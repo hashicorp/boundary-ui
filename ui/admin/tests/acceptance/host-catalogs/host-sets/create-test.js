@@ -19,6 +19,18 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR =
+    '[name="preferred_endpoints"] input';
+  const PREFERRED_ENDPOINT_BUTTON_SELECTOR =
+    '[name="preferred_endpoints"] button';
+  const FILTER_TEXT_INPUT_SELECTOR = '[name="filters"] input';
+  const FILTER_BUTTON_SELECTOR = '[name="filters"] button';
+  const AZURE_FILTER_SELECTOR = '[name="filter"]';
+  const SYNC_INTERVAL_SELECTOR = '[name="sync_interval_seconds"]';
+  const SUBMIT_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
+  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
+  const NAME_SELECTOR = '[name="name"]';
+
   let getHostSetCount;
 
   const instances = {
@@ -79,8 +91,8 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.expect(1);
     const count = getHostSetCount();
     await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await fillIn(NAME_SELECTOR, 'random string');
+    await click(SUBMIT_BTN_SELECTOR);
     assert.strictEqual(getHostSetCount(), count + 1);
   });
 
@@ -100,18 +112,19 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
     );
     const name = 'aws host set';
-    await fillIn('[name="name"]', name);
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
-    await fillIn('[name="filters"]', 'filter');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
-    await fillIn('[name="sync_interval_seconds"]', 10);
-    await click('[type="submit"]');
+    await fillIn(NAME_SELECTOR, name);
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'filter_test');
+    await click(FILTER_BUTTON_SELECTOR);
+
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+    await click(SUBMIT_BTN_SELECTOR);
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
     assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
-    assert.deepEqual(hostSet.attributes.filters, ['filter']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter_test']);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
@@ -131,12 +144,12 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
     );
     const name = 'azure host set';
-    await fillIn('[name="name"]', name);
-    await fillIn('[name="preferred_endpoints"]', 'endpoint');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
-    await fillIn('[name="filter"]', 'filter');
-    await fillIn('[name="sync_interval_seconds"]', 10);
-    await click('[type="submit"]');
+    await fillIn(NAME_SELECTOR, name);
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(AZURE_FILTER_SELECTOR, 'filter');
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+    await click(SUBMIT_BTN_SELECTOR);
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -173,8 +186,8 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.expect(2);
     const count = getHostSetCount();
     await visit(urls.newHostSet);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await fillIn(NAME_SELECTOR, 'random string');
+    await click(CANCEL_BTN_SELECTOR);
     assert.strictEqual(currentURL(), urls.hostSets);
     assert.strictEqual(getHostSetCount(), count);
   });
@@ -201,7 +214,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       );
     });
     await visit(urls.newHostSet);
-    await click('[type="submit"]');
+    await click(SUBMIT_BTN_SELECTOR);
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'The request was invalid.'

@@ -209,6 +209,7 @@
         @isInvalid={{@model.errors.secrets}}
         @type='password'
         name='access_key_id'
+        @hasVisibilityToggle={{false}}
         {{on 'input' (set-from-event @model 'access_key_id')}}
         as |F|
       >
@@ -234,6 +235,7 @@
         @type='password'
         name='secret_access_key'
         disabled={{form.disabled}}
+        @hasVisibilityToggle={{false}}
         {{on 'input' (set-from-event @model 'secret_access_key')}}
         as |F|
       >
@@ -366,30 +368,37 @@
       {{/if}}
     </Hds::Form::TextInput::Field>
 
-    <Form::Field::KeyValueList
+    <Form::Field::ListWrapper
       @layout='horizontal'
       @isOptional={{true}}
-      @name='role_tags'
-      @options={{@model.role_tags}}
-      @addOption={{fn this.addOption 'role_tags'}}
-      @removeOptionByIndex={{fn this.removeOptionByIndex 'role_tags'}}
       @disabled={{form.disabled}}
-      as |M|
     >
-      <M.Legend>
-        {{t 'resources.storage-bucket.form.role_tags.label'}}
-      </M.Legend>
-      <M.HelperText>
-        {{t 'resources.storage-bucket.form.role_tags.help'}}
-      </M.HelperText>
-      {{#if @model.errors.role_tags}}
-        <M.Error as |E|>
-          {{#each @model.errors.role_tags as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </M.Error>
-      {{/if}}
-    </Form::Field::KeyValueList>
+      <:fieldset as |F|>
+        <F.Legend>
+          {{t 'resources.storage-bucket.form.role_tags.label'}}
+        </F.Legend>
+        <F.HelperText>
+          {{t 'resources.storage-bucket.form.role_tags.label'}}
+        </F.HelperText>
+
+        {{#if @model.errors.role_tags}}
+          <F.Error as |E|>
+            {{#each @model.errors.role_tags as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </:fieldset>
+      <:field as |F|>
+        <F.TextInput
+          @name='role_tags'
+          @options={{@model.role_tags}}
+          @addOption={{fn this.addOption 'role_tags'}}
+          @removeOptionByIndex={{fn this.removeOptionByIndex 'role_tags'}}
+          @disabled={{form.disabled}}
+        />
+      </:field>
+    </Form::Field::ListWrapper>
   {{/if}}
 
   <Hds::Form::TextInput::Field
