@@ -186,6 +186,11 @@ app.on('ready', async () => {
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
+    //we need to allow this for the hds clipboard action to not fail
+    if (permission === 'clipboard-sanitized-write') {
+      // Approves the permissions request
+      return callback(true);
+    }
     return callback(false);
   });
 
@@ -263,6 +268,7 @@ app.on('before-quit', (event) => {
 // resources (e.g. file descriptors, handles, etc) before shutting down the process. It is
 // not safe to resume normal operation after 'uncaughtException'.
 process.on('uncaughtException', (err) => {
+  console.log(err, 'what the err');
   console.log('An exception in the main thread was not handled.');
   console.log(
     'This is a serious issue that needs to be handled and/or debugged.'
