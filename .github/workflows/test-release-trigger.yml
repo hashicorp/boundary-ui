@@ -10,15 +10,6 @@ on:
         required: true
         type: string
         description: The version number belonging to the oss binary to be used
-      channel:
-        required: true
-        type: choice
-        description: The Artifactory repo from which to download the release assets
-        default: staging
-        options:
-          - dev
-          - stable
-          - staging
       commit:
         required: true
         type: string
@@ -40,6 +31,5 @@ jobs:
           --ref labWeek/update-release-workflow \
           -f TAG="${{ inputs.branch }}" \
           -f PRODUCT_VERSION="${{ inputs.product_version }}" \
-          -f CHANNEL="${{ inputs.channel }}" \
           -f COMMIT="${{ inputs.commit }}" \
 
