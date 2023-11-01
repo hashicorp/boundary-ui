@@ -7,7 +7,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { inject as service } from '@ember/service';
-import { paramValueFinder } from 'admin/utils/route-info';
+import { paramValueFinder } from 'admin/utils/param-value-finder';
 
 export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
   // =services
