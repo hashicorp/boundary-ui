@@ -19,7 +19,7 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
    * Load a group in current scope.
    * @param {object} params
    * @param {string} params.group_id
-   * @return {GroupModel}
+   * @return {Promise{GroupModel}}
    */
   async model({ group_id }) {
     return this.store.findRecord('group', group_id, { reload: true });

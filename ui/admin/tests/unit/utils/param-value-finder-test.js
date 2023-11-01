@@ -31,7 +31,6 @@ module('Unit | Utility | param-value-finder', function (hooks) {
 
     routeInfo = router.recognize('/scopes/global/auth-methods');
     result = paramValueFinder('scopes', routeInfo.parent);
-    console.log(routeInfo);
     assert.deepEqual(result, ['global']);
   });
 });

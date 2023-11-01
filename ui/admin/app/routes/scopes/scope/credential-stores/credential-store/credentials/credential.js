@@ -19,7 +19,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
    * Load a credential using current credential store and its parent scope.
    * @param {object} params
    * @param {string} params.credential_id
-   * @return {CredentialModel}
+   * @return {Promise{CredentialModel}}
    */
   async model({ credential_id }) {
     return this.store.findRecord('credential', credential_id, {

@@ -19,7 +19,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
    * Load a host using current host-catalog and it's parent scope.
    * @param {object} params
    * @param {string} params.host_id
-   * @return {HostModel}
+   * @return {Promise{HostModel}}
    */
   async model({ host_id }) {
     return this.store.findRecord('host', host_id, { reload: true });

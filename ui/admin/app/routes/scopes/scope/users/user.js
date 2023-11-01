@@ -19,7 +19,7 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * Load a user in current scope.
    * @param {object} params
    * @param {string} params.user_id
-   * @return {UserModel}
+   * @return {Promise{UserModel}}
    */
   async model({ user_id }) {
     return this.store.findRecord('user', user_id, { reload: true });

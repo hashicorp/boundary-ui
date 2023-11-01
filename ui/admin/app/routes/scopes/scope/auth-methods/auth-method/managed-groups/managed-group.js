@@ -20,7 +20,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
    * Load managed group by ID.
    * @param {object} params
    * @param {string} params.managed_group_id
-   * @returns {ManagedGroupModel}
+   * @returns {Promise{ManagedGroupModel}}
    */
   async model({ managed_group_id }) {
     return this.store.findRecord('managed-group', managed_group_id, {

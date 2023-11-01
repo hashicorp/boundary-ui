@@ -16,7 +16,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
 
   /**
    * Load a specific credential store in current scope
-   * @return {CredentialStoreModel}
+   * @return {Promise{CredentialStoreModel}}
    */
   async model({ credential_store_id }) {
     return this.store.findRecord('credential-store', credential_store_id, {

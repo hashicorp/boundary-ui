@@ -19,7 +19,7 @@ export default class ScopesScopeWorkersWorkerRoute extends Route {
    * Load a worker in current scope.
    * @param {object} params
    * @param {string} params.worker_id
-   * @return {WorkerModel}
+   * @return {Promise{WorkerModel}}
    */
   async model({ worker_id }) {
     return this.store.findRecord('worker', worker_id, { reload: true });

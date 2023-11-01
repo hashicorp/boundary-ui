@@ -21,7 +21,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    * Load a host-set using current host-catalog and its parent scope.
    * @param {object} params
    * @param {string} params.host_set_id
-   * @return {HostSetModel}
+   * @return {Promise{HostSetModel}}
    */
   async model({ host_set_id }) {
     return this.store.findRecord('host-set', host_set_id, { reload: true });

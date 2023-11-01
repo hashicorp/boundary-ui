@@ -19,7 +19,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsHostR
    * Load a host in current scope.
    * @param {object} params
    * @param {string} params.host_id
-   * @return {HostModel}
+   * @return {Promise{HostModel}}
    */
   async model({ host_id }) {
     return this.store.findRecord('host', host_id, { reload: true });
