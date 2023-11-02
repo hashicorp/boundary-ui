@@ -10,6 +10,8 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -17,9 +19,21 @@ export default class ScopesScopeGroupsGroupRoute extends Route {
    * Load a group in current scope.
    * @param {object} params
    * @param {string} params.group_id
-   * @return {groupModel}
+   * @return {Promise{GroupModel}}
    */
-  model({ group_id }) {
+  async model({ group_id }) {
     return this.store.findRecord('group', group_id, { reload: true });
+  }
+
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {GroupModel} credentialStore
+   * @param {object} transition
+   */
+  redirect(group, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (group.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, group.scopeID, group.id);
+    }
   }
 }

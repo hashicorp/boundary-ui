@@ -105,4 +105,22 @@ module('Acceptance | host-catalogs | read', function (hooks) {
       .dom(`[href="https://boundaryproject.io/help/admin-ui/host-catalogs"]`)
       .exists();
   });
+
+  test('users can navigate to host catalog and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const projectScope = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
+    const hostCatalog = this.server.create('host-catalog', {
+      scope: projectScope,
+    });
+    const incorrectUrl = `${urls.hostCatalogs}/${hostCatalog.id}/host-sets`;
+    const correctUrl = `/scopes/${projectScope.id}/host-catalogs/${hostCatalog.id}/host-sets`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

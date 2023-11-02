@@ -145,4 +145,21 @@ module('Acceptance | users | create', function (hooks) {
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
     assert.dom('.rose-form-error-message').hasText('Name is required.');
   });
+
+  test('users cannot directly navigate to new user route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.org.authorized_collection_actions.users =
+      instances.scopes.org.authorized_collection_actions.users.filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newUser);
+
+    assert.false(
+      instances.scopes.org.authorized_collection_actions.users.includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.users);
+  });
 });

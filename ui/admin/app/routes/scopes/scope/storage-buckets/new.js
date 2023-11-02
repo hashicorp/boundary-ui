@@ -14,8 +14,24 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create scope', scopeModel, {
+        collection: 'storage-buckets',
+      })
+    ) {
+      this.router.replaceWith('scopes.scope.storage-buckets');
+    }
+  }
 
   /**
    * Creates a new unsaved storage bucket.

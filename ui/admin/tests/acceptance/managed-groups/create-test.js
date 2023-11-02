@@ -242,4 +242,21 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
+
+  test('Users cannot directly navigate to a new managed group route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.authMethod.authorized_collection_actions['managed-groups'] =
+      instances.authMethod.authorized_collection_actions[
+        'managed-groups'
+      ].filter((item) => item !== 'create');
+
+    await visit(urls.newManagedGroup);
+
+    assert.false(
+      instances.authMethod.authorized_collection_actions[
+        'managed-groups'
+      ].includes('create')
+    );
+    assert.strictEqual(currentURL(), urls.managedGroups);
+  });
 });

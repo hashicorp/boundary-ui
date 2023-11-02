@@ -14,6 +14,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @service store;
   @service router;
   @service features;
+  @service can;
 
   // =attributes
 
@@ -24,6 +25,24 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   };
 
   // =methods
+
+  /**
+   * Redirect to parent route when credential-store does not have create authorized action.
+   */
+  beforeModel() {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store'
+    );
+    if (
+      this.can.cannot('create model', credentialStore, {
+        collection: 'credential-libraries',
+      })
+    ) {
+      this.router.replaceWith(
+        'scopes.scope.credential-stores.credential-store.credential-libraries'
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved credential library in current credential store.

@@ -106,4 +106,22 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await a11yAudit();
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
+
+  test('users can navigate to credential library and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const credentialStore = this.server.create('credential-store', {
+      scope: instances.scopes.project,
+    });
+    const credentialLibrary = this.server.create('credential-library', {
+      scope: instances.scopes.project,
+      credentialStore,
+    });
+    const incorrectUrl = `${urls.credentialLibraries}/${credentialLibrary.id}`;
+    const correctUrl = `${urls.projectScope}/credential-stores/${credentialStore.id}/credential-libraries/${credentialLibrary.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

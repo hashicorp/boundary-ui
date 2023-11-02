@@ -444,4 +444,18 @@ module('Acceptance | auth-methods | create', function (hooks) {
       .dom(FIELD_ERROR_TEXT_SELECTOR)
       .hasText('At least one URL is required.');
   });
+
+  test('users cannot directly navigate to new auth method route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.orgScope.authorized_collection_actions['auth-methods'] = ['list'];
+
+    await visit(urls.newAuthMethod);
+
+    assert.false(
+      instances.orgScope.authorized_collection_actions['auth-methods'].includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.authMethods);
+  });
 });

@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, fillIn, click, find, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  fillIn,
+  click,
+  find,
+  findAll,
+  currentURL,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -143,5 +150,22 @@ module('Acceptance | workers | create', function (hooks) {
       'rpc error: code = Unknown',
       'Displays primary error message.'
     );
+  });
+
+  test('users cannot directly navigate to new worker route without proper authorization', async function (assert) {
+    assert.expect(2);
+    globalScope.authorized_collection_actions.workers =
+      globalScope.authorized_collection_actions.workers.filter(
+        (item) => item !== 'create:worker-led'
+      );
+
+    await visit(newWorkerURL);
+
+    assert.false(
+      globalScope.authorized_collection_actions.workers.includes(
+        'create:worker-led'
+      )
+    );
+    assert.strictEqual(currentURL(), workersURL);
   });
 });
