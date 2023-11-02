@@ -93,7 +93,7 @@ disable_discovered_config_validation:
     If the Authorization Server's discovered configuration contains values that do not match the configuration set on this auth method, this can be set to force the local configuration to override the discovered values.  This is useful in the case of slow-changing or incorrect values announced by the Authorization Server. NOTE: For safety, not providing this value will be treated the same as "false"; that is, every time the method is updated or the state is changed, this value must be set to "true" or it will be disabled.
 idp_ca_certs:
   label: Certificates
-  help: Optional PEM-encoded X.509 CA certificates that can be used as trust anchors when connecting to an OIDC provider.
+  help: PEM-encoded X.509 CA certificates that can be used as trust anchors when connecting to an OIDC provider.
 certificate:
   label: Certificate
 allowed_audiences:
