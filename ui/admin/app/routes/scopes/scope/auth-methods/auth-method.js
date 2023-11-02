@@ -22,7 +22,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
    * Load an auth method by ID.
    * @param {object} params
    * @param {string} params.auth_method_id
-   * @return {AuthMethodModel}
+   * @return {Promise{AuthMethodModel}}
    */
   async model({ auth_method_id }) {
     return this.store.findRecord('auth-method', auth_method_id, {
