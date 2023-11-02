@@ -13,6 +13,7 @@ const sanitizer = require('../utils/sanitizer.js');
 const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
+const which = require('which');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -112,13 +113,9 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
- * Return an object containing helper fields for determining what OS we're running on
+ * Return the location of where a user's binary for a command is. If it isn't found, return null.
  */
-handle('checkOS', () => ({
-  isLinux: isLinux(),
-  isMac: isMac(),
-  isWindows: isWindows(),
-}));
+handle('checkCommand', async (command) => which(command, { nothrow: true }));
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

@@ -18,7 +18,7 @@
       <toolbar.primary>
         <Rose::Form as |form|>
           {{#let
-            (resource-filter 'scopes.scope.projects.sessions' 'status')
+            (resource-filter 'scopes.scope.projects.sessions.index' 'status')
             as |filter|
           }}
             <Rose::Dropdown
@@ -45,7 +45,7 @@
           {{/let}}
 
           {{#let
-            (resource-filter 'scopes.scope.projects.sessions' 'project')
+            (resource-filter 'scopes.scope.projects.sessions.index' 'project')
             as |filter|
           }}
             <Rose::Dropdown
@@ -95,7 +95,7 @@
 
           {{#if
             (has-resource-filter-selections
-              'scopes.scope.projects.sessions' 'status' 'project'
+              'scopes.scope.projects.sessions.index' 'status' 'project'
             )
           }}
             <Rose::Button
@@ -130,7 +130,7 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              {{#if (can 'read session' B.data)}}
+              {{#if B.data.isAvailable}}
                 <Hds::Badge
                   @text={{t 'resources.session.title'}}
                   @icon='entry-point'
@@ -143,7 +143,7 @@
                   @acknowledgeText={{t 'states.copied'}}
                 >
                   <LinkTo
-                    @route='scopes.scope.projects.sessions.session'
+                    @route='scopes.scope.projects.sessions.session.index'
                     @model={{B.data.id}}
                     data-test-session-detail-link
                   >
@@ -171,7 +171,7 @@
             {{!
                   Two if's here because:
                   1) Local proxy info is only relevant if the session is
-                     active or pending (aka isCancelable).  Once the session
+                     active or pending (aka isAvailable).  Once the session
                      is canceled or in the process thereof, the local proxy
                      may no longer be used.
                   2) The session actually has proxy information associated
@@ -180,7 +180,7 @@
                      won't have the local proxy info available here.
                 }}
             <B.Td>
-              {{#if B.data.isCancelable}}
+              {{#if B.data.isAvailable}}
                 {{#if B.data.proxy}}
                   <Copyable
                     @text={{B.data.proxy}}
@@ -201,11 +201,12 @@
               <SessionStatus @model={{B.data}} />
             </B.Td>
             <B.Td>
-              {{#if B.data.isCancelable}}
+              {{#if (can 'cancel session' B.data)}}
                 <Hds::Button
                   @text={{t 'actions.cancel'}}
                   @color='secondary'
                   {{on 'click' (route-action 'cancelSession' B.data)}}
+                  data-test-session-cancel-button
                 />
               {{/if}}
             </B.Td>
@@ -214,7 +215,7 @@
       </Hds::Table>
 
     {{else if (has-resource-filter-selections
-      'scopes.scope.projects.sessions' 'status' 'project'
+      'scopes.scope.projects.sessions.index' 'status' 'project'
     )}}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>

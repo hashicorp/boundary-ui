@@ -687,7 +687,7 @@
   }
 }
 
-.key-value-list {
+.list-wrapper-field {
   border: 0;
 
   /* stylelint-disable selector-class-pattern */
@@ -747,6 +747,7 @@
     bottom: 2.15rem;
     left: 0.5rem;
     border-radius: 0.25rem;
+    z-index: 1;
     background-color: var(--token-color-palette-neutral-200);
   }
 

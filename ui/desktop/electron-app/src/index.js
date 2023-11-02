@@ -185,7 +185,11 @@ app.on('ready', async () => {
   // Disallow all permissions requests,
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
-    /* eng-disable PERMISSION_REQUEST_HANDLER_JS_CHECK */
+    // We need to allow this for native clipboard usage
+    if (permission === 'clipboard-sanitized-write') {
+      // Approves the permissions request
+      return callback(true);
+    }
     return callback(false);
   });
 

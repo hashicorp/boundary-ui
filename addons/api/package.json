@@ -14,7 +14,7 @@
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "format": "yarn run format:js",
+    "format": "concurrently \"npm:format:*\" --names \"format:\"",
     "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
     "start": "ember serve",
     "test": "ember exam --test-port 0 --split=4 --parallel=1 --random",
@@ -31,8 +31,8 @@
     "ember-fetch": "^8.1.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.5",
-    "@babel/eslint-parser": "^7.21.3",
+    "@babel/core": "^7.21.0",
+    "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/string": "^3.0.1",

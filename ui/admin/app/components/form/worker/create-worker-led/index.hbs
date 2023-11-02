@@ -203,7 +203,7 @@
       />
       {{#if (can 'save worker' @model)}}
         <Rose::Button
-          @submit={{true}}
+          @onSubmit={{true}}
           @style='primary'
           class='nowrap'
           @disabled={{@model.cannotSave}}

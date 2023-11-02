@@ -31,5 +31,11 @@ module.exports = {
         'no-passed-in-event-handlers': false,
       },
     },
+    {
+      files: '**/tests/**/*.{js,gts,gjs}',
+      rules: {
+        prettier: false,
+      },
+    },
   ],
 };

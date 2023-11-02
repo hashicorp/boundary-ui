@@ -19,9 +19,22 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    * @param {string} params.session_id
    * @return {SessionModel}
    */
-  model({ session_id }) {
-    return this.store.findRecord('session', session_id, {
-      reload: true,
-    });
+  async model({ session_id }) {
+    const session = await this.store.findRecord('session', session_id);
+
+    /**
+     * If the session has a host_id and the user has grants,
+     * we retrieve the host and aggregate it to the session model.
+     */
+    if (session.host_id) {
+      try {
+        const host = await this.store.findRecord('host', session.host_id);
+        session.addHost(host);
+      } catch (error) {
+        // no operation
+      }
+    }
+
+    return session;
   }
 }
