@@ -12,10 +12,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =services
 
   @service store;
-  @service confirm;
-  @service ipc;
-  @service router;
-  @service session;
 
   // =attributes
 
@@ -77,7 +73,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
      * rely on the CLI to give the user the proper error
      */
     if (isConnecting && model.hosts.length <= 1) {
-      await this.connect(model.target);
+      await model.target.connect(null, this.errorHandler);
     }
   }
 
@@ -106,7 +102,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
    */
   @action
   async hostConnect(target, host) {
-    await this.connect(target, host);
+    await target.connect(host, this.errorHandler);
     if (this.isConnectionError) {
       /* eslint-disable-next-line ember/no-controller-access-in-routes */
       const controller = this.controllerFor(
@@ -131,87 +127,22 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
      * there are 2 or more hosts we show the modal for host selection
      */
     if (model.hosts.length <= 1) {
-      await this.connect(model.target);
+      await model.target.connect(null, this.errorHandler);
     } else {
       toggleModal(true);
     }
   }
 
   /**
-   * Establish a session to current target.
-   * @param {TargetModel} model
-   * @param {HostModel} host
+   * Used as a callback to when connection fails
    */
   @action
-  @loading
-  async connect(model, host) {
-    // TODO: Connect: move this logic into the target model
-    try {
-      // Check for CLI
-      const cliExists = await this.ipc.invoke('cliExists');
-      if (!cliExists) throw new Error('Cannot find Boundary CLI.');
-
-      const options = {
-        target_id: model.id,
-        token: this.session.data.authenticated.token,
-      };
-
-      if (host) options.host_id = host.id;
-
-      // Create target session
-      const connectionDetails = await this.ipc.invoke('connect', options);
-
-      // Associate the connection details with the session
-      let session;
-      const { session_id, address, port, credentials } = connectionDetails;
-      try {
-        session = await this.store.findRecord('session', session_id);
-      } catch (error) {
-        /**
-         * if the user cannot read or fetch the session we add the important
-         * information returned from the connect command to allow the user
-         * to still continue their work with the information they need
-         */
-        this.store.pushPayload('session', {
-          sessions: [
-            {
-              id: session_id,
-              proxy_address: address,
-              proxy_port: port,
-            },
-          ],
-        });
-        session = this.store.peekRecord('session', session_id);
-      }
-
-      // Flag the session has been open in the desktop client
-      session.started_desktop_client = true;
-      /**
-       * Update the session record with proxy information from the CLI
-       * In the future, it may make sense to push this off to the API so that
-       * we don't have to manually persist the proxy details.
-       */
-      session.proxy_address = address;
-      session.proxy_port = port;
-      if (credentials) {
-        credentials.forEach((cred) => session.addCredential(cred));
-      }
-
-      await this.router.transitionTo(
-        'scopes.scope.projects.sessions.session',
-        session_id
-      );
-    } catch (e) {
-      this.isConnectionError = true;
-      this.confirm
-        .confirm(e.message, { isConnectError: true })
-        // Retry
-        .then(() => this.connect(model, host))
-        .catch(() => {
-          // Reset the flag as this was user initiated and we're not
-          // in a transition or have a host modal open
-          this.isConnectionError = false;
-        });
-    }
+  errorHandler(value) {
+    this.isConnectionError = value;
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
+    const controller = this.controllerFor(
+      'scopes.scope.projects.targets.target'
+    );
+    controller.set('isConnecting', false);
   }
 }

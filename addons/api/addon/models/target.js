@@ -6,6 +6,7 @@
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
+import { loading } from 'ember-loading';
 
 export const TYPE_TARGET_TCP = 'tcp';
 export const TYPE_TARGET_SSH = 'ssh';
@@ -15,6 +16,10 @@ export default class TargetModel extends GeneratedTargetModel {
   // =services
 
   @service store;
+  @service ipc;
+  @service router;
+  @service session;
+  @service confirm;
 
   // =attributes
 
@@ -332,5 +337,81 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   get isSSH() {
     return this.type === TYPE_TARGET_SSH;
+  }
+
+  /**
+   * Establish a session to current target.
+   * @param {HostModel} host
+   * @param {function} errorCallback
+   */
+  @loading
+  async connect(host, errorCallback) {
+    try {
+      // Check for CLI
+      const cliExists = await this.ipc.invoke('cliExists');
+      if (!cliExists) throw new Error('Cannot find Boundary CLI.');
+
+      const options = {
+        target_id: this.id,
+        token: this.session.data.authenticated.token,
+      };
+
+      if (host) options.host_id = host.id;
+
+      // Create target session
+      const connectionDetails = await this.ipc.invoke('connect', options);
+
+      // Associate the connection details with the session
+      let session;
+      const { session_id, address, port, credentials } = connectionDetails;
+      try {
+        session = await this.store.findRecord('session', session_id);
+      } catch (error) {
+        /**
+         * if the user cannot read or fetch the session we add the important
+         * information returned from the connect command to allow the user
+         * to still continue their work with the information they need
+         */
+        this.store.pushPayload('session', {
+          sessions: [
+            {
+              id: session_id,
+              proxy_address: address,
+              proxy_port: port,
+            },
+          ],
+        });
+        session = this.store.peekRecord('session', session_id);
+      }
+
+      // Flag the session has been open in the desktop client
+      session.started_desktop_client = true;
+      /**
+       * Update the session record with proxy information from the CLI
+       * In the future, it may make sense to push this off to the API so that
+       * we don't have to manually persist the proxy details.
+       */
+      session.proxy_address = address;
+      session.proxy_port = port;
+      if (credentials) {
+        credentials.forEach((cred) => session.addCredential(cred));
+      }
+
+      await this.router.transitionTo(
+        'scopes.scope.projects.sessions.session',
+        session_id
+      );
+    } catch (e) {
+      if (errorCallback) errorCallback(true);
+      this.confirm
+        .confirm(e.message, { isConnectError: true })
+        // Retry
+        .then(() => this.connect(host, errorCallback))
+        .catch(() => {
+          // Reset the flag as this was user initiated and we're not
+          // in a transition or have a host modal open
+          if (errorCallback) errorCallback(false);
+        });
+    }
   }
 }
