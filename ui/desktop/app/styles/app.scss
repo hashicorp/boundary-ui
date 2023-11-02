@@ -608,6 +608,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     .secret-container {
       margin: 0.75rem 0.5rem;
       border-bottom: 1px solid var(--token-color-border-primary);
+      word-break: break-word;
 
       &:last-child {
         border-bottom: 0;
