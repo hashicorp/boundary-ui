@@ -7,7 +7,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { resourceFilter } from 'core/decorators/resource-filter';
 import { loading } from 'ember-loading';
 
 export default class ScopesScopeProjectsSessionsRoute extends Route {
@@ -16,24 +15,8 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
   @service store;
   @service ipc;
   @service session;
-  @service resourceFilterStore;
   @service router;
   @service can;
-
-  // =attributes
-
-  @resourceFilter({
-    allowed: ['active', 'pending', 'canceling', 'terminated'],
-    defaultValue: ['active', 'pending', 'canceling'],
-  })
-  status;
-
-  @resourceFilter({
-    allowed: (route) => route.modelFor('scopes.scope.projects'),
-    serialize: ({ id }) => id,
-    findBySerialized: ({ id }, value) => id === value,
-  })
-  project;
 
   // =methods
 
@@ -44,68 +27,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
-  /**
-   * Loads all sessions under current scope for the current user.
-   *
-   * NOTE:  previously, sessions were filtered only with API filter queries.
-   *        In an effort to offload processing from the controller, sessions
-   *        are now filtered on the client by projects and status,
-   *        while user_id filtering remains server side.
-   *
-   * @return {Promise{[SessionModel]}}
-   */
-  async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    const queryOptions = {
-      scope_id,
-      recursive: true,
-      include_terminated: this.status?.includes('terminated'),
-    };
-
-    // Recursively query sessions within the current scope for the current user
-    let sessions = await this.resourceFilterStore.queryBy(
-      'session',
-      { user_id: this.session.data.authenticated.user_id },
-      queryOptions
-    );
-
-    // If project filters are selected, filter sessions by the selected projects
-    if (this.project?.length) {
-      const projectIDs = this.project.map((p) => p?.id);
-      sessions = sessions.filter((s) => projectIDs.includes(s?.scopeID));
-    }
-
-    // If status filters are selected, filter sessions by the selected statuses
-    if (this.status?.length) {
-      sessions = sessions.filter((s) => this.status.includes(s?.status));
-    }
-
-    return sessions;
-  }
-
   // =actions
-
-  /**
-   * A hack to force a refresh when coming from a child route back to the list route.
-   * This is needed because these model hooks are on the `sessions` route which is a
-   * parent to the `sessions.session` route so we never leave the route which means
-   * the model hooks won't rerun when going back to the list route.
-   *
-   * This could be alternatively solved by moving all the model fetching to
-   * `sessions.index` which would make the children routes siblings to the list route
-   * and transitions between them would also force a refresh.
-   * @param transition
-   * @returns {boolean}
-   */
-  @action
-  willTransition(transition) {
-    // This event only will execute when "leaving" this route (which includes any children)
-    // Checking for this really means are we leaving from a child to this parent route.
-    if (transition.to.name === 'scopes.scope.projects.sessions.index') {
-      this.refresh();
-    }
-    return true;
-  }
 
   /**
    * Cancels the specified session and notifies user of success or error.
@@ -133,25 +55,6 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
     ) {
       await this.router.replaceWith('scopes.scope.projects.targets');
     }
-  }
-
-  /**
-   * Sets the specified resource filter field to the specified value.
-   * @param {string} field
-   * @param value
-   */
-  @action
-  filterBy(field, value) {
-    this[field] = value;
-  }
-
-  /**
-   * Clears and filter selections.
-   */
-  @action
-  clearAllFilters() {
-    this.status = [];
-    this.project = [];
   }
 
   /**

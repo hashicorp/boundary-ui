@@ -145,6 +145,9 @@ export default class SessionModel extends GeneratedSessionModel {
    * @type {TargetModel}
    */
   get target() {
+    if (!this.target_id) {
+      return null;
+    }
     return this.store.peekRecord('target', this.target_id);
   }
 
