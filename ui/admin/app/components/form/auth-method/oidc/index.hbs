@@ -279,8 +279,8 @@
 
     <:field as |F|>
       <F.TextInput
-        @name='critical_options'
-        @options={{@model.critical_options}}
+        @name='allowed_audiences'
+        @options={{@model.allowed_audiences}}
         @addOption={{fn @addOption 'allowed_audiences'}}
         @removeOptionByIndex={{fn @removeOptionByIndex 'allowed_audiences'}}
         @disabled={{form.disabled}}
@@ -460,94 +460,39 @@
   </Rose::Form::Fieldset>
 
   {{! Certificates }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.idp_ca_certs.label'}}</:title>
-    <:description>{{t 'form.idp_ca_certs.help'}}</:description>
-    <:body>
-      {{#if @model.errors.idp_ca_certs}}
-        <Rose::Form::Errors as |errors|>
-          {{#each @model.errors.idp_ca_certs as |error|}}
-            <errors.message>{{error.message}}</errors.message>
-          {{/each}}
-        </Rose::Form::Errors>
-      {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row @hidden={{true}} as |row|>
-            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.idp_ca_certs as |cert i|}}
-            <body.row as |row|>
-              <row.cell>
-                <Hds::Form::Textarea::Field
-                  @value={{cert.value}}
-                  @isOptional={{true}}
-                  @isInvalid={{@model.errors.idp_ca_certs}}
-                  disabled={{form.disabled}}
-                  aria-label={{t 'form.certificate.label'}}
-                  as |F|
-                >
-                  {{#if @model.errors.idp_ca_certs}}
-                    <F.Error as |E|>
-                      {{#each @model.errors.idp_ca_certs as |error|}}
-                        <E.Message>{{error.message}}</E.Message>
-                      {{/each}}
-                    </F.Error>
-                  {{/if}}
-                </Hds::Form::Textarea::Field>
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'idp_ca_certs' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.idp_ca_certs.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.idp_ca_certs.help'}}
+      </F.HelperText>
 
-          <body.row as |row|>
-            <row.cell>
-              <Hds::Form::Textarea::Field
-                @value={{this.newCertificate}}
-                @isOptional={{true}}
-                disabled={{form.disabled}}
-                aria-label={{t 'resources.auth-method.titles.new-certificate'}}
-              />
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn @addStringItem 'idp_ca_certs' this.newCertificate)
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+      {{#if @model.errors.idp_ca_certs}}
+        <F.Error as |E|>
+          {{#each @model.errors.idp_ca_certs as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
+    <:field as |F|>
+      <F.Textarea
+        @name='idp_ca_certs'
+        @options={{@model.idp_ca_certs}}
+        @addOption={{fn @addOption 'idp_ca_certs'}}
+        @removeOptionByIndex={{fn @removeOptionByIndex 'idp_ca_certs'}}
+        @disabled={{form.disabled}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
 
   <form.input
     @name='max_age'

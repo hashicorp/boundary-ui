@@ -103,7 +103,7 @@ claim:
   label: Claim
 claims_scopes:
   label: Claims Scopes
-  help: Optional claims scopes that will be requested during authentication.
+  help: claims scopes that will be requested during authentication.
 claims_scope:
   label: Claims Scope
 account_claim_maps:

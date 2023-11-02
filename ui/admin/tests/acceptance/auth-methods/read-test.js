@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, pauseTest } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -118,7 +118,6 @@ module('Acceptance | auth methods | read', function (hooks) {
     assert.dom(AUTH_ACTIONS_SELECTOR).exists();
 
     await click(AUTH_LINK_SELECTOR);
-    //await this.pauseTest();
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);

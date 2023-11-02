@@ -33,7 +33,24 @@ module('Acceptance | auth methods | update', function (hooks) {
   const DESC_INPUT_SELECTOR = '[name="description"]';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
+  const CERTIFICATES_REMOVE_BTN_SELECTOR =
+    '[name="certificates"] [data-test-remove-button]';
+  const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';
+  const CERTIFICATES_INPUT_SELECTOR = '[name="certificates"] textarea';
+  const IDP_CERTS_INPUT_SELECTOR = '[name="idp_ca_certs"] textarea';
+  const IDP_CERTS_REMOVE_BTN_SELECTOR =
+    '[name="idp_ca_certs"] [data-test-remove-button]';
+  const IDP_CERTS_BTN_SELECTOR = '[name="idp_ca_certs"] button';
 
+  const ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR =
+    '[name="allowed_audiences"] [data-test-remove-button]';
+  const ALLOWED_AUDIENCES_BTN_SELECTOR = '[name="allowed_audiences"] button';
+  const ALLOWED_AUDIENCES_INPUT_SELECTOR = '[name="allowed_audiences"] input';
+
+  const CLAIMS_SCOPES_REMOVE_BTN_SELECTOR =
+    '[name="claims_scopes"] [data-test-remove-button]';
+  const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
+  const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   const instances = {
     scopes: {
       global: null,
@@ -115,21 +132,28 @@ module('Acceptance | auth methods | update', function (hooks) {
     await select('form fieldset:nth-of-type(1) select', 'RS384');
     await click('form fieldset:nth-of-type(1) [title="Add"]');
     // Remove all allowed audiences
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(2) [title="Remove"]').map((element) =>
-        click(element)
-      )
+    const allowedAudiencesList = await Promise.all(
+      findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR)
     );
-    await fillIn('[name="allowed_audiences"]', 'allowed_audiences');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
+
+    for (const element of allowedAudiencesList) {
+      await click(element);
+    }
+    await fillIn(ALLOWED_AUDIENCES_INPUT_SELECTOR, 'allowed_audiences');
+    await click(ALLOWED_AUDIENCES_BTN_SELECTOR, 'allowed_audiences');
+
     // Remove all claims scopes
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(3) [title="Remove"]').map((element) =>
-        click(element)
-      )
+    const claimsScopeList = await Promise.all(
+      findAll(CLAIMS_SCOPES_REMOVE_BTN_SELECTOR)
     );
-    await fillIn('[name="claims_scopes"]', 'claims_scopes');
-    await click('form fieldset:nth-of-type(3) [title="Add"]');
+
+    for (const element of claimsScopeList) {
+      await click(element);
+    }
+
+    await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
+    await click(CLAIMS_SCOPES_BTN_SELECTOR, 'allowed_audiences');
+
     // Remove all claim maps
     await Promise.all(
       findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
@@ -139,14 +163,18 @@ module('Acceptance | auth methods | update', function (hooks) {
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
     await click('form fieldset:nth-of-type(4) [title="Add"]');
+
     // Remove all certificates
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(5) [title="Remove"]').map((element) =>
-        click(element)
-      )
+    const certificatesList = await Promise.all(
+      findAll(IDP_CERTS_REMOVE_BTN_SELECTOR)
     );
-    await fillIn('form fieldset:nth-of-type(5) textarea', 'certificates');
-    await click('form fieldset:nth-of-type(5) [title="Add"]');
+
+    for (const element of certificatesList) {
+      await click(element);
+    }
+
+    await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
+    await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click('form [type="submit"]:not(:disabled)');
@@ -181,9 +209,17 @@ module('Acceptance | auth methods | update', function (hooks) {
     await fillIn(DESC_INPUT_SELECTOR, 'description');
     await fillIn('[name="urls"]', 'url1,url2');
     await click('[name="certificates"] .hds-button--color-critical');
+
     // Remove certificate
-    await fillIn('[name="certificates"] textarea', 'certificate');
-    await click('[name="certificates"] button');
+    const certificatesList = await Promise.all(
+      findAll(CERTIFICATES_REMOVE_BTN_SELECTOR)
+    );
+
+    for (const element of certificatesList) {
+      await click(element);
+    }
+    await fillIn(CERTIFICATES_INPUT_SELECTOR, 'certificate');
+    await click(CERTIFICATES_BTN_SELECTOR);
     await click('[name="start_tls"]');
     await click('[name="insecure_tls"]');
     await fillIn('[name="bind_dn"]', 'bind dn');
