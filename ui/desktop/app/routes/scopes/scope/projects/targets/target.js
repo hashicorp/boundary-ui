@@ -178,6 +178,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
               id: session_id,
               proxy_address: address,
               proxy_port: port,
+              target_id: model.id,
             },
           ],
         });

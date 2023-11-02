@@ -7,6 +7,7 @@ import factory from '../generated/factories/session';
 import { trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
+import permissions from '../helpers/permissions';
 
 const statusStrings = ['pending', 'active', 'canceling', 'terminated'];
 
@@ -15,7 +16,8 @@ export const pickRandomStatusString = () =>
 
 export default factory.extend({
   id: () => generateId('ss_'),
-
+  authorized_actions: () =>
+    permissions.authorizedActionsFor('session') || ['read', 'cancel'],
   status: pickRandomStatusString(),
 
   /**

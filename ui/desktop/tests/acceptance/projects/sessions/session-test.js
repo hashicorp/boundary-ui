@@ -123,6 +123,11 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
   });
 
+  hooks.afterEach(function () {
+    // reset onUncaughtException to original state
+    QUnit.onUncaughtException = originalUncaughtException;
+  });
+
   test('visiting session detail', async function (assert) {
     assert.expect(1);
 
@@ -130,11 +135,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.session);
-  });
-
-  hooks.afterEach(function () {
-    // reset onUncaughtException to original state
-    QUnit.onUncaughtException = originalUncaughtException;
   });
 
   test('visiting session with no credentials', async function (assert) {
@@ -197,6 +197,24 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click(TARGET_CONNECT_BUTTON);
 
     assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('can cancel a session with cancel:self permissions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ authorized_actions: ['cancel:self'] });
+
+    await visit(urls.session);
+
+    assert.dom('[data-test-session-detail-cancel-button]').isVisible();
+  });
+
+  test('cannot cancel a session without cancel permissions', async function (assert) {
+    assert.expect(1);
+    instances.session.update({ authorized_actions: [] });
+
+    await visit(urls.session);
+
+    assert.dom('[data-test-session-detail-cancel-button]').isNotVisible();
   });
 
   test('cancelling a session shows success alert', async function (assert) {
