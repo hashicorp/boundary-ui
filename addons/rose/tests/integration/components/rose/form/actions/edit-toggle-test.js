@@ -17,7 +17,12 @@ module(
       assert.expect(1);
       this.enableEdit = () => {};
       await render(
-        hbs`{{rose/form/actions/edit-toggle enableEdit=this.enableEdit enableEditText='Edit'}}`
+        hbs`
+          <Rose::Form::Actions::EditToggle
+            @enableEdit={{this.enableEdit}}
+            @enableEditText='Edit'
+          />
+        `,
       );
       assert.ok(find('button'));
     });
@@ -26,9 +31,14 @@ module(
       assert.expect(1);
       this.enableEdit = () => assert.ok(true, 'edit was clicked');
       await render(
-        hbs`{{rose/form/actions/edit-toggle enableEdit=this.enableEdit enableEditText='Edit'}}`
+        hbs`
+          <Rose::Form::Actions::EditToggle
+            @enableEdit={{this.enableEdit}}
+            @enableEditText='Edit'
+          />
+        `,
       );
       await click('button');
     });
-  }
+  },
 );

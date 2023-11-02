@@ -122,7 +122,7 @@
                 <SessionStatus @model={{sessionAggregate.session}} />
               </row.cell>
               <row.cell>
-                {{#if sessionAggregate.session.isCancelable}}
+                {{#if sessionAggregate.session.isAvailable}}
                   <Rose::Button
                     @style='secondary'
                     {{on

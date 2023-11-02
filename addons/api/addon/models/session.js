@@ -4,7 +4,6 @@
  */
 
 import GeneratedSessionModel from '../generated/models/session';
-import { computed } from '@ember/object';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
@@ -127,8 +126,7 @@ export default class SessionModel extends GeneratedSessionModel {
   /**
    * @type {boolean}
    */
-  @computed('isActive', 'isPending')
-  get isCancelable() {
+  get isAvailable() {
     return this.isActive || this.isPending;
   }
 
@@ -136,7 +134,6 @@ export default class SessionModel extends GeneratedSessionModel {
    * The full proxy address and port if address exists, otherwise null.
    * @type {?string}
    */
-  @computed('proxy_address', 'proxy_port')
   get proxy() {
     return this.proxy_address
       ? `${this.proxy_address}:${this.proxy_port}`
@@ -148,6 +145,9 @@ export default class SessionModel extends GeneratedSessionModel {
    * @type {TargetModel}
    */
   get target() {
+    if (!this.target_id) {
+      return null;
+    }
     return this.store.peekRecord('target', this.target_id);
   }
 

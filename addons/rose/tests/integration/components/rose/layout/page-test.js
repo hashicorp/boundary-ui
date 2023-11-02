@@ -24,7 +24,7 @@ module('Integration | Component | rose/layout/page', function (hooks) {
 
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Layout::Page>
-      <button id="content" />
+      <button id="content" type="button" />
     </Rose::Layout::Page>`);
     assert.ok(find('#content'));
   });

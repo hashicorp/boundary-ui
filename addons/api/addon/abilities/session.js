@@ -14,10 +14,25 @@ export default class SessionAbility extends ModelAbility {
   // =permissions
 
   /**
-   * Only "active" or "pending" sessions may be read.
+   * Only available sessions may be read.
    * @type {boolean}
    */
   get canRead() {
-    return (this.model.isActive || this.model.isPending) && super.canRead;
+    return (
+      this.model.isAvailable &&
+      (this.hasAuthorizedAction('read:self') || super.canRead)
+    );
+  }
+
+  /**
+   * Only available sessions may be canceled.
+   * @type {boolean}
+   */
+  get canCancel() {
+    return (
+      this.model.isAvailable &&
+      (this.hasAuthorizedAction('cancel:self') ||
+        this.hasAuthorizedAction('cancel'))
+    );
   }
 }

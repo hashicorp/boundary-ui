@@ -20,9 +20,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    * @return {SessionModel}
    */
   async model({ session_id }) {
-    const session = await this.store.findRecord('session', session_id, {
-      reload: true,
-    });
+    const session = await this.store.findRecord('session', session_id);
 
     /**
      * If the session has a host_id and the user has grants,
