@@ -95,7 +95,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       credentials.forEach((cred) => session.addCredential(cred));
     }
 
-    await this.router.transitionTo(
+    this.router.transitionTo(
       'scopes.scope.projects.sessions.session',
       session_id
     );
