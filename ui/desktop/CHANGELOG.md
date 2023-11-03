@@ -14,7 +14,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 - Fix brokered credentials text overflow ([PR](https://github.com/hashicorp/boundary-ui/pull/1982))
 - Fix session permission issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1975))
-- Add read:self permission for sessions in ability check ([PR](https://github.com/hashicorp/boundary-ui/pull/1974))
+- Add read:self permission for sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1974))
 - Fix host-set permission issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1968))
 
 
