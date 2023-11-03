@@ -11,6 +11,8 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -18,12 +20,29 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
    * Load managed group by ID.
    * @param {object} params
    * @param {string} params.managed_group_id
-   * @returns {ManagedGroupModel}
+   * @returns {Promise{ManagedGroupModel}}
    */
-  model({ managed_group_id }) {
+  async model({ managed_group_id }) {
     return this.store.findRecord('managed-group', managed_group_id, {
       reload: true,
     });
+  }
+
+  /**
+   * Redirects to route with correct auth-method id if incorrect.
+   * @param {ManagedGroupModel} managedGroup
+   * @param {object} transition
+   */
+  redirect(managedGroup, transition) {
+    const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
+    const { auth_method_id } = managedGroup;
+    if (auth_method_id !== authMethod.id) {
+      this.router.replaceWith(
+        transition.to.name,
+        auth_method_id,
+        managedGroup.id
+      );
+    }
   }
 
   /**

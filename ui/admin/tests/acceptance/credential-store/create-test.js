@@ -153,4 +153,22 @@ module('Acceptance | credential-stores | create', function (hooks) {
       )
     );
   });
+
+  test('users cannot directly navigate to new credential store route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions[
+      'credential-stores'
+    ] = instances.scopes.project.authorized_collection_actions[
+      'credential-stores'
+    ].filter((item) => item !== 'create');
+
+    await visit(urls.newCredentialStore);
+
+    assert.false(
+      instances.scopes.project.authorized_collection_actions[
+        'credential-stores'
+      ].includes('create')
+    );
+    assert.strictEqual(currentURL(), urls.credentialStores);
+  });
 });

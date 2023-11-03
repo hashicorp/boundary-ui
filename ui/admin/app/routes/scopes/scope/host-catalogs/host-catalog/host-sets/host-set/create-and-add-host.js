@@ -15,8 +15,23 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   @service store;
   @service intl;
   @service router;
+  @service can;
 
   // =methods
+
+  /**
+   * Redirect to parent route when host-catalog does not have create authorized action.
+   */
+  beforeModel() {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    if (this.can.cannot('create model', hostCatalog, { collection: 'hosts' })) {
+      this.router.replaceWith(
+        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+      );
+    }
+  }
 
   /**
    * Creates a new unsaved host in current host catalog scope.

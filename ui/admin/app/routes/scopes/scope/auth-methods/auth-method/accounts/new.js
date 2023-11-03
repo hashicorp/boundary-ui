@@ -10,8 +10,22 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  /**
+   * Redirect to parent route when auth-method does not have create authorized action.
+   */
+  beforeModel() {
+    const authMethod = this.modelFor('scopes.scope.auth-methods.auth-method');
+    if (
+      this.can.cannot('create model', authMethod, { collection: 'accounts' })
+    ) {
+      this.router.replaceWith('scopes.scope.auth-methods.auth-method.accounts');
+    }
+  }
 
   /**
    * Creates a new unsaved account in current scope.

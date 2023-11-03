@@ -201,4 +201,21 @@ module('Acceptance | host-catalogs | create', function (hooks) {
       'Name is required.'
     );
   });
+
+  test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].filter((item) => item !== 'create');
+
+    await visit(urls.newHostCatalog);
+
+    assert.false(
+      instances.scopes.project.authorized_collection_actions[
+        'host-catalogs'
+      ].includes('create')
+    );
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+  });
 });

@@ -90,4 +90,14 @@ module('Acceptance | users | read', function (hooks) {
       .dom(`[href="https://boundaryproject.io/help/admin-ui/users"]`)
       .exists();
   });
+
+  test('users can navigate to user and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const incorrectUrl = `/scopes/global/users/${instances.user.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), urls.user);
+  });
 });

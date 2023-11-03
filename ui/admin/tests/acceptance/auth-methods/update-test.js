@@ -20,7 +20,7 @@ import {
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 
-module('Acceptance | auth methods | update', function (hooks) {
+module('Acceptance | auth-methods | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 

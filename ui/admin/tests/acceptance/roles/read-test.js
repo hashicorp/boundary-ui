@@ -96,4 +96,22 @@ module('Acceptance | roles | read', function (hooks) {
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.role);
   });
+
+  test('users can navigate to role and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const orgScope = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    const role = this.server.create('role', {
+      scope: orgScope,
+    });
+    const incorrectUrl = `${urls.roles}/${role.id}/grants`;
+    const correctUrl = `/scopes/${orgScope.id}/roles/${role.id}/grants`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

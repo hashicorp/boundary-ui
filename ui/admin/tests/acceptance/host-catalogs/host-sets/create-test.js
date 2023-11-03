@@ -224,4 +224,21 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       'Name is required.'
     );
   });
+
+  test('users cannot directly navigate to new host set route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions['host-sets'] =
+      instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newHostSet);
+
+    assert.false(
+      instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.hostSets);
+  });
 });

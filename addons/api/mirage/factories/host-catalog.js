@@ -85,7 +85,16 @@ export default factory.extend({
     afterCreate(hostCatalog, server) {
       const { scope, type } = hostCatalog;
       const hosts = server.createList('host', 10, { scope, hostCatalog, type });
-      server.createList('host-set', 3, { scope, hostCatalog, hosts, type });
+      const hostSets = server.createList('host-set', 3, {
+        scope,
+        hostCatalog,
+        hosts,
+        type,
+      });
+      const hostSetIds = hostSets.map((hostSet) => hostSet.id);
+      hosts.forEach((host) => {
+        host.update({ hostSetIds });
+      });
     },
   }),
 });

@@ -10,6 +10,8 @@ export default class ScopesScopeUsersUserRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -17,9 +19,21 @@ export default class ScopesScopeUsersUserRoute extends Route {
    * Load a user in current scope.
    * @param {object} params
    * @param {string} params.user_id
-   * @return {UserModel}
+   * @return {Promise{UserModel}}
    */
-  model({ user_id }) {
-    return this.store.findRecord('user', user_id);
+  async model({ user_id }) {
+    return this.store.findRecord('user', user_id, { reload: true });
+  }
+
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {UserModel} user
+   * @param {object} transition
+   */
+  redirect(user, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (user.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, user.scopeID, user.id);
+    }
   }
 }
