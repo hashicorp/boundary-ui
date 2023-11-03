@@ -230,7 +230,7 @@ module('Acceptance | projects | targets', function (hooks) {
       .doesNotExist();
   });
 
-  test('user is redirected to target details page when unable to connect from list view if they have read and authorize-seesion permissions', async function (assert) {
+  test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
     assert.expect(3);
     stubs.ipcService.withArgs('cliExists').returns(true);
     stubs.ipcService.withArgs('connect').rejects();
