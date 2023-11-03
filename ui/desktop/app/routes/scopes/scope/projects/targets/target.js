@@ -6,16 +6,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
 
 export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   // =services
 
   @service store;
   @service confirm;
-  @service ipc;
-  @service router;
-  @service session;
 
   // =attributes
 
@@ -99,6 +95,34 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
+   * Connect method that calls parent connect method and handles
+   * connection errors unique to this route
+   * @param {TargetModel} target
+   * @param {HostModel} host
+   */
+  @action
+  async connect(target, host) {
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
+    const parentController = this.controllerFor(
+      'scopes.scope.projects.targets.index'
+    );
+    try {
+      await parentController.connect(target, host);
+    } catch (error) {
+      this.isConnectionError = true;
+      this.confirm
+        .confirm(error.message, { isConnectError: true })
+        // Retry
+        .then(() => this.connect(target, host))
+        .catch(() => {
+          // Reset the flag as this was user initiated and we're not
+          // in a transition or have a host modal open
+          this.isConnectionError = false;
+        });
+    }
+  }
+
+  /**
    * Establish a session to current target.
    * @param {TargetModel} target
    * @param {HostModel} host
@@ -107,6 +131,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   @action
   async hostConnect(target, host) {
     await this.connect(target, host);
+
     if (this.isConnectionError) {
       /* eslint-disable-next-line ember/no-controller-access-in-routes */
       const controller = this.controllerFor(
@@ -120,9 +145,9 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   /**
    * Determine if we show host modal or quick connect based on target attributes.
    * @param {TargetModel} model
+   * @param {function} toggleModal
    */
   @action
-  @loading
   async preConnect(model, toggleModal) {
     /**
      * if hosts length is 1 or less we will try to
@@ -134,85 +159,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       await this.connect(model.target);
     } else {
       toggleModal(true);
-    }
-  }
-
-  /**
-   * Establish a session to current target.
-   * @param {TargetModel} model
-   * @param {HostModel} host
-   */
-  @action
-  @loading
-  async connect(model, host) {
-    // TODO: Connect: move this logic into the target model
-    try {
-      // Check for CLI
-      const cliExists = await this.ipc.invoke('cliExists');
-      if (!cliExists) throw new Error('Cannot find Boundary CLI.');
-
-      const options = {
-        target_id: model.id,
-        token: this.session.data.authenticated.token,
-      };
-
-      if (host) options.host_id = host.id;
-
-      // Create target session
-      const connectionDetails = await this.ipc.invoke('connect', options);
-
-      // Associate the connection details with the session
-      let session;
-      const { session_id, address, port, credentials } = connectionDetails;
-      try {
-        session = await this.store.findRecord('session', session_id);
-      } catch (error) {
-        /**
-         * if the user cannot read or fetch the session we add the important
-         * information returned from the connect command to allow the user
-         * to still continue their work with the information they need
-         */
-        this.store.pushPayload('session', {
-          sessions: [
-            {
-              id: session_id,
-              proxy_address: address,
-              proxy_port: port,
-              target_id: model.id,
-            },
-          ],
-        });
-        session = this.store.peekRecord('session', session_id);
-      }
-
-      // Flag the session has been open in the desktop client
-      session.started_desktop_client = true;
-      /**
-       * Update the session record with proxy information from the CLI
-       * In the future, it may make sense to push this off to the API so that
-       * we don't have to manually persist the proxy details.
-       */
-      session.proxy_address = address;
-      session.proxy_port = port;
-      if (credentials) {
-        credentials.forEach((cred) => session.addCredential(cred));
-      }
-
-      await this.router.transitionTo(
-        'scopes.scope.projects.sessions.session',
-        session_id
-      );
-    } catch (e) {
-      this.isConnectionError = true;
-      this.confirm
-        .confirm(e.message, { isConnectError: true })
-        // Retry
-        .then(() => this.connect(model, host))
-        .catch(() => {
-          // Reset the flag as this was user initiated and we're not
-          // in a transition or have a host modal open
-          this.isConnectionError = false;
-        });
     }
   }
 }
