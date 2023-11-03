@@ -2,6 +2,22 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v1.7.1 [CLI 0.14.2] (2023.11.07)
+
+### New
+
+- Upgrade CLI to v0.14.2 ([PR](https://github.com/hashicorp/boundary-ui/pull/1985))
+- Add cancel permission checks for sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/1980))
+- Allow auto connect to SSH targets on windows ([PR](https://github.com/hashicorp/boundary-ui/pull/1971))
+
+### Bug Fixes
+
+- Fix brokered credentials text overflow ([PR](https://github.com/hashicorp/boundary-ui/pull/1982))
+- Fix session permission issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1975))
+- Add read:self permission for sessions in ability check ([PR](https://github.com/hashicorp/boundary-ui/pull/1974))
+- Fix host-set permission issue ([PR](https://github.com/hashicorp/boundary-ui/pull/1968))
+
+
 ## v1.7.0 [CLI 0.14.0] (2023.10.10)
 
 ### New
