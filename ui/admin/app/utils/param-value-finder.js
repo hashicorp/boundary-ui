@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 // Traverses through a RouteInfo object in order to find
 // the dynamic segments of a route and stops traversing when
 // the route name of the caller is reached. In the RouteInfo
