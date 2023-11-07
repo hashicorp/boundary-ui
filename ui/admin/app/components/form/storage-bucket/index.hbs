@@ -393,9 +393,7 @@
         <F.TextInput
           @name='role_tags'
           @options={{@model.role_tags}}
-          @addOption={{fn this.addOption 'role_tags'}}
-          @removeOptionByIndex={{fn this.removeOptionByIndex 'role_tags'}}
-          @disabled={{form.disabled}}
+          @model={{@model}}
         />
       </:field>
     </Form::Field::ListWrapper>

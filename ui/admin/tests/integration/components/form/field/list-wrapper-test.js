@@ -58,8 +58,6 @@ module('Integration | Component | list-wrapper', function (hooks) {
           <:field as |F|>
             <F.KeyValue  @options={{this.options}}></F.KeyValue>
           </:field>
-
-           
         </Form::Field::ListWrapper>
     `);
 
@@ -68,7 +66,6 @@ module('Integration | Component | list-wrapper', function (hooks) {
 
   test('it renders multiple options with a single text field', async function (assert) {
     this.options = [{ value: 'one' }, { value: 'three' }];
-    this.fn = () => {};
 
     await render(hbs`
     
@@ -76,8 +73,30 @@ module('Integration | Component | list-wrapper', function (hooks) {
       <:field as |F|>
         <F.TextInput 
           @options={{this.options}}  
-          @removeOptionByIndex={{this.fn}}>
+        >
         </F.TextInput>
+        </:field>
+    </Form::Field::ListWrapper>
+    `);
+
+    assert
+      .dom('.list-wrapper-field [data-test-remove-button]')
+      .exists({ count: 2 });
+
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
+
+  test('it renders multiple options with a single textarea field', async function (assert) {
+    this.options = [{ value: 'one' }, { value: 'three' }];
+
+    await render(hbs`
+    
+    <Form::Field::ListWrapper>
+      <:field as |F|>
+        <F.Textarea
+          @options={{this.options}}  
+        >
+        </F.Textarea>
         </:field>
     </Form::Field::ListWrapper>
     `);

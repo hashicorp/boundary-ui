@@ -8,55 +8,37 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { set } from '@ember/object';
 
-export default class MappingListComponent extends Component {
+export default class MappingListTextAreaComponent extends Component {
   // =attributes
-
-  /**
-   * @type {string}
-   */
-  @tracked newOptionKey = '';
 
   /**
    * @type {string}
    */
   @tracked newOptionValue = '';
 
-  /**
-   * Returns an array of key/value pair that the user enters
-   * @type {object}
-   */
-
-  get options() {
-    return this.args?.options || this.args?.model?.[this.args.name];
-  }
   // =actions
 
   /**
-   * If a new key value is entered and an addOption method was specified,
-   * calls addOption with the new key and value. Resets key and value.
+   * If a new input is entered and an addOption method was specified,
+   * calls addOption with the new input.  Resets previous value.
    * Otherwise use the model argument to create the array and update the model
    */
 
   @action
   addOption() {
     if (this.args.addOption) {
-      if (this.newOptionKey) {
+      if (this.newOptionValue) {
         this.args.addOption({
-          key: this.newOptionKey,
           value: this.newOptionValue,
         });
       }
     } else {
       const field = this.args.name;
       const existingArray = this.args.model[field] ?? [];
-      const newArray = [
-        ...existingArray,
-        { key: this.newOptionKey, value: this.newOptionValue },
-      ];
+      const newArray = [...existingArray, { value: this.newOptionValue }];
       set(this.args.model, field, newArray);
     }
 
-    this.newOptionKey = '';
     this.newOptionValue = '';
   }
 

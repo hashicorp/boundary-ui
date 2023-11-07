@@ -33,6 +33,16 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
+  const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';
+  const CERTIFICATES_INPUT_SELECTOR = '[name="certificates"] textarea';
+  const IDP_CERTS_INPUT_SELECTOR = '[name="idp_ca_certs"] textarea';
+  const IDP_CERTS_BTN_SELECTOR = '[name="idp_ca_certs"] button';
+
+  const ALLOWED_AUDIENCES_BTN_SELECTOR = '[name="allowed_audiences"] button';
+  const ALLOWED_AUDIENCES_INPUT_SELECTOR = '[name="allowed_audiences"] input';
+
+  const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
+  const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   let getAuthMethodsCount;
   let featuresService;
 
@@ -110,15 +120,18 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="client_secret"]', 'client_secret');
     await select('form fieldset:nth-of-type(1) select', 'RS384');
     await click('form fieldset:nth-of-type(1) [title="Add"]');
-    await fillIn('[name="allowed_audiences"]', 'allowed_audiences');
-    await click('form fieldset:nth-of-type(2) [title="Add"]');
-    await fillIn('[name="claims_scopes"]', 'claims_scopes');
-    await click('form fieldset:nth-of-type(3) [title="Add"]');
+    await fillIn(ALLOWED_AUDIENCES_INPUT_SELECTOR, 'allowed_audiences');
+    await click(ALLOWED_AUDIENCES_BTN_SELECTOR, 'allowed_audiences');
+    await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
+    await click(CLAIMS_SCOPES_BTN_SELECTOR, 'claims_scopes');
+
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
+
     await click('form fieldset:nth-of-type(4) [title="Add"]');
-    await fillIn('form fieldset:nth-of-type(5) textarea', 'certificates');
-    await click('form fieldset:nth-of-type(5) [title="Add"]');
+
+    await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
+    await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click(SAVE_BTN_SELECTOR);
@@ -154,8 +167,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, name);
     await fillIn(DESC_INPUT_SELECTOR, 'description');
     await fillIn('[name="urls"]', 'url1,url2');
-    await fillIn('[name="certificates"] textarea', 'certificate');
-    await click('[name="certificates"] button');
+    await fillIn(CERTIFICATES_INPUT_SELECTOR, 'certificate');
+    await click(CERTIFICATES_BTN_SELECTOR);
     await fillIn('[name="client_certificate"]', 'client cert');
     await fillIn('[name="client_certificate_key"]', 'client cert key');
     await click('[name="start_tls"]');
@@ -404,6 +417,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is set.'
     );
     await click(DROPDOWN_SELECTOR_ICON);
+
     await click(DROPDOWN_SELECTOR_OPTION);
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);

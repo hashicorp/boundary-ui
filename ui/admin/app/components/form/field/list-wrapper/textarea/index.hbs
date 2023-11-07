@@ -10,12 +10,11 @@
     {{#each @options as |option index|}}
       <B.Tr>
         <B.Td>
-          <Hds::Form::TextInput::Field
+          <Hds::Form::Textarea::Field
             @value={{option.value}}
             @type='text'
             disabled={{@disabled}}
             aria-label={{t 'titles.value'}}
-            {{on 'input' (set-from-event option 'value')}}
           />
         </B.Td>
 
@@ -38,12 +37,11 @@
     <B.Tr>
 
       <B.Td>
-        <Hds::Form::TextInput::Field
+        <Hds::Form::Textarea::Field
           @value={{this.newOptionValue}}
           @type='text'
           disabled={{@disabled}}
           aria-label={{t 'titles.value'}}
-          {{on 'input' (set-from-event this 'newOptionValue')}}
         />
       </B.Td>
 
