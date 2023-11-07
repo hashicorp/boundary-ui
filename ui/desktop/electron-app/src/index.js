@@ -22,9 +22,10 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 
-const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
+const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
+const clientDaemonManager = require('./services/client-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -233,6 +234,8 @@ app.on('ready', async () => {
       mainWindow = createWindow(partition, closeWindowCB);
     }
   });
+
+  await clientDaemonManager.start();
 });
 
 /**
@@ -249,6 +252,12 @@ app.on('before-quit', (event) => {
     const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
     buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
   }
+});
+
+app.on('quit', () => {
+  // TODO: Should we check if the desktop client started the daemon?
+  //  If not, we probably shouldn't stop the daemon
+  clientDaemonManager.stop();
 });
 
 // Handle an unhandled error in the main thread
