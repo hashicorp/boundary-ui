@@ -35,10 +35,7 @@ export default class MappingListTextInputComponent extends Component {
     } else {
       const field = this.args.name;
       const existingArray = this.args.model[field] ?? [];
-      const newArray = [
-        ...existingArray,
-        { key: this.newOptionKey, value: this.newOptionValue },
-      ];
+      const newArray = [...existingArray, { value: this.newOptionValue }];
       set(this.args.model, field, newArray);
     }
 
