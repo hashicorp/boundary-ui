@@ -54,6 +54,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     instances.hostCatalog = this.server.create('host-catalog', {
+      type: 'static',
       scope: instances.scopes.project,
     });
     instances.host = this.server.create('host', {
@@ -159,5 +160,22 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.'
     );
+  });
+
+  test('users cannot directly navigate to new host route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.hostCatalog.authorized_collection_actions.hosts =
+      instances.hostCatalog.authorized_collection_actions.hosts.filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newHost);
+
+    assert.false(
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.hosts);
   });
 });

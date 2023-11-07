@@ -9,6 +9,7 @@ import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 
 import {
+  TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
   TYPES_AUTH_METHOD,
@@ -23,11 +24,17 @@ export default factory.extend({
       'delete',
       'authenticate',
     ],
-  authorized_collection_actions: () => {
-    return {
-      accounts: ['create', 'list'],
-      'managed-groups': ['create', 'list'],
-    };
+  authorized_collection_actions() {
+    switch (this.type) {
+      case TYPE_AUTH_METHOD_PASSWORD:
+        return { accounts: ['create', 'list'] };
+      case TYPE_AUTH_METHOD_LDAP:
+      case TYPE_AUTH_METHOD_OIDC:
+        return {
+          accounts: ['create', 'list'],
+          'managed-groups': ['create', 'list'],
+        };
+    }
   },
 
   id: () => generateId('am_'),

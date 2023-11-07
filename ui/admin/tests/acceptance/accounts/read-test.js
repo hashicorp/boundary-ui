@@ -18,6 +18,7 @@ import {
 module('Acceptance | accounts | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
   const ACCOUNT_SELECTOR = 'main tbody .hds-table__td:nth-child(1) a';
 
   const instances = {
@@ -26,11 +27,13 @@ module('Acceptance | accounts | read', function (hooks) {
       org: null,
     },
     authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
     authMethods: null,
+    authMethod: null,
     accounts: null,
     account: null,
   };
@@ -79,5 +82,23 @@ module('Acceptance | accounts | read', function (hooks) {
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
     assert.dom(ACCOUNT_SELECTOR).doesNotExist();
+  });
+
+  test('user can navigate to account and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+    });
+    const account = this.server.create('account', {
+      scope: instances.scopes.org,
+      authMethod,
+    });
+    const incorrectUrl = `${urls.accounts}/${account.id}`;
+    const correctUrl = `${urls.orgScope}/auth-methods/${authMethod.id}/accounts/${account.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
   });
 });

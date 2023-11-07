@@ -233,4 +233,22 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
   });
+
+  test('users cannot directly navigate to new credential library route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.credentialStore.authorized_collection_actions[
+      'credential-libraries'
+    ] = instances.credentialStore.authorized_collection_actions[
+      'credential-libraries'
+    ].filter((item) => item !== 'create');
+
+    await visit(urls.newCredentialLibrary);
+
+    assert.false(
+      instances.credentialStore.authorized_collection_actions[
+        'credential-libraries'
+      ].includes('create')
+    );
+    assert.strictEqual(currentURL(), urls.credentialLibraries);
+  });
 });

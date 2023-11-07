@@ -54,4 +54,10 @@ export default class GeneratedHostModel extends BaseModel {
     readOnly: true,
   })
   plugin;
+
+  @attr({
+    emptyArrayIfMissing: true,
+    readOnly: true,
+  })
+  host_set_ids;
 }

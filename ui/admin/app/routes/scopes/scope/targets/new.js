@@ -14,8 +14,7 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   @service store;
   @service router;
   @service features;
-
-  // =methods
+  @service can;
 
   // =attributes
   queryParams = {
@@ -23,6 +22,21 @@ export default class ScopesScopeTargetsNewRoute extends Route {
       refreshModel: true,
     },
   };
+
+  // =methods
+
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create model', scopeModel, { collection: 'targets' })
+    ) {
+      this.router.replaceWith('scopes.scope.targets');
+    }
+  }
+
   /**
    * Creates a new unsaved target in current scope.
    * Also rollback/destroy any new, unsaved instances from this route before

@@ -57,6 +57,7 @@ module('Unit | Serializer | host', function (hooks) {
           address: '10.0.0.1',
           dns_names: [],
           ip_addresses: [],
+          host_set_ids: [],
         },
         relationships: {},
       },
@@ -78,6 +79,7 @@ module('Unit | Serializer | host', function (hooks) {
       authorized_actions: ['no-op', 'read'],
       ip_addresses: ['10.0.0.1', '10.0.0.2', '10.0.0.3'],
       dns_names: ['test.example.internal', 'test.example.external'],
+      host_set_ids: ['hst_12345'],
     };
     const normalized = serializer.normalizeSingleResponse(store, host, payload);
     assert.deepEqual(normalized, {
@@ -92,6 +94,7 @@ module('Unit | Serializer | host', function (hooks) {
           ip_addresses: ['10.0.0.1', '10.0.0.2', '10.0.0.3'],
           dns_names: ['test.example.internal', 'test.example.external'],
           plugin: { name: 'aws' },
+          host_set_ids: ['hst_12345'],
         },
         relationships: {},
       },

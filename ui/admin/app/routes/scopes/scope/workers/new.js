@@ -13,8 +13,24 @@ export default class ScopesScopeWorkersNewRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
+
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create worker led worker', scopeModel, {
+        collection: 'workers',
+      })
+    ) {
+      this.router.replaceWith('scopes.scope.workers');
+    }
+  }
 
   /**
    * Creates a new unsaved worker.

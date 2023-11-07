@@ -10,6 +10,8 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -17,9 +19,26 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
    * Load a storage bucket in current scope.
    * @param {object} params
    * @param {string} params.storage_bucket_id
-   * @return {StorageBucketModel}
+   * @return {Promise{StorageBucketModel}}
    */
-  model({ storage_bucket_id }) {
-    return this.store.findRecord('storage-bucket', storage_bucket_id);
+  async model({ storage_bucket_id }) {
+    return this.store.findRecord('storage-bucket', storage_bucket_id, {
+      reload: true,
+    });
+  }
+
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {StorageBucketModel} storageBucket
+   */
+  redirect(storageBucket) {
+    const scope = this.modelFor('scopes.scope');
+    if (storageBucket.scopeID !== scope.id) {
+      this.router.replaceWith(
+        'scopes.scope.storage-buckets.storage-bucket',
+        storageBucket.scopeID,
+        storageBucket.id
+      );
+    }
   }
 }

@@ -118,4 +118,23 @@ module('Acceptance | managed-groups | read', function (hooks) {
 
     assert.dom(`[href="${urls.ldapManagedGroup}"]`).doesNotExist();
   });
+
+  test('User can navigate to managed group and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const authMethod = this.server.create('auth-method', {
+      scope: instances.scopes.org,
+      type: TYPE_AUTH_METHOD_LDAP,
+    });
+    const managedGroup = this.server.create('managed-group', {
+      scope: instances.scopes.org,
+      authMethod,
+    });
+    const incorrectUrl = `${urls.managedGroups}/${managedGroup.id}`;
+    const correctUrl = `${urls.orgScope}/auth-methods/${authMethod.id}/managed-groups/${managedGroup.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

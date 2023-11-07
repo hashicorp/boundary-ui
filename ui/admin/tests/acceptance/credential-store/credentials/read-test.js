@@ -165,4 +165,22 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
       find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`)
     );
   });
+
+  test('users can navigate to credential and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const credentialStore = this.server.create('credential-store', {
+      scope: instances.scopes.project,
+    });
+    const credential = this.server.create('credential', {
+      scope: instances.scopes.project,
+      credentialStore,
+    });
+    const incorrectUrl = `${urls.credentials}/${credential.id}`;
+    const correctUrl = `${urls.projectScope}/credential-stores/${credentialStore.id}/credentials/${credential.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

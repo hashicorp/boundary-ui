@@ -26,11 +26,13 @@ module('Acceptance | accounts | create', function (hooks) {
       org: null,
     },
     authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
     authMethods: null,
+    authMethod: null,
     accounts: null,
     newAccount: null,
     account: null,
@@ -189,5 +191,22 @@ module('Acceptance | accounts | create', function (hooks) {
       'Name is required.',
       'Displays field-level errors.'
     );
+  });
+
+  test('users cannot directly navigate to new account route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.authMethod.authorized_collection_actions.accounts =
+      instances.authMethod.authorized_collection_actions.accounts.filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newAccount);
+
+    assert.false(
+      instances.authMethod.authorized_collection_actions.accounts.includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.accounts);
   });
 });

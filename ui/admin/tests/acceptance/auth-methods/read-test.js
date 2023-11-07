@@ -15,7 +15,7 @@ import {
   TYPE_AUTH_METHOD_PASSWORD,
 } from 'api/models/auth-method';
 
-module('Acceptance | auth methods | read', function (hooks) {
+module('Acceptance | auth-methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   const AUTH_LINK_SELECTOR = 'main tbody .hds-table__td:nth-child(1) a';
@@ -177,5 +177,23 @@ module('Acceptance | auth methods | read', function (hooks) {
     assert.dom(LDAP_AUTH_LINK_SELECTOR).doesNotExist();
     assert.dom(LDAP_AUTH_TYPE_SELECTOR).hasText('LDAP');
     assert.dom(LDAP_AUTH_ACTIONS_SELECTOR).doesNotExist();
+  });
+
+  test('users can navigate to auth method and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const orgScope = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    const authMethod = this.server.create('auth-method', {
+      scope: orgScope,
+    });
+    const incorrectUrl = `${urls.globalAuthMethods}/${authMethod.id}/accounts`;
+    const correctUrl = `/scopes/${orgScope.id}/auth-methods/${authMethod.id}/accounts`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
   });
 });

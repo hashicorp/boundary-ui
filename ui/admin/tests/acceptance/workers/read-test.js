@@ -86,4 +86,18 @@ module('Acceptance | workers | read', function (hooks) {
 
     assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
   });
+
+  test('users can navigate to worker and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const orgScope = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    const incorrectUrl = `/scopes/${orgScope.id}/workers/${instances.worker.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), urls.worker);
+  });
 });

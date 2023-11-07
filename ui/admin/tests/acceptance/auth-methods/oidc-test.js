@@ -25,7 +25,7 @@ import {
 
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
-module('Acceptance | auth methods | oidc', function (hooks) {
+module('Acceptance | auth-methods | oidc', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
