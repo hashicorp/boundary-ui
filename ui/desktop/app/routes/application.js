@@ -35,7 +35,7 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-    return this.clusterUrl.updateClusterUrl();
+    await this.clusterUrl.updateClusterUrl();
   }
 
   /**
