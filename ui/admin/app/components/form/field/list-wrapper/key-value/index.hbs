@@ -10,9 +10,8 @@
         <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
         <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
         <H.Th>
-          {{#if this.removeOptionByIndex}}
-            {{t 'titles.actions'}}
-          {{/if}}
+          {{t 'titles.actions'}}
+
         </H.Th>
       </H.Tr>
     </:head>
@@ -48,7 +47,7 @@
                 @icon='trash'
                 @isIconOnly={{true}}
                 disabled={{@disabled}}
-                {{on 'click' (fn this.removeOptionByIndex @name index)}}
+                {{on 'click' (fn this.removeOptionByIndex index)}}
               />
             {{/if}}
           </B.Td>

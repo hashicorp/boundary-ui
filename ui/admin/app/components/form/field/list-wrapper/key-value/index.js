@@ -61,14 +61,19 @@ export default class MappingListComponent extends Component {
   }
 
   /**
-   * Removes an option by index. We recreate a new array after
+   * If removeOptionByIndex method was passed, use that.
+   * Otherwise, use the model to remove an option by index. We recreate a new array after
    * splicing out the item so that ember is aware that the array has been modified.
-   * @param field {string}
    * @param index {number}
    */
   @action
-  removeOptionByIndex(field, index) {
-    const newArray = this.args.model[field].filter((_, i) => i !== index);
-    set(this.args.model, field, newArray);
+  removeOptionByIndex(index) {
+    if (this.args.removeOptionByIndex) {
+      this.args.removeOptionByIndex(index);
+    } else {
+      const field = this.args.name;
+      const newArray = this.args.model[field].filter((_, i) => i !== index);
+      set(this.args.model, field, newArray);
+    }
   }
 }
