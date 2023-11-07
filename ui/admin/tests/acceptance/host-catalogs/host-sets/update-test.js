@@ -184,9 +184,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     const name = 'aws host set';
     await fillIn('[name="name"]', name);
 
-    const endpointList = await Promise.all(
-      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR)
-    );
+    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
 
     for (const element of endpointList) {
       await click(element);
@@ -235,9 +233,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
 
-    const endpointList = await Promise.all(
-      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR)
-    );
+    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
 
     for (const element of endpointList) {
       await click(element);

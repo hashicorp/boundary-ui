@@ -10,15 +10,14 @@
         <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
         <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
         <H.Th>
-          {{#if @removeOptionByIndex}}
+          {{#if this.removeOptionByIndex}}
             {{t 'titles.actions'}}
           {{/if}}
         </H.Th>
       </H.Tr>
     </:head>
     <:body as |B|>
-
-      {{#each @options as |option index|}}
+      {{#each this.options as |option index|}}
         <B.Tr>
           <B.Td>
             <Hds::Form::TextInput::Field
@@ -41,7 +40,7 @@
           </B.Td>
 
           <B.Td>
-            {{#if @removeOptionByIndex}}
+            {{#if this.removeOptionByIndex}}
               <Hds::Button
                 data-test-remove-button
                 @text={{t 'actions.remove'}}
@@ -49,7 +48,7 @@
                 @icon='trash'
                 @isIconOnly={{true}}
                 disabled={{@disabled}}
-                {{on 'click' (fn @removeOptionByIndex index)}}
+                {{on 'click' (fn this.removeOptionByIndex @name index)}}
               />
             {{/if}}
           </B.Td>

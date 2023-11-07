@@ -3,61 +3,58 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{#let (unique-id) as |valueHeaderID|}}
-  <Hds::Table class='list-wrapper-field' name={{@name}}>
+<Hds::Table class='list-wrapper-field' name={{@name}}>
 
-    <:body as |B|>
+  <:body as |B|>
 
-      {{#each @options as |option index|}}
-        <B.Tr>
-          <B.Td>
-            <Hds::Form::Textarea::Field
-              @value={{option.value}}
-              @type='text'
-              disabled={{@disabled}}
-              aria-label={{valueHeaderID}}
-            />
-          </B.Td>
-
-          <B.Td>
-            {{#if @removeOptionByIndex}}
-              <Hds::Button
-                data-test-remove-button
-                @text={{t 'actions.remove'}}
-                @color='critical'
-                @icon='trash'
-                @isIconOnly={{true}}
-                disabled={{@disabled}}
-                {{on 'click' (fn @removeOptionByIndex index)}}
-              />
-            {{/if}}
-          </B.Td>
-        </B.Tr>
-      {{/each}}
-
+    {{#each @options as |option index|}}
       <B.Tr>
-
         <B.Td>
           <Hds::Form::Textarea::Field
-            @value={{this.newOptionValue}}
+            @value={{option.value}}
             @type='text'
             disabled={{@disabled}}
-            aria-label={{valueHeaderID}}
+            aria-label={{t 'titles.value'}}
           />
         </B.Td>
 
         <B.Td>
-          <Hds::Button
-            @text={{t 'actions.add'}}
-            @color='secondary'
-            type='button'
-            disabled={{or @disabled (not this.newOptionValue)}}
-            {{on 'click' this.addOption}}
-          />
+          {{#if this.removeOptionByIndex}}
+            <Hds::Button
+              data-test-remove-button
+              @text={{t 'actions.remove'}}
+              @color='critical'
+              @icon='trash'
+              @isIconOnly={{true}}
+              disabled={{@disabled}}
+              {{on 'click' (fn this.removeOptionByIndex @name index)}}
+            />
+          {{/if}}
         </B.Td>
       </B.Tr>
+    {{/each}}
 
-    </:body>
-  </Hds::Table>
+    <B.Tr>
 
-{{/let}}
+      <B.Td>
+        <Hds::Form::Textarea::Field
+          @value={{this.newOptionValue}}
+          @type='text'
+          disabled={{@disabled}}
+          aria-label={{t 'titles.value'}}
+        />
+      </B.Td>
+
+      <B.Td>
+        <Hds::Button
+          @text={{t 'actions.add'}}
+          @color='secondary'
+          type='button'
+          disabled={{or @disabled (not this.newOptionValue)}}
+          {{on 'click' this.addOption}}
+        />
+      </B.Td>
+    </B.Tr>
+
+  </:body>
+</Hds::Table>

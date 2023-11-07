@@ -102,8 +102,7 @@
       <F.Textarea
         @name='certificates'
         @options={{@model.certificates}}
-        @addOption={{fn @addOption 'certificates'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'certificates'}}
+        @model={{@model}}
       />
     </:field>
 

@@ -6,7 +6,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { assert } from '@ember/debug';
+import { set } from '@ember/object';
 
 export default class MappingListComponent extends Component {
   // =attributes
@@ -21,27 +21,54 @@ export default class MappingListComponent extends Component {
    */
   @tracked newOptionValue = '';
 
+  /**
+   * Returns an array of key/value pair that the user enters
+   * @type {object}
+   */
+
+  get options() {
+    return this.args?.options || this.args?.model?.[this.args.name];
+  }
   // =actions
 
   /**
    * If a new key value is entered and an addOption method was specified,
-   * calls addOption with the new key and value.  Resets key and value.
+   * calls addOption with the new key and value. Resets key and value.
+   * Otherwise use the model argument to create the array and update the model
    */
+
   @action
   addOption() {
-    assert(
-      '[boundary-admin-list-wrapper] `@addOption` is required.',
-      this.args.addOption
-    );
-
-    if (this.newOptionKey) {
-      this.args.addOption({
-        key: this.newOptionKey,
-        value: this.newOptionValue,
-      });
+    if (this.args.addOption) {
+      if (this.newOptionKey) {
+        this.args.addOption({
+          key: this.newOptionKey,
+          value: this.newOptionValue,
+        });
+      }
+    } else {
+      const field = this.args.name;
+      const existingArray = this.args.model[field] ?? [];
+      const newArray = [
+        ...existingArray,
+        { key: this.newOptionKey, value: this.newOptionValue },
+      ];
+      set(this.args.model, field, newArray);
     }
 
     this.newOptionKey = '';
     this.newOptionValue = '';
+  }
+
+  /**
+   * Removes an option by index. We recreate a new array after
+   * splicing out the item so that ember is aware that the array has been modified.
+   * @param field {string}
+   * @param index {number}
+   */
+  @action
+  removeOptionByIndex(field, index) {
+    const newArray = this.args.model[field].filter((_, i) => i !== index);
+    set(this.args.model, field, newArray);
   }
 }

@@ -262,8 +262,7 @@
       <F.KeyValue
         @name='critical_options'
         @options={{@model.critical_options}}
-        @addOption={{fn this.addOption 'critical_options'}}
-        @removeOptionByIndex={{fn this.removeOptionByIndex 'critical_options'}}
+        @model={{@model}}
         @disabled={{form.disabled}}
       />
     </:field>
@@ -295,8 +294,7 @@
       <F.KeyValue
         @name='extensions'
         @options={{@model.extensions}}
-        @addOption={{fn this.addOption 'extensions'}}
-        @removeOptionByIndex={{fn this.removeOptionByIndex 'extensions'}}
+        @model={{@model}}
       />
     </:field>
 

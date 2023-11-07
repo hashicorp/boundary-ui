@@ -132,9 +132,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     await select('form fieldset:nth-of-type(1) select', 'RS384');
     await click('form fieldset:nth-of-type(1) [title="Add"]');
     // Remove all allowed audiences
-    const allowedAudiencesList = await Promise.all(
-      findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR)
-    );
+    const allowedAudiencesList = findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR);
 
     for (const element of allowedAudiencesList) {
       await click(element);
@@ -165,9 +163,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     await click('form fieldset:nth-of-type(4) [title="Add"]');
 
     // Remove all certificates
-    const certificatesList = await Promise.all(
-      findAll(IDP_CERTS_REMOVE_BTN_SELECTOR)
-    );
+    const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
 
     for (const element of certificatesList) {
       await click(element);
@@ -211,9 +207,7 @@ module('Acceptance | auth methods | update', function (hooks) {
     await click('[name="certificates"] .hds-button--color-critical');
 
     // Remove certificate
-    const certificatesList = await Promise.all(
-      findAll(CERTIFICATES_REMOVE_BTN_SELECTOR)
-    );
+    const certificatesList = findAll(CERTIFICATES_REMOVE_BTN_SELECTOR);
 
     for (const element of certificatesList) {
       await click(element);

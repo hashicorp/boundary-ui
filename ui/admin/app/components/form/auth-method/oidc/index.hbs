@@ -281,8 +281,7 @@
       <F.TextInput
         @name='allowed_audiences'
         @options={{@model.allowed_audiences}}
-        @addOption={{fn @addOption 'allowed_audiences'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'allowed_audiences'}}
+        @model={{@model}}
       />
     </:field>
 
@@ -316,8 +315,7 @@
       <F.TextInput
         @name='claims_scopes'
         @options={{@model.claims_scopes}}
-        @addOption={{fn @addOption 'claims_scopes'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'claims_scopes'}}
+        @model={{@model}}
       />
     </:field>
 
@@ -484,8 +482,7 @@
       <F.Textarea
         @name='idp_ca_certs'
         @options={{@model.idp_ca_certs}}
-        @addOption={{fn @addOption 'idp_ca_certs'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'idp_ca_certs'}}
+        @model={{@model}}
       />
     </:field>
 

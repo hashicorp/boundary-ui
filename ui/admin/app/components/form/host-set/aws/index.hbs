@@ -94,8 +94,7 @@
       <F.TextInput
         @name='preferred_endpoints'
         @options={{@model.preferred_endpoints}}
-        @addOption={{fn @addOption 'preferred_endpoints'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'preferred_endpoints'}}
+        @model={{@model}}
       />
     </:field>
   </Form::Field::ListWrapper>
@@ -121,9 +120,7 @@
       <F.TextInput
         @name='filters'
         @options={{@model.filters}}
-        @addOption={{fn @addOption 'filters'}}
-        @removeOptionByIndex={{fn @removeOptionByIndex 'filters'}}
-        @disabled={{form.disabled}}
+        @model={{@model}}
       />
     </:field>
   </Form::Field::ListWrapper>
