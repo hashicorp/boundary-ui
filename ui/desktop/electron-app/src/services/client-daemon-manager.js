@@ -33,7 +33,13 @@ class ClientDaemonManager {
    * @returns {Promise<void>}
    */
   async start() {
-    const startDaemonCommand = ['daemon', 'start'];
+    // TODO: Finalize how often the daemon should be refreshing
+    const startDaemonCommand = [
+      'daemon',
+      'start',
+      '-refresh-interval-seconds',
+      '10',
+    ];
     await spawn(startDaemonCommand);
     this.status();
   }
@@ -66,6 +72,17 @@ class ClientDaemonManager {
       socketPath: this.#socketPath,
     };
     return unixSocketRequest(request, postBody);
+  }
+
+  search(requestData) {
+    const queryString = new URLSearchParams(requestData);
+
+    const request = {
+      method: 'GET',
+      path: `http://internal.boundary.local/v1/search?${queryString.toString()}`,
+      socketPath: this.#socketPath,
+    };
+    return unixSocketRequest(request);
   }
 }
 
