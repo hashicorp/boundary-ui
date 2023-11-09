@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const netRequestPromise = require('../helpers/net-request-promise.js');
+const { netRequest } = require('../helpers/request-promise.js');
 
 // Runtime settings are any configuration, especially user-specified,
 // set up at runtime.  For example, the Boundary clusterUrl is a runtime setting.
@@ -36,7 +36,7 @@ class RuntimeSettings {
     // test to see if the clusterUrl is API-compatible with the desktop client.
     const scopesEndpoint = `${clusterUrl}/v1/scopes`;
     try {
-      const result = await netRequestPromise(scopesEndpoint);
+      const result = await netRequest(scopesEndpoint);
       // Redirects (3xx) are handled in the netRequest Promise, so we only
       // throw an error for 4xx or 5xx responses.
       if (result.statusCode >= 400) {
