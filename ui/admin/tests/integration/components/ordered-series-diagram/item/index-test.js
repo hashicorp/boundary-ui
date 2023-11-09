@@ -16,14 +16,16 @@ module(
     test('it renders with icon and text', async function (assert) {
       assert.expect(2);
 
+      this.set('client', 'Client');
+
       await render(hbs`
         <OrderedSeriesDiagram::Item @icon='user'>
-          Client
+          {{this.client}}
         </OrderedSeriesDiagram::Item>
       `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert.dom('.ordered-series-diagram-item-title').hasText('Client');
     });
-  }
+  },
 );

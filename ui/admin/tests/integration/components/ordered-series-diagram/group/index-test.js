@@ -16,13 +16,16 @@ module(
     test('it renders group icons with highlight background', async function (assert) {
       assert.expect(7);
 
+      this.set('client', 'Client');
+      this.set('egressWorker', 'Egress Worker');
+
       await render(hbs`
         <OrderedSeriesDiagram::Group @title='Private Network' @color='highlight'>
           <OrderedSeriesDiagram::Item @icon='user'>
-            Client
+            {{this.client}}
           </OrderedSeriesDiagram::Item>
           <OrderedSeriesDiagram::Item @icon='settings'>
-            Egress Worker
+            {{this.egressWorker}}
           </OrderedSeriesDiagram::Item>
         </OrderedSeriesDiagram::Group>
       `);
@@ -41,9 +44,9 @@ module(
       assert.dom('[data-test-icon="settings"]').isVisible();
       assert
         .dom(
-          '.ordered-series-diagram-item:last-child .ordered-series-diagram-item-title'
+          '.ordered-series-diagram-item:last-child .ordered-series-diagram-item-title',
         )
         .hasText('Egress Worker');
     });
-  }
+  },
 );

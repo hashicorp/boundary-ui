@@ -139,9 +139,9 @@
         </table.body>
       </Rose::Table>
 
-    {{else if (has-resource-filter-selections
-      'scopes.scope.sessions' 'status'
-    )}}
+    {{else if
+      (has-resource-filter-selections 'scopes.scope.sessions' 'status')
+    }}
       <Rose::Layout::Centered>
         <Rose::Message @title={{t 'titles.no-results'}} as |message|>
           <message.description>

@@ -11,16 +11,21 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | info-field', function (hooks) {
   setupRenderingTest(hooks);
 
+  hooks.beforeEach(function () {
+    this.set('label', 'Type');
+    this.set('helperText', 'Description');
+  });
+
   test('it renders without icon', async function (assert) {
     assert.expect(4);
 
     await render(
       hbs`
         <InfoField @value="JSON" as |F|>
-          <F.Label>Type</F.Label>
-          <F.HelperText>Description</F.HelperText>
+          <F.Label>{{this.label}}</F.Label>
+          <F.HelperText>{{this.helperText}}</F.HelperText>
         </InfoField>
-      `
+      `,
     );
     assert.dom('.info-field').isVisible();
     assert.dom('.info-field .hds-form-label').hasText('Type');
@@ -34,10 +39,10 @@ module('Integration | Component | info-field', function (hooks) {
     await render(
       hbs`
         <InfoField @value="JSON" @icon='apple' as |F|>
-          <F.Label>Type</F.Label>
-          <F.HelperText>Description</F.HelperText>
+          <F.Label>{{this.label}}</F.Label>
+          <F.HelperText>{{this.helperText}}</F.HelperText>
         </InfoField>
-      `
+      `,
     );
     assert.dom('.info-field').isVisible();
     assert.dom('.info-field .hds-form-label').hasText('Type');

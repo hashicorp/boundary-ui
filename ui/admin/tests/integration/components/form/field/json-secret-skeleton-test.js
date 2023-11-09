@@ -15,14 +15,17 @@ module(
 
     test('it renders', async function (assert) {
       assert.expect(2);
+
+      this.set('value', 'Skeleton Message');
+
       await render(hbs`
       <Form::Field::JsonSecret::Skeleton>
-        Skeleton Message
+        {{this.value}}
       </Form::Field::JsonSecret::Skeleton>
     `);
 
       assert.dom('.secret-editor-skeleton-wrapper').isVisible();
       assert.dom('.secret-editor-skeleton-message').hasText('Skeleton Message');
     });
-  }
+  },
 );
