@@ -24,7 +24,7 @@ class ClientDaemonManager {
     const data = spawnSync(daemonStatusCommand);
 
     const status = jsonify(data);
-    this.#socketPath = status.socket_address;
+    this.#socketPath = status?.socket_address;
     return status;
   }
 

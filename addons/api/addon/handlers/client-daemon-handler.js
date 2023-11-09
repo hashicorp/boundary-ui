@@ -17,8 +17,11 @@ const ClientDaemonHandler = {
       case 'query': {
         const { store, data } = context.request;
         const { type, query } = data;
+        const isClientDaemonRunning = await this.ipc.invoke(
+          'isClientDaemonRunning'
+        );
 
-        if (!supportedTypes.includes(type)) {
+        if (!supportedTypes.includes(type) || !isClientDaemonRunning) {
           return next(context.request);
         }
 

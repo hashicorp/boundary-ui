@@ -119,12 +119,26 @@ handle('closeWindow', () => app.quit());
  */
 handle('checkCommand', async (command) => which(command, { nothrow: true }));
 
+/**
+ * Adds the user's token to the client daemon.
+ */
 handle('addTokenToClientDaemon', async (data) =>
   clientDaemonManager.addToken(data)
 );
 
+/**
+ * Call the client daemon's search endpoint to retrieve cached results.
+ */
 handle('searchClientDaemon', async (request) =>
   clientDaemonManager.search(request)
+);
+
+/**
+ * Check to see if the client daemon is running. We use the presence of a
+ * socket path as a proxy for whether the daemon is running.
+ */
+handle('isClientDaemonRunning', async (request) =>
+  Boolean(clientDaemonManager.socketPath)
 );
 
 /**
