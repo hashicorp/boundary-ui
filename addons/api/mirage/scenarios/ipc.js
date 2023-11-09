@@ -179,6 +179,10 @@ export default function initializeMockIPC(server, config) {
     closeWindow() {}
     toggleFullscreenWindow() {}
     stop() {}
+    checkCommand() {
+      return faker.system.filePath();
+    }
+    addTokenToClientDaemon() {}
   }
 
   /**

@@ -78,7 +78,25 @@ module.exports = {
    */
   spawnSync(command) {
     const childProcess = spawnSync(path(), command);
-    const rawOutput = childProcess.output.toString();
+    const rawOutput = childProcess.stdout.toString();
     return rawOutput;
+  },
+
+  /**
+   * Spawn a child process and return a promise.
+   * Resolves on any output from stdout or stderr.
+   * @param command
+   */
+  spawn(command) {
+    return new Promise((resolve, reject) => {
+      const childProcess = spawn(path(), command);
+      childProcess.stdout.on('data', (data) => {
+        resolve({ childProcess, stdout: data.toString() });
+      });
+      childProcess.stderr.on('data', (data) => {
+        resolve({ childProcess, stderr: data.toString() });
+      });
+      childProcess.on('error', (err) => reject(e));
+    });
   },
 };
