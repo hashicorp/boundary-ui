@@ -62,7 +62,7 @@ class ClientDaemonManager {
     };
     const request = {
       method: 'POST',
-      path: 'http://127.0.0.1:9200/v1/tokens',
+      path: 'http://internal.boundary.local/v1/tokens',
       socketPath: this.#socketPath,
     };
     return unixSocketRequest(request, postBody);
