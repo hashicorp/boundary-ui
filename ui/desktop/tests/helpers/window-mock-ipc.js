@@ -24,6 +24,7 @@ class MockIPC {
   resetClusterUrl() {}
   hasMacOSChrome() {}
   showWindowActions() {}
+  addTokenToClientDaemon() {}
 }
 
 /**
