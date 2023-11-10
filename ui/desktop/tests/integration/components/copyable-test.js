@@ -12,8 +12,9 @@ module('Integration | Component | copyable', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
+    this.set('actionText', 'text');
     await render(
-      hbs`<Copyable @buttonText="Copy me" @text="foo">text</Copyable>`
+      hbs`<Copyable @buttonText="Copy me" @text="foo">{{this.actionText}}</Copyable>`,
     );
     assert.ok(find('.copyable'));
     assert.strictEqual(find('.copyable-content').textContent.trim(), 'text');

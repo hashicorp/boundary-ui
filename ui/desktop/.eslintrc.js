@@ -9,12 +9,14 @@ module.exports = {
   root: true,
   parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module',
     // This is specific babel-config. If grows consider creating a babel config file
     requireConfigFile: false,
     babelOptions: {
-      plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]],
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
     },
     // end of babel-config
   },
@@ -36,6 +38,7 @@ module.exports = {
       files: [
         './.eslintrc.js',
         './.prettierrc.js',
+        './.stylelintrc.js',
         './.template-lintrc.js',
         '.stylelintrc.js',
         './ember-cli-build.js',
@@ -53,13 +56,7 @@ module.exports = {
         browser: false,
         node: true,
       },
-      plugins: ['node'],
-      extends: ['plugin:node/recommended'],
-      rules: {
-        // this can be removed once the following is fixed
-        // https://github.com/mysticatea/eslint-plugin-node/issues/77
-        'node/no-unpublished-require': 'off',
-      },
+      extends: ['plugin:n/recommended'],
     },
     {
       // test files

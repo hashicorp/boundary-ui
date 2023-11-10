@@ -8,21 +8,17 @@
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 
 module.exports = function (environment) {
-  let ENV = {
+  const ENV = {
     modulePrefix: 'desktop',
     environment,
     rootURL: process.env.EMBER_CLI_ELECTRON ? '' : '/',
     locationType: process.env.EMBER_CLI_ELECTRON ? 'hash' : 'auto',
     EmberENV: {
+      EXTEND_PROTOTYPES: false,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: false,
-      // EXTEND_PROTOTYPES: {
-      //   // Prevent Ember Data from overriding Date.parse.
-      //   Date: false
-      // }
     },
 
     APP: {
