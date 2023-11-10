@@ -45,7 +45,7 @@ function prenormalizeArrayResponse(response) {
 }
 
 export default class ApplicationAdapter extends RESTAdapter.extend(
-  AdapterBuildURLMixin
+  AdapterBuildURLMixin,
 ) {
   // =attributes
 
@@ -147,7 +147,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
           break;
         }
       } catch (err) {
-        console.error(err);
+        throw new Error(err);
       }
     } while (result.response_type === 'delta');
 
