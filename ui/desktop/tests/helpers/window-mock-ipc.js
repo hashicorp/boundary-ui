@@ -25,6 +25,10 @@ class MockIPC {
   hasMacOSChrome() {}
   showWindowActions() {}
   addTokenToClientDaemon() {}
+  searchClientDaemon() {}
+  isClientDaemonRunning() {
+    return false;
+  }
 }
 
 /**

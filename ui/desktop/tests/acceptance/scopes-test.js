@@ -15,13 +15,12 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import WindowMockIPC from '../helpers/window-mock-ipc';
+import Store from 'api/services/store';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  let mockIPC;
-  let messageHandler;
 
   const instances = {
     scopes: {
@@ -129,42 +128,18 @@ module('Acceptance | scopes', function (hooks) {
     urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
+
+    // Use the original store so we don't try and hit the client daemon
+    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
+    sinon.restore();
   });
 
   test('visiting index', async function (assert) {

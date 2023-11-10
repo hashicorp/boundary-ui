@@ -22,6 +22,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import Store from 'api/services/store';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -128,6 +129,9 @@ module('Acceptance | authentication', function (hooks) {
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
+
+    // Use the original store so we don't try and hit the client daemon
+    this.owner.register('service:store', Store);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
