@@ -128,8 +128,8 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     let result;
     let data = [];
 
-    //run this loop as long as the response_type is delta,
-    //which indicates that there are more items in the list
+    // Run this loop as long as the response_type is delta,
+    // which indicates that there are more items in the list
     do {
       try {
         result = await super.query(store, schema, query);
