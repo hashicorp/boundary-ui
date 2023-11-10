@@ -16,7 +16,7 @@ on:
         description: The git SHA of the oss artifacts to be used
 
 jobs:
-  trigger-gha-release:
+  trigger-gha-build-artifacts-for-testing:
     runs-on: ubuntu-latest
     steps:
       - name: Release description
