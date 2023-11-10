@@ -6,14 +6,6 @@ on:
       branch:
         description: Please use tag-like format n.n.n-someword (1.111.11-beta)
         required: true
-      product_version:
-        required: true
-        type: string
-        description: The version number belonging to the oss binary to be used
-      commit:
-        required: true
-        type: string
-        description: The git SHA of the oss artifacts to be used
 
 jobs:
   trigger-gha-release:
@@ -26,10 +18,8 @@ jobs:
       - name: Trigger Release workflow in boundary-ui-releases
         run: |
           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
-          gh workflow run build-artifacts-for-testing.yml \
+          gh workflow run release.yml \
           --repo hashicorp/boundary-ui-releases \
-          --ref labWeek/update-release-workflow \
-          -f TAG="${{ inputs.branch }}" \
-          -f PRODUCT_VERSION="${{ inputs.product_version }}" \
-          -f COMMIT="${{ inputs.commit }}" \
+          --ref main \
+          -f TAG="${{ github.event.inputs.branch }}"
 
