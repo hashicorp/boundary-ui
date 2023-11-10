@@ -40,7 +40,6 @@ module.exports = {
         './.prettierrc.js',
         './.stylelintrc.js',
         './.template-lintrc.js',
-        '.stylelintrc.js',
         './ember-cli-build.js',
         './testem.js',
         './testem-electron.js',
