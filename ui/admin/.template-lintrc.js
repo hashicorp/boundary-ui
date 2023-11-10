@@ -20,4 +20,12 @@ module.exports = {
     },
     'no-route-action': false,
   },
+  overrides: [
+    {
+      files: '**/tests/**/*.{js,gts,gjs}',
+      rules: {
+        prettier: false,
+      },
+    },
+  ],
 };

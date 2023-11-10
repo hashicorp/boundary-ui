@@ -14,22 +14,21 @@ module('Integration | Component | list-wrapper', function (hooks) {
   setupIntl(hooks);
 
   test('it renders fields', async function (assert) {
-    this.error = [
-      {
-        message: 'Error!',
-      },
-    ];
+    this.set('label', 'Label');
+    this.set('helperText', 'Help');
+    this.set('error', 'Error!');
+
     await render(hbs`
     <Form::Field::ListWrapper>
       <:fieldset as |F|>
         <F.Legend>
-          Label
+          {{this.label}}
         </F.Legend>
         <F.HelperText>
-          Help
+          {{this.helperText}}
         </F.HelperText>
         <F.Error as |E|>
-          <E.Message>Error!</E.Message>  
+          <E.Message>{{this.error}}</E.Message>
         </F.Error>
       </:fieldset>
       <:field as |F|>
@@ -68,11 +67,11 @@ module('Integration | Component | list-wrapper', function (hooks) {
     this.options = [{ value: 'one' }, { value: 'three' }];
 
     await render(hbs`
-    
+
     <Form::Field::ListWrapper>
       <:field as |F|>
-        <F.TextInput 
-          @options={{this.options}}  
+        <F.TextInput
+          @options={{this.options}}
         >
         </F.TextInput>
         </:field>
@@ -90,11 +89,11 @@ module('Integration | Component | list-wrapper', function (hooks) {
     this.options = [{ value: 'one' }, { value: 'three' }];
 
     await render(hbs`
-    
+
     <Form::Field::ListWrapper>
       <:field as |F|>
         <F.Textarea
-          @options={{this.options}}  
+          @options={{this.options}}
         >
         </F.Textarea>
         </:field>
