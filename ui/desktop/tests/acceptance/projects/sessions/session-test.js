@@ -15,6 +15,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
+import Store from 'api/services/store';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -121,9 +122,13 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
+
+    // Use the original store so we don't try and hit the client daemon
+    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {
+    sinon.restore();
     // reset onUncaughtException to original state
     QUnit.onUncaughtException = originalUncaughtException;
   });
