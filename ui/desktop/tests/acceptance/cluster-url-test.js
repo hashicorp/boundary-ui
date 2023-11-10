@@ -13,6 +13,7 @@ import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import config from '../../config/environment';
+import Store from 'api/services/store';
 
 module('Acceptance | clusterUrl', function (hooks) {
   setupApplicationTest(hooks);
@@ -100,6 +101,9 @@ module('Acceptance | clusterUrl', function (hooks) {
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.global}/projects`;
     urls.targets = `${urls.projects}/targets`;
+
+    // Use the original store so we don't try and hit the client daemon
+    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {
