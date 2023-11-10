@@ -14,7 +14,7 @@ on:
         required: true
         type: string
         description: The git SHA of the oss artifacts to be used
-  push:
+
 jobs:
   trigger-gha-release:
     runs-on: ubuntu-latest
