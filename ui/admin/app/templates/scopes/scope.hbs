@@ -207,15 +207,9 @@
     </main>
   </sidebarLayout.body>
   <sidebarLayout.footer>
-    <Rose::Footer as |footer|>
-      <footer.text>{{app-name}}</footer.text>
-      <footer.nav as |nav|>
-        <nav.link @href={{(doc-url)}}>
-          {{t 'titles.documentation'}}
-        </nav.link>
-      </footer.nav>
-      <footer.brand @logo='logo-company' @text={{(company-name)}} />
-      <footer.text>{{company-copyright}}</footer.text>
-    </Rose::Footer>
+    <Hds::AppFooter as |AF|>
+      <AF.Link @href={{(doc-url)}}>{{t 'titles.documentation'}}</AF.Link>
+      <AF.LegalLinks />
+    </Hds::AppFooter>
   </sidebarLayout.footer>
 </Rose::Layout::Sidebar>
