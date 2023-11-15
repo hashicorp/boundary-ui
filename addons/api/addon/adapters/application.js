@@ -131,28 +131,21 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // Run this loop as long as the response_type is delta,
     // which indicates that there are more items in the list
     do {
-      try {
-        result = await super.query(store, schema, query);
-
-        //add the result items to a data array
-        if (result.items) {
-          data.push(...result.items);
-        }
-
-        //pass in the refresh token for subsequent calls to fetch the remaining list iems
+      result = await super.query(store, schema, query);
+      //add the result items to a data array
+      if (result && result.items) {
+        data.push(...result.items);
+        //pass in the refresh token for subsequent calls to fetch the remaining list items
         query.refresh_token = result.refresh_token;
-
         //break the loop as soon the response_type becomes complete
         if (result.response_type === 'complete') {
           break;
         }
-      } catch (err) {
-        throw new Error(err);
       }
-    } while (result.response_type === 'delta');
+    } while (result && result.response_type === 'delta');
 
     result.items = data;
-    return result;
+    return prenormalizeArrayResponse(result);
   }
 
   /**
