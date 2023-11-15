@@ -22,6 +22,8 @@ module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const APP_STATE_TITLE = '.hds-application-state__title';
+
   const instances = {
     scopes: {
       global: null,
@@ -228,10 +230,7 @@ module('Acceptance | scopes', function (hooks) {
 
     await visit(urls.targets);
 
-    assert.ok(
-      find('.rose-message-title').textContent.trim(),
-      'No Targets Available'
-    );
+    assert.ok(find(APP_STATE_TITLE).textContent.trim(), 'No Targets Available');
   });
 
   test.skip('connecting to a target', async function (assert) {
