@@ -17,11 +17,12 @@ module('Integration | Component | dialog-detail', function (hooks) {
   });
 
   test('it renders with content', async function (assert) {
+    this.set('value', 'Test');
     await render(hbs`
       <DialogDetail as |dialogDetail|>
         <dialogDetail.notification />
         <dialogDetail.body>
-          <h2>Test</h2>
+          <h2>{{this.value}}</h2>
         </dialogDetail.body>
         <dialogDetail.footer></dialogDetail.footer>
       </DialogDetail>

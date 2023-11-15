@@ -26,8 +26,8 @@ const enableDevCSP = () => {
   csp['style-src'].push("'unsafe-inline'");
   csp['script-src'].push("'unsafe-eval'");
   csp['script-src'].push("'unsafe-inline'");
-  csp['script-src'].push('http://localhost:7020');
-  csp['connect-src'].push('ws://localhost:7020');
+  csp['script-src'].push('http://localhost:8000');
+  csp['connect-src'].push('ws://localhost:8000');
 };
 
 const generateCSPHeader = () => {

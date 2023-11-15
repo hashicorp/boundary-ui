@@ -336,5 +336,22 @@ module(
         .dom('.hds-form-radio-card:nth-child(2) input')
         .hasAttribute('value', 'ssh_private_key');
     });
+
+    test('users cannot directly navigate to new credential route without proper authorization', async function (assert) {
+      assert.expect(2);
+      instances.staticCredentialStore.authorized_collection_actions.credentials =
+        instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
+          (item) => item !== 'create'
+        );
+
+      await visit(urls.newCredential);
+
+      assert.false(
+        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
+          'create'
+        )
+      );
+      assert.strictEqual(currentURL(), urls.credentials);
+    });
   }
 );

@@ -20,9 +20,9 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     const sortedSessions = sortBy(sessions, 'session.created_time').reverse();
     return [
       // then move active sessions to the top
-      ...sortedSessions.filter((session) => session.isCancelable),
+      ...sortedSessions.filter((session) => session.isAvailable),
       // and all others to the end
-      ...sortedSessions.filter((session) => !session.isCancelable),
+      ...sortedSessions.filter((session) => !session.isAvailable),
     ];
   }
 }

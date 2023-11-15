@@ -15,7 +15,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 
-module('Acceptance | host-catalogs | host sets | read', function (hooks) {
+module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -112,5 +112,24 @@ module('Acceptance | host-catalogs | host sets | read', function (hooks) {
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/host-sets"]`)
       .exists();
+  });
+
+  test('users can navigate to host set and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'static',
+    });
+    const hostSet = this.server.create('host-set', {
+      scope: instances.scopes.project,
+      hostCatalog,
+    });
+    const incorrectUrl = `${urls.hostSets}/${hostSet.id}`;
+    const correctUrl = `${urls.hostCatalogs}/${hostCatalog.id}/host-sets/${hostSet.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
   });
 });

@@ -6,10 +6,14 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { paramValueFinder } from 'admin/utils/param-value-finder';
+
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -17,10 +21,31 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    * Load a host-set using current host-catalog and its parent scope.
    * @param {object} params
    * @param {string} params.host_set_id
-   * @return {HostSetModel}
+   * @return {Promise{HostSetModel}}
    */
   async model({ host_set_id }) {
     return this.store.findRecord('host-set', host_set_id, { reload: true });
+  }
+
+  /**
+   * Redirects to route with correct host-catalog id if incorrect.
+   * @param {HostSetModel} hostSet
+   * @param {object} transition
+   */
+  redirect(hostSet, transition) {
+    const hostCatalog = this.modelFor(
+      'scopes.scope.host-catalogs.host-catalog'
+    );
+    const { host_catalog_id } = hostSet;
+    if (host_catalog_id !== hostCatalog.id) {
+      let paramValues = paramValueFinder('host-set', transition.to.parent);
+      this.router.replaceWith(
+        transition.to.name,
+        host_catalog_id,
+        hostSet.id,
+        ...paramValues
+      );
+    }
   }
 
   /**
@@ -43,30 +68,5 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
     if (hostSet.filters) {
       hostSet.filters = structuredClone(hostSet.filters);
     }
-  }
-
-  /**
-   * Adds a string item `{ value }` to array `property` on passed `hostSet`.
-   * @param {hostSetModel} hostSet
-   * @param {string} property
-   * @param {string} value
-   */
-  @action
-  async addStringItem(hostSet, property, value) {
-    const array = [...hostSet.get(property), { value }];
-    hostSet.set(property, array);
-  }
-
-  /**
-   * Removes an item from array `property` at `index` on the
-   * passed `hostSet`.
-   * @param {hostSetModel} hostSet
-   * @param {string} property
-   * @param {number} index
-   */
-  @action
-  async removeItemByIndex(hostSet, property, index) {
-    const array = hostSet.get(property).filter((item, i) => i !== index);
-    hostSet.set(property, array);
   }
 }

@@ -113,4 +113,23 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
       .dom(`[href="https://boundaryproject.io/help/admin-ui/hosts"]`)
       .exists();
   });
+
+  test('users can navigate to host and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'static',
+    });
+    const host = this.server.create('host', {
+      scope: instances.scopes.project,
+      hostCatalog,
+    });
+    const incorrectUrl = `${urls.hosts}/${host.id}`;
+    const correctUrl = `${urls.hostCatalogs}/${hostCatalog.id}/hosts/${host.id}`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

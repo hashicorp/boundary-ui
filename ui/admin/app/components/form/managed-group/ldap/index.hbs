@@ -61,7 +61,7 @@
       }}</F.HelperText>
     {{#let (unique-id) as |valueHeaderID|}}
       <F.Control>
-        <Hds::Table class='key-value-list' name='group_names'>
+        <Hds::Table class='list-wrapper-field' name='group_names'>
           <:head as |H|>
             <H.Tr>
               <H.Th id={{valueHeaderID}}>{{t 'titles.value'}}</H.Th>

@@ -15,10 +15,14 @@ module(
 
     test('it renders two icon series', async function (assert) {
       assert.expect(5);
+
+      this.set('client', 'Client');
+      this.set('egressWorker', 'Egress Worker');
+
       await render(hbs`
         <OrderedSeriesDiagram as |D|>
-          <D.Item @icon='user'>Client</D.Item>
-          <D.Item @icon='settings'>Egress Worker</D.Item>
+          <D.Item @icon='user'>{{this.client}}</D.Item>
+          <D.Item @icon='settings'>{{this.egressWorker}}</D.Item>
         </OrderedSeriesDiagram>
       `);
 
@@ -28,9 +32,9 @@ module(
       assert.dom('[data-test-icon="settings"]').isVisible();
       assert
         .dom(
-          '.ordered-series-diagram-item:last-child .ordered-series-diagram-item-title'
+          '.ordered-series-diagram-item:last-child .ordered-series-diagram-item-title',
         )
         .hasText('Egress Worker');
     });
-  }
+  },
 );

@@ -76,73 +76,37 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::Fieldset @isOptional={{true}} as |F|>
-    <F.Legend>{{t 'resources.auth-method.form.certificates.label'}}</F.Legend>
-    <F.HelperText>{{t
-        'resources.auth-method.form.certificates.help'
-      }}</F.HelperText>
-    {{#let (unique-id) as |valueHeaderID|}}
-      <F.Control>
-        <Hds::Table class='key-value-list' name='certificates'>
-          <:head as |H|>
-            <H.Tr>
-              <H.Th id={{valueHeaderID}}>{{t 'titles.value'}}</H.Th>
-              <H.Th>{{t 'titles.actions'}}</H.Th>
-            </H.Tr>
-          </:head>
-          <:body as |B|>
-            {{#each @model.certificates as |cert i|}}
-              <B.Tr>
-                <B.Td>
-                  <Hds::Form::Textarea::Field
-                    @value={{cert.value}}
-                    @isOptional={{true}}
-                    disabled={{form.disabled}}
-                    aria-labelledby={{valueHeaderID}}
-                  />
-                </B.Td>
-                <B.Td>
-                  <Hds::Button
-                    @text={{t 'actions.remove'}}
-                    @color='critical'
-                    @icon='trash'
-                    @isIconOnly={{true}}
-                    disabled={{form.disabled}}
-                    {{on 'click' (fn @removeItemByIndex 'certificates' i)}}
-                  />
-                </B.Td>
-              </B.Tr>
-            {{/each}}
-            <B.Tr>
-              <B.Td>
-                <Hds::Form::Textarea::Field
-                  @value={{this.newCertificate}}
-                  @isOptional={{true}}
-                  disabled={{form.disabled}}
-                  aria-labelledby={{valueHeaderID}}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Button
-                  @text={{t 'actions.add'}}
-                  @color='secondary'
-                  disabled={{or form.disabled (not this.newCertificate)}}
-                  {{on 'click' this.addCertificate}}
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      </F.Control>
-    {{/let}}
-    {{#if @model.errors.certificates}}
-      <F.Error as |E|>
-        {{#each @model.errors.certificates as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Fieldset>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.auth-method.form.certificates.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.certificates.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.certificates}}
+        <F.Error as |E|>
+          {{#each @model.errors.certificates as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
+    <:field as |F|>
+      <F.Textarea
+        @name='certificates'
+        @options={{@model.certificates}}
+        @model={{@model}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
 
   {{#if @model.isNew}}
     <Hds::Form::TextInput::Field
@@ -152,6 +116,7 @@
       @type='password'
       name='client_certificate'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate')}}
       as |F|
     >
@@ -177,6 +142,7 @@
       @type='password'
       name='client_certificate_key'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate_key')}}
       as |F|
     >
@@ -277,6 +243,7 @@
       @type='password'
       name='bind_password'
       disabled={{form.disabled}}
+      @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'bind_password')}}
       as |F|
     >
@@ -424,7 +391,7 @@
       }}</F.HelperText>
     {{#let (unique-id) (unique-id) as |fromHeaderID toHeaderID|}}
       <F.Control>
-        <Hds::Table class='key-value-list' name='account_attribute_maps'>
+        <Hds::Table class='list-wrapper-field' name='account_attribute_maps'>
           <:head as |H|>
             <H.Tr>
               <H.Th id={{fromHeaderID}}>{{t

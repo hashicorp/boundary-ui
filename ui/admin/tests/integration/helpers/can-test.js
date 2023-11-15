@@ -26,11 +26,13 @@ module('Integration | Helper | can', function (hooks) {
       },
     };
 
+    this.set('read', 'Read');
+    this.set('list', 'List');
     this.set('model', model);
 
     await render(hbs`
       {{#if (can 'read model' this.model)}}
-        Read
+        {{this.read}}
       {{/if}}
     `);
 
@@ -38,7 +40,7 @@ module('Integration | Helper | can', function (hooks) {
 
     await render(hbs`
       {{#if (can 'list model' this.model collection='resource')}}
-        List
+        {{this.list}}
       {{/if}}
     `);
 

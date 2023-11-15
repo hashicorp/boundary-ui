@@ -21,11 +21,9 @@ module('Acceptance | groups | create', function (hooks) {
 
   const instances = {
     scopes: {
-      global: null,
       org: null,
     },
     group: null,
-    orgScope: null,
   };
   const urls = {
     groups: null,
@@ -35,7 +33,7 @@ module('Acceptance | groups | create', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession({});
-    instances.orgScope = this.server.create(
+    instances.scopes.org = this.server.create(
       'scope',
       {
         type: 'org',
@@ -44,9 +42,9 @@ module('Acceptance | groups | create', function (hooks) {
       'withChildren'
     );
     instances.group = this.server.create('group', {
-      scope: instances.orgScope,
+      scope: instances.scopes.org,
     });
-    urls.groups = `/scopes/${instances.orgScope.id}/groups`;
+    urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
   });
@@ -64,17 +62,21 @@ module('Acceptance | groups | create', function (hooks) {
     assert.expect(2);
     await visit(urls.groups);
     assert.ok(
-      instances.orgScope.authorized_collection_actions.groups.includes('create')
+      instances.scopes.org.authorized_collection_actions.groups.includes(
+        'create'
+      )
     );
     assert.ok(find(`[href="${urls.newGroup}"]`));
   });
 
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
     assert.expect(2);
-    instances.orgScope.authorized_collection_actions.groups = [];
+    instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.groups);
-    assert.notOk(
-      instances.orgScope.authorized_collection_actions.groups.includes('create')
+    assert.false(
+      instances.scopes.org.authorized_collection_actions.groups.includes(
+        'create'
+      )
     );
     assert.notOk(find(`[href="${urls.newGroup}"]`));
   });
@@ -122,5 +124,22 @@ module('Acceptance | groups | create', function (hooks) {
       'Name is required.',
       'Displays field-level errors.'
     );
+  });
+
+  test('users cannot directly navigate to new group route without proper authorization', async function (assert) {
+    assert.expect(2);
+    instances.scopes.org.authorized_collection_actions.groups =
+      instances.scopes.org.authorized_collection_actions.groups.filter(
+        (item) => item !== 'create'
+      );
+
+    await visit(urls.newGroup);
+
+    assert.false(
+      instances.scopes.org.authorized_collection_actions.groups.includes(
+        'create'
+      )
+    );
+    assert.strictEqual(currentURL(), urls.groups);
   });
 });

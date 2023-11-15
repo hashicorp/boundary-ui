@@ -142,4 +142,22 @@ module('Acceptance | credential-stores | read', function (hooks) {
       )
       .exists();
   });
+
+  test('users can navigate to credential store and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    const projectScope = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
+    const credentialStore = this.server.create('credential-store', {
+      scope: projectScope,
+    });
+    const incorrectUrl = `${urls.credentialStores}/${credentialStore.id}/credentials`;
+    const correctUrl = `/scopes/${projectScope.id}/credential-stores/${credentialStore.id}/credentials`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), correctUrl);
+  });
 });

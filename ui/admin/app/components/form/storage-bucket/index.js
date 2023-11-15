@@ -51,32 +51,6 @@ export default class FormStorageBucketComponent extends Component {
     this.args.changeType(type);
   }
 
-  /**
-   * Adds a key/value option object. We recreate a new array after adding
-   * so that ember is aware that the array has been modified.
-   * @param field {string}
-   * @param key {string}
-   * @param value {string}
-   */
-  @action
-  addOption(field, { key, value }) {
-    const existingArray = this.args.model[field] ?? [];
-    const newArray = [...existingArray, { key, value }];
-    set(this.args.model, field, newArray);
-  }
-
-  /**
-   * Removes an option by index. We recreate a new array after
-   * splicing out the item so that ember is aware that the array has been modified.
-   * @param field {string}
-   * @param index {number}
-   */
-  @action
-  removeOptionByIndex(field, index) {
-    const newArray = this.args.model[field].filter((_, i) => i !== index);
-    set(this.args.model, field, newArray);
-  }
-
   updateScopeFieldDescription() {
     if (this.args.model.scopeModel.isGlobal) {
       this.scopeFieldDescription = this.intl.t(

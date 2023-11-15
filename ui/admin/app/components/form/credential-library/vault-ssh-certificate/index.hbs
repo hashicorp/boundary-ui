@@ -236,55 +236,69 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Form::Field::KeyValueList
+  <Form::Field::ListWrapper
     @layout='horizontal'
     @isOptional={{true}}
-    @name='critical_options'
-    @options={{@model.critical_options}}
-    @addOption={{fn this.addOption 'critical_options'}}
-    @removeOptionByIndex={{fn this.removeOptionByIndex 'critical_options'}}
     @disabled={{form.disabled}}
-    as |M|
   >
-    <M.Legend>
-      {{t 'resources.credential-library.form.critical_options.label'}}
-    </M.Legend>
-    <M.HelperText>
-      {{t 'resources.credential-library.form.critical_options.help'}}
-    </M.HelperText>
-    {{#if @model.errors.critical_options}}
-      <M.Error as |E|>
-        {{#each @model.errors.critical_options as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </M.Error>
-    {{/if}}
-  </Form::Field::KeyValueList>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.credential-library.form.critical_options.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.critical_options.help'}}
+      </F.HelperText>
 
-  <Form::Field::KeyValueList
+      {{#if @model.errors.critical_options}}
+        <F.Error as |E|>
+          {{#each @model.errors.critical_options as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+
+    <:field as |F|>
+      <F.KeyValue
+        @name='critical_options'
+        @options={{@model.critical_options}}
+        @model={{@model}}
+        @disabled={{form.disabled}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
+
+  <Form::Field::ListWrapper
     @layout='horizontal'
     @isOptional={{true}}
-    @name='extensions'
-    @options={{@model.extensions}}
-    @addOption={{fn this.addOption 'extensions'}}
-    @removeOptionByIndex={{fn this.removeOptionByIndex 'extensions'}}
     @disabled={{form.disabled}}
-    as |M|
   >
-    <M.Legend>
-      {{t 'resources.credential-library.form.extensions.label'}}
-    </M.Legend>
-    <M.HelperText>
-      {{t 'resources.credential-library.form.extensions.help'}}
-    </M.HelperText>
-    {{#if @model.errors.extensions}}
-      <M.Error as |E|>
-        {{#each @model.errors.extensions as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </M.Error>
-    {{/if}}
-  </Form::Field::KeyValueList>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.credential-library.form.extensions.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.extensions.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.extensions}}
+        <F.Error as |E|>
+          {{#each @model.errors.extensions as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+    <:field as |F|>
+      <F.KeyValue
+        @name='extensions'
+        @options={{@model.extensions}}
+        @model={{@model}}
+      />
+    </:field>
+
+  </Form::Field::ListWrapper>
 
   {{#if (can 'save model' @model)}}
     <form.actions

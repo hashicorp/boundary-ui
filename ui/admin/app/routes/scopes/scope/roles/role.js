@@ -11,6 +11,8 @@ export default class ScopesScopeRolesRoleRoute extends Route {
   // =services
 
   @service store;
+  @service can;
+  @service router;
 
   // =methods
 
@@ -18,14 +20,26 @@ export default class ScopesScopeRolesRoleRoute extends Route {
    * Load a role in current scope.
    * @param {object} params
    * @param {string} params.role_id
-   * @return {RoleModel}
+   * @return {Promise{RoleModel}}
    */
-  model({ role_id }) {
+  async model({ role_id }) {
     const { id: scopeID } = this.modelFor('scopes.scope');
     return this.store.findRecord('role', role_id, {
       reload: true,
       adapterOptions: { scopeID },
     });
+  }
+
+  /**
+   * Redirects to route with correct scope id if incorrect.
+   * @param {RoleModel} role
+   * @param {object} transition
+   */
+  redirect(role, transition) {
+    const scope = this.modelFor('scopes.scope');
+    if (role.scopeID !== scope.id) {
+      this.router.replaceWith(transition.to.name, role.scopeID, role.id);
+    }
   }
 
   // =actions

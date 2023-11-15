@@ -10,7 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | session recordings | read', function (hooks) {
+module('Acceptance | session-recordings | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -112,5 +112,16 @@ module('Acceptance | session recordings | read', function (hooks) {
     // Click a channel recording and check it navigates properly
     await click(LIST_CHANNEL_RECORDING_BUTTON);
     assert.strictEqual(currentURL(), urls.channelRecording);
+  });
+
+  test('users can navigate to session recording and incorrect url autocorrects', async function (assert) {
+    assert.expect(2);
+    featuresService.enable('ssh-session-recording');
+    const incorrectUrl = `/scopes/${instances.scopes.org.id}/session-recordings/${instances.sessionRecording.id}/channels-by-connection`;
+
+    await visit(incorrectUrl);
+
+    assert.notEqual(currentURL(), incorrectUrl);
+    assert.strictEqual(currentURL(), urls.sessionRecording);
   });
 });

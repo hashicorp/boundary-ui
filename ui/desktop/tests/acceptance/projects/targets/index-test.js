@@ -34,6 +34,10 @@ module('Acceptance | projects | targets', function (hooks) {
     'scopes.scope.projects.targets.target.index';
   const ROSE_DIALOG_MODAL = '.rose-dialog-error';
   const CHOOSE_HOST_MODAL = '[data-test-host-modal]';
+  const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
+  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
+  const ROSE_DIALOG_CANCEL_BUTTON =
+    '.rose-dialog footer .rose-button-secondary';
 
   const instances = {
     scopes: {
@@ -103,14 +107,10 @@ module('Acceptance | projects | targets', function (hooks) {
       { scope: instances.scopes.project },
       'withChildren'
     );
-    instances.target = this.server.create(
-      'target',
-      {
-        scope: instances.scopes.project,
-        address: '127.0.0.1',
-      },
-      'withAssociations'
-    );
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      address: '127.0.0.1',
+    });
     instances.session = this.server.create(
       'session',
       {
@@ -230,29 +230,62 @@ module('Acceptance | projects | targets', function (hooks) {
       .doesNotExist();
   });
 
-  test('user is redirected to target details page when unable to connect from list view', async function (assert) {
-    assert.expect(2);
-    instances.target.address = '';
-    instances.target.update({ address: '', hostSets: [] });
-    await visit(urls.projects);
-
-    await click(`[href="${urls.targets}"]`);
-    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
-
-    assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
-    assert.dom(APP_STATE_TITLE).includesText('Cannot connect');
-  });
-
-  test('choose host modal does not render when there is a connect error', async function (assert) {
-    assert.expect(2);
+  test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
+    assert.expect(3);
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    await visit(urls.projects);
 
-    await click(`[href="${urls.targets}"]`);
+    await visit(urls.targets);
+
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(CHOOSE_HOST_MODAL).doesNotExist();
+    assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
+  });
+
+  test('user can connect without target read permissions', async function (assert) {
+    assert.expect(2);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+    });
+
+    await visit(urls.targets);
+
+    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
+
+    assert.strictEqual(
+      currentURL(),
+      `${urls.projects}/sessions/${instances.session.id}`
+    );
+    assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test('user can retry connect without target read permissions', async function (assert) {
+    assert.expect(5);
+    instances.target.authorized_actions =
+      instances.target.authorized_actions.filter((item) => item !== 'read');
+    stubs.ipcService.withArgs('cliExists').returns(true);
+    stubs.ipcService.withArgs('connect').rejects();
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+
+    await visit(urls.targets);
+
+    await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
+
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.dom(ROSE_DIALOG_MODAL).exists();
+    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
+    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 });
