@@ -45,7 +45,7 @@ function prenormalizeArrayResponse(response) {
 }
 
 export default class ApplicationAdapter extends RESTAdapter.extend(
-  AdapterBuildURLMixin
+  AdapterBuildURLMixin,
 ) {
   // =attributes
 
@@ -118,12 +118,34 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 
   /**
    * Intercepts "empty" responses and adds an empty `items` array.
+   * This query method now supports pagination by checking the responseType and
+   * passing in the refresh token if the responseType indicates more data
    * @override
    * @method query
    * @return {Promise} promise
    */
-  query() {
-    return super.query(...arguments).then(prenormalizeArrayResponse);
+  async query(store, schema, query) {
+    let result;
+    let data = [];
+
+    // Run this loop as long as the response_type is delta,
+    // which indicates that there are more items in the list
+    do {
+      result = await super.query(store, schema, query);
+      //add the result items to a data array
+      if (result && result.items) {
+        data.push(...result.items);
+        //pass in the refresh token for subsequent calls to fetch the remaining list items
+        query.refresh_token = result.refresh_token;
+        //break the loop as soon the response_type becomes complete
+        if (result.response_type === 'complete') {
+          break;
+        }
+      }
+    } while (result && result.response_type === 'delta');
+
+    result.items = data;
+    return prenormalizeArrayResponse(result);
   }
 
   /**
