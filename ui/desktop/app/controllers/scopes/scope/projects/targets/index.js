@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -16,6 +17,13 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service router;
   @service session;
   @service store;
+
+  // =attributes
+
+  @tracked targets = this.model;
+  @tracked freeSearch;
+  @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
+  searchableProps = ['id', 'name', 'description', 'address', 'scope_id'];
 
   // =methods
 
@@ -99,5 +107,38 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       'scopes.scope.projects.sessions.session',
       session_id
     );
+  }
+
+  /**
+   * @param {object} event
+   */
+  @action
+  async handleInput(event) {
+    const { value } = event.target;
+    this.freeSearch = value;
+    await this.search();
+  }
+
+  /**
+   * builds a query string for all searchable target properties
+   * @returns {string}
+   */
+  buildQuery() {
+    return this.searchableProps
+      .map((prop) => `${prop} % '${this.freeSearch}'`)
+      .join(' or ');
+  }
+
+  /**
+   * queries for targets based on input from user
+   */
+  @action
+  async search() {
+    if (this.freeSearch) {
+      const query = this.buildQuery();
+      this.targets = await this.store.query('target', { query });
+    } else {
+      this.targets = this.model;
+    }
   }
 }
