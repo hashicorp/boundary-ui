@@ -53,7 +53,6 @@ toggle-feature-edition: Toggle Feature Edition
 toggle-licensed-features: Toggle Licensed Features
 more: ', +{remainingItems} more'
 search: Search
-filtering:
-  yes: Yes
-  no: No
-  narrow-results: Narrow results
+yes: Yes
+no: No
+narrow-results: Narrow results

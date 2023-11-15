@@ -31,7 +31,7 @@
             <DD.Header @hasDivider={{true}}>
               <Hds::Form::TextInput::Base
                 @type='search'
-                placeholder={{t 'actions.filtering.narrow-results'}}
+                placeholder={{t 'actions.narrow-results'}}
                 data-test-search
               />
             </DD.Header>
@@ -43,8 +43,8 @@
           </S.Dropdown>
           <S.Dropdown as |DD|>
             <DD.ToggleButton @color='secondary' @text='Active session' />
-            <DD.Checkbox>{{t 'actions.filtering.yes'}}</DD.Checkbox>
-            <DD.Checkbox>{{t 'actions.filtering.no'}}</DD.Checkbox>
+            <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
+            <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
           </S.Dropdown>
           <S.Dropdown as |DD|>
             <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
