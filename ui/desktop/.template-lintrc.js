@@ -15,4 +15,12 @@ module.exports = {
     'no-implicit-this': { allow: ['app-name', 'is-loading'] },
     'no-route-action': false,
   },
+  overrides: [
+    {
+      files: '**/tests/**/*.{js,gts,gjs}',
+      rules: {
+        prettier: false,
+      },
+    },
+  ],
 };
