@@ -19,9 +19,7 @@
     </sidebarLayout.body>
     <sidebarLayout.footer>
       <Hds::AppFooter @theme={{this.session.data.theme}} as |AF|>
-        <AF.Link
-          @href={{(doc-url)}}
-        >{{t 'titles.documentation'}}</AF.Link>
+        <AF.Link @href={{(doc-url)}}>{{t 'titles.documentation'}}</AF.Link>
         <AF.LegalLinks />
       </Hds::AppFooter>
     </sidebarLayout.footer>
