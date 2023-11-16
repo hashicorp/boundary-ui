@@ -11,7 +11,7 @@ import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
 import { resourceFilter } from 'core/decorators/resource-filter';
-import sortBy from 'lodash/sortBy';
+
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeSessionsRoute extends Route {
@@ -60,7 +60,7 @@ export default class ScopesScopeSessionsRoute extends Route {
     const sessions = await this.resourceFilterStore.queryBy(
       'session',
       filters,
-      options
+      options,
     );
 
     const sessionAggregates = await all(
@@ -75,21 +75,17 @@ export default class ScopesScopeSessionsRoute extends Route {
             ? this.store.peekRecord('target', session.target_id) ||
               this.store.findRecord('target', session.target_id)
             : null,
-        })
-      )
-    );
-    // Sort sessions by time created...
-    let sortedSessionAggregates = sortBy(
-      sessionAggregates,
-      'session.created_time'
-    ).reverse();
-    // Then move active sessions to the top...
-    sortedSessionAggregates = [
-      ...sortedSessionAggregates.filter(
-        (aggregate) => aggregate.session.status === 'active'
+        }),
       ),
-      ...sortedSessionAggregates.filter(
-        (aggregate) => aggregate.session.status !== 'active'
+    );
+
+    // Move active sessions to the top...
+    const sortedSessionAggregates = [
+      ...sessionAggregates.filter(
+        (aggregate) => aggregate.session.status === 'active',
+      ),
+      ...sessionAggregates.filter(
+        (aggregate) => aggregate.session.status !== 'active',
       ),
     ];
     return sortedSessionAggregates;
