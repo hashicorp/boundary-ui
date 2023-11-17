@@ -7,7 +7,7 @@ import { registerDeprecationHandler } from '@ember/debug';
 
 const deprecationList = [
   'ember-data:deprecate-early-static',
-  'ember-data:deprecate-array-like',
+  //'ember-data:deprecate-array-like',
 ];
 
 export function initialize() {
