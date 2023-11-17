@@ -41,11 +41,17 @@ function payloadIsBlank(adapterPayload) {
  * @return {object}
  */
 function prenormalizeArrayResponse(response) {
-  return payloadIsBlank(response) ? { items: [] } : response;
+  if (payloadIsBlank(response)) {
+    return { items: [] };
+  } else if ('items' in response) {
+    return response;
+  } else {
+    return { ...response, items: [] };
+  }
 }
 
 export default class ApplicationAdapter extends RESTAdapter.extend(
-  AdapterBuildURLMixin
+  AdapterBuildURLMixin,
 ) {
   // =attributes
 
