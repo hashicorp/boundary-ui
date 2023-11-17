@@ -37,6 +37,10 @@ function payloadIsBlank(adapterPayload) {
  * adapter and serializers together.  Before it forwards a response from the
  * adapter on to the serializer, it checks for an "empty" response.  If the
  * response is empty, fetch manager throws and error and never forwards it on.
+ * Some resources from the api are presorted and will always return sort metada.
+ * If the response is not empty we need to check if it has the "items" property
+ * before returning the reponse. If it does not have "items", we will add it
+ * to the response so it can be handled correctly by the normalizer.
  * @param {object} response
  * @return {object}
  */
