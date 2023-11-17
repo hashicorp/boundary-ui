@@ -11,7 +11,10 @@ import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import config from '../../../config/environment';
 import { resourceFilter } from 'core/decorators/resource-filter';
+<<<<<<< HEAD
 import orderBy from 'lodash/orderBy';
+=======
+>>>>>>> 66027002c (refactor: 💡 remove unnecessary sorting due to pagination change (#1996))
 
 const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
@@ -80,19 +83,12 @@ export default class ScopesScopeSessionsRoute extends Route {
       ),
     );
 
-    // Sort sessions by created time descending (newest on top)
-    let sortedSessionAggregates = orderBy(
-      sessionAggregates,
-      'created_time',
-      'desc',
-    );
-
     // Move active sessions to the top...
-    sortedSessionAggregates = [
-      ...sortedSessionAggregates.filter(
+    const sortedSessionAggregates = [
+      ...sessionAggregates.filter(
         (aggregate) => aggregate.session.status === 'active',
       ),
-      ...sortedSessionAggregates.filter(
+      ...sessionAggregates.filter(
         (aggregate) => aggregate.session.status !== 'active',
       ),
     ];
