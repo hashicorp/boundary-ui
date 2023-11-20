@@ -110,6 +110,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
+   * Handles input on each keystroke and triggers the search
    * @param {object} event
    */
   @action
