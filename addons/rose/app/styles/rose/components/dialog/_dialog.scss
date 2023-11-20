@@ -22,7 +22,8 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
   border-radius: $xxxs;
   background-color: var(--subtle);
-  box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
+  box-shadow:
+    0 $xs $s rgba(var(--stark-components), var(--opacity-2)),
     0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3));
 
   &.rose-dialog-success {
@@ -130,7 +131,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
     max-width: 80vw;
     width: 650px;
 
-    @media (max-width: media.width(small)) {
+    @media (width <= (media.width(small))) {
       left: 5%;
     }
 
