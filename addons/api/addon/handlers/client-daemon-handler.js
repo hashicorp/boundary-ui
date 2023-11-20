@@ -6,6 +6,13 @@ import { pluralize } from 'ember-inflector';
  * @type {string[]}
  */
 const supportedTypes = ['target', 'session'];
+const targetRearchableProps = [
+  'id',
+  'name',
+  'description',
+  'address',
+  'scope_id',
+];
 
 /**
  * Handler to sit in front of the API request layer
@@ -18,7 +25,7 @@ const ClientDaemonHandler = {
         const { store, data } = context.request;
         const { type, query } = data;
         const isClientDaemonRunning = await this.ipc.invoke(
-          'isClientDaemonRunning'
+          'isClientDaemonRunning',
         );
 
         if (!supportedTypes.includes(type) || !isClientDaemonRunning) {
@@ -29,9 +36,13 @@ const ClientDaemonHandler = {
         //  all calls to daemon are recursive, scope_id can be part of search query instead
         // eslint-disable-next-line no-unused-vars
         let { recursive, scope_id, ...modifiedQuery } = query;
+        let searchQuery = '';
+        if (modifiedQuery.query) {
+          searchQuery = buildQuery(type, modifiedQuery);
+        }
         const auth_token_id = this.session.data?.authenticated?.id;
         modifiedQuery = {
-          ...modifiedQuery,
+          query: searchQuery,
           auth_token_id,
           resource: pluralize(type),
         };
@@ -40,7 +51,7 @@ const ClientDaemonHandler = {
         // e.g. { targets: [...] } or { sessions: [..] }
         // So this just unwraps to the array, or undefined
         const [results] = Object.values(
-          await this.ipc.invoke('searchClientDaemon', modifiedQuery)
+          await this.ipc.invoke('searchClientDaemon', modifiedQuery),
         );
         const payload = { items: results ?? [] };
 
@@ -51,7 +62,7 @@ const ClientDaemonHandler = {
           schema,
           payload,
           null,
-          'query'
+          'query',
         );
 
         // TODO: Add some pagination
@@ -62,6 +73,16 @@ const ClientDaemonHandler = {
         return next(context.request);
     }
   },
+};
+
+/**
+ * builds a query string for all searchable target properties
+ * @returns {string}
+ */
+const buildQuery = (type, { query }) => {
+  return targetRearchableProps
+    .map((prop) => `${prop} % '${query}'`)
+    .join(' or ');
 };
 
 export default ClientDaemonHandler;

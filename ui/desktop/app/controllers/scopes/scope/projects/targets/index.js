@@ -23,7 +23,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked targets = this.model;
   @tracked freeSearch;
   @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
-  searchableProps = ['id', 'name', 'description', 'address', 'scope_id'];
 
   // =methods
 
@@ -121,23 +120,14 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * builds a query string for all searchable target properties
-   * @returns {string}
-   */
-  buildQuery() {
-    return this.searchableProps
-      .map((prop) => `${prop} % '${this.freeSearch}'`)
-      .join(' or ');
-  }
-
-  /**
    * queries for targets based on input from user
    */
   @action
   async search() {
     if (this.freeSearch) {
-      const query = this.buildQuery();
-      this.targets = await this.store.query('target', { query });
+      this.targets = await this.store.query('target', {
+        query: this.freeSearch,
+      });
     } else {
       this.targets = this.model;
     }
