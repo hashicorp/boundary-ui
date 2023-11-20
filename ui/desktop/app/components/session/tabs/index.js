@@ -50,11 +50,28 @@ export default class SessionTerminalTabsComponent extends Component {
       return;
     }
 
+    const { isWindows } = await this.ipc.invoke('checkOS');
     const xterm = new Terminal(terminalOptions);
     this.terminal = xterm;
     const fitAddon = new FitAddon();
     const termContainer = document.getElementById(`terminal-container`);
     calculateTerminalContainerHeight(termContainer);
+
+    /**
+     * Custom key event handler for windows to achieve Ctrl+C as on the other OS's
+     */
+    if (isWindows) {
+      xterm.attachCustomKeyEventHandler((arg) => {
+        if (arg.ctrlKey && arg.code === 'KeyC' && arg.type === 'keydown') {
+          const selection = xterm.getSelection();
+          if (selection) {
+            navigator.clipboard.writeText(selection);
+            return false;
+          }
+        }
+        return true;
+      });
+    }
 
     xterm.loadAddon(fitAddon);
     xterm.loadAddon(new CanvasAddon());
@@ -80,7 +97,7 @@ export default class SessionTerminalTabsComponent extends Component {
       // Send an SSH command immediately
       window.terminal.send(
         `ssh ${proxy_address} -p ${proxy_port} -o NoHostAuthenticationForLocalhost=yes\r`,
-        this.id
+        this.id,
       );
     }
   }
