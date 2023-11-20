@@ -19,13 +19,81 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service store;
 
   // =attributes
+  items = ['Project 1', 'Project 2', 'Project 3'];
 
   @tracked targets = this.model;
   @tracked freeSearch;
-  @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
+  @tracked scopeSearch;
+  @tracked selectedItems = [];
+  @tracked uniqueProjects = this.getUniqueScopes();
+  @tracked uniqueOrgs = this.getUniqueOrgs();
+  @tracked searchItems = this.getSearchItems();
+  @tracked filteredItems = this.searchItems;
   searchableProps = ['id', 'name', 'description', 'address', 'scope_id'];
 
   // =methods
+
+  getUniqueScopes() {
+    const scopes = this.model.map((target) => target.scope);
+    const scopeLookup = {};
+
+    // convert back to Set
+    const uniqueProjects = scopes.filter((scope) => {
+      const id = scope.id;
+      if (scopeLookup[id]) {
+        return false;
+      }
+      scopeLookup[id] = true;
+      return true;
+    });
+
+    let projs = [];
+    uniqueProjects.forEach(project => {
+      const proj = this.store.peekRecord('scope', project.id)
+      projs.push(proj);
+    })
+    return projs;
+  }
+
+  getUniqueOrgs() {
+    const uniqueOrgIds = [];
+
+    this.uniqueProjects.forEach(project => {
+      if (!uniqueOrgIds.includes(project.scopeID)) {
+        uniqueOrgIds.push(project.scopeID);
+      }
+    });
+
+    // fairly sure we don't need scope when filtering targets
+    // const globalScope = this.store.peekRecord('scope', 'global');
+    let orgs = [];
+    uniqueOrgIds.forEach((scopeId) => {
+      console.log(scopeId)
+      const org = this.store.peekRecord('scope', scopeId);
+      orgs.push(org);
+    });
+    return orgs;
+  }
+
+  getSearchItems() {
+    let sortedScopes = [...this.uniqueOrgs]; 
+    let offset = 0;
+
+    this.uniqueProjects.forEach((project) => {
+      const matchingOrgIndex = this.uniqueOrgs.findIndex(
+        (org) => {
+          return org.id === project.scopeID
+        }
+      );
+      if (matchingOrgIndex !== -1) {
+        const insertionIndex = matchingOrgIndex + 1 + offset;
+        sortedScopes.splice(insertionIndex, 0, project);
+        offset++;
+      }
+    });
+
+    return sortedScopes;
+  }
 
   /**
    * Quick connect method used to call main connect method and handle
@@ -119,10 +187,38 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     await this.search();
   }
 
+  @action
+  selectItem(event) {
+    console.log(event)
+    let { checked, value } = event.target;
+    console.log(value);
+    if (checked) {
+      this.selectedItems.addObject(value);
+    } else {
+      this.selectedItems.removeObject(value);
+    }
+  }
+
+  @action
+  filterItems(event) {
+    const { value } = event.target;
+    console.log(value)
+
+    if (value) {
+      this.filteredItems = this.searchItems.filter((item) => {
+        console.log(items)
+        return item.includes(value);
+      });
+    } else {
+      this.filteredItems = this.searchItems;
+    }
+  }
+
   /**
    * builds a query string for all searchable target properties
    * @returns {string}
    */
+  @action
   buildQuery() {
     return this.searchableProps
       .map((prop) => `${prop} % '${this.freeSearch}'`)

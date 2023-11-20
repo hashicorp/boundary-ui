@@ -6,6 +6,14 @@ import { pluralize } from 'ember-inflector';
  * @type {string[]}
  */
 const supportedTypes = ['target', 'session'];
+const target = {
+  target: 'supported field'
+}
+
+// {
+//   search: 'test',
+//   filters: { scopeid: ['p_123'], type: ['ssh']}
+// }
 
 /**
  * Handler to sit in front of the API request layer
@@ -17,6 +25,8 @@ const ClientDaemonHandler = {
       case 'query': {
         const { store, data } = context.request;
         const { type, query } = data;
+        console.log('type: ', type);
+        console.log('data: ', data);
         const isClientDaemonRunning = await this.ipc.invoke(
           'isClientDaemonRunning'
         );

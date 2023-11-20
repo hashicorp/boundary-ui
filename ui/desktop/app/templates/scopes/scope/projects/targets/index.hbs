@@ -27,27 +27,42 @@
             <DD.ToggleButton
               @color='secondary'
               @text={{t 'resources.scope.title'}}
+              @count={{this.selectedItems.length}}
             />
             <DD.Header @hasDivider={{true}}>
               <Hds::Form::TextInput::Base
                 @type='search'
                 placeholder={{t 'actions.narrow-results'}}
-                data-test-search
+                @value={{this.scopeSearch}}
+                {{on 'search' this.filterItems}}
+                data-test-scope-search
               />
             </DD.Header>
-            {{#each this.searchItems as |item|}}
-              <DD.Checkbox @value={{item}} data-test-checkbox={{item}}>
-                {{item}}
+            {{#each this.filteredItems as |item|}}
+              <DD.Checkbox
+                data-test-checkbox={{item}}
+                @value={{item.name}}
+                checked={{includes item.id this.selectedItems}}
+                {{on 'change' this.selectItem}}
+              >
+                {{item.name}}
               </DD.Checkbox>
             {{/each}}
           </S.Dropdown>
           <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Active session' />
+            <DD.ToggleButton
+              @color='secondary'
+              @text={{t 'resources.session.active'}}
+            />
             <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
             <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
           </S.Dropdown>
           <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
+            <DD.ToggleButton
+              @color='secondary'
+              @text={{t 'form.type.label'}}
+              @count='2'
+            />
             <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
             <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
           </S.Dropdown>
