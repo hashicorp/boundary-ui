@@ -25,7 +25,7 @@ module('Integration | Component | rose/footer/nav', function (hooks) {
   //   assert.ok(find('.rose-footer-nav'));
   // });
 
-  // test('it renders nav external link elements', async function (assert) {
+  // DISABLEtest('it renders nav external link elements', async function (assert) {
   //   assert.expect(1);
   //   await render(hbs`<Rose::Footer::nav as |nav| >
   //     <nav.link @href="index"/>
