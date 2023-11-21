@@ -3,25 +3,30 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import { module, test } from 'qunit';
+import { 
+  module, 
+  // test 
+} from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+// import { render, find } from '@ember/test-helpers';
+// import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | rose/footer/nav/link', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders with @href', async function (assert) {
-    assert.expect(2);
-    await render(hbs`<Rose::Footer::Nav::Link @href="localhost" />`);
-    assert.ok(find('a'));
-    assert.ok(find('.rose-footer-nav-link'));
-  });
+  // TODO: delete tests or else update to test `Hds::AppFooter` which replace `Rose::Footer`
 
-  test('it renders with @route', async function (assert) {
-    assert.expect(2);
-    await render(hbs`<Rose::Footer::Nav::Link @route="index" />`);
-    assert.ok(find('a'));
-    assert.ok(find('.rose-footer-nav-link'));
-  });
+  // DISABLEtest('it renders with @href', async function (assert) {
+  //   assert.expect(2);
+  //   await render(hbs`<Rose::Footer::Nav::Link @href="localhost" />`);
+  //   assert.ok(find('a'));
+  //   assert.ok(find('.rose-footer-nav-link'));
+  // });
+
+  // DISABLEest('it renders with @route', async function (assert) {
+  //   assert.expect(2);
+  //   await render(hbs`<Rose::Footer::Nav::Link @route="index" />`);
+  //   assert.ok(find('a'));
+  //   assert.ok(find('.rose-footer-nav-link'));
+  // });
 });

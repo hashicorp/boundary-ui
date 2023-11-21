@@ -3,27 +3,32 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import { module, test } from 'qunit';
+import { 
+  module, 
+  // test 
+} from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
+// import { render, find } from '@ember/test-helpers';
+// import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | rose/footer/text', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function (assert) {
-    assert.expect(1);
-    await render(hbs`<Rose::Footer as |footer|>
-      <footer.text />
-    </Rose::Footer>`);
-    assert.ok(find('.rose-footer-text'));
-  });
+  // TODO: delete tests or else update to test `Hds::AppFooter` which replace `Rose::Footer`
 
-  test('it renders content', async function (assert) {
-    assert.expect(1);
-    await render(hbs`<Rose::Footer as |footer|>
-      <footer.text>content</footer.text>
-    </Rose::Footer>`);
-    assert.strictEqual(find('.rose-footer-text').textContent.trim(), 'content');
-  });
+  // DISABLEtest('it renders', async function (assert) {
+  //   assert.expect(1);
+  //   await render(hbs`<Rose::Footer as |footer|>
+  //     <footer.text />
+  //   </Rose::Footer>`);
+  //   assert.ok(find('.rose-footer-text'));
+  // });
+
+  // DISABLEtest('it renders content', async function (assert) {
+  //   assert.expect(1);
+  //   await render(hbs`<Rose::Footer as |footer|>
+  //     <footer.text>content</footer.text>
+  //   </Rose::Footer>`);
+  //   assert.strictEqual(find('.rose-footer-text').textContent.trim(), 'content');
+  // });
 });
