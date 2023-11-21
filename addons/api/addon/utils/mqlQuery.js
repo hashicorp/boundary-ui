@@ -16,6 +16,10 @@
  *   // (name % "search text") and (scope = "scope1" or scope = "scope2")
  */
 export function generateMQLFilterExpression(filterObj) {
+  if (!filterObj) {
+    return null;
+  }
+
   const expressions = Object.entries(filterObj)
     .map(([key, filterObjValue]) => {
       const filterObjValueArray = Array.isArray(filterObjValue)
@@ -66,23 +70,29 @@ export function generateMQLFilterExpression(filterObj) {
  *   // (id % 'search' or name % 'search' or description % 'search')
  */
 export function generateMQLSearchExpression(searchObj) {
+  if (!searchObj) {
+    return null;
+  }
+
   const { text, fields } = searchObj;
 
-  return parenthetical(or(fields.map((field) => contains(field, text))));
+  return parenthetical(
+    or(fields.map((field) => contains(field, text)).filter((item) => item)),
+  );
 }
 
+/**
+ * Generates the MQL expression when a user passes in both search and filters.
+ */
 export function generateMQLExpression(obj) {
   const { search, filters } = obj;
-  const result = [];
 
-  if (search) {
-    result.push(generateMQLSearchExpression(search));
-  }
-  if (filters) {
-    result.push(generateMQLFilterExpression(filters));
-  }
+  const expressions = [
+    generateMQLSearchExpression(search),
+    generateMQLFilterExpression(filters),
+  ].filter((item) => item);
 
-  return and(result);
+  return and(expressions);
 }
 
 const isEmpty = (input) =>

@@ -39,12 +39,14 @@ const ClientDaemonHandler = {
         let { recursive, scope_id, ...remainingQuery } = query;
         let searchQuery = '';
         if (remainingQuery.query) {
+          const { search, filters } = remainingQuery.query;
+
           searchQuery = generateMQLExpression({
             search: {
-              text: remainingQuery.query.search,
+              text: search,
               fields: supportedTypes[type],
             },
-            filters: remainingQuery.query.filters,
+            filters,
           });
         }
         const auth_token_id = this.session.data?.authenticated?.id;

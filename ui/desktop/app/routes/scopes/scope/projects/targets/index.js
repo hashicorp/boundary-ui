@@ -36,23 +36,19 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   /**
    * Loads all targets under current scope.
    *
-   * NOTE:  previously, targets were filtered with API filter queries.
-   *        In an effort to offload processing from the controller, targets
-   *        are now filtered on the client by projects and authorized_actions.
-   *
    * @return {Promise{[TargetModel]}}
    */
   async model({ search = '' }) {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    const queryOptions = {
-      query: { search, filters: { scope: [{ equals: scope_id }] } },
-    };
+    // TODO: Filter targets by scope we're in manually
+    // const { id: scope_id } = this.modelFor('scopes.scope');
+    const queryOptions = { query: { search } };
 
-    // Recursively query all targets within the current scope
     let targets = await this.store.query('target', queryOptions);
 
     // Filter out targets to which users do not have the connect ability
-    targets = targets.filter((t) => this.can.can('connect target', t));
+    targets = targets.filter((target) =>
+      this.can.can('connect target', target)
+    );
 
     return targets;
   }
