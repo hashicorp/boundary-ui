@@ -150,12 +150,7 @@ module('Unit | Adapter | application', function (hooks) {
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/users', () => new Response({}));
-    const prenormalized = await adapter.findAll(
-      store,
-      { modelName: 'user' },
-      null,
-      [],
-    );
+    const prenormalized = await adapter.query(store, { modelName: 'user' }, {});
     assert.deepEqual(prenormalized, { items: [] });
   });
 

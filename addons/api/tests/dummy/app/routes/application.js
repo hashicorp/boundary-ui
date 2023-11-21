@@ -12,6 +12,6 @@ export default class ApplicationRoute extends Route {
   @service store;
 
   model() {
-    this.store.findAll('scope');
+    this.store.query('scope', {});
   }
 }
