@@ -108,16 +108,6 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 
   /**
    * Intercepts "empty" responses and adds an empty `items` array.
-   * @override
-   * @method findAll
-   * @return {Promise} promise
-   */
-  findAll() {
-    return super.findAll(...arguments).then(prenormalizeArrayResponse);
-  }
-
-  /**
-   * Intercepts "empty" responses and adds an empty `items` array.
    * This query method now supports pagination by checking the responseType and
    * passing in the refresh token if the responseType indicates more data
    * @override
