@@ -41,9 +41,10 @@ const ClientDaemonHandler = {
         if (remainingQuery.query) {
           searchQuery = generateMQLExpression({
             search: {
-              text: remainingQuery.query,
+              text: remainingQuery.query.search,
               fields: supportedTypes[type],
             },
+            filters: remainingQuery.query.filters,
           });
         }
         const auth_token_id = this.session.data?.authenticated?.id;

@@ -20,11 +20,28 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =attributes
 
-  @tracked targets = this.model;
-  @tracked freeSearch;
+  queryParams = ['search'];
+
+  @tracked search;
   @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
 
   // =methods
+
+  /**
+   * Returns true if model is empty but we have a search term
+   * @returns {boolean}
+   */
+  get noResults() {
+    return this.model.length === 0 && this.search;
+  }
+
+  /**
+   * Returns true if model is empty and we have no search term
+   * @returns {boolean}
+   */
+  get noTargets() {
+    return this.model.length === 0 && !this.search;
+  }
 
   /**
    * Quick connect method used to call main connect method and handle
@@ -113,23 +130,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @param {object} event
    */
   @action
-  async handleInput(event) {
+  handleSearchInput(event) {
     const { value } = event.target;
-    this.freeSearch = value;
-    await this.search();
-  }
-
-  /**
-   * queries for targets based on input from user
-   */
-  @action
-  async search() {
-    if (this.freeSearch) {
-      this.targets = await this.store.query('target', {
-        query: this.freeSearch,
-      });
-    } else {
-      this.targets = this.model;
-    }
+    this.search = value;
+    this.router.replaceWith({
+      queryParams: { ...this.queryParams, search: this.search },
+    });
   }
 }

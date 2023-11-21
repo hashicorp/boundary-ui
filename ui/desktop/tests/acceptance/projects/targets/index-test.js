@@ -83,6 +83,8 @@ module('Acceptance | projects | targets', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession();
+    // bypass mirage config that expects recursive to be passed in as queryParam
+    this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });

@@ -14,14 +14,14 @@
   </page.header>
 
   <page.body class='targets'>
-    {{#if @model}}
+    {{#if (or @model this.search)}}
       <div class='target-search-filtering'>
         <Hds::SegmentedGroup as |S|>
           <S.TextInput
             @type='search'
             placeholder={{t 'actions.search'}}
             aria-label={{t 'actions.search'}}
-            {{on 'input' this.handleInput}}
+            {{on 'input' this.handleSearchInput}}
           />
           <S.Dropdown as |DD|>
             <DD.ToggleButton
@@ -54,9 +54,9 @@
           </S.Dropdown>
         </Hds::SegmentedGroup>
       </div>
-      {{#if this.targets}}
+      {{#if @model}}
         <Hds::Table
-          @model={{this.targets}}
+          @model={{@model}}
           @columns={{array
             (hash label=(t 'form.name.label'))
             (hash label=(t 'form.id.label'))
@@ -139,7 +139,8 @@
             </B.Tr>
           </:body>
         </Hds::Table>
-      {{else}}
+      {{/if}}
+      {{#if this.noResults}}
         <Hds::ApplicationState data-test-no-target-results as |A|>
           <A.Header
             @title={{t 'resources.target.messages.no-search-results.title'}}
@@ -147,12 +148,13 @@
           <A.Body
             @text={{t
               'resources.target.messages.no-search-results.description'
-              query=this.freeSearch
+              query=this.search
             }}
           />
         </Hds::ApplicationState>
       {{/if}}
-    {{else}}
+    {{/if}}
+    {{#if this.noTargets}}
       <Hds::ApplicationState data-test-no-targets as |A|>
         <A.Header @title={{t 'resources.target.messages.none.title'}} />
         <A.Body @text={{t 'resources.target.messages.none.description'}} />
