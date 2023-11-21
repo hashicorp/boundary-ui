@@ -61,11 +61,11 @@ export default class SessionTerminalTabsComponent extends Component {
      * Custom key event handler for windows to achieve Ctrl+C as on the other OS's
      */
     if (isWindows) {
-      xterm.attachCustomKeyEventHandler((arg) => {
+      xterm.attachCustomKeyEventHandler(async (arg) => {
         if (arg.ctrlKey && arg.code === 'KeyC' && arg.type === 'keydown') {
           const selection = xterm.getSelection();
           if (selection) {
-            navigator.clipboard.writeText(selection);
+            await navigator.clipboard.writeText(selection);
             return false;
           }
         }
