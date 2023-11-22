@@ -21,6 +21,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   queryParams = {
     search: {
       refreshModel: true,
+      replace: true,
     },
   };
 

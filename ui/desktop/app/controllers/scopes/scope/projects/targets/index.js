@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
+import { debounce } from 'core/decorators/debounce';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -130,11 +131,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @param {object} event
    */
   @action
+  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
-    this.router.replaceWith({
-      queryParams: { ...this.queryParams, search: this.search },
-    });
   }
 }
