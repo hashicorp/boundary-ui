@@ -24,11 +24,11 @@ module('Integration | Component | rose/message', function (hooks) {
     assert.strictEqual(find('.rose-message-title').textContent.trim(), 'Title');
     assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
-      'Subtitle'
+      'Subtitle',
     );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
-      'Description'
+      'Description',
     );
 
     assert.strictEqual(find('a').textContent.trim(), 'Link');

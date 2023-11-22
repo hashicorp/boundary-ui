@@ -35,7 +35,8 @@ $xxxs: sizing.rems(xxxs); // 2
   display: inline-flex;
   flex-direction: column;
   margin: 0 sizing.rems(m) sizing.rems(m) 0;
-  box-shadow: 0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4)),
+  box-shadow:
+    0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4)),
     0 $xxxs $xxxs rgba(var(--stark-components), var(--opacity-4));
   background-color: var(--background-color);
 
@@ -57,7 +58,8 @@ $xxxs: sizing.rems(xxxs); // 2
 
     border-color: var(--ui-gray);
     background-color: var(--ui-gray-subtler-5);
-    box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
+    box-shadow:
+      0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
       0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
 
     .rose-card-link-description,

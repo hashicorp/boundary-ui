@@ -27,7 +27,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
     await render(hbs`<Rose::Dropdown @text="Click me" />`);
     assert.strictEqual(
       find('.rose-dropdown-trigger').textContent.trim(),
-      'Click me'
+      'Click me',
     );
   });
 
@@ -38,7 +38,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it supports an icon', async function (assert) {
     await render(
-      hbs`<Rose::Dropdown @icon="flight-icons/svg/user-circle-16" />`
+      hbs`<Rose::Dropdown @icon="flight-icons/svg/user-circle-16" />`,
     );
     assert.ok(find('svg'));
   });

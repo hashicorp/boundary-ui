@@ -22,11 +22,11 @@ module('Integration | Component | rose/form/errors', function (hooks) {
     assert.ok(find('.rose-form-errors'));
     assert.strictEqual(
       find('.rose-form-error-message:first-child').textContent.trim(),
-      'An error occurred.'
+      'An error occurred.',
     );
     assert.strictEqual(
       find('.rose-form-error-message:last-child').textContent.trim(),
-      'Another error occurred.'
+      'Another error occurred.',
     );
   });
 });
