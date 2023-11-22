@@ -5,6 +5,7 @@
 
 import Controller from '@ember/controller';
 import orderBy from 'lodash/orderBy';
+
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =attributes
 

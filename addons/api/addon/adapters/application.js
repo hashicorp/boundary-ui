@@ -139,7 +139,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
           break;
         }
       }
-    } while (result && result.response_type === 'complete');
+    } while (result && result.response_type === 'delta');
 
     result.items = data;
     return prenormalizeArrayResponse(result);
