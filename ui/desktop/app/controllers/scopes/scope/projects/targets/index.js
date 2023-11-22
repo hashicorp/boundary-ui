@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -17,7 +18,30 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service session;
   @service store;
 
+  // =attributes
+
+  queryParams = ['search'];
+
+  @tracked search;
+  @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
+
   // =methods
+
+  /**
+   * Returns true if model is empty but we have a search term
+   * @returns {boolean}
+   */
+  get noResults() {
+    return this.model.length === 0 && this.search;
+  }
+
+  /**
+   * Returns true if model is empty and we have no search term
+   * @returns {boolean}
+   */
+  get noTargets() {
+    return this.model.length === 0 && !this.search;
+  }
 
   /**
    * Quick connect method used to call main connect method and handle
@@ -102,5 +126,18 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       'scopes.scope.projects.sessions.session',
       session_id,
     );
+  }
+
+  /**
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
+   */
+  @action
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.router.replaceWith({
+      queryParams: { ...this.queryParams, search: this.search },
+    });
   }
 }
