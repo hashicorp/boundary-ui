@@ -123,7 +123,7 @@ handle('checkCommand', async (command) => which(command, { nothrow: true }));
  * Adds the user's token to the client daemon.
  */
 handle('addTokenToClientDaemon', async (data) =>
-  clientDaemonManager.addToken(data)
+  clientDaemonManager.addToken(data),
 );
 
 /**
@@ -139,7 +139,7 @@ handle('checkOS', () => ({
  * Call the client daemon's search endpoint to retrieve cached results.
  */
 handle('searchClientDaemon', async (request) =>
-  clientDaemonManager.search(request)
+  clientDaemonManager.search(request),
 );
 
 /**
@@ -147,7 +147,7 @@ handle('searchClientDaemon', async (request) =>
  * socket path as a proxy for whether the daemon is running.
  */
 handle('isClientDaemonRunning', async (request) =>
-  Boolean(clientDaemonManager.socketPath)
+  Boolean(clientDaemonManager.socketPath),
 );
 
 /**

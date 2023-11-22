@@ -29,7 +29,6 @@ module('Acceptance | projects | targets', function (hooks) {
 
   let getTargetCount;
 
-  const ROSE_APP_STATE_TITLE = '.rose-message-title';
   const APP_STATE_TITLE = '.hds-application-state__title';
   const TARGET_DETAILS_ROUTE_NAME =
     'scopes.scope.projects.targets.target.index';
@@ -84,6 +83,8 @@ module('Acceptance | projects | targets', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession();
+    // bypass mirage config that expects recursive to be passed in as queryParam
+    this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -190,7 +191,7 @@ module('Acceptance | projects | targets', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom(ROSE_APP_STATE_TITLE).hasText('No Targets Available');
+    assert.dom(APP_STATE_TITLE).hasText('No Targets Available');
   });
 
   test('user cannot navigate to a target without proper authorization', async function (assert) {
