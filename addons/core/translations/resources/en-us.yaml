@@ -62,6 +62,10 @@ auth-method:
     searching: Searching
     finding: Finding
     always: Always
+    consent: Consent
+    none: None
+    select_account: Select Account
+    login: Login
   types:
     password: Password
     oidc: OIDC

@@ -528,6 +528,29 @@
     {{/if}}
   </form.input>
 
+  <Hds::Form::Checkbox::Group
+    @isOptional={{true}}
+    @layout='horizontal'
+    @name='prompts'
+    disabled={{form.disabled}}
+    as |G|
+  >
+    <G.Legend>{{t 'form.prompts.label'}}</G.Legend>
+    <G.HelperText>{{t 'form.prompts.help'}}</G.HelperText>
+
+    {{#each this.prompts as |prompt|}}
+      <G.Checkbox::Field
+        @id={{prompt}}
+        checked={{includes prompt this.selectedPrompts}}
+        {{on 'change' (fn this.updatePrompt prompt)}}
+        as |F|
+      >
+        <F.Label>{{t (concat 'resources.auth-method.titles.' prompt)}}</F.Label>
+      </G.Checkbox::Field>
+    {{/each}}
+
+  </Hds::Form::Checkbox::Group>
+
   {{#unless @model.isNew}}
     <form.input
       @value={{@model.callback_url}}
@@ -537,6 +560,7 @@
       @disabled={{true}}
     />
   {{/unless}}
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

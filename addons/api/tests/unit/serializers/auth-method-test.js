@@ -36,7 +36,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.ok(serializedRecord);
     assert.notOk(
       serializedRecord.attributes,
-      'Password should not have attributes'
+      'Password should not have attributes',
     );
   });
 
@@ -65,6 +65,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'none' }],
     });
 
     let serializedRecord = record.serialize();
@@ -86,6 +87,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['none'],
       },
     });
   });
@@ -180,6 +182,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'consent' }],
     });
 
     let serializedRecord = record.serialize();
@@ -200,6 +203,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['consent'],
       },
     });
   });
@@ -327,7 +331,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     const normalizedArray = serializer.normalizeArrayResponse(
       store,
       modelClass,
-      payload
+      payload,
     );
     assert.ok(payload.items[1].is_primary, 'Second payload item is primary');
     assert.deepEqual(
@@ -370,7 +374,7 @@ module('Unit | Serializer | auth method', function (hooks) {
           },
         ],
       },
-      'First normalized item is primary'
+      'First normalized item is primary',
     );
   });
 
@@ -432,7 +436,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     assert.strictEqual(record.client_id, clientId);
     assert.strictEqual(
       record.disable_discovered_config_validation,
-      disableDiscoveredConfigValidation
+      disableDiscoveredConfigValidation,
     );
     assert.strictEqual(record.dry_run, dryRun);
     assert.strictEqual(record.issuer, issuer);

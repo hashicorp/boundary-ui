@@ -165,6 +165,7 @@ module('Unit | Serializer | application', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'consent' }],
     });
 
     let serializedRecord = record.serialize();
@@ -186,6 +187,7 @@ module('Unit | Serializer | application', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['consent'],
       },
     });
   });
@@ -205,7 +207,7 @@ module('Unit | Serializer | application', function (hooks) {
     const normalizedArray = serializer.normalizeArrayResponse(
       store,
       userModelClass,
-      payload
+      payload,
     );
     assert.deepEqual(normalizedArray, {
       included: [],
@@ -254,7 +256,7 @@ module('Unit | Serializer | application', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       userModelClass,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -285,7 +287,7 @@ module('Unit | Serializer | application', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -318,7 +320,7 @@ module('Unit | Serializer | application', function (hooks) {
     const normalized = serializer.normalizeUpdateRecordResponse(
       store,
       user,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
