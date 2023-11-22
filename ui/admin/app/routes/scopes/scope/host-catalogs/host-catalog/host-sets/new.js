@@ -20,13 +20,13 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
    */
   beforeModel() {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     if (
       this.can.cannot('create model', hostCatalog, { collection: 'host-sets' })
     ) {
       this.router.replaceWith(
-        'scopes.scope.host-catalogs.host-catalog.host-sets'
+        'scopes.scope.host-catalogs.host-catalog.host-sets',
       );
     }
   }
@@ -37,7 +37,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsNewRoute extends 
    */
   model() {
     const { id: host_catalog_id, compositeType } = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     return this.store.createRecord('host-set', {
       compositeType,

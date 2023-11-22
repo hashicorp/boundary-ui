@@ -58,7 +58,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
       {
         scope: instances.scopes.project,
       },
-      'withChildren'
+      'withChildren',
     );
     // creates "unknown" host-set for target host sources
     instances.hostCatalogPlugin = this.server.create(
@@ -68,7 +68,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
         plugin: { name: 'shh' },
         scope: instances.scopes.project,
       },
-      'withChildren'
+      'withChildren',
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
@@ -139,7 +139,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
-        (item) => item !== 'remove-host-sources'
+        (item) => item !== 'remove-host-sources',
       );
     await visit(urls.target);
 
@@ -159,7 +159,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     const targetHostSetCount = getTargetHostSetCount();
@@ -199,7 +199,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
-        (item) => item !== 'add-host-sources'
+        (item) => item !== 'add-host-sources',
       );
     await visit(urls.target);
 
@@ -244,7 +244,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.targetHostSources);
@@ -273,7 +273,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
       .hostSets.models.length;
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      '0.0.0.0'
+      '0.0.0.0',
     );
 
     const targetUrl = `${urls.targets}/${target.id}`;
@@ -289,11 +289,11 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      null
+      null,
     );
     assert.strictEqual(
       this.server.schema.targets.find(target.id).hostSets.models.length,
-      targetHostSetCount + 1
+      targetHostSetCount + 1,
     );
   });
 
@@ -309,7 +309,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
       .hostSets.models.length;
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      '0.0.0.0'
+      '0.0.0.0',
     );
 
     const targetUrl = `${urls.targets}/${target.id}`;
@@ -323,16 +323,16 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.dom('.rose-dialog').isVisible();
     await click(
       '.rose-dialog-footer .rose-button-secondary',
-      'Remove resources'
+      'Remove resources',
     );
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      '0.0.0.0'
+      '0.0.0.0',
     );
     assert.strictEqual(
       this.server.schema.targets.find(target.id).hostSets.models.length,
-      targetHostSetCount
+      targetHostSetCount,
     );
   });
 });

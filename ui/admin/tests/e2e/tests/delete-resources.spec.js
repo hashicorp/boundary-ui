@@ -80,18 +80,16 @@ test('Verify resources can be deleted', async ({ page }) => {
     let groupId = await createNewGroupCli(orgId);
     let userId = await createNewUserCli(orgId);
     let staticHostCatalogId = await createNewStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
-      projectId
-    );
+    let dynamicAwsHostCatalogId =
+      await createDynamicAwsHostCatalogCli(projectId);
     let staticHostId = await createNewStaticHostCli(staticHostCatalogId);
     let staticHostSetId = await createNewHostSetCli(staticHostCatalogId);
-    let staticCredentialStoreId = await createNewStaticCredentialStoreCli(
-      projectId
-    );
+    let staticCredentialStoreId =
+      await createNewStaticCredentialStoreCli(projectId);
     let vaultCredentialStoreId = await createNewVaultCredentialStoreCli(
       projectId,
       secretPolicyName,
-      boundaryPolicyName
+      boundaryPolicyName,
     );
     let usernamePasswordCredentialId =
       await createNewUsernamePasswordCredentialCli(staticCredentialStoreId);
@@ -103,43 +101,43 @@ test('Verify resources can be deleted', async ({ page }) => {
 
     // Delete username-password credentials
     await page.goto(
-      `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}/credentials/${usernamePasswordCredentialId}`
+      `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}/credentials/${usernamePasswordCredentialId}`,
     );
     await deleteResource(page);
 
     // Delete static credential store
     await page.goto(
-      `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}`
+      `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}`,
     );
     await deleteResource(page);
 
     // Delete vault credential store
     await page.goto(
-      `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}`
+      `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}`,
     );
     await deleteResource(page);
 
     // Delete static host set
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/host-sets/${staticHostSetId}`
+      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/host-sets/${staticHostSetId}`,
     );
     await deleteResource(page);
 
     // Delete static host
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/hosts/${staticHostId}`
+      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/hosts/${staticHostId}`,
     );
     await deleteResource(page);
 
     // Delete static host catalog
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}`
+      `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}`,
     );
     await deleteResource(page);
 
     // Delete dynamic aws host catalog
     await page.goto(
-      `/scopes/${projectId}/host-catalogs/${dynamicAwsHostCatalogId}`
+      `/scopes/${projectId}/host-catalogs/${dynamicAwsHostCatalogId}`,
     );
     await deleteResource(page);
 
@@ -165,7 +163,7 @@ test('Verify resources can be deleted', async ({ page }) => {
 
     // Delete password account
     await page.goto(
-      `/scopes/${orgId}/auth-methods/${authMethodId}/accounts/${passwordAccountId}`
+      `/scopes/${orgId}/auth-methods/${authMethodId}/accounts/${passwordAccountId}`,
     );
     await deleteResource(page);
 

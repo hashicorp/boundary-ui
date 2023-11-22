@@ -75,8 +75,8 @@ module('Acceptance | users | create', function (hooks) {
 
     assert.true(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(`[href="${urls.newUser}"]`).exists();
   });
@@ -85,7 +85,7 @@ module('Acceptance | users | create', function (hooks) {
     assert.expect(2);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
     await visit(urls.orgScope);
 
@@ -93,8 +93,8 @@ module('Acceptance | users | create', function (hooks) {
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
 
     assert.dom('.rose-button-primary').doesNotExist();
@@ -133,7 +133,7 @@ module('Acceptance | users | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 
@@ -150,15 +150,15 @@ module('Acceptance | users | create', function (hooks) {
     assert.expect(2);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newUser);
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.users);
   });

@@ -25,7 +25,7 @@ module(
 
     test('it renders the correct diagram when egress and ingress filter is false', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{false}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{false}} />`,
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-off]').exists();
@@ -33,7 +33,7 @@ module(
 
     test('it renders the correct diagram when egress filter is true and ingress filter is false', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{false}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{false}} />`,
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-off]').exists();
@@ -41,7 +41,7 @@ module(
 
     test('it renders the correct diagram when egress filter is false and ingress filter is true', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{true}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{false}} @ingressWorkerFilterEnabled={{true}} />`,
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-off-ingress-on]').exists();
@@ -49,10 +49,10 @@ module(
 
     test('it renders the correct diagram when egress and ingress filter is true', async function (assert) {
       await render(
-        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{true}} />`
+        hbs`<WorkerDiagram::DualFilter::Hcp @egressWorkerFilterEnabled={{true}} @ingressWorkerFilterEnabled={{true}} />`,
       );
 
       assert.dom('[data-test-dual-filter-hcp-egress-on-ingress-on]').exists();
     });
-  }
+  },
 );

@@ -19,7 +19,7 @@ export default class FormStorageBucketComponent extends Component {
   @service intl;
 
   @tracked scopeFieldDescription = this.intl.t(
-    'resources.storage-bucket.form.scope.help'
+    'resources.storage-bucket.form.scope.help',
   );
 
   @tracked selectedCredentialType = this.args.model.credentialType;
@@ -54,11 +54,11 @@ export default class FormStorageBucketComponent extends Component {
   updateScopeFieldDescription() {
     if (this.args.model.scopeModel.isGlobal) {
       this.scopeFieldDescription = this.intl.t(
-        'resources.storage-bucket.form.scope.help_global'
+        'resources.storage-bucket.form.scope.help_global',
       );
     } else {
       this.scopeFieldDescription = this.intl.t(
-        'resources.storage-bucket.form.scope.help_org'
+        'resources.storage-bucket.form.scope.help_org',
       );
     }
   }
@@ -67,7 +67,7 @@ export default class FormStorageBucketComponent extends Component {
   updateScope(event) {
     const selectedScopeId = event.target.value;
     const selectedScopeModel = this.args.scopes.find(
-      (element) => element.model.id === selectedScopeId
+      (element) => element.model.id === selectedScopeId,
     ).model;
     this.args.model.scopeModel = selectedScopeModel;
     this.updateScopeFieldDescription();

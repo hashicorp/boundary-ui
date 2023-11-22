@@ -75,8 +75,8 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     await visit(urls.staticCredentialStore);
     assert.ok(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.dom(`[href="${urls.credentials}"]`).isVisible();
     await click(`[href="${urls.credentials}"]`);
@@ -93,13 +93,13 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     await visit(urls.staticCredentialStore);
     assert.notOk(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.notOk(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom('.rose-nav-tabs a:nth-child(2)').doesNotExist();
   });

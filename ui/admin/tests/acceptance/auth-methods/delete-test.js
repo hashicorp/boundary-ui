@@ -104,7 +104,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.authMethods);
@@ -127,7 +127,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.authMethods);
@@ -143,7 +143,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     assert.expect(1);
     instances.authMethod.authorized_actions =
       instances.authMethod.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.authMethods);
 
@@ -157,7 +157,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_actions =
       instances.ldapAuthMethod.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.authMethods);
 

@@ -35,7 +35,7 @@ export default class ScopesScopeWorkersWorkerRoute extends Route {
       this.router.replaceWith(
         'scopes.scope.workers.worker',
         worker.scopeID,
-        worker.id
+        worker.id,
       );
     }
   }

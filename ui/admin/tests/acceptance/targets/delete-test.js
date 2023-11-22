@@ -128,7 +128,7 @@ module('Acceptance | targets | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
 

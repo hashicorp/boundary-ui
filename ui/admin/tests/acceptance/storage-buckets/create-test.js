@@ -188,7 +188,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.storageBuckets);
@@ -213,7 +213,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.storageBuckets);
   });

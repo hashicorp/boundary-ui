@@ -57,7 +57,7 @@ export function notifySuccess(notification) {
  */
 export function notifyError(
   notification,
-  options = { catch: false, sticky: true }
+  options = { catch: false, sticky: true },
 ) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;

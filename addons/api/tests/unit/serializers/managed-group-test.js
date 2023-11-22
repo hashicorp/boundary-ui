@@ -204,7 +204,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostSetModelClass,
-      payload
+      payload,
     );
 
     assert.deepEqual(normalized, {

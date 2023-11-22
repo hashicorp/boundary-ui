@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     json.credential_store_id = model.credentialStoreId;
     return json;

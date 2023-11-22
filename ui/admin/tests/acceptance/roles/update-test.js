@@ -53,7 +53,7 @@ module('Acceptance | roles | update', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withPrincipals'
+      'withPrincipals',
     );
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
@@ -105,7 +105,7 @@ module('Acceptance | roles | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.role);
@@ -115,12 +115,12 @@ module('Acceptance | roles | update', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
     assert.strictEqual(
       find('.hds-form-error__message').textContent.trim(),
       'Name is required.',
-      'Displays field-level errors.'
+      'Displays field-level errors.',
     );
   });
 });

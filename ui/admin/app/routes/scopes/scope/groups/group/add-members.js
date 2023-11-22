@@ -59,7 +59,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
           {
             scope_id: 'global',
             recursive: true,
-          }
+          },
         )
       : this.store.query('user', { scope_id: 'global', recursive: true });
     return hash({ group, users, scopes });

@@ -56,7 +56,7 @@ const commandHandlers = {
               last_used_time: '',
               expiration_time: '',
             },
-          }
+          },
         );
       }
     },
@@ -82,7 +82,7 @@ const commandHandlers = {
             auth_url: 'https://www.duckduckgo.com',
             token_id: 'token_1234',
           },
-        }
+        },
       ),
     token: (_, scopeAttrs) => {
       oidcAttemptCounter++;
@@ -105,7 +105,7 @@ const commandHandlers = {
               last_used_time: '',
               expiration_time: '',
             },
-          }
+          },
         );
       }
     },
@@ -115,7 +115,7 @@ const commandHandlers = {
 // Handles all custom methods on /auth-methods/:id route
 export function authHandler({ scopes, authMethods }, request) {
   const [, id, method] = request.params.id_method.match(
-    /(?<id>.[^:]*):(?<method>(.*))/
+    /(?<id>.[^:]*):(?<method>(.*))/,
   );
   const authMethod = authMethods.find(id);
 

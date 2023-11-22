@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/credential-stores/credential-store/credentials/new'
+        'controller:scopes/scope/credential-stores/credential-store/credentials/new',
       );
       assert.ok(controller);
     });
-  }
+  },
 );

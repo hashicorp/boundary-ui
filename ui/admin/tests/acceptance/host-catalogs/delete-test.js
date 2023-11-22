@@ -79,7 +79,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
 
     await click(`[href="${urls.hostCatalog}"]`);
@@ -131,7 +131,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
 

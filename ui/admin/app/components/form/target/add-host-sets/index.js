@@ -42,10 +42,10 @@ export default class FormTargetAddHostSetsComponent extends Component {
   get filteredHostSets() {
     // Get IDs for host sets already added to the current target
     const alreadyAddedHostSetIDs = this.args.model.host_sources.map(
-      ({ host_source_id }) => host_source_id
+      ({ host_source_id }) => host_source_id,
     );
     const notAddedHostSets = this.args.hostSets.filter(
-      ({ id }) => !alreadyAddedHostSetIDs.includes(id)
+      ({ id }) => !alreadyAddedHostSetIDs.includes(id),
     );
     return notAddedHostSets;
   }
@@ -75,13 +75,13 @@ export default class FormTargetAddHostSetsComponent extends Component {
       try {
         await this.confirm.confirm(
           this.intl.t(
-            'resources.target.host-source.questions.delete-address.message'
+            'resources.target.host-source.questions.delete-address.message',
           ),
           {
             title:
               'resources.target.host-source.questions.delete-address.title',
             confirm: 'resources.target.actions.remove-address',
-          }
+          },
         );
       } catch (e) {
         // if the user denies, do nothing and return

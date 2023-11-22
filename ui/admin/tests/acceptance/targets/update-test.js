@@ -78,11 +78,11 @@ module('Acceptance | targets | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.first().workerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -128,7 +128,7 @@ module('Acceptance | targets | update', function (hooks) {
     await click('.hds-button[type="button"]', 'Update Filter');
     assert.strictEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      worker_filter_value
+      worker_filter_value,
     );
   });
 
@@ -143,11 +143,11 @@ module('Acceptance | targets | update', function (hooks) {
     await click('.hds-button[type="button"]', 'Update Filter');
     assert.strictEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      worker_filter_value
+      worker_filter_value,
     );
     assert.strictEqual(
       this.server.schema.targets.first().ingressWorkerFilter,
-      worker_filter_value
+      worker_filter_value,
     );
   });
 
@@ -169,7 +169,7 @@ module('Acceptance | targets | update', function (hooks) {
     await click('.hds-button[type="button"]', 'Update Filter');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     assert.dom('[name=egress_worker_filter]').isNotVisible();
   });
@@ -186,12 +186,12 @@ module('Acceptance | targets | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      'random filter string'
+      'random filter string',
     );
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     await click('.rose-form-actions [type="submit"]');
     //clear egress_worker_filter when the toggle is off
@@ -199,7 +199,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.dom('[name=egress_worker_filter]').doesNotExist();
     assert.strictEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      null
+      null,
     );
   });
 
@@ -236,7 +236,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().ingressWorkerFilter,
-      'random filter string'
+      'random filter string',
     );
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-form-toggle__control', 'Ingress worker filter');
@@ -246,7 +246,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.dom('[name=ingress_worker_filter]').doesNotExist();
     assert.strictEqual(
       this.server.schema.targets.first().ingressWorkerFilter,
-      null
+      null,
     );
   });
 
@@ -281,7 +281,7 @@ module('Acceptance | targets | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 
@@ -302,7 +302,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.notEqual(instances.target.name, 'random string');
     assert.notEqual(
       instances.target.egressWorkerFilter,
-      'random worker string'
+      'random worker string',
     );
     await visit(urls.targets);
 
@@ -320,7 +320,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
     assert.notEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      'random worker string'
+      'random worker string',
     );
   });
 
@@ -347,7 +347,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
     assert.notEqual(
       this.server.schema.targets.first().egressWorkerFilter,
-      'random string'
+      'random string',
     );
   });
 
@@ -372,18 +372,18 @@ module('Acceptance | targets | update', function (hooks) {
       'host-catalog',
       8,
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     this.server.createList(
       'credential-store',
       3,
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     const target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
 
@@ -400,11 +400,11 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      '0.0.0.0'
+      '0.0.0.0',
     );
     assert.strictEqual(
       this.server.schema.targets.find(target.id).hostSets.length,
-      0
+      0,
     );
   });
 
@@ -418,18 +418,18 @@ module('Acceptance | targets | update', function (hooks) {
       'host-catalog',
       8,
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     this.server.createList(
       'credential-store',
       3,
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     const target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
 
@@ -446,7 +446,7 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      undefined
+      undefined,
     );
     assert.true(this.server.schema.targets.find(target.id).hostSets.length > 0);
   });

@@ -78,7 +78,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     await visit(urls.projectScope);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
 
     await click(`[href="${urls.hostCatalogs}"]`);

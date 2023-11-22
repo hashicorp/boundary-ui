@@ -29,8 +29,8 @@ export default class ScopesScopeUsersUserAccountsRoute extends Route {
       user,
       accounts: all(
         user.account_ids.map((id) =>
-          this.store.findRecord('account', id, { adapterOptions: { scopeID } })
-        )
+          this.store.findRecord('account', id, { adapterOptions: { scopeID } }),
+        ),
       ),
     });
   }

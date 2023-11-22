@@ -55,16 +55,16 @@ test.beforeEach(async ({ page }) => {
 
 test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   execSync(
-    `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`
+    `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
   );
   execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
   execSync(
     `vault kv put -mount ${secretsPath} ${secretName} ` +
       ` username=${process.env.E2E_SSH_USER}` +
-      ` private_key=@${process.env.E2E_SSH_KEY_PATH}`
+      ` private_key=@${process.env.E2E_SSH_KEY_PATH}`,
   );
   execSync(
-    `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`
+    `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
   );
   const vaultToken = JSON.parse(
     execSync(
@@ -75,8 +75,8 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
         ` -orphan=true` +
         ` -period=20m` +
         ` -renewable=true` +
-        ` -format=json`
-    )
+        ` -format=json`,
+    ),
   );
   const clientToken = vaultToken.auth.client_token;
 
@@ -103,11 +103,11 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   await page.getByLabel('Token', { exact: true }).fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialStoreName })
+    page.getByRole('link', { name: credentialStoreName }),
   ).toBeVisible();
 
   const credentialLibraryName = 'Credential Library ' + nanoid();
@@ -122,7 +122,7 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   await page.getByLabel('Vault Path').fill(`${secretsPath}/data/${secretName}`);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 
@@ -147,27 +147,29 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
     .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
     .click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialLibraryName })
+    page.getByRole('link', { name: credentialLibraryName }),
   ).toBeVisible();
 
   await authenticateBoundaryCli();
   const orgs = JSON.parse(execSync('boundary scopes list -format json'));
   const org = orgs.items.filter((obj) => obj.name == orgName)[0];
   const projects = JSON.parse(
-    execSync(`boundary scopes list -format json -scope-id ${org.id}`)
+    execSync(`boundary scopes list -format json -scope-id ${org.id}`),
   );
   const project = projects.items.filter((obj) => obj.name == projectName)[0];
   const targets = JSON.parse(
-    execSync(`boundary targets list -format json -scope-id ${project.id}`)
+    execSync(`boundary targets list -format json -scope-id ${project.id}`),
   );
   const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
   const session = JSON.parse(
-    execSync(`boundary targets authorize-session -id ${target.id} -format json`)
+    execSync(
+      `boundary targets authorize-session -id ${target.id} -format json`,
+    ),
   );
   const retrievedUser =
     session.item.credentials[0].secret.decoded.data.username;
@@ -178,7 +180,7 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
       'Stored User does not match. EXPECTED: ' +
         process.env.E2E_SSH_USER +
         ', ACTUAL: ' +
-        retrievedUser
+        retrievedUser,
     );
   }
   const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {

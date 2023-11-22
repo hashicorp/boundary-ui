@@ -25,7 +25,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       // Filter out duplicate tags
       return configTags.reduce((uniqueConfigTags, currentTag) => {
         const isDuplicateTag = uniqueConfigTags.some(
-          (tag) => tag.key === currentTag.key && tag.value === currentTag.value
+          (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
         );
 
         if (!isDuplicateTag) {
@@ -45,7 +45,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   model() {
     const workers = sortBy(
       this.modelFor('scopes.scope.workers'),
-      'displayName'
+      'displayName',
     );
 
     if (this.tags?.length) {
@@ -60,8 +60,8 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
         return this.tags.some((tag) =>
           workerTags.some(
             (workerTag) =>
-              tag.key === workerTag.key && tag.value === workerTag.value
-          )
+              tag.key === workerTag.key && tag.value === workerTag.value,
+          ),
         );
       });
     }

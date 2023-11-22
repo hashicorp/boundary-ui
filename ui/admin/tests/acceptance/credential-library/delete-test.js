@@ -84,11 +84,11 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.credentialLibrary);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -126,7 +126,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.credentialLibrary);

@@ -37,7 +37,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
 
     return Object.values(this.config_tags).reduce(
       (previousCount, currentTags) => previousCount + currentTags.length,
-      0
+      0,
     );
   }
 
@@ -51,7 +51,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     }
 
     return Object.entries(this.config_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag }))
+      value.map((tag) => ({ key, value: tag })),
     );
   }
 

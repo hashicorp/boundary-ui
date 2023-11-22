@@ -51,7 +51,7 @@ export default class RoseFormCheckboxGroupComponent extends Component {
 
     if (this.args.itemEqualityFunc) {
       return currentItems.some((element) =>
-        this.args.itemEqualityFunc(element, item)
+        this.args.itemEqualityFunc(element, item),
       );
     }
 
@@ -69,7 +69,7 @@ export default class RoseFormCheckboxGroupComponent extends Component {
 
     if (this.args.itemEqualityFunc) {
       return currentItems.findIndex((element) =>
-        this.args.itemEqualityFunc(element, item)
+        this.args.itemEqualityFunc(element, item),
       );
     }
 

@@ -23,13 +23,13 @@ exports.createNewOrg = async (page) => {
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: orgName })
+      .getByRole('link', { name: orgName }),
   ).toBeVisible();
 
   return orgName;
@@ -51,13 +51,13 @@ exports.createNewProject = async (page) => {
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: projectName })
+      .getByRole('link', { name: projectName }),
   ).toBeVisible();
 
   return projectName;
@@ -79,13 +79,13 @@ exports.createNewHostCatalog = async (page) => {
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: hostCatalogName })
+      .getByRole('link', { name: hostCatalogName }),
   ).toBeVisible();
 
   return hostCatalogName;
@@ -104,13 +104,13 @@ exports.createNewHostSet = async (page) => {
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: hostSetName })
+      .getByRole('link', { name: hostSetName }),
   ).toBeVisible();
 
   return hostSetName;
@@ -130,7 +130,7 @@ exports.createNewHostInHostSet = async (page) => {
   await page.getByLabel('Address').fill(process.env.E2E_TARGET_ADDRESS);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: hostName })).toBeVisible();
@@ -155,13 +155,13 @@ exports.createNewTarget = async (page) => {
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: targetName })
+      .getByRole('link', { name: targetName }),
   ).toBeVisible();
 
   return targetName;
@@ -185,13 +185,13 @@ exports.createNewTargetWithAddress = async (page) => {
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: targetName })
+      .getByRole('link', { name: targetName }),
   ).toBeVisible();
 
   return targetName;
@@ -208,7 +208,7 @@ exports.deleteResource = async (page) => {
   await page.getByRole('button', { name: /^(Delete|Remove Worker)/ }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 };
@@ -222,7 +222,7 @@ exports.removeAuthMethodAsPrimary = async (page) => {
   await page.getByRole('button', { name: 'Remove as primary' }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 };
@@ -245,7 +245,7 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
     .click({ force: true });
   await page.getByRole('button', { name: 'Add Host Sources' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: hostSourceName })).toBeVisible();
@@ -289,7 +289,7 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
 exports.addBrokeredCredentialsToTarget = async (
   page,
   targetName,
-  credentialName
+  credentialName,
 ) => {
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -312,7 +312,7 @@ exports.addBrokeredCredentialsToTarget = async (
     .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
     .click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
@@ -333,13 +333,13 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
   await page.getByLabel('Name').fill(authMethodName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: authMethodName })
+      .getByRole('link', { name: authMethodName }),
   ).toBeVisible();
 };
 
@@ -357,7 +357,7 @@ exports.makeAuthMethodPrimary = async (page) => {
   await page.getByText('Make Primary', { exact: true }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 };
@@ -381,13 +381,13 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
   await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: accountName })
+      .getByRole('link', { name: accountName }),
   ).toBeVisible();
 };
 
@@ -402,7 +402,7 @@ exports.setPasswordToAccount = async (page, password) => {
   await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 };
@@ -424,13 +424,13 @@ exports.createNewUser = async (page, userName) => {
   await page.getByLabel('Name').fill(userName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: userName })
+      .getByRole('link', { name: userName }),
   ).toBeVisible();
 };
 
@@ -450,7 +450,7 @@ exports.addAccountToUser = async (page) => {
   await page.getByRole('checkbox').click();
   await page.getByRole('button', { name: 'Add Accounts', exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
 };
@@ -472,13 +472,13 @@ exports.createNewGroup = async (page, groupName) => {
   await page.getByLabel('Name').fill(groupName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: groupName })
+      .getByRole('link', { name: groupName }),
   ).toBeVisible();
 };
 
@@ -496,7 +496,7 @@ exports.addMemberToGroup = async (page, userName) => {
   await page.getByRole('checkbox', { name: userName }).click();
   await page.getByRole('button', { name: 'Add Members', exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('table').getByText(userName)).toBeVisible();
@@ -516,13 +516,13 @@ exports.createNewRole = async (page, roleName) => {
   await page.getByLabel('Name').fill(roleName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: roleName })
+      .getByRole('link', { name: roleName }),
   ).toBeVisible();
 };
 
@@ -542,11 +542,11 @@ exports.addPrincipalToRole = async (page, principalName) => {
     .getByRole('button', { name: 'Add Principals', exact: true })
     .click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('table').getByRole('link', { name: principalName })
+    page.getByRole('table').getByRole('link', { name: principalName }),
   ).toBeVisible();
 };
 
@@ -561,10 +561,10 @@ exports.addGrantsToGroup = async (page, grants) => {
   await page.getByRole('button', { name: 'Add', exact: true }).click();
   await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('textbox', { name: 'Grant', exact: true })
+    page.getByRole('textbox', { name: 'Grant', exact: true }),
   ).toHaveValue(grants);
 };

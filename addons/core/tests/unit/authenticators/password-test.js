@@ -39,7 +39,7 @@ module('Unit | Authenticator | password', function (hooks) {
     authenticator.restore(mockData);
     assert.strictEqual(
       applicationAdapter.headers.Authorization,
-      'Bearer token1234'
+      'Bearer token1234',
     );
   });
 
@@ -54,7 +54,7 @@ module('Unit | Authenticator | password', function (hooks) {
     await authenticator.authenticate(creds, null, { scope, authMethod });
     assert.strictEqual(
       applicationAdapter.headers.Authorization,
-      'Bearer thetokenstring'
+      'Bearer thetokenstring',
     );
   });
 });

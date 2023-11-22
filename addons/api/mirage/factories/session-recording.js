@@ -57,7 +57,8 @@ export default factory.extend({
       const session = pickRandomElement(server.schema.sessions.all().models);
       session.id = 'deleted_session';
       const target = pickRandomElement(
-        server.schema.targets.where((target) => target.storage_bucket_id).models
+        server.schema.targets.where((target) => target.storage_bucket_id)
+          .models,
       );
       target.id = 'deleted_target';
 
@@ -77,7 +78,8 @@ export default factory.extend({
       const user = pickRandomElement(server.schema.users.all().models);
       const session = pickRandomElement(server.schema.sessions.all().models);
       const target = pickRandomElement(
-        server.schema.targets.where((target) => target.storage_bucket_id).models
+        server.schema.targets.where((target) => target.storage_bucket_id)
+          .models,
       );
 
       sessionRecording.update({

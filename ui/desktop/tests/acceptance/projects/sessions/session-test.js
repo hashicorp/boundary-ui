@@ -94,7 +94,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project, address: 'localhost' },
-      'withAssociations'
+      'withAssociations',
     );
     instances.session = this.server.create(
       'session',
@@ -104,7 +104,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
         status: STATUS_SESSION_ACTIVE,
         user: instances.user,
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;

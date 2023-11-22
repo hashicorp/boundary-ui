@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/session-recordings/session-recording/channels-by-connection/channel'
+        'route:scopes/scope/session-recordings/session-recording/channels-by-connection/channel',
       );
       assert.ok(route);
     });
-  }
+  },
 );

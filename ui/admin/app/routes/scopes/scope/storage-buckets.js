@@ -59,7 +59,7 @@ export default class ScopesScopeStorageBucketsRoute extends Route {
     await storageBucket.save();
     await this.router.transitionTo(
       'scopes.scope.storage-buckets.storage-bucket',
-      storageBucket
+      storageBucket,
     );
     this.refresh();
   }

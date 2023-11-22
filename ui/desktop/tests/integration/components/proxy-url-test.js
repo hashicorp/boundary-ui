@@ -25,7 +25,7 @@ module('Integration | Component | session/proxy-url', function (hooks) {
           @proxyPort={{this.proxyPort}}
           @isSSHTarget={{false}}
         />
-      `
+      `,
     );
 
     assert.dom('.copy-address').hasText(this.proxyAddress);
@@ -44,7 +44,7 @@ module('Integration | Component | session/proxy-url', function (hooks) {
           @proxyPort={{this.proxyPort}}
           @isSSHTarget={{false}}
         />
-      `
+      `,
     );
     await click('.proxy-url-container .hds-dropdown-toggle-button');
     await click('[data-test-ssh-option]');
@@ -67,7 +67,7 @@ module('Integration | Component | session/proxy-url', function (hooks) {
           @proxyPort={{this.proxyPort}}
           @isSSHTarget={{false}}
         />
-      `
+      `,
     );
 
     assert.dom('.copy-address').hasText(this.proxyAddress);
@@ -86,7 +86,7 @@ module('Integration | Component | session/proxy-url', function (hooks) {
           @proxyPort={{this.proxyPort}}
           @isSSHTarget={{true}}
         />
-      `
+      `,
     );
 
     assert.dom('.copy-ssh-command').isVisible();

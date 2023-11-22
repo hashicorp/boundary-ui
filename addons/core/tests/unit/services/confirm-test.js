@@ -26,13 +26,13 @@ module('Unit | Service | confirm', function (hooks) {
     assert.strictEqual(
       service.pending.length,
       0,
-      'No pending confirmations yet'
+      'No pending confirmations yet',
     );
     const confirmation = service.confirm();
     assert.strictEqual(
       service.pending.length,
       1,
-      'One pending confirmation created'
+      'One pending confirmation created',
     );
     confirmation.confirm();
     assert.strictEqual(service.pending.length, 0, 'Confirmation was confirmed');

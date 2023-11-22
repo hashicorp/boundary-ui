@@ -67,7 +67,7 @@ Router.map(function () {
               { path: ':managed_group_id' },
               function () {
                 this.route('members');
-              }
+              },
             );
             this.route('new');
           });
@@ -121,7 +121,7 @@ Router.map(function () {
               this.route(
                 'credential-library',
                 { path: ':credential_library_id' },
-                function () {}
+                function () {},
               );
             });
             this.route('credentials', function () {
@@ -129,10 +129,10 @@ Router.map(function () {
               this.route(
                 'credential',
                 { path: ':credential_id' },
-                function () {}
+                function () {},
               );
             });
-          }
+          },
         );
         this.route('new');
       });
@@ -148,7 +148,7 @@ Router.map(function () {
             this.route('channels-by-connection', function () {
               this.route('channel', { path: ':channel_id' }, function () {});
             });
-          }
+          },
         );
       });
       this.route('storage-buckets', function () {
@@ -156,7 +156,7 @@ Router.map(function () {
         this.route(
           'storage-bucket',
           { path: ':storage_bucket_id' },
-          function () {}
+          function () {},
         );
       });
     });

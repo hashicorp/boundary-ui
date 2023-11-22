@@ -87,12 +87,12 @@ module('Acceptance | clusterUrl', function (hooks) {
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;

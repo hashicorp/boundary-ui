@@ -26,7 +26,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
    */
   async model() {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     const { id: host_catalog_id } = hostCatalog;
     let hosts;
@@ -68,18 +68,18 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(host) {
     await host.save();
     if (this.can.can('read model', host)) {
       await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.hosts.host',
-        host
+        host,
       );
     } else {
       await this.router.transitionTo(
-        'scopes.scope.host-catalogs.host-catalog.hosts'
+        'scopes.scope.host-catalogs.host-catalog.hosts',
       );
     }
     this.refresh();
@@ -97,7 +97,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsRoute extends Route 
   async deleteHost(host) {
     await host.destroyRecord();
     await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.hosts'
+      'scopes.scope.host-catalogs.host-catalog.hosts',
     );
     this.refresh();
   }

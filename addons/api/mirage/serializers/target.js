@@ -11,14 +11,14 @@ export default ApplicationSerializer.extend({
 
   keyForRelationshipIds(relationshipName) {
     return `${this._container.inflector.singularize(
-      underscore(relationshipName)
+      underscore(relationshipName),
     )}_ids`;
   },
 
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     const { hostSets } = this.schema;
     if (model.hostSetIds?.length) {

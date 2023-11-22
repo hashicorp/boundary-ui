@@ -60,7 +60,7 @@ export default class HasRouteResourceFilterSelectionsHelper extends Helper {
     const selectedValues = names.map((name) => route[name] || null).flat();
     const anyTruthy = selectedValues.reduce(
       (previousValue, currentValue) => previousValue || currentValue,
-      false
+      false,
     );
     return Boolean(anyTruthy);
   }

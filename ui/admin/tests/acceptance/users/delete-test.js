@@ -116,7 +116,7 @@ module('Acceptance | users | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
 

@@ -117,7 +117,7 @@ module('Unit | Model | user', function (hooks) {
     assert.strictEqual(
       user.account_ids.length,
       0,
-      'User has empty account_ids by default'
+      'User has empty account_ids by default',
     );
   });
 

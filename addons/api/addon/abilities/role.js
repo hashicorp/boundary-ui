@@ -54,7 +54,7 @@ export default class RoleAbility extends ModelAbility {
       type === 'user' || type === 'group' || type === 'managed-group';
     if (!typeIsValid)
       throw new InvalidRolePrincipalTypeError(
-        `Expected a role principal of type 'user', 'group', or 'managed-group'.  Got '${type}'.`
+        `Expected a role principal of type 'user', 'group', or 'managed-group'.  Got '${type}'.`,
       );
     return this.can.can(`read ${type}`, this.model);
   }

@@ -93,7 +93,7 @@ module('Integration | Component | rose/form', function (hooks) {
     this.cancel = () => {
       assert.ok(
         true,
-        'cancel function may still be passed even for @showEditToggle'
+        'cancel function may still be passed even for @showEditToggle',
       );
     };
     this.submit = () => {};
@@ -123,7 +123,7 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
       find('button:not([type="submit"])').textContent.trim(),
-      'Cancel'
+      'Cancel',
     );
     // After canceling, fields are disabled again and the edit mode button is displayed
     await click('button:not([type="submit"])');
@@ -161,7 +161,7 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
       find('button:not([type="submit"])').textContent.trim(),
-      'Cancel'
+      'Cancel',
     );
     // After saving with failure, fields are enabled and save/cancel buttons are displayed
     this.submit = () => reject();
@@ -170,7 +170,7 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
       find('button:not([type="submit"])').textContent.trim(),
-      'Cancel'
+      'Cancel',
     );
     // After saving with success, fields are disabled again and the edit mode button is displayed
     this.submit = () => resolve();

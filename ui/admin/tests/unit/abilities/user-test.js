@@ -40,7 +40,7 @@ module('Unit | Abilities | user', function (hooks) {
     assert.true(
       canService.can('addAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 
@@ -50,13 +50,13 @@ module('Unit | Abilities | user', function (hooks) {
     assert.true(
       canService.can('addAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
     instances.account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.true(
       canService.can('addAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 
@@ -66,7 +66,7 @@ module('Unit | Abilities | user', function (hooks) {
     assert.false(
       canService.can('addAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 
@@ -77,7 +77,7 @@ module('Unit | Abilities | user', function (hooks) {
     assert.true(
       canService.can('removeAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 
@@ -87,7 +87,7 @@ module('Unit | Abilities | user', function (hooks) {
     assert.false(
       canService.can('removeAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 
@@ -97,13 +97,13 @@ module('Unit | Abilities | user', function (hooks) {
     assert.true(
       canService.can('removeAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
     instances.account.type = TYPE_AUTH_METHOD_PASSWORD;
     assert.true(
       canService.can('removeAccount user', instances.user, {
         account: instances.account,
-      })
+      }),
     );
   });
 });

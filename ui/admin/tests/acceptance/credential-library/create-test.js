@@ -114,20 +114,20 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await fillIn('[name="key_id"]', 'key_id');
     await fillIn(
       '[name="critical_options"] tbody td:nth-of-type(1) input',
-      'co_key'
+      'co_key',
     );
     await fillIn(
       '[name="critical_options"] tbody td:nth-of-type(2) input',
-      'co_value'
+      'co_value',
     );
     await click('[name="critical_options"] button');
     await fillIn(
       '[name="extensions"] tbody td:nth-of-type(1) input',
-      'ext_key'
+      'ext_key',
     );
     await fillIn(
       '[name="extensions"] tbody td:nth-of-type(2) input',
-      'ext_value'
+      'ext_value',
     );
     await click('[name="extensions"] button');
     await click('[type="submit"]');
@@ -136,7 +136,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       this.server.schema.credentialLibraries.where({
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
       }).length,
-      1
+      1,
     );
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
@@ -179,7 +179,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.notOk(find(`[href="${urls.newCredentialLibrary}"]`));
   });
@@ -212,18 +212,18 @@ module('Acceptance | credential-libraries | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newCredentialLibrary);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.hds-form-error__message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -247,7 +247,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.false(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.credentialLibraries);
   });

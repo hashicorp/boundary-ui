@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/index'
+        'controller:scopes/scope/session-recordings/index',
       );
       assert.ok(controller);
     });
-  }
+  },
 );
