@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import sortBy from 'lodash/sortBy';
+import orderBy from 'lodash/orderBy';
 
 export default class ScopesScopeSessionRecordingsRoute extends Route {
   // =services
@@ -49,7 +49,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         sessionRecordings,
         'created_time',
         'desc',
-      )
+      );
 
       // Storage buckets could fail for a number of reasons, including that
       // the user isn't authorized to access them.
