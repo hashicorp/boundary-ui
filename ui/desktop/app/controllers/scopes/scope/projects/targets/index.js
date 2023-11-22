@@ -126,7 +126,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Handles input on each keystroke and triggers the search
+   * Handles input on each keystroke and the search queryParam
    * @param {object} event
    */
   @action
