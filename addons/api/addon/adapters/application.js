@@ -124,6 +124,10 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       result = await super.query(store, schema, query);
       //add the result items to a data array
       if (result && result.items) {
+        //filter out the removed_ids before returning the result set
+        if (result.removed_ids) {
+          result = result.items.filter((i) => !result.removed_ids.includes(i));
+        }
         data.push(...result.items);
         //pass in the refresh token for subsequent calls to fetch the remaining list items
         query.refresh_token = result.refresh_token;
