@@ -41,7 +41,7 @@
   }
 }
 
-@media (max-width: media.width(small)) {
+@media (width <= (media.width(small))) {
   .rose-layout-page {
     grid-template-columns: 1fr;
     grid-template-areas:

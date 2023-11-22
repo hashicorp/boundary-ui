@@ -284,7 +284,7 @@
   }
 }
 
-@media (max-width: media.width(medium)) {
+@media (width <= (media.width(medium))) {
   .branded-card {
     max-width: 100%;
     width: auto;
