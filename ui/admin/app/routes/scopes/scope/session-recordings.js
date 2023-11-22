@@ -45,10 +45,11 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
       });
 
       // Sort sessions by created time descending (newest on top)
-      const sortedSessionRecordings = sortBy(
+      const sortedSessionRecordings = orderBy(
         sessionRecordings,
         'created_time',
-      ).reverse();
+        'desc',
+      )
 
       // Storage buckets could fail for a number of reasons, including that
       // the user isn't authorized to access them.
