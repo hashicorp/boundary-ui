@@ -45,7 +45,7 @@ function prenormalizeArrayResponse(response) {
 }
 
 export default class ApplicationAdapter extends RESTAdapter.extend(
-  AdapterBuildURLMixin
+  AdapterBuildURLMixin,
 ) {
   // =attributes
 

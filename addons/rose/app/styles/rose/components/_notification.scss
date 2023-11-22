@@ -18,7 +18,8 @@
   margin-bottom: sizing.rems(m);
   border: sizing.rems(xxxxs) solid;
   border-radius: $xxxs;
-  box-shadow: 0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
+  box-shadow:
+    0 $xs $s rgba(var(--stark-components), var(--opacity-3)),
     0 $xxs $xxs rgba(var(--stark-components), var(--opacity-4));
 
   .rose-notification-icon {

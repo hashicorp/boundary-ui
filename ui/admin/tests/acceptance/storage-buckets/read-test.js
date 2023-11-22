@@ -71,7 +71,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
       instances.storageBucket.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
 
     await click(`[href="${urls.storageBuckets}"]`);

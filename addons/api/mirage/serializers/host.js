@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     json.host_catalog_id = model.hostCatalogId;
     return json;

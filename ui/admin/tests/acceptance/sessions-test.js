@@ -47,13 +47,13 @@ module('Acceptance | sessions', function (hooks) {
       'group',
       1,
       { scope: instances.scopes.org },
-      'withMembers'
+      'withMembers',
     );
     this.server.createList(
       'target',
       1,
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     instances.sessions = this.server.createList(
       'session',
@@ -62,7 +62,7 @@ module('Acceptance | sessions', function (hooks) {
         scope: instances.scopes.project,
         status: 'active',
       },
-      'withAssociations'
+      'withAssociations',
     );
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -89,15 +89,15 @@ module('Acceptance | sessions', function (hooks) {
     await a11yAudit();
     instances.scopes.project.authorized_collection_actions.sessions =
       instances.scopes.project.authorized_collection_actions.sessions.filter(
-        (item) => item !== 'list'
+        (item) => item !== 'list',
       );
 
     await click(`[href="${urls.projectScope}"]`);
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.sessions.includes(
-        'list'
-      )
+        'list',
+      ),
     );
 
     assert
@@ -113,8 +113,8 @@ module('Acceptance | sessions', function (hooks) {
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.sessions.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.dom(`[href="${urls.sessions}"]`).exists();
   });

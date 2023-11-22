@@ -61,7 +61,7 @@ export default factory.extend({
             type: 'org',
             scope: { id: record.id, type: record.type },
           },
-          'withChildren'
+          'withChildren',
         );
       }
       if (record.type === 'org') {

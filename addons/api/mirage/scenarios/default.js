@@ -21,7 +21,7 @@ export default function (server) {
       type: 'org',
       scope: { id: globalScope.id, type: globalScope.type },
     },
-    'withChildren'
+    'withChildren',
   )[0];
 
   // Auth
@@ -29,13 +29,13 @@ export default function (server) {
     'auth-method',
     5,
     { scope: globalScope },
-    'withAccountsAndUsersAndManagedGroups'
+    'withAccountsAndUsersAndManagedGroups',
   );
   const orgAuthMethods = server.createList(
     'auth-method',
     3,
     { scope: orgScope },
-    'withAccountsAndUsersAndManagedGroups'
+    'withAccountsAndUsersAndManagedGroups',
   );
   // Authenticated user/account
   const user = server.create('user', {
@@ -62,13 +62,13 @@ export default function (server) {
     'role',
     1,
     { scope: globalScope },
-    'withPrincipals'
+    'withPrincipals',
   );
   //create managed groups for role/principals in globalScope
   globalScopeRoles.forEach((role) => {
     const { scope } = role;
     const oidcAuthMethod = globalAuthMethods.filter(
-      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC
+      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC,
     )[0];
     const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
@@ -83,13 +83,13 @@ export default function (server) {
     'role',
     5,
     { scope: orgScope },
-    'withPrincipals'
+    'withPrincipals',
   );
   //create managed groups for role/principals in orgScope
   orgScopeRoles.forEach((role) => {
     const { scope } = role;
     const oidcAuthMethod = orgAuthMethods.filter(
-      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC
+      (auth) => auth.type === TYPE_AUTH_METHOD_OIDC,
     )[0];
     const { type } = oidcAuthMethod;
     const managedGroups = server.createList('managed-group', 2, {
@@ -129,19 +129,19 @@ export default function (server) {
     3,
     { scope: globalScope },
     'withConnectionAndChannels',
-    'withExistingUserAndTarget'
+    'withExistingUserAndTarget',
   );
   server.create(
     'session-recording',
     { scope: globalScope },
     'withConnectionAndChannels',
-    'withNonExistingUserAndTarget'
+    'withNonExistingUserAndTarget',
   );
   server.createList(
     'session-recording',
     2,
     { scope: orgScope },
     'withConnectionAndChannels',
-    'withExistingUserAndTarget'
+    'withExistingUserAndTarget',
   );
 }

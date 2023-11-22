@@ -25,11 +25,11 @@ module('Unit | Adapter | session recording', function (hooks) {
       'sr_id',
       mockSnapshot,
       'findRecord',
-      queryObject
+      queryObject,
     );
     assert.strictEqual(
       createRecordURL,
-      '/v1/session-recordings/sr_id:download?mime_type=mimeType'
+      '/v1/session-recordings/sr_id:download?mime_type=mimeType',
     );
   });
 
@@ -40,7 +40,7 @@ module('Unit | Adapter | session recording', function (hooks) {
       'session-recording',
       'sr_id',
       {},
-      'findRecord'
+      'findRecord',
     );
     assert.strictEqual(createRecordURL, '/v1/session-recordings/sr_id');
   });

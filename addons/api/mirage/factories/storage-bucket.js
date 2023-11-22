@@ -46,7 +46,7 @@ export default factory.extend({
       case TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3:
         return {
           region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
-            9
+            9,
           )}`,
           disable_credential_rotation: faker.datatype.boolean(),
         };

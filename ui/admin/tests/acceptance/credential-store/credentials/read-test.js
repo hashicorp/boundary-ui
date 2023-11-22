@@ -118,7 +118,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     assert.expect(1);
     instances.usernamePasswordCredential.authorized_actions =
       instances.usernamePasswordCredential.authorized_actions.filter(
-        (item) => item != 'read'
+        (item) => item != 'read',
       );
     await visit(urls.credentials);
     assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
@@ -128,7 +128,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     assert.expect(1);
     instances.usernameKeyPairCredential.authorized_actions =
       instances.usernameKeyPairCredential.authorized_actions.filter(
-        (item) => item != 'read'
+        (item) => item != 'read',
       );
     await visit(urls.credentials);
     assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
@@ -138,7 +138,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     assert.expect(1);
     instances.jsonCredential.authorized_actions =
       instances.jsonCredential.authorized_actions.filter(
-        (item) => item != 'read'
+        (item) => item != 'read',
       );
     await visit(urls.credentials);
     assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
@@ -162,7 +162,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     assert.expect(1);
     await visit(urls.usernamePasswordCredential);
     assert.ok(
-      find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`)
+      find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`),
     );
   });
 

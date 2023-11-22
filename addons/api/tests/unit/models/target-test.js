@@ -31,12 +31,12 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       target.host_sources.length,
       2,
-      'Target has two entires in host_sources'
+      'Target has two entires in host_sources',
     );
     assert.strictEqual(
       target.hostSets.length,
       0,
-      'Target has no resolved hostSets because they are not loaded yet'
+      'Target has no resolved hostSets because they are not loaded yet',
     );
     store.push({
       data: {
@@ -55,16 +55,16 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       target.host_sources.length,
       2,
-      'Target has two entires in host_sources'
+      'Target has two entires in host_sources',
     );
     assert.strictEqual(
       target.hostSets.length,
       2,
-      'Target has two resolved hostSets'
+      'Target has two resolved hostSets',
     );
     assert.notOk(
       target.hostSets[0].hostCatalog,
-      'Host catalog was not resolved because it is not loaded yet'
+      'Host catalog was not resolved because it is not loaded yet',
     );
     store.push({
       data: {
@@ -89,7 +89,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -126,7 +126,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -163,7 +163,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -224,12 +224,12 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       store.peekAll('session').length,
       3,
-      'There are 3 sessions loaded in the store'
+      'There are 3 sessions loaded in the store',
     );
     assert.strictEqual(
       target.sessions.length,
       2,
-      'Target has two associated sessions loaded in the store'
+      'Target has two associated sessions loaded in the store',
     );
   });
 
@@ -249,12 +249,12 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       target.brokered_credential_source_ids.length,
       2,
-      'Target has two entires in brokered_credential_source_ids'
+      'Target has two entires in brokered_credential_source_ids',
     );
     assert.strictEqual(
       target.brokeredCredentialSources.length,
       0,
-      'Target has no resolved credentialSources, because they are not yet loaded'
+      'Target has no resolved credentialSources, because they are not yet loaded',
     );
     store.push({
       data: {
@@ -274,12 +274,12 @@ module('Unit | Model | target', function (hooks) {
     assert.strictEqual(
       target.brokered_credential_source_ids.length,
       2,
-      'Target has two entires in brokered_credential_source_ids'
+      'Target has two entires in brokered_credential_source_ids',
     );
     assert.strictEqual(
       target.brokeredCredentialSources.length,
       2,
-      'Target has two resolved credentialSources'
+      'Target has two resolved credentialSources',
     );
   });
 
@@ -294,7 +294,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -328,7 +328,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -362,7 +362,7 @@ module('Unit | Model | target', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({

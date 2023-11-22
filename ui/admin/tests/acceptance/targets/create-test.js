@@ -110,12 +110,12 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .workerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -133,7 +133,7 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('[type="submit"]');
@@ -142,12 +142,12 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .egressWorkerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -171,12 +171,12 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .workerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -194,7 +194,7 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
 
@@ -204,12 +204,12 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .egressWorkerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -227,11 +227,11 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
     await click(
-      '[data-test-filter="egress_worker_filter"] .hds-form-toggle__control'
+      '[data-test-filter="egress_worker_filter"] .hds-form-toggle__control',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click(
-      '[data-test-filter="ingress_worker_filter"] .hds-form-toggle__control'
+      '[data-test-filter="ingress_worker_filter"] .hds-form-toggle__control',
     );
     await fillIn('[name="ingress_worker_filter"]', 'random filter');
 
@@ -241,12 +241,12 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1]
         .egressWorkerFilter,
-      'random filter'
+      'random filter',
     );
   });
 
@@ -273,8 +273,8 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(`[href="${urls.newTarget}"]`).exists();
   });
@@ -283,7 +283,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
     await visit(urls.projectScope);
 
@@ -291,8 +291,8 @@ module('Acceptance | targets | create', function (hooks) {
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom('.rose-layout-page-actions a').doesNotExist();
   });
@@ -305,8 +305,8 @@ module('Acceptance | targets | create', function (hooks) {
     assert.false(featuresService.isEnabled('ssh-target'));
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom('.info-field').exists({ count: 1 });
     assert.dom('.info-field .hds-form-helper-text').includesText('TCP');
@@ -325,7 +325,7 @@ module('Acceptance | targets | create', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
@@ -349,7 +349,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[value="ssh"]');
     await click(
       '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle'
+      'Egress toggle',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
@@ -377,7 +377,7 @@ module('Acceptance | targets | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 
@@ -406,7 +406,7 @@ module('Acceptance | targets | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newSSHTarget);
@@ -432,7 +432,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].address,
-      '0.0.0.0'
+      '0.0.0.0',
     );
   });
 
@@ -448,15 +448,15 @@ module('Acceptance | targets | create', function (hooks) {
     assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newSSHTarget);
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.targets);
   });

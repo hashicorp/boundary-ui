@@ -22,7 +22,7 @@ export default class WorkerSerializer extends ApplicationSerializer {
     if (workerGeneratedAuthToken)
       serialized = this.serializeWithGeneratedToken(
         snapshot,
-        workerGeneratedAuthToken
+        workerGeneratedAuthToken,
       );
     return serialized;
   }

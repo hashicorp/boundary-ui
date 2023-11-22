@@ -79,12 +79,12 @@ module('Acceptance | workers | create', function (hooks) {
     assert
       .dom(createSection[1])
       .includesText(
-        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;'
+        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;',
       );
     assert
       .dom(createSection[1])
       .doesNotIncludeText(
-        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"'
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"',
       );
   });
 
@@ -97,12 +97,12 @@ module('Acceptance | workers | create', function (hooks) {
     assert
       .dom(createSection[1])
       .includesText(
-        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"'
+        'wget -q "$(curl -fsSL "https://api.releases.hashicorp.com/v1/releases/boundary/latest?license_class=enterprise"',
       );
     assert
       .dom(createSection[1])
       .doesNotIncludeText(
-        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;'
+        'curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - ;',
       );
   });
 
@@ -111,8 +111,8 @@ module('Acceptance | workers | create', function (hooks) {
     await visit(workersURL);
     assert.ok(
       globalScope.authorized_collection_actions.workers.includes(
-        'create:worker-led'
-      )
+        'create:worker-led',
+      ),
     );
     assert.dom(`[href="${newWorkerURL}"]`).isVisible();
   });
@@ -123,8 +123,8 @@ module('Acceptance | workers | create', function (hooks) {
     await visit(workersURL);
     assert.notOk(
       globalScope.authorized_collection_actions.users.includes(
-        'create:worker-led'
-      )
+        'create:worker-led',
+      ),
     );
     assert.dom(`[href="${newWorkerURL}"]`).isNotVisible();
   });
@@ -139,7 +139,7 @@ module('Acceptance | workers | create', function (hooks) {
           status: 500,
           code: 'api_error',
           message: 'rpc error: code = Unknown',
-        }
+        },
       );
     });
     await visit(newWorkerURL);
@@ -148,7 +148,7 @@ module('Acceptance | workers | create', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'rpc error: code = Unknown',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
   });
 
@@ -156,15 +156,15 @@ module('Acceptance | workers | create', function (hooks) {
     assert.expect(2);
     globalScope.authorized_collection_actions.workers =
       globalScope.authorized_collection_actions.workers.filter(
-        (item) => item !== 'create:worker-led'
+        (item) => item !== 'create:worker-led',
       );
 
     await visit(newWorkerURL);
 
     assert.false(
       globalScope.authorized_collection_actions.workers.includes(
-        'create:worker-led'
-      )
+        'create:worker-led',
+      ),
     );
     assert.strictEqual(currentURL(), workersURL);
   });

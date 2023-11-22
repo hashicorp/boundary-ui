@@ -42,7 +42,7 @@ module('Acceptance | groups | list', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
     instances.group = this.server.create('group', {
       scope: instances.orgScope,
@@ -57,7 +57,7 @@ module('Acceptance | groups | list', function (hooks) {
     assert.expect(2);
     await visit(orgURL);
     assert.ok(
-      instances.orgScope.authorized_collection_actions.groups.includes('list')
+      instances.orgScope.authorized_collection_actions.groups.includes('list'),
     );
     assert.ok(find(`[href="${urls.groups}"]`));
   });
@@ -67,7 +67,7 @@ module('Acceptance | groups | list', function (hooks) {
     instances.orgScope.authorized_collection_actions.groups = [];
     await visit(orgURL);
     assert.notOk(
-      instances.orgScope.authorized_collection_actions.groups.includes('list')
+      instances.orgScope.authorized_collection_actions.groups.includes('list'),
     );
     assert.notOk(find(`[href="${urls.groups}"]`));
   });

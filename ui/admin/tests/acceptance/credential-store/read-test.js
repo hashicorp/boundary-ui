@@ -97,7 +97,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
 
     await click(`[href="${urls.credentialStores}"]`);
@@ -112,7 +112,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
 
     await click(`[href="${urls.credentialStores}"]`);
@@ -138,7 +138,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     assert
       .dom(
-        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`,
       )
       .exists();
   });

@@ -63,7 +63,7 @@ export default class FormAuthMethodLdapComponent extends Component {
       this.args.addAccountMapItem(
         'account_attribute_maps',
         this.newFromAttribute,
-        this.newToAttribute
+        this.newToAttribute,
       );
     }
     this.newFromAttribute = '';

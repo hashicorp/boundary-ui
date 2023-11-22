@@ -50,7 +50,7 @@ module(
         'connection-recording',
         {
           session_recording: instances.sessionRecording,
-        }
+        },
       );
       instances.channelRecording = this.server.create('channel-recording', {
         connection_recording: instances.connectionRecording,
@@ -95,7 +95,7 @@ module(
       assert.expect(1);
       instances.sessionRecording.authorized_actions =
         instances.sessionRecording.authorized_actions.filter(
-          (item) => item !== 'download'
+          (item) => item !== 'download',
         );
 
       // Visit channel
@@ -117,8 +117,8 @@ module(
               status: 500,
               code: 'api_error',
               message: 'rpc error: code = Unknown',
-            }
-          )
+            },
+          ),
       );
 
       // Visit channel
@@ -154,5 +154,5 @@ module(
       assert.notEqual(currentURL(), incorrectUrl);
       assert.strictEqual(currentURL(), urls.channelRecording);
     });
-  }
+  },
 );

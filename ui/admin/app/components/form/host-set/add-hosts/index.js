@@ -33,7 +33,7 @@ export default class FormHostSetAddHostsIndexComponent extends Component {
   @computed('args.{model,model.host_ids,hosts}')
   get filteredHosts() {
     return this.args.hosts.filter(
-      ({ id }) => !this.args.model.host_ids.includes(id)
+      ({ id }) => !this.args.model.host_ids.includes(id),
     );
   }
 

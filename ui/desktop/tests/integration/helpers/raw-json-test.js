@@ -18,7 +18,7 @@ module('Integration | Helper | raw-json', function (hooks) {
     this.set('inputValue', { key: 'value', nestedKey: { key: 'value' } });
     assert.strictEqual(
       this.element.textContent.trim(),
-      `{\n  "key": "value",\n  "nestedKey": {\n    "key": "value"\n  }\n}`
+      `{\n  "key": "value",\n  "nestedKey": {\n    "key": "value"\n  }\n}`,
     );
   });
 });

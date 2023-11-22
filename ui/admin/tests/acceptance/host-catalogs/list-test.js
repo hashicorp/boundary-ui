@@ -66,12 +66,12 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     assert.true(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
   });
@@ -87,12 +87,12 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert
       .dom('[title="Resources"] a:nth-of-type(3)')
@@ -112,12 +112,12 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
 
@@ -139,12 +139,12 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.true(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
 

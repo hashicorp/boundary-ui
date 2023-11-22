@@ -97,7 +97,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
     this.router.transitionTo(
       'scopes.scope.projects.sessions.session',
-      session_id
+      session_id,
     );
   }
 }

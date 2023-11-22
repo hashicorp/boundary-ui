@@ -25,14 +25,14 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute
    */
   async model() {
     const hostSet = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
     );
     return hash({
       hostSet,
       hosts: all(
         hostSet.host_ids.map((hostID) =>
-          this.store.findRecord('host', hostID, { reload: true })
-        )
+          this.store.findRecord('host', hostID, { reload: true }),
+        ),
       ),
     });
   }
@@ -50,7 +50,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute
   async removeHost(hostSet, host) {
     const scopeID = this.modelFor('scopes.scope').id;
     const hostCatalogID = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     ).id;
     await hostSet.removeHost(host.id, {
       adapterOptions: { scopeID, hostCatalogID },

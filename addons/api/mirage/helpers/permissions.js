@@ -35,13 +35,13 @@ class ToggledCapabilities {
   // Find the value of a pair with key `authorized_actions`
   // Safe-ish when the item is not present
   #rawAuthorizedActions = (this.#queryPairs.find(
-    (item) => item[0] === 'authorized_actions'
+    (item) => item[0] === 'authorized_actions',
   ) || [])[1];
 
   // Safe-ish when the value is not present
   #authorizedActions =
     JSON.parse(
-      decodeURIComponent(this.#rawAuthorizedActions || '') || 'null'
+      decodeURIComponent(this.#rawAuthorizedActions || '') || 'null',
     ) || {};
 
   // =methods

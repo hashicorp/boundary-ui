@@ -40,7 +40,7 @@ module('Unit | Model | auth method', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     store.push({
       data: {

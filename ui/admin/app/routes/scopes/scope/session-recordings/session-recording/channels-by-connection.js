@@ -28,7 +28,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     let storageBucket = null;
 
     const sessionRecording = this.modelFor(
-      'scopes.scope.session-recordings.session-recording'
+      'scopes.scope.session-recordings.session-recording',
     );
 
     try {
@@ -36,7 +36,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
         const { storage_bucket_id } = sessionRecording;
         storageBucket = await this.store.findRecord(
           'storage-bucket',
-          storage_bucket_id
+          storage_bucket_id,
         );
       }
     } catch (e) {

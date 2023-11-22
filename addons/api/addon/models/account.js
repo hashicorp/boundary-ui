@@ -87,7 +87,7 @@ export default class AccountModel extends GeneratedAccountModel {
   changePassword(
     currentPassword,
     newPassword,
-    options = { adapterOptions: {} }
+    options = { adapterOptions: {} },
   ) {
     const defaultAdapterOptions = {
       method: 'change-password',

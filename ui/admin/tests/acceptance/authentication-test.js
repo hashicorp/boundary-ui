@@ -74,7 +74,7 @@ module('Acceptance | authentication', function (hooks) {
         type: 'org',
         scope: { id: globalScope.id, type: globalScope.type },
       },
-      'withChildren'
+      'withChildren',
     );
     scope = { id: orgScope.id, type: orgScope.type };
     globalAuthMethod = this.server.create('auth-method', {
@@ -309,7 +309,7 @@ module('Acceptance | authentication', function (hooks) {
     await click('.rose-header-utilities .rose-dropdown summary');
     // Find and click on last element in dropdown - should be deauthenticate button
     const menu = findAll(
-      '.rose-header-utilities .rose-dropdown .rose-dropdown-content button'
+      '.rose-header-utilities .rose-dropdown .rose-dropdown-content button',
     );
     await click(menu[menu.length - 1]);
     assert.notOk(currentSession().isAuthenticated);
@@ -324,13 +324,13 @@ module('Acceptance | authentication', function (hooks) {
     await visit(orgsURL);
     assert.ok(
       currentSession().isAuthenticated,
-      'Session begins authenticated, before encountering 401'
+      'Session begins authenticated, before encountering 401',
     );
     this.server.get('/users', () => new Response(401));
     await visit(usersURL);
     assert.notOk(
       currentSession().isAuthenticated,
-      'Session is unauthenticated, after encountering 401'
+      'Session is unauthenticated, after encountering 401',
     );
   });
 
@@ -358,7 +358,7 @@ module('Acceptance | authentication', function (hooks) {
     await click('[name="theme"][value="system-default-theme"]');
     assert.strictEqual(
       currentSession().get('data.theme'),
-      'system-default-theme'
+      'system-default-theme',
     );
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
@@ -380,7 +380,7 @@ module('Acceptance | authentication', function (hooks) {
             },
           };
         }
-      }
+      },
     );
     await visit(authMethodOIDCAuthenticateURL);
     await click('form [type="submit"]');

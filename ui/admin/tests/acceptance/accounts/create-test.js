@@ -97,7 +97,7 @@ module('Acceptance | accounts | create', function (hooks) {
     await click('form [type="submit"]:not(:disabled)');
     assert.strictEqual(
       this.server.schema.accounts.all().models.length,
-      accountsCount + 1
+      accountsCount + 1,
     );
   });
 
@@ -107,8 +107,8 @@ module('Acceptance | accounts | create', function (hooks) {
     await visit(urls.authMethod);
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`.rose-layout-page-actions [href="${urls.newAccount}"]`));
   });
@@ -118,8 +118,8 @@ module('Acceptance | accounts | create', function (hooks) {
     await visit(urls.accounts);
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.ok(find(`[href="${urls.newAccount}"]`));
   });
@@ -130,8 +130,8 @@ module('Acceptance | accounts | create', function (hooks) {
     await visit(urls.accounts);
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`[href="${urls.newAccount}"]`));
   });
@@ -174,7 +174,7 @@ module('Acceptance | accounts | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newAccount);
@@ -184,12 +184,12 @@ module('Acceptance | accounts | create', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
     assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
-      'Displays field-level errors.'
+      'Displays field-level errors.',
     );
   });
 
@@ -197,15 +197,15 @@ module('Acceptance | accounts | create', function (hooks) {
     assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts =
       instances.authMethod.authorized_collection_actions.accounts.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newAccount);
 
     assert.false(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.accounts);
   });

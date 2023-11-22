@@ -17,41 +17,41 @@ module('Integration | Component | error/message', function (hooks) {
     await render(hbs`<Error::Message @status='401' />`);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'You are not signed in'
+      'You are not signed in',
     );
     assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
-      'Error 401'
+      'Error 401',
     );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
-      'You are not signed in. Please sign in and try again later.'
+      'You are not signed in. Please sign in and try again later.',
     );
     await render(hbs`<Error::Message @status='403' />`);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'You are not authorized'
+      'You are not authorized',
     );
     assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
-      'Error 403'
+      'Error 403',
     );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
-      'You must be granted permissions to view this data. Ask your administrator if you think you should have access.'
+      'You must be granted permissions to view this data. Ask your administrator if you think you should have access.',
     );
     await render(hbs`<Error::Message @status='404' />`);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'Resource not found'
+      'Resource not found',
     );
     assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
-      'Error 404'
+      'Error 404',
     );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
-      'We could not find the requested resource. You can ask your administrator or try again later.'
+      'We could not find the requested resource. You can ask your administrator or try again later.',
     );
   });
 
@@ -59,15 +59,15 @@ module('Integration | Component | error/message', function (hooks) {
     await render(hbs`<Error::Message @status='599' />`);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'Something went wrong'
+      'Something went wrong',
     );
     assert.strictEqual(
       find('.rose-message-subtitle').textContent.trim(),
-      'Error 599'
+      'Error 599',
     );
     assert.strictEqual(
       find('.rose-message-description').textContent.trim(),
-      "We're not sure what happened.  Please contact your administrator or try again later."
+      "We're not sure what happened.  Please contact your administrator or try again later.",
     );
   });
 });

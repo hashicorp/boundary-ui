@@ -38,7 +38,7 @@ module('Integration | Component | session-recording/player', function (hooks) {
 
     assert.dom('.session-recording-player-header').hasText('Back to channels');
     const result = await waitUntil(() =>
-      find('.ap-player').textContent.includes('yarn test')
+      find('.ap-player').textContent.includes('yarn test'),
     );
     assert.true(result);
   });

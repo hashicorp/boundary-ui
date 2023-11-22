@@ -29,7 +29,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
    */
   beforeModel() {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     if (
       this.can.cannot('create model', credentialStore, {
@@ -37,7 +37,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
       })
     ) {
       this.router.replaceWith(
-        'scopes.scope.credential-stores.credential-store.credentials'
+        'scopes.scope.credential-stores.credential-store.credentials',
       );
     }
   }
@@ -50,7 +50,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
    */
   model({ type = 'username_password' }) {
     const { id: credential_store_id } = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     let name, description;
 

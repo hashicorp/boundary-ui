@@ -20,11 +20,11 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
    */
   model({ channel_id }) {
     const { sessionRecording, storageBucket } = this.modelFor(
-      'scopes.scope.session-recordings.session-recording.channels-by-connection'
+      'scopes.scope.session-recordings.session-recording.channels-by-connection',
     );
     const channelRecording = this.store.peekRecord(
       'channel-recording',
-      channel_id
+      channel_id,
     );
 
     return {
@@ -46,7 +46,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       this.router.replaceWith(
         'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
         session_recording_id,
-        channelRecording.id
+        channelRecording.id,
       );
     }
   }

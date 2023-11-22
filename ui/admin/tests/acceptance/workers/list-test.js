@@ -45,8 +45,8 @@ module('Acceptance | workers | list', function (hooks) {
     await visit(urls.globalScope);
     assert.ok(
       instances.scopes.global.authorized_collection_actions.workers.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.dom(`[href="${urls.workers}"]`).isVisible();
   });

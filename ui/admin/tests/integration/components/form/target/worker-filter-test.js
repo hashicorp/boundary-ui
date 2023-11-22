@@ -18,7 +18,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
     this.onChange = () => {};
     this.toggleAction = () => {};
     await render(
-      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{false}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`
+      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{false}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`,
     );
 
     assert.dom('.hds-form-toggle').isVisible();
@@ -30,7 +30,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
     this.onChange = () => {};
     this.toggleAction = () => {};
     await render(
-      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{true}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`
+      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{true}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`,
     );
 
     assert.dom('.hds-form-toggle').isVisible();

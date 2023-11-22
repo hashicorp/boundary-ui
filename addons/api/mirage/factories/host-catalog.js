@@ -54,7 +54,7 @@ export default factory.extend({
         return {
           disable_credential_rotation: faker.datatype.boolean(),
           region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
-            9
+            9,
           )}`,
         };
       case 'azure':

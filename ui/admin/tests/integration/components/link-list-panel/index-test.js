@@ -92,7 +92,7 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
       .dom('li.link-list-item > a')
       .hasAttribute(
         'href',
-        `/scopes/${this.modelA.scopeId}/users/${this.modelA.id}`
+        `/scopes/${this.modelA.scopeId}/users/${this.modelA.id}`,
       );
 
     // ScopeId org
@@ -106,7 +106,7 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
       .dom('li.link-list-item > a')
       .hasAttribute(
         'href',
-        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`
+        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`,
       );
   });
 
@@ -128,7 +128,7 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
       .dom('li.link-list-item:nth-child(2) > a')
       .hasAttribute(
         'href',
-        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`
+        `/scopes/${this.modelB.scopeId}/users/${this.modelB.id}`,
       );
     assert
       .dom('li.link-list-item:nth-child(3) > a')

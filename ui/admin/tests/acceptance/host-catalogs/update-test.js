@@ -70,7 +70,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.strictEqual(
       this.server.schema.hostCatalogs.all().models[0].name,
-      'random string'
+      'random string',
     );
   });
 
@@ -79,7 +79,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
 
     await click(`[href="${urls.hostCatalog}"]`);
@@ -117,7 +117,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 
@@ -147,7 +147,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.notEqual(
       this.server.schema.hostCatalogs.first().name,
-      'random string'
+      'random string',
     );
   });
 
@@ -168,7 +168,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.notEqual(
       this.server.schema.hostCatalogs.all().models[0].name,
-      'random string'
+      'random string',
     );
   });
 });

@@ -8,7 +8,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexRoute extend
   // =methods
   setupController(controller) {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     super.setupController(...arguments);
     controller.setProperties({ hostCatalog });

@@ -35,7 +35,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       },
       {
         scope_id,
-      }
+      },
     );
     // Preload all authenticatable auth methods into the store
     const authMethodsForAllScopes = await this.resourceFilterStore.queryBy(
@@ -46,14 +46,14 @@ export default class ScopesScopeAuthenticateRoute extends Route {
       {
         scope_id: 'global',
         recursive: true,
-      }
+      },
     );
     // Fetch org scopes
     // and filter out any that have no auth methods
     const scopes = this.modelFor('scopes').filter(
       ({ id: scope_id, isOrg }) =>
         isOrg &&
-        authMethodsForAllScopes.filter((i) => i.scopeID === scope_id).length
+        authMethodsForAllScopes.filter((i) => i.scopeID === scope_id).length,
     );
     return hash({
       scope: this.modelFor('scopes.scope'),

@@ -37,7 +37,7 @@ export default class ScopesScopeRolesRoleGrantsRoute extends Route {
   @action
   removeGrant(role, grantString) {
     role.grant_strings = role.grant_strings.filter(
-      (str) => str !== grantString
+      (str) => str !== grantString,
     );
   }
 

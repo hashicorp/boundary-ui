@@ -34,7 +34,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
    */
   redirect(hostSet, transition) {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     const { host_catalog_id } = hostSet;
     if (host_catalog_id !== hostCatalog.id) {
@@ -43,7 +43,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
         transition.to.name,
         host_catalog_id,
         hostSet.id,
-        ...paramValues
+        ...paramValues,
       );
     }
   }
@@ -62,7 +62,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
   edit(hostSet) {
     if (hostSet.preferred_endpoints) {
       hostSet.preferred_endpoints = structuredClone(
-        hostSet.preferred_endpoints
+        hostSet.preferred_endpoints,
       );
     }
     if (hostSet.filters) {

@@ -25,7 +25,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    */
   model() {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     const { id: credential_store_id } = credentialStore;
     if (
@@ -49,7 +49,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     credentialLibrary.rollbackAttributes();
     if (isNew)
       this.router.transitionTo(
-        'scopes.scope.credential-stores.credential-store.credential-libraries'
+        'scopes.scope.credential-stores.credential-store.credential-libraries',
       );
   }
 
@@ -61,18 +61,18 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(credentialLibrary) {
     await credentialLibrary.save();
     if (this.can.can('read model', credentialLibrary)) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credential-libraries.credential-library',
-        credentialLibrary
+        credentialLibrary,
       );
     } else {
       await this.router.transitionTo(
-        'scopes.scope.credential-stores.credential-store.credential-libraries'
+        'scopes.scope.credential-stores.credential-store.credential-libraries',
       );
     }
     this.refresh();
@@ -90,7 +90,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   async deleteCredentialLibrary(credentialLibrary) {
     await credentialLibrary.destroyRecord();
     await this.router.replaceWith(
-      'scopes.scope.credential-stores.credential-store.credential-libraries'
+      'scopes.scope.credential-stores.credential-store.credential-libraries',
     );
     this.refresh();
   }

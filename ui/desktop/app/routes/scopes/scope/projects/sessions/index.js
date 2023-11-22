@@ -53,7 +53,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     let sessions = await this.resourceFilterStore.queryBy(
       'session',
       { user_id: this.session.data.authenticated.user_id },
-      queryOptions
+      queryOptions,
     );
 
     // If project filters are selected, filter sessions by the selected projects

@@ -48,7 +48,7 @@ export default class RouteActionHelper extends Helper {
         [boundary-core-helper-route-action]
         Unable to find action ${actionName}
       `,
-        handler
+        handler,
       );
     });
 

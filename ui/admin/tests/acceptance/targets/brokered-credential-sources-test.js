@@ -79,7 +79,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       {
         scope: instances.scopes.project,
         credentialStore: instances.vaultCredentialStore,
-      }
+      },
     );
     instances.credentialLibrary = instances.credentialLibraries[0];
     instances.credential = instances.credentials[0];
@@ -191,7 +191,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
-      'No Brokered Credential Sources Available'
+      'No Brokered Credential Sources Available',
     );
   });
 
@@ -256,7 +256,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
-        (item) => item !== 'add-credential-sources'
+        (item) => item !== 'add-credential-sources',
       );
     await visit(urls.brokeredCredentialSources);
     assert.dom('.rose-dropdown-content a:nth-child(2)').doesNotExist();
@@ -304,7 +304,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.target.update({
@@ -332,7 +332,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       findAll('tbody tr').length,
-      availableCredentialsCount + 1
+      availableCredentialsCount + 1,
     );
   });
 
@@ -351,7 +351,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       findAll('tbody tr').length,
-      availableCredentialsCount + 1
+      availableCredentialsCount + 1,
     );
   });
 
@@ -359,7 +359,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
-        (item) => item !== 'remove-credential-sources'
+        (item) => item !== 'remove-credential-sources',
       );
     await visit(urls.brokeredCredentialSources);
     assert.dom('tbody tr .hds-dropdown-list-item button').doesNotExist();
@@ -379,7 +379,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     const count = getCredentialLibraryCount();
@@ -404,7 +404,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     const count = getCredentialCount();

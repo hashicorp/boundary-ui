@@ -105,7 +105,7 @@ module('Acceptance | projects | targets', function (hooks) {
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
@@ -117,7 +117,7 @@ module('Acceptance | projects | targets', function (hooks) {
         scope: instances.scopes.project,
         status: 'active',
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     // Generate route URLs for resources
@@ -205,7 +205,7 @@ module('Acceptance | projects | targets', function (hooks) {
     await click(`[href="${urls.targets}"]`);
 
     assert.true(
-      instances.target.authorized_actions.includes('authorize-session')
+      instances.target.authorized_actions.includes('authorize-session'),
     );
     assert
       .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
@@ -216,14 +216,14 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
-        (item) => item !== 'authorize-session'
+        (item) => item !== 'authorize-session',
       );
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
 
     assert.false(
-      instances.target.authorized_actions.includes('authorize-session')
+      instances.target.authorized_actions.includes('authorize-session'),
     );
     assert
       .dom(`[data-test-targets-connect-button="${instances.target.id}"]`)
@@ -264,7 +264,7 @@ module('Acceptance | projects | targets', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `${urls.projects}/sessions/${instances.session.id}`
+      `${urls.projects}/sessions/${instances.session.id}`,
     );
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });

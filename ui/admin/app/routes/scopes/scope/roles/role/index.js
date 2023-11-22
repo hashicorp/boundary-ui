@@ -29,7 +29,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
           subScopes: !scope.isProject
             ? await this.store.query('scope', { scope_id: scope.id })
             : [],
-        }))
+        })),
       );
     }
 

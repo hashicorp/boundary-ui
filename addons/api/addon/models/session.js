@@ -76,7 +76,7 @@ class SessionCredential {
     if (this.#payloadSecret?.decoded) {
       const secretJSON = this.#payloadSecret.decoded;
       return Object.keys(secretJSON).map(
-        (key) => new SessionCredential.SecretItem(key, secretJSON[key])
+        (key) => new SessionCredential.SecretItem(key, secretJSON[key]),
       );
     } else {
       // decode from base64

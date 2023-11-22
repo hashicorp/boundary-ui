@@ -55,7 +55,7 @@ export default class SessionRecordingAdapter extends ApplicationAdapter {
       throw this.handleResponse(
         response.status,
         response.headers,
-        await response.text()
+        await response.text(),
       );
     }
   }

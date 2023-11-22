@@ -62,7 +62,7 @@ export default class ScopesScopeTargetsRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(target) {
     await target.save();
@@ -121,11 +121,11 @@ export default class ScopesScopeTargetsRoute extends Route {
 
     if (hostSourceCount) {
       const hostSourceIDs = target.host_sources.map(
-        ({ host_source_id }) => host_source_id
+        ({ host_source_id }) => host_source_id,
       );
       const confirmMessage = this.intl.t(
         'resources.target.questions.delete-host-sources.message',
-        { hostSourceCount }
+        { hostSourceCount },
       );
 
       // Ask for confirmation

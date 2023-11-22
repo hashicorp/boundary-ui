@@ -14,7 +14,7 @@ const log = (method, request = '', response = '', type = 'log') => {
     console[type](
       `[ipc] ${method}(${requestString}): `,
       type === 'error' ? 'ERROR' : '',
-      response
+      response,
     );
   }
 };

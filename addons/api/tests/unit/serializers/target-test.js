@@ -354,7 +354,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       targetModelClass,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -391,7 +391,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       targetModelClass,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -424,7 +424,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -457,7 +457,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -490,7 +490,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -523,7 +523,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -557,7 +557,7 @@ module('Unit | Serializer | target', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       target,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],

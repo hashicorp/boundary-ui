@@ -18,7 +18,7 @@ module(
     test('it renders the correct diagram when egress filter is false', async function (assert) {
       assert.expect(2);
       await render(
-        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{false}} />`
+        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{false}} />`,
       );
 
       assert.dom('[data-test-single-filter-egress-off]').isVisible();
@@ -28,11 +28,11 @@ module(
     test('it renders the correct diagram when egress filter is true', async function (assert) {
       assert.expect(2);
       await render(
-        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{true}} />`
+        hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{true}} />`,
       );
 
       assert.dom('[data-test-single-filter-egress-on]').isVisible();
       assert.dom('[data-test-single-filter-egress-off]').doesNotExist();
     });
-  }
+  },
 );

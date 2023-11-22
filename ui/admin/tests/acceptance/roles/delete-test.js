@@ -53,7 +53,7 @@ module('Acceptance | roles | delete', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withPrincipals'
+      'withPrincipals',
     );
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
@@ -74,7 +74,7 @@ module('Acceptance | roles | delete', function (hooks) {
       instances.role.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.role);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -88,7 +88,7 @@ module('Acceptance | roles | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.role);
@@ -96,7 +96,7 @@ module('Acceptance | roles | delete', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
   });
 });

@@ -19,7 +19,7 @@ export default class FormAzureHostCatalogAwsComponent extends Component {
   get mapResourceTypeWithIcon() {
     return pluginTypes.reduce(
       (obj, plugin, i) => ({ ...obj, [plugin]: icons[i] }),
-      {}
+      {},
     );
   }
 }
