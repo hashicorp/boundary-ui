@@ -55,7 +55,7 @@ export default class FormAuthMethodOidcComponent extends Component {
   updatePrompt(option, event) {
     const currentSelection = option.split(',').map((value) => ({ value }));
 
-    const previousSelection = this.args.model.prompts;
+    const previousSelection = this.args.model.prompts || [];
 
     //when the checkbox is unchecked, remove the option form the exisiting list
     const removeSelection = previousSelection.filter((i) => i.value !== option);
