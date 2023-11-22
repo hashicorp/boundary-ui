@@ -54,7 +54,7 @@ handle('openExternal', async (href) => {
   } else {
     throw new Error(
       `URLs may only be opened over HTTPS in an external browser.
-       The URL '${href}' could not be opened.`
+       The URL '${href}' could not be opened.`,
     );
   }
 });
@@ -68,7 +68,7 @@ handle('cliExists', () => boundaryCli.exists());
  * Establishes a boundary session and returns session details.
  */
 handle('connect', ({ target_id, token, host_id }) =>
-  sessionManager.start(runtimeSettings.clusterUrl, target_id, token, host_id)
+  sessionManager.start(runtimeSettings.clusterUrl, target_id, token, host_id),
 );
 
 /**
@@ -82,7 +82,7 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
  * `DISABLE_WINDOW_CHROME=true`.
  */
 handle('hasMacOSChrome', () =>
-  process.env.DISABLE_WINDOW_CHROME ? false : isMac()
+  process.env.DISABLE_WINDOW_CHROME ? false : isMac(),
 );
 
 /**
@@ -91,7 +91,7 @@ handle('hasMacOSChrome', () =>
  * `DISABLE_WINDOW_CHROME=true`.
  */
 handle('showWindowActions', () =>
-  process.env.DISABLE_WINDOW_CHROME ? false : !isMac()
+  process.env.DISABLE_WINDOW_CHROME ? false : !isMac(),
 );
 
 /**
@@ -116,6 +116,15 @@ handle('closeWindow', () => app.quit());
  * Return the location of where a user's binary for a command is. If it isn't found, return null.
  */
 handle('checkCommand', async (command) => which(command, { nothrow: true }));
+
+/**
+ * Return an object containing helper fields for determining what OS we're running on
+ */
+handle('checkOS', () => ({
+  isLinux: isLinux(),
+  isMac: isMac(),
+  isWindows: isWindows(),
+}));
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method
