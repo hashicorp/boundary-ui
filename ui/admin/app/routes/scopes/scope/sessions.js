@@ -80,7 +80,7 @@ export default class ScopesScopeSessionsRoute extends Route {
       ),
     );
 
-    // Sort sessions by created time descending (newest on top)...
+    // Sort sessions by created time descending (newest on top)
     let sortedSessionAggregates = sortBy(
       sessionAggregates,
       'created_time',

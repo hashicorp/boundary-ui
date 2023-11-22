@@ -16,7 +16,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   get sorted() {
     const sessions = this.model;
-    // Sort sessions by created time descending (newest on top)...
+    // Sort sessions by created time descending (newest on top)
     const sortedSessions = sortBy(sessions, 'created_time').reverse();
     return [
       // then move active sessions to the top

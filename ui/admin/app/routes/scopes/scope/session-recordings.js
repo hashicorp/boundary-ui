@@ -43,12 +43,13 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         scope_id,
         recursive: true,
       });
-      console.log('Session Recordings', sessionRecordings);
+
+      // Sort sessions by created time descending (newest on top)...
       const sortedSessionRecordings = sortBy(
         sessionRecordings,
         'created_time',
       ).reverse();
-      console.log('Sorted Session Recordings', sortedSessionRecordings);
+
       // Storage buckets could fail for a number of reasons, including that
       // the user isn't authorized to access them.
       try {
