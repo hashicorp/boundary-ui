@@ -22,7 +22,7 @@
     width: sizing.rems(l) * 18;
   }
 
-  @media (max-width: media.width(small)) {
+  @media (width <= (media.width(small))) {
     display: block;
 
     > .rose-layout-page {

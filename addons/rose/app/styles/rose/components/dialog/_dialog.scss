@@ -131,7 +131,7 @@ $xxxxs: sizing.rems(xxxxs); // 1
     max-width: 80vw;
     width: 650px;
 
-    @media (max-width: media.width(small)) {
+    @media (width <= (media.width(small))) {
       left: 5%;
     }
 
