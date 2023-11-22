@@ -98,7 +98,7 @@ export function generateMQLExpression(obj) {
 const isEmpty = (input) =>
   input === null || input === undefined || input === '';
 
-// Escape any double quotes or backspaces
+// Escape any double quotes or backslashes
 const sanitize = (input) => input?.replace(/(["\\])/g, '\\$1');
 
 // Comparison Operators
