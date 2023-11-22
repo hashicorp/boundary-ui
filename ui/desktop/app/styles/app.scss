@@ -690,3 +690,18 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     color: var(--token-color-foreground-faint);
   }
 }
+
+// Search & Filtering
+.targets {
+  .hds-application-state {
+    padding-top: 3rem;
+  }
+
+  .target-search-filtering {
+    padding-bottom: 1rem;
+
+    .hds-dropdown-toggle-button__text {
+      white-space: nowrap;
+    }
+  }
+}

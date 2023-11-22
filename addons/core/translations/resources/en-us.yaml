@@ -551,6 +551,9 @@ target:
     connect-more-info:
       title: Connect for more info
       description: Additional information for this target will be provided here after your session is established.
+    no-search-results:
+      title: No results found
+      description: Sorry, we weren't able to find any targets for "{query}".
   titles:
     new: New Target
   actions:
