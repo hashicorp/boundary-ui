@@ -145,7 +145,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     const transformedPayload = {};
     // Find the Ember-data-expected root key name.
     const payloadKey = this.payloadKeyFromModelName(
-      primaryModelClass.modelName
+      primaryModelClass.modelName,
     );
     // Copy the data rooted under `items` in the existing payload into the new
     // payload under the expected root key name.
@@ -156,7 +156,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       primaryModelClass,
       transformedPayload,
       id,
-      requestType
+      requestType,
     );
   }
 
@@ -183,7 +183,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     const transformedPayload = {};
     // Find the Ember-data-expected root key name.
     const payloadKey = this.payloadKeyFromModelName(
-      primaryModelClass.modelName
+      primaryModelClass.modelName,
     );
     // Copy the unrooted payload under the expected root key name.
     transformedPayload[payloadKey] = payload;
@@ -193,7 +193,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       primaryModelClass,
       transformedPayload,
       id,
-      requestType
+      requestType,
     );
   }
 
@@ -318,7 +318,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     primaryModelClass,
     payload,
     id,
-    requestType
+    requestType,
   ) {
     const newPayload = structuredClone(payload);
 
@@ -338,7 +338,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       primaryModelClass,
       newPayload,
       id,
-      requestType
+      requestType,
     );
   }
 }

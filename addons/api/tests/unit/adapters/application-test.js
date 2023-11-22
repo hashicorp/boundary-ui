@@ -67,7 +67,7 @@ module('Unit | Adapter | application', function (hooks) {
       'user',
       '1',
       mockSnapshot,
-      'findRecord'
+      'findRecord',
     );
     assert.strictEqual(findRecordURL, '/v1/users/1:my-custom-method');
     const findAllURL = adapter.buildURL('user', null, mockSnapshot, 'findAll');
@@ -76,28 +76,28 @@ module('Unit | Adapter | application', function (hooks) {
       'user',
       '2',
       mockSnapshot,
-      'findBelongsTo'
+      'findBelongsTo',
     );
     assert.strictEqual(findBelongsToURL, '/v1/users/2:my-custom-method');
     const createRecordURL = adapter.buildURL(
       'user',
       null,
       mockSnapshot,
-      'createRecord'
+      'createRecord',
     );
     assert.strictEqual(createRecordURL, '/v1/users:my-custom-method');
     const updateRecordURL = adapter.buildURL(
       'user',
       '3',
       mockSnapshot,
-      'updateRecord'
+      'updateRecord',
     );
     assert.strictEqual(updateRecordURL, '/v1/users/3:my-custom-method');
     const deleteRecordURL = adapter.buildURL(
       'user',
       '4',
       mockSnapshot,
-      'deleteRecord'
+      'deleteRecord',
     );
     assert.strictEqual(deleteRecordURL, '/v1/users/4:my-custom-method');
   });
@@ -109,7 +109,7 @@ module('Unit | Adapter | application', function (hooks) {
       assert.strictEqual(
         scope_id,
         'p_456',
-        'Scoped resource URL was requested.'
+        'Scoped resource URL was requested.',
       );
       return { items: [] };
     });
@@ -154,7 +154,7 @@ module('Unit | Adapter | application', function (hooks) {
       store,
       { modelName: 'user' },
       null,
-      []
+      [],
     );
     assert.deepEqual(prenormalized, { items: [] });
   });
@@ -209,7 +209,7 @@ module('Unit | Adapter | application', function (hooks) {
     assert.strictEqual(
       handledResponse.errors.length,
       2,
-      'A base error plus one field error'
+      'A base error plus one field error',
     );
   });
 });

@@ -80,19 +80,19 @@ module('Unit | Abilities | Target', function (hooks) {
     };
 
     assert.true(
-      canService.can('addInjectedApplicationCredentialSources target', model)
+      canService.can('addInjectedApplicationCredentialSources target', model),
     );
     assert.false(
       canService.can(
         'addInjectedApplicationCredentialSources target',
-        modelWithoutAuthorizedActions
-      )
+        modelWithoutAuthorizedActions,
+      ),
     );
     assert.false(
       canService.can(
         'addInjectedApplicationCredentialSources target',
-        modelWithoutSSHType
-      )
+        modelWithoutSSHType,
+      ),
     );
   });
 });

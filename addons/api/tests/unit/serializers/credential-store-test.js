@@ -161,7 +161,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         name: null,
         type: 'vault',
       },
-      'token attribute is not expected'
+      'token attribute is not expected',
     );
   });
 
@@ -198,7 +198,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         name: null,
         type: 'vault',
       },
-      'client certificate key attribute is not expected'
+      'client certificate key attribute is not expected',
     );
 
     record.client_certificate_key = 'client-cert-key-456';
@@ -221,7 +221,7 @@ module('Unit | Serializer | credential store', function (hooks) {
         name: null,
         type: 'vault',
       },
-      'client certificate key attribute is expected'
+      'client certificate key attribute is expected',
     );
   });
 

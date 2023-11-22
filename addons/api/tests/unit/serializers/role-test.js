@@ -64,7 +64,7 @@ module('Unit | Serializer | role', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       roleModelClass,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],

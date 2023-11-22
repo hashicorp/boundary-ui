@@ -248,7 +248,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostSetModelClass,
-      payload
+      payload,
     );
 
     assert.deepEqual(normalized, {

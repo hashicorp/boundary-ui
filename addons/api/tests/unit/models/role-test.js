@@ -94,7 +94,7 @@ module('Unit | Model | role', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({
@@ -132,7 +132,7 @@ module('Unit | Model | role', function (hooks) {
           version: 1,
         });
         return { id: '123abc' };
-      }
+      },
     );
     const store = this.owner.lookup('service:store');
     store.push({

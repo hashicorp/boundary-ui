@@ -39,7 +39,7 @@ export default function (prefix = '') {
   let result = '';
   for (let i = 0; i < 10; i++) {
     result = result.concat(
-      characters[Math.floor(random() * characters.length)]
+      characters[Math.floor(random() * characters.length)],
     );
   }
   return prefix.concat(result);
