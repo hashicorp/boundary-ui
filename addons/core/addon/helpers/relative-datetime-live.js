@@ -59,7 +59,7 @@ export default class extends Helper {
           ? previousValue
           : currentValue;
       },
-      unitMappings[0]
+      unitMappings[0],
     );
     const scaledDelta =
       delta < 0
