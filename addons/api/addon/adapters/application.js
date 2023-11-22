@@ -125,18 +125,21 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       //add the result items to a data array
       if (result && result.items) {
         //filter out the removed_ids before returning the result set
+        //This is due to items being removed from the previous iteration
+        //while the user is still paginating
         if (result.removed_ids) {
-          result = result.items.filter((i) => !result.removed_ids.includes(i));
+          data = data.items.filter((i) => !result.removed_ids.includes(i));
         }
         data.push(...result.items);
         //pass in the refresh token for subsequent calls to fetch the remaining list items
         query.refresh_token = result.refresh_token;
+
         //break the loop as soon the response_type becomes complete
         if (result.response_type === 'complete') {
           break;
         }
       }
-    } while (result && result.response_type === 'delta');
+    } while (result && result.response_type === 'complete');
 
     result.items = data;
     return prenormalizeArrayResponse(result);
