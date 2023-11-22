@@ -14,9 +14,9 @@ module(
     // TODO: Replace this with your real tests.
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/projects/sessions/index'
+        'controller:scopes/scope/projects/sessions/index',
       );
       assert.ok(controller);
     });
-  }
+  },
 );

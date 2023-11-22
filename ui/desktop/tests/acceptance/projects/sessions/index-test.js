@@ -95,7 +95,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     instances.session = this.server.create(
       'session',
@@ -105,7 +105,7 @@ module('Acceptance | projects | sessions', function (hooks) {
         status: STATUS_SESSION_ACTIVE,
         user: instances.user,
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -184,7 +184,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .isVisible();
   });
@@ -197,7 +197,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .isVisible();
   });
@@ -210,7 +210,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .isVisible();
   });
@@ -223,7 +223,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .isVisible();
   });
@@ -236,7 +236,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .doesNotExist();
     assert
@@ -253,7 +253,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     assert
       .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]'
+        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
       )
       .doesNotExist();
     assert

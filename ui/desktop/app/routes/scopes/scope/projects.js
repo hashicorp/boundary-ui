@@ -45,7 +45,7 @@ export default class ScopesScopeProjectsRoute extends Route {
     const projects = this.resourceFilterStore.queryBy(
       'scope',
       { type: 'project' },
-      { recursive: true, scope_id }
+      { recursive: true, scope_id },
     );
     return projects;
   }

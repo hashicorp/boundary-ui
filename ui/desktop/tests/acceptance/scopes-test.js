@@ -99,12 +99,12 @@ module('Acceptance | scopes', function (hooks) {
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project, address: 'localhost' },
-      'withAssociations'
+      'withAssociations',
     );
 
     instances.session = this.server.create(
@@ -113,7 +113,7 @@ module('Acceptance | scopes', function (hooks) {
         scope: instances.scopes.project,
         status: 'active',
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -255,7 +255,7 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.ok(
       find('.rose-message-title').textContent.trim(),
-      'No Targets Available'
+      'No Targets Available',
     );
   });
 
@@ -279,7 +279,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.strictEqual(
       find('.rose-dialog-footer button').textContent.trim(),
       'Close',
-      'Cannot retry'
+      'Cannot retry',
     );
   });
 });

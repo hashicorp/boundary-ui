@@ -89,7 +89,7 @@ const createWindow = (partition, closeWindowCB) => {
       '..',
       'assets',
       'app-icons',
-      'icon.png'
+      'icon.png',
     );
 
   const browserWindow = new BrowserWindow(browserWindowOptions);
@@ -109,10 +109,10 @@ const createWindow = (partition, closeWindowCB) => {
 
   browserWindow.webContents.on('crashed', () => {
     console.log(
-      'Your Ember app (or other code) in the main window has crashed.'
+      'Your Ember app (or other code) in the main window has crashed.',
     );
     console.log(
-      'This is a serious issue that needs to be handled and/or debugged.'
+      'This is a serious issue that needs to be handled and/or debugged.',
     );
   });
 
@@ -136,7 +136,7 @@ const createWindow = (partition, closeWindowCB) => {
 
   browserWindow.on('unresponsive', () => {
     console.log(
-      'Your Ember app (or other code) has made the window unresponsive.'
+      'Your Ember app (or other code) has made the window unresponsive.',
     );
   });
 
@@ -269,7 +269,7 @@ app.on('before-quit', (event) => {
 process.on('uncaughtException', (err) => {
   console.log('An exception in the main thread was not handled.');
   console.log(
-    'This is a serious issue that needs to be handled and/or debugged.'
+    'This is a serious issue that needs to be handled and/or debugged.',
   );
   console.log(`Exception: ${err}`);
 });

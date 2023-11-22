@@ -21,7 +21,7 @@ export function initialize(registry) {
         const clusterUrl = getOwner(this).lookup('service:clusterUrl');
         return clusterUrl.updateClusterUrl().then(
           () => originalBeforeModel.apply(this, arguments),
-          () => originalBeforeModel.apply(this, arguments)
+          () => originalBeforeModel.apply(this, arguments),
         );
       };
     },

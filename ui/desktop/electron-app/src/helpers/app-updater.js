@@ -166,7 +166,7 @@ module.exports = {
       // Support hosted url and file paths
       displayDownloadPrompt(
         latestVersion,
-        location.match(/^http/i) ? location : `file://${location}`
+        location.match(/^http/i) ? location : `file://${location}`,
       );
       return;
     }
