@@ -47,7 +47,7 @@ module('Acceptance | roles | principals', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withPrincipals'
+      'withPrincipals',
     );
     principalsCount =
       this.server.db.roles[0].userIds.length +
@@ -79,7 +79,7 @@ module('Acceptance | roles | principals', function (hooks) {
   test('principal cannot be removed from a role without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.role.authorized_actions.filter(
-      (item) => item !== 'remove-principals'
+      (item) => item !== 'remove-principals',
     );
     instances.role.update({ authorized_actions });
     await visit(urls.rolePrincipals);
@@ -97,7 +97,7 @@ module('Acceptance | roles | principals', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.rolePrincipals);
@@ -110,7 +110,7 @@ module('Acceptance | roles | principals', function (hooks) {
   test('cannot navigate to add principals without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.role.authorized_actions.filter(
-      (item) => item !== 'add-principals'
+      (item) => item !== 'add-principals',
     );
     instances.role.update({ authorized_actions });
     await visit(urls.rolePrincipals);
@@ -160,7 +160,7 @@ module('Acceptance | roles | principals', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });

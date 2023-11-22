@@ -72,7 +72,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
 
     instances.scopes.project = this.server.create('scope', {
@@ -199,7 +199,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.deepEqual(ldapAuthMethod.attributes.certificates, ['certificate']);
     assert.strictEqual(
       ldapAuthMethod.attributes.client_certificate,
-      'client cert'
+      'client cert',
     );
     assert.notOk(ldapAuthMethod.attributes.client_certificate_key);
     assert.true(ldapAuthMethod.attributes.start_tls);
@@ -234,8 +234,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
 
     await click(NEW_DROPDOWN_SELECTOR);
@@ -252,8 +252,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.false(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(NEW_DROPDOWN_SELECTOR).doesNotExist();
   });
@@ -271,8 +271,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
 
     await click(NEW_DROPDOWN_SELECTOR);
@@ -292,8 +292,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
 
     await click(NEW_DROPDOWN_SELECTOR);
@@ -320,7 +320,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.expect(2);
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is not yet set.'
+      'Primary auth method is not yet set.',
     );
     await visit(urls.authMethod);
     await click(MAKE_PRIMARY_SELECTOR);
@@ -328,7 +328,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.strictEqual(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
-      'Primary auth method is set.'
+      'Primary auth method is set.',
     );
   });
 
@@ -342,12 +342,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
           status: 400,
           code: 'fail',
           message: 'Sorry!',
-        }
+        },
       );
     });
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is not yet set.'
+      'Primary auth method is not yet set.',
     );
     await visit(urls.authMethod);
     await click(MAKE_PRIMARY_SELECTOR);
@@ -361,7 +361,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     });
     assert.ok(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is set.'
+      'Primary auth method is set.',
     );
     await visit(urls.authMethod);
     await click(MAKE_PRIMARY_SELECTOR);
@@ -379,7 +379,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
           status: 400,
           code: 'fail',
           message: 'Sorry!',
-        }
+        },
       );
     });
     instances.orgScope.update({
@@ -388,7 +388,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.strictEqual(
       instances.orgScope.primaryAuthMethodId,
-      instances.authMethod.id
+      instances.authMethod.id,
     );
 
     await visit(urls.authMethod);
@@ -401,7 +401,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.expect(4);
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
-      'Primary auth method is not yet set.'
+      'Primary auth method is not yet set.',
     );
     await visit(urls.authMethods);
 
@@ -414,7 +414,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.strictEqual(
       scope.primaryAuthMethodId,
       instances.authMethod.id,
-      'Primary auth method is set.'
+      'Primary auth method is set.',
     );
     await click(DROPDOWN_SELECTOR_ICON);
 
@@ -443,7 +443,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.authMethods);
@@ -467,8 +467,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
     assert.false(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.authMethods);
   });

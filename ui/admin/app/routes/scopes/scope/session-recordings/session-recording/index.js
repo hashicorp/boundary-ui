@@ -21,7 +21,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingIndexRoute exte
     if (sessionRecording.isSSH) {
       this.router.transitionTo(
         'scopes.scope.session-recordings.session-recording.channels-by-connection',
-        sessionRecording.id
+        sessionRecording.id,
       );
     }
   }

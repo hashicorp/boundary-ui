@@ -19,7 +19,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupMe
    */
   async model() {
     const managedGroup = this.modelFor(
-      'scopes.scope.auth-methods.auth-method.managed-groups.managed-group'
+      'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
     );
     const { auth_method_id, member_ids } = managedGroup;
 
@@ -29,7 +29,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupMe
         ? await this.resourceFilterStore.queryBy(
             'account',
             { id: member_ids },
-            { auth_method_id }
+            { auth_method_id },
           )
         : [],
     };

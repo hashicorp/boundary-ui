@@ -43,7 +43,7 @@ module('Unit | Abilities | channel-recording', function (hooks) {
 
     assert.true(canService.can('play channel-recording', asciicastChannel));
     assert.false(
-      canService.can('play channel-recording', noneAsciicastChannel)
+      canService.can('play channel-recording', noneAsciicastChannel),
     );
   });
 
@@ -51,10 +51,10 @@ module('Unit | Abilities | channel-recording', function (hooks) {
     assert.expect(2);
 
     assert.true(
-      canService.can('viewOnly channel-recording', noneAsciicastChannel)
+      canService.can('viewOnly channel-recording', noneAsciicastChannel),
     );
     assert.false(
-      canService.can('viewOnly channel-recording', asciicastChannel)
+      canService.can('viewOnly channel-recording', asciicastChannel),
     );
   });
 });

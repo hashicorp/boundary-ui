@@ -67,7 +67,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       {
         scope: instances.scopes.project,
       },
-      'withChildren'
+      'withChildren',
     );
     instances.hostSet = this.server.schema.hostSets.all().models[0];
     // Generate route URLs for resources
@@ -107,7 +107,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('cannot remove a host without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.hostSet.authorized_actions.filter(
-      (item) => item !== 'remove-hosts'
+      (item) => item !== 'remove-hosts',
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSetHosts);
@@ -125,7 +125,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.hostSetHosts);
@@ -150,7 +150,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('cannot navigate to add hosts without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.hostSet.authorized_actions.filter(
-      (item) => item !== 'add-hosts'
+      (item) => item !== 'add-hosts',
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSet);
@@ -199,7 +199,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.hostSet.update({ hostIds: [] });
@@ -248,7 +248,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.hostSet.update({ hostIds: [] });
@@ -269,7 +269,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.hostSet.update({ hostIds: [] });

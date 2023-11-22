@@ -24,7 +24,7 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute exte
    */
   beforeModel() {
     const { brokered_credential_source_ids: sourceIDFragments } = this.modelFor(
-      'scopes.scope.targets.target'
+      'scopes.scope.targets.target',
     );
     return all(
       sourceIDFragments.map(({ value }) => {
@@ -38,7 +38,7 @@ export default class ScopesScopeTargetsTargetBrokeredCredentialSourcesRoute exte
             reload: true,
           });
         }
-      })
+      }),
     );
   }
 

@@ -70,7 +70,7 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     assert.ok(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.ok(find(`[href="${urls.credentialLibraries}"]`));
   });
@@ -84,7 +84,7 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.notOk(find(`[href="${urls.credentialLibraries}"]`));
   });

@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/roles/role/add-principals'
+        'controller:scopes/scope/roles/role/add-principals',
       );
       assert.ok(controller);
     });
-  }
+  },
 );

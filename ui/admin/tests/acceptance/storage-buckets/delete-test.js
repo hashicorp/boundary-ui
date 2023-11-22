@@ -111,14 +111,16 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert
       .dom(DIALOG_TITLE_SELECTOR)
       .hasText(
-        intl.t('resources.storage-bucket.questions.delete-storage-bucket.title')
+        intl.t(
+          'resources.storage-bucket.questions.delete-storage-bucket.title',
+        ),
       );
     assert
       .dom(DIALOG_MESSAGE_SELECTOR)
       .hasText(
         intl.t(
-          'resources.storage-bucket.questions.delete-storage-bucket.message'
-        )
+          'resources.storage-bucket.questions.delete-storage-bucket.message',
+        ),
       );
 
     await click(DIALOG_CANCEL_BTN_SELECTOR);
@@ -132,7 +134,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
       instances.storageBucket.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
 
     await click(`[href="${urls.storageBuckets}"]`);
@@ -152,7 +154,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
 

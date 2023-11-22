@@ -33,14 +33,14 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsCreden
    */
   redirect(credential) {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     const { credential_store_id } = credential;
     if (credential_store_id !== credentialStore.id) {
       this.router.replaceWith(
         'scopes.scope.credential-stores.credential-store.credentials.credential',
         credential_store_id,
-        credential.id
+        credential.id,
       );
     }
   }

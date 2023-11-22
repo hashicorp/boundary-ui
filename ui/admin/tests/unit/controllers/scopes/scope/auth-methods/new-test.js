@@ -11,7 +11,7 @@ module('Unit | Controller | scopes/scope/auth-methods/new', function (hooks) {
 
   test('it exists', function (assert) {
     let controller = this.owner.lookup(
-      'controller:scopes/scope/auth-methods/new'
+      'controller:scopes/scope/auth-methods/new',
     );
     assert.ok(controller);
   });

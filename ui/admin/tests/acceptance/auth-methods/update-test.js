@@ -103,7 +103,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     assert.strictEqual(
       this.server.schema.authMethods.first().name,
-      'update name'
+      'update name',
     );
   });
 
@@ -126,8 +126,8 @@ module('Acceptance | auth-methods | update', function (hooks) {
     // Remove all signing algorithms
     await Promise.all(
       findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element)
-      )
+        click(element),
+      ),
     );
     await select('form fieldset:nth-of-type(1) select', 'RS384');
     await click('form fieldset:nth-of-type(1) [title="Add"]');
@@ -142,7 +142,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     // Remove all claims scopes
     const claimsScopeList = await Promise.all(
-      findAll(CLAIMS_SCOPES_REMOVE_BTN_SELECTOR)
+      findAll(CLAIMS_SCOPES_REMOVE_BTN_SELECTOR),
     );
 
     for (const element of claimsScopeList) {
@@ -155,8 +155,8 @@ module('Acceptance | auth-methods | update', function (hooks) {
     // Remove all claim maps
     await Promise.all(
       findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
-        click(element)
-      )
+        click(element),
+      ),
     );
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
@@ -226,8 +226,8 @@ module('Acceptance | auth-methods | update', function (hooks) {
     // Remove all attribute maps
     await Promise.all(
       findAll(
-        '[name="account_attribute_maps"] .hds-button--color-critical'
-      ).map((element) => click(element))
+        '[name="account_attribute_maps"] .hds-button--color-critical',
+      ).map((element) => click(element)),
     );
     await fillIn('[name="account_attribute_maps"] input', 'attribute');
     await select('[name="account_attribute_maps"] select', 'email');
@@ -292,7 +292,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     assert.deepEqual(ldapAuthMethod.attributes.certificates, certificates);
     assert.deepEqual(
       ldapAuthMethod.attributes.account_attribute_maps,
-      account_attribute_maps
+      account_attribute_maps,
     );
   });
 
@@ -300,7 +300,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     assert.expect(1);
     instances.authMethod.authorized_actions =
       instances.authMethod.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
     await visit(urls.authMethods);
 
@@ -314,7 +314,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_actions =
       instances.ldapAuthMethod.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
     await visit(urls.authMethods);
 
@@ -341,7 +341,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.authMethods);
@@ -374,7 +374,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.authMethods);

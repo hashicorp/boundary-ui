@@ -63,11 +63,11 @@ test.beforeEach(async ({ page }) => {
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialStoreName })
+    page.getByRole('link', { name: credentialStoreName }),
   ).toBeVisible();
 });
 
@@ -90,7 +90,7 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
@@ -107,7 +107,7 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
       'Stored User does not match. EXPECTED: ' +
         process.env.E2E_SSH_USER +
         ', ACTUAL: ' +
-        retrievedUser
+        retrievedUser,
     );
   }
   if (keyData != retrievedKey) {
@@ -132,7 +132,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   await page.getByLabel('Password', { exact: true }).fill(testPassword);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
@@ -149,7 +149,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
       'Stored User does not match. EXPECTED: ' +
         process.env.E2E_SSH_USER +
         ', ACTUAL: ' +
-        retrievedUser
+        retrievedUser,
     );
   }
   if (testPassword != retrievedPassword) {
@@ -157,7 +157,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
       'Stored Password does not match. EXPECTED: ' +
         testPassword +
         ', ACTUAL: ' +
-        retrievedPassword
+        retrievedPassword,
     );
   }
 });
@@ -176,11 +176,11 @@ test('Static Credential Store (JSON)', async ({ page }) => {
   await page.keyboard.type(
     `"username": "${testName}",
     "password": "${testPassword}",
-    "id": "${testId}"`
+    "id": "${testId}"`,
   );
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
-    page.getByRole('alert').getByText('Success', { exact: true })
+    page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
@@ -198,7 +198,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
       'Stored User does not match. EXPECTED: ' +
         process.env.E2E_SSH_USER +
         ', ACTUAL: ' +
-        retrievedUser
+        retrievedUser,
     );
   }
   if (testPassword != retrievedPassword) {
@@ -206,7 +206,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
       'Stored Password does not match. EXPECTED: ' +
         testPassword +
         ', ACTUAL: ' +
-        retrievedPassword
+        retrievedPassword,
     );
   }
   if (testId != retrievedId) {
@@ -214,7 +214,7 @@ test('Static Credential Store (JSON)', async ({ page }) => {
       'Stored ID does not match. EXPECTED: ' +
         testId +
         ', ACTUAL: ' +
-        retrievedId
+        retrievedId,
     );
   }
 });

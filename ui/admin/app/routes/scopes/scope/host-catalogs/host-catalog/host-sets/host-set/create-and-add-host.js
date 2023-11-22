@@ -24,11 +24,11 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
    */
   beforeModel() {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     if (this.can.cannot('create model', hostCatalog, { collection: 'hosts' })) {
       this.router.replaceWith(
-        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
       );
     }
   }
@@ -39,7 +39,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
    */
   async model() {
     const { id: host_catalog_id } = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
 
     return this.store.createRecord('host', {
@@ -60,12 +60,12 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   @notifySuccess('notifications.add-success')
   async save(host) {
     const hostSet = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
     );
     await host.save();
     await hostSet.addHost(host.id);
     await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
     );
   }
 
@@ -75,7 +75,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
   @action
   cancel() {
     this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
     );
   }
 }

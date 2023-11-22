@@ -24,7 +24,7 @@ export default class ScopesScopeAuthenticateIndexRoute extends Route {
     if (firstAuthMethod) {
       this.router.transitionTo(
         'scopes.scope.authenticate.method',
-        firstAuthMethod
+        firstAuthMethod,
       );
     }
   }

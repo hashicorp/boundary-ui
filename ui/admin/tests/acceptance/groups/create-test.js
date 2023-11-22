@@ -39,7 +39,7 @@ module('Acceptance | groups | create', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
     instances.group = this.server.create('group', {
       scope: instances.scopes.org,
@@ -63,8 +63,8 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.groups);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.groups.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.ok(find(`[href="${urls.newGroup}"]`));
   });
@@ -75,8 +75,8 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.groups);
     assert.false(
       instances.scopes.org.authorized_collection_actions.groups.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`[href="${urls.newGroup}"]`));
   });
@@ -108,7 +108,7 @@ module('Acceptance | groups | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newGroup);
@@ -117,12 +117,12 @@ module('Acceptance | groups | create', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
     assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
-      'Displays field-level errors.'
+      'Displays field-level errors.',
     );
   });
 
@@ -130,15 +130,15 @@ module('Acceptance | groups | create', function (hooks) {
     assert.expect(2);
     instances.scopes.org.authorized_collection_actions.groups =
       instances.scopes.org.authorized_collection_actions.groups.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newGroup);
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.groups.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.groups);
   });

@@ -40,7 +40,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
       this.router.replaceWith(
         transition.to.name,
         auth_method_id,
-        managedGroup.id
+        managedGroup.id,
       );
     }
   }

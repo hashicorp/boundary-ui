@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/host-catalogs/host-catalog/host-sets/host-set/hosts/index'
+        'route:scopes/scope/host-catalogs/host-catalog/host-sets/host-set/hosts/index',
       );
       assert.ok(route);
     });
-  }
+  },
 );

@@ -33,7 +33,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
       session_recording_id,
       // Set reload to true to always force an API call. The downstream peekRecord
       // for channels will resolve before the session recording is returned otherwise.
-      { reload: true }
+      { reload: true },
     );
 
     return sessionRecording;
@@ -49,13 +49,13 @@ export default class ScopesScopeSessionRecordingsSessionRecordingRoute extends R
     if (sessionRecording.scopeID !== scope.id) {
       const paramValues = paramValueFinder(
         'session-recording',
-        transition.to.parent
+        transition.to.parent,
       );
       this.router.replaceWith(
         transition.to.name,
         sessionRecording.scopeID,
         sessionRecording.id,
-        ...paramValues
+        ...paramValues,
       );
     }
   }

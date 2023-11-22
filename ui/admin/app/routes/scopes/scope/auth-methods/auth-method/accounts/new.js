@@ -33,7 +33,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsNewRoute extends Ro
    */
   model() {
     const { id: auth_method_id, type } = this.modelFor(
-      'scopes.scope.auth-methods.auth-method'
+      'scopes.scope.auth-methods.auth-method',
     );
     return this.store.createRecord('account', {
       type,

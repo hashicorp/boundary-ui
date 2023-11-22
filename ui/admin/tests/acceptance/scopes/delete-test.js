@@ -72,7 +72,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       ),
     });
     await visit(urls.orgScope);
@@ -126,7 +126,7 @@ module('Acceptance | scopes | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
 

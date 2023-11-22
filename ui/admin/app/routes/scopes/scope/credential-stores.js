@@ -49,7 +49,7 @@ export default class ScopesScopeCredentialStoresRoute extends Route {
     await credentialStore.save();
     await this.router.transitionTo(
       'scopes.scope.credential-stores.credential-store',
-      credentialStore
+      credentialStore,
     );
     this.refresh();
   }

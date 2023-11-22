@@ -25,7 +25,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
    */
   model() {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     const { id: credential_store_id } = credentialStore;
     if (
@@ -49,7 +49,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
     credential.rollbackAttributes();
     if (isNew)
       this.router.transitionTo(
-        'scopes.scope.credential-stores.credential-store.credentials'
+        'scopes.scope.credential-stores.credential-store.credentials',
       );
   }
 
@@ -61,18 +61,18 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(credential) {
     await credential.save();
     if (this.can.can('read model', credential)) {
       await this.router.transitionTo(
         'scopes.scope.credential-stores.credential-store.credentials.credential',
-        credential
+        credential,
       );
     } else {
       await this.router.transitionTo(
-        'scopes.scope.credential-stores.credential-store.credentials'
+        'scopes.scope.credential-stores.credential-store.credentials',
       );
     }
     this.refresh();
@@ -89,7 +89,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
   async deleteCredential(credential) {
     await credential.destroyRecord();
     await this.router.replaceWith(
-      'scopes.scope.credential-stores.credential-store.credentials'
+      'scopes.scope.credential-stores.credential-store.credentials',
     );
     this.refresh();
   }

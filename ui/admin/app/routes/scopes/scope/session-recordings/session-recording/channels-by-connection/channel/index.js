@@ -17,7 +17,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   async model() {
     let asciicast;
     const { sessionRecording, storageBucket, channelRecording } = this.modelFor(
-      'scopes.scope.session-recordings.session-recording.channels-by-connection.channel'
+      'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
     );
 
     if (this.can.can('getAsciicast channel-recording', channelRecording)) {

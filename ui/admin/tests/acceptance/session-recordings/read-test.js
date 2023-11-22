@@ -96,7 +96,7 @@ module('Acceptance | session-recordings | read', function (hooks) {
     featuresService.enable('ssh-session-recording');
     instances.sessionRecording.authorized_actions =
       instances.sessionRecording.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     // Visit session recordings
     await visit(urls.sessionRecordings);

@@ -32,11 +32,11 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
    */
   async model() {
     const { id: host_catalog_id } = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     return hash({
       hostSet: this.modelFor(
-        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+        'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
       ),
       hosts: this.store.query('host', { host_catalog_id }),
     });
@@ -55,7 +55,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
   async addHosts(hostSet, hostIDs) {
     await hostSet.addHosts(hostIDs);
     await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
     );
   }
 
@@ -65,7 +65,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
   @action
   cancel() {
     this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
     );
   }
 }

@@ -26,7 +26,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
    */
   async model() {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     const { id: host_catalog_id } = hostCatalog;
     let hostSets;
@@ -57,7 +57,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
     hostSet.rollbackAttributes();
     if (isNew)
       this.router.transitionTo(
-        'scopes.scope.host-catalogs.host-catalog.host-sets'
+        'scopes.scope.host-catalogs.host-catalog.host-sets',
       );
   }
 
@@ -70,18 +70,18 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(hostSet) {
     await hostSet.save();
     if (this.can.can('read model', hostSet)) {
       await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
-        hostSet
+        hostSet,
       );
     } else {
       await this.router.transitionTo(
-        'scopes.scope.host-catalogs.host-catalog.host-sets'
+        'scopes.scope.host-catalogs.host-catalog.host-sets',
       );
     }
     this.refresh();
@@ -99,7 +99,7 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsRoute extends Rou
   async deleteHostSet(hostSet) {
     await hostSet.destroyRecord();
     await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets'
+      'scopes.scope.host-catalogs.host-catalog.host-sets',
     );
   }
 }
