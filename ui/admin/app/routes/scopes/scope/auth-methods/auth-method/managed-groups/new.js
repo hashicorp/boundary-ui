@@ -26,14 +26,14 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsNewRoute exten
       })
     ) {
       this.router.replaceWith(
-        'scopes.scope.auth-methods.auth-method.managed-groups'
+        'scopes.scope.auth-methods.auth-method.managed-groups',
       );
     }
   }
 
   model() {
     const { id: auth_method_id, type } = this.modelFor(
-      'scopes.scope.auth-methods.auth-method'
+      'scopes.scope.auth-methods.auth-method',
     );
     return this.store.createRecord('managed-group', {
       type,

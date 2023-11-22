@@ -13,7 +13,7 @@ module(
 
     test('it exists', function (assert) {
       const controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/add-brokered-credential-sources'
+        'controller:scopes/scope/targets/target/add-brokered-credential-sources',
       );
       assert.ok(controller);
     });
@@ -21,7 +21,7 @@ module(
     test('hasAvailableBrokeredCredentialSources returns true if target has available credentials', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/add-brokered-credential-sources'
+        'controller:scopes/scope/targets/target/add-brokered-credential-sources',
       );
 
       const target = store.createRecord('target', {
@@ -39,7 +39,7 @@ module(
     test('hasAvailableBrokeredCredentialSources returns false if target has no available credentials', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/add-brokered-credential-sources'
+        'controller:scopes/scope/targets/target/add-brokered-credential-sources',
       );
 
       const target = store.createRecord('target', {
@@ -53,5 +53,5 @@ module(
 
       assert.false(controller.hasAvailableBrokeredCredentialSources);
     });
-  }
+  },
 );

@@ -91,7 +91,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
       instances.host.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.host);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -129,7 +129,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.host);

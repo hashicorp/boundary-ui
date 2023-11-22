@@ -59,7 +59,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.ok(find(`[href="${urls.credentialStores}"]`));
   });
@@ -73,7 +73,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.notOk(find(`[href="${urls.credentialStores}"]`));
   });
@@ -92,8 +92,8 @@ module('Acceptance | credential-stores | list', function (hooks) {
     await visit(urls.credentialStores);
     assert.ok(
       find(
-        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
-      )
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`,
+      ),
     );
   });
 });

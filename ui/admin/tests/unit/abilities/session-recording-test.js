@@ -30,21 +30,24 @@ module('Unit | Abilities | session-recording', function (hooks) {
       {
         authorized_actions: ['read'],
         type: TYPE_SESSION_RECORDING_SSH,
-      }
+      },
     );
     const recordingWithoutAuthorizedAction = store.createRecord(
       'session-recording',
       {
         authorized_actions: [],
         type: TYPE_SESSION_RECORDING_SSH,
-      }
+      },
     );
 
     assert.true(
-      canService.can('read session-recording', recordingWithAuthorizedAction)
+      canService.can('read session-recording', recordingWithAuthorizedAction),
     );
     assert.false(
-      canService.can('read session-recording', recordingWithoutAuthorizedAction)
+      canService.can(
+        'read session-recording',
+        recordingWithoutAuthorizedAction,
+      ),
     );
   });
 
@@ -56,21 +59,24 @@ module('Unit | Abilities | session-recording', function (hooks) {
       {
         authorized_actions: ['read'],
         type: TYPE_SESSION_RECORDING_SSH,
-      }
+      },
     );
     const recordingWithoutAuthorizedAction = store.createRecord(
       'session-recording',
       {
         authorized_actions: [],
         type: TYPE_SESSION_RECORDING_SSH,
-      }
+      },
     );
 
     assert.false(
-      canService.can('read session-recording', recordingWithAuthorizedAction)
+      canService.can('read session-recording', recordingWithAuthorizedAction),
     );
     assert.false(
-      canService.can('read session-recording', recordingWithoutAuthorizedAction)
+      canService.can(
+        'read session-recording',
+        recordingWithoutAuthorizedAction,
+      ),
     );
   });
 
@@ -93,12 +99,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     assert.true(
       canService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
     assert.false(
       canService.can('list scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
   });
 
@@ -121,12 +127,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     assert.true(
       canService.can('list scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
     assert.false(
       canService.can('list scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
   });
 
@@ -149,12 +155,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     assert.true(
       canService.can('navigate scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
     assert.false(
       canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
   });
 
@@ -175,12 +181,12 @@ module('Unit | Abilities | session-recording', function (hooks) {
     assert.false(
       canService.can('navigate scope', scopeModelWithAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
     assert.false(
       canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
-      })
+      }),
     );
   });
 });

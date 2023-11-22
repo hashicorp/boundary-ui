@@ -31,13 +31,13 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsHostR
    */
   redirect(host) {
     const hostSet = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
     );
     if (host.host_set_ids !== hostSet.id) {
       this.router.replaceWith(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host',
         host.host_set_ids[0],
-        host.id
+        host.id,
       );
     }
   }

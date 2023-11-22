@@ -67,25 +67,25 @@ module('Acceptance | roles | grants', function (hooks) {
     assert.strictEqual(currentURL(), urls.grants);
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount
+      grantsCount,
     );
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
     assert.expect(4);
     const authorized_actions = instances.role.authorized_actions.filter(
-      (item) => item !== 'set-grants'
+      (item) => item !== 'set-grants',
     );
     instances.role.update({ authorized_actions });
     await visit(urls.grants);
     assert.strictEqual(
       findAll('main form').length,
       1,
-      'New grant form is not displayed.'
+      'New grant form is not displayed.',
     );
     assert.notOk(
       find('main form button:not([type="submit"])'),
-      'Grant delete button is not displayed.'
+      'Grant delete button is not displayed.',
     );
     assert.notOk(find('.rose-form-actions'), 'Form actions are not displayed.');
     assert.ok(find('main form input[disabled]'), 'Grant fields are disabled.');
@@ -100,11 +100,11 @@ module('Acceptance | roles | grants', function (hooks) {
         assert.strictEqual(
           attrs.grant_strings[0],
           'id=123,action=delete',
-          'A grant is updated'
+          'A grant is updated',
         );
         const id = idMethod.split(':')[0];
         return { id };
-      }
+      },
     );
     await visit(urls.grants);
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
@@ -118,7 +118,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await click('.rose-form-actions button:not([type="submit"])');
     assert.notEqual(
       find(`${grantsForm} [name="grant"]`).value,
-      'id=123,action=delete'
+      'id=123,action=delete',
     );
   });
 
@@ -133,13 +133,13 @@ module('Acceptance | roles | grants', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.grants);
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount
+      grantsCount,
     );
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
@@ -155,11 +155,11 @@ module('Acceptance | roles | grants', function (hooks) {
         assert.strictEqual(
           attrs.grant_strings.length,
           grantsCount + 1,
-          'A grant is created'
+          'A grant is created',
         );
         const id = idMethod.split(':')[0];
         return { id };
-      }
+      },
     );
     await visit(urls.grants);
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
@@ -187,13 +187,13 @@ module('Acceptance | roles | grants', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.grants);
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount
+      grantsCount,
     );
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
@@ -208,7 +208,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount - 1
+      grantsCount - 1,
     );
   });
 
@@ -219,7 +219,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await click('.rose-form-actions button:not([type="submit"])');
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount
+      grantsCount,
     );
   });
 
@@ -234,13 +234,13 @@ module('Acceptance | roles | grants', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.grants);
     assert.strictEqual(
       findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount
+      grantsCount,
     );
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');

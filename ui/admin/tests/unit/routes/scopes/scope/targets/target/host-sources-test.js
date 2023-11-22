@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/targets/target/host-sources'
+        'route:scopes/scope/targets/target/host-sources',
       );
       assert.ok(route);
     });
-  }
+  },
 );

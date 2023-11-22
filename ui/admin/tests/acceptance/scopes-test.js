@@ -130,7 +130,7 @@ module('Acceptance | scopes', function (hooks) {
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.projectScopeEdit);
     await click(
-      '.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)'
+      '.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)',
     );
     assert.strictEqual(currentURL(), urls.project2ScopeEdit);
   });
@@ -191,7 +191,7 @@ module('Acceptance | scopes', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newOrgScope);

@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/auth-methods/auth-method/accounts/account/set-password'
+        'route:scopes/scope/auth-methods/auth-method/accounts/account/set-password',
       );
       assert.ok(route);
     });
-  }
+  },
 );

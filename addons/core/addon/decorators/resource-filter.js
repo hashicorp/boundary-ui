@@ -68,8 +68,8 @@ class RouteResourceFilter extends EmberObject {
       ? value
           .map((serializedValue) =>
             this.allowedValues.find((item) =>
-              this.deserializeValue(item, serializedValue)
-            )
+              this.deserializeValue(item, serializedValue),
+            ),
           )
           .filter((value) => value !== undefined)
       : null;
@@ -161,7 +161,7 @@ class RouteResourceFilter extends EmberObject {
     allowed,
     defaultValue,
     serialize,
-    findBySerialized
+    findBySerialized,
   ) {
     const owner = getOwner(routeInstance);
     const containerKey = `resource-filter:${name}@${routeInstance.routeName}`;
@@ -237,7 +237,7 @@ export function resourceFilter({
     RouteResourceFilter.setupRouteQueryParams(
       target,
       name,
-      refreshRouteOnChange
+      refreshRouteOnChange,
     );
 
     let instance;
@@ -254,7 +254,7 @@ export function resourceFilter({
           allowed,
           defaultValue,
           serialize,
-          findBySerialized
+          findBySerialized,
         );
         return instance.value;
       },

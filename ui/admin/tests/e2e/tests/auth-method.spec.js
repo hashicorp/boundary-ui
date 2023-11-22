@@ -43,7 +43,7 @@ test('Verify new auth-method can be created and assigned to users', async ({
       page,
       'UI Test Account',
       'test-user',
-      'password'
+      'password',
     );
     await setPasswordToAccount(page, 'password2');
     await makeAuthMethodPrimary(page);

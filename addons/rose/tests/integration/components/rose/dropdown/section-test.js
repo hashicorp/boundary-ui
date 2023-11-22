@@ -29,7 +29,7 @@ module('Integration | Component | rose/dropdown/section', function (hooks) {
     `);
     assert.strictEqual(
       find('.rose-dropdown-section-title').textContent.trim(),
-      'Section Title'
+      'Section Title',
     );
   });
 });

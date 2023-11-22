@@ -12,7 +12,7 @@ module('Integration | Helper | company-copyright', function (hooks) {
     await render(hbs`{{company-copyright}}`);
     assert.strictEqual(
       this.element.textContent.trim(),
-      `© ${currentYear} Company Name`
+      `© ${currentYear} Company Name`,
     );
   });
 });

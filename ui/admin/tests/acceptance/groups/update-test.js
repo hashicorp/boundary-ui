@@ -93,7 +93,7 @@ module('Acceptance | groups | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.group);
@@ -103,12 +103,12 @@ module('Acceptance | groups | update', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
     assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
-      'Displays field-level errors.'
+      'Displays field-level errors.',
     );
   });
 });

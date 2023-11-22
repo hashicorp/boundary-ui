@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     // If the scope marks this auth method as primary, designate it
     // as such with a read-only boolean field (this is how the API behaves).

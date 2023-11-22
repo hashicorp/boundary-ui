@@ -51,7 +51,7 @@ export default Factory.extend({
           certificates: [faker.string.alphanumeric(50)],
           client_certificate: faker.string.alphanumeric(50),
           client_certificate_key: `---Begin Certificate --- ${faker.string.alphanumeric(
-            170
+            170,
           )} ---End Certificate ---`,
           client_certificate_key_hmac: faker.string.alphanumeric(50),
           enable_groups: true,

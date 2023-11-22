@@ -68,7 +68,7 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingCreateStorage
   async save(storageBucket) {
     await storageBucket.save();
     await this.router.transitionTo(
-      'scopes.scope.targets.target.enable-session-recording'
+      'scopes.scope.targets.target.enable-session-recording',
     );
     this.refresh();
   }
@@ -81,7 +81,7 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingCreateStorage
   cancel(storageBucket) {
     storageBucket.rollbackAttributes();
     this.router.transitionTo(
-      'scopes.scope.targets.target.enable-session-recording'
+      'scopes.scope.targets.target.enable-session-recording',
     );
   }
 }

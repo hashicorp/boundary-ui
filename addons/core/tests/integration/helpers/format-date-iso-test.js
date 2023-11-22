@@ -18,7 +18,7 @@ module('Integration | Helper | format-date-iso', function (hooks) {
 
     assert.strictEqual(
       this.element.textContent.trim(),
-      '2020-01-01T00:00:00.999Z'
+      '2020-01-01T00:00:00.999Z',
     );
   });
 

@@ -82,7 +82,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.host);
     assert.strictEqual(
       this.server.schema.hosts.all().models[0].name,
-      'random string'
+      'random string',
     );
   });
 
@@ -122,7 +122,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.host);
@@ -131,11 +131,11 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -156,7 +156,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
       assert.strictEqual(currentURL(), urls.hosts);
       assert.notEqual(
         this.server.schema.hosts.all().models[0].name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -178,7 +178,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
       assert.strictEqual(currentURL(), urls.host);
       assert.notEqual(
         this.server.schema.hosts.all().models[0].name,
-        'random string'
+        'random string',
       );
     }
   });

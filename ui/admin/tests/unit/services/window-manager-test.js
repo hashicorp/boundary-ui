@@ -22,7 +22,7 @@ module('Unit | Service | window-manager', function (hooks) {
         open(url) {
           assert.strictEqual(url, fakeURL);
         }
-      }
+      },
     );
     const service = this.owner.lookup('service:window-manager');
     service.open(fakeURL);
@@ -43,7 +43,7 @@ module('Unit | Service | window-manager', function (hooks) {
             },
           };
         }
-      }
+      },
     );
     const service = this.owner.lookup('service:window-manager');
     for (let i = 0; i < instanceCount; i++) {

@@ -26,18 +26,18 @@ module('Integration | Component | rose/list/key-value', function (hooks) {
       </Rose::List::KeyValue>
     `);
     const itemLabelledBy = find(
-      '.rose-list-key-value-item:first-child'
+      '.rose-list-key-value-item:first-child',
     ).getAttribute('aria-labelledby');
     assert.strictEqual(
       findAll('.rose-list-key-value-item').length,
       2,
-      'it has two items'
+      'it has two items',
     );
     assert.ok(
       find(
-        `.rose-list-key-value-item:first-child > .rose-list-key-value-item-cell:first-child#${itemLabelledBy}`
+        `.rose-list-key-value-item:first-child > .rose-list-key-value-item-cell:first-child#${itemLabelledBy}`,
       ),
-      'The key cell has an ID associated with the `aria-labelledby` attribute of its parent item element'
+      'The key cell has an ID associated with the `aria-labelledby` attribute of its parent item element',
     );
   });
 });

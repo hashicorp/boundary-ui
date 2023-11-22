@@ -143,7 +143,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         name: null,
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       },
-      'http_request_body attribute is not expected'
+      'http_request_body attribute is not expected',
     );
 
     record.http_method = 'POST';
@@ -161,7 +161,7 @@ module('Unit | Serializer | credential library', function (hooks) {
         name: null,
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       },
-      'http_request_body attribute is expected'
+      'http_request_body attribute is expected',
     );
   });
 

@@ -45,7 +45,7 @@ export default class ApplicationRoute extends Route {
     controller.set('hasMacOSChrome', await this.ipc.invoke('hasMacOSChrome'));
     controller.set(
       'showWindowActions',
-      await this.ipc.invoke('showWindowActions')
+      await this.ipc.invoke('showWindowActions'),
     );
   }
 

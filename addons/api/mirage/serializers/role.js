@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     const serializedUsers = model.users.models.map((user) => ({
       scope_id: model.scope.id,
@@ -28,7 +28,7 @@ export default ApplicationSerializer.extend({
         scope_id: model.scope.id,
         id: managedGroup.id,
         type: 'managed group',
-      })
+      }),
     );
     json.principals = [
       ...serializedUsers,

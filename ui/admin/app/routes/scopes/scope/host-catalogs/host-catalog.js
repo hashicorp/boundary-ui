@@ -41,7 +41,7 @@ export default class ScopesScopeHostCatalogsHostCatalogRoute extends Route {
         transition.to.name,
         hostCatalog.scopeID,
         hostCatalog.id,
-        ...paramValues
+        ...paramValues,
       );
     }
   }

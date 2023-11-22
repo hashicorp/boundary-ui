@@ -80,12 +80,12 @@ module('Acceptance | managed-groups | list', function (hooks) {
     assert.true(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.managedGroups}"]`).exists();
   });
@@ -100,12 +100,12 @@ module('Acceptance | managed-groups | list', function (hooks) {
     assert.true(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.ldapManagedGroups}"]`).exists();
   });
@@ -120,12 +120,12 @@ module('Acceptance | managed-groups | list', function (hooks) {
     assert.false(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.false(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.managedGroups}"]`).doesNotExist();
   });
@@ -142,12 +142,12 @@ module('Acceptance | managed-groups | list', function (hooks) {
     assert.false(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.false(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.ldapManagedGroups}"]`).doesNotExist();
   });

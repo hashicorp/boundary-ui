@@ -106,7 +106,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.notOk(find(`[href="${urls.newCredentialStore}"]`));
   });
@@ -129,18 +129,18 @@ module('Acceptance | credential-stores | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newCredentialStore);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -149,8 +149,8 @@ module('Acceptance | credential-stores | create', function (hooks) {
     await visit(urls.newCredentialStore);
     assert.ok(
       find(
-        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`
-      )
+        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`,
+      ),
     );
   });
 
@@ -167,7 +167,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.credentialStores);
   });

@@ -28,7 +28,7 @@ module('Integration | Component | rose/dropdown/link', function (hooks) {
     </Rose::Dropdown::Link>`);
     assert.strictEqual(
       find('.rose-dropdown-link').textContent.trim(),
-      'content'
+      'content',
     );
   });
 

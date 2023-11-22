@@ -65,7 +65,7 @@ export default class ClusterUrlService extends Service {
     const originalHost = this.adapter.host;
     assert(
       `setClusterUrl expects a string, you passed ${clusterUrl}`,
-      typeof clusterUrl === 'string'
+      typeof clusterUrl === 'string',
     );
     try {
       // Trim whitespaces and silently drop trailing slashes if present.

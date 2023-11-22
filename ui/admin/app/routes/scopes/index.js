@@ -24,7 +24,7 @@ export default class ScopesIndexRoute extends Route {
   redirect() {
     const authenticatedScopeID = get(
       this.session,
-      'data.authenticated.scope.id'
+      'data.authenticated.scope.id',
     );
     if (authenticatedScopeID) {
       this.router.transitionTo('scopes.scope', authenticatedScopeID);

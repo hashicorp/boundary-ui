@@ -14,7 +14,7 @@ const screenshotsDirectory = 'authentication/';
 // Path where the Boundary Desktop client binary is generated
 const executablePath = helpers.returnExecutablePath(
   process.platform,
-  process.arch
+  process.arch,
 );
 
 // Set login variables
@@ -44,7 +44,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:clusterUrl', null)
+        window.localStorage.setItem('desktop:clusterUrl', null),
       );
 
       // Perform login
@@ -52,14 +52,14 @@ test.describe('Authentication end to end test suite', async () => {
         boundaryWindow,
         clusterUrlValue,
         loginUsername,
-        loginPassword
+        loginPassword,
       );
 
       // Take screenshot
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
           screenshotsDirectory,
-          'fillUserPassword'
+          'fillUserPassword',
         ),
         fullPage: true,
       });
@@ -77,7 +77,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
           screenshotsDirectory,
-          'afterLogin'
+          'afterLogin',
         ),
         fullPage: true,
       });
@@ -93,7 +93,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
           screenshotsDirectory,
-          'userDropdown'
+          'userDropdown',
         ),
         fullPage: true,
       });
@@ -112,7 +112,7 @@ test.describe('Authentication end to end test suite', async () => {
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
           screenshotsDirectory,
-          'afterLogout'
+          'afterLogout',
         ),
         fullPage: true,
       });
@@ -122,28 +122,28 @@ test.describe('Authentication end to end test suite', async () => {
       const boundaryWindow = await electronApp.firstWindow(); // The window that contains the app.
       // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:clusterUrl', null)
+        window.localStorage.setItem('desktop:clusterUrl', null),
       );
       // Perform login
       await helpers.login(
         boundaryWindow,
         clusterUrlValue,
         loginUsername,
-        '123456789'
+        '123456789',
       );
 
       // Wait for the notification
       await boundaryWindow.waitForSelector('.rose-notification-body');
       // Expect the notification to alert authentication has failed.
       expect(
-        await boundaryWindow.innerText('div.rose-notification-body')
+        await boundaryWindow.innerText('div.rose-notification-body'),
       ).toEqual('Authentication Failed');
 
       // Take screenshot
       await boundaryWindow.screenshot({
         path: helpers.generateScreenshotPath(
           screenshotsDirectory,
-          'notificationFailed'
+          'notificationFailed',
         ),
         fullPage: true,
       });
@@ -165,7 +165,7 @@ test.describe('Authentication end to end test suite', async () => {
 
       // Override local storage cluster URL
       await boundaryWindow.evaluate(() =>
-        window.localStorage.setItem('desktop:clusterUrl', null)
+        window.localStorage.setItem('desktop:clusterUrl', null),
       );
       const clusterUrlValue = 'http://localhost:9200';
 

@@ -41,8 +41,8 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       try {
         const hostSets = await Promise.all(
           target.host_sources.map(({ host_source_id }) =>
-            this.store.findRecord('host-set', host_source_id)
-          )
+            this.store.findRecord('host-set', host_source_id),
+          ),
         );
 
         // Extract host ids from all host sets
@@ -53,8 +53,8 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
 
         hosts = await Promise.all(
           [...uniqueHostIds].map((hostId) =>
-            this.store.findRecord('host', hostId)
-          )
+            this.store.findRecord('host', hostId),
+          ),
         );
       } catch (error) {
         // no operation
@@ -86,7 +86,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     if (this.isConnectionError) {
       /* eslint-disable-next-line ember/no-controller-access-in-routes */
       const controller = this.controllerFor(
-        'scopes.scope.projects.targets.target'
+        'scopes.scope.projects.targets.target',
       );
       controller.set('isConnecting', false);
       this.isConnectionError = false;
@@ -104,7 +104,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   async connect(target, host) {
     /* eslint-disable-next-line ember/no-controller-access-in-routes */
     const parentController = this.controllerFor(
-      'scopes.scope.projects.targets.index'
+      'scopes.scope.projects.targets.index',
     );
     try {
       await parentController.connect(target, host);
@@ -135,7 +135,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     if (this.isConnectionError) {
       /* eslint-disable-next-line ember/no-controller-access-in-routes */
       const controller = this.controllerFor(
-        'scopes.scope.projects.targets.target'
+        'scopes.scope.projects.targets.target',
       );
       controller.set('isConnecting', false);
       this.isConnectionError = false;

@@ -42,15 +42,15 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     assert.ok(find('.rose-form-fieldset'));
     assert.strictEqual(
       find('.rose-form-fieldset-title').textContent.trim(),
-      this.mockTitle
+      this.mockTitle,
     );
     assert.strictEqual(
       find('.rose-form-fieldset-description').textContent.trim(),
-      this.mockDescription
+      this.mockDescription,
     );
     assert.strictEqual(
       find('.rose-form-fieldset-body').textContent.trim(),
-      this.mockBody
+      this.mockBody,
     );
   });
 
@@ -60,12 +60,12 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     assert.ok(find('.rose-form-fieldset'));
     assert.strictEqual(
       find('.rose-form-fieldset-title').textContent.trim(),
-      this.mockTitle
+      this.mockTitle,
     );
     assert.notOk(find('.rose-form-fieldset-description'));
     assert.strictEqual(
       find('.rose-form-fieldset-body').textContent.trim(),
-      this.mockBody
+      this.mockBody,
     );
   });
 
@@ -78,7 +78,7 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
     assert.strictEqual(
       fieldsetElement.getAttribute('aria-describedby'),
       descriptionElement.id,
-      'Fieldset is described by description'
+      'Fieldset is described by description',
     );
   });
 

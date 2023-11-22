@@ -17,7 +17,7 @@ exports.generateScreenshotPath = (screenshotTestDirectory, fileName) => {
   const screenshotsRootPath = path.join(__dirname, 'screenshots');
   const screenshotPath = path.join(
     screenshotsRootPath,
-    screenshotTestDirectory
+    screenshotTestDirectory,
   );
   return path.join(screenshotPath, fileName).concat(screenshotFormat);
 };

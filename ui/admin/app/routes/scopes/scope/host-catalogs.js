@@ -62,13 +62,13 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(hostCatalog) {
     await hostCatalog.save();
     await this.router.transitionTo(
       'scopes.scope.host-catalogs.host-catalog',
-      hostCatalog
+      hostCatalog,
     );
     this.refresh();
   }

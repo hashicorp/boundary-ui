@@ -74,7 +74,7 @@ function routes() {
         });
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/scopes', function ({ scopes }) {
     // Parent scope comes through the payload via `scope_id`, but this needs
@@ -107,11 +107,11 @@ function routes() {
         });
       } else {
         resultSet = authMethods.where(
-          (authMethod) => authMethod.scopeId === scope_id
+          (authMethod) => authMethod.scopeId === scope_id,
         );
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/auth-methods', function ({ authMethods }) {
     const attrs = this.normalizedRequestAttrs();
@@ -130,7 +130,7 @@ function routes() {
       }
 
       return authMethods.find(id).update(attrs);
-    }
+    },
   );
   this.del('/auth-methods/:id', ({ authMethods }, { params: { id } }) => {
     const authMethod = authMethods.find(id);
@@ -149,7 +149,7 @@ function routes() {
     '/accounts',
     (
       { accounts },
-      { queryParams: { auth_method_id: authMethodId, filter } }
+      { queryParams: { auth_method_id: authMethodId, filter } },
     ) => {
       let resultSet;
       if (authMethodId) {
@@ -158,7 +158,7 @@ function routes() {
         resultSet = accounts.all();
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/accounts');
   this.get('/accounts/:id');
@@ -184,7 +184,7 @@ function routes() {
         updatedAttrs.attributes.password = attrs.new_password;
       }
       return account.update(updatedAttrs);
-    }
+    },
   );
 
   // Authenticate + auth methods custom routes
@@ -211,7 +211,7 @@ function routes() {
         resultSet = users.where((user) => user.scopeId === scope_id);
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/users');
   this.get('/users/:id');
@@ -262,7 +262,7 @@ function routes() {
         resultSet = groups.where((group) => group.scopeId === scope_id);
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/groups');
   this.get('/groups/:id');
@@ -294,7 +294,7 @@ function routes() {
         });
       }
       return group.update(updatedAttrs);
-    }
+    },
   );
 
   // IAM: Roles
@@ -309,7 +309,7 @@ function routes() {
     '/roles/:idMethod',
     function (
       { roles, users, groups, managedGroups },
-      { params: { idMethod } }
+      { params: { idMethod } },
     ) {
       const attrs = this.normalizedRequestAttrs();
       const id = idMethod.split(':')[0];
@@ -361,7 +361,7 @@ function routes() {
         updatedAttrs.managedGroupIds = updatedAttrs.managedGroupIds.filter(
           (id) => {
             return !attrs.principalIds.includes(id);
-          }
+          },
         );
       }
 
@@ -373,7 +373,7 @@ function routes() {
       }
 
       return role.update(updatedAttrs);
-    }
+    },
   );
 
   // Other resources
@@ -383,7 +383,7 @@ function routes() {
     '/host-catalogs',
     ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
       return hostCatalogs.where({ scopeId });
-    }
+    },
   );
   this.post(
     '/host-catalogs',
@@ -396,7 +396,7 @@ function routes() {
         };
       }
       return hostCatalogs.create(attrs);
-    }
+    },
   );
   this.get('/host-catalogs/:id');
   this.patch('/host-catalogs/:id');
@@ -408,7 +408,7 @@ function routes() {
     '/hosts',
     function ({ hosts }, { queryParams: { host_catalog_id: hostCatalogId } }) {
       return hosts.where({ hostCatalogId });
-    }
+    },
   );
   this.post('/hosts', function ({ hostCatalogs, hosts }) {
     const attrs = this.normalizedRequestAttrs();
@@ -426,10 +426,10 @@ function routes() {
     '/host-sets',
     function (
       { hostSets },
-      { queryParams: { host_catalog_id: hostCatalogId } }
+      { queryParams: { host_catalog_id: hostCatalogId } },
     ) {
       return hostSets.where({ hostCatalogId });
-    }
+    },
   );
 
   this.post('/host-sets', function ({ hostCatalogs, hostSets }) {
@@ -477,7 +477,7 @@ function routes() {
       }
 
       return hostSet.update(updatedAttrs);
-    }
+    },
   );
 
   // target
@@ -500,7 +500,7 @@ function routes() {
         resultSet = targets.where((target) => target.scopeId === scope_id);
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/targets', function ({ targets }) {
     const attrs = this.normalizedRequestAttrs();
@@ -548,7 +548,7 @@ function routes() {
         resultSet = sessions.where((session) => session.scopeId === scope_id);
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.get('/sessions/:id', function ({ sessions }, { params: { id } }) {
     const session = sessions.find(id);
@@ -573,7 +573,7 @@ function routes() {
         updatedAttrs.status = 'canceling';
       }
       return session.update(updatedAttrs);
-    }
+    },
   );
 
   // auth-tokens
@@ -589,7 +589,7 @@ function routes() {
   this.get(
     '/credential-stores',
     ({ credentialStores }, { queryParams: { scope_id: scopeId } }) =>
-      credentialStores.where({ scopeId })
+      credentialStores.where({ scopeId }),
   );
 
   this.get('/credential-stores/:id');
@@ -603,8 +603,8 @@ function routes() {
     '/credential-libraries',
     (
       { credentialLibraries },
-      { queryParams: { credential_store_id: credentialStoreId } }
-    ) => credentialLibraries.where({ credentialStoreId })
+      { queryParams: { credential_store_id: credentialStoreId } },
+    ) => credentialLibraries.where({ credentialStoreId }),
   );
   this.get('/credential-libraries/:id');
   this.post(
@@ -614,7 +614,7 @@ function routes() {
       const credentialStore = credentialStores.find(attrs.credentialStoreId);
       attrs.scopeId = credentialStore.scope.id;
       return credentialLibraries.create(attrs);
-    }
+    },
   );
   this.del('/credential-libraries/:id');
   this.patch('/credential-libraries/:id');
@@ -625,8 +625,8 @@ function routes() {
     '/credentials',
     (
       { credentials },
-      { queryParams: { credential_store_id: credentialStoreId } }
-    ) => credentials.where({ credentialStoreId })
+      { queryParams: { credential_store_id: credentialStoreId } },
+    ) => credentials.where({ credentialStoreId }),
   );
   this.get('/credentials/:id');
   this.post('/credentials', function ({ credentialStores, credentials }) {
@@ -644,7 +644,7 @@ function routes() {
     '/managed-groups',
     (
       { managedGroups },
-      { queryParams: { auth_method_id: authMethodId, filter } }
+      { queryParams: { auth_method_id: authMethodId, filter } },
     ) => {
       let resultSet;
       if (authMethodId) {
@@ -653,7 +653,7 @@ function routes() {
         resultSet = managedGroups.all();
       }
       return resultSet.filter(makeBooleanFilter(filter));
-    }
+    },
   );
   this.post('/managed-groups');
   this.get('/managed-groups/:id');
@@ -665,7 +665,7 @@ function routes() {
     '/workers',
     ({ workers }, { queryParams: { scope_id: scopeId } }) => {
       return workers.where({ scopeId });
-    }
+    },
   );
   this.get('/workers/:id');
   this.del('/workers/:id');
@@ -689,7 +689,7 @@ function routes() {
         return storageBuckets.all();
       }
       return storageBuckets.where({ scopeId });
-    }
+    },
   );
   this.get('/storage-buckets/:id');
   this.del('/storage-buckets/:id');
@@ -708,7 +708,7 @@ function routes() {
       delete attrs.secrets;
 
       return storageBuckets.create(attrs);
-    }
+    },
   );
 
   // session recordings
@@ -716,13 +716,13 @@ function routes() {
     '/session-recordings',
     (
       { sessionRecordings },
-      { queryParams: { scope_id: scopeId, recursive } }
+      { queryParams: { scope_id: scopeId, recursive } },
     ) => {
       if (recursive && scopeId === 'global') {
         return sessionRecordings.all();
       }
       return sessionRecordings.where({ scopeId });
-    }
+    },
   );
   this.get(
     '/session-recordings/:idMethod',
@@ -735,7 +735,7 @@ function routes() {
       } else {
         return sessionRecordings.find(id);
       }
-    }
+    },
   );
 
   /* Uncomment the following line and the Response import above

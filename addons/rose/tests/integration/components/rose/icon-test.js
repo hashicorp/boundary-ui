@@ -18,7 +18,7 @@ module('Integration | Component | rose/icon', function (hooks) {
 
   test('it supports optional @size', async function (assert) {
     await render(
-      hbs`<Rose::Icon @name="flight-icons/svg/globe-16" @size="small" />`
+      hbs`<Rose::Icon @name="flight-icons/svg/globe-16" @size="small" />`,
     );
     assert.ok(find('.small'));
   });

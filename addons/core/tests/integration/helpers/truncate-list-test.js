@@ -29,11 +29,11 @@ module('Integration | Helper | truncate-list', function (hooks) {
     this.set('inputValue', list);
     this.set('limit', limit);
     await render(
-      hbs`{{truncate-list 'actions.more' this.inputValue this.limit}}`
+      hbs`{{truncate-list 'actions.more' this.inputValue this.limit}}`,
     );
     assert.strictEqual(
       this.element.textContent.trim(),
-      'boundary, consul, packer, +1 more'
+      'boundary, consul, packer, +1 more',
     );
   });
 

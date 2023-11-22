@@ -60,13 +60,13 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(`[href="${urls.targets}"]`).exists();
   });
@@ -80,13 +80,13 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert
       .dom('[title="Resources"] a:nth-of-type(2)')
@@ -97,7 +97,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
-        (item) => item !== 'list'
+        (item) => item !== 'list',
       );
     await visit(urls.orgScope);
 
@@ -105,13 +105,13 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.dom(`[href="${urls.targets}"]`).exists();
   });
@@ -120,7 +120,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
     await visit(urls.orgScope);
 
@@ -128,13 +128,13 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.dom(`[href="${urls.targets}"]`).exists();
   });

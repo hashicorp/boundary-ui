@@ -34,13 +34,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Rou
     if (credentialStore.scopeID !== scope.id) {
       let paramValues = paramValueFinder(
         'credential-store',
-        transition.to.parent
+        transition.to.parent,
       );
       this.router.replaceWith(
         transition.to.name,
         credentialStore.scopeID,
         credentialStore.id,
-        ...paramValues
+        ...paramValues,
       );
     }
   }

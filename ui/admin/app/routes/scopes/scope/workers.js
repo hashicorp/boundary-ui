@@ -63,7 +63,7 @@ export default class ScopesScopeWorkersRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(worker) {
     await worker.save();

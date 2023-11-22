@@ -16,7 +16,7 @@ module('Unit | Abilities | model', function (hooks) {
       authorized_collection_actions: { foobars: [] },
     };
     assert.notOk(
-      service.can('navigate model', model, { collection: 'foobars' })
+      service.can('navigate model', model, { collection: 'foobars' }),
     );
     model.authorized_collection_actions.foobars = ['list'];
     assert.ok(service.can('navigate model', model, { collection: 'foobars' }));

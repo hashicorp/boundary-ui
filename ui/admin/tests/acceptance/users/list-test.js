@@ -56,12 +56,12 @@ module('Acceptance | users | list', function (hooks) {
     await click(`[href="${urls.orgScope}"]`);
 
     assert.true(
-      instances.scopes.org.authorized_collection_actions.users.includes('list')
+      instances.scopes.org.authorized_collection_actions.users.includes('list'),
     );
     assert.true(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
 
     assert.dom(`[href="${urls.users}"]`).exists();
@@ -76,11 +76,11 @@ module('Acceptance | users | list', function (hooks) {
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.false(
-      instances.scopes.org.authorized_collection_actions.users.includes('list')
+      instances.scopes.org.authorized_collection_actions.users.includes('list'),
     );
     assert.dom(`nav [href="${urls.users}"]`).doesNotExist();
   });
@@ -89,19 +89,19 @@ module('Acceptance | users | list', function (hooks) {
     assert.expect(4);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
-        (item) => item !== 'list'
+        (item) => item !== 'list',
       );
     await visit(urls.globalScope);
 
     await click(`[href="${urls.orgScope}"]`);
 
     assert.false(
-      instances.scopes.org.authorized_collection_actions.users.includes('list')
+      instances.scopes.org.authorized_collection_actions.users.includes('list'),
     );
     assert.true(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(`[href="${urls.users}"]`).exists();
 
@@ -114,19 +114,19 @@ module('Acceptance | users | list', function (hooks) {
     assert.expect(4);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
     await visit(urls.globalScope);
 
     await click(`[href="${urls.orgScope}"]`);
 
     assert.true(
-      instances.scopes.org.authorized_collection_actions.users.includes('list')
+      instances.scopes.org.authorized_collection_actions.users.includes('list'),
     );
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.dom(`[href="${urls.users}"]`).exists();
 

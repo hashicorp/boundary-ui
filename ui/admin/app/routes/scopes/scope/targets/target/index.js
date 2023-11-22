@@ -24,7 +24,7 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
       const { storage_bucket_id } = target;
       const storageBucket = await this.store.findRecord(
         'storage-bucket',
-        storage_bucket_id
+        storage_bucket_id,
       );
       const storage_bucket_name = storageBucket.displayName;
       controller.set('storage_bucket_name', storage_bucket_name);

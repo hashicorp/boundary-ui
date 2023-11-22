@@ -92,7 +92,7 @@ module(
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernamePasswordCredentialCount + 1
+        usernamePasswordCredentialCount + 1,
       );
     });
 
@@ -111,7 +111,7 @@ module(
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
-        usernameKeyPairCredentialCount + 1
+        usernameKeyPairCredentialCount + 1,
       );
     });
 
@@ -199,7 +199,7 @@ module(
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
           (item) => {
             item !== 'create';
-          }
+          },
         );
       await visit(urls.credentialStores);
 
@@ -207,8 +207,8 @@ module(
 
       assert.false(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create'
-        )
+          'create',
+        ),
       );
       assert.dom('.rose-layout-page-actions a').doesNotExist();
     });
@@ -233,7 +233,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
 
@@ -268,7 +268,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
 
@@ -304,7 +304,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
 
@@ -325,8 +325,8 @@ module(
       assert.false(featuresService.isEnabled('json-credentials'));
       assert.true(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create'
-        )
+          'create',
+        ),
       );
       assert.dom('.hds-form-radio-card').exists({ count: 2 });
       assert
@@ -341,17 +341,17 @@ module(
       assert.expect(2);
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
-          (item) => item !== 'create'
+          (item) => item !== 'create',
         );
 
       await visit(urls.newCredential);
 
       assert.false(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
-          'create'
-        )
+          'create',
+        ),
       );
       assert.strictEqual(currentURL(), urls.credentials);
     });
-  }
+  },
 );

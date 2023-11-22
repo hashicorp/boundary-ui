@@ -78,7 +78,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     await visit(urls.credentialLibraries);
     assert.notOk(find('main tbody .rose-table-header-cell a'));
@@ -92,7 +92,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
     await visit(
-      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
+      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`,
     );
     await visit(urls.credentialLibraries);
     const featuresService = this.owner.lookup('service:features');

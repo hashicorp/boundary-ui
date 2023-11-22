@@ -22,6 +22,6 @@ export default Factory.extend({
   active_connection_count: () => faker.number.int(10),
   release_version: () =>
     `Boundary v${faker.number.int(11)}.${faker.number.int(
-      50
+      50,
     )}.${faker.number.int(12)}`,
 });

@@ -70,5 +70,5 @@ module(
       assert.dom(editorSelector).includesText(myNewCode);
       assert.true(this.called);
     });
-  }
+  },
 );

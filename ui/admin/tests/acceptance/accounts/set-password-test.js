@@ -69,19 +69,19 @@ module('Acceptance | accounts | set password', function (hooks) {
     assert.expect(1);
     await visit(urls.account);
     assert.ok(
-      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`)
+      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`),
     );
   });
 
   test('cannot navigate to route without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.account.authorized_actions.filter(
-      (item) => item !== 'set-password'
+      (item) => item !== 'set-password',
     );
     instances.account.update({ authorized_actions });
     await visit(urls.account);
     assert.notOk(
-      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`)
+      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`),
     );
   });
 
@@ -94,11 +94,11 @@ module('Acceptance | accounts | set password', function (hooks) {
         assert.strictEqual(
           attrs.password,
           'update password',
-          'new password is set'
+          'new password is set',
         );
         const id = idMethod.split(':')[0];
         return { id };
-      }
+      },
     );
     await visit(urls.setPassword);
     await fillIn('[name="password"]', 'update password');
@@ -127,7 +127,7 @@ module('Acceptance | accounts | set password', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.setPassword);

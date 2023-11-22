@@ -30,27 +30,27 @@ module('Unit | Model | scope', function (hooks) {
     assert.strictEqual(
       await scopes.objectAt(1).get('scope.scope_id'),
       'global',
-      'Org 1 parent scope is global'
+      'Org 1 parent scope is global',
     );
     assert.strictEqual(
       await scopes.objectAt(2).get('scope.scope_id'),
       'global',
-      'Org 2 parent scope is global'
+      'Org 2 parent scope is global',
     );
     assert.strictEqual(
       await scopes.objectAt(3).get('scope.scope_id'),
       'o_1',
-      'Project 1 parent scope is org 1'
+      'Project 1 parent scope is org 1',
     );
     assert.strictEqual(
       await scopes.objectAt(4).get('scope.scope_id'),
       'o_1',
-      'Project 2 parent scope is org 1'
+      'Project 2 parent scope is org 1',
     );
     assert.strictEqual(
       await scopes.objectAt(5).get('scope.scope_id'),
       'o_2',
-      'Project 3 parent scope is org 2'
+      'Project 3 parent scope is org 2',
     );
   });
 

@@ -22,15 +22,15 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
   test('it renders optional description paragraph', async function (assert) {
     assert.expect(3);
     await render(
-      hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`
+      hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`,
     );
     assert.strictEqual(
       find('.rose-form-checkbox-label-text').textContent.trim(),
-      'Label'
+      'Label',
     );
     assert.strictEqual(
       find('.rose-form-checkbox-label-description').textContent.trim(),
-      'Hello world'
+      'Hello world',
     );
     assert.ok(find('input'));
   });
@@ -38,11 +38,11 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
   test('it renders optional helper text', async function (assert) {
     assert.expect(1);
     await render(
-      hbs`<Rose::Form::Checkbox @label="Label" @helperText="Hello world" />`
+      hbs`<Rose::Form::Checkbox @label="Label" @helperText="Hello world" />`,
     );
     assert.strictEqual(
       find('.rose-form-helper-text').textContent.trim(),
-      'Hello world'
+      'Hello world',
     );
   });
 
@@ -62,7 +62,7 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
     assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
     assert.strictEqual(
       fieldEl.getAttribute('aria-describedby').trim(),
-      errorsId
+      errorsId,
     );
   });
 

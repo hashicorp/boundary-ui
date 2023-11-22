@@ -47,7 +47,7 @@ module('Integration | Component | card', function (hooks) {
     assert.ok(find('.card-header .rose-icon'));
     assert.strictEqual(
       this.element.textContent.trim(),
-      'This is a heading test'
+      'This is a heading test',
     );
   });
 });
