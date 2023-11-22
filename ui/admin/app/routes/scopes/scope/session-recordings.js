@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import sortBy from 'lodash/sortBy';
 
 export default class ScopesScopeSessionRecordingsRoute extends Route {
   // =services
@@ -42,7 +43,12 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         scope_id,
         recursive: true,
       });
-
+      console.log('Session Recordings', sessionRecordings);
+      const sortedSessionRecordings = sortBy(
+        sessionRecordings,
+        'created_time',
+      ).reverse();
+      console.log('Sorted Session Recordings', sortedSessionRecordings);
       // Storage buckets could fail for a number of reasons, including that
       // the user isn't authorized to access them.
       try {
@@ -55,7 +61,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
       }
 
       return {
-        sessionRecordings,
+        sessionRecordings: sortedSessionRecordings,
         storageBuckets,
       };
     }
