@@ -89,7 +89,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -107,7 +107,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.false(
       canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -125,7 +125,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('list scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -143,7 +143,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -161,7 +161,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -179,7 +179,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -197,7 +197,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.false(
       canService.can('create scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -215,7 +215,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.true(
       canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 
@@ -231,7 +231,7 @@ module('Unit | Abilities | storage-bucket', function (hooks) {
     assert.false(
       canService.can('navigate scope', scopeModel, {
         collection: 'storage-buckets',
-      })
+      }),
     );
   });
 });

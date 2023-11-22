@@ -26,7 +26,7 @@ export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
    */
   beforeModel() {
     const { scopeID, host_sources } = this.modelFor(
-      'scopes.scope.targets.target'
+      'scopes.scope.targets.target',
     );
     const promises = host_sources.map(
       ({ host_source_id, host_catalog_id: hostCatalogID }) =>
@@ -40,7 +40,7 @@ export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
           hostSet: this.store.findRecord('host-set', host_source_id, {
             adapterOptions: { scopeID, hostCatalogID },
           }),
-        })
+        }),
     );
     return all(promises);
   }

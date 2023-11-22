@@ -53,7 +53,7 @@ module('Acceptance | roles | read', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withPrincipals'
+      'withPrincipals',
     );
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;

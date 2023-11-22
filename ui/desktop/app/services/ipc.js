@@ -80,7 +80,7 @@ export class IPCRequest {
         payload: this.payload,
       },
       origin,
-      [this.#channel.port2]
+      [this.#channel.port2],
     );
   }
 

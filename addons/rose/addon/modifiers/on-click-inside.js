@@ -24,5 +24,5 @@ export default modifier(
       element.removeEventListener('click', handleClick, false);
     };
   },
-  { eager: false }
+  { eager: false },
 );

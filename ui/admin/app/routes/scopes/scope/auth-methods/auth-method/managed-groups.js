@@ -55,7 +55,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
     managedGroup.rollbackAttributes();
     if (isNew) {
       this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.managed-groups'
+        'scopes.scope.auth-methods.auth-method.managed-groups',
       );
     }
   }
@@ -68,18 +68,18 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(managedGroup) {
     await managedGroup.save();
     if (this.can.can('read model', managedGroup)) {
       await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method.managed-groups.managed-group',
-        managedGroup
+        managedGroup,
       );
     } else {
       await this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.managed-groups'
+        'scopes.scope.auth-methods.auth-method.managed-groups',
       );
     }
     this.refresh();
@@ -97,7 +97,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
   async deleteManagedGroup(managedGroup) {
     await managedGroup.destroyRecord();
     await this.router.replaceWith(
-      'scopes.scope.auth-methods.auth-method.managed-groups'
+      'scopes.scope.auth-methods.auth-method.managed-groups',
     );
     this.refresh();
   }

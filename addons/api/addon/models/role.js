@@ -138,7 +138,7 @@ export default class RoleModel extends GeneratedRoleModel {
       const authMethods = this.resourceFilterStore.queryBy(
         'auth-method',
         { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
-        { scope_id: 'global', recursive: true }
+        { scope_id: 'global', recursive: true },
       );
 
       // For each auth method, query all managed groups with IDs
@@ -149,9 +149,9 @@ export default class RoleModel extends GeneratedRoleModel {
             methods.map(({ id: auth_method_id }) =>
               this.resourceFilterStore
                 .queryBy('managed-group', { id: ids }, { auth_method_id })
-                .then((models) => models.map((model) => model))
-            )
-          )
+                .then((models) => models.map((model) => model)),
+            ),
+          ),
         )
         // The result is an array of arrays of model instances (grouped by
         // auth methods), so these must be flattened.

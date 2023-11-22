@@ -27,12 +27,12 @@ module('Unit | Model | group', function (hooks) {
     assert.strictEqual(
       group.member_ids.length,
       2,
-      'Group has two entires in member_ids'
+      'Group has two entires in member_ids',
     );
     assert.strictEqual(
       group.members.length,
       0,
-      'Group has no resolved members because they are not loaded yet'
+      'Group has no resolved members because they are not loaded yet',
     );
     store.push({
       data: {
@@ -53,12 +53,12 @@ module('Unit | Model | group', function (hooks) {
     assert.strictEqual(
       group.member_ids.length,
       2,
-      'Group has two entires in member_ids'
+      'Group has two entires in member_ids',
     );
     assert.strictEqual(
       group.members.length,
       2,
-      'Group has two resolved members'
+      'Group has two resolved members',
     );
   });
 
@@ -168,7 +168,7 @@ module('Unit | Model | group', function (hooks) {
     assert.strictEqual(
       group.member_ids.length,
       0,
-      'Group has empty member_ids by default'
+      'Group has empty member_ids by default',
     );
   });
 });

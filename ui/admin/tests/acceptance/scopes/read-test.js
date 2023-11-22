@@ -59,7 +59,7 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       ),
     });
     await visit(urls.orgScope);

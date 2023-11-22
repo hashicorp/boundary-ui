@@ -25,7 +25,7 @@ module('Unit | Adapter | host catalog', function (hooks) {
       'host-catalog',
       null,
       mockSnapshot,
-      'createRecord'
+      'createRecord',
     );
     assert.strictEqual(createRecordURL, '/v1/host-catalogs');
   });
@@ -46,7 +46,7 @@ module('Unit | Adapter | host catalog', function (hooks) {
       'host-catalog',
       null,
       mockSnapshot,
-      'createRecord'
+      'createRecord',
     );
     assert.strictEqual(createRecordURL, '/v1/host-catalogs?plugin_name=aws');
   });

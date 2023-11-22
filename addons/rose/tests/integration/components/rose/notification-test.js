@@ -23,7 +23,7 @@ module('Integration | Component | rose/notification', function (hooks) {
     assert.ok(find('.rose-notification'));
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
-      'An error occurred.'
+      'An error occurred.',
     );
   });
 

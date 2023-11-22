@@ -35,18 +35,18 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
     const currentPrincipalIDs = this.args.model.principals.map(
-      (principal) => principal.principal_id
+      (principal) => principal.principal_id,
     );
 
     // Retrieve principal IDs not assigned to current role
     const unassignedUsers = this.args.users.filter(
-      ({ id }) => !currentPrincipalIDs.includes(id)
+      ({ id }) => !currentPrincipalIDs.includes(id),
     );
     const unassignedGroups = this.args.groups.filter(
-      ({ id }) => !currentPrincipalIDs.includes(id)
+      ({ id }) => !currentPrincipalIDs.includes(id),
     );
     const unassignedManagedGroups = this.args.managedGroups.filter(
-      ({ id }) => !currentPrincipalIDs.includes(id)
+      ({ id }) => !currentPrincipalIDs.includes(id),
     );
 
     return [

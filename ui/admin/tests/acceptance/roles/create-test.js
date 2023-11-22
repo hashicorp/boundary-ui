@@ -43,7 +43,7 @@ module('Acceptance | roles | create', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
 
     // The project scope is not yet used for role tests (though it will be
@@ -58,7 +58,7 @@ module('Acceptance | roles | create', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withPrincipals'
+      'withPrincipals',
     );
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
@@ -80,8 +80,8 @@ module('Acceptance | roles | create', function (hooks) {
     await visit(urls.roles);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.roles.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.ok(find(`[href="${urls.newRole}"]`));
   });
@@ -92,8 +92,8 @@ module('Acceptance | roles | create', function (hooks) {
     await visit(urls.roles);
     assert.notOk(
       instances.scopes.org.authorized_collection_actions.roles.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`[href="${urls.newRole}"]`));
   });
@@ -126,7 +126,7 @@ module('Acceptance | roles | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newRole);
@@ -141,15 +141,15 @@ module('Acceptance | roles | create', function (hooks) {
     assert.expect(2);
     instances.scopes.org.authorized_collection_actions.roles =
       instances.scopes.org.authorized_collection_actions.roles.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newRole);
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.roles.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.roles);
   });

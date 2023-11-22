@@ -98,7 +98,7 @@ module(
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'username_password' })
           .models[0].name,
-        mockInput
+        mockInput,
       );
     });
 
@@ -114,7 +114,7 @@ module(
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'ssh_private_key' })
           .models[0].name,
-        mockInput
+        mockInput,
       );
     });
 
@@ -129,7 +129,7 @@ module(
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'json' }).models[0].name,
-        mockInput
+        mockInput,
       );
     });
 
@@ -137,7 +137,7 @@ module(
       assert.expect(1);
       instances.usernamePasswordCredential.authorized_actions =
         instances.usernamePasswordCredential.authorized_actions.filter(
-          (item) => item !== 'update'
+          (item) => item !== 'update',
         );
       await visit(urls.usernamePasswordCredential);
       assert
@@ -149,7 +149,7 @@ module(
       assert.expect(1);
       instances.usernameKeyPairCredential.authorized_actions =
         instances.usernameKeyPairCredential.authorized_actions.filter(
-          (item) => item !== 'update'
+          (item) => item !== 'update',
         );
       await visit(urls.usernameKeyPairCredential);
       assert
@@ -161,7 +161,7 @@ module(
       assert.expect(1);
       instances.jsonCredential.authorized_actions =
         instances.jsonCredential.authorized_actions.filter(
-          (item) => item !== 'update'
+          (item) => item !== 'update',
         );
       await visit(urls.jsonCredential);
       assert
@@ -179,7 +179,7 @@ module(
       assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       assert.strictEqual(
         find('[name="name"]').value,
-        instances.usernamePasswordCredential.name
+        instances.usernamePasswordCredential.name,
       );
     });
 
@@ -193,7 +193,7 @@ module(
       assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       assert.strictEqual(
         find('[name="name"]').value,
-        instances.usernameKeyPairCredential.name
+        instances.usernameKeyPairCredential.name,
       );
     });
 
@@ -207,7 +207,7 @@ module(
       assert.notEqual(instances.jsonCredential.name, mockInput);
       assert.strictEqual(
         find('[name="name"]').value,
-        instances.jsonCredential.name
+        instances.jsonCredential.name,
       );
     });
 
@@ -230,7 +230,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
       await visit(urls.usernamePasswordCredential);
@@ -239,11 +239,11 @@ module(
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
-        'Error in provided request.'
+        'Error in provided request.',
       );
       assert.ok(
         find('.rose-form-error-message').textContent.trim(),
-        'Name is required.'
+        'Name is required.',
       );
     });
 
@@ -266,7 +266,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
       await visit(urls.usernameKeyPairCredential);
@@ -275,11 +275,11 @@ module(
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
-        'Error in provided request.'
+        'Error in provided request.',
       );
       assert.ok(
         find('.rose-form-error-message').textContent.trim(),
-        'Name is required.'
+        'Name is required.',
       );
     });
 
@@ -302,7 +302,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
       await visit(urls.jsonCredential);
@@ -311,11 +311,11 @@ module(
       await click('[type="submit"]');
       assert.ok(
         find('[role="alert"]').textContent.trim(),
-        'Error in provided request.'
+        'Error in provided request.',
       );
       assert.ok(
         find('.rose-form-error-message').textContent.trim(),
-        'Name is required.'
+        'Name is required.',
       );
     });
 
@@ -335,13 +335,13 @@ module(
         assert.dom('.rose-dialog').isVisible();
         await click(
           '.rose-dialog-footer button:first-of-type',
-          'Click Discard'
+          'Click Discard',
         );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          mockInput
+          mockInput,
         );
       }
     });
@@ -362,13 +362,13 @@ module(
         assert.dom('.rose-dialog').isVisible();
         await click(
           '.rose-dialog-footer button:first-of-type',
-          'Click Discard'
+          'Click Discard',
         );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          mockInput
+          mockInput,
         );
       }
     });
@@ -389,12 +389,12 @@ module(
         assert.dom('.rose-dialog').isVisible();
         await click(
           '.rose-dialog-footer button:first-of-type',
-          'Click Discard'
+          'Click Discard',
         );
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
-          mockInput
+          mockInput,
         );
       }
     });
@@ -420,7 +420,7 @@ module(
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          credentialName
+          credentialName,
         );
       }
     });
@@ -446,7 +446,7 @@ module(
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          credentialName
+          credentialName,
         );
       }
     });
@@ -471,7 +471,7 @@ module(
         assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
-          credentialName
+          credentialName,
         );
       }
     });
@@ -513,10 +513,10 @@ module(
       assert.dom('.secret-editor-skeleton-message button').isVisible();
       await click(
         '.secret-editor-skeleton-message button',
-        'Enter editing mode'
+        'Enter editing mode',
       );
       assert.dom('.secret-editor-skeleton-message button').doesNotExist();
       await waitUntil(() => assert.dom('.CodeMirror').isVisible());
     });
-  }
+  },
 );

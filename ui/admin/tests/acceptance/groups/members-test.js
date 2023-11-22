@@ -48,7 +48,7 @@ module('Acceptance | groups | members', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withMembers'
+      'withMembers',
     );
     membersCount = instances.group.memberIds.length;
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
@@ -77,7 +77,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('cannot remove a member without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.group.authorized_actions.filter(
-      (item) => item !== 'remove-members'
+      (item) => item !== 'remove-members',
     );
     instances.group.update({ authorized_actions });
     await visit(urls.members);
@@ -95,7 +95,7 @@ module('Acceptance | groups | members', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.members);
@@ -121,7 +121,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('cannot navigate to add members without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.group.authorized_actions.filter(
-      (item) => item !== 'add-members'
+      (item) => item !== 'add-members',
     );
     instances.group.update({ authorized_actions });
     await visit(urls.group);
@@ -170,7 +170,7 @@ module('Acceptance | groups | members', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.group.update({ memberIds: [] });

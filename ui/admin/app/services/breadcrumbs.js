@@ -23,7 +23,7 @@ export default class BreadcrumbsService extends Service {
   registerContainer(container) {
     assert(
       'A breadcrumb container with the same DOM element has already been registered before.',
-      !this.#isContainerRegistered(container)
+      !this.#isContainerRegistered(container),
     );
     this.#containers = [...this.#containers, container];
     this.containers = this.#containers;
@@ -32,7 +32,7 @@ export default class BreadcrumbsService extends Service {
   unregisterContainer(container) {
     assert(
       'No breadcrumb container was found with this DOM element.',
-      this.#isContainerRegistered(container)
+      this.#isContainerRegistered(container),
     );
 
     this.#containers = this.#containers.filter((registeredContainer) => {

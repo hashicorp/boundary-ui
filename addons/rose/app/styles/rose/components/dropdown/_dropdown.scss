@@ -105,7 +105,8 @@ $chevron-grey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%236
     border: 1px solid var(--ui-gray-subtler-2);
     border-radius: sizing.rems(xxxs);
     background: var(--subtle);
-    box-shadow: 0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3)),
+    box-shadow:
+      0 $xxs $xxs rgba(var(--stark-components), var(--opacity-3)),
       0 $xxs $xs rgba(var(--stark-components), var(--opacity-4));
     z-index: 99;
   }

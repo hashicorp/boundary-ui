@@ -57,13 +57,13 @@ test.describe('AWS', async () => {
     await page.getByLabel('Disable credential rotation').click({ force: true });
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(
-      page.getByRole('alert').getByText('Success', { exact: true })
+      page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostCatalogName })
+        .getByRole('link', { name: hostCatalogName }),
     ).toBeVisible();
 
     // Create first host set
@@ -82,20 +82,20 @@ test.describe('AWS', async () => {
       .click();
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(
-      page.getByRole('alert').getByText('Success', { exact: true })
+      page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName1 })
+        .getByRole('link', { name: hostSetName1 }),
     ).toBeVisible();
 
     await page.getByRole('link', { name: 'Hosts' }).click();
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: 'Hosts' })
+        .getByRole('link', { name: 'Hosts' }),
     ).toBeVisible();
 
     // Check number of hosts in host set
@@ -128,7 +128,7 @@ test.describe('AWS', async () => {
         'Hosts are not visible. EXPECTED: ' +
           expectedHosts.length +
           ', ACTUAL: ' +
-          rowCount
+          rowCount,
       );
     }
 
@@ -147,7 +147,7 @@ test.describe('AWS', async () => {
       await expect(
         page
           .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByRole('link', { name: hostName })
+          .getByRole('link', { name: hostName }),
       ).toBeVisible();
 
       await page

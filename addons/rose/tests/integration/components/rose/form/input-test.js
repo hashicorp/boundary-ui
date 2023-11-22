@@ -27,7 +27,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
     assert.strictEqual(helperTextEl.id, helperId);
     assert.strictEqual(
       fieldEl.getAttribute('aria-describedby').trim(),
-      helperId
+      helperId,
     );
   });
 
@@ -47,7 +47,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
     assert.strictEqual(errorMessageEl.textContent.trim(), 'An error occurred.');
     assert.strictEqual(
       fieldEl.getAttribute('aria-describedby').split(' ')[1],
-      errorsId
+      errorsId,
     );
   });
 
@@ -95,7 +95,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
     `);
     assert.notOk(
       find('.rose-form-input'),
-      'The form field wrapper element is not present in contextual mode'
+      'The form field wrapper element is not present in contextual mode',
     );
     assert.ok(find('.rose-form-label.error'));
     assert.ok(find('.rose-form-helper-text.error'));

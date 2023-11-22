@@ -10,7 +10,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexR
 
   setupController(controller) {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     super.setupController(...arguments);
     controller.setProperties({ credentialStore });

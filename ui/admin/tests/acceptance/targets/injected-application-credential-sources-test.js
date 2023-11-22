@@ -78,7 +78,7 @@ module(
         {
           scope: instances.scopes.project,
           credentialStore: instances.vaultCredentialStore,
-        }
+        },
       );
       instances.credentialLibrary = instances.credentialLibraries[0];
       instances.credential = instances.credentials[0];
@@ -125,7 +125,7 @@ module(
       await a11yAudit();
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
     });
@@ -157,7 +157,7 @@ module(
       await a11yAudit();
       assert.strictEqual(
         currentURL(),
-        urls.addInjectedApplicationCredentialSources
+        urls.addInjectedApplicationCredentialSources,
       );
     });
 
@@ -181,7 +181,7 @@ module(
       await visit(urls.addInjectedApplicationCredentialSources);
       assert.strictEqual(
         findAll('tbody tr').length,
-        getCredentialLibraryCount()
+        getCredentialLibraryCount(),
       );
       assert.dom('.rose-message-title').doesNotExist();
     });
@@ -191,7 +191,7 @@ module(
       await visit(urls.addInjectedApplicationCredentialSources);
       assert.strictEqual(
         find('.rose-message-title').textContent.trim(),
-        'No Injected Application Credential Sources Available'
+        'No Injected Application Credential Sources Available',
       );
     });
 
@@ -205,7 +205,7 @@ module(
       await click(find('.rose-message > .rose-message-body > a'));
       assert.strictEqual(
         currentURL(),
-        urls.addInjectedApplicationCredentialSources
+        urls.addInjectedApplicationCredentialSources,
       );
     });
 
@@ -222,7 +222,7 @@ module(
       await click('form [type="submit"]');
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, 1);
     });
@@ -240,7 +240,7 @@ module(
       await click('form [type="submit"]');
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, 1);
     });
@@ -259,7 +259,7 @@ module(
       await click('form [type="submit"]');
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, 2);
     });
@@ -268,7 +268,7 @@ module(
       assert.expect(1);
       instances.target.authorized_actions =
         instances.target.authorized_actions.filter(
-          (item) => item !== 'add-credential-sources'
+          (item) => item !== 'add-credential-sources',
         );
       await visit(urls.injectedApplicationCredentialSources);
 
@@ -288,7 +288,7 @@ module(
       await click('form [type="button"]');
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, 0);
     });
@@ -307,7 +307,7 @@ module(
       await click('form [type="button"]');
       assert.strictEqual(
         currentURL(),
-        urls.injectedApplicationCredentialSources
+        urls.injectedApplicationCredentialSources,
       );
       assert.strictEqual(findAll('tbody tr').length, 0);
     });
@@ -323,7 +323,7 @@ module(
             code: 'invalid_argument',
             message: 'The request was invalid.',
             details: {},
-          }
+          },
         );
       });
       instances.target.update({
@@ -350,12 +350,12 @@ module(
       await click('tbody tr .hds-dropdown-list-item button');
       assert.strictEqual(
         findAll('tbody tr').length,
-        credentialLibraryCount - 1
+        credentialLibraryCount - 1,
       );
       await visit(urls.addInjectedApplicationCredentialSources);
       assert.strictEqual(
         findAll('tbody tr').length,
-        credentialLibraryCount + 1
+        credentialLibraryCount + 1,
       );
     });
 
@@ -380,7 +380,7 @@ module(
       assert.expect(1);
       instances.target.authorized_actions =
         instances.target.authorized_actions.filter(
-          (item) => item !== 'remove-credential-sources'
+          (item) => item !== 'remove-credential-sources',
         );
       await visit(urls.injectedApplicationCredentialSources);
       assert.dom('tbody tr .rose-dropdown-button-danger').doesNotExist();
@@ -402,7 +402,7 @@ module(
             code: 'invalid_argument',
             message: 'The request was invalid.',
             details: {},
-          }
+          },
         );
       });
       const count = getCredentialLibraryCount();
@@ -429,7 +429,7 @@ module(
             code: 'invalid_argument',
             message: 'The request was invalid.',
             details: {},
-          }
+          },
         );
       });
       const count = getCredentialCount();
@@ -439,5 +439,5 @@ module(
       await click('tbody tr .hds-dropdown-list-item button');
       assert.dom('[role="alert"]').isVisible();
     });
-  }
+  },
 );

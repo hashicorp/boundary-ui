@@ -66,7 +66,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'session-recordings'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.dom(`[href="${urls.sessionRecordings}"]`).exists();
     assert.dom('[title="General"]').includesText(SESSION_RECORDING_TITLE);
@@ -87,7 +87,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'session-recordings'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.dom('[title="General"]').doesNotIncludeText(SESSION_RECORDING_TITLE);
     assert.dom(`[href="${urls.sessionRecordings}"]`).doesNotExist();

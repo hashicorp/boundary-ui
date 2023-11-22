@@ -66,7 +66,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     await click('.rose-header-utilities .rose-dropdown summary');
     // Find first element in dropdown - should be change password link
     await click(
-      '.rose-header-utilities .rose-dropdown .rose-dropdown-content a'
+      '.rose-header-utilities .rose-dropdown .rose-dropdown-content a',
     );
     assert.strictEqual(currentURL(), urls.changePassword);
   });
@@ -80,16 +80,16 @@ module('Acceptance | accounts | change password', function (hooks) {
         assert.strictEqual(
           attrs.current_password,
           'current password',
-          'current password is provided'
+          'current password is provided',
         );
         assert.strictEqual(
           attrs.new_password,
           'new password',
-          'new password is provided'
+          'new password is provided',
         );
         const id = idMethod.split(':')[0];
         return { id };
-      }
+      },
     );
     await visit(urls.changePassword);
     await fillIn('[name="currentPassword"]', 'current password');
@@ -117,7 +117,7 @@ module('Acceptance | accounts | change password', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.changePassword);

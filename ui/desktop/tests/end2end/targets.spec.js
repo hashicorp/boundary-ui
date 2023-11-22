@@ -14,7 +14,7 @@ const screenshotsDirectory = 'targets/';
 // Path where the Boundary Desktop client binary is generated
 const executablePath = helpers.returnExecutablePath(
   process.platform,
-  process.arch
+  process.arch,
 );
 
 // Set login variables
@@ -43,7 +43,7 @@ test.describe('Targets end to end test suite', async () => {
 
     // Override local storage cluster URL
     await boundaryWindow.evaluate(() =>
-      window.localStorage.setItem('desktop:clusterURL', null)
+      window.localStorage.setItem('desktop:clusterURL', null),
     );
 
     // Perform the login
@@ -51,7 +51,7 @@ test.describe('Targets end to end test suite', async () => {
       boundaryWindow,
       clusterUrlValue,
       loginUsername,
-      loginPassword
+      loginPassword,
     );
 
     // Check we are in Targets
@@ -63,7 +63,7 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.waitForSelector('table.rose-table');
     await helpers.click(
       boundaryWindow,
-      'table.rose-table >> tbody >> tr >> nth=0 >> button >> text=Connect'
+      'table.rose-table >> tbody >> tr >> nth=0 >> button >> text=Connect',
     );
 
     // The target popup opens
@@ -72,7 +72,7 @@ test.describe('Targets end to end test suite', async () => {
     await boundaryWindow.screenshot({
       path: helpers.generateScreenshotPath(
         screenshotsDirectory,
-        'targetConnectionDetails'
+        'targetConnectionDetails',
       ),
       fullPage: true,
     });
@@ -80,24 +80,24 @@ test.describe('Targets end to end test suite', async () => {
     // TODO: read clipboard value. Running into issues reading clipboard, so will take a shortcut for now
     await helpers.click(
       boundaryWindow,
-      'section.dialog-detail >> div.rose-dialog-body >> button'
+      'section.dialog-detail >> div.rose-dialog-body >> button',
     );
     // Temporary: persist proxy from target
     const persistedProxy = await boundaryWindow.innerText(
-      'section.dialog-detail >> div.rose-dialog-body >> span.copyable-content'
+      'section.dialog-detail >> div.rose-dialog-body >> span.copyable-content',
     );
 
     // Click close popup
     await helpers.click(
       boundaryWindow,
-      'section.dialog-detail >> footer >> button'
+      'section.dialog-detail >> footer >> button',
     );
 
     // On left nav menu, click Sessions
     await boundaryWindow.waitForSelector('section.rose-layout-global >> aside');
     await helpers.click(
       boundaryWindow,
-      'section.rose-layout-global >> aside >> nav >> a >> text=Sessions'
+      'section.rose-layout-global >> aside >> nav >> a >> text=Sessions',
     );
 
     // Take screenshot
@@ -108,14 +108,14 @@ test.describe('Targets end to end test suite', async () => {
 
     // Check the right session has status pending.
     await boundaryWindow.waitForSelector(
-      'main >> div.rose-layout-page-body >> table.rose-table'
+      'main >> div.rose-layout-page-body >> table.rose-table',
     );
     // Select Proxy
     const currentProxy = await boundaryWindow.innerText(
-      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=1 >> .copyable-content'
+      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=1 >> .copyable-content',
     );
     const currentStatus = await boundaryWindow.innerText(
-      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=3 >> .hds-badge'
+      'div.rose-layout-page-body >> table >> tbody >> tr >> nth=0 >> td >> nth=3 >> .hds-badge',
     );
 
     expect(await persistedProxy).toEqual(await currentProxy);

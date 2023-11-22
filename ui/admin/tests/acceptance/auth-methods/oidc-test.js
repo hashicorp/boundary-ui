@@ -72,7 +72,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     assert.strictEqual(
       find('.rose-dropdown[open] input:checked').value,
-      instances.authMethod.attributes.state
+      instances.authMethod.attributes.state,
     );
   });
 
@@ -121,7 +121,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
             status: 400,
             code: 'error',
             message: 'Sorry!',
-          }
+          },
         );
       }
       return request;
@@ -134,12 +134,12 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     assert.notEqual(
       newState,
       authMethod.attributes.state,
-      'Auth method state is not be updated.'
+      'Auth method state is not be updated.',
     );
     assert.ok(
       find('.rose-notification-body').textContent.trim(),
       'Sorry!',
-      'Displays error message.'
+      'Displays error message.',
     );
   });
 });

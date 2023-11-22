@@ -40,7 +40,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedHostSourceIds) {
       const listOfHostSources = addToSourcesList(
         originHostSetIds,
-        selectedHostSourceIds
+        selectedHostSourceIds,
       );
       if (listOfHostSources?.length) {
         updatedAttrs.hostSetIds = listOfHostSources;
@@ -52,7 +52,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedHostSourceIds) {
       const removedHostSources = removeFromSourcesList(
         originHostSetIds,
-        selectedHostSourceIds
+        selectedHostSourceIds,
       );
       updatedAttrs.hostSetIds = removedHostSources;
     }
@@ -62,7 +62,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedBrokeredCredentials) {
       const listOfBrokeredCredentialSources = addToSourcesList(
         originalBrokeredCredentials,
-        selectedBrokeredCredentials
+        selectedBrokeredCredentials,
       );
       if (listOfBrokeredCredentialSources?.length) {
         updatedAttrs.brokeredCredentialSourceIds =
@@ -73,7 +73,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedInjectedCredentials) {
       const listOfInjectedCredentialSources = addToSourcesList(
         originalInjectedCredentials,
-        selectedInjectedCredentials
+        selectedInjectedCredentials,
       );
       if (listOfInjectedCredentialSources?.length) {
         updatedAttrs.injectedApplicationCredentialSourceIds =
@@ -86,7 +86,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedBrokeredCredentials) {
       const removedCredentialSources = removeFromSourcesList(
         originalBrokeredCredentials,
-        selectedBrokeredCredentials
+        selectedBrokeredCredentials,
       );
       updatedAttrs.brokeredCredentialSourceIds = removedCredentialSources;
     }
@@ -94,7 +94,7 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
     if (selectedInjectedCredentials) {
       const removedCredentialSources = removeFromSourcesList(
         originalInjectedCredentials,
-        selectedInjectedCredentials
+        selectedInjectedCredentials,
       );
       updatedAttrs.injectedApplicationCredentialSourceIds =
         removedCredentialSources;

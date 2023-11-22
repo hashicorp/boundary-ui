@@ -104,7 +104,7 @@ module('Acceptance | authentication', function (hooks) {
     instances.target = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withAssociations'
+      'withAssociations',
     );
     instances.session = this.server.create(
       'session',
@@ -114,7 +114,7 @@ module('Acceptance | authentication', function (hooks) {
         status: 'active',
         user: instances.user,
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -192,9 +192,9 @@ module('Acceptance | authentication', function (hooks) {
     await click('.rose-header-utilities .rose-dropdown summary');
     assert.strictEqual(
       find(
-        '.rose-header-utilities .rose-dropdown-content button'
+        '.rose-header-utilities .rose-dropdown-content button',
       ).textContent.trim(),
-      'Sign Out'
+      'Sign Out',
     );
     await click('.rose-header-utilities .rose-dropdown-content button');
     assert.notOk(currentSession().isAuthenticated);
@@ -211,7 +211,7 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.sessions);
     assert.ok(
       currentSession().isAuthenticated,
-      'Session begins authenticated, before encountering 401'
+      'Session begins authenticated, before encountering 401',
     );
     assert.ok(currentURL(), urls.targets);
     this.server.get('/sessions', () => new Response(401));
@@ -219,7 +219,7 @@ module('Acceptance | authentication', function (hooks) {
     await visit(urls.sessions);
     assert.notOk(
       currentSession().isAuthenticated,
-      'Session is unauthenticated, after encountering 401'
+      'Session is unauthenticated, after encountering 401',
     );
   });
 
@@ -250,7 +250,7 @@ module('Acceptance | authentication', function (hooks) {
     await click('[name="theme"][value="system-default-theme"]');
     assert.strictEqual(
       currentSession().get('data.theme'),
-      'system-default-theme'
+      'system-default-theme',
     );
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));

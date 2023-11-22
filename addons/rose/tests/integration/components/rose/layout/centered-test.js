@@ -29,7 +29,7 @@ module('Integration | Component | rose/layout/centered', function (hooks) {
     </Rose::Layout::Centered>`);
     assert.strictEqual(
       find('.rose-layout-centered').textContent.trim(),
-      'Layout content'
+      'Layout content',
     );
   });
 });

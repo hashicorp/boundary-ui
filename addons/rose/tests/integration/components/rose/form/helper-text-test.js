@@ -21,7 +21,7 @@ module('Integration | Component | rose/form/helper-text', function (hooks) {
     assert.ok(find('.rose-form-helper-text'));
     assert.strictEqual(
       find('.rose-form-helper-text').textContent.trim(),
-      'Helper text'
+      'Helper text',
     );
   });
 });

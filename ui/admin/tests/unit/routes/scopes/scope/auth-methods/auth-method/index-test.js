@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/auth-methods/auth-method/index'
+        'route:scopes/scope/auth-methods/auth-method/index',
       );
       assert.ok(route);
     });
-  }
+  },
 );

@@ -114,7 +114,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(ACCESS_KEY_ID_FIELD_SELECTOR, ACCESS_KEY_ID_FIELD_TEXT);
     await fillIn(
       SECRET_ACCESS_KEY_FIELD_SELECTOR,
-      SECRET_ACCESS_KEY_FIELD_TEXT
+      SECRET_ACCESS_KEY_FIELD_TEXT,
     );
     await click(SAVE_BUTTON_SELECTOR, 'Click save');
 
@@ -134,12 +134,12 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(ACCESS_KEY_ID_FIELD_SELECTOR, ACCESS_KEY_ID_FIELD_TEXT);
     await fillIn(
       SECRET_ACCESS_KEY_FIELD_SELECTOR,
-      SECRET_ACCESS_KEY_FIELD_TEXT
+      SECRET_ACCESS_KEY_FIELD_TEXT,
     );
     await click(SECRET_FIELD_BUTTON_SELECTOR, 'Click cancel button');
     await click(
       findAll(SECRET_FIELD_BUTTON_SELECTOR)[1],
-      'Click cancel button'
+      'Click cancel button',
     );
     await click(SAVE_BUTTON_SELECTOR, 'Click save');
 
@@ -167,7 +167,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 

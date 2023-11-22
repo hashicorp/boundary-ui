@@ -25,11 +25,11 @@ module('Unit | Adapter | storage bucket', function (hooks) {
       'storage-bucket',
       null,
       mockSnapshot,
-      'createRecord'
+      'createRecord',
     );
     assert.strictEqual(
       createRecordURL,
-      '/v1/storage-buckets?plugin_name=aws_s3'
+      '/v1/storage-buckets?plugin_name=aws_s3',
     );
   });
 });

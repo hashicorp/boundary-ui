@@ -36,12 +36,12 @@ export default class TargetSerializer extends ApplicationSerializer {
     if (brokeredCredentialSourceIDs)
       serialized = this.serializeWithBrokeredCredentialSources(
         snapshot,
-        brokeredCredentialSourceIDs
+        brokeredCredentialSourceIDs,
       );
     if (injectedApplicationCredentialSourceIDs)
       serialized = this.serializeWithInjectedApplicationCredentialSources(
         snapshot,
-        injectedApplicationCredentialSourceIDs
+        injectedApplicationCredentialSourceIDs,
       );
 
     // Delete session recording related fields from non-SSH targets
@@ -75,7 +75,7 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serializeWithBrokeredCredentialSources(
     snapshot,
-    brokered_credential_source_ids
+    brokered_credential_source_ids,
   ) {
     return {
       version: snapshot.attr('version'),
@@ -92,7 +92,7 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serializeWithInjectedApplicationCredentialSources(
     snapshot,
-    injected_application_credential_source_ids
+    injected_application_credential_source_ids,
   ) {
     return {
       version: snapshot.attr('version'),

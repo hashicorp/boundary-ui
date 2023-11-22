@@ -50,7 +50,7 @@ module('Acceptance | managed-groups | members', function (hooks) {
         scope: instances.scopes.org,
         type: TYPE_AUTH_METHOD_OIDC,
       },
-      'withAccountsAndUsersAndManagedGroups'
+      'withAccountsAndUsersAndManagedGroups',
     );
 
     instances.managedGroup = this.server.db.managedGroups[0];

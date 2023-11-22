@@ -48,7 +48,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
             credential_store_id,
           });
         }
-      })
+      }),
     );
     const credentialLibraries = this.store.peekAll('credential-library');
     const credentials = this.store.peekAll('credential');
@@ -73,7 +73,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
   async save(target, credentialLibraryIDs) {
     await target.addInjectedApplicationCredentialSources(credentialLibraryIDs);
     this.router.replaceWith(
-      'scopes.scope.targets.target.injected-application-credential-sources'
+      'scopes.scope.targets.target.injected-application-credential-sources',
     );
   }
 
@@ -83,7 +83,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
   @action
   cancel() {
     this.router.replaceWith(
-      'scopes.scope.targets.target.injected-application-credential-sources'
+      'scopes.scope.targets.target.injected-application-credential-sources',
     );
   }
 }

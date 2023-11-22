@@ -35,7 +35,7 @@
   }
 }
 
-@media (max-width: media.width(medium)) {
+@media (width <= (media.width(medium))) {
   .rose-layout-sidebar {
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;

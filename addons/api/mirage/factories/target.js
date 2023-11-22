@@ -60,7 +60,7 @@ export default factory.extend({
 
       randomlySelectedCredentialLibraries = server.schema.credentialLibraries
         .where(
-          (credentialLibrary) => credentialLibrary.scopeId === target.scope.id
+          (credentialLibrary) => credentialLibrary.scopeId === target.scope.id,
         )
         .models.filter(() => randomBoolean())
         .map((cred) => cred.id);

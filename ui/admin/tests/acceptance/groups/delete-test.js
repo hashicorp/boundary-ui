@@ -62,7 +62,7 @@ module('Acceptance | groups | delete', function (hooks) {
       instances.group.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.group);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -76,7 +76,7 @@ module('Acceptance | groups | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.group);
@@ -84,7 +84,7 @@ module('Acceptance | groups | delete', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
   });
 });

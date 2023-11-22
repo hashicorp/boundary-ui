@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/groups/group/add-members'
+        'controller:scopes/scope/groups/group/add-members',
       );
       assert.ok(controller);
     });
-  }
+  },
 );

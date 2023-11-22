@@ -83,7 +83,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.credentialLibrary);
     assert.strictEqual(
       this.server.schema.credentialLibraries.all().models[0].name,
-      'random string'
+      'random string',
     );
   });
 
@@ -91,7 +91,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
     await visit(urls.credentialLibrary);
     assert.notOk(find('form [type="button"]'));
@@ -105,11 +105,11 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await click('.rose-form-actions [type="button"]');
     assert.notEqual(
       this.server.schema.credentialLibraries.all().models[0].name,
-      'random string'
+      'random string',
     );
     assert.strictEqual(
       find('[name="name"]').value,
-      instances.credentialLibrary.name
+      instances.credentialLibrary.name,
     );
   });
 
@@ -131,7 +131,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.credentialLibrary);
@@ -140,11 +140,11 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.hds-form-error__message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -167,7 +167,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       assert.strictEqual(currentURL(), urls.credentialLibraries);
       assert.notEqual(
         this.server.schema.credentialLibraries.all().models[0].name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -190,7 +190,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       assert.strictEqual(currentURL(), urls.credentialLibrary);
       assert.notEqual(
         this.server.schema.credentialLibraries.all().models[0].name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -203,7 +203,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
     await visit(
-      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`
+      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`,
     );
     await click('form [type="button"]:not(:disabled)', 'Activate edit mode');
     await fillIn('[name="name"]', 'name');
@@ -216,20 +216,20 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await fillIn('[name="key_id"]', 'key_id');
     await fillIn(
       '[name="critical_options"] tbody td:nth-of-type(1) input',
-      'co_key'
+      'co_key',
     );
     await fillIn(
       '[name="critical_options"] tbody td:nth-of-type(2) input',
-      'co_value'
+      'co_value',
     );
     await click('[name="critical_options"] button');
     await fillIn(
       '[name="extensions"] tbody td:nth-of-type(1) input',
-      'ext_key'
+      'ext_key',
     );
     await fillIn(
       '[name="extensions"] tbody td:nth-of-type(2) input',
-      'ext_value'
+      'ext_value',
     );
     await click('[name="extensions"] button');
     await click('[type="submit"]');

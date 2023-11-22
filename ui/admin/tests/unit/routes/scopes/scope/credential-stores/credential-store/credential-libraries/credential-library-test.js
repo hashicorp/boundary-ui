@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/credential-stores/credential-store/credential-libraries/credential-library'
+        'route:scopes/scope/credential-stores/credential-store/credential-libraries/credential-library',
       );
       assert.ok(route);
     });
-  }
+  },
 );

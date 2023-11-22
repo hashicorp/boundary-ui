@@ -94,11 +94,11 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     assert.expect(1);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.vaultCredentialStore);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -106,11 +106,11 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     assert.expect(1);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.staticCredentialStore);
     assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger')
+      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
   });
 
@@ -172,7 +172,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.staticCredentialStore);
@@ -190,7 +190,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.vaultCredentialStore);

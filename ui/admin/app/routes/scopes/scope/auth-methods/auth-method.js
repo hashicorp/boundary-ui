@@ -43,7 +43,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
         transition.to.name,
         authMethod.scopeID,
         authMethod.id,
-        ...paramValues
+        ...paramValues,
       );
     }
   }
@@ -67,12 +67,12 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
     }
     if (authMethod.signing_algorithms) {
       authMethod.signing_algorithms = structuredClone(
-        authMethod.signing_algorithms
+        authMethod.signing_algorithms,
       );
     }
     if (authMethod.allowed_audiences) {
       authMethod.allowed_audiences = structuredClone(
-        authMethod.allowed_audiences
+        authMethod.allowed_audiences,
       );
     }
     if (authMethod.idp_ca_certs) {
@@ -80,7 +80,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
     }
     if (authMethod.account_claim_maps) {
       authMethod.account_claim_maps = structuredClone(
-        authMethod.account_claim_maps
+        authMethod.account_claim_maps,
       );
     }
     if (authMethod.certificates) {
@@ -88,7 +88,7 @@ export default class ScopesScopeAuthMethodsAuthMethodRoute extends Route {
     }
     if (authMethod.account_attribute_maps) {
       authMethod.account_attribute_maps = structuredClone(
-        authMethod.account_attribute_maps
+        authMethod.account_attribute_maps,
       );
     }
   }

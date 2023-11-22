@@ -184,7 +184,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostCatalog,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       data: {
@@ -234,7 +234,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostCatalog,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       data: {
@@ -293,7 +293,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostCatalog,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       data: {

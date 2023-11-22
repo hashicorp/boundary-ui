@@ -48,7 +48,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
             credential_store_id,
           });
         }
-      })
+      }),
     );
     const credentialLibraries = this.store.peekAll('credential-library');
     const credentials = this.store.peekAll('credential');
@@ -74,7 +74,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
   async save(target, credentialLibraryIDs) {
     await target.addBrokeredCredentialSources(credentialLibraryIDs);
     this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources'
+      'scopes.scope.targets.target.brokered-credential-sources',
     );
   }
 
@@ -84,7 +84,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
   @action
   cancel() {
     this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources'
+      'scopes.scope.targets.target.brokered-credential-sources',
     );
   }
 }

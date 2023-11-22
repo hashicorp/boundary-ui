@@ -47,7 +47,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       return this.resourceFilterStore.queryBy(
         'auth-method',
         { type },
-        { scope_id }
+        { scope_id },
       );
     }
   }
@@ -72,14 +72,14 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   @loading
   @notifyError(({ message }) => message)
   @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success'
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(authMethod) {
     await authMethod.save();
     if (this.can.can('read model', authMethod)) {
       await this.router.transitionTo(
         'scopes.scope.auth-methods.auth-method',
-        authMethod
+        authMethod,
       );
     } else {
       await this.router.transitionTo('scopes.scope.auth-methods');
@@ -145,7 +145,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess(
-    'resources.auth-method.notifications.remove-as-primary-success'
+    'resources.auth-method.notifications.remove-as-primary-success',
   )
   async removeAsPrimary(authMethod) {
     const scopeModel = this.modelFor('scopes.scope');

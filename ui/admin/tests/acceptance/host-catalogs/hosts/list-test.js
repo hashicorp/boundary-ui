@@ -73,7 +73,9 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     assert.expect(2);
     await visit(urls.hostCatalog);
     assert.ok(
-      instances.hostCatalog.authorized_collection_actions.hosts.includes('list')
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'list',
+      ),
     );
     assert.ok(find(`[href="${urls.hosts}"]`));
   });
@@ -83,7 +85,9 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     instances.hostCatalog.authorized_collection_actions.hosts = [];
     await visit(urls.hostCatalog);
     assert.notOk(
-      instances.hostCatalog.authorized_collection_actions.hosts.includes('list')
+      instances.hostCatalog.authorized_collection_actions.hosts.includes(
+        'list',
+      ),
     );
     assert.notOk(find(`[href="${urls.hosts}"]`));
   });

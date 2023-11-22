@@ -122,7 +122,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   get isActive() {
     const pendingOrActiveSessions = this.sessions.filter(
-      (s) => s.isActive || s.isPending
+      (s) => s.isActive || s.isPending,
     );
     return Boolean(pendingOrActiveSessions.length);
   }
@@ -195,7 +195,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   addBrokeredCredentialSources(
     brokeredCredentialSourceIDs,
-    options = { adapterOptions: {} }
+    options = { adapterOptions: {} },
   ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
@@ -221,7 +221,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   addInjectedApplicationCredentialSources(
     injectedApplicationCredentialSourceIDs,
-    options = { adapterOptions: {} }
+    options = { adapterOptions: {} },
   ) {
     const defaultAdapterOptions = {
       method: 'add-credential-sources',
@@ -247,7 +247,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   removeBrokeredCredentialSources(
     brokeredCredentialSourceIDs,
-    options = { adapterOptions: {} }
+    options = { adapterOptions: {} },
   ) {
     const defaultAdapterOptions = {
       method: 'remove-credential-sources',
@@ -272,7 +272,7 @@ export default class TargetModel extends GeneratedTargetModel {
   removeBrokeredCredentialSource(brokeredCredentialSourceID, options) {
     return this.removeBrokeredCredentialSources(
       [brokeredCredentialSourceID],
-      options
+      options,
     );
   }
 
@@ -286,7 +286,7 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   removeInjectedApplicationCredentialSources(
     injectedApplicationCredentialSourceIDs,
-    options = { adapterOptions: {} }
+    options = { adapterOptions: {} },
   ) {
     const defaultAdapterOptions = {
       method: 'remove-credential-sources',
@@ -310,11 +310,11 @@ export default class TargetModel extends GeneratedTargetModel {
    */
   removeInjectedApplicationCredentialSource(
     injectedApplicationCredentialSourceID,
-    options
+    options,
   ) {
     return this.removeInjectedApplicationCredentialSources(
       [injectedApplicationCredentialSourceID],
-      options
+      options,
     );
   }
 

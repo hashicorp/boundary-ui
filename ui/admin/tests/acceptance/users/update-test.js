@@ -61,7 +61,7 @@ module('Acceptance | users | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.user);
     assert.strictEqual(
       this.server.schema.users.first().name,
-      'Updated user name'
+      'Updated user name',
     );
   });
 
@@ -109,7 +109,7 @@ module('Acceptance | users | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 

@@ -31,7 +31,7 @@ exports.authenticateBoundaryCli = async () => {
         process.env.E2E_PASSWORD_AUTH_METHOD_ID +
         ' -login-name=' +
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
-        ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD'
+        ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -59,7 +59,7 @@ exports.connectToTarget = async (targetId) => {
         ' -o StrictHostKeyChecking=no' +
         ' -o IdentitiesOnly=yes' + // forces the use of the provided key
         ' -p {{boundary.port}}' +
-        ' {{boundary.ip}}'
+        ' {{boundary.ip}}',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -80,8 +80,8 @@ exports.createNewOrgCli = async () => {
         `boundary scopes create \
          -name="${orgName}" \
          -scope-id=global \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -115,8 +115,8 @@ exports.createNewProjectCli = async (orgId) => {
         `boundary scopes create \
          -name="${projectName}" \
          -scope-id=${orgId} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -136,8 +136,8 @@ exports.createNewControllerLedWorkerCli = async () => {
       execSync(
         `boundary workers create controller-led \
          -name="${workerName.toLowerCase()}" \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -159,8 +159,8 @@ exports.createNewPasswordAuthMethodCli = async (scopeId) => {
         `boundary auth-methods create password \
          -name "${authMethodName}" \
          -scope-id ${scopeId} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -179,7 +179,7 @@ exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
       `boundary scopes update \
         -id=${scopeId} \
         -primary-auth-method-id ${authMethodId} \
-        -format json`
+        -format json`,
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -202,8 +202,8 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
          -auth-method-id ${authMethodId} \
          -login-name ${login} \
          -password env://ACCOUNT_PASSWORD \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -225,8 +225,8 @@ exports.createNewRoleCli = async (scopeId) => {
         `boundary roles create \
          -scope-id ${scopeId} \
          -name ${roleName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -248,8 +248,8 @@ exports.createNewGroupCli = async (scopeId) => {
         `boundary groups create \
          -scope-id ${scopeId} \
          -name ${groupName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -271,8 +271,8 @@ exports.createNewUserCli = async (scopeId) => {
         `boundary users create \
          -scope-id ${scopeId} \
          -name ${userName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -294,8 +294,8 @@ exports.createNewStaticHostCatalogCli = async (projectId) => {
         `boundary host-catalogs create static \
          -scope-id ${projectId} \
          -name ${hostCatalogName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -322,8 +322,8 @@ exports.createDynamicAwsHostCatalogCli = async (projectId) => {
           -attr region=us-east-1 \
           -secret access_key_id=env://E2E_AWS_ACCESS_KEY_ID \
           -secret secret_access_key=env://E2E_AWS_SECRET_ACCESS_KEY \
-          -format json`
-      )
+          -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -346,8 +346,8 @@ exports.createNewStaticHostCli = async (hostCatalogId) => {
          -host-catalog-id ${hostCatalogId} \
          -name ${hostName} \
          -address localhost \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -369,8 +369,8 @@ exports.createNewHostSetCli = async (hostCatalogId) => {
         `boundary host-sets create static \
          -host-catalog-id ${hostCatalogId} \
          -name ${hostSetName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -392,8 +392,8 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
         `boundary credential-stores create static \
          -scope-id ${projectId} \
          -name ${credentialStoreName} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -411,15 +411,15 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
 exports.createNewVaultCredentialStoreCli = async (
   projectId,
   secretPolicyName,
-  boundaryPolicyName
+  boundaryPolicyName,
 ) => {
   let credentialStore;
   try {
     execSync(
-      `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`
+      `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
     );
     execSync(
-      `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`
+      `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
     );
     const vaultToken = JSON.parse(
       execSync(
@@ -430,8 +430,8 @@ exports.createNewVaultCredentialStoreCli = async (
           -orphan=true \
           -period=20m \
           -renewable=true \
-          -format=json`
-      )
+          -format=json`,
+      ),
     );
     const clientToken = vaultToken.auth.client_token;
     const credentialStoreName = 'vault-credential-store-' + nanoid();
@@ -442,8 +442,8 @@ exports.createNewVaultCredentialStoreCli = async (
           -name ${credentialStoreName} \
           -vault-address ${process.env.E2E_VAULT_ADDR} \
           -vault-token ${clientToken} \
-          -format json`
-      )
+          -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -468,8 +468,8 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
          -credential-store-id ${credentialStoreId} \
          -username ${login} \
          -password env://CREDENTIALS_PASSWORD \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -493,8 +493,8 @@ exports.createNewTcpTarget = async (projectId) => {
          -default-port ${defaultPort} \
          -name ${targetName} \
          -scope-id ${projectId} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -518,8 +518,8 @@ exports.createNewSshTarget = async (projectId) => {
          -default-port ${defaultPort} \
          -name ${targetName} \
          -scope-id ${projectId} \
-         -format json`
-      )
+         -format json`,
+      ),
     ).item;
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -540,17 +540,17 @@ exports.getSessionCli = async (orgName, projectName, targetName) => {
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     const org = orgs.items.filter((obj) => obj.name == orgName)[0];
     const projects = JSON.parse(
-      execSync(`boundary scopes list -format json -scope-id ${org.id}`)
+      execSync(`boundary scopes list -format json -scope-id ${org.id}`),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
     const targets = JSON.parse(
-      execSync(`boundary targets list -format json -scope-id ${project.id}`)
+      execSync(`boundary targets list -format json -scope-id ${project.id}`),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
     session = JSON.parse(
       execSync(
-        `boundary targets authorize-session -id ${target.id} -format json`
-      )
+        `boundary targets authorize-session -id ${target.id} -format json`,
+      ),
     );
   } catch (e) {
     console.log(`${e.stderr}`);

@@ -103,7 +103,7 @@ module('Acceptance | workers | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.worker);

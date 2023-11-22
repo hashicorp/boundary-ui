@@ -206,7 +206,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
 
     assert.strictEqual(
       find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-      storageBucketTwo.name
+      storageBucketTwo.name,
     );
   });
 
@@ -230,7 +230,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
 
     assert.strictEqual(
       find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-      storageBucketOne.name
+      storageBucketOne.name,
     );
   });
 });

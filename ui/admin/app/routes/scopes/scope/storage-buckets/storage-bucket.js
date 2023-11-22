@@ -37,7 +37,7 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
       this.router.replaceWith(
         'scopes.scope.storage-buckets.storage-bucket',
         storageBucket.scopeID,
-        storageBucket.id
+        storageBucket.id,
       );
     }
   }

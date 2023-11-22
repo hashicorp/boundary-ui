@@ -51,7 +51,7 @@ module('Acceptance | roles | list', function (hooks) {
     assert.expect(2);
     await visit(urls.scopes.org);
     assert.ok(
-      instances.scopes.org.authorized_collection_actions.roles.includes('list')
+      instances.scopes.org.authorized_collection_actions.roles.includes('list'),
     );
     assert.ok(find(`[href="${urls.roles}"]`));
   });
@@ -61,7 +61,7 @@ module('Acceptance | roles | list', function (hooks) {
     instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.scopes.org);
     assert.notOk(
-      instances.scopes.org.authorized_collection_actions.roles.includes('list')
+      instances.scopes.org.authorized_collection_actions.roles.includes('list'),
     );
     assert.notOk(find(`[href="${urls.roles}"]`));
   });

@@ -61,7 +61,7 @@ class Session {
         this.#process = spawnedSession.childProcess;
         this.#id = this.#proxyDetails.session_id;
         return this.#proxyDetails;
-      }
+      },
     );
   }
 

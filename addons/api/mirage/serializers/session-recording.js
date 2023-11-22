@@ -12,7 +12,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     const { connectionRecordings, scopes } = this.schema;
 
@@ -22,7 +22,7 @@ export default ApplicationSerializer.extend({
         const connection = connectionRecordings.find(id);
         return ConnectionRecordingSerializer.prototype._hashForModel.apply(
           this,
-          [connection]
+          [connection],
         );
       });
     }

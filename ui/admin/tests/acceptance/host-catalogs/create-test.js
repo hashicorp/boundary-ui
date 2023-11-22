@@ -50,7 +50,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -151,7 +151,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.ok(find(`[href="${urls.newHostCatalog}"]`));
   });
@@ -164,7 +164,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.notOk(find(`[href="${urls.newStaticHostCatalog}"]`));
   });
@@ -187,18 +187,18 @@ module('Acceptance | host-catalogs | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newStaticHostCatalog);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -214,7 +214,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.false(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.hostCatalogs);
   });

@@ -74,7 +74,7 @@ export default class AuthMethodSerializer extends ApplicationSerializer {
   normalizeArrayResponse() {
     const normalized = super.normalizeArrayResponse(...arguments);
     normalized.data = normalized.data.sort((a) =>
-      a.attributes.is_primary ? -1 : 1
+      a.attributes.is_primary ? -1 : 1,
     );
     return normalized;
   }

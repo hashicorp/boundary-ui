@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
   _hashForModel(/* model */) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     // in a real API, the following fields are set-only and returned in
     // associated HMAC fields

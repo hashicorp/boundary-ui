@@ -110,7 +110,7 @@ module('Unit | Model | storage bucket', function (hooks) {
     assert.strictEqual(modelPlugin.type, 'plugin');
     assert.strictEqual(
       modelPlugin.plugin.name,
-      TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3
+      TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
     );
   });
 });

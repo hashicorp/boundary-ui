@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/targets/target/enable-session-recording/index'
+        'route:scopes/scope/targets/target/enable-session-recording/index',
       );
       assert.ok(route);
     });
-  }
+  },
 );

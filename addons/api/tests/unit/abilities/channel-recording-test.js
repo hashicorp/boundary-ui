@@ -35,7 +35,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
       'connection-recording',
       {
         session_recording: sessionRecordingModel,
-      }
+      },
     );
     const channelRecordingModel = store.createRecord('channel-recording', {
       mime_types: [MIME_TYPE_ASCIICAST],
@@ -43,7 +43,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.true(
-      canService.can('getAsciicast channel-recording', channelRecordingModel)
+      canService.can('getAsciicast channel-recording', channelRecordingModel),
     );
   });
 
@@ -58,7 +58,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
       'connection-recording',
       {
         session_recording: sessionRecordingModel,
-      }
+      },
     );
     const channelRecordingModel = store.createRecord('channel-recording', {
       mime_types: ['unknown'],
@@ -66,7 +66,7 @@ module('Unit | Ability | channel-recording', function (hooks) {
     });
 
     assert.false(
-      canService.can('getAsciicast channel-recording', channelRecordingModel)
+      canService.can('getAsciicast channel-recording', channelRecordingModel),
     );
   });
 });

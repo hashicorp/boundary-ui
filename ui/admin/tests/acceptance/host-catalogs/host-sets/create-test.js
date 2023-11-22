@@ -109,7 +109,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
 
     const count = getHostSetCount();
     await visit(
-      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
     );
     const name = 'aws host set';
     await fillIn(NAME_SELECTOR, name);
@@ -141,7 +141,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
 
     const count = getHostSetCount();
     await visit(
-      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
     );
     const name = 'azure host set';
     await fillIn(NAME_SELECTOR, name);
@@ -164,8 +164,8 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     await visit(urls.hostCatalog);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
   });
@@ -176,8 +176,8 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     await visit(urls.hostSets);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`[href="${urls.newHostSet}"]`));
   });
@@ -210,18 +210,18 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newHostSet);
     await click(SUBMIT_BTN_SELECTOR);
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -229,15 +229,15 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] =
       instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newHostSet);
 
     assert.false(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.hostSets);
   });

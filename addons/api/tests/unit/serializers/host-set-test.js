@@ -116,7 +116,7 @@ module('Unit | Serializer | host set', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostSetModelClass,
-      payload
+      payload,
     );
 
     assert.deepEqual(normalized, {
@@ -153,7 +153,7 @@ module('Unit | Serializer | host set', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostSet,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
@@ -191,7 +191,7 @@ module('Unit | Serializer | host set', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       hostSetModelClass,
-      payload
+      payload,
     );
 
     assert.deepEqual(normalized, {

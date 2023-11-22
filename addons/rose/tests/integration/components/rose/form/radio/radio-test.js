@@ -24,14 +24,14 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
 
   test('it supports an icon', async function (assert) {
     await render(
-      hbs`<Rose::Form::Radio::Radio @icon="flight-icons/svg/user-circle-16" />`
+      hbs`<Rose::Form::Radio::Radio @icon="flight-icons/svg/user-circle-16" />`,
     );
     assert.ok(find('svg'));
   });
 
   test('it is checked when @value and @selectedValue values match', async function (assert) {
     await render(
-      hbs`<Rose::Form::Radio::Radio @value="tree" @selectedValue="tree"/>`
+      hbs`<Rose::Form::Radio::Radio @value="tree" @selectedValue="tree"/>`,
     );
     assert.true(await find('input').checked);
   });
@@ -44,7 +44,7 @@ module('Integration | Component | rose/form/radio/radio', function (hooks) {
     assert.false(await find('input').checked);
 
     await render(
-      hbs`<Rose::Form::Radio::Radio @value="root" @selectedValue="tree"/>`
+      hbs`<Rose::Form::Radio::Radio @value="root" @selectedValue="tree"/>`,
     );
     assert.false(await find('input').checked);
   });
