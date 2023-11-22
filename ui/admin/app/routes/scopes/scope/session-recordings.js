@@ -44,7 +44,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         recursive: true,
       });
 
-      // Sort sessions by created time descending (newest on top)...
+      // Sort sessions by created time descending (newest on top)
       const sortedSessionRecordings = sortBy(
         sessionRecordings,
         'created_time',
