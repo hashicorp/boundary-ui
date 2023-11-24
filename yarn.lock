@@ -10884,25 +10884,6 @@ eslint-plugin-ember@^11.11.1:
     requireindex "^1.2.0"
     snake-case "^3.0.3"
 
-eslint-plugin-ember@^11.5.0:
-  version "11.10.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-ember/-/eslint-plugin-ember-11.10.0.tgz#46a696ebabcfefcf8212eb0eb2b11d61360c70fc"
-  integrity sha512-/5VanfpfzIdmWgXWyQ6ylAJWITu8mXivRce06h0uoifVpUoGaBdAkwuto/PLGfDxWdi43xWUFLb5Tpkhx2MoFg==
-  dependencies:
-    "@ember-data/rfc395-data" "^0.0.4"
-    "@glimmer/syntax" "^0.84.2"
-    css-tree "^2.0.4"
-    ember-rfc176-data "^0.3.15"
-    ember-template-imports "^3.4.2"
-    ember-template-recast "^6.1.4"
-    eslint-utils "^3.0.0"
-    estraverse "^5.2.0"
-    lodash.camelcase "^4.1.1"
-    lodash.kebabcase "^4.1.1"
-    magic-string "^0.30.0"
-    requireindex "^1.2.0"
-    snake-case "^3.0.3"
-
 eslint-plugin-es@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-es/-/eslint-plugin-es-4.1.0.tgz#f0822f0c18a535a97c3e714e89f88586a7641ec9"
