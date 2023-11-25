@@ -21,27 +21,23 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('its namespace is equal to the configured namespace', function (assert) {
-    assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(adapter.namespace);
     assert.strictEqual(adapter.namespace, config.api.namespace);
   });
 
   test('it generates correct URL prefixes', function (assert) {
-    assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(config.api.namespace);
     assert.strictEqual(adapter.urlPrefix(), config.api.namespace);
   });
 
   test('it generates correct default URL suffixes', function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     assert.strictEqual(adapter.urlSuffix(), '');
   });
 
   test('it generates URL suffixes with optional `method` from adapterOptions', function (assert) {
-    assert.expect(2);
     const method = 'set-something';
     const adapter = this.owner.lookup('adapter:application');
     const suffix = adapter.urlSuffix(null, null, {
@@ -52,7 +48,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it generates correct complete URLs', function (assert) {
-    assert.expect(6);
     const scopeID = 'o_1';
     const method = 'my-custom-method';
     const mockSnapshot = {
@@ -103,7 +98,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
       assert.strictEqual(
@@ -117,7 +111,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     // TODO this is icky, should be changed to a spy or stub
     const originalAjax = RESTAdapter.prototype.ajax;
@@ -129,7 +122,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it rewrites PUT/PATCH to POST when `adapterOptions.method` is passed to `updateRecord`', function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     const snapshot = store.createRecord('role', {})._createSnapshot();
@@ -146,7 +138,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it prenormalizes "empty" responses into a form that the fetch-manager will not reject', async function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/users', () => new Response({}));
@@ -160,14 +151,12 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it correctly identifies 400 responses as invalid', function (assert) {
-    assert.expect(2);
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(adapter.isInvalid(400));
     assert.notOk(adapter.isInvalid(401));
   });
 
   test('it returns an proper InvalidError from handleResponse', function (assert) {
-    assert.expect(4);
     const adapter = this.owner.lookup('adapter:application');
     const payload = {
       status: 400,
@@ -182,7 +171,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it assigns convenience booleans for error types', function (assert) {
-    assert.expect(6);
     const adapter = this.owner.lookup('adapter:application');
     const getResponse = (status) =>
       adapter.handleResponse(status, {}, { status });
@@ -195,7 +183,6 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it returns field-level errors in InvalidError from handleResponse', function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     const payload = {
       status: 400,

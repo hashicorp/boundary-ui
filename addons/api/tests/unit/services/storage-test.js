@@ -10,14 +10,12 @@ module('Unit | Service | storage', function (hooks) {
   setupTest(hooks);
 
   test('it can persist values', function (assert) {
-    assert.expect(1);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
     assert.strictEqual(service.getItem('foo'), 'bar');
   });
 
   test('it can remove persisted values', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
     assert.strictEqual(service.getItem('foo'), 'bar');
@@ -29,14 +27,12 @@ module('Unit | Service | storage', function (hooks) {
   // if we switch to random test ordering
 
   test("it's in-memory storage is implicitly refreshed for every test case", function (assert) {
-    assert.expect(1);
     const service = this.owner.lookup('service:storage');
     service.setItem('foo', 'bar');
     assert.strictEqual(service.getItem('foo'), 'bar');
   });
 
   test("it's in-memory storage is implicitly refreshed for every test case, and thus values from previous runs are not present", function (assert) {
-    assert.expect(1);
     const service = this.owner.lookup('service:storage');
     assert.notOk(service.getItem('foo'));
   });

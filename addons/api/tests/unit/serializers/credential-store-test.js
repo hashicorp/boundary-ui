@@ -10,7 +10,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   setupTest(hooks);
 
   test('it serializes vault-type correctly on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-store');
     const record = store.createRecord('credential-store', {
@@ -50,7 +49,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it serializes vault-type correctly on update', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-store');
     store.push({
@@ -97,7 +95,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it serializes empty strings to null for vault-type credential store', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
       address: '',
@@ -129,7 +126,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it does not serialize token if present but falsy for vault-type credential store', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
       token: null,
@@ -166,7 +162,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it does not serialize client certificate key if present but falsy when client certificate is present for vault-type credential store', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
       client_certificate: 'client-cert-123',
@@ -226,7 +221,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it serializes empty strings to null for static-type credential store', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
       name: '',
@@ -242,7 +236,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it serializes static-type correctly on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-store', {
       type: 'static',
@@ -257,7 +250,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it serializes static-type correctly on update', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -280,7 +272,6 @@ module('Unit | Serializer | credential store', function (hooks) {
   });
 
   test('it normalizes vault type credential store record', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-store');
     const credentialStoreModelClass =

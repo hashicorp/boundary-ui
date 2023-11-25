@@ -14,7 +14,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   setupTest(hooks);
 
   test('it serializes correctly on create with no filter provided', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     const record = store.createRecord('managed-group', {
@@ -38,7 +37,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it serializes correctly on create when filter provided', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     const record = store.createRecord('managed-group', {
@@ -66,7 +64,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it serializes correctly on create when group names are provided', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     const record = store.createRecord('managed-group', {
@@ -94,7 +91,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it does not serialize version when it has null or undefined value', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     store.push({
@@ -127,7 +123,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it does not serialize readOnly attributes', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     const record = store.createRecord('managed-group', {
@@ -153,7 +148,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it serializes correctly on update', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     store.push({
@@ -187,7 +181,6 @@ module('Unit | Serializer | Managed group', function (hooks) {
   });
 
   test('it normalizes correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
     const hostSetModelClass = store.createRecord('managed-group').constructor;

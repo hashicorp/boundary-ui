@@ -12,7 +12,6 @@ module('Unit | Model | group', function (hooks) {
   setupMirage(hooks);
 
   test('it has a `members` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -63,7 +62,6 @@ module('Unit | Model | group', function (hooks) {
   });
 
   test('it has an `addMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
-    assert.expect(1);
     this.server.post('/v1/groups/123abc:add-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -94,7 +92,6 @@ module('Unit | Model | group', function (hooks) {
   });
 
   test('it has a `removeMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
-    assert.expect(1);
     this.server.post('/v1/groups/123abc:remove-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -125,7 +122,6 @@ module('Unit | Model | group', function (hooks) {
   });
 
   test('it has a `removeMember` method that deletes a single member set using `removeMembers` method', async function (assert) {
-    assert.expect(1);
     this.server.post('/v1/groups/123abc:remove-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -156,7 +152,6 @@ module('Unit | Model | group', function (hooks) {
   });
 
   test('it defaults `members_ids` to an empty array when model instance does not define it', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {

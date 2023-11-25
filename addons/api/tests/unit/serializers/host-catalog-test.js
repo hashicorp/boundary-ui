@@ -17,7 +17,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it serializes a static host-catalog as expected', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       name: 'static',
@@ -33,7 +32,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it serializes a new aws plugin as expected, ignoring azure fields', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: 'aws',
@@ -68,7 +66,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it serializes a new azure record as expected, ignoring aws fields', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: 'azure',
@@ -104,7 +101,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it serializes an existing aws record correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -135,7 +131,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it serializes an existing azure record correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -170,7 +165,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it normalizes an static host catalog as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
     const hostCatalog = store.createRecord('host-catalog').constructor;
@@ -207,7 +201,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it normalizes an aws plugin type host catalog as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
     const hostCatalog = store.createRecord('host-catalog').constructor;
@@ -264,7 +257,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
   });
 
   test('it normalizes an azure plugin type host catalog as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
     const hostCatalog = store.createRecord('host-catalog').constructor;

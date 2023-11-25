@@ -25,7 +25,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes password records', function (assert) {
-    assert.expect(2);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_PASSWORD,
@@ -41,7 +40,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes OIDC records without state', function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
@@ -91,7 +89,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes LDAP records without state', function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
@@ -156,7 +153,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test("OIDC auth-method doesn't serialize client secrets when not set", function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
@@ -205,7 +201,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test("LDAP auth-method doesn't serialize client secrets when not set", function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
@@ -269,7 +264,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes OIDC records with only state and version when `adapterOptions.state` is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('auth-method');
     const record = store.createRecord('auth-method', {
@@ -293,7 +287,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it serializes LDAP records with only state and version when `adapterOptions.state` is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('auth-method');
     const record = store.createRecord('auth-method', {
@@ -317,7 +310,6 @@ module('Unit | Serializer | auth method', function (hooks) {
   });
 
   test('it sorts primary first in normalizeArrayResponse', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('auth-method');
     const modelClass = store.createRecord('auth-method').constructor;

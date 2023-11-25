@@ -17,7 +17,6 @@ module('Unit | Model | channel-recording', function (hooks) {
   });
 
   test('it has isAsciicast property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('channel-recording', {
       mime_types: [MIME_TYPE_ASCIICAST],
@@ -30,7 +29,6 @@ module('Unit | Model | channel-recording', function (hooks) {
   });
 
   test('it has isAsciicast property and returns the expected values when mime_types are not present', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('channel-recording', {
       mime_types: undefined,

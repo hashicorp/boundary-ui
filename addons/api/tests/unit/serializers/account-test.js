@@ -15,7 +15,6 @@ module('Unit | Serializer | account', function (hooks) {
   setupTest(hooks);
 
   test('it serializes OIDC-type with only issuer and subject in `attributes` on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -45,7 +44,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes OIDC-type without `attributes` on update', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     store.push({
@@ -77,7 +75,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes password-type normally', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -103,7 +100,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes password attribute when `adapterOptions.password` is true', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -132,12 +128,7 @@ module('Unit | Serializer | account', function (hooks) {
     });
   });
 
-  test('it does not serialize password for non-new records', function (assert) {
-    assert.expect(0);
-  });
-
   test('it serializes only password when `adapterOptions.method` is set to `set-password`', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -161,7 +152,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes a custom payload when `adapterOptions.method` is set to `change-password`', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -187,7 +177,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes LDAP-type with only login_name in `attributes` on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     const record = store.createRecord('account', {
@@ -217,7 +206,6 @@ module('Unit | Serializer | account', function (hooks) {
   });
 
   test('it serializes LDAP-type without `attributes`', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('account');
     store.push({

@@ -10,14 +10,12 @@ module('Unit | Model | host', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('host', {});
     assert.ok(model);
   });
 
   test('it contains attributes', function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('host', {
       type: 'static',
@@ -29,7 +27,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('it has isStatic and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host', { type: 'static' });
     const modelB = store.createRecord('host', { type: 'plugin' });
@@ -39,7 +36,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('it has isPlugin and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host', { type: 'plugin' });
     const modelStatic = store.createRecord('host', { type: 'static' });
@@ -49,7 +45,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('it has isUnknown and returns the expected values', async function (assert) {
-    assert.expect(4);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host', {
       type: 'plugin',
@@ -71,7 +66,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('it has isAWS and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host', {
       type: 'plugin',
@@ -86,7 +80,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('it has isAzure and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host', {
       type: 'plugin',
@@ -101,7 +94,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('get compositeType returns expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host', {
       type: 'plugin',
@@ -116,7 +108,6 @@ module('Unit | Model | host', function (hooks) {
   });
 
   test('set compositeType sets expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host', {
       compositeType: 'aws',

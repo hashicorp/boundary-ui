@@ -19,7 +19,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it may have a scope fragment (and thus a scopeModel)', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -46,7 +45,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it may accept a `scopeModel` for convenience, instead of a fragment', function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const scope = store.createRecord('scope', { id: 'o_1', type: 'org' });
     const model = store.createRecord('user', '123abc');
@@ -57,7 +55,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it has a displayName attribute', function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -74,7 +71,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it has canSave and cannotSave attributes', async function (assert) {
-    assert.expect(11);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -112,7 +108,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it saves records to a scoped URL', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('user', { scopeID: 'o_123' });
     this.server.post('/v1/users', () => {
@@ -133,7 +128,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it saves to a custom scoped URL if requested', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const customScopeID = 'global';
     const scope = { scope_id: 'o_123' };
@@ -156,7 +150,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it saves records to a URL with a custom method if requested', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const method = 'my-custom-method';
     const scope = { scope_id: 'o_123' };

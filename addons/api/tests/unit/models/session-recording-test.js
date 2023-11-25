@@ -24,7 +24,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('session-recording', {
       type: TYPE_SESSION_RECORDING_SSH,
@@ -37,7 +36,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has isSSH property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('session-recording', {
       type: TYPE_SESSION_RECORDING_SSH,
@@ -50,7 +48,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has isAvailable property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('session-recording', {
       state: STATE_SESSION_RECORDING_AVAILABLE,
@@ -67,7 +64,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has connections as a relationship', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('session-recording', {
       type: TYPE_SESSION_RECORDING_SSH,
@@ -79,7 +75,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has targetScopeDisplayName and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const fakeName = 'Scope name';
     const fakeId = 's_123456789';
@@ -109,7 +104,6 @@ module('Unit | Model | session-recording', function (hooks) {
   });
 
   test('it has userDisplayName and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const fakeUserName = 'User name';
     const fakeUserId = 'userid';

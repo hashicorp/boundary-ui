@@ -16,7 +16,6 @@ module('Unit | Model | connection-recording', function (hooks) {
   });
 
   test('it has channels as a relationship', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('connection-recording', {
       channel_recordings: [store.createRecord('channel-recording')],

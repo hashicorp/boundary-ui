@@ -28,7 +28,6 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has a `changeState` method that targets a specific POST API endpoint and serialization', async function (assert) {
-    assert.expect(1);
     this.server.post(
       '/v1/auth-methods/123abc:change-state',
       (schema, request) => {
@@ -62,7 +61,6 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has isPassword property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
@@ -78,7 +76,6 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has isOIDC property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
@@ -94,7 +91,6 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has isLDAP property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
@@ -110,7 +106,6 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', function (assert) {
-    assert.expect(4);
     const modelA = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
