@@ -142,13 +142,12 @@
       {{/if}}
       {{#if this.noResults}}
         <Hds::ApplicationState data-test-no-target-results as |A|>
-          <A.Header
-            @title={{t 'resources.target.messages.no-search-results.title'}}
-          />
+          <A.Header @title={{t 'titles.no-search-results'}} />
           <A.Body
             @text={{t
-              'resources.target.messages.no-search-results.description'
+              'descriptions.no-search-results'
               query=this.search
+              resource='targets'
             }}
           />
         </Hds::ApplicationState>

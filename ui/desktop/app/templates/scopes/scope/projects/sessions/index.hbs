@@ -13,106 +13,46 @@
     <p>{{t 'resources.session.description'}}</p>
   </page.header>
 
-  <page.body>
-    <Rose::Toolbar as |toolbar|>
-      <toolbar.primary>
-        <Rose::Form as |form|>
-          {{#let
-            (resource-filter 'scopes.scope.projects.sessions.index' 'status')
-            as |filter|
-          }}
-            <Rose::Dropdown
-              @text={{t (concat 'form.' filter.name '.label')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <form.checkboxGroup
-                @name={{filter.name}}
-                @items={{filter.allowedValues}}
-                @selectedItems={{filter.selectedValue}}
-                @onChange={{route-action 'filterBy' filter.name}}
-                as |group|
-              >
-                <dropdown.item>
-                  <group.checkbox
-                    @label={{t (concat 'resources.session.status.' group.item)}}
-                    value={{group.item}}
-                  />
-                </dropdown.item>
-              </form.checkboxGroup>
-            </Rose::Dropdown>
-          {{/let}}
-
-          {{#let
-            (resource-filter 'scopes.scope.projects.sessions.index' 'project')
-            as |filter|
-          }}
-            <Rose::Dropdown
-              @text={{t (concat 'resources.' filter.name '.title')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <ul>
-                {{#let
-                  (group-by filter.allowedValues 'scopeModel')
-                  as |groups|
-                }}
-                  {{#each groups as |groupedItems|}}
-                    <li>
-                      <dropdown.item>
-                        <Rose::Icon
-                          @name='flight-icons/svg/org-16'
-                          @size='medium'
-                        />
-                        {{groupedItems.key.displayName}}
-                      </dropdown.item>
-                      <ul class='indent-label-2'>
-                        <form.checkboxGroup
-                          @name={{filter.name}}
-                          @items={{groupedItems.items}}
-                          @selectedItems={{filter.selectedValue}}
-                          @onChange={{route-action 'filterBy' filter.name}}
-                          as |group|
-                        >
-                          <li>
-                            <dropdown.item>
-                              <group.checkbox
-                                @label={{group.item.displayName}}
-                                value={{group.item}}
-                              />
-                            </dropdown.item>
-                          </li>
-                        </form.checkboxGroup>
-                      </ul>
-                    </li>
-                  {{/each}}
-                {{/let}}
-              </ul>
-            </Rose::Dropdown>
-          {{/let}}
-
-          {{#if
-            (has-resource-filter-selections
-              'scopes.scope.projects.sessions.index' 'status' 'project'
-            )
-          }}
-            <Rose::Button
-              @style='inline-link-action'
-              @iconLeft='flight-icons/svg/x-16'
-              {{on 'click' (route-action 'clearAllFilters')}}
-            >{{t 'actions.clear-all-filters'}}
-            </Rose::Button>
-          {{/if}}
-        </Rose::Form>
-      </toolbar.primary>
-
-      <toolbar.secondary>
-        <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
-      </toolbar.secondary>
-
-    </Rose::Toolbar>
+  <page.body class='sessions'>
+    {{#if (or this.model this.search)}}
+      <Hds::SegmentedGroup class='session-search-filtering' as |S|>
+        <S.TextInput
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton
+            @color='secondary'
+            @text={{t 'resources.target.title'}}
+          />
+          <DD.Header @hasDivider={{true}}>
+            <Hds::Form::TextInput::Base
+              @type='search'
+              placeholder={{t 'actions.narrow-results'}}
+              aria-label={{t 'actions.narrow-results'}}
+            />
+          </DD.Header>
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Status' @count='4' />
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton
+            @color='secondary'
+            @text={{t 'resources.scope.title'}}
+          />
+          <DD.Header @hasDivider={{true}}>
+            <Hds::Form::TextInput::Base
+              @type='search'
+              placeholder={{t 'actions.narrow-results'}}
+              aria-label={{t 'actions.narrow-results'}}
+            />
+          </DD.Header>
+        </S.Dropdown>
+      </Hds::SegmentedGroup>
+    {{/if}}
 
     {{#if this.sorted}}
       <Hds::Table
@@ -169,16 +109,16 @@
               {{B.data.target.displayName}}
             </B.Td>
             {{!
-                  Two if's here because:
-                  1) Local proxy info is only relevant if the session is
-                     active or pending (aka isAvailable).  Once the session
-                     is canceled or in the process thereof, the local proxy
-                     may no longer be used.
-                  2) The session actually has proxy information associated
-                     with it.  It's possible for the user to start sessions
-                     from other devices (or even another tab), in which case we
-                     won't have the local proxy info available here.
-                }}
+              Two if's here because:
+              1) Local proxy info is only relevant if the session is
+                  active or pending (aka isAvailable).  Once the session
+                  is canceled or in the process thereof, the local proxy
+                  may no longer be used.
+              2) The session actually has proxy information associated
+                  with it.  It's possible for the user to start sessions
+                  from other devices (or even another tab), in which case we
+                  won't have the local proxy info available here.
+            }}
             <B.Td>
               {{#if B.data.isAvailable}}
                 {{#if B.data.proxy}}
@@ -213,30 +153,30 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+    {{/if}}
 
-    {{else if
-      (has-resource-filter-selections
-        'scopes.scope.projects.sessions.index' 'status' 'project'
-      )
-    }}
-      <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.no-results'}} as |message|>
-          <message.description>
-            {{t 'descriptions.no-results'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-    {{else}}
-      <Rose::Layout::Centered>
-        <Rose::Message
+    {{#if this.noResults}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'titles.no-search-results'}} />
+        <A.Body
+          @text={{t
+            'descriptions.no-search-results'
+            query=this.search
+            resource='sessions'
+          }}
+        />
+      </Hds::ApplicationState>
+    {{/if}}
+
+    {{#if this.noSessions}}
+      <Hds::ApplicationState as |A|>
+        <A.Header
           @title={{t 'resources.session.messages.none-friendly.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.session.messages.none-friendly.description'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
+        />
+        <A.Body
+          @text={{t 'resources.session.messages.none-friendly.description'}}
+        />
+      </Hds::ApplicationState>
     {{/if}}
   </page.body>
 

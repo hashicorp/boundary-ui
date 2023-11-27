@@ -56,12 +56,4 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
       await this.router.replaceWith('scopes.scope.projects.targets');
     }
   }
-
-  /**
-   * refreshes session data.
-   */
-  @action
-  async refreshSessions() {
-    return this.refresh();
-  }
 }
