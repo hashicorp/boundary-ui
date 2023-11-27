@@ -58,7 +58,7 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
   async authenticate(
     { identification: login_name, password },
     requestCookies = true,
-    options
+    options,
   ) {
     const body = JSON.stringify({
       command: 'login',
