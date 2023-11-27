@@ -317,6 +317,11 @@
   }
 }
 
+.oidc-prompts {
+  .hds-form-group__control-field {
+    margin-bottom: 0.5rem;
+  }
+}
 .worker-create-section {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
   border-radius: sizing.rems(xxs);

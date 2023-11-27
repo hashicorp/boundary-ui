@@ -529,8 +529,8 @@
   </form.input>
 
   <Hds::Form::Checkbox::Group
+    class='oidc-prompts'
     @isOptional={{true}}
-    @layout='horizontal'
     @name='prompts'
     disabled={{form.disabled}}
     as |G|
@@ -545,7 +545,12 @@
         {{on 'change' (fn this.updatePrompt prompt)}}
         as |F|
       >
-        <F.Label>{{t (concat 'resources.auth-method.titles.' prompt)}}</F.Label>
+        <F.Label>
+          {{t (concat 'resources.auth-method.form.' prompt '.label')}}
+        </F.Label>
+        <F.HelperText>
+          {{t (concat 'resources.auth-method.form.' prompt '.help')}}
+        </F.HelperText>
       </G.Checkbox::Field>
     {{/each}}
 

@@ -62,10 +62,6 @@ auth-method:
     searching: Searching
     finding: Finding
     always: Always
-    consent: Consent
-    none: None
-    select_account: Select Account
-    login: Login
   types:
     password: Password
     oidc: OIDC
@@ -151,6 +147,18 @@ auth-method:
     account_attribute_maps:
       label: Account Attribute Maps
       help: Attribute maps from custom attributes to the standard fullname and email account attributes. These maps are represented as key=value where the key equals the from_attribute, and the value equals the to_attribute. For example, "preferredName=fullName".
+    consent:
+      label: Consent
+      help: Always require the user to explicitly consent to scopes requested
+    select_account:
+      label: Select Account
+      help: Allow the user to select from multiple accounts from this provider
+    login:
+      label: Login
+      help: Always require the user to log in to this auth provider
+    none:
+      label: None
+      help: Skip prompts if the user is already signed in and has granted consent
   section:
     connection:
       title: Connection
