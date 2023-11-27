@@ -317,11 +317,14 @@
   }
 }
 
+/* stylelint-diasable selector-class-pattern */
 .oidc-prompts {
   .hds-form-group__control-field {
     margin-bottom: 0.5rem;
   }
 }
+/* stylelint-enable selector-class-pattern */
+
 .worker-create-section {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
   border-radius: sizing.rems(xxs);
