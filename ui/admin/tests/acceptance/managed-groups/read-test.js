@@ -97,7 +97,7 @@ module('Acceptance | managed-groups | read', function (hooks) {
     assert.expect(1);
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     await visit(urls.authMethod);
 
@@ -110,7 +110,7 @@ module('Acceptance | managed-groups | read', function (hooks) {
     assert.expect(1);
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     await visit(urls.ldapAuthMethod);
 

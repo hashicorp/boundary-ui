@@ -75,7 +75,7 @@ export default class ScopesScopeAuthenticateMethodRoute extends Route {
           authenticatorName,
           creds,
           requestCookies,
-          { scope, authMethod }
+          { scope, authMethod },
         );
         this.router.transitionTo('index');
         break;

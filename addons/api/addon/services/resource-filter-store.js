@@ -42,8 +42,8 @@ export class ResourceFilter {
                 return this.in(value.contains, key);
               }
               return this.equals(key, value);
-            })
-          )
+            }),
+          ),
         );
       })
       .flat()

@@ -86,7 +86,7 @@
   }
 }
 
-@media only screen and (max-width: 680px) {
+@media only screen and (width <= 680px) {
   .ember-notify-cn {
     box-sizing: border-box;
     padding-left: 20px;

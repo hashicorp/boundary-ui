@@ -59,12 +59,12 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
 
@@ -90,12 +90,12 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('create')
+      ].includes('create'),
     );
     assert
       .dom('[title="General"] a:nth-of-type(3)')
@@ -107,7 +107,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
       intl.t('descriptions.neither-list-nor-create', {
         resource: STORAGE_BUCKET_TITLE,
-      })
+      }),
     );
     assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
   });
@@ -126,12 +126,12 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
 
@@ -141,7 +141,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
       intl.t('descriptions.create-but-not-list', {
         resource: STORAGE_BUCKET_TITLE,
-      })
+      }),
     );
     assert.dom(MESSAGE_LINK_SELECTOR).exists();
   });
@@ -160,12 +160,12 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('list')
+      ].includes('list'),
     );
     assert.false(
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.storageBuckets}"]`).exists();
 

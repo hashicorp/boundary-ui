@@ -57,11 +57,11 @@ test('Verify session created to target with host, then cancel the session', asyn
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
     const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id)
+      execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
     const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id)
+      execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
@@ -96,11 +96,11 @@ test('Verify session created to target with address, then cancel the session', a
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
     const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id)
+      execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
     const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id)
+      execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
@@ -144,7 +144,7 @@ test('Verify TCP target is updated', async ({ page }) => {
     await page.getByRole('button', { name: 'Save' }).click();
 
     await expect(
-      page.getByRole('alert').getByText('Success', { exact: true })
+      page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
   } finally {
     await authenticateBoundaryCli();

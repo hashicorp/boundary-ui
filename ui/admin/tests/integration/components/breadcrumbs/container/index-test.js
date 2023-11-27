@@ -16,11 +16,11 @@ module(
     test('it renders', async function (assert) {
       assert.expect(2);
       await render(
-        hbs` <Breadcrumbs::Item @text='Orgs' @icon='org' @route='scopes.scope.scopes' @model='global' /> <Breadcrumbs::Container />`
+        hbs` <Breadcrumbs::Item @text='Orgs' @icon='org' @route='scopes.scope.scopes' @model='global' /> <Breadcrumbs::Container />`,
       );
 
       assert.dom('.hds-breadcrumb__text').hasText('Orgs');
       assert.dom('.hds-breadcrumb__icon').exists();
     });
-  }
+  },
 );

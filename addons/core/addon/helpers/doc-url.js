@@ -19,7 +19,7 @@ export default class extends Helper {
         Documentation for "${docKey}" could not be found. Please ensure that
         this key exists under "documentation" in your app config.
       `,
-        configuredPath
+        configuredPath,
       );
     }
     const path = configuredPath || '';

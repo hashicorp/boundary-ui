@@ -129,7 +129,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.false(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.newManagedGroup}"]`).doesNotExist();
   });
@@ -148,7 +148,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.false(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.dom(`[href="${urls.newLdapManagedGroup}"]`).doesNotExist();
   });
@@ -197,7 +197,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.authMethod);
@@ -229,7 +229,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.ldapAuthMethod);
@@ -255,7 +255,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert.false(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
-      ].includes('create')
+      ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.managedGroups);
   });

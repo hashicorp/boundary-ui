@@ -1,0 +1,34 @@
+name: "Trigger Build Artifacts for Testing"
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Please use tag-like format n.n.n-someword (1.111.11-beta)
+        required: true
+      product_version:
+        required: true
+        type: string
+        description: The version number belonging to the oss binary to be used
+      commit:
+        required: true
+        type: string
+        description: The git SHA of the oss artifacts to be used
+
+jobs:
+  trigger-gha-build-artifacts-for-testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release description
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Triggering Build Artifacts for Testing using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
+      - name: Trigger Build Artifacts for Testing in boundary-ui-releases
+        run: |
+          export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
+          gh workflow run build-artifacts-for-testing.yml \
+          --repo hashicorp/boundary-ui-releases \
+          --ref main \
+          -f TAG="${{ inputs.branch }}" \
+          -f PRODUCT_VERSION="${{ inputs.product_version }}" \
+          -f COMMIT="${{ inputs.commit }}" \

@@ -18,7 +18,7 @@ test('Log in, log out, and then log back in', async ({ page }) => {
   await page.getByRole('button', { name: 'Sign In' }).click();
   await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
   await expect(
-    page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME)
+    page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
   ).toBeEnabled();
 
   await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
@@ -51,7 +51,7 @@ test.describe('Failure Cases', async () => {
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
     await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME)
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
     ).toBeHidden();
   });
 
@@ -61,7 +61,7 @@ test.describe('Failure Cases', async () => {
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
     await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME)
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
     ).toBeHidden();
   });
 
@@ -73,7 +73,7 @@ test.describe('Failure Cases', async () => {
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
     await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME)
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
     ).toBeHidden();
   });
 });

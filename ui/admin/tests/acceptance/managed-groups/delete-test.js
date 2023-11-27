@@ -112,7 +112,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     assert.expect(1);
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.managedGroups);
 
@@ -125,7 +125,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     assert.expect(1);
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
-        (item) => item !== 'delete'
+        (item) => item !== 'delete',
       );
     await visit(urls.ldapManagedGroups);
 
@@ -144,7 +144,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.managedGroups);
@@ -167,7 +167,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.ldapManagedGroups);

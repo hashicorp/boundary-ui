@@ -60,7 +60,7 @@ export default class ScopesScopeSessionsRoute extends Route {
     const sessions = await this.resourceFilterStore.queryBy(
       'session',
       filters,
-      options
+      options,
     );
 
     const sessionAggregates = await all(
@@ -75,21 +75,21 @@ export default class ScopesScopeSessionsRoute extends Route {
             ? this.store.peekRecord('target', session.target_id) ||
               this.store.findRecord('target', session.target_id)
             : null,
-        })
-      )
+        }),
+      ),
     );
     // Sort sessions by time created...
     let sortedSessionAggregates = sortBy(
       sessionAggregates,
-      'session.created_time'
+      'session.created_time',
     ).reverse();
     // Then move active sessions to the top...
     sortedSessionAggregates = [
       ...sortedSessionAggregates.filter(
-        (aggregate) => aggregate.session.status === 'active'
+        (aggregate) => aggregate.session.status === 'active',
       ),
       ...sortedSessionAggregates.filter(
-        (aggregate) => aggregate.session.status !== 'active'
+        (aggregate) => aggregate.session.status !== 'active',
       ),
     ];
     return sortedSessionAggregates;

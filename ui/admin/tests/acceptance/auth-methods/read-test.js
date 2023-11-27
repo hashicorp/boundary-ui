@@ -127,7 +127,7 @@ module('Acceptance | auth-methods | read', function (hooks) {
     assert.expect(1);
     instances.passwordAuthMethodOrg.authorized_actions =
       instances.passwordAuthMethodOrg.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     await visit(urls.orgScope);
 
@@ -140,7 +140,7 @@ module('Acceptance | auth-methods | read', function (hooks) {
     assert.expect(1);
     instances.oidcAuthMethodGlobal.authorized_actions =
       instances.oidcAuthMethodGlobal.authorized_actions.filter(
-        (item) => item !== 'read'
+        (item) => item !== 'read',
       );
     await visit(urls.globalScope);
 

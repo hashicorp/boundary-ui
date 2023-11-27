@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/storage-buckets/storage-bucket/index'
+        'route:scopes/scope/storage-buckets/storage-bucket/index',
       );
       assert.ok(route);
     });
-  }
+  },
 );

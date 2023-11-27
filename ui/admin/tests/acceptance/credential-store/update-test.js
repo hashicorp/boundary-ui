@@ -71,7 +71,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.strictEqual(
       this.server.schema.credentialStores.where({ type: 'static' }).models[0]
         .name,
-      'random string'
+      'random string',
     );
   });
 
@@ -86,7 +86,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.strictEqual(
       this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
         .name,
-      'random string'
+      'random string',
     );
   });
 
@@ -94,7 +94,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.expect(1);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
     await visit(urls.staticCredentialStore);
     assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
@@ -104,7 +104,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.expect(1);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       );
     await visit(urls.vaultCredentialStore);
     assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
@@ -119,7 +119,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.notEqual(instances.staticCredentialStore.name, 'random string');
     assert.strictEqual(
       find('[name="name"]').value,
-      instances.staticCredentialStore.name
+      instances.staticCredentialStore.name,
     );
   });
 
@@ -132,7 +132,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
     assert.strictEqual(
       find('[name="name"]').value,
-      instances.vaultCredentialStore.name
+      instances.vaultCredentialStore.name,
     );
   });
 
@@ -154,7 +154,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.staticCredentialStore);
@@ -163,11 +163,11 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -189,7 +189,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.vaultCredentialStore);
@@ -198,11 +198,11 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -226,7 +226,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
           .name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -251,7 +251,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
           .name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -275,7 +275,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
           .name,
-        'random string'
+        'random string',
       );
     }
   });
@@ -299,7 +299,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
           .name,
-        'random string'
+        'random string',
       );
     }
   });

@@ -155,7 +155,7 @@ module(
                 },
               ],
             },
-          }
+          },
         );
       });
       await visit(urls.enableSessionRecording);
@@ -167,5 +167,5 @@ module(
       assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
       assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
     });
-  }
+  },
 );

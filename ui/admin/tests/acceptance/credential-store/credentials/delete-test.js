@@ -99,7 +99,7 @@ module(
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernamePasswordCredentialCount - 1
+        usernamePasswordCredentialCount - 1,
       );
     });
 
@@ -112,7 +112,7 @@ module(
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
-        usernameKeyPairCredentialCount - 1
+        usernameKeyPairCredentialCount - 1,
       );
     });
 
@@ -131,7 +131,7 @@ module(
         getUsernamePasswordCredentialCount();
       instances.usernamePasswordCredential.authorized_actions =
         instances.usernamePasswordCredential.authorized_actions.filter(
-          (item) => item !== 'delete'
+          (item) => item !== 'delete',
         );
       await visit(urls.usernamePasswordCredential);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
@@ -140,7 +140,7 @@ module(
         .doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernamePasswordCredentialCount
+        usernamePasswordCredentialCount,
       );
     });
 
@@ -150,7 +150,7 @@ module(
         getUsernameKeyPairCredentialCount();
       instances.usernameKeyPairCredential.authorized_actions =
         instances.usernameKeyPairCredential.authorized_actions.filter(
-          (item) => item !== 'delete'
+          (item) => item !== 'delete',
         );
       await visit(urls.usernameKeyPairCredential);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
@@ -159,7 +159,7 @@ module(
         .doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernameKeyPairCredentialCount
+        usernameKeyPairCredentialCount,
       );
     });
 
@@ -168,7 +168,7 @@ module(
       const jsonCredentialCount = getJSONCredentialCount();
       instances.jsonCredential.authorized_actions =
         instances.jsonCredential.authorized_actions.filter(
-          (item) => item !== 'delete'
+          (item) => item !== 'delete',
         );
       await visit(urls.jsonCredential);
       assert.strictEqual(currentURL(), urls.jsonCredential);
@@ -190,7 +190,7 @@ module(
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernamePasswordCredentialCount - 1
+        usernamePasswordCredentialCount - 1,
       );
     });
 
@@ -206,7 +206,7 @@ module(
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
-        usernameKeyPairCredentialCount - 1
+        usernameKeyPairCredentialCount - 1,
       );
     });
 
@@ -234,7 +234,7 @@ module(
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
-        usernamePasswordCredentialCount
+        usernamePasswordCredentialCount,
       );
     });
 
@@ -250,7 +250,7 @@ module(
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
-        usernameKeyPairCredentialCount
+        usernameKeyPairCredentialCount,
       );
     });
 
@@ -276,7 +276,7 @@ module(
             status: 490,
             code: 'error',
             message: 'Oops.',
-          }
+          },
         );
       });
       await visit(urls.usernamePasswordCredential);
@@ -294,7 +294,7 @@ module(
             status: 490,
             code: 'error',
             message: 'Oops.',
-          }
+          },
         );
       });
       await visit(urls.usernameKeyPairCredential);
@@ -312,12 +312,12 @@ module(
             status: 490,
             code: 'error',
             message: 'Oops.',
-          }
+          },
         );
       });
       await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
-  }
+  },
 );

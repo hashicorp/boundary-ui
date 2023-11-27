@@ -13,9 +13,9 @@ module(
 
     test('it exists', function (assert) {
       let route = this.owner.lookup(
-        'route:scopes/scope/auth-methods/auth-method/managed-groups/managed-group'
+        'route:scopes/scope/auth-methods/auth-method/managed-groups/managed-group',
       );
       assert.ok(route);
     });
-  }
+  },
 );

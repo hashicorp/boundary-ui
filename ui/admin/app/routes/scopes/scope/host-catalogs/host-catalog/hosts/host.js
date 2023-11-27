@@ -31,14 +31,14 @@ export default class ScopesScopeHostCatalogsHostCatalogHostsHostRoute extends Ro
    */
   redirect(host) {
     const hostCatalog = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog'
+      'scopes.scope.host-catalogs.host-catalog',
     );
     const { host_catalog_id } = host;
     if (host_catalog_id !== hostCatalog.id) {
       this.router.replaceWith(
         'scopes.scope.host-catalogs.host-catalog.hosts.host',
         host_catalog_id,
-        host.id
+        host.id,
       );
     }
   }

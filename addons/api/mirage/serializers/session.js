@@ -11,14 +11,14 @@ export default ApplicationSerializer.extend({
 
   keyForRelationshipId(relationshipName) {
     return `${this._container.inflector.singularize(
-      underscore(relationshipName)
+      underscore(relationshipName),
     )}_id`;
   },
 
   _hashForModel(model) {
     const json = ApplicationSerializer.prototype._hashForModel.apply(
       this,
-      arguments
+      arguments,
     );
     json.user_id = model.userId;
     json.target_id = model.targetId;

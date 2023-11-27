@@ -42,7 +42,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
         type: 'org',
         scope: { id: 'global', type: 'global' },
       },
-      'withChildren'
+      'withChildren',
     );
 
     urls.orgScope = `/scopes/${instances.orgScope.id}`;
@@ -55,8 +55,8 @@ module('Acceptance | auth-methods | list', function (hooks) {
     await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.ok(find(`[href="${urls.authMethods}"]`));
   });
@@ -67,8 +67,8 @@ module('Acceptance | auth-methods | list', function (hooks) {
     await visit(urls.orgScope);
     assert.notOk(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.notOk(find(`[href="${urls.authMethods}"]`));
   });

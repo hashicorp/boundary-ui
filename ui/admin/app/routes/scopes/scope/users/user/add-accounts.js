@@ -36,8 +36,8 @@ export default class ScopesScopeUsersUserAddAccountsRoute extends Route {
     const authMethods = await this.store.query('auth-method', { scope_id });
     await all(
       authMethods.map(({ id: auth_method_id }) =>
-        this.store.query('account', { auth_method_id })
-      )
+        this.store.query('account', { auth_method_id }),
+      ),
     );
     const accounts = this.store.peekAll('account');
     return { user, authMethods, accounts };

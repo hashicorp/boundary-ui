@@ -19,7 +19,7 @@ module(
     test('isSessionInprogressWithNoConnections returns true if session has started with no connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -34,7 +34,7 @@ module(
     test('isSessionInprogressWithNoConnections returns false if session has started and has connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -49,7 +49,7 @@ module(
     test('isSessionInprogressWithNoConnections returns false if session is complete and has connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -64,7 +64,7 @@ module(
     test('isSessionUnknownWithNoConnections returns true if session is unknown with no connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -79,7 +79,7 @@ module(
     test('isSessionUnknownWithNoConnections returns false if session is unknown and has connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -94,7 +94,7 @@ module(
     test('isSessionUnknownWithNoConnections returns false if session is complete and has connections', function (assert) {
       const store = this.owner.lookup('service:store');
       const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index'
+        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
       const sessionRecording = store.createRecord('session-recording', {
@@ -105,5 +105,5 @@ module(
 
       assert.false(controller.isSessionUnknownWithNoConnections);
     });
-  }
+  },
 );

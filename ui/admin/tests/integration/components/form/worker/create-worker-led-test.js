@@ -33,7 +33,7 @@ module(
       windowService.location.hostname = `${guid}.boundary.hcp.dev`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -49,7 +49,7 @@ module(
       windowService.location.hostname = `${guid}.boundary.hcp.to`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -65,7 +65,7 @@ module(
       windowService.location.hostname = `${guid}.boundary.hashicorp.cloud`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
       );
 
       assert.dom('[name="cluster_id"]').hasValue(guid);
@@ -80,10 +80,10 @@ module(
       windowService.location.hostname = `personal.website.com`;
 
       await render(
-        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`
+        hbs`<Form::Worker::CreateWorkerLed @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
       );
 
       assert.dom('[name="cluster_id"]').hasNoValue();
     });
-  }
+  },
 );

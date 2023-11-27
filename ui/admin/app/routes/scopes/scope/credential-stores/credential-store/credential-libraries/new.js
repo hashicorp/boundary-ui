@@ -31,7 +31,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    */
   beforeModel() {
     const credentialStore = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
     if (
       this.can.cannot('create model', credentialStore, {
@@ -39,7 +39,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       })
     ) {
       this.router.replaceWith(
-        'scopes.scope.credential-stores.credential-store.credential-libraries'
+        'scopes.scope.credential-stores.credential-store.credential-libraries',
       );
     }
   }
@@ -50,7 +50,7 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
    */
   model({ type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC }) {
     const { id: credential_store_id } = this.modelFor(
-      'scopes.scope.credential-stores.credential-store'
+      'scopes.scope.credential-stores.credential-store',
     );
 
     // Set the type to generic vault if feature flag isn't enabled in cases where

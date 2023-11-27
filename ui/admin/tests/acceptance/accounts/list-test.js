@@ -69,8 +69,8 @@ module('Acceptance | accounts | list', function (hooks) {
     await visit(urls.authMethod);
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.ok(find(`[href="${urls.accounts}"]`));
   });
@@ -81,8 +81,8 @@ module('Acceptance | accounts | list', function (hooks) {
     await visit(urls.authMethod);
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
-        'list'
-      )
+        'list',
+      ),
     );
     assert.notOk(find(`[href="${urls.accounts}"]`));
   });

@@ -29,26 +29,26 @@ module('Unit | Ability | session-recording', function (hooks) {
       'session-recording',
       {
         authorized_actions: ['download'],
-      }
+      },
     );
     const recordingWithoutAuthorizedAction = store.createRecord(
       'session-recording',
       {
         authorized_actions: [],
-      }
+      },
     );
 
     assert.true(
       canService.can(
         'download session-recording',
-        recordingWithAuthorizedAction
-      )
+        recordingWithAuthorizedAction,
+      ),
     );
     assert.false(
       canService.can(
         'download session-recording',
-        recordingWithoutAuthorizedAction
-      )
+        recordingWithoutAuthorizedAction,
+      ),
     );
   });
 });

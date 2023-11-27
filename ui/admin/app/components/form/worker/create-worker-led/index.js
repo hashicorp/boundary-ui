@@ -181,7 +181,9 @@ unzip *.zip ;\\
     return this.workerTags
       .map(
         (tag) =>
-          `${tag.key} = [${this.convertCommaSeparatedValuesToArray(tag.value)}]`
+          `${tag.key} = [${this.convertCommaSeparatedValuesToArray(
+            tag.value,
+          )}]`,
       )
       .join('\n    ');
   }

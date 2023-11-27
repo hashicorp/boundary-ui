@@ -91,8 +91,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     await visit(urls.hostCatalog);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
   });
@@ -101,8 +101,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     await visit(urls.hosts);
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.ok(find(`[href="${urls.newHost}"]`));
   });
@@ -113,8 +113,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     await visit(urls.hosts);
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.notOk(find(`[href="${urls.newHost}"]`));
   });
@@ -147,18 +147,18 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.newHost);
     await click('[type="submit"]');
     assert.ok(
       find('[role="alert"]').textContent.trim(),
-      'The request was invalid.'
+      'The request was invalid.',
     );
     assert.ok(
       find('.rose-form-error-message').textContent.trim(),
-      'Name is required.'
+      'Name is required.',
     );
   });
 
@@ -166,15 +166,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts =
       instances.hostCatalog.authorized_collection_actions.hosts.filter(
-        (item) => item !== 'create'
+        (item) => item !== 'create',
       );
 
     await visit(urls.newHost);
 
     assert.false(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
-        'create'
-      )
+        'create',
+      ),
     );
     assert.strictEqual(currentURL(), urls.hosts);
   });

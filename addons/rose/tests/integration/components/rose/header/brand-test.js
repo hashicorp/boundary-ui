@@ -20,7 +20,7 @@ module('Integration | Component | rose/header/brand', function (hooks) {
     assert.ok(find('.rose-header-brand svg'));
     assert.strictEqual(
       find('.rose-header-brand-text').textContent.trim(),
-      'Product Name'
+      'Product Name',
     );
   });
 });

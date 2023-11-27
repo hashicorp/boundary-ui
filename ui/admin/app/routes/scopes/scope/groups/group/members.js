@@ -32,7 +32,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
         ? this.resourceFilterStore.queryBy(
             'user',
             { id: group.member_ids },
-            { scope_id: 'global', recursive: true }
+            { scope_id: 'global', recursive: true },
           )
         : [],
     });

@@ -82,11 +82,11 @@ module('Acceptance | accounts | update', function (hooks) {
     await click('form [type="submit"]:not(:disabled)');
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].name,
-      'updated name'
+      'updated name',
     );
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].description,
-      'updated desc'
+      'updated desc',
     );
   });
 
@@ -117,7 +117,7 @@ module('Acceptance | accounts | update', function (hooks) {
           status: 490,
           code: 'error',
           message: 'Oops.',
-        }
+        },
       );
     });
     await visit(urls.account);
@@ -128,7 +128,7 @@ module('Acceptance | accounts | update', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
   });
 
@@ -150,7 +150,7 @@ module('Acceptance | accounts | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
     await visit(urls.account);
@@ -161,12 +161,12 @@ module('Acceptance | accounts | update', function (hooks) {
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'The request was invalid.',
-      'Displays primary error message.'
+      'Displays primary error message.',
     );
     assert.strictEqual(
       find('.rose-form-error-message').textContent.trim(),
       'Name is required.',
-      'Displays field-level errors.'
+      'Displays field-level errors.',
     );
   });
 });

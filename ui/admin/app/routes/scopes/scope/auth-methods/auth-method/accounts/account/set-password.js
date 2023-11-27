@@ -30,7 +30,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSettingsRout
   async setPassword(account, password) {
     await account.setPassword(password);
     await this.router.replaceWith(
-      'scopes.scope.auth-methods.auth-method.accounts.account.set-password'
+      'scopes.scope.auth-methods.auth-method.accounts.account.set-password',
     );
   }
 }

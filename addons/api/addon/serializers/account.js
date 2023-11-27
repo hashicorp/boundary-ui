@@ -110,7 +110,7 @@ export default class AccountSerializer extends ApplicationSerializer {
       serialized = this.serializeForChangePassword(
         snapshot,
         currentPassword,
-        newPassword
+        newPassword,
       );
     }
     return serialized;

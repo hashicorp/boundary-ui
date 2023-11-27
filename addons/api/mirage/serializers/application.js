@@ -38,7 +38,7 @@ export default RestSerializer.extend({
 
   keyForRelationshipId(relationshipName) {
     return `${this._container.inflector.singularize(
-      underscore(relationshipName)
+      underscore(relationshipName),
     )}_id`;
   },
 

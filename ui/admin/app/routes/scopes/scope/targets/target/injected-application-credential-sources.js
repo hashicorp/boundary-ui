@@ -37,7 +37,7 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
             reload: true,
           });
         }
-      })
+      }),
     );
   }
 

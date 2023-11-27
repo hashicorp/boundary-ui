@@ -26,14 +26,14 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
     // Get IDs for credential sources already added to the current target
     const currentCredentialSourceIDs = new Set(
       this.model.target.injected_application_credential_source_ids.map(
-        (source) => source.value
-      )
+        (source) => source.value,
+      ),
     );
     const notAddedCredentialLibraries = this.model.credentialLibraries.filter(
-      ({ id }) => !currentCredentialSourceIDs.has(id)
+      ({ id }) => !currentCredentialSourceIDs.has(id),
     );
     const notAddedCredentials = this.model.credentials.filter(
-      ({ id, type }) => !currentCredentialSourceIDs.has(id) && type !== 'json'
+      ({ id, type }) => !currentCredentialSourceIDs.has(id) && type !== 'json',
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
   }

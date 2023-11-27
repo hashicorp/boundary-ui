@@ -36,8 +36,8 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
     const hostCatalogs = await this.store.query('host-catalog', { scope_id });
     await all(
       hostCatalogs.map(({ id: host_catalog_id }) =>
-        this.store.query('host-set', { host_catalog_id })
-      )
+        this.store.query('host-set', { host_catalog_id }),
+      ),
     );
     const hostSets = this.store.peekAll('host-set');
     return {

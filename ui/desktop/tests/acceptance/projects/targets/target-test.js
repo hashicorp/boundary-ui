@@ -89,7 +89,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     instances.hostCatalog = this.server.create(
       'host-catalog',
       { scope: instances.scopes.project },
-      'withChildren'
+      'withChildren',
     );
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
@@ -98,12 +98,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
     instances.targetWithOneHost = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withOneHost'
+      'withOneHost',
     );
     instances.targetWithTwoHosts = this.server.create(
       'target',
       { scope: instances.scopes.project },
-      'withTwoHosts'
+      'withTwoHosts',
     );
     instances.session = this.server.create(
       'session',
@@ -111,7 +111,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
         scope: instances.scopes.project,
         status: 'active',
       },
-      'withAssociations'
+      'withAssociations',
     );
 
     // Generate route URLs for resources

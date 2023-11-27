@@ -69,7 +69,7 @@ module('Acceptance | scopes | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.strictEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string'
+      'random string',
     );
   });
 
@@ -77,7 +77,7 @@ module('Acceptance | scopes | update', function (hooks) {
     assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
-        (item) => item !== 'update'
+        (item) => item !== 'update',
       ),
     });
     await visit(urls.orgScope);
@@ -120,7 +120,7 @@ module('Acceptance | scopes | update', function (hooks) {
               },
             ],
           },
-        }
+        },
       );
     });
 
@@ -151,7 +151,7 @@ module('Acceptance | scopes | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.notEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string'
+      'random string',
     );
   });
 
@@ -173,7 +173,7 @@ module('Acceptance | scopes | update', function (hooks) {
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.notEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string'
+      'random string',
     );
   });
 });

@@ -61,7 +61,7 @@ module('Acceptance | users | accounts', function (hooks) {
       {
         scope: instances.scopes.org,
       },
-      'withAccountsAndUsersAndManagedGroups'
+      'withAccountsAndUsersAndManagedGroups',
     );
     instances.user = this.server.schema.users.first();
     accountsCount = instances.user.accountIds.length;
@@ -98,7 +98,7 @@ module('Acceptance | users | accounts', function (hooks) {
   test('cannot remove an account without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.user.authorized_actions.filter(
-      (item) => item !== 'remove-accounts'
+      (item) => item !== 'remove-accounts',
     );
     instances.user.update({ authorized_actions });
     await visit(urls.user);
@@ -160,7 +160,7 @@ module('Acceptance | users | accounts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     await visit(urls.user);
@@ -194,7 +194,7 @@ module('Acceptance | users | accounts', function (hooks) {
   test('cannot navigate to add accounts without proper authorization', async function (assert) {
     assert.expect(1);
     const authorized_actions = instances.user.authorized_actions.filter(
-      (item) => item !== 'add-accounts'
+      (item) => item !== 'add-accounts',
     );
     instances.user.update({ authorized_actions });
     await visit(urls.user);
@@ -298,7 +298,7 @@ module('Acceptance | users | accounts', function (hooks) {
           code: 'invalid_argument',
           message: 'The request was invalid.',
           details: {},
-        }
+        },
       );
     });
     instances.user.update({ accountIds: [] });

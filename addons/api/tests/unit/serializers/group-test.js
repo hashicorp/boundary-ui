@@ -63,7 +63,7 @@ module('Unit | Serializer | group', function (hooks) {
     const normalized = serializer.normalizeSingleResponse(
       store,
       group,
-      payload
+      payload,
     );
     assert.deepEqual(normalized, {
       included: [],
