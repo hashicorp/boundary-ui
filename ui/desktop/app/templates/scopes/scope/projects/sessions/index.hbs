@@ -14,7 +14,7 @@
   </page.header>
 
   <page.body class='sessions'>
-    {{#if (or this.model this.search)}}
+    {{#if (or @model this.search)}}
       <Hds::SegmentedGroup class='session-search-filtering' as |S|>
         <S.TextInput
           @type='search'
@@ -156,7 +156,7 @@
     {{/if}}
 
     {{#if this.noResults}}
-      <Hds::ApplicationState as |A|>
+      <Hds::ApplicationState data-test-no-session-results as |A|>
         <A.Header @title={{t 'titles.no-search-results'}} />
         <A.Body
           @text={{t
@@ -169,7 +169,7 @@
     {{/if}}
 
     {{#if this.noSessions}}
-      <Hds::ApplicationState as |A|>
+      <Hds::ApplicationState data-test-no-sessions as |A|>
         <A.Header
           @title={{t 'resources.session.messages.none-friendly.title'}}
         />

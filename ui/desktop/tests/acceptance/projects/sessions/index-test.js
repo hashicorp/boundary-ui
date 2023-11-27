@@ -76,6 +76,9 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     authenticateSession({ user_id: instances.user.id });
 
+    // bypass mirage config that expects recursive to be passed in as queryParam
+    this.server.get('/sessions', ({ sessions }) => sessions.all());
+
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     stubs.global = { id: 'global', type: 'global' };
@@ -158,10 +161,9 @@ module('Acceptance | projects | sessions', function (hooks) {
     this.server.get('/sessions', () => new Response(200));
 
     await visit(urls.sessions);
-    await click('button.rose-button-inline-link-action'); // clear all filters
     await a11yAudit();
 
-    assert.dom('.rose-message-title').hasText('No Sessions Available');
+    assert.dom('[data-test-no-sessions]').includesText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
@@ -257,7 +259,6 @@ module('Acceptance | projects | sessions', function (hooks) {
     instances.session.update({ status: STATUS_SESSION_TERMINATED });
 
     await visit(urls.sessions);
-    await click('button.rose-button-inline-link-action'); // clear all filters
 
     assert
       .dom(
