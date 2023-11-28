@@ -31,7 +31,6 @@ module.exports = {
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/no-assignment-of-untracked-properties-used-in-tracking-contexts':
       'off',
-    // 'qunit/require-expect': 'except-simple'
   },
   overrides: [
     // node files
