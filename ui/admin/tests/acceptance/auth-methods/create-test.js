@@ -108,7 +108,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create new oidc auth method', async function (assert) {
-    assert.expect(12);
+    assert.expect(13);
     const count = getAuthMethodsCount();
 
     await visit(`${urls.authMethods}/new?type=oidc`);
@@ -134,6 +134,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
+    await click('[id="consent"]', 'consent');
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getAuthMethodsCount(), count + 1);
@@ -153,6 +154,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
     assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
+    assert.deepEqual(authMethod.attributes.prompts, ['consent']);
   });
 
   test('Users can create a new ldap auth method', async function (assert) {

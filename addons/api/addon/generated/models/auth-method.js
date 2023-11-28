@@ -158,6 +158,13 @@ export default class GeneratedAuthMethodModel extends BaseModel {
   })
   account_claim_maps;
 
+  @attr('string-array', {
+    for: 'oidc',
+    emptyArrayIfMissing: true,
+    isNestedAttribute: true,
+  })
+  prompts;
+
   // =attributes(ldap)
 
   @attr('boolean', {

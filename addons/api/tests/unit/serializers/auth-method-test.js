@@ -63,6 +63,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'none' }],
     });
 
     let serializedRecord = record.serialize();
@@ -84,6 +85,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['none'],
       },
     });
   });
@@ -176,6 +178,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'consent' }],
     });
 
     let serializedRecord = record.serialize();
@@ -196,6 +199,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['consent'],
       },
     });
   });
@@ -389,6 +393,7 @@ module('Unit | Serializer | auth method', function (hooks) {
         issuer: issuer,
         max_age: maxAge,
         client_secret: 'secret123',
+        prompts: ['consent'],
       },
       version: 1,
       type: TYPE_AUTH_METHOD_OIDC,
@@ -402,6 +407,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       allowed_audiences,
       signing_algorithms,
       idp_ca_certs,
+      prompts,
     } = record;
     assert.deepEqual(account_claim_maps, [
       { from: 'from', to: 'to' },
@@ -421,6 +427,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       { value: 'certificate-5678' },
     ]);
     assert.strictEqual(record.api_url_prefix, apiUrlPrefix);
+    assert.deepEqual(prompts, [{ value: 'consent' }]);
     assert.strictEqual(record.client_id, clientId);
     assert.strictEqual(
       record.disable_discovered_config_validation,
