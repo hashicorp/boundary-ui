@@ -98,6 +98,7 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it can request records through the store from a specified scope', async function (assert) {
+    assert.expect(1);
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
       assert.strictEqual(
@@ -111,6 +112,7 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it rewrites PUT to PATCH, but leaves others unchanged', function (assert) {
+    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     // TODO this is icky, should be changed to a spy or stub
     const originalAjax = RESTAdapter.prototype.ajax;
@@ -122,6 +124,7 @@ module('Unit | Adapter | application', function (hooks) {
   });
 
   test('it rewrites PUT/PATCH to POST when `adapterOptions.method` is passed to `updateRecord`', function (assert) {
+    assert.expect(1);
     const adapter = this.owner.lookup('adapter:application');
     const store = this.owner.lookup('service:store');
     const snapshot = store.createRecord('role', {})._createSnapshot();

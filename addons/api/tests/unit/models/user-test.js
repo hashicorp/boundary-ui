@@ -12,6 +12,7 @@ module('Unit | Model | user', function (hooks) {
   setupMirage(hooks);
 
   test('it has an `addAccounts` method that users a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/users/123abc:add-accounts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -42,6 +43,7 @@ module('Unit | Model | user', function (hooks) {
   });
 
   test('it has a `removeAccounts` method that users a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/users/123abc:remove-accounts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -72,6 +74,7 @@ module('Unit | Model | user', function (hooks) {
   });
 
   test('it has a `removeAccount` method that deletes a single account set using `removeAccounts` method', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/users/123abc:remove-accounts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -118,6 +121,7 @@ module('Unit | Model | user', function (hooks) {
   });
 
   test('it defaults to null for readonly attributes when response does not have fields', async function (assert) {
+    assert.expect(3);
     this.server.post('/v1/users/123abc:remove-accounts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {

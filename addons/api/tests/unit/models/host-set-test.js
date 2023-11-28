@@ -12,6 +12,7 @@ module('Unit | Model | host set', function (hooks) {
   setupMirage(hooks);
 
   test('it has an `addHosts` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/host-sets/123abc:add-hosts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -42,6 +43,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has an `addHost` method that adds a single host using `addHosts` method', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/host-sets/123abc:add-hosts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -72,6 +74,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has a `removeHosts` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/host-sets/123abc:remove-hosts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -102,6 +105,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has a `removeHost` method that removes a single host using `removeHosts` method', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/host-sets/123abc:remove-hosts', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -132,6 +136,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has isStatic and returns the expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host-set', { type: 'static' });
     const modelB = store.createRecord('host-set', { type: 'plugin' });
@@ -141,6 +146,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has isPlugin and returns the expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-set', { type: 'plugin' });
     const modelStatic = store.createRecord('host-set', { type: 'static' });
@@ -150,6 +156,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has isAws and return the expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host-set', {
       type: 'plugin',
@@ -164,6 +171,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('it has isAzure and return the expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host-set', {
       type: 'plugin',
@@ -178,6 +186,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('get compositeType return expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin1 = store.createRecord('host-set', {
       type: 'plugin',
@@ -196,6 +205,7 @@ module('Unit | Model | host set', function (hooks) {
   });
 
   test('set compositeType sets expected values', async function (assert) {
+    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-set', {
       compositeType: 'aws',

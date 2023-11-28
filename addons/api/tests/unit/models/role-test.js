@@ -18,6 +18,7 @@ module('Unit | Model | role', function (hooks) {
   });
 
   test('it has a `saveGrantStrings` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/roles/123abc:set-grants', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -48,6 +49,7 @@ module('Unit | Model | role', function (hooks) {
   });
 
   test('it has an `addPrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post('/v1/roles/123abc:add-principals', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
@@ -82,6 +84,7 @@ module('Unit | Model | role', function (hooks) {
   });
 
   test('it has a `removePrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/roles/123abc:remove-principals',
       (schema, request) => {
@@ -119,6 +122,7 @@ module('Unit | Model | role', function (hooks) {
   });
 
   test('it has a `removePrincipal` method that deletes a single principal using `removePrincipals` method', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/roles/123abc:remove-principals',
       (schema, request) => {

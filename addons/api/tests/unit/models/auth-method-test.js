@@ -28,6 +28,7 @@ module('Unit | Model | auth method', function (hooks) {
   });
 
   test('it has a `changeState` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/auth-methods/123abc:change-state',
       (schema, request) => {

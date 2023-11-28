@@ -78,6 +78,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has an `addHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:add-host-sources',
       (schema, request) => {
@@ -114,6 +115,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `removeHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-host-sources',
       (schema, request) => {
@@ -150,6 +152,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `removeHostSource` method that deletes a single host set using `removeHostSources` method', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-host-sources',
       (schema, request) => {
@@ -278,6 +281,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has an `addBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:add-credential-sources',
       (schema, request) => {
@@ -311,6 +315,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `removeBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-sources',
       (schema, request) => {
@@ -344,6 +349,7 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `removeBrokeredCredentialSource` method that deletes a single credential library using `removeBrokeredCredentialSources` method', async function (assert) {
+    assert.expect(1);
     this.server.post(
       '/v1/targets/123abc:remove-credential-sources',
       (schema, request) => {

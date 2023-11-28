@@ -12,6 +12,7 @@ module('Unit | Model | worker', function (hooks) {
   setupMirage(hooks);
 
   test('it has a `createWorkerLed` method that targets a specific POST API', async function (assert) {
+    assert.expect(2);
     const scopeId = 'global';
     const workerGeneratedAuthToken = 'token';
     this.server.post('/v1/workers:create:worker-led', (schema, request) => {

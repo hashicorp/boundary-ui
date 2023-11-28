@@ -31,6 +31,7 @@ module.exports = {
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/no-assignment-of-untracked-properties-used-in-tracking-contexts':
       'off',
+    // 'qunit/require-expect': 'except-simple'
   },
   overrides: [
     // node files
@@ -59,6 +60,9 @@ module.exports = {
       // Test files:
       files: ['tests/**/*-test.{js,ts}'],
       extends: ['plugin:qunit/recommended'],
+      rules: {
+        'qunit/require-expect': [2, 'except-simple'],
+      },
     },
   ],
 };
