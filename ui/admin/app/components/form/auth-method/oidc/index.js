@@ -41,7 +41,7 @@ export default class FormAuthMethodOidcComponent extends Component {
    * @returns {string}
    */
   parsePromptsArray() {
-    return this.args.model.prompts.map((item) => item.value) ?? [];
+    return this.args.model?.prompts.map((item) => item.value) ?? [];
   }
 
   //actions
