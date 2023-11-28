@@ -80,7 +80,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting global scope', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.globalScope);
@@ -102,7 +101,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting org scope', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.orgScope);
@@ -113,7 +111,6 @@ module('Acceptance | scopes', function (hooks) {
   // normalization step, the UI doesn't know it's authenticated with global
   // and thus doesn't display the "Global" item in the org nav dropdown.
   test('can navigate among org scopes via header navigation', async function (assert) {
-    assert.expect(3);
     await visit(urls.globalScope);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.globalScope);
@@ -125,7 +122,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can navigate among project scopes via header navigation', async function (assert) {
-    assert.expect(2);
     await visit(urls.projectScope);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.projectScopeEdit);
@@ -136,7 +132,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can create new org scopes', async function (assert) {
-    assert.expect(1);
     const orgScopeCount = getScopeCount('org');
     await visit(urls.newOrgScope);
     await fillIn('[name="name"]', 'random string');
@@ -145,7 +140,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can create new project scopes', async function (assert) {
-    assert.expect(1);
     const orgScopeCount = getScopeCount('project');
     await visit(urls.newProjectScope);
     await fillIn('[name="name"]', 'random string');
@@ -154,7 +148,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can cancel create new org scopes', async function (assert) {
-    assert.expect(2);
     const orgScopeCount = getScopeCount('org');
     await visit(urls.newOrgScope);
     await fillIn('[name="name"]', 'random string');
@@ -164,7 +157,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can cancel create new project scopes', async function (assert) {
-    assert.expect(2);
     const projectScopeCount = getScopeCount('project');
     await visit(urls.newProjectScope);
     await fillIn('[name="name"]', 'random string');
@@ -174,7 +166,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('saving a new scope with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/scopes', () => {
       return new Response(
         400,
