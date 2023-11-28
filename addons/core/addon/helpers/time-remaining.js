@@ -19,12 +19,9 @@ export default class extends Helper {
     // Calculate the difference in milleseconds
     const difference = expirationTime - currentTime;
 
-    // Calculate the difference in seconds
-    const differenceInSeconds = Math.floor(difference / 1000);
-
-    // If the difference is negative, return 0:0:00 remaining
-    if (differenceInSeconds <= 0)
-      return `0:0:00 ${this.intl.t('resources.session.remaining')}`;
+    // Calculate the difference in seconds if the difference is positive
+    const differenceInSeconds =
+      difference > 0 ? Math.floor(difference / 1000) : 0;
 
     // Format the duration
     const duration = new DurationUnitFormat(this.intl.primaryLocale, {

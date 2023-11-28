@@ -2,9 +2,11 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | time-remaining', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
   test('it calculates the correct time remaining', async function (assert) {
     assert.expect(1);
