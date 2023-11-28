@@ -8,8 +8,8 @@
     "ember-addon"
   ],
   "scripts": {
-    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint": "concurrently \"yarn:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"yarn:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "format": "yarn run format:js",
