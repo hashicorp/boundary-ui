@@ -286,6 +286,7 @@ session:
   title_plural: Sessions
   active_plural: Active Sessions
   description: A session is a connection to a target initiated through Boundary.
+  remaining: remaining
   status:
     active: Active
     pending: Pending

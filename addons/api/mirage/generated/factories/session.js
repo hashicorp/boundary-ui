@@ -13,5 +13,6 @@ export default Factory.extend({
   type: 'tcp',
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
+  expiration_time: () => faker.date.soon(),
   version: () => faker.number.int(),
 });
