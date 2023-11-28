@@ -42,6 +42,7 @@ export default Factory.extend({
           signing_algorithms: ['RS256', 'RS384'],
           allowed_audiences: ['www.alice.com', 'www.alice.com/admin'],
           idp_ca_certs: ['certificate-1234', 'certificate-5678'],
+          prompts: ['consent'],
         };
         break;
       case TYPE_AUTH_METHOD_LDAP:

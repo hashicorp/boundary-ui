@@ -108,7 +108,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an oidc auth method and save changes', async function (assert) {
-    assert.expect(11);
+    assert.expect(12);
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
@@ -173,6 +173,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
+    await click('[id="none"]', 'none');
     await click('form [type="submit"]:not(:disabled)');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
@@ -191,6 +192,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
     assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
+    assert.deepEqual(authMethod.attributes.prompts, ['consent', 'none']);
   });
 
   test('can update an ldap auth method and save changes', async function (assert) {

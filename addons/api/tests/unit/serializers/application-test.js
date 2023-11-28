@@ -165,6 +165,7 @@ module('Unit | Serializer | application', function (hooks) {
       dry_run: true,
       issuer: 'http://www.example.net',
       max_age: 500,
+      prompts: [{ value: 'consent' }],
     });
 
     let serializedRecord = record.serialize();
@@ -186,6 +187,7 @@ module('Unit | Serializer | application', function (hooks) {
         dry_run: true,
         issuer: 'http://www.example.net',
         max_age: 500,
+        prompts: ['consent'],
       },
     });
   });
