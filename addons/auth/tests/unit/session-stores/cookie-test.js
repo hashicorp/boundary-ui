@@ -28,7 +28,7 @@ module('Unit | Session Store | cookie', function (hooks) {
     sessionStore.cookies.write(
       sessionStore.authenticatorCookieName,
       'authenticator-name',
-      { path: '/' }
+      { path: '/' },
     );
     assert.ok(sessionStore.sessionExists);
     const session = await sessionStore.restore();
@@ -54,27 +54,27 @@ module('Unit | Session Store | cookie', function (hooks) {
     });
     assert.ok(
       sessionStore.cookies.exists(sessionStore.cookieName),
-      'cookie exists'
+      'cookie exists',
     );
     await sessionStore.restore().catch(() => {});
     assert.notOk(
       sessionStore.cookies.exists(sessionStore.cookieName),
-      'cookie was cleared'
+      'cookie was cleared',
     );
     // For authenticator name cookie
     sessionStore.cookies.write(
       sessionStore.authenticatorCookieName,
       'authenticator-name',
-      { path: '/' }
+      { path: '/' },
     );
     assert.ok(
       sessionStore.cookies.exists(sessionStore.authenticatorCookieName),
-      'cookie exists'
+      'cookie exists',
     );
     await sessionStore.restore().catch(() => {});
     assert.notOk(
       sessionStore.cookies.exists(sessionStore.authenticatorCookieName),
-      'cookie was cleared'
+      'cookie was cleared',
     );
   });
 
@@ -82,16 +82,16 @@ module('Unit | Session Store | cookie', function (hooks) {
     assert.expect(4);
     assert.notOk(sessionStore.cookies.exists(sessionStore.cookieName));
     assert.notOk(
-      sessionStore.cookies.exists(sessionStore.authenticatorCookieName)
+      sessionStore.cookies.exists(sessionStore.authenticatorCookieName),
     );
     sessionStore.persist({ authenticated: { authenticator: 'foobar' } });
     assert.notOk(
       sessionStore.cookies.exists(sessionStore.cookieName),
-      'session cookie was not set'
+      'session cookie was not set',
     );
     assert.strictEqual(
       sessionStore.cookies.read(sessionStore.authenticatorCookieName),
-      'foobar'
+      'foobar',
     );
   });
 });
