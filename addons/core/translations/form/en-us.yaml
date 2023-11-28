@@ -119,6 +119,9 @@ to_claim:
 signing_algorithms:
   label: Signing Algorithms
   help: The signing algorithms allowed for the auth method.
+prompts:
+  label: Prompts
+  help: The prompts allowed for an oidc auth method.
 algorithm:
   label: Algorithm
 subject:
