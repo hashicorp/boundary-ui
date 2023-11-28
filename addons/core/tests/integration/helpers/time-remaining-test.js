@@ -25,6 +25,6 @@ module('Integration | Helper | time-remaining', function (hooks) {
 
     await render(hbs`{{time-remaining this.expirationTime}}`);
 
-    assert.strictEqual(this.element.textContent.trim(), '0:0:00 remaining');
+    assert.strictEqual(this.element.textContent.trim(), '0:00:00 remaining');
   });
 });
