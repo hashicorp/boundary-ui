@@ -1,5 +1,6 @@
 import { pluralize } from 'ember-inflector';
 import { generateMQLExpression } from '../utils/mqlQuery';
+import ArrayProxy from '@ember/array/proxy';
 
 /**
  * Not all types are yet supported by the client daemon so we'll
@@ -21,7 +22,7 @@ const ClientDaemonHandler = {
     switch (context.request.op) {
       case 'query': {
         const { store, data } = context.request;
-        const { type, query } = data;
+        const { type, query, options: { pushToStore = true } = {} } = data;
         const isClientDaemonRunning = await this.ipc.invoke(
           'isClientDaemonRunning',
         );
@@ -36,7 +37,7 @@ const ClientDaemonHandler = {
         // TODO: Remove usages of recursive from callers and scope_id since
         //  all calls to daemon are recursive, scope_id can be part of search query instead
         // eslint-disable-next-line no-unused-vars
-        let { recursive, scope_id, ...remainingQuery } = query;
+        let { recursive, scope_id, page, pageSize, ...remainingQuery } = query;
         let searchQuery = '';
         if (remainingQuery.query) {
           const { search, filters } = remainingQuery.query;
@@ -63,7 +64,7 @@ const ClientDaemonHandler = {
         const [results] = Object.values(
           await this.ipc.invoke('searchClientDaemon', remainingQuery),
         );
-        const payload = { items: results ?? [] };
+        const payload = { items: paginateResults(results, page, pageSize) };
 
         const schema = store.modelFor(type);
         const serializer = store.serializerFor(type);
@@ -75,14 +76,48 @@ const ClientDaemonHandler = {
           'query',
         );
 
-        // TODO: Add some pagination
+        // Return the raw data if we don't push to the store.
+        let records = normalizedPayload.data;
+        if (pushToStore) {
+          records = store.push(normalizedPayload);
+        }
 
-        return store.push(normalizedPayload);
+        // Use a proxy array to store the metadata so the store's `query`
+        // array requirement is satisfied.
+        return ArrayProxy.create({
+          content: records,
+          meta: { totalItems: results?.length ?? 0 },
+        });
       }
       default:
         return next(context.request);
     }
   },
+};
+
+/**
+ * Takes an array and the current page and pagesize to calculate the correct
+ * number of results to return to the caller.
+ *
+ * @param array
+ * @param page
+ * @param pageSize
+ * @returns {[*]}
+ */
+const paginateResults = (array, page, pageSize) => {
+  const length = array?.length;
+  if (!array || length === 0) {
+    return [];
+  }
+  if (!page || !pageSize) {
+    return array;
+  }
+
+  const offset = (page - 1) * pageSize;
+  const start = Math.min(length - 1, offset);
+  const end = Math.min(length, offset + pageSize);
+
+  return array.slice(start, end);
 };
 
 export default ClientDaemonHandler;

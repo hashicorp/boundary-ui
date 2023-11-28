@@ -35,9 +35,9 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   }
 
   /**
-   * Loads all targets under current scope.
+   * Loads all targets and the number of targets under current scope.
    *
-   * @return {Promise{[TargetModel]}}
+   * @returns {Promise<{totalItems: number, targets: [TargetModel]}>}
    */
   async model({ search = '' }) {
     // TODO: Filter targets by scope we're in manually
@@ -45,12 +45,13 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     const queryOptions = { query: { search } };
 
     let targets = await this.store.query('target', queryOptions);
+    const totalItems = targets.meta?.totalItems;
 
     // Filter out targets to which users do not have the connect ability
     targets = targets.filter((target) =>
       this.can.can('connect target', target),
     );
 
-    return targets;
+    return { targets: targets, totalItems };
   }
 }
