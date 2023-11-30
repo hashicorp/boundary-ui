@@ -38,7 +38,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   }
 
   /**
-   * Loads all targets and the number of targets under current scope.
+   * Loads queried targets, the number of targets under current scope, and
+   * all targets and projects for filtering options.
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel]}>}
    */

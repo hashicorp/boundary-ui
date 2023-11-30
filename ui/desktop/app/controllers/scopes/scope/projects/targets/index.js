@@ -45,6 +45,10 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     return this.model.targets.length === 0 && !this.search;
   }
 
+  /**
+   * Returns scopes that belong to the targets listed
+   * @returns {[ScopeModel]}
+   */
   get availableScopes() {
     const targetScopeIds = this.model.allTargets.map(
       (target) => target.scope.id,
@@ -147,6 +151,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     this.search = value;
   }
 
+  /**
+   * Handles checkbox event changes for selectedScopes but does not
+   * update the scopes query param
+   * @param {object} event
+   */
   @action
   selectItem(event) {
     let { checked, value } = event.target;
@@ -159,6 +168,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     }
   }
 
+  /**
+   * Sets the scopes query param to value of selectedScopes
+   * to trigger a query and closes the dropdown
+   * @param {function} closeCallback
+   */
   @action
   filterByScopes(closeCallback) {
     this.scopes = this.selectedScopes;
