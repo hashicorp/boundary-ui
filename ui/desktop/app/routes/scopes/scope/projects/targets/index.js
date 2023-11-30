@@ -40,7 +40,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   /**
    * Loads all targets and the number of targets under current scope.
    *
-   * @returns {Promise<{totalItems: number, targets: [TargetModel]}>}
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel]}>}
    */
   async model({ search = '', scopes }) {
     // TODO: Filter targets by scope we're in manually
