@@ -10,7 +10,6 @@ module('Unit | Service | confirm', function (hooks) {
   setupTest(hooks);
 
   test('`confirm()` emits promise-like instances', function (assert) {
-    assert.expect(3);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
     const confirmation = service.confirm();
@@ -20,7 +19,6 @@ module('Unit | Service | confirm', function (hooks) {
   });
 
   test('`pending` is an array of pending confirmations', function (assert) {
-    assert.expect(3);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
     assert.strictEqual(
@@ -39,7 +37,6 @@ module('Unit | Service | confirm', function (hooks) {
   });
 
   test('confirmations may be confirmed or dismissed', function (assert) {
-    assert.expect(4);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
     let confirmation = service.confirm();

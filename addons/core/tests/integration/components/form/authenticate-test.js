@@ -19,8 +19,6 @@ module('Integration | Component | form | authenticate', function (hooks) {
   setupIntl(hooks);
 
   test('it shows login name and password when LDAP is selected from the list', async function (assert) {
-    assert.expect(3);
-
     const store = this.owner.lookup('service:store');
 
     this.model = store.createRecord('auth-method', {
@@ -43,8 +41,6 @@ module('Integration | Component | form | authenticate', function (hooks) {
   });
 
   test('it shows login name and password when password is selected from the list', async function (assert) {
-    assert.expect(3);
-
     const store = this.owner.lookup('service:store');
 
     this.model = store.createRecord('auth-method', {
@@ -67,8 +63,6 @@ module('Integration | Component | form | authenticate', function (hooks) {
   });
 
   test('it should only show sign in button when OIDC is selected from the list', async function (assert) {
-    assert.expect(3);
-
     const store = this.owner.lookup('service:store');
 
     this.model = store.createRecord('auth-method', {

@@ -12,7 +12,6 @@ module('Integration | Component | doc-link', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(1);
     await render(hbs`<DocLink @doc='account' @iconSize='large' />`);
     assert.ok(find('.doc-link .rose-icon.large'));
   });
