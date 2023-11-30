@@ -12,7 +12,6 @@ module('Integration | Component | rose/header/brand', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(3);
     await render(hbs`
       <Rose::Header::Brand @logo="logo" @text="Product Name" />
     `);

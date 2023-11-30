@@ -12,7 +12,6 @@ module('Integration | Component | rose/form/actions', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders a submit button and a regular button', async function (assert) {
-    assert.expect(2);
     this.cancel = () => {};
     await render(
       hbs`
@@ -28,7 +27,6 @@ module('Integration | Component | rose/form/actions', function (hooks) {
   });
 
   test('it can disable the buttons', async function (assert) {
-    assert.expect(2);
     this.cancel = () => {};
     await render(
       hbs`
@@ -46,7 +44,6 @@ module('Integration | Component | rose/form/actions', function (hooks) {
   });
 
   test('it optionally does not render the cancel button', async function (assert) {
-    assert.expect(2);
     await render(hbs`
         <Rose::Form::Actions @submitText='Save' @showCancel={{false}} />
     `);
