@@ -60,7 +60,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
     // Associate the connection details with the session
     let session;
-    const { session_id, address, port, credentials } = connectionDetails;
+    const { session_id, address, port, credentials, expiration_time } =
+      connectionDetails;
     try {
       session = await this.store.findRecord('session', session_id);
     } catch (error) {
@@ -76,9 +77,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
             proxy_address: address,
             proxy_port: port,
             target_id: target.id,
+            expiration_time,
           },
         ],
       });
+
       session = this.store.peekRecord('session', session_id);
     }
 
