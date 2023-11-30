@@ -23,6 +23,12 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    page: {
+      refreshModel: true,
+    },
+    pageSize: {
+      refreshModel: true,
+    },
   };
 
   // =methods
@@ -39,10 +45,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel]}>}
    */
-  async model({ search = '' }) {
+  async model({ search, page, pageSize }) {
     // TODO: Filter targets by scope we're in manually
     // const { id: scope_id } = this.modelFor('scopes.scope');
-    const queryOptions = { query: { search } };
+
+    const queryOptions = {
+      query: { search },
+      page,
+      pageSize,
+    };
 
     let targets = await this.store.query('target', queryOptions);
     const totalItems = targets.meta?.totalItems;
