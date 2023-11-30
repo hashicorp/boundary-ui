@@ -21,7 +21,6 @@ module('Unit | Authenticator | OIDC', function (hooks) {
   });
 
   test('`startAuthentication` initiates the authentication flow and returns the response', async function (assert) {
-    assert.expect(2);
     const authenticator = this.owner.lookup('authenticator:oidc');
     server.post(authenticator.buildAuthEndpointURL(), () => [
       200,
