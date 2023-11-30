@@ -57,6 +57,7 @@ export default function initializeMockIPC(server, config) {
         userId: 'authenticateduser',
         type,
         created_time: new Date().toISOString(),
+        expiration_time: faker.date.soon(),
       });
       const decoded = {
         key1: 'value 1',
