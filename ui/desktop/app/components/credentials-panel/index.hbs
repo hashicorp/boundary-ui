@@ -24,39 +24,24 @@
 {{#each @credentials as |credential|}}
   {{#if this.isRawApiVisible}}
     <div class='raw-credential-panel-body'>
-      <div class='raw-credential-header'>
-        <div class='raw-credential-title'>
-          <div class='credential-name hds-typography-display-200'>
-            {{#if credential.source.name}}
-              {{credential.source.name}}
-            {{else}}
-              {{credential.source.id}}
-            {{/if}}
-          </div>
-          <Hds::Copy::Button
-            @text='Copy'
-            @isIconOnly={{true}}
-            @textToCopy={{raw-json credential.rawCredential}}
-          />
-        </div>
-        <div class='hds-typography-body-100'>
+      <Hds::CodeBlock
+        @language='json'
+        @value={{raw-json credential.rawCredential}}
+        @hasLineNumbers={{false}}
+        @hasCopyButton={{true}}
+        as |CB|
+      >
+        <CB.Title>
+          {{#if credential.source.name}}
+            {{credential.source.name}}
+          {{else}}
+            {{credential.source.id}}
+          {{/if}}
+        </CB.Title>
+        <CB.Description>
           {{credential.source.description}}
-        </div>
-      </div>
-
-      <Rose::CodeEditor @codeValue={{raw-json credential.rawCredential}} as |c|>
-        <c.fieldEditor
-          class='rose-autosize raw-secret'
-          @options={{hash
-            mode='application/json'
-            readOnly=true
-            lineNumbers=false
-            cursorBlinkRate=-1
-            styleActiveLine=false
-            autoRefresh=true
-          }}
-        />
-      </Rose::CodeEditor>
+        </CB.Description>
+      </Hds::CodeBlock>
     </div>
   {{else}}
     <div class='credential-panel-body'>
