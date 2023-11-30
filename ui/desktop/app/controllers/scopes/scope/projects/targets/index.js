@@ -33,7 +33,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {boolean}
    */
   get noResults() {
-    return this.model.length === 0 && this.search;
+    return this.model.targets.length === 0 && this.search;
   }
 
   /**
@@ -41,7 +41,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {boolean}
    */
   get noTargets() {
-    return this.model.length === 0 && !this.search;
+    return this.model.targets.length === 0 && !this.search;
   }
 
   /**
