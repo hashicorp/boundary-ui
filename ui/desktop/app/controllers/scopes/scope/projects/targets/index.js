@@ -34,7 +34,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {boolean}
    */
   get noResults() {
-    return this.model.targets.targets.length === 0 && this.search;
+    return this.model.targets.length === 0 && this.search;
   }
 
   /**
