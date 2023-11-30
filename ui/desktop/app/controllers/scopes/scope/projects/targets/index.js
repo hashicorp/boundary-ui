@@ -21,10 +21,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =attributes
 
-  queryParams = ['search'];
+  queryParams = ['search', { scopes: { type: 'array' } }];
 
   @tracked search;
-  @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
+  @tracked scopes = [];
+  @tracked selectedScopes = [];
 
   // =methods
 
@@ -33,7 +34,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {boolean}
    */
   get noResults() {
-    return this.model.targets.length === 0 && this.search;
+    return this.model.targets.targets.length === 0 && this.search;
   }
 
   /**
@@ -42,6 +43,15 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get noTargets() {
     return this.model.targets.length === 0 && !this.search;
+  }
+
+  get availableScopes() {
+    const targetScopeIds = this.model.allTargets.map(
+      (target) => target.scope.id,
+    );
+    return this.model.projects.filter((project) =>
+      targetScopeIds.includes(project.id),
+    );
   }
 
   /**
@@ -135,5 +145,23 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+  }
+
+  @action
+  selectItem(event) {
+    let { checked, value } = event.target;
+    if (checked) {
+      this.selectedScopes.push(value);
+    } else {
+      this.selectedScopes = this.selectedScopes.filter(
+        (scope) => scope !== value,
+      );
+    }
+  }
+
+  @action
+  filterByScopes(closeCallback) {
+    this.scopes = this.selectedScopes;
+    closeCallback();
   }
 }

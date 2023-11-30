@@ -27,6 +27,7 @@
             <DD.ToggleButton
               @color='secondary'
               @text={{t 'resources.scope.title'}}
+              @count={{this.scopes.length}}
             />
             <DD.Header @hasDivider={{true}}>
               <Hds::Form::TextInput::Base
@@ -36,11 +37,32 @@
                 data-test-search
               />
             </DD.Header>
-            {{#each this.searchItems as |item|}}
-              <DD.Checkbox @value={{item}} data-test-checkbox={{item}}>
-                {{item}}
-              </DD.Checkbox>
-            {{/each}}
+            {{#let (group-by this.availableScopes 'scopeModel') as |orgs|}}
+              {{#each orgs as |org|}}
+                <DD.Generic>
+                  <FlightIcon @name='org' />
+                  {{org.key.name}}
+                </DD.Generic>
+                {{#each org.items as |project|}}
+                  <DD.Checkbox
+                    @value={{project.id}}
+                    data-test-checkbox={{project.name}}
+                    checked={{includes project.id this.scopes}}
+                    {{on 'change' this.selectItem}}
+                  >
+                    {{project.name}}
+                  </DD.Checkbox>
+                {{/each}}
+              {{/each}}
+            {{/let}}
+            <DD.Footer @hasDivider={{true}}>
+              <Hds::Button
+                @text='Apply'
+                @isFullWidth={{true}}
+                @size='small'
+                {{on 'click' (fn this.filterByScopes DD.close)}}
+              />
+            </DD.Footer>
           </S.Dropdown>
           <S.Dropdown as |DD|>
             <DD.ToggleButton @color='secondary' @text='Active session' />

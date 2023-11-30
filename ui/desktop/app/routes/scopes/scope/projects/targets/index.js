@@ -23,6 +23,9 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    scopes: {
+      refreshModel: true,
+    },
   };
 
   // =methods
@@ -39,10 +42,16 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel]}>}
    */
-  async model({ search = '' }) {
+  async model({ search = '', scopes }) {
     // TODO: Filter targets by scope we're in manually
     // const { id: scope_id } = this.modelFor('scopes.scope');
-    const queryOptions = { query: { search } };
+    const filters = { scope_id: [] };
+    scopes.forEach((scope) => {
+      filters.scope_id.push({ equals: scope });
+    });
+
+    const queryOptions = { query: { search, filters } };
+    const projects = this.modelFor('scopes.scope.projects');
 
     let targets = await this.store.query('target', queryOptions);
     const totalItems = targets.meta?.totalItems;
@@ -52,6 +61,14 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       this.can.can('connect target', target),
     );
 
-    return { targets: targets, totalItems };
+    // Query all targets for defining filtering values
+    let allTargets = await this.store.query('target', { query: null });
+
+    // Filter out targets to which users do not have the connect ability
+    allTargets = allTargets.filter((target) =>
+      this.can.can('connect target', target),
+    );
+
+    return { targets, projects, allTargets, totalItems };
   }
 }
