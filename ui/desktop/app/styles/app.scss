@@ -502,15 +502,16 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.session-details-header {
-  &,
-  h1 {
-    display: flex;
-    align-items: center;
+.session-details-info {
+  display: flex;
+  align-items: center;
 
-    > * {
-      margin-right: 1rem;
-    }
+  > * {
+    margin-right: 1rem;
+  }
+
+  .hds-badge {
+    margin-left: 1rem;
   }
 }
 

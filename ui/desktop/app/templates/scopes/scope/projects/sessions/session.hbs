@@ -8,16 +8,14 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <div class='session-details-header'>
-      <h1>
-        <Hds::IconTile @color='boundary' @icon='terminal' />
-        {{@model.displayName}}
-      </h1>
+    <h1 class='session-details-info'>
+      <Hds::IconTile @color='boundary' @icon='terminal' />
+      {{@model.displayName}}
       <Hds::Badge
         @text={{time-remaining @model.expiration_time}}
         @icon='loading'
       />
-    </div>
+    </h1>
   </page.header>
 
   <page.actions>
