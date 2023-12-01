@@ -151,21 +151,23 @@
     {{/if}}
 
     <Hds::CodeBlock
-      @language="bash"
+      @language='bash'
       @value={{this.createConfigText}}
       @hasCopyButton={{true}}
       @hasLineNumbers={{false}}
-    as |CB|>
+      as |CB|
+    >
       <CB.Title>
         {{t 'resources.worker.form.steps.1.create_directory'}}
       </CB.Title>
     </Hds::CodeBlock>
 
     <Hds::CodeBlock
-      @language="hcl"
+      @language='hcl'
       @value={{this.workerConfigText}}
       @hasCopyButton={{true}}
-    as |CB|>
+      as |CB|
+    >
       <CB.Title>
         {{t 'resources.worker.form.steps.1.create_config'}}
       </CB.Title>
@@ -176,10 +178,11 @@
   <h3>{{t 'resources.worker.form.steps.2.title'}}</h3>
   <div class='worker-create-section'>
     <Hds::CodeBlock
-      @language="bash"
+      @language='bash'
       @value={{this.installBoundaryText}}
       @hasCopyButton={{true}}
-    as |CB|>
+      as |CB|
+    >
       <CB.Title>
         {{t 'resources.worker.form.steps.2.run_command'}}
       </CB.Title>
