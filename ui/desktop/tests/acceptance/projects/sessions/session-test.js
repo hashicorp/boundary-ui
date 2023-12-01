@@ -191,11 +191,11 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       address: 'a_123',
       port: 'p_123',
       protocol: 'tcp',
+      expiration_time: '2022-02-05T09:55:39.216Z',
     });
 
     await visit(urls.target);
     await click(TARGET_CONNECT_BUTTON);
-
     assert.strictEqual(currentURL(), urls.session);
   });
 
