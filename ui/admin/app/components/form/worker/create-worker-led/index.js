@@ -140,6 +140,33 @@ unzip *.zip ;\\
       : ossContent;
   }
 
+  /**
+   * Returns `shell` configuration object for `<Rose::CodeEditor>`.
+   * @type {Object}
+   */
+  get shellCodeEditor() {
+    return {
+      mode: 'shell',
+      readOnly: true,
+      lineNumbers: false,
+      cursorBlinkRate: -1,
+      styleActiveLine: false,
+    };
+  }
+
+  /**
+   * Returns `hcl` configuration object for `<Rose::CodeEditor>`.
+   * @type {Object}
+   */
+  get hclCodeEditor() {
+    return {
+      mode: 'hcl',
+      readOnly: true,
+      cursorBlinkRate: -1,
+      styleActiveLine: false,
+    };
+  }
+
   //=methods
 
   convertCommaSeparatedValuesToArray(input) {
