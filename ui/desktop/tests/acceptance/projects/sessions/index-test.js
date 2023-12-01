@@ -22,7 +22,6 @@ import {
   STATUS_SESSION_CANCELING,
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
-import Store from 'api/services/store';
 
 module('Acceptance | projects | sessions', function (hooks) {
   setupApplicationTest(hooks);
@@ -123,9 +122,6 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-
-    // Use the original store so we don't try and hit the client daemon
-    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {
