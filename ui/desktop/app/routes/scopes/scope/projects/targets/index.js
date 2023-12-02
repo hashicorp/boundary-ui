@@ -52,6 +52,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       this.can.can('connect target', target),
     );
 
-    return { targets: targets, totalItems };
+    let targetsWithSessions = [];
+    for (const target of targets) {
+      const sessions = await this.store.query('session', {
+        query: { search: target.id },
+      });
+      // TODO: perhaps sort sessions ? remove terminated sessions ?
+      targetsWithSessions.push({ target, sessions });
+    }
+
+    return { targets: targetsWithSessions, totalItems };
   }
 }

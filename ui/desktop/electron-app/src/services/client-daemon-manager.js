@@ -34,12 +34,7 @@ class ClientDaemonManager {
    */
   async start() {
     // TODO: Finalize how often the daemon should be refreshing
-    const startDaemonCommand = [
-      'daemon',
-      'start',
-      '-refresh-interval-seconds',
-      '10',
-    ];
+    const startDaemonCommand = ['daemon', 'start', '-refresh-interval', '10'];
     await spawn(startDaemonCommand);
     this.status();
   }

@@ -556,6 +556,7 @@ target:
       description: Sorry, we weren't able to find any targets for "{query}".
   titles:
     new: New Target
+    session-in-progress: Sessions in progress?
   actions:
     create: New Target
     delete: Delete Target
