@@ -16,7 +16,6 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
-import Store from 'api/services/store';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -137,9 +136,6 @@ module('Acceptance | scopes', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-
-    // Use the original store so we don't try and hit the client daemon
-    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {

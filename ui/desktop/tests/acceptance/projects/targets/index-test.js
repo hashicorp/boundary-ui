@@ -21,9 +21,8 @@ import {
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
-import Store from 'api/services/store';
 
-module('Acceptance | projects | targets', function (hooks) {
+module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -140,9 +139,6 @@ module('Acceptance | projects | targets', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-
-    // Use the original store so we don't try and hit the client daemon
-    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {
