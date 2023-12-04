@@ -60,6 +60,6 @@ module('Integration | Component | credentials-panel', function (hooks) {
 
     await click('[data-test-toggle-credentials]');
 
-    assert.dom('.raw-secret').isVisible();
+    assert.dom("[data-test='raw-secret']").isVisible();
   });
 });
