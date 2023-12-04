@@ -45,6 +45,8 @@ export function generateMQLFilterExpression(filterObj) {
               return lt(key, value);
             case 'lte':
               return lte(key, value);
+            case 'notEquals':
+              return notEquals(key, value);
             default:
               return equals(key, value);
           }
@@ -104,6 +106,9 @@ const sanitize = (input) => input?.replace(/(["\\])/g, '\\$1');
 // Comparison Operators
 const equals = (key, value) =>
   !isEmpty(value) ? `${key} = "${sanitize(value)}"` : null;
+
+const notEquals = (key, value) =>
+  !isEmpty(value) ? `${key} != "${sanitize(value)}"` : null;
 
 const contains = (key, value) =>
   !isEmpty(value) ? `${key} % "${sanitize(value)}"` : null;
