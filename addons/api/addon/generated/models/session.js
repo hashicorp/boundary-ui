@@ -32,6 +32,13 @@ export default class GeneratedSessionModel extends BaseModel {
   })
   updated_time;
 
+  @attr('date', {
+    description:
+      'After this time the connection will be expired, e.g. forcefully terminated.\nOutput only.',
+    readOnly: true,
+  })
+  expiration_time;
+
   @attr('number', {
     description: 'Current version number of this resource.',
   })
