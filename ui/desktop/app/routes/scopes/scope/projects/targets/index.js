@@ -9,7 +9,6 @@ import orderBy from 'lodash/orderBy';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
-  STATUS_SESSION_CANCELING,
 } from 'api/models/session';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
@@ -67,7 +66,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
             status: [
               { equals: STATUS_SESSION_ACTIVE },
               { equals: STATUS_SESSION_PENDING },
-              { equals: STATUS_SESSION_CANCELING },
             ],
           },
         },
