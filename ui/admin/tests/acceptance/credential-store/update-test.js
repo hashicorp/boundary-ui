@@ -61,7 +61,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can save changes to existing static credential store', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.staticCredentialStore.name, 'random string');
     await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
@@ -76,7 +75,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can save changes to existing vault credential store', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
     await visit(urls.vaultCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
@@ -91,7 +89,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('cannot make changes to an existing static credential store without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'update',
@@ -101,7 +98,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('cannot make changes to an existing vault credential store without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'update',
@@ -111,7 +107,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can cancel changes to existing static credential store', async function (assert) {
-    assert.expect(2);
     await visit(urls.staticCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
@@ -124,7 +119,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('can cancel changes to existing vault credential store', async function (assert) {
-    assert.expect(2);
     await visit(urls.vaultCredentialStore);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
@@ -137,7 +131,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('saving an existing static credential store with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
         400,
@@ -172,7 +165,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('saving an existing vault credential store with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
         400,

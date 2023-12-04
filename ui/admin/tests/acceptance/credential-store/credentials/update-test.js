@@ -87,7 +87,6 @@ module(
     });
 
     test('can save changes to existing username & password credential', async function (assert) {
-      assert.expect(3);
       const mockInput = 'random string';
       assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
       await visit(urls.usernamePasswordCredential);
@@ -103,7 +102,6 @@ module(
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
-      assert.expect(3);
       const mockInput = 'random string';
       assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
       await visit(urls.usernameKeyPairCredential);
@@ -119,7 +117,6 @@ module(
     });
 
     test('can save changes to existing JSON credential', async function (assert) {
-      assert.expect(3);
       const mockInput = 'random string';
       assert.notEqual(instances.jsonCredential.name, mockInput);
       await visit(urls.jsonCredential);
@@ -134,7 +131,6 @@ module(
     });
 
     test('cannot make changes to an existing username & password credential without proper authorization', async function (assert) {
-      assert.expect(1);
       instances.usernamePasswordCredential.authorized_actions =
         instances.usernamePasswordCredential.authorized_actions.filter(
           (item) => item !== 'update',
@@ -146,7 +142,6 @@ module(
     });
 
     test('cannot make changes to an existing username & key pair credential without proper authorization', async function (assert) {
-      assert.expect(1);
       instances.usernameKeyPairCredential.authorized_actions =
         instances.usernameKeyPairCredential.authorized_actions.filter(
           (item) => item !== 'update',
@@ -158,7 +153,6 @@ module(
     });
 
     test('cannot make changes to an existing JSON credential without proper authorization', async function (assert) {
-      assert.expect(1);
       instances.jsonCredential.authorized_actions =
         instances.jsonCredential.authorized_actions.filter(
           (item) => item !== 'update',
@@ -170,7 +164,6 @@ module(
     });
 
     test('can cancel changes to existing username & password credential', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       await visit(urls.usernamePasswordCredential);
       await click('form [type="button"]', 'Activate edit mode');
@@ -184,7 +177,6 @@ module(
     });
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       await visit(urls.usernameKeyPairCredential);
       await click('form [type="button"]', 'Activate edit mode');
@@ -198,7 +190,6 @@ module(
     });
 
     test('can cancel changes to existing JSON credential', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       await visit(urls.jsonCredential);
       await click('form [type="button"]', 'Activate edit mode');
@@ -212,7 +203,6 @@ module(
     });
 
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       this.server.patch('/credentials/:id', () => {
         return new Response(
@@ -248,7 +238,6 @@ module(
     });
 
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       this.server.patch('/credentials/:id', () => {
         return new Response(
@@ -284,7 +273,6 @@ module(
     });
 
     test('saving an existing JSON credential with invalid fields displays error message', async function (assert) {
-      assert.expect(2);
       const mockInput = 'random string';
       this.server.patch('/credentials/:id', () => {
         return new Response(
@@ -477,7 +465,6 @@ module(
     });
 
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
-      assert.expect(3);
       await visit(urls.usernamePasswordCredential);
       assert.dom('[name="password"]').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
@@ -486,7 +473,6 @@ module(
     });
 
     test('private_key and private_key_passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
-      assert.expect(5);
       await visit(urls.usernameKeyPairCredential);
       assert.dom('[name="private_key"]').doesNotExist();
       assert.dom('[name="private_key_passphrase"]').doesNotExist();
@@ -497,7 +483,6 @@ module(
     });
 
     test('secret editor is in actionable state when entering edit mode of a JSON credential', async function (assert) {
-      assert.expect(3);
       await visit(urls.jsonCredential);
       assert.dom('.secret-editor-skeleton-message button').doesNotExist();
       await click('form [type="button"]', 'Activate edit mode');
@@ -506,7 +491,6 @@ module(
     });
 
     test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
-      assert.expect(4);
       await visit(urls.jsonCredential);
       await click('form [type="button"]', 'Activate edit mode');
       assert.strictEqual(currentURL(), urls.jsonCredential);

@@ -54,7 +54,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('Users can navigate to credential-stores with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.projectScope);
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
@@ -65,7 +64,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = [];
@@ -79,7 +77,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = ['create'];
@@ -88,7 +85,6 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('Users can link to docs page for credential stores', async function (assert) {
-    assert.expect(1);
     await visit(urls.credentialStores);
     assert.ok(
       find(

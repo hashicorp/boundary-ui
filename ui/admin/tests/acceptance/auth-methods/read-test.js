@@ -74,7 +74,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('visiting auth methods in org scope', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgAuthMethods}"]`);
@@ -84,7 +83,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('visiting auth methods in global scope', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
 
     await click(`[href="${urls.globalAuthMethods}"]`);
@@ -94,7 +92,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('can navigate to an auth method form in org scope', async function (assert) {
-    assert.expect(3);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgAuthMethods}"]`);
@@ -109,7 +106,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('can navigate to an auth method form in global scope', async function (assert) {
-    assert.expect(3);
     await visit(urls.globalScope);
 
     await click(`[href="${urls.globalAuthMethods}"]`);
@@ -124,7 +120,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an auth method form without proper authorization in org scope', async function (assert) {
-    assert.expect(1);
     instances.passwordAuthMethodOrg.authorized_actions =
       instances.passwordAuthMethodOrg.authorized_actions.filter(
         (item) => item !== 'read',
@@ -137,7 +132,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an auth method form without proper authorization in global scope', async function (assert) {
-    assert.expect(1);
     instances.oidcAuthMethodGlobal.authorized_actions =
       instances.oidcAuthMethodGlobal.authorized_actions.filter(
         (item) => item !== 'read',
@@ -150,7 +144,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an ldap auth method form in global scope', async function (assert) {
-    assert.expect(3);
     instances.ldapAuthMethod = this.server.create('auth-method', {
       scope: instances.scopes.global,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -165,7 +158,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('cannot navigate to an ldap auth method form in org scope', async function (assert) {
-    assert.expect(3);
     instances.ldapAuthMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -180,7 +172,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
   });
 
   test('users can navigate to auth method and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

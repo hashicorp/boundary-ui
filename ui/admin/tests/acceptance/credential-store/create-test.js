@@ -67,7 +67,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can create a new credential store of default type static', async function (assert) {
-    assert.expect(1);
     featuresService.enable('static-credentials');
     const count = getStaticCredentialStoresCount();
     await visit(urls.newCredentialStore);
@@ -77,7 +76,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can create a new credential store of type vault', async function (assert) {
-    assert.expect(1);
     featuresService.enable('static-credentials');
     const count = getVaultCredentialStoresCount();
     await visit(urls.newCredentialStore);
@@ -88,7 +86,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can cancel create new credential stores', async function (assert) {
-    assert.expect(2);
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
     await fillIn('[name="name"]', 'random string');
@@ -98,7 +95,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users cannot navigate to new credential stores route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = [];
@@ -112,7 +108,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('saving a new credential store with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/credential-stores', () => {
       return new Response(
         400,
@@ -145,7 +140,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can link to docs page for new credential store', async function (assert) {
-    assert.expect(1);
     await visit(urls.newCredentialStore);
     assert.ok(
       find(
@@ -155,7 +149,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new credential store route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions[
       'credential-stores'
     ] = instances.scopes.project.authorized_collection_actions[

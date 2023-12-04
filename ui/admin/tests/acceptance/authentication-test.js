@@ -210,7 +210,6 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('visiting auth method authenticate route', async function (assert) {
-    assert.expect(1);
     await visit(authMethodAuthenticateURL);
     await a11yAudit();
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);

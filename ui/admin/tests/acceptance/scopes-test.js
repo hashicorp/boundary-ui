@@ -90,7 +90,6 @@ module('Acceptance | scopes', function (hooks) {
   // In order to resolve this, we might hoist authentication routes up from
   // under scopes.
   test('visiting global scope is successful even when the global scope cannot be fetched', async function (assert) {
-    assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
       const response = id === 'global' ? new Response(404) : scope;

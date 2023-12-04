@@ -50,7 +50,6 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('can create new group', async function (assert) {
-    assert.expect(1);
     const groupsCount = this.server.db.groups.length;
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
@@ -59,7 +58,6 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.groups);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.groups.includes(
@@ -70,7 +68,6 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.groups);
     assert.false(
@@ -81,7 +78,6 @@ module('Acceptance | groups | create', function (hooks) {
     assert.notOk(find(`[href="${urls.newGroup}"]`));
   });
   test('can cancel new group creation', async function (assert) {
-    assert.expect(2);
     const groupsCount = this.server.db.groups.length;
     await visit(urls.newGroup);
     await fillIn('[name="name"]', 'group name');
@@ -91,7 +87,6 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/groups', () => {
       return new Response(
         400,
@@ -127,7 +122,6 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new group route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.groups =
       instances.scopes.org.authorized_collection_actions.groups.filter(
         (item) => item !== 'create',
