@@ -98,13 +98,13 @@
                 </Copyable>
               </B.Td>
               <B.Td>
-                {{! TODO: perhaps add a label to the button ? }}
                 {{#if B.data.sessions.length}}
                   <Hds::Button
                     @text={{t 'actions.yes'}}
                     @color='tertiary'
                     @icon='info'
                     @iconPosition='trailing'
+                    {{on 'click' this.toggleSessionsFlyout}}
                   />
                 {{/if}}
               </B.Td>

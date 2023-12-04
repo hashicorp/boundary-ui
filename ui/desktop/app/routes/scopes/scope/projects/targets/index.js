@@ -5,6 +5,12 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import orderBy from 'lodash/orderBy';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
@@ -54,10 +60,19 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     let targetsWithSessions = [];
     for (const target of targets) {
-      const sessions = await this.store.query('session', {
-        query: { search: target.id },
+      let sessions = await this.store.query('session', {
+        query: {
+          filters: {
+            target_id: { equals: target.id },
+            status: [
+              { equals: STATUS_SESSION_ACTIVE },
+              { equals: STATUS_SESSION_PENDING },
+              { equals: STATUS_SESSION_CANCELING },
+            ],
+          },
+        },
       });
-      // TODO: perhaps sort sessions ? remove terminated sessions ?
+      sessions = orderBy(sessions, 'created_time', 'desc');
       targetsWithSessions.push({ target, sessions });
     }
 

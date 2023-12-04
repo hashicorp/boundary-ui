@@ -25,6 +25,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   @tracked search;
   @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
+  @tracked sessionsFlyoutActive = false;
 
   // =methods
 
@@ -135,5 +136,10 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+  }
+
+  @action
+  toggleSessionsFlyout() {
+    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
   }
 }
