@@ -109,7 +109,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
   /**
    * Intercepts "empty" responses and adds an empty `items` array.
    * This query method now supports pagination by checking the responseType and
-   * passing in the refresh token if the responseType indicates more data
+   * passing in the list token if the responseType indicates more data
    * @override
    * @method query
    * @return {Promise} promise
@@ -125,12 +125,8 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       //add the result items to a data array
       if (result && result.items) {
         data.push(...result.items);
-        //pass in the refresh token for subsequent calls to fetch the remaining list items
-        query.refresh_token = result.refresh_token;
-        //break the loop as soon the response_type becomes complete
-        if (result.response_type === 'complete') {
-          break;
-        }
+        //pass in the list token for subsequent calls to fetch the remaining list items
+        query.list_token = result.list_token;
       }
     } while (result && result.response_type === 'delta');
 
