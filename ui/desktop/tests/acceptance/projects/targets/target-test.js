@@ -10,7 +10,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
-import Store from 'api/services/store';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -132,9 +131,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     const ipcService = this.owner.lookup('service:ipc');
     stubs.ipcService = sinon.stub(ipcService, 'invoke');
-
-    // Use the original store so we don't try and hit the client daemon
-    this.owner.register('service:store', Store);
   });
 
   hooks.afterEach(function () {

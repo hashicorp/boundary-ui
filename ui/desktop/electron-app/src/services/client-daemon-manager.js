@@ -10,6 +10,7 @@ const runtimeSettings = require('./runtime-settings');
 
 class ClientDaemonManager {
   #socketPath;
+  #isClientDaemonAlreadyRunning = true;
 
   get socketPath() {
     return this.#socketPath;
@@ -33,9 +34,14 @@ class ClientDaemonManager {
    * @returns {Promise<void>}
    */
   async start() {
-    // TODO: Finalize how often the daemon should be refreshing
-    const startDaemonCommand = ['daemon', 'start', '-refresh-interval', '10'];
-    await spawn(startDaemonCommand);
+    const startDaemonCommand = ['daemon', 'start'];
+    const { stderr } = await spawn(startDaemonCommand);
+
+    // If we get a null/undefined, err on safe side and don't stop daemon when
+    // we close the desktop client
+    if (stderr && !stderr.includes('The daemon is already running')) {
+      this.#isClientDaemonAlreadyRunning = false;
+    }
     this.status();
   }
 
@@ -43,6 +49,10 @@ class ClientDaemonManager {
    * Stops the daemon.
    */
   stop() {
+    if (this.#isClientDaemonAlreadyRunning) {
+      return;
+    }
+
     const stopDaemonCommand = ['daemon', 'stop'];
     spawnSync(stopDaemonCommand);
   }
