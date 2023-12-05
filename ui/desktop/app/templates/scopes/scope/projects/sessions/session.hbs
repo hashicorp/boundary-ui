@@ -10,7 +10,7 @@
   <page.header>
     <h1 class='session-details-info'>
       <Hds::IconTile @color='boundary' @icon='terminal' />
-      {{@model.displayName}}
+      <span>{{@model.displayName}}</span>
       <Hds::Badge
         @text={{time-remaining @model.expiration_time}}
         @icon='loading'
