@@ -65,7 +65,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       address,
       port,
       credentials,
-      expiration_time: expiration,
+      expiration: expiration_time,
     } = connectionDetails;
     try {
       session = await this.store.findRecord('session', session_id);
