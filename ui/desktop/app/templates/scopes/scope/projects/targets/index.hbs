@@ -23,7 +23,12 @@
             aria-label={{t 'actions.search'}}
             {{on 'input' this.handleSearchInput}}
           />
-          <S.Dropdown as |DD|>
+          <S.Dropdown
+            id='scope-filter'
+            {{on 'keyup' this.handleKeyUp}}
+            {{on-click-outside this.handleBlur}}
+            as |DD|
+          >
             <DD.ToggleButton
               @color='secondary'
               @text={{t 'resources.scope.title'}}

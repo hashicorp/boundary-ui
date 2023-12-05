@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
+import isEqual from 'lodash/isEqual';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -25,7 +26,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   @tracked search;
   @tracked scopes = [];
-  @tracked selectedScopes = [];
+  // @tracked selectedScopes = [];
+  @tracked selectedScopes = this.scopes;
 
   // =methods
 
@@ -166,16 +168,45 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
         (scope) => scope !== value,
       );
     }
+    console.log('selected click event: ', this.selectedScopes);
   }
 
   /**
    * Sets the scopes query param to value of selectedScopes
    * to trigger a query and closes the dropdown
-   * @param {function} closeCallback
+   * @param {function} close
    */
   @action
-  filterByScopes(closeCallback) {
+  filterByScopes(close) {
     this.scopes = this.selectedScopes;
-    closeCallback();
+    close();
+  }
+
+  @action
+  handleKeyUp(event) {
+    console.log('KEYUP');
+    if (event.keyCode === 27) {
+      if (!isEqual(this.scopes.sort(), this.selectedScopes.sort())) {
+        console.log('arrays dont match');
+        this.selectedScopes = this.scopes;
+      }
+    }
+    console.log('selected: ', this.selectedScopes);
+    console.log('scopes: ', this.scopes);
+  }
+
+  @action
+  handleBlur(event) {
+    const dropdown = document.getElementById('scope-filter');
+
+    if (!dropdown.contains(event.target)) {
+      console.log('Clicked outside the dropdown!');
+      if (!isEqual(this.scopes.sort(), this.selectedScopes.sort())) {
+        console.log('arrays dont match');
+        this.selectedScopes = this.scopes;
+      }
+    }
+    console.log('selected: ', this.selectedScopes);
+    console.log('scopes: ', this.scopes);
   }
 }
