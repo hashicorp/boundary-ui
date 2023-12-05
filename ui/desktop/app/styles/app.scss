@@ -37,6 +37,11 @@
     overflow: auto;
 
     main {
+      /** This overrides the main defined within Rose.
+       * HDS has this set to 1.5rem top/bottom 3rem left/right. HDS assumes the usage of breadcrumbs
+       * but the DC have no breadcrumbs, so we will keep it at 3rem all around.
+      */
+      padding: 3rem;
       flex-grow: 1;
     }
   }
