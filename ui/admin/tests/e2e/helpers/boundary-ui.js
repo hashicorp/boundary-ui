@@ -378,7 +378,7 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
     .click();
   await page.getByLabel('Name', { exact: true }).fill(accountName);
   await page.getByLabel('Login Name').fill(login);
-  await page.getByLabel('Password').fill(password);
+  await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -399,7 +399,7 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
  */
 exports.setPasswordToAccount = async (page, password) => {
   await page.getByRole('link', { name: 'Set Password' }).click();
-  await page.getByLabel('Password').fill(password);
+  await page.getByLabel(new RegExp('Password*')).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
