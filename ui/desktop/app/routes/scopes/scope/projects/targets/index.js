@@ -63,7 +63,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     );
 
     // Query all targets for defining filtering values
-    const options = { pushToStore: true };
+    const options = { pushToStore: false };
     let allTargets = await this.store.query('target', { query: null }, options);
 
     // Filter out targets to which users do not have the connect ability
