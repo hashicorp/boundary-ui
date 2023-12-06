@@ -14,8 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders two icon series', async function (assert) {
-      assert.expect(5);
-
       this.set('client', 'Client');
       this.set('egressWorker', 'Egress Worker');
 

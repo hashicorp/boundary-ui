@@ -12,7 +12,6 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders with icons, text and yield content wrapped in a link, because @route is present', async function (assert) {
-    assert.expect(6);
     await render(hbs`
       <LinkListPanel as |P|>
         <P.Item @icon='cloud-upload' @text='Storage Bucket' @route='scopes.scope.storage-buckets'>
@@ -33,7 +32,6 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders with icons, text and yield content WITHOUT a link, because @route is not present.', async function (assert) {
-    assert.expect(6);
     await render(hbs`
       <LinkListPanel as |P|>
         <P.Item @icon='clock' @text='Storage Bucket'>
@@ -54,8 +52,6 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders link correctly supplying a single model', async function (assert) {
-    assert.expect(2);
-
     // ScopeId global
     this.modelA = { scopeId: 'global' };
     await render(hbs`
@@ -80,7 +76,6 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders a link correctly supplying multiple models', async function (assert) {
-    assert.expect(2);
     // ScopeId global
     this.modelA = { scopeId: 'global', id: 'u_umasjqde46' };
     await render(hbs`

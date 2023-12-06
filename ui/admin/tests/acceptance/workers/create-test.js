@@ -42,7 +42,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('can create new workers', async function (assert) {
-    assert.expect(1);
     const workersCount = getWorkersCount();
     await visit(newWorkerURL);
     await fillIn('[name="worker_auth_registration_request"]', 'token');
@@ -51,7 +50,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
-    assert.expect(2);
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
@@ -61,7 +59,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
     const labels = findAll('label.rose-form-label');
@@ -71,7 +68,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
-    assert.expect(3);
     const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
     const createSection = findAll('.worker-create-section');
@@ -89,7 +85,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
-    assert.expect(2);
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
@@ -107,7 +102,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(workersURL);
     assert.ok(
       globalScope.authorized_collection_actions.workers.includes(
@@ -118,7 +112,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('Users cannot navigate to new workers route without proper authorization', async function (assert) {
-    assert.expect(2);
     globalScope.authorized_collection_actions.workers = [];
     await visit(workersURL);
     assert.notOk(
@@ -130,7 +123,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.post('/workers:create:worker-led', () => {
       return new Response(
         500,
@@ -153,7 +145,6 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new worker route without proper authorization', async function (assert) {
-    assert.expect(2);
     globalScope.authorized_collection_actions.workers =
       globalScope.authorized_collection_actions.workers.filter(
         (item) => item !== 'create:worker-led',

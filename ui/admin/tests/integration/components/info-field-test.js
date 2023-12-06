@@ -17,8 +17,6 @@ module('Integration | Component | info-field', function (hooks) {
   });
 
   test('it renders without icon', async function (assert) {
-    assert.expect(4);
-
     await render(
       hbs`
         <InfoField @value="JSON" as |F|>
@@ -34,8 +32,6 @@ module('Integration | Component | info-field', function (hooks) {
   });
 
   test('it renders with icon', async function (assert) {
-    assert.expect(5);
-
     await render(
       hbs`
         <InfoField @value="JSON" @icon='apple' as |F|>

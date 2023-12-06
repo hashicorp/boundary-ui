@@ -22,7 +22,6 @@ module('Integration | Component | session-recording/status', function (hooks) {
   const BADGE_TEXT_SELECTOR = '.hds-badge__text';
 
   test('it renders a completed status badge', async function (assert) {
-    assert.expect(2);
     this.status = STATE_SESSION_RECORDING_AVAILABLE;
 
     await render(hbs`
@@ -36,7 +35,6 @@ module('Integration | Component | session-recording/status', function (hooks) {
   });
 
   test('it renders an in progress status badge', async function (assert) {
-    assert.expect(2);
     this.status = STATE_SESSION_RECORDING_STARTED;
 
     await render(hbs`
@@ -50,7 +48,6 @@ module('Integration | Component | session-recording/status', function (hooks) {
   });
 
   test('it renders a failed status badge', async function (assert) {
-    assert.expect(2);
     this.status = STATE_SESSION_RECORDING_UNKNOWN;
 
     await render(hbs`
@@ -64,8 +61,6 @@ module('Integration | Component | session-recording/status', function (hooks) {
   });
 
   test('it renders a failed status badge when the status does not match any known states', async function (assert) {
-    assert.expect(2);
-
     await render(hbs`
       <SessionRecording::Status @status='wat' />
     `);

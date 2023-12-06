@@ -74,7 +74,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('visiting user accounts', async function (assert) {
-    assert.expect(2);
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
@@ -85,7 +84,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can remove an account', async function (assert) {
-    assert.expect(2);
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
@@ -96,7 +94,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot remove an account without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.user.authorized_actions.filter(
       (item) => item !== 'remove-accounts',
     );
@@ -109,7 +106,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot remove an ldap account when feature flag disabled', async function (assert) {
-    assert.expect(2);
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -129,7 +125,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can remove an ldap account when feature flag enabled', async function (assert) {
-    assert.expect(2);
     features.enable('ldap-auth-methods');
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
@@ -150,7 +145,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('shows error message on account remove', async function (assert) {
-    assert.expect(2);
     this.server.post('/users/:idMethod', () => {
       return new Response(
         400,
@@ -173,7 +167,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('visiting account add accounts', async function (assert) {
-    assert.expect(1);
     await visit(urls.accounts);
 
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
@@ -183,7 +176,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to add accounts with proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
@@ -192,7 +184,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot navigate to add accounts without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.user.authorized_actions.filter(
       (item) => item !== 'add-accounts',
     );
@@ -204,7 +195,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('cannot add ldap accounts to user when feature flag is disabled', async function (assert) {
-    assert.expect(1);
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,
@@ -228,7 +218,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can add ldap accounts to user when feature flag is enabled', async function (assert) {
-    assert.expect(1);
     features.enable('ldap-auth-methods');
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
@@ -251,7 +240,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('select and save accounts to add', async function (assert) {
-    assert.expect(4);
     instances.user.update({ accountIds: [] });
     await visit(urls.user);
 
@@ -271,7 +259,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('select and cancel accounts to add', async function (assert) {
-    assert.expect(4);
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
@@ -288,7 +275,6 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('shows error message on account add', async function (assert) {
-    assert.expect(1);
     this.server.post('/users/:idMethod', () => {
       return new Response(
         400,

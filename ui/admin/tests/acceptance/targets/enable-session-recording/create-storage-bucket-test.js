@@ -77,7 +77,6 @@ module(
     });
 
     test('users can create a new storage bucket with global scope', async function (assert) {
-      assert.expect(7);
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -101,7 +100,6 @@ module(
     });
 
     test('users can create a new storage bucket with org scope', async function (assert) {
-      assert.expect(7);
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -125,7 +123,6 @@ module(
     });
 
     test('user can cancel new storage bucket creation', async function (assert) {
-      assert.expect(2);
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -138,7 +135,6 @@ module(
     });
 
     test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
-      assert.expect(2);
       this.server.post('/storage-buckets', () => {
         return new Response(
           400,

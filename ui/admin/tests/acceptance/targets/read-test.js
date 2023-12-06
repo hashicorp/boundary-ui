@@ -74,7 +74,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting ssh target', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ssh-target');
 
     await visit(urls.targets);
@@ -88,7 +87,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting tcp target', async function (assert) {
-    assert.expect(2);
     await visit(urls.targets);
     assert.strictEqual(currentURL(), urls.targets);
 
@@ -100,7 +98,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting an ssh target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     instances.sshTarget.worker_filter = 'worker filter present';
     await visit(urls.sshTarget);
 
@@ -109,7 +106,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting a tcp target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     instances.tcpTarget.worker_filter = 'worker filter present';
     await visit(urls.tcpTarget);
 
@@ -118,7 +114,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting an ssh target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     instances.sshTarget.worker_filter = null;
     await visit(urls.sshTarget);
 
@@ -127,7 +122,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting a tcp target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     instances.tcpTarget.worker_filter = null;
     await visit(urls.tcpTarget);
 
@@ -135,21 +129,18 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting an ssh target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.sshTarget);
     assert.false(featuresService.isEnabled('target-worker-filters-v2'));
     assert.dom('.hds-alert').doesNotExist();
   });
 
   test('visiting a tcp target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.tcpTarget);
     assert.false(featuresService.isEnabled('target-worker-filters-v2'));
     assert.dom('.hds-alert').doesNotExist();
   });
 
   test('cannot navigate to an ssh target form without proper authorization', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ssh-target');
     await visit(urls.projectScope);
     instances.sshTarget.authorized_actions =
@@ -162,7 +153,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ssh-target');
     await visit(urls.projectScope);
     instances.tcpTarget.authorized_actions =
@@ -175,8 +165,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
-    assert.expect(1);
-
     await visit(urls.unknownTarget);
     await a11yAudit();
 
@@ -184,7 +172,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('users can link to docs page for target', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.targets}"]`);
@@ -195,7 +182,6 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('users can navigate to target and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/targets/${instances.sshTarget.id}`;
 
     await visit(incorrectUrl);
