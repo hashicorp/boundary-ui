@@ -107,7 +107,9 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialStoreName }),
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
   ).toBeVisible();
 
   const credentialLibraryName = 'Credential Library ' + nanoid();
