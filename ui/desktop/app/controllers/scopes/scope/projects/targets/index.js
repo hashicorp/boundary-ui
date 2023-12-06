@@ -52,7 +52,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get availableScopes() {
     const targetScopeIds = this.model.allTargets.map(
-      (target) => target.scope.id,
+      (target) => target.attributes.scope.id,
     );
     let availableScopes = this.model.projects.filter((project) =>
       targetScopeIds.includes(project.id),

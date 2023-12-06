@@ -46,7 +46,7 @@
               {{#each orgs as |org|}}
                 <DD.Generic>
                   <FlightIcon @name='org' />
-                  {{org.key.name}}
+                  {{org.key.displayName}}
                 </DD.Generic>
                 {{#each org.items as |project|}}
                   <DD.Checkbox
@@ -55,7 +55,7 @@
                     checked={{includes project.id this.scopes}}
                     {{on 'change' this.selectItem}}
                   >
-                    {{project.name}}
+                    {{project.displayName}}
                   </DD.Checkbox>
                 {{/each}}
               {{/each}}
@@ -140,7 +140,9 @@
                     <code>{{B.data.project.id}}</code>
                   </Copyable>
                 </div>
-                <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+                {{#if B.data.project.name}}
+                  <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+                {{/if}}
               </B.Td>
               <B.Td>
                 {{#if (can 'connect target' B.data)}}

@@ -67,8 +67,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     let allTargets = await this.store.query('target', { query: null }, options);
 
     // Filter out targets to which users do not have the connect ability
-    allTargets = allTargets.filter((target) =>
-      this.can.can('connect target', target),
+    allTargets = allTargets.content.filter((target) =>
+      target.attributes.authorized_actions.includes('authorize-session'),
     );
 
     return { targets, projects, allTargets, totalItems };
