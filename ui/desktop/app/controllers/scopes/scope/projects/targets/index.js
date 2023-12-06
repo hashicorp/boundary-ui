@@ -60,13 +60,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
     // Associate the connection details with the session
     let session;
-    const {
-      session_id,
-      address,
-      port,
-      credentials,
-      expiration: expiration_time,
-    } = connectionDetails;
+    const { session_id, address, port, credentials, expiration } =
+      connectionDetails;
     try {
       session = await this.store.findRecord('session', session_id);
     } catch (error) {
