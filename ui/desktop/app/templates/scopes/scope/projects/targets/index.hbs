@@ -23,12 +23,7 @@
             aria-label={{t 'actions.search'}}
             {{on 'input' this.handleSearchInput}}
           />
-          <S.Dropdown
-            id='scope-filter'
-            {{on 'keyup' this.handleKeyUp}}
-            {{on-click-outside this.handleBlur}}
-            as |DD|
-          >
+          <S.Dropdown @onClose={{this.close}} as |DD|>
             <DD.ToggleButton
               @color='secondary'
               @text={{t 'resources.scope.title'}}
@@ -37,11 +32,16 @@
             <DD.Header @hasDivider={{true}}>
               <Hds::Form::TextInput::Base
                 @type='search'
+                @value={{this.scopeSearchTerm}}
                 placeholder={{t 'actions.narrow-results'}}
                 aria-label={{t 'actions.narrow-results'}}
+                {{on 'search' this.filterItems}}
                 data-test-search
               />
             </DD.Header>
+            {{#unless this.availableScopes}}
+              <DD.Description @text={{t 'titles.no-results'}} />
+            {{/unless}}
             {{#let (group-by this.availableScopes 'scopeModel') as |orgs|}}
               {{#each orgs as |org|}}
                 <DD.Generic>
@@ -65,7 +65,7 @@
                 @text='Apply'
                 @isFullWidth={{true}}
                 @size='small'
-                {{on 'click' (fn this.filterByScopes DD.close)}}
+                {{on 'click' (fn this.applyFilter DD.close)}}
               />
             </DD.Footer>
           </S.Dropdown>

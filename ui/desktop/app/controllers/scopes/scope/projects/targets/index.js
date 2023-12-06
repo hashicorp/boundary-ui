@@ -9,7 +9,6 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
-import isEqual from 'lodash/isEqual';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -25,9 +24,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   queryParams = ['search', { scopes: { type: 'array' } }];
 
   @tracked search;
+  @tracked scopeSearchTerm;
   @tracked scopes = [];
-  // @tracked selectedScopes = [];
-  @tracked selectedScopes = this.scopes;
+  @tracked selectedScopes = [];
 
   // =methods
 
@@ -55,9 +54,21 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const targetScopeIds = this.model.allTargets.map(
       (target) => target.scope.id,
     );
-    return this.model.projects.filter((project) =>
+    let availableScopes = this.model.projects.filter((project) =>
       targetScopeIds.includes(project.id),
     );
+
+    if (this.scopeSearchTerm) {
+      availableScopes = availableScopes.filter((item) => {
+        const isNameMatch = item.name
+          .toLowerCase()
+          .includes(this.scopeSearchTerm);
+        const isIdMatch =
+          item.id.toLowerCase() === this.scopeSearchTerm.toLowerCase();
+        return isNameMatch || isIdMatch;
+      });
+    }
+    return availableScopes;
   }
 
   /**
@@ -154,6 +165,16 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
+   * Sets scopeSearchTerm to be used for filtering availableScopes
+   * @param {object} event
+   */
+  @action
+  filterItems(event) {
+    let { value } = event.target;
+    this.scopeSearchTerm = value;
+  }
+
+  /**
    * Handles checkbox event changes for selectedScopes but does not
    * update the scopes query param
    * @param {object} event
@@ -168,7 +189,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
         (scope) => scope !== value,
       );
     }
-    console.log('selected click event: ', this.selectedScopes);
   }
 
   /**
@@ -177,36 +197,18 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @param {function} close
    */
   @action
-  filterByScopes(close) {
-    this.scopes = this.selectedScopes;
+  applyFilter(close) {
+    this.scopes = [...this.selectedScopes];
     close();
   }
 
+  /**
+   * Custom close method for dropdown that resets selectedScopes
+   * to scopes when the user closes the dropdown
+   */
   @action
-  handleKeyUp(event) {
-    console.log('KEYUP');
-    if (event.keyCode === 27) {
-      if (!isEqual(this.scopes.sort(), this.selectedScopes.sort())) {
-        console.log('arrays dont match');
-        this.selectedScopes = this.scopes;
-      }
-    }
-    console.log('selected: ', this.selectedScopes);
-    console.log('scopes: ', this.scopes);
-  }
-
-  @action
-  handleBlur(event) {
-    const dropdown = document.getElementById('scope-filter');
-
-    if (!dropdown.contains(event.target)) {
-      console.log('Clicked outside the dropdown!');
-      if (!isEqual(this.scopes.sort(), this.selectedScopes.sort())) {
-        console.log('arrays dont match');
-        this.selectedScopes = this.scopes;
-      }
-    }
-    console.log('selected: ', this.selectedScopes);
-    console.log('scopes: ', this.scopes);
+  close() {
+    this.selectedScopes = [...this.scopes];
+    this.scopeSearchTerm = '';
   }
 }
