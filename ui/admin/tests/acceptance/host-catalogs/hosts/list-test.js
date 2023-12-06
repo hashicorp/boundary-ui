@@ -70,7 +70,6 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     authenticateSession({});
   });
   test('Users can navigate to hosts with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostCatalog);
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
@@ -81,7 +80,6 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = [];
     await visit(urls.hostCatalog);
     assert.notOk(
@@ -93,7 +91,6 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
     await visit(urls.hostCatalog);
     assert.ok(find(`[href="${urls.hosts}"]`));

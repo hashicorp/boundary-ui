@@ -57,7 +57,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('can save changes to existing scope', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.scopes.org.name, 'random string');
     await visit(urls.orgScope);
 
@@ -74,7 +73,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('cannot save changes to without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
         (item) => item !== 'update',
@@ -89,7 +87,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('can cancel changes to existing scope', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgScopeEdit}"]`);
@@ -102,7 +99,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('saving an existing scope with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
     this.server.patch('/scopes/:id', () => {
       return new Response(
@@ -134,7 +130,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('can discard unsaved scope changes via dialog', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.scopes.org.name, 'random string');
@@ -156,7 +151,6 @@ module('Acceptance | scopes | update', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved scope changes', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.scopes.org.name, 'random string');

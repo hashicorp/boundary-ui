@@ -44,7 +44,6 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting org scope edit', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
     await a11yAudit();
 
@@ -56,7 +55,6 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
         (item) => item !== 'read',

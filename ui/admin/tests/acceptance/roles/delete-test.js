@@ -61,7 +61,6 @@ module('Acceptance | roles | delete', function (hooks) {
   });
 
   test('can delete a role', async function (assert) {
-    assert.expect(1);
     const rolesCount = this.server.db.roles.length;
     await visit(urls.role);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -69,7 +68,6 @@ module('Acceptance | roles | delete', function (hooks) {
   });
 
   test('cannot delete a role without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.role);
@@ -79,7 +77,6 @@ module('Acceptance | roles | delete', function (hooks) {
   });
 
   test('errors are displayed when delete project fails', async function (assert) {
-    assert.expect(1);
     this.server.del('/roles/:id', () => {
       return new Response(
         490,

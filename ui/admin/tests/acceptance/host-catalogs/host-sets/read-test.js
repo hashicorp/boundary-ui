@@ -72,7 +72,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('visiting host sets', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostSets);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostSets);
@@ -84,7 +83,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('cannot navigate to a host set form without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.hostCatalog);
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'read');
@@ -95,8 +93,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
-    assert.expect(1);
-
     await visit(urls.unknownHostSet);
     await a11yAudit();
 
@@ -104,7 +100,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('users can link to docs page for host sets', async function (assert) {
-    assert.expect(1);
     await visit(urls.hostSets);
 
     await click(`[href="${urls.hostSet}"]`);
@@ -115,7 +110,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   });
 
   test('users can navigate to host set and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'static',

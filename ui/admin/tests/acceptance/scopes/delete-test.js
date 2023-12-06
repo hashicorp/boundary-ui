@@ -58,7 +58,6 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can delete scope', async function (assert) {
-    assert.expect(1);
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
@@ -69,7 +68,6 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('cannot delete scope without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -86,7 +84,6 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can accept delete scope via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
@@ -101,7 +98,6 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can cancel delete scope via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
@@ -116,7 +112,6 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('deleting a scope which errors displays error messages', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
     this.server.del('/scopes/:id', () => {
       return new Response(

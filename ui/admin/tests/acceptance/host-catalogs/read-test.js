@@ -62,7 +62,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('visiting host catalogs', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostCatalogs);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hostCatalogs);
@@ -74,7 +73,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('cannot navigate to a host catalog form without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -87,8 +85,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
-    assert.expect(1);
-
     await visit(urls.unknownHostCatalog);
     await a11yAudit();
 
@@ -96,7 +92,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('users can link to docs page for host catalog', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.hostCatalogs}"]`);
@@ -107,7 +102,6 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('users can navigate to host catalog and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const projectScope = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
