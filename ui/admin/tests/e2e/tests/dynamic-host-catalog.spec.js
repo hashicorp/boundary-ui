@@ -63,14 +63,14 @@ test.describe('AWS', async () => {
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostCatalogName }),
+        .getByText(hostCatalogName),
     ).toBeVisible();
 
     // Create first host set
-    const hostSetName1 = 'Host Set ' + nanoid();
+    const hostSetName = 'Host Set ' + nanoid();
     await page.getByRole('link', { name: 'Host Sets' }).click();
     await page.getByRole('link', { name: 'New', exact: true }).click();
-    await page.getByLabel('Name').fill(hostSetName1);
+    await page.getByLabel('Name').fill(hostSetName);
     await page.getByLabel('Description').fill('This is an automated test');
     await page
       .getByRole('group', { name: 'Filter' })
@@ -88,14 +88,12 @@ test.describe('AWS', async () => {
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName1 }),
+        .getByText(hostSetName),
     ).toBeVisible();
 
     await page.getByRole('link', { name: 'Hosts' }).click();
     await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: 'Hosts' }),
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Hosts'),
     ).toBeVisible();
 
     // Check number of hosts in host set
@@ -119,7 +117,7 @@ test.describe('AWS', async () => {
       await page.reload();
       await page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName1 })
+        .getByText(hostSetName)
         .waitFor();
     } while (i < 5);
 
@@ -147,12 +145,12 @@ test.describe('AWS', async () => {
       await expect(
         page
           .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByRole('link', { name: hostName }),
+          .getByText(hostName),
       ).toBeVisible();
 
       await page
         .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: hostSetName1 })
+        .getByText(hostSetName)
         .click();
       await page.getByRole('link', { name: 'Hosts' }).click();
     }

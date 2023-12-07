@@ -23,7 +23,7 @@ module.exports = async () => {
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page
-    .getByLabel('Password')
+    .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
   await page.getByRole('button', { name: 'Sign In' }).click();
   await page.getByRole('navigation', { name: 'General' }).waitFor();
