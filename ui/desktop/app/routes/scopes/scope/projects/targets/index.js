@@ -39,9 +39,9 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
   /**
    * Loads queried targets, the number of targets under current scope, and
-   * all targets and projects for filtering options.
+   * projects for filtering options.
    *
-   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel]}>}
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel]}>}
    */
   async model({ search = '', scopes }) {
     // TODO: Filter targets by scope we're in manually
@@ -62,15 +62,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       this.can.can('connect target', target),
     );
 
-    // Query all targets for defining filtering values
-    const options = { pushToStore: false };
-    let allTargets = await this.store.query('target', { query: null }, options);
-
-    // Filter out targets to which users do not have the connect ability
-    allTargets = allTargets.content.filter((target) =>
-      target.attributes.authorized_actions.includes('authorize-session'),
-    );
-
-    return { targets, projects, allTargets, totalItems };
+    return { targets, projects, totalItems };
   }
 }
