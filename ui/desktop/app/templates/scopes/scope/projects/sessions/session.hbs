@@ -7,11 +7,15 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.header>
-    <h1 class='session-details-header'>
-      <Hds::IconTile @color='boundary' @icon='terminal' />
+  <page.header class='session-details-info'>
+    <Hds::IconTile @color='boundary' @icon='terminal' />
+    <Hds::Text::Display @tag='h1' @size='500'>
       {{@model.displayName}}
-    </h1>
+    </Hds::Text::Display>
+    <Hds::Badge
+      @text={{time-remaining @model.expiration_time}}
+      @icon='loading'
+    />
   </page.header>
 
   <page.actions>
