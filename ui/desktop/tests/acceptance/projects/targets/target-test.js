@@ -7,13 +7,14 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
   const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
@@ -38,12 +39,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -72,17 +67,16 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     // Generate resources
     instances.authMethods.global = this.server.create('auth-method', {
@@ -129,18 +123,14 @@ module('Acceptance | projects | targets | target', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    sinon.restore();
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('targets');
   });
 
   test('user can connect to a target with an address', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'localhost',
       port: 'p_123',
@@ -159,7 +149,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('handles cli error on connect', async function (assert) {
     assert.expect(4);
-    stubs.ipcService.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('cliExists').returns(true);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.targets);
@@ -175,8 +165,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('handles connect error', async function (assert) {
     assert.expect(4);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').rejects();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.targets);
@@ -192,7 +182,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('user can retry on error', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('cliExists').rejects();
+    this.ipcStub.withArgs('cliExists').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -208,8 +198,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('user can connect to a target with one host', async function (assert) {
     assert.expect(2);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -228,8 +218,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
   test('user can connect to a target with two hosts using host modal', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -275,8 +265,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
   test('user can connect to a target without read permissions for host-set', async function (assert) {
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -294,8 +284,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
   test('user can connect to a target without read permissions for host', async function (assert) {
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',

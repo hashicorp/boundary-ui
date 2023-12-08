@@ -15,17 +15,18 @@ import {
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
-import sinon from 'sinon';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
   STATUS_SESSION_CANCELING,
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
-module('Acceptance | projects | sessions', function (hooks) {
+module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const instances = {
     scopes: {
@@ -38,12 +39,6 @@ module('Acceptance | projects | sessions', function (hooks) {
     },
     user: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -77,17 +72,16 @@ module('Acceptance | projects | sessions', function (hooks) {
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
@@ -120,12 +114,7 @@ module('Acceptance | projects | sessions', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    sinon.restore();
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -299,7 +288,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session shows success alert', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop');
+    this.ipcStub.withArgs('stop');
 
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');
@@ -309,7 +298,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session keeps you on the sessions list screen', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop');
+    this.ipcStub.withArgs('stop');
 
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');
@@ -329,7 +318,7 @@ module('Acceptance | projects | sessions', function (hooks) {
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop').throws();
+    this.ipcStub.withArgs('stop').throws();
 
     await visit(urls.sessions);
     await click('tbody tr:first-child td:last-child button');

@@ -13,47 +13,45 @@
     <p>{{t 'resources.target.description'}}</p>
   </page.header>
 
-  <page.body class='targets'>
+  <page.body class='search-filtering'>
     {{#if (or @model.targets this.search)}}
-      <div class='target-search-filtering'>
-        <Hds::SegmentedGroup as |S|>
-          <S.TextInput
-            @type='search'
-            placeholder={{t 'actions.search'}}
-            aria-label={{t 'actions.search'}}
-            {{on 'input' this.handleSearchInput}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton
+            @color='secondary'
+            @text={{t 'resources.scope.title'}}
           />
-          <S.Dropdown as |DD|>
-            <DD.ToggleButton
-              @color='secondary'
-              @text={{t 'resources.scope.title'}}
+          <DD.Header @hasDivider={{true}}>
+            <Hds::Form::TextInput::Base
+              @type='search'
+              placeholder={{t 'actions.narrow-results'}}
+              aria-label={{t 'actions.narrow-results'}}
+              data-test-search
             />
-            <DD.Header @hasDivider={{true}}>
-              <Hds::Form::TextInput::Base
-                @type='search'
-                placeholder={{t 'actions.narrow-results'}}
-                aria-label={{t 'actions.narrow-results'}}
-                data-test-search
-              />
-            </DD.Header>
-            {{#each this.searchItems as |item|}}
-              <DD.Checkbox @value={{item}} data-test-checkbox={{item}}>
-                {{item}}
-              </DD.Checkbox>
-            {{/each}}
-          </S.Dropdown>
-          <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Active session' />
-            <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
-            <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
-          </S.Dropdown>
-          <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
-            <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
-            <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
-          </S.Dropdown>
-        </Hds::SegmentedGroup>
-      </div>
+          </DD.Header>
+          {{#each this.searchItems as |item|}}
+            <DD.Checkbox @value={{item}} data-test-checkbox={{item}}>
+              {{item}}
+            </DD.Checkbox>
+          {{/each}}
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Active session' />
+          <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
+          <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
+        </S.Dropdown>
+      </Hds::SegmentedGroup>
       {{#if @model.targets}}
         <Hds::Table
           @model={{@model.targets}}
@@ -156,6 +154,12 @@
             </B.Tr>
           </:body>
         </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+
       {{/if}}
       {{#if this.noResults}}
         <Hds::ApplicationState data-test-no-target-results as |A|>
