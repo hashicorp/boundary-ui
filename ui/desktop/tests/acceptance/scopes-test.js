@@ -9,17 +9,18 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import sinon from 'sinon';
 import {
   currentSession,
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const APP_STATE_TITLE = '.hds-application-state__title';
 
@@ -34,12 +35,6 @@ module('Acceptance | scopes', function (hooks) {
     },
     target: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -78,21 +73,20 @@ module('Acceptance | scopes', function (hooks) {
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
     instances.scopes.org2 = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
@@ -134,12 +128,8 @@ module('Acceptance | scopes', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    sinon.restore();
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('targets');
   });
 
   test('visiting index', async function (assert) {
@@ -190,6 +180,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
+    this.stubClientDaemonSearch('targets', 'targets', 'targets', 'targets');
     await visit(urls.targets);
 
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
@@ -224,7 +215,8 @@ module('Acceptance | scopes', function (hooks) {
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
-    this.server.get('/targets', () => new Response(200));
+    this.server.db.targets.remove();
+    this.stubClientDaemonSearch('targets');
 
     await visit(urls.targets);
 
@@ -233,8 +225,8 @@ module('Acceptance | scopes', function (hooks) {
 
   test.skip('connecting to a target', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.ipcService.withArgs('cliExists').returns(true);
+    this.ipcStub.ipcService.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
