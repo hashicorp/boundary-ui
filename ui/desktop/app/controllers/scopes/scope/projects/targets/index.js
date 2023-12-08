@@ -44,8 +44,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     let allTargets = await this.store.query('target', { query: null }, options);
 
     // Filter out targets to which users do not have the connect ability
-    allTargets = allTargets.content.filter((target) =>
-      target.attributes.authorized_actions.includes('authorize-session'),
+    allTargets = allTargets.filter((target) =>
+      target.authorized_actions.includes('authorize-session'),
     );
 
     this.allTargets = allTargets;
@@ -72,9 +72,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {[ScopeModel]}
    */
   get availableScopes() {
-    const targetScopeIds = this.allTargets.map(
-      (target) => target.attributes.scope.id,
-    );
+    const targetScopeIds = this.allTargets.map((target) => target.scope.id);
 
     let availableScopes = this.model.projects.filter((project) =>
       targetScopeIds.includes(project.id),

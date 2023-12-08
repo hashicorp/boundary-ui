@@ -22,68 +22,63 @@
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
-        <S.Dropdown as |DD|>
+        <S.Dropdown @onClose={{this.close}} as |DD|>
           <DD.ToggleButton
             @color='secondary'
             @text={{t 'resources.scope.title'}}
+            @count={{this.scopes.length}}
           />
-          <S.Dropdown @onClose={{this.close}} as |DD|>
-            <DD.ToggleButton
-              @color='secondary'
-              @text={{t 'resources.scope.title'}}
-              @count={{this.scopes.length}}
+          <DD.Header @hasDivider={{true}}>
+            <Hds::Form::TextInput::Base
+              @type='search'
+              @value={{this.scopeSearchTerm}}
+              placeholder={{t 'actions.narrow-results'}}
+              aria-label={{t 'actions.narrow-results'}}
+              {{on 'search' this.filterItems}}
+              data-test-search
             />
-            <DD.Header @hasDivider={{true}}>
-              <Hds::Form::TextInput::Base
-                @type='search'
-                @value={{this.scopeSearchTerm}}
-                placeholder={{t 'actions.narrow-results'}}
-                aria-label={{t 'actions.narrow-results'}}
-                {{on 'search' this.filterItems}}
-                data-test-search
-              />
-            </DD.Header>
-            {{#unless this.availableScopes}}
-              <DD.Description @text={{t 'titles.no-results'}} />
-            {{/unless}}
-            {{#let (group-by this.availableScopes 'scopeModel') as |orgs|}}
-              {{#each orgs as |org|}}
-                <DD.Generic>
-                  <FlightIcon @name='org' />
-                  {{org.key.displayName}}
-                </DD.Generic>
-                {{#each org.items as |project|}}
-                  <DD.Checkbox
-                    @value={{project.id}}
-                    data-test-checkbox={{project.name}}
-                    checked={{includes project.id this.scopes}}
-                    {{on 'change' this.selectItem}}
-                  >
-                    {{project.displayName}}
-                  </DD.Checkbox>
-                {{/each}}
+          </DD.Header>
+          {{#unless this.availableScopes}}
+            <DD.Description @text={{t 'titles.no-results'}} />
+          {{/unless}}
+          {{#let (group-by this.availableScopes 'scopeModel') as |orgs|}}
+            {{#each orgs as |org|}}
+              <DD.Generic>
+                <FlightIcon @name='org' />
+                {{org.key.displayName}}
+              </DD.Generic>
+              {{#each org.items as |project|}}
+                <DD.Checkbox
+                  @value={{project.id}}
+                  data-test-checkbox={{project.name}}
+                  checked={{includes project.id this.scopes}}
+                  {{on 'change' this.selectItem}}
+                >
+                  {{project.displayName}}
+                </DD.Checkbox>
               {{/each}}
-            {{/let}}
-            <DD.Footer @hasDivider={{true}}>
-              <Hds::Button
-                @text='Apply'
-                @isFullWidth={{true}}
-                @size='small'
-                {{on 'click' (fn this.applyFilter DD.close)}}
-              />
-            </DD.Footer>
-          </S.Dropdown>
-          <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Active session' />
-            <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
-            <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
-          </S.Dropdown>
-          <S.Dropdown as |DD|>
-            <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
-            <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
-            <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
-          </S.Dropdown>
-        </Hds::SegmentedGroup>
+            {{/each}}
+          {{/let}}
+          <DD.Footer @hasDivider={{true}}>
+            <Hds::Button
+              @text='Apply'
+              @isFullWidth={{true}}
+              @size='small'
+              {{on 'click' (fn this.applyFilter DD.close)}}
+            />
+          </DD.Footer>
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Active session' />
+          <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
+          <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
+        </S.Dropdown>
+      </Hds::SegmentedGroup>
       {{#if @model.targets}}
         <Hds::Table
           @model={{@model.targets}}
