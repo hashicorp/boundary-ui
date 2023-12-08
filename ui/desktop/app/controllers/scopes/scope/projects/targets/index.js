@@ -41,7 +41,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   async getAllTargets() {
     // Query all targets for defining filtering values
     const options = { pushToStore: false };
-    let allTargets = await this.store.query('target', { query: null }, options);
+    let allTargets = await this.store.query('target', {}, options);
 
     // Filter out targets to which users do not have the connect ability
     allTargets = allTargets.filter((target) =>
