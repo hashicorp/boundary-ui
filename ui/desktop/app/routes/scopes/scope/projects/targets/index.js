@@ -25,6 +25,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     },
     scopes: {
       refreshModel: true,
+      replace: true,
     },
     page: {
       refreshModel: true,
