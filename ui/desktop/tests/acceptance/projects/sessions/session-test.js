@@ -12,13 +12,14 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import sinon from 'sinon';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
 
@@ -33,12 +34,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     },
     user: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -70,17 +65,17 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
+
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
@@ -119,12 +114,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
   });
 
   hooks.afterEach(function () {
-    sinon.restore();
     // reset onUncaughtException to original state
     QUnit.onUncaughtException = originalUncaughtException;
   });
@@ -140,8 +133,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   test('visiting session with no credentials', async function (assert) {
     assert.expect(4);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -162,8 +155,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   test('visiting a session that does not have permissions to read a host', async function (assert) {
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -185,8 +178,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     };
 
     this.server.get('/sessions/:id', () => new Response(403));
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       host_id: 'h_123',
       address: 'a_123',
@@ -220,7 +213,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   test('cancelling a session shows success alert', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop');
 
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');
@@ -230,7 +222,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   test('cancelling a session takes you to the targets list screen', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop');
 
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');
@@ -250,7 +241,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
     assert.expect(1);
-    stubs.ipcService.withArgs('stop').throws();
+    this.ipcStub.withArgs('stop').throws();
 
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');

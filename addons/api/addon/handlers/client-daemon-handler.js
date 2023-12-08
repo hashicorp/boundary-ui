@@ -1,6 +1,5 @@
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
-import ArrayProxy from '@ember/array/proxy';
 import { pluralize } from 'ember-inflector';
 import { generateMQLExpression } from '../utils/mqlQuery';
 
@@ -111,17 +110,20 @@ export default class ClientDaemonHandler {
         );
 
         // Return the raw data if we don't push to the store.
-        let records = normalizedPayload.data;
+        let records = normalizedPayload.data.map((record) => ({
+          ...record.attributes,
+          id: record.id,
+        }));
         if (pushToStore) {
           records = store.push(normalizedPayload);
         }
 
-        // Use a proxy array to store the metadata so the store's `query`
-        // array requirement is satisfied.
-        return ArrayProxy.create({
-          content: records,
-          meta: { totalItems: results?.length ?? 0 },
-        });
+        // Set a meta property on the array to store the total items of the results.
+        // This isn't conventional but is better than returning an ArrayProxy
+        // or EmberArray since the ember store query method asserts it has to be an array
+        // so we can't just return an object.
+        records.meta = { totalItems: results?.length ?? 0 };
+        return records;
       }
       default:
         return next(context.request);

@@ -12,19 +12,19 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import sinon from 'sinon';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   authenticateSession,
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   let getTargetCount;
 
@@ -49,12 +49,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
     },
     target: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -87,17 +81,16 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     // Generate scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     // Generate resources
     instances.authMethods.global = this.server.create('auth-method', {
@@ -137,12 +130,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    sinon.restore();
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -182,7 +171,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('visiting targets list view with no targets', async function (assert) {
     assert.expect(1);
-    this.server.get('/targets', () => new Response(200));
+    this.server.db.targets.remove();
+    this.stubClientDaemonSearch('targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -194,6 +185,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
+    this.stubClientDaemonSearch('targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -223,6 +216,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
+    this.stubClientDaemonSearch('targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -237,8 +232,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
     assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').rejects();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -255,8 +250,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.stubClientDaemonSearch('targets');
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
@@ -278,8 +274,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.expect(5);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').rejects();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').rejects();
+    this.stubClientDaemonSearch('targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
