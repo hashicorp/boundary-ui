@@ -60,7 +60,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('visiting role principals', async function (assert) {
-    assert.expect(2);
     await visit(urls.rolePrincipals);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.rolePrincipals);
@@ -68,7 +67,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('principal can be removed from a role', async function (assert) {
-    assert.expect(2);
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
     await click('.hds-dropdown-toggle-icon');
@@ -77,7 +75,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('principal cannot be removed from a role without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'remove-principals',
     );
@@ -87,7 +84,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('shows error message on principal remove', async function (assert) {
-    assert.expect(2);
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -108,7 +104,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('cannot navigate to add principals without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'add-principals',
     );
@@ -118,7 +113,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('select and save principals to add', async function (assert) {
-    assert.expect(3);
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, 0);
@@ -134,7 +128,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('select and cancel principals to add', async function (assert) {
-    assert.expect(4);
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
     // Remove a principal to populate association view
@@ -150,7 +143,6 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('shows error message on principal add', async function (assert) {
-    assert.expect(1);
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,

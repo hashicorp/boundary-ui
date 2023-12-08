@@ -10,7 +10,6 @@ module('Unit | Serializer | credential', function (hooks) {
   setupTest(hooks);
 
   test('it serializes username_password type correctly on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -39,7 +38,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes username_password type correctly when only the username is updated', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -67,7 +65,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes ssh_private_key type correctly on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -98,7 +95,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes json_object type correctly on create', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -129,7 +125,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes ssh_private_key type correctly when only the username is updated', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -158,7 +153,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes username_password type correctly by removing "json_object" attribute', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -187,7 +181,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it serializes ssh_private_key type correctly by removing "json_object" attribute', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const record = store.createRecord('credential', {
@@ -219,7 +212,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it normalizes "username_password" type credential record', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const credentialModelClass = store.createRecord('credential').constructor;
@@ -253,7 +245,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it normalizes "ssh_private_key" type credential record', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const credentialModelClass = store.createRecord('credential').constructor;
@@ -288,7 +279,6 @@ module('Unit | Serializer | credential', function (hooks) {
   });
 
   test('it normalizes "json" type credential record', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential');
     const credentialModelClass = store.createRecord('credential').constructor;

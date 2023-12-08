@@ -69,7 +69,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting static credential store', async function (assert) {
-    assert.expect(2);
     featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
     await a11yAudit();
@@ -82,7 +81,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting vault credential store', async function (assert) {
-    assert.expect(2);
     await visit(urls.credentialStores);
     assert.strictEqual(currentURL(), urls.credentialStores);
 
@@ -93,7 +91,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
@@ -107,7 +104,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
-    assert.expect(2);
     featuresService.enable('static-credentials');
     await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
@@ -122,8 +118,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
-    assert.expect(1);
-
     await visit(urls.unknownCredentialStore);
     await a11yAudit();
 
@@ -131,7 +125,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('users can link to docs page for credential store', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.credentialStores}"]`);
@@ -144,7 +137,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('users can navigate to credential store and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const projectScope = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },

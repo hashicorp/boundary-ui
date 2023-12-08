@@ -16,7 +16,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('it has isStatic property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host-catalog', { compositeType: 'aws' });
     const modelB = store.createRecord('host-catalog', {
@@ -31,7 +30,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('it has isPlugin property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-catalog', {
       compositeType: 'aws',
@@ -44,7 +42,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host-catalog', {
       compositeType: 'static',
@@ -59,7 +56,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('it has isAWS property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('host-catalog', {
       type: 'plugin',
@@ -73,7 +69,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('it has isAzure property and return the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelAzure = store.createRecord('host-catalog', {
       type: 'plugin',
@@ -87,7 +82,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('get compositeType returns expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host-catalog', {
       type: 'static',
@@ -106,7 +100,6 @@ module('Unit | Model | host catalog', function (hooks) {
   });
 
   test('set compositeType sets expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('host-catalog', {
       compositeType: 'aws',

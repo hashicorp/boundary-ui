@@ -21,8 +21,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('can read session recording feature is enabled', function (assert) {
-    assert.expect(2);
-
     features.enable('ssh-session-recording');
 
     const recordingWithAuthorizedAction = store.createRecord(
@@ -52,8 +50,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('cannot read session recording when feature is disabled', function (assert) {
-    assert.expect(2);
-
     const recordingWithAuthorizedAction = store.createRecord(
       'session-recording',
       {
@@ -81,8 +77,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('can list session recording when in global scope', function (assert) {
-    assert.expect(2);
-
     features.enable('ssh-session-recording');
 
     const scopeModelWithAuthorizedAction = store.createRecord('scope', {
@@ -109,8 +103,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('can list session recording when in org scope when authorized', function (assert) {
-    assert.expect(2);
-
     features.enable('ssh-session-recording');
 
     const scopeModelWithAuthorizedAction = store.createRecord('scope', {
@@ -137,8 +129,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('can navigate to session recording when feature is enabled', function (assert) {
-    assert.expect(2);
-
     features.enable('ssh-session-recording');
 
     const scopeModelWithAuthorizedAction = store.createRecord('scope', {
@@ -165,8 +155,6 @@ module('Unit | Abilities | session-recording', function (hooks) {
   });
 
   test('cannot navigate to session recording when feature is disabled', function (assert) {
-    assert.expect(2);
-
     const scopeModelWithAuthorizedAction = store.createRecord('scope', {
       authorized_collection_actions: { ['session-recordings']: ['list'] },
       type: 'global',

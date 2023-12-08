@@ -12,7 +12,6 @@ module('Integration | Component | rose/form/errors', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(3);
     await render(hbs`
       <Rose::Form::Errors as |errors|>
         <errors.message>An error occurred.</errors.message>

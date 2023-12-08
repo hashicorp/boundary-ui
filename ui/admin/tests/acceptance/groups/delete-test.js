@@ -49,7 +49,6 @@ module('Acceptance | groups | delete', function (hooks) {
   });
 
   test('can delete a group', async function (assert) {
-    assert.expect(1);
     const groupsCount = this.server.db.groups.length;
     await visit(urls.group);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -57,7 +56,6 @@ module('Acceptance | groups | delete', function (hooks) {
   });
 
   test('cannot delete a group without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.group);
@@ -67,7 +65,6 @@ module('Acceptance | groups | delete', function (hooks) {
   });
 
   test('errors are displayed when delete project fails', async function (assert) {
-    assert.expect(1);
     this.server.del('/groups/:id', () => {
       return new Response(
         490,

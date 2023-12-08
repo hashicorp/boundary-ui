@@ -21,7 +21,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('it has the isPlugin property and returns the expected values', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('storage-bucket', {
       type: 'plugin',
@@ -33,7 +32,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('storage-bucket', {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
@@ -46,7 +44,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('it has credentialType property and returns the expected values', async function (assert) {
-    assert.expect(4);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('storage-bucket', {
       role_arn: 'test-role-arn',
@@ -73,7 +70,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('it has isAWS property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelAws = store.createRecord('storage-bucket', {
       type: 'plugin',
@@ -87,7 +83,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('get compositeType returns expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('storage-bucket', {
       type: 'plugin',
@@ -102,7 +97,6 @@ module('Unit | Model | storage bucket', function (hooks) {
   });
 
   test('set compositeType sets expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelPlugin = store.createRecord('storage-bucket', {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,

@@ -81,7 +81,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('visiting username & password credential', async function (assert) {
-    assert.expect(2);
     await visit(urls.staticCredentialStore);
     await click(`[href="${urls.credentials}"]`);
     await a11yAudit();
@@ -92,7 +91,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('visiting username & key pair credential', async function (assert) {
-    assert.expect(2);
     await visit(urls.staticCredentialStore);
     await click(`[href="${urls.credentials}"]`);
     await a11yAudit();
@@ -103,7 +101,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('visiting JSON credential', async function (assert) {
-    assert.expect(2);
     featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
     await click(`[href="${urls.credentials}"]`);
@@ -115,7 +112,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a username & password credential form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.usernamePasswordCredential.authorized_actions =
       instances.usernamePasswordCredential.authorized_actions.filter(
         (item) => item != 'read',
@@ -125,7 +121,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a username & key pair credential form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.usernameKeyPairCredential.authorized_actions =
       instances.usernameKeyPairCredential.authorized_actions.filter(
         (item) => item != 'read',
@@ -135,7 +130,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a JSON credential form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.jsonCredential.authorized_actions =
       instances.jsonCredential.authorized_actions.filter(
         (item) => item != 'read',
@@ -145,21 +139,18 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.credentials);
     assert.false(featuresService.isEnabled('json-credentials'));
     assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
-    assert.expect(1);
     await visit(urls.unknownCredential);
     await a11yAudit();
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 
   test('Users can link to docs page for credential', async function (assert) {
-    assert.expect(1);
     await visit(urls.usernamePasswordCredential);
     assert.ok(
       find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`),
@@ -167,7 +158,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   });
 
   test('users can navigate to credential and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const credentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
     });

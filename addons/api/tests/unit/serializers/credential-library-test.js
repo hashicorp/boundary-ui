@@ -14,7 +14,6 @@ module('Unit | Serializer | credential library', function (hooks) {
   setupTest(hooks);
 
   test('it serializes correctly on create', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-library');
     const record = store.createRecord('credential-library', {
@@ -42,7 +41,6 @@ module('Unit | Serializer | credential library', function (hooks) {
   });
 
   test('it serializes correctly on update', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-library');
     store.push({
@@ -77,7 +75,6 @@ module('Unit | Serializer | credential library', function (hooks) {
   });
 
   test('it serializes empty strings to null', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const vaultGenericRecord = store.createRecord('credential-library', {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
@@ -122,7 +119,6 @@ module('Unit | Serializer | credential library', function (hooks) {
   });
 
   test('it does not serialize http_request_body unless http_method is set to POST', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential-library', {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
@@ -166,7 +162,6 @@ module('Unit | Serializer | credential library', function (hooks) {
   });
 
   test('it serializes vault_ssh_certificate correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('credential-library');
     store.push({

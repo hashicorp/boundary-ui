@@ -84,14 +84,12 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ssh-target');
     await visit(urls.newTarget);
     assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
   });
 
   test('can create type `ssh` when `target-worker-filters-v2` is disabled', async function (assert) {
-    assert.expect(5);
     featuresService.enable('ssh-target');
 
     assert.false(featuresService.isEnabled('target-worker-filters-v2'));
@@ -120,7 +118,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `ssh` when `target-worker-filters-v2` is enabled', async function (assert) {
-    assert.expect(4);
     featuresService.enable('ssh-target');
     featuresService.enable('target-worker-filters-v2');
 
@@ -152,7 +149,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
-    assert.expect(5);
     featuresService.enable('ssh-target');
 
     assert.false(featuresService.isEnabled('target-worker-filters-v2'));
@@ -181,7 +177,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` is enabled', async function (assert) {
-    assert.expect(4);
     featuresService.enable('ssh-target');
     featuresService.enable('target-worker-filters-v2');
 
@@ -214,7 +209,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create type `tcp` when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    assert.expect(4);
     featuresService.enable('ssh-target');
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
@@ -251,14 +245,12 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('default port is not marked required for SSH targets', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ssh-target');
     await visit(urls.newTarget);
     assert.dom('[data-test-default-port-label]').includesText('Optional');
   });
 
   test('default port is marked required for TCP targets', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ssh-target');
     await visit(urls.newTarget);
     await click('[value="tcp"]');
@@ -266,7 +258,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.targets}"]`);
@@ -280,7 +271,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',
@@ -298,7 +288,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
-    assert.expect(4);
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
@@ -313,7 +302,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new TCP target', async function (assert) {
-    assert.expect(3);
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
 
@@ -336,7 +324,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new SSH target', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ssh-target');
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
@@ -360,7 +347,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('saving a new TCP target with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/targets', () => {
       return new Response(
         400,
@@ -389,7 +375,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/targets', () => {
       return new Response(
         400,
@@ -417,7 +402,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can save address', async function (assert) {
-    assert.expect(2);
     featuresService.enable('target-network-address');
 
     const targetCount = getTargetCount();
@@ -437,7 +421,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('address field does not exist when target network address feature is disabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.targets);
     await click(`[href="${urls.newTarget}"]`);
     assert.false(featuresService.isEnabled('target-network-address'));
@@ -445,7 +428,6 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',

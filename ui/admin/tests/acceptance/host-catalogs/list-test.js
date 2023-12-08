@@ -58,7 +58,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {
-    assert.expect(3);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.projectScope}"]`);
@@ -77,7 +76,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(3);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
     await visit(urls.orgScope);
@@ -100,7 +98,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
-    assert.expect(4);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
@@ -127,7 +124,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to index with only list action', async function (assert) {
-    assert.expect(4);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'

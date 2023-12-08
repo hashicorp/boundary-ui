@@ -10,7 +10,6 @@ module('Unit | Transform | duration', function (hooks) {
   setupTest(hooks);
 
   test('it deserializes a duration string', function (assert) {
-    assert.expect(8);
     const transform = this.owner.lookup('transform:duration');
 
     const num1 = transform.deserialize('0s');
@@ -33,7 +32,6 @@ module('Unit | Transform | duration', function (hooks) {
   });
 
   test('it serializes a duration number', function (assert) {
-    assert.expect(7);
     const transform = this.owner.lookup('transform:duration');
     const num1 = transform.serialize(0);
     const num2 = transform.serialize(undefined);

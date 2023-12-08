@@ -65,7 +65,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update resource and save changes', async function (assert) {
-    assert.expect(1);
     await visit(urls.account);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
@@ -74,7 +73,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update resource and save LDAP account changes', async function (assert) {
-    assert.expect(2);
     await visit(urls.account);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'updated name');
@@ -91,7 +89,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('cannot update resource without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.account);
@@ -99,7 +96,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update an account and cancel changes', async function (assert) {
-    assert.expect(1);
     await visit(urls.account);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'update name');
@@ -108,7 +104,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('errors are displayed when save on account fails', async function (assert) {
-    assert.expect(1);
     this.server.patch('/accounts/:id', () => {
       return new Response(
         490,
@@ -133,7 +128,6 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('saving an existing account with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/accounts/:id', () => {
       return new Response(
         400,

@@ -10,7 +10,6 @@ module('Unit | Serializer | role', function (hooks) {
   setupTest(hooks);
 
   test('it serializes roles normally, without grants', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const record = store.createRecord('role', {
@@ -31,7 +30,6 @@ module('Unit | Serializer | role', function (hooks) {
   });
 
   test('it serializes only grant strings when `adapterOptions.grantStrings` is set', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const record = store.createRecord('role', {
@@ -52,7 +50,6 @@ module('Unit | Serializer | role', function (hooks) {
   });
 
   test('it normalizes records with array fields', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const roleModelClass = store.createRecord('role').constructor;
@@ -83,7 +80,6 @@ module('Unit | Serializer | role', function (hooks) {
   });
 
   test('it normalizes missing principals to empty array', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const role = store.createRecord('role').constructor;

@@ -77,7 +77,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('can create new host', async function (assert) {
-    assert.expect(1);
     const count = getHostCount();
     await visit(urls.newHost);
     await fillIn('[name="name"]', 'random string');
@@ -86,7 +85,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('Users cannot create a new host without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = [];
     await visit(urls.hostCatalog);
     assert.notOk(
@@ -97,7 +95,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
   });
   test('Users can navigate to new host route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.hosts);
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
@@ -108,7 +105,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts = [];
     await visit(urls.hosts);
     assert.notOk(
@@ -120,7 +116,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('can cancel create new host', async function (assert) {
-    assert.expect(2);
     const count = getHostCount();
     await visit(urls.newHost);
     await fillIn('[name="name"]', 'random string');
@@ -130,7 +125,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('saving a new host with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/hosts', () => {
       return new Response(
         400,
@@ -163,7 +157,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions.hosts =
       instances.hostCatalog.authorized_collection_actions.hosts.filter(
         (item) => item !== 'create',

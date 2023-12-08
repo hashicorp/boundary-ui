@@ -21,7 +21,6 @@ module('Unit | Session Store | cookie', function (hooks) {
   });
 
   test('it restores a session if both necessary cookies are present (session exists)', async function (assert) {
-    assert.expect(2);
     sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {
       path: '/',
     });
@@ -40,14 +39,12 @@ module('Unit | Session Store | cookie', function (hooks) {
   });
 
   test('it rejects restore if the session does not exist', async function (assert) {
-    assert.expect(2);
     assert.notOk(sessionStore.sessionExists);
     await sessionStore.restore().catch(() => {});
     assert.ok(true, 'Rejected');
   });
 
   test('it cleans up cookies on restore rejection', async function (assert) {
-    assert.expect(4);
     // For session cookie
     sessionStore.cookies.write(sessionStore.cookieName, 'token-value', {
       path: '/',
@@ -79,7 +76,6 @@ module('Unit | Session Store | cookie', function (hooks) {
   });
 
   test('it persists only an authenticator name cookie, since the server persists the session cookie', async function (assert) {
-    assert.expect(4);
     assert.notOk(sessionStore.cookies.exists(sessionStore.cookieName));
     assert.notOk(
       sessionStore.cookies.exists(sessionStore.authenticatorCookieName),

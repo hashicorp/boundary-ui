@@ -50,7 +50,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can save changes to an existing user', async function (assert) {
-    assert.expect(2);
     await visit(urls.users);
 
     await click(`[href="${urls.user}"]`);
@@ -66,7 +65,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('cannot make changes to an existing user without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.users);
@@ -78,7 +76,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can cancel changes to an existing user', async function (assert) {
-    assert.expect(2);
     await visit(urls.users);
 
     await click(`[href="${urls.user}"]`);
@@ -91,7 +88,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     await visit(urls.users);
     this.server.patch('/users/:id', () => {
       return new Response(
@@ -123,7 +119,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can discard unsaved user changes via dialog', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.user.name, 'Unsaved user name');
@@ -141,7 +136,6 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved user changes', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.user.name, 'Unsaved user name');

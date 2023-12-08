@@ -56,7 +56,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('can create new users', async function (assert) {
-    assert.expect(1);
     const usersCount = getUsersCount();
     await visit(urls.users);
 
@@ -68,7 +67,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users can navigate to new users route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.users}"]`);
@@ -82,7 +80,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users cannot navigate to new users route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'create',
@@ -101,7 +98,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('can cancel creation of a new user', async function (assert) {
-    assert.expect(2);
     const usersCount = getUsersCount();
     await visit(urls.users);
 
@@ -114,7 +110,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
-    assert.expect(3);
     const usersCount = getUsersCount();
     await visit(urls.users);
     this.server.post('/users', () => {
@@ -147,7 +142,6 @@ module('Acceptance | users | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.users =
       instances.scopes.org.authorized_collection_actions.users.filter(
         (item) => item !== 'create',

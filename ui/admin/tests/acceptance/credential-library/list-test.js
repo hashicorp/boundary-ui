@@ -65,7 +65,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   });
 
   test('Users can navigate to credential libraries with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.credentialStore);
     assert.ok(
       instances.credentialStore.authorized_collection_actions[
@@ -76,7 +75,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = [];
@@ -90,7 +88,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = ['create'];

@@ -12,7 +12,6 @@ module('Integration | Component | pending-confirmations', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders pending confirmations', async function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:confirm');
     service.enabled = true;
     await render(hbs`<PendingConfirmations as |confirmation|>

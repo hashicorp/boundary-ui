@@ -19,7 +19,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it may have a scope fragment (and thus a scopeModel)', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -46,7 +45,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it may accept a `scopeModel` for convenience, instead of a fragment', function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const scope = store.createRecord('scope', { id: 'o_1', type: 'org' });
     const model = store.createRecord('user', '123abc');
@@ -57,7 +55,6 @@ module('Unit | Model | base', function (hooks) {
   });
 
   test('it has a displayName attribute', function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {

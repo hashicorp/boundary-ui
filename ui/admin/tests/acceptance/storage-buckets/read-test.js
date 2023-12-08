@@ -54,7 +54,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('visiting a storage bucket', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
     await a11yAudit();
 
@@ -67,7 +66,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('cannot navigate to a storage bucket without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
       instances.storageBucket.authorized_actions.filter(
@@ -80,8 +78,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
-    assert.expect(1);
-
     await visit(urls.unknownStorageBucket);
     await a11yAudit();
 
@@ -89,7 +85,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('users can navigate to storage bucket and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/storage-buckets/${instances.storageBucket.id}`;
 
     await visit(incorrectUrl);

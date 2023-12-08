@@ -91,7 +91,6 @@ module(
     });
 
     test('can delete username & password credential', async function (assert) {
-      assert.expect(2);
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
@@ -104,7 +103,6 @@ module(
     });
 
     test('can delete username & key pair credential', async function (assert) {
-      assert.expect(2);
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
@@ -117,7 +115,6 @@ module(
     });
 
     test('can delete JSON credential', async function (assert) {
-      assert.expect(2);
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
       await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -126,7 +123,6 @@ module(
     });
 
     test('cannot delete a username & password credential without proper authorization', async function (assert) {
-      assert.expect(3);
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       instances.usernamePasswordCredential.authorized_actions =
@@ -145,7 +141,6 @@ module(
     });
 
     test('cannot delete a username & key pair credential without proper authorization', async function (assert) {
-      assert.expect(3);
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       instances.usernameKeyPairCredential.authorized_actions =
@@ -164,7 +159,6 @@ module(
     });
 
     test('cannot delete a JSON credential without proper authorization', async function (assert) {
-      assert.expect(3);
       const jsonCredentialCount = getJSONCredentialCount();
       instances.jsonCredential.authorized_actions =
         instances.jsonCredential.authorized_actions.filter(
@@ -179,7 +173,6 @@ module(
     });
 
     test('can accept delete username & password credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernamePasswordCredentialCount =
@@ -195,7 +188,6 @@ module(
     });
 
     test('can accept delete username & key pair credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernameKeyPairCredentialCount =
@@ -211,7 +203,6 @@ module(
     });
 
     test('can accept delete JSON credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
@@ -223,7 +214,6 @@ module(
     });
 
     test('can cancel delete username & password credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernamePasswordCredentialCount =
@@ -239,7 +229,6 @@ module(
     });
 
     test('can cancel delete username & key pair credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernameKeyPairCredentialCount =
@@ -255,7 +244,6 @@ module(
     });
 
     test('can cancel delete JSON credential via dialog', async function (assert) {
-      assert.expect(2);
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
@@ -267,7 +255,6 @@ module(
     });
 
     test('deleting a username & password credential which errors displays error message', async function (assert) {
-      assert.expect(1);
       this.server.del('/credentials/:id', () => {
         return new Response(
           490,
@@ -285,7 +272,6 @@ module(
     });
 
     test('deleting a username & key pair credential which errors displays error message', async function (assert) {
-      assert.expect(1);
       this.server.del('/credentials/:id', () => {
         return new Response(
           490,
@@ -303,7 +289,6 @@ module(
     });
 
     test('deleting a JSON credential which errors displays error message', async function (assert) {
-      assert.expect(1);
       this.server.del('/credentials/:id', () => {
         return new Response(
           490,

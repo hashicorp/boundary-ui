@@ -61,14 +61,12 @@ module('Acceptance | roles | read', function (hooks) {
   });
 
   test('visiting roles', async function (assert) {
-    assert.expect(1);
     await visit(urls.roles);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.roles);
   });
 
   test('can navigate to a role form', async function (assert) {
-    assert.expect(1);
     await visit(urls.roles);
     await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
@@ -76,7 +74,6 @@ module('Acceptance | roles | read', function (hooks) {
   });
 
   test('cannot navigate to a role form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.roles);
@@ -84,7 +81,6 @@ module('Acceptance | roles | read', function (hooks) {
   });
 
   test('can navigate to a roles and fetches scopes correctly', async function (assert) {
-    assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
       const response = scope.type === 'project' ? new Response(400) : scope;
@@ -98,7 +94,6 @@ module('Acceptance | roles | read', function (hooks) {
   });
 
   test('users can navigate to role and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

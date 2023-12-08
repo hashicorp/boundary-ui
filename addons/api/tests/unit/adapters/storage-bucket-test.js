@@ -10,7 +10,6 @@ module('Unit | Adapter | storage bucket', function (hooks) {
   setupTest(hooks);
 
   test('it generates correct createRecord URLs for storage buckets with extra query parameter ?plugin_name', function (assert) {
-    assert.expect(1);
     const scopeID = 'o_1';
     const mockSnapshot = {
       adapterOptions: {

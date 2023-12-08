@@ -25,7 +25,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('can read LDAP auth-method when authorized and feature flag enabled', function (assert) {
-    assert.expect(2);
     features.enable('ldap-auth-methods');
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
@@ -37,7 +36,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('cannot read LDAP auth-method when authorized and feature flag disabled', function (assert) {
-    assert.expect(2);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_LDAP,
@@ -48,7 +46,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('can read non-LDAP auth-method when authorized', function (assert) {
-    assert.expect(2);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -59,7 +56,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('cannot read non-LDAP auth-method when unauthorized', function (assert) {
-    assert.expect(2);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -70,7 +66,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('cannot make LDAP auth-method primary when feature flag disabled', function (assert) {
-    assert.expect(1);
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
@@ -78,7 +73,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('can make LDAP auth-method primary when feature flag enabled', function (assert) {
-    assert.expect(1);
     features.enable('ldap-auth-methods');
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_LDAP,
@@ -87,7 +81,6 @@ module('Unit | Abilities | auth-method', function (hooks) {
   });
 
   test('can make non-LDAP auth-method primary', function (assert) {
-    assert.expect(2);
     const authMethod = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC,
     });

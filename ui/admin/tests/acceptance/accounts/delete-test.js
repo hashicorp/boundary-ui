@@ -65,7 +65,6 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('can delete an account', async function (assert) {
-    assert.expect(1);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.account);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -73,7 +72,6 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('cannot delete an account without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.account);
@@ -83,7 +81,6 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('errors are displayed when delete on account fails', async function (assert) {
-    assert.expect(1);
     this.server.del('/accounts/:id', () => {
       return new Response(
         490,

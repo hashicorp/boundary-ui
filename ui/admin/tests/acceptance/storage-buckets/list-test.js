@@ -52,7 +52,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('users can navigate to storage-buckets with proper authorization', async function (assert) {
-    assert.expect(5);
     featuresService.enable('ssh-session-recording');
     await visit(urls.globalScope);
 
@@ -78,7 +77,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(5);
     featuresService.enable('byow');
     featuresService.enable('ssh-session-recording');
 
@@ -113,7 +111,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
-    assert.expect(5);
     featuresService.enable('ssh-session-recording');
 
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
@@ -147,7 +144,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('user can navigate to index with only list action', async function (assert) {
-    assert.expect(5);
     featuresService.enable('ssh-session-recording');
 
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
@@ -179,7 +175,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('user cannot navigate to index when feature is disabled', async function (assert) {
-    assert.expect(2);
     featuresService.enable('byow');
     await visit(urls.globalScope);
     assert.false(featuresService.isEnabled('ssh-session-recording'));
@@ -189,7 +184,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ssh-session-recording');
     await visit(urls.globalScope);
     instances.storageBucket = this.server.create('storage-bucket', {

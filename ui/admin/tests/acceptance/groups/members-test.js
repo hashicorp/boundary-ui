@@ -58,7 +58,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('visiting group members', async function (assert) {
-    assert.expect(2);
     await visit(urls.members);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.members);
@@ -66,7 +65,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('can remove a member', async function (assert) {
-    assert.expect(2);
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('.hds-dropdown-toggle-icon');
@@ -75,7 +73,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('cannot remove a member without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.group.authorized_actions.filter(
       (item) => item !== 'remove-members',
     );
@@ -85,7 +82,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('shows error message on member remove', async function (assert) {
-    assert.expect(2);
     this.server.post('/groups/:idMethod', () => {
       return new Response(
         400,
@@ -106,20 +102,17 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('visiting member selection', async function (assert) {
-    assert.expect(1);
     await visit(urls.addMembers);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.addMembers);
   });
 
   test('can navigate to add members with proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.group);
     assert.ok(find(`[href="${urls.addMembers}"]`));
   });
 
   test('cannot navigate to add members without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.group.authorized_actions.filter(
       (item) => item !== 'add-members',
     );
@@ -129,7 +122,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('select and save members to add', async function (assert) {
-    assert.expect(3);
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, 0);
@@ -145,7 +137,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('select and cancel members to add', async function (assert) {
-    assert.expect(4);
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('.hds-dropdown-toggle-icon');
@@ -160,7 +151,6 @@ module('Acceptance | groups | members', function (hooks) {
   });
 
   test('shows error message on member add', async function (assert) {
-    assert.expect(1);
     this.server.post('/groups/:idMethod', () => {
       return new Response(
         400,

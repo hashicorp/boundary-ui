@@ -64,7 +64,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can save changes to existing target', async function (assert) {
-    assert.expect(5);
     await visit(urls.targets);
     assert.notEqual(instances.target.name, 'random string');
     assert.notEqual(instances.target.worker_filter, 'random filter');
@@ -88,14 +87,12 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('updating a target shows the worker_filter deprecation message when "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     await visit(urls.target);
 
     assert.dom('.hds-alert').isVisible();
   });
 
   test('updating a target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.target);
     assert.false(featuresService.isEnabled('target-worker-filters-v2'));
     assert.dom('.hds-alert').doesNotExist();
@@ -103,7 +100,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('cannot edit worker_filter when "target-worker-filters-v2" is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     await visit(urls.target);
 
     assert.dom('[name=worker_filter]').isDisabled();
@@ -111,7 +107,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('show update filter button when the old worker filter field is has value', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(2);
     await visit(urls.target);
     assert.dom('[name=worker_filter]').isVisible();
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
@@ -120,7 +115,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('onClick update filter should select the egress toggle and the worker_filter value is copied into egress_worker_filter', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(2);
     await visit(urls.target);
     assert.dom('[name=worker_filter]').isVisible();
     const worker_filter_value = this.server.schema.targets.first().workerFilter;
@@ -135,7 +129,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('onClick update filter should select the egress and ingress toggle and the worker_filter value is copied into egress_worker_filter and ingress_worker_filter', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(3);
     await visit(urls.target);
     assert.dom('[name=worker_filter]').isVisible();
     const worker_filter_value = this.server.schema.targets.first().workerFilter;
@@ -153,7 +146,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('show filter input field when the `egress_worker_filter` toggle is on', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -163,7 +155,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('hide filter input field when the `egress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -177,7 +168,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('clear `egress_worker_field` value from a target when the toggle is off and form is saved', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(5);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -206,7 +196,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('show filter input field when the `ingress_worker_filter` toggle is on', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -216,7 +205,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('hide filter input field when the `ingress_worker_filter` toggled is off', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(1);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -227,7 +215,6 @@ module('Acceptance | targets | update', function (hooks) {
   test('clear `ingress_worker_field` value from a target when the toggle is off and form is saved', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
     featuresService.enable('target-worker-filters-v2-ingress');
-    assert.expect(5);
     await visit(urls.target);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await click('.hds-button[type="button"]', 'Update Filter');
@@ -251,7 +238,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can cancel changes to existing target', async function (assert) {
-    assert.expect(2);
     await visit(urls.targets);
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
@@ -263,7 +249,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     await visit(urls.targets);
     this.server.patch('/targets/:id', () => {
       return new Response(
@@ -296,7 +281,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('can discard unsaved target changes via dialog', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(7);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, 'random string');
@@ -326,7 +310,6 @@ module('Acceptance | targets | update', function (hooks) {
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
     featuresService.enable('target-worker-filters-v2');
-    assert.expect(6);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, 'random string');
@@ -352,7 +335,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('cannot make changes to an existing target without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'update');
@@ -363,7 +345,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
-    assert.expect(4);
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
@@ -409,7 +390,6 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
-    assert.expect(4);
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');

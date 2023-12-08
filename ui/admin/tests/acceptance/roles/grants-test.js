@@ -61,7 +61,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('visiting role grants', async function (assert) {
-    assert.expect(2);
     await visit(urls.grants);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.grants);
@@ -72,7 +71,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
-    assert.expect(4);
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'set-grants',
     );
@@ -112,7 +110,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('cancel a grant update', async function (assert) {
-    assert.expect(1);
     await visit(urls.grants);
     await fillIn(`${grantsForm} [name="grant"]`, 'id=123,action=delete');
     await click('.rose-form-actions button:not([type="submit"])');
@@ -123,7 +120,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('shows error message on grant update', async function (assert) {
-    assert.expect(2);
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -168,7 +164,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('cancel a grant creation', async function (assert) {
-    assert.expect(1);
     await visit(urls.grants);
     await fillIn(`${newGrantForm} [name="grant"]`, 'id=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
@@ -177,7 +172,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('shows error message on grant create', async function (assert) {
-    assert.expect(2);
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -202,7 +196,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('delete a grant', async function (assert) {
-    assert.expect(1);
     await visit(urls.grants);
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
@@ -213,7 +206,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('cancel a grant remove', async function (assert) {
-    assert.expect(1);
     await visit(urls.grants);
     await click(`${grantsForm} button`);
     await click('.rose-form-actions button:not([type="submit"])');
@@ -224,7 +216,6 @@ module('Acceptance | roles | grants', function (hooks) {
   });
 
   test('shows error message on grant remove', async function (assert) {
-    assert.expect(2);
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,

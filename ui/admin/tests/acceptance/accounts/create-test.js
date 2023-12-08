@@ -69,14 +69,12 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('visiting accounts', async function (assert) {
-    assert.expect(1);
     await visit(urls.accounts);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.accounts);
   });
 
   test('can create a new account', async function (assert) {
-    assert.expect(1);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
@@ -88,7 +86,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can create a new LDAP account', async function (assert) {
-    assert.expect(1);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
@@ -102,7 +99,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users cannot create a new account without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.authMethod);
     assert.notOk(
@@ -114,7 +110,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users can navigate to new account route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.accounts);
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
@@ -125,7 +120,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('Users cannot navigate to new account route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.accounts);
     assert.notOk(
@@ -137,7 +131,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can cancel a new account creation', async function (assert) {
-    assert.expect(2);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
@@ -147,7 +140,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can cancel a new LDAP account creation', async function (assert) {
-    assert.expect(2);
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
@@ -157,7 +149,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/accounts', () => {
       return new Response(
         400,
@@ -194,7 +185,6 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new account route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts =
       instances.authMethod.authorized_collection_actions.accounts.filter(
         (item) => item !== 'create',

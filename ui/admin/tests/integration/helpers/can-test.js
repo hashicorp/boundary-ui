@@ -17,8 +17,6 @@ module('Integration | Helper | can', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(2);
-
     const model = {
       authorized_actions: ['read'],
       authorized_collection_actions: {

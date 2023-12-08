@@ -23,8 +23,6 @@ module('Unit | Ability | session-recording', function (hooks) {
   });
 
   test('can download when a recording has download authorization', function (assert) {
-    assert.expect(2);
-
     const recordingWithAuthorizedAction = store.createRecord(
       'session-recording',
       {

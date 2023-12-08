@@ -27,7 +27,6 @@ module('Unit | Model | account', function (hooks) {
   });
 
   test('it has an accountName attribute for password account', function (assert) {
-    assert.expect(2);
     store = this.owner.lookup('service:store');
     let model = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_PASSWORD,
@@ -38,7 +37,6 @@ module('Unit | Model | account', function (hooks) {
   });
 
   test('it has isPassword property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
@@ -54,7 +52,6 @@ module('Unit | Model | account', function (hooks) {
   });
 
   test('it has isOIDC property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_OIDC,
     });
@@ -70,7 +67,6 @@ module('Unit | Model | account', function (hooks) {
   });
 
   test('it has isLDAP property and returns the expected values', function (assert) {
-    assert.expect(3);
     const modelA = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_LDAP,
     });
@@ -86,7 +82,6 @@ module('Unit | Model | account', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', function (assert) {
-    assert.expect(4);
     const modelA = store.createRecord('account', {
       type: TYPE_AUTH_METHOD_LDAP,
     });

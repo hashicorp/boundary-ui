@@ -34,7 +34,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('can add ldap account to user when feature flag enabled', function (assert) {
-    assert.expect(1);
     features.enable('ldap-auth-methods');
     instances.account.type = TYPE_AUTH_METHOD_LDAP;
     assert.true(
@@ -45,7 +44,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('can add non-ldap account to user', function (assert) {
-    assert.expect(2);
     instances.account.type = TYPE_AUTH_METHOD_OIDC;
     assert.true(
       canService.can('addAccount user', instances.user, {
@@ -61,7 +59,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('cannot add ldap account to user when feature flag disabled', function (assert) {
-    assert.expect(1);
     instances.account.type = TYPE_AUTH_METHOD_LDAP;
     assert.false(
       canService.can('addAccount user', instances.user, {
@@ -71,7 +68,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('can remove ldap account from user when feature flag enabled', function (assert) {
-    assert.expect(1);
     features.enable('ldap-auth-methods');
     instances.account.type = TYPE_AUTH_METHOD_LDAP;
     assert.true(
@@ -82,7 +78,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('cannot remove ldap account from user when feature flag disabled', function (assert) {
-    assert.expect(1);
     instances.account.type = TYPE_AUTH_METHOD_LDAP;
     assert.false(
       canService.can('removeAccount user', instances.user, {
@@ -92,7 +87,6 @@ module('Unit | Abilities | user', function (hooks) {
   });
 
   test('can remove non-ldap account from user', function (assert) {
-    assert.expect(2);
     instances.account.type = TYPE_AUTH_METHOD_OIDC;
     assert.true(
       canService.can('removeAccount user', instances.user, {

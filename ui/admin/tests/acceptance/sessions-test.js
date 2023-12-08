@@ -72,7 +72,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('visiting sessions', async function (assert) {
-    assert.expect(2);
     await visit(urls.projectScope);
     await a11yAudit();
 
@@ -84,7 +83,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('users cannot navigate to sessions tab without proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
     await a11yAudit();
     instances.scopes.project.authorized_collection_actions.sessions =
@@ -106,7 +104,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.projectScope}"]`);
@@ -120,7 +117,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('visiting sessions without users or targets is OK', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
     instances.sessions[0].update({
       userId: null,
@@ -133,7 +129,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('cancelling a session', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.sessions}"]`);
@@ -143,7 +138,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
     this.server.post('/sessions/:id_method', () => new Response(400));
 
@@ -154,7 +148,6 @@ module('Acceptance | sessions', function (hooks) {
   });
 
   test('users can link to docs page for sessions', async function (assert) {
-    assert.expect(1);
     await visit(urls.projectScope);
 
     await click(`[href="${urls.sessions}"]`);

@@ -23,7 +23,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('it reflects when a given account may set password based on authorized_actions', function (assert) {
-    assert.expect(2);
     const account = store.createRecord('auth-method', {
       authorized_actions: ['set-password'],
     });
@@ -33,7 +32,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('can read known account types when authorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -48,7 +46,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('cannot read accounts when unauthorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -63,7 +60,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('can delete known account types when authorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -78,7 +74,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('cannot delete accounts when unauthorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -93,7 +88,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('can update known account types when authorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: ['update'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -108,7 +102,6 @@ module('Unit | Abilities | Account', function (hooks) {
   });
 
   test('cannot update accounts when unauthorized', function (assert) {
-    assert.expect(4);
     const account = store.createRecord('account', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,

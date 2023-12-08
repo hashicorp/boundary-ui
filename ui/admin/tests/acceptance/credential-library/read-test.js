@@ -67,7 +67,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('can navigate to resource', async function (assert) {
-    assert.expect(1);
     await visit(urls.credentialLibraries);
     await click('main tbody .rose-table-header-cell a');
     await a11yAudit();
@@ -75,7 +74,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to resource without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'read',
@@ -85,7 +83,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
-    assert.expect(2);
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
@@ -101,14 +98,12 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {
-    assert.expect(1);
     await visit(urls.unknownCredentialLibrary);
     await a11yAudit();
     assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
   });
 
   test('users can navigate to credential library and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const credentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
     });

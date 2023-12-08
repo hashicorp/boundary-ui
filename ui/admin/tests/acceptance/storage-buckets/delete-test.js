@@ -63,7 +63,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   });
 
   skip('user can delete a storage bucket', async function (assert) {
-    assert.expect(2);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.globalScope);
 
@@ -76,7 +75,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   });
 
   skip('user can accept delete storage bucket via dialog', async function (assert) {
-    assert.expect(4);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const storageBucketCount = getStorageBucketCount();
@@ -98,7 +96,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   });
 
   skip('user can cancel delete storage bucket via dialog', async function (assert) {
-    assert.expect(4);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const storageBucketCount = getStorageBucketCount();
@@ -130,7 +127,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   });
 
   skip('user cannot delete storage bucket without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
     instances.storageBucket.authorized_actions =
       instances.storageBucket.authorized_actions.filter(
@@ -144,7 +140,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   });
 
   skip('deleting a storage bucket which errors displays error messages', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
     this.server.del('/storage-buckets/:id', () => {
       return new Response(
