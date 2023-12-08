@@ -48,7 +48,7 @@ export default class FormAuthMethodOidcComponent extends Component {
   /**
    * @returns {boolean}
    */
-  toggleChecked() {
+  isToggleChecked() {
     return this.args.model.prompts?.find((i) => i.value === 'none');
   }
 
