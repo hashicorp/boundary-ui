@@ -686,16 +686,20 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 }
 
 // Search & Filtering
-.targets {
+.search-filtering {
   .hds-application-state {
-    padding-top: 3rem;
+    margin-top: 3rem;
   }
 
-  .target-search-filtering {
-    padding-bottom: 1rem;
+  .hds-segmented-group {
+    margin-bottom: 1rem;
 
     .hds-dropdown-toggle-button__text {
       white-space: nowrap;
     }
+  }
+
+  .hds-table {
+    margin-bottom: 1rem;
   }
 }

@@ -21,9 +21,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =attributes
 
-  queryParams = ['search'];
+  queryParams = ['search', 'page', 'pageSize'];
 
   @tracked search;
+  @tracked page = 1;
+  @tracked pageSize = 10;
   @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
 
   // =methods
@@ -138,5 +140,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+    this.page = 1;
   }
 }
