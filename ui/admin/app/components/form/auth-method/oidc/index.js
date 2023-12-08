@@ -36,7 +36,7 @@ export default class FormAuthMethodOidcComponent extends Component {
   prompts = options.oidc.prompts;
 
   @tracked selectedPrompts = this.parsePromptsArray();
-  @tracked skipPromptsList = this.toggleChecked();
+  @tracked skipPromptsList = this.isToggleChecked();
 
   /**
    * @returns {string}
