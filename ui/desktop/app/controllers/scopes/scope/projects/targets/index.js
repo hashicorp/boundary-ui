@@ -191,7 +191,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   @action
   filterItems(event) {
-    let { value } = event.target;
+    const { value } = event.target;
     this.scopeSearchTerm = value;
   }
 
@@ -202,7 +202,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   @action
   selectItem(event) {
-    let { checked, value } = event.target;
+    const { checked, value } = event.target;
     if (checked) {
       this.selectedScopes.push(value);
     } else {
