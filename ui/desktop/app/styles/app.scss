@@ -642,18 +642,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   display: block;
   margin-top: 0.75rem;
 
-  .raw-credential-header {
-    border: 1px solid var(--token-color-border-primary);
-    border-radius: 5px 5px 0 0;
-    border-bottom: none;
-    padding: 1.5rem 1.5rem 0.75rem;
-  }
-
-  .raw-credential-title {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .raw-secret .CodeMirror {
     border-radius: 0 0 5px 5px;
   }
