@@ -13,15 +13,19 @@
     <p>{{t 'resources.target.description'}}</p>
   </page.header>
 
-  <page.body class='targets'>
+  <page.body class='search-filtering'>
     {{#if (or @model.targets this.search)}}
-      <div class='target-search-filtering'>
-        <Hds::SegmentedGroup as |S|>
-          <S.TextInput
-            @type='search'
-            placeholder={{t 'actions.search'}}
-            aria-label={{t 'actions.search'}}
-            {{on 'input' this.handleSearchInput}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton
+            @color='secondary'
+            @text={{t 'resources.scope.title'}}
           />
           <S.Dropdown @onClose={{this.close}} as |DD|>
             <DD.ToggleButton
@@ -80,7 +84,6 @@
             <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
           </S.Dropdown>
         </Hds::SegmentedGroup>
-      </div>
       {{#if @model.targets}}
         <Hds::Table
           @model={{@model.targets}}
@@ -168,6 +171,12 @@
             </B.Tr>
           </:body>
         </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+
       {{/if}}
       {{#if this.noResults}}
         <Hds::ApplicationState data-test-no-target-results as |A|>

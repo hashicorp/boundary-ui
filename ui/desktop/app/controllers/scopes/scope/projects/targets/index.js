@@ -21,13 +21,15 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =attributes
 
-  queryParams = ['search', { scopes: { type: 'array' } }];
+  queryParams = ['search', { scopes: { type: 'array' } }, 'page', 'pageSize'];
 
   allTargets;
   @tracked search;
   @tracked scopeSearchTerm;
   @tracked scopes = [];
   @tracked selectedScopes = [];
+  @tracked page = 1;
+  @tracked pageSize = 10;
 
   constructor() {
     super(...arguments);
@@ -182,6 +184,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+    this.page = 1;
   }
 
   /**
