@@ -6,11 +6,15 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <h2>
-      {{t 'resources.session.title_plural'}}
-      <DocLink @doc='sessions' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.session.description'}}</p>
+    <Hds::PageHeader as |PH|>
+      <PH.Title>{{t 'resources.session.title_plural'}}</PH.Title>
+      <PH.Description>
+        {{t 'resources.session.description'}}
+        <Hds::Link::Inline @color='secondary' @href={{(doc-url 'sessions')}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

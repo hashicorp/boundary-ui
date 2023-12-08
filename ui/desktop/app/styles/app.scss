@@ -10,6 +10,17 @@
 @import 'rose';
 @import 'notify';
 
+// Overrides to use HDS appHeader. Once we stop relying on rose-layout page
+// for layouting, we can delete these styles.
+.rose-layout-page {
+  display: grid;
+  grid-template-areas:
+    'header header header'
+    'body body body';
+}
+
+// End of Rose override to fit HDS components /////////////
+
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
