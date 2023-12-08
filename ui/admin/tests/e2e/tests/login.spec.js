@@ -13,7 +13,7 @@ test('Log in, log out, and then log back in', async ({ page }) => {
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page
-    .getByLabel('Password')
+    .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
   await page.getByRole('button', { name: 'Sign In' }).click();
   await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
@@ -31,7 +31,7 @@ test('Log in, log out, and then log back in', async ({ page }) => {
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page
-    .getByLabel('Password')
+    .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
   await page.getByRole('button', { name: 'Sign In' }).click();
   await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
@@ -46,7 +46,7 @@ test.describe('Failure Cases', async () => {
     await page
       .getByLabel('Login Name')
       .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page.getByLabel('Password').fill('badpassword');
+    await page.getByLabel('Password', { exact: true }).fill('badpassword');
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
@@ -67,7 +67,7 @@ test.describe('Failure Cases', async () => {
 
   test('Log in with only password', async ({ page }) => {
     await page
-      .getByLabel('Password')
+      .getByLabel('Password', { exact: true })
       .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();

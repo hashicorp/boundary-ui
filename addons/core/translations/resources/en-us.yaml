@@ -157,7 +157,7 @@ auth-method:
       label: Login
       help: Always require the user to log in to this auth provider
     none:
-      label: None
+      label: Skip Prompts
       help: Skip prompts if the user is already signed in and has granted consent
   section:
     connection:

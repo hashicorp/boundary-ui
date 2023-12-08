@@ -121,7 +121,7 @@ signing_algorithms:
   help: The signing algorithms allowed for the auth method.
 prompts:
   label: Prompts
-  help: The prompts allowed for an oidc auth method.
+  help: The prompts allowed for an OIDC auth method.
 algorithm:
   label: Algorithm
 subject:

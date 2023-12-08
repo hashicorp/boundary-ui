@@ -43,6 +43,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
   const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
+  const TOGGLE_SELECTOR = '[name="prompts"]';
   let getAuthMethodsCount;
   let featuresService;
 
@@ -133,6 +134,10 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click('[id="consent"]', 'consent');
+
+    //If skip prompts toggle is clicked, then we hide the rest of the prompt options
+    await click(TOGGLE_SELECTOR);
+    assert.dom('[id="select_account"]').isNotVisible();
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getAuthMethodsCount(), count + 1);
@@ -152,7 +157,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
     assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
-    assert.deepEqual(authMethod.attributes.prompts, ['consent']);
+    assert.deepEqual(authMethod.attributes.prompts, ['none']);
   });
 
   test('Users can create a new ldap auth method', async function (assert) {
