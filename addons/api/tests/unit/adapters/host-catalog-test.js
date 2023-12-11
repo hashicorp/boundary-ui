@@ -10,7 +10,6 @@ module('Unit | Adapter | host catalog', function (hooks) {
   setupTest(hooks);
 
   test('it generates correct createRecord URLs for static host catalogs', function (assert) {
-    assert.expect(1);
     const scopeID = 'o_1';
     const mockSnapshot = {
       adapterOptions: {
@@ -31,7 +30,6 @@ module('Unit | Adapter | host catalog', function (hooks) {
   });
 
   test('it generates correct createRecord URLs for dynamic host catalogs with extra query parameter ?plugin_name', function (assert) {
-    assert.expect(1);
     const scopeID = 'o_1';
     const mockSnapshot = {
       adapterOptions: {

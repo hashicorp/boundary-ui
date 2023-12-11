@@ -78,7 +78,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('can delete host', async function (assert) {
-    assert.expect(1);
     const count = getHostSetCount();
     await visit(urls.hostSet);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -86,7 +85,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('can accept delete host set via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -98,7 +96,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('cannot delete host set without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.hostSet);
@@ -108,7 +105,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('cannot cancel delete host set via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -120,7 +116,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('deleting a host set which errors displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.del('/host-sets/:id', () => {
       return new Response(
         490,

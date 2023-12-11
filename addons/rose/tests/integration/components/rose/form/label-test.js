@@ -12,7 +12,6 @@ module('Integration | Component | rose/form/label', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(2);
     await render(hbs`
       <Rose::Form::Label>
         Form Label

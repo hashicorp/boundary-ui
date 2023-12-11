@@ -73,7 +73,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('can delete resource', async function (assert) {
-    assert.expect(1);
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -81,7 +80,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('cannot delete resource without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -93,7 +91,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('can accept delete credential library via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -105,7 +102,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('cannot cancel delete credential library via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -117,7 +113,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('deleting a credential library which errors displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.del('/credential-libraries/:id', () => {
       return new Response(
         490,

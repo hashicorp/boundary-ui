@@ -10,7 +10,6 @@ module('Unit | Abilities | Role', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a given role may set grants based on authorized_actions', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['set-grants'],
@@ -21,7 +20,6 @@ module('Unit | Abilities | Role', function (hooks) {
   });
 
   test('it reflects when a given role may add principals based on authorized_actions', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['add-principals'],
@@ -32,7 +30,6 @@ module('Unit | Abilities | Role', function (hooks) {
   });
 
   test('it reflects when a given role may remove principals based on authorized_actions', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-principals'],
@@ -43,7 +40,6 @@ module('Unit | Abilities | Role', function (hooks) {
   });
 
   test('it proxies role principal read ability to the appropriate ability type', function (assert) {
-    assert.expect(6);
     const service = this.owner.lookup('service:can');
     const user = {
       constructor: { modelName: 'user' },
@@ -69,7 +65,6 @@ module('Unit | Abilities | Role', function (hooks) {
   });
 
   test('it throws an error for unknown principal types on principal read check', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const account = {
       constructor: { modelName: 'account' },

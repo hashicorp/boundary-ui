@@ -20,7 +20,6 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the active editor', async function (assert) {
-    assert.expect(3);
     await render(hbs`
       <Form::Field::JsonSecret
         @value={{this.model.json_object}}
@@ -37,7 +36,6 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the disabled editor', async function (assert) {
-    assert.expect(3);
     await render(hbs`
       <Form::Field::JsonSecret
         @disabled={{true}}
@@ -55,7 +53,6 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the actionable editor', async function (assert) {
-    assert.expect(3);
     await render(hbs`
       <Form::Field::JsonSecret
         @disabled={{false}}
@@ -73,7 +70,6 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the active editor from the actionable view', async function (assert) {
-    assert.expect(4);
     await render(hbs`
       <Form::Field::JsonSecret
         @disabled={{false}}

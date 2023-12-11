@@ -10,7 +10,6 @@ module('Unit | Serializer | group', function (hooks) {
   setupTest(hooks);
 
   test('it serializes groups normally, without members', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('group');
     const record = store.createRecord('group', {
@@ -30,7 +29,6 @@ module('Unit | Serializer | group', function (hooks) {
   });
 
   test('it serializes only host sets and version when an `adapterOptions.memberIDs` array is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('group');
     const record = store.createRecord('group', {
@@ -51,7 +49,6 @@ module('Unit | Serializer | group', function (hooks) {
   });
 
   test('it normalizes missing member_ids to empty array', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('group');
     const group = store.createRecord('group').constructor;

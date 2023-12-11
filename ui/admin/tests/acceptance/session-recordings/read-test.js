@@ -68,7 +68,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   });
 
   test('visiting a session recording', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ssh-session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
@@ -80,7 +79,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   });
 
   test('user can navigate to a session recording with proper authorization', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ssh-session-recording');
     // Visit session recordings
     await visit(urls.sessionRecordings);
@@ -92,7 +90,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   });
 
   test('user cannot navigate to a session recording without the read action', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ssh-session-recording');
     instances.sessionRecording.authorized_actions =
       instances.sessionRecording.authorized_actions.filter(
@@ -104,7 +101,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   });
 
   test('user can navigate to a channel recording', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ssh-session-recording');
     // Visit session recording
     await visit(urls.sessionRecording);
@@ -115,7 +111,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   });
 
   test('users can navigate to session recording and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ssh-session-recording');
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/session-recordings/${instances.sessionRecording.id}/channels-by-connection`;
 

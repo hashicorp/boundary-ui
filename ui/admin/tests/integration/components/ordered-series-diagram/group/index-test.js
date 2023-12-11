@@ -14,8 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders group icons with highlight background', async function (assert) {
-      assert.expect(7);
-
       this.set('client', 'Client');
       this.set('egressWorker', 'Egress Worker');
 

@@ -30,7 +30,6 @@ module('Unit | Abilities | User', function (hooks) {
   });
 
   test('can add accounts to user when authorized and given a known account type', function (assert) {
-    assert.expect(5);
     instances.user.authorized_actions = ['add-accounts'];
     assert.true(canService.can('addAccounts user', instances.user));
     instances.account.type = TYPE_AUTH_METHOD_OIDC;
@@ -60,7 +59,6 @@ module('Unit | Abilities | User', function (hooks) {
   });
 
   test('cannot add accounts to user when unauthorized', function (assert) {
-    assert.expect(5);
     instances.user.authorized_actions = [];
     assert.false(canService.can('addAccounts user', instances.user));
     instances.account.type = TYPE_AUTH_METHOD_OIDC;
@@ -90,7 +88,6 @@ module('Unit | Abilities | User', function (hooks) {
   });
 
   test('can remove accounts from user when authorized and given a known account type', function (assert) {
-    assert.expect(5);
     instances.user.authorized_actions = ['remove-accounts'];
     assert.true(canService.can('removeAccounts user', instances.user));
     instances.account.type = TYPE_AUTH_METHOD_OIDC;
@@ -120,7 +117,6 @@ module('Unit | Abilities | User', function (hooks) {
   });
 
   test('cannot remove accounts from user when unauthorized', function (assert) {
-    assert.expect(5);
     instances.user.authorized_actions = [];
     assert.false(canService.can('removeAccounts user', instances.user));
     instances.account.type = TYPE_AUTH_METHOD_OIDC;

@@ -37,7 +37,6 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
   }
 
   test('it renders the full component', async function (assert) {
-    assert.expect(4);
     await renderComponent(false);
     assert.ok(find('.rose-form-fieldset'));
     assert.strictEqual(
@@ -55,7 +54,6 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
   });
 
   test('it renders with no description', async function (assert) {
-    assert.expect(4);
     await renderComponent(true);
     assert.ok(find('.rose-form-fieldset'));
     assert.strictEqual(
@@ -70,7 +68,6 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
   });
 
   test('it supports aria description for fieldset with description provided', async function (assert) {
-    assert.expect(1);
     await renderComponent(false);
     const descriptionElement = find('.rose-form-fieldset-description');
     const fieldsetElement = find('.rose-form-fieldset');
@@ -83,7 +80,6 @@ module('Integration | Component | rose/form/fieldset', function (hooks) {
   });
 
   test('it does not support aria description for fieldset with no description provided', async function (assert) {
-    assert.expect(3);
     await renderComponent(true);
     const fieldsetElement = find('.rose-form-fieldset');
 

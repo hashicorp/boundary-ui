@@ -85,7 +85,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User can delete a managed group', async function (assert) {
-    assert.expect(2);
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.managedGroups);
 
@@ -97,7 +96,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User can delete a ldap managed group', async function (assert) {
-    assert.expect(2);
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapManagedGroups);
 
@@ -109,7 +107,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User cannot delete a managed-group without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -122,7 +119,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('User cannot delete a ldap managed-group without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -135,7 +131,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('Errors are displayed when delete on managed group fails', async function (assert) {
-    assert.expect(2);
     this.server.del('/managed-groups/:id', () => {
       return new Response(
         490,
@@ -158,7 +153,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   });
 
   test('Errors are displayed when delete on ldap managed group fails', async function (assert) {
-    assert.expect(2);
     this.server.del('/managed-groups/:id', () => {
       return new Response(
         490,

@@ -49,14 +49,12 @@ module('Acceptance | groups | read', function (hooks) {
   });
 
   test('visiting a group', async function (assert) {
-    assert.expect(1);
     await visit(urls.newGroup);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.newGroup);
   });
 
   test('cannot navigate to a group form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.group);
@@ -64,7 +62,6 @@ module('Acceptance | groups | read', function (hooks) {
   });
 
   test('users can navigate to group and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

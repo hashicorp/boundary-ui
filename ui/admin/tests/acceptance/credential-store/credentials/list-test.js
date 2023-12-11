@@ -71,7 +71,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   });
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {
-    assert.expect(4);
     await visit(urls.staticCredentialStore);
     assert.ok(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
@@ -87,7 +86,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   });
 
   test('User cannot navigate to Credentials tab without either list or create action', async function (assert) {
-    assert.expect(3);
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       [];
     await visit(urls.staticCredentialStore);
@@ -105,7 +103,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   });
 
   test('User can navigate to new credential screen with only create action', async function (assert) {
-    assert.expect(2);
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       ['create'];
     await visit(urls.staticCredentialStore);

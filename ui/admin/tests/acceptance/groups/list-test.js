@@ -54,7 +54,6 @@ module('Acceptance | groups | list', function (hooks) {
   });
 
   test('can navigate to groups with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(orgURL);
     assert.ok(
       instances.orgScope.authorized_collection_actions.groups.includes('list'),
@@ -63,7 +62,6 @@ module('Acceptance | groups | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions.groups = [];
     await visit(orgURL);
     assert.notOk(
@@ -73,7 +71,6 @@ module('Acceptance | groups | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
     instances.orgScope.authorized_collection_actions.groups = ['create'];
     await visit(orgURL);
     assert.ok(find(`[href="${urls.groups}"]`));

@@ -67,7 +67,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('can create new role', async function (assert) {
-    assert.expect(1);
     const rolesCount = this.server.db.roles.length;
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
@@ -76,7 +75,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('Users can navigate to new roles route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.roles);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.roles.includes(
@@ -87,7 +85,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('Users cannot navigate to new roles route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.roles);
     assert.notOk(
@@ -99,7 +96,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('can cancel new role creation', async function (assert) {
-    assert.expect(2);
     const rolesCount = this.server.db.roles.length;
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
@@ -109,7 +105,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/roles', () => {
       return new Response(
         400,
@@ -138,7 +133,6 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new role route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.org.authorized_collection_actions.roles =
       instances.scopes.org.authorized_collection_actions.roles.filter(
         (item) => item !== 'create',

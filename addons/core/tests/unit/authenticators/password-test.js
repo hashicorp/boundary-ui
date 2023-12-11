@@ -30,7 +30,6 @@ module('Unit | Authenticator | password', function (hooks) {
   });
 
   test('it adds an authorization header to application adapter on restore', async function (assert) {
-    assert.expect(1);
     const id = 'token1234';
     const mockData = { attributes: { id, token: 'token1234' } };
     this.server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
@@ -44,7 +43,6 @@ module('Unit | Authenticator | password', function (hooks) {
   });
 
   test('it adds an authorization header to application adapter on authenticate', async function (assert) {
-    assert.expect(1);
     const creds = { identification: 'foo', password: 'bar' };
     const scope = { id: 'global' };
     const authMethod = { id: 'paum_1234' };

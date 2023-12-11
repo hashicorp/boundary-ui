@@ -63,7 +63,6 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('can delete target', async function (assert) {
-    assert.expect(1);
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
@@ -74,7 +73,6 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('can accept delete target via dialog', async function (assert) {
-    assert.expect(3);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const targetCount = getTargetCount();
@@ -90,7 +88,6 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('cannot cancel delete target via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const targetCount = getTargetCount();
@@ -105,7 +102,6 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('cannot delete target without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'delete');
@@ -118,7 +114,6 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('deleting a target which errors displays error messages', async function (assert) {
-    assert.expect(1);
     await visit(urls.targets);
     this.server.del('/targets/:id', () => {
       return new Response(

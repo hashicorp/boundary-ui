@@ -23,7 +23,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('can read known auth method types when authorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['read'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -38,7 +37,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('cannot read auth methods when unauthorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -53,7 +51,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('can delete known auth method types when authorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -68,7 +65,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('cannot delete auth methods when unauthorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['delete'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -83,7 +79,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('can update known auth method types when authorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: ['update'],
       type: TYPE_AUTH_METHOD_OIDC,
@@ -98,7 +93,6 @@ module('Unit | Abilities | Auth Method', function (hooks) {
   });
 
   test('cannot update auth methods when unauthorized', function (assert) {
-    assert.expect(4);
     const authMethod = store.createRecord('auth-method', {
       authorized_actions: [],
       type: TYPE_AUTH_METHOD_OIDC,

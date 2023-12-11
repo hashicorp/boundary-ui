@@ -10,7 +10,6 @@ module('Unit | Adapter | session recording', function (hooks) {
   setupTest(hooks);
 
   test('it generates correct URLs for downloading asciicast', function (assert) {
-    assert.expect(1);
     const mockSnapshot = {
       adapterOptions: {
         method: 'download',
@@ -34,7 +33,6 @@ module('Unit | Adapter | session recording', function (hooks) {
   });
 
   test('it generates correct URLs for retrieving session-recordings', function (assert) {
-    assert.expect(1);
     const adapter = this.owner.lookup('adapter:session-recording');
     const createRecordURL = adapter.buildURL(
       'session-recording',

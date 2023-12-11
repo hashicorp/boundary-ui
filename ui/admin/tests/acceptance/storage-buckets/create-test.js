@@ -62,7 +62,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with global scope', async function (assert) {
-    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -86,7 +85,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with org scope', async function (assert) {
-    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -110,7 +108,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with dynamic credentials', async function (assert) {
-    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -133,7 +130,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with static credentials', async function (assert) {
-    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -158,7 +154,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('user can cancel new storage bucket creation', async function (assert) {
-    assert.expect(2);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -171,7 +166,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/storage-buckets', () => {
       return new Response(
         400,
@@ -202,7 +196,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'

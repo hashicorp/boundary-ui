@@ -83,7 +83,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new static host catalogs', async function (assert) {
-    assert.expect(1);
     const count = gethostCatalogCount();
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -94,7 +93,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new dynamic aws host catalogs with aws provider', async function (assert) {
-    assert.expect(1);
     const count = gethostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -105,7 +103,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can create new dynamic aws host catalogs with azure provider', async function (assert) {
-    assert.expect(1);
     const count = gethostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -116,7 +113,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new static host catalogs', async function (assert) {
-    assert.expect(2);
     const count = gethostCatalogCount();
     await visit(urls.newStaticHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -126,7 +122,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new dynamic host catalogs with AWS provider', async function (assert) {
-    assert.expect(2);
     const count = gethostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -136,7 +131,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can cancel creation of new dynamic host catalogs with Azure provider', async function (assert) {
-    assert.expect(2);
     const count = gethostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
     await fillIn('[name="name"]', 'random string');
@@ -146,7 +140,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users can navigate to new static host catalogs route with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostCatalogs);
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
@@ -157,7 +150,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('Users cannot navigate to new static host catalogs route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
     await visit(urls.hostCatalogs);
@@ -170,7 +162,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('saving a new static host catalog with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/host-catalogs', () => {
       return new Response(
         400,
@@ -203,7 +194,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'

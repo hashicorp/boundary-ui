@@ -12,8 +12,6 @@ module('Integration | Component | rose/dialog/cover', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(3);
-
     await render(hbs`
       <Rose::Dialog::Cover>
         <:header>

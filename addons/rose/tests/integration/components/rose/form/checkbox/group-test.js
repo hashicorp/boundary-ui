@@ -25,7 +25,6 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
   });
 
   test('it renders checkboxes equal in length to an array of items', async function (assert) {
-    assert.expect(1);
     this.items = items;
     await render(hbs`
       <Rose::Form::Checkbox::Group
@@ -41,7 +40,6 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
   });
 
   test('it checks checkboxes for items present in a selectedItems array', async function (assert) {
-    assert.expect(1);
     this.items = items;
     this.selectedItems = selectedItems;
     await render(hbs`
@@ -59,7 +57,6 @@ module('Integration | Component | rose/form/checkbox/group', function (hooks) {
   });
 
   test('it checks checkboxes for objects present in a selectedItems array that are deeply equal', async function (assert) {
-    assert.expect(1);
     this.items = items;
     this.selectedItems = [{ id: 1, name: 'Foo' }];
     this.isEqual = (item1, item2) =>

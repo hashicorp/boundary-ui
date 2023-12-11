@@ -16,7 +16,6 @@ module('Unit | Model | credential store', function (hooks) {
   });
 
   test('it has a `isStatic` computed property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelStatic = store.createRecord('credential-store', {
       type: 'static',
@@ -30,7 +29,6 @@ module('Unit | Model | credential store', function (hooks) {
   });
 
   test('it has a `isVault` computed property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelVault = store.createRecord('credential-store', {
       type: 'vault',

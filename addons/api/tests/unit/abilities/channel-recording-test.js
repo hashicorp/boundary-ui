@@ -25,8 +25,6 @@ module('Unit | Ability | channel-recording', function (hooks) {
   });
 
   test('it can download asciicast', function (assert) {
-    assert.expect(1);
-
     const sessionRecordingModel = store.createRecord('session-recording', {
       authorized_actions: ['download'],
       type: TYPE_SESSION_RECORDING_SSH,
@@ -48,8 +46,6 @@ module('Unit | Ability | channel-recording', function (hooks) {
   });
 
   test('it cannot download asciicast without the correct mime type', function (assert) {
-    assert.expect(1);
-
     const sessionRecordingModel = store.createRecord('session-recording', {
       authorized_actions: ['download'],
       type: TYPE_SESSION_RECORDING_SSH,

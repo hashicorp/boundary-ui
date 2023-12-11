@@ -61,7 +61,6 @@ module('Acceptance | roles | update', function (hooks) {
   });
 
   test('can save changes to an existing role', async function (assert) {
-    assert.expect(2);
     await visit(urls.role);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin role');
@@ -71,7 +70,6 @@ module('Acceptance | roles | update', function (hooks) {
   });
 
   test('cannot make changes to an existing role without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.role);
@@ -79,7 +77,6 @@ module('Acceptance | roles | update', function (hooks) {
   });
 
   test('can cancel changes to an existing role', async function (assert) {
-    assert.expect(1);
     await visit(urls.role);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin role');
@@ -88,7 +85,6 @@ module('Acceptance | roles | update', function (hooks) {
   });
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/roles/:id', () => {
       return new Response(
         400,

@@ -14,7 +14,6 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
   setupIntl(hooks);
 
   test('it only renders a toggle field when "toggleEnabled" is false', async function (assert) {
-    assert.expect(2);
     this.onChange = () => {};
     this.toggleAction = () => {};
     await render(
@@ -26,7 +25,6 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
   });
 
   test('it renders a toggle field and text input field when "toggleEnabled" is true', async function (assert) {
-    assert.expect(2);
     this.onChange = () => {};
     this.toggleAction = () => {};
     await render(

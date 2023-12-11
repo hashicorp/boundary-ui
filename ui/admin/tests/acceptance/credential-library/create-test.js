@@ -80,7 +80,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     featuresService = this.owner.lookup('service:features');
   });
   test('visiting credential libraries', async function (assert) {
-    assert.expect(2);
     await visit(urls.credentialLibraries);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialLibraries);
@@ -90,7 +89,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a credential library', async function (assert) {
-    assert.expect(1);
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
@@ -99,7 +97,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library of type vault ssh cert', async function (assert) {
-    assert.expect(12);
     featuresService.enable('ssh-target');
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
@@ -158,7 +155,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ssh-target');
     await visit(urls.newCredentialLibrary);
     await click('[value="vault-ssh-certificate"]');
@@ -171,7 +167,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = [];
@@ -185,7 +180,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can cancel create a new credential library', async function (assert) {
-    assert.expect(2);
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
     await fillIn('[name="name"]', 'random string');
@@ -195,7 +189,6 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('saving a new credential library with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/credential-libraries', () => {
       return new Response(
         400,
@@ -228,14 +221,12 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
-    assert.expect(2);
     await visit(urls.newCredentialLibrary);
     assert.false(featuresService.isEnabled('ssh-target'));
     assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
   });
 
   test('users cannot directly navigate to new credential library route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = instances.credentialStore.authorized_collection_actions[

@@ -12,7 +12,6 @@ module('Integration | Component | rose/cards', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(2);
     await render(hbs`
       <Rose::Cards as |cards|>
         <cards.link

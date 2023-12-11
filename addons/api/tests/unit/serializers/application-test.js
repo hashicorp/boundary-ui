@@ -11,14 +11,12 @@ module('Unit | Serializer | application', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('application');
     assert.ok(serializer);
   });
 
   test('it serializes records', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
       name: 'User',
@@ -37,7 +35,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it serializes scope_id', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
       name: 'User',
@@ -56,7 +53,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it does not serialize scope_id when serializeScopeID is false', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const record = store.createRecord('user', {
@@ -77,7 +73,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it serializes empty strings to null', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
       name: '',
@@ -92,7 +87,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it serializes non-nullish version fields', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('user', {
       name: 'User',
@@ -114,7 +108,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it serializes secret attributes correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('credential', {
       private_key_passphrase: undefined,
@@ -141,7 +134,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it serializes attributes with `for` option containing array or string correctly', function (assert) {
-    assert.expect(1);
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC, //has both string and array `for` option
@@ -193,7 +185,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it normalizes array records from an `items` root key', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const userModelClass = store.createRecord('user').constructor;
@@ -244,7 +235,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it normalizes single, unrooted records', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const userModelClass = store.createRecord('user').constructor;
@@ -275,7 +265,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it normalizes missing arrays in single responses if annotated in model attributes', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -308,7 +297,6 @@ module('Unit | Serializer | application', function (hooks) {
   });
 
   test('it normalizes removed fields correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const user = store.createRecord('user').constructor;

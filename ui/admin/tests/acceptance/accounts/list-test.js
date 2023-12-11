@@ -65,7 +65,6 @@ module('Acceptance | accounts | list', function (hooks) {
   });
 
   test('Users can navigate to accounts with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.authMethod);
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
@@ -76,7 +75,6 @@ module('Acceptance | accounts | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.authMethod);
     assert.notOk(
@@ -88,7 +86,6 @@ module('Acceptance | accounts | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions.accounts = ['create'];
     await visit(urls.authMethod);
     assert.ok(find(`[href="${urls.accounts}"]`));

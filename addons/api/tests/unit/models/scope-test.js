@@ -12,7 +12,6 @@ module('Unit | Model | scope', function (hooks) {
   setupMirage(hooks);
 
   test('it may have a scope fragment', async function (assert) {
-    assert.expect(6);
     const store = this.owner.lookup('service:store');
     this.server.get('/v1/scopes', () => ({
       items: [
@@ -55,7 +54,6 @@ module('Unit | Model | scope', function (hooks) {
   });
 
   test('it has isType boolean getters and setters', async function (assert) {
-    assert.expect(9);
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('scope', { type: 'global' });
     assert.ok(model.isGlobal);

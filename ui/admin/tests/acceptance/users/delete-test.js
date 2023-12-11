@@ -50,7 +50,6 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can delete a user', async function (assert) {
-    assert.expect(1);
     const usersCount = this.server.db.users.length;
     await visit(urls.users);
 
@@ -62,7 +61,6 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('cannot delete a user without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.users);
@@ -75,7 +73,6 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can accept delete user via dialog', async function (assert) {
-    assert.expect(3);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const usersCount = this.server.db.users.length;
@@ -91,7 +88,6 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can cancel delete user via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const usersCount = this.server.db.users.length;
@@ -106,7 +102,6 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('errors are displayed when user deletion fails', async function (assert) {
-    assert.expect(1);
     await visit(urls.users);
     this.server.del('/users/:id', () => {
       return new Response(

@@ -12,7 +12,6 @@ module('Integration | Component | rose/list/key-value', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(2);
     await render(hbs`
       <Rose::List::KeyValue as |list|>
         <list.item as |item|>

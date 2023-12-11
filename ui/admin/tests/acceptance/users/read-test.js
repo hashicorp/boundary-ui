@@ -49,7 +49,6 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('visiting users', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
     await a11yAudit();
 
@@ -60,7 +59,6 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('visiting user', async function (assert) {
-    assert.expect(1);
     await visit(urls.users);
 
     await click(`[href="${urls.user}"]`);
@@ -70,7 +68,6 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.orgScope);
@@ -81,7 +78,6 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('users can link to docs page for users', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.users}"]`);
@@ -92,7 +88,6 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('users can navigate to user and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const incorrectUrl = `/scopes/global/users/${instances.user.id}`;
 
     await visit(incorrectUrl);

@@ -34,7 +34,6 @@ module('Integration | Component | rose/form', function (hooks) {
   });
 
   test('it can render contextual form components', async function (assert) {
-    assert.expect(5);
     this.submit = () => {};
     this.cancel = () => {};
     this.select = () => {};
@@ -46,9 +45,9 @@ module('Integration | Component | rose/form', function (hooks) {
         as |form|
       >
         <form.input @label="Input" @name="input-field" />
-        <Hds::Form::Textarea::Field 
-          @value="This is my description" 
-          name="textarea-field" 
+        <Hds::Form::Textarea::Field
+          @value="This is my description"
+          name="textarea-field"
           disabled={{form.disabled}}
           as |F|>
           <F.Label>Short description</F.Label>
@@ -133,7 +132,6 @@ module('Integration | Component | rose/form', function (hooks) {
   });
 
   test('it re-enables read-only mode if the submit handler returns a resolving promise', async function (assert) {
-    assert.expect(15);
     this.cancel = () => {};
     await render(hbs`
       <Rose::Form

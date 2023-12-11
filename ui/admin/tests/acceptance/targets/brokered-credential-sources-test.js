@@ -121,7 +121,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('visiting target brokered credential sources', async function (assert) {
-    assert.expect(2);
     await visit(urls.brokeredCredentialSources);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.brokeredCredentialSources);
@@ -129,7 +128,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can navigate to a vault type credential library', async function (assert) {
-    assert.expect(1);
     await visit(urls.brokeredCredentialSources);
     await click('main tbody tr .hds-table__td:nth-child(1) a');
     await a11yAudit();
@@ -137,7 +135,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can navigate to a username & password type credential', async function (assert) {
-    assert.expect(1);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -148,7 +145,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot navigate to a json type credential when feature is disabled', async function (assert) {
-    assert.expect(3);
     const jsonCredential = instances.credentials[2];
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
@@ -160,14 +156,12 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('visiting add brokered credential sources', async function (assert) {
-    assert.expect(1);
     await visit(urls.addBrokeredCredentialSources);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
   test('displays list of all brokered credential source types available', async function (assert) {
-    assert.expect(2);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -177,7 +171,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
-    assert.expect(2);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -187,7 +180,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('displays no brokered credential sources message when none available', async function (assert) {
-    assert.expect(1);
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(
       find('.rose-message-title').textContent.trim(),
@@ -196,7 +188,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
-    assert.expect(1);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -207,7 +198,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can select and save a vault type credential library to add', async function (assert) {
-    assert.expect(4);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -222,7 +212,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can select and save a username & password type credential to add', async function (assert) {
-    assert.expect(4);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -237,7 +226,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can select and save both a credential-library and a credential to add', async function (assert) {
-    assert.expect(4);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -253,7 +241,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot add credential sources without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'add-credential-sources',
@@ -263,7 +250,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can select and cancel credential sources to add', async function (assert) {
-    assert.expect(4);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -278,7 +264,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can select multiple brokered credential sources to add and cancel', async function (assert) {
-    assert.expect(4);
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -294,7 +279,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('adding credential sources which errors displays error message', async function (assert) {
-    assert.expect(1);
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -318,7 +302,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can remove a vault type credential library', async function (assert) {
-    assert.expect(3);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
@@ -337,7 +320,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can remove a username & password type credential', async function (assert) {
-    assert.expect(3);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -356,7 +338,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'remove-credential-sources',
@@ -366,7 +347,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('removing a target credential library which errors displays error messages', async function (assert) {
-    assert.expect(2);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
@@ -391,7 +371,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('removing a target credential which errors displays error messages', async function (assert) {
-    assert.expect(2);
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });

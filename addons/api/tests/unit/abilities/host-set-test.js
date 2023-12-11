@@ -10,7 +10,6 @@ module('Unit | Abilities | Host Set', function (hooks) {
   setupTest(hooks);
 
   test('it reflects when a given host set resource may add hosts based on authorized_actions', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['add-hosts'],
@@ -21,7 +20,6 @@ module('Unit | Abilities | Host Set', function (hooks) {
   });
 
   test('it reflects when a given hostSet resource may remove hosts based on authorized_actions', function (assert) {
-    assert.expect(2);
     const service = this.owner.lookup('service:can');
     const model = {
       authorized_actions: ['remove-hosts'],

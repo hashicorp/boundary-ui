@@ -59,8 +59,6 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {
-    assert.expect(4);
-
     await visit(urls.globalScope);
 
     assert.true(
@@ -77,7 +75,6 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('users cannot navigate to session-recordings without the list action', async function (assert) {
-    assert.expect(3);
     instances.scopes.global.authorized_collection_actions[
       'session-recordings'
     ] = [];

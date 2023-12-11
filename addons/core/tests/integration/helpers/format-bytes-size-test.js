@@ -12,7 +12,6 @@ module('Integration | Helper | format-bytes-size', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders file size in human-readable string', async function (assert) {
-    assert.expect(18);
     // Size to B
     const expectedSizeB = '1 B';
     this.set('inputNumberSizeB', 1);

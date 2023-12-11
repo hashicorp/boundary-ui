@@ -12,7 +12,6 @@ module('Unit | Model | group', function (hooks) {
   setupMirage(hooks);
 
   test('it has a `members` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {

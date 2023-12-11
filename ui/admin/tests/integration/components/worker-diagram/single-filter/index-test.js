@@ -16,7 +16,6 @@ module(
     setupIntl(hooks);
 
     test('it renders the correct diagram when egress filter is false', async function (assert) {
-      assert.expect(2);
       await render(
         hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{false}} />`,
       );
@@ -26,7 +25,6 @@ module(
     });
 
     test('it renders the correct diagram when egress filter is true', async function (assert) {
-      assert.expect(2);
       await render(
         hbs`<WorkerDiagram::SingleFilter @egressWorkerFilterEnabled={{true}} />`,
       );

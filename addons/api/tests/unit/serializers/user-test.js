@@ -10,7 +10,6 @@ module('Unit | Serializer | user', function (hooks) {
   setupTest(hooks);
 
   test('it serializes users normally, without accounts', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const record = store.createRecord('user', {
@@ -30,7 +29,6 @@ module('Unit | Serializer | user', function (hooks) {
   });
 
   test('it serializes only host sets and version when an `adapterOptions.accountIDs` array is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const record = store.createRecord('user', {
@@ -51,7 +49,6 @@ module('Unit | Serializer | user', function (hooks) {
   });
 
   test('it normalizes missing account_ids to empty array', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('user');
     const user = store.createRecord('user').constructor;

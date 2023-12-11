@@ -51,7 +51,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('Users can navigate to auth methods with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.orgScope);
     assert.ok(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
@@ -62,7 +61,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [];
     await visit(urls.orgScope);
     assert.notOk(
@@ -74,7 +72,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(1);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
     ];

@@ -33,7 +33,6 @@ module('Unit | Model | session', function (hooks) {
   });
 
   test('it computes isActive', function (assert) {
-    assert.expect(2);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
       status: 'pending',
@@ -44,7 +43,6 @@ module('Unit | Model | session', function (hooks) {
   });
 
   test('it computes isPending', function (assert) {
-    assert.expect(2);
     let store = this.owner.lookup('service:store');
     let model = store.createRecord('session', {
       status: 'active',
@@ -66,7 +64,6 @@ module('Unit | Model | session', function (hooks) {
   });
 
   test('it has isUnknownStatus property and returns the expected values', async function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('session', { status: 'active' });
     const modelB = store.createRecord('session', {

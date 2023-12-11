@@ -98,7 +98,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create new auth method', async function (assert) {
-    assert.expect(1);
     const count = getAuthMethodsCount();
 
     await visit(urls.newAuthMethod);
@@ -109,7 +108,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create new oidc auth method', async function (assert) {
-    assert.expect(14);
     const count = getAuthMethodsCount();
 
     await visit(`${urls.authMethods}/new?type=oidc`);
@@ -163,7 +161,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create a new ldap auth method', async function (assert) {
-    assert.expect(23);
     featuresService.enable('ldap-auth-methods');
     const authMethodsCount = getAuthMethodsCount();
     const name = 'ldap auth method';
@@ -230,7 +227,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -251,7 +247,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = ['list'];
 
     await visit(urls.orgScope);
@@ -266,7 +261,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can navigate to new ldap auth-method route with proper authorization and feature flag enabled', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -288,7 +282,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users cannot navigate to new ldap auth-method route when feature flag disabled', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -309,7 +302,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('can cancel new auth method creation', async function (assert) {
-    assert.expect(2);
     const count = getAuthMethodsCount();
     await visit(urls.authMethods);
 
@@ -324,7 +316,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('user can make primary an auth method', async function (assert) {
-    assert.expect(2);
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.',
@@ -340,7 +331,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('user is notified of error on make primary an auth method', async function (assert) {
-    assert.expect(2);
     this.server.patch('/scopes/:id', () => {
       return new Response(
         400,
@@ -362,7 +352,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('user can remove as primary an auth method', async function (assert) {
-    assert.expect(2);
     instances.orgScope.update({
       primaryAuthMethodId: instances.authMethod.id,
     });
@@ -377,7 +366,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('user is notified of error on remove as primary an auth method', async function (assert) {
-    assert.expect(2);
     this.server.patch('/scopes/:id', () => {
       return new Response(
         400,
@@ -405,7 +393,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('user can make and remove primary auth methods from index', async function (assert) {
-    assert.expect(4);
     assert.notOk(
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.',
@@ -432,7 +419,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('saving a new ldap auth method with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ldap-auth-methods');
     this.server.post('/auth-methods', () => {
       return new Response(
@@ -467,7 +453,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new auth method route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.orgScope.authorized_collection_actions['auth-methods'] = ['list'];
 
     await visit(urls.newAuthMethod);

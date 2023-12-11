@@ -11,7 +11,6 @@ module('Unit | Serializer | target', function (hooks) {
   setupTest(hooks);
 
   test('it serializes TCP targets normally, without host sets or credential libraries or session recording fields in the attributes', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -61,7 +60,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes SSH targets normally with session recording fields in the attributes but without host sets or credential libraries', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -113,7 +111,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes only host sources and version when an `adapterOptions.hostSetIDs` array is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -137,7 +134,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes only credential sources and version when an `adapterOptions.brokeredCredentialSourceIDs` array is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -159,7 +155,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes only credential sources and version when an `adapterOptions.injectedApplicationCredentialSourceIDs` array is passed', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -184,7 +179,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes the storage_bucket_id attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -223,7 +217,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes the worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -261,7 +254,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes the egress_worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -299,7 +291,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it serializes the ingress_worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const record = store.createRecord('target', {
@@ -337,7 +328,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes records with array fields', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const targetModelClass = store.createRecord('target').constructor;
@@ -377,7 +367,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes records with nested attributes', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const targetModelClass = store.createRecord('target').constructor;
@@ -412,7 +401,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes missing host_sources and brokered_credential_source_ids to empty array', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -445,7 +433,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes the worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -478,7 +465,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes the egress_worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -511,7 +497,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes the ingress_worker_filter attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;
@@ -544,7 +529,6 @@ module('Unit | Serializer | target', function (hooks) {
   });
 
   test('it normalizes the storage_bucket_id attribute if present', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('target');
     const target = store.createRecord('target').constructor;

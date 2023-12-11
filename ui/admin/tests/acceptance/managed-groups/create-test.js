@@ -80,7 +80,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new managed group', async function (assert) {
-    assert.expect(3);
     const managedGroupsCount = getManagedGroupCount();
     const name = 'Managed group name';
     await visit(urls.authMethod);
@@ -97,7 +96,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new ldap managed group', async function (assert) {
-    assert.expect(4);
     const managedGroupsCount = getManagedGroupCount();
     const name = 'Managed group name';
     await visit(urls.ldapAuthMethod);
@@ -117,7 +115,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new managed group without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions['managed-groups'] =
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
@@ -135,7 +132,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new ldap managed group without proper authorization', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       instances.ldapAuthMethod.authorized_collection_actions[
@@ -154,7 +150,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new managed group creation', async function (assert) {
-    assert.expect(2);
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
 
@@ -167,7 +162,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new ldap managed group creation', async function (assert) {
-    assert.expect(2);
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
 
@@ -180,7 +174,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new managed group with invalid fields displays error message', async function (assert) {
-    assert.expect(2);
     this.server.post('/managed-groups', () => {
       return new Response(
         400,
@@ -212,7 +205,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new ldap managed group with invalid fields displays error message', async function (assert) {
-    assert.expect(2);
     this.server.post('/managed-groups', () => {
       return new Response(
         400,
@@ -244,7 +236,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('Users cannot directly navigate to a new managed group route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions['managed-groups'] =
       instances.authMethod.authorized_collection_actions[
         'managed-groups'

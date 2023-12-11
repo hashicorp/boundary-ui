@@ -16,7 +16,6 @@ module('Unit | Model | credential', function (hooks) {
   });
 
   test('it has isStatic property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential', { id: 'credup_123' });
     const modelB = store.createRecord('credential', { id: 'credspk_123' });
@@ -28,7 +27,6 @@ module('Unit | Model | credential', function (hooks) {
   });
 
   test('it has isJSON property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential', { type: 'json' });
     const modelB = store.createRecord('credential', {
@@ -44,7 +42,6 @@ module('Unit | Model | credential', function (hooks) {
   });
 
   test('it has isUnknown property and returns the expected values', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential', {
       type: 'username_password',

@@ -10,7 +10,6 @@ module('Unit | Serializer | host', function (hooks) {
   setupTest(hooks);
 
   test('it serializes host with type static as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host', {
       name: 'Host 1',
@@ -33,7 +32,6 @@ module('Unit | Serializer | host', function (hooks) {
   });
 
   test('it normalizes type static record as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host');
     const host = store.createRecord('host').constructor;
@@ -65,7 +63,6 @@ module('Unit | Serializer | host', function (hooks) {
   });
 
   test('it normalizes type plugin (aws) record as expected', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host');
     const host = store.createRecord('host').constructor;

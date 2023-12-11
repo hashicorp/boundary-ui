@@ -19,7 +19,6 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
 
   test('it renders a single filter diagram', async function (assert) {
     featuresService = this.owner.lookup('service:features');
-    assert.expect(3);
     await render(hbs`<WorkerDiagram />`);
     assert.false(featuresService.isEnabled(targetWorkerFilterIngress));
     assert.false(featuresService.isEnabled(targetWorkerFilterHCP));
@@ -29,7 +28,6 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
   test('it renders a dual filter diagram when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
-    assert.expect(3);
     assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
     assert.false(featuresService.isEnabled(targetWorkerFilterHCP));
     await render(hbs`<WorkerDiagram />`);
@@ -41,7 +39,6 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
     featuresService.enable(targetWorkerFilterHCP);
-    assert.expect(3);
     await render(hbs`<WorkerDiagram />`);
     assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
     assert.true(featuresService.isEnabled(targetWorkerFilterHCP));

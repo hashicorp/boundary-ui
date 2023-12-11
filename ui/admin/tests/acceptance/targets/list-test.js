@@ -53,7 +53,6 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {
-    assert.expect(3);
     await visit(urls.orgScope);
 
     await click(`[href="${urls.projectScope}"]`);
@@ -72,7 +71,6 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.orgScope);
 
@@ -94,7 +92,6 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
-    assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'list',
@@ -117,7 +114,6 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can navigate to index with only list action', async function (assert) {
-    assert.expect(3);
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',
