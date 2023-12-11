@@ -49,7 +49,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Returns scopes that belong to the targets listed
+   * Returns scopes that are associated with all targets user has access to
    * @returns {[ScopeModel]}
    */
   get availableScopes() {
@@ -63,7 +63,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
     if (this.scopeSearchTerm) {
       availableScopes = availableScopes.filter((item) => {
-        const isNameMatch = item.name
+        const isNameMatch = item.displayName
           .toLowerCase()
           .includes(this.scopeSearchTerm);
         const isIdMatch =
@@ -173,6 +173,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @param {object} event
    */
   @action
+  @debounce(150)
   filterItems(event) {
     const { value } = event.target;
     this.scopeSearchTerm = value;
