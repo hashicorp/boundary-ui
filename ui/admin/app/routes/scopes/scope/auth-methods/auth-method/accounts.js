@@ -7,7 +7,6 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route {
@@ -46,20 +45,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   // =actions
 
   /**
-   * Rollback changes on an account.
-   * @param {AccountModel} account
-   */
-  @action
-  cancel(account) {
-    const { isNew } = account;
-    account.rollbackAttributes();
-    if (isNew)
-      this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.accounts',
-      );
-  }
-
-  /**
    * Save an account in current scope.
    * @param {AccountModel} account
    */
@@ -86,23 +71,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
         'scopes.scope.auth-methods.auth-method.accounts',
       );
     }
-    this.refresh();
-  }
-
-  /**
-   * Delete an account in current scope and redirect to index
-   * @param {AccountModel} account
-   */
-  @action
-  @loading
-  @confirm('questions.delete-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.delete-success')
-  async deleteAccount(account) {
-    await account.destroyRecord();
-    await this.router.replaceWith(
-      'scopes.scope.auth-methods.auth-method.accounts',
-    );
     this.refresh();
   }
 }
