@@ -40,11 +40,11 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
     await all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
         if (isStatic) {
-          return this.store.query('credential', {
+          this.store.query('credential', {
             credential_store_id,
           });
         } else {
-          return this.store.query('credential-library', {
+          this.store.query('credential-library', {
             credential_store_id,
           });
         }
