@@ -87,25 +87,6 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     this.refresh();
   }
 
-  // /**
-  //  * Delete an auth method in current scope and redirect to index
-  //  * @param {AuthMethodModel} authMethod
-  //  */
-  // @action
-  // @loading
-  // @confirm('questions.delete-confirm')
-  // @notifyError(({ message }) => message, { catch: true })
-  // @notifySuccess('notifications.delete-success')
-  // async delete(authMethod) {
-  //   const scopeModel = this.modelFor('scopes.scope');
-  //   await authMethod.destroyRecord();
-  //   // Reload the scope, since this is where the primary_auth_method_id is
-  //   // stored.  An auth method deletion could affect this field.
-  //   await scopeModel.reload();
-  //   await this.router.replaceWith('scopes.scope.auth-methods');
-  //   this.refresh();
-  // }
-
   /**
    * Elects the specified auth method to primary for the current scope.
    * @param {AuthMethodModel} authMethod
