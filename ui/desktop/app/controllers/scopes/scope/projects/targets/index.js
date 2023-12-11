@@ -23,7 +23,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   queryParams = ['search', { scopes: { type: 'array' } }, 'page', 'pageSize'];
 
-  allTargets;
   @tracked search;
   @tracked scopeSearchTerm;
   @tracked scopes = [];
@@ -31,25 +30,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked page = 1;
   @tracked pageSize = 10;
 
-  constructor() {
-    super(...arguments);
-    this.getAllTargets();
-  }
-
   // =methods
-
-  async getAllTargets() {
-    // Query all targets for defining filtering values
-    const options = { pushToStore: false };
-    let allTargets = await this.store.query('target', {}, options);
-
-    // Filter out targets to which users do not have the connect ability
-    allTargets = allTargets.filter((target) =>
-      target.authorized_actions.includes('authorize-session'),
-    );
-
-    this.allTargets = allTargets;
-  }
 
   /**
    * Returns true if model is empty but we have a search term
@@ -72,7 +53,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {[ScopeModel]}
    */
   get availableScopes() {
-    const targetScopeIds = this.allTargets.map((target) => target.scope.id);
+    const targetScopeIds = this.model.allTargets.map(
+      (target) => target.scope.id,
+    );
 
     let availableScopes = this.model.projects.filter((project) =>
       targetScopeIds.includes(project.id),
