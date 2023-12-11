@@ -68,6 +68,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       this.can.can('connect target', target),
     );
 
+    // Retrieve all the 'active' and 'pending' sessions associated with each target.
     let targetsWithSessions = [];
     for (const target of targets) {
       let sessions = await this.store.query('session', {
