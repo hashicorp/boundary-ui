@@ -20,6 +20,7 @@ import setFromEvent from 'rose/helpers/set-from-event';
 
 export default class FormAccountPasswordChangePasswordIndex extends Component {
   @service accountActions;
+  @service router;
 
   /**
    * @type {string}
@@ -45,7 +46,7 @@ export default class FormAccountPasswordChangePasswordIndex extends Component {
     return !this.canSave;
   }
 
-    /**
+  /**
    * Unsets the password fields.
    */
   resetPasswords() {
@@ -54,8 +55,6 @@ export default class FormAccountPasswordChangePasswordIndex extends Component {
   }
 
   // =actions
-
-
 
   /**
    * Unset passwords then redirect to index route for further processing.
@@ -76,47 +75,55 @@ export default class FormAccountPasswordChangePasswordIndex extends Component {
   @action
   submit(currentPassword, newPassword) {
     run(() => this.resetPasswords());
-    run(() => this.accountActions.changePassword(this.args.model, currentPassword, newPassword));
+    run(() =>
+      this.accountActions.changePassword(
+        this.args.model,
+        currentPassword,
+        newPassword,
+      ),
+    );
   }
 
-  <template><RoseForm
-  class='full-width'
-  @onSubmit={{fn this.submit this.currentPassword this.newPassword}}
-  @cancel={{this.cancel}}
-  @disabled={{@model.isSaving}}
-  as |form|
->
+  <template>
+    <RoseForm
+      class='full-width'
+      @onSubmit={{fn this.submit this.currentPassword this.newPassword}}
+      @cancel={{this.cancel}}
+      @disabled={{@model.isSaving}}
+      as |form|
+    >
 
-  <HdsFormTextInputField
-    @isRequired={{true}}
-    @value={{this.currentPassword}}
-    @type='password'
-    name='currentPassword'
-    autocomplete='current-password'
-    disabled={{form.disabled}}
-    {{on 'input' (setFromEvent this 'currentPassword')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.current_password.label'}}</F.Label>
-  </HdsFormTextInputField>
+      <HdsFormTextInputField
+        @isRequired={{true}}
+        @value={{this.currentPassword}}
+        @type='password'
+        name='currentPassword'
+        autocomplete='current-password'
+        disabled={{form.disabled}}
+        {{on 'input' (setFromEvent this 'currentPassword')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.current_password.label'}}</F.Label>
+      </HdsFormTextInputField>
 
-  <HdsFormTextInputField
-    @isRequired={{true}}
-    @value={{this.newPassword}}
-    @type='password'
-    name='newPassword'
-    autocomplete='new-password'
-    disabled={{form.disabled}}
-    {{on 'input' (setFromEvent this 'newPassword')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.new_password.label'}}</F.Label>
-  </HdsFormTextInputField>
+      <HdsFormTextInputField
+        @isRequired={{true}}
+        @value={{this.newPassword}}
+        @type='password'
+        name='newPassword'
+        autocomplete='new-password'
+        disabled={{form.disabled}}
+        {{on 'input' (setFromEvent this 'newPassword')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.new_password.label'}}</F.Label>
+      </HdsFormTextInputField>
 
-  <form.actions
-    @submitDisabled={{this.cannotSave}}
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
-</RoseForm></template>
+      <form.actions
+        @submitDisabled={{this.cannotSave}}
+        @submitText={{t 'actions.save'}}
+        @cancelText={{t 'actions.cancel'}}
+      />
+    </RoseForm>
+  </template>
 }

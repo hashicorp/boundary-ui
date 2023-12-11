@@ -27,5 +27,12 @@ module.exports = {
         prettier: false,
       },
     },
+    // Temporarily disabling prettier plugin for ember templates due to bug: https://github.com/ember-template-lint/ember-template-lint-plugin-prettier/issues/268
+    {
+      files: ['**/*.{gjs,gts}'],
+      rules: {
+        prettier: false,
+      },
+    },
   ],
 };

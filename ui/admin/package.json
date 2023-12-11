@@ -25,6 +25,7 @@
     "lint:sass": "stylelint 'app/styles/**/*.scss'",
     "lint:sass:fix": "stylelint 'app/styles/**/*.scss' --fix",
     "format": "concurrently \"npm:format:*\" --names \"format:\"",
+    "format:gjs": "prettier --write 'app/**/*.gjs' --plugin prettier-plugin-ember-template-tag",
     "format:hbs": "prettier --write 'app/**/*.hbs'",
     "format:js": "prettier --write '{app,config,stories,tests}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",

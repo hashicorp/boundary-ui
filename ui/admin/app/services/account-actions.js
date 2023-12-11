@@ -12,20 +12,6 @@ export default class AccountActionsService extends Service {
   @service router;
 
   /**
-   * Rollback changes on an account.
-   * @param {AccountModel} account
-   */
-  @action
-  cancel(account) {
-    const { isNew } = account;
-    account.rollbackAttributes();
-    if (isNew)
-      this.router.transitionTo(
-        'scopes.scope.auth-methods.auth-method.accounts',
-      );
-  }
-
-  /**
    * Delete an account in current scope and redirect to index
    * @param {AccountModel} account
    */

@@ -45,6 +45,20 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsRoute extends Route
   // =actions
 
   /**
+   * Rollback changes on an account.
+   * @param {AccountModel} account
+   */
+  @action
+  cancel(account) {
+    const { isNew } = account;
+    account.rollbackAttributes();
+    if (isNew)
+      this.router.transitionTo(
+        'scopes.scope.auth-methods.auth-method.accounts',
+      );
+  }
+
+  /**
    * Save an account in current scope.
    * @param {AccountModel} account
    */
