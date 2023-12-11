@@ -186,6 +186,9 @@ module('Acceptance | scopes', function (hooks) {
       'targets',
       'targets',
       'targets',
+      'targets',
+      'targets',
+      'targets',
     );
     await visit(urls.targets);
 
