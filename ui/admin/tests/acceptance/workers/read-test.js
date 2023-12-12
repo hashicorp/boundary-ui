@@ -72,7 +72,7 @@ module('Acceptance | workers | read', function (hooks) {
     await click(`[href="${urls.workers}"]`);
 
     assert
-      .dom('main tbody .rose-table-header-cell:nth-child(1) a')
+      .dom('.hds-table__tbody .hds-table__tr:nth-child(1) a')
       .isNotVisible();
   });
 
@@ -81,7 +81,7 @@ module('Acceptance | workers | read', function (hooks) {
 
     await click(`[href="${urls.workers}"]`);
 
-    assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
+    assert.dom('.hds-table__tbody .hds-table__tr:nth-child(1) a').isVisible();
   });
 
   test('users can navigate to worker and incorrect url autocorrects', async function (assert) {

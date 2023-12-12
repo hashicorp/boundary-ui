@@ -90,67 +90,62 @@
 
       </Rose::Toolbar>
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'resources.worker.title'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            <row.headerCell>{{t
-                'resources.worker.table.session_count'
-              }}</row.headerCell>
-            <row.headerCell>{{t
-                'resources.worker.table.release_version'
-              }}</row.headerCell>
-            <row.headerCell>{{t
-                'resources.worker.table.ip_address'
-              }}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model as |worker|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (and (can 'read worker' worker) worker.isPki)}}
-                  <LinkTo
-                    @route='scopes.scope.workers.worker'
-                    @model={{worker.id}}
-                  >
-                    {{worker.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{worker.displayName}}
-                {{/if}}
-                {{#if worker.description}}
-                  <p>{{worker.description}}</p>
-                {{/if}}
-                {{#if worker.tagCount}}
-                  <div>
-                    <Hds::Badge
-                      @icon='tag'
-                      @text={{t
-                        'resources.worker.table.tag_count'
-                        tagCount=worker.tagCount
-                      }}
-                    />
-                  </div>
-                {{/if}}
-              </row.headerCell>
-              <row.cell>
-                <Copyable
-                  @text={{worker.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
+      <Hds::Table
+        class='workers-list-table'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'resources.worker.title'))
+          (hash label=(t 'form.tags.label'))
+          (hash label=(t 'resources.session.title_plural'))
+          (hash label=(t 'resources.worker.table.release_version'))
+          (hash label=(t 'resources.worker.table.ip_address'))
+          (hash label=(t 'form.id.label'))
+        }}
+        @density='short'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (and (can 'read worker' B.data) B.data.isPki)}}
+                <LinkTo
+                  @route='scopes.scope.workers.worker'
+                  @model={{B.data.id}}
                 >
-                  <code>{{worker.id}}</code>
-                </Copyable>
-              </row.cell>
-              <row.cell>{{worker.active_connection_count}}</row.cell>
-              <row.cell>{{worker.release_version}}</row.cell>
-              <row.cell>{{worker.address}} </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.tagCount}}
+                <Hds::Badge
+                  @icon='tag'
+                  @text={{t
+                    'resources.worker.table.tag_count'
+                    tagCount=B.data.tagCount
+                  }}
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>{{B.data.active_connection_count}}</B.Td>
+            <B.Td>{{B.data.release_version}}</B.Td>
+            <B.Td>{{B.data.address}} </B.Td>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <code>{{B.data.id}}</code>
+              </Copyable>
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message
