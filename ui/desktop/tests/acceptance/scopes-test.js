@@ -129,7 +129,7 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets');
+    this.stubClientDaemonSearch('targets', 'targets');
   });
 
   test('visiting index', async function (assert) {
@@ -180,7 +180,16 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
-    this.stubClientDaemonSearch('targets', 'targets', 'targets', 'targets');
+    this.stubClientDaemonSearch(
+      'targets',
+      'targets',
+      'targets',
+      'targets',
+      'targets',
+      'targets',
+      'targets',
+      'targets',
+    );
     await visit(urls.targets);
 
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
@@ -216,7 +225,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.db.targets.remove();
-    this.stubClientDaemonSearch('targets');
+    this.stubClientDaemonSearch('targets', 'targets');
 
     await visit(urls.targets);
 
