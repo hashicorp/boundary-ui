@@ -15,52 +15,52 @@
 
   <page.body class='search-filtering'>
     {{#if (or @model.targets this.search)}}
-      <Hds::SegmentedGroup as |sg|>
-        <sg.TextInput
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
           @type='search'
           placeholder={{t 'actions.search'}}
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
-        <sg.Generic>
+        <S.Generic>
           <Rose::FilterableDropdown
             @name={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
             @applyFilter={{this.applyFilter}}
             @isSearchable={{true}}
-            as |fd selectItem itemOptions|
+            as |FD selectItem itemOptions|
           >
             {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
               {{#each orgs as |org|}}
-                <fd.Generic>
+                <FD.Generic>
                   <FlightIcon @name='org' />
                   {{org.key.displayName}}
-                </fd.Generic>
+                </FD.Generic>
                 {{#each org.items as |project|}}
-                  <fd.Checkbox
+                  <FD.Checkbox
                     @value={{project.id}}
                     data-test-checkbox={{project.name}}
                     checked={{includes project.id this.scopes}}
                     {{on 'change' selectItem}}
                   >
                     {{project.displayName}}
-                  </fd.Checkbox>
+                  </FD.Checkbox>
                 {{/each}}
               {{/each}}
             {{/let}}
           </Rose::FilterableDropdown>
-        </sg.Generic>
-        <sg.Dropdown as |dd|>
-          <dd.ToggleButton @color='secondary' @text='Active session' />
-          <dd.Checkbox>{{t 'actions.yes'}}</dd.Checkbox>
-          <dd.Checkbox>{{t 'actions.no'}}</dd.Checkbox>
-        </sg.Dropdown>
-        <sg.Dropdown as |dd|>
-          <dd.ToggleButton @color='secondary' @text='Type' @count='2' />
-          <dd.Checkbox>{{t 'resources.target.types.tcp'}}</dd.Checkbox>
-          <dd.Checkbox>{{t 'resources.target.types.ssh'}}</dd.Checkbox>
-        </sg.Dropdown>
+        </S.Generic>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Active session' />
+          <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
+          <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
+          <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
+        </S.Dropdown>
       </Hds::SegmentedGroup>
       {{#if @model.targets}}
         <Hds::Table
@@ -74,79 +74,79 @@
           }}
           @valign='middle'
         >
-          <:body as |b|>
-            <b.Tr>
-              <b.Td>
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
                 <span class='hds-font-weight-semibold'>
-                  {{#if (can 'read model' b.data)}}
+                  {{#if (can 'read model' B.data)}}
                     <LinkTo
-                      data-test-visit-target={{b.data.id}}
+                      data-test-visit-target={{B.data.id}}
                       @route='scopes.scope.projects.targets.target'
-                      @model={{b.data.id}}
+                      @model={{B.data.id}}
                       @query={{hash isConnecting=false}}
                     >
-                      {{b.data.displayName}}
+                      {{B.data.displayName}}
                     </LinkTo>
                   {{else}}
-                    {{b.data.displayName}}
+                    {{B.data.displayName}}
                   {{/if}}
-                  {{#if b.data.description}}
-                    <p>{{b.data.description}}</p>
+                  {{#if B.data.description}}
+                    <p>{{B.data.description}}</p>
                   {{/if}}
                 </span>
-              </b.Td>
-              <b.Td>
+              </B.Td>
+              <B.Td>
                 <Copyable
-                  @text={{b.data.id}}
+                  @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{b.data.id}}</code>
+                  <code>{{B.data.id}}</code>
                 </Copyable>
-              </b.Td>
-              <b.Td>
-                {{#if b.data.type}}
+              </B.Td>
+              <B.Td>
+                {{#if B.data.type}}
                   <Hds::Badge
-                    @text={{t (concat 'resources.target.types.' b.data.type)}}
+                    @text={{t (concat 'resources.target.types.' B.data.type)}}
                   />
                 {{/if}}
-              </b.Td>
-              <b.Td>
+              </B.Td>
+              <B.Td>
                 <div>
                   <Copyable
-                    @text={{b.data.project.id}}
+                    @text={{B.data.project.id}}
                     @buttonText={{t 'actions.copy-to-clipboard'}}
                     @acknowledgeText={{t 'states.copied'}}
                   >
-                    <code>{{b.data.project.id}}</code>
+                    <code>{{B.data.project.id}}</code>
                   </Copyable>
                 </div>
-                {{#if b.data.project.name}}
-                  <Hds::Badge @color='neutral' @text={{b.data.project.name}} />
+                {{#if B.data.project.name}}
+                  <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
                 {{/if}}
-              </b.Td>
-              <b.Td>
-                {{#if (can 'connect target' b.data)}}
-                  {{#if (can 'read target' b.data)}}
+              </B.Td>
+              <B.Td>
+                {{#if (can 'connect target' B.data)}}
+                  {{#if (can 'read target' B.data)}}
                     <Hds::Button
-                      data-test-targets-connect-button={{b.data.id}}
+                      data-test-targets-connect-button={{B.data.id}}
                       @text={{t 'resources.session.actions.connect'}}
                       @color='secondary'
                       @route='scopes.scope.projects.targets.target'
-                      @model={{b.data.id}}
+                      @model={{B.data.id}}
                       @query={{hash isConnecting=true}}
                     />
                   {{else}}
                     <Hds::Button
-                      data-test-targets-connect-button={{b.data.id}}
+                      data-test-targets-connect-button={{B.data.id}}
                       @text={{t 'resources.session.actions.connect'}}
                       @color='secondary'
-                      {{on 'click' (fn this.quickConnect b.data)}}
+                      {{on 'click' (fn this.quickConnect B.data)}}
                     />
                   {{/if}}
                 {{/if}}
-              </b.Td>
-            </b.Tr>
+              </B.Td>
+            </B.Tr>
           </:body>
         </Hds::Table>
         <Rose::Pagination
@@ -157,11 +157,11 @@
 
       {{/if}}
       {{#if this.noResults}}
-        <Hds::ApplicationState data-test-no-target-results as |a|>
-          <a.Header
+        <Hds::ApplicationState data-test-no-target-results as |A|>
+          <A.Header
             @title={{t 'resources.target.messages.no-search-results.title'}}
           />
-          <a.Body
+          <A.Body
             @text={{t
               'resources.target.messages.no-search-results.description'
               query=this.search
@@ -171,9 +171,9 @@
       {{/if}}
     {{/if}}
     {{#if this.noTargets}}
-      <Hds::ApplicationState data-test-no-targets as |a|>
-        <a.Header @title={{t 'resources.target.messages.none.title'}} />
-        <a.Body @text={{t 'resources.target.messages.none.description'}} />
+      <Hds::ApplicationState data-test-no-targets as |A|>
+        <A.Header @title={{t 'resources.target.messages.none.title'}} />
+        <A.Body @text={{t 'resources.target.messages.none.description'}} />
       </Hds::ApplicationState>
     {{/if}}
   </page.body>

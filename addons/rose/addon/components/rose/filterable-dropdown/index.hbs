@@ -3,14 +3,14 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Hds::Dropdown @onClose={{this.close}} as |dd|>
-  <dd.ToggleButton
+<Hds::Dropdown @onClose={{this.close}} as |DD|>
+  <DD.ToggleButton
     @color='secondary'
     @text={{@name}}
     @count={{@checkedItems.length}}
   />
   {{#if @isSearchable}}
-    <dd.Header @hasDivider={{true}}>
+    <DD.Header @hasDivider={{true}}>
       <Hds::Form::TextInput::Base
         @type='search'
         @value={{this.searchTerm}}
@@ -19,33 +19,33 @@
         {{on 'input' this.filterItems}}
         data-test-dropdown-search
       />
-    </dd.Header>
+    </DD.Header>
   {{/if}}
-  {{#unless this.items}}
-    <dd.Description @text={{t 'titles.no-results'}} />
+  {{#unless this.itemOptions}}
+    <DD.Description @text={{t 'titles.no-results'}} />
   {{/unless}}
 
   {{#if (has-block)}}
-    {{yield dd this.selectItem this.itemOptions}}
+    {{yield DD this.selectItem this.itemOptions}}
   {{else}}
-    {{#each this.items as |itemOption|}}
-      <dd.Checkbox
+    {{#each this.itemOptions as |itemOption|}}
+      <DD.Checkbox
         @value={{itemOption.id}}
         data-test-checkbox={{itemOption.id}}
         checked={{includes itemOption.id @checkedItems}}
         {{on 'change' this.selectItem}}
       >
         {{itemOption.displayName}}
-      </dd.Checkbox>
+      </DD.Checkbox>
     {{/each}}
   {{/if}}
 
-  <dd.Footer @hasDivider={{true}}>
+  <DD.Footer @hasDivider={{true}}>
     <Hds::Button
       @text='Apply'
       @isFullWidth={{true}}
       @size='small'
-      {{on 'click' (fn this.applyFilter dd.close)}}
+      {{on 'click' (fn this.applyFilter DD.close)}}
     />
-  </dd.Footer>
+  </DD.Footer>
 </Hds::Dropdown>
