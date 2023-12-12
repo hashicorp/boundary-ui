@@ -22,25 +22,35 @@
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton
-            @color='secondary'
-            @text={{t 'resources.scope.title'}}
-          />
-          <DD.Header @hasDivider={{true}}>
-            <Hds::Form::TextInput::Base
-              @type='search'
-              placeholder={{t 'actions.narrow-results'}}
-              aria-label={{t 'actions.narrow-results'}}
-              data-test-search
-            />
-          </DD.Header>
-          {{#each this.searchItems as |item|}}
-            <DD.Checkbox @value={{item}} data-test-checkbox={{item}}>
-              {{item}}
-            </DD.Checkbox>
-          {{/each}}
-        </S.Dropdown>
+        <S.Generic>
+          <Rose::FilterableDropdown
+            @name={{t 'resources.scope.title'}}
+            @itemOptions={{this.availableScopes}}
+            @checkedItems={{this.scopes}}
+            @applyFilter={{this.applyFilter}}
+            @isSearchable={{true}}
+            as |FD selectItem itemOptions|
+          >
+            {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+              {{#each orgs as |org|}}
+                <FD.Generic>
+                  <FlightIcon @name='org' />
+                  {{org.key.displayName}}
+                </FD.Generic>
+                {{#each org.items as |project|}}
+                  <FD.Checkbox
+                    @value={{project.id}}
+                    data-test-checkbox={{project.name}}
+                    checked={{includes project.id this.scopes}}
+                    {{on 'change' selectItem}}
+                  >
+                    {{project.displayName}}
+                  </FD.Checkbox>
+                {{/each}}
+              {{/each}}
+            {{/let}}
+          </Rose::FilterableDropdown>
+        </S.Generic>
         <S.Dropdown as |DD|>
           <DD.ToggleButton @color='secondary' @text='Active session' />
           <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
@@ -124,10 +134,9 @@
                     <code>{{B.data.target.project.id}}</code>
                   </Copyable>
                 </div>
-                <Hds::Badge
-                  @color='neutral'
-                  @text={{B.data.target.project.name}}
-                />
+                {{#if B.data.project.name}}
+                  <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+                {{/if}}
               </B.Td>
               <B.Td>
                 {{#if (can 'connect target' B.data.target)}}

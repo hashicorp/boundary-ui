@@ -21,9 +21,10 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = ['search', { scopes: { type: 'array' } }, 'page', 'pageSize'];
 
   @tracked search;
+  @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
@@ -45,6 +46,22 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get noTargets() {
     return this.model.targets.length === 0 && !this.search;
+  }
+
+  /**
+   * Returns scopes that are associated with all targets user has access to
+   * @returns {[ScopeModel]}
+   */
+  get availableScopes() {
+    const targetScopeIds = this.model.allTargets.map(
+      (target) => target.scope.id,
+    );
+
+    let availableScopes = this.model.projects.filter((project) =>
+      targetScopeIds.includes(project.id),
+    );
+
+    return availableScopes;
   }
 
   /**
@@ -144,5 +161,14 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   toggleSessionsFlyout() {
     this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
+
+  /**
+   * Sets the scopes query param to value of selectedScopes
+   * to trigger a query and closes the dropdown
+   * @param {function} close
+   */
+  @action
+  applyFilter(selectedItems) {
+    this.scopes = [...selectedItems];
   }
 }

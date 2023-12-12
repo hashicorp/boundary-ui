@@ -28,6 +28,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    scopes: {
+      refreshModel: true,
+      replace: true,
+    },
     page: {
       refreshModel: true,
     },
@@ -46,19 +50,25 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   }
 
   /**
-   * Loads all targets and the number of targets under current scope.
+   * Loads queried targets, the number of targets under current scope, and
+   * projects for filtering options.
    *
-   * @returns {Promise<{totalItems: number, targets: [TargetModel]}>}
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel]}>, allTargets: [TargetModel]}
    */
-  async model({ search, page, pageSize }) {
+  async model({ search, scopes, page, pageSize }) {
     // TODO: Filter targets by scope we're in manually
     // const { id: scope_id } = this.modelFor('scopes.scope');
+    const filters = { scope_id: [] };
+    scopes.forEach((scope) => {
+      filters.scope_id.push({ equals: scope });
+    });
 
     const queryOptions = {
-      query: { search },
+      query: { search, filters },
       page,
       pageSize,
     };
+    const projects = this.modelFor('scopes.scope.projects');
 
     let targets = await this.store.query('target', queryOptions);
     const totalItems = targets.meta?.totalItems;
@@ -86,6 +96,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       targetsWithSessions.push({ target, sessions });
     }
 
-    return { targets: targetsWithSessions, totalItems };
+    // Query all targets for defining filtering values
+    const options = { pushToStore: false };
+    let allTargets = await this.store.query('target', {}, options);
+
+    // Filter out targets to which users do not have the connect ability
+    allTargets = allTargets.filter((target) =>
+      target.authorized_actions.includes('authorize-session'),
+    );
+
+    return { targets: targetsWithSessions, projects, allTargets, totalItems };
   }
 }

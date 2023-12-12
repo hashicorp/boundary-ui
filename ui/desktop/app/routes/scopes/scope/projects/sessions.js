@@ -53,7 +53,7 @@ export default class ScopesScopeProjectsSessionsRoute extends Route {
       this.router.currentRoute.name ===
       'scopes.scope.projects.sessions.session.index'
     ) {
-      this.router.replaceWith('scopes.scope.projects.targets');
+      this.router.replaceWith('scopes.scope.projects.targets.index');
     }
   }
 
