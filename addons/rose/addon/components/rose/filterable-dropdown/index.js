@@ -22,10 +22,9 @@ export default class RoseFilterableDropdownComponent extends Component {
   get itemOptions() {
     let items = this.args.itemOptions;
     if (this.searchTerm) {
+      const searchTerm = this.searchTerm.toLowerCase();
       items = this.args.itemOptions.filter((item) => {
-        const isNameMatch = item.name
-          ?.toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
+        const isNameMatch = item.name?.toLowerCase().includes(searchTerm);
         const isIdMatch = item.id.includes(this.searchTerm);
         return isNameMatch || isIdMatch;
       });
