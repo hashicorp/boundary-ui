@@ -161,6 +161,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   toggleSessionsFlyout() {
     this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
+  }
 
   /**
    * Sets the scopes query param to value of selectedScopes
