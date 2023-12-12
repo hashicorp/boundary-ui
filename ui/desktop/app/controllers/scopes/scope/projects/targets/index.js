@@ -24,9 +24,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   queryParams = ['search', { scopes: { type: 'array' } }, 'page', 'pageSize'];
 
   @tracked search;
-  @tracked scopeSearchTerm;
   @tracked scopes = [];
-  @tracked selectedScopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
 
@@ -61,16 +59,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       targetScopeIds.includes(project.id),
     );
 
-    if (this.scopeSearchTerm) {
-      availableScopes = availableScopes.filter((item) => {
-        const isNameMatch = item.displayName
-          .toLowerCase()
-          .includes(this.scopeSearchTerm);
-        const isIdMatch =
-          item.id.toLowerCase() === this.scopeSearchTerm.toLowerCase();
-        return isNameMatch || isIdMatch;
-      });
-    }
     return availableScopes;
   }
 
@@ -169,51 +157,12 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Sets scopeSearchTerm to be used for filtering availableScopes
-   * @param {object} event
-   */
-  @action
-  @debounce(150)
-  filterItems(event) {
-    const { value } = event.target;
-    this.scopeSearchTerm = value;
-  }
-
-  /**
-   * Handles checkbox event changes for selectedScopes but does not
-   * update the scopes query param
-   * @param {object} event
-   */
-  @action
-  selectItem(event) {
-    const { checked, value } = event.target;
-    if (checked) {
-      this.selectedScopes.push(value);
-    } else {
-      this.selectedScopes = this.selectedScopes.filter(
-        (scope) => scope !== value,
-      );
-    }
-  }
-
-  /**
    * Sets the scopes query param to value of selectedScopes
    * to trigger a query and closes the dropdown
    * @param {function} close
    */
   @action
-  applyFilter(close) {
-    this.scopes = [...this.selectedScopes];
-    close();
-  }
-
-  /**
-   * Custom close method for dropdown that resets selectedScopes
-   * to scopes when the user closes the dropdown
-   */
-  @action
-  close() {
-    this.selectedScopes = [...this.scopes];
-    this.scopeSearchTerm = '';
+  applyFilter(selectedItems) {
+    this.scopes = [...selectedItems];
   }
 }
