@@ -1,1 +1,51 @@
-{{yield}}
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Hds::Dropdown @onClose={{this.close}} as |dd|>
+  <dd.ToggleButton
+    @color='secondary'
+    @text={{@name}}
+    @count={{@checkedItems.length}}
+  />
+  {{#if @isSearchable}}
+    <dd.Header @hasDivider={{true}}>
+      <Hds::Form::TextInput::Base
+        @type='search'
+        @value={{this.searchTerm}}
+        placeholder={{t 'actions.narrow-results'}}
+        aria-label={{t 'actions.narrow-results'}}
+        {{on 'input' this.filterItems}}
+        data-test-dropdown-search
+      />
+    </dd.Header>
+  {{/if}}
+  {{#unless this.items}}
+    <dd.Description @text={{t 'titles.no-results'}} />
+  {{/unless}}
+
+  {{#if (has-block)}}
+    {{yield dd this.selectItem this.itemOptions}}
+  {{else}}
+    {{#each this.items as |itemOption|}}
+      <dd.Checkbox
+        @value={{itemOption.id}}
+        data-test-checkbox={{itemOption.id}}
+        checked={{includes itemOption.id @checkedItems}}
+        {{on 'change' this.selectItem}}
+      >
+        {{itemOption.displayName}}
+      </dd.Checkbox>
+    {{/each}}
+  {{/if}}
+
+  <dd.Footer @hasDivider={{true}}>
+    <Hds::Button
+      @text='Apply'
+      @isFullWidth={{true}}
+      @size='small'
+      {{on 'click' (fn this.applyFilter dd.close)}}
+    />
+  </dd.Footer>
+</Hds::Dropdown>
