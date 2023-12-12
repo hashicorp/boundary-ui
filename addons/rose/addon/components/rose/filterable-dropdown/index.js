@@ -15,8 +15,6 @@ export default class RoseFilterableDropdownComponent extends Component {
   @tracked selectedItems = [];
   @tracked searchTerm;
 
-  // =methods
-
   /**
    * Takes itemOptions and filters them by searchTerm if there is one
    * @returns {[object]}
@@ -34,6 +32,8 @@ export default class RoseFilterableDropdownComponent extends Component {
     }
     return items;
   }
+
+  // =methods
 
   /**
    * Sets searchTerm to be used for filtering itemOptions
