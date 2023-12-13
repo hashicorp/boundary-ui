@@ -47,7 +47,7 @@ export default function setupStubs(hooks) {
           .withArgs('searchClientDaemon')
           .onCall(i)
           .returns({
-            [type]: this.server.db[type].map((model) => ({
+            [type]: this.server.db[type]?.map((model) => ({
               ...model,
               scope: this.server.db.scopes.find(model.scopeId),
             })),

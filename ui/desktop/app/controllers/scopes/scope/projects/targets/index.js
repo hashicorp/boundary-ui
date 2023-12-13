@@ -30,7 +30,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked sessionsFlyoutActive = false;
-  @tracked sessions = [];
   @tracked selectedTargetSessions;
 
   // =methods

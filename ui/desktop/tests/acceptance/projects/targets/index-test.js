@@ -37,6 +37,11 @@ module('Acceptance | projects | targets | index', function (hooks) {
   const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
   const ROSE_DIALOG_CANCEL_BUTTON =
     '.rose-dialog footer .rose-button-secondary';
+  const SESSIONS_FLYOUT = '[data-test-targets-sessions-flyout]';
+  const SESSIONS_FLYOUT_TITLE =
+    '[data-test-targets-sessions-flyout] .hds-flyout__title';
+  const SESSIONS_FLYOUT_CLOSE_BUTTON =
+    '[data-test-targets-sessions-flyout] .hds-flyout__dismiss';
 
   const instances = {
     scopes: {
@@ -65,7 +70,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     projects: null,
     targets: null,
     target: null,
-    sessions: null,
+    session: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -122,6 +127,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
@@ -131,7 +137,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'targets', 'sessions');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -289,5 +295,116 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
     assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
     assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+  });
+
+  test('user can open sessions flyout when target has active or pending sessions', async function (assert) {
+    assert.expect(4);
+    await visit(urls.targets);
+
+    assert
+      .dom(
+        `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+      )
+      .exists();
+
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert.dom(SESSIONS_FLYOUT_TITLE).includesText(`Active sessions for`);
+
+    await click(SESSIONS_FLYOUT_CLOSE_BUTTON);
+
+    assert.dom(SESSIONS_FLYOUT).doesNotExist();
+  });
+
+  test('user can cancel a session from inside target sessions flyout', async function (assert) {
+    assert.expect(5);
+    this.stubClientDaemonSearch(
+      'targets',
+      'sessions',
+      'targets',
+      'targets',
+      '',
+      'targets',
+    );
+
+    await visit(urls.targets);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert
+      .dom(`[data-test-session-flyout-cancel-button="${instances.session.id}"]`)
+      .exists();
+
+    await click(
+      `[data-test-session-flyout-cancel-button="${instances.session.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).doesNotExist();
+    assert
+      .dom(
+        `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+      )
+      .doesNotExist();
+    assert.strictEqual(currentURL(), urls.targets);
+  });
+
+  test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
+    assert.expect(4);
+    instances.session.authorized_actions =
+      instances.session.authorized_actions.filter((item) => item !== 'cancel');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+
+    await visit(urls.targets);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert
+      .dom(`[data-test-session-flyout-cancel-button="${instances.target.id}"]`)
+      .doesNotExist();
+    assert
+      .dom(`[data-test-targets-session-detail-link="${instances.session.id}"]`)
+      .exists();
+  });
+
+  test('user can navigate to session details from sessions table in flyout', async function (assert) {
+    assert.expect(2);
+    await visit(urls.targets);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+
+    await click(
+      `[data-test-targets-session-detail-link="${instances.session.id}"]`,
+    );
+
+    assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('user cannot navigate to session details from sessions table in flyout without permissions', async function (assert) {
+    assert.expect(3);
+    instances.session.authorized_actions =
+      instances.session.authorized_actions.filter((item) => item !== 'read');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+
+    await visit(urls.targets);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert
+      .dom(`[data-test-targets-session-detail-link="${instances.session.id}"]`)
+      .doesNotExist();
+    assert.strictEqual(currentURL(), urls.targets);
   });
 });

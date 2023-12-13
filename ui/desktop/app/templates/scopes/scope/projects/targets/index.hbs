@@ -108,6 +108,7 @@
               <B.Td>
                 {{#if B.data.sessions.length}}
                   <Hds::Button
+                    data-test-targets-sessions-flyout-button={{B.data.target.id}}
                     @text={{t 'actions.yes'}}
                     @color='tertiary'
                     @icon='info'
@@ -198,12 +199,15 @@
       <Hds::Flyout
         @onClose={{this.toggleSessionsFlyout}}
         class='flyout-with-table'
+        data-test-targets-sessions-flyout
         as |M|
       >
-        <M.Header>{{t
+        <M.Header>
+          {{t
             'resources.target.titles.sessions-flyout'
             targetDisplayName=this.selectedTargetWithSessions.target.displayName
-          }}</M.Header>
+          }}
+        </M.Header>
         <M.Body>
           <Hds::Table
             @model={{this.selectedTargetWithSessions.sessions}}
@@ -218,19 +222,29 @@
             <:body as |B|>
               <B.Tr>
                 <B.Td>
-                  <Copyable
-                    @text={{B.data.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    <LinkTo
-                      @route='scopes.scope.projects.sessions.session.index'
-                      @model={{B.data.id}}
-                      data-test-session-detail-link
+                  {{#if (can 'read session' B.data)}}
+                    <Copyable
+                      @text={{B.data.id}}
+                      @buttonText={{t 'actions.copy-to-clipboard'}}
+                      @acknowledgeText={{t 'states.copied'}}
+                    >
+                      <LinkTo
+                        @route='scopes.scope.projects.sessions.session.index'
+                        @model={{B.data.id}}
+                        data-test-targets-session-detail-link={{B.data.id}}
+                      >
+                        <code>{{B.data.id}}</code>
+                      </LinkTo>
+                    </Copyable>
+                  {{else}}
+                    <Copyable
+                      @text={{B.data.id}}
+                      @buttonText={{t 'actions.copy-to-clipboard'}}
+                      @acknowledgeText={{t 'states.copied'}}
                     >
                       <code>{{B.data.id}}</code>
-                    </LinkTo>
-                  </Copyable>
+                    </Copyable>
+                  {{/if}}
                 </B.Td>
                 <B.Td>
                   <time datetime={{format-date-iso B.data.created_time}}>
@@ -243,7 +257,7 @@
                 <B.Td>
                   {{#if (can 'cancel session' B.data)}}
                     <Hds::Button
-                      data-test-session-flyout-cancel-button
+                      data-test-session-flyout-cancel-button={{B.data.id}}
                       @text={{t 'resources.session.actions.end'}}
                       @icon='x'
                       @isIconOnly={{true}}
