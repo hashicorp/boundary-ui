@@ -113,7 +113,7 @@ It is not necessary, but from this point we recommend having 2 terminals open. 
 
 ### Launch Enos Scenario
 
-Using Terminal 1: 
+Using Terminal 1:
 - `$ cd boundary/enos`.
 - `$ doormat login`. Login with Doormat.
 - `$ eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
@@ -136,14 +136,15 @@ PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.co
 PWDEBUG=console yarn playwright test --headed --config ./tests/e2e/playwright.config.js login.spec.js --debug
 ```
 
-To run the tests with a specific tag (e.g. @enterprise), use this command.
+To run all tests for a certain configuration, you can use the following shortcuts
 ```bash
-PWDEBUG=console yarn playwright test --grep @enterprise --headed --config ./tests/e2e/playwright.config.js delete-resources.spec.js
-```
+# Runs all tests pertaining to the Community Edition
+yarn run e2e:ce:aws
+yarn run e2e:ce:docker
 
-To run all tests except those with a specific tag (e.g. @enterprise), use this command.
-```bash
-PWDEBUG=console yarn playwright test --grep-invert @enterprise --headed --config ./tests/e2e/playwright.config.js delete-resources.spec.js
+# Runs all tests pertaining to the Enterprise Edition
+yarn run e2e:ent:aws
+yarn run e2e:ent:docker
 ```
 
 [Playwright documentation about running tests](https://playwright.dev/docs/running-tests).
