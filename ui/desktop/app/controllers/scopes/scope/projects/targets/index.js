@@ -27,7 +27,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
-  @tracked searchItems = ['Project 1', 'Project 2', 'Project 3'];
   @tracked sessionsFlyoutActive = false;
 
   // =methods
