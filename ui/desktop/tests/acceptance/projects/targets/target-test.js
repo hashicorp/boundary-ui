@@ -126,11 +126,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
     this.stubClientDaemonSearch(
       'targets',
+      'sessions',
+      'sessions',
+      'sessions',
       'targets',
-      'targets',
-      'sessions',
-      'sessions',
-      'sessions',
     );
   });
 
