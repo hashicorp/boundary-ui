@@ -107,7 +107,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const { session_id, address, port, credentials, expiration } =
       connectionDetails;
     try {
-      session = await this.store.findRecord('session', session_id);
+      session = await this.store.findRecord('session', session_id, {
+        reload: true,
+      });
     } catch (error) {
       /**
        * if the user cannot read or fetch the session we add the important
