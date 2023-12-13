@@ -45,7 +45,7 @@
               {{else}}
                 {{B.data.displayName}}
               {{/if}}
-              <p>{{B.data.description}}</p>
+              <Hds::Text::Body @tag='p'>{{B.data.description}}</Hds::Text::Body>
             </B.Td>
             <B.Td>
               <HostCatalogTypeBadge @model={{B.data}} />
@@ -56,11 +56,11 @@
                 @buttonText={{t 'actions.copy-to-clipboard'}}
                 @acknowledgeText={{t 'states.copied'}}
               >
-                <code>{{B.data.id}}</code>
+                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
               </Copyable>
             </B.Td>
             <B.Td>
-              <code>{{B.data.address}}</code>
+              <Hds::Text::Code>{{B.data.address}}</Hds::Text::Code>
             </B.Td>
           </B.Tr>
         </:body>
