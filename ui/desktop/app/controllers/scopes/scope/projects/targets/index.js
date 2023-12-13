@@ -27,6 +27,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sessionsFlyoutActive = false;
 
   // =methods
 
@@ -157,6 +158,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const { value } = event.target;
     this.search = value;
     this.page = 1;
+  }
+
+  @action
+  toggleSessionsFlyout() {
+    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
   }
 
   /**

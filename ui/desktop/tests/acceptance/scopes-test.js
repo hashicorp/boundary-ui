@@ -129,7 +129,7 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.stubClientDaemonSearch('targets', 'targets', 'sessions');
   });
 
   test('visiting index', async function (assert) {
@@ -189,6 +189,14 @@ module('Acceptance | scopes', function (hooks) {
       'targets',
       'targets',
       'targets',
+      'sessions',
+      'sessions',
+      'sessions',
+      'sessions',
+      'sessions',
+      'sessions',
+      'sessions',
+      'sessions',
     );
     await visit(urls.targets);
 

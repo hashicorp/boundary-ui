@@ -131,7 +131,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.stubClientDaemonSearch('targets', 'targets', 'sessions');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
