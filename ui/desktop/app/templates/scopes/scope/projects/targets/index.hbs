@@ -23,7 +23,7 @@
           {{on 'input' this.handleSearchInput}}
         />
         <S.Generic>
-          <Rose::FilterableDropdown
+          <Dropdown
             @name={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
@@ -49,7 +49,7 @@
                 {{/each}}
               {{/each}}
             {{/let}}
-          </Rose::FilterableDropdown>
+          </Dropdown>
         </S.Generic>
         <S.Dropdown as |DD|>
           <DD.ToggleButton @color='secondary' @text='Active session' />
