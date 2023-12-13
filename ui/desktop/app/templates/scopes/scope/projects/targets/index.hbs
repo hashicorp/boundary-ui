@@ -111,7 +111,7 @@
                     @text={{t 'actions.yes'}}
                     @color='tertiary'
                     @icon='info'
-                    {{on 'click' this.toggleSessionsFlyout}}
+                    {{on 'click' (fn this.selectTargetSessions B.data)}}
                   />
                 {{/if}}
               </B.Td>
@@ -188,6 +188,75 @@
         <A.Header @title={{t 'resources.target.messages.none.title'}} />
         <A.Body @text={{t 'resources.target.messages.none.description'}} />
       </Hds::ApplicationState>
+    {{/if}}
+    {{#if
+      (and
+        this.sessionsFlyoutActive
+        this.selectedTargetWithSessions.sessions.length
+      )
+    }}
+      <Hds::Flyout
+        @onClose={{this.toggleSessionsFlyout}}
+        class='flyout-with-table'
+        as |M|
+      >
+        <M.Header>{{t
+            'resources.target.titles.sessions-flyout'
+            targetDisplayName=this.selectedTargetWithSessions.target.displayName
+          }}</M.Header>
+        <M.Body>
+          <Hds::Table
+            @model={{this.selectedTargetWithSessions.sessions}}
+            @columns={{array
+              (hash label=(t 'form.id.label'))
+              (hash label=(t 'form.started.label'))
+              (hash label=(t 'form.proxy_url.label'))
+              (hash label='')
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Copyable
+                    @text={{B.data.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <LinkTo
+                      @route='scopes.scope.projects.sessions.session.index'
+                      @model={{B.data.id}}
+                      data-test-session-detail-link
+                    >
+                      <code>{{B.data.id}}</code>
+                    </LinkTo>
+                  </Copyable>
+                </B.Td>
+                <B.Td>
+                  <time datetime={{format-date-iso B.data.created_time}}>
+                    {{format-date-iso-human B.data.created_time}}
+                  </time>
+                </B.Td>
+                <B.Td>
+                  {{B.data.proxy}}
+                </B.Td>
+                <B.Td>
+                  {{#if (can 'cancel session' B.data)}}
+                    <Hds::Button
+                      data-test-session-flyout-cancel-button
+                      @text={{t 'resources.session.actions.end'}}
+                      @icon='x'
+                      @isIconOnly={{true}}
+                      @color='secondary'
+                      {{on 'click' (fn this.cancelSession B.data)}}
+                    />
+                  {{/if}}
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        </M.Body>
+      </Hds::Flyout>
     {{/if}}
   </page.body>
 

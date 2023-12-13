@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -18,6 +19,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service router;
   @service session;
   @service store;
+  @service can;
 
   // =attributes
 
@@ -28,6 +30,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked sessionsFlyoutActive = false;
+  @tracked sessions = [];
+  @tracked selectedTargetSessions;
 
   // =methods
 
@@ -61,6 +65,16 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     );
 
     return availableScopes;
+  }
+
+  /**
+   * Returns the target and sessions associated with that target
+   * @returns {object}
+   */
+  get selectedTargetWithSessions() {
+    return this.model.targets.find(
+      ({ target }) => target.id === this.selectedTargetSessions.target.id,
+    );
   }
 
   /**
@@ -175,5 +189,37 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   applyFilter(selectedItems) {
     this.scopes = [...selectedItems];
+  }
+
+  /**
+   * Toggle the sessions flyout and initialize variable to store selected target
+   * @param {object} selectedTargetSessions
+   */
+  @action
+  selectTargetSessions(selectedTargetSessions) {
+    this.toggleSessionsFlyout();
+    this.selectedTargetSessions = selectedTargetSessions;
+  }
+
+  /**
+   * Cancels the specified session and notifies user of success or error.
+   * @param {SessionModel}
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.canceled-success')
+  async cancelSession(session) {
+    let updatedSession = session;
+    // fetch session from API to verify we have most up to date record
+    if (this.can.can('read session', session)) {
+      updatedSession = await this.store.findRecord('session', session.id, {
+        reload: true,
+      });
+    }
+
+    await updatedSession.cancelSession();
+    await this.ipc.invoke('stop', { session_id: session.id });
+    this.router.refresh();
   }
 }

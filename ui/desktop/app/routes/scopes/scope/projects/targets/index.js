@@ -91,6 +91,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
             ],
           },
         },
+        force_refresh: true,
       });
       sessions = orderBy(sessions, 'created_time', 'desc');
       targetsWithSessions.push({ target, sessions });
