@@ -28,26 +28,26 @@
 
   <page.body>
     {{#if @model.hosts}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            {{#if @model.hostSet.isStatic}}
-              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            {{else}}
-              <row.headerCell>{{t 'form.external_name.label'}}</row.headerCell>
-            {{/if}}
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            {{#if @model.hostSet.isStatic}}
-              <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-            {{/if}}
-          </header.row>
-        </table.header>
 
-        <table.body as |body|>
+      <Hds::Table @model={{@model.hosts}}>
+        <:head as |H|>
+          <H.Tr>
+            {{#if @model.hostSet.isStatic}}
+              <H.Th>{{t 'form.name.label'}}</H.Th>
+            {{else}}
+              <H.Th>{{t 'form.external_name.label'}}</H.Th>
+            {{/if}}
+            <H.Th>{{t 'form.type.label'}}</H.Th>
+            <H.Th>{{t 'form.id.label'}}</H.Th>
+            {{#if @model.hostSet.isStatic}}
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            {{/if}}
+          </H.Tr>
+        </:head>
+        <:body as |B|>
           {{#each @model.hosts as |host|}}
-            <body.row as |row|>
-              <row.headerCell>
+            <B.Tr>
+              <B.Td>
                 {{#if host.isStatic}}
                   <LinkTo
                     @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
@@ -59,51 +59,51 @@
                   {{! Link to a different subroute for dynamic/plugin hosts }}
                   <LinkTo
                     @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
-                    @model={{host.id}}
+                    model={{host.id}}
                   >
                     {{host.displayName}}
                   </LinkTo>
                 {{/if}}
-                <p>{{host.description}}</p>
-              </row.headerCell>
-              <row.cell>
+                <Hds::Text:Body @tag='p'>{{host.description}}</Hds::Text:Body>
+              </B.Td>
+              <B.Td>
                 <HostCatalogTypeBadge @model={{host}} />
-              </row.cell>
-              <row.cell>
+              </B.Td>
+              <B.Td>
                 <Copyable
                   @text={{host.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{host.id}}</code>
+                  <Hds::Text::Code>{{host.id}}</Hds::Text::Code>
                 </Copyable>
-              </row.cell>
-              <row.cell>
+              </B.Td>
+              <B.Td>
                 {{#if (can 'removeHosts hostSet' @model.hostSet)}}
-                  <Rose::Dropdown
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @dropdownRight={{true}}
-                    @text={{t 'actions.manage'}}
-                    as |dropdown|
-                  >
-                    <dropdown.button
-                      @style='danger'
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @text={{t 'actions.manage'}}
+                      @icon='more-horizontal'
+                      @hasChevron={{false}}
+                      data-test-host-set-hosts-dropdown
+                    />
+                    <dd.Interactive
+                      @text={{t 'actions.remove'}}
+                      @color='critical'
                       {{on
                         'click'
                         (route-action 'removeHost' @model.hostSet host)
                       }}
-                    >
-                      {{t 'actions.remove'}}
-                    </dropdown.button>
-                  </Rose::Dropdown>
+                      data-test-host-set-hosts-dropdown-remove
+                    />
+                  </Hds::Dropdown>
                 {{/if}}
-              </row.cell>
-            </body.row>
+              </B.Td>
+            </B.Tr>
           {{/each}}
-        </table.body>
-      </Rose::Table>
+        </:body>
+      </Hds::Table>
+
     {{/if}}
 
     {{#unless @model.hosts}}

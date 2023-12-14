@@ -51,6 +51,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     newHost: null,
   };
 
+  const HOST_ACTIONS_SELECTOR =
+    'tbody .hds-table__tr:nth-child(1) .hds-dropdown-toggle-icon';
+  const HOST_REMOVE_SELECTOR =
+    'tbody .hds-table__tr:nth-child(1) .hds-dropdown-list-item button';
+  const HOST_ADD_SELECTOR = 'tbody .hds-table__tr .hds-form-label';
+
   hooks.beforeEach(function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -98,7 +104,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+
+    await click(HOST_ACTIONS_SELECTOR);
+    await click(HOST_REMOVE_SELECTOR);
     assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
@@ -126,7 +134,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click(HOST_ACTIONS_SELECTOR);
+    await click(HOST_REMOVE_SELECTOR);
     assert.ok(find('[role="alert"]'));
   });
 
@@ -169,11 +178,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click(HOST_ACTIONS_SELECTOR);
+    await click(HOST_REMOVE_SELECTOR);
     assert.strictEqual(findAll('tbody tr').length, count - 1);
     await click('.rose-layout-page-actions a:nth-child(2)');
     assert.strictEqual(currentURL(), urls.addHosts);
-    await click('tbody label');
+    await click(HOST_ADD_SELECTOR);
     await click('form [type="button"]');
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count - 1);
@@ -194,7 +204,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.addHosts);
-    await click('tbody label');
+    await click(HOST_ADD_SELECTOR);
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });
