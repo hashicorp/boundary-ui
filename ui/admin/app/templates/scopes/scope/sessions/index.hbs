@@ -114,13 +114,12 @@
               <SessionStatus @model={{B.data.session}} />
             </B.Td>
             <B.Td>
-              {{#if B.data.session.isAvailable}}
-                <Rose::Button
-                  @style='secondary'
+              {{#if (can 'cancel session' B.data.session)}}
+                <Hds::Button
+                  @color='secondary'
+                  @text={{t 'actions.cancel'}}
                   {{on 'click' (route-action 'cancelSession' B.data.session)}}
-                >
-                  {{t 'actions.cancel'}}
-                </Rose::Button>
+                />
               {{/if}}
             </B.Td>
           </B.Tr>
