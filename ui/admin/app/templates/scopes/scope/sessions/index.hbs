@@ -94,11 +94,11 @@
                 @buttonText={{t 'actions.copy-to-clipboard'}}
                 @acknowledgeText={{t 'states.copied'}}
               >
-                <code>{{B.data.session.id}}</code>
+                <Hds::Text::Code>{{B.data.session.id}}</Hds::Text::Code>
               </Copyable>
             </B.Td>
             <B.Td>
-              <code>{{B.data.user.id}}</code>
+              <Hds::Text::Code>{{B.data.user.id}}</Hds::Text::Code>
               {{#if B.data.user.accountName}}
                 <br />
                 <Hds::Badge @text={{B.data.user.accountName}} />
