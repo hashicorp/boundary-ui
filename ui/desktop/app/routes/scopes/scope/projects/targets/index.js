@@ -40,6 +40,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     },
   };
 
+  allTargets;
+
   // =methods
 
   /**
@@ -53,9 +55,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * Loads queried targets, the number of targets under current scope, and
    * projects for filtering options.
    *
-   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel]}>, allTargets: [TargetModel]}
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel] }> }
    */
-  async model({ search, scopes, page, pageSize }) {
+  async model({ search, scopes, page, pageSize }, transition) {
+    const from = transition.from?.name;
     // TODO: Filter targets by scope we're in manually
     // const { id: scope_id } = this.modelFor('scopes.scope');
     const filters = { scope_id: [] };
@@ -96,15 +99,22 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       targetsWithSessions.push({ target, sessions });
     }
 
-    // Query all targets for defining filtering values
-    const options = { pushToStore: false };
-    let allTargets = await this.store.query('target', {}, options);
+    // Query all targets for defining filtering values if entering route for first time
+    if (from !== 'scopes.scope.projects.targets.index') {
+      const options = { pushToStore: false };
+      const allTargets = await this.store.query('target', {}, options);
 
-    // Filter out targets to which users do not have the connect ability
-    allTargets = allTargets.filter((target) =>
-      target.authorized_actions.includes('authorize-session'),
-    );
+      // Filter out targets to which users do not have the connect ability
+      this.allTargets = allTargets.filter((target) =>
+        target.authorized_actions.includes('authorize-session'),
+      );
+    }
 
-    return { targets: targetsWithSessions, projects, allTargets, totalItems };
+    return {
+      targets: targetsWithSessions,
+      projects,
+      allTargets: this.allTargets,
+      totalItems,
+    };
   }
 }

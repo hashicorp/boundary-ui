@@ -17,6 +17,7 @@
     {{#if (or @model.targets this.search)}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
+          @value={{this.search}}
           @type='search'
           placeholder={{t 'actions.search'}}
           aria-label={{t 'actions.search'}}
