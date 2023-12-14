@@ -110,9 +110,7 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake');
 
-    const result = await waitUntil(function () {
-      return findAll(ITEM_SELECTOR).length === 1;
-    });
+    const result = await waitUntil(() => findAll(ITEM_SELECTOR).length === 1);
 
     assert.true(result);
   });
