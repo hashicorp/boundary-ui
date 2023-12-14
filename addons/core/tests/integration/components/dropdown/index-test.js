@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'dummy/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import { render, click, fillIn } from '@ember/test-helpers';
+import { render, click, fillIn, findAll, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | dropdown/index', function (hooks) {
@@ -94,7 +94,6 @@ module('Integration | Component | dropdown/index', function (hooks) {
   });
 
   test('it filters the list of items when searching', async function (assert) {
-    const done = assert.async();
     this.set('checkedItems', []);
 
     await render(hbs`<Dropdown
@@ -111,11 +110,10 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake');
 
-    // setTimeout allows us to wait for the debounce
-    // to finish before checking the DOM again
-    setTimeout(() => {
-      assert.dom(ITEM_SELECTOR).exists({ count: 1 });
-      done();
-    }, 151);
+    const result = await waitUntil(function () {
+      return findAll(ITEM_SELECTOR).length === 1;
+    });
+
+    assert.true(result);
   });
 });
