@@ -35,14 +35,12 @@ module('Integration | Component | dropdown/index', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    await render(hbs`
-      <Dropdown
-        @name={{this.name}}
-        @itemOptions={{this.array}}
-        @checkedItems={{this.checkedItems}}
-        @applyFilter={{this.applyFilter}}
-      />
-    `);
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.array}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+/>`);
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
     assert.dom('.hds-dropdown-toggle-button__text').hasText(name);
@@ -54,29 +52,25 @@ module('Integration | Component | dropdown/index', function (hooks) {
   });
 
   test('it renders a search input when isSearchable is true', async function (assert) {
-    await render(hbs`
-      <Dropdown
-        @name={{this.name}}
-        @itemOptions={{this.array}}
-        @checkedItems={{this.checkedItems}}
-        @applyFilter={{this.applyFilter}}
-        @isSearchable={{true}}
-      />
-    `);
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.array}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+  @isSearchable={{true}}
+/>`);
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
     assert.dom(SEARCH_INPUT_SELECTOR).exists();
   });
 
   test('it renders the correct count of checked items', async function (assert) {
-    await render(hbs`
-      <Dropdown
-        @name={{this.name}}
-        @itemOptions={{this.array}}
-        @checkedItems={{this.checkedItems}}
-        @applyFilter={{this.applyFilter}}
-      />
-    `);
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.array}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+/>`);
 
     assert.dom(COUNT_SELECTOR).hasText('1');
   });
@@ -87,14 +81,12 @@ module('Integration | Component | dropdown/index', function (hooks) {
       assert.deepEqual(selectedItems, ['2']);
     });
 
-    await render(hbs`
-      <Dropdown
-        @name={{this.name}}
-        @itemOptions={{this.array}}
-        @checkedItems={{this.checkedItems}}
-        @applyFilter={{this.applyFilter}}
-      />
-    `);
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.array}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+/>`);
 
     await click(TOGGLE_DROPDOWN_SELECTOR);
     await click(SECOND_ITEM_SELECTOR);
@@ -105,15 +97,13 @@ module('Integration | Component | dropdown/index', function (hooks) {
     const done = assert.async();
     this.set('checkedItems', []);
 
-    await render(hbs`
-      <Dropdown
-        @name={{this.name}}
-        @itemOptions={{this.array}}
-        @checkedItems={{this.checkedItems}}
-        @applyFilter={{this.applyFilter}}
-        @isSearchable={{true}}
-      />
-    `);
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.array}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+  @isSearchable={{true}}
+/>`);
 
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
