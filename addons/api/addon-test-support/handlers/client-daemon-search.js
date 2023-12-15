@@ -47,10 +47,16 @@ export default function setupStubs(hooks) {
           .withArgs('searchClientDaemon')
           .onCall(i)
           .returns({
-            [type]: this.server.db[type]?.map((model) => ({
-              ...model,
-              scope: this.server.db.scopes.find(model.scopeId),
-            })),
+            [type]: this.server.schema[type]?.all().models.map((model) => {
+              // Use internal serializer to serialize the model correctly
+              // according to our mirage serializers
+              const modelData =
+                this.server.serializerOrRegistry.serialize(model);
+
+              // Serialize the data properly to standard JSON as that is what
+              // we're expecting from the client daemon response
+              return JSON.parse(JSON.stringify(modelData));
+            }),
           });
       });
     };
