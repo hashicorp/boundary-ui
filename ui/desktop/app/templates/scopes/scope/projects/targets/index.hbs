@@ -17,13 +17,14 @@
     {{#if (or @model.targets this.search)}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
+          @value={{this.search}}
           @type='search'
           placeholder={{t 'actions.search'}}
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
         <S.Generic>
-          <Rose::FilterableDropdown
+          <Dropdown
             @name={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
@@ -49,7 +50,7 @@
                 {{/each}}
               {{/each}}
             {{/let}}
-          </Rose::FilterableDropdown>
+          </Dropdown>
         </S.Generic>
         <S.Dropdown as |DD|>
           <DD.ToggleButton @color='secondary' @text='Active session' />

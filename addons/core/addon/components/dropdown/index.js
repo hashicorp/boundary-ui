@@ -8,8 +8,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 
-// TODO: Remove old Rose::Dropdown and rename this to Rose::Dropdown
-export default class RoseFilterableDropdownComponent extends Component {
+export default class DropdownComponent extends Component {
   // =attributes
 
   @tracked selectedItems = [];
