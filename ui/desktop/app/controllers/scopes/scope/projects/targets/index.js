@@ -191,7 +191,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   /**
    * Toggle the sessions flyout and initialize variable to store selected target
-   * @param {object} selectedTargetSessions
+   * @param {object} selectedTarget
    */
   @action
   selectTarget(selectedTarget) {
