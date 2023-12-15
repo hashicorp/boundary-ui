@@ -5,6 +5,10 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
@@ -78,7 +82,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
-      const sessions = await this.store.query('session', {
+    await this.store.query('session', {
       query: {
         filters: {
           user_id: { equals: this.session.data.authenticated.user_id },
