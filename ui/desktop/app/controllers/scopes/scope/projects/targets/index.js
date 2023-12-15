@@ -10,6 +10,7 @@ import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import orderBy from 'lodash/orderBy';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -30,7 +31,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked sessionsFlyoutActive = false;
-  @tracked selectedTargetSessions;
+  @tracked selectedTarget;
 
   // =methods
 
@@ -65,13 +66,13 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Returns the target and sessions associated with that target
+   * Returns active and pending sessions associated with a target.
    * @returns {object}
    */
-  get selectedTargetWithSessions() {
-    return this.model.targets.find(
-      ({ target }) => target.id === this.selectedTargetSessions.target.id,
-    );
+  @action
+  getAvailableSessions(target) {
+    const sessions = target.sessions.filter((session) => session.isAvailable);
+    return orderBy(sessions, 'created_time', 'desc');
   }
 
   /**
@@ -173,11 +174,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     this.page = 1;
   }
 
-  @action
-  toggleSessionsFlyout() {
-    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
-  }
-
   /**
    * Sets the scopes query param to value of selectedScopes
    * to trigger a query and closes the dropdown
@@ -188,14 +184,19 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     this.scopes = [...selectedItems];
   }
 
+  @action
+  toggleSessionsFlyout() {
+    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
+  }
+
   /**
    * Toggle the sessions flyout and initialize variable to store selected target
    * @param {object} selectedTargetSessions
    */
   @action
-  selectTargetSessions(selectedTargetSessions) {
+  selectTarget(selectedTarget) {
     this.toggleSessionsFlyout();
-    this.selectedTargetSessions = selectedTargetSessions;
+    this.selectedTarget = selectedTarget;
   }
 
   /**

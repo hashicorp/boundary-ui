@@ -115,6 +115,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       {
         scope: instances.scopes.project,
         status: 'active',
+        target_id: instances.target.id,
       },
       'withAssociations',
     );
@@ -390,7 +391,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.strictEqual(currentURL(), urls.session);
   });
 
-  test('user cannot navigate to session details from sessions table in flyout without permissions', async function (assert) {
+  test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
     assert.expect(3);
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
@@ -404,7 +405,12 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.dom(SESSIONS_FLYOUT).exists();
     assert
       .dom(`[data-test-targets-session-detail-link="${instances.session.id}"]`)
-      .doesNotExist();
-    assert.strictEqual(currentURL(), urls.targets);
+      .exists();
+
+    await click(
+      `[data-test-targets-session-detail-link="${instances.session.id}"]`,
+    );
+
+    assert.strictEqual(currentURL(), urls.session);
   });
 });
