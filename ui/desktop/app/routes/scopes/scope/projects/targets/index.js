@@ -78,7 +78,18 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
-    await this.store.query('session', { force_refresh: true });
+      const sessions = await this.store.query('session', {
+      query: {
+        filters: {
+          user_id: { equals: this.session.data.authenticated.user_id },
+          status: [
+            { equals: STATUS_SESSION_ACTIVE },
+            { equals: STATUS_SESSION_PENDING },
+          ],
+        },
+      },
+      force_refresh: true,
+    });
 
     // Query all targets for defining filtering values if entering route for first time
     if (from !== 'scopes.scope.projects.targets.index') {
