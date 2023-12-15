@@ -13,6 +13,7 @@
     @color='secondary'
     @text={{@name}}
     @count={{@checkedItems.length}}
+    {{on 'click' this.open}}
   />
   {{#if @isSearchable}}
     <DD.Header @hasDivider={{true}}>

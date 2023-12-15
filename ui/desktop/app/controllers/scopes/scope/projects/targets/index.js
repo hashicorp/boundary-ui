@@ -104,6 +104,16 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
+   * Returns true if there are any filters applied
+   * @returns {boolean}
+   */
+  get hasFilters() {
+    return this.scopes.length > 0;
+  }
+
+  // =methods
+
+  /**
    * Quick connect method used to call main connect method and handle
    * connection errors unique to this route
    * @param {TargetModel} target
@@ -200,6 +210,41 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const { value } = event.target;
     this.search = value;
     this.page = 1;
+  }
+
+  /**
+   * Takes the scopeId and returns the displayName of the scope
+   * @param {string} scopeId
+   * @returns {string}
+   */
+  @action
+  scopeDisplayName(scopeId) {
+    const scope = this.model.projects.find((project) => project.id === scopeId);
+    return scope.displayName;
+  }
+
+  /**
+   * Clears a single scope from the scopes query param
+   * @param {string} scopeId
+   */
+  @action
+  removeScopeFilter(scopeId) {
+    this.scopes = this.scopes.filter((scope) => scope !== scopeId);
+  }
+
+  /**
+   * Clears all filters by resetting scopes,
+   * active_session, and type query params
+   */
+  @action
+  clearAllFilters() {
+    // TODO: add active_session and type query params once added
+    this.scopes = [];
+  }
+
+  @action
+  toggleSessionsFlyout() {
+    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
   }
 
   /**
