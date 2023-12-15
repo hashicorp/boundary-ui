@@ -30,7 +30,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
-  @tracked sessionsFlyoutActive = false;
   @tracked selectedTarget;
 
   // =methods
@@ -69,9 +68,10 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * Returns active and pending sessions associated with a target.
    * @returns {object}
    */
-  @action
-  getAvailableSessions(target) {
-    const sessions = target.sessions.filter((session) => session.isAvailable);
+  get availableSessions() {
+    const sessions = this.selectedTarget.sessions.filter(
+      (session) => session.isAvailable,
+    );
     return orderBy(sessions, 'created_time', 'desc');
   }
 
@@ -185,8 +185,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   @action
-  toggleSessionsFlyout() {
-    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
+  deselectTarget() {
+    this.selectedTarget = null;
   }
 
   /**
@@ -195,7 +195,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   @action
   selectTarget(selectedTarget) {
-    this.toggleSessionsFlyout();
     this.selectedTarget = selectedTarget;
   }
 

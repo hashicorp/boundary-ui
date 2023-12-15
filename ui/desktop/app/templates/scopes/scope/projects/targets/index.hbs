@@ -107,20 +107,15 @@
                 </Copyable>
               </B.Td>
               <B.Td>
-                {{#let
-                  (call (fn this.getAvailableSessions B.data))
-                  as |sessions|
-                }}
-                  {{#if sessions.length}}
-                    <Hds::Button
-                      data-test-targets-sessions-flyout-button={{B.data.id}}
-                      @text={{t 'actions.yes'}}
-                      @color='tertiary'
-                      @icon='info'
-                      {{on 'click' (fn this.selectTarget B.data)}}
-                    />
-                  {{/if}}
-                {{/let}}
+                {{#if B.data.isActive}}
+                  <Hds::Button
+                    data-test-targets-sessions-flyout-button={{B.data.id}}
+                    @text={{t 'actions.yes'}}
+                    @color='tertiary'
+                    @icon='info'
+                    {{on 'click' (fn this.selectTarget B.data)}}
+                  />
+                {{/if}}
               </B.Td>
               <B.Td>
                 {{#if B.data.type}}
@@ -194,78 +189,73 @@
         <A.Body @text={{t 'resources.target.messages.none.description'}} />
       </Hds::ApplicationState>
     {{/if}}
-    {{#let
-      (call (fn this.getAvailableSessions this.selectedTarget))
-      as |sessions|
-    }}
-      {{#if (and this.sessionsFlyoutActive sessions.length)}}
-        <Hds::Flyout
-          @onClose={{this.toggleSessionsFlyout}}
-          class='flyout-with-table'
-          data-test-targets-sessions-flyout
-          as |M|
-        >
-          <M.Header>
-            {{t
-              'resources.target.titles.sessions-flyout'
-              targetDisplayName=this.selectedTarget.displayName
+    {{#if (and this.selectedTarget this.selectedTarget.isActive)}}
+      <Hds::Flyout
+        @onClose={{this.deselectTarget}}
+        class='flyout-with-table'
+        data-test-targets-sessions-flyout
+        as |M|
+      >
+        <M.Header>
+          {{t
+            'resources.target.titles.sessions-flyout'
+            targetDisplayName=this.selectedTarget.displayName
+          }}
+        </M.Header>
+        <M.Body>
+          <Hds::Table
+            @model={{this.availableSessions}}
+            @columns={{array
+              (hash label=(t 'form.id.label'))
+              (hash label=(t 'form.started.label'))
+              (hash label=(t 'form.proxy_url.label'))
+              (hash label='')
             }}
-          </M.Header>
-          <M.Body>
-            <Hds::Table
-              @model={{sessions}}
-              @columns={{array
-                (hash label=(t 'form.id.label'))
-                (hash label=(t 'form.started.label'))
-                (hash label=(t 'form.proxy_url.label'))
-                (hash label='')
-              }}
-              @valign='middle'
-            >
-              <:body as |B|>
-                <B.Tr>
-                  <B.Td>
-                    <Copyable
-                      @text={{B.data.id}}
-                      @buttonText={{t 'actions.copy-to-clipboard'}}
-                      @acknowledgeText={{t 'states.copied'}}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Copyable
+                    @text={{B.data.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <LinkTo
+                      @route='scopes.scope.projects.sessions.session.index'
+                      @model={{B.data.id}}
+                      data-test-targets-session-detail-link={{B.data.id}}
                     >
-                      <LinkTo
-                        @route='scopes.scope.projects.sessions.session.index'
-                        @model={{B.data.id}}
-                        data-test-targets-session-detail-link={{B.data.id}}
-                      >
-                        <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                      </LinkTo>
-                    </Copyable>
-                  </B.Td>
-                  <B.Td>
-                    <time datetime={{format-date-iso B.data.created_time}}>
-                      {{format-date-iso-human B.data.created_time}}
-                    </time>
-                  </B.Td>
-                  <B.Td>
-                    {{B.data.proxy}}
-                  </B.Td>
-                  <B.Td>
-                    {{#if (can 'cancel session' B.data)}}
-                      <Hds::Button
-                        data-test-session-flyout-cancel-button={{B.data.id}}
-                        @text={{t 'resources.session.actions.end'}}
-                        @icon='x'
-                        @isIconOnly={{true}}
-                        @color='secondary'
-                        {{on 'click' (fn this.cancelSession B.data)}}
-                      />
-                    {{/if}}
-                  </B.Td>
-                </B.Tr>
-              </:body>
-            </Hds::Table>
-          </M.Body>
-        </Hds::Flyout>
-      {{/if}}
-    {{/let}}
+                      <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+                    </LinkTo>
+                  </Copyable>
+                </B.Td>
+                <B.Td>
+                  <time datetime={{format-date-iso B.data.created_time}}>
+                    {{format-date-iso-human B.data.created_time}}
+                  </time>
+                </B.Td>
+                <B.Td>
+                  {{B.data.proxy}}
+                </B.Td>
+                <B.Td>
+                  {{#if (can 'cancel session' B.data)}}
+                    <Hds::Button
+                      data-test-session-flyout-cancel-button={{B.data.id}}
+                      @text={{t 'resources.session.actions.end'}}
+                      @icon='x'
+                      @isIconOnly={{true}}
+                      @color='secondary'
+                      {{on 'click' (fn this.cancelSession B.data)}}
+                    />
+                  {{/if}}
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        </M.Body>
+      </Hds::Flyout>
+    {{/if}}
   </page.body>
 
 </Rose::Layout::Page>
