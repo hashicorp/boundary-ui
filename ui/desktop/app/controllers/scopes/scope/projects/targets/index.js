@@ -184,14 +184,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     this.scopes = [...selectedItems];
   }
 
-  @action
-  deselectTarget() {
-    this.selectedTarget = null;
-  }
-
   /**
    * Toggle the sessions flyout and initialize variable to store selected target
-   * @param {object} selectedTargetSessions
+   * @param {object} selectedTarget
    */
   @action
   selectTarget(selectedTarget) {

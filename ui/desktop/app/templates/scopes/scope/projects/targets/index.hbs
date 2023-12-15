@@ -191,7 +191,7 @@
     {{/if}}
     {{#if (and this.selectedTarget this.selectedTarget.isActive)}}
       <Hds::Flyout
-        @onClose={{this.deselectTarget}}
+        @onClose={{fn this.selectTarget null}}
         class='flyout-with-table'
         data-test-targets-sessions-flyout
         as |M|
