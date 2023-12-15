@@ -143,7 +143,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
-    assert.expect(2);
     await visit(urls.targets);
     await a11yAudit();
 
@@ -152,7 +151,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting targets index', async function (assert) {
-    assert.expect(2);
     const targetsCount = getTargetCount();
     await visit(urls.projects);
 
@@ -164,7 +162,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting a target', async function (assert) {
-    assert.expect(2);
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -177,7 +174,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting targets list view with no targets', async function (assert) {
-    assert.expect(1);
     this.server.db.targets.remove();
     this.stubClientDaemonSearch('targets', 'targets');
 
@@ -189,7 +185,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot navigate to a target without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.stubClientDaemonSearch('targets', 'targets');
@@ -204,7 +199,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can connect to a target with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -218,7 +212,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot connect to a target without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
@@ -238,13 +231,13 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
-    assert.expect(3);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -254,7 +247,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can connect without target read permissions', async function (assert) {
-    assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.stubClientDaemonSearch('targets');
@@ -265,8 +257,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -278,7 +271,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can retry connect without target read permissions', async function (assert) {
-    assert.expect(5);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -286,8 +278,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.stubClientDaemonSearch('targets', 'targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -299,8 +292,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can open sessions flyout when target has active or pending sessions', async function (assert) {
-    assert.expect(4);
-    await visit(urls.targets);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
 
     assert
       .dom(
@@ -321,7 +315,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can cancel a session from inside target sessions flyout', async function (assert) {
-    assert.expect(5);
     this.stubClientDaemonSearch(
       'targets',
       'sessions',
@@ -330,8 +323,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
       '',
       'targets',
     );
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -355,12 +349,12 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
-    assert.expect(4);
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'cancel');
     this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -376,8 +370,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can navigate to session details from sessions table in flyout', async function (assert) {
-    assert.expect(2);
-    await visit(urls.targets);
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
@@ -392,12 +387,12 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
-    assert.expect(3);
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
     this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
     await click(
       `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
     );
