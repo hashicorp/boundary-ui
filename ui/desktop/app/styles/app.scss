@@ -703,3 +703,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     margin-bottom: 1rem;
   }
 }
+
+// Flyout with table
+.flyout-with-table {
+  .copyable-content a,
+  button {
+    color: var(--token-color-foreground-primary);
+  }
+}
