@@ -21,33 +21,53 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service session;
   @service store;
   @service can;
+  @service intl;
 
   // =attributes
 
-  queryParams = ['search', { scopes: { type: 'array' } }, 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    { scopes: { type: 'array' } },
+    { availableSessions: { type: 'array' } },
+    'page',
+    'pageSize',
+  ];
 
   @tracked search;
   @tracked scopes = [];
+  @tracked availableSessions = [];
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked selectedTarget;
 
   // =methods
 
-  /**
-   * Returns true if model is empty but we have a search term
-   * @returns {boolean}
-   */
-  get noResults() {
-    return this.model.targets.length === 0 && this.search;
+  get showFilters() {
+    return (
+      this.model.targets.length || this.search || this.availableSessions.length
+    );
   }
 
   /**
-   * Returns true if model is empty and we have no search term
+   * Returns true if model is empty but we have a search term or filters
+   * @returns {boolean}
+   */
+  get noResults() {
+    return (
+      this.model.targets.length === 0 &&
+      (this.search || this.availableSessions.length)
+    );
+  }
+
+  /**
+   * Returns true if model is empty and we have no search term or filters
    * @returns {boolean}
    */
   get noTargets() {
-    return this.model.targets.length === 0 && !this.search;
+    return (
+      this.model.targets.length === 0 &&
+      !(this.search || this.availableSessions.length)
+    );
   }
 
   /**
@@ -64,11 +84,19 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     );
   }
 
+  get availableSessionOptions() {
+    return [
+      { id: 'yes', displayName: this.intl.t('actions.yes') },
+      { id: 'no', displayName: this.intl.t('actions.no') },
+    ];
+  }
+
   /**
-   * Returns active and pending sessions associated with a target.
+   * Returns active and pending sessions associated with a target
+   * sorted descending by created time.
    * @returns {object}
    */
-  get availableSessions() {
+  get sortedTargetSessions() {
     const sessions = this.selectedTarget.sessions.filter(
       (session) => session.isAvailable,
     );
@@ -180,8 +208,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @param {function} close
    */
   @action
-  applyFilter(selectedItems) {
-    this.scopes = [...selectedItems];
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+    this.page = 1;
   }
 
   /**
