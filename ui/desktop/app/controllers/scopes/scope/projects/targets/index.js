@@ -9,6 +9,8 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
+import orderBy from 'lodash/orderBy';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -18,6 +20,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @service router;
   @service session;
   @service store;
+  @service can;
 
   // =attributes
 
@@ -27,7 +30,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
-  @tracked sessionsFlyoutActive = false;
+  @tracked selectedTarget;
 
   // =methods
 
@@ -59,6 +62,17 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     return this.model.projects.filter((project) =>
       uniqueTargetScopeIds.has(project.id),
     );
+  }
+
+  /**
+   * Returns active and pending sessions associated with a target.
+   * @returns {object}
+   */
+  get availableSessions() {
+    const sessions = this.selectedTarget.sessions.filter(
+      (session) => session.isAvailable,
+    );
+    return orderBy(sessions, 'created_time', 'desc');
   }
 
   /**
@@ -160,11 +174,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     this.page = 1;
   }
 
-  @action
-  toggleSessionsFlyout() {
-    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
-  }
-
   /**
    * Sets the scopes query param to value of selectedScopes
    * to trigger a query and closes the dropdown
@@ -173,5 +182,36 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @action
   applyFilter(selectedItems) {
     this.scopes = [...selectedItems];
+  }
+
+  /**
+   * Toggle the sessions flyout and initialize variable to store selected target
+   * @param {object} selectedTarget
+   */
+  @action
+  selectTarget(selectedTarget) {
+    this.selectedTarget = selectedTarget;
+  }
+
+  /**
+   * Cancels the specified session and notifies user of success or error.
+   * @param {SessionModel}
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.canceled-success')
+  async cancelSession(session) {
+    let updatedSession = session;
+    // fetch session from API to verify we have most up to date record
+    if (this.can.can('read session', session)) {
+      updatedSession = await this.store.findRecord('session', session.id, {
+        reload: true,
+      });
+    }
+
+    await updatedSession.cancelSession();
+    await this.ipc.invoke('stop', { session_id: session.id });
+    this.router.refresh();
   }
 }

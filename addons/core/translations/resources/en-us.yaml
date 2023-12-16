@@ -570,6 +570,7 @@ target:
   titles:
     new: New Target
     active-sessions: Active sessions
+    sessions-flyout: Active sessions for {targetDisplayName}
   actions:
     create: New Target
     delete: Delete Target
