@@ -80,59 +80,58 @@
             <B.Tr>
               <B.Td>
                 <span class='hds-font-weight-semibold'>
-                  {{#if (can 'read model' B.data.target)}}
+                  {{#if (can 'read model' B.data)}}
                     <LinkTo
-                      data-test-visit-target={{B.data.target.id}}
+                      data-test-visit-target={{B.data.id}}
                       @route='scopes.scope.projects.targets.target'
-                      @model={{B.data.target.id}}
+                      @model={{B.data.id}}
                       @query={{hash isConnecting=false}}
                     >
-                      {{B.data.target.displayName}}
+                      {{B.data.displayName}}
                     </LinkTo>
                   {{else}}
-                    {{B.data.target.displayName}}
+                    {{B.data.displayName}}
                   {{/if}}
-                  {{#if B.data.target.description}}
-                    <p>{{B.data.target.description}}</p>
+                  {{#if B.data.description}}
+                    <p>{{B.data.description}}</p>
                   {{/if}}
                 </span>
               </B.Td>
               <B.Td>
                 <Copyable
-                  @text={{B.data.target.id}}
+                  @text={{B.data.id}}
                   @buttonText={{t 'actions.copy-to-clipboard'}}
                   @acknowledgeText={{t 'states.copied'}}
                 >
-                  <code>{{B.data.target.id}}</code>
+                  <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
                 </Copyable>
               </B.Td>
               <B.Td>
-                {{#if B.data.sessions.length}}
+                {{#if B.data.isActive}}
                   <Hds::Button
+                    data-test-targets-sessions-flyout-button={{B.data.id}}
                     @text={{t 'actions.yes'}}
                     @color='tertiary'
                     @icon='info'
-                    {{on 'click' this.toggleSessionsFlyout}}
+                    {{on 'click' (fn this.selectTarget B.data)}}
                   />
                 {{/if}}
               </B.Td>
               <B.Td>
-                {{#if B.data.target.type}}
+                {{#if B.data.type}}
                   <Hds::Badge
-                    @text={{t
-                      (concat 'resources.target.types.' B.data.target.type)
-                    }}
+                    @text={{t (concat 'resources.target.types.' B.data.type)}}
                   />
                 {{/if}}
               </B.Td>
               <B.Td>
                 <div>
                   <Copyable
-                    @text={{B.data.target.project.id}}
+                    @text={{B.data.project.id}}
                     @buttonText={{t 'actions.copy-to-clipboard'}}
                     @acknowledgeText={{t 'states.copied'}}
                   >
-                    <code>{{B.data.target.project.id}}</code>
+                    <Hds::Text::Code>{{B.data.project.id}}</Hds::Text::Code>
                   </Copyable>
                 </div>
                 {{#if B.data.project.name}}
@@ -140,22 +139,22 @@
                 {{/if}}
               </B.Td>
               <B.Td>
-                {{#if (can 'connect target' B.data.target)}}
-                  {{#if (can 'read target' B.data.target)}}
+                {{#if (can 'connect target' B.data)}}
+                  {{#if (can 'read target' B.data)}}
                     <Hds::Button
-                      data-test-targets-connect-button={{B.data.target.id}}
+                      data-test-targets-connect-button={{B.data.id}}
                       @text={{t 'resources.session.actions.connect'}}
                       @color='secondary'
                       @route='scopes.scope.projects.targets.target'
-                      @model={{B.data.target.id}}
+                      @model={{B.data.id}}
                       @query={{hash isConnecting=true}}
                     />
                   {{else}}
                     <Hds::Button
-                      data-test-targets-connect-button={{B.data.target.id}}
+                      data-test-targets-connect-button={{B.data.id}}
                       @text={{t 'resources.session.actions.connect'}}
                       @color='secondary'
-                      {{on 'click' (fn this.quickConnect B.data.target)}}
+                      {{on 'click' (fn this.quickConnect B.data)}}
                     />
                   {{/if}}
                 {{/if}}
@@ -189,6 +188,73 @@
         <A.Header @title={{t 'resources.target.messages.none.title'}} />
         <A.Body @text={{t 'resources.target.messages.none.description'}} />
       </Hds::ApplicationState>
+    {{/if}}
+    {{#if (and this.selectedTarget this.selectedTarget.isActive)}}
+      <Hds::Flyout
+        @onClose={{fn this.selectTarget null}}
+        class='flyout-with-table'
+        data-test-targets-sessions-flyout
+        as |M|
+      >
+        <M.Header>
+          {{t
+            'resources.target.titles.sessions-flyout'
+            targetDisplayName=this.selectedTarget.displayName
+          }}
+        </M.Header>
+        <M.Body>
+          <Hds::Table
+            @model={{this.availableSessions}}
+            @columns={{array
+              (hash label=(t 'form.id.label'))
+              (hash label=(t 'form.started.label'))
+              (hash label=(t 'form.proxy_url.label'))
+              (hash label='')
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Copyable
+                    @text={{B.data.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <LinkTo
+                      @route='scopes.scope.projects.sessions.session.index'
+                      @model={{B.data.id}}
+                      data-test-targets-session-detail-link={{B.data.id}}
+                    >
+                      <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+                    </LinkTo>
+                  </Copyable>
+                </B.Td>
+                <B.Td>
+                  <time datetime={{format-date-iso B.data.created_time}}>
+                    {{format-date-iso-human B.data.created_time}}
+                  </time>
+                </B.Td>
+                <B.Td>
+                  {{B.data.proxy}}
+                </B.Td>
+                <B.Td>
+                  {{#if (can 'cancel session' B.data)}}
+                    <Hds::Button
+                      data-test-session-flyout-cancel-button={{B.data.id}}
+                      @text={{t 'resources.session.actions.end'}}
+                      @icon='x'
+                      @isIconOnly={{true}}
+                      @color='secondary'
+                      {{on 'click' (fn this.cancelSession B.data)}}
+                    />
+                  {{/if}}
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+        </M.Body>
+      </Hds::Flyout>
     {{/if}}
   </page.body>
 
