@@ -711,6 +711,22 @@ function routes() {
     },
   );
 
+  //storage-policy
+  this.get(
+    '/storage-policies',
+    ({ storagePolicies }, { queryParams: { scope_id: scopeId } }) => {
+      return storagePolicies.where({ scopeId });
+    },
+  );
+  this.get('/storage-policies/:id');
+  this.del('/storage-policies/:id');
+  this.patch('/storage-policies/:id');
+  this.post('/storage-policies', function ({ storagePolicies }) {
+    const attrs = this.normalizedRequestAttrs();
+
+    return storagePolicies.create(attrs);
+  });
+
   // session recordings
   this.get(
     '/session-recordings',

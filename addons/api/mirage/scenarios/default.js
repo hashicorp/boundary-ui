@@ -104,6 +104,10 @@ export default function (server) {
   server.createList('storage-bucket', 3, { scope: globalScope });
   server.createList('storage-bucket', 2, { scope: orgScope });
 
+  // Storage Policies
+  server.createList('storage-policy', 3, { scope: globalScope });
+  server.createList('storage-policy', 3, { scope: orgScope });
+
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');
