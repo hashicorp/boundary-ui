@@ -7,7 +7,7 @@ import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 /**
- * GeneratedStorageBucketModelFactory
+ * GeneratedStoragePolicyModelFactory
  */
 export default Factory.extend({
   name: () => faker.word.words(),
