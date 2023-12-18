@@ -41,6 +41,10 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     );
   }
 
+  /**
+   * Returns all status types for sessions
+   * @returns {[string]}
+   */
   get sessionStatusTypes() {
     return statusTypes;
   }
