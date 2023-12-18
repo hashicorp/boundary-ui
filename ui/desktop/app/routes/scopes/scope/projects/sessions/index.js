@@ -4,30 +4,25 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   // =services
 
   @service session;
-  @service resourceFilterStore;
+  @service store;
 
   // =attributes
 
-  @resourceFilter({
-    allowed: ['active', 'pending', 'canceling', 'terminated'],
-    defaultValue: ['active', 'pending', 'canceling'],
-  })
-  status;
+  queryParams = {
+    targets: {
+      refreshModel: true,
+      replace: true,
+    },
+  };
 
-  @resourceFilter({
-    allowed: (route) => route.modelFor('scopes.scope.projects'),
-    serialize: ({ id }) => id,
-    findBySerialized: ({ id }, value) => id === value,
-  })
-  project;
+  allSessions;
+  allTargets;
 
   // =methods
 
@@ -39,53 +34,43 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    *        are now filtered on the client by projects and status,
    *        while user_id filtering remains server side.
    *
-   * @return {Promise{[SessionModel]}}
+   * @return {Promise<{sessions: [SessionModel], allSessions: [SessionModel]}>}
    */
-  async model() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    const queryOptions = {
-      scope_id,
-      recursive: true,
-      include_terminated: this.status?.includes('terminated'),
+  async model({ targets }, transition) {
+    const from = transition.from?.name;
+
+    const filters = {
+      user_id: { equals: this.session.data.authenticated.user_id },
+      target_id: [],
     };
+    targets.forEach((target) => {
+      filters.target_id.push({ equals: target });
+    });
 
-    // Recursively query sessions within the current scope for the current user
-    let sessions = await this.resourceFilterStore.queryBy(
-      'session',
-      { user_id: this.session.data.authenticated.user_id },
-      queryOptions,
-    );
+    const queryOptions = { query: { filters }, force_refresh: true };
+    const sessions = await this.store.query('session', queryOptions);
 
-    // If project filters are selected, filter sessions by the selected projects
-    if (this.project?.length) {
-      const projectIDs = this.project.map((p) => p?.id);
-      sessions = sessions.filter((s) => projectIDs.includes(s?.scopeID));
+    // Query all sessions and all targets for defining filtering values if entering route for the first time
+    if (from !== 'scopes.scope.projects.sessions.index') {
+      const options = { pushToStore: false };
+      this.allSessions = await this.store.query(
+        'session',
+        {
+          query: {
+            filters: {
+              user_id: { equals: this.session.data.authenticated.user_id },
+            },
+          },
+        },
+        options,
+      );
+      this.allTargets = await this.store.query('target', {}, options);
     }
 
-    // If status filters are selected, filter sessions by the selected statuses
-    if (this.status?.length) {
-      sessions = sessions.filter((s) => this.status.includes(s?.status));
-    }
-
-    return sessions;
-  }
-
-  /**
-   * Sets the specified resource filter field to the specified value.
-   * @param {string} field
-   * @param value
-   */
-  @action
-  filterBy(field, value) {
-    this[field] = value;
-  }
-
-  /**
-   * Clears and filter selections.
-   */
-  @action
-  clearAllFilters() {
-    this.status = [];
-    this.project = [];
+    return {
+      sessions,
+      allSessions: this.allSessions,
+      allTargets: this.allTargets,
+    };
   }
 }

@@ -13,110 +13,52 @@
     <p>{{t 'resources.session.description'}}</p>
   </page.header>
 
-  <page.body>
-    <Rose::Toolbar as |toolbar|>
-      <toolbar.primary>
-        <Rose::Form as |form|>
-          {{#let
-            (resource-filter 'scopes.scope.projects.sessions.index' 'status')
-            as |filter|
-          }}
-            <Rose::Dropdown
-              @text={{t (concat 'form.' filter.name '.label')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <form.checkboxGroup
-                @name={{filter.name}}
-                @items={{filter.allowedValues}}
-                @selectedItems={{filter.selectedValue}}
-                @onChange={{route-action 'filterBy' filter.name}}
-                as |group|
+  <page.body class='search-filtering'>
+    {{#if this.sortedSessions}}
+      <Hds::SegmentedGroup as |S|>
+        <S.Generic>
+          <Dropdown
+            @name={{t 'resources.target.title'}}
+            @itemOptions={{this.availableTargets}}
+            @checkedItems={{this.targets}}
+            @applyFilter={{this.applyTargetFilter}}
+            @isSearchable={{true}}
+            @listPosition='bottom-left'
+            as |FD selectItem itemOptions|
+          >
+            {{#each itemOptions as |target|}}
+              <FD.Checkbox
+                @value={{target.id}}
+                checked={{includes target.id this.targets}}
+                {{on 'change' selectItem}}
               >
-                <dropdown.item>
-                  <group.checkbox
-                    @label={{t (concat 'resources.session.status.' group.item)}}
-                    value={{group.item}}
-                  />
-                </dropdown.item>
-              </form.checkboxGroup>
-            </Rose::Dropdown>
-          {{/let}}
+                {{#if target.name}}
+                  {{target.name}}
+                {{else}}
+                  {{target.id}}
+                {{/if}}
+              </FD.Checkbox>
+            {{/each}}
+          </Dropdown>
+        </S.Generic>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton @color='secondary' @text={{t 'form.status.label'}} />
+          {{#each this.sessionStatusTypes as |status|}}
+            <DD.Checkbox>{{t
+                (concat 'resources.session.status.' status)
+              }}</DD.Checkbox>
+          {{/each}}
+        </S.Dropdown>
+        <S.Dropdown as |DD|>
+          <DD.ToggleButton
+            @color='secondary'
+            @text={{t 'resources.scope.title'}}
+          />
+        </S.Dropdown>
+      </Hds::SegmentedGroup>
 
-          {{#let
-            (resource-filter 'scopes.scope.projects.sessions.index' 'project')
-            as |filter|
-          }}
-            <Rose::Dropdown
-              @text={{t (concat 'resources.' filter.name '.title')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <ul>
-                {{#let
-                  (group-by filter.allowedValues 'scopeModel')
-                  as |groups|
-                }}
-                  {{#each groups as |groupedItems|}}
-                    <li>
-                      <dropdown.item>
-                        <Rose::Icon
-                          @name='flight-icons/svg/org-16'
-                          @size='medium'
-                        />
-                        {{groupedItems.key.displayName}}
-                      </dropdown.item>
-                      <ul class='indent-label-2'>
-                        <form.checkboxGroup
-                          @name={{filter.name}}
-                          @items={{groupedItems.items}}
-                          @selectedItems={{filter.selectedValue}}
-                          @onChange={{route-action 'filterBy' filter.name}}
-                          as |group|
-                        >
-                          <li>
-                            <dropdown.item>
-                              <group.checkbox
-                                @label={{group.item.displayName}}
-                                value={{group.item}}
-                              />
-                            </dropdown.item>
-                          </li>
-                        </form.checkboxGroup>
-                      </ul>
-                    </li>
-                  {{/each}}
-                {{/let}}
-              </ul>
-            </Rose::Dropdown>
-          {{/let}}
-
-          {{#if
-            (has-resource-filter-selections
-              'scopes.scope.projects.sessions.index' 'status' 'project'
-            )
-          }}
-            <Rose::Button
-              @style='inline-link-action'
-              @iconLeft='flight-icons/svg/x-16'
-              {{on 'click' (route-action 'clearAllFilters')}}
-            >{{t 'actions.clear-all-filters'}}
-            </Rose::Button>
-          {{/if}}
-        </Rose::Form>
-      </toolbar.primary>
-
-      <toolbar.secondary>
-        <ToolbarRefresher @onClick={{route-action 'refreshSessions'}} />
-      </toolbar.secondary>
-
-    </Rose::Toolbar>
-
-    {{#if this.sorted}}
       <Hds::Table
-        @model={{this.sorted}}
+        @model={{this.sortedSessions}}
         @columns={{array
           (hash label=(t 'form.id.label'))
           (hash label=(t 'resources.target.title'))
@@ -169,16 +111,16 @@
               {{B.data.target.displayName}}
             </B.Td>
             {{!
-                  Two if's here because:
-                  1) Local proxy info is only relevant if the session is
-                     active or pending (aka isAvailable).  Once the session
-                     is canceled or in the process thereof, the local proxy
-                     may no longer be used.
-                  2) The session actually has proxy information associated
-                     with it.  It's possible for the user to start sessions
-                     from other devices (or even another tab), in which case we
-                     won't have the local proxy info available here.
-                }}
+              Two if's here because:
+              1) Local proxy info is only relevant if the session is
+                  active or pending (aka isAvailable).  Once the session
+                  is canceled or in the process thereof, the local proxy
+                  may no longer be used.
+              2) The session actually has proxy information associated
+                  with it.  It's possible for the user to start sessions
+                  from other devices (or even another tab), in which case we
+                  won't have the local proxy info available here.
+            }}
             <B.Td>
               {{#if B.data.isAvailable}}
                 {{#if B.data.proxy}}
