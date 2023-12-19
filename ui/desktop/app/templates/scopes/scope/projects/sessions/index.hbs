@@ -24,22 +24,7 @@
             @applyFilter={{fn this.applyFilter 'targets'}}
             @isSearchable={{true}}
             @listPosition='bottom-left'
-            as |FD selectItem itemOptions|
-          >
-            {{#each itemOptions as |target|}}
-              <FD.Checkbox
-                @value={{target.id}}
-                checked={{includes target.id this.targets}}
-                {{on 'change' selectItem}}
-              >
-                {{#if target.name}}
-                  {{target.name}}
-                {{else}}
-                  {{target.id}}
-                {{/if}}
-              </FD.Checkbox>
-            {{/each}}
-          </Dropdown>
+          />
         </S.Generic>
         <S.Dropdown as |DD|>
           <DD.ToggleButton @color='secondary' @text={{t 'form.status.label'}} />
