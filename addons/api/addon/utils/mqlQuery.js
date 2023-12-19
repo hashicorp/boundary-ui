@@ -22,38 +22,45 @@ export function generateMQLFilterExpression(filterObj) {
 
   const expressions = Object.entries(filterObj)
     .map(([key, filterObjValue]) => {
-      const filterObjValueArray = Array.isArray(filterObjValue)
+      const filterValueArray = Array.isArray(filterObjValue)
         ? filterObjValue
-        : [filterObjValue];
+        : filterObjValue.values;
 
-      const orClauses = or(
-        filterObjValueArray.map((filterObjValue) => {
-          if (!filterObjValue) {
-            return null;
-          }
+      let clauses;
+      const filterValues = filterValueArray.map((filterObjValue) => {
+        if (!filterObjValue) {
+          return null;
+        }
 
-          const [operation, value] = Object.entries(filterObjValue)[0];
+        const [operation, value] = Object.entries(filterObjValue)[0];
 
-          switch (operation) {
-            case 'contains':
-              return contains(key, value);
-            case 'gt':
-              return gt(key, value);
-            case 'gte':
-              return gte(key, value);
-            case 'lt':
-              return lt(key, value);
-            case 'lte':
-              return lte(key, value);
-            case 'notEquals':
-              return notEquals(key, value);
-            default:
-              return equals(key, value);
-          }
-        }),
-      );
+        switch (operation) {
+          case 'contains':
+            return contains(key, value);
+          case 'gt':
+            return gt(key, value);
+          case 'gte':
+            return gte(key, value);
+          case 'lt':
+            return lt(key, value);
+          case 'lte':
+            return lte(key, value);
+          case 'notEquals':
+            return notEquals(key, value);
+          default:
+            return equals(key, value);
+        }
+      });
 
-      return parenthetical(orClauses);
+      // Default to `or` if we don't have a logical operator
+      const { logicalOperator } = filterObjValue;
+      if (logicalOperator === 'and') {
+        clauses = and(filterValues);
+      } else {
+        clauses = or(filterValues);
+      }
+
+      return parenthetical(clauses);
     })
     .filter((item) => item);
   return and(expressions);

@@ -14,7 +14,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if (or @model.targets this.search)}}
+    {{#if this.showFilters}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
@@ -28,7 +28,7 @@
             @name={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
-            @applyFilter={{this.applyFilter}}
+            @applyFilter={{fn this.applyFilter 'scopes'}}
             @isSearchable={{true}}
             as |FD selectItem itemOptions|
           >
@@ -52,16 +52,15 @@
             {{/let}}
           </Dropdown>
         </S.Generic>
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton @color='secondary' @text='Active session' />
-          <DD.Checkbox>{{t 'actions.yes'}}</DD.Checkbox>
-          <DD.Checkbox>{{t 'actions.no'}}</DD.Checkbox>
-        </S.Dropdown>
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton @color='secondary' @text='Type' @count='2' />
-          <DD.Checkbox>{{t 'resources.target.types.tcp'}}</DD.Checkbox>
-          <DD.Checkbox>{{t 'resources.target.types.ssh'}}</DD.Checkbox>
-        </S.Dropdown>
+        <S.Generic>
+          <Dropdown
+            @name={{t 'resources.target.titles.active-sessions'}}
+            @itemOptions={{this.availableSessionOptions}}
+            @checkedItems={{this.availableSessions}}
+            @applyFilter={{fn this.applyFilter 'availableSessions'}}
+          />
+        </S.Generic>
+        {{! TODO: Target type filter}}
       </Hds::SegmentedGroup>
       {{#if @model.targets}}
         <Hds::Table
@@ -176,7 +175,11 @@
           />
           <A.Body
             @text={{t
-              'resources.target.messages.no-search-results.description'
+              (if
+                this.search
+                'resources.target.messages.no-search-results.description'
+                'resources.target.messages.no-filter-results.description'
+              )
               query=this.search
             }}
           />
@@ -204,7 +207,7 @@
         </M.Header>
         <M.Body>
           <Hds::Table
-            @model={{this.availableSessions}}
+            @model={{this.sortedTargetSessions}}
             @columns={{array
               (hash label=(t 'form.id.label'))
               (hash label=(t 'form.started.label'))
