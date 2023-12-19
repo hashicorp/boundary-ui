@@ -129,7 +129,7 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'targets', 'sessions');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
   });
 
   test('visiting index', async function (assert) {
@@ -182,21 +182,14 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(3);
     this.stubClientDaemonSearch(
       'targets',
-      'targets',
-      'targets',
-      'targets',
-      'targets',
-      'targets',
-      'targets',
+      'sessions',
       'targets',
       'sessions',
+      'targets',
       'sessions',
+      'targets',
       'sessions',
-      'sessions',
-      'sessions',
-      'sessions',
-      'sessions',
-      'sessions',
+      'targets',
     );
     await visit(urls.targets);
 
@@ -213,6 +206,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
+    this.stubClientDaemonSearch();
 
     await visit(urls.targets);
     await a11yAudit();
@@ -233,7 +227,8 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
     this.server.db.targets.remove();
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.server.db.sessions.remove();
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
 
     await visit(urls.targets);
 

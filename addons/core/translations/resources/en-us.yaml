@@ -567,6 +567,8 @@ target:
     no-search-results:
       title: No results found
       description: Sorry, we weren't able to find any targets for "{query}".
+    no-filter-results:
+      description: Sorry, we weren’t able to find any targets within the filtered parameters.
   titles:
     new: New Target
     active-sessions: Active sessions
