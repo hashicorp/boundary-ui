@@ -21,7 +21,7 @@
             @name={{t 'resources.target.title'}}
             @itemOptions={{this.availableTargets}}
             @checkedItems={{this.targets}}
-            @applyFilter={{this.applyTargetFilter}}
+            @applyFilter={{fn this.applyFilter 'targets'}}
             @isSearchable={{true}}
             @listPosition='bottom-left'
             as |FD selectItem itemOptions|

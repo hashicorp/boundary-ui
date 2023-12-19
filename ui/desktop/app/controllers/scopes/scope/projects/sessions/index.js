@@ -55,7 +55,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    * @param {object} selectedTargets
    */
   @action
-  applyTargetFilter(selectedTargets) {
-    this.targets = [...selectedTargets];
+  applyFilter(filter, selectedTargets) {
+    this[filter] = [...selectedTargets];
   }
 }
