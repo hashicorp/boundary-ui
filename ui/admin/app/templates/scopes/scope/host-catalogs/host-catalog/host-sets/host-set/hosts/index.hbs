@@ -82,13 +82,13 @@
                 {{#if (can 'removeHosts hostSet' @model.hostSet)}}
                   <Hds::Dropdown as |dd|>
                     <dd.ToggleIcon
+                      data-test-host-set-hosts-dropdown-toggle
                       @text={{t 'actions.manage'}}
                       @icon='more-horizontal'
                       @hasChevron={{false}}
-                      data-test-host-set-hosts-dropddown-toggle
                     />
                     <dd.Interactive
-                      data-test-host-set-hosts-dropddown-remove-host
+                      data-test-host-set-hosts-dropdown-remove-host
                       @text={{t 'actions.remove'}}
                       @color='critical'
                       {{on
