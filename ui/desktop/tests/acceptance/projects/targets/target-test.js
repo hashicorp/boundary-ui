@@ -124,13 +124,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch(
-      'targets',
-      'sessions',
-      'sessions',
-      'sessions',
-      'targets',
-    );
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
   });
 
   test('user can connect to a target with an address', async function (assert) {
@@ -142,6 +136,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
+    this.stubClientDaemonSearch();
 
     await visit(urls.target);
 
@@ -189,6 +184,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   test('user can retry on error', async function (assert) {
     assert.expect(1);
     this.ipcStub.withArgs('cliExists').rejects();
+    this.stubClientDaemonSearch();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
