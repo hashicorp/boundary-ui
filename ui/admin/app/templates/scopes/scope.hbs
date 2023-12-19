@@ -60,7 +60,15 @@
               {{t 'resources.storage-bucket.title_plural'}}
             </nav.link>
           {{/if}}
-
+          {{#if (can 'navigate scope' @model collection='policies')}}
+            <nav.link @route='scopes.scope.storage-policies'>
+              <Rose::Icon
+                @name='flight-icons/svg/hourglass-16'
+                @size='medium'
+              />
+              {{t 'resources.storage-policy.title_plural'}}
+            </nav.link>
+          {{/if}}
           {{#if
             (and
               (can 'navigate worker' @model collection='workers')
@@ -87,7 +95,18 @@
             <Rose::Icon @name='flight-icons/svg/grid-16' @size='medium' />
             {{t 'resources.project.title_plural'}}
           </nav.link>
+
+          {{#if (can 'navigate scope' @model collection='policies')}}
+            <nav.link @route='scopes.scope.storage-policies'>
+              <Rose::Icon
+                @name='flight-icons/svg/hourglass-16'
+                @size='medium'
+              />
+              {{t 'resources.storage-policy.title_plural'}}
+            </nav.link>
+          {{/if}}
         </Rose::Nav::Sidebar>
+
       {{/if}}
 
       {{#if @model.isProject}}
