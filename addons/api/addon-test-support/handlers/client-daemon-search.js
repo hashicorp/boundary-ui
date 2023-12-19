@@ -1,4 +1,5 @@
 import sinon from 'sinon';
+import { typeOf } from '@ember/utils';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
@@ -23,6 +24,8 @@ import sinon from 'sinon';
  * @public
  */
 export default function setupStubs(hooks) {
+  let stubTypes = [];
+
   hooks.beforeEach(function () {
     const ipcService = this.owner.lookup('service:ipc');
     this.ipcStub = sinon.stub(ipcService, 'invoke');
@@ -42,12 +45,24 @@ export default function setupStubs(hooks) {
      * @param types
      */
     this.stubClientDaemonSearch = (...types) => {
+      stubTypes = types;
+
       types.forEach((type, i) => {
+        let models;
+        let resourceName;
+        if (typeOf(type) === 'object') {
+          models = type.func();
+          resourceName = type.resource;
+        } else {
+          models = this.server.schema[type].all().models;
+          resourceName = type;
+        }
+
         this.ipcStub
           .withArgs('searchClientDaemon')
           .onCall(i)
           .returns({
-            [type]: this.server.schema[type]?.all().models.map((model) => {
+            [resourceName]: models.map((model) => {
               // Use internal serializer to serialize the model correctly
               // according to our mirage serializers
               const modelData =
@@ -63,6 +78,25 @@ export default function setupStubs(hooks) {
   });
 
   hooks.afterEach(function () {
+    // Verify the number of mocks we set up match with how
+    // many times the client daemon was called with
+    sinon.assert.callCount(
+      this.ipcStub.withArgs('searchClientDaemon'),
+      stubTypes.length,
+    );
+
+    stubTypes.forEach((type, i) => {
+      // Assert that the stub was called with the resource we're trying to mock
+      // so we don't mistakenly mock the wrong resource
+      const ipcCall = this.ipcStub.withArgs('searchClientDaemon').getCall(i);
+      let resource = type;
+      if (typeOf(type) === 'object') {
+        resource = type.resource;
+      }
+
+      sinon.assert.match(ipcCall.args[1], { resource });
+    });
+
     sinon.restore();
   });
 }

@@ -143,6 +143,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
+    this.stubClientDaemonSearch();
     await visit(urls.targets);
     await a11yAudit();
 
@@ -175,7 +176,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('visiting targets list view with no targets', async function (assert) {
     this.server.db.targets.remove();
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.server.db.sessions.remove();
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -187,7 +189,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user cannot navigate to a target without proper authorization', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -216,7 +218,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -249,7 +251,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user can connect without target read permissions', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('targets');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -275,7 +277,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
-    this.stubClientDaemonSearch('targets', 'targets');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -319,8 +321,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
       'targets',
       'sessions',
       'targets',
-      'targets',
-      '',
+      {
+        resource: 'sessions',
+        func: () => [],
+      },
       'targets',
     );
     await visit(urls.projects);
