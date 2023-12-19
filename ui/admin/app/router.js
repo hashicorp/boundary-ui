@@ -159,6 +159,15 @@ Router.map(function () {
           function () {},
         );
       });
+
+      this.route('storage-policies', function () {
+        this.route('new');
+        this.route(
+          'storage-policy',
+          { path: ':storage_policy_id' },
+          function () {},
+        );
+      });
     });
   });
 
