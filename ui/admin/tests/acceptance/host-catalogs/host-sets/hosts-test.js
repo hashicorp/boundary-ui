@@ -99,8 +99,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
 
-    await click('[data-test-host-set-hosts-dropddown-toggle]');
-    await click('[data-test-host-set-hosts-dropddown-remove-host]');
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
@@ -128,8 +128,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
-    await click('[data-test-host-set-hosts-dropddown-toggle]');
-    await click('[data-test-host-set-hosts-dropddown-remove-host]');
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.ok(find('[role="alert"]'));
   });
 
@@ -172,8 +172,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('[data-test-host-set-hosts-dropddown-toggle]');
-    await click('[data-test-host-set-hosts-dropddown-remove-host]');
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.strictEqual(findAll('tbody tr').length, count - 1);
     await click('.rose-layout-page-actions a:nth-child(2)');
     assert.strictEqual(currentURL(), urls.addHosts);
