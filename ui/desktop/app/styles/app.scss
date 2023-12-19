@@ -702,15 +702,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   .hds-table {
     margin-bottom: 1rem;
   }
-
-  .filters-applied {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    > * + * {
-      margin-left: 0.5rem;
-    }
-  }
 }
 
 // Flyout with table

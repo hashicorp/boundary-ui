@@ -111,6 +111,23 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     return this.scopes.length > 0;
   }
 
+  get tags() {
+    const tags = {
+      scopes: [],
+      availableSessions: [],
+      type: [],
+    };
+
+    if (this.scopes.length > 0) {
+      tags.scopes = this.scopes.map((scope) => ({
+        id: scope,
+        name: this.scopeDisplayName(scope),
+      }));
+    }
+
+    return tags;
+  }
+
   // =methods
 
   /**
