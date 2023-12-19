@@ -10,7 +10,6 @@ import generateId from '../helpers/id';
 
 export default factory.extend({
   id: () => generateId('pst_'),
-  type: 'storage',
 
   authorized_actions: () =>
     permissions.authorizedActionsFor('storage-policy') || [

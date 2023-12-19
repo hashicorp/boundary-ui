@@ -14,4 +14,9 @@ export default class StoragePolicySerializer extends ApplicationSerializer {
   serialize() {
     return super.serialize(...arguments);
   }
+
+  normalize(typeClass, hash, ...rest) {
+    const normalizedHash = structuredClone(hash);
+    return super.normalize(typeClass, normalizedHash, ...rest);
+  }
 }
