@@ -40,7 +40,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const from = transition.from?.name;
 
     const filters = {
-      user_id: { equals: this.session.data.authenticated.user_id },
+      user_id: [{ equals: this.session.data.authenticated.user_id }],
       target_id: [],
     };
     targets.forEach((target) => {
@@ -58,7 +58,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
         {
           query: {
             filters: {
-              user_id: { equals: this.session.data.authenticated.user_id },
+              user_id: [{ equals: this.session.data.authenticated.user_id }],
             },
           },
         },

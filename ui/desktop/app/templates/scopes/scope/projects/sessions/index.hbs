@@ -14,7 +14,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if this.sortedSessions}}
+    {{#if (or @model.sessions @model.allSessions)}}
       <Hds::SegmentedGroup as |S|>
         <S.Generic>
           <Dropdown
@@ -41,129 +41,124 @@
           />
         </S.Dropdown>
       </Hds::SegmentedGroup>
-
-      <Hds::Table
-        @model={{this.sortedSessions}}
-        @columns={{array
-          (hash label=(t 'form.id.label'))
-          (hash label=(t 'resources.target.title'))
-          (hash label=(t 'form.proxy_url.label'))
-          (hash label=(t 'form.started.label'))
-          (hash label=(t 'form.status.label'))
-          (hash label='')
-        }}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if B.data.isAvailable}}
-                <Hds::Badge
-                  @text={{t 'resources.session.title'}}
-                  @icon='entry-point'
-                  @isIconOnly={{true}}
-                  @color='success'
-                />
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <LinkTo
-                    @route='scopes.scope.projects.sessions.session.index'
-                    @model={{B.data.id}}
-                    data-test-session-detail-link
-                  >
-                    <code>{{B.data.id}}</code>
-                  </LinkTo>
-                </Copyable>
-              {{else}}
-                <Hds::Badge
-                  @text={{t 'resources.session.title'}}
-                  @icon='entry-point'
-                  @isIconOnly={{true}}
-                />
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code data-test-session-id-copy>{{B.data.id}}</code>
-                </Copyable>
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              {{B.data.target.displayName}}
-            </B.Td>
-            {{!
-              Two if's here because:
-              1) Local proxy info is only relevant if the session is
-                  active or pending (aka isAvailable).  Once the session
-                  is canceled or in the process thereof, the local proxy
-                  may no longer be used.
-              2) The session actually has proxy information associated
-                  with it.  It's possible for the user to start sessions
-                  from other devices (or even another tab), in which case we
-                  won't have the local proxy info available here.
-            }}
-            <B.Td>
-              {{#if B.data.isAvailable}}
-                {{#if B.data.proxy}}
+      {{#if @model.sessions}}
+        <Hds::Table
+          @model={{this.sortedSessions}}
+          @columns={{array
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'resources.target.title'))
+            (hash label=(t 'form.proxy_url.label'))
+            (hash label=(t 'form.started.label'))
+            (hash label=(t 'form.status.label'))
+            (hash label='')
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if B.data.isAvailable}}
+                  <Hds::Badge
+                    @text={{t 'resources.session.title'}}
+                    @icon='entry-point'
+                    @isIconOnly={{true}}
+                    @color='success'
+                  />
                   <Copyable
-                    @text={{B.data.proxy}}
+                    @text={{B.data.id}}
                     @buttonText={{t 'actions.copy-to-clipboard'}}
                     @acknowledgeText={{t 'states.copied'}}
                   >
-                    <code>{{B.data.proxy}}</code>
+                    <LinkTo
+                      @route='scopes.scope.projects.sessions.session.index'
+                      @model={{B.data.id}}
+                      data-test-session-detail-link
+                    >
+                      <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+                    </LinkTo>
+                  </Copyable>
+                {{else}}
+                  <Hds::Badge
+                    @text={{t 'resources.session.title'}}
+                    @icon='entry-point'
+                    @isIconOnly={{true}}
+                  />
+                  <Copyable
+                    @text={{B.data.id}}
+                    @buttonText={{t 'actions.copy-to-clipboard'}}
+                    @acknowledgeText={{t 'states.copied'}}
+                  >
+                    <Hds::Text::Code
+                      data-test-session-id-copy
+                    >{{B.data.id}}</Hds::Text::Code>
                   </Copyable>
                 {{/if}}
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              <time datetime={{format-date-iso B.data.created_time}}>
-                {{format-date-iso-human B.data.created_time}}
-              </time>
-            </B.Td>
-            <B.Td>
-              <SessionStatus @model={{B.data}} />
-            </B.Td>
-            <B.Td>
-              {{#if (can 'cancel session' B.data)}}
-                <Hds::Button
-                  @text={{t 'actions.cancel'}}
-                  @color='secondary'
-                  {{on 'click' (route-action 'cancelSession' B.data)}}
-                  data-test-session-cancel-button
-                />
-              {{/if}}
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-
-    {{else if
-      (has-resource-filter-selections
-        'scopes.scope.projects.sessions.index' 'status' 'project'
-      )
-    }}
-      <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.no-results'}} as |message|>
-          <message.description>
-            {{t 'descriptions.no-results'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
+              </B.Td>
+              <B.Td>
+                {{B.data.target.displayName}}
+              </B.Td>
+              {{!
+                Two if's here because:
+                1) Local proxy info is only relevant if the session is
+                    active or pending (aka isAvailable).  Once the session
+                    is canceled or in the process thereof, the local proxy
+                    may no longer be used.
+                2) The session actually has proxy information associated
+                    with it.  It's possible for the user to start sessions
+                    from other devices (or even another tab), in which case we
+                    won't have the local proxy info available here.
+              }}
+              <B.Td>
+                {{#if B.data.isAvailable}}
+                  {{#if B.data.proxy}}
+                    <Copyable
+                      @text={{B.data.proxy}}
+                      @buttonText={{t 'actions.copy-to-clipboard'}}
+                      @acknowledgeText={{t 'states.copied'}}
+                    >
+                      <Hds::Text::Code>{{B.data.proxy}}</Hds::Text::Code>
+                    </Copyable>
+                  {{/if}}
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                <time datetime={{format-date-iso B.data.created_time}}>
+                  {{format-date-iso-human B.data.created_time}}
+                </time>
+              </B.Td>
+              <B.Td>
+                <SessionStatus @model={{B.data}} />
+              </B.Td>
+              <B.Td>
+                {{#if (can 'cancel session' B.data)}}
+                  <Hds::Button
+                    @text={{t 'actions.cancel'}}
+                    @color='secondary'
+                    {{on 'click' (route-action 'cancelSession' B.data)}}
+                    data-test-session-cancel-button
+                  />
+                {{/if}}
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <Hds::ApplicationState data-test-no-session-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t 'descriptions.no-filter-results' resource='sessions'}}
+          />
+        </Hds::ApplicationState>
+      {{/if}}
     {{else}}
-      <Rose::Layout::Centered>
-        <Rose::Message
+      <Hds::ApplicationState data-test-no-sessions as |A|>
+        <A.Header
           @title={{t 'resources.session.messages.none-friendly.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.session.messages.none-friendly.description'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
+        />
+        <A.Body
+          @text={{t 'resources.session.messages.none-friendly.description'}}
+        />
+      </Hds::ApplicationState>
     {{/if}}
   </page.body>
 

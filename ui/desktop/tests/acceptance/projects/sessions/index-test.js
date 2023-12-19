@@ -28,6 +28,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   setupMirage(hooks);
   setupStubs(hooks);
 
+  const APP_STATE_TITLE =
+    '[data-test-no-sessions] .hds-application-state__title';
+
   const instances = {
     scopes: {
       global: null,
@@ -120,6 +123,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
+    this.stubClientDaemonSearch();
 
     await visit(urls.sessions);
     await a11yAudit();
@@ -146,7 +150,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await a11yAudit();
 
-    assert.dom('.rose-message-title').hasText('No Sessions Available');
+    assert.dom(APP_STATE_TITLE).hasText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
