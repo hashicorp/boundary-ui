@@ -26,14 +26,25 @@
             @listPosition='bottom-left'
           />
         </S.Generic>
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton @color='secondary' @text={{t 'form.status.label'}} />
-          {{#each this.sessionStatusTypes as |status|}}
-            <DD.Checkbox>{{t
-                (concat 'resources.session.status.' status)
-              }}</DD.Checkbox>
-          {{/each}}
-        </S.Dropdown>
+        <S.Generic>
+          <Dropdown
+            @name={{t 'form.status.label'}}
+            @itemOptions={{this.sessionStatusTypes}}
+            @checkedItems={{this.status}}
+            @applyFilter={{fn this.applyFilter 'status'}}
+            as |FD selectItem itemOptions|
+          >
+            {{#each itemOptions as |status|}}
+              <FD.Checkbox
+                @value={{status}}
+                checked={{includes status this.status}}
+                {{on 'change' selectItem}}
+              >
+                {{t (concat 'resources.session.status.' status)}}
+              </FD.Checkbox>
+            {{/each}}
+          </Dropdown>
+        </S.Generic>
         <S.Dropdown as |DD|>
           <DD.ToggleButton
             @color='secondary'
@@ -95,7 +106,11 @@
                 {{/if}}
               </B.Td>
               <B.Td>
-                {{B.data.target.displayName}}
+                {{#if B.data.target.name}}
+                  {{B.data.target.name}}
+                {{else}}
+                  {{B.data.target.id}}
+                {{/if}}
               </B.Td>
               {{!
                 Two if's here because:
@@ -142,6 +157,11 @@
             </B.Tr>
           </:body>
         </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
       {{else}}
         <Hds::ApplicationState data-test-no-session-results as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />

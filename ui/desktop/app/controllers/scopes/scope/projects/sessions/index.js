@@ -14,9 +14,17 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
   // =attributes
 
-  queryParams = [{ targets: { type: 'array' } }];
+  queryParams = [
+    { targets: { type: 'array' } },
+    { status: { type: 'array' } },
+    'page',
+    'pageSize',
+  ];
 
   @tracked targets = [];
+  @tracked status = [];
+  @tracked page = 1;
+  @tracked pageSize = 10;
 
   // =methods
 

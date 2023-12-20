@@ -577,6 +577,7 @@ target:
     remove-address: Remove address and save
     enable-session-recording: Enable Session Recording
     enable-recording: Enable recording
+    view-more-sessions: View more sessions
   types:
     tcp: Generic TCP
     ssh: SSH

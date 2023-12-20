@@ -93,14 +93,24 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   /**
    * Returns active and pending sessions associated with a target
-   * sorted descending by created time.
+   * sorted descending by created time with a limit of 10.
    * @returns {object}
    */
   get sortedTargetSessions() {
-    const sessions = this.selectedTarget.sessions.filter(
-      (session) => session.isAvailable,
-    );
-    return orderBy(sessions, 'created_time', 'desc');
+    return orderBy(
+      this.selectedTarget.availableSessions,
+      'created_time',
+      'desc',
+    ).slice(0, 10);
+  }
+
+  /**
+   * Returns true when there are more than 10 active or pending sessions
+   * associated with the selected target.
+   * @returns {boolean}
+   */
+  get showFlyoutViewMoreLink() {
+    return this.selectedTarget.availableSessions.length > 10;
   }
 
   /**
