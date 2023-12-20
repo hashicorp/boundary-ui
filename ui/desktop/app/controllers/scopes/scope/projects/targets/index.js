@@ -11,6 +11,10 @@ import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import orderBy from 'lodash/orderBy';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -111,6 +115,18 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get showFlyoutViewMoreLink() {
     return this.selectedTarget.availableSessions.length > 10;
+  }
+
+  /**
+   * Returns query params for filters that should be present when user
+   * clicks on the link to navigate to sessions route.
+   * @returns {object}
+   */
+  get viewMoreLinkQueryParams() {
+    return {
+      targets: [this.selectedTarget.id],
+      status: [STATUS_SESSION_ACTIVE, STATUS_SESSION_PENDING],
+    };
   }
 
   /**

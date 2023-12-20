@@ -259,10 +259,7 @@
             <Hds::Link::Standalone
               @text={{t 'resources.target.actions.view-more-sessions'}}
               @route='scopes.scope.projects.sessions'
-              @query={{hash
-                targets=(array this.selectedTarget.id)
-                status=(array 'active' 'pending')
-              }}
+              @query={{this.viewMoreLinkQueryParams}}
               @icon='arrow-right'
               @iconPosition='trailing'
             />
