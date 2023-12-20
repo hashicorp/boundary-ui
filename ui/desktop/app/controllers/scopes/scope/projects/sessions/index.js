@@ -30,16 +30,15 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
   /**
    * Returns targets that are associated will all sessions the user has access to
-   * with a limit of 100 targets rendered.
    * @returns {[TargetModel]}
    */
   get availableTargets() {
     const uniqueSessionTargetIds = new Set(
       this.model.allSessions.map((session) => session.target_id),
     );
-    return this.model.allTargets
-      .filter((target) => uniqueSessionTargetIds.has(target.id))
-      .slice(0, 100);
+    return this.model.allTargets.filter((target) =>
+      uniqueSessionTargetIds.has(target.id),
+    );
   }
 
   /**
