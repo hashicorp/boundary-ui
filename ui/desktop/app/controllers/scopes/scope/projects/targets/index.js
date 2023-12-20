@@ -86,8 +86,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   get availableSessionOptions() {
     return [
-      { id: 'yes', displayName: this.intl.t('actions.yes') },
-      { id: 'no', displayName: this.intl.t('actions.no') },
+      { id: 'yes', name: this.intl.t('actions.yes') },
+      { id: 'no', name: this.intl.t('actions.no') },
     ];
   }
 
