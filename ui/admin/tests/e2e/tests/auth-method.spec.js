@@ -28,7 +28,7 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Verify new auth-method can be created and assigned to users', async ({
+test('Verify new auth-method can be created and assigned to users @ce @ent @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');

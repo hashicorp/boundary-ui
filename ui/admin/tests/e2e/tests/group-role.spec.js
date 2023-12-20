@@ -27,7 +27,7 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Verify a new role can be created and associated with a group', async ({
+test('Verify a new role can be created and associated with a group @ce @ent @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
