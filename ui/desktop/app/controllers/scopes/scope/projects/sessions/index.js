@@ -4,6 +4,7 @@
  */
 
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import orderBy from 'lodash/orderBy';
@@ -11,6 +12,8 @@ import { statusTypes } from 'api/models/session';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =services
+
+  @service intl;
 
   // =attributes
 
@@ -53,8 +56,11 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    * Returns all status types for sessions
    * @returns {[string]}
    */
-  get sessionStatusTypes() {
-    return statusTypes;
+  get sessionStatusOptions() {
+    return statusTypes.map((status) => ({
+      id: status,
+      name: this.intl.t(`resources.session.status.${status}`),
+    }));
   }
 
   /**
