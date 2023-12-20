@@ -54,7 +54,10 @@
               <HostCatalogTypeBadge @model={{B.data}} />
             </B.Td>
             <B.Td>
-              <Hds::Copy::Snippet @textToCopy={{B.data.id}} />
+              <Hds::Copy::Snippet
+                @color='secondary'
+                @textToCopy={{B.data.id}} 
+              />
             </B.Td>
           </B.Tr>
         </:body>
