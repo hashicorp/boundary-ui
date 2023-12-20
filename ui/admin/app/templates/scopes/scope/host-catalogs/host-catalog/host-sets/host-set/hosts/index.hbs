@@ -70,9 +70,10 @@
                 <HostCatalogTypeBadge @model={{host}} />
               </B.Td>
               <B.Td>
-                <Hds::Copy::Snippet @textToCopy={{host.id}} @color='secondary'>
-                  <Hds::Text::Code>{{host.id}}</Hds::Text::Code>
-                </Hds::Copy::Snippet>
+                <Hds::Copy::Snippet
+                  @textToCopy={{host.id}}
+                  @color='secondary'
+                />
               </B.Td>
               <B.Td>
                 {{#if (can 'removeHosts hostSet' @model.hostSet)}}
