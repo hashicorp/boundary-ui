@@ -22,47 +22,45 @@
 
   <page.body>
     {{#if @model.hostSets}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          </header.row>
-        </table.header>
 
-        <table.body as |body|>
-          {{#each @model.hostSets as |hostSet|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if (can 'read model' hostSet)}}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
-                    @model={{hostSet.id}}
-                  >
-                    {{hostSet.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{hostSet.displayName}}
-                {{/if}}
-                <p>{{hostSet.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <HostCatalogTypeBadge @model={{hostSet}} />
-              </row.cell>
-              <row.cell>
-                <Copyable
-                  @text={{hostSet.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
+      <Hds::Table
+        @model={{@model.hostSets}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'form.id.label'))
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read model' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set'
+                  @model={{B.data.id}}
                 >
-                  <code>{{hostSet.id}}</code>
-                </Copyable>
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.displayName}}
+                </Hds::Text::Body>
+              {{/if}}
+              <Hds::Text::Body @tag='p'>
+                {{B.data.description}}
+              </Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <HostCatalogTypeBadge @model={{B.data}} />
+            </B.Td>
+            <B.Td>
+              <Hds::Copy::Snippet @textToCopy={{B.data.id}}>
+                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+              </Hds::Copy::Snippet>
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
 
     {{else}}
       <Rose::Layout::Centered>
