@@ -108,9 +108,13 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {boolean}
    */
   get hasFilters() {
-    return this.scopes.length > 0;
+    return this.scopes.length > 0 || this.availableSessions.length > 0;
   }
 
+  /**
+   * Returns object of tags to be used for displaying filters
+   * @returns {object}
+   */
   get tags() {
     const tags = {
       scopes: [],
@@ -122,6 +126,15 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
       tags.scopes = this.scopes.map((scope) => ({
         id: scope,
         name: this.scopeDisplayName(scope),
+      }));
+    }
+
+    if (this.availableSessions.length > 0) {
+      tags.availableSessions = this.availableSessions.map((option) => ({
+        id: option,
+        name: this.availableSessionOptions.find(
+          (availableSessionOption) => availableSessionOption.id === option,
+        ).displayName,
       }));
     }
 
@@ -238,25 +251,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   scopeDisplayName(scopeId) {
     const scope = this.model.projects.find((project) => project.id === scopeId);
     return scope.displayName;
-  }
-
-  /**
-   * Clears a single scope from the scopes query param
-   * @param {string} scopeId
-   */
-  @action
-  removeScopeFilter(scopeId) {
-    this.scopes = this.scopes.filter((scope) => scope !== scopeId);
-  }
-
-  /**
-   * Clears all filters by resetting scopes,
-   * active_session, and type query params
-   */
-  @action
-  clearAllFilters() {
-    // TODO: add active_session and type query params once added
-    this.scopes = [];
   }
 
   @action

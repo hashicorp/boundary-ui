@@ -8,6 +8,7 @@ export default class RoseFilterTagsIndexComponent extends Component {
   @service router;
 
   // =attributes
+
   get tags() {
     const tags = [];
 
@@ -24,22 +25,25 @@ export default class RoseFilterTagsIndexComponent extends Component {
   // =methods
 
   /**
-   * Clears a single filter
+   * Clears a single filter from queryParams for current route
    * @param {string} filterName
    */
   @action
   removeFilter(filterName) {
-    const matchedQueryParam = this.findQueryParamByName(filterName);
+    const matchedTag = this.findTagByName(filterName);
     const queryParams = { ...this.router.currentRoute.queryParams };
 
-    for (const key in matchedQueryParam) {
-      if (queryParams[key] !== undefined && matchedQueryParam[key]?.id) {
-        const matchedId = matchedQueryParam[key].id;
-        const paramValue = queryParams[key];
+    for (const key in queryParams) {
+      const paramValue = queryParams[key];
 
-        if (typeof paramValue === 'string') {
-          queryParams[key] = JSON.parse(paramValue);
-        }
+      if (typeof paramValue === 'string') {
+        queryParams[key] = JSON.parse(paramValue);
+      }
+    }
+
+    for (const key in matchedTag) {
+      if (queryParams[key] !== undefined && matchedTag[key]?.id) {
+        const matchedId = matchedTag[key].id;
 
         if (Array.isArray(queryParams[key])) {
           queryParams[key] = queryParams[key].filter(
@@ -49,12 +53,16 @@ export default class RoseFilterTagsIndexComponent extends Component {
       }
     }
 
-    this.router.replaceWith({ queryParams: queryParams });
+    this.router.replaceWith({ queryParams });
   }
 
+  /**
+   * Clears all filters based on queryParams from tags keys
+   */
   @action
   clearAllFilters() {
-    const allowList = ['scopes', 'availableSession', 'type'];
+    const allowList = Object.keys(this.args.tags);
+
     const queryParams = { ...this.router.currentRoute.queryParams };
 
     for (const key in queryParams) {
@@ -63,19 +71,19 @@ export default class RoseFilterTagsIndexComponent extends Component {
       }
     }
 
-    this.router.replaceWith({ queryParams: queryParams });
+    this.router.replaceWith({ queryParams });
   }
 
-  findQueryParamByName(filterName) {
-    const matchedObject = {};
+  findTagByName(filterName) {
+    const matchedTag = {};
 
     Object.entries(this.args.tags).forEach(([key, value]) => {
       const foundTag = value.find((tag) => tag.name === filterName);
       if (foundTag) {
-        matchedObject[key] = foundTag;
+        matchedTag[key] = foundTag;
       }
     });
 
-    return matchedObject;
+    return matchedTag;
   }
 }
