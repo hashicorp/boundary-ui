@@ -40,11 +40,7 @@
         checked={{includes itemOption.id @checkedItems}}
         {{on 'change' this.selectItem}}
       >
-        {{#if itemOption.name}}
-          {{itemOption.name}}
-        {{else}}
-          {{itemOption.id}}
-        {{/if}}
+        {{#if itemOption.name itemOption.name itemOption.id}}
       </DD.Checkbox>
     {{/each}}
   {{/if}}
