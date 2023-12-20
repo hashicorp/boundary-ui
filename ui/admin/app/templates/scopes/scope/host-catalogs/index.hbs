@@ -55,21 +55,19 @@
                   {{B.data.displayName}}
                 </LinkTo>
               {{else}}
-                {{B.data.displayName}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.displayName}}
+                </Hds::Text::Body>
               {{/if}}
-              <p>{{B.data.description}}</p>
+              <Hds::Text::Body @tag='p'>{{B.data.description}}</Hds::Text::Body>
             </B.Td>
             <B.Td>
               <HostCatalogTypeBadge @model={{B.data}} />
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
+              <Hds::Copy::Snippet @color='secondary' @textToCopy={{B.data.id}}>
                 <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-              </Copyable>
+              </Hds::Copy::Snippet>
             </B.Td>
           </B.Tr>
         </:body>
