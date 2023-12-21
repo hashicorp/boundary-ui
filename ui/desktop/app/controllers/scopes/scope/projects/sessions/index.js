@@ -20,12 +20,14 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   queryParams = [
     { targets: { type: 'array' } },
     { status: { type: 'array' } },
+    { scopes: { type: 'array' } },
     'page',
     'pageSize',
   ];
 
   @tracked targets = [];
   @tracked status = [];
+  @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
 
@@ -64,6 +66,19 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   }
 
   /**
+   * Returns scopes that are associated with all sessions the user has access to
+   * @returns {[ScopeModel]}
+   */
+  get availableScopes() {
+    const uniqueSessionScopeIds = new Set(
+      this.model.allSessions.map((session) => session.scope.id),
+    );
+    return this.model.projects.filter((project) =>
+      uniqueSessionScopeIds.has(project.id),
+    );
+  }
+
+  /**
    * Sets the query params to value of selectedItems
    * to trigger a query and closes the dropdown
    * @param {object} selectedTargets
@@ -71,5 +86,6 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   @action
   applyFilter(filter, selectedItems) {
     this[filter] = [...selectedItems];
+    this.page = 1;
   }
 }

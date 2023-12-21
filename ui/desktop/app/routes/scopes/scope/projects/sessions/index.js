@@ -23,6 +23,10 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    scopes: {
+      refreshModel: true,
+      replace: true,
+    },
     page: {
       refreshModel: true,
     },
@@ -46,19 +50,23 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    *
    * @return {Promise<{sessions: [SessionModel], allSessions: [SessionModel]}>}
    */
-  async model({ targets, status, page, pageSize }, transition) {
+  async model({ targets, status, scopes, page, pageSize }, transition) {
     const from = transition.from?.name;
 
     const filters = {
       user_id: [{ equals: this.session.data.authenticated.user_id }],
       target_id: [],
       status: [],
+      scope_id: [],
     };
     targets.forEach((target) => {
       filters.target_id.push({ equals: target });
     });
     status.forEach((item) => {
       filters.status.push({ equals: item });
+    });
+    scopes.forEach((scope) => {
+      filters.scope_id.push({ equals: scope });
     });
 
     const queryOptions = {
@@ -87,8 +95,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       this.allTargets = await this.store.query('target', {}, options);
     }
 
+    const projects = this.modelFor('scopes.scope.projects');
+
     return {
       sessions,
+      projects,
       allSessions: this.allSessions,
       allTargets: this.allTargets,
       totalItems,

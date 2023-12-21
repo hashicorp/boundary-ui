@@ -78,7 +78,7 @@ module('Integration | Component | dropdown/index', function (hooks) {
   test('it calls applyFilter with the correct arguments', async function (assert) {
     assert.expect(1);
     this.set('applyFilter', (selectedItems) => {
-      assert.deepEqual(selectedItems, ['1', '2']);
+      assert.deepEqual(selectedItems, ['2']);
     });
 
     await render(hbs`<Dropdown

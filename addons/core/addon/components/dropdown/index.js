@@ -11,7 +11,7 @@ import { debounce } from 'core/decorators/debounce';
 export default class DropdownComponent extends Component {
   // =attributes
 
-  @tracked selectedItems = this.args.checkedItems;
+  @tracked selectedItems = [];
   @tracked searchTerm;
 
   /**
