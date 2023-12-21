@@ -63,7 +63,7 @@
         {{! TODO: Target type filter}}
       </Hds::SegmentedGroup>
       {{#if this.hasFilters}}
-        <Rose::FilterTags @tags={{this.tags}} />
+        <FilterTags @tags={{this.tags}} />
       {{/if}}
       {{#if @model.targets}}
         <Hds::Table
