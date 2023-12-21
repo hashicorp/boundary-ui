@@ -13,11 +13,28 @@ export default class FilterTagsIndexComponent extends Component {
   get filters() {
     return Object.entries(this.args.filters).flatMap(([key, value]) => {
       assert(`Tags must be an array for key ${key}`, Array.isArray(value));
-      return value.map((item) => ({ id: item.id, name: item.name, type: key }));
+      const paramsSet = new Set(this.getCurrentQueryParams(key));
+      const filters = value.filter((item) => paramsSet.has(item.id));
+
+      return filters.map((item) => ({
+        id: item.id,
+        name: item.name,
+        type: key,
+      }));
     });
   }
 
   // =methods
+  getCurrentQueryParams(key) {
+    let queryParamValue;
+    try {
+      queryParamValue = JSON.parse(this.router.currentRoute.queryParams[key]);
+    } catch {
+      // We should never get an error as we are always asserting the queryParam to an array
+      queryParamValue = [];
+    }
+    return queryParamValue;
+  }
 
   /**
    * Clears a single filter from queryParams for current route
@@ -25,16 +42,7 @@ export default class FilterTagsIndexComponent extends Component {
    */
   @action
   removeFilter(tag) {
-    let queryParamValue;
-
-    try {
-      queryParamValue = JSON.parse(
-        this.router.currentRoute.queryParams[tag.type],
-      );
-    } catch {
-      // We should never get an error as we are always asserting the queryParam to an array
-      queryParamValue = [];
-    }
+    const queryParamValue = this.getCurrentQueryParams(tag.type);
 
     const queryParams = {
       [tag.type]: queryParamValue.filter((item) => item !== tag.id),

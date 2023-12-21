@@ -116,29 +116,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {object}
    */
   get filters() {
-    const filters = {
-      scopes: [],
-      availableSessions: [],
+    return {
+      scopes: this.model.projects,
+      availableSessions: this.availableSessionOptions,
       type: [],
     };
-
-    if (this.scopes.length > 0) {
-      filters.scopes = this.scopes.map((scope) => ({
-        id: scope,
-        name: this.scopeDisplayName(scope),
-      }));
-    }
-
-    if (this.availableSessions.length > 0) {
-      filters.availableSessions = this.availableSessions.map((option) => ({
-        id: option,
-        name: this.availableSessionOptions.find(
-          (availableSessionOption) => availableSessionOption.id === option,
-        ).name,
-      }));
-    }
-
-    return filters;
   }
 
   // =methods
@@ -240,17 +222,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const { value } = event.target;
     this.search = value;
     this.page = 1;
-  }
-
-  /**
-   * Takes the scopeId and returns the displayName of the scope
-   * @param {string} scopeId
-   * @returns {string}
-   */
-  @action
-  scopeDisplayName(scopeId) {
-    const scope = this.model.projects.find((project) => project.id === scopeId);
-    return scope.displayName;
   }
 
   @action
