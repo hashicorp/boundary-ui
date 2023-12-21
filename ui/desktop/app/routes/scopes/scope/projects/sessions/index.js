@@ -41,14 +41,9 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   // =methods
 
   /**
-   * Loads all sessions under current scope for the current user.
-   *
-   * NOTE:  previously, sessions were filtered only with API filter queries.
-   *        In an effort to offload processing from the controller, sessions
-   *        are now filtered on the client by projects and status,
-   *        while user_id filtering remains server side.
-   *
-   * @return {Promise<{sessions: [SessionModel], allSessions: [SessionModel]}>}
+   * Loads queried sessions, the total number of sessions, all sessions,
+   * all targets and all projects for filtering options for the current user.
+   * @return {Promise<{sessions: [SessionModel], projects: [ScopeModel], allSessions: [SessionModel], allTargets: [TargetModel], totalItems: number}>}
    */
   async model({ targets, status, scopes, page, pageSize }, transition) {
     const from = transition.from?.name;
