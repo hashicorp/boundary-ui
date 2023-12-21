@@ -3,7 +3,12 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Hds::Dropdown @height='314px' @onClose={{this.close}} as |DD|>
+<Hds::Dropdown
+  @height='314px'
+  @onClose={{this.close}}
+  @listPosition={{@listPosition}}
+  as |DD|
+>
   <DD.ToggleButton
     @color='secondary'
     @text={{@name}}
@@ -35,7 +40,7 @@
         checked={{includes itemOption.id @checkedItems}}
         {{on 'change' this.selectItem}}
       >
-        {{itemOption.displayName}}
+        {{if itemOption.name itemOption.name itemOption.id}}
       </DD.Checkbox>
     {{/each}}
   {{/if}}
