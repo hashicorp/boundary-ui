@@ -21,9 +21,9 @@ export default class PolicyObjectTransform extends Transform {
   }
 
   /**
-   * Serialize a policy object years format to days
+   * Serialize a policy object in years format to days
    * The API expects the policy deletion and retention information in days format
-   * We display this information in years to be in consistent with common regulation practises
+   * We display this information in years to be in consistent with common regulation practices
    * @param deserialized
    * @returns {object}
    */
