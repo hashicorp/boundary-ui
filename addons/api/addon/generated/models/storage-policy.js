@@ -45,20 +45,14 @@ export default class GeneratedStoragePolicyModel extends BaseModel {
   })
   version;
 
-  @attr('string', {
-    description:
-      'The scope id of this policy. This must be defined for policy creation, but\nis otherwise output only.',
-  })
-  scope_id;
-
-  @attr({
+  @attr('policy-object', {
     isNestedAttribute: true,
     description:
       'Days is the number of days for which a session recording will be retained.',
   })
   retain_for;
 
-  @attr({
+  @attr('policy-object', {
     isNestedAttribute: true,
     description:
       'Days is the number of days for which a session recording will be automatically deleted.',
