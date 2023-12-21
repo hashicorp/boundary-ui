@@ -64,12 +64,12 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   }
 
   /**
-   * Sets the targets query param to value of selectedTargets
+   * Sets the query params to value of selectedItems
    * to trigger a query and closes the dropdown
    * @param {object} selectedTargets
    */
   @action
-  applyFilter(filter, selectedTargets) {
-    this[filter] = [...selectedTargets];
+  applyFilter(filter, selectedItems) {
+    this[filter] = [...selectedItems];
   }
 }
