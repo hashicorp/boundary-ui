@@ -1,7 +1,126 @@
 {{!
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
-}}{{!
-  Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
 }}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.policy.title_plural'}}
+    </h2>
+    {{!-- <p>{{t 'resources.policy.description'}}</p> --}}
+  </page.header>
+  <page.actions>
+    {{#if (can 'create model' this.scope collection='policies')}}
+      {{#if @model}}
+        <Hds::Button
+          @route='scopes.scope.policies.new'
+          @text={{t 'resources.policy.titles.new'}}
+        />
+      {{/if}}
+    {{/if}}
+  </page.actions>
+  <page.body>
+    {{#if @model}}
+      <Hds::Table
+        @valign='middle'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'resources.policy.titles.policy_name'))
+          (hash label=(t 'resources.policy.titles.scope'))
+          (hash label=(t 'resources.policy.titles.retain_for'))
+          (hash label=(t 'resources.policy.titles.delete_after'))
+          (hash label='')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read policy' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.policies.policy'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{B.data.scope.id}}
+            </B.Td>
+            <B.Td>{{B.data.retain_for.days}}</B.Td>
+            <B.Td>{{B.data.delete_after.days}}</B.Td>
+            <B.Td>
+              {{#if (can 'read policy' B.data)}}
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    @icon='more-horizontal'
+                    @text='Overflow Options'
+                    @hasChevron={{false}}
+                    @size='small'
+                  />
+
+                  <dd.Interactive
+                    @route='scopes.scope.policies.policy'
+                    @model={{B.data.id}}
+                    @text={{t 'actions.edit'}}
+                  />
+
+                  <dd.Separator />
+
+                  <dd.Interactive
+                    @text={{t 'resources.policy.actions.delete'}}
+                    @color='critical'
+                    {{on 'click' (route-action 'delete' B.data)}}
+                  />
+
+                </Hds::Dropdown>
+              {{/if}}
+
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.policy.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if (can 'list model' this.scope collection='policies')}}
+              {{t 'resources.policy.messages.none.description'}}
+            {{else if (can 'create model' this.scope collection='policies')}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.policy.title_plural')
+              }}
+            {{else}}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.policy.title_plural')
+              }}
+            {{/if}}
+          </message.description>
+          {{#if (can 'create model' this.scope collection='policies')}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.policies.new'
+              @text={{t 'resources.policy.messages.none.link'}}
+            />
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
+  </page.body>
+</Rose::Layout::Page>

@@ -4,5 +4,25 @@
  */
 
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default class ScopesScopePoliciesPolicyRoute extends Route {}
+export default class ScopesScopePoliciesPolicyRoute extends Route {
+  @service store;
+  @service can;
+  @service router;
+
+  // =methods
+
+  /**
+   * Load a storage bucket in current scope.
+   * @param {object} params
+   * @param {string} params.storage_bucket_id
+   * @return {Promise{StorageBucketModel}}
+   */
+  async model({ policy_id }) {
+    console.log(policy_id, 'PIDD');
+    return this.store.findRecord('policy', policy_id, {
+      reload: true,
+    });
+  }
+}

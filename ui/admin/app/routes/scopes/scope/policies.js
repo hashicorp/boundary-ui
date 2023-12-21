@@ -11,8 +11,17 @@ export default class ScopesScopePoliciesRoute extends Route {
 
   @service store;
   @service can;
+  @service session;
 
   // =methods
+
+  /**
+   * If arriving here unauthenticated, redirect to index for further processing.
+   */
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
+  }
+
   /**
    * Load all storage buckets under current scope
    * @return {Promise<[PolicyModel]>}

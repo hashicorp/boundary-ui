@@ -920,3 +920,14 @@ policy:
   title_plural: Storage Policies
   titles:
     new: New Storage Policy
+    policy_name: Policy name
+    scope: Scope
+    retain_for: Retain for
+    delete_after: Delete After
+  actions:
+    delete: Delete Storage Policy
+  messages:
+    none:
+      title: No storage policies yet
+      description: There are no storage policy for this session
+      link: Add a new storage policy
