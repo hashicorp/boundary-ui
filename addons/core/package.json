@@ -84,6 +84,7 @@
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
     "rose": "*",
+    "sinon": "^17.0.1",
     "webpack": "^5.78.0"
   },
   "peerDependencies": {
