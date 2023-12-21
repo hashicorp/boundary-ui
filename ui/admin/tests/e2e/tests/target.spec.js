@@ -38,7 +38,7 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Verify session created to target with host, then cancel the session', async ({
+test('Verify session created to target with host, then cancel the session @ce @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
@@ -81,7 +81,7 @@ test('Verify session created to target with host, then cancel the session', asyn
   }
 });
 
-test('Verify session created to target with address, then cancel the session', async ({
+test('Verify session created to target with address, then cancel the session @ce @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
@@ -120,7 +120,7 @@ test('Verify session created to target with address, then cancel the session', a
   }
 });
 
-test('Verify TCP target is updated', async ({ page }) => {
+test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
   await page.goto('/');
   let orgName;
   try {

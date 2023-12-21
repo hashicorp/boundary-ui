@@ -53,7 +53,9 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
+test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
+  page,
+}) => {
   execSync(
     `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
   );
