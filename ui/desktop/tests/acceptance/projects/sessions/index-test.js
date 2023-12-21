@@ -28,6 +28,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   setupMirage(hooks);
   setupStubs(hooks);
 
+  const APP_STATE_TITLE =
+    '[data-test-no-sessions] .hds-application-state__title';
+
   const instances = {
     scopes: {
       global: null,
@@ -114,12 +117,13 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
-    assert.expect(2);
+    this.stubClientDaemonSearch();
 
     await visit(urls.sessions);
     await a11yAudit();
@@ -129,32 +133,32 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting index', async function (assert) {
-    assert.expect(2);
     const sessionsCount = this.server.schema.sessions.all().models.length;
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 
   test('visiting empty sessions', async function (assert) {
-    assert.expect(1);
-    this.server.get('/sessions', () => new Response(200));
+    this.server.db.sessions.remove();
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
-    await click('button.rose-button-inline-link-action'); // clear all filters
+    await click(`[href="${urls.sessions}"]`);
     await a11yAudit();
 
-    assert.dom('.rose-message-title').hasText('No Sessions Available');
+    assert.dom(APP_STATE_TITLE).hasText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
-    assert.expect(2);
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
@@ -162,17 +166,18 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting a session', async function (assert) {
-    assert.expect(1);
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await click('[data-test-session-detail-link]');
 
     assert.strictEqual(currentURL(), urls.session);
   });
 
   test('can link to an active session', async function (assert) {
-    assert.expect(1);
+    await visit(urls.projects);
 
+    await click(`[href="${urls.sessions}"]`);
     await visit(urls.sessions);
 
     assert
@@ -183,10 +188,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to an active session with read:self permissions', async function (assert) {
-    assert.expect(1);
     instances.session.update({ authorized_actions: ['read:self'] });
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(
@@ -196,10 +202,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to a pending session', async function (assert) {
-    assert.expect(1);
     instances.session.update({ status: STATUS_SESSION_PENDING });
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(
@@ -209,10 +216,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can link to session even without read permissions', async function (assert) {
-    assert.expect(1);
     instances.session.update({ authorized_actions: [] });
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom(
@@ -222,9 +230,8 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot link to a canceling session', async function (assert) {
-    assert.expect(2);
     instances.session.update({ status: STATUS_SESSION_CANCELING });
-
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
 
     assert
@@ -238,11 +245,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot link to a terminated session', async function (assert) {
-    assert.expect(2);
     instances.session.update({ status: STATUS_SESSION_TERMINATED });
-
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
-    await click('button.rose-button-inline-link-action'); // clear all filters
 
     assert
       .dom(
@@ -255,9 +260,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can cancel an active session with cancel permissions', async function (assert) {
-    assert.expect(1);
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom('tbody tr:first-child [data-test-session-cancel-button]')
@@ -265,10 +270,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('can cancel an active session with cancel:self permissions', async function (assert) {
-    assert.expect(1);
     instances.session.update({ authorized_actions: ['cancel:self'] });
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom('tbody tr:first-child [data-test-session-cancel-button]')
@@ -276,10 +282,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cannot click cancel button without cancel permissions', async function (assert) {
-    assert.expect(1);
     instances.session.update({ authorized_actions: [] });
+    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
 
     assert
       .dom('tbody tr:first-child [data-test-session-cancel-button]')
@@ -287,40 +294,40 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('cancelling a session shows success alert', async function (assert) {
-    assert.expect(1);
     this.ipcStub.withArgs('stop');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert.dom('[role="alert"].is-success').isVisible();
   });
 
   test('cancelling a session keeps you on the sessions list screen', async function (assert) {
-    assert.expect(1);
     this.ipcStub.withArgs('stop');
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert.strictEqual(currentURL(), urls.sessions);
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
-    assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert.dom('[role="alert"].is-error').isVisible();
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
-    assert.expect(1);
     this.ipcStub.withArgs('stop').throws();
+    await visit(urls.projects);
 
-    await visit(urls.sessions);
+    await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
     assert.dom('[role="alert"].is-error').isVisible();
