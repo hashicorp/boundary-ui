@@ -14,7 +14,7 @@ export default class ScopesScopePoliciesRoute extends Route {
 
   // =methods
   /**
-   * Load all storage buckets under current scope
+   * Load all policies under current scope
    * @return {Promise<[PolicyModel]>}
    */
   async model() {
