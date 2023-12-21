@@ -123,13 +123,12 @@ module('Integration | Component | dropdown/index', function (hooks) {
     );
 
     await render(hbs`<Dropdown
-      @name={{this.name}}
-      @itemOptions={{this.itemOptions}}
-      @checkedItems={{this.checkedItems}}
-      @applyFilter={{this.applyFilter}}
-      @isSearchable={{true}}
-      @listPosition='bottom-left'
-    />`);
+  @name={{this.name}}
+  @itemOptions={{this.itemOptions}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+  @isSearchable={{true}}
+/>`);
 
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
