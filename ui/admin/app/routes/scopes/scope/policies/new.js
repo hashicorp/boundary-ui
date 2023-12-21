@@ -6,7 +6,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class ScopesScopeStoragePoliciesNewRoute extends Route {
+export default class ScopesScopePoliciesNewRoute extends Route {
   // =services
 
   @service store;
@@ -19,7 +19,7 @@ export default class ScopesScopeStoragePoliciesNewRoute extends Route {
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');
-    const record = this.store.createRecord('storage-policy');
+    const record = this.store.createRecord('policy');
     record.scopeModel = scopeModel;
     return record;
   }

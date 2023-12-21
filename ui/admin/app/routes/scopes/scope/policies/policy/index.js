@@ -5,4 +5,6 @@
 
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeStoragePoliciesStoragePolicyRoute extends Route {}
+export default class ScopesScopePoliciesPolicyIndexRoute extends Route {
+  // =services
+}
