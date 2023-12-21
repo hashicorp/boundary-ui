@@ -5,8 +5,19 @@
 
 .filters-applied {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 1rem;
+
+  .filter-tag {
+    max-width: 200px;
+
+    .hds-tag__text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
 
   > :not(:first-child) {
     margin-left: 0.5rem;

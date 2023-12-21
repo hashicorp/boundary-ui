@@ -4,7 +4,8 @@
     }}</Hds::Text::Display>
   {{#each this.filters as |filter|}}
     <Hds::Tag
-      @text={{filter.name}}
+      class='filter-tag'
+      @text={{if filter.name filter.name filter.id}}
       @onDismiss={{fn this.removeFilter filter}}
     />
   {{/each}}
