@@ -713,18 +713,18 @@ function routes() {
 
   //storage-policy
   this.get(
-    '/storage-policies',
-    ({ storagePolicies }, { queryParams: { scope_id: scopeId } }) => {
-      return storagePolicies.where({ scopeId });
+    '/policies',
+    ({ policies }, { queryParams: { scope_id: scopeId } }) => {
+      return policies.where({ scopeId });
     },
   );
-  this.get('/storage-policies/:id');
-  this.del('/storage-policies/:id');
-  this.patch('/storage-policies/:id');
-  this.post('/storage-policies', function ({ storagePolicies }) {
+  this.get('/policies/:id');
+  this.del('/policies/:id');
+  this.patch('/policies/:id');
+  this.post('/policies', function ({ policies }) {
     const attrs = this.normalizedRequestAttrs();
 
-    return storagePolicies.create(attrs);
+    return policies.create(attrs);
   });
 
   // session recordings

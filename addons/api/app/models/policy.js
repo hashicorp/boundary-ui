@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'api/models/storage-policy';
+export { default } from 'api/models/policy';

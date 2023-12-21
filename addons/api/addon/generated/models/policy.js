@@ -10,7 +10,7 @@ import { attr } from '@ember-data/model';
  * Storage Policy is a resource that manages the lifecycle of Session Recordings,
  * particularly to meet compliance frameworks.
  */
-export default class GeneratedStoragePolicyModel extends BaseModel {
+export default class GeneratedPolicyModel extends BaseModel {
   // =attributes
 
   @attr('string', {

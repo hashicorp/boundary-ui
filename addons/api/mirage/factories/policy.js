@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import factory from '../generated/factories/storage-policy';
+import factory from '../generated/factories/policy';
 import permissions from '../helpers/permissions';
 import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
@@ -12,7 +12,7 @@ export default factory.extend({
   id: () => generateId('pst_'),
 
   authorized_actions: () =>
-    permissions.authorizedActionsFor('storage-policy') || [
+    permissions.authorizedActionsFor('policy') || [
       'no-op',
       'read',
       'update',

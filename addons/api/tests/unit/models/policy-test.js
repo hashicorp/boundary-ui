@@ -11,7 +11,7 @@ module('Unit | Model | storage policy', function (hooks) {
 
   test('it exists', function (assert) {
     let store = this.owner.lookup('service:store');
-    let model = store.createRecord('storage-policy', {});
+    let model = store.createRecord('policy', {});
     assert.ok(model);
   });
 });
