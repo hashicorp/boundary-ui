@@ -9,8 +9,8 @@ module('Integration | Component | filter-tags/index', function (hooks) {
   setupIntl(hooks);
 
   test('it renders', async function (assert) {
-    this.set('tag', { scopes: [{ id: '1', name: 'Project 1' }] });
-    await render(hbs`<FilterTags @tags={{this.tag}} />`);
+    this.set('filter', { scopes: [{ id: '1', name: 'Project 1' }] });
+    await render(hbs`<FilterTags @filters={{this.filter}} />`);
 
     assert.dom('.hds-tag__text').hasText('Project 1');
   });

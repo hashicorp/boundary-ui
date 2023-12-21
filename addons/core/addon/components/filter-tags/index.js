@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { assert } from '@ember/debug';
 
 export default class FilterTagsIndexComponent extends Component {
   // =services
@@ -9,81 +10,49 @@ export default class FilterTagsIndexComponent extends Component {
 
   // =attributes
 
-  get tags() {
-    const tags = [];
-
-    for (const key in this.args.tags) {
-      if (Array.isArray(this.args.tags[key])) {
-        const names = this.args.tags[key].map((item) => item.name);
-        tags.push(...names);
-      }
-    }
-
-    return tags;
+  get filters() {
+    return Object.entries(this.args.filters).flatMap(([key, value]) => {
+      assert(`Tags must be an array for key ${key}`, Array.isArray(value));
+      return value.map((item) => ({ id: item.id, name: item.name, type: key }));
+    });
   }
 
   // =methods
 
   /**
    * Clears a single filter from queryParams for current route
-   * @param {string} filterName
+   * @param {object} tag
    */
   @action
-  removeFilter(filterName) {
-    const matchedTag = this.findTagByName(filterName);
-    const queryParams = { ...this.router.currentRoute.queryParams };
+  removeFilter(tag) {
+    let queryParamValue;
 
-    for (const key in queryParams) {
-      const paramValue = queryParams[key];
-
-      if (typeof paramValue === 'string') {
-        queryParams[key] = JSON.parse(paramValue);
-      }
+    try {
+      queryParamValue = JSON.parse(
+        this.router.currentRoute.queryParams[tag.type],
+      );
+    } catch {
+      // We should never get an error as we are always asserting the queryParam to an array
+      queryParamValue = [];
     }
 
-    for (const key in matchedTag) {
-      if (queryParams[key] !== undefined && matchedTag[key]?.id) {
-        const matchedId = matchedTag[key].id;
-
-        if (Array.isArray(queryParams[key])) {
-          queryParams[key] = queryParams[key].filter(
-            (item) => item !== matchedId,
-          );
-        }
-      }
-    }
+    const queryParams = {
+      [tag.type]: queryParamValue.filter((item) => item !== tag.id),
+    };
 
     this.router.replaceWith({ queryParams });
   }
 
   /**
-   * Clears all filters based on queryParams from tags keys
+   * Clears all filters based on provided queryParams
    */
   @action
   clearAllFilters() {
-    const allowList = Object.keys(this.args.tags);
-
-    const queryParams = { ...this.router.currentRoute.queryParams };
-
-    for (const key in queryParams) {
-      if (allowList.includes(key)) {
-        queryParams[key] = [];
-      }
-    }
+    const queryParams = Object.keys(this.args.filters).reduce((params, key) => {
+      params[key] = [];
+      return params;
+    }, {});
 
     this.router.replaceWith({ queryParams });
-  }
-
-  findTagByName(filterName) {
-    const matchedTag = {};
-
-    Object.entries(this.args.tags).forEach(([key, value]) => {
-      const foundTag = value.find((tag) => tag.name === filterName);
-      if (foundTag) {
-        matchedTag[key] = foundTag;
-      }
-    });
-
-    return matchedTag;
   }
 }

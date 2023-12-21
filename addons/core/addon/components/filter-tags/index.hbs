@@ -2,11 +2,12 @@
   <Hds::Text::Display @size='100' @weight='medium' @color='faint'>{{t
       'titles.filters-applied'
     }}</Hds::Text::Display>
-  {{#if this.tags}}
-    {{#each this.tags as |tag|}}
-      <Hds::Tag @text={{tag}} @onDismiss={{fn this.removeFilter tag}} />
-    {{/each}}
-  {{/if}}
+  {{#each this.filters as |filter|}}
+    <Hds::Tag
+      @text={{filter.name}}
+      @onDismiss={{fn this.removeFilter filter}}
+    />
+  {{/each}}
   <Hds::Button
     @text={{t 'actions.clear-filters'}}
     @color='tertiary'

@@ -112,33 +112,33 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Returns object of tags to be used for displaying filters
+   * Returns object of filters to be used for displaying selected filters
    * @returns {object}
    */
-  get tags() {
-    const tags = {
+  get filters() {
+    const filters = {
       scopes: [],
       availableSessions: [],
       type: [],
     };
 
     if (this.scopes.length > 0) {
-      tags.scopes = this.scopes.map((scope) => ({
+      filters.scopes = this.scopes.map((scope) => ({
         id: scope,
         name: this.scopeDisplayName(scope),
       }));
     }
 
     if (this.availableSessions.length > 0) {
-      tags.availableSessions = this.availableSessions.map((option) => ({
+      filters.availableSessions = this.availableSessions.map((option) => ({
         id: option,
         name: this.availableSessionOptions.find(
           (availableSessionOption) => availableSessionOption.id === option,
-        ).displayName,
+        ).name,
       }));
     }
 
-    return tags;
+    return filters;
   }
 
   // =methods
