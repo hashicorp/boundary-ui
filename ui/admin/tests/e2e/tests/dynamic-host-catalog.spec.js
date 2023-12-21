@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('AWS', async () => {
-  test('Create a Dynamic Host Catalog and set up Host Sets', async ({
+  test('Create a Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
     page,
   }) => {
     await createNewOrg(page);
