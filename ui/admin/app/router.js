@@ -160,13 +160,9 @@ Router.map(function () {
         );
       });
 
-      this.route('storage-policies', function () {
+      this.route('policies', function () {
         this.route('new');
-        this.route(
-          'storage-policy',
-          { path: ':storage_policy_id' },
-          function () {},
-        );
+        this.route('policy', { path: ':policy_id' }, function () {});
       });
     });
   });

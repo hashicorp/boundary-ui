@@ -61,12 +61,12 @@
             </nav.link>
           {{/if}}
           {{#if (can 'navigate scope' @model collection='policies')}}
-            <nav.link @route='scopes.scope.storage-policies'>
+            <nav.link @route='scopes.scope.policies'>
               <Rose::Icon
                 @name='flight-icons/svg/hourglass-16'
                 @size='medium'
               />
-              {{t 'resources.storage-policy.title_plural'}}
+              {{t 'resources.policy.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if
@@ -97,12 +97,12 @@
           </nav.link>
 
           {{#if (can 'navigate scope' @model collection='policies')}}
-            <nav.link @route='scopes.scope.storage-policies'>
+            <nav.link @route='scopes.scope.policies'>
               <Rose::Icon
                 @name='flight-icons/svg/hourglass-16'
                 @size='medium'
               />
-              {{t 'resources.storage-policy.title_plural'}}
+              {{t 'resources.policy.title_plural'}}
             </nav.link>
           {{/if}}
         </Rose::Nav::Sidebar>
