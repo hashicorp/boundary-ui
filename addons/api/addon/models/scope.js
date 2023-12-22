@@ -48,6 +48,11 @@ export default class ScopeModel extends GeneratedScopeModel {
     if (value) this.type = scopeTypes.project;
   }
 
+  /**
+   * Scope names are optional therefore we fall back on displaying
+   * scope id prefixed by "Unnamed scope".
+   * @type {string}
+   */
   get displayName() {
     const scopeType = this.type === scopeTypes.org ? 'Org' : 'Project';
     return (
