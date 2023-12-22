@@ -55,9 +55,7 @@ export default class DropdownComponent extends Component {
     if (checked) {
       this.selectedItems = [...this.selectedItems, value];
     } else {
-      this.selectedItems = this.selectedItems.filter(
-        (scope) => scope !== value,
-      );
+      this.selectedItems = this.selectedItems.filter((item) => item !== value);
     }
   }
 
@@ -69,6 +67,16 @@ export default class DropdownComponent extends Component {
   applyFilter(onClose) {
     this.args.applyFilter(this.selectedItems);
     onClose();
+  }
+
+  /**
+   * Sets selectedItems to checkedItems when the user opens
+   * the dropdown and potentially has made changes
+   * outside of the scope of dropdown
+   */
+  @action
+  open() {
+    this.selectedItems = [...this.args.checkedItems];
   }
 
   /**

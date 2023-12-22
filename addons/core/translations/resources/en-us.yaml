@@ -564,11 +564,6 @@ target:
     connect-more-info:
       title: Connect for more info
       description: Additional information for this target will be provided here after your session is established.
-    no-search-results:
-      title: No results found
-      description: Sorry, we weren't able to find any targets for "{query}".
-    no-filter-results:
-      description: Sorry, we weren’t able to find any targets within the filtered parameters.
   titles:
     new: New Target
     active-sessions: Active sessions
@@ -582,6 +577,7 @@ target:
     remove-address: Remove address and save
     enable-session-recording: Enable Session Recording
     enable-recording: Enable recording
+    view-more-sessions: View more sessions
   types:
     tcp: Generic TCP
     ssh: SSH

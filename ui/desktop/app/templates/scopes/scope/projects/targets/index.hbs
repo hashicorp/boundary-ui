@@ -62,6 +62,7 @@
         </S.Generic>
         {{! TODO: Target type filter}}
       </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
       {{#if @model.targets}}
         <Hds::Table
           @model={{@model.targets}}
@@ -170,17 +171,16 @@
       {{/if}}
       {{#if this.noResults}}
         <Hds::ApplicationState data-test-no-target-results as |A|>
-          <A.Header
-            @title={{t 'resources.target.messages.no-search-results.title'}}
-          />
+          <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
               (if
                 this.search
-                'resources.target.messages.no-search-results.description'
-                'resources.target.messages.no-filter-results.description'
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
               )
               query=this.search
+              resource='targets'
             }}
           />
         </Hds::ApplicationState>
@@ -256,6 +256,15 @@
               </B.Tr>
             </:body>
           </Hds::Table>
+          {{#if this.showFlyoutViewMoreLink}}
+            <Hds::Link::Standalone
+              @text={{t 'resources.target.actions.view-more-sessions'}}
+              @route='scopes.scope.projects.sessions'
+              @query={{this.viewMoreLinkQueryParams}}
+              @icon='arrow-right'
+              @iconPosition='trailing'
+            />
+          {{/if}}
         </M.Body>
       </Hds::Flyout>
     {{/if}}
