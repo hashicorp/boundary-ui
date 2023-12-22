@@ -62,6 +62,7 @@
         </S.Generic>
         {{! TODO: Target type filter}}
       </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
       {{#if @model.targets}}
         <Hds::Table
           @model={{@model.targets}}
