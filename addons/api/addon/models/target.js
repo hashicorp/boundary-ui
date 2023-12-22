@@ -109,6 +109,14 @@ export default class TargetModel extends GeneratedTargetModel {
   }
 
   /**
+   * Available sessions associated with this target (but only already loaded sessions).
+   * @type {SessionModel[]}
+   */
+  get availableSessions() {
+    return this.sessions.filter((session) => session.isAvailable);
+  }
+
+  /**
    * The project associated with this target (if already loaded).
    * @type {ScopeModel}
    */

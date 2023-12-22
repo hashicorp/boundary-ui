@@ -54,9 +54,7 @@ export default class DropdownComponent extends Component {
     if (checked) {
       this.selectedItems = [...this.selectedItems, value];
     } else {
-      this.selectedItems = this.selectedItems.filter(
-        (scope) => scope !== value,
-      );
+      this.selectedItems = this.selectedItems.filter((item) => item !== value);
     }
   }
 
