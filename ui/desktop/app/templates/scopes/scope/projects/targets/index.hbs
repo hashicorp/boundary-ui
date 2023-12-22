@@ -256,6 +256,15 @@
               </B.Tr>
             </:body>
           </Hds::Table>
+          {{#if this.showFlyoutViewMoreLink}}
+            <Hds::Link::Standalone
+              @text={{t 'resources.target.actions.view-more-sessions'}}
+              @route='scopes.scope.projects.sessions'
+              @query={{this.viewMoreLinkQueryParams}}
+              @icon='arrow-right'
+              @iconPosition='trailing'
+            />
+          {{/if}}
         </M.Body>
       </Hds::Flyout>
     {{/if}}

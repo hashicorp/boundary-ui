@@ -26,20 +26,42 @@
             @listPosition='bottom-left'
           />
         </S.Generic>
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton @color='secondary' @text={{t 'form.status.label'}} />
-          {{#each this.sessionStatusTypes as |status|}}
-            <DD.Checkbox>{{t
-                (concat 'resources.session.status.' status)
-              }}</DD.Checkbox>
-          {{/each}}
-        </S.Dropdown>
-        <S.Dropdown as |DD|>
-          <DD.ToggleButton
-            @color='secondary'
-            @text={{t 'resources.scope.title'}}
+        <S.Generic>
+          <Dropdown
+            @name={{t 'form.status.label'}}
+            @itemOptions={{this.sessionStatusOptions}}
+            @checkedItems={{this.status}}
+            @applyFilter={{fn this.applyFilter 'status'}}
           />
-        </S.Dropdown>
+        </S.Generic>
+        <S.Generic>
+          <Dropdown
+            @name={{t 'resources.scope.title'}}
+            @itemOptions={{this.availableScopes}}
+            @checkedItems={{this.scopes}}
+            @applyFilter={{fn this.applyFilter 'scopes'}}
+            @isSearchable={{true}}
+            as |FD selectItem itemOptions|
+          >
+            {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+              {{#each orgs as |org|}}
+                <FD.Generic>
+                  <FlightIcon @name='org' />
+                  {{org.key.displayName}}
+                </FD.Generic>
+                {{#each org.items as |project|}}
+                  <FD.Checkbox
+                    @value={{project.id}}
+                    checked={{includes project.id this.scopes}}
+                    {{on 'change' selectItem}}
+                  >
+                    {{project.displayName}}
+                  </FD.Checkbox>
+                {{/each}}
+              {{/each}}
+            {{/let}}
+          </Dropdown>
+        </S.Generic>
       </Hds::SegmentedGroup>
       {{#if @model.sessions}}
         <Hds::Table
@@ -142,6 +164,11 @@
             </B.Tr>
           </:body>
         </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
       {{else}}
         <Hds::ApplicationState data-test-no-session-results as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />
