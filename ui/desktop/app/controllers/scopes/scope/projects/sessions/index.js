@@ -56,7 +56,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
   /**
    * Returns all status types for sessions
-   * @returns {[string]}
+   * @returns {[object]}
    */
   get sessionStatusOptions() {
     return statusTypes.map((status) => ({
@@ -76,6 +76,18 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
     return this.model.projects.filter((project) =>
       uniqueSessionScopeIds.has(project.id),
     );
+  }
+
+  /**
+   * Returns object of filters to be used for displaying selected filters
+   * @returns {object}
+   */
+  get filters() {
+    return {
+      targets: this.availableTargets,
+      status: this.sessionStatusOptions,
+      scopes: this.availableScopes,
+    };
   }
 
   /**

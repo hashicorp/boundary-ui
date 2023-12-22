@@ -35,6 +35,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    types: {
+      refreshModel: true,
+      replace: true,
+    },
     page: {
       refreshModel: true,
     },
@@ -61,14 +65,17 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel] }> }
    */
   async model(
-    { search, scopes, availableSessions, page, pageSize },
+    { search, scopes, availableSessions, types, page, pageSize },
     transition,
   ) {
     await this.getAllTargets(transition);
 
-    const filters = { scope_id: [], id: { values: [] } };
+    const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
+    });
+    types.forEach((type) => {
+      filters.type.push({ equals: type });
     });
 
     // Retrieve all sessions so that the session and activeSessions getters
@@ -94,6 +101,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       pageSize,
       force_refresh: true,
     });
+    console.log('filtered targets: ', targets);
     const totalItems = targets.meta?.totalItems;
 
     // TODO: Filter targets by scope we're in manually

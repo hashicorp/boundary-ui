@@ -11,6 +11,7 @@ import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import orderBy from 'lodash/orderBy';
+import { TYPES_TARGET } from 'api/models/target';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
@@ -33,6 +34,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     'search',
     { scopes: { type: 'array' } },
     { availableSessions: { type: 'array' } },
+    { types: { type: 'array' } },
     'page',
     'pageSize',
   ];
@@ -40,6 +42,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   @tracked search;
   @tracked scopes = [];
   @tracked availableSessions = [];
+  @tracked types = [];
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked selectedTarget;
@@ -48,7 +51,9 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   get showFilters() {
     return (
-      this.model.targets.length || this.search || this.availableSessions.length
+      this.model.allTargets.length ||
+      this.search ||
+      this.availableSessions.length
     );
   }
 
@@ -135,10 +140,21 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get filters() {
     return {
-      scopes: this.model.projects,
+      scopes: this.availableScopes,
       availableSessions: this.availableSessionOptions,
-      type: [],
+      types: this.targetTypeOptions,
     };
+  }
+
+  /**
+   * Returns all target types
+   * @returns {[object]}
+   */
+  get targetTypeOptions() {
+    return TYPES_TARGET.map((type) => ({
+      id: type,
+      name: this.intl.t(`resources.target.types.${type}`),
+    }));
   }
 
   // =methods
