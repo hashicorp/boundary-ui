@@ -101,7 +101,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       pageSize,
       force_refresh: true,
     });
-    console.log('filtered targets: ', targets);
     const totalItems = targets.meta?.totalItems;
 
     // TODO: Filter targets by scope we're in manually
