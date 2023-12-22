@@ -28,76 +28,77 @@
 
   <page.body>
     {{#if @model.hosts}}
+      <Hds::Table
+        @valign='middle'
+        @model={{@model.hosts}}
+        @columns={{(if
+          @model.hostSet.isStatic
+          (array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'titles.actions'))
+          )
+          (array
+            (hash label=(t 'form.external_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          )
+        )}}
+      >
 
-      <Hds::Table @model={{@model.hosts}}>
-        <:head as |H|>
-          <H.Tr>
-            {{#if @model.hostSet.isStatic}}
-              <H.Th>{{t 'form.name.label'}}</H.Th>
-            {{else}}
-              <H.Th>{{t 'form.external_name.label'}}</H.Th>
-            {{/if}}
-            <H.Th>{{t 'form.type.label'}}</H.Th>
-            <H.Th>{{t 'form.id.label'}}</H.Th>
-            {{#if @model.hostSet.isStatic}}
-              <H.Th>{{t 'titles.actions'}}</H.Th>
-            {{/if}}
-          </H.Tr>
-        </:head>
         <:body as |B|>
-          {{#each @model.hosts as |host|}}
-            <B.Tr>
+          <B.Tr>
+            <B.Td>
+              {{#if B.data.isStatic}}
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{! Link to a different subroute for dynamic/plugin hosts }}
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{/if}}
+              <Hds::Text::Body @tag='p'>{{B.data.description}}</Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <HostCatalogTypeBadge @model={{B.data}} />
+            </B.Td>
+            <B.Td>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
+            </B.Td>
+            {{#if (can 'removeHosts hostSet' @model.hostSet)}}
               <B.Td>
-                {{#if host.isStatic}}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
-                    @model={{host.id}}
-                  >
-                    {{host.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{! Link to a different subroute for dynamic/plugin hosts }}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
-                    model={{host.id}}
-                  >
-                    {{host.displayName}}
-                  </LinkTo>
-                {{/if}}
-                <Hds::Text:Body @tag='p'>{{host.description}}</Hds::Text:Body>
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    data-test-host-set-hosts-dropdown-toggle
+                    @text={{t 'actions.manage'}}
+                    @icon='more-horizontal'
+                    @hasChevron={{false}}
+                  />
+                  <dd.Interactive
+                    data-test-host-set-hosts-dropdown-remove-host
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    {{on
+                      'click'
+                      (route-action 'removeHost' @model.hostSet B.data)
+                    }}
+                  />
+                </Hds::Dropdown>
               </B.Td>
-              <B.Td>
-                <HostCatalogTypeBadge @model={{host}} />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{host.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-              <B.Td>
-                {{#if (can 'removeHosts hostSet' @model.hostSet)}}
-                  <Hds::Dropdown as |dd|>
-                    <dd.ToggleIcon
-                      data-test-host-set-hosts-dropdown-toggle
-                      @text={{t 'actions.manage'}}
-                      @icon='more-horizontal'
-                      @hasChevron={{false}}
-                    />
-                    <dd.Interactive
-                      data-test-host-set-hosts-dropdown-remove-host
-                      @text={{t 'actions.remove'}}
-                      @color='critical'
-                      {{on
-                        'click'
-                        (route-action 'removeHost' @model.hostSet host)
-                      }}
-                    />
-                  </Hds::Dropdown>
-                {{/if}}
-              </B.Td>
-            </B.Tr>
-          {{/each}}
+            {{/if}}
+          </B.Tr>
         </:body>
       </Hds::Table>
 
