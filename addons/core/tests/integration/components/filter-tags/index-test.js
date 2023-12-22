@@ -9,6 +9,10 @@ module('Integration | Component | filter-tags/index', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
+  hooks.afterEach(function () {
+    sinon.restore();
+  });
+
   test('it renders', async function (assert) {
     const router = this.owner.lookup('service:router');
     sinon.stub(router, 'currentRoute').value({

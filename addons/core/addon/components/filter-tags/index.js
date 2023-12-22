@@ -25,6 +25,7 @@ export default class FilterTagsIndexComponent extends Component {
   }
 
   // =methods
+
   getCurrentQueryParams(key) {
     let queryParamValue;
     try {

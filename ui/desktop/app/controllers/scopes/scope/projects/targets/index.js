@@ -104,14 +104,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
-   * Returns true if there are any filters applied
-   * @returns {boolean}
-   */
-  get hasFilters() {
-    return this.scopes.length > 0 || this.availableSessions.length > 0;
-  }
-
-  /**
    * Returns object of filters to be used for displaying selected filters
    * @returns {object}
    */
