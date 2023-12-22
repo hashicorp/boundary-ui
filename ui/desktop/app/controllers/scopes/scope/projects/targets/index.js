@@ -11,6 +11,10 @@ import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import orderBy from 'lodash/orderBy';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsTargetsIndexController extends Controller {
   // =services
@@ -93,14 +97,36 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   /**
    * Returns active and pending sessions associated with a target
-   * sorted descending by created time.
+   * sorted descending by created time with a limit of 10.
    * @returns {object}
    */
   get sortedTargetSessions() {
-    const sessions = this.selectedTarget.sessions.filter(
-      (session) => session.isAvailable,
-    );
-    return orderBy(sessions, 'created_time', 'desc');
+    return orderBy(
+      this.selectedTarget.availableSessions,
+      'created_time',
+      'desc',
+    ).slice(0, 10);
+  }
+
+  /**
+   * Returns true when there are more than 10 active or pending sessions
+   * associated with the selected target.
+   * @returns {boolean}
+   */
+  get showFlyoutViewMoreLink() {
+    return this.selectedTarget.availableSessions.length > 10;
+  }
+
+  /**
+   * Returns query params for filters that should be present when user
+   * clicks on the link to navigate to sessions route.
+   * @returns {object}
+   */
+  get viewMoreLinkQueryParams() {
+    return {
+      targets: [this.selectedTarget.id],
+      status: [STATUS_SESSION_ACTIVE, STATUS_SESSION_PENDING],
+    };
   }
 
   /**
