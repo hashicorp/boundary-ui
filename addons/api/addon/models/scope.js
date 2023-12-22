@@ -4,7 +4,7 @@
  */
 
 import GeneratedScopeModel from '../generated/models/scope';
-import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export const scopeTypes = {
   global: 'global',
@@ -13,12 +13,15 @@ export const scopeTypes = {
 };
 
 export default class ScopeModel extends GeneratedScopeModel {
+  // =services
+
+  @service intl;
+
   // =attributes
 
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isGlobal() {
     return this.type === scopeTypes.global;
   }
@@ -28,7 +31,6 @@ export default class ScopeModel extends GeneratedScopeModel {
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isOrg() {
     return this.type === scopeTypes.org;
   }
@@ -39,11 +41,18 @@ export default class ScopeModel extends GeneratedScopeModel {
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isProject() {
     return this.type === scopeTypes.project;
   }
   set isProject(value) {
     if (value) this.type = scopeTypes.project;
+  }
+
+  get displayName() {
+    const scopeType = this.type === scopeTypes.org ? 'Org' : 'Project';
+    return (
+      this.name ||
+      this.intl.t('titles.unnamed-scope', { scopeType, id: this.id })
+    );
   }
 }

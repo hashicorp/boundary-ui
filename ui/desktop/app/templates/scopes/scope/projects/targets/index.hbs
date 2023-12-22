@@ -134,9 +134,10 @@
                     <Hds::Text::Code>{{B.data.project.id}}</Hds::Text::Code>
                   </Copyable>
                 </div>
-                {{#if B.data.project.name}}
-                  <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
-                {{/if}}
+                <Hds::Badge
+                  @color='neutral'
+                  @text={{B.data.project.displayName}}
+                />
               </B.Td>
               <B.Td>
                 {{#if (can 'connect target' B.data)}}
