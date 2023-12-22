@@ -39,6 +39,7 @@ titles:
   choose-an-option: Choose an option
   feature-edition: 'Edition: {edition}'
   no-results-found: No results found
+  filters-applied: 'Filters Applied:'
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   cluster-url-initialization: To get started, please enter your cluster URL
