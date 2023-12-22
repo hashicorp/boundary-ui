@@ -16,6 +16,7 @@ export default class DropdownComponent extends Component {
 
   /**
    * Takes itemOptions and filters them by searchTerm if there is one
+   * and limits the number of items displayed in the dropdown to 500.
    * @returns {[object]}
    */
   get itemOptions() {
@@ -28,7 +29,7 @@ export default class DropdownComponent extends Component {
         return isNameMatch || isIdMatch;
       });
     }
-    return items;
+    return items.slice(0, 500);
   }
 
   // =methods

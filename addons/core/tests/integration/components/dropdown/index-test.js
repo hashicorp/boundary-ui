@@ -114,4 +114,31 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
     assert.true(result);
   });
+
+  test('it only renders a max of 500 items but allows searching on all items', async function (assert) {
+    this.set('checkedItems', []);
+    this.set(
+      'itemOptions',
+      [...Array(600).keys()].map((k) => ({ id: k.toString() })),
+    );
+
+    await render(hbs`<Dropdown
+  @name={{this.name}}
+  @itemOptions={{this.itemOptions}}
+  @checkedItems={{this.checkedItems}}
+  @applyFilter={{this.applyFilter}}
+  @isSearchable={{true}}
+/>`);
+
+    await click(TOGGLE_DROPDOWN_SELECTOR);
+
+    assert.dom(ITEM_SELECTOR).exists({ count: 500 });
+
+    // Random number between 500 and 599 to search
+    await fillIn(SEARCH_INPUT_SELECTOR, '591');
+
+    const result = await waitUntil(() => findAll(ITEM_SELECTOR).length === 1);
+
+    assert.true(result);
+  });
 });
