@@ -69,6 +69,16 @@ export default class DropdownComponent extends Component {
   }
 
   /**
+   * Sets selectedItems to checkedItems when the user opens
+   * the dropdown and potentially has made changes
+   * outside of the scope of dropdown
+   */
+  @action
+  open() {
+    this.selectedItems = [...this.args.checkedItems];
+  }
+
+  /**
    * Custom close method for dropdown that resets selectedItems
    * to checkedItems when the user closes the dropdown
    */

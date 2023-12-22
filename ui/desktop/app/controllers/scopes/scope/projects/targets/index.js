@@ -130,6 +130,20 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   }
 
   /**
+   * Returns object of filters to be used for displaying selected filters
+   * @returns {object}
+   */
+  get filters() {
+    return {
+      scopes: this.model.projects,
+      availableSessions: this.availableSessionOptions,
+      type: [],
+    };
+  }
+
+  // =methods
+
+  /**
    * Quick connect method used to call main connect method and handle
    * connection errors unique to this route
    * @param {TargetModel} target
@@ -226,6 +240,11 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     const { value } = event.target;
     this.search = value;
     this.page = 1;
+  }
+
+  @action
+  toggleSessionsFlyout() {
+    this.sessionsFlyoutActive = !this.sessionsFlyoutActive;
   }
 
   /**
