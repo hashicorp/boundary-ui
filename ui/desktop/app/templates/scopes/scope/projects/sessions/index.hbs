@@ -63,6 +63,7 @@
           </Dropdown>
         </S.Generic>
       </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
       {{#if @model.sessions}}
         <Hds::Table
           @model={{this.sortedSessions}}
