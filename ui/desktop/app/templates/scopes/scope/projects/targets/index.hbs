@@ -25,6 +25,22 @@
         />
         <S.Generic>
           <Dropdown
+            @name={{t 'resources.target.titles.active-sessions'}}
+            @itemOptions={{this.availableSessionOptions}}
+            @checkedItems={{this.availableSessions}}
+            @applyFilter={{fn this.applyFilter 'availableSessions'}}
+          />
+        </S.Generic>
+        <S.Generic>
+          <Dropdown
+            @name={{t 'form.type.label'}}
+            @itemOptions={{this.targetTypeOptions}}
+            @checkedItems={{this.types}}
+            @applyFilter={{fn this.applyFilter 'types'}}
+          />
+        </S.Generic>
+        <S.Generic>
+          <Dropdown
             @name={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
@@ -52,15 +68,6 @@
             {{/let}}
           </Dropdown>
         </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'resources.target.titles.active-sessions'}}
-            @itemOptions={{this.availableSessionOptions}}
-            @checkedItems={{this.availableSessions}}
-            @applyFilter={{fn this.applyFilter 'availableSessions'}}
-          />
-        </S.Generic>
-        {{! TODO: Target type filter}}
       </Hds::SegmentedGroup>
       <FilterTags @filters={{this.filters}} />
       {{#if @model.targets}}

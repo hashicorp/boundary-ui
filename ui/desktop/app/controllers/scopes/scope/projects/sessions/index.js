@@ -56,7 +56,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
 
   /**
    * Returns all status types for sessions
-   * @returns {[string]}
+   * @returns {[object]}
    */
   get sessionStatusOptions() {
     return statusTypes.map((status) => ({
@@ -79,9 +79,22 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   }
 
   /**
+   * Returns object of filters to be used for displaying selected filters
+   * @returns {object}
+   */
+  get filters() {
+    return {
+      targets: this.availableTargets,
+      status: this.sessionStatusOptions,
+      scopes: this.availableScopes,
+    };
+  }
+
+  /**
    * Sets the query params to value of selectedItems
    * to trigger a query and closes the dropdown
-   * @param {object} selectedTargets
+   * @param {string} filter
+   * @param {object} selectedItems
    */
   @action
   applyFilter(filter, selectedItems) {
