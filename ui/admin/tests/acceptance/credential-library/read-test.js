@@ -68,7 +68,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
 
   test('can navigate to resource', async function (assert) {
     await visit(urls.credentialLibraries);
-    await click('main tbody .rose-table-header-cell a');
+    await click('.hds-table .hds-table__tbody .hds-table__tr a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
