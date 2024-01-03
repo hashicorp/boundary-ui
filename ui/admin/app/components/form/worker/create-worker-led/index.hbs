@@ -57,57 +57,63 @@
           'resources.worker.form.worker_tags.help'
         }}</F.HelperText>
       <F.Control>
-        <Rose::Table @style='condensed' as |table|>
-          <table.body as |body|>
-            {{#each this.workerTags as |tag index|}}
-              <body.row as |row|>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.key}} />
-                </row.cell>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.value}} />
-                </row.cell>
-                <row.cell @shrink={{true}}>
-                  <Rose::Button
-                    @style='warning'
-                    @iconOnly='flight-icons/svg/trash-16'
-                    title={{t 'actions.remove'}}
-                    {{on 'click' (fn this.removeWorkerTagByIndex index)}}
-                  >
-                    {{t 'actions.remove'}}
-                  </Rose::Button>
-                </row.cell>
-              </body.row>
+        <Hds::Table class='list-wrapper-field' name='workers_tags'>
+          <:body as |B|>
+            {{#each this.workerTags as |tag i|}}
+              <B.Tr>
+                <B.Td>
+                  <Hds::Form::TextInput::Base
+                    @value={{tag.key}}
+                    @type='text'
+                    {{on 'input' (set-from-event tag 'key')}}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Form::TextInput::Base
+                    @value={{tag.value}}
+                    @type='text'
+                    {{on 'input' (set-from-event tag 'value')}}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Button
+                    @text={{t 'actions.remove'}}
+                    @color='critical'
+                    @icon='trash'
+                    @isIconOnly={{true}}
+                    {{on 'click' (fn this.removeWorkerTagByIndex i)}}
+                  />
+                </B.Td>
+              </B.Tr>
             {{/each}}
-
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::TextInput::Base
                   @value={{this.newWorkerKey}}
-                  placeholder='Key'
-                />
-              </row.cell>
-              <row.cell>
-                <form.input
                   @type='text'
-                  @value={{this.newWorkerValue}}
-                  placeholder='Value'
+                  placeholder='Key'
+                  {{on 'input' (set-from-event this 'newWorkerKey')}}
                 />
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='secondary'
-                  title={{t 'actions.add'}}
-                  @disabled={{not this.newWorkerKey}}
+              </B.Td>
+              <B.Td>
+                <Hds::Form::TextInput::Base
+                  @value={{this.newWorkerValue}}
+                  @type='text'
+                  placeholder='Value'
+                  {{on 'input' (set-from-event this 'newWorkerValue')}}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Button
+                  @text={{t 'actions.add'}}
+                  @color='secondary'
+                  disabled={{not this.newWorkerKey}}
                   {{on 'click' this.addWorkerTag}}
-                >
-                  {{t 'actions.add'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          </table.body>
-        </Rose::Table>
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
       </F.Control>
     </Hds::Form::Fieldset>
 
