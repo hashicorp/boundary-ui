@@ -37,6 +37,7 @@ export default factory.extend({
       collectionActions['session-recordings'] = ['list'];
       collectionActions.users = ['create', 'list'];
       collectionActions['auth-methods'] = ['create', 'list'];
+      collectionActions['policies'] = ['create', 'list'];
     }
 
     if (this.type === 'project') {
