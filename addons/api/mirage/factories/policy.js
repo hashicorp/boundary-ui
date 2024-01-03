@@ -22,12 +22,12 @@ export default factory.extend({
   attributes() {
     return {
       retain_for: {
-        days: faker.number.int({ min: 10, max: 700 }),
+        days: faker.number.int({ min: 10, max: 100 }),
         overridable: faker.datatype.boolean(),
       },
 
       delete_after: {
-        days: faker.number.int({ min: 1, max: 500 }),
+        days: faker.number.int({ min: 101, max: 500 }),
         overridable: faker.datatype.boolean(),
       },
     };

@@ -5,6 +5,10 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopePoliciesRoute extends Route {
   // =services
@@ -23,7 +27,7 @@ export default class ScopesScopePoliciesRoute extends Route {
   }
 
   /**
-   * Load all storage buckets under current scope
+   * Load all storage policies under current scope
    * @return {Promise<[PolicyModel]>}
    */
   async model() {
@@ -37,5 +41,18 @@ export default class ScopesScopePoliciesRoute extends Route {
     ) {
       return this.store.query('policy', { scope_id });
     }
+  }
+
+  /**
+   * Deletes the policy.
+   * @param {StorageBucketModel} policy
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(policy) {
+    await policy.destroyRecord();
   }
 }

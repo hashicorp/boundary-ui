@@ -10,8 +10,8 @@
   <page.header>
     <h2>
       {{t 'resources.policy.title_plural'}}
+      {{! TODO: Add doc link here }}
     </h2>
-    {{!-- <p>{{t 'resources.policy.description'}}</p> --}}
   </page.header>
   <page.actions>
     {{#if (can 'create model' this.scope collection='policies')}}
@@ -54,10 +54,31 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{B.data.scope.id}}
+              {{#if B.data.scopeModel.isGlobal}}
+                <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+              {{else}}
+                <Hds::Badge
+                  @text={{B.data.scopeModel.displayName}}
+                  @icon='org'
+                />
+              {{/if}}
             </B.Td>
-            <B.Td>{{B.data.retain_for.days}}</B.Td>
-            <B.Td>{{B.data.delete_after.days}}</B.Td>
+            <B.Td>
+              {{#if B.data.retain_for.days}}
+                {{B.data.retain_for.days}}
+                {{t 'resources.policy.titles.days'}}
+              {{else}}
+                {{t 'resources.policy.titles.forever'}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.delete_after.days}}
+                {{B.data.delete_after.days}}
+                {{t 'resources.policy.titles.days'}}
+              {{else}}
+                {{t 'resources.policy.titles.do_not_delete'}}
+              {{/if}}
+            </B.Td>
             <B.Td>
               {{#if (can 'read policy' B.data)}}
                 <Hds::Dropdown as |dd|>
