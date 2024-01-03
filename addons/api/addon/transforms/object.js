@@ -5,7 +5,6 @@
 
 import Transform from '@ember-data/serializer/transform';
 import { TrackedObject } from 'tracked-built-ins';
-import { typeOf } from '@ember/utils';
 
 export default class ObjectTransform extends Transform {
   /**
@@ -13,7 +12,7 @@ export default class ObjectTransform extends Transform {
    * @returns {object}
    */
   deserialize(serialized) {
-    if (typeOf(serialized) === 'object') {
+    if (Object.keys(serialized).length) {
       const obj = new TrackedObject(serialized);
       return obj;
     } else {
@@ -26,9 +25,8 @@ export default class ObjectTransform extends Transform {
    * @returns {object}
    */
   serialize(deserialized) {
-    if (typeOf(deserialized) === 'object') {
-      const obj = new TrackedObject(deserialized);
-      return obj;
+    if (Object.keys(deserialized).length) {
+      return deserialized;
     } else {
       return {};
     }
