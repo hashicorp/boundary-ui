@@ -45,14 +45,14 @@ export default class GeneratedPolicyModel extends BaseModel {
   })
   version;
 
-  @attr('policy-object', {
+  @attr('object', {
     isNestedAttribute: true,
     description:
       'Days is the number of days for which a session recording will be retained.',
   })
   retain_for;
 
-  @attr('policy-object', {
+  @attr('object', {
     isNestedAttribute: true,
     description:
       'Days is the number of days for which a session recording will be automatically deleted.',

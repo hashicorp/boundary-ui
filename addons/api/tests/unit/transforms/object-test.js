@@ -6,33 +6,36 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
-module('Unit | Transform | policy object', function (hooks) {
+module('Unit | Transform | object', function (hooks) {
   setupTest(hooks);
 
   test('it deserializes a policy object', function (assert) {
-    const transform = this.owner.lookup('transform:policy-object');
+    const transform = this.owner.lookup('transform:object');
     const obj = {
       days: 365,
       overridable: true,
     };
     const expectedObj = {
-      days: 1,
+      days: 365,
       overridable: true,
     };
-
+    const emptyObj = {};
     assert.deepEqual(transform.deserialize(obj), expectedObj);
+    assert.deepEqual(transform.deserialize(emptyObj), {});
   });
 
   test('it serializes a policy object', function (assert) {
-    const transform = this.owner.lookup('transform:policy-object');
+    const transform = this.owner.lookup('transform:object');
     const obj = {
       days: 2,
       overridable: true,
     };
     const expectedObj = {
-      days: 730,
+      days: 2,
       overridable: true,
     };
+    const emptyObj = {};
     assert.deepEqual(transform.serialize(obj), expectedObj);
+    assert.deepEqual(transform.serialize(emptyObj), {});
   });
 });
