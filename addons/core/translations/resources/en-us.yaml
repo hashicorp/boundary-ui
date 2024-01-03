@@ -929,5 +929,5 @@ policy:
   messages:
     none:
       title: No storage policies yet
-      description: There are no storage policy for this session
-      link: Add a new storage policy
+      description: Storage policies define how long store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
+      link: Create a new storage policy
