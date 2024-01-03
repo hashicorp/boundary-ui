@@ -1,0 +1,13 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+{{page-title @model.displayName}}
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.policies.policy'
+  @model={{@model}}
+/>
+
+{{outlet}}

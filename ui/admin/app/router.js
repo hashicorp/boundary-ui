@@ -159,6 +159,11 @@ Router.map(function () {
           function () {},
         );
       });
+
+      this.route('policies', function () {
+        this.route('new');
+        this.route('policy', { path: ':policy_id' }, function () {});
+      });
     });
   });
 
