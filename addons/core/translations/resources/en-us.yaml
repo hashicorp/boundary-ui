@@ -915,3 +915,8 @@ worker:
           label: Worker Auth Registration Request
           help: The registration key provided by this worker when it started
         registered: Registered
+policy:
+  title: Storage Policy
+  title_plural: Storage Policies
+  titles:
+    new: New Storage Policy
