@@ -1,7 +1,8 @@
 import { modelIndexes } from 'api/services/indexed-db';
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
-import { pluralize } from 'ember-inflector';
+import { queryIndexedDb } from '../utils/indexedDbQuery';
+import { paginateResults } from '../utils/paginate-results';
 
 /**
  * Handler to sit in front of the API request layer
@@ -21,22 +22,23 @@ export default class IndexedDbHandler {
         const { type, query, options: { pushToStore = true } = {} } = data;
         const supportedModels = Object.keys(modelIndexes);
         const { db: indexedDb } = this.indexedDb ?? {};
-        const pluralizedType = pluralize(type);
 
         // Go through normal flow if we don't yet support the model
         // or if we don't have an indexedDb instance
-        if (!supportedModels.includes(pluralizedType) || !indexedDb) {
+        if (!supportedModels.includes(type) || !indexedDb) {
           return next(context.request);
         }
 
-        const listToken = await indexedDb.tokens.get(pluralizedType);
+        let { page, pageSize, query: queryObj, ...remainingQuery } = query;
+
+        const listToken = await indexedDb.token.get(type);
         const adapter = store.adapterFor(type);
         const schema = store.modelFor(type);
 
         let payload;
         try {
           payload = await adapter.query(store, schema, {
-            ...query,
+            ...remainingQuery,
             scope_id: 'global',
             recursive: true,
             list_token: listToken?.token,
@@ -47,11 +49,11 @@ export default class IndexedDbHandler {
           // clear the DB and try again without a token.
           // TODO: Probably should check for 400 and bad token error specifically instead?
           if (e?.errors[0].status !== 429) {
-            await indexedDb[pluralizedType].clear();
-            await indexedDb.tokens.delete(pluralizedType);
+            await indexedDb[type].clear();
+            await indexedDb.token.delete(type);
 
             payload = await adapter.query(store, schema, {
-              ...query,
+              ...remainingQuery,
               scope_id: 'global',
               recursive: true,
               list_token: null,
@@ -62,14 +64,14 @@ export default class IndexedDbHandler {
         }
 
         // Store the token we just got back from the payload
-        await indexedDb.tokens.put({
-          id: pluralizedType,
+        await indexedDb.token.put({
+          id: type,
           token: payload.list_token,
         });
 
         // Remove any records from the DB if the API indicates they've been deleted
         if (payload.removed_ids?.length > 0) {
-          await indexedDb[pluralizedType].bulkDelete(payload.removed_ids);
+          await indexedDb[type].bulkDelete(payload.removed_ids);
         }
 
         const serializer = store.serializerFor(type);
@@ -84,18 +86,20 @@ export default class IndexedDbHandler {
         const { data: payloadData } = normalizedPayload;
 
         // Store the new data we just got back from the API refresh
-        await indexedDb[pluralizedType].bulkPut(
-          payloadData.map((datum) => this.indexedDb.normalizeData(datum, true)),
+        const items = payloadData.map((datum) =>
+          this.indexedDb.normalizeData(datum, true),
+        );
+        await indexedDb[type].bulkPut(items);
+
+        const indexedDbResults = await queryIndexedDb(
+          indexedDb,
+          type,
+          queryObj,
         );
 
-        // TODO: Filter here, this is just a placeholder for now
-        const dbRecords = (
-          await indexedDb[pluralizedType]
-            .where('attributes.scope.scope_id')
-            .equals(query.scope_id)
-            .toArray()
-        ).map(this.indexedDb.normalizeData);
-        const recordCount = await indexedDb[pluralizedType].count();
+        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
+          this.indexedDb.normalizeData,
+        );
 
         // Return the raw data if we don't push to the store.
         let records = dbRecords.map((record) => ({
@@ -111,7 +115,7 @@ export default class IndexedDbHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: recordCount };
+        records.meta = { totalItems: indexedDbResults.length };
         return records;
       }
       default:
