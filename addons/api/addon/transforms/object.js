@@ -21,10 +21,9 @@ export default class ObjectTransform extends Transform {
    * @returns {object}
    */
   serialize(deserialized) {
-    if (deserialized && Object.keys(deserialized).length) {
-      return deserialized;
-    } else {
+    if (!deserialized) {
       return {};
     }
+    return deserialized;
   }
 }
