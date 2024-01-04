@@ -20,7 +20,6 @@ export default class ScopesScopePoliciesPolicyRoute extends Route {
    * @return {Promise{StorageBucketModel}}
    */
   async model({ policy_id }) {
-    console.log(policy_id, 'PIDD');
     return this.store.findRecord('policy', policy_id, {
       reload: true,
     });
