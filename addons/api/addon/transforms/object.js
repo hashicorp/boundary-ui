@@ -12,12 +12,8 @@ export default class ObjectTransform extends Transform {
    * @returns {object}
    */
   deserialize(serialized) {
-    if (Object.keys(serialized).length) {
-      const obj = new TrackedObject(serialized);
-      return obj;
-    } else {
-      return {};
-    }
+    const obj = new TrackedObject(serialized || {});
+    return obj;
   }
 
   /**
@@ -25,10 +21,9 @@ export default class ObjectTransform extends Transform {
    * @returns {object}
    */
   serialize(deserialized) {
-    if (Object.keys(deserialized).length) {
-      return deserialized;
-    } else {
-      return {};
+    if (!deserialized) {
+      return null;
     }
+    return deserialized;
   }
 }
