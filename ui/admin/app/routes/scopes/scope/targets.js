@@ -13,7 +13,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeTargetsRoute extends Route {
   // =services
 
-  @service store;
   @service intl;
   @service session;
   @service can;
@@ -27,18 +26,6 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Loads all targets under current scope.
-   * @return {Promise{[TargetModel]}}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'targets' })) {
-      return this.store.query('target', { scope_id });
-    }
   }
 
   // =actions

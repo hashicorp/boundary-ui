@@ -14,66 +14,64 @@
       {{t 'resources.target.title_plural'}}
       <DocLink @doc='target' @iconSize='large' />
     </h2>
-    {{#if @model}}
+    {{#if this.showFilters}}
       <p>{{t 'resources.target.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
-      {{#if @model}}
+      {{#if @model.targets}}
         <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
             'resources.target.titles.new'
           }}</Rose::LinkButton>
       {{/if}}
     {{/if}}
   </page.actions>
-  <page.body>
+  <page.body class='search-filtering'>
+    {{#if this.showFilters}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Generic>
+          <Dropdown
+            @name={{t 'resources.target.titles.active-sessions'}}
+            @itemOptions={{this.availableSessionOptions}}
+            @checkedItems={{this.availableSessions}}
+            @applyFilter={{fn this.applyFilter 'availableSessions'}}
+          />
+        </S.Generic>
+        {{#if (feature-flag 'ssh-target')}}
+          <S.Generic>
+            <Dropdown
+              @name={{t 'form.type.label'}}
+              @itemOptions={{this.targetTypeOptions}}
+              @checkedItems={{this.types}}
+              @applyFilter={{fn this.applyFilter 'types'}}
+            />
+          </S.Generic>
+        {{/if}}
+      </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
 
-    {{#if @model}}
-
-      <Hds::Table
-        @model={{@model}}
-        @columns={{array
-          (hash label=(t 'form.name.label'))
-          (hash label=(t 'form.type.label'))
-          (hash label=(t 'form.id.label'))
-        }}
-        @density='short'
-        @valign='middle'
-      >
-        <:body as |B|>
-          {{#if (feature-flag 'ssh-target')}}
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read model' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.targets.target'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <p>{{B.data.description}}</p>
-              </B.Td>
-              <B.Td>
-                {{#if B.data.type}}
-                  <Hds::Badge
-                    @text={{t (concat 'resources.target.types.' B.data.type)}}
-                  />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
-          {{else}}
-            {{#if B.data.isTCP}}
+      {{#if @model.targets}}
+        <Hds::Table
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @model={{@model.targets}}
+          @density='short'
+          @valign='middle'
+        >
+          <:body as |B|>
+            {{#if (feature-flag 'ssh-target')}}
               <B.Tr>
                 <B.Td>
                   {{#if (can 'read model' B.data)}}
@@ -102,48 +100,107 @@
                   />
                 </B.Td>
               </B.Tr>
-            {{/if}}
-          {{/if}}
-        </:body>
-      </Hds::Table>
-
-    {{else}}
-
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.target.messages.welcome.title'}}
-          as |message|
-        >
-          <message.description>
-
-            {{#if (can 'list model' this.scope collection='targets')}}
-              {{! can list (at least):  show default welcome message}}
-              {{t 'resources.target.description'}}
-            {{else if (can 'create model' this.scope collection='targets')}}
-              {{! can create (only):  show create-but-not-list welcome message}}
-              {{t
-                'descriptions.create-but-not-list'
-                resource=(t 'resources.target.title_plural')
-              }}
             {{else}}
-              {{! can neither list nor create }}
-              {{t
-                'descriptions.neither-list-nor-create'
-                resource=(t 'resources.target.title_plural')
-              }}
-
+              {{#if B.data.isTCP}}
+                <B.Tr>
+                  <B.Td>
+                    {{#if (can 'read model' B.data)}}
+                      <LinkTo
+                        @route='scopes.scope.targets.target'
+                        @model={{B.data.id}}
+                      >
+                        {{B.data.displayName}}
+                      </LinkTo>
+                    {{else}}
+                      {{B.data.displayName}}
+                    {{/if}}
+                    <p>{{B.data.description}}</p>
+                  </B.Td>
+                  <B.Td>
+                    {{#if B.data.type}}
+                      <Hds::Badge
+                        @text={{t
+                          (concat 'resources.target.types.' B.data.type)
+                        }}
+                      />
+                    {{/if}}
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Copy::Snippet
+                      @textToCopy={{B.data.id}}
+                      @color='secondary'
+                      />
+                  </B.Td>
+                </B.Tr>
+              {{/if}}
             {{/if}}
-          </message.description>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
 
-          {{#if (can 'create model' this.scope collection='targets')}}
-            <message.link @route='scopes.scope.targets.new'>
-              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
-          {{/if}}
-        </Rose::Message>
-      </Rose::Layout::Centered>
+      {{else}}
+        {{#if this.noResults}}
+          <Hds::ApplicationState data-test-no-target-results as |A|>
+            <A.Header @title={{t 'titles.no-results-found'}} />
+            <A.Body
+              @text={{t
+                (if
+                  this.search
+                  'descriptions.no-search-results'
+                  'descriptions.no-filter-results'
+                )
+                query=this.search
+                resource='targets'
+              }}
+            />
+          </Hds::ApplicationState>
+        {{else}}
+          <Rose::Layout::Centered>
+            <Rose::Message
+              @title={{t 'resources.target.messages.welcome.title'}}
+              as |message|
+            >
+              <message.description>
 
+                {{#if (can 'list model' this.scope collection='targets')}}
+                  {{! can list (at least):  show default welcome message}}
+                  {{t 'resources.target.description'}}
+                {{else if (can 'create model' this.scope collection='targets')}}
+                  {{! can create (only):  show create-but-not-list welcome message}}
+                  {{t
+                    'descriptions.create-but-not-list'
+                    resource=(t 'resources.target.title_plural')
+                  }}
+                {{else}}
+                  {{! can neither list nor create }}
+                  {{t
+                    'descriptions.neither-list-nor-create'
+                    resource=(t 'resources.target.title_plural')
+                  }}
+                {{/if}}
+              </message.description>
+              {{#if (can 'create model' this.scope collection='targets')}}
+                <message.link @route='scopes.scope.targets.new'>
+                  <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
+                  {{t 'titles.new'}}
+                </message.link>
+              {{/if}}
+            </Rose::Message>
+          </Rose::Layout::Centered>
+        {{/if}}
+
+      {{/if}}
+
+    {{/if}}
+    {{#if this.noTargets}}
+      <Hds::ApplicationState data-test-no-targets as |A|>
+        <A.Header @title={{t 'resources.target.messages.none.title'}} />
+        <A.Body @text={{t 'resources.target.messages.none.description'}} />
+      </Hds::ApplicationState>
     {{/if}}
 
   </page.body>
