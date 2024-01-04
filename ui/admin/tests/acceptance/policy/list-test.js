@@ -67,7 +67,6 @@ module('Acceptance | policies | list', function (hooks) {
     );
     assert.dom(`[href="${urls.policies}"]`).exists();
 
-    // Tests that correct message is displayed when no policies exist
     await click(`[href="${urls.policies}"]`);
 
     assert
@@ -97,7 +96,6 @@ module('Acceptance | policies | list', function (hooks) {
       .dom('[title="General"] a:nth-of-type(3)')
       .doesNotIncludeText(STORAGE_POLICY_TITLE);
 
-    // Tests that correct message is displayed when no policies exist
     await visit(urls.policies);
 
     assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
@@ -130,7 +128,6 @@ module('Acceptance | policies | list', function (hooks) {
     );
     assert.dom(`[href="${urls.policies}"]`).exists();
 
-    // Tests that correct message is displayed when no policies exist
     await click(`[href="${urls.policies}"]`);
 
     assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
@@ -163,7 +160,6 @@ module('Acceptance | policies | list', function (hooks) {
     );
     assert.dom(`[href="${urls.policies}"]`).exists();
 
-    // Tests that correct message is displayed when no policies exist
     await click(`[href="${urls.policies}"]`);
 
     assert

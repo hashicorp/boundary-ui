@@ -15,7 +15,7 @@ export default class ScopesScopePoliciesNewRoute extends Route {
 
   /**
    * Creates a new unsaved storage policy.
-   * @return {StorageBucket}
+   * @return {Policy}
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');

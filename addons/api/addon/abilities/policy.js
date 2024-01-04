@@ -7,7 +7,7 @@ import ModelAbility from './model';
 import { service } from '@ember/service';
 
 /**
- * Provides abilities for storage buckets.
+ * Provides abilities for storage policies.
  */
 export default class PolicyAbility extends ModelAbility {
   // =services

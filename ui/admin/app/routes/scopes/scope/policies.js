@@ -45,7 +45,7 @@ export default class ScopesScopePoliciesRoute extends Route {
 
   /**
    * Deletes the policy.
-   * @param {StorageBucketModel} policy
+   * @param {PolicyModel} policy
    */
   @action
   @loading

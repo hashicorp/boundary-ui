@@ -14,10 +14,10 @@ export default class ScopesScopePoliciesPolicyRoute extends Route {
   // =methods
 
   /**
-   * Load a storage bucket in current scope.
+   * Load a policy in current scope.
    * @param {object} params
-   * @param {string} params.storage_bucket_id
-   * @return {Promise{StorageBucketModel}}
+   * @param {string} params.policy_id
+   * @return {Promise{PolicyModel}}
    */
   async model({ policy_id }) {
     return this.store.findRecord('policy', policy_id, {
