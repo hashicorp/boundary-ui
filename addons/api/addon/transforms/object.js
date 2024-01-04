@@ -22,7 +22,7 @@ export default class ObjectTransform extends Transform {
    */
   serialize(deserialized) {
     if (!deserialized) {
-      return {};
+      return null;
     }
     return deserialized;
   }
