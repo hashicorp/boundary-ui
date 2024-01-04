@@ -189,8 +189,10 @@ unzip *.zip ;\\
   }
 
   @action
-  addWorkerTag() {
-    this.workerTags.pushObject(new Tag(this.newWorkerKey, this.newWorkerValue));
+  addWorkerTag(e) {
+    this.workerTags.pushObject(
+      new Tag((this.newWorkerKey = e.key), (this.newWorkerValue = e.value)),
+    );
     this.newWorkerKey = '';
     this.newWorkerValue = '';
   }

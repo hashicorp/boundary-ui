@@ -50,72 +50,30 @@
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
       />
     {{/if}}
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @isOptional={{true}}
+      @disabled={{form.disabled}}
+    >
+      <:fieldset as |F|>
+        <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+        <F.HelperText>
+          {{t 'resources.worker.form.worker_tags.help'}}
+        </F.HelperText>
+      </:fieldset>
 
-    <Hds::Form::Fieldset as |F|>
-      <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-      <F.HelperText>{{t
-          'resources.worker.form.worker_tags.help'
-        }}</F.HelperText>
-      <F.Control>
-        <Hds::Table class='list-wrapper-field' name='workers_tags'>
-          <:body as |B|>
-            {{#each this.workerTags as |tag i|}}
-              <B.Tr>
-                <B.Td>
-                  <Hds::Form::TextInput::Base
-                    @value={{tag.key}}
-                    @type='text'
-                    {{on 'input' (set-from-event tag 'key')}}
-                  />
-                </B.Td>
-                <B.Td>
-                  <Hds::Form::TextInput::Base
-                    @value={{tag.value}}
-                    @type='text'
-                    {{on 'input' (set-from-event tag 'value')}}
-                  />
-                </B.Td>
-                <B.Td>
-                  <Hds::Button
-                    @text={{t 'actions.remove'}}
-                    @color='critical'
-                    @icon='trash'
-                    @isIconOnly={{true}}
-                    {{on 'click' (fn this.removeWorkerTagByIndex i)}}
-                  />
-                </B.Td>
-              </B.Tr>
-            {{/each}}
-            <B.Tr>
-              <B.Td>
-                <Hds::Form::TextInput::Base
-                  @value={{this.newWorkerKey}}
-                  @type='text'
-                  placeholder='Key'
-                  {{on 'input' (set-from-event this 'newWorkerKey')}}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Form::TextInput::Base
-                  @value={{this.newWorkerValue}}
-                  @type='text'
-                  placeholder='Value'
-                  {{on 'input' (set-from-event this 'newWorkerValue')}}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Button
-                  @text={{t 'actions.add'}}
-                  @color='secondary'
-                  disabled={{not this.newWorkerKey}}
-                  {{on 'click' this.addWorkerTag}}
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      </F.Control>
-    </Hds::Form::Fieldset>
+      <:field as |F|>
+        <F.KeyValue
+          @name='worker_tags'
+          @options={{this.workerTags}}
+          @disabled={{form.disabled}}
+          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
+          @addOption={{this.addWorkerTag}}
+          @newOptionKey={{this.newWorkerTagKey}}
+          @newOptionValue={{this.newWorkerTagValue}}
+        />
+      </:field>
+    </Form::Field::ListWrapper>
 
     {{#if (feature-flag 'ssh-session-recording')}}
       <Hds::Form::Fieldset as |F|>
