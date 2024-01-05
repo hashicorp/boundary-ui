@@ -1,0 +1,14 @@
+<div class='search-filtering-loading'>
+  <div class='search-filtering-loading-title'>
+    <FlightIcon @name='loading' @size='24' />
+    <Hds::Text::Display @tag='h3'>
+      {{t 'states.loading.title'}}
+    </Hds::Text::Display>
+  </div>
+  <Hds::Text::Body @tag='p'>
+    {{t
+      'states.loading.description'
+      resource=(t 'resources.session.title_plural')
+    }}
+  </Hds::Text::Body>
+</div>

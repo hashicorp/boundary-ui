@@ -8,7 +8,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { getOwner } from '@ember/application';
-import { loading } from 'ember-loading';
 
 export default class ApplicationRoute extends Route {
   // =services
@@ -76,17 +75,6 @@ export default class ApplicationRoute extends Route {
   disconnect() {
     this.clusterUrl.resetClusterUrl();
     this.invalidateSession();
-  }
-
-  /**
-   * Hooks into ember-loading to kick off loading indicator in the
-   * application template.
-   * @return {boolean} always returns true
-   */
-  @action
-  @loading
-  loading() {
-    return true;
   }
 
   /**

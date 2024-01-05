@@ -14,3 +14,6 @@ active-public: Public
 recording: Recording
 completed: Completed
 failed: Failed
+loading:
+  title: Loading all items...
+  description: All of your {resource} are still loading. Please wait while we finish loading everything on screen.
