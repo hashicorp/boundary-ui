@@ -120,6 +120,10 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 
     // Run this loop as long as the response_type is delta,
     // which indicates that there are more items in the list
+    if (query.page_size) {
+      result = await super.query(store, schema, query);
+      return prenormalizeArrayResponse(result);
+    }
     do {
       result = await super.query(store, schema, query);
       //add the result items to a data array
