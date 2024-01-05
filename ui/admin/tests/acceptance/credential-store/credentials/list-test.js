@@ -81,7 +81,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     await click(`[href="${urls.credentials}"]`);
     assert.strictEqual(currentURL(), urls.credentials);
     assert
-      .dom('.rose-table-body .rose-table-row')
+      .dom('tbody tr')
       .isVisible({ count: this.server.schema.credentials.all().models.length });
   });
 
