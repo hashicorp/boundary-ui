@@ -7,41 +7,37 @@ export default class ScopesScopeHostsHostCatalogsHostCatalogHostSetsHostSetHosts
 
   // =attributes
   /**
-   * Returns the static columns header labels for the table
+   * Returns the columns for the host list.
    * @type {Array.<object>}
    */
-  get isStaticColumns() {
-    return [
-      {
-        label: this.intl.t('form.name.label'),
-      },
-      {
-        label: this.intl.t('form.type.label'),
-      },
-      {
-        label: this.intl.t('form.id.label'),
-      },
-      {
-        label: this.intl.t('titles.actions'),
-      },
-    ];
-  }
-
-  /**
-   * Returns the dynamic columns header labels for the table
-   * @type {Array.<object>}
-   */
-  get isDynamicColumns() {
-    return [
-      {
-        label: this.intl.t('form.external_name.label'),
-      },
-      {
-        label: this.intl.t('form.type.label'),
-      },
-      {
-        label: this.intl.t('form.id.label'),
-      },
-    ];
+  get columns() {
+    if (this.model.hostSet.isStatic) {
+      return [
+        {
+          label: this.intl.t('form.name.label'),
+        },
+        {
+          label: this.intl.t('form.type.label'),
+        },
+        {
+          label: this.intl.t('form.id.label'),
+        },
+        {
+          label: this.intl.t('titles.actions'),
+        },
+      ];
+    } else {
+      return [
+        {
+          label: this.intl.t('form.external_name.label'),
+        },
+        {
+          label: this.intl.t('form.type.label'),
+        },
+        {
+          label: this.intl.t('form.id.label'),
+        },
+      ];
+    }
   }
 }

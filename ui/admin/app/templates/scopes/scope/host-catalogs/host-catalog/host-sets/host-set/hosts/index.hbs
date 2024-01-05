@@ -31,9 +31,7 @@
       <Hds::Table
         @valign='middle'
         @model={{@model.hosts}}
-        @columns={{(if
-          @model.hostSet.isStatic this.isStaticColumns this.isDynmamicColumns
-        )}}
+        @columns={{this.columns}}
       >
 
         <:body as |B|>
