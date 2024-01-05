@@ -39,49 +39,22 @@ export async function queryIndexedDb(indexedDb, resource, query) {
 
     filterCollection = await entries.reduce(
       async (currCollection, [key, filterArrayOrObject]) => {
-        const filterValueArray = Array.isArray(filterArrayOrObject)
-          ? filterArrayOrObject
-          : filterArrayOrObject.values;
-
-        const { logicalOperator } = filterArrayOrObject;
-
-        // Remove the first item to use as the initial where clause and then reduce the remaining ones
-        const [firstOperation, firstFilterValue] = Object.entries(
-          filterValueArray[0],
-        )[0];
-
         // Grab the results from the set of one filters to be `AND` together with the rest of the filters
-        const filterResults = await filterValueArray
-          .slice(1)
-          .reduce(
-            (result, currObj) => {
-              const [operation, value] = Object.entries(currObj)[0];
+        const filterResults = await buildInitialWhereClause({
+          table: indexedDb[resource],
+          key,
+          filterArrayOrObject,
+        }).primaryKeys();
+        const resultIdsSet = new Set(filterResults);
 
-              return buildIndexedDbCollection({
-                key: getKey(key),
-                value,
-                collection: result,
-                operation,
-                logicalOperator,
-              });
-            },
-            buildIndexedDbWhere({
-              table: indexedDb[resource],
-              key: getKey(key),
-              operation: firstOperation,
-              value: firstFilterValue,
-            }),
-          )
-          .toArray();
-
-        return (await currCollection).and((record) =>
-          filterResults.some((item) => item.id === record.id),
-        );
+        return (await currCollection).and((record) => {
+          return resultIdsSet.has(record.id);
+        });
       },
       buildInitialWhereClause({
         key: firstKey,
-        filterArrayOrObject: firstFilterArrayOrObject,
         table: indexedDb[resource],
+        filterArrayOrObject: firstFilterArrayOrObject,
       }),
     );
   }
