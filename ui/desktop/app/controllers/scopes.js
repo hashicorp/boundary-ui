@@ -21,7 +21,7 @@ export default class ScopesController extends Controller {
 
   @action
   @loading
-  async downloadAndInstallCompatiableVersion() {
+  async downloadCompatibleVersion() {
     const metaDataUrl =
       'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
     const { isWindows, isMac, isLinux } = await this.ipc.invoke('checkOS');
