@@ -64,8 +64,9 @@
                 @color='secondary'
               />
             </B.Td>
-            {{#if (can 'removeHosts hostSet' @model.hostSet)}}
-              <B.Td>
+
+            <B.Td>
+              {{#if (can 'removeHosts hostSet' @model.hostSet)}}
                 <Hds::Dropdown as |dd|>
                   <dd.ToggleIcon
                     data-test-host-set-hosts-dropdown-toggle
@@ -83,8 +84,9 @@
                     }}
                   />
                 </Hds::Dropdown>
-              </B.Td>
-            {{/if}}
+              {{/if}}
+            </B.Td>
+
           </B.Tr>
         </:body>
       </Hds::Table>
