@@ -4,3 +4,37 @@
 }}
 
 {{outlet}}
+{{#unless @model.isClientDaemonSupported}}
+  <Hds::Modal @isDismissDisabled={{true}} as |M|>
+    <M.Header>
+      {{t 'unsupported-controller.title'}}
+    </M.Header>
+    <M.Body class='unsupported-modal-body'>
+      {{#if this.error}}
+        <Hds::Alert @color='critical' @type='inline' as |A|>
+          <A.Title>{{t 'errors.generic.title'}}</A.Title>
+          <A.Description>{{t 'unsupported-controller.error'}}</A.Description>
+          <A.Button
+            @text={{t 'unsupported-controller.buttons.releases-page'}}
+            @color='secondary'
+            @href='https://releases.hashicorp.com/boundary-desktop/'
+            @isHrefExternal={{true}}
+          />
+        </Hds::Alert>
+      {{/if}}
+      <Hds::Text::Body @size='300' @color='primary'>
+        {{t 'unsupported-controller.description.message'}}
+      </Hds::Text::Body>
+      <Hds::Text::Body @size='300' @color='primary'>
+        {{t 'unsupported-controller.description.install'}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer>
+      <Hds::Button
+        type='button'
+        @text={{t 'unsupported-controller.buttons.download'}}
+        {{on 'click' this.downloadAndInstallCompatiableVersion}}
+      />
+    </M.Footer>
+  </Hds::Modal>
+{{/unless}}

@@ -90,3 +90,12 @@ onboarding:
       learn: Learn about Boundary Desktop app
       cli: Learn about Boundary command-line (CLI)
       api: Learn about Boundary API
+unsupported-controller:
+  title: Unsupported controller version
+  description:
+    message: The controller you have connected to is not supported by this version of the desktop app. You’ll be unable to see and connect to any targets as a result.
+    install: Download the supported version of the desktop app to fix this issue.
+  buttons:
+    download: Download supported version
+    releases-page: Go to releases page
+  error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page
