@@ -73,7 +73,11 @@ function routes() {
           return scope.scope ? scope.scope.id === scope_id : false;
         });
       }
-      return resultSet.filter(makeBooleanFilter(filter));
+      const filteredResultSet = resultSet.filter(makeBooleanFilter(filter));
+      // add a list_token to the response to simulate pagination
+      // without having list_token, the unsupported controller modal
+      // will show when running with mirage
+      return { items: filteredResultSet.models, list_token: '12345' };
     },
   );
   this.post('/scopes', function ({ scopes }) {
