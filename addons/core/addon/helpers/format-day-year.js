@@ -23,20 +23,13 @@ export default class extends Helper {
    * @return string
    */
 
-  translation(year) {
-    if (year === 1) {
-      return this.intl.t('titles.year');
-    } else {
-      return this.intl.t('titles.years');
-    }
-  }
   compute([days]) {
     const remainder = days % 365;
     if (remainder === 0) {
-      const numberOfYears = Math.floor(days / 365);
-      return numberOfYears + ' ' + this.translation(numberOfYears);
+      const numberOfYears = days / 365;
+      return this.intl.t('titles.year', { numberOfYears });
     } else {
-      return days + ' ' + this.intl.t('titles.days');
+      return this.intl.t('titles.days', { days });
     }
   }
 }
