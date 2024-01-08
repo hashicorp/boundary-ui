@@ -923,7 +923,6 @@ policy:
     policy_name: Policy name
     retain_for: Retain for
     delete_after: Delete After
-    days: days
     do_not_delete: Do not delete
     forever: Forever
   actions:

@@ -72,8 +72,7 @@
             </B.Td>
             <B.Td>
               {{#if B.data.delete_after.days}}
-                {{B.data.delete_after.days}}
-                {{t 'resources.policy.titles.days'}}
+                {{format-day-year B.data.delete_after.days}}
               {{else}}
                 {{t 'resources.policy.titles.do_not_delete'}}
               {{/if}}
