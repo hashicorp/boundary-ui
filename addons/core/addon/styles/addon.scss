@@ -38,23 +38,6 @@
   .hds-table {
     margin-bottom: 1rem;
   }
-
-  &-loading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 4rem;
-
-    &-title {
-      gap: 1rem;
-      display: flex;
-    }
-
-    > * {
-      width: 350px;
-    }
-  }
 }
 
 // Flyout with table
