@@ -1,0 +1,70 @@
+<Hds::Form::Fieldset class='policy' as |F|>
+  <F.Legend>{{t (concat 'resources.policy.form.' @name '.label')}}</F.Legend>
+  <F.HelperText>
+    {{t (concat 'resources.policy.form.' @name '.help')}}
+  </F.HelperText>
+  <F.Control>
+    <Hds::Form::Select::Field
+      @isOptional={{true}}
+      name={{@name}}
+      disabled={{@disabled}}
+      aria-label={{t (concat 'resources.policy.form.' @name '.label')}}
+      @width='80%'
+      {{on 'change' @onSelect}}
+      as |F|
+    >
+      <F.Options>
+        <option disabled hidden selected value=''>
+          {{t 'titles.choose-an-option'}}
+        </option>
+        {{#each @options as |key|}}
+          <option value={{key}} selected={{eq key @selectedOption}}>
+            {{t
+              (concat 'resources.policy.form.' @name '_options.' key '.label')
+            }}
+          </option>
+        {{/each}}
+      </F.Options>
+
+    </Hds::Form::Select::Field>
+    {{#if @isGlobal}}
+      {{#if (eq @selectedOption 'custom')}}
+        <Hds::Form::Toggle::Field
+          name='allow-override'
+          checked={{@isOverridable}}
+          disabled={{@disabled}}
+          {{on 'change' (fn @onToggle @overridableField)}}
+          as |F|
+        >
+          <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
+        </Hds::Form::Toggle::Field>
+      {{/if}}
+    {{/if}}
+  </F.Control>
+</Hds::Form::Fieldset>
+
+{{#if @isCustomInputVisible}}
+  <Hds::Form::Field class='policy-custom-input' @layout='vertical' as |F|>
+    <F.Label>{{t (concat 'resources.policy.titles.' @customInputName)}}
+    </F.Label>
+    <F.Control>
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{@inputValue}}
+          disabled={{@disabled}}
+          aria-label={{t 'resources.policy.label'}}
+          {{on 'input' @onInput}}
+          data-input-type={{@customInputName}}
+        />
+        <S.Generic>
+          <Hds::Badge
+            class={{if @disabled 'disabled'}}
+            @text={{t 'titles.days'}}
+            @color='neutral'
+            @type='outlined'
+          />
+        </S.Generic>
+      </Hds::SegmentedGroup>
+    </F.Control>
+  </Hds::Form::Field>
+{{/if}}
