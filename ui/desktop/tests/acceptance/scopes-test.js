@@ -234,28 +234,4 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.ok(find(APP_STATE_TITLE).textContent.trim(), 'No Targets Available');
   });
-
-  test.skip('connecting to a target', async function (assert) {
-    assert.expect(3);
-    this.ipcStub.ipcService.withArgs('cliExists').returns(true);
-    this.ipcStub.ipcService.withArgs('connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'tcp',
-    });
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-
-    await visit(urls.targets);
-    await click('[data-test-targets-connect-button]');
-
-    assert.ok(find('.dialog-detail'), 'Success dialog');
-    assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
-    assert.strictEqual(
-      find('.rose-dialog-footer button').textContent.trim(),
-      'Close',
-      'Cannot retry',
-    );
-  });
 });
