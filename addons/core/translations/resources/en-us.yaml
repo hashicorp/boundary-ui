@@ -932,5 +932,5 @@ policy:
   messages:
     none:
       title: No storage policies yet
-      description: Storage policies define how long store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
+      description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
       link: Create a new storage policy
