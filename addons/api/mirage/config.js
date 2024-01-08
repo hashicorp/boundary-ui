@@ -711,6 +711,22 @@ function routes() {
     },
   );
 
+  //storage-policy
+  this.get(
+    '/policies',
+    ({ policies }, { queryParams: { scope_id: scopeId } }) => {
+      return policies.where({ scopeId });
+    },
+  );
+  this.get('/policies/:id');
+  this.del('/policies/:id');
+  this.patch('/policies/:id');
+  this.post('/policies', function ({ policies }) {
+    const attrs = this.normalizedRequestAttrs();
+
+    return policies.create(attrs);
+  });
+
   // session recordings
   this.get(
     '/session-recordings',
