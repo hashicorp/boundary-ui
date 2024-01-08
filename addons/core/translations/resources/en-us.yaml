@@ -921,7 +921,6 @@ policy:
   titles:
     new: New Storage Policy
     policy_name: Policy name
-    scope: Scope
     retain_for: Retain for
     delete_after: Delete After
     days: days

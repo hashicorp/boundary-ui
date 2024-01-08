@@ -30,7 +30,7 @@
         @model={{@model}}
         @columns={{array
           (hash label=(t 'resources.policy.titles.policy_name'))
-          (hash label=(t 'resources.policy.titles.scope'))
+          (hash label=(t 'resources.scope.title'))
           (hash label=(t 'resources.policy.titles.retain_for'))
           (hash label=(t 'resources.policy.titles.delete_after'))
           (hash label='')
@@ -65,8 +65,7 @@
             </B.Td>
             <B.Td>
               {{#if B.data.retain_for.days}}
-                {{B.data.retain_for.days}}
-                {{t 'resources.policy.titles.days'}}
+                {{format-day-year B.data.retain_for.days}}
               {{else}}
                 {{t 'resources.policy.titles.forever'}}
               {{/if}}
@@ -80,32 +79,41 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{#if (can 'read policy' B.data)}}
-                <Hds::Dropdown as |dd|>
-                  <dd.ToggleIcon
-                    @icon='more-horizontal'
-                    @text={{t 'actions.manage'}}
-                    @hasChevron={{false}}
-                    @size='small'
-                  />
-
-                  <dd.Interactive
-                    @route='scopes.scope.policies.policy'
-                    @model={{B.data.id}}
-                    @text={{t 'actions.edit'}}
-                  />
-
-                  <dd.Separator />
-
-                  <dd.Interactive
-                    @text={{t 'resources.policy.actions.delete'}}
-                    @color='critical'
-                    {{on 'click' (route-action 'delete' B.data)}}
-                  />
-
-                </Hds::Dropdown>
-              {{/if}}
-
+              {{#let
+                (hash
+                  canRead=(can 'read policy' B.data)
+                  canDelete=(can 'delete policy' B.data)
+                )
+                as |perms|
+              }}
+                {{#if (or perms.canRead perms.canDelete)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    {{#if perms.canRead}}
+                      <dd.Interactive
+                        @route='scopes.scope.policies.policy'
+                        @model={{B.data.id}}
+                        @text={{t 'actions.edit'}}
+                      />
+                    {{/if}}
+                    {{#if (and perms.canRead perms.canDelete)}}
+                      <dd.Separator />
+                    {{/if}}
+                    {{#if perms.canDelete}}
+                      <dd.Interactive
+                        @text={{t 'resources.policy.actions.delete'}}
+                        @color='critical'
+                        {{on 'click' (route-action 'delete' B.data)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
+                {{/if}}
+              {{/let}}
             </B.Td>
           </B.Tr>
         </:body>
