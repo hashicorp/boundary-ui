@@ -14,6 +14,7 @@ class Tag {
   @tracked value;
 
   constructor(key, value) {
+    console.log(key, value);
     this.key = key;
     this.value = value;
   }
@@ -31,8 +32,6 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked configFilePath;
   @tracked initialUpstreams;
   @tracked workerTags = A([]);
-  @tracked newWorkerKey;
-  @tracked newWorkerValue;
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
@@ -190,11 +189,7 @@ unzip *.zip ;\\
 
   @action
   addWorkerTag(e) {
-    this.workerTags.pushObject(
-      new Tag((this.newWorkerKey = e.key), (this.newWorkerValue = e.value)),
-    );
-    this.newWorkerKey = '';
-    this.newWorkerValue = '';
+    this.workerTags.pushObject(new Tag(e.key, e.value));
   }
 
   @action

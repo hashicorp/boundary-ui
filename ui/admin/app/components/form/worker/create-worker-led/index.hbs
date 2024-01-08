@@ -50,11 +50,7 @@
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
       />
     {{/if}}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @isOptional={{true}}
-      @disabled={{form.disabled}}
-    >
+    <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
       <:fieldset as |F|>
         <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
         <F.HelperText>
@@ -67,10 +63,8 @@
           @name='worker_tags'
           @options={{this.workerTags}}
           @disabled={{form.disabled}}
-          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
           @addOption={{this.addWorkerTag}}
-          @newOptionKey={{this.newWorkerTagKey}}
-          @newOptionValue={{this.newWorkerTagValue}}
+          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
         />
       </:field>
     </Form::Field::ListWrapper>
