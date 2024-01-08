@@ -3,278 +3,264 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Rose::Layout::Page as |page|>
+{{#if this.showFilters}}
+  <Hds::SegmentedGroup as |S|>
+    <S.TextInput
+      @value={{this.search}}
+      @type='search'
+      placeholder={{t 'actions.search'}}
+      aria-label={{t 'actions.search'}}
+      {{on 'input' this.handleSearchInput}}
+    />
+    <S.Generic>
+      <Dropdown
+        @name={{t 'resources.target.titles.active-sessions'}}
+        @itemOptions={{this.availableSessionOptions}}
+        @checkedItems={{this.availableSessions}}
+        @applyFilter={{fn this.applyFilter 'availableSessions'}}
+      />
+    </S.Generic>
+    <S.Generic>
+      <Dropdown
+        @name={{t 'form.type.label'}}
+        @itemOptions={{this.targetTypeOptions}}
+        @checkedItems={{this.types}}
+        @applyFilter={{fn this.applyFilter 'types'}}
+      />
+    </S.Generic>
+    <S.Generic>
+      <Dropdown
+        @name={{t 'resources.scope.title'}}
+        @itemOptions={{this.availableScopes}}
+        @checkedItems={{this.scopes}}
+        @applyFilter={{fn this.applyFilter 'scopes'}}
+        @isSearchable={{true}}
+        as |FD selectItem itemOptions|
+      >
+        {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+          {{#each orgs as |org|}}
+            <FD.Generic>
+              <FlightIcon @name='org' />
+              {{org.key.displayName}}
+            </FD.Generic>
+            {{#each org.items as |project|}}
+              <FD.Checkbox
+                @value={{project.id}}
+                data-test-checkbox={{project.name}}
+                checked={{includes project.id this.scopes}}
+                {{on 'change' selectItem}}
+              >
+                {{project.displayName}}
+              </FD.Checkbox>
+            {{/each}}
+          {{/each}}
+        {{/let}}
+      </Dropdown>
+    </S.Generic>
+  </Hds::SegmentedGroup>
+  <FilterTags @filters={{this.filters}} />
+  {{#if @model.targets}}
+    <Hds::Table
+      @model={{@model.targets}}
+      @columns={{array
+        (hash label=(t 'form.name.label'))
+        (hash label=(t 'form.id.label'))
+        (hash label=(t 'resources.target.titles.active-sessions'))
+        (hash label=(t 'form.type.label'))
+        (hash label=(t 'resources.project.title'))
+        (hash label='')
+      }}
+      @valign='middle'
+    >
+      <:body as |B|>
+        <B.Tr>
+          <B.Td>
+            <span class='hds-font-weight-semibold'>
+              {{#if (can 'read model' B.data)}}
+                <LinkTo
+                  data-test-visit-target={{B.data.id}}
+                  @route='scopes.scope.projects.targets.target'
+                  @model={{B.data.id}}
+                  @query={{hash isConnecting=false}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </span>
+          </B.Td>
+          <B.Td>
+            <Copyable
+              @text={{B.data.id}}
+              @buttonText={{t 'actions.copy-to-clipboard'}}
+              @acknowledgeText={{t 'states.copied'}}
+            >
+              <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+            </Copyable>
+          </B.Td>
+          <B.Td>
+            {{#if B.data.isActive}}
+              <Hds::Button
+                data-test-targets-sessions-flyout-button={{B.data.id}}
+                @text={{t 'actions.yes'}}
+                @color='tertiary'
+                @icon='info'
+                {{on 'click' (fn this.selectTarget B.data)}}
+              />
+            {{/if}}
+          </B.Td>
+          <B.Td>
+            {{#if B.data.type}}
+              <Hds::Badge
+                @text={{t (concat 'resources.target.types.' B.data.type)}}
+              />
+            {{/if}}
+          </B.Td>
+          <B.Td>
+            <div>
+              <Copyable
+                @text={{B.data.project.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <Hds::Text::Code>{{B.data.project.id}}</Hds::Text::Code>
+              </Copyable>
+            </div>
+            {{#if B.data.project.name}}
+              <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+            {{/if}}
+          </B.Td>
+          <B.Td>
+            {{#if (can 'connect target' B.data)}}
+              {{#if (can 'read target' B.data)}}
+                <Hds::Button
+                  data-test-targets-connect-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  @route='scopes.scope.projects.targets.target'
+                  @model={{B.data.id}}
+                  @query={{hash isConnecting=true}}
+                />
+              {{else}}
+                <Hds::Button
+                  data-test-targets-connect-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  {{on 'click' (fn this.quickConnect B.data)}}
+                />
+              {{/if}}
+            {{/if}}
+          </B.Td>
+        </B.Tr>
+      </:body>
+    </Hds::Table>
+    <Rose::Pagination
+      @totalItems={{@model.totalItems}}
+      @currentPage={{this.page}}
+      @currentPageSize={{this.pageSize}}
+    />
 
-  <page.header>
-    <h2>
-      {{t 'resources.target.title_plural'}}
-      <DocLink @doc='targets' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.target.description'}}</p>
-  </page.header>
-
-  <page.body class='search-filtering'>
-    {{#if this.showFilters}}
-      <Hds::SegmentedGroup as |S|>
-        <S.TextInput
-          @value={{this.search}}
-          @type='search'
-          placeholder={{t 'actions.search'}}
-          aria-label={{t 'actions.search'}}
-          {{on 'input' this.handleSearchInput}}
-        />
-        <S.Generic>
-          <Dropdown
-            @name={{t 'resources.target.titles.active-sessions'}}
-            @itemOptions={{this.availableSessionOptions}}
-            @checkedItems={{this.availableSessions}}
-            @applyFilter={{fn this.applyFilter 'availableSessions'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'form.type.label'}}
-            @itemOptions={{this.targetTypeOptions}}
-            @checkedItems={{this.types}}
-            @applyFilter={{fn this.applyFilter 'types'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'resources.scope.title'}}
-            @itemOptions={{this.availableScopes}}
-            @checkedItems={{this.scopes}}
-            @applyFilter={{fn this.applyFilter 'scopes'}}
-            @isSearchable={{true}}
-            as |FD selectItem itemOptions|
-          >
-            {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
-              {{#each orgs as |org|}}
-                <FD.Generic>
-                  <FlightIcon @name='org' />
-                  {{org.key.displayName}}
-                </FD.Generic>
-                {{#each org.items as |project|}}
-                  <FD.Checkbox
-                    @value={{project.id}}
-                    data-test-checkbox={{project.name}}
-                    checked={{includes project.id this.scopes}}
-                    {{on 'change' selectItem}}
-                  >
-                    {{project.displayName}}
-                  </FD.Checkbox>
-                {{/each}}
-              {{/each}}
-            {{/let}}
-          </Dropdown>
-        </S.Generic>
-      </Hds::SegmentedGroup>
-      <FilterTags @filters={{this.filters}} />
-      {{#if @model.targets}}
-        <Hds::Table
-          @model={{@model.targets}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.id.label'))
-            (hash label=(t 'resources.target.titles.active-sessions'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'resources.project.title'))
-            (hash label='')
-          }}
-          @valign='middle'
-        >
-          <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                <span class='hds-font-weight-semibold'>
-                  {{#if (can 'read model' B.data)}}
-                    <LinkTo
-                      data-test-visit-target={{B.data.id}}
-                      @route='scopes.scope.projects.targets.target'
-                      @model={{B.data.id}}
-                      @query={{hash isConnecting=false}}
-                    >
-                      {{B.data.displayName}}
-                    </LinkTo>
-                  {{else}}
-                    {{B.data.displayName}}
-                  {{/if}}
-                  {{#if B.data.description}}
-                    <p>{{B.data.description}}</p>
-                  {{/if}}
-                </span>
-              </B.Td>
-              <B.Td>
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
+  {{/if}}
+  {{#if this.noResults}}
+    <Hds::ApplicationState data-test-no-target-results as |A|>
+      <A.Header @title={{t 'titles.no-results-found'}} />
+      <A.Body
+        @text={{t
+          (if
+            this.search
+            'descriptions.no-search-results'
+            'descriptions.no-filter-results'
+          )
+          query=this.search
+          resource='targets'
+        }}
+      />
+    </Hds::ApplicationState>
+  {{/if}}
+{{/if}}
+{{#if this.noTargets}}
+  <Hds::ApplicationState data-test-no-targets as |A|>
+    <A.Header @title={{t 'resources.target.messages.none.title'}} />
+    <A.Body @text={{t 'resources.target.messages.none.description'}} />
+  </Hds::ApplicationState>
+{{/if}}
+{{#if (and this.selectedTarget this.selectedTarget.isActive)}}
+  <Hds::Flyout
+    @onClose={{fn this.selectTarget null}}
+    class='flyout-with-table'
+    data-test-targets-sessions-flyout
+    as |M|
+  >
+    <M.Header>
+      {{t
+        'resources.target.titles.sessions-flyout'
+        targetDisplayName=this.selectedTarget.displayName
+      }}
+    </M.Header>
+    <M.Body>
+      <Hds::Table
+        @model={{this.sortedTargetSessions}}
+        @columns={{array
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'form.started.label'))
+          (hash label=(t 'form.proxy_url.label'))
+          (hash label='')
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Copyable
+                @text={{B.data.id}}
+                @buttonText={{t 'actions.copy-to-clipboard'}}
+                @acknowledgeText={{t 'states.copied'}}
+              >
+                <LinkTo
+                  @route='scopes.scope.projects.sessions.session.index'
+                  @model={{B.data.id}}
+                  data-test-targets-session-detail-link={{B.data.id}}
                 >
                   <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                </Copyable>
-              </B.Td>
-              <B.Td>
-                {{#if B.data.isActive}}
-                  <Hds::Button
-                    data-test-targets-sessions-flyout-button={{B.data.id}}
-                    @text={{t 'actions.yes'}}
-                    @color='tertiary'
-                    @icon='info'
-                    {{on 'click' (fn this.selectTarget B.data)}}
-                  />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                {{#if B.data.type}}
-                  <Hds::Badge
-                    @text={{t (concat 'resources.target.types.' B.data.type)}}
-                  />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                <div>
-                  <Copyable
-                    @text={{B.data.project.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    <Hds::Text::Code>{{B.data.project.id}}</Hds::Text::Code>
-                  </Copyable>
-                </div>
-                {{#if B.data.project.name}}
-                  <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                {{#if (can 'connect target' B.data)}}
-                  {{#if (can 'read target' B.data)}}
-                    <Hds::Button
-                      data-test-targets-connect-button={{B.data.id}}
-                      @text={{t 'resources.session.actions.connect'}}
-                      @color='secondary'
-                      @route='scopes.scope.projects.targets.target'
-                      @model={{B.data.id}}
-                      @query={{hash isConnecting=true}}
-                    />
-                  {{else}}
-                    <Hds::Button
-                      data-test-targets-connect-button={{B.data.id}}
-                      @text={{t 'resources.session.actions.connect'}}
-                      @color='secondary'
-                      {{on 'click' (fn this.quickConnect B.data)}}
-                    />
-                  {{/if}}
-                {{/if}}
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-        <Rose::Pagination
-          @totalItems={{@model.totalItems}}
-          @currentPage={{this.page}}
-          @currentPageSize={{this.pageSize}}
+                </LinkTo>
+              </Copyable>
+            </B.Td>
+            <B.Td>
+              <time datetime={{format-date-iso B.data.created_time}}>
+                {{format-date-iso-human B.data.created_time}}
+              </time>
+            </B.Td>
+            <B.Td>
+              {{B.data.proxy}}
+            </B.Td>
+            <B.Td>
+              {{#if (can 'cancel session' B.data)}}
+                <Hds::Button
+                  data-test-session-flyout-cancel-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.end'}}
+                  @icon='x'
+                  @isIconOnly={{true}}
+                  @color='secondary'
+                  {{on 'click' (fn this.cancelSession B.data)}}
+                />
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+      {{#if this.showFlyoutViewMoreLink}}
+        <Hds::Link::Standalone
+          @text={{t 'resources.target.actions.view-more-sessions'}}
+          @route='scopes.scope.projects.sessions'
+          @query={{this.viewMoreLinkQueryParams}}
+          @icon='arrow-right'
+          @iconPosition='trailing'
         />
-
       {{/if}}
-      {{#if this.noResults}}
-        <Hds::ApplicationState data-test-no-target-results as |A|>
-          <A.Header @title={{t 'titles.no-results-found'}} />
-          <A.Body
-            @text={{t
-              (if
-                this.search
-                'descriptions.no-search-results'
-                'descriptions.no-filter-results'
-              )
-              query=this.search
-              resource='targets'
-            }}
-          />
-        </Hds::ApplicationState>
-      {{/if}}
-    {{/if}}
-    {{#if this.noTargets}}
-      <Hds::ApplicationState data-test-no-targets as |A|>
-        <A.Header @title={{t 'resources.target.messages.none.title'}} />
-        <A.Body @text={{t 'resources.target.messages.none.description'}} />
-      </Hds::ApplicationState>
-    {{/if}}
-    {{#if (and this.selectedTarget this.selectedTarget.isActive)}}
-      <Hds::Flyout
-        @onClose={{fn this.selectTarget null}}
-        class='flyout-with-table'
-        data-test-targets-sessions-flyout
-        as |M|
-      >
-        <M.Header>
-          {{t
-            'resources.target.titles.sessions-flyout'
-            targetDisplayName=this.selectedTarget.displayName
-          }}
-        </M.Header>
-        <M.Body>
-          <Hds::Table
-            @model={{this.sortedTargetSessions}}
-            @columns={{array
-              (hash label=(t 'form.id.label'))
-              (hash label=(t 'form.started.label'))
-              (hash label=(t 'form.proxy_url.label'))
-              (hash label='')
-            }}
-            @valign='middle'
-          >
-            <:body as |B|>
-              <B.Tr>
-                <B.Td>
-                  <Copyable
-                    @text={{B.data.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    <LinkTo
-                      @route='scopes.scope.projects.sessions.session.index'
-                      @model={{B.data.id}}
-                      data-test-targets-session-detail-link={{B.data.id}}
-                    >
-                      <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                    </LinkTo>
-                  </Copyable>
-                </B.Td>
-                <B.Td>
-                  <time datetime={{format-date-iso B.data.created_time}}>
-                    {{format-date-iso-human B.data.created_time}}
-                  </time>
-                </B.Td>
-                <B.Td>
-                  {{B.data.proxy}}
-                </B.Td>
-                <B.Td>
-                  {{#if (can 'cancel session' B.data)}}
-                    <Hds::Button
-                      data-test-session-flyout-cancel-button={{B.data.id}}
-                      @text={{t 'resources.session.actions.end'}}
-                      @icon='x'
-                      @isIconOnly={{true}}
-                      @color='secondary'
-                      {{on 'click' (fn this.cancelSession B.data)}}
-                    />
-                  {{/if}}
-                </B.Td>
-              </B.Tr>
-            </:body>
-          </Hds::Table>
-          {{#if this.showFlyoutViewMoreLink}}
-            <Hds::Link::Standalone
-              @text={{t 'resources.target.actions.view-more-sessions'}}
-              @route='scopes.scope.projects.sessions'
-              @query={{this.viewMoreLinkQueryParams}}
-              @icon='arrow-right'
-              @iconPosition='trailing'
-            />
-          {{/if}}
-        </M.Body>
-      </Hds::Flyout>
-    {{/if}}
-  </page.body>
-
-</Rose::Layout::Page>
+    </M.Body>
+  </Hds::Flyout>
+{{/if}}

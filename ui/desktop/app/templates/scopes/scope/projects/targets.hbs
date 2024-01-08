@@ -5,4 +5,16 @@
 
 {{page-title (t 'resources.target.title_plural')}}
 
-{{outlet}}
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>
+      {{t 'resources.target.title_plural'}}
+      <DocLink @doc='targets' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.target.description'}}</p>
+  </page.header>
+
+  <page.body class='search-filtering'>
+    {{outlet}}
+  </page.body>
+</Rose::Layout::Page>
