@@ -52,6 +52,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   get showFilters() {
     return (
       this.model.allTargets.length ||
+      this.types.length ||
       this.search ||
       this.availableSessions.length
     );
@@ -64,7 +65,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   get noResults() {
     return (
       this.model.targets.length === 0 &&
-      (this.search || this.availableSessions.length)
+      (this.search || this.availableSessions.length || this.types.length)
     );
   }
 
@@ -75,7 +76,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
   get noTargets() {
     return (
       this.model.targets.length === 0 &&
-      !(this.search || this.availableSessions.length)
+      !(this.search || this.availableSessions.length || this.types.length)
     );
   }
 
