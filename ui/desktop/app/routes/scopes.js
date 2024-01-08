@@ -47,14 +47,7 @@ export default class ScopesRoute extends Route {
   async model() {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    let scopes = A([]);
-    const isPaginationSupported = get(this, 'isPaginationSupported');
-
-    if (isPaginationSupported) {
-      scopes = await this.store.query('scope', {}).catch(() => A([]));
-    }
-
-    return scopes;
+    return this.store.query('scope', {}).catch(() => A([]));
   }
 
   /**
