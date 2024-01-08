@@ -17,7 +17,7 @@ export default class ScopesRoute extends Route {
   // =methods
 
   async beforeModel() {
-    let isClientDaemonSupported = true;
+    let isPaginationSupported = true;
     const adapter = this.store.adapterFor('application');
     const scopeSchema = this.store.modelFor('scope');
 
@@ -27,12 +27,12 @@ export default class ScopesRoute extends Route {
         recursive: true,
       });
       if (!scopesCheck.list_token) {
-        isClientDaemonSupported = false;
+        isPaginationSupported = false;
       }
     } catch (e) {
       // no op
     }
-    set(this, 'isClientDaemonSupported', isClientDaemonSupported);
+    set(this, 'isPaginationSupported', isPaginationSupported);
   }
 
   /**
@@ -48,12 +48,56 @@ export default class ScopesRoute extends Route {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
     let scopes = A([]);
-    const isClientDaemonSupported = get(this, 'isClientDaemonSupported');
+    const isPaginationSupported = get(this, 'isPaginationSupported');
 
-    if (isClientDaemonSupported) {
+    if (isPaginationSupported) {
       scopes = await this.store.query('scope', {}).catch(() => A([]));
     }
 
-    return { scopes, isClientDaemonSupported };
+    return scopes;
+  }
+
+  /**
+   * Adds `isPaginationSupported` to the controller.
+   * @param {Controller} controller
+   */
+  async setupController(controller) {
+    super.setupController(...arguments);
+
+    const isPaginationSupported = get(this, 'isPaginationSupported');
+    controller.set('isPaginationSupported', isPaginationSupported);
+
+    let downloadLink;
+    let downloadError = false;
+
+    if (!isPaginationSupported) {
+      const metaDataUrl =
+        'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
+      const { isWindows, isMac, isLinux } = await this.ipc.invoke('checkOS');
+
+      try {
+        const metaDataResponse = await fetch(metaDataUrl);
+        const metaData = await metaDataResponse.json();
+
+        if (isWindows) {
+          downloadLink = this.extractOsSpecificUrl(metaData, 'windows');
+        } else if (isMac) {
+          downloadLink = this.extractOsSpecificUrl(metaData, 'darwin');
+        } else if (isLinux) {
+          downloadLink = this.extractOsSpecificUrl(metaData, 'linux');
+        }
+      } catch (e) {
+        // this is a catch for any errors that may occur and shows the user
+        // an error alert directing them to the releases page
+        downloadError = true;
+      }
+    }
+
+    controller.set('downloadLink', downloadLink);
+    controller.set('downloadError', downloadError);
+  }
+
+  extractOsSpecificUrl(metaData, os) {
+    return metaData.builds.find((build) => build.os === os).url;
   }
 }

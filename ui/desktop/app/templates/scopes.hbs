@@ -4,13 +4,13 @@
 }}
 
 {{outlet}}
-{{#unless @model.isClientDaemonSupported}}
+{{#unless this.isPaginationSupported}}
   <Hds::Modal @isDismissDisabled={{true}} as |M|>
     <M.Header>
       {{t 'unsupported-controller.title'}}
     </M.Header>
     <M.Body class='unsupported-modal-body'>
-      {{#if this.error}}
+      {{#if this.downloadError}}
         <Hds::Alert @color='critical' @type='inline' as |A|>
           <A.Title>{{t 'errors.generic.title'}}</A.Title>
           <A.Description>{{t 'unsupported-controller.error'}}</A.Description>
@@ -19,6 +19,7 @@
             @color='secondary'
             @href='https://releases.hashicorp.com/boundary-desktop/'
             @isHrefExternal={{true}}
+            {{autofocus}}
           />
         </Hds::Alert>
       {{/if}}
@@ -33,7 +34,9 @@
       <Hds::Button
         type='button'
         @text={{t 'unsupported-controller.buttons.download'}}
-        {{on 'click' this.downloadCompatibleVersion}}
+        @href={{this.downloadLink}}
+        @isHrefExternal={{true}}
+        disabled={{unless this.downloadLink 'disabled'}}
       />
     </M.Footer>
   </Hds::Modal>
