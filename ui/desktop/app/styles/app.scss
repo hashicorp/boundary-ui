@@ -685,33 +685,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-// Search & Filtering
-.search-filtering {
-  .hds-application-state {
-    margin-top: 3rem;
-  }
-
-  .hds-segmented-group {
-    margin-bottom: 1rem;
-
-    .hds-dropdown-toggle-button__text {
-      white-space: nowrap;
-    }
-  }
-
-  .hds-table {
-    margin-bottom: 1rem;
-  }
-}
-
-// Flyout with table
-.flyout-with-table {
-  .copyable-content a,
-  button {
-    color: var(--token-color-foreground-primary);
-  }
-}
-
 // Unsupported controller modal
 .unsupported-modal-body {
   display: grid;

@@ -20,3 +20,30 @@
     }
   }
 }
+
+// Search & Filtering
+.search-filtering {
+  .hds-application-state {
+    margin-top: 3rem;
+  }
+
+  .hds-segmented-group {
+    margin-bottom: 1rem;
+
+    .hds-dropdown-toggle-button__text {
+      white-space: nowrap;
+    }
+  }
+
+  .hds-table {
+    margin-bottom: 1rem;
+  }
+}
+
+// Flyout with table
+.flyout-with-table {
+  .copyable-content a,
+  button {
+    color: var(--token-color-foreground-primary);
+  }
+}

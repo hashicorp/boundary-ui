@@ -9,6 +9,7 @@ import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
+import { action } from '@ember/object';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
@@ -50,6 +51,20 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   allTargets;
 
   // =methods
+
+  /**
+   * Event to determine whether the loading template should be shown.
+   * Only show the loading template during initial loads or when transitioning
+   * from different routes. Don't show it when a user is just searching or
+   * filtering on the same page as it can be jarring.
+   * @param transition
+   * @returns {boolean}
+   */
+  @action
+  loading(transition) {
+    const from = transition.from?.name;
+    return from !== 'scopes.scope.projects.targets.index';
+  }
 
   /**
    * If arriving here unauthenticated, redirect to index for further processing.
