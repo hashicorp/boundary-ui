@@ -53,7 +53,6 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
    * @type {boolean}
    */
   get canAttachStoragePolicy() {
-    console.log(this, 'THIS');
     return this.features.isEnabled('ssh-session-recording')
       ? this.hasAuthorizedAction('attach-storage-policy')
       : false;
