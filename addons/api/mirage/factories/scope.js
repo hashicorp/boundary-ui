@@ -17,6 +17,8 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'attach-storage-policy',
+      'detach-storage-policy',
     ],
 
   authorized_collection_actions() {
