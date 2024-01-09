@@ -10,7 +10,144 @@
   <page.header>
     <h2>
       {{t 'resources.policy.title_plural'}}
+      {{! TODO: Add doc link here }}
     </h2>
-    <p>{{t 'resources.policy.description'}}</p>
   </page.header>
+  <page.actions>
+    {{#if (can 'create model' this.scope collection='policies')}}
+      {{#if @model}}
+        <Hds::Button
+          @route='scopes.scope.policies.new'
+          @text={{t 'resources.policy.titles.new'}}
+        />
+      {{/if}}
+    {{/if}}
+  </page.actions>
+  <page.body>
+    {{#if @model}}
+      <Hds::Table
+        @valign='middle'
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'resources.policy.titles.policy_name'))
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'resources.policy.titles.retain_for'))
+          (hash label=(t 'resources.policy.titles.delete_after'))
+          (hash label='')
+        }}
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read policy' B.data)}}
+                <LinkTo
+                  @route='scopes.scope.policies.policy'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+              {{else}}
+                {{B.data.displayName}}
+              {{/if}}
+              {{#if B.data.description}}
+                <p>{{B.data.description}}</p>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.scopeModel.isGlobal}}
+                <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+              {{else}}
+                <Hds::Badge
+                  @text={{B.data.scopeModel.displayName}}
+                  @icon='org'
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.retain_for.days}}
+                {{format-day-year B.data.retain_for.days}}
+              {{else}}
+                {{t 'resources.policy.titles.forever'}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.delete_after.days}}
+                {{format-day-year B.data.delete_after.days}}
+              {{else}}
+                {{t 'resources.policy.titles.do_not_delete'}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#let
+                (hash
+                  canRead=(can 'read policy' B.data)
+                  canDelete=(can 'delete policy' B.data)
+                )
+                as |perms|
+              }}
+                {{#if (or perms.canRead perms.canDelete)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    {{#if perms.canRead}}
+                      <dd.Interactive
+                        @route='scopes.scope.policies.policy'
+                        @model={{B.data.id}}
+                        @text={{t 'actions.edit'}}
+                      />
+                    {{/if}}
+                    {{#if (and perms.canRead perms.canDelete)}}
+                      <dd.Separator />
+                    {{/if}}
+                    {{#if perms.canDelete}}
+                      <dd.Interactive
+                        @text={{t 'resources.policy.actions.delete'}}
+                        @color='critical'
+                        {{on 'click' (route-action 'delete' B.data)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
+                {{/if}}
+              {{/let}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.policy.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if (can 'list model' this.scope collection='policies')}}
+              {{t 'resources.policy.messages.none.description'}}
+            {{else if (can 'create model' this.scope collection='policies')}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.policy.title_plural')
+              }}
+            {{else}}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.policy.title_plural')
+              }}
+            {{/if}}
+          </message.description>
+          {{#if (can 'create model' this.scope collection='policies')}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.policies.new'
+              @text={{t 'resources.policy.messages.none.link'}}
+            />
+          {{/if}}
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
+  </page.body>
 </Rose::Layout::Page>

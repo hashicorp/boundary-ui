@@ -920,3 +920,15 @@ policy:
   title_plural: Storage Policies
   titles:
     new: New Storage Policy
+    policy_name: Policy name
+    retain_for: Retain for
+    delete_after: Delete After
+    do_not_delete: Do not delete
+    forever: Forever
+  actions:
+    delete: Delete Storage Policy
+  messages:
+    none:
+      title: No storage policies yet
+      description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
+      link: Create a new storage policy
