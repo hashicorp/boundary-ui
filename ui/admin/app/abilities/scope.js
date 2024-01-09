@@ -47,4 +47,25 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
         return super.canList;
     }
   }
+
+  /**
+   * Attaching a policy is allowed only if the feature flag is enabled
+   * @type {boolean}
+   */
+  get canAttachStoragePolicy() {
+    console.log(this, 'THIS');
+    return this.features.isEnabled('ssh-session-recording')
+      ? this.hasAuthorizedAction('attach-storage-policy')
+      : false;
+  }
+
+  /**
+   * Deattaching a policy is allowed only if the feature flag is enabled
+   * @type {boolean}
+   */
+  get canDetachStoragePolicy() {
+    return this.features.isEnabled('ssh-session-recording')
+      ? this.hasAuthorizedAction('detach-storage-policy')
+      : false;
+  }
 }
