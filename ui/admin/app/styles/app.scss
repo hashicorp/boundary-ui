@@ -735,6 +735,19 @@
   /* stylelint-enable selector-class-pattern */
 }
 
+.config-tags {
+  // extend styles from list-wrapper-field
+  @extend .list-wrapper-field;
+  .hds-table__tbody {
+    .hds-table__td {
+      &:last-child {
+        // remove width and white-space styles
+        width: unset;
+      }
+    }
+  }
+}
+
 .auth-methods-list-alert {
   margin-bottom: 1rem;
 }
