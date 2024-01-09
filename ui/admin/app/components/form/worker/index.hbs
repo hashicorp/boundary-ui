@@ -62,7 +62,7 @@
     <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
     <F.HelperText>{{t 'resources.worker.form.worker_tags.help'}}</F.HelperText>
     <F.Control>
-      <Hds::Table class='config-tags' name='config_tags'>
+      <Hds::Table class='list-wrapper-field config-tags' name='config_tags'>
         <:body as |B|>
           {{#each-in @model.config_tags as |key value|}}
             <B.Tr>

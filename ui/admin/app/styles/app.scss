@@ -736,17 +736,17 @@
 }
 
 .config-tags {
-  // extend styles from list-wrapper-field
-  @extend .list-wrapper-field;
+  /* stylelint-disable selector-class-pattern */
   .hds-table__tbody {
     .hds-table__td {
       &:last-child {
         // remove width and white-space styles
-        width: unset;
+        width: unset !important;
       }
     }
   }
 }
+/* stylelint-enable selector-class-pattern */
 
 .auth-methods-list-alert {
   margin-bottom: 1rem;
