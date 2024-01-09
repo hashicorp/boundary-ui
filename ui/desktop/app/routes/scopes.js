@@ -73,12 +73,14 @@ export default class ScopesRoute extends Route {
         const metaData = await metaDataResponse.json();
 
         if (isWindows) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'windows');
+          downloadLink = this.extractOsSpecificUrl(metaData, 'windows', '.zip');
         } else if (isMac) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'darwin');
+          downloadLink = this.extractOsSpecificUrl(metaData, 'darwin', '.dmg');
         } else if (isLinux) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'linux');
+          downloadLink = this.extractOsSpecificUrl(metaData, 'linux', '.deb');
         }
+
+        if (!downloadLink) throw new Error('No build found');
       } catch (e) {
         // this is a catch for any errors that may occur and shows the user
         // an error alert directing them to the releases page
@@ -90,7 +92,11 @@ export default class ScopesRoute extends Route {
     controller.set('downloadError', downloadError);
   }
 
-  extractOsSpecificUrl(metaData, os) {
-    return metaData.builds.find((build) => build.os === os).url;
+  extractOsSpecificUrl(metaData, os, fileExtension) {
+    const build = metaData.builds.find(
+      (build) => build.os === os && build.url.endsWith(fileExtension),
+    );
+
+    return build?.url;
   }
 }
