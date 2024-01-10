@@ -7,14 +7,14 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-const RETENTION_POLICY = ['forever', 'custom'];
+const RETENTION_POLICY = { forever: -1, custom: 'custom', do_not_protect: 0 };
 
-const DELETION_POLICY = ['do_not_delete', 'custom'];
+const DELETION_POLICY = { do_not_delete: null, custom: 'custom' };
 
 export default class FormPolicyComponent extends Component {
   //attributes
 
-  @tracked is_custom_retention_selected = this.args.model.retain_for?.days;
+  @tracked is_custom_retention_selected = this.args.model.retain_for?.days > 0;
   @tracked is_custom_deletion_selected = this.args.model.delete_after?.days;
   @tracked retain_for_overridable = this.args.model.retain_for?.overridable;
   @tracked delete_after_overridable = this.args.model.delete_after?.overridable;
@@ -37,7 +37,11 @@ export default class FormPolicyComponent extends Component {
    * @type {array}
    */
   get deletionPolicyOptions() {
-    return DELETION_POLICY;
+    if (!this.is_custom_retention_selected) {
+      return { do_not_delete: null };
+    } else {
+      return DELETION_POLICY;
+    }
   }
 
   /**
@@ -45,15 +49,19 @@ export default class FormPolicyComponent extends Component {
    * @type {string}
    */
   get selectedDeleteDropdownOption() {
-    return this.is_custom_deletion_selected ? 'custom' : 'do_not_delete';
+    if (!this.is_custom_retention_selected && this.retain_days === -1) {
+      return 0;
+    } else {
+      return this.args.model.delete_after?.days && 'custom';
+    }
   }
 
-  /**
-   * Returns the selected option for the retain policy dropdown
-   * @type {string}
-   */
+  // /**
+  //  * Returns the selected option for the retain policy dropdown
+  //  * @type {string}
+  //  */
   get selectedRetainDropdownOption() {
-    return this.is_custom_retention_selected ? 'custom' : 'forever';
+    return this.args.model.retain_for?.days > 0 && 'custom';
   }
 
   //actions
@@ -62,22 +70,25 @@ export default class FormPolicyComponent extends Component {
    * Show custom text field when custom option is selected
    */
   @action
-  handlePolicyTypeSelection({ target: { value: selectedType, name: policy } }) {
+  handlePolicyTypeSelection({ target: { value, name: policy } }) {
     switch (policy) {
       case 'retention_policy':
-        if (selectedType === 'custom') {
+        if (value === 'custom' || value === 'do_not_protect') {
+          this.retain_days = null;
           this.is_custom_retention_selected = true;
         } else {
           this.is_custom_retention_selected = false;
-          this.retain_days = null;
+          //API expects forever option value to be -1
+          //and do not delete should be automatically selected
+          this.retain_days = value;
         }
         break;
       case 'deletion_policy':
-        if (selectedType === 'custom') {
+        if (value === 'custom') {
           this.is_custom_deletion_selected = true;
         } else {
           this.is_custom_deletion_selected = false;
-          this.delete_days = null;
+          this.delete_days = value;
         }
         break;
     }

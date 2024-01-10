@@ -925,6 +925,7 @@ policy:
     delete_after: Delete After
     do_not_delete: Do not delete
     forever: Forever
+    days: days
   actions:
     delete: Delete Storage Policy
   messages:
@@ -946,6 +947,8 @@ policy:
         label: Forever
       custom:
         label: Custom
+      do_not_protect:
+        label: Do not protect, allow deletion any time
     deletion_policy_options:
       do_not_delete:
         label: Do not delete

@@ -10,6 +10,7 @@
   <page.header>
     <h2>
       {{t 'resources.policy.title_plural'}}
+      {{! TODO: Add doc link here }}
     </h2>
   </page.header>
   <page.actions>
@@ -63,9 +64,10 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{#if B.data.retain_for.days}}
+              {{! leave blank space when the retain days are 0 }}
+              {{#if (gte B.data.retain_for.days 1)}}
                 {{format-day-year B.data.retain_for.days}}
-              {{else}}
+              {{else if (eq B.data.retain_for.days -1)}}
                 {{t 'resources.policy.titles.forever'}}
               {{/if}}
             </B.Td>

@@ -1,8 +1,10 @@
 <Hds::Form::Fieldset class='policy' as |F|>
+
   <F.Legend>{{t (concat 'resources.policy.form.' @name '.label')}}</F.Legend>
   <F.HelperText>
     {{t (concat 'resources.policy.form.' @name '.help')}}
   </F.HelperText>
+
   <F.Control>
     <Hds::Form::Select::Field
       @isOptional={{true}}
@@ -17,13 +19,13 @@
         <option disabled hidden selected value=''>
           {{t 'titles.choose-an-option'}}
         </option>
-        {{#each @options as |key|}}
-          <option value={{key}} selected={{eq key @selectedOption}}>
+        {{#each-in @options as |key value|}}
+          <option value={{value}} selected={{eq value @selectedOption}}>
             {{t
               (concat 'resources.policy.form.' @name '_options.' key '.label')
             }}
           </option>
-        {{/each}}
+        {{/each-in}}
       </F.Options>
 
     </Hds::Form::Select::Field>
@@ -59,7 +61,7 @@
         <S.Generic>
           <Hds::Badge
             class={{if @disabled 'disabled'}}
-            @text={{t 'titles.days'}}
+            @text={{t 'resources.policy.titles.days'}}
             @color='neutral'
             @type='outlined'
           />
