@@ -955,21 +955,24 @@
 // storage policies
 .policy {
   margin-bottom: 0;
-
-  .hds-form-group__control-fields-wrapper {
-    flex-direction: row;
-  }
-
-  .hds-form-field--layout-vertical {
-    width: 70%;
-  }
-
-  .hds-form-field--layout-flag {
-    width: 30%;
-  }
 }
 
 .policy-custom-input {
+  .hds-form-field__control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .hds-segmented-group {
+      width: 45%;
+    }
+
+    .hds-form-field--layout-flag {
+      width: 40%;
+      margin-bottom: 0;
+    }
+  }
+
   .hds-badge {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;

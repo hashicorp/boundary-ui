@@ -7,15 +7,19 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-const RETENTION_POLICY = { forever: -1, custom: 'custom', do_not_protect: 0 };
+const RETENTION_POLICY = {
+  forever: -1,
+  custom: 1,
+  do_not_protect: 0,
+};
 
-const DELETION_POLICY = { do_not_delete: null, custom: 'custom' };
+const DELETION_POLICY = { do_not_delete: 0, custom: 1 };
 
 export default class FormPolicyComponent extends Component {
   //attributes
 
   @tracked is_custom_retention_selected = this.args.model.retain_for?.days > 0;
-  @tracked is_custom_deletion_selected = this.args.model.delete_after?.days;
+  @tracked is_custom_deletion_selected = this.args.model.delete_after?.days > 0;
   @tracked retain_for_overridable = this.args.model.retain_for?.overridable;
   @tracked delete_after_overridable = this.args.model.delete_after?.overridable;
 
@@ -28,67 +32,84 @@ export default class FormPolicyComponent extends Component {
    * Returns retention policy options list
    * @type {array}
    */
-  get retentionPolicyOptions() {
+  get listRententionOptions() {
     return RETENTION_POLICY;
   }
 
   /**
-   * Returns deletion policy options list
+   * Returns deletion policy options list, if the retain days are -1 (forever)
+   * then we should force the delete option to be do not delete
    * @type {array}
    */
-  get deletionPolicyOptions() {
-    if (!this.is_custom_retention_selected) {
-      return { do_not_delete: null };
+  get listDeletionOptions() {
+    if (this.retain_days < 0) {
+      return { do_not_delete: 0 };
     } else {
       return DELETION_POLICY;
     }
   }
 
   /**
-   * Returns the selected option for the delete policy dropdown
+   * Force the delete After select list to have `do not delete` option selected
+   * @type {boolean}
+   */
+  get disableDeleteOptions() {
+    return this.retain_days < 0 ? true : false;
+  }
+
+  /**
+   * Returns policy type
    * @type {string}
    */
-  get selectedDeleteDropdownOption() {
-    if (!this.is_custom_retention_selected && this.retain_days === -1) {
-      return 0;
+  get selectRetentionPolicyType() {
+    if (this.retain_days < 0) {
+      return 'forever';
+    } else if (this.retain_days >= 1) {
+      return 'custom';
     } else {
-      return this.args.model.delete_after?.days && 'custom';
+      return 'do_not_protect';
     }
   }
 
-  // /**
-  //  * Returns the selected option for the retain policy dropdown
-  //  * @type {string}
-  //  */
-  get selectedRetainDropdownOption() {
-    return this.args.model.retain_for?.days > 0 && 'custom';
+  /**
+   * Returns policy type
+   * @type {string}
+   */
+  get selectDeletePolicyType() {
+    return this.delete_days > 0 && this.is_custom_deletion_selected
+      ? 'custom'
+      : 'do_not_delete';
   }
 
   //actions
-
   /**
    * Show custom text field when custom option is selected
    */
+
   @action
-  handlePolicyTypeSelection({ target: { value, name: policy } }) {
+  handlePolicyTypeSelection({ target: { value: selectedVal, name: policy } }) {
     switch (policy) {
       case 'retention_policy':
-        if (value === 'custom' || value === 'do_not_protect') {
-          this.retain_days = null;
+        this.retain_days = selectedVal;
+        //When `forever` is selected, we should automatically select `do_not_delete`
+        //and hide the custom input
+        if (selectedVal < 0) {
+          this.delete_days = 0;
+          this.is_custom_deletion_selected = false;
+        }
+        if (selectedVal > 0) {
           this.is_custom_retention_selected = true;
         } else {
           this.is_custom_retention_selected = false;
-          //API expects forever option value to be -1
-          //and do not delete should be automatically selected
-          this.retain_days = value;
         }
         break;
+
       case 'deletion_policy':
-        if (value === 'custom') {
+        this.delete_days = selectedVal;
+        if (selectedVal > 0) {
           this.is_custom_deletion_selected = true;
         } else {
           this.is_custom_deletion_selected = false;
-          this.delete_days = value;
         }
         break;
     }
@@ -119,7 +140,7 @@ export default class FormPolicyComponent extends Component {
   }
 
   /**
-   * Callback submit and construct retain_for and delete_after model objects
+   * Callback submit and construct retain_days and delete_days model objects
    */
   @action
   async submit() {
@@ -141,8 +162,8 @@ export default class FormPolicyComponent extends Component {
   @action
   cancel() {
     this.args.cancel();
-    this.is_custom_retention_selected = this.args.model.retain_for?.days;
-    this.is_custom_deletion_selected = this.args.model.delete_after?.days;
+    this.is_custom_retention_selected = this.args.model.retain_for?.days > 0;
+    this.is_custom_deletion_selected = this.args.model.delete_after?.days > 0;
     this.retain_for_overridable = this.args.model.retain_for?.overridable;
     this.delete_after_overridable = this.args.model.delete_after?.overridable;
     this.retain_days = this.args.model.retain_for?.days;

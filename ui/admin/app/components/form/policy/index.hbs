@@ -54,7 +54,7 @@
     @name='retention_policy'
     @disabled={{form.disabled}}
     @onSelect={{this.handlePolicyTypeSelection}}
-    @options={{this.retentionPolicyOptions}}
+    @options={{this.listRententionOptions}}
     @isGlobal={{@model.scope.isGlobal}}
     @onInput={{this.handleRetainForInput}}
     @isOverridable={{if @model.isNew true this.retain_for_overridable}}
@@ -62,7 +62,7 @@
     @customInputName='retain_for'
     @isCustomInputVisible={{this.is_custom_retention_selected}}
     @inputValue={{this.retain_days}}
-    @selectedOption={{this.selectedRetainDropdownOption}}
+    @selectedOption={{this.selectRetentionPolicyType}}
     @overridableField='retain_for_overridable'
   />
 
@@ -71,7 +71,7 @@
     @disabled={{form.disabled}}
     @name='deletion_policy'
     @onSelect={{this.handlePolicyTypeSelection}}
-    @options={{this.deletionPolicyOptions}}
+    @options={{this.listDeletionOptions}}
     @isGlobal={{@model.scope.isGlobal}}
     @onInput={{this.handleDeleteAfterInput}}
     @isOverridable={{if @model.isNew true this.delete_after_overridable}}
@@ -79,8 +79,9 @@
     @customInputName='delete_after'
     @isCustomInputVisible={{this.is_custom_deletion_selected}}
     @inputValue={{this.delete_days}}
-    @selectedOption={{this.selectedDeleteDropdownOption}}
+    @selectedOption={{this.selectDeletePolicyType}}
     @overridableField='delete_after_overridable'
+    @forceDoNotDelete={{this.disableDeleteOptions}}
   />
 
   {{#if (can 'save model' @model)}}

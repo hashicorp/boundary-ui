@@ -1,4 +1,4 @@
-<Hds::Form::Fieldset class='policy' as |F|>
+<Hds::Form::Fieldset @isRequired={{true}} class='policy' as |F|>
 
   <F.Legend>{{t (concat 'resources.policy.form.' @name '.label')}}</F.Legend>
   <F.HelperText>
@@ -7,7 +7,6 @@
 
   <F.Control>
     <Hds::Form::Select::Field
-      @isOptional={{true}}
       name={{@name}}
       disabled={{@disabled}}
       aria-label={{t (concat 'resources.policy.form.' @name '.label')}}
@@ -20,7 +19,11 @@
           {{t 'titles.choose-an-option'}}
         </option>
         {{#each-in @options as |key value|}}
-          <option value={{value}} selected={{eq value @selectedOption}}>
+          <option
+            value={{value}}
+            selected={{eq key @selectedOption}}
+            disabled={{@forceDoNotDelete}}
+          >
             {{t
               (concat 'resources.policy.form.' @name '_options.' key '.label')
             }}
@@ -29,19 +32,7 @@
       </F.Options>
 
     </Hds::Form::Select::Field>
-    {{#if @isGlobal}}
-      {{#if (eq @selectedOption 'custom')}}
-        <Hds::Form::Toggle::Field
-          name='allow-override'
-          checked={{@isOverridable}}
-          disabled={{@disabled}}
-          {{on 'change' (fn @onToggle @overridableField)}}
-          as |F|
-        >
-          <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
-        </Hds::Form::Toggle::Field>
-      {{/if}}
-    {{/if}}
+
   </F.Control>
 </Hds::Form::Fieldset>
 
@@ -67,6 +58,18 @@
           />
         </S.Generic>
       </Hds::SegmentedGroup>
+      {{#if @isGlobal}}
+        <Hds::Form::Toggle::Field
+          name='allow-override'
+          checked={{@isOverridable}}
+          disabled={{@disabled}}
+          {{on 'change' (fn @onToggle @overridableField)}}
+          as |F|
+        >
+          <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
+        </Hds::Form::Toggle::Field>
+      {{/if}}
     </F.Control>
+
   </Hds::Form::Field>
 {{/if}}

@@ -62,8 +62,7 @@ module('Acceptance | policies | create', function (hooks) {
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
 
     await click('.hds-form-select');
-    await fillIn('.hds-form-select', 'custom');
-
+    await fillIn('.hds-form-select', 1);
     await fillIn(RETAIN_FOR_INPUT, 90);
     await click(SAVE_BTN_SELECTOR);
     const policy = this.server.schema.policies.findBy({
