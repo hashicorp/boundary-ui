@@ -142,6 +142,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
   resetController(controller, isExiting, transition) {
     const { to } = transition;
+    // Reset the scopes query param when changing org scope
     if (!isExiting && to.queryParams.scopes === '[]') {
       controller.setProperties({
         scopes: [],
