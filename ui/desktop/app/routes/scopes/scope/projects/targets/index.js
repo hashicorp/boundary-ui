@@ -84,11 +84,18 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     transition,
   ) {
     await this.getAllTargets(transition);
+    const projects = this.modelFor('scopes.scope.projects');
+    const projectIds = projects.map((project) => project.id);
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
+    if (scopes.length === 0) {
+      projectIds.forEach((projectId) => {
+        filters.scope_id.push({ equals: projectId });
+      });
+    }
     types.forEach((type) => {
       filters.type.push({ equals: type });
     });
@@ -124,7 +131,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     targets = targets.filter((target) =>
       this.can.can('connect target', target),
     );
-    const projects = this.modelFor('scopes.scope.projects');
 
     return {
       targets,
@@ -132,6 +138,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       allTargets: this.allTargets,
       totalItems,
     };
+  }
+
+  resetController(controller, isExiting, transition) {
+    const { to } = transition;
+    if (!isExiting && to.queryParams.scopes === '[]') {
+      controller.setProperties({
+        scopes: [],
+      });
+    }
   }
 
   /**
