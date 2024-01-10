@@ -14,7 +14,6 @@ class Tag {
   @tracked value;
 
   constructor(key, value) {
-    console.log(key, value);
     this.key = key;
     this.value = value;
   }
