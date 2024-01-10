@@ -639,6 +639,19 @@
   }
 }
 
+// add storage policy 
+
+.add-storage-policy {
+  margin: 1rem 0 1rem 0;
+}
+.select-policy {
+    margin-top: 1rem;
+}
+.add-policy-link {
+    margin-bottom: 1.5rem;
+}
+
+
 .enable-session-recording-toggle {
   width: 50%;
   margin-top: 1.5rem;
@@ -654,8 +667,14 @@
   }
 }
 
+// policy sidebar
+.policy-sidebar {
+  .description {
+    margin: 1rem 0 1rem 0;
+  }
+}
 // target sidebar
-.target-sidebar {
+.target-sidebar{
   .description {
     color: var(--token-form-helper-text-color);
     font-weight: var(--token-typography-font-weight-normal);

@@ -925,8 +925,11 @@ policy:
     delete_after: Delete After
     do_not_delete: Do not delete
     forever: Forever
+    description: Store recorded sessions for atleast this long.
   actions:
     delete: Delete Storage Policy
+    add: Add Storage Policy
+    apply: Apply the storage policy to this scope and its children
   messages:
     none:
       title: No storage policies yet

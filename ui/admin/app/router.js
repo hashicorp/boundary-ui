@@ -25,6 +25,9 @@ Router.map(function () {
 
       this.route('scopes', function () {
         this.route('new');
+        this.route('add-storage-policy', function () {
+          this.route('create');
+        });
       });
       this.route('edit');
 

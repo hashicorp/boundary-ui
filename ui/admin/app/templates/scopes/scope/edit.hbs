@@ -66,21 +66,58 @@
   {{/if}}
 
   <page.body>
-    {{#if (can 'read model' @model)}}
-      <Form::Scope
-        @model={{@model}}
-        @submit={{route-action 'save' @model}}
-        @cancel={{route-action 'cancel' @model}}
-      />
-    {{else}}
-      <Rose::Layout::Centered>
-        <Rose::Message as |message|>
-          <message.description>
-            {{t 'resources.scope.messages.cannot_read'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-    {{/if}}
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body>
+        {{#if (can 'read model' @model)}}
+          <Form::Scope
+            @model={{@model}}
+            @submit={{route-action 'save' @model}}
+            @cancel={{route-action 'cancel' @model}}
+          />
+        {{else}}
+          <Rose::Layout::Centered>
+            <Rose::Message as |message|>
+              <message.description>
+                {{t 'resources.scope.messages.cannot_read'}}
+              </message.description>
+            </Rose::Message>
+          </Rose::Layout::Centered>
+        {{/if}}
+      </bc.Body>
+      {{#if (can 'attachStoragePolicy scope' @model)}}
+        <bc.Sidebar>
+          <div class='policy-sidebar'>
+            <Hds::Text::Display @tag='h3'>
+              {{t 'resources.policy.title'}}
+            </Hds::Text::Display>
+
+            <Hds::Text::Body @tag='p' class='description'>
+              {{t 'resources.policy.titles.description'}}
+            </Hds::Text::Body>
+
+            <Hds::Button
+              @text={{t 'resources.policy.actions.add'}}
+              @color='secondary'
+              @route='scopes.scope.scopes.add-storage-policy'
+            />
+            {{!-- <LinkListPanel as |P|>
+              <P.Item
+                @icon='cloud-upload'
+                @color='boundary'
+                @text={{this.storage_bucket_name}}
+                @route='scopes.scope.storage-buckets.storage-bucket'
+                @model={{@model.storage_bucket_id}}
+              >
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.types.aws_s3'}}
+                  @icon='aws'
+                />
+              </P.Item>
+            </LinkListPanel> --}}
+          </div>
+        </bc.Sidebar>
+      {{/if}}
+    </Rose::Layout::BodyContent>
   </page.body>
 
 </Rose::Layout::Page>
