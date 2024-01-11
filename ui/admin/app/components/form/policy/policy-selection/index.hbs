@@ -19,11 +19,7 @@
           {{t 'titles.choose-an-option'}}
         </option>
         {{#each-in @options as |key value|}}
-          <option
-            value={{value}}
-            selected={{eq key @selectedOption}}
-            disabled={{this.disableDeleteOptions}}
-          >
+          <option value={{value}} selected={{eq key @selectedOption}}>
             {{t
               (concat 'resources.policy.form.' @name '_options.' key '.label')
             }}
@@ -35,7 +31,6 @@
 
   </F.Control>
 </Hds::Form::Fieldset>
-{{@isCustomInputVisible}}??
 {{#if @isCustomInputVisible}}
   <Hds::Form::Field class='policy-custom-input' @layout='vertical' as |F|>
     <F.Label>{{t (concat 'resources.policy.titles.' @customInputName)}}
