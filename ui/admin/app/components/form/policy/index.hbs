@@ -4,8 +4,8 @@
 }}
 
 <Rose::Form
-  @onSubmit={{this.submit}}
-  @cancel={{this.cancel}}
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   @showEditToggle={{if @model.isNew false true}}
   as |form|
@@ -53,35 +53,30 @@
   <Form::Policy::PolicySelection
     @name='retention_policy'
     @disabled={{form.disabled}}
-    @onSelect={{this.handlePolicyTypeSelection}}
+    @model={{@model}}
     @options={{this.listRententionOptions}}
-    @isGlobal={{@model.scope.isGlobal}}
-    @onInput={{this.handleRetainForInput}}
-    @isOverridable={{if @model.isNew true this.retain_for_overridable}}
+    @isOverridable={{this.retainForOverridable}}
     @onToggle={{this.handleOverridableToggle}}
+    @onSelect={{this.handlePolicyTypeSelection}}
     @customInputName='retain_for'
-    @isCustomInputVisible={{this.is_custom_retention_selected}}
-    @inputValue={{this.retain_days}}
+    @isCustomInputVisible={{this.isCustomRetentionSelected}}
+    @inputValue={{@model.retain_for.days}}
     @selectedOption={{this.selectRetentionPolicyType}}
-    @overridableField='retain_for_overridable'
   />
 
   {{! deletion policy }}
   <Form::Policy::PolicySelection
     @disabled={{form.disabled}}
     @name='deletion_policy'
-    @onSelect={{this.handlePolicyTypeSelection}}
+    @model={{@model}}
     @options={{this.listDeletionOptions}}
-    @isGlobal={{@model.scope.isGlobal}}
-    @onInput={{this.handleDeleteAfterInput}}
-    @isOverridable={{if @model.isNew true this.delete_after_overridable}}
+    @isOverridable={{this.deleteAfterOverridable}}
     @onToggle={{this.handleOverridableToggle}}
+    @onSelect={{this.handlePolicyTypeSelection}}
     @customInputName='delete_after'
-    @isCustomInputVisible={{this.is_custom_deletion_selected}}
-    @inputValue={{this.delete_days}}
+    @isCustomInputVisible={{this.isCustomDeletionSelected}}
+    @inputValue={{@model.delete_after.days}}
     @selectedOption={{this.selectDeletePolicyType}}
-    @overridableField='delete_after_overridable'
-    @forceDoNotDelete={{this.disableDeleteOptions}}
   />
 
   {{#if (can 'save model' @model)}}

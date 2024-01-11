@@ -24,12 +24,14 @@ export default class extends Helper {
    */
 
   compute([days]) {
-    const remainder = days % 365;
-    if (remainder === 0) {
-      const numberOfYears = days / 365;
-      return this.intl.t('titles.year', { numberOfYears });
-    } else {
-      return this.intl.t('titles.days', { days });
+    if (days > 0) {
+      const remainder = days % 365;
+      if (remainder === 0) {
+        const numberOfYears = days / 365;
+        return this.intl.t('titles.year', { numberOfYears });
+      } else {
+        return this.intl.t('titles.days', { days });
+      }
     }
   }
 }
