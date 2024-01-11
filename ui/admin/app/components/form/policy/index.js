@@ -73,18 +73,20 @@ export default class FormPolicyComponent extends Component {
   /**
    * Show custom text field when custom option is selected
    */
-
   @action
   handlePolicyTypeSelection({ target: { value: selectedVal, name: policy } }) {
     if (policy === 'retention_policy') {
       this.args.model.retain_for = {
+        ...this.args.model.retain_for,
         days: selectedVal,
       };
       if (selectedVal < 0) {
         this.args.model.delete_after = {
+          ...this.args.model.delete_after,
           days: 0,
         };
         this.isCustomDeletionSelected = false;
+        this.isCustomRetentionSelected = false;
       }
 
       if (selectedVal > 0) {
@@ -96,6 +98,7 @@ export default class FormPolicyComponent extends Component {
 
     if (policy === 'deletion_policy') {
       this.args.model.delete_after = {
+        ...this.args.model.delete_after,
         days: selectedVal,
       };
       if (selectedVal > 0) {
@@ -104,15 +107,5 @@ export default class FormPolicyComponent extends Component {
         this.isCustomDeletionSelected = false;
       }
     }
-  }
-
-  /**
-   * Handles custom input changes
-   */
-  @action
-  handleInputChange({ target: { value, name: field } }) {
-    this.args.model[field] = {
-      days: value ? value : null,
-    };
   }
 }

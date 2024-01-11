@@ -6,12 +6,11 @@ export default class FormPolicySelectionComponent extends Component {
   /**
    * Handles custom input changes
    */
-
   @action
   handleInputChange({ target: { value, name: field } }) {
     this.args.model[field] = {
       ...this.args.model[field],
-      days: value ? value : null,
+      days: value || null,
     };
   }
 
