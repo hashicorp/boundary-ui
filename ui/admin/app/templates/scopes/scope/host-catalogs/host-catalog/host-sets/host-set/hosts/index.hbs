@@ -28,82 +28,101 @@
 
   <page.body>
     {{#if @model.hosts}}
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            {{#if @model.hostSet.isStatic}}
-              <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            {{else}}
-              <row.headerCell>{{t 'form.external_name.label'}}</row.headerCell>
-            {{/if}}
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-            {{#if @model.hostSet.isStatic}}
-              <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-            {{/if}}
-          </header.row>
-        </table.header>
-
-        <table.body as |body|>
-          {{#each @model.hosts as |host|}}
-            <body.row as |row|>
-              <row.headerCell>
-                {{#if host.isStatic}}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
-                    @model={{host.id}}
-                  >
-                    {{host.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{! Link to a different subroute for dynamic/plugin hosts }}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
-                    @model={{host.id}}
-                  >
-                    {{host.displayName}}
-                  </LinkTo>
-                {{/if}}
-                <p>{{host.description}}</p>
-              </row.headerCell>
-              <row.cell>
-                <HostCatalogTypeBadge @model={{host}} />
-              </row.cell>
-              <row.cell>
-                <Copyable
-                  @text={{host.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
+      {{#if (get @model.hostSet 'isStatic')}}
+        <Hds::Table
+          @model={{@model.hosts}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'titles.actions'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.hosts.host'
+                  @model={{B.data.id}}
                 >
-                  <code>{{host.id}}</code>
-                </Copyable>
-              </row.cell>
-              <row.cell>
+                  {{B.data.displayName}}
+                </LinkTo>
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <HostCatalogTypeBadge @model={{B.data}} />
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+
+              <B.Td>
                 {{#if (can 'removeHosts hostSet' @model.hostSet)}}
-                  <Rose::Dropdown
-                    @icon='flight-icons/svg/more-horizontal-16'
-                    @iconOnly={{true}}
-                    @showCaret={{false}}
-                    @dropdownRight={{true}}
-                    @text={{t 'actions.manage'}}
-                    as |dropdown|
-                  >
-                    <dropdown.button
-                      @style='danger'
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      data-test-host-set-hosts-dropdown-toggle
+                      @text={{t 'actions.manage'}}
+                      @icon='more-horizontal'
+                      @hasChevron={{false}}
+                    />
+                    <dd.Interactive
+                      data-test-host-set-hosts-dropdown-remove-host
+                      @text={{t 'actions.remove'}}
+                      @color='critical'
                       {{on
                         'click'
-                        (route-action 'removeHost' @model.hostSet host)
+                        (route-action 'removeHost' @model.hostSet B.data)
                       }}
-                    >
-                      {{t 'actions.remove'}}
-                    </dropdown.button>
-                  </Rose::Dropdown>
+                    />
+                  </Hds::Dropdown>
                 {{/if}}
-              </row.cell>
-            </body.row>
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+              </B.Td>
+
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <Hds::Table
+          @model={{@model.hosts}}
+          @columns={{array
+            (hash label=(t 'form.external_name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                <LinkTo
+                  @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts.host'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.displayName}}
+                </LinkTo>
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <HostCatalogTypeBadge @model={{B.data}} />
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{/if}}
     {{/if}}
 
     {{#unless @model.hosts}}
