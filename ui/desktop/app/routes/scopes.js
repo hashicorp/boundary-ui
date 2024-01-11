@@ -6,7 +6,6 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
-import { set, get } from '@ember/object';
 
 export default class ScopesRoute extends Route {
   // =services
@@ -32,7 +31,7 @@ export default class ScopesRoute extends Route {
     } catch (e) {
       // no op
     }
-    set(this, 'isPaginationSupported', isPaginationSupported);
+    this.isPaginationSupported = isPaginationSupported;
   }
 
   /**
@@ -51,19 +50,19 @@ export default class ScopesRoute extends Route {
   }
 
   /**
-   * Adds `isPaginationSupported` to the controller.
+   * Adds `isPaginationSupported`, `downloadLink`, and
+   * `downloadError` to the controller.
    * @param {Controller} controller
    */
   async setupController(controller) {
     super.setupController(...arguments);
 
-    const isPaginationSupported = get(this, 'isPaginationSupported');
-    controller.set('isPaginationSupported', isPaginationSupported);
+    controller.set('isPaginationSupported', this.isPaginationSupported);
 
     let downloadLink;
     let downloadError = false;
 
-    if (!isPaginationSupported) {
+    if (!this.isPaginationSupported) {
       const metaDataUrl =
         'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
       const { isWindows, isMac, isLinux } = await this.ipc.invoke('checkOS');
