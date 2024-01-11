@@ -98,7 +98,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.strictEqual(findAll('tbody tr').length, count - 1);
   });
 
@@ -126,7 +128,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.ok(find('[role="alert"]'));
   });
 
@@ -169,11 +172,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('tbody tr .rose-dropdown-button-danger');
+    await click('[data-test-host-set-hosts-dropdown-toggle]');
+    await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.strictEqual(findAll('tbody tr').length, count - 1);
     await click('.rose-layout-page-actions a:nth-child(2)');
     assert.strictEqual(currentURL(), urls.addHosts);
-    await click('tbody label');
+    await click('tbody .hds-table__tr .hds-form-label');
     await click('form [type="button"]');
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, count - 1);
@@ -194,7 +198,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.addHosts);
-    await click('tbody label');
+    await click('tbody .hds-table__tr .hds-form-label');
     await click('form [type="submit"]');
     assert.ok(find('[role="alert"]'));
   });
