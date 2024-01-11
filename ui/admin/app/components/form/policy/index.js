@@ -18,13 +18,10 @@ const DELETION_POLICY = { do_not_delete: 0, custom: 1 };
 export default class FormPolicyComponent extends Component {
   //attributes
 
-  @tracked is_custom_retention_selected = this.args.model.retain_for?.days > 0;
-  @tracked is_custom_deletion_selected = this.args.model.delete_after?.days > 0;
-  @tracked retain_for_overridable = this.args.model.retain_for?.overridable;
-  @tracked delete_after_overridable = this.args.model.delete_after?.overridable;
-
-  @tracked delete_days = this.args.model.delete_after?.days;
-  @tracked retain_days = this.args.model.retain_for?.days;
+  @tracked retainForOverridable = this.args.model.retain_for?.overridable;
+  @tracked deleteAfterOverridable = this.args.model.delete_after?.overridable;
+  @tracked isCustomRetentionSelected = this.args.model.retain_for?.days > 0;
+  @tracked isCustomDeletionSelected = this.args.model.delete_after?.days > 0;
 
   //methods
 
@@ -42,7 +39,7 @@ export default class FormPolicyComponent extends Component {
    * @type {array}
    */
   get listDeletionOptions() {
-    if (this.retain_days < 0) {
+    if (this.args.model.retain_for?.days < 0) {
       return { do_not_delete: 0 };
     } else {
       return DELETION_POLICY;
@@ -50,21 +47,13 @@ export default class FormPolicyComponent extends Component {
   }
 
   /**
-   * Force the delete After select list to have `do not delete` option selected
-   * @type {boolean}
-   */
-  get disableDeleteOptions() {
-    return this.retain_days < 0 ? true : false;
-  }
-
-  /**
    * Returns policy type
    * @type {string}
    */
   get selectRetentionPolicyType() {
-    if (this.retain_days < 0) {
+    if (this.args.model.retain_for?.days < 0) {
       return 'forever';
-    } else if (this.retain_days >= 1) {
+    } else if (this.args.model.retain_for?.days >= 1) {
       return 'custom';
     } else {
       return 'do_not_protect';
@@ -76,97 +65,54 @@ export default class FormPolicyComponent extends Component {
    * @type {string}
    */
   get selectDeletePolicyType() {
-    return this.delete_days > 0 && this.is_custom_deletion_selected
-      ? 'custom'
-      : 'do_not_delete';
+    return this.args.model.delete_after?.days > 0 ? 'custom' : 'do_not_delete';
   }
 
   //actions
+
   /**
    * Show custom text field when custom option is selected
    */
 
   @action
   handlePolicyTypeSelection({ target: { value: selectedVal, name: policy } }) {
-    switch (policy) {
-      case 'retention_policy':
-        this.retain_days = selectedVal;
-        //When `forever` is selected, we should automatically select `do_not_delete`
-        //and hide the custom input
-        if (selectedVal < 0) {
-          this.delete_days = 0;
-          this.is_custom_deletion_selected = false;
-        }
-        if (selectedVal > 0) {
-          this.is_custom_retention_selected = true;
-        } else {
-          this.is_custom_retention_selected = false;
-        }
-        break;
+    if (policy === 'retention_policy') {
+      this.args.model.retain_for = {
+        days: selectedVal,
+      };
+      if (selectedVal < 0) {
+        this.args.model.delete_after = {
+          days: 0,
+        };
+        this.isCustomDeletionSelected = false;
+      }
 
-      case 'deletion_policy':
-        this.delete_days = selectedVal;
-        if (selectedVal > 0) {
-          this.is_custom_deletion_selected = true;
-        } else {
-          this.is_custom_deletion_selected = false;
-        }
-        break;
+      if (selectedVal > 0) {
+        this.isCustomRetentionSelected = true;
+      } else {
+        this.isCustomRetentionSelected = false;
+      }
+    }
+
+    if (policy === 'deletion_policy') {
+      this.args.model.delete_after = {
+        days: selectedVal,
+      };
+      if (selectedVal > 0) {
+        this.isCustomDeletionSelected = true;
+      } else {
+        this.isCustomDeletionSelected = false;
+      }
     }
   }
 
   /**
-   * Toggle retain for & delete after overridables
+   * Handles custom input changes
    */
   @action
-  handleOverridableToggle(field) {
-    this[field] = !this[field];
-  }
-
-  /**
-   * Set retain for input value to a tracked property
-   */
-  @action
-  handleRetainForInput({ target: { value } }) {
-    this.retain_days = value;
-  }
-
-  /**
-   * Set delete after input value to a tracked property
-   */
-  @action
-  handleDeleteAfterInput({ target: { value } }) {
-    this.delete_days = value;
-  }
-
-  /**
-   * Callback submit and construct retain_days and delete_days model objects
-   */
-  @action
-  async submit() {
-    this.args.model.retain_for = {
-      days: this.retain_days,
-      overridable: this.retain_for_overridable,
+  handleInputChange({ target: { value, name: field } }) {
+    this.args.model[field] = {
+      days: value ? value : null,
     };
-    this.args.model.delete_after = {
-      days: this.delete_days,
-      overridable: this.delete_after_overridable,
-    };
-    await this.args.submit();
-  }
-
-  /**
-   * Callback cancel and
-   * Resets all the tracked properties after rollback
-   */
-  @action
-  cancel() {
-    this.args.cancel();
-    this.is_custom_retention_selected = this.args.model.retain_for?.days > 0;
-    this.is_custom_deletion_selected = this.args.model.delete_after?.days > 0;
-    this.retain_for_overridable = this.args.model.retain_for?.overridable;
-    this.delete_after_overridable = this.args.model.delete_after?.overridable;
-    this.retain_days = this.args.model.retain_for?.days;
-    this.delete_days = this.args.model.delete_after?.days;
   }
 }

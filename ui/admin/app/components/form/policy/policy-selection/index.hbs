@@ -22,7 +22,7 @@
           <option
             value={{value}}
             selected={{eq key @selectedOption}}
-            disabled={{@forceDoNotDelete}}
+            disabled={{this.disableDeleteOptions}}
           >
             {{t
               (concat 'resources.policy.form.' @name '_options.' key '.label')
@@ -35,7 +35,7 @@
 
   </F.Control>
 </Hds::Form::Fieldset>
-
+{{@isCustomInputVisible}}??
 {{#if @isCustomInputVisible}}
   <Hds::Form::Field class='policy-custom-input' @layout='vertical' as |F|>
     <F.Label>{{t (concat 'resources.policy.titles.' @customInputName)}}
@@ -45,8 +45,9 @@
         <S.TextInput
           @value={{@inputValue}}
           disabled={{@disabled}}
-          aria-label={{t 'resources.policy.label'}}
-          {{on 'input' @onInput}}
+          aria-label={{t 'resources.policy.title'}}
+          {{on 'input' this.handleInputChange}}
+          name={{@customInputName}}
           data-input-type={{@customInputName}}
         />
         <S.Generic>
@@ -58,12 +59,12 @@
           />
         </S.Generic>
       </Hds::SegmentedGroup>
-      {{#if @isGlobal}}
+      {{#if @model.scope.isGlobal}}
         <Hds::Form::Toggle::Field
-          name='allow-override'
           checked={{@isOverridable}}
           disabled={{@disabled}}
-          {{on 'change' (fn @onToggle @overridableField)}}
+          name={{@customInputName}}
+          {{on 'change' this.handleOverridableToggle}}
           as |F|
         >
           <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
