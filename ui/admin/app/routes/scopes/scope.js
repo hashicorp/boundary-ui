@@ -56,6 +56,7 @@ export default class ScopesScopeRoute extends Route {
    * a project.  These are used for scope navigation.
    */
   async afterModel(model) {
+    console.log(model, 'what model data does this habe?');
     // First, load orgs and, if necessary, projects
     let orgs, projects;
     orgs = await this.store
@@ -77,7 +78,12 @@ export default class ScopesScopeRoute extends Route {
     this.scope.project = selectedProject;
     this.scope.orgsList = orgs;
     this.scope.projectsList = projects;
-    this.scopes = { orgs, projects, selectedOrg, selectedProject };
+    this.scopes = {
+      orgs,
+      projects,
+      selectedOrg,
+      selectedProject,
+    };
     // Update the controller (if exists), since setupController is only
     // called once the first time the route is activated.  It is not called
     // again on route refreshes.
@@ -130,7 +136,10 @@ export default class ScopesScopeRoute extends Route {
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(scope) {
-    const { isNew } = scope;
+    const { isNew, storage_policy_id } = scope;
+    if (storage_policy_id) {
+      await scope.attachStoragePolicy(storage_policy_id);
+    }
     await scope.save();
     await this.router.transitionTo('scopes.scope.edit', scope);
     if (isNew) this.refresh();

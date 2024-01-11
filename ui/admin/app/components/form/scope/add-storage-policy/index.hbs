@@ -28,22 +28,22 @@
       <option disabled hidden selected value=''>{{t
           'titles.choose-an-option'
         }}</option>
-      {{!-- {{#each @storageBucketList as |policy|}}
+      {{#each @policyList as |policy|}}
         <option
-          value={{bucket.id}}
+          value={{policy.id}}
           selected={{eq @model.storage_policy_id policy.id}}
         >
-          {{bucket.displayName}}
+          {{policy.displayName}}
         </option>
-      {{/each}} --}}
+      {{/each}}
     </F.Options>
-    {{!-- {{#if @model.errors.storage_bucket_id}}
+    {{#if @model.errors.storage_policy_id}}
       <F.Error as |E|>
-        {{#each @model.errors.storage_bucket_id as |error|}}
+        {{#each @model.errors.storage_policy_id as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
-    {{/if}} --}}
+    {{/if}}
   </Hds::Form::Select::Field>
 
   <Hds::Link::Standalone
@@ -51,7 +51,7 @@
     @color='primary'
     @icon='plus'
     @text={{t 'resources.storage-bucket.messages.none.link'}}
-    @route='scopes.scope.scopes.add-storage-policy.create'
+    @route='scopes.scope.add-storage-policy.create'
   />
   <form.actions
     @enableEditText={{t 'actions.edit-form'}}

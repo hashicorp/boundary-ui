@@ -922,10 +922,11 @@ policy:
     new: New Storage Policy
     policy_name: Policy name
     retain_for: Retain for
-    delete_after: Delete After
+    delete_after: Delete after
     do_not_delete: Do not delete
     forever: Forever
     description: Store recorded sessions for atleast this long.
+    days: days
   actions:
     delete: Delete Storage Policy
     add: Add Storage Policy
@@ -935,3 +936,24 @@ policy:
       title: No storage policies yet
       description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
       link: Create a new storage policy
+  form:
+    retention_policy:
+      label: Retention Policy
+      help: Specifies how long a recording must be stored
+    deletion_policy:
+      label: Deletion Policy
+      help: Specifies when to delete a recording
+    overridable:
+      label: Allow orgs to override
+    retention_policy_options:
+      forever:
+        label: Forever
+      custom:
+        label: Custom
+      do_not_protect:
+        label: Do not protect, allow deletion any time
+    deletion_policy_options:
+      do_not_delete:
+        label: Do not delete
+      custom:
+        label: Custom

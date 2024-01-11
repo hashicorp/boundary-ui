@@ -17,6 +17,7 @@
   <page.body>
     <Form::Scope::AddStoragePolicy
       @model={{@model}}
+      @policyList={{this.policyList}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
     />

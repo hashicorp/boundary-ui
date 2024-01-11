@@ -94,26 +94,51 @@
             <Hds::Text::Body @tag='p' class='description'>
               {{t 'resources.policy.titles.description'}}
             </Hds::Text::Body>
+            {{#if @model.storage_policy_id}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='hourglass'
+                  @color='boundary'
+                  @text={{this.storage_policy.name}}
+                  @route='scopes.scope.policies.policy'
+                  @model={{@model.storage_policy_id}}
+                >
+                  {{#if this.storage_policy.retain_for.days}}
+                    <Hds::Text::Body
+                      @tag='p'
+                      @color='var(--ui-gray-subtler-1)'
+                      @size='100'
+                    >
+                      {{t 'resources.policy.titles.retain_for'}}
+                      {{format-day-year this.storage_policy.retain_for.days}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                  {{#if this.storage_policy.delete_after.days}}
+                    <Hds::Text::Body
+                      @tag='p'
+                      @color='var(--ui-gray-subtler-1)'
+                      @size='100'
+                    >
+                      {{t 'resources.policy.titles.delete_after'}}
+                      {{format-day-year this.storage_policy.delete_after.days}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                </P.Item>
+              </LinkListPanel>
 
-            <Hds::Button
-              @text={{t 'resources.policy.actions.add'}}
-              @color='secondary'
-              @route='scopes.scope.scopes.add-storage-policy'
-            />
-            {{!-- <LinkListPanel as |P|>
-              <P.Item
-                @icon='cloud-upload'
-                @color='boundary'
-                @text={{this.storage_bucket_name}}
-                @route='scopes.scope.storage-buckets.storage-bucket'
-                @model={{@model.storage_bucket_id}}
-              >
-                <Hds::Badge
-                  @text={{t 'resources.storage-bucket.types.aws_s3'}}
-                  @icon='aws'
-                />
-              </P.Item>
-            </LinkListPanel> --}}
+              <Hds::Link::Standalone
+                @icon='arrow-right'
+                @iconPosition='trailing'
+                @text={{t 'resources.policy.actions.add'}}
+                @route='scopes.scope.add-storage-policy'
+              />
+            {{else}}
+              <Hds::Button
+                @text={{t 'resources.policy.actions.add'}}
+                @color='secondary'
+                @route='scopes.scope.add-storage-policy'
+              />
+            {{/if}}
           </div>
         </bc.Sidebar>
       {{/if}}

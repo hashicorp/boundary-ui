@@ -25,11 +25,11 @@ Router.map(function () {
 
       this.route('scopes', function () {
         this.route('new');
-        this.route('add-storage-policy', function () {
-          this.route('create');
-        });
       });
       this.route('edit');
+      this.route('add-storage-policy', function () {
+        this.route('create');
+      });
 
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {
