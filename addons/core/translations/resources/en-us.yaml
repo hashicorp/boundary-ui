@@ -936,7 +936,7 @@ policy:
   form:
     retention_policy:
       label: Retention Policy
-      help: Specifies how long a recording must be stored
+      help: Specifies how long a recording must be stored.
     deletion_policy:
       label: Deletion Policy
       help: Specifies when to delete a recording
