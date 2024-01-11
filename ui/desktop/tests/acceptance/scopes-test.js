@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  findAll,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -243,7 +250,6 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('pagination is not supported - windows build', async function (assert) {
-    invalidateSession();
     this.ipcStub.withArgs('checkOS').returns({
       isWindows: true,
       isMac: false,
@@ -259,6 +265,7 @@ module('Acceptance | scopes', function (hooks) {
 
     await visit(urls.targets);
 
+    await waitFor('[data-test-unsupported-controller]');
     assert.dom('[data-test-unsupported-controller]').exists();
     assert
       .dom('[data-test-download-link]')
@@ -281,6 +288,7 @@ module('Acceptance | scopes', function (hooks) {
 
     await visit(urls.targets);
 
+    await waitFor('[data-test-unsupported-controller]');
     assert.dom('[data-test-unsupported-controller]').exists();
     assert
       .dom('[data-test-download-link]')
@@ -303,6 +311,7 @@ module('Acceptance | scopes', function (hooks) {
 
     await visit(urls.targets);
 
+    await waitFor('[data-test-unsupported-controller]');
     assert.dom('[data-test-unsupported-controller]').exists();
     assert
       .dom('[data-test-download-link]')
@@ -325,6 +334,7 @@ module('Acceptance | scopes', function (hooks) {
 
     await visit(urls.targets);
 
+    await waitFor('[data-test-unsupported-controller-alert]');
     assert.dom('[data-test-unsupported-controller-alert]').exists();
     assert
       .dom('[data-test-releases-link]')
