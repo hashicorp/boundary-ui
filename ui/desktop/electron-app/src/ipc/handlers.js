@@ -146,9 +146,10 @@ handle('searchClientDaemon', async (request) =>
  * Check to see if the client daemon is running. We use the presence of a
  * socket path as a proxy for whether the daemon is running.
  */
-handle('isClientDaemonRunning', async () =>
-  Boolean(clientDaemonManager.socketPath),
-);
+handle('isClientDaemonRunning', async () => {
+  clientDaemonManager.status();
+  return Boolean(clientDaemonManager.socketPath);
+});
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method
