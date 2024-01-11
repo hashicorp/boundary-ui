@@ -55,26 +55,18 @@
     @disabled={{form.disabled}}
     @model={{@model}}
     @options={{this.listRententionOptions}}
-    @isOverridable={{this.retainForOverridable}}
-    @onToggle={{this.handleOverridableToggle}}
-    @onSelect={{this.handlePolicyTypeSelection}}
     @customInputName='retain_for'
-    @isCustomInputVisible={{this.isCustomRetentionSelected}}
     @inputValue={{@model.retain_for.days}}
     @selectedOption={{this.selectRetentionPolicyType}}
   />
 
   {{! deletion policy }}
   <Form::Policy::PolicySelection
-    @disabled={{form.disabled}}
     @name='deletion_policy'
+    @disabled={{form.disabled}}
     @model={{@model}}
     @options={{this.listDeletionOptions}}
-    @isOverridable={{this.deleteAfterOverridable}}
-    @onToggle={{this.handleOverridableToggle}}
-    @onSelect={{this.handlePolicyTypeSelection}}
     @customInputName='delete_after'
-    @isCustomInputVisible={{this.isCustomDeletionSelected}}
     @inputValue={{@model.delete_after.days}}
     @selectedOption={{this.selectDeletePolicyType}}
   />
