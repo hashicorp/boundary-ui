@@ -26,7 +26,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   ];
 
   @tracked targets = [];
-  @tracked status = [];
+  @tracked status = ['active', 'pending', 'canceling'];
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;
@@ -34,11 +34,17 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   // =methods
 
   /**
-   * A list of sessions sorted by created time
+   * A list of sessions sorted by created time then sorted by availability
    * @type {[SessionModel]}
    */
   get sortedSessions() {
-    return orderBy(this.model.sessions, 'created_time', 'desc');
+    const sortedSessions = orderBy(this.model.sessions, 'created_time', 'desc');
+    return [
+      // then move active sessions to the top
+      ...sortedSessions.filter((session) => session.isAvailable),
+      // and all others to the end
+      ...sortedSessions.filter((session) => !session.isAvailable),
+    ];
   }
 
   /**
@@ -84,9 +90,16 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   get filters() {
     return {
-      targets: this.availableTargets,
-      status: this.sessionStatusOptions,
-      scopes: this.availableScopes,
+      allFilters: {
+        targets: this.availableTargets,
+        status: this.sessionStatusOptions,
+        scopes: this.availableScopes,
+      },
+      selectedFilters: {
+        targets: this.targets,
+        status: this.status,
+        scopes: this.scopes,
+      },
     };
   }
 
