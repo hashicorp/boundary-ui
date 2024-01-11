@@ -48,17 +48,37 @@ export default class ScopeModel extends GeneratedScopeModel {
   }
 
   /**
-   * Adds host sets via the `add-host-sources` method.
-   * See serializer and adapter for more information.
-   * @param {[string]} hostSetIDs
+   * Attach policy via the `attach-staorage-policy` method.
+   * @param {[string]} policyId
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
    */
   attachStoragePolicy(policyId, options = { adapterOptions: {} }) {
-    console.log(policyId, 'POLICYYYYY');
     const defaultAdapterOptions = {
       method: 'attach-storage-policy',
+      policyId,
+    };
+    // There is no "deep merge" in ES.
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
+
+  /**
+   * Detaches policy via the `detach-storage-policy` method.
+   * @param {[string]} policyId
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  detachStoragePolicy(policyId, options = { adapterOptions: {} }) {
+    const defaultAdapterOptions = {
+      method: 'detach-storage-policy',
       policyId,
     };
     // There is no "deep merge" in ES.

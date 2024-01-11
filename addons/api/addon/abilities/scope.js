@@ -15,7 +15,6 @@ export default class ScopeAbility extends ModelAbility {
    * @type {boolean}
    */
   get canAttachStoragePolicy() {
-    console.log(' in herhehrhe');
     return this.hasAuthorizedAction('attach-storage-policy');
   }
 

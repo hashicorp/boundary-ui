@@ -56,7 +56,6 @@ export default class ScopesScopeRoute extends Route {
    * a project.  These are used for scope navigation.
    */
   async afterModel(model) {
-    console.log(model, 'what model data does this habe?');
     // First, load orgs and, if necessary, projects
     let orgs, projects;
     orgs = await this.store
@@ -155,9 +154,28 @@ export default class ScopesScopeRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async delete(scope) {
-    const { scopeID } = scope;
+    const { scopeID, storage_policy_id } = scope;
+    if (storage_policy_id) {
+      await scope.detachStoragePolicy(storage_policy_id);
+    }
     await scope.destroyRecord();
     await this.router.replaceWith('scopes.scope.scopes', scopeID);
     //this.refresh();
+  }
+
+  /**
+   * Deletes the scope and redirects to index.
+   * @param {Model} scope
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
+  async detachStoragePolicy(scope) {
+    const { storage_policy_id, scopeID } = scope;
+
+    await scope.detachStoragePolicy(storage_policy_id);
+    await this.router.replaceWith('scopes.scope.scopes', scopeID);
   }
 }

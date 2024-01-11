@@ -100,8 +100,6 @@
                   @icon='hourglass'
                   @color='boundary'
                   @text={{this.storage_policy.name}}
-                  @route='scopes.scope.policies.policy'
-                  @model={{@model.storage_policy_id}}
                 >
                   {{#if this.storage_policy.retain_for.days}}
                     <Hds::Text::Body
@@ -124,6 +122,33 @@
                     </Hds::Text::Body>
                   {{/if}}
                 </P.Item>
+                {{#if (can 'detachStoragePolicy scope' @model)}}
+                  <P.Item>
+                    <Hds::Dropdown as |dd|>
+                      <dd.ToggleIcon
+                        @icon='more-horizontal'
+                        @text={{t 'actions.manage'}}
+                        @hasChevron={{false}}
+                        @size='small'
+                      />
+                      <dd.Interactive
+                        @route='scopes.scope.policies.policy'
+                        @model={{this.storage_policy.id}}
+                        @text={{t 'actions.view'}}
+                      />
+                      <dd.Separator />
+                      <dd.Interactive
+                        @text={{t 'resources.policy.actions.delete'}}
+                        @color='critical'
+                        {{on
+                          'click'
+                          (route-action 'detachStoragePolicy' @model)
+                        }}
+                      />
+                    </Hds::Dropdown>
+                  </P.Item>
+                {{/if}}
+
               </LinkListPanel>
 
               <Hds::Link::Standalone
@@ -132,6 +157,7 @@
                 @text={{t 'resources.policy.actions.add'}}
                 @route='scopes.scope.add-storage-policy'
               />
+
             {{else}}
               <Hds::Button
                 @text={{t 'resources.policy.actions.add'}}

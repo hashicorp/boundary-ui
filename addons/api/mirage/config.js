@@ -82,12 +82,35 @@ function routes() {
     // saving, which is the gist of this function.
     const attrs = this.normalizedRequestAttrs();
     const parentScopeAttrs = this.serialize(scopes.find(attrs.scopeId));
+
     attrs.scope = parentScopeAttrs;
+
     return scopes.create(attrs);
   });
   this.get('/scopes/:id');
   this.patch('/scopes/:id');
   this.del('/scopes/:id');
+  this.post(
+    '/scopes/:idMethod',
+    function ({ scopes }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      console.log(scopes, 'scope');
+      console.log(attrs, 'attrs');
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      console.log(updatedAttrs, 'upda');
+      const method = idMethod.split(':')[1];
+      const policy = attrs.storage_policy_id;
+
+      if (method === 'attach-storage-policy') {
+        if (policy) {
+          updatedAttrs.storagePolicyId = policy;
+        }
+      }
+      //return scopes.find(id).update(attrs);
+    },
+  );
 
   // Auth & IAM resources
 

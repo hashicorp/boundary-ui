@@ -30,27 +30,6 @@ export default class ScopesScopeAddStoragePolicyCreateRoute extends Route {
     return record;
   }
 
-  // async afterModel() {
-  //   let scopes;
-  //   const orgScopes = (
-  //     await this.store.query('scope', { scope_id: 'global' })
-  //   ).map((scope) => ({ model: scope }));
-  //   scopes = [
-  //     { model: this.store.peekRecord('scope', 'global') },
-  //     ...orgScopes,
-  //   ];
-  //   this.scopes = scopes;
-  // }
-
-  /**
-   * Adds available global and org scopes to the context.
-   * @param {Controller} controller
-   */
-  // setupController(controller) {
-  //   super.setupController(...arguments);
-  //   controller.set('scopes', this.scopes);
-  // }
-
   // =actions
 
   /**
@@ -62,7 +41,6 @@ export default class ScopesScopeAddStoragePolicyCreateRoute extends Route {
   @notifyError(({ message }) => message)
   @notifySuccess('notifications.save-success')
   async save(policy) {
-    console.log(policy, 'POLICY FROM CREATE');
     await policy.save();
     await this.router.transitionTo('scopes.scope.add-storage-policy');
     this.refresh();

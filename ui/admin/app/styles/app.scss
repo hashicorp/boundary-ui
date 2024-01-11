@@ -639,18 +639,17 @@
   }
 }
 
-// add storage policy 
+// add storage policy
 
 .add-storage-policy {
   margin: 1rem 0 1rem 0;
 }
 .select-policy {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 .add-policy-link {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
-
 
 .enable-session-recording-toggle {
   width: 50%;
@@ -672,9 +671,12 @@
   .description {
     margin: 1rem 0 1rem 0;
   }
+  .hds-link-standalone__text {
+    margin: 1rem 0 1rem 0;
+  }
 }
 // target sidebar
-.target-sidebar{
+.target-sidebar {
   .description {
     color: var(--token-form-helper-text-color);
     font-weight: var(--token-typography-font-weight-normal);
@@ -713,7 +715,6 @@
 
   &__policy {
     color: var(--ui-gray-subtler-1);
-    
   }
   .flight-icon-arrow-right {
     color: var(--token-color-foreground-faint);
