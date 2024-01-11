@@ -16,7 +16,7 @@ export default class ScopesRoute extends Route {
   // =methods
 
   async beforeModel() {
-    let isPaginationSupported = true;
+    this.isPaginationSupported = false;
     const adapter = this.store.adapterFor('application');
     const scopeSchema = this.store.modelFor('scope');
 
@@ -25,13 +25,12 @@ export default class ScopesRoute extends Route {
         page_size: 1,
         recursive: true,
       });
-      if (!scopesCheck.list_token) {
-        isPaginationSupported = false;
+      if (scopesCheck.list_token) {
+        this.isPaginationSupported = true;
       }
     } catch (e) {
       // no op
     }
-    this.isPaginationSupported = isPaginationSupported;
   }
 
   /**
