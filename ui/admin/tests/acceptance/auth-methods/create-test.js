@@ -118,7 +118,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
     await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [data-test-add-algorithm]');
     await fillIn(ALLOWED_AUDIENCES_INPUT_SELECTOR, 'allowed_audiences');
     await click(ALLOWED_AUDIENCES_BTN_SELECTOR, 'allowed_audiences');
     await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
@@ -127,7 +127,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
 
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await click('form fieldset:nth-of-type(4) [data-test-add-claim-map]');
 
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);
