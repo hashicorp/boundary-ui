@@ -84,7 +84,7 @@
                 <LinkTo
                   @route='scopes.scope.projects.sessions.session.index'
                   @model={{B.data.id}}
-                  data-test-session-detail-link
+                  data-test-session-detail-link={{B.data.id}}
                 >
                   <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
                 </LinkTo>
@@ -101,7 +101,7 @@
                 @acknowledgeText={{t 'states.copied'}}
               >
                 <Hds::Text::Code
-                  data-test-session-id-copy
+                  data-test-session-id-copy={{B.data.id}}
                 >{{B.data.id}}</Hds::Text::Code>
               </Copyable>
             {{/if}}

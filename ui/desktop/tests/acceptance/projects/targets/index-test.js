@@ -47,12 +47,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      org2: null,
       project: null,
+      project2: null,
     },
     authMethods: {
       global: null,
     },
     target: null,
+    target2: null,
     session: null,
   };
 
@@ -85,7 +88,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create('scope', {
+      id: 'global',
+      name: 'Global',
+    });
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -95,6 +101,15 @@ module('Acceptance | projects | targets | index', function (hooks) {
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: orgScope,
+    });
+    instances.scopes.org2 = this.server.create('scope', {
+      type: 'org',
+      scope: globalScope,
+    });
+    const org2Scope = { id: instances.scopes.org2.id, type: 'org' };
+    instances.scopes.project2 = this.server.create('scope', {
+      type: 'project',
+      scope: org2Scope,
     });
 
     // Generate resources
@@ -119,6 +134,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
       },
       'withAssociations',
     );
+    instances.target2 = this.server.create('target', {
+      scope: instances.scopes.project2,
+      address: 'localhost',
+    });
 
     // Generate route URLs for resources
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -411,5 +430,29 @@ module('Acceptance | projects | targets | index', function (hooks) {
     );
 
     assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('user can change org scope and only targets for that org will be displayed', async function (assert) {
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets', 'sessions', {
+      resource: 'targets',
+      func: () => [instances.target],
+    });
+
+    await visit(urls.scopes.global);
+
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
+      .exists();
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
+      .exists();
+
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
+      .exists();
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
+      .doesNotExist();
   });
 });
