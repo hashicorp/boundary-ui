@@ -1,14 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 export default class FormPolicySelectionComponent extends Component {
-  //attributes
-  @tracked isCustomRetentionSelected = this.args.model.retain_for?.days > 0;
-  @tracked isCustomDeletionSelected = this.args.model.delete_after?.days > 0;
-  @tracked retainForOverridable = this.args.model.retain_for?.overridable;
-  @tracked deleteAfterOverridable = this.args.model.delete_after?.overridable;
-
   //methods
   /**
    * This is used to show/hide the custom input field
@@ -28,11 +21,45 @@ export default class FormPolicySelectionComponent extends Component {
   }
 
   /**
+   * Returns true if rentention days are greater than 0
+   * @type {boolean}
+   */
+  get isCustomRetentionSelected() {
+    return this.args.model.retain_for?.days > 0;
+  }
+
+  /**
+   * Returns true if deletion days are greater than 0
+   * @type {boolean}
+   */
+  get isCustomDeletionSelected() {
+    return this.args.model.delete_after?.days > 0;
+  }
+  /**
    * Returns true if the toggle is on
    * @type {boolean}
    */
   get isOverridable() {
     return this.args.model[this.args.customInputName]?.overridable;
+  }
+
+  get disable() {
+    if (
+      this.args.name === 'deletion_policy' &&
+      this.args.model.retain_for?.days === -1
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  /**
+   * Select options return type is string and we want the `days` in integer format
+   * @type {Number}
+   */
+
+  convertStringToInt(str) {
+    return Number(str);
   }
   //actions
   /**
@@ -40,9 +67,10 @@ export default class FormPolicySelectionComponent extends Component {
    */
   @action
   handleInputChange({ target: { value, name: field } }) {
+    const val = this.convertStringToInt(value);
     this.args.model[field] = {
       ...this.args.model[field],
-      days: value || null,
+      days: val,
     };
   }
 
@@ -61,7 +89,8 @@ export default class FormPolicySelectionComponent extends Component {
    * Show custom text field when custom option is selected
    */
   @action
-  handlePolicyTypeSelection({ target: { value: selectedVal, name: policy } }) {
+  handlePolicyTypeSelection({ target: { value, name: policy } }) {
+    const selectedVal = this.convertStringToInt(value);
     if (policy === 'retention_policy') {
       this.args.model.retain_for = {
         ...this.args.model.retain_for,
