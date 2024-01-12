@@ -148,96 +148,104 @@
   <Hds::Form::Fieldset as |F|>
     <F.Legend>{{t 'form.signing_algorithms.label'}}</F.Legend>
     <F.HelperText>{{t 'form.signing_algorithms.help'}}</F.HelperText>
-
-    <F.Control>
-      <Hds::Table class='list-wrapper-field' @valign='middle'>
-        <:head as |H|>
-          <H.Tr>
-            <H.Th>{{t 'form.algorithm.label'}}</H.Th>
-            <H.Th>{{t 'titles.actions'}}</H.Th>
-          </H.Tr>
-        </:head>
-        <:body as |B|>
-          {{#each @model.signing_algorithms as |algorithm i|}}
+    {{#let (unique-id) as |headerID|}}
+      <F.Control>
+        <Hds::Table class='list-wrapper-field' @valign='middle'>
+          <:head as |H|>
+            <H.Tr>
+              <H.Th id={{headerID}}>{{t 'form.algorithm.label'}}</H.Th>
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            </H.Tr>
+          </:head>
+          <:body as |B|>
+            {{#each @model.signing_algorithms as |algorithm i|}}
+              <B.Tr>
+                <B.Td>
+                  <Hds::Form::Select::Field
+                    @width='100%'
+                    @value={{algorithm.value}}
+                    @isInvalid={{@model.errors.signing_algorithms}}
+                    aria-labelledby={{headerID}}
+                    disabled={{form.disabled}}
+                    {{on 'change' (set-from-event algorithm 'value')}}
+                    as |F|
+                  >
+                    <F.Options>
+                      {{#each this.signingAlgorithms as |algorithmOption|}}
+                        <option
+                          value={{algorithmOption}}
+                          selected={{eq algorithmOption algorithm.value}}
+                        >{{algorithmOption}}</option>
+                      {{/each}}
+                    </F.Options>
+                  </Hds::Form::Select::Field>
+                </B.Td>
+                <B.Td>
+                  <Hds::Button
+                    @color='critical'
+                    @text={{t 'actions.remove'}}
+                    @isIconOnly={{true}}
+                    @icon='trash'
+                    disabled={{if
+                      @model.isNew
+                      false
+                      (if form.isEditable false true)
+                    }}
+                    {{on
+                      'click'
+                      (fn @removeItemByIndex 'signing_algorithms' i)
+                    }}
+                    data-test-remove-algorithm
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
             <B.Tr>
               <B.Td>
                 <Hds::Form::Select::Field
                   @width='100%'
-                  @value={{algorithm.value}}
-                  @isInvalid={{@model.errors.signing_algorithms}}
+                  @value={{this.newSigningAlgorithm}}
+                  aria-labelledby={{headerID}}
                   disabled={{form.disabled}}
-                  {{on 'change' (set-from-event algorithm 'value')}}
+                  {{on 'change' (set-from-event this 'newSigningAlgorithm')}}
                   as |F|
                 >
                   <F.Options>
                     {{#each this.signingAlgorithms as |algorithmOption|}}
                       <option
                         value={{algorithmOption}}
-                        selected={{eq algorithmOption algorithm.value}}
-                      >{{algorithmOption}}</option>
+                        selected={{eq algorithmOption this.newSigningAlgorithm}}
+                      >{{algorithmOption}}
+                      </option>
                     {{/each}}
                   </F.Options>
                 </Hds::Form::Select::Field>
               </B.Td>
               <B.Td>
                 <Hds::Button
-                  @color='critical'
-                  @text={{t 'actions.remove'}}
-                  @isIconOnly={{true}}
-                  @icon='trash'
+                  @color='secondary'
+                  @text={{t 'actions.add'}}
                   disabled={{if
                     @model.isNew
                     false
                     (if form.isEditable false true)
                   }}
-                  {{on 'click' (fn @removeItemByIndex 'signing_algorithms' i)}}
-                  data-test-remove-algorithm
+                  {{on
+                    'click'
+                    (fn
+                      @addStringItem
+                      'signing_algorithms'
+                      this.newSigningAlgorithm
+                    )
+                  }}
+                  data-test-add-algorithm
                 />
               </B.Td>
             </B.Tr>
-          {{/each}}
-          <B.Tr>
-            <B.Td>
-              <Hds::Form::Select::Field
-                @width='100%'
-                @value={{this.newSigningAlgorithm}}
-                disabled={{form.disabled}}
-                {{on 'change' (set-from-event this 'newSigningAlgorithm')}}
-                as |F|
-              >
-                <F.Options>
-                  {{#each this.signingAlgorithms as |algorithmOption|}}
-                    <option
-                      value={{algorithmOption}}
-                      selected={{eq algorithmOption this.newSigningAlgorithm}}
-                    >{{algorithmOption}}
-                    </option>
-                  {{/each}}
-                </F.Options>
-              </Hds::Form::Select::Field>
-            </B.Td>
-            <B.Td>
-              <Hds::Button
-                @color='secondary'
-                @text={{t 'actions.add'}}
-                disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn
-                    @addStringItem 'signing_algorithms' this.newSigningAlgorithm
-                  )
-                }}
-                data-test-add-algorithm
-              />
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-    </F.Control>
+          </:body>
+        </Hds::Table>
+      </F.Control>
+    {{/let}}
     {{#if @model.errors.signing_algorithms}}
       <F.Error as |E|>
         {{#each @model.errors.signing_algorithms as |error|}}
@@ -348,6 +356,7 @@
                     @value={{claimMap.to}}
                     @width='100%'
                     @isInvalid={{@model.errors.account_claim_maps}}
+                    name='to_claim'
                     disabled={{form.disabled}}
                     aria-labelledby={{toHeaderID}}
                     {{on 'change' (set-from-event claimMap 'to')}}
@@ -397,6 +406,7 @@
                 <Hds::Form::Select::Field
                   @width='100%'
                   @value={{this.newToClaim}}
+                  name='to_claim'
                   disabled={{form.disabled}}
                   aria-labelledby={{toHeaderID}}
                   {{on 'change' (set-from-event this 'newToClaim')}}
