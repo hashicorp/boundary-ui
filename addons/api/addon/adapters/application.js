@@ -118,6 +118,13 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     let result;
     let data = [];
 
+    // If the query has a page_size, we skip the pagination logic
+    // and return the initial result. This is being used to determine
+    // if the controller supports pagination
+    if (query.page_size) {
+      result = await super.query(store, schema, query);
+      return prenormalizeArrayResponse(result);
+    }
     // Run this loop as long as the response_type is delta,
     // which indicates that there are more items in the list
     do {

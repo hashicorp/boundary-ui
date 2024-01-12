@@ -149,7 +149,7 @@
                 @text={{t 'actions.cancel'}}
                 @color='secondary'
                 {{on 'click' (route-action 'cancelSession' B.data)}}
-                data-test-session-cancel-button
+                data-test-session-cancel-button={{B.data.id}}
               />
             {{/if}}
           </B.Td>

@@ -125,9 +125,14 @@ const createWindow = (partition, closeWindowCB) => {
   });
 
   // Opens external links in the host default browser.
-  // We just allow boundaryproject.io domain to open on external window (for now).
+  // We allow boundaryproject.io domain to open on external window (for now)
+  // and releases.hashicorp.com domain to download the desktop app or
+  // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https://boundaryproject.io/')) {
+    if (
+      url.startsWith('https://boundaryproject.io/') ||
+      url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
+    ) {
       shell.openExternal(url);
     }
 

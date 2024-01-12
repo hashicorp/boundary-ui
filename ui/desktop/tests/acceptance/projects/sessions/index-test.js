@@ -295,7 +295,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .dom(`[data-test-session-cancel-button="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -307,19 +307,17 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .dom(`[data-test-session-cancel-button="${instances.session.id}"]`)
       .isVisible();
   });
 
   test('cannot click cancel button without cancel permissions', async function (assert) {
     instances.session.update({ authorized_actions: [] });
     this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
-    await visit(urls.projects);
-
-    await click(`[href="${urls.sessions}"]`);
+    await visit(urls.sessions);
 
     assert
-      .dom('tbody tr:first-child [data-test-session-cancel-button]')
+      .dom(`[data-test-session-cancel-button="${instances.session.id}"]`)
       .isNotVisible();
   });
 
