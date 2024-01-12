@@ -12,6 +12,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
 
   @service session;
   @service store;
+  @service ipc;
 
   // =attributes
 
@@ -62,6 +63,9 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    */
   async model({ targets, status, scopes, page, pageSize }, transition) {
     const from = transition.from?.name;
+    const projects = this.modelFor('scopes.scope.projects');
+    const projectIds = projects.map((project) => project.id);
+    const { id: scope_id } = this.modelFor('scopes.scope');
 
     const filters = {
       user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -78,8 +82,15 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
+    if (scopes.length === 0) {
+      projectIds.forEach((projectId) => {
+        filters.scope_id.push({ equals: projectId });
+      });
+    }
 
     const queryOptions = {
+      scope_id,
+      recursive: true,
       query: { filters },
       page,
       pageSize,
@@ -94,6 +105,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       this.allSessions = await this.store.query(
         'session',
         {
+          scope_id,
+          recursive: true,
           query: {
             filters: {
               user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -102,10 +115,12 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
         },
         options,
       );
-      this.allTargets = await this.store.query('target', {}, options);
+      this.allTargets = await this.store.query(
+        'target',
+        { scope_id, recursive: true },
+        options,
+      );
     }
-
-    const projects = this.modelFor('scopes.scope.projects');
 
     return {
       sessions,
@@ -113,6 +128,17 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       allTargets: this.allTargets,
       totalItems,
+      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
     };
+  }
+
+  resetController(controller, isExiting, transition) {
+    const { to } = transition;
+    // Reset the scopes query param when changing org scope
+    if (!isExiting && to.queryParams.scopes === '[]') {
+      controller.setProperties({
+        scopes: [],
+      });
+    }
   }
 }

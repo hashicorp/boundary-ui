@@ -20,6 +20,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   @service router;
   @service session;
   @service store;
+  @service ipc;
 
   // =attributes
 
@@ -83,12 +84,20 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     { search, scopes, availableSessions, types, page, pageSize },
     transition,
   ) {
-    await this.getAllTargets(transition);
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    await this.getAllTargets(transition, scope_id);
+    const projects = this.modelFor('scopes.scope.projects');
+    const projectIds = projects.map((project) => project.id);
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
+    if (scopes.length === 0) {
+      projectIds.forEach((projectId) => {
+        filters.scope_id.push({ equals: projectId });
+      });
+    }
     types.forEach((type) => {
       filters.type.push({ equals: type });
     });
@@ -96,6 +105,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
     const sessions = await this.store.query('session', {
+      recursive: true,
+      scope_id,
       query: {
         filters: {
           user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -111,6 +122,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
     let targets = await this.store.query('target', {
+      recursive: true,
+      scope_id,
       query: { search, filters },
       page,
       pageSize,
@@ -118,20 +131,28 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     });
     const totalItems = targets.meta?.totalItems;
 
-    // TODO: Filter targets by scope we're in manually
-    // const { id: scope_id } = this.modelFor('scopes.scope');
     // Filter out targets to which users do not have the connect ability
     targets = targets.filter((target) =>
       this.can.can('connect target', target),
     );
-    const projects = this.modelFor('scopes.scope.projects');
 
     return {
       targets,
       projects,
       allTargets: this.allTargets,
       totalItems,
+      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
     };
+  }
+
+  resetController(controller, isExiting, transition) {
+    const { to } = transition;
+    // Reset the scopes query param when changing org scope
+    if (!isExiting && to.queryParams.scopes === '[]') {
+      controller.setProperties({
+        scopes: [],
+      });
+    }
   }
 
   /**
@@ -140,13 +161,17 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * @param transition
    * @returns {Promise<void>}
    */
-  async getAllTargets(transition) {
+  async getAllTargets(transition, scope_id) {
     const from = transition.from?.name;
 
     // Query all targets for defining filtering values if entering route for first time
     if (from !== 'scopes.scope.projects.targets.index') {
       const options = { pushToStore: false };
-      const allTargets = await this.store.query('target', {}, options);
+      const allTargets = await this.store.query(
+        'target',
+        { scope_id, recursive: true },
+        options,
+      );
 
       // Filter out targets to which users do not have the connect ability
       this.allTargets = allTargets.filter((target) =>
