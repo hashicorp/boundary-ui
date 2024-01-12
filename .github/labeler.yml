@@ -2,22 +2,29 @@
 # SPDX-License-Identifier: MPL-2.0
 
 addons:
-  - addons/**/*
+  - changed-files:
+    - any-glob-to-any-file: "addons/**/*"
 
 api-addon:
-  - addons/api/**/*
+  - changed-files:
+    - any-glob-to-any-file: "addons/api/**/*"
 
 auth-addon:
-  - addons/auth/**/*
+  - changed-files:
+    - any-glob-to-any-file: "addons/auth/**/*"
 
 styles-addon:
-  - addons/rose/**/*
+  - changed-files:
+    - any-glob-to-any-file: "addons/rose/**/*"
 
 ui:
-  - ui/**/*
+  - changed-files:
+    - any-glob-to-any-file: "ui/**/*"
 
 admin:
-  - ui/admin/**/*
+  - changed-files:
+    - any-glob-to-any-file: "ui/admin/**/*"
 
 desktop:
-  - ui/desktop/**/*
+  - changed-files:
+    - any-glob-to-any-file: "ui/desktop/**/*"
