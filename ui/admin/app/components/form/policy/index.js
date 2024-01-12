@@ -49,7 +49,6 @@ export default class FormPolicyComponent extends Component {
     const val = Object.keys(RETENTION_POLICY).find(
       (i) => RETENTION_POLICY[i] === this.args.model.retain_for?.days,
     );
-    console.log(val, 'VAL');
     return val;
   }
 
