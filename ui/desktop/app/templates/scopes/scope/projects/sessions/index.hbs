@@ -4,55 +4,57 @@
 }}
 
 {{#if (or @model.sessions @model.allSessions)}}
-  <Hds::SegmentedGroup as |S|>
-    <S.Generic>
-      <Dropdown
-        @name={{t 'resources.target.title'}}
-        @itemOptions={{this.availableTargets}}
-        @checkedItems={{this.targets}}
-        @applyFilter={{fn this.applyFilter 'targets'}}
-        @isSearchable={{true}}
-        @listPosition='bottom-left'
-      />
-    </S.Generic>
-    <S.Generic>
-      <Dropdown
-        @name={{t 'form.status.label'}}
-        @itemOptions={{this.sessionStatusOptions}}
-        @checkedItems={{this.status}}
-        @applyFilter={{fn this.applyFilter 'status'}}
-      />
-    </S.Generic>
-    <S.Generic>
-      <Dropdown
-        @name={{t 'resources.scope.title'}}
-        @itemOptions={{this.availableScopes}}
-        @checkedItems={{this.scopes}}
-        @applyFilter={{fn this.applyFilter 'scopes'}}
-        @isSearchable={{true}}
-        as |FD selectItem itemOptions|
-      >
-        {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
-          {{#each orgs as |org|}}
-            <FD.Generic>
-              <FlightIcon @name='org' />
-              {{org.key.displayName}}
-            </FD.Generic>
-            {{#each org.items as |project|}}
-              <FD.Checkbox
-                @value={{project.id}}
-                checked={{includes project.id this.scopes}}
-                {{on 'change' selectItem}}
-              >
-                {{project.displayName}}
-              </FD.Checkbox>
+  {{#if @model.isClientDaemonRunning}}
+    <Hds::SegmentedGroup as |S|>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'resources.target.title'}}
+          @itemOptions={{this.availableTargets}}
+          @checkedItems={{this.targets}}
+          @applyFilter={{fn this.applyFilter 'targets'}}
+          @isSearchable={{true}}
+          @listPosition='bottom-left'
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'form.status.label'}}
+          @itemOptions={{this.sessionStatusOptions}}
+          @checkedItems={{this.status}}
+          @applyFilter={{fn this.applyFilter 'status'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'resources.scope.title'}}
+          @itemOptions={{this.availableScopes}}
+          @checkedItems={{this.scopes}}
+          @applyFilter={{fn this.applyFilter 'scopes'}}
+          @isSearchable={{true}}
+          as |FD selectItem itemOptions|
+        >
+          {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+            {{#each orgs as |org|}}
+              <FD.Generic>
+                <FlightIcon @name='org' />
+                {{org.key.displayName}}
+              </FD.Generic>
+              {{#each org.items as |project|}}
+                <FD.Checkbox
+                  @value={{project.id}}
+                  checked={{includes project.id this.scopes}}
+                  {{on 'change' selectItem}}
+                >
+                  {{project.displayName}}
+                </FD.Checkbox>
+              {{/each}}
             {{/each}}
-          {{/each}}
-        {{/let}}
-      </Dropdown>
-    </S.Generic>
-  </Hds::SegmentedGroup>
-  <FilterTags @filters={{this.filters}} />
+          {{/let}}
+        </Dropdown>
+      </S.Generic>
+    </Hds::SegmentedGroup>
+    <FilterTags @filters={{this.filters}} />
+  {{/if}}
   {{#if @model.sessions}}
     <Hds::Table
       @model={{this.sortedSessions}}
@@ -84,7 +86,7 @@
                 <LinkTo
                   @route='scopes.scope.projects.sessions.session.index'
                   @model={{B.data.id}}
-                  data-test-session-detail-link
+                  data-test-session-detail-link={{B.data.id}}
                 >
                   <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
                 </LinkTo>
@@ -101,7 +103,7 @@
                 @acknowledgeText={{t 'states.copied'}}
               >
                 <Hds::Text::Code
-                  data-test-session-id-copy
+                  data-test-session-id-copy={{B.data.id}}
                 >{{B.data.id}}</Hds::Text::Code>
               </Copyable>
             {{/if}}
