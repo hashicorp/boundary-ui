@@ -8,3 +8,24 @@
   @text={{t 'resources.policy.titles.new'}}
   @route='scopes.scope.policies.new'
 />
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.policy.titles.new'}}
+    </h2>
+  </page.header>
+
+  <page.body>
+    <Form::Policy
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

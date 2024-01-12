@@ -951,3 +951,37 @@
     margin-bottom: 1.5rem;
   }
 }
+
+// storage policies
+.policy {
+  margin-bottom: 0;
+}
+
+.policy-custom-input {
+  .hds-form-field__control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .hds-segmented-group {
+      width: 45%;
+    }
+
+    .hds-form-field--layout-flag {
+      width: 40%;
+      margin-bottom: 0;
+    }
+  }
+
+  .hds-badge {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-color: var(--ui-gray-subtler-1);
+    border-left: 0;
+
+    &.disabled {
+      color: var(--token-form-control-disabled-foreground-color);
+      border-color: var(--token-form-control-disabled-border-color);
+    }
+  }
+}
