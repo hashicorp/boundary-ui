@@ -125,12 +125,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="client_secret"]', 'client_secret');
     // Remove all signing algorithms
     await Promise.all(
-      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element),
+      findAll('form fieldset:nth-of-type(1) [data-test-remove-algorithm]').map(
+        (element) => click(element),
       ),
     );
     await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    await click('form fieldset:nth-of-type(1) [data-test-add-algorithm]');
     // Remove all allowed audiences
     const allowedAudiencesList = findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR);
 
@@ -154,13 +154,13 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     // Remove all claim maps
     await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
-        click(element),
+      findAll('form fieldset:nth-of-type(4) [data-test-remove-claim-map]').map(
+        (element) => click(element),
       ),
     );
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await click('form fieldset:nth-of-type(4) [data-test-add-claim-map]');
 
     // Remove all certificates
     const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
