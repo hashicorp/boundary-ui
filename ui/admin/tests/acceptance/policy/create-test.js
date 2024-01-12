@@ -71,7 +71,7 @@ module('Acceptance | policies | create', function (hooks) {
 
     assert.strictEqual(policy.name, NAME_FIELD_TEXT);
     assert.strictEqual(policy.scopeId, 'global');
-    assert.strictEqual(policy.attributes.retain_for.days, '90');
+    assert.strictEqual(policy.attributes.retain_for.days, 90);
     assert.strictEqual(getPolicyCount(), policyCount + 1);
   });
 

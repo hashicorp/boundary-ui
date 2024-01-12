@@ -12,7 +12,7 @@ export default class FormPolicySelectionComponent extends Component {
       return this.isCustomRetentionSelected;
     } else if (
       this.args.name === 'deletion_policy' &&
-      this.args.model.retain_for?.days > 0
+      this.args.model.retain_for?.days >= 0
     ) {
       return this.isCustomDeletionSelected;
     } else {
@@ -43,7 +43,7 @@ export default class FormPolicySelectionComponent extends Component {
     return this.args.model[this.args.customInputName]?.overridable;
   }
 
-  get disable() {
+  get isDeleteDisable() {
     if (
       this.args.name === 'deletion_policy' &&
       this.args.model.retain_for?.days === -1
@@ -101,15 +101,6 @@ export default class FormPolicySelectionComponent extends Component {
           ...this.args.model.delete_after,
           days: 0,
         };
-
-        this.isCustomDeletionSelected = false;
-        this.isCustomRetentionSelected = false;
-      }
-
-      if (selectedVal > 0) {
-        this.isCustomRetentionSelected = true;
-      } else {
-        this.isCustomRetentionSelected = false;
       }
     }
 
@@ -118,11 +109,6 @@ export default class FormPolicySelectionComponent extends Component {
         ...this.args.model.delete_after,
         days: selectedVal,
       };
-      if (selectedVal > 0) {
-        this.isCustomDeletionSelected = true;
-      } else {
-        this.isCustomDeletionSelected = false;
-      }
     }
   }
 }
