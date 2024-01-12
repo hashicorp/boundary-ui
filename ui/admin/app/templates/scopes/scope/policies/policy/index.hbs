@@ -9,16 +9,11 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display @tag='h2'>
       {{t 'resources.policy.title'}}
-    </h2>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <Hds::Text::Code>{{@model.id}}</Hds::Text::Code>
-    </Copyable>
+    </Hds::Text::Display>
+
+    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
 
   <page.navigation>
