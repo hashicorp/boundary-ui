@@ -31,8 +31,6 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked configFilePath;
   @tracked initialUpstreams;
   @tracked workerTags = A([]);
-  @tracked newWorkerKey;
-  @tracked newWorkerValue;
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
@@ -189,10 +187,8 @@ unzip *.zip ;\\
   }
 
   @action
-  addWorkerTag() {
-    this.workerTags.pushObject(new Tag(this.newWorkerKey, this.newWorkerValue));
-    this.newWorkerKey = '';
-    this.newWorkerValue = '';
+  addWorkerTag(e) {
+    this.workerTags.pushObject(new Tag(e.key, e.value));
   }
 
   @action

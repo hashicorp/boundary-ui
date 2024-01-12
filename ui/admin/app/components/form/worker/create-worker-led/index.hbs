@@ -50,66 +50,24 @@
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
       />
     {{/if}}
+    <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
+      <:fieldset as |F|>
+        <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+        <F.HelperText>
+          {{t 'resources.worker.form.worker_tags.help'}}
+        </F.HelperText>
+      </:fieldset>
 
-    <Hds::Form::Fieldset as |F|>
-      <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-      <F.HelperText>{{t
-          'resources.worker.form.worker_tags.help'
-        }}</F.HelperText>
-      <F.Control>
-        <Rose::Table @style='condensed' as |table|>
-          <table.body as |body|>
-            {{#each this.workerTags as |tag index|}}
-              <body.row as |row|>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.key}} />
-                </row.cell>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.value}} />
-                </row.cell>
-                <row.cell @shrink={{true}}>
-                  <Rose::Button
-                    @style='warning'
-                    @iconOnly='flight-icons/svg/trash-16'
-                    title={{t 'actions.remove'}}
-                    {{on 'click' (fn this.removeWorkerTagByIndex index)}}
-                  >
-                    {{t 'actions.remove'}}
-                  </Rose::Button>
-                </row.cell>
-              </body.row>
-            {{/each}}
-
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{this.newWorkerKey}}
-                  placeholder='Key'
-                />
-              </row.cell>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{this.newWorkerValue}}
-                  placeholder='Value'
-                />
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='secondary'
-                  title={{t 'actions.add'}}
-                  @disabled={{not this.newWorkerKey}}
-                  {{on 'click' this.addWorkerTag}}
-                >
-                  {{t 'actions.add'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          </table.body>
-        </Rose::Table>
-      </F.Control>
-    </Hds::Form::Fieldset>
+      <:field as |F|>
+        <F.KeyValue
+          @name='worker_tags'
+          @options={{this.workerTags}}
+          @disabled={{form.disabled}}
+          @addOption={{this.addWorkerTag}}
+          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
+        />
+      </:field>
+    </Form::Field::ListWrapper>
 
     {{#if (feature-flag 'ssh-session-recording')}}
       <Hds::Form::Fieldset as |F|>
