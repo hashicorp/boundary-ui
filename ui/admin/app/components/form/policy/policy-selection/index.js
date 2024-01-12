@@ -25,7 +25,9 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get isCustomRetentionSelected() {
-    return this.args.model.retain_for?.days > 0;
+    //no need to show custom input for the below days
+    const arr = [-1, 0, 2555, 2190];
+    return arr.includes(this.args.model.retain_for?.days) ? false : true;
   }
 
   /**

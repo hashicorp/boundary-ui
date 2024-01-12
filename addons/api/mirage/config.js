@@ -88,7 +88,29 @@ function routes() {
   this.get('/scopes/:id');
   this.patch('/scopes/:id');
   this.del('/scopes/:id');
+  this.post(
+    '/scopes/:idMethod',
+    function ({ scopes }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const scope = scopes.find(id);
 
+      const updatedAttrs = {
+        version: attrs.version,
+        storagePolicyId: attrs.storagePolicyId,
+      };
+
+      if (method === 'attach-storage-policy') {
+        updatedAttrs.storagePolicyId = attrs.storagePolicyId;
+      }
+
+      if (method === 'detach-storage-policy') {
+        updatedAttrs.storagePolicyId = '';
+      }
+      return scope.update(updatedAttrs);
+    },
+  );
   // Auth & IAM resources
 
   this.get(

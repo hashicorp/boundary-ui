@@ -9,6 +9,8 @@ const RETENTION_POLICY = {
   forever: -1,
   custom: 1,
   do_not_protect: 0,
+  soc: 2555,
+  hippa: 2190,
 };
 
 const DELETION_POLICY = { do_not_delete: 0, custom: 1 };
@@ -44,13 +46,10 @@ export default class FormPolicyComponent extends Component {
    * @type {string}
    */
   get selectRetentionPolicyType() {
-    if (this.args.model.retain_for?.days < 0) {
-      return 'forever';
-    } else if (this.args.model.retain_for?.days >= 1) {
-      return 'custom';
-    } else {
-      return 'do_not_protect';
-    }
+    const val = Object.keys(RETENTION_POLICY).find(
+      (i) => RETENTION_POLICY[i] === this.args.model.retain_for?.days,
+    );
+    return val || 'custom';
   }
 
   /**
