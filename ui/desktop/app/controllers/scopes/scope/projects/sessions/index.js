@@ -38,13 +38,11 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    * @type {[SessionModel]}
    */
   get sortedSessions() {
-    const sortedSessions = orderBy(this.model.sessions, 'created_time', 'desc');
-    return [
-      // then move active sessions to the top
-      ...sortedSessions.filter((session) => session.isAvailable),
-      // and all others to the end
-      ...sortedSessions.filter((session) => !session.isAvailable),
-    ];
+    return orderBy(
+      this.model.sessions,
+      ['isAvailable', 'created_time'],
+      ['desc', 'desc'],
+    );
   }
 
   /**
