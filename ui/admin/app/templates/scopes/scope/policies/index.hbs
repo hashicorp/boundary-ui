@@ -26,7 +26,6 @@
   <page.body>
     {{#if @model}}
       <Hds::Table
-        @valign='middle'
         @model={{@model}}
         @columns={{array
           (hash label=(t 'resources.policy.titles.policy_name'))
@@ -35,6 +34,7 @@
           (hash label=(t 'resources.policy.titles.delete_after'))
           (hash label='')
         }}
+        @valign='middle'
       >
         <:body as |B|>
           <B.Tr>

@@ -30,7 +30,6 @@
   <page.body>
     {{#if @model}}
       <Hds::Table
-        @valign='middle'
         @model={{@model}}
         @columns={{array
           (hash label=(t 'form.name.label'))
@@ -39,6 +38,7 @@
           (hash label=(t 'resources.storage-bucket.form.scope.label'))
           (hash label='')
         }}
+        @valign='middle'
       >
         <:body as |B|>
           <B.Tr>
