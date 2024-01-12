@@ -91,10 +91,15 @@
               {{t 'resources.policy.title'}}
             </Hds::Text::Display>
 
-            <Hds::Text::Body @tag='p' class='description'>
-              {{t 'resources.policy.titles.description'}}
-            </Hds::Text::Body>
-
+            {{#if @model.storage_policy_id}}
+              <Hds::Text::Body @tag='p' class='description'>
+                {{t 'resources.policy.titles.policy_description'}}
+              </Hds::Text::Body>
+            {{else}}
+              <Hds::Text::Body @tag='p' class='description'>
+                {{t 'resources.policy.titles.create_policy_description'}}
+              </Hds::Text::Body>
+            {{/if}}
             {{#if @model.storage_policy_id}}
               <LinkListPanel as |P|>
                 <P.Item
@@ -109,10 +114,15 @@
                       @size='100'
                     >
                       {{t 'resources.policy.titles.retain_for'}}
-                      {{format-day-year this.storage_policy.retain_for.days}}
+                      {{#if (gte this.storage_policy.retain_for.days 1)}}
+                        {{format-day-year this.storage_policy.retain_for.days}}
+                      {{else if (eq this.storage_policy.retain_for.days -1)}}
+                        {{t 'resources.policy.titles.forever'}}
+                      {{/if}}
                     </Hds::Text::Body>
                   {{/if}}
-                  {{#if this.storage_policy.delete_after.days}}
+
+                  {{#if (gt this.storage_policy.delete_after.days 0)}}
                     <Hds::Text::Body
                       @tag='p'
                       @color='var(--ui-gray-subtler-1)'
