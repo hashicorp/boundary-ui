@@ -4,61 +4,64 @@
 }}
 
 {{#if this.showFilters}}
-  <Hds::SegmentedGroup as |S|>
-    <S.TextInput
-      @value={{this.search}}
-      @type='search'
-      placeholder={{t 'actions.search'}}
-      aria-label={{t 'actions.search'}}
-      {{on 'input' this.handleSearchInput}}
-    />
-    <S.Generic>
-      <Dropdown
-        @name={{t 'resources.target.titles.active-sessions'}}
-        @itemOptions={{this.availableSessionOptions}}
-        @checkedItems={{this.availableSessions}}
-        @applyFilter={{fn this.applyFilter 'availableSessions'}}
+  {{#if @model.isClientDaemonRunning}}
+    <Hds::SegmentedGroup as |S|>
+      <S.TextInput
+        @value={{this.search}}
+        @type='search'
+        placeholder={{t 'actions.search'}}
+        aria-label={{t 'actions.search'}}
+        {{on 'input' this.handleSearchInput}}
       />
-    </S.Generic>
-    <S.Generic>
-      <Dropdown
-        @name={{t 'form.type.label'}}
-        @itemOptions={{this.targetTypeOptions}}
-        @checkedItems={{this.types}}
-        @applyFilter={{fn this.applyFilter 'types'}}
-      />
-    </S.Generic>
-    <S.Generic>
-      <Dropdown
-        @name={{t 'resources.scope.title'}}
-        @itemOptions={{this.availableScopes}}
-        @checkedItems={{this.scopes}}
-        @applyFilter={{fn this.applyFilter 'scopes'}}
-        @isSearchable={{true}}
-        as |FD selectItem itemOptions|
-      >
-        {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
-          {{#each orgs as |org|}}
-            <FD.Generic>
-              <FlightIcon @name='org' />
-              {{org.key.displayName}}
-            </FD.Generic>
-            {{#each org.items as |project|}}
-              <FD.Checkbox
-                @value={{project.id}}
-                data-test-checkbox={{project.name}}
-                checked={{includes project.id this.scopes}}
-                {{on 'change' selectItem}}
-              >
-                {{project.displayName}}
-              </FD.Checkbox>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'resources.target.titles.active-sessions'}}
+          @itemOptions={{this.availableSessionOptions}}
+          @checkedItems={{this.availableSessions}}
+          @applyFilter={{fn this.applyFilter 'availableSessions'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'form.type.label'}}
+          @itemOptions={{this.targetTypeOptions}}
+          @checkedItems={{this.types}}
+          @applyFilter={{fn this.applyFilter 'types'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          @name={{t 'resources.scope.title'}}
+          @itemOptions={{this.availableScopes}}
+          @checkedItems={{this.scopes}}
+          @applyFilter={{fn this.applyFilter 'scopes'}}
+          @isSearchable={{true}}
+          as |FD selectItem itemOptions|
+        >
+          {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+            {{#each orgs as |org|}}
+              <FD.Generic>
+                <FlightIcon @name='org' />
+                {{org.key.displayName}}
+              </FD.Generic>
+              {{#each org.items as |project|}}
+                <FD.Checkbox
+                  @value={{project.id}}
+                  data-test-checkbox={{project.name}}
+                  checked={{includes project.id this.scopes}}
+                  {{on 'change' selectItem}}
+                >
+                  {{project.displayName}}
+                </FD.Checkbox>
+              {{/each}}
             {{/each}}
-          {{/each}}
-        {{/let}}
-      </Dropdown>
-    </S.Generic>
-  </Hds::SegmentedGroup>
-  <FilterTags @filters={{this.filters}} />
+          {{/let}}
+        </Dropdown>
+      </S.Generic>
+    </Hds::SegmentedGroup>
+    <FilterTags @filters={{this.filters}} />
+  {{/if}}
+
   {{#if @model.targets}}
     <Hds::Table
       @model={{@model.targets}}
