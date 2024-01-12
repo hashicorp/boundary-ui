@@ -141,9 +141,16 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get filters() {
     return {
-      scopes: this.availableScopes,
-      availableSessions: this.availableSessionOptions,
-      types: this.targetTypeOptions,
+      allFilters: {
+        scopes: this.availableScopes,
+        availableSessions: this.availableSessionOptions,
+        types: this.targetTypeOptions,
+      },
+      selectedFilters: {
+        scopes: this.scopes,
+        availableSessions: this.availableSessions,
+        types: this.types,
+      },
     };
   }
 
