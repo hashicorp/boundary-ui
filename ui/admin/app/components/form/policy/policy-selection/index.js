@@ -55,7 +55,6 @@ export default class FormPolicySelectionComponent extends Component {
       return false;
     }
   }
-
   //actions
   /**
    * Handles custom input changes
