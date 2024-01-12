@@ -64,17 +64,16 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              {{#if B.data.retain_for.days}}
+              {{! leave blank space when the retain days are 0 }}
+              {{#if (gte B.data.retain_for.days 1)}}
                 {{format-day-year B.data.retain_for.days}}
-              {{else}}
+              {{else if (eq B.data.retain_for.days -1)}}
                 {{t 'resources.policy.titles.forever'}}
               {{/if}}
             </B.Td>
             <B.Td>
               {{#if B.data.delete_after.days}}
                 {{format-day-year B.data.delete_after.days}}
-              {{else}}
-                {{t 'resources.policy.titles.do_not_delete'}}
               {{/if}}
             </B.Td>
             <B.Td>
