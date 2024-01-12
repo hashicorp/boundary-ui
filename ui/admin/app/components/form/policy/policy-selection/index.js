@@ -53,21 +53,14 @@ export default class FormPolicySelectionComponent extends Component {
       return false;
     }
   }
-  /**
-   * Select options return type is string and we want the `days` in integer format
-   * @type {Number}
-   */
-
-  convertStringToInt(str) {
-    return Number(str);
-  }
   //actions
   /**
    * Handles custom input changes
    */
   @action
   handleInputChange({ target: { value, name: field } }) {
-    const val = this.convertStringToInt(value);
+    // Select options return type is string and we want the `days` in integer format
+    const val = Number(value);
     this.args.model[field] = {
       ...this.args.model[field],
       days: val,
@@ -90,7 +83,8 @@ export default class FormPolicySelectionComponent extends Component {
    */
   @action
   handlePolicyTypeSelection({ target: { value, name: policy } }) {
-    const selectedVal = this.convertStringToInt(value);
+    //Select options return type is string and we want the `days` in integer format
+    const selectedVal = Number(value);
     if (policy === 'retention_policy') {
       this.args.model.retain_for = {
         ...this.args.model.retain_for,
