@@ -987,6 +987,7 @@
 }
 
 // policy sidebar
+
 .policy-sidebar {
   background-color: var(--token-form-control-disabled-surface-color);
   padding: 1rem;
@@ -996,18 +997,18 @@
     display: flex;
   }
   .description {
-    margin: 0.5rem 0 0.5rem 0;
+    margin: 0.5rem 0;
   }
 
   .hds-link-standalone__text {
-    margin: 1rem 0 1rem 0;
+    margin: 1rem 0;
   }
 }
 
 // add storage policy
 
 .add-storage-policy {
-  margin: 1rem 0 1rem 0;
+  margin: 1rem 0;
 }
 
 .select-policy {
