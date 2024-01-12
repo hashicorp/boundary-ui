@@ -957,6 +957,10 @@ policy:
         label: Custom
       do_not_protect:
         label: Do not protect, allow deletion any time
+      hippa:
+        label: HIPPA (6 years)
+      soc:
+        label: SOC 2 (7 years)
     deletion_policy_options:
       do_not_delete:
         label: Do not delete
