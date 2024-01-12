@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  findAll,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -23,6 +30,13 @@ module('Acceptance | scopes', function (hooks) {
   setupStubs(hooks);
 
   const APP_STATE_TITLE = '.hds-application-state__title';
+  const META_DATA_RESPONSE = {
+    builds: [
+      { os: 'windows', url: 'windows.fake.download.zip' },
+      { os: 'darwin', url: 'darwin.fake.download.dmg' },
+      { os: 'linux', url: 'linux.fake.download.deb' },
+    ],
+  };
 
   const instances = {
     scopes: {
@@ -233,5 +247,97 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.targets);
 
     assert.ok(find(APP_STATE_TITLE).textContent.trim(), 'No Targets Available');
+  });
+
+  test.skip('pagination is not supported - windows build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: true,
+      isMac: false,
+      isLinux: false,
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'windows.fake.download.zip');
+  });
+
+  test.skip('pagination is not supported - mac build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: false,
+      isMac: true,
+      isLinux: false,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'darwin.fake.download.dmg');
+  });
+
+  test.skip('pagination is not supported - linux build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: false,
+      isMac: false,
+      isLinux: true,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'linux.fake.download.deb');
+  });
+
+  test.skip('pagination is not supported - failed to fetch metaData', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: true,
+      isMac: false,
+      isLinux: false,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(500);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller-alert]');
+    assert.dom('[data-test-unsupported-controller-alert]').exists();
+    assert
+      .dom('[data-test-releases-link]')
+      .hasAttribute('href', 'https://releases.hashicorp.com/boundary-desktop/');
   });
 });
