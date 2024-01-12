@@ -49,7 +49,7 @@ export default class FormPolicyComponent extends Component {
     const val = Object.keys(RETENTION_POLICY).find(
       (i) => RETENTION_POLICY[i] === this.args.model.retain_for?.days,
     );
-    return val;
+    return val || 'custom';
   }
 
   /**
