@@ -35,19 +35,25 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      org2: null,
       project: null,
+      project2: null,
     },
     authMethods: {
       global: null,
     },
     user: null,
+    target: null,
+    target2: null,
     session: null,
+    session2: null,
   };
 
   const urls = {
     scopes: {
       global: null,
       org: null,
+      org2: null,
     },
     authenticate: {
       global: null,
@@ -56,7 +62,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
     },
     projects: null,
+    projects2: null,
     sessions: null,
+    sessions2: null,
     session: null,
   };
 
@@ -74,7 +82,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     authenticateSession({ user_id: instances.user.id });
 
     // create scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.scopes.global = this.server.create('scope', {
+      id: 'global',
+      name: 'Global',
+    });
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -85,7 +96,17 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       type: 'project',
       scope: orgScope,
     });
+    instances.scopes.org2 = this.server.create('scope', {
+      type: 'org',
+      scope: globalScope,
+    });
+    const org2Scope = { id: instances.scopes.org2.id, type: 'org' };
+    instances.scopes.project2 = this.server.create('scope', {
+      type: 'project',
+      scope: org2Scope,
+    });
 
+    // create resources
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
     });
@@ -104,13 +125,33 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       },
       'withAssociations',
     );
+    // create resources in second org
+    instances.target2 = this.server.create(
+      'target',
+      { scope: instances.scopes.project2 },
+      'withAssociations',
+    );
+    instances.session2 = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project2,
+        target: instances.target2,
+        status: STATUS_SESSION_ACTIVE,
+        user: instances.user,
+      },
+      'withAssociations',
+    );
 
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
+    urls.scopes.org2 = `/scopes/${instances.scopes.org2.id}`;
     urls.authenticate.global = `${urls.scopes.global}/authenticate`;
     urls.authenticate.methods.global = `${urls.authenticate.global}/${instances.authMethods.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
+    urls.projects2 = `${urls.scopes.org2}/projects`;
+    urls.globalSessions = `${urls.scopes.global}/projects/sessions`;
     urls.sessions = `${urls.projects}/sessions`;
+    urls.sessions2 = `${urls.projects2}/sessions`;
     urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
     // Mock the postMessage interface used by IPC.
@@ -169,7 +210,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
-    await click('[data-test-session-detail-link]');
+    await click(`[data-test-session-detail-link="${instances.session.id}"]`);
 
     assert.strictEqual(currentURL(), urls.session);
   });
@@ -181,9 +222,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await visit(urls.sessions);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -195,9 +234,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -209,9 +246,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -223,9 +258,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -235,12 +268,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await visit(urls.sessions);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .doesNotExist();
     assert
-      .dom('tbody tr:first-child td:first-child [data-test-session-id-copy]')
+      .dom(`[data-test-session-id-copy="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -250,12 +281,10 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await visit(urls.sessions);
 
     assert
-      .dom(
-        'tbody tr:first-child td:first-child [data-test-session-detail-link]',
-      )
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .doesNotExist();
     assert
-      .dom('tbody tr:first-child td:first-child [data-test-session-id-copy]')
+      .dom(`[data-test-session-id-copy="${instances.session.id}"]`)
       .isVisible();
   });
 
@@ -331,5 +360,42 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click('tbody tr:first-child td:last-child button');
 
     assert.dom('[role="alert"].is-error').isVisible();
+  });
+
+  test('user can change org scope and only sessions for that org will be displayed', async function (assert) {
+    this.stubClientDaemonSearch(
+      'sessions',
+      'sessions',
+      'targets',
+      'targets',
+      'sessions',
+      'targets',
+      {
+        resource: 'sessions',
+        func: () => [instances.session2],
+      },
+      'sessions',
+      'targets',
+    );
+    await visit(urls.globalSessions);
+
+    assert
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
+      .isVisible();
+    assert
+      .dom(`[data-test-session-detail-link="${instances.session2.id}"]`)
+      .isVisible();
+
+    // change scope in app header
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
+    // navigate to back sessions
+    await click(`[href="${urls.sessions2}"]`);
+
+    assert
+      .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
+      .doesNotExist();
+    assert
+      .dom(`[data-test-session-detail-link="${instances.session2.id}"]`)
+      .isVisible();
   });
 });

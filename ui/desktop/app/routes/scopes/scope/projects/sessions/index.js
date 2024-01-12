@@ -62,6 +62,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    */
   async model({ targets, status, scopes, page, pageSize }, transition) {
     const from = transition.from?.name;
+    const projects = this.modelFor('scopes.scope.projects');
+    const projectIds = projects.map((project) => project.id);
 
     const filters = {
       user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -78,6 +80,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
+    if (scopes.length === 0) {
+      projectIds.forEach((projectId) => {
+        filters.scope_id.push({ equals: projectId });
+      });
+    }
 
     const queryOptions = {
       query: { filters },
@@ -105,8 +112,6 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       this.allTargets = await this.store.query('target', {}, options);
     }
 
-    const projects = this.modelFor('scopes.scope.projects');
-
     return {
       sessions,
       projects,
@@ -114,5 +119,15 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allTargets: this.allTargets,
       totalItems,
     };
+  }
+
+  resetController(controller, isExiting, transition) {
+    const { to } = transition;
+    // Reset the scopes query param when changing org scope
+    if (!isExiting && to.queryParams.scopes === '[]') {
+      controller.setProperties({
+        scopes: [],
+      });
+    }
   }
 }

@@ -127,7 +127,9 @@
                 @buttonText={{t 'actions.copy-to-clipboard'}}
                 @acknowledgeText={{t 'states.copied'}}
               >
-                <Hds::Text::Code>{{B.data.project.id}}</Hds::Text::Code>
+                <Hds::Text::Code
+                  data-test-target-project-id={{B.data.project.id}}
+                >{{B.data.project.id}}</Hds::Text::Code>
               </Copyable>
             </div>
             {{#if B.data.project.name}}
