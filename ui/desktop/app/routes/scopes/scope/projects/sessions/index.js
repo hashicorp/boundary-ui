@@ -12,6 +12,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
 
   @service session;
   @service store;
+  @service ipc;
 
   // =attributes
 
@@ -64,6 +65,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const from = transition.from?.name;
     const projects = this.modelFor('scopes.scope.projects');
     const projectIds = projects.map((project) => project.id);
+    const { id: scope_id } = this.modelFor('scopes.scope');
 
     const filters = {
       user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -87,6 +89,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     }
 
     const queryOptions = {
+      scope_id,
+      recursive: true,
       query: { filters },
       page,
       pageSize,
@@ -101,6 +105,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       this.allSessions = await this.store.query(
         'session',
         {
+          scope_id,
+          recursive: true,
           query: {
             filters: {
               user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -109,7 +115,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
         },
         options,
       );
-      this.allTargets = await this.store.query('target', {}, options);
+      this.allTargets = await this.store.query(
+        'target',
+        { scope_id, recursive: true },
+        options,
+      );
     }
 
     return {
@@ -118,6 +128,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       allTargets: this.allTargets,
       totalItems,
+      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
     };
   }
 

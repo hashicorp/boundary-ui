@@ -177,6 +177,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await click(`[href="${urls.targets}"]`);
     await a11yAudit();
 
+    assert.dom('.hds-segmented-group').exists();
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetsCount);
   });
@@ -454,5 +455,19 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert
       .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
       .doesNotExist();
+  });
+
+  test('targets list view still loads with no client daemon', async function (assert) {
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
+    this.stubClientDaemonSearch();
+    const targetsCount = getTargetCount();
+
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom('.hds-segmented-group').doesNotExist();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.dom('tbody tr').exists({ count: targetsCount });
   });
 });
