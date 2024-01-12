@@ -25,7 +25,7 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get isCustomRetentionSelected() {
-    return this.args.model.retain_for?.days > 0;
+    return this.args.model.retain_for?.days === 1;
   }
 
   /**
