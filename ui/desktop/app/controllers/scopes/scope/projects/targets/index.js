@@ -49,6 +49,12 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =methods
 
+  get test() {
+    const scopesController = this.controllerFor('scopes');
+    console.log(scopesController);
+    return scopesController;
+  }
+
   get showFilters() {
     return (
       this.model.allTargets.length ||

@@ -12,25 +12,27 @@ export default class ScopesRoute extends Route {
 
   @service store;
   @service ipc;
+  @service controllerCheck;
 
   // =methods
 
   async beforeModel() {
-    this.isPaginationSupported = false;
-    const adapter = this.store.adapterFor('application');
-    const scopeSchema = this.store.modelFor('scope');
+    // this.isPaginationSupported = false;
+    await this.controllerCheck.checkPaginationSupport();
+    // const adapter = this.store.adapterFor('application');
+    // const scopeSchema = this.store.modelFor('scope');
 
-    try {
-      const scopesCheck = await adapter.query(this.store, scopeSchema, {
-        page_size: 1,
-        recursive: true,
-      });
-      if (scopesCheck.list_token) {
-        this.isPaginationSupported = true;
-      }
-    } catch (e) {
-      // no op
-    }
+    // try {
+    //   const scopesCheck = await adapter.query(this.store, scopeSchema, {
+    //     page_size: 1,
+    //     recursive: true,
+    //   });
+    //   if (scopesCheck.list_token) {
+    //     this.isPaginationSupported = false;
+    //   }
+    // } catch (e) {
+    //   // no op
+    // }
   }
 
   /**
@@ -56,45 +58,49 @@ export default class ScopesRoute extends Route {
   async setupController(controller) {
     super.setupController(...arguments);
 
-    controller.set('isPaginationSupported', this.isPaginationSupported);
+    console.log('TEST v2: ', this.controllerCheck.isPaginationSupported);
+    controller.set('isPaginationSupported', this.controllerCheck.isPaginationSupported);
+    // controller.set('isPaginationSupported', this.isPaginationSupported);
 
-    let downloadLink;
-    let downloadError = false;
+    // let downloadLink;
+    // let downloadError = false;
 
-    if (!this.isPaginationSupported) {
-      const metaDataUrl =
-        'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
-      const { isWindows, isMac, isLinux } = await this.ipc.invoke('checkOS');
+    // if (!this.isPaginationSupported) {
+    //   const metaDataUrl =
+    //     'https://api.releases.hashicorp.com/v1/releases/boundary-desktop/1.7.1';
+    //   const { isWindows, isMac, isLinux } = await this.ipc.invoke('checkOS');
 
-      try {
-        const metaDataResponse = await fetch(metaDataUrl);
-        const metaData = await metaDataResponse.json();
+    //   try {
+    //     const metaDataResponse = await fetch(metaDataUrl);
+    //     const metaData = await metaDataResponse.json();
 
-        if (isWindows) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'windows', '.zip');
-        } else if (isMac) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'darwin', '.dmg');
-        } else if (isLinux) {
-          downloadLink = this.extractOsSpecificUrl(metaData, 'linux', '.deb');
-        }
+    //     if (isWindows) {
+    //       downloadLink = this.extractOsSpecificUrl(metaData, 'windows', '.zip');
+    //     } else if (isMac) {
+    //       downloadLink = this.extractOsSpecificUrl(metaData, 'darwin', '.dmg');
+    //     } else if (isLinux) {
+    //       downloadLink = this.extractOsSpecificUrl(metaData, 'linux', '.deb');
+    //     }
 
-        if (!downloadLink) throw new Error('No build found');
-      } catch (e) {
-        // this is a catch for any errors that may occur and shows the user
-        // an error alert directing them to the releases page
-        downloadError = true;
-      }
-    }
+    //     if (!downloadLink) throw new Error('No build found');
+    //   } catch (e) {
+    //     // this is a catch for any errors that may occur and shows the user
+    //     // an error alert directing them to the releases page
+    //     downloadError = true;
+    //   }
+    // }
+
+    const { downloadLink, downloadError } = await this.controllerCheck.findDownloadLink();
 
     controller.set('downloadLink', downloadLink);
     controller.set('downloadError', downloadError);
   }
 
-  extractOsSpecificUrl(metaData, os, fileExtension) {
-    const build = metaData.builds.find(
-      (build) => build.os === os && build.url.endsWith(fileExtension),
-    );
+  // extractOsSpecificUrl(metaData, os, fileExtension) {
+  //   const build = metaData.builds.find(
+  //     (build) => build.os === os && build.url.endsWith(fileExtension),
+  //   );
 
-    return build?.url;
-  }
+  //   return build?.url;
+  // }
 }
