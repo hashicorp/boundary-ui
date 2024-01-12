@@ -180,6 +180,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert.strictEqual(currentURL(), urls.sessions);
+    assert.dom('.hds-segmented-group').exists();
     assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 
@@ -397,5 +398,17 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     assert
       .dom(`[data-test-session-detail-link="${instances.session2.id}"]`)
       .isVisible();
+  });
+
+  test('sessions list view still loads with no client daemon', async function (assert) {
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
+    this.stubClientDaemonSearch();
+    const sessionsCount = this.server.schema.sessions.all().models.length;
+
+    await visit(urls.globalSessions);
+
+    assert.dom('.hds-segmented-group').doesNotExist();
+    assert.strictEqual(currentURL(), urls.globalSessions);
+    assert.dom('tbody tr').exists({ count: sessionsCount });
   });
 });
