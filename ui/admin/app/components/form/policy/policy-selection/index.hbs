@@ -10,7 +10,7 @@
       name={{@name}}
       disabled={{or @disabled this.isDeleteDisable}}
       aria-label={{t (concat 'resources.policy.form.' @name '.label')}}
-      @width='80%'
+      @width='70%'
       {{on 'change' this.handlePolicyTypeSelection}}
       as |F|
     >
@@ -28,7 +28,17 @@
       </F.Options>
 
     </Hds::Form::Select::Field>
-
+    {{#if @model.scope.isGlobal}}
+      <Hds::Form::Toggle::Field
+        checked={{this.isOverridable}}
+        disabled={{@disabled}}
+        name={{@customInputName}}
+        {{on 'change' this.handleOverridableToggle}}
+        as |F|
+      >
+        <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
+      </Hds::Form::Toggle::Field>
+    {{/if}}
   </F.Control>
 </Hds::Form::Fieldset>
 {{#if this.showCustomInput}}
@@ -54,17 +64,7 @@
           />
         </S.Generic>
       </Hds::SegmentedGroup>
-      {{#if @model.scope.isGlobal}}
-        <Hds::Form::Toggle::Field
-          checked={{this.isOverridable}}
-          disabled={{@disabled}}
-          name={{@customInputName}}
-          {{on 'change' this.handleOverridableToggle}}
-          as |F|
-        >
-          <F.Label>{{t 'resources.policy.form.overridable.label'}}</F.Label>
-        </Hds::Form::Toggle::Field>
-      {{/if}}
+
     </F.Control>
 
   </Hds::Form::Field>
