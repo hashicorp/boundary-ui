@@ -19,6 +19,13 @@ module('Acceptance | scopes | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let features;
+
+  const FORM_SELECTOR = 'main .rose-form';
+  const FORM_ACTIONS_SELECTOR = '.rose-form-actions';
+  const DELETE_DROPDOWN_SELECTOR =
+    '.rose-layout-page-actions .rose-dropdown-button-danger';
+
   const instances = {
     scopes: {
       global: null,
@@ -26,6 +33,8 @@ module('Acceptance | scopes | read', function (hooks) {
     },
   };
   const urls = {
+    globalScope: null,
+    globalScopeEdit: null,
     orgScope: null,
     orgScopeEdit: null,
   };
@@ -38,8 +47,11 @@ module('Acceptance | scopes | read', function (hooks) {
       scope: { id: 'global', type: 'global' },
     });
     // Generate route URLs for resources
+    urls.globalScope = `/scopes/global`;
+    urls.globalScopeEdit = `/scopes/global/edit`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
+    features = this.owner.lookup('service:features');
     authenticateSession({ isGlobal: true });
   });
 
@@ -51,7 +63,23 @@ module('Acceptance | scopes | read', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom('main .rose-form').exists();
+    assert.dom(FORM_SELECTOR).exists();
+    assert.dom(FORM_ACTIONS_SELECTOR).exists();
+    assert.dom(DELETE_DROPDOWN_SELECTOR).exists();
+  });
+
+  test('visiting global scope edit', async function (assert) {
+    features.enable('ssh-session-recording');
+    await visit(urls.globalScope);
+    await a11yAudit();
+
+    await click(`[href="${urls.globalScopeEdit}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.globalScopeEdit);
+    assert.dom(FORM_SELECTOR).exists();
+    assert.dom(FORM_ACTIONS_SELECTOR).doesNotExist();
+    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
@@ -64,6 +92,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
     await click(`[href="${urls.orgScopeEdit}"]`);
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom('main .rose-form').doesNotExist();
+    assert.dom(FORM_SELECTOR).doesNotExist();
   });
 });

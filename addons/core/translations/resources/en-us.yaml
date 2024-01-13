@@ -326,6 +326,12 @@ session:
     address-port: Address & port
     ssh: SSH
   shell: Shell
+global:
+  title: Global
+  description: The global scope is the outermost scope. There is always a single global scope and it cannot be deleted.
+  messages:
+    settings:
+      title: Global Settings
 org:
   title: Org
   title_plural: Orgs

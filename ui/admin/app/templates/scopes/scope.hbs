@@ -199,6 +199,16 @@
         {{/unless}}
       </Rose::Nav::Sidebar>
 
+      {{#if (and @model.isGlobal (feature-flag 'ssh-session-recording'))}}
+        {{#if this.session.data.authenticated.isGlobal}}
+          <Rose::Nav::Sidebar @title={{t 'titles.settings'}} as |nav|>
+            <nav.link @route='scopes.scope.edit'>
+              {{t 'resources.global.messages.settings.title'}}
+            </nav.link>
+          </Rose::Nav::Sidebar>
+        {{/if}}
+      {{/if}}
+
       {{#if @model.isOrg}}
         {{#if this.session.data.authenticated.isGlobal}}
           <Rose::Nav::Sidebar @title={{t 'titles.settings'}} as |nav|>
