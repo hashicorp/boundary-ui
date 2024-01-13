@@ -17,7 +17,7 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
   // =methods
 
   /**
-   * Load polcies from global and current scope
+   * Load policies from current scope
    * @param {Model} model
    */
   async afterModel() {
