@@ -955,6 +955,14 @@
 // storage policies
 .policy {
   margin-bottom: 0;
+
+  .hds-form-field--layout-vertical {
+    width: 50%;
+  }
+
+  .hds-form-group__control-fields-wrapper {
+    flex-direction: row;
+  }
 }
 
 .policy-custom-input {
