@@ -968,6 +968,14 @@
 // storage policies
 .policy {
   margin-bottom: 0;
+
+  .hds-form-field--layout-vertical {
+    width: 50%;
+  }
+
+  .hds-form-group__control-fields-wrapper {
+    flex-direction: row;
+  }
 }
 
 .policy-custom-input {
@@ -997,4 +1005,38 @@
       border-color: var(--token-form-control-disabled-border-color);
     }
   }
+}
+
+// policy sidebar
+
+.policy-sidebar {
+  background-color: var(--token-form-control-disabled-surface-color);
+  padding: 1rem;
+  width: 380px;
+
+  .hds-card__container > ul {
+    display: flex;
+  }
+
+  .description {
+    margin: 0.5rem 0;
+  }
+
+  .hds-link-standalone__text {
+    margin: 1rem 0;
+  }
+}
+
+// add storage policy
+
+.add-storage-policy {
+  margin: 1rem 0;
+}
+
+.select-policy {
+  margin-top: 1rem;
+}
+
+.add-policy-link {
+  margin-bottom: 1.5rem;
 }

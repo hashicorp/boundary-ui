@@ -3,6 +3,12 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
+{{page-title (t 'titles.new')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.policy.titles.new'}}
+  @route='scopes.scope.add-storage-policy.create'
+/>
+
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <Breadcrumbs::Container />
@@ -10,19 +16,9 @@
 
   <page.header>
     <Hds::Text::Display @tag='h2'>
-      {{t 'resources.policy.title'}}
+      {{t 'resources.policy.titles.new'}}
     </Hds::Text::Display>
-
-    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
-
-  <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.policies.policy.index'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
-  </page.navigation>
 
   <page.body>
     <Form::Policy
@@ -31,4 +27,5 @@
       @cancel={{route-action 'cancel' @model}}
     />
   </page.body>
+
 </Rose::Layout::Page>
