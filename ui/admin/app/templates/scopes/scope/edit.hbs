@@ -66,21 +66,120 @@
   {{/if}}
 
   <page.body>
-    {{#if (can 'read model' @model)}}
-      <Form::Scope
-        @model={{@model}}
-        @submit={{route-action 'save' @model}}
-        @cancel={{route-action 'cancel' @model}}
-      />
-    {{else}}
-      <Rose::Layout::Centered>
-        <Rose::Message as |message|>
-          <message.description>
-            {{t 'resources.scope.messages.cannot_read'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-    {{/if}}
+    <Rose::Layout::BodyContent as |bc|>
+      <bc.Body>
+        {{#if (can 'read model' @model)}}
+          <Form::Scope
+            @model={{@model}}
+            @submit={{route-action 'save' @model}}
+            @cancel={{route-action 'cancel' @model}}
+          />
+        {{else}}
+          <Rose::Layout::Centered>
+            <Rose::Message as |message|>
+              <message.description>
+                {{t 'resources.scope.messages.cannot_read'}}
+              </message.description>
+            </Rose::Message>
+          </Rose::Layout::Centered>
+        {{/if}}
+      </bc.Body>
+      {{#if (can 'attachStoragePolicy scope' @model)}}
+        <bc.Sidebar>
+          <div class='policy-sidebar'>
+            <Hds::Text::Display @tag='h3'>
+              {{t 'resources.policy.title'}}
+            </Hds::Text::Display>
+
+            {{#if @model.storage_policy_id}}
+              <Hds::Text::Body @tag='p' class='description'>
+                {{t 'resources.policy.titles.policy_description'}}
+              </Hds::Text::Body>
+            {{else}}
+              <Hds::Text::Body @tag='p' class='description'>
+                {{t 'resources.policy.titles.create_policy_description'}}
+              </Hds::Text::Body>
+            {{/if}}
+            {{#if @model.storage_policy_id}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='hourglass'
+                  @color='boundary'
+                  @text={{this.storage_policy.name}}
+                >
+                  {{#if this.storage_policy.retain_for.days}}
+                    <Hds::Text::Body
+                      @tag='p'
+                      @color='var(--ui-gray-subtler-1)'
+                      @size='100'
+                    >
+                      {{t 'resources.policy.titles.retain_for'}}
+                      {{#if (gte this.storage_policy.retain_for.days 1)}}
+                        {{format-day-year this.storage_policy.retain_for.days}}
+                      {{else if (eq this.storage_policy.retain_for.days -1)}}
+                        {{t 'resources.policy.titles.forever'}}
+                      {{/if}}
+                    </Hds::Text::Body>
+                  {{/if}}
+
+                  {{#if (gt this.storage_policy.delete_after.days 0)}}
+                    <Hds::Text::Body
+                      @tag='p'
+                      @color='var(--ui-gray-subtler-1)'
+                      @size='100'
+                    >
+                      {{t 'resources.policy.titles.delete_after'}}
+                      {{format-day-year this.storage_policy.delete_after.days}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                </P.Item>
+                {{#if (can 'detachStoragePolicy scope' @model)}}
+                  <P.Item>
+                    <Hds::Dropdown as |dd|>
+                      <dd.ToggleIcon
+                        @icon='more-horizontal'
+                        @text={{t 'actions.manage'}}
+                        @hasChevron={{false}}
+                        @size='small'
+                      />
+                      <dd.Interactive
+                        @route='scopes.scope.policies.policy'
+                        @model={{this.storage_policy.id}}
+                        @text={{t 'actions.view'}}
+                      />
+                      <dd.Separator />
+                      <dd.Interactive
+                        @text={{t 'resources.policy.actions.delete'}}
+                        @color='critical'
+                        {{on
+                          'click'
+                          (route-action 'detachStoragePolicy' @model)
+                        }}
+                      />
+                    </Hds::Dropdown>
+                  </P.Item>
+                {{/if}}
+
+              </LinkListPanel>
+
+              <Hds::Link::Standalone
+                @icon='arrow-right'
+                @iconPosition='trailing'
+                @text={{t 'resources.policy.actions.add'}}
+                @route='scopes.scope.add-storage-policy'
+              />
+
+            {{else}}
+              <Hds::Button
+                @text={{t 'resources.policy.actions.add'}}
+                @color='secondary'
+                @route='scopes.scope.add-storage-policy'
+              />
+            {{/if}}
+          </div>
+        </bc.Sidebar>
+      {{/if}}
+    </Rose::Layout::BodyContent>
   </page.body>
 
 </Rose::Layout::Page>

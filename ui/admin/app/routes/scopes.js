@@ -6,6 +6,10 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesRoute extends Route {
   // =services
@@ -32,5 +36,20 @@ export default class ScopesRoute extends Route {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
     return this.store.findAll('scope').catch(() => A([]));
+  }
+
+  /**
+   * Deletes the scope and redirects to index.
+   * @param {Model} scope
+   */
+  @action
+  @loading
+  @confirm('resources.policy.questions.detach')
+  @notifyError(({ message }) => message)
+  @notifySuccess('resources.policy.messages.detach')
+  async detachStoragePolicy(scope) {
+    const { storage_policy_id } = scope;
+    await scope.detachStoragePolicy(storage_policy_id);
+    scope.storage_policy_id = '';
   }
 }
