@@ -49,4 +49,9 @@ export default class GeneratedScopeModel extends BaseModel {
     description: 'Current version number of this resource.',
   })
   version;
+
+  @attr('string', {
+    description: 'The ID of the associated storage policy',
+  })
+  storage_policy_id;
 }
