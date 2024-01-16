@@ -6,13 +6,9 @@
 import ApplicationSerializer from './application';
 import { EmbeddedRecordsMixin } from '@ember-data/serializer/rest';
 
-export default class ConnectionSerializer extends ApplicationSerializer.extend(
+export default class ChannelSerializer extends ApplicationSerializer.extend(
   EmbeddedRecordsMixin,
 ) {
-  attrs = {
-    channel_recordings: { embedded: 'always' },
-  };
-
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = structuredClone(hash);
     const normalized = super.normalize(typeClass, normalizedHash, ...rest);
@@ -23,7 +19,7 @@ export default class ConnectionSerializer extends ApplicationSerializer.extend(
     delete normalized.data.attributes.errors;
     normalized.data.attributes.errors_session_recording =
       errors_session_recording;
-    console.log(normalized, 'normalized in conn');
+    console.log(normalized, 'normalized in channe');
 
     return normalized;
   }

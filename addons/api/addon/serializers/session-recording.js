@@ -12,8 +12,17 @@ export default class RecordingSerializer extends ApplicationSerializer.extend(
     connection_recordings: { embedded: 'always' },
   };
 
-  serialize() {
-    console.log('seriali', ...arguments);
-    return super.serialize(...arguments);
+  normalize(typeClass, hash, ...rest) {
+    const normalizedHash = structuredClone(hash);
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
+    // we should not override the ember models errors field,
+    // so we rename the errors field from the api
+
+    const errors_session_recording = normalized.data.attributes.errors;
+    delete normalized.data.attributes.errors;
+    normalized.data.attributes.errors_session_recording =
+      errors_session_recording;
+    console.log(normalized, 'normalized');
+    return normalized;
   }
 }
