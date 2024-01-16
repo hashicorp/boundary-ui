@@ -782,6 +782,7 @@ function routes() {
   this.post(
     '/session-recordings/:idMethod',
     function ({ sessionRecordings }, { params: { idMethod } }) {
+      console.log('in post call', this.normalizedRequestAttrs());
       const attrs = this.normalizedRequestAttrs();
       const id = idMethod.split(':')[0];
       const method = idMethod.split(':')[1];
@@ -790,7 +791,9 @@ function routes() {
         version: attrs.version,
       };
       if (method === 'reapply-storage-policy') {
-        console.log('ih here mirage');
+        console.log(record, 'recorddddd');
+        updatedAttrs.retain_until = faker.date.recent();
+        updatedAttrs.delete_after = faker.date.recent();
       }
       return record.update(updatedAttrs);
     },

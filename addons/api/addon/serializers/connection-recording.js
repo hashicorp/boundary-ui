@@ -19,12 +19,9 @@ export default class ConnectionSerializer extends ApplicationSerializer.extend(
     // we should not override the ember models errors field,
     // so we rename the errors field from the api
 
-    const errors_session_recording = normalized.data.attributes.errors;
-    delete normalized.data.attributes.errors;
-    normalized.data.attributes.errors_session_recording =
-      errors_session_recording;
-    console.log(normalized, 'normalized in conn');
-
+    const err = normalized.data.attributes.errors_session_recording;
+    delete normalized.data.attributes.errors_session_recording;
+    normalized.data.attributes.errors = err;
     return normalized;
   }
 }

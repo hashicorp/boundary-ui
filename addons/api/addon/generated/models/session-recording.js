@@ -70,7 +70,7 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
       'The total number of errors that occurred during the use of the Session.',
     readOnly: true,
   })
-  errors;
+  errors_session_recording;
 
   @attr('date', {
     description: 'The time the Session started.',

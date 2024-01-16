@@ -45,12 +45,12 @@ export default factory.extend({
 
   retain_until() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? faker.date.recent({ days: 3, refDate: this.end_time })
+      ? faker.date.recent()
       : null;
   },
   delete_after() {
     return this.state === STATE_SESSION_RECORDING_AVAILABLE
-      ? faker.date.recent({ days: 3, refDate: this.end_time })
+      ? faker.date.recent()
       : null;
   },
 
