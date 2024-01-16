@@ -572,6 +572,8 @@ target:
       description: Additional information for this target will be provided here after your session is established.
   titles:
     new: New Target
+    active-sessions: Active sessions
+    sessions-flyout: Active sessions for {targetDisplayName}
   actions:
     create: New Target
     delete: Delete Target
@@ -581,6 +583,7 @@ target:
     remove-address: Remove address and save
     enable-session-recording: Enable Session Recording
     enable-recording: Enable recording
+    view-more-sessions: View more sessions
   types:
     tcp: Generic TCP
     ssh: SSH

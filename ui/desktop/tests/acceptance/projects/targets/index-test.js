@@ -12,23 +12,22 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import sinon from 'sinon';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   authenticateSession,
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
-module('Acceptance | projects | targets', function (hooks) {
+module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   let getTargetCount;
 
-  const ROSE_APP_STATE_TITLE = '.rose-message-title';
   const APP_STATE_TITLE = '.hds-application-state__title';
   const TARGET_DETAILS_ROUTE_NAME =
     'scopes.scope.projects.targets.target.index';
@@ -38,24 +37,26 @@ module('Acceptance | projects | targets', function (hooks) {
   const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
   const ROSE_DIALOG_CANCEL_BUTTON =
     '.rose-dialog footer .rose-button-secondary';
+  const SESSIONS_FLYOUT = '[data-test-targets-sessions-flyout]';
+  const SESSIONS_FLYOUT_TITLE =
+    '[data-test-targets-sessions-flyout] .hds-flyout__title';
+  const SESSIONS_FLYOUT_CLOSE_BUTTON =
+    '[data-test-targets-sessions-flyout] .hds-flyout__dismiss';
 
   const instances = {
     scopes: {
       global: null,
       org: null,
+      org2: null,
       project: null,
+      project2: null,
     },
     authMethods: {
       global: null,
     },
     target: null,
+    target2: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -72,7 +73,7 @@ module('Acceptance | projects | targets', function (hooks) {
     projects: null,
     targets: null,
     target: null,
-    sessions: null,
+    session: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -83,20 +84,33 @@ module('Acceptance | projects | targets', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession();
+    // bypass mirage config that expects recursive to be passed in as queryParam
+    this.server.get('/targets', ({ targets }) => targets.all());
 
     // Generate scopes
-    instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    instances.scopes.global = this.server.create('scope', {
+      id: 'global',
+      name: 'Global',
+    });
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
+    instances.scopes.org2 = this.server.create('scope', {
+      type: 'org',
+      scope: globalScope,
+    });
+    const org2Scope = { id: instances.scopes.org2.id, type: 'org' };
+    instances.scopes.project2 = this.server.create('scope', {
+      type: 'project',
+      scope: org2Scope,
+    });
 
     // Generate resources
     instances.authMethods.global = this.server.create('auth-method', {
@@ -116,9 +130,14 @@ module('Acceptance | projects | targets', function (hooks) {
       {
         scope: instances.scopes.project,
         status: 'active',
+        target_id: instances.target.id,
       },
       'withAssociations',
     );
+    instances.target2 = this.server.create('target', {
+      scope: instances.scopes.project2,
+      address: 'localhost',
+    });
 
     // Generate route URLs for resources
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -128,6 +147,7 @@ module('Acceptance | projects | targets', function (hooks) {
     urls.projects = `${urls.scopes.org}/projects`;
     urls.targets = `${urls.projects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.session = `${urls.projects}/sessions/${instances.session.id}`;
 
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
@@ -136,13 +156,13 @@ module('Acceptance | projects | targets', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
-    assert.expect(2);
+    this.stubClientDaemonSearch();
     await visit(urls.targets);
     await a11yAudit();
 
@@ -151,19 +171,18 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('visiting targets index', async function (assert) {
-    assert.expect(2);
     const targetsCount = getTargetCount();
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
     await a11yAudit();
 
+    assert.dom('.hds-segmented-group').exists();
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetsCount);
   });
 
   test('visiting a target', async function (assert) {
-    assert.expect(2);
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -176,19 +195,22 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('visiting targets list view with no targets', async function (assert) {
-    assert.expect(1);
-    this.server.get('/targets', () => new Response(200));
+    this.server.db.targets.remove();
+    this.server.db.sessions.remove();
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom(ROSE_APP_STATE_TITLE).hasText('No Targets Available');
+    assert.dom(APP_STATE_TITLE).hasText('No Targets Available');
   });
 
   test('user cannot navigate to a target without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -199,7 +221,6 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user can connect to a target with proper authorization', async function (assert) {
-    assert.expect(2);
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -213,11 +234,12 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user cannot connect to a target without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -231,13 +253,13 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user is redirected to target details page when unable to connect from list view if they have read and authorize-session permissions', async function (assert) {
-    assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').rejects();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').rejects();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -247,18 +269,19 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user can connect without target read permissions', async function (assert) {
-    assert.expect(2);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
       address: 'a_123',
       port: 'p_123',
       protocol: 'tcp',
     });
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -270,15 +293,16 @@ module('Acceptance | projects | targets', function (hooks) {
   });
 
   test('user can retry connect without target read permissions', async function (assert) {
-    assert.expect(5);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').rejects();
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').rejects();
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+    await visit(urls.projects);
 
-    await visit(urls.targets);
+    await click(`[href="${urls.targets}"]`);
 
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
@@ -287,5 +311,163 @@ module('Acceptance | projects | targets', function (hooks) {
     assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
     assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
     assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+  });
+
+  test('user can open sessions flyout when target has active or pending sessions', async function (assert) {
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert
+      .dom(
+        `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+      )
+      .exists();
+
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert.dom(SESSIONS_FLYOUT_TITLE).includesText(`Active sessions for`);
+
+    await click(SESSIONS_FLYOUT_CLOSE_BUTTON);
+
+    assert.dom(SESSIONS_FLYOUT).doesNotExist();
+  });
+
+  test('user can cancel a session from inside target sessions flyout', async function (assert) {
+    this.stubClientDaemonSearch(
+      'targets',
+      'sessions',
+      'targets',
+      {
+        resource: 'sessions',
+        func: () => [],
+      },
+      'targets',
+    );
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert
+      .dom(`[data-test-session-flyout-cancel-button="${instances.session.id}"]`)
+      .exists();
+
+    await click(
+      `[data-test-session-flyout-cancel-button="${instances.session.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).doesNotExist();
+    assert
+      .dom(
+        `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+      )
+      .doesNotExist();
+    assert.strictEqual(currentURL(), urls.targets);
+  });
+
+  test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
+    instances.session.authorized_actions =
+      instances.session.authorized_actions.filter((item) => item !== 'cancel');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert
+      .dom(`[data-test-session-flyout-cancel-button="${instances.target.id}"]`)
+      .doesNotExist();
+    assert
+      .dom(`[data-test-targets-session-detail-link="${instances.session.id}"]`)
+      .exists();
+  });
+
+  test('user can navigate to session details from sessions table in flyout', async function (assert) {
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+
+    await click(
+      `[data-test-targets-session-detail-link="${instances.session.id}"]`,
+    );
+
+    assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
+    instances.session.authorized_actions =
+      instances.session.authorized_actions.filter((item) => item !== 'read');
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(
+      `[data-test-targets-sessions-flyout-button="${instances.target.id}"]`,
+    );
+
+    assert.dom(SESSIONS_FLYOUT).exists();
+    assert
+      .dom(`[data-test-targets-session-detail-link="${instances.session.id}"]`)
+      .exists();
+
+    await click(
+      `[data-test-targets-session-detail-link="${instances.session.id}"]`,
+    );
+
+    assert.strictEqual(currentURL(), urls.session);
+  });
+
+  test('user can change org scope and only targets for that org will be displayed', async function (assert) {
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets', 'sessions', {
+      resource: 'targets',
+      func: () => [instances.target],
+    });
+
+    await visit(urls.scopes.global);
+
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
+      .exists();
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
+      .exists();
+
+    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
+      .exists();
+    assert
+      .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
+      .doesNotExist();
+  });
+
+  test('targets list view still loads with no client daemon', async function (assert) {
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
+    this.stubClientDaemonSearch();
+    const targetsCount = getTargetCount();
+
+    await visit(urls.projects);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom('.hds-segmented-group').doesNotExist();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.dom('tbody tr').exists({ count: targetsCount });
   });
 });

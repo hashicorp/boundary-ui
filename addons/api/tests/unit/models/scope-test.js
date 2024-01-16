@@ -23,7 +23,7 @@ module('Unit | Model | scope', function (hooks) {
         { id: 'p_3', type: 'project', scope: { scope_id: 'o_2' } },
       ],
     }));
-    const scopes = await store.findAll('scope');
+    const scopes = await store.query('scope', {});
     // check integrity of scope relationships
     assert.notOk(await scopes[0].get('scope'), 'Global scope has no parent');
     assert.strictEqual(
