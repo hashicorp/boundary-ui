@@ -18,8 +18,9 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   // =methods
 
   beforeModel() {
-    if (this.session.isAuthenticated)
+    if (this.session.isAuthenticated) {
       this.router.replaceWith('scopes.scope.index');
+    }
   }
 
   /**
@@ -29,6 +30,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    */
   model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
+
     return hash({
       scope: this.modelFor('scopes.scope'),
       scopes: this.modelFor('scopes').filter((scope) => scope.isOrg),

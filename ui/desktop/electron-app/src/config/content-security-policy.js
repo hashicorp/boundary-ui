@@ -39,6 +39,10 @@ const generateCSPHeader = () => {
     policy['connect-src'].push(runtimeSettings.clusterUrl);
   }
 
+  // add hashicorp release endpoints to connect-src
+  policy['connect-src'].push('https://api.releases.hashicorp.com');
+  policy['connect-src'].push('https://releases.hashicorp.com');
+
   return Object.keys(policy)
     .map((key) => `${key} ${policy[key].join(' ')};`)
     .join(' ');

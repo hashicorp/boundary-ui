@@ -3,4 +3,16 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{outlet}}
+<Rose::Layout::Page as |page|>
+  <page.header>
+    <h2>
+      {{t 'resources.session.title_plural'}}
+      <DocLink @doc='sessions' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.session.description'}}</p>
+  </page.header>
+
+  <page.body class='search-filtering'>
+    {{outlet}}
+  </page.body>
+</Rose::Layout::Page>
