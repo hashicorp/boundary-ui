@@ -24,4 +24,11 @@ export default class SessionRecordingAbility extends ModelAbility {
   get canDownload() {
     return this.hasAuthorizedAction('download');
   }
+
+  /* Permission that checks whether a policy can be attached to a scope
+   * @type {boolean}
+   */
+  get canReapplyStoragePolicy() {
+    return this.hasAuthorizedAction('reapply-storage-policy');
+  }
 }

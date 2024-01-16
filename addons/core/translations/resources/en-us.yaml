@@ -934,15 +934,18 @@ policy:
     days: days
     policy_description: Store recorded sessions for at least this long.
     create_policy_description: Enable session recording for projects in this org.
+    retain_until: Retain until
   actions:
     delete: Delete Storage Policy
     add: Add Storage Policy
     apply: Apply the storage policy to this scope and its children
     new: Add a new storage policy
+    update: Re-apply storage policy
   questions:
     detach: Are you sure you want to detach this storage policy?
   messages:
     detach: Successfully detached
+    reapply: Successfully reapplied
     none:
       title: No storage policies yet
       description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.

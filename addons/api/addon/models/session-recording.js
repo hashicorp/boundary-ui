@@ -69,4 +69,25 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
       this.create_time_values?.user?.name || this.create_time_values?.user?.id
     );
   }
+
+  /**
+   * Reapply policy dates via the `reapply-staorage-policy` method.
+   * @param {object} options
+   * @param {object} options.adapterOptions
+   * @return {Promise}
+   */
+  reapplyStoragePolicy(options = { adapterOptions: {} }) {
+    console.log(options, 'OPTION');
+    const defaultAdapterOptions = {
+      method: 'reapply-storage-policy',
+    };
+    console.log(this, 'this');
+    return this.save({
+      ...options,
+      adapterOptions: {
+        ...defaultAdapterOptions,
+        ...options.adapterOptions,
+      },
+    });
+  }
 }

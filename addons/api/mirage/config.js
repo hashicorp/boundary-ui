@@ -767,12 +767,32 @@ function routes() {
     async ({ sessionRecordings }, { params: { idMethod } }) => {
       const id = idMethod.split(':')[0];
       const method = idMethod.split(':')[1];
-
+      console.log('in herere get');
+      if (method === 'reapply-storage-policy') {
+        console.log('in get');
+      }
       if (method === 'download') {
         return faker.helpers.arrayElement(asciicasts);
       } else {
         return sessionRecordings.find(id);
       }
+    },
+  );
+
+  this.post(
+    '/session-recordings/:idMethod',
+    function ({ sessionRecordings }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const record = sessionRecordings.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      if (method === 'reapply-storage-policy') {
+        console.log('ih here mirage');
+      }
+      return record.update(updatedAttrs);
     },
   );
 

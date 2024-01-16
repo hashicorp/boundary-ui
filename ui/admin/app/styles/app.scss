@@ -886,6 +886,10 @@
 // Session Recording sidebar details
 .rose-layout-body-content-sidebar .section-details {
   margin-bottom: 3rem;
+
+  .rose-metadata-list-item {
+    font-size: var(--token-typography-body-200-font-size);
+  }
 }
 
 .ldap-read-only-fields .hds-form-field--layout-vertical {

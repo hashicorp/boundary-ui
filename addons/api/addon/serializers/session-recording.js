@@ -11,4 +11,9 @@ export default class RecordingSerializer extends ApplicationSerializer.extend(
   attrs = {
     connection_recordings: { embedded: 'always' },
   };
+
+  serialize() {
+    console.log('seriali', ...arguments);
+    return super.serialize(...arguments);
+  }
 }
