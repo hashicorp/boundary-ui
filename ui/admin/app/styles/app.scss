@@ -738,11 +738,9 @@
 .config-tags {
   /* stylelint-disable selector-class-pattern */
   .hds-table__tbody {
-    .hds-table__td {
-      &:last-child {
-        // remove width and white-space styles
-        width: unset !important;
-      }
+    .hds-table__td:last-child {
+      // remove width and white-space styles
+      width: unset;
     }
   }
 }
