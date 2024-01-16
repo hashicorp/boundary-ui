@@ -35,7 +35,7 @@ export default class ScopesRoute extends Route {
     });
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    return this.store.findAll('scope').catch(() => A([]));
+    return this.store.query('scope', {}).catch(() => A([]));
   }
 
   /**

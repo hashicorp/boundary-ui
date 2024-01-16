@@ -149,7 +149,7 @@ export default class ApplicationSerializer extends RESTSerializer {
     );
     // Copy the data rooted under `items` in the existing payload into the new
     // payload under the expected root key name.
-    transformedPayload[payloadKey] = structuredClone(payload.items);
+    transformedPayload[payloadKey] = structuredClone(payload?.items);
     // Return the result of normalizing the transformed payload.
     return super.normalizeArrayResponse(
       store,

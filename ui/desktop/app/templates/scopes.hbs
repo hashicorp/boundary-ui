@@ -4,3 +4,50 @@
 }}
 
 {{outlet}}
+{{#unless this.isPaginationSupported}}
+  <Hds::Modal
+    @isDismissDisabled={{true}}
+    data-test-unsupported-controller
+    as |M|
+  >
+    <M.Header>
+      {{t 'unsupported-controller.title'}}
+    </M.Header>
+    <M.Body class='unsupported-modal-body'>
+      {{#if this.downloadError}}
+        <Hds::Alert
+          @color='critical'
+          @type='inline'
+          data-test-unsupported-controller-alert
+          as |A|
+        >
+          <A.Title>{{t 'errors.generic.title'}}</A.Title>
+          <A.Description>{{t 'unsupported-controller.error'}}</A.Description>
+          <A.Button
+            @text={{t 'unsupported-controller.buttons.releases-page'}}
+            @color='secondary'
+            @href='https://releases.hashicorp.com/boundary-desktop/'
+            @isHrefExternal={{true}}
+            data-test-releases-link
+          />
+        </Hds::Alert>
+      {{/if}}
+      <Hds::Text::Body @size='300' @color='primary'>
+        {{t 'unsupported-controller.description.message'}}
+      </Hds::Text::Body>
+      <Hds::Text::Body @size='300' @color='primary'>
+        {{t 'unsupported-controller.description.install'}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer>
+      <Hds::Button
+        type='button'
+        @text={{t 'unsupported-controller.buttons.download'}}
+        @href={{this.downloadLink}}
+        @isHrefExternal={{true}}
+        disabled={{unless this.downloadLink 'disabled'}}
+        data-test-download-link
+      />
+    </M.Footer>
+  </Hds::Modal>
+{{/unless}}
