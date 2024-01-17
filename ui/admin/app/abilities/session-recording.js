@@ -25,7 +25,6 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
    * @type {boolean}
    */
   get canReapplyStoragePolicy() {
-    console.log('in app ability', this);
     return this.features.isEnabled('ssh-session-recording')
       ? this.hasAuthorizedAction('reapply-storage-policy')
       : false;

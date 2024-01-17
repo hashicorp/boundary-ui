@@ -77,11 +77,9 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
    * @return {Promise}
    */
   reapplyStoragePolicy(options = { adapterOptions: {} }) {
-    console.log(options, 'OPTION');
     const defaultAdapterOptions = {
       method: 'reapply-storage-policy',
     };
-    console.log(this, 'this');
     return this.save({
       ...options,
       adapterOptions: {
