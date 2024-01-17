@@ -17,9 +17,9 @@ export default class RecordingSerializer extends ApplicationSerializer.extend(
     // The post request for reapply-storage-policy doesn't expect a payload,
     // so we just delete these
     if (snapshot?.adapterOptions?.method === 'reapply-storage-policy') {
-      delete serialized.retain_until;
-      delete serialized.delete_after;
-      delete serialized.connection_recordings;
+      serialized.retain_until = null;
+      serialized.delete_after = null;
+      serialized.connection_recordings = [];
     }
     return serialized;
   }
