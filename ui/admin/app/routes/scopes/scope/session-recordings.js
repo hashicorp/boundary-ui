@@ -76,7 +76,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
    * @param {SessionRecordingModel}
    */
   @action
-  @notifyError(({ message }) => message, { catch: false })
+  @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.policy.messages.reapply')
   async reapplyStoragepolicy(sessionRecording) {
     await sessionRecording.reapplyStoragePolicy();
