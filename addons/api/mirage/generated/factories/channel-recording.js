@@ -12,5 +12,5 @@ import { faker } from '@faker-js/faker';
 export default Factory.extend({
   bytes_up: () => faker.string.numeric(faker.number.int({ min: 1, max: 12 })),
   bytes_down: () => faker.string.numeric(faker.number.int({ min: 1, max: 12 })),
-  errors_number: () => faker.number.int({ max: 10 }),
+  errors: () => faker.number.int({ max: 10 }),
 });
