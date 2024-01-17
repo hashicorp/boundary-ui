@@ -20,11 +20,13 @@ module('Acceptance | scopes | read', function (hooks) {
   setupMirage(hooks);
 
   let features;
+  let featureEdition;
 
   const FORM_SELECTOR = 'main .rose-form';
   const FORM_ACTIONS_SELECTOR = '.rose-form-actions';
   const DELETE_DROPDOWN_SELECTOR =
     '.rose-layout-page-actions .rose-dropdown-button-danger';
+  const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';
 
   const instances = {
     scopes: {
@@ -47,11 +49,12 @@ module('Acceptance | scopes | read', function (hooks) {
       scope: { id: 'global', type: 'global' },
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global`;
+    urls.globalScope = `/scopes/global/scopes`;
     urls.globalScopeEdit = `/scopes/global/edit`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
+    featureEdition = this.owner.lookup('service:featureEdition');
     authenticateSession({ isGlobal: true });
   });
 
@@ -68,7 +71,7 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.dom(DELETE_DROPDOWN_SELECTOR).exists();
   });
 
-  test('visiting global scope edit', async function (assert) {
+  test('visiting global scope settings when feature flag is enabled', async function (assert) {
     features.enable('ssh-session-recording');
     await visit(urls.globalScope);
     await a11yAudit();
@@ -80,6 +83,33 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.dom(FORM_SELECTOR).exists();
     assert.dom(FORM_ACTIONS_SELECTOR).doesNotExist();
     assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+  });
+
+  test('user cannot visit global scope settings when feature flag is not enabled', async function (assert) {
+    await visit(urls.globalScope);
+
+    assert.strictEqual(currentURL(), urls.globalScope);
+    assert.dom(`[href="${urls.globalScopeEdit}"]`).doesNotExist();
+  });
+
+  test('user can attatch a storage policy to a scope in enterprise edition', async function (assert) {
+    featureEdition.setEdition('enterprise', ['ssh-session-recording']);
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalScopeEdit}"]`);
+
+    assert.strictEqual(currentURL(), urls.globalScopeEdit);
+    assert.dom(STORAGE_POLICY_SIDEBAR).exists();
+  });
+
+  test('user can attatch a storage policy to a scope in hcp edition', async function (assert) {
+    featureEdition.setEdition('hcp', ['ssh-session-recording']);
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalScopeEdit}"]`);
+
+    assert.strictEqual(currentURL(), urls.globalScopeEdit);
+    assert.dom(STORAGE_POLICY_SIDEBAR).exists();
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
