@@ -3,6 +3,16 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
+{{#if @model.isGlobal}}
+  {{page-title (t 'resources.global.title')}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.global.title'}}
+    @icon='globe'
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
+{{/if}}
+
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
@@ -10,6 +20,13 @@
   </page.breadcrumbs>
 
   <page.header>
+    {{#if @model.isGlobal}}
+      <h2>
+        {{t 'resources.global.title'}}
+        {{! TODO: Add doc link }}
+      </h2>
+      <p>{{t 'resources.global.description'}}</p>
+    {{/if}}
     {{#if @model.isOrg}}
       <h2>
         {{t 'resources.org.title'}}
@@ -43,7 +60,7 @@
     </page.navigation>
   {{/if}}
 
-  {{#if (can 'delete model' @model)}}
+  {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
     <page.actions>
       <Rose::Dropdown
         @text={{t 'actions.manage'}}
