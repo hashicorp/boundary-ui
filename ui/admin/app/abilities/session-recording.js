@@ -21,7 +21,7 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
   }
 
   /**
-   * Attaching a policy is allowed only if the feature flag is enabled
+   * Reapplying policy is allowed only if the feature flag is enabled
    * @type {boolean}
    */
   get canReapplyStoragePolicy() {
