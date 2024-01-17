@@ -247,6 +247,7 @@
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.retain_until'}}
                   <time
+                    data-test-retain-until
                     datetime={{format-date-iso
                       @model.sessionRecording.retain_until
                     }}
@@ -260,6 +261,7 @@
                 <list.Item @icon='hourglass' @color='faint'>
                   {{t 'resources.policy.titles.delete_after'}}
                   <time
+                    data-test-delete-after
                     datetime={{format-date-iso
                       @model.sessionRecording.delete_after
                     }}
