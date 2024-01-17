@@ -4,24 +4,39 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  findAll,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import sinon from 'sinon';
 import {
   currentSession,
   authenticateSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import WindowMockIPC from '../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/client-daemon-search';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
-  let mockIPC;
-  let messageHandler;
+  const APP_STATE_TITLE = '.hds-application-state__title';
+  const META_DATA_RESPONSE = {
+    builds: [
+      { os: 'windows', url: 'windows.fake.download.zip' },
+      { os: 'darwin', url: 'darwin.fake.download.dmg' },
+      { os: 'linux', url: 'linux.fake.download.deb' },
+    ],
+  };
 
   const instances = {
     scopes: {
@@ -34,12 +49,6 @@ module('Acceptance | scopes', function (hooks) {
     },
     target: null,
     session: null,
-  };
-
-  const stubs = {
-    global: null,
-    org: null,
-    ipcService: null,
   };
 
   const urls = {
@@ -73,24 +82,25 @@ module('Acceptance | scopes', function (hooks) {
 
   hooks.beforeEach(function () {
     authenticateSession();
+    // bypass mirage config that expects recursive to be passed in as queryParam
+    this.server.get('/targets', ({ targets }) => targets.all());
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    stubs.global = { id: 'global', type: 'global' };
+    const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
     instances.scopes.org2 = this.server.create('scope', {
       type: 'org',
-      scope: stubs.global,
+      scope: globalScope,
     });
-    stubs.org = { id: instances.scopes.org.id, type: 'org' };
+    const orgScope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
-      scope: stubs.org,
+      scope: orgScope,
     });
-    stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
@@ -129,42 +139,11 @@ module('Acceptance | scopes', function (hooks) {
     urls.globalTargets = `${urls.globalProjects}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
 
-    class MockIPC {
-      clusterUrl = null;
-
-      invoke(method, payload) {
-        return this[method](payload);
-      }
-
-      getClusterUrl() {
-        return this.clusterUrl;
-      }
-
-      setClusterUrl(clusterUrl) {
-        this.clusterUrl = clusterUrl;
-        return this.clusterUrl;
-      }
-    }
-
-    mockIPC = new MockIPC();
-    messageHandler = async function (event) {
-      if (event.origin !== window.location.origin) return;
-      const { method, payload } = event.data;
-      if (method) {
-        const response = await mockIPC.invoke(method, payload);
-        event.ports[0].postMessage(response);
-      }
-    };
-
-    window.addEventListener('message', messageHandler);
+    this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    const ipcService = this.owner.lookup('service:ipc');
-    stubs.ipcService = sinon.stub(ipcService, 'invoke');
-  });
-
-  hooks.afterEach(function () {
-    window.removeEventListener('message', messageHandler);
+    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
   });
 
   test('visiting index', async function (assert) {
@@ -215,6 +194,17 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
+    this.stubClientDaemonSearch(
+      'targets',
+      'sessions',
+      'targets',
+      'sessions',
+      'targets',
+      'sessions',
+      'targets',
+      'sessions',
+      'targets',
+    );
     await visit(urls.targets);
 
     await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
@@ -230,6 +220,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
+    this.stubClientDaemonSearch();
 
     await visit(urls.targets);
     await a11yAudit();
@@ -249,37 +240,104 @@ module('Acceptance | scopes', function (hooks) {
 
   test('visiting empty targets', async function (assert) {
     assert.expect(1);
-    this.server.get('/targets', () => new Response(200));
+    this.server.db.targets.remove();
+    this.server.db.sessions.remove();
+    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
 
     await visit(urls.targets);
 
-    assert.ok(
-      find('.rose-message-title').textContent.trim(),
-      'No Targets Available',
-    );
+    assert.ok(find(APP_STATE_TITLE).textContent.trim(), 'No Targets Available');
   });
 
-  test.skip('connecting to a target', async function (assert) {
-    assert.expect(3);
-    stubs.ipcService.withArgs('cliExists').returns(true);
-    stubs.ipcService.withArgs('connect').returns({
-      session_id: instances.session.id,
-      address: 'a_123',
-      port: 'p_123',
-      protocol: 'tcp',
+  test.skip('pagination is not supported - windows build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: true,
+      isMac: false,
+      isLinux: false,
     });
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
 
     await visit(urls.targets);
-    await click('[data-test-targets-connect-button]');
 
-    assert.ok(find('.dialog-detail'), 'Success dialog');
-    assert.strictEqual(findAll('.rose-dialog-footer button').length, 1);
-    assert.strictEqual(
-      find('.rose-dialog-footer button').textContent.trim(),
-      'Close',
-      'Cannot retry',
-    );
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'windows.fake.download.zip');
+  });
+
+  test.skip('pagination is not supported - mac build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: false,
+      isMac: true,
+      isLinux: false,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'darwin.fake.download.dmg');
+  });
+
+  test.skip('pagination is not supported - linux build', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: false,
+      isMac: false,
+      isLinux: true,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'linux.fake.download.deb');
+  });
+
+  test.skip('pagination is not supported - failed to fetch metaData', async function (assert) {
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: true,
+      isMac: false,
+      isLinux: false,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(500);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller-alert]');
+    assert.dom('[data-test-unsupported-controller-alert]').exists();
+    assert
+      .dom('[data-test-releases-link]')
+      .hasAttribute('href', 'https://releases.hashicorp.com/boundary-desktop/');
   });
 });

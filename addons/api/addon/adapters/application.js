@@ -108,22 +108,37 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
 
   /**
    * Intercepts "empty" responses and adds an empty `items` array.
-   * @override
-   * @method findAll
-   * @return {Promise} promise
-   */
-  findAll() {
-    return super.findAll(...arguments).then(prenormalizeArrayResponse);
-  }
-
-  /**
-   * Intercepts "empty" responses and adds an empty `items` array.
+   * This query method now supports pagination by checking the responseType and
+   * passing in the list token if the responseType indicates more data
    * @override
    * @method query
    * @return {Promise} promise
    */
-  query() {
-    return super.query(...arguments).then(prenormalizeArrayResponse);
+  async query(store, schema, query) {
+    let result;
+    let data = [];
+
+    // If the query has a page_size, we skip the pagination logic
+    // and return the initial result. This is being used to determine
+    // if the controller supports pagination
+    if (query.page_size) {
+      result = await super.query(store, schema, query);
+      return prenormalizeArrayResponse(result);
+    }
+    // Run this loop as long as the response_type is delta,
+    // which indicates that there are more items in the list
+    do {
+      result = await super.query(store, schema, query);
+      //add the result items to a data array
+      if (result && result.items) {
+        data.push(...result.items);
+        //pass in the list token for subsequent calls to fetch the remaining list items
+        query.list_token = result.list_token;
+      }
+    } while (result && result.response_type === 'delta');
+
+    result.items = data;
+    return prenormalizeArrayResponse(result);
   }
 
   /**
