@@ -16,7 +16,7 @@
     {{#if
       (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
     }}
-      <Hds::Dropdown as |dd|>
+      <Hds::Dropdown data-test-manage-dropdown as |dd|>
         <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
         <dd.Interactive

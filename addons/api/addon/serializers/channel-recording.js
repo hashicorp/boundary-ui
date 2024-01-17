@@ -17,6 +17,7 @@ export default class ChannelSerializer extends ApplicationSerializer.extend(
     // we should not override the ember models errors field,
     // so we rename the errors field from the api
     normalized.data.attributes.errors_number = err;
+
     return normalized;
   }
 }

@@ -25,4 +25,45 @@ module('Unit | Serializer | session-recording', function (hooks) {
 
     assert.ok(serializedRecord);
   });
+
+  test('it serializes only version when `adapterOptions.method` is `reapply-storage-policy`', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('session-recording');
+    const record = store.createRecord('session-recording', {
+      version: 1,
+      retain_until: 1,
+      delete_after: 2,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      method: 'reapply-storage-policy',
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {});
+  });
+
+  test('it normalizes correctly', function (assert) {
+    let store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('session-recording');
+
+    let record = store.createRecord('session-recording').constructor;
+    const payload = {
+      id: '1',
+      type: 'session-recording',
+      errors: 2,
+    };
+    const normalized = serializer.normalize(record, payload);
+
+    assert.deepEqual(normalized, {
+      data: {
+        id: '1',
+        type: 'session-recording',
+        attributes: {
+          errors_number: 2,
+          type: 'session-recording',
+        },
+        relationships: {},
+      },
+    });
+  });
 });

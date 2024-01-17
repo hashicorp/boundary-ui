@@ -157,7 +157,7 @@ module(
         );
       await visit(urls.sessionRecording);
 
-      assert.dom('.hds-menu-primitive').doesNotExist();
+      assert.dom('[data-test-manage-dropdown]').doesNotExist();
     });
 
     test('user can view manage dropdown with proper authorization', async function (assert) {
@@ -166,7 +166,7 @@ module(
 
       await visit(urls.sessionRecording);
 
-      assert.dom('.hds-menu-primitive').exists();
+      assert.dom('[data-test-manage-dropdown]').isVisible();
     });
 
     test('both retain until and delete after can be seen with proper authorization', async function (assert) {
@@ -175,10 +175,10 @@ module(
 
       await visit(urls.sessionRecording);
 
-      assert.dom('.hds-dropdown-toggle-button__text').exists();
+      assert.dom('.hds-dropdown-toggle-button__text').isVisible();
 
-      assert.dom('[data-test-retain-until]').exists();
-      assert.dom('[data-test-delete-after]').exists();
+      assert.dom('[data-test-retain-until]').isVisible();
+      assert.dom('[data-test-delete-after]').isVisible();
     });
   },
 );
