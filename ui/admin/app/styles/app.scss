@@ -732,7 +732,14 @@
       }
     }
   }
-  /* stylelint-enable selector-class-pattern */
+
+  &.config-tags {
+    .hds-table__td:last-child {
+      // remove width from last cell
+      width: unset;
+    }
+    /* stylelint-enable selector-class-pattern */
+  }
 }
 
 .auth-methods-list-alert {

@@ -57,36 +57,31 @@
       </F.Error>
     {{/if}}
   </Hds::Form::Textarea::Field>
-  <form.fieldset>
-    <:title>{{t 'resources.worker.form.worker_tags.label'}}</:title>
-    <:description>{{t 'resources.worker.form.worker_tags.help'}}</:description>
-    <:body>
-      <Rose::Table @style='condensed' as |table|>
-        <table.body as |body|>
+
+  <Hds::Form::Fieldset as |F|>
+    <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+    <F.HelperText>{{t 'resources.worker.form.worker_tags.help'}}</F.HelperText>
+    <F.Control>
+      <Hds::Table class='list-wrapper-field config-tags' name='config_tags'>
+        <:body as |B|>
           {{#each-in @model.config_tags as |key value|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{key}}
-                  @disabled={{true}}
-                  @readOnly={{true}}
+            <B.Tr>
+              <B.Td>
+                <Hds::Form::TextInput::Base @value={{key}} disabled={{true}} />
+              </B.Td>
+              <B.Td>
+                <Hds::Form::TextInput::Base
+                  @value={{value}}
+                  disabled={{true}}
                 />
-              </row.cell>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{join ', ' value}}
-                  @disabled={{true}}
-                  @readOnly={{true}}
-                />
-              </row.cell>
-            </body.row>
+              </B.Td>
+            </B.Tr>
           {{/each-in}}
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </form.fieldset>
+        </:body>
+      </Hds::Table>
+    </F.Control>
+  </Hds::Form::Fieldset>
+
   <form.input
     @name='address'
     @type='url'

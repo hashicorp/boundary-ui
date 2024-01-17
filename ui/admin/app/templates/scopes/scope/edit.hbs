@@ -60,7 +60,7 @@
     </page.navigation>
   {{/if}}
 
-  {{#if (can 'delete model' @model)}}
+  {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
     <page.actions>
       <Rose::Dropdown
         @text={{t 'actions.manage'}}
