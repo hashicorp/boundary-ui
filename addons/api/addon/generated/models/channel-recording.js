@@ -31,7 +31,7 @@ export default class GeneratedChannelRecordingModel extends BaseModel {
       'The total number of errors that occurred during the use of this Channel.',
     readOnly: true,
   })
-  errors_session_recording;
+  errors_number;
 
   @attr('date', {
     description: 'The time the Channel started.',
