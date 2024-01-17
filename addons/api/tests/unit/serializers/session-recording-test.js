@@ -39,11 +39,7 @@ module('Unit | Serializer | session-recording', function (hooks) {
       method: 'reapply-storage-policy',
     };
     const serializedRecord = serializer.serialize(snapshot);
-    assert.deepEqual(serializedRecord, {
-      retain_until: null,
-      delete_after: null,
-      connection_recordings: [],
-    });
+    assert.deepEqual(serializedRecord, {});
   });
 
   test('it normalizes correctly', function (assert) {
