@@ -780,6 +780,24 @@ function routes() {
     },
   );
 
+  this.post(
+    '/session-recordings/:idMethod',
+    function ({ sessionRecordings }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const record = sessionRecordings.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      if (method === 'reapply-storage-policy') {
+        updatedAttrs.retain_until = faker.date.recent();
+        updatedAttrs.delete_after = faker.date.recent();
+      }
+      return record.update(updatedAttrs);
+    },
+  );
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));

@@ -146,5 +146,39 @@ module(
       assert.notEqual(currentURL(), incorrectUrl);
       assert.strictEqual(currentURL(), urls.channelRecording);
     });
+
+    test('user cannot view manage dropdown without proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      instances.sessionRecording.authorized_actions =
+        instances.sessionRecording.authorized_actions.filter(
+          (item) => item !== 'reapply-storage-policy',
+        );
+      await visit(urls.sessionRecording);
+
+      assert.dom('[data-test-manage-dropdown]').doesNotExist();
+    });
+
+    test('user can view manage dropdown with proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      await visit(urls.sessionRecording);
+
+      assert.dom('[data-test-manage-dropdown]').isVisible();
+    });
+
+    test('both retain until and delete after can be seen with proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      await visit(urls.sessionRecording);
+
+      assert.dom('.hds-dropdown-toggle-button__text').isVisible();
+
+      assert.dom('[data-test-retain-until]').isVisible();
+      assert.dom('[data-test-delete-after]').isVisible();
+    });
   },
 );

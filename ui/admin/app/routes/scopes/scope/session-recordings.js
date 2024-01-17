@@ -5,6 +5,8 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 import orderBy from 'lodash/orderBy';
 
 export default class ScopesScopeSessionRecordingsRoute extends Route {
@@ -67,5 +69,17 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         storageBuckets,
       };
     }
+  }
+
+  /**
+   * Reapplies storage policy dates to session recording
+   * @param {SessionRecordingModel}
+   */
+  @action
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('resources.policy.messages.reapply')
+  async reapplyStoragepolicy(sessionRecording) {
+    await sessionRecording.reapplyStoragePolicy();
+    super.refresh(...arguments);
   }
 }
