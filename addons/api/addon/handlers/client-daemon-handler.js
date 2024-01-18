@@ -1,7 +1,7 @@
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { pluralize } from 'ember-inflector';
-import { generateMQLExpression } from '../utils/mqlQuery';
+import { generateMQLExpression } from '../utils/mql-query';
 
 /**
  * Not all types are yet supported by the client daemon so we'll
