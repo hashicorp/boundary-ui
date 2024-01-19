@@ -41,11 +41,13 @@ const paginateResults = (array, page, pageSize) => {
 
 const fetchControllerData = async (context, next) => {
   const { data } = context.request;
-  const { query } = data;
-  const { recursive, scope_id, page, pageSize } = query;
+  const { query: originalQuery } = data;
+  // remove client daemon specific query params
+  // eslint-disable-next-line no-unused-vars
+  const { query, page, pageSize, ...remainingQuery } = originalQuery;
 
   // If we get an error or client daemon is unavailable, fall back to calling the API
-  context.request.data.query = { recursive, scope_id };
+  context.request.data.query = remainingQuery;
   const results = await next(context.request);
   const models = results.content.toArray();
 
