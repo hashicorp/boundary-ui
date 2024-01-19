@@ -13,7 +13,7 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get showCustomInput() {
-    return this.args.selectedOption === 'custom' ? true : false;
+    return this.args.selectedOption === 'custom';
   }
 
   /**
