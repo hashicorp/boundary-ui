@@ -9,9 +9,10 @@
 
   <page.header>
     <h2>
-      {{t 'resources.policy.title_plural'}}
-      {{! TODO: Add doc link here }}
+      {{t 'resources.policy.title'}}
+      {{! TODO: ADD DOC LINK }}
     </h2>
+    <p>{{t 'resources.policy.description'}}</p>
   </page.header>
   <page.actions>
     {{#if (can 'create model' this.scope collection='policies')}}

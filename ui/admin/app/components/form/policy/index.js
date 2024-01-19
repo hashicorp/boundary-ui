@@ -43,9 +43,13 @@ export default class FormPolicyComponent extends Component {
 
   /**
    * Returns policy type
+   * API doesn't return days for do_not_protect,
+   * so we set option to do_not_protect when there's no retain days
    * @type {string}
    */
   get selectRetentionPolicyType() {
+    if (!this.args.model.retain_for?.days) return 'do_not_protect';
+
     const val = Object.keys(RETENTION_POLICY).find(
       (i) => RETENTION_POLICY[i] === this.args.model.retain_for?.days,
     );

@@ -22,7 +22,8 @@ export default class ScopesScopeAddStoragePolicyCreateRoute extends Route {
    * @return {Policy}
    */
   model() {
-    const scopeModel = this.store.peekRecord('scope', 'global');
+    const { id: scope_id } = this.modelFor('scopes.scope');
+    const scopeModel = this.store.peekRecord('scope', scope_id);
     const record = this.store.createRecord('policy', {
       type: TYPE_POLICY,
     });
