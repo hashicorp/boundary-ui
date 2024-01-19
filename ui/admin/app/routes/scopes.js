@@ -49,7 +49,7 @@ export default class ScopesRoute extends Route {
   @notifySuccess('resources.policy.messages.detach')
   async detachStoragePolicy(scope) {
     const { storage_policy_id } = scope;
-    await scope.detachStoragePolicy(storage_policy_id);
     scope.storage_policy_id = '';
+    await scope.detachStoragePolicy(storage_policy_id);
   }
 }

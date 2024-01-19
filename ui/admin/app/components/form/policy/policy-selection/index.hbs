@@ -15,6 +15,7 @@
       name={{@name}}
       disabled={{or @disabled this.isDeleteDisable}}
       aria-label={{t (concat 'resources.policy.form.' @name '.label')}}
+      data-select={{@name}}
       @width='70%'
       {{on 'change' this.handlePolicyTypeSelection}}
       as |F|
@@ -35,9 +36,10 @@
     </Hds::Form::Select::Field>
     {{#if @model.scope.isGlobal}}
       <Hds::Form::Toggle::Field
-        checked={{this.isOverridable}}
-        disabled={{@disabled}}
         name={{@customInputName}}
+        checked={{this.isOverridable}}
+        disabled={{this.toggleDisabled}}
+        data-toggle={{@customInputName}}
         {{on 'change' this.handleOverridableToggle}}
         as |F|
       >
@@ -53,12 +55,12 @@
     <F.Control>
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
+          name={{@customInputName}}
           @value={{@inputValue}}
           disabled={{@disabled}}
           aria-label={{t 'resources.policy.title'}}
+          data-input={{@customInputName}}
           {{on 'input' this.handleInputChange}}
-          name={{@customInputName}}
-          data-input-type={{@customInputName}}
         />
         <S.Generic>
           <Hds::Badge

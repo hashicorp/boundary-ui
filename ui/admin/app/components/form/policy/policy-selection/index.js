@@ -15,13 +15,26 @@ export default class FormPolicySelectionComponent extends Component {
   get showCustomInput() {
     if (this.args.name === 'retention_policy') {
       return this.isCustomRetentionSelected;
-    } else if (
-      this.args.name === 'deletion_policy' &&
-      this.args.model.retain_for?.days >= 0
-    ) {
+    } else if (this.args.name === 'deletion_policy') {
       return this.isCustomDeletionSelected;
     } else {
       return null;
+    }
+  }
+
+  /**
+   * Disable toggle when the form is disabled and when the retain/delete after days are 0
+   * @type {boolean}
+   */
+  get toggleDisabled() {
+    if (
+      this.args.disabled ||
+      this.args.model[this.args.customInputName]?.days === 0 ||
+      !this.args.model[this.args.customInputName]?.days
+    ) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -30,9 +43,7 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get isCustomRetentionSelected() {
-    //no need to show custom input for the below days
-    const arr = [-1, 0, 2555, 2190];
-    return arr.includes(this.args.model.retain_for?.days) ? false : true;
+    return this.args.selectedOption === 'custom' ? true : false;
   }
 
   /**
@@ -40,14 +51,17 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get isCustomDeletionSelected() {
-    return this.args.model.delete_after?.days > 0;
+    return this.args.selectedOption === 'custom' ? true : false;
   }
   /**
    * Returns true if the toggle is on
    * @type {boolean}
    */
   get isOverridable() {
-    return this.args.model[this.args.customInputName]?.overridable;
+    return (
+      this.args.model[this.args.customInputName]?.days &&
+      this.args.model[this.args.customInputName]?.overridable
+    );
   }
 
   get isDeleteDisable() {
@@ -67,11 +81,13 @@ export default class FormPolicySelectionComponent extends Component {
   @action
   handleInputChange({ target: { value, name: field } }) {
     // Select options return type is string and we want the `days` in integer format
-    const val = Number(value);
-    this.args.model[field] = {
-      ...this.args.model[field],
-      days: val,
-    };
+    if (value) {
+      const val = Number(value);
+      this.args.model[field] = {
+        ...this.args.model[field],
+        days: val,
+      };
+    }
   }
 
   /**
