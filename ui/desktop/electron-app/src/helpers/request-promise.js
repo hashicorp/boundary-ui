@@ -54,6 +54,15 @@ const unixSocketRequest = (options, reqBody) =>
           parsedResponse = JSON.parse(response);
         }
 
+        // Reject the response if the status code is not in the 2xx range.
+        const { statusCode } = res;
+        if (statusCode < 200 || statusCode >= 400) {
+          reject({
+            statusCode,
+            ...parsedResponse,
+          });
+        }
+
         resolve(parsedResponse);
       } catch (e) {
         reject(e);
