@@ -21,15 +21,9 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get toggleDisabled() {
-    if (
-      this.args.disabled ||
-      this.args.model[this.args.customInputName]?.days === 0 ||
-      !this.args.model[this.args.customInputName]?.days
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return (
+      this.args.disabled || !this.args.model[this.args.customInputName]?.days
+    );
   }
 
   /**
@@ -44,14 +38,10 @@ export default class FormPolicySelectionComponent extends Component {
   }
 
   get isDeleteDisable() {
-    if (
+    return (
       this.args.name === 'deletion_policy' &&
       this.args.model.retain_for?.days === -1
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    );
   }
   //actions
   /**
