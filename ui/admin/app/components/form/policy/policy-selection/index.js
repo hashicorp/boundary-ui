@@ -13,13 +13,7 @@ export default class FormPolicySelectionComponent extends Component {
    * @type {boolean}
    */
   get showCustomInput() {
-    if (this.args.name === 'retention_policy') {
-      return this.isCustomRetentionSelected;
-    } else if (this.args.name === 'deletion_policy') {
-      return this.isCustomDeletionSelected;
-    } else {
-      return null;
-    }
+    return this.args.selectedOption === 'custom' ? true : false;
   }
 
   /**
@@ -38,21 +32,6 @@ export default class FormPolicySelectionComponent extends Component {
     }
   }
 
-  /**
-   * Returns true if rentention days are greater than 0
-   * @type {boolean}
-   */
-  get isCustomRetentionSelected() {
-    return this.args.selectedOption === 'custom' ? true : false;
-  }
-
-  /**
-   * Returns true if deletion days are greater than 0
-   * @type {boolean}
-   */
-  get isCustomDeletionSelected() {
-    return this.args.selectedOption === 'custom' ? true : false;
-  }
   /**
    * Returns true if the toggle is on
    * @type {boolean}
