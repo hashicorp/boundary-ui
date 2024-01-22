@@ -87,17 +87,12 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     const { id: scope_id } = this.modelFor('scopes.scope');
     await this.getAllTargets(transition, scope_id);
     const projects = this.modelFor('scopes.scope.projects');
-    const projectIds = projects.map((project) => project.id);
+    const orgScope = this.modelFor('scopes.scope');
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
-    if (scopes.length === 0) {
-      projectIds.forEach((projectId) => {
-        filters.scope_id.push({ equals: projectId });
-      });
-    }
     types.forEach((type) => {
       filters.type.push({ equals: type });
     });
@@ -121,14 +116,18 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
-    let targets = await this.store.query('target', {
+    const query = {
       recursive: true,
       scope_id,
       query: { search, filters },
       page,
       pageSize,
       force_refresh: true,
-    });
+    };
+    if (orgScope.isOrg && scopes.length === 0) {
+      query.filter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
+    }
+    let targets = await this.store.query('target', query);
     const totalItems = targets.meta?.totalItems;
 
     // Filter out targets to which users do not have the connect ability
