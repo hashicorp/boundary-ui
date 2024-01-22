@@ -260,8 +260,6 @@ app.on('before-quit', (event) => {
 });
 
 app.on('quit', () => {
-  // TODO: Should we check if the desktop client started the daemon?
-  //  If not, we probably shouldn't stop the daemon
   clientDaemonManager.stop();
 });
 
