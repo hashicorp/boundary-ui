@@ -590,6 +590,10 @@ target:
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+  filter:
+    active-sessions:
+      yes: Has active sessions
+      no: No active sessions
   form:
     type:
       label: Type
