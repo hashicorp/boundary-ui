@@ -57,7 +57,6 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.save-success')
   async attachStoragePolicy(scope) {
-    console.log(scope, 'SCOPE');
     const { storage_policy_id } = scope;
     if (storage_policy_id) {
       await scope.attachStoragePolicy(storage_policy_id);
