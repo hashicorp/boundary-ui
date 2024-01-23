@@ -950,7 +950,6 @@ policy:
   messages:
     detach: Successfully detached
     reapply: Successfully reapplied
-    later: The policy will be reapplied after the recording has completed
     none:
       title: No storage policies yet
       description: A Storage Policy defines how long Session Recordings must be kept and when they should be deleted. We recommend checking your data retention policies for compliance requirements.
