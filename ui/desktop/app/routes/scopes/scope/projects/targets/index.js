@@ -85,6 +85,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     transition,
   ) {
     const orgScope = this.modelFor('scopes.scope');
+    // orgFilter used to narrow down resources to only those under
+    // the current org scope if org is not global
     const orgFilter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
     await this.getAllTargets(transition, orgScope, orgFilter);
     const projects = this.modelFor('scopes.scope.projects');
@@ -150,10 +152,13 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
   resetController(controller, isExiting, transition) {
     const { to } = transition;
-    // Reset the scopes query param when changing org scope
+    // Reset the query params when changing org scope
     if (!isExiting && to.queryParams.scopes === '[]') {
       controller.setProperties({
         scopes: [],
+        availableSessions: [],
+        types: [],
+        search: '',
       });
     }
   }

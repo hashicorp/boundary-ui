@@ -6,6 +6,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   // =services
@@ -117,6 +122,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       );
       const allTargetsQuery = { scope_id: orgScope.id, recursive: true };
       if (orgScope.isOrg) {
+        // orgFilter used to narrow down resources to only those under
+        // the current org scope if org is not global
         allTargetsQuery.filter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
       }
       this.allTargets = await this.store.query(
@@ -137,11 +144,17 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   }
 
   resetController(controller, isExiting, transition) {
-    const { to } = transition;
+    const { scopes, targets, status } = transition.to.queryParams;
     // Reset the scopes query param when changing org scope
-    if (!isExiting && to.queryParams.scopes === '[]') {
+    if (isExiting && (scopes || targets || status)) {
       controller.setProperties({
         scopes: [],
+        targets: [],
+        status: [
+          STATUS_SESSION_ACTIVE,
+          STATUS_SESSION_PENDING,
+          STATUS_SESSION_CANCELING,
+        ],
       });
     }
   }
