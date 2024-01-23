@@ -25,6 +25,7 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
     const currentScopePolicies = await this.store.query('policy', {
       scope_id,
     });
+
     if (scope_id === 'global') {
       // Global scope should only list policies from its scope
       this.policyList = currentScopePolicies;
@@ -56,6 +57,7 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.save-success')
   async attachStoragePolicy(scope) {
+    console.log(scope, 'SCOPE');
     const { storage_policy_id } = scope;
     if (storage_policy_id) {
       await scope.attachStoragePolicy(storage_policy_id);
