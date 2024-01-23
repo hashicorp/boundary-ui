@@ -112,12 +112,14 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
 
   @attr('date', {
     description: 'The time until a session recording is required to be stored.',
+    readOnly: true,
   })
   retain_until;
 
   @attr('date', {
     description:
       'The time a session recording is scheduled to be automatically deleted.',
+    readOnly: true,
   })
   delete_after;
 }
