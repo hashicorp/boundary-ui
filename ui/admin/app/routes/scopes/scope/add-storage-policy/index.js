@@ -22,20 +22,19 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
    */
   async afterModel() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-
+    const currentScope = await this.store.query('policy', {
+      scope_id,
+    });
     if (scope_id === 'global') {
-      //Global scope should list both global and org scope policies
-      const globalPolicy = await this.store.query('policy', {
-        scope_id,
-        recursive: true,
-      });
-      this.policyList = globalPolicy;
+      //Global scope should only list policies from its scope
+      this.policyList = currentScope;
     } else {
-      //Org scope should only list policies from its scope
-      const orgPolicy = await this.store.query('policy', {
-        scope_id,
+      //Org scope should list both global and org scope policies
+      const globalScope = await this.store.query('policy', {
+        scope_id: 'global',
       });
-      this.policyList = orgPolicy;
+
+      this.policyList = [...globalScope, ...currentScope];
     }
   }
 
