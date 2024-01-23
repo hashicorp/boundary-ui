@@ -26,7 +26,7 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
       scope_id,
     });
     if (scope_id === 'global') {
-      //Global scope should only list policies from its scope
+      // Global scope should only list policies from its scope
       this.policyList = currentScope;
     } else {
       //Org scope should list both global and org scope policies
