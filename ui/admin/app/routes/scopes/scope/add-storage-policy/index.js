@@ -29,7 +29,7 @@ export default class ScopesScopeAddStoragePolicyIndexRoute extends Route {
       // Global scope should only list policies from its scope
       this.policyList = currentScope;
     } else {
-      //Org scope should list both global and org scope policies
+      // Org scope should list both global and org scope policies
       const globalScope = await this.store.query('policy', {
         scope_id: 'global',
       });
