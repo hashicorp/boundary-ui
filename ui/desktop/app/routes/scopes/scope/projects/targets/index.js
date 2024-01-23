@@ -85,7 +85,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     transition,
   ) {
     const orgScope = this.modelFor('scopes.scope');
-    await this.getAllTargets(transition, orgScope.id);
+    const orgFilter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
+    await this.getAllTargets(transition, orgScope, orgFilter);
     const projects = this.modelFor('scopes.scope.projects');
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
@@ -98,7 +99,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
-    const sessions = await this.store.query('session', {
+    const sessionQuery = {
       recursive: true,
       scope_id: orgScope.id,
       query: {
@@ -111,7 +112,11 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         },
       },
       force_refresh: true,
-    });
+    };
+    if (orgScope.isOrg && scopes.length === 0) {
+      sessionQuery.filter = orgFilter;
+    }
+    const sessions = await this.store.query('session', sessionQuery);
 
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
@@ -124,7 +129,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       force_refresh: true,
     };
     if (orgScope.isOrg && scopes.length === 0) {
-      query.filter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
+      query.filter = orgFilter;
     }
     let targets = await this.store.query('target', query);
     const totalItems = targets.meta?.totalItems;
@@ -159,17 +164,17 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * @param transition
    * @returns {Promise<void>}
    */
-  async getAllTargets(transition, scope_id) {
+  async getAllTargets(transition, orgScope, orgFilter) {
     const from = transition.from?.name;
 
     // Query all targets for defining filtering values if entering route for first time
     if (from !== 'scopes.scope.projects.targets.index') {
+      const query = { scope_id: orgScope.id, recursive: true };
+      if (orgScope.isOrg) {
+        query.filter = orgFilter;
+      }
       const options = { pushToStore: false };
-      const allTargets = await this.store.query(
-        'target',
-        { scope_id, recursive: true },
-        options,
-      );
+      const allTargets = await this.store.query('target', query, options);
 
       // Filter out targets to which users do not have the connect ability
       this.allTargets = allTargets.filter((target) =>
