@@ -87,7 +87,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     const orgScope = this.modelFor('scopes.scope');
     // orgFilter used to narrow down resources to only those under
     // the current org scope if org is not global
-    const orgFilter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
+    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
     await this.getAllTargets(transition, orgScope, orgFilter);
     const projects = this.modelFor('scopes.scope.projects');
 

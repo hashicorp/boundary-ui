@@ -124,7 +124,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       if (orgScope.isOrg) {
         // orgFilter used to narrow down resources to only those under
         // the current org scope if org is not global
-        allTargetsQuery.filter = `("/item/scope/parent_scope_id" == "${orgScope.id}")`;
+        allTargetsQuery.filter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
       }
       this.allTargets = await this.store.query(
         'target',
