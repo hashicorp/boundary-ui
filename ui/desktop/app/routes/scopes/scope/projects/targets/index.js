@@ -84,10 +84,9 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     { search, scopes, availableSessions, types, page, pageSize },
     transition,
   ) {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    await this.getAllTargets(transition, scope_id);
-    const projects = this.modelFor('scopes.scope.projects');
     const orgScope = this.modelFor('scopes.scope');
+    await this.getAllTargets(transition, orgScope.id);
+    const projects = this.modelFor('scopes.scope.projects');
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
@@ -101,7 +100,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     // in the target model always retrieve the most up-to-date sessions.
     const sessions = await this.store.query('session', {
       recursive: true,
-      scope_id,
+      scope_id: orgScope.id,
       query: {
         filters: {
           user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -118,7 +117,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     const query = {
       recursive: true,
-      scope_id,
+      scope_id: orgScope.id,
       query: { search, filters },
       page,
       pageSize,
