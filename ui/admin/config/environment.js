@@ -110,6 +110,7 @@ module.exports = function (environment) {
           '/session-recordings/retrieve-lost-session-recordings',
         'storage-policy': '/storage-policy',
         'storage-policy.new': '/storage-policy/new',
+        'storage-policy.update': '/storage-policy/update',
       },
     },
 
