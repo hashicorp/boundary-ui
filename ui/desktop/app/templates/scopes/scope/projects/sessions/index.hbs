@@ -72,12 +72,6 @@
         <B.Tr>
           <B.Td>
             {{#if B.data.isAvailable}}
-              <Hds::Badge
-                @text={{t 'resources.session.title'}}
-                @icon='entry-point'
-                @isIconOnly={{true}}
-                @color='success'
-              />
               <Copyable
                 @text={{B.data.id}}
                 @buttonText={{t 'actions.copy-to-clipboard'}}
@@ -92,11 +86,6 @@
                 </LinkTo>
               </Copyable>
             {{else}}
-              <Hds::Badge
-                @text={{t 'resources.session.title'}}
-                @icon='entry-point'
-                @isIconOnly={{true}}
-              />
               <Copyable
                 @text={{B.data.id}}
                 @buttonText={{t 'actions.copy-to-clipboard'}}
