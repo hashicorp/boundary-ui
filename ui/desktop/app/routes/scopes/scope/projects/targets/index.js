@@ -84,29 +84,26 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     { search, scopes, availableSessions, types, page, pageSize },
     transition,
   ) {
-    const { id: scope_id } = this.modelFor('scopes.scope');
-    await this.getAllTargets(transition, scope_id);
+    const orgScope = this.modelFor('scopes.scope');
+    // orgFilter used to narrow down resources to only those under
+    // the current org scope if org is not global
+    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
+    await this.getAllTargets(transition, orgScope, orgFilter);
     const projects = this.modelFor('scopes.scope.projects');
-    const projectIds = projects.map((project) => project.id);
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
-    if (scopes.length === 0) {
-      projectIds.forEach((projectId) => {
-        filters.scope_id.push({ equals: projectId });
-      });
-    }
     types.forEach((type) => {
       filters.type.push({ equals: type });
     });
 
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
-    const sessions = await this.store.query('session', {
+    const sessionQuery = {
       recursive: true,
-      scope_id,
+      scope_id: orgScope.id,
       query: {
         filters: {
           user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -117,18 +114,26 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         },
       },
       force_refresh: true,
-    });
+    };
+    if (orgScope.isOrg && scopes.length === 0) {
+      sessionQuery.filter = orgFilter;
+    }
+    const sessions = await this.store.query('session', sessionQuery);
 
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
-    let targets = await this.store.query('target', {
+    const query = {
       recursive: true,
-      scope_id,
+      scope_id: orgScope.id,
       query: { search, filters },
       page,
       pageSize,
       force_refresh: true,
-    });
+    };
+    if (orgScope.isOrg && scopes.length === 0) {
+      query.filter = orgFilter;
+    }
+    let targets = await this.store.query('target', query);
     const totalItems = targets.meta?.totalItems;
 
     // Filter out targets to which users do not have the connect ability
@@ -146,11 +151,20 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   }
 
   resetController(controller, isExiting, transition) {
-    const { to } = transition;
-    // Reset the scopes query param when changing org scope
-    if (!isExiting && to.queryParams.scopes === '[]') {
+    const fromScope = transition.from.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+    const toScope = transition.to.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+
+    // Reset the query params when changing scope context
+    if (fromScope !== toScope) {
       controller.setProperties({
         scopes: [],
+        availableSessions: [],
+        types: [],
+        search: '',
       });
     }
   }
@@ -161,17 +175,17 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * @param transition
    * @returns {Promise<void>}
    */
-  async getAllTargets(transition, scope_id) {
+  async getAllTargets(transition, orgScope, orgFilter) {
     const from = transition.from?.name;
 
     // Query all targets for defining filtering values if entering route for first time
     if (from !== 'scopes.scope.projects.targets.index') {
+      const query = { scope_id: orgScope.id, recursive: true };
+      if (orgScope.isOrg) {
+        query.filter = orgFilter;
+      }
       const options = { pushToStore: false };
-      const allTargets = await this.store.query(
-        'target',
-        { scope_id, recursive: true },
-        options,
-      );
+      const allTargets = await this.store.query('target', query, options);
 
       // Filter out targets to which users do not have the connect ability
       this.allTargets = allTargets.filter((target) =>
