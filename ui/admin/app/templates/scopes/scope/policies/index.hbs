@@ -8,11 +8,16 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
-      {{t 'resources.policy.title'}}
-      <DocLink @doc='storage-policy' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.policy.description'}}</p>
+    <h2>{{t 'resources.policy.title'}}</h2>
+    <p>
+      {{t 'resources.policy.description'}}
+      <Hds::Link::Inline
+        @color='secondary'
+        @href={{(doc-url 'storage-policy')}}
+      >
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </p>
   </page.header>
   <page.actions>
     {{#if (can 'create model' this.scope collection='policies')}}
