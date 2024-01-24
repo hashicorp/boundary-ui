@@ -146,10 +146,10 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   }
 
   resetController(controller, isExiting, transition) {
-    const fromScope = transition.to.find(
+    const fromScope = transition.from.find(
       (routeInfo) => routeInfo.name === 'scopes.scope',
     ).params.scope_id;
-    const toScope = transition.from.find(
+    const toScope = transition.to.find(
       (routeInfo) => routeInfo.name === 'scopes.scope',
     ).params.scope_id;
 
