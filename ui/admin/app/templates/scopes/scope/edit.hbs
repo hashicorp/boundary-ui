@@ -121,6 +121,12 @@
             {{else}}
               <Hds::Text::Body @tag='p' class='description'>
                 {{t 'resources.policy.titles.create_policy_description'}}
+                <Hds::Link::Inline
+                  @color='secondary'
+                  @href={{(doc-url 'storage-policy.update')}}
+                >
+                  {{t 'actions.read-more'}}
+                </Hds::Link::Inline>
               </Hds::Text::Body>
             {{/if}}
             {{#if @model.storage_policy_id}}
