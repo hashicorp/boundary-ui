@@ -59,7 +59,7 @@ module.exports = function (environment) {
       baseURL: 'https://boundaryproject.io/help/admin-ui',
       topics: {
         global: '/global',
-        org: '/concepts/iam',
+        org: '/orgs',
         'org.new': '/orgs/new',
         project: '/projects',
         'project.new': '/projects/new',
