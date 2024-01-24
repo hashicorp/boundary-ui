@@ -144,9 +144,15 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   }
 
   resetController(controller, isExiting, transition) {
-    const { scopes, targets, status } = transition.to.queryParams;
-    // Reset the scopes query param when changing org scope
-    if (isExiting && (scopes || targets || status)) {
+    const fromScope = transition.to.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+    const toScope = transition.from.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+
+    // Reset the query params when changing scope context
+    if (fromScope !== toScope) {
       controller.setProperties({
         scopes: [],
         targets: [],
