@@ -23,7 +23,7 @@
     {{#if @model.isGlobal}}
       <h2>
         {{t 'resources.global.title'}}
-        {{! TODO: Add doc link }}
+        <DocLink @doc='global' @iconSize='large' />
       </h2>
       <p>{{t 'resources.global.description'}}</p>
     {{/if}}
