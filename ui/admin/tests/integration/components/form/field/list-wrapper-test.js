@@ -106,4 +106,28 @@ module('Integration | Component | list-wrapper', function (hooks) {
 
     assert.dom('tbody tr').exists({ count: 3 });
   });
+
+  test('it renders multiple options with a single select field', async function (assert) {
+    this.set('options', ['option1', 'option2', 'option3']);
+    this.set('model', { select: ['option2', 'option3'] });
+    await render(hbs`
+
+    <Form::Field::ListWrapper>
+      <:field as |F|>
+        <F.Select
+          @name="select"
+          @options={{this.options}}
+          @model={{this.model}}
+          @width='100%'
+        />
+        </:field>
+    </Form::Field::ListWrapper>
+    `);
+
+    assert
+      .dom('.list-wrapper-field [data-test-remove-button]')
+      .exists({ count: 2 });
+
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
 });
