@@ -6,7 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New
 
-- Upgrade CLI to v0.15.0 ([PR]())
+- Upgrade CLI to v0.15.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2117))
 - Add search, filtering, and pagination support for sessions and targets ([PR](https://github.com/hashicorp/boundary-ui/pull/2091))
 - Add time-remaining to a session ([PR](https://github.com/hashicorp/boundary-ui/pull/2018))
 
