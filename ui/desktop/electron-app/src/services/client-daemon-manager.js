@@ -28,9 +28,9 @@ class ClientDaemonManager {
    */
   status() {
     const daemonStatusCommand = ['daemon', 'status', '-format=json'];
-    const data = spawnSync(daemonStatusCommand);
+    const { stdout } = spawnSync(daemonStatusCommand);
 
-    const status = jsonify(data);
+    const status = jsonify(stdout);
     this.#socketPath = status?.item?.socket_address;
     return status;
   }
@@ -73,16 +73,15 @@ class ClientDaemonManager {
    * @returns {Promise}
    */
   async addToken({ token, tokenId }) {
+    // TODO: Should this and search just always call CLI even for non-Windows?
     if (isWindows()) {
       return addTokenCliCommand(token);
     }
-    // TODO: Remove this after testing
-    // return addTokenCliCommand(token);
 
     const postBody = {
-      auth_token_id: tokenId,
+      auth_token_id: sanitizer.base62EscapeAndValidate(tokenId),
       boundary_addr: runtimeSettings.clusterUrl,
-      auth_token: token,
+      auth_token: sanitizer.base62EscapeAndValidate(token),
     };
     const request = {
       method: 'POST',
@@ -96,8 +95,6 @@ class ClientDaemonManager {
     if (isWindows()) {
       return searchCliCommand(requestData);
     }
-    // TODO: Remove this after testing
-    // return searchCliCommand(requestData);
 
     delete requestData.token;
     const queryString = new URLSearchParams(requestData);
@@ -121,15 +118,22 @@ const addTokenCliCommand = (token) => {
   ];
   const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
 
-  const data = spawnSync(addTokenCommand, sanitizedToken);
-  const parsedResponse = jsonify(data);
+  // TODO: Is setting an env var for the address the only way? I'm surprised to not see an -addr flag
+  const { stdout, stderr } = spawnSync(addTokenCommand, {
+    BOUNDARY_TOKEN: sanitizedToken,
+    BOUNDARY_ADDR: runtimeSettings.clusterUrl,
+  });
+  let parsedResponse = jsonify(stdout);
 
   if (parsedResponse?.status_code === 204) {
+    // 204 has no response body
     return;
   }
-  // TODO: What's in this response? Can it be parsed into JSON correctly? Probably need to get it from stderr
+
+  parsedResponse = jsonify(stderr);
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
+    ...parsedResponse?.api_error,
   });
 };
 
@@ -140,7 +144,6 @@ const searchCliCommand = (requestData) => {
     '-token=env://BOUNDARY_TOKEN',
     `-resource=${requestData.resource}`,
   ];
-  // TODO: Should we just go through requestData object and add all keys with values instead of if statements?
   if (requestData.query) {
     searchCommand.push(`-query=${requestData.query}`);
   }
@@ -149,17 +152,20 @@ const searchCliCommand = (requestData) => {
   }
   const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
 
-  const data = spawnSync(searchCommand, sanitizedToken);
-  const parsedResponse = jsonify(data);
+  const { stdout, stderr } = spawnSync(searchCommand, {
+    BOUNDARY_TOKEN: sanitizedToken,
+  });
+  let parsedResponse = jsonify(stdout);
 
   if (parsedResponse?.status_code === 200) {
-    return jsonify(data)?.item;
-  } else {
-    // TODO: What's in this response? Can it be parsed into JSON correctly? Probably need to get it from stderr
-    return Promise.reject({
-      statusCode: parsedResponse?.status_code,
-    });
+    return parsedResponse?.item;
   }
+
+  parsedResponse = jsonify(stderr);
+  return Promise.reject({
+    statusCode: parsedResponse?.status_code,
+    ...parsedResponse?.api_error,
+  });
 };
 
 // Export an instance so we get a singleton
