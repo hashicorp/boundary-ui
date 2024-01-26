@@ -39,7 +39,7 @@
         {{t 'unsupported-controller.description.install'}}
       </Hds::Text::Body>
     </M.Body>
-    <M.Footer>
+    <M.Footer class='unsupported-modal-footer'>
       <Hds::Button
         type='button'
         @text={{t 'unsupported-controller.buttons.download'}}
@@ -47,6 +47,13 @@
         @isHrefExternal={{true}}
         disabled={{unless this.downloadLink 'disabled'}}
         data-test-download-link
+      />
+      <Hds::Button
+        type='button'
+        @color='secondary'
+        @route='cluster-url'
+        @text={{t 'unsupported-controller.buttons.change-cluster-url'}}
+        data-test-change-cluster-url
       />
     </M.Footer>
   </Hds::Modal>

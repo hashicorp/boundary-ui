@@ -101,4 +101,5 @@ unsupported-controller:
   buttons:
     download: Download supported version
     releases-page: Go to releases page
+    change-cluster-url: Change cluster URL
   error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page
