@@ -13,9 +13,9 @@ module.exports = {
   // Returns JSON-formatted version information from the CLI
   version: () => {
     const command = ['-v'];
-    const rawOutput = spawnSync(command);
-    let gitRevision = /Git Revision:\s*(?<rev>.*)\n/.exec(rawOutput);
-    let versionNumber = /Version Number:\s*(?<ver>.*)\n/.exec(rawOutput);
+    const { stdout } = spawnSync(command);
+    let gitRevision = /Git Revision:\s*(?<rev>.*)\n/.exec(stdout);
+    let versionNumber = /Version Number:\s*(?<ver>.*)\n/.exec(stdout);
     if (gitRevision) gitRevision = gitRevision.groups.rev;
     if (versionNumber) versionNumber = versionNumber.groups.ver;
     const formatted = versionNumber
