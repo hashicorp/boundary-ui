@@ -74,10 +74,20 @@ module.exports = {
    * Spawn child process and return output immediately.
    * This function is intended for non-connection related tasks.
    * @param {string} command
+   * @param {string}token
    * @return {string}
    */
-  spawnSync(command) {
-    const childProcess = spawnSync(path(), command);
+  spawnSync(command, token) {
+    const env = {
+      ...process.env,
+    };
+    if (token) {
+      env.BOUNDARY_TOKEN = token;
+    }
+
+    const childProcess = spawnSync(path(), command, {
+      env,
+    });
     const rawOutput = childProcess.stdout.toString();
     return rawOutput;
   },

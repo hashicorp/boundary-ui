@@ -106,10 +106,12 @@ export default class ClientDaemonHandler {
         }
         const sessionData = this.session.data?.authenticated;
         const auth_token_id = sessionData?.id;
+        const token = sessionData?.token;
         remainingQuery = {
           ...remainingQuery,
           query: searchQuery,
           auth_token_id,
+          token,
           resource: pluralize(type),
         };
 
@@ -125,7 +127,7 @@ export default class ClientDaemonHandler {
           if (e.statusCode === 403 || e.statusCode === 401) {
             await this.ipc.invoke('addTokenToClientDaemon', {
               tokenId: auth_token_id,
-              token: sessionData?.token,
+              token,
             });
             try {
               clientDaemonResults = await this.ipc.invoke(

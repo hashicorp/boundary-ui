@@ -3,10 +3,16 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const { spawnSync, spawn } = require('../helpers/spawn-promise');
+const {
+  spawnSync,
+  spawn,
+  spawnAsyncJSONPromise,
+} = require('../helpers/spawn-promise');
 const jsonify = require('../utils/jsonify.js');
 const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
+const sanitizer = require('../utils/sanitizer.js');
+const { isWindows } = require('../helpers/platform.js');
 
 class ClientDaemonManager {
   #socketPath;
@@ -35,6 +41,7 @@ class ClientDaemonManager {
    */
   async start() {
     const startDaemonCommand = ['daemon', 'start'];
+    // We use spawn here because we want to check the stderr for specific logs
     const { stderr } = await spawn(startDaemonCommand);
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
@@ -65,7 +72,13 @@ class ClientDaemonManager {
    * @param tokenId
    * @returns {Promise}
    */
-  addToken({ token, tokenId }) {
+  async addToken({ token, tokenId }) {
+    if (isWindows()) {
+      return addTokenCliCommand(token);
+    }
+    // TODO: Remove this after testing
+    // return addTokenCliCommand(token);
+
     const postBody = {
       auth_token_id: tokenId,
       boundary_addr: runtimeSettings.clusterUrl,
@@ -80,6 +93,13 @@ class ClientDaemonManager {
   }
 
   search(requestData) {
+    if (isWindows()) {
+      return searchCliCommand(requestData);
+    }
+    // TODO: Remove this after testing
+    // return searchCliCommand(requestData);
+
+    delete requestData.token;
     const queryString = new URLSearchParams(requestData);
 
     const request = {
@@ -90,6 +110,57 @@ class ClientDaemonManager {
     return unixSocketRequest(request);
   }
 }
+
+const addTokenCliCommand = (token) => {
+  const addTokenCommand = [
+    'daemon',
+    'add-token',
+    '-format=json',
+    '-token=env://BOUNDARY_TOKEN',
+    '-keyring-type=none',
+  ];
+  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
+
+  const data = spawnSync(addTokenCommand, sanitizedToken);
+  const parsedResponse = jsonify(data);
+
+  if (parsedResponse?.status_code === 204) {
+    return;
+  }
+  // TODO: What's in this response? Can it be parsed into JSON correctly? Probably need to get it from stderr
+  return Promise.reject({
+    statusCode: parsedResponse?.status_code,
+  });
+};
+
+const searchCliCommand = (requestData) => {
+  const searchCommand = [
+    'search',
+    '-format=json',
+    '-token=env://BOUNDARY_TOKEN',
+    `-resource=${requestData.resource}`,
+  ];
+  // TODO: Should we just go through requestData object and add all keys with values instead of if statements?
+  if (requestData.query) {
+    searchCommand.push(`-query=${requestData.query}`);
+  }
+  if (requestData.filter) {
+    searchCommand.push(`-filter=${requestData.filter}`);
+  }
+  const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
+
+  const data = spawnSync(searchCommand, sanitizedToken);
+  const parsedResponse = jsonify(data);
+
+  if (parsedResponse?.status_code === 200) {
+    return jsonify(data)?.item;
+  } else {
+    // TODO: What's in this response? Can it be parsed into JSON correctly? Probably need to get it from stderr
+    return Promise.reject({
+      statusCode: parsedResponse?.status_code,
+    });
+  }
+};
 
 // Export an instance so we get a singleton
 module.exports = new ClientDaemonManager();
