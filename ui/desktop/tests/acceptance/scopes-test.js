@@ -340,4 +340,36 @@ module('Acceptance | scopes', function (hooks) {
       .dom('[data-test-releases-link]')
       .hasAttribute('href', 'https://releases.hashicorp.com/boundary-desktop/');
   });
+
+  test('pagination is not supported - navigate to cluster url page', async function (assert) {
+    invalidateSession();
+    this.stubClientDaemonSearch();
+    this.ipcStub.withArgs('checkOS').returns({
+      isWindows: true,
+      isMac: false,
+      isLinux: false,
+    });
+    this.server.get('/scopes', () => {
+      // no "list_token" field
+      return new Response(200, {}, { scopes: [] });
+    });
+    this.server.get('https://api.releases.hashicorp.com/*', () => {
+      return new Response(200, {}, META_DATA_RESPONSE);
+    });
+
+    await visit(urls.targets);
+
+    await waitFor('[data-test-unsupported-controller]');
+    assert.dom('[data-test-unsupported-controller]').exists();
+    assert
+      .dom('[data-test-download-link]')
+      .hasAttribute('href', 'windows.fake.download.zip');
+    assert
+      .dom('[data-test-change-cluster-url]')
+      .hasAttribute('href', '/cluster-url');
+
+    await click('[data-test-change-cluster-url]');
+
+    assert.strictEqual(currentURL(), urls.clusterUrl);
+  });
 });
