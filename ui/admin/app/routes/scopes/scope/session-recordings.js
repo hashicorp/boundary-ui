@@ -6,8 +6,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import orderBy from 'lodash/orderBy';
-import { action } from '@ember/object';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeSessionRecordingsRoute extends Route {
   // =services
@@ -68,30 +66,6 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         sessionRecordings: sortedSessionRecordings,
         storageBuckets,
       };
-    }
-  }
-
-  /**
-   * Reapplies storage policy dates to session recording
-   * @param {SessionRecordingModel}
-   */
-  @action
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess(function () {
-    const { end_time } = this.modelFor(
-      'scopes.scope.session-recordings.session-recording',
-    );
-    return !end_time
-      ? 'resources.policy.messages.later'
-      : 'resources.policy.messages.reapply';
-  })
-  async reapplyStoragepolicy(sessionRecording) {
-    try {
-      await sessionRecording.reapplyStoragePolicy();
-    } catch (e) {
-      await this.router.replaceWith('scopes.scope.session-recordings');
-      this.refresh();
-      throw new Error(e);
     }
   }
 }
