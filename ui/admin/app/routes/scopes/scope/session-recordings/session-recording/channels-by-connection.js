@@ -12,7 +12,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   // =services
   @service store;
   @service session;
-
+  @service router;
   // =methods
 
   /**
@@ -50,7 +50,6 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       storageBucket,
     };
   }
-
   /**
    * Reapplies storage policy dates to session recording
    * @param {SessionRecordingModel}
@@ -63,7 +62,12 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       : 'resources.policy.messages.reapply',
   )
   async reapplyStoragepolicy(sessionRecording) {
-    await sessionRecording.reapplyStoragePolicy();
-    super.refresh(...arguments);
+    try {
+      await sessionRecording.reapplyStoragePolicy();
+    } catch (e) {
+      await this.router.replaceWith('scopes.scope.session-recordings');
+      this.router.refresh();
+      throw new Error(e);
+    }
   }
 }
