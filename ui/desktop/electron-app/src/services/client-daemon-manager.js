@@ -112,6 +112,7 @@ const addTokenCliCommand = (token) => {
   const addTokenCommand = [
     'daemon',
     'add-token',
+    `-addr=${runtimeSettings.clusterUrl}`,
     '-format=json',
     '-token=env://BOUNDARY_TOKEN',
     '-keyring-type=none',
@@ -121,7 +122,6 @@ const addTokenCliCommand = (token) => {
   // TODO: Is setting an env var for the address the only way? I'm surprised to not see an -addr flag
   const { stdout, stderr } = spawnSync(addTokenCommand, {
     BOUNDARY_TOKEN: sanitizedToken,
-    BOUNDARY_ADDR: runtimeSettings.clusterUrl,
   });
   let parsedResponse = jsonify(stdout);
 
