@@ -119,7 +119,6 @@ const addTokenCliCommand = (token) => {
   ];
   const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
 
-  // TODO: Is setting an env var for the address the only way? I'm surprised to not see an -addr flag
   const { stdout, stderr } = spawnSync(addTokenCommand, {
     BOUNDARY_TOKEN: sanitizedToken,
   });
