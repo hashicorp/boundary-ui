@@ -33,7 +33,7 @@ export default class ScopesScopeStorageBucketsStorageBucketRoute extends Route {
    */
   redirect(storageBucket) {
     const scope = this.modelFor('scopes.scope');
-    if (storageBucket.scopeID !== scope.id) {
+    if (!scope.isGlobal && storageBucket.scopeID !== scope.id) {
       this.router.replaceWith(
         'scopes.scope.storage-buckets.storage-bucket',
         storageBucket.scopeID,
