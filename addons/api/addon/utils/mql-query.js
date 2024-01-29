@@ -9,11 +9,11 @@
  *
  * @example
  *   const filter = generateMQLFilterExpression({
- *     name: { contains: 'search text' },
+ *     name: [{ contains: 'search text' }],
  *     scope: [{ equals: 'scope1'}, { equals: 'scope2' }],
  *   });
  *
- *   // (name % "search text") and (scope = "scope1" or scope = "scope2")
+ *   // (name % "search text") and (scope_id = "scope1" or scope_id = "scope2")
  */
 export function generateMQLFilterExpression(filterObj) {
   if (!filterObj) {
@@ -107,30 +107,31 @@ export function generateMQLExpression(obj) {
 const isEmpty = (input) =>
   input === null || input === undefined || input === '';
 
-// Escape any double quotes or backslashes
-const sanitize = (input) => input?.replace(/(["\\])/g, '\\$1');
+// Escape any double quotes or backslashes and add quotes if it's a string
+const sanitize = (input) =>
+  typeof input === 'string' ? `"${input?.replace(/(["\\])/g, '\\$1')}"` : input;
 
 // Comparison Operators
 const equals = (key, value) =>
-  !isEmpty(value) ? `${key} = "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} = ${sanitize(value)}` : null;
 
 const notEquals = (key, value) =>
-  !isEmpty(value) ? `${key} != "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} != ${sanitize(value)}` : null;
 
 const contains = (key, value) =>
-  !isEmpty(value) ? `${key} % "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} % ${sanitize(value)}` : null;
 
 const gt = (key, value) =>
-  !isEmpty(value) ? `${key} > "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} > ${sanitize(value)}` : null;
 
 const gte = (key, value) =>
-  !isEmpty(value) ? `${key} >= "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} >= ${sanitize(value)}` : null;
 
 const lt = (key, value) =>
-  !isEmpty(value) ? `${key} < "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} < ${sanitize(value)}` : null;
 
 const lte = (key, value) =>
-  !isEmpty(value) ? `${key} <= "${sanitize(value)}"` : null;
+  !isEmpty(value) ? `${key} <= ${sanitize(value)}` : null;
 
 // Logical Operators
 const and = (clauses) => clauses.join(' and ');

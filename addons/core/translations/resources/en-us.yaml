@@ -590,6 +590,10 @@ target:
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+  filter:
+    active-sessions:
+      yes: Has active sessions
+      no: No active sessions
   form:
     type:
       label: Type
@@ -927,6 +931,7 @@ worker:
 policy:
   title: Storage Policy
   title_plural: Storage Policies
+  description: A Storage Policy defines how long Session Recordings must be kept and when they should be deleted.
   titles:
     new: New Storage Policy
     policy_name: Policy name
@@ -949,9 +954,10 @@ policy:
   messages:
     detach: Successfully detached
     reapply: Successfully reapplied
+    later: Policy will be reapplied after the recording has completed
     none:
       title: No storage policies yet
-      description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
+      description: A Storage Policy defines how long Session Recordings must be kept and when they should be deleted. We recommend checking your data retention policies for compliance requirements.
       link: Create a new storage policy
   form:
     retention_policy:

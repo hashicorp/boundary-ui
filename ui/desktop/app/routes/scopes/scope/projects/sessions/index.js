@@ -6,6 +6,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   // =services
@@ -64,8 +69,10 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   async model({ targets, status, scopes, page, pageSize }, transition) {
     const from = transition.from?.name;
     const projects = this.modelFor('scopes.scope.projects');
-    const projectIds = projects.map((project) => project.id);
-    const { id: scope_id } = this.modelFor('scopes.scope');
+    const orgScope = this.modelFor('scopes.scope');
+    // orgFilter used to narrow down resources to only those under
+    // the current org scope if org is not global
+    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
 
     const filters = {
       user_id: [{ equals: this.session.data.authenticated.user_id }],
@@ -82,42 +89,48 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     scopes.forEach((scope) => {
       filters.scope_id.push({ equals: scope });
     });
-    if (scopes.length === 0) {
-      projectIds.forEach((projectId) => {
-        filters.scope_id.push({ equals: projectId });
-      });
-    }
 
     const queryOptions = {
-      scope_id,
+      scope_id: orgScope.id,
       recursive: true,
       query: { filters },
       page,
       pageSize,
       force_refresh: true,
     };
+    if (orgScope.isOrg && scopes.length === 0) {
+      queryOptions.filter = orgFilter;
+    }
     const sessions = await this.store.query('session', queryOptions);
     const totalItems = sessions.meta?.totalItems;
 
     // Query all sessions and all targets for defining filtering values if entering route for the first time
     if (from !== 'scopes.scope.projects.sessions.index') {
       const options = { pushToStore: false };
-      this.allSessions = await this.store.query(
-        'session',
-        {
-          scope_id,
-          recursive: true,
-          query: {
-            filters: {
-              user_id: [{ equals: this.session.data.authenticated.user_id }],
-            },
+      const allSessionsQuery = {
+        scope_id: orgScope.id,
+        recursive: true,
+        query: {
+          filters: {
+            user_id: [{ equals: this.session.data.authenticated.user_id }],
           },
         },
+      };
+      if (orgScope.isOrg && scopes.length === 0) {
+        allSessionsQuery.filter = orgFilter;
+      }
+      this.allSessions = await this.store.query(
+        'session',
+        allSessionsQuery,
         options,
       );
+      const allTargetsQuery = { scope_id: orgScope.id, recursive: true };
+      if (orgScope.isOrg) {
+        allTargetsQuery.filter = orgFilter;
+      }
       this.allTargets = await this.store.query(
         'target',
-        { scope_id, recursive: true },
+        allTargetsQuery,
         options,
       );
     }
@@ -133,11 +146,23 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   }
 
   resetController(controller, isExiting, transition) {
-    const { to } = transition;
-    // Reset the scopes query param when changing org scope
-    if (!isExiting && to.queryParams.scopes === '[]') {
+    const fromScope = transition.from.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+    const toScope = transition.to.find(
+      (routeInfo) => routeInfo.name === 'scopes.scope',
+    ).params.scope_id;
+
+    // Reset the query params when changing scope context
+    if (fromScope !== toScope) {
       controller.setProperties({
         scopes: [],
+        targets: [],
+        status: [
+          STATUS_SESSION_ACTIVE,
+          STATUS_SESSION_PENDING,
+          STATUS_SESSION_CANCELING,
+        ],
       });
     }
   }

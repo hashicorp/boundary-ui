@@ -1,7 +1,12 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { pluralize } from 'ember-inflector';
-import { generateMQLExpression } from '../utils/mqlQuery';
+import { generateMQLExpression } from '../utils/mql-query';
 
 /**
  * Not all types are yet supported by the client daemon so we'll
@@ -41,11 +46,13 @@ const paginateResults = (array, page, pageSize) => {
 
 const fetchControllerData = async (context, next) => {
   const { data } = context.request;
-  const { query } = data;
-  const { recursive, scope_id, page, pageSize } = query;
+  const { query: originalQuery } = data;
+  // remove client daemon specific query params
+  // eslint-disable-next-line no-unused-vars
+  const { query, page, pageSize, ...remainingQuery } = originalQuery;
 
   // If we get an error or client daemon is unavailable, fall back to calling the API
-  context.request.data.query = { recursive, scope_id };
+  context.request.data.query = remainingQuery;
   const results = await next(context.request);
   const models = results.content.toArray();
 
@@ -97,11 +104,14 @@ export default class ClientDaemonHandler {
             filters,
           });
         }
-        const auth_token_id = this.session.data?.authenticated?.id;
+        const sessionData = this.session.data?.authenticated;
+        const auth_token_id = sessionData?.id;
+        const token = sessionData?.token;
         remainingQuery = {
           ...remainingQuery,
           query: searchQuery,
           auth_token_id,
+          token,
           resource: pluralize(type),
         };
 
@@ -112,6 +122,23 @@ export default class ClientDaemonHandler {
             remainingQuery,
           );
         } catch (e) {
+          // If we got a 403, most likely the client daemon was restarted and our token is no longer valid
+          // I'm not sure if we can get a 401 since we always send a token but we'll handle it in the same way
+          if (e.statusCode === 403 || e.statusCode === 401) {
+            await this.ipc.invoke('addTokenToClientDaemon', {
+              tokenId: auth_token_id,
+              token,
+            });
+            try {
+              clientDaemonResults = await this.ipc.invoke(
+                'searchClientDaemon',
+                remainingQuery,
+              );
+            } catch {
+              // If it fails again just fall back to fetching controller data
+            }
+          }
+
           return fetchControllerData(context, next);
         }
 

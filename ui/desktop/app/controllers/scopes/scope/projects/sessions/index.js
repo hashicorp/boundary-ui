@@ -8,7 +8,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import orderBy from 'lodash/orderBy';
-import { statusTypes } from 'api/models/session';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_CANCELING,
+  statusTypes,
+} from 'api/models/session';
 
 export default class ScopesScopeProjectsSessionsIndexController extends Controller {
   // =services
@@ -26,7 +31,11 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   ];
 
   @tracked targets = [];
-  @tracked status = ['active', 'pending', 'canceling'];
+  @tracked status = [
+    STATUS_SESSION_ACTIVE,
+    STATUS_SESSION_PENDING,
+    STATUS_SESSION_CANCELING,
+  ];
   @tracked scopes = [];
   @tracked page = 1;
   @tracked pageSize = 10;

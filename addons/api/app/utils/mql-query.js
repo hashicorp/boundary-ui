@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'rose/components/rose/filter-tags/index';
+export { default } from 'api/utils/mql-query';
