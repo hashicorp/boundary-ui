@@ -7,19 +7,17 @@
 @use '../../variables/media';
 @use '../../utilities/type';
 
-.rose-toolbar {
-  .rose-toolbar-info {
-    @include type.type(button);
+.rose-toolbar-info {
+  @include type.type(button);
 
-    color: var(--ui-gray);
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    white-space: nowrap;
-    overflow: hidden;
+  color: var(--ui-gray);
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
 
-    $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
+  $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
 
-    padding: $y-padding sizing.rems(m) $y-padding sizing.rems(l);
-  }
+  padding: $y-padding sizing.rems(m) $y-padding sizing.rems(l);
 }
