@@ -135,7 +135,7 @@ export default class OnboardingRoute extends Route {
       await role.save();
       await role.saveGrantStrings([
         `type=target;actions=list`,
-        `id=${target.id};actions=authorize-session`,
+        `ids=${target.id};actions=authorize-session`,
       ]);
     } catch (error) {
       // Redirect to targets that belong to scope
