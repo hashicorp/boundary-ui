@@ -12,7 +12,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### Bug Fixes
 - Fix copy command not working in embedded terminal for Windows OS ([PR](https://github.com/hashicorp/boundary-ui/pull/2001))
-- Fix broken hot reloading ([PR](https://github.com/hashicorp/boundary-ui/pull/1992))
+
 
 ## v1.7.1 [CLI 0.14.2] (2023.11.07)
 
