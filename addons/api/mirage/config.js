@@ -74,10 +74,10 @@ function routes() {
         });
       }
       const filteredResultSet = resultSet.filter(makeBooleanFilter(filter));
-      // add a list_token to the response to simulate pagination
-      // without having list_token, the unsupported controller modal
+      // add a response_type to the response to simulate pagination
+      // without having response_type, the unsupported controller modal
       // will show when running with mirage
-      return { items: filteredResultSet.models, list_token: '12345' };
+      return { items: filteredResultSet.models, response_type: 'complete' };
     },
   );
   this.post('/scopes', function ({ scopes }) {
