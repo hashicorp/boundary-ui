@@ -80,15 +80,16 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel] }> }
    */
-  async model(
-    { search, scopes, availableSessions, types, page, pageSize },
-    transition,
-  ) {
+  async model({ search, scopes, availableSessions, types, page, pageSize }) {
     const orgScope = this.modelFor('scopes.scope');
     // orgFilter used to narrow down resources to only those under
     // the current org scope if org is not global
     const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
-    await this.getAllTargets(transition, orgScope, orgFilter);
+
+    if (!this.allTargets) {
+      await this.getAllTargets(orgScope, orgFilter);
+    }
+
     const projects = this.modelFor('scopes.scope.projects');
 
     const filters = { scope_id: [], id: { values: [] }, type: [] };
@@ -172,26 +173,27 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   /**
    * Get all the targets but only load them once when entering the route. Ideally we would lazy load it when needed
    * but this can be revisited in the future.
-   * @param transition
+   * @param orgScope
+   * @param orgFilter
    * @returns {Promise<void>}
    */
-  async getAllTargets(transition, orgScope, orgFilter) {
-    const from = transition.from?.name;
-
+  async getAllTargets(orgScope, orgFilter) {
     // Query all targets for defining filtering values if entering route for first time
-    if (from !== 'scopes.scope.projects.targets.index') {
-      const query = { scope_id: orgScope.id, recursive: true };
-      if (orgScope.isOrg) {
-        query.filter = orgFilter;
-      }
-      const options = { pushToStore: false };
-      const allTargets = await this.store.query('target', query, options);
-
-      // Filter out targets to which users do not have the connect ability
-      this.allTargets = allTargets.filter((target) =>
-        target.authorized_actions.includes('authorize-session'),
-      );
+    const query = {
+      scope_id: orgScope.id,
+      recursive: true,
+      force_refresh: true,
+    };
+    if (orgScope.isOrg) {
+      query.filter = orgFilter;
     }
+    const options = { pushToStore: false };
+    const allTargets = await this.store.query('target', query, options);
+
+    // Filter out targets to which users do not have the connect ability
+    this.allTargets = allTargets.filter((target) =>
+      target.authorized_actions.includes('authorize-session'),
+    );
   }
 
   /**
@@ -233,4 +235,18 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       }
     });
   };
+
+  @action
+  async refreshAll() {
+    const orgScope = this.modelFor('scopes.scope');
+    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
+    await this.getAllTargets(orgScope, orgFilter);
+
+    // Prime the store by searching for only orgs in case there are new org scopes;
+    // otherwise we won't be able to correctly peek the org scopes for their display name in the UI.
+    await this.store.query('scope', {});
+
+    // Refresh the proj scopes so our `modelFor` returns accurate data
+    this.router.refresh('scopes.scope.projects');
+  }
 }

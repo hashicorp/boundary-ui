@@ -25,7 +25,9 @@ export default class ScopesRoute extends Route {
         page_size: 1,
         recursive: true,
       });
-      if (scopesCheck.list_token) {
+      // we use the response_type to determine if pagination is supported
+      // and this will still pass even if there are no scopes returned
+      if (scopesCheck.response_type) {
         this.isPaginationSupported = true;
       }
     } catch (e) {

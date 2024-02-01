@@ -259,7 +259,7 @@ module('Acceptance | scopes', function (hooks) {
       return new Response(200, {}, META_DATA_RESPONSE);
     });
     this.server.get('/scopes', () => {
-      // no "list_token" field
+      // no "response_type" field
       return new Response(200, {}, { scopes: [] });
     });
 
@@ -279,7 +279,7 @@ module('Acceptance | scopes', function (hooks) {
       isLinux: false,
     });
     this.server.get('/scopes', () => {
-      // no "list_token" field
+      // no "response_type" field
       return new Response(200, {}, { scopes: [] });
     });
     this.server.get('https://api.releases.hashicorp.com/*', () => {
@@ -302,7 +302,7 @@ module('Acceptance | scopes', function (hooks) {
       isLinux: true,
     });
     this.server.get('/scopes', () => {
-      // no "list_token" field
+      // no "response_type" field
       return new Response(200, {}, { scopes: [] });
     });
     this.server.get('https://api.releases.hashicorp.com/*', () => {
@@ -325,7 +325,7 @@ module('Acceptance | scopes', function (hooks) {
       isLinux: false,
     });
     this.server.get('/scopes', () => {
-      // no "list_token" field
+      // no "response_type" field
       return new Response(200, {}, { scopes: [] });
     });
     this.server.get('https://api.releases.hashicorp.com/*', () => {
@@ -350,7 +350,7 @@ module('Acceptance | scopes', function (hooks) {
       isLinux: false,
     });
     this.server.get('/scopes', () => {
-      // no "list_token" field
+      // no "response_type" field
       return new Response(200, {}, { scopes: [] });
     });
     this.server.get('https://api.releases.hashicorp.com/*', () => {

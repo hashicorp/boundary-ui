@@ -18,6 +18,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   @service session;
   @service store;
   @service ipc;
+  @service router;
 
   // =attributes
 
@@ -66,8 +67,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
    * all targets and all projects for filtering options for the current user.
    * @return {Promise<{sessions: [SessionModel], projects: [ScopeModel], allSessions: [SessionModel], allTargets: [TargetModel], totalItems: number}>}
    */
-  async model({ targets, status, scopes, page, pageSize }, transition) {
-    const from = transition.from?.name;
+  async model({ targets, status, scopes, page, pageSize }) {
     const projects = this.modelFor('scopes.scope.projects');
     const orgScope = this.modelFor('scopes.scope');
     // orgFilter used to narrow down resources to only those under
@@ -105,34 +105,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const totalItems = sessions.meta?.totalItems;
 
     // Query all sessions and all targets for defining filtering values if entering route for the first time
-    if (from !== 'scopes.scope.projects.sessions.index') {
-      const options = { pushToStore: false };
-      const allSessionsQuery = {
-        scope_id: orgScope.id,
-        recursive: true,
-        query: {
-          filters: {
-            user_id: [{ equals: this.session.data.authenticated.user_id }],
-          },
-        },
-      };
-      if (orgScope.isOrg && scopes.length === 0) {
-        allSessionsQuery.filter = orgFilter;
-      }
-      this.allSessions = await this.store.query(
-        'session',
-        allSessionsQuery,
-        options,
-      );
-      const allTargetsQuery = { scope_id: orgScope.id, recursive: true };
-      if (orgScope.isOrg) {
-        allTargetsQuery.filter = orgFilter;
-      }
-      this.allTargets = await this.store.query(
-        'target',
-        allTargetsQuery,
-        options,
-      );
+    if (!this.allSessions) {
+      await this.getAllSessions(orgScope, scopes, orgFilter);
+    }
+    if (!this.allTargets) {
+      await this.getAllTargets(orgScope, orgFilter);
     }
 
     return {
@@ -143,6 +120,39 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       totalItems,
       isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
     };
+  }
+
+  async getAllTargets(orgScope, orgFilter) {
+    const allTargetsQuery = {
+      scope_id: orgScope.id,
+      recursive: true,
+      force_refresh: true,
+    };
+    if (orgScope.isOrg) {
+      allTargetsQuery.filter = orgFilter;
+    }
+    this.allTargets = await this.store.query('target', allTargetsQuery, {
+      pushToStore: false,
+    });
+  }
+
+  async getAllSessions(orgScope, scopes, orgFilter) {
+    const allSessionsQuery = {
+      scope_id: orgScope.id,
+      recursive: true,
+      query: {
+        filters: {
+          user_id: [{ equals: this.session.data.authenticated.user_id }],
+        },
+      },
+      force_refresh: true,
+    };
+    if (orgScope.isOrg && scopes.length === 0) {
+      allSessionsQuery.filter = orgFilter;
+    }
+    this.allSessions = await this.store.query('session', allSessionsQuery, {
+      pushToStore: false,
+    });
   }
 
   resetController(controller, isExiting, transition) {
@@ -165,5 +175,21 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
         ],
       });
     }
+  }
+
+  @action
+  async refreshAll() {
+    const orgScope = this.modelFor('scopes.scope');
+    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
+
+    await this.getAllTargets(orgScope, orgFilter);
+    await this.getAllSessions(orgScope, [], orgFilter);
+
+    // Prime the store by searching for orgs only in case there are new org scopes;
+    // otherwise we won't be able to correctly peek the org scopes for their display name in the UI.
+    await this.store.query('scope', {});
+
+    // Refresh the proj scopes so our `modelFor` returns accurate data
+    this.router.refresh('scopes.scope.projects');
   }
 }
