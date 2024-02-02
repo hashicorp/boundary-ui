@@ -56,6 +56,8 @@ export default class IndexedDbHandler {
               recursive: true,
               list_token: null,
             });
+          } else {
+            throw e;
           }
         }
 
