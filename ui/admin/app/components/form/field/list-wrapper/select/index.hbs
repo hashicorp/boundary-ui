@@ -2,10 +2,10 @@
 
   <:body as |B|>
 
-    {{#each this.options as |select index|}}
+    {{#each @options as |select index|}}
       <B.Tr>
         <B.Td>
-          <Hds::Form::Select::Field
+          <Hds::Form::Select::Base
             @value={{select.value}}
             @width={{@width}}
             disabled={{@disabled}}
@@ -14,7 +14,7 @@
             as |F|
           >
             <F.Options>
-              {{#each @options as |selectOption|}}
+              {{#each @selectOptions as |selectOption|}}
                 <option
                   value={{selectOption}}
                   selected={{eq selectOption select.value}}
@@ -23,13 +23,13 @@
                 </option>
               {{/each}}
             </F.Options>
-          </Hds::Form::Select::Field>
+          </Hds::Form::Select::Base>
         </B.Td>
 
         <B.Td>
           {{#if this.removeOptionByIndex}}
             <Hds::Button
-              data-test-remove-button
+              data-test-remove-option-button={{select.value}}
               @text={{t 'actions.remove'}}
               @color='critical'
               @icon='trash'
@@ -44,7 +44,7 @@
 
     <B.Tr>
       <B.Td>
-        <Hds::Form::Select::Field
+        <Hds::Form::Select::Base
           @value={{this.newOptionValue}}
           @width={{@width}}
           disabled={{@disabled}}
@@ -53,7 +53,8 @@
           as |F|
         >
           <F.Options>
-            {{#each @options as |selectOption|}}
+            <option value=''></option>
+            {{#each @selectOptions as |selectOption|}}
               <option
                 value={{selectOption}}
                 selected={{eq selectOption this.newOptionValue}}
@@ -62,11 +63,12 @@
               </option>
             {{/each}}
           </F.Options>
-        </Hds::Form::Select::Field>
+        </Hds::Form::Select::Base>
       </B.Td>
 
       <B.Td>
         <Hds::Button
+          data-test-add-option-button
           @text={{t 'actions.add'}}
           @color='secondary'
           type='button'

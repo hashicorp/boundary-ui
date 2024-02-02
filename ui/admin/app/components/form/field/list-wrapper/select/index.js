@@ -11,11 +11,6 @@ export default class MappingListSelectComponent extends Component {
    */
   @tracked newOptionValue = '';
 
-  get options() {
-    return this.args?.model?.[this.args.name];
-  }
-  // =actions
-
   /**
    * If a new input is entered and an addOption method was specified,
    * calls addOption with the new input. Resets previous value.
@@ -24,12 +19,10 @@ export default class MappingListSelectComponent extends Component {
 
   @action
   addOption() {
-    if (this.args.addOption) {
-      if (this.newOptionValue) {
-        this.args.addOption({
-          value: this.newOptionValue,
-        });
-      }
+    if (this.args.addOption && this.newOptionValue) {
+      this.args.addOption({
+        value: this.newOptionValue,
+      });
     } else {
       const field = this.args.name;
       const existingArray = this.args.model[field] ?? [];
