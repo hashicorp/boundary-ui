@@ -333,11 +333,12 @@
   margin-bottom: sizing.rems(xl);
   padding: sizing.rems(l);
 
-  > div {
+  > div,
+  > p:not(:last-of-type) {
     margin-bottom: sizing.rems(l);
   }
 
-  > code {
+  > p code {
     background-color: var(--ui-gray-subtler-5);
     border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
     color: var(--failure);
