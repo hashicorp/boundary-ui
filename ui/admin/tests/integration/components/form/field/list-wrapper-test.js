@@ -118,6 +118,7 @@ module('Integration | Component | list-wrapper', function (hooks) {
           @name="select"
           @selectOptions={{this.options}}
           @options={{this.model.select}}
+          @model={{this.model}}
           @width='100%'
         />
         </:field>
@@ -144,6 +145,7 @@ module('Integration | Component | list-wrapper', function (hooks) {
           @name="select"
           @selectOptions={{this.options}}
           @options={{this.model.select}}
+          @model={{this.model}}
           @width='100%'
         />
         </:field>
