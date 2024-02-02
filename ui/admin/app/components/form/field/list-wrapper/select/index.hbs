@@ -2,7 +2,7 @@
 
   <:body as |B|>
 
-    {{#each @options as |select index|}}
+    {{#each this.options as |select index|}}
       <B.Tr>
         <B.Td>
           <Hds::Form::Select::Base
@@ -17,7 +17,7 @@
               {{#each @selectOptions as |selectOption|}}
                 <option
                   value={{selectOption}}
-                  selected={{eq selectOption select.value}}
+                  selected={{eq select.value selectOption}}
                 >
                   {{selectOption}}
                 </option>
@@ -52,8 +52,11 @@
           {{on 'change' (set-from-event this 'newOptionValue')}}
           as |F|
         >
+
           <F.Options>
-            <option value=''></option>
+            <option disabled={{@disabled}} hidden selected value=''>
+              {{t 'titles.choose-an-option'}}
+            </option>
             {{#each @selectOptions as |selectOption|}}
               <option
                 value={{selectOption}}
@@ -63,6 +66,7 @@
               </option>
             {{/each}}
           </F.Options>
+
         </Hds::Form::Select::Base>
       </B.Td>
 

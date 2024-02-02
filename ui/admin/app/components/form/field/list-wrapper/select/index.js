@@ -11,6 +11,10 @@ export default class MappingListSelectComponent extends Component {
    */
   @tracked newOptionValue = '';
 
+  get options() {
+    return this.args.options || this.args.model[this.args.name];
+  }
+
   /**
    * If a new input is entered and an addOption method was specified,
    * calls addOption with the new input. Resets previous value.
