@@ -64,7 +64,6 @@ module('Acceptance | managed-groups | members', function (hooks) {
   });
 
   test('User can navigate to index', async function (assert) {
-    assert.expect(3);
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
     await a11yAudit();

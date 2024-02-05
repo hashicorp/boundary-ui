@@ -29,8 +29,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can read a session that is active', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
       status: STATUS_SESSION_ACTIVE,
@@ -40,8 +38,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can read a session that is pending', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
       status: STATUS_SESSION_PENDING,
@@ -51,8 +47,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot read a session that is not authorized', function (assert) {
-    assert.expect(4);
-
     const activeSession = store.createRecord('session', {
       authorized_actions: [],
       status: STATUS_SESSION_ACTIVE,
@@ -77,8 +71,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot read a session that is canceling', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
       status: STATUS_SESSION_CANCELING,
@@ -88,8 +80,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot read a session that is terminated', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['read'],
       status: STATUS_SESSION_TERMINATED,
@@ -99,8 +89,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can read a session that has read:self', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['read:self'],
       status: STATUS_SESSION_ACTIVE,
@@ -110,8 +98,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can cancel a session that is active', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['cancel'],
       status: STATUS_SESSION_ACTIVE,
@@ -121,8 +107,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can cancel a session that has cancel:self', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['cancel:self'],
       status: STATUS_SESSION_ACTIVE,
@@ -132,8 +116,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('can cancel a session that is pending', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['cancel'],
       status: STATUS_SESSION_PENDING,
@@ -143,8 +125,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot cancel a session that is canceling', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['cancel'],
       status: STATUS_SESSION_CANCELING,
@@ -154,8 +134,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot cancel a session that is terminated', function (assert) {
-    assert.expect(1);
-
     const session = store.createRecord('session', {
       authorized_actions: ['cancel'],
       status: STATUS_SESSION_TERMINATED,
@@ -165,8 +143,6 @@ module('Unit | Ability | session', function (hooks) {
   });
 
   test('cannot cancel a session that is not authorized', function (assert) {
-    assert.expect(4);
-
     const activeSession = store.createRecord('session', {
       authorized_actions: [],
       status: STATUS_SESSION_ACTIVE,

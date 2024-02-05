@@ -40,7 +40,6 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can navigate to workers with proper authorization', async function (assert) {
-    assert.expect(2);
     featuresService.enable('byow');
     await visit(urls.globalScope);
     assert.ok(
@@ -52,7 +51,6 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users cannot navigate to workers without list or create permissions', async function (assert) {
-    assert.expect(1);
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = [];
 
@@ -61,7 +59,6 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can navigate to workers with only create permission', async function (assert) {
-    assert.expect(1);
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = [
       'create:worker-led',
@@ -72,7 +69,6 @@ module('Acceptance | workers | list', function (hooks) {
   });
 
   test('Users can navigate to workers with only list permission', async function (assert) {
-    assert.expect(1);
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = ['list'];
 

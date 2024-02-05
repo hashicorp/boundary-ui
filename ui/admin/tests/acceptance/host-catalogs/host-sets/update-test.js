@@ -128,7 +128,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/host-sets', () => {
       return new Response(
         400,
@@ -161,7 +160,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can save changes to existing host-set', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.hostSet.name, 'random string');
     await visit(urls.hostSet);
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
@@ -175,8 +173,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can save changes to an existing aws host-set', async function (assert) {
-    assert.expect(7);
-
     await visit(urls.awshostSet);
 
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
@@ -223,8 +219,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can save changes to an existing azure host-set', async function (assert) {
-    assert.expect(6);
-
     await visit(urls.azureHostSet);
 
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
@@ -259,7 +253,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.hostSet);
@@ -267,7 +260,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can cancel changes to existing host-set', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostSet);
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
@@ -277,7 +269,6 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('saving an existing host set with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/host-sets/:id', () => {
       return new Response(
         400,

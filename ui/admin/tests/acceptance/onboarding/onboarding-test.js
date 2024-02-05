@@ -24,14 +24,12 @@ module('Acceptance | onboarding', function (hooks) {
   });
 
   test('show targetAddress and targetPort fields', async function (assert) {
-    assert.expect(2);
     await visit(urls.onboarding);
     assert.dom('[name="targetAddress"]').isVisible();
     assert.dom('[name="targetPort"]').isVisible();
   });
 
   test('redirect user to success when fill targetAddress, targetPort and click Save', async function (assert) {
-    assert.expect(1);
     await visit(urls.onboarding);
     await fillIn('[name="targetAddress"]', '192.168.1.0');
     await fillIn('[name="targetPort"]', '22');
@@ -40,7 +38,6 @@ module('Acceptance | onboarding', function (hooks) {
   });
 
   test('redirect user to orgs screen when click do this later', async function (assert) {
-    assert.expect(1);
     await visit(urls.onboarding);
     await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.orgs);

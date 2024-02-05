@@ -25,13 +25,11 @@ module('Acceptance | onboarding | success', function (hooks) {
   const doneButtonSelector = '[data-test-onboarding-done-button]';
 
   test('check if the done button is present', async function (assert) {
-    assert.expect(1);
     await visit(urls.success);
     assert.dom(doneButtonSelector).isVisible();
   });
 
   test('check the controller url is copyable', async function (assert) {
-    assert.expect(2);
     const origin = window.location.origin;
     await visit(urls.success);
     assert.dom('.copyable-content').isVisible();
@@ -39,7 +37,6 @@ module('Acceptance | onboarding | success', function (hooks) {
   });
 
   test('fill the onboarding form and redirect user to target detail when done is clicked', async function (assert) {
-    assert.expect(1);
     await visit(urls.onboarding);
     await fillIn('[name="targetAddress"]', '0.0.0.0');
     await fillIn('[name="targetPort"]', '22');

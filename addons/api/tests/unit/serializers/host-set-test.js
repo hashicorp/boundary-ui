@@ -10,7 +10,6 @@ module('Unit | Serializer | host set', function (hooks) {
   setupTest(hooks);
 
   test('it serializes host sets normally, without host_ids', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
@@ -28,7 +27,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it serializes only host_ids when `adapterOptions.hostIDs` is true', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
     const record = store.createRecord('host-set', {
@@ -49,7 +47,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it serializes host sets as expected for Aws plugin', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
@@ -75,7 +72,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it serializes host sets as expected for Azure plugin', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-set', {
       name: 'Host Set 1',
@@ -101,7 +97,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it normalizes records with array fields', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
     const hostSetModelClass = store.createRecord('host-set').constructor;
@@ -141,7 +136,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it normalizes missing array fields to empty array', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
     const hostSet = store.createRecord('host-set').constructor;
@@ -174,7 +168,6 @@ module('Unit | Serializer | host set', function (hooks) {
   });
 
   test('it normalizes filter correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-set');
     const hostSetModelClass = store.createRecord('host-set').constructor;

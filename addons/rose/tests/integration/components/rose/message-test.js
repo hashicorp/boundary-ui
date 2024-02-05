@@ -12,7 +12,6 @@ module('Integration | Component | rose/message', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(5);
     await render(hbs`
       <Rose::Message @title="Title" @subtitle="Subtitle" as |message|>
         <message.description>Description</message.description>

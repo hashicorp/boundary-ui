@@ -107,17 +107,25 @@ const displayInfoPrompt = () => {
 /**
  * Show update available prompt
  */
-const displayDownloadPrompt = (version, url) => {
+const displayDownloadPrompt = (latestVersion, url) => {
+  let detail = 'A new version is available for download.';
+
   const dialogOpts = {
     type: 'info',
     buttons: ['Download', 'Later'],
     icon: null,
-    detail: 'A new version is available for download',
+    detail,
   };
+
+  // If the user's current version is less than 2.0.0, show a warning that upgrading might not be compatible
+  if (semver.lt(currentVersion, '2.0.0')) {
+    dialogOpts.detail += `\n\nThis is a major version upgrade which could be incompatible with your current controller version.`;
+    dialogOpts.type = 'warning';
+  }
 
   dialog.showMessageBox(dialogOpts).then((returnValue) => {
     if (returnValue.response === 0) {
-      downloadAndInstallUpdate(version, url);
+      downloadAndInstallUpdate(latestVersion, url);
     }
   });
 };

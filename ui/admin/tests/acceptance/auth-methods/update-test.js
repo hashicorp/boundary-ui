@@ -51,6 +51,8 @@ module('Acceptance | auth-methods | update', function (hooks) {
     '[name="claims_scopes"] [data-test-remove-button]';
   const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
+  const TOGGLE_SELECTOR = '[name="prompts"]';
+
   const instances = {
     scopes: {
       global: null,
@@ -93,7 +95,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an auth method and save changes', async function (assert) {
-    assert.expect(1);
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
@@ -108,7 +109,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an oidc auth method and save changes', async function (assert) {
-    assert.expect(12);
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
@@ -173,7 +173,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
-    await click('[id="none"]', 'none');
+    await click(TOGGLE_SELECTOR);
     await click('form [type="submit"]:not(:disabled)');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
@@ -192,11 +192,10 @@ module('Acceptance | auth-methods | update', function (hooks) {
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
     assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
-    assert.deepEqual(authMethod.attributes.prompts, ['consent', 'none']);
+    assert.deepEqual(authMethod.attributes.prompts, ['none']);
   });
 
   test('can update an ldap auth method and save changes', async function (assert) {
-    assert.expect(19);
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
     const name = 'ldap auth method';
@@ -266,7 +265,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an auth method and cancel changes', async function (assert) {
-    assert.expect(1);
     await visit(urls.authMethod);
 
     await click(BUTTON_SELECTOR, 'Activate edit mode');
@@ -277,7 +275,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an ldap auth method and cancel changes', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
     const name = instances.ldapAuthMethod.name;
@@ -299,7 +296,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('cannot make changes to an existing auth method without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.authMethod.authorized_actions =
       instances.authMethod.authorized_actions.filter(
         (item) => item !== 'update',
@@ -312,7 +308,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('cannot make changes to an existing ldap auth method without proper authorization', async function (assert) {
-    assert.expect(1);
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_actions =
       instances.ldapAuthMethod.authorized_actions.filter(
@@ -326,7 +321,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/auth-methods/:id', () => {
       return new Response(
         400,
@@ -358,7 +352,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ldap-auth-methods');
     this.server.patch('/auth-methods/:id', () => {
       return new Response(

@@ -88,7 +88,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('can create new host sets', async function (assert) {
-    assert.expect(1);
     const count = getHostSetCount();
     await visit(urls.newHostSet);
     await fillIn(NAME_SELECTOR, 'random string');
@@ -97,7 +96,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('can create new aws host set', async function (assert) {
-    assert.expect(4);
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'plugin',
@@ -129,7 +127,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('can create new azure host set', async function (assert) {
-    assert.expect(4);
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'plugin',
@@ -159,7 +156,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('Users cannot create a new host set without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
     assert.notOk(
@@ -171,7 +167,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostSets);
     assert.notOk(
@@ -183,7 +178,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('can cancel create new host', async function (assert) {
-    assert.expect(2);
     const count = getHostSetCount();
     await visit(urls.newHostSet);
     await fillIn(NAME_SELECTOR, 'random string');
@@ -193,7 +187,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/host-sets', () => {
       return new Response(
         400,
@@ -226,7 +219,6 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host set route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.hostCatalog.authorized_collection_actions['host-sets'] =
       instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
         (item) => item !== 'create',

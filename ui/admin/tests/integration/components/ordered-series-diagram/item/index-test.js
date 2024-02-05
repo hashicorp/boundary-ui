@@ -14,8 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders with icon and text', async function (assert) {
-      assert.expect(2);
-
       this.set('client', 'Client');
 
       await render(hbs`

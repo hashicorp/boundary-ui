@@ -27,6 +27,9 @@ Router.map(function () {
         this.route('new');
       });
       this.route('edit');
+      this.route('add-storage-policy', function () {
+        this.route('create');
+      });
 
       this.route('users', function () {
         this.route('user', { path: ':user_id' }, function () {
@@ -158,6 +161,11 @@ Router.map(function () {
           { path: ':storage_bucket_id' },
           function () {},
         );
+      });
+
+      this.route('policies', function () {
+        this.route('new');
+        this.route('policy', { path: ':policy_id' }, function () {});
       });
     });
   });

@@ -64,7 +64,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can save changes to an existing storage-bucket', async function (assert) {
-    assert.expect(3);
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
@@ -78,7 +77,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can cancel changes to an existing storage-bucket', async function (assert) {
-    assert.expect(2);
     const name = instances.storageBucket.name;
     await visit(urls.storageBuckets);
 
@@ -92,7 +90,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can save changes to access key fields', async function (assert) {
-    assert.expect(8);
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
@@ -124,7 +121,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('can cancel changes to access key fields', async function (assert) {
-    assert.expect(3);
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
@@ -149,7 +145,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('saving an existing storage-bucket with invalid fields will display error messages', async function (assert) {
-    assert.expect(2);
     await visit(urls.storageBuckets);
     this.server.patch('/storage-buckets/:id', () => {
       return new Response(
@@ -181,7 +176,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   });
 
   test('user cannot edit bucket name and bucket prefix fields in a storage bucket form', async function (assert) {
-    assert.expect(6);
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);

@@ -49,7 +49,6 @@ module('Acceptance | groups | update', function (hooks) {
   });
 
   test('can save changes to an existing group', async function (assert) {
-    assert.expect(2);
     await visit(urls.group);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin group');
@@ -59,7 +58,6 @@ module('Acceptance | groups | update', function (hooks) {
   });
 
   test('cannot make changes to an existing group without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.group);
@@ -67,7 +65,6 @@ module('Acceptance | groups | update', function (hooks) {
   });
 
   test('can cancel changes to an existing group', async function (assert) {
-    assert.expect(1);
     await visit(urls.group);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'Updated admin group');
@@ -76,7 +73,6 @@ module('Acceptance | groups | update', function (hooks) {
   });
 
   test('saving an existing group with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/groups/:id', () => {
       return new Response(
         400,

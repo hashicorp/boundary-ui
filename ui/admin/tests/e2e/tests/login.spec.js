@@ -6,14 +6,16 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 
-test('Log in, log out, and then log back in', async ({ page }) => {
+test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
+  page,
+}) => {
   await page.goto('/');
 
   await page
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page
-    .getByLabel('Password')
+    .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
   await page.getByRole('button', { name: 'Sign In' }).click();
   await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
@@ -31,7 +33,7 @@ test('Log in, log out, and then log back in', async ({ page }) => {
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page
-    .getByLabel('Password')
+    .getByLabel('Password', { exact: true })
     .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
   await page.getByRole('button', { name: 'Sign In' }).click();
   await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
@@ -42,11 +44,13 @@ test.describe('Failure Cases', async () => {
     await page.goto('/');
   });
 
-  test('Log in with invalid password', async ({ page }) => {
+  test('Log in with invalid password @ce @ent @aws @docker', async ({
+    page,
+  }) => {
     await page
       .getByLabel('Login Name')
       .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page.getByLabel('Password').fill('badpassword');
+    await page.getByLabel('Password', { exact: true }).fill('badpassword');
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
@@ -55,7 +59,7 @@ test.describe('Failure Cases', async () => {
     ).toBeHidden();
   });
 
-  test('Log in with only username', async ({ page }) => {
+  test('Log in with only username @ce @ent @aws @docker', async ({ page }) => {
     await page.getByLabel('Login Name').fill('testuser');
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
@@ -65,9 +69,9 @@ test.describe('Failure Cases', async () => {
     ).toBeHidden();
   });
 
-  test('Log in with only password', async ({ page }) => {
+  test('Log in with only password @ce @ent @aws @docker', async ({ page }) => {
     await page
-      .getByLabel('Password')
+      .getByLabel('Password', { exact: true })
       .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();

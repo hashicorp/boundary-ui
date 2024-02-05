@@ -43,11 +43,23 @@ export default factory.extend({
       : null;
   },
 
+  retain_until() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE
+      ? faker.date.recent()
+      : null;
+  },
+  delete_after() {
+    return this.state === STATE_SESSION_RECORDING_AVAILABLE
+      ? faker.date.recent()
+      : null;
+  },
+
   authorized_actions: () =>
     permissions.authorizedActionsFor('session-recording') || [
       'no-op',
       'read',
       'download',
+      'reapply-storage-policy',
     ],
 
   withNonExistingUserAndTarget: trait({

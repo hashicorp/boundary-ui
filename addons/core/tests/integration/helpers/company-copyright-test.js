@@ -7,7 +7,6 @@ module('Integration | Helper | company-copyright', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(1);
     const currentYear = new Date().getFullYear();
     await render(hbs`{{company-copyright}}`);
     assert.strictEqual(

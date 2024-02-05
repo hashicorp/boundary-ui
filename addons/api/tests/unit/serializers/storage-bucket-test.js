@@ -25,7 +25,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
   });
 
   test('it serializes a new static aws plugin as expected', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('storage-bucket', {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
@@ -72,7 +71,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
   });
 
   test('it serializes a new aws plugin with dynamic credentials as expected', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('storage-bucket', {
       compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
@@ -115,7 +113,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
   });
 
   test('it serializes when updating a dynamic type credential storage bucket with static credentials correctly', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('storage-bucket');
     store.push({
@@ -173,7 +170,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
   });
 
   test('it serializes when updating a static type credential storage bucket with dynamic credentials correctly', async function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('storage-bucket');
     store.push({
@@ -227,7 +223,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
   });
 
   test('it normalizes correctly', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('storage-bucket');
     const hostSetModelClass = store.createRecord('storage-bucket').constructor;

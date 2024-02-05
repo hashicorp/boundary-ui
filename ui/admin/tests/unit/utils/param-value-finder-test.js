@@ -17,7 +17,6 @@ module('Unit | Utility | param-value-finder', function (hooks) {
   });
 
   test('returns empty array when null or empty routeInfo object is used', function (assert) {
-    assert.expect(2);
     let result = paramValueFinder('scopes', null);
 
     assert.deepEqual(result, []);
@@ -28,7 +27,6 @@ module('Unit | Utility | param-value-finder', function (hooks) {
   });
 
   test('returns correct array when routeInfo object is used', function (assert) {
-    assert.expect(2);
     let routeInfo = router.recognize('/scopes');
     let result = paramValueFinder('scopes', routeInfo.parent);
 

@@ -36,6 +36,7 @@ export default class FormAuthMethodOidcComponent extends Component {
   prompts = options.oidc.prompts;
 
   @tracked selectedPrompts = this.parsePromptsArray();
+  @tracked skipPromptsList = this.isToggleChecked();
 
   /**
    * @returns {string}
@@ -44,7 +45,28 @@ export default class FormAuthMethodOidcComponent extends Component {
     return this.args.model.prompts?.map((item) => item.value) ?? [];
   }
 
+  /**
+   * @returns {boolean}
+   */
+  isToggleChecked() {
+    return this.args.model.prompts?.find((i) => i.value === 'none');
+  }
+
   //actions
+
+  /**
+   * @param {string} value
+   */
+  @action
+  toggleField(value) {
+    this.skipPromptsList = !this.skipPromptsList;
+    //If toggle is on, then add `none` to model, else remove it
+    if (this.skipPromptsList) {
+      this.args.model.prompts = [{ value }];
+    } else {
+      this.args.model.prompts = [];
+    }
+  }
 
   /**
    * @param {string} option
@@ -54,7 +76,6 @@ export default class FormAuthMethodOidcComponent extends Component {
   updatePrompt(value, event) {
     const currentSelection = { value };
     const previousSelection = this.args.model.prompts || [];
-
     // Add the selected option to the model, only when the checkbox is in checked state
     if (event.target.checked) {
       this.args.model.prompts = [...previousSelection, currentSelection];
@@ -63,6 +84,7 @@ export default class FormAuthMethodOidcComponent extends Component {
       const removeSelection = previousSelection.filter(
         (prompt) => prompt.value !== value,
       );
+
       this.args.model.prompts = [...removeSelection];
     }
   }

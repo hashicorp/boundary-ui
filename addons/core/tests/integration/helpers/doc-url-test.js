@@ -12,7 +12,6 @@ module('Integration | Helper | doc-url', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders a URL generated from the documentation config', async function (assert) {
-    assert.expect(3);
     const config = this.owner.resolveRegistration('config:environment');
     const baseURL = config.documentation.baseURL;
     const path = config.documentation.topics.account;
@@ -23,7 +22,6 @@ module('Integration | Helper | doc-url', function (hooks) {
   });
 
   test('it throws an error if the specified documentation path cannot be found', async function (assert) {
-    assert.expect(2);
     const Helper = this.owner.lookup('helper:doc-url');
     const helper = new Helper(this.owner);
     assert.ok(helper.compute(['account']), 'Specified document exists.');

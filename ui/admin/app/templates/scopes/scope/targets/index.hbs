@@ -32,89 +32,86 @@
 
     {{#if @model}}
 
-      <Rose::Table as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.name.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.type.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.id.label'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model as |target|}}
-            {{#if (feature-flag 'ssh-target')}}
-
-              <body.row as |row|>
-                <row.headerCell>
-                  {{#if (can 'read model' target)}}
+      <Hds::Table
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'form.name.label'))
+          (hash label=(t 'form.type.label'))
+          (hash label=(t 'form.id.label'))
+        }}
+        @density='short'
+        @valign='middle'
+      >
+        <:body as |B|>
+          {{#if (feature-flag 'ssh-target')}}
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read model' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.targets.target'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{#if B.data.type}}
+                  <Hds::Badge
+                    @text={{t (concat 'resources.target.types.' B.data.type)}}
+                  />
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                <Copyable
+                  @text={{B.data.id}}
+                  @buttonText={{t 'actions.copy-to-clipboard'}}
+                  @acknowledgeText={{t 'states.copied'}}
+                >
+                  <code>{{B.data.id}}</code>
+                </Copyable>
+              </B.Td>
+            </B.Tr>
+          {{else}}
+            {{#if B.data.isTCP}}
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read model' B.data)}}
                     <LinkTo
                       @route='scopes.scope.targets.target'
-                      @model={{target.id}}
+                      @model={{B.data.id}}
                     >
-                      {{target.displayName}}
+                      {{B.data.displayName}}
                     </LinkTo>
                   {{else}}
-                    {{target.displayName}}
+                    {{B.data.displayName}}
                   {{/if}}
-                  <p>{{target.description}}</p>
-                </row.headerCell>
-                <row.cell>
-                  {{#if target.type}}
+                  <p>{{B.data.description}}</p>
+                </B.Td>
+                <B.Td>
+                  {{#if B.data.type}}
                     <Hds::Badge
-                      @text={{t (concat 'resources.target.types.' target.type)}}
+                      @text={{t (concat 'resources.target.types.' B.data.type)}}
                     />
                   {{/if}}
-                </row.cell>
-                <row.cell>
+                </B.Td>
+                <B.Td>
                   <Copyable
-                    @text={{target.id}}
+                    @text={{B.data.id}}
                     @buttonText={{t 'actions.copy-to-clipboard'}}
                     @acknowledgeText={{t 'states.copied'}}
                   >
-                    <code>{{target.id}}</code>
+                    <code>{{B.data.id}}</code>
                   </Copyable>
-                </row.cell>
-              </body.row>
-            {{else}}
-              {{#if target.isTCP}}
-                <body.row as |row|>
-                  <row.headerCell>
-                    {{#if (can 'read model' target)}}
-                      <LinkTo
-                        @route='scopes.scope.targets.target'
-                        @model={{target.id}}
-                      >
-                        {{target.displayName}}
-                      </LinkTo>
-                    {{else}}
-                      {{target.displayName}}
-                    {{/if}}
-                    <p>{{target.description}}</p>
-                  </row.headerCell>
-                  <row.cell>
-                    {{#if target.type}}
-                      <Hds::Badge
-                        @text={{t
-                          (concat 'resources.target.types.' target.type)
-                        }}
-                      />
-                    {{/if}}
-                  </row.cell>
-                  <row.cell>
-                    <Copyable
-                      @text={{target.id}}
-                      @buttonText={{t 'actions.copy-to-clipboard'}}
-                      @acknowledgeText={{t 'states.copied'}}
-                    >
-                      <code>{{target.id}}</code>
-                    </Copyable>
-                  </row.cell>
-                </body.row>
-              {{/if}}
+                </B.Td>
+              </B.Tr>
             {{/if}}
-          {{/each}}
-        </table.body>
-      </Rose::Table>
+          {{/if}}
+        </:body>
+      </Hds::Table>
 
     {{else}}
 

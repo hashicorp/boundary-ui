@@ -74,7 +74,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update resource and save changes', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.credentialLibrary.name, 'random string');
     await visit(urls.credentialLibrary);
     await click('form [type="button"]', 'Activate edit mode');
@@ -88,7 +87,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('cannot update resource without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'update',
@@ -98,7 +96,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a credential library and cancel changes', async function (assert) {
-    assert.expect(2);
     await visit(urls.credentialLibrary);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
@@ -114,7 +111,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/credential-libraries/:id', () => {
       return new Response(
         400,
@@ -196,7 +192,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault ssh cert credential library and save changes', async function (assert) {
-    assert.expect(10);
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,

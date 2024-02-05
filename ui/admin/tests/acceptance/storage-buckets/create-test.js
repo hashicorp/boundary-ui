@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -31,6 +31,8 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   const ROLE_ARN_SELECTOR = '[name="role_arn"]';
   const ACCESS_KEY_SELECTOR = '[name="access_key_id"]';
   const SECRET_KEY_SELECTOR = '[name="secret_access_key"]';
+  const SCOPE_SELECTOR = '[name=scope]';
+
   const instances = {
     scopes: {
       global: null,
@@ -62,7 +64,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with global scope', async function (assert) {
-    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -86,13 +87,12 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with org scope', async function (assert) {
-    assert.expect(7);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(`[value="${instances.scopes.org.scope.id}"]`);
+    await select(SCOPE_SELECTOR, instances.scopes.org.id);
 
     assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
     assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
@@ -104,13 +104,13 @@ module('Acceptance | storage-buckets | create', function (hooks) {
       name: NAME_FIELD_TEXT,
     });
 
+    assert.dom(ALERT_TEXT_SELECTOR).hasText('Saved successfully.');
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
-    assert.strictEqual(storageBucket.scopeId, instances.scopes.org.scope.id);
+    assert.strictEqual(storageBucket.scopeId, instances.scopes.org.id);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
   test('users can create a new storage bucket with dynamic credentials', async function (assert) {
-    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -133,7 +133,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users can create a new storage bucket with static credentials', async function (assert) {
-    assert.expect(4);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -158,7 +157,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('user can cancel new storage bucket creation', async function (assert) {
-    assert.expect(2);
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -171,7 +169,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.post('/storage-buckets', () => {
       return new Response(
         400,
@@ -202,7 +199,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
-    assert.expect(2);
     instances.scopes.global.authorized_collection_actions['storage-buckets'] =
       instances.scopes.global.authorized_collection_actions[
         'storage-buckets'

@@ -10,8 +10,8 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | session-status', function (hooks) {
   setupRenderingTest(hooks);
+
   test('it maps to correct text color, icon and type if it is in active status', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     this.model = store.createRecord('session', { status: 'active' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);
@@ -21,7 +21,6 @@ module('Integration | Component | session-status', function (hooks) {
   });
 
   test('it maps to correct text color, icon and type if it is in canceling status', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     this.model = store.createRecord('session', { status: 'canceling' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);
@@ -31,7 +30,6 @@ module('Integration | Component | session-status', function (hooks) {
   });
 
   test('it maps to correct text color, icon and type if it is in terminated status', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     this.model = store.createRecord('session', { status: 'terminated' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);
@@ -41,7 +39,6 @@ module('Integration | Component | session-status', function (hooks) {
   });
 
   test('it maps to correct text color, icon and type if it is in pending status', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     this.model = store.createRecord('session', { status: 'pending' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);
@@ -51,7 +48,6 @@ module('Integration | Component | session-status', function (hooks) {
   });
 
   test('display neutral color and outlined style when it is an unknown status', async function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     this.model = store.createRecord('session', { status: 'any string' });
     await render(hbs`<SessionStatus @model={{this.model}} />`);

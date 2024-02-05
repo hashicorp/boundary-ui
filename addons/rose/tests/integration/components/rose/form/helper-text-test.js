@@ -12,7 +12,6 @@ module('Integration | Component | rose/form/helper-text', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(2);
     await render(hbs`
       <Rose::Form::HelperText>
         Helper text

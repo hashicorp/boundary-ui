@@ -27,9 +27,7 @@ exports.createNewOrg = async (page) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: orgName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
   ).toBeVisible();
 
   return orgName;
@@ -57,7 +55,7 @@ exports.createNewProject = async (page) => {
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: projectName }),
+      .getByText(projectName),
   ).toBeVisible();
 
   return projectName;
@@ -85,7 +83,7 @@ exports.createNewHostCatalog = async (page) => {
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: hostCatalogName }),
+      .getByText(hostCatalogName),
   ).toBeVisible();
 
   return hostCatalogName;
@@ -110,7 +108,7 @@ exports.createNewHostSet = async (page) => {
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: hostSetName }),
+      .getByText(hostSetName),
   ).toBeVisible();
 
   return hostSetName;
@@ -159,9 +157,7 @@ exports.createNewTarget = async (page) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: targetName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
   ).toBeVisible();
 
   return targetName;
@@ -189,9 +185,7 @@ exports.createNewTargetWithAddress = async (page) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: targetName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
   ).toBeVisible();
 
   return targetName;
@@ -339,7 +333,7 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: authMethodName }),
+      .getByText(authMethodName),
   ).toBeVisible();
 };
 
@@ -378,7 +372,7 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
     .click();
   await page.getByLabel('Name', { exact: true }).fill(accountName);
   await page.getByLabel('Login Name').fill(login);
-  await page.getByLabel('Password').fill(password);
+  await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -387,7 +381,7 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
   await expect(
     page
       .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: accountName }),
+      .getByText(accountName),
   ).toBeVisible();
 };
 
@@ -399,7 +393,7 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
  */
 exports.setPasswordToAccount = async (page, password) => {
   await page.getByRole('link', { name: 'Set Password' }).click();
-  await page.getByLabel('Password').fill(password);
+  await page.getByLabel(new RegExp('Password*')).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -428,9 +422,7 @@ exports.createNewUser = async (page, userName) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: userName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(userName),
   ).toBeVisible();
 };
 
@@ -476,9 +468,7 @@ exports.createNewGroup = async (page, groupName) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: groupName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(groupName),
   ).toBeVisible();
 };
 
@@ -520,9 +510,7 @@ exports.createNewRole = async (page, roleName) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByRole('link', { name: roleName }),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(roleName),
   ).toBeVisible();
 };
 

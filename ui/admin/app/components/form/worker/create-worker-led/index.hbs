@@ -50,66 +50,24 @@
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
       />
     {{/if}}
+    <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
+      <:fieldset as |F|>
+        <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
+        <F.HelperText>
+          {{t 'resources.worker.form.worker_tags.help'}}
+        </F.HelperText>
+      </:fieldset>
 
-    <Hds::Form::Fieldset as |F|>
-      <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-      <F.HelperText>{{t
-          'resources.worker.form.worker_tags.help'
-        }}</F.HelperText>
-      <F.Control>
-        <Rose::Table @style='condensed' as |table|>
-          <table.body as |body|>
-            {{#each this.workerTags as |tag index|}}
-              <body.row as |row|>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.key}} />
-                </row.cell>
-                <row.cell>
-                  <form.input @type='text' @value={{tag.value}} />
-                </row.cell>
-                <row.cell @shrink={{true}}>
-                  <Rose::Button
-                    @style='warning'
-                    @iconOnly='flight-icons/svg/trash-16'
-                    title={{t 'actions.remove'}}
-                    {{on 'click' (fn this.removeWorkerTagByIndex index)}}
-                  >
-                    {{t 'actions.remove'}}
-                  </Rose::Button>
-                </row.cell>
-              </body.row>
-            {{/each}}
-
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{this.newWorkerKey}}
-                  placeholder='Key'
-                />
-              </row.cell>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @value={{this.newWorkerValue}}
-                  placeholder='Value'
-                />
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='secondary'
-                  title={{t 'actions.add'}}
-                  @disabled={{not this.newWorkerKey}}
-                  {{on 'click' this.addWorkerTag}}
-                >
-                  {{t 'actions.add'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          </table.body>
-        </Rose::Table>
-      </F.Control>
-    </Hds::Form::Fieldset>
+      <:field as |F|>
+        <F.KeyValue
+          @name='worker_tags'
+          @options={{this.workerTags}}
+          @disabled={{form.disabled}}
+          @addOption={{this.addWorkerTag}}
+          @removeOptionByIndex={{this.removeWorkerTagByIndex}}
+        />
+      </:field>
+    </Form::Field::ListWrapper>
 
     {{#if (feature-flag 'ssh-session-recording')}}
       <Hds::Form::Fieldset as |F|>
@@ -150,41 +108,53 @@
       </Hds::Form::Fieldset>
     {{/if}}
 
-    <Rose::CodeEditor @codeValue={{this.createConfigText}} as |c|>
-      <c.toolbar>
-        <:action>
-          <span>{{t 'resources.worker.form.steps.1.create_directory'}}</span>
-        </:action>
-      </c.toolbar>
-      <c.fieldEditor class='rose-autosize' @options={{this.shellCodeEditor}} />
-    </Rose::CodeEditor>
+    <p>
+      {{t 'resources.worker.form.steps.1.create_directory'}}
+    </p>
 
-    <Rose::CodeEditor @codeValue={{this.workerConfigText}} as |c|>
-      <c.toolbar>
-        <:action>
-          <span>{{t 'resources.worker.form.steps.1.create_config'}}</span>
-        </:action>
-      </c.toolbar>
-      <c.fieldEditor class='rose-autosize' @options={{this.hclCodeEditor}} />
-    </Rose::CodeEditor>
-    <p>{{t 'resources.worker.form.steps.1.save_config'}}</p>
+    <Hds::CodeBlock
+      @language='bash'
+      @value={{this.createConfigText}}
+      @hasCopyButton={{true}}
+      @hasLineNumbers={{false}}
+    />
+
+    <p>
+      {{t 'resources.worker.form.steps.1.create_config'}}
+    </p>
+
+    <Hds::CodeBlock
+      @language='hcl'
+      @value={{this.workerConfigText}}
+      @hasCopyButton={{true}}
+      @hasLineNumbers={{false}}
+    />
+
+    <p>
+      {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
+    </p>
   </div>
 
   <h3>{{t 'resources.worker.form.steps.2.title'}}</h3>
   <div class='worker-create-section'>
-    <Rose::CodeEditor @codeValue={{this.installBoundaryText}} as |c|>
-      <c.toolbar>
-        <:action>
-          <span>{{t 'resources.worker.form.steps.2.run_command'}}</span>
-        </:action>
-      </c.toolbar>
-      <c.fieldEditor class='rose-autosize' @options={{this.shellCodeEditor}} />
-    </Rose::CodeEditor>
-    <span>{{t 'resources.worker.form.steps.2.copy_registration_request'}}</span>
-    <code>{{t
-        'resources.worker.form.steps.3.worker_auth_registration_request.label'
-      }}
-    </code>
+
+    <p>
+      {{t 'resources.worker.form.steps.2.run_command'}}
+    </p>
+
+    <Hds::CodeBlock
+      @language='bash'
+      @value={{this.installBoundaryText}}
+      @hasCopyButton={{true}}
+      @hasLineNumbers={{false}}
+    />
+
+    <p>
+      {{t 'resources.worker.form.steps.2.copy_registration_request'}}
+      <code>{{t
+          'resources.worker.form.steps.3.worker_auth_registration_request.label'
+        }}</code>.
+    </p>
   </div>
 
   <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>

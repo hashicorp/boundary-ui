@@ -38,7 +38,7 @@ export default class GeneratedConnectionRecordingModel extends BaseModel {
       'The total number of errors that occurred during the use of this Connection.',
     readOnly: true,
   })
-  errors;
+  errors_number;
 
   @attr('date', {
     description: 'The time the Connection started.',

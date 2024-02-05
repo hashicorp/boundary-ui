@@ -75,7 +75,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can delete credential store of type vault', async function (assert) {
-    assert.expect(1);
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -83,7 +82,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can delete credential store of type static', async function (assert) {
-    assert.expect(1);
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -91,7 +89,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot delete a vault credential store without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.vaultCredentialStore.authorized_actions =
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -103,7 +100,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot delete a static credential store without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -115,7 +111,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can accept delete static credential store via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -127,7 +122,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('can accept delete vault credential store via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -139,7 +133,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot cancel delete for static credential store via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -151,7 +144,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('cannot cancel delete for vault credential store via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -163,7 +155,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('deleting a static credential store which errors displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.del('/credential-stores/:id', () => {
       return new Response(
         490,
@@ -181,7 +172,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   });
 
   test('deleting a vault credential store which errors displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.del('/credential-stores/:id', () => {
       return new Response(
         490,

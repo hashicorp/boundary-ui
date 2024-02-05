@@ -22,9 +22,10 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 
-const runtimeSettings = require('./services/runtime-settings.js');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
+const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
+const clientDaemonManager = require('./services/client-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -124,9 +125,14 @@ const createWindow = (partition, closeWindowCB) => {
   });
 
   // Opens external links in the host default browser.
-  // We just allow boundaryproject.io domain to open on external window (for now).
+  // We allow boundaryproject.io domain to open on external window (for now)
+  // and releases.hashicorp.com domain to download the desktop app or
+  // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https://boundaryproject.io/')) {
+    if (
+      url.startsWith('https://boundaryproject.io/') ||
+      url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
+    ) {
       shell.openExternal(url);
     }
 
@@ -233,6 +239,8 @@ app.on('ready', async () => {
       mainWindow = createWindow(partition, closeWindowCB);
     }
   });
+
+  await clientDaemonManager.start();
 });
 
 /**
@@ -249,6 +257,10 @@ app.on('before-quit', (event) => {
     const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
     buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
   }
+});
+
+app.on('quit', () => {
+  clientDaemonManager.stop();
 });
 
 // Handle an unhandled error in the main thread

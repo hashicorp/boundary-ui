@@ -64,15 +64,12 @@ module(
     });
 
     test('user can navigate to a channel', async function (assert) {
-      assert.expect(1);
       // Visit channel
       await visit(urls.channelRecording);
       assert.strictEqual(currentURL(), urls.channelRecording);
     });
 
     test('user can view recording with proper authorization', async function (assert) {
-      assert.expect(1);
-
       // Visit channel
       await visit(urls.channelRecording);
 
@@ -81,7 +78,6 @@ module(
     });
 
     test('user cannot view recording without proper authorization: channel mime_types', async function (assert) {
-      assert.expect(1);
       instances.channelRecording.mime_types = [];
 
       // Visit channel
@@ -92,7 +88,6 @@ module(
     });
 
     test('user cannot view recording without proper authorization: session recording download action', async function (assert) {
-      assert.expect(1);
       instances.sessionRecording.authorized_actions =
         instances.sessionRecording.authorized_actions.filter(
           (item) => item !== 'download',
@@ -106,7 +101,6 @@ module(
     });
 
     test('user cannot view recording if asciicast download errors out', async function (assert) {
-      assert.expect(2);
       this.server.get(
         `/session-recordings/${instances.channelRecording.id}:download`,
         () =>
@@ -132,7 +126,6 @@ module(
     });
 
     test('user can navigate back to session recording screen', async function (assert) {
-      assert.expect(1);
       // Visit channel
       await visit(urls.channelRecording);
       // click "Back to channels" link in player header
@@ -142,7 +135,6 @@ module(
     });
 
     test('users can navigate to channel recording and incorrect url autocorrects', async function (assert) {
-      assert.expect(2);
       featuresService.enable('ssh-session-recording');
       const sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
@@ -153,6 +145,40 @@ module(
 
       assert.notEqual(currentURL(), incorrectUrl);
       assert.strictEqual(currentURL(), urls.channelRecording);
+    });
+
+    test('user cannot view manage dropdown without proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      instances.sessionRecording.authorized_actions =
+        instances.sessionRecording.authorized_actions.filter(
+          (item) => item !== 'reapply-storage-policy',
+        );
+      await visit(urls.sessionRecording);
+
+      assert.dom('[data-test-manage-dropdown]').doesNotExist();
+    });
+
+    test('user can view manage dropdown with proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      await visit(urls.sessionRecording);
+
+      assert.dom('[data-test-manage-dropdown]').isVisible();
+    });
+
+    test('both retain until and delete after can be seen with proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      await visit(urls.sessionRecording);
+
+      assert.dom('.hds-dropdown-toggle-button__text').isVisible();
+
+      assert.dom('[data-test-retain-until]').isVisible();
+      assert.dom('[data-test-delete-after]').isVisible();
     });
   },
 );

@@ -67,11 +67,15 @@ test.beforeEach(async ({ page }) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialStoreName }),
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
   ).toBeVisible();
 });
 
-test('Static Credential Store (User & Key Pair)', async ({ page }) => {
+test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
+  page,
+}) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -93,7 +97,11 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
     page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
 
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
@@ -115,7 +123,9 @@ test('Static Credential Store (User & Key Pair)', async ({ page }) => {
   }
 });
 
-test('Static Credential Store (Username & Password)', async ({ page }) => {
+test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
+  page,
+}) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -135,7 +145,11 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
     page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
 
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
@@ -162,7 +176,7 @@ test('Static Credential Store (Username & Password)', async ({ page }) => {
   }
 });
 
-test('Static Credential Store (JSON)', async ({ page }) => {
+test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -183,7 +197,11 @@ test('Static Credential Store (JSON)', async ({ page }) => {
     page.getByRole('alert').getByText('Success', { exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
 
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 

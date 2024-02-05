@@ -59,14 +59,12 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('visiting account set password', async function (assert) {
-    assert.expect(1);
     await visit(urls.setPassword);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.setPassword);
   });
 
   test('can navigate to route with proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.account);
     assert.ok(
       find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`),
@@ -74,7 +72,6 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('cannot navigate to route without proper authorization', async function (assert) {
-    assert.expect(1);
     const authorized_actions = instances.account.authorized_actions.filter(
       (item) => item !== 'set-password',
     );
@@ -110,7 +107,6 @@ module('Acceptance | accounts | set password', function (hooks) {
   // from the form, and the form does not directly operate on a model instance,
   // a "cancel" flow doesn't make much sense.  Disabling for now.
   test.skip('can cancel setting new password', async function (assert) {
-    assert.expect(1);
     await visit(urls.setPassword);
     await fillIn('[name="password"]', 'update password');
     await click('form button:not([type="submit"])');
@@ -118,7 +114,6 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('errors are displayed when setting password fails', async function (assert) {
-    assert.expect(1);
     this.server.post('/accounts/:id', () => {
       return new Response(
         490,

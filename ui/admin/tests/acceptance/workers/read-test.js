@@ -56,7 +56,6 @@ module('Acceptance | workers | read', function (hooks) {
   });
 
   test('visiting worker', async function (assert) {
-    assert.expect(1);
     await visit(urls.workers);
     await a11yAudit();
 
@@ -66,7 +65,6 @@ module('Acceptance | workers | read', function (hooks) {
   });
 
   test('cannot navigate to an worker form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((itm) => itm !== 'read');
     await visit(urls.globalScope);
@@ -74,21 +72,19 @@ module('Acceptance | workers | read', function (hooks) {
     await click(`[href="${urls.workers}"]`);
 
     assert
-      .dom('main tbody .rose-table-header-cell:nth-child(1) a')
+      .dom('.hds-table__tbody .hds-table__tr:nth-child(1) a')
       .isNotVisible();
   });
 
   test('can navigate to an worker form with proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.globalScope);
 
     await click(`[href="${urls.workers}"]`);
 
-    assert.dom('main tbody .rose-table-header-cell:nth-child(1) a').isVisible();
+    assert.dom('.hds-table__tbody .hds-table__tr:nth-child(1) a').isVisible();
   });
 
   test('users can navigate to worker and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

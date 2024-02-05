@@ -74,7 +74,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User can navigate to a managed group form', async function (assert) {
-    assert.expect(1);
     await visit(urls.managedGroups);
 
     await click(`[href="${urls.managedGroup}"]`);
@@ -84,7 +83,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User can navigate to a ldap managed group form', async function (assert) {
-    assert.expect(1);
     await visit(urls.ldapManagedGroups);
 
     await click(`[href="${urls.ldapManagedGroup}"]`);
@@ -94,7 +92,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User cannot navigate to a managed group form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.managedGroup.authorized_actions =
       instances.managedGroup.authorized_actions.filter(
         (item) => item !== 'read',
@@ -107,7 +104,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User cannot navigate to a ldap managed group form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.ldapManagedGroup.authorized_actions =
       instances.ldapManagedGroup.authorized_actions.filter(
         (item) => item !== 'read',
@@ -120,7 +116,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
   });
 
   test('User can navigate to managed group and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_LDAP,

@@ -73,7 +73,6 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can save changes to existing host', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.host.name, 'random string');
     await visit(urls.host);
     await click('form [type="button"]', 'Activate edit mode');
@@ -87,7 +86,6 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.host);
@@ -95,7 +93,6 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can cancel changes to existing host', async function (assert) {
-    assert.expect(2);
     await visit(urls.host);
     await click('form [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
@@ -105,7 +102,6 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('saving an existing host with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/hosts/:id', () => {
       return new Response(
         400,

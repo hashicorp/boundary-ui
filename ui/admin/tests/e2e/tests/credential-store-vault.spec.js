@@ -53,7 +53,9 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
+test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
+  page,
+}) => {
   execSync(
     `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
   );
@@ -107,7 +109,9 @@ test('Vault Credential Store (User & Key Pair)', async ({ page }) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(
-    page.getByRole('link', { name: credentialStoreName }),
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
   ).toBeVisible();
 
   const credentialLibraryName = 'Credential Library ' + nanoid();

@@ -21,6 +21,7 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
   get canCreate() {
     switch (this.collection) {
       case 'storage-buckets':
+      case 'policies':
         return (
           this.features.isEnabled('ssh-session-recording') && super.canCreate
         );
@@ -38,11 +39,32 @@ export default class OverrideScopeAbility extends OverrideModelAbility {
     switch (this.collection) {
       case 'session-recordings':
       case 'storage-buckets':
+      case 'policies':
         return (
           this.features.isEnabled('ssh-session-recording') && super.canList
         );
       default:
         return super.canList;
     }
+  }
+
+  /**
+   * Attaching a policy is allowed only if the feature flag is enabled
+   * @type {boolean}
+   */
+  get canAttachStoragePolicy() {
+    return this.features.isEnabled('ssh-session-recording')
+      ? this.hasAuthorizedAction('attach-storage-policy')
+      : false;
+  }
+
+  /**
+   * Deattaching a policy is allowed only if the feature flag is enabled
+   * @type {boolean}
+   */
+  get canDetachStoragePolicy() {
+    return this.features.isEnabled('ssh-session-recording')
+      ? this.hasAuthorizedAction('detach-storage-policy')
+      : false;
   }
 }

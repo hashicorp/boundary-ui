@@ -25,7 +25,6 @@ module('Integration | Helper | truncate-list', function (hooks) {
   setupIntl(hooks);
 
   test('it renders correctly when there is list with more than the limit specificed', async function (assert) {
-    assert.expect(1);
     this.set('inputValue', list);
     this.set('limit', limit);
     await render(
@@ -38,7 +37,6 @@ module('Integration | Helper | truncate-list', function (hooks) {
   });
 
   test('it renders correctly when there is list with one item', async function (assert) {
-    assert.expect(1);
     this.set('inputValue', listWithOneItem);
 
     await render(hbs`{{truncate-list 'actions.more' this.inputValue}}`);
@@ -46,7 +44,6 @@ module('Integration | Helper | truncate-list', function (hooks) {
   });
 
   test('it renders correctly when the list is empty', async function (assert) {
-    assert.expect(1);
     this.set('inputValue', listWithNoItem);
 
     await render(hbs`{{truncate-list 'actions.more' this.inputValue}}`);

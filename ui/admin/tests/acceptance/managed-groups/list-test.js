@@ -72,7 +72,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to managed groups with proper authorization', async function (assert) {
-    assert.expect(3);
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
@@ -91,7 +90,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups with proper authorization', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
 
@@ -111,7 +109,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
-    assert.expect(3);
     instances.authMethod.authorized_collection_actions['managed-groups'] = [];
     await visit(urls.authMethods);
 
@@ -131,7 +128,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to ldap managed group index without either list or create actions', async function (assert) {
-    assert.expect(3);
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       [];
@@ -153,7 +149,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    assert.expect(2);
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',
     ];
@@ -166,7 +161,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups index with only create action', async function (assert) {
-    assert.expect(2);
     featuresService.enable('ldap-auth-methods');
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',

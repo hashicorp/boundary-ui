@@ -68,7 +68,6 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('can navigate to an account form', async function (assert) {
-    assert.expect(1);
     await visit(urls.accounts);
     await click(ACCOUNT_SELECTOR);
 
@@ -77,7 +76,6 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
@@ -85,7 +83,6 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('user can navigate to account and incorrect url autocorrects', async function (assert) {
-    assert.expect(2);
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
     });

@@ -51,7 +51,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (can 'save model' @model)}}
+  {{#if (and (can 'save model' @model) (not @model.isGlobal))}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}

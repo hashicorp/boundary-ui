@@ -52,7 +52,6 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can delete a worker', async function (assert) {
-    assert.expect(1);
     const count = getWorkerCount();
     await visit(urls.worker);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
@@ -60,7 +59,6 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can accept delete worker via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -72,7 +70,6 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can cancel delete worker via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -84,7 +81,6 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('cannot delete worker without proper authorization', async function (assert) {
-    assert.expect(1);
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.worker);
@@ -94,7 +90,6 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('deleting a worker which errors displays error messages', async function (assert) {
-    assert.expect(1);
     this.server.del('/workers/:id', () => {
       return new Response(
         490,

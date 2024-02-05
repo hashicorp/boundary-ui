@@ -14,7 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders', async function (assert) {
-      assert.expect(2);
       await render(
         hbs` <Breadcrumbs::Item @text='Orgs' @icon='org' @route='scopes.scope.scopes' @model='global' /> <Breadcrumbs::Container />`,
       );

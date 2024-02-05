@@ -157,7 +157,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting authenticate route when the scope cannot be loaded is allowed', async function (assert) {
     assert.expect(1);
-    this.server.get('/scopes', () => {
+    this.server.get('/scopes/global', () => {
       return new Response(404);
     });
     await visit(urls.authenticate.global);

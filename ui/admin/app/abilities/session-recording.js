@@ -19,4 +19,14 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
       ? super.canRead
       : false;
   }
+
+  /**
+   * Reapplying policy is allowed only if the feature flag is enabled
+   * @type {boolean}
+   */
+  get canReapplyStoragePolicy() {
+    return this.features.isEnabled('ssh-session-recording')
+      ? this.hasAuthorizedAction('reapply-storage-policy')
+      : false;
+  }
 }

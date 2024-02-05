@@ -35,13 +35,18 @@
     "test": "concurrently \"npm:test:*\" --names \"test:\"",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
     "e2e": "yarn playwright test --config ./tests/e2e/playwright.config.js",
+    "e2e:ce:aws": "yarn run e2e --grep \"(?=.*@ce)(?=.*@aws)\"",
+    "e2e:ce:docker": "yarn run e2e --grep \"(?=.*@ce)(?=.*@docker)\"",
+    "e2e:ent:aws": "yarn run e2e --grep \"(?=.*@ent)(?=.*@aws)\"",
+    "e2e:ent:docker": "yarn run e2e --grep \"(?=.*@ent)(?=.*@docker)\"",
     "e2e:dev:chrome": "yarn run e2e --project=chromium --headed",
     "e2e:dev:firefox": "yarn run e2e --project=firefox --headed",
     "e2e:dev:safari": "yarn run e2e --project=webkit --headed",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
-    "ember-named-blocks-polyfill": "^0.2.5"
+    "ember-named-blocks-polyfill": "^0.2.5",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -94,10 +99,9 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-ember": "^11.11.1",
     "eslint-plugin-n": "^16.3.1",
-    "eslint-plugin-qunit": "^7.3.4",
+    "eslint-plugin-qunit": "^8.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
-    "lodash": "4.17.21",
     "prettier": "^3.0.0",
     "prettier-plugin-ember-template-tag": "^1.1.0",
     "qunit": "^2.19.4",

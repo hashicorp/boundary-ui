@@ -64,7 +64,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can delete host catalog', async function (assert) {
-    assert.expect(1);
     const hostCatalogCount = gethostCatalogCount();
 
     await visit(urls.hostCatalogs);
@@ -75,7 +74,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('cannot delete host catalog without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -90,7 +88,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can accept delete host catalog via dialog', async function (assert) {
-    assert.expect(3);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const hostCatalogCount = gethostCatalogCount();
@@ -106,7 +103,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('can cancel delete host catalog via dialog', async function (assert) {
-    assert.expect(2);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const hostCatalogCount = gethostCatalogCount();
@@ -121,7 +117,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   });
 
   test('deleting a host catalog which errors displays error messages', async function (assert) {
-    assert.expect(1);
     await visit(urls.hostCatalogs);
     this.server.del('/host-catalogs/:id', () => {
       return new Response(

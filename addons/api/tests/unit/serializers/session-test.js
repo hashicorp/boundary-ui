@@ -17,7 +17,6 @@ module('Unit | Serializer | session', function (hooks) {
   });
 
   test('it serializes only version when `adapterOptions.method` is `cancel`', function (assert) {
-    assert.expect(1);
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('session');
     const record = store.createRecord('session', {

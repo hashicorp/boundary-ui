@@ -16,8 +16,6 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
   let now;
 
   test('it renders relative date in "time" ago format', async function (assert) {
-    assert.expect(8);
-
     now = Date.now();
     this.date = now - 100 - 30 * 1000;
     await render(hbs`{{relative-datetime-live this.date}}`);
@@ -60,8 +58,6 @@ module('Integration | Helper | relative-datetime-live', function (hooks) {
   });
 
   test('it renders nothing when there is no date', async function (assert) {
-    assert.expect(1);
-
     this.date = null;
     await render(hbs`{{relative-datetime-live this.date}}`);
     assert.dom(this.element).hasText('');

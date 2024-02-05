@@ -14,8 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders', async function (assert) {
-      assert.expect(2);
-
       this.set('value', 'Skeleton Message');
 
       await render(hbs`

@@ -2,6 +2,18 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v2.0.0 [CLI 0.15.0] (2024.01.31)
+
+### New
+
+- Upgrade CLI to v0.15.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2117))
+- Add search, filtering, and pagination support for sessions and targets ([PR](https://github.com/hashicorp/boundary-ui/pull/2091))
+- Add time-remaining to a session ([PR](https://github.com/hashicorp/boundary-ui/pull/2018))
+
+### Bug Fixes
+- Fix copy command not working in embedded terminal for Windows OS ([PR](https://github.com/hashicorp/boundary-ui/pull/2001))
+
+
 ## v1.7.1 [CLI 0.14.2] (2023.11.07)
 
 ### New

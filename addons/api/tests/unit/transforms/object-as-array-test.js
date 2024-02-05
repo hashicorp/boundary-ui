@@ -10,7 +10,6 @@ module('Unit | Transform | object as array', function (hooks) {
   setupTest(hooks);
 
   test('it deserializes an object to an array of key value objects', function (assert) {
-    assert.expect(1);
     let transform = this.owner.lookup('transform:object-as-array');
     const deserialized = transform.deserialize({
       first: 'Hey',
@@ -25,14 +24,12 @@ module('Unit | Transform | object as array', function (hooks) {
   });
 
   test('it deserializes undefined to an empty object', function (assert) {
-    assert.expect(1);
     let transform = this.owner.lookup('transform:object-as-array');
     const deserialized = transform.deserialize(undefined);
     assert.deepEqual(deserialized, []);
   });
 
   test('it serializes an array of key value objects to an object', function (assert) {
-    assert.expect(1);
     let transform = this.owner.lookup('transform:object-as-array');
     const serialized = transform.serialize([
       { key: 'first', value: 'Hey' },
@@ -48,7 +45,6 @@ module('Unit | Transform | object as array', function (hooks) {
   });
 
   test('it serializes an empty array of key value objects to null', function (assert) {
-    assert.expect(1);
     let transform = this.owner.lookup('transform:object-as-array');
     const serialized = transform.serialize([]);
 

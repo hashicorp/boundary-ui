@@ -1,0 +1,35 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.policy.title'}}
+      <DocLink @doc='storage-policy' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.policy.description'}}</p>
+    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.policies.policy.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    <Form::Policy
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

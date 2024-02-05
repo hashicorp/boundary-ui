@@ -59,7 +59,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can save changes to existing host catalog', async function (assert) {
-    assert.expect(3);
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
 
@@ -75,7 +74,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('cannot make changes to an existing host catalog without proper authorization', async function (assert) {
-    assert.expect(1);
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -88,7 +86,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('clicking cancel in edit mode does not save changes', async function (assert) {
-    assert.expect(2);
     await visit(urls.hostCatalog);
 
     await click('form [type="button"]', 'Activate edit mode');
@@ -100,7 +97,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
-    assert.expect(2);
     this.server.patch('/host-catalogs/:id', () => {
       return new Response(
         400,
@@ -131,7 +127,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can discard unsaved host catalog changes via dialog', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.hostCatalog.name, 'random string');
@@ -152,7 +147,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved host catalog changes', async function (assert) {
-    assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.hostCatalog.name, 'random string');

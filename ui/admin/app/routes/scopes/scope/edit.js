@@ -11,7 +11,7 @@ export default class ScopesScopeEditRoute extends Route {
 
   @service session;
   @service router;
-
+  @service store;
   // =methods
 
   /**
@@ -19,5 +19,19 @@ export default class ScopesScopeEditRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
+  }
+
+  /**
+   * Adds storage policy name to the context.
+   * @param {Controller} controller
+   * @param {PolicyModel} policy
+   */
+  async setupController(controller, policy) {
+    super.setupController(...arguments);
+    if (policy.storage_policy_id) {
+      const { storage_policy_id } = policy;
+      const record = await this.store.findRecord('policy', storage_policy_id);
+      controller.set('storage_policy', record);
+    }
   }
 }

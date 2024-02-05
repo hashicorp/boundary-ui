@@ -14,7 +14,6 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders a regular button', async function (assert) {
-      assert.expect(1);
       this.enableEdit = () => {};
       await render(
         hbs`

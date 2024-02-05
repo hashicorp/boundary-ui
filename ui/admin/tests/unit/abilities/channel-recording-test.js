@@ -39,8 +39,6 @@ module('Unit | Abilities | channel-recording', function (hooks) {
   });
 
   test('returns true if session recording complete and channel mime type is asciicast', function (assert) {
-    assert.expect(2);
-
     assert.true(canService.can('play channel-recording', asciicastChannel));
     assert.false(
       canService.can('play channel-recording', noneAsciicastChannel),
@@ -48,8 +46,6 @@ module('Unit | Abilities | channel-recording', function (hooks) {
   });
 
   test('returns false if session recording complete and channel mime type is not asciicast', function (assert) {
-    assert.expect(2);
-
     assert.true(
       canService.can('viewOnly channel-recording', noneAsciicastChannel),
     );

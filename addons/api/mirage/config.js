@@ -73,7 +73,11 @@ function routes() {
           return scope.scope ? scope.scope.id === scope_id : false;
         });
       }
-      return resultSet.filter(makeBooleanFilter(filter));
+      const filteredResultSet = resultSet.filter(makeBooleanFilter(filter));
+      // add a response_type to the response to simulate pagination
+      // without having response_type, the unsupported controller modal
+      // will show when running with mirage
+      return { items: filteredResultSet.models, response_type: 'complete' };
     },
   );
   this.post('/scopes', function ({ scopes }) {
@@ -88,7 +92,29 @@ function routes() {
   this.get('/scopes/:id');
   this.patch('/scopes/:id');
   this.del('/scopes/:id');
+  this.post(
+    '/scopes/:idMethod',
+    function ({ scopes }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const scope = scopes.find(id);
 
+      const updatedAttrs = {
+        version: attrs.version,
+        storagePolicyId: attrs.storagePolicyId,
+      };
+
+      if (method === 'attach-storage-policy') {
+        updatedAttrs.storagePolicyId = attrs.storagePolicyId;
+      }
+
+      if (method === 'detach-storage-policy') {
+        updatedAttrs.storagePolicyId = '';
+      }
+      return scope.update(updatedAttrs);
+    },
+  );
   // Auth & IAM resources
 
   this.get(
@@ -711,6 +737,22 @@ function routes() {
     },
   );
 
+  //storage-policy
+  this.get(
+    '/policies',
+    ({ policies }, { queryParams: { scope_id: scopeId } }) => {
+      return policies.where({ scopeId });
+    },
+  );
+  this.get('/policies/:id');
+  this.del('/policies/:id');
+  this.patch('/policies/:id');
+  this.post('/policies', function ({ policies }) {
+    const attrs = this.normalizedRequestAttrs();
+
+    return policies.create(attrs);
+  });
+
   // session recordings
   this.get(
     '/session-recordings',
@@ -735,6 +777,24 @@ function routes() {
       } else {
         return sessionRecordings.find(id);
       }
+    },
+  );
+
+  this.post(
+    '/session-recordings/:idMethod',
+    function ({ sessionRecordings }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const record = sessionRecordings.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      if (method === 'reapply-storage-policy') {
+        updatedAttrs.retain_until = faker.date.recent();
+        updatedAttrs.delete_after = faker.date.recent();
+      }
+      return record.update(updatedAttrs);
     },
   );
 

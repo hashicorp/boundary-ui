@@ -37,7 +37,7 @@ export const options = {
     account_claim_maps: {
       to: ['sub', 'name', 'email'],
     },
-    prompts: ['none', 'consent', 'select_account', 'login'],
+    prompts: ['consent', 'select_account', 'login'],
   },
   ldap: {
     account_attribute_maps: {

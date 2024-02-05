@@ -53,14 +53,12 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('visiting account change password', async function (assert) {
-    assert.expect(1);
     await visit(urls.changePassword);
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.changePassword);
   });
 
   test('visiting account change password from header', async function (assert) {
-    assert.expect(1);
     await visit(urls.orgScope);
     // Open header utilities dropdown
     await click('.rose-header-utilities .rose-dropdown summary');
@@ -99,7 +97,6 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('can cancel password change', async function (assert) {
-    assert.expect(1);
     await visit(urls.changePassword);
     await fillIn('[name="currentPassword"]', 'current password');
     await fillIn('[name="newPassword"]', 'new password');
@@ -108,7 +105,6 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('errors are displayed when changing password fails', async function (assert) {
-    assert.expect(1);
     this.server.post('/accounts/:id', () => {
       return new Response(
         490,
@@ -129,7 +125,6 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('cannot change password when not authenticated', async function (assert) {
-    assert.expect(1);
     invalidateSession();
     await visit(urls.changePassword);
     assert.notEqual(currentURL(), urls.changePassword);

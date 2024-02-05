@@ -528,33 +528,57 @@
     {{/if}}
   </form.input>
 
-  <Hds::Form::Checkbox::Group
-    class='oidc-prompts'
-    @isOptional={{true}}
-    @name='prompts'
-    disabled={{form.disabled}}
-    as |G|
-  >
-    <G.Legend>{{t 'form.prompts.label'}}</G.Legend>
-    <G.HelperText>{{t 'form.prompts.help'}}</G.HelperText>
-
-    {{#each this.prompts as |prompt|}}
-      <G.Checkbox::Field
-        @id={{prompt}}
-        checked={{includes prompt this.selectedPrompts}}
-        {{on 'change' (fn this.updatePrompt prompt)}}
+  <Hds::Form::Fieldset @isOptional={{true}} as |F|>
+    <F.Legend>{{t 'form.prompts.label'}}</F.Legend>
+    <F.HelperText>{{t 'form.prompts.help'}}</F.HelperText>
+    <F.Control>
+      <Hds::Form::Toggle::Field
+        name='prompts'
+        checked={{this.skipPromptsList}}
+        disabled={{form.disabled}}
+        {{on 'change' (fn this.toggleField 'none')}}
         as |F|
       >
         <F.Label>
-          {{t (concat 'resources.auth-method.form.' prompt '.label')}}
+          {{t 'resources.auth-method.form.none.label'}}
         </F.Label>
         <F.HelperText>
-          {{t (concat 'resources.auth-method.form.' prompt '.help')}}
+          {{t 'resources.auth-method.form.none.help'}}
         </F.HelperText>
-      </G.Checkbox::Field>
-    {{/each}}
-
-  </Hds::Form::Checkbox::Group>
+      </Hds::Form::Toggle::Field>
+      {{#unless this.skipPromptsList}}
+        <Hds::Form::Checkbox::Group
+          class='oidc-prompts'
+          @name='prompts'
+          disabled={{form.disabled}}
+          as |G|
+        >
+          {{#each this.prompts as |prompt|}}
+            <G.Checkbox::Field
+              @id={{prompt}}
+              checked={{includes prompt this.selectedPrompts}}
+              {{on 'change' (fn this.updatePrompt prompt)}}
+              as |F|
+            >
+              <F.Label>
+                {{t (concat 'resources.auth-method.form.' prompt '.label')}}
+              </F.Label>
+              <F.HelperText>
+                {{t (concat 'resources.auth-method.form.' prompt '.help')}}
+              </F.HelperText>
+            </G.Checkbox::Field>
+          {{/each}}
+        </Hds::Form::Checkbox::Group>
+      {{/unless}}
+    </F.Control>
+    {{#if @model.errors.prompts}}
+      <F.Error as |E|>
+        {{#each @model.errors.prompts as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Fieldset>
 
   {{#unless @model.isNew}}
     <form.input

@@ -17,7 +17,6 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('can read credentials, including JSON credentials, when authorized and json-credentials feature is enabled', function (assert) {
-    assert.expect(3);
     featuresService.enable('json-credentials');
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
@@ -33,7 +32,6 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('cannot read credentials, including JSON credentials, when unauthorized and json-credentials feature is enabled', function (assert) {
-    assert.expect(3);
     featuresService.enable('json-credentials');
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
@@ -49,7 +47,6 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('cannot read credentials, including JSON credentials, when unauthorized and json-credentials feature is disabled', function (assert) {
-    assert.expect(4);
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {
@@ -65,7 +62,6 @@ module('Unit | Abilities | credential', function (hooks) {
   });
 
   test('can read credentials, excepting JSON credentials, when authorized and json-credentials feature is disabled', function (assert) {
-    assert.expect(4);
     const service = this.owner.lookup('service:can');
     const store = this.owner.lookup('service:store');
     const credential = store.createRecord('credential', {

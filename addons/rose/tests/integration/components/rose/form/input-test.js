@@ -82,7 +82,6 @@ module('Integration | Component | rose/form/input', function (hooks) {
   });
 
   test('it supports a fully contextual usage', async function (assert) {
-    assert.expect(5);
     await render(hbs`
       <Rose::Form::Input @value="Text" @error={{true}} @contextual={{true}} as |field|>
         <field.label>Label</field.label>

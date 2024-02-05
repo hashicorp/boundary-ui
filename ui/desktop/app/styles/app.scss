@@ -507,7 +507,12 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 }
 
-.session-details-header,
+.session-details-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .target-details-header {
   display: flex;
   align-items: center;
@@ -641,22 +646,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 .raw-credential-panel-body {
   display: block;
   margin-top: 0.75rem;
-
-  .raw-credential-header {
-    border: 1px solid var(--token-color-border-primary);
-    border-radius: 5px 5px 0 0;
-    border-bottom: none;
-    padding: 1.5rem 1.5rem 0.75rem;
-  }
-
-  .raw-credential-title {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .raw-secret .CodeMirror {
-    border-radius: 0 0 5px 5px;
-  }
 }
 
 // Host Modal
@@ -694,4 +683,15 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   .host-arrow {
     color: var(--token-color-foreground-faint);
   }
+}
+
+// Unsupported controller modal
+.unsupported-modal-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.unsupported-modal-footer {
+  display: flex;
+  gap: 1rem;
 }

@@ -13,7 +13,6 @@ module('Unit | Model | target', function (hooks) {
   setupMirage(hooks);
 
   test('it has a `hostSets` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(6);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -190,7 +189,6 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `sessions` array of session instances associated with the target (if those instances are already in the store)', function (assert) {
-    assert.expect(3);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -234,7 +232,6 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has a `brokeredCredentialSources` array of resolved model instances (if those instances are already in the store)', function (assert) {
-    assert.expect(4);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -386,7 +383,6 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has isSSH property and returns the expected values', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelSSH = store.createRecord('target', {
       type: TYPE_TARGET_SSH,
@@ -396,7 +392,6 @@ module('Unit | Model | target', function (hooks) {
   });
 
   test('it has isTCP property and returns the expected values', function (assert) {
-    assert.expect(2);
     const store = this.owner.lookup('service:store');
     const modelTCP = store.createRecord('target', {
       type: TYPE_TARGET_TCP,
