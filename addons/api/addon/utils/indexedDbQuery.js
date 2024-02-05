@@ -173,51 +173,42 @@ const buildIndexedDbCollection = ({
   operation,
   logicalOperator,
 }) => {
+  if (logicalOperator === 'and') {
+    switch (operation) {
+      case 'contains':
+        return collection.and((record) => get(record, key)?.includes(value));
+      case 'gt':
+        return collection.and((record) => get(record, key) > value);
+      case 'gte':
+        return collection.and((record) => get(record, key) >= value);
+      case 'lt':
+        return collection.and((record) => get(record, key) < value);
+      case 'lte':
+        return collection.and((record) => get(record, key) <= value);
+      case 'notEquals':
+        return collection.and((record) => get(record, key) !== value);
+      default:
+        return collection.and((record) => get(record, key) === value);
+    }
+  }
+
   switch (operation) {
     case 'contains':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key)?.includes(value));
-      } else {
-        return collection
-          .or(key)
-          .filter((record) => get(record, key)?.includes(value));
-      }
+      return collection
+        .or(key)
+        .filter((record) => get(record, key)?.includes(value));
     case 'gt':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) > value);
-      } else {
-        return collection.or(key).above(value);
-      }
+      return collection.or(key).above(value);
     case 'gte':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) >= value);
-      } else {
-        return collection.or(key).aboveOrEqual(value);
-      }
+      return collection.or(key).aboveOrEqual(value);
     case 'lt':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) < value);
-      } else {
-        return collection.or(key).below(value);
-      }
+      return collection.or(key).below(value);
     case 'lte':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) <= value);
-      } else {
-        return collection.or(key).belowOrEqual(value);
-      }
+      return collection.or(key).belowOrEqual(value);
     case 'notEquals':
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) !== value);
-      } else {
-        return collection.or(key).notEqual(value);
-      }
+      return collection.or(key).notEqual(value);
     default:
-      if (logicalOperator === 'and') {
-        return collection.and((record) => get(record, key) === value);
-      } else {
-        return collection.or(key).equals(value);
-      }
+      return collection.or(key).equals(value);
   }
 };
 
