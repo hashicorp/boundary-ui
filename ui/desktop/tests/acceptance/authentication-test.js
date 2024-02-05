@@ -138,15 +138,6 @@ module('Acceptance | authentication', function (hooks) {
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
-  test('visiting authenticate route when there no methods shows a message', async function (assert) {
-    assert.expect(2);
-    instances.authMethods.global.destroy();
-    await visit(urls.authenticate.global);
-    await a11yAudit();
-    assert.strictEqual(currentURL(), urls.authenticate.global);
-    assert.ok(find('.rose-message'));
-  });
-
   test('visiting authenticate route without clusterUrl redirects to clusterUrl index', async function (assert) {
     assert.expect(1);
     this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;

@@ -14,6 +14,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   @service session;
   @service clusterUrl;
   @service router;
+  @service resourceFilterStore;
 
   // =methods
 
@@ -28,13 +29,42 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    * scope and all scopes (for org navigation).
    * @return {Promise} `{scope, scopes, authMethods}`
    */
-  model() {
+  async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
+
+    // Fetch auth methods for current scope
+    const authMethods = await this.resourceFilterStore.queryBy(
+      'auth-method',
+      {
+        authorized_actions: [{ contains: 'authenticate' }],
+      },
+      {
+        scope_id,
+      },
+    );
+    // Preload all authenticatable auth methods into the store
+    const authMethodsForAllScopes = await this.resourceFilterStore.queryBy(
+      'auth-method',
+      {
+        authorized_actions: [{ contains: 'authenticate' }],
+      },
+      {
+        scope_id: 'global',
+        recursive: true,
+      },
+    );
+    // Fetch org scopes
+    // and filter out any that have no auth methods
+    const scopes = this.modelFor('scopes').filter(
+      ({ id: scope_id, isOrg }) =>
+        isOrg &&
+        authMethodsForAllScopes.filter((i) => i.scopeID === scope_id).length,
+    );
 
     return hash({
       scope: this.modelFor('scopes.scope'),
-      scopes: this.modelFor('scopes').filter((scope) => scope.isOrg),
-      authMethods: this.store.query('auth-method', { scope_id }),
+      scopes,
+      authMethods,
     });
   }
 
