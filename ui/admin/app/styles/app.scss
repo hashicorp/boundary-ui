@@ -337,10 +337,11 @@
     margin-bottom: sizing.rems(l);
   }
 
-  > code {
-    background-color: var(--ui-gray-subtler-5);
-    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-    color: var(--failure);
+  > p code {
+    background-color: var(--token-color-surface-strong);
+    border-radius: 5px;
+    color: var(--token-color-foreground-primary);
+    padding: sizing.rems(xxxs) sizing.rems(xxs);
   }
 
   .worker-auth-token {
