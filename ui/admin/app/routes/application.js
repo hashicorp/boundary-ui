@@ -8,6 +8,7 @@ import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import { formatDbName } from 'api/services/indexed-db';
 
 /**
  * Entry route for the application.
@@ -21,6 +22,8 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service features;
   @service featureEdition;
+  @service indexedDb;
+  @service('browser/window') window;
 
   // =attributes
 
@@ -62,6 +65,15 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
+
+    // Setup the DB from a successful authentication restoration
+    if (this.session.isAuthenticated) {
+      const userId = this.session.data?.authenticated?.user_id;
+      const hostUrl = this.window.location.host;
+      if (userId && hostUrl) {
+        this.indexedDb.setup(formatDbName(userId, hostUrl));
+      }
+    }
   }
 
   // =actions
