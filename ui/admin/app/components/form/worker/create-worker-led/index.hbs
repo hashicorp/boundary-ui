@@ -108,9 +108,9 @@
       </Hds::Form::Fieldset>
     {{/if}}
 
-    <Hds::Text::Body @tag='p'>
+    <p>
       {{t 'resources.worker.form.steps.1.create_directory'}}
-    </Hds::Text::Body>
+    </p>
 
     <Hds::CodeBlock
       @language='bash'
@@ -119,9 +119,9 @@
       @hasLineNumbers={{false}}
     />
 
-    <Hds::Text::Body @tag='p'>
+    <p>
       {{t 'resources.worker.form.steps.1.create_config'}}
-    </Hds::Text::Body>
+    </p>
 
     <Hds::CodeBlock
       @language='hcl'
@@ -130,17 +130,17 @@
       @hasLineNumbers={{false}}
     />
 
-    <Hds::Text::Body @tag='p'>
+    <p>
       {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
-    </Hds::Text::Body>
+    </p>
   </div>
 
   <h3>{{t 'resources.worker.form.steps.2.title'}}</h3>
   <div class='worker-create-section'>
 
-    <Hds::Text::Body @tag='p'>
+    <p>
       {{t 'resources.worker.form.steps.2.run_command'}}
-    </Hds::Text::Body>
+    </p>
 
     <Hds::CodeBlock
       @language='bash'
@@ -149,12 +149,12 @@
       @hasLineNumbers={{false}}
     />
 
-    <Hds::Text::Body @tag='p'>
+    <p>
       {{t 'resources.worker.form.steps.2.copy_registration_request'}}
       <code>{{t
           'resources.worker.form.steps.3.worker_auth_registration_request.label'
         }}</code>.
-    </Hds::Text::Body>
+    </p>
   </div>
 
   <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>

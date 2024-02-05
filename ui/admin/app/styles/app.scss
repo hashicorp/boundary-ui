@@ -333,8 +333,7 @@
   margin-bottom: sizing.rems(xl);
   padding: sizing.rems(l);
 
-  > div,
-  > p:not(:last-of-type) {
+  > div {
     margin-bottom: sizing.rems(l);
   }
 
