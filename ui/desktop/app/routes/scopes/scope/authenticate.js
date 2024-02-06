@@ -42,13 +42,17 @@ export default class ScopesScopeAuthenticateRoute extends Route {
         recursive: true,
       },
     );
+
     const scopeIDs = new Set(
       authMethodsForAllScopes.map((authMethod) => authMethod.scopeID),
     );
+
     // Fetch org scopes and filter out any that have no auth methods
     const scopes = this.modelFor('scopes').filter(({ id: scope_id }) =>
       scopeIDs.has(scope_id),
     );
+
+    // Filter out auth methods that are not for the current scope
     const authMethods = authMethodsForAllScopes.filter(
       (authMethod) => authMethod.scopeID === scope_id,
     );
