@@ -131,7 +131,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     assert
       .dom(
-        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`,
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores"]`,
       )
       .exists();
   });
