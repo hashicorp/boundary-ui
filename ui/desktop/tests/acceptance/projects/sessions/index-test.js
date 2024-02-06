@@ -373,8 +373,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
         resource: 'sessions',
         func: () => [instances.session2],
       },
-      'sessions',
-      'targets',
     );
     await visit(urls.globalSessions);
 

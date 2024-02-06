@@ -7,13 +7,12 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { STATE_SESSION_RECORDING_AVAILABLE } from 'api/models/session-recording';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionRoute extends Route {
   // =services
   @service store;
   @service session;
-
+  @service router;
   // =methods
 
   /**
@@ -51,20 +50,24 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       storageBucket,
     };
   }
-
   /**
    * Reapplies storage policy dates to session recording
    * @param {SessionRecordingModel}
    */
   @action
   @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess(({ state }) =>
-    state === STATE_SESSION_RECORDING_AVAILABLE
-      ? 'resources.policy.messages.reapply'
-      : 'resources.policy.messages.later',
+  @notifySuccess(({ end_time }) =>
+    !end_time
+      ? 'resources.policy.messages.later'
+      : 'resources.policy.messages.reapply',
   )
   async reapplyStoragepolicy(sessionRecording) {
-    await sessionRecording.reapplyStoragePolicy();
-    super.refresh(...arguments);
+    try {
+      await sessionRecording.reapplyStoragePolicy();
+    } catch (e) {
+      await this.router.replaceWith('scopes.scope.session-recordings');
+      this.router.refresh();
+      throw new Error(e);
+    }
   }
 }

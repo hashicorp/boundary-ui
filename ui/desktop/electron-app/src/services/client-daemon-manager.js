@@ -3,10 +3,16 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const { spawnSync, spawn } = require('../helpers/spawn-promise');
+const {
+  spawnSync,
+  spawn,
+  spawnAsyncJSONPromise,
+} = require('../helpers/spawn-promise');
 const jsonify = require('../utils/jsonify.js');
 const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
+const sanitizer = require('../utils/sanitizer.js');
+const { isWindows } = require('../helpers/platform.js');
 
 class ClientDaemonManager {
   #socketPath;
@@ -22,9 +28,9 @@ class ClientDaemonManager {
    */
   status() {
     const daemonStatusCommand = ['daemon', 'status', '-format=json'];
-    const data = spawnSync(daemonStatusCommand);
+    const { stdout } = spawnSync(daemonStatusCommand);
 
-    const status = jsonify(data);
+    const status = jsonify(stdout);
     this.#socketPath = status?.item?.socket_address;
     return status;
   }
@@ -35,6 +41,7 @@ class ClientDaemonManager {
    */
   async start() {
     const startDaemonCommand = ['daemon', 'start'];
+    // We use spawn here because we want to check the stderr for specific logs
     const { stderr } = await spawn(startDaemonCommand);
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
@@ -65,11 +72,16 @@ class ClientDaemonManager {
    * @param tokenId
    * @returns {Promise}
    */
-  addToken({ token, tokenId }) {
+  async addToken({ token, tokenId }) {
+    // TODO: Should this and search just always call CLI even for non-Windows?
+    if (isWindows()) {
+      return addTokenCliCommand(token);
+    }
+
     const postBody = {
-      auth_token_id: tokenId,
+      auth_token_id: sanitizer.base62EscapeAndValidate(tokenId),
       boundary_addr: runtimeSettings.clusterUrl,
-      auth_token: token,
+      auth_token: sanitizer.base62EscapeAndValidate(token),
     };
     const request = {
       method: 'POST',
@@ -80,6 +92,11 @@ class ClientDaemonManager {
   }
 
   search(requestData) {
+    if (isWindows()) {
+      return searchCliCommand(requestData);
+    }
+
+    delete requestData.token;
     const queryString = new URLSearchParams(requestData);
 
     const request = {
@@ -90,6 +107,65 @@ class ClientDaemonManager {
     return unixSocketRequest(request);
   }
 }
+
+const addTokenCliCommand = (token) => {
+  const addTokenCommand = [
+    'daemon',
+    'add-token',
+    `-addr=${runtimeSettings.clusterUrl}`,
+    '-format=json',
+    '-token=env://BOUNDARY_TOKEN',
+    '-keyring-type=none',
+  ];
+  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
+
+  const { stdout, stderr } = spawnSync(addTokenCommand, {
+    BOUNDARY_TOKEN: sanitizedToken,
+  });
+  let parsedResponse = jsonify(stdout);
+
+  if (parsedResponse?.status_code === 204) {
+    // 204 has no response body
+    return;
+  }
+
+  parsedResponse = jsonify(stderr);
+  return Promise.reject({
+    statusCode: parsedResponse?.status_code,
+    ...parsedResponse?.api_error,
+  });
+};
+
+const searchCliCommand = (requestData) => {
+  const searchCommand = [
+    'search',
+    '-format=json',
+    '-token=env://BOUNDARY_TOKEN',
+    `-resource=${requestData.resource}`,
+  ];
+  if (requestData.query) {
+    searchCommand.push(`-query=${requestData.query}`);
+  }
+  if (requestData.filter) {
+    searchCommand.push(`-filter=${requestData.filter}`);
+  }
+  const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
+
+  const { stdout, stderr } = spawnSync(searchCommand, {
+    BOUNDARY_TOKEN: sanitizedToken,
+  });
+  let parsedResponse = jsonify(stdout);
+
+  if (parsedResponse?.status_code === 200) {
+    return parsedResponse?.item;
+  }
+
+  parsedResponse = jsonify(stderr);
+  return Promise.reject({
+    statusCode: parsedResponse?.status_code,
+    ...parsedResponse?.api_error,
+  });
+};
 
 // Export an instance so we get a singleton
 module.exports = new ClientDaemonManager();

@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { getOwner } from '@ember/application';
+import { notifyError } from 'core/decorators/notify';
 
 export default class ApplicationRoute extends Route {
   // =services
@@ -29,6 +30,7 @@ export default class ApplicationRoute extends Route {
    * reported by the main process.  If they differ, update the main process
    * clusterUrl so that the renderer's CSP can be rewritten to allow requests.
    */
+  @notifyError(({ message }) => message, { catch: true })
   async beforeModel() {
     this.intl.setLocale(['en-us']);
     await this.session.setup();
@@ -39,7 +41,7 @@ export default class ApplicationRoute extends Route {
     // Add token to client daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      this.ipc.invoke('addTokenToClientDaemon', {
+      await this.ipc.invoke('addTokenToClientDaemon', {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
