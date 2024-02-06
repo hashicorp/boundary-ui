@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
@@ -43,21 +42,22 @@ export default class ScopesScopeAuthenticateRoute extends Route {
         recursive: true,
       },
     );
-    const scopeIDs = new Set(authMethodsForAllScopes.map((i) => i.scopeID));
-    // Fetch org scopes
-    // and filter out any that have no auth methods
+    const scopeIDs = new Set(
+      authMethodsForAllScopes.map((authMethod) => authMethod.scopeID),
+    );
+    // Fetch org scopes and filter out any that have no auth methods
     const scopes = this.modelFor('scopes').filter(({ id: scope_id }) =>
       scopeIDs.has(scope_id),
     );
     const authMethods = authMethodsForAllScopes.filter(
-      (i) => i.scopeID === scope_id,
+      (authMethod) => authMethod.scopeID === scope_id,
     );
 
-    return hash({
+    return {
       scope: this.modelFor('scopes.scope'),
       scopes,
       authMethods,
-    });
+    };
   }
 
   redirect() {
