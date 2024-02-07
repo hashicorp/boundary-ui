@@ -150,7 +150,7 @@ const searchCliCommand = (requestData) => {
     searchCommand.push(`-filter=${requestData.filter}`);
   }
   if (requestData.force_refresh) {
-    searchCommand.push(`-force-refresh`);
+    searchCommand.push(`-force-refresh=true`);
   }
   const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
 
