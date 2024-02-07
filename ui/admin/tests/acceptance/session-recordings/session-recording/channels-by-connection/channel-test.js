@@ -19,9 +19,8 @@ module(
     let featuresService;
     let getRecordingCount;
 
-    const DELETE_DROPDOWN_SELECTOR =
-      '.hds-dropdown-list-item--color-critical [type="button"]';
-    const DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+    const DELETE_DROPDOWN_SELECTOR = '[data-test-manage-dropdown-delete]';
+    const DROPDOWN_SELECTOR = '[data-test-manage-dropdown]';
     // Instances
     const instances = {
       scopes: {

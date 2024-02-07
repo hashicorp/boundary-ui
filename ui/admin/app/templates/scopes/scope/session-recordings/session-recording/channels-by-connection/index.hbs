@@ -17,7 +17,11 @@
       (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
     }}
       <Hds::Dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+        <dd.ToggleButton
+          data-test-manage-dropdown
+          @text={{t 'actions.manage'}}
+          @color='secondary'
+        />
 
         <dd.Interactive
           @text={{t 'resources.policy.actions.update'}}
@@ -30,6 +34,7 @@
           {{#if (can 'delete session-recording' @model.sessionRecording)}}
             <dd.Separator />
             <dd.Interactive
+              data-test-manage-dropdown-delete
               @color='critical'
               @text={{t 'resources.policy.actions.delete_recording'}}
               {{on 'click' (route-action 'delete' @model.sessionRecording)}}
