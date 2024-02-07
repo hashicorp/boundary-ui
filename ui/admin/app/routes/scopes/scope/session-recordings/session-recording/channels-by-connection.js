@@ -7,6 +7,8 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionRoute extends Route {
   // =services
@@ -69,5 +71,20 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       this.router.refresh();
       throw new Error(e);
     }
+  }
+
+  /**
+   * Deletes the session recording
+   * @param {SessionRecording} recording
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(recording) {
+    await recording.destroyRecord();
+    await this.router.replaceWith('scopes.scope.session-recordings');
+    this.router.refresh();
   }
 }

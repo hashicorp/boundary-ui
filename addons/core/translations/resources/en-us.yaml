@@ -949,6 +949,7 @@ policy:
     apply: Apply the storage policy to this scope and its children
     new: Add a new storage policy
     update: Re-apply storage policy
+    delete_recording: Delete recording
   questions:
     detach: Are you sure you want to detach this storage policy?
   messages:

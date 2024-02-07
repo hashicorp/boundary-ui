@@ -60,6 +60,7 @@ export default factory.extend({
       'read',
       'download',
       'reapply-storage-policy',
+      'delete',
     ],
 
   withNonExistingUserAndTarget: trait({
