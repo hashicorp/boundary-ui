@@ -173,6 +173,15 @@ module(
       assert.dom(DROPDOWN_SELECTOR).doesNotExist();
     });
 
+    test('user can view manage dropdown with proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+
+      await visit(urls.sessionRecording);
+
+      assert.dom(DROPDOWN_SELECTOR).isVisible();
+    });
+
     test('user can delete a recording with proper authorization', async function (assert) {
       // Visit channel
       const count = getRecordingCount();
