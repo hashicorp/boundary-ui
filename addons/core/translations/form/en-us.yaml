@@ -58,8 +58,6 @@ worker_last_seen:
   help: Last time the worker reported status.
 worker_address:
   help: URL and port for this worker.
-worker_type:
-  help: Type of worker
 host_set:
   label: Host Set
 grant_scope:
