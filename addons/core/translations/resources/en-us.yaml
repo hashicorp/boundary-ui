@@ -326,6 +326,12 @@ session:
     address-port: Address & port
     ssh: SSH
   shell: Shell
+global:
+  title: Global
+  description: The global scope is the outermost scope. There is always a single global scope and it cannot be deleted.
+  messages:
+    settings:
+      title: Global Settings
 org:
   title: Org
   title_plural: Orgs
@@ -566,6 +572,8 @@ target:
       description: Additional information for this target will be provided here after your session is established.
   titles:
     new: New Target
+    active-sessions: Active sessions
+    sessions-flyout: Active sessions for {targetDisplayName}
   actions:
     create: New Target
     delete: Delete Target
@@ -575,12 +583,17 @@ target:
     remove-address: Remove address and save
     enable-session-recording: Enable Session Recording
     enable-recording: Enable recording
+    view-more-sessions: View more sessions
   types:
     tcp: Generic TCP
     ssh: SSH
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+  filter:
+    active-sessions:
+      yes: Has active sessions
+      no: No active sessions
   form:
     type:
       label: Type
@@ -904,7 +917,7 @@ worker:
         title: 1. Configure your new worker
         create_directory: Create a configuration file in a new directory on your server
         create_config: 'Open the file with a text editor, such as Vi. Paste the following configuration into the worker config file:'
-        save_config: Save the configuration in your `pki-worker.hcl` file.
+        save_config: Save the configuration in your <code>pki-worker.hcl</code> file.
       2:
         title: 2. Install & start Boundary on your server
         run_command: 'Run this command on your server to install Boundary:'
@@ -918,6 +931,7 @@ worker:
 policy:
   title: Storage Policy
   title_plural: Storage Policies
+  description: A Storage Policy defines how long Session Recordings must be kept and when they should be deleted.
   titles:
     new: New Storage Policy
     policy_name: Policy name
@@ -928,18 +942,22 @@ policy:
     days: days
     policy_description: Store recorded sessions for at least this long.
     create_policy_description: Enable session recording for projects in this org.
+    retain_until: Retain until
   actions:
     delete: Delete Storage Policy
     add: Add Storage Policy
     apply: Apply the storage policy to this scope and its children
     new: Add a new storage policy
+    update: Re-apply storage policy
   questions:
     detach: Are you sure you want to detach this storage policy?
   messages:
     detach: Successfully detached
+    reapply: Successfully reapplied
+    later: Policy will be reapplied after the recording has completed
     none:
       title: No storage policies yet
-      description: Storage policies define how long to store recordings before they are automatically deleted. We recommend checking your data retention policies for compliance requirements.
+      description: A Storage Policy defines how long Session Recordings must be kept and when they should be deleted. We recommend checking your data retention policies for compliance requirements.
       link: Create a new storage policy
   form:
     retention_policy:

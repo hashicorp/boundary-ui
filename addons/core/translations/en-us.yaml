@@ -38,6 +38,8 @@ titles:
   create-resources: Create Resources
   choose-an-option: Choose an option
   feature-edition: 'Edition: {edition}'
+  no-results-found: No results found
+  filters-applied: 'Filters Applied:'
   unit: Unit
   year: '{numberOfYears, plural, =1 {# year} other {# years}}'
   days: '{days, plural, =1 {# day} other {# days}}'
@@ -50,6 +52,8 @@ descriptions:
   no-results: We found no matching records.
   choose-a-provider: There are several built-in plugins for the most common providers. You can choose from one of the included plugins or use a custom plugin.
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
+  no-search-results: Sorry, we weren't able to find any {resource} for "{query}".
+  no-filter-results: Sorry, we weren’t able to find any {resource} within the filtered parameters.
 questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
@@ -89,3 +93,13 @@ onboarding:
       learn: Learn about Boundary Desktop app
       cli: Learn about Boundary command-line (CLI)
       api: Learn about Boundary API
+unsupported-controller:
+  title: Unsupported controller version
+  description:
+    message: The controller you have connected to is not supported by this version of the desktop app. You’ll be unable to see and connect to any targets as a result.
+    install: Download the supported version of the desktop app to fix this issue.
+  buttons:
+    download: Download supported version
+    releases-page: Go to releases page
+    change-cluster-url: Change cluster URL
+  error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page

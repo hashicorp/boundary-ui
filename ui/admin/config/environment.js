@@ -58,6 +58,7 @@ module.exports = function (environment) {
     documentation: {
       baseURL: 'https://boundaryproject.io/help/admin-ui',
       topics: {
+        global: '/global',
         org: '/orgs',
         'org.new': '/orgs/new',
         project: '/projects',
@@ -107,6 +108,9 @@ module.exports = function (environment) {
         'session-recording': '/session-recordings',
         'session-recording.retrieve-lost-session-recordings':
           '/session-recordings/retrieve-lost-session-recordings',
+        'storage-policy': '/storage-policy',
+        'storage-policy.new': '/storage-policy/new',
+        'storage-policy.update': '/storage-policy/update',
       },
     },
 

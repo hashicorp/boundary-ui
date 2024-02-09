@@ -35,7 +35,7 @@ export default class ScopesRoute extends Route {
     });
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    return this.store.findAll('scope').catch(() => A([]));
+    return this.store.query('scope', {}).catch(() => A([]));
   }
 
   /**
@@ -49,7 +49,7 @@ export default class ScopesRoute extends Route {
   @notifySuccess('resources.policy.messages.detach')
   async detachStoragePolicy(scope) {
     const { storage_policy_id } = scope;
-    await scope.detachStoragePolicy(storage_policy_id);
     scope.storage_policy_id = '';
+    await scope.detachStoragePolicy(storage_policy_id);
   }
 }

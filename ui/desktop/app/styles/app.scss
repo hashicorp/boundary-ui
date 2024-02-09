@@ -684,3 +684,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     color: var(--token-color-foreground-faint);
   }
 }
+
+// Unsupported controller modal
+.unsupported-modal-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.unsupported-modal-footer {
+  display: flex;
+  gap: 1rem;
+}

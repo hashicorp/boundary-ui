@@ -58,8 +58,6 @@ worker_last_seen:
   help: Last time the worker reported status.
 worker_address:
   help: URL and port for this worker.
-worker_type:
-  help: Type of worker
 host_set:
   label: Host Set
 grant_scope:
@@ -68,8 +66,8 @@ grant_scope:
 cluster-url:
   label: Cluster URL
   description: The Boundary URL to which to connect (e.g. protocol://host:port)
-proxy:
-  label: Proxy
+proxy_url:
+  label: Proxy URL
 issuer:
   label: Issuer
   help: The issuer URL. Boundary expects only the schema, host, and port and will strip off ".well-known/openid-configuration" if present. This will be used for configuration discovery as well as for validation of the "iss" claim.

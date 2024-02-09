@@ -337,10 +337,11 @@
     margin-bottom: sizing.rems(l);
   }
 
-  > code {
-    background-color: var(--ui-gray-subtler-5);
-    border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-    color: var(--failure);
+  > p code {
+    background-color: var(--token-color-surface-strong);
+    border-radius: 5px;
+    color: var(--token-color-foreground-primary);
+    padding: sizing.rems(xxxs) sizing.rems(xxs);
   }
 
   .worker-auth-token {
@@ -732,7 +733,14 @@
       }
     }
   }
-  /* stylelint-enable selector-class-pattern */
+
+  &.config-tags {
+    .hds-table__td:last-child {
+      // remove width from last cell
+      width: unset;
+    }
+    /* stylelint-enable selector-class-pattern */
+  }
 }
 
 .auth-methods-list-alert {
@@ -998,8 +1006,8 @@
 
 .policy-sidebar {
   background-color: var(--token-form-control-disabled-surface-color);
-  padding: 1rem;
-  width: 380px;
+  padding: 1.5rem 1rem 0.7rem;
+  width: 300px;
 
   .hds-card__container > ul {
     display: flex;
@@ -1015,10 +1023,6 @@
 }
 
 // add storage policy
-
-.add-storage-policy {
-  margin: 1rem 0;
-}
 
 .select-policy {
   margin-top: 1rem;

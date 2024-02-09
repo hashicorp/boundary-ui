@@ -11,15 +11,20 @@ import generateId from '../helpers/id';
 export default factory.extend({
   type: 'global',
 
-  authorized_actions: () =>
-    permissions.authorizedActionsFor('scope') || [
-      'no-op',
-      'read',
-      'update',
-      'delete',
-      'attach-storage-policy',
-      'detach-storage-policy',
-    ],
+  authorized_actions() {
+    const authorizedActions = ['no-op', 'read', 'update'];
+
+    // Storage policies can only be attatched to global and org scopes.
+    if (this.type === 'global' || this.type === 'org') {
+      authorizedActions.push('attach-storage-policy', 'detach-storage-policy');
+    }
+
+    if (this.type === 'org' || this.type === 'project') {
+      authorizedActions.push('delete');
+    }
+
+    return permissions.authorizedActionsFor('scope') || authorizedActions;
+  },
 
   authorized_collection_actions() {
     const collectionActions = {

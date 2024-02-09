@@ -5,12 +5,14 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionRoute extends Route {
   // =services
   @service store;
   @service session;
-
+  @service router;
   // =methods
 
   /**
@@ -47,5 +49,25 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       sessionRecording,
       storageBucket,
     };
+  }
+  /**
+   * Reapplies storage policy dates to session recording
+   * @param {SessionRecordingModel}
+   */
+  @action
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess(({ end_time }) =>
+    !end_time
+      ? 'resources.policy.messages.later'
+      : 'resources.policy.messages.reapply',
+  )
+  async reapplyStoragepolicy(sessionRecording) {
+    try {
+      await sessionRecording.reapplyStoragePolicy();
+    } catch (e) {
+      await this.router.replaceWith('scopes.scope.session-recordings');
+      this.router.refresh();
+      throw new Error(e);
+    }
   }
 }

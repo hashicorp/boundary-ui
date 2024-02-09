@@ -3,6 +3,16 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
+{{#if @model.isGlobal}}
+  {{page-title (t 'resources.global.title')}}
+  <Breadcrumbs::Item
+    @text={{t 'resources.global.title'}}
+    @icon='globe'
+    @route='scopes.scope.edit'
+    @model={{@model.id}}
+  />
+{{/if}}
+
 <Rose::Layout::Page as |page|>
 
   <page.breadcrumbs>
@@ -10,6 +20,13 @@
   </page.breadcrumbs>
 
   <page.header>
+    {{#if @model.isGlobal}}
+      <h2>
+        {{t 'resources.global.title'}}
+        <DocLink @doc='global' @iconSize='large' />
+      </h2>
+      <p>{{t 'resources.global.description'}}</p>
+    {{/if}}
     {{#if @model.isOrg}}
       <h2>
         {{t 'resources.org.title'}}
@@ -43,7 +60,7 @@
     </page.navigation>
   {{/if}}
 
-  {{#if (can 'delete model' @model)}}
+  {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
     <page.actions>
       <Rose::Dropdown
         @text={{t 'actions.manage'}}
@@ -94,10 +111,22 @@
             {{#if @model.storage_policy_id}}
               <Hds::Text::Body @tag='p' class='description'>
                 {{t 'resources.policy.titles.policy_description'}}
+                <Hds::Link::Inline
+                  @color='secondary'
+                  @href={{(doc-url 'storage-policy.update')}}
+                >
+                  {{t 'actions.read-more'}}
+                </Hds::Link::Inline>
               </Hds::Text::Body>
             {{else}}
               <Hds::Text::Body @tag='p' class='description'>
                 {{t 'resources.policy.titles.create_policy_description'}}
+                <Hds::Link::Inline
+                  @color='secondary'
+                  @href={{(doc-url 'storage-policy.update')}}
+                >
+                  {{t 'actions.read-more'}}
+                </Hds::Link::Inline>
               </Hds::Text::Body>
             {{/if}}
             {{#if @model.storage_policy_id}}
@@ -105,7 +134,7 @@
                 <P.Item
                   @icon='hourglass'
                   @color='boundary'
-                  @text={{this.storage_policy.name}}
+                  @text={{this.storage_policy.displayName}}
                 >
                   {{#if this.storage_policy.retain_for.days}}
                     <Hds::Text::Body

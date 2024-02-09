@@ -70,7 +70,7 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
       'The total number of errors that occurred during the use of the Session.',
     readOnly: true,
   })
-  errors;
+  errors_number;
 
   @attr('date', {
     description: 'The time the Session started.',
@@ -109,4 +109,17 @@ export default class GeneratedSessionRecordingModel extends BaseModel {
     readOnly: true,
   })
   error_details;
+
+  @attr('date', {
+    description: 'The time until a session recording is required to be stored.',
+    readOnly: true,
+  })
+  retain_until;
+
+  @attr('date', {
+    description:
+      'The time a session recording is scheduled to be automatically deleted.',
+    readOnly: true,
+  })
+  delete_after;
 }

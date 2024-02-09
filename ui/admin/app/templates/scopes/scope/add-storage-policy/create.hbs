@@ -15,9 +15,11 @@
   </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2'>
+    <h2>
       {{t 'resources.policy.titles.new'}}
-    </Hds::Text::Display>
+      <DocLink @doc='storage-policy.new' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.policy.description'}}</p>
   </page.header>
 
   <page.body>

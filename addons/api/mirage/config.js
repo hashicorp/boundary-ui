@@ -73,7 +73,11 @@ function routes() {
           return scope.scope ? scope.scope.id === scope_id : false;
         });
       }
-      return resultSet.filter(makeBooleanFilter(filter));
+      const filteredResultSet = resultSet.filter(makeBooleanFilter(filter));
+      // add a response_type to the response to simulate pagination
+      // without having response_type, the unsupported controller modal
+      // will show when running with mirage
+      return { items: filteredResultSet.models, response_type: 'complete' };
     },
   );
   this.post('/scopes', function ({ scopes }) {
@@ -773,6 +777,24 @@ function routes() {
       } else {
         return sessionRecordings.find(id);
       }
+    },
+  );
+
+  this.post(
+    '/session-recordings/:idMethod',
+    function ({ sessionRecordings }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const record = sessionRecordings.find(id);
+      const updatedAttrs = {
+        version: attrs.version,
+      };
+      if (method === 'reapply-storage-policy') {
+        updatedAttrs.retain_until = faker.date.recent();
+        updatedAttrs.delete_after = faker.date.recent();
+      }
+      return record.update(updatedAttrs);
     },
   );
 

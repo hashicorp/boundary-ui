@@ -31,6 +31,7 @@ module('Acceptance | authentication', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      emptyOrg: null,
       project: null,
     },
     authMethods: {
@@ -92,6 +93,10 @@ module('Acceptance | authentication', function (hooks) {
     stubs.project = { id: instances.scopes.project.id, type: 'project' };
 
     // create other resources
+    instances.scopes.emptyOrg = this.server.create('scope', {
+      type: 'org',
+      scope: stubs.global,
+    });
     instances.authMethods.global = this.server.create('auth-method', {
       scope: instances.scopes.global,
       type: 'password',
@@ -138,15 +143,6 @@ module('Acceptance | authentication', function (hooks) {
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
-  test('visiting authenticate route when there no methods shows a message', async function (assert) {
-    assert.expect(2);
-    instances.authMethods.global.destroy();
-    await visit(urls.authenticate.global);
-    await a11yAudit();
-    assert.strictEqual(currentURL(), urls.authenticate.global);
-    assert.ok(find('.rose-message'));
-  });
-
   test('visiting authenticate route without clusterUrl redirects to clusterUrl index', async function (assert) {
     assert.expect(1);
     this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
@@ -157,7 +153,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting authenticate route when the scope cannot be loaded is allowed', async function (assert) {
     assert.expect(1);
-    this.server.get('/scopes', () => {
+    this.server.get('/scopes/global', () => {
       return new Response(404);
     });
     await visit(urls.authenticate.global);
@@ -254,5 +250,13 @@ module('Acceptance | authentication', function (hooks) {
     );
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+  });
+
+  test('org scopes with no auth methods are not visible in dropdown', async function (assert) {
+    await visit(urls.authenticate.methods.global);
+
+    await click('.rose-dropdown-trigger');
+
+    assert.dom('.rose-dropdown-content a').exists({ count: 2 });
   });
 });
