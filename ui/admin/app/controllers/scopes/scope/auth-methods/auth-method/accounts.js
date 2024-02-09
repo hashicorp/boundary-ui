@@ -55,7 +55,7 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsController extends 
         'scopes.scope.auth-methods.auth-method.accounts',
       );
     }
-    this.router.refresh();
+    await this.router.refresh();
   }
 
   /**
@@ -72,6 +72,6 @@ export default class ScopesScopeAuthMethodsAuthMethodAccountsController extends 
     await this.router.replaceWith(
       'scopes.scope.auth-methods.auth-method.accounts',
     );
-    this.router.refresh();
+    await this.router.refresh();
   }
 }
