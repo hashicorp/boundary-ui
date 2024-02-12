@@ -44,6 +44,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   const TOGGLE_SELECTOR = '[name="prompts"]';
+
+  const ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR = '[data-test-add-claim-map]';
+  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input';
+  const ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR =
+    '[data-test-to-claim-select]';
+
   let getAuthMethodsCount;
   let featuresService;
 
@@ -124,10 +130,10 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'claims_scopes');
 
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
+    await fillIn(ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR, 'from_claim');
+    await select(ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR, 'email');
 
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await click(ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR);
 
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);

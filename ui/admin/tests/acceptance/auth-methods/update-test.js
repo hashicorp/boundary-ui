@@ -59,6 +59,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     '.list-wrapper-field tbody tr:last-child select';
   const SIGNING_ALGORITHMS_ADD_BTN_SELECTOR = '[data-test-add-option-button]';
 
+  const ACCOUNT_CLAIM_MAPS_REMOVE_BTN_SELECTOR = '[data-test-remove-claim-map]';
+  const ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR = '[data-test-add-claim-map]';
+  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input';
+  const ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR =
+    '[data-test-to-claim-select]';
+
   const instances = {
     scopes: {
       global: null,
@@ -162,13 +168,14 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     // Remove all claim maps
     await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
+      findAll(ACCOUNT_CLAIM_MAPS_REMOVE_BTN_SELECTOR).map((element) =>
         click(element),
       ),
     );
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+
+    await fillIn(ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR, 'from_claim');
+    await select(ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR, 'email');
+    await click(ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR);
 
     // Remove all certificates
     const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
