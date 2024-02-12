@@ -4,6 +4,7 @@
  */
 
 import ModelAbility from './model';
+import { STATE_SESSION_RECORDING_AVAILABLE } from 'api/models/session-recording';
 
 /**
  * Provides abilities for session recordings.
@@ -26,7 +27,11 @@ export default class SessionRecordingAbility extends ModelAbility {
    * @type {boolean}
    */
   get canDelete() {
-    return !this.model.isUnknown && super.canDelete;
+    return (
+      !this.model.isUnknown &&
+      super.canDelete &&
+      this.model.state === STATE_SESSION_RECORDING_AVAILABLE
+    );
   }
 
   get canDownload() {

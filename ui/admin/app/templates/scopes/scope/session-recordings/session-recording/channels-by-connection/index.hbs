@@ -30,16 +30,14 @@
             (route-action 'reapplyStoragepolicy' @model.sessionRecording)
           }}
         />
-        {{#if (eq @model.sessionRecording.state 'available')}}
-          {{#if (can 'delete session-recording' @model.sessionRecording)}}
-            <dd.Separator />
-            <dd.Interactive
-              data-test-manage-dropdown-delete
-              @color='critical'
-              @text={{t 'resources.policy.actions.delete_recording'}}
-              {{on 'click' (route-action 'delete' @model.sessionRecording)}}
-            />
-          {{/if}}
+        {{#if (can 'delete session-recording' @model.sessionRecording)}}
+          <dd.Separator />
+          <dd.Interactive
+            data-test-manage-dropdown-delete
+            @color='critical'
+            @text={{t 'resources.policy.actions.delete_recording'}}
+            {{on 'click' (route-action 'delete' @model.sessionRecording)}}
+          />
         {{/if}}
       </Hds::Dropdown>
     {{/if}}
