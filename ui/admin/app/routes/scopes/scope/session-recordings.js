@@ -79,7 +79,7 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
    */
   @action
   @loading
-  @confirm('questions.delete-confirm')
+  @confirm('resources.session-recording.questions.delete')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async delete(recording) {

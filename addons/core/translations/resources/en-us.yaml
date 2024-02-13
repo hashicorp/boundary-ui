@@ -354,6 +354,8 @@ session-recording:
   up: '{bytes} up'
   down: '{bytes} down'
   duration: '{time} duration'
+  questions:
+    delete: Are you sure you want to delete this recording?
   connection:
     title: Connection
     title_index: Connection {index}
