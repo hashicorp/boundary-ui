@@ -153,7 +153,7 @@ yarn run e2e:ent:docker
 ### Destroy Enos Scenario
 
 Using Terminal 1:
-- `$ enos scenario destroy e2e_ui builder:local`
+- `$ enos scenario destroy e2e_ui_aws builder:local`
 - After all the steps pass, you should see a `Enos operations finished!`.
 
 
