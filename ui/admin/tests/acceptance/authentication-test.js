@@ -76,6 +76,15 @@ module('Acceptance | authentication', function (hooks) {
       },
       'withChildren',
     );
+    // create an emtpy org with no auth methods
+    this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: globalScope.id, type: globalScope.type },
+      },
+      'withChildren',
+    );
     scope = { id: orgScope.id, type: orgScope.type };
     globalAuthMethod = this.server.create('auth-method', {
       scope: globalScope,
@@ -366,4 +375,12 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   // TODO:  test OIDC retry and cancel
+
+  test('org scopes with no auth methods are not visible in dropdown', async function (assert) {
+    await visit(authMethodGlobalAuthenticateURL);
+
+    await click('.rose-dropdown-trigger');
+
+    assert.dom('.rose-dropdown-content a').exists({ count: 2 });
+  });
 });
