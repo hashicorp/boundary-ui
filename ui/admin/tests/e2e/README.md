@@ -15,7 +15,7 @@
     - [Setup Enos:](#setup-enos)
   - [Run tests:](#run-tests)
     - [Launch Enos Scenario](#launch-enos-scenario)
-    - [Run tests](#run-tests-1)
+    - [Run tests](#run-tests)
     - [Destroy Enos Scenario](#destroy-enos-scenario)
   - [Developing Tests](#developing-tests)
 
