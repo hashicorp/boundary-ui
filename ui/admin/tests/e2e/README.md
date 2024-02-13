@@ -4,7 +4,6 @@
 # Admin UI e2e tests
 
 - [Admin UI e2e tests](#admin-ui-e2e-tests)
-- [Admin UI e2e tests](#admin-ui-e2e-tests-1)
   - [Prerequisites:](#prerequisites)
     - [Accesses](#accesses)
     - [Software](#software)
