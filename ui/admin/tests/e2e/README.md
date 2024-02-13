@@ -85,7 +85,7 @@ You need to provide an SSH Key pair for the EC2 instance. We recommend creating 
 
 ### Setup HCP Terraform (Terraform cloud):
 
-Log in to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens). Make sure you are added to the `hashicorp-qti` org before creating the token.
+Log in to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens). Make sure you are added to the `hashicorp-qti` org in order for the created token to be valid.
 
 **Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
 
