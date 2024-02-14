@@ -108,6 +108,40 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
+  <Hds::Form::Select::Field
+    @isOptional={{true}}
+    @width='100%'
+    name='credential_type'
+    disabled={{or form.disabled (not @model.isNew)}}
+    {{on 'input' (set-from-event @model 'credential_type')}}
+    as |F|
+  >
+    <F.Label>
+      {{t 'resources.credential-library.form.credential_type.label'}}
+    </F.Label>
+    <F.HelperText>
+      {{t 'resources.credential-library.form.credential_type.help'}}
+    </F.HelperText>
+    <F.Options>
+      <option disabled hidden selected value='unspecified'>
+        {{t 'titles.choose-an-option'}}
+      </option>
+
+      {{#each this.credentialTypes as |type|}}
+        <option value={{type}} selected={{eq type @model.credential_type}}>
+          {{t (concat 'resources.credential-library.titles.' type)}}
+        </option>
+      {{/each}}
+    </F.Options>
+    {{#if @model.errors.credential_type}}
+      <F.Error as |E|>
+        {{#each @model.errors.credential_type as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
+  </Hds::Form::Select::Field>
+
   <Hds::Form::Radio::Group
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'http_method')}}
