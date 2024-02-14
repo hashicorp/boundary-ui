@@ -46,7 +46,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const TOGGLE_SELECTOR = '[name="prompts"]';
 
   const ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR = '[data-test-add-claim-map]';
-  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input';
+  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input]';
   const ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR =
     '[data-test-to-claim-select]';
 
