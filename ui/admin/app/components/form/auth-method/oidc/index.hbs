@@ -12,31 +12,29 @@
   as |form|
 >
 
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <Hds::Form::TextInput::Field @value={{@model.type}} disabled={{true}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='name'
-    @type='text'
+  <Hds::Form::TextInput::Field
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
@@ -48,33 +46,26 @@
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
     <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
-    {{#if @model.errors.description}}
+  </Hds::Form::Textarea::Field>
+
+  <Hds::Form::TextInput::Field
+    @value={{@model.issuer}}
+    @isInvalid={{@model.errors.issuer}}
+    disabled={{form.disabled}}
+    name='issuer'
+    {{on 'input' (set-from-event @model 'issuer')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.issuer.label'}}</F.Label>
+    <F.HelperText>{{t 'form.issuer.help'}}</F.HelperText>
+    {{#if @model.errors.issuer}}
       <F.Error as |E|>
-        {{#each @model.errors.description as |error|}}
+        {{#each @model.errors.issuer as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::Textarea::Field>
-
-  <form.input
-    @name='issuer'
-    @type='text'
-    @value={{@model.issuer}}
-    @label={{t 'form.issuer.label'}}
-    @helperText={{t 'form.issuer.help'}}
-    @error={{@model.errors.issuer}}
-    readonly={{false}}
-    as |field|
-  >
-    {{#if @model.errors.issuer}}
-      <field.errors as |errors|>
-        {{#each @model.errors.issuer as |error|}}
-          <errors.message>{{error.message}}</errors.message>
-        {{/each}}
-      </field.errors>
-    {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Checkbox::Field
     name='disable_discovered_config_validation'
@@ -95,52 +86,52 @@
     </F.HelperText>
   </Hds::Form::Checkbox::Field>
 
-  <form.input
-    @name='client_id'
-    @type='text'
+  <Hds::Form::TextInput::Field
     @value={{@model.client_id}}
-    @label={{t 'form.client_id.label'}}
-    @helperText={{t 'form.client_id.help'}}
-    @error={{@model.errors.client_id}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.client_id}}
+    disabled={{form.disabled}}
+    name='client_id'
+    {{on 'input' (set-from-event @model 'client_id')}}
+    as |F|
   >
+    <F.Label>{{t 'form.client_id.label'}}</F.Label>
+    <F.HelperText>{{t 'form.client_id.help'}}</F.HelperText>
     {{#if @model.errors.client_id}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.client_id as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='client_secret'
-    @type='password'
+  <Hds::Form::TextInput::Field
     @value={{@model.client_secret}}
-    @label={{t 'form.client_secret.label'}}
-    @helperText={{t 'form.client_secret.help'}}
-    @error={{@model.errors.client_secret}}
-    readonly={{false}}
-    @hasVisibilityToggle={{false}}
-    as |field|
+    @isInvalid={{@model.errors.client_secret}}
+    disabled={{form.disabled}}
+    name='client_secret'
+    {{on 'input' (set-from-event @model 'client_secret')}}
+    as |F|
   >
+    <F.Label>{{t 'form.client_secret.label'}}</F.Label>
+    <F.HelperText>{{t 'form.client_secret.help'}}</F.HelperText>
     {{#if @model.errors.client_secret}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.client_secret as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.client_secret_hmac}}
-      @label={{t 'form.client_secret_hmac.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'form.client_secret_hmac.label'}}</F.Label>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
 
   {{! Signing Algorithms }}
@@ -406,45 +397,45 @@
 
   </Form::Field::ListWrapper>
 
-  <form.input
-    @name='max_age'
-    @type='number'
+  <Hds::Form::TextInput::Field
     @value={{@model.max_age}}
-    @label={{t 'form.max_age.label'}}
-    @helperText={{t 'form.max_age.help'}}
-    @error={{@model.errors.max_age}}
-    readonly={{false}}
+    @isInvalid={{@model.errors.max_age}}
     step='1'
     min='0'
-    as |field|
+    disabled={{form.disabled}}
+    name='max_age'
+    {{on 'input' (set-from-event @model 'max_age')}}
+    as |F|
   >
+    <F.Label>{{t 'form.max_age.label'}}</F.Label>
+    <F.HelperText>{{t 'form.max_age.help'}}</F.HelperText>
     {{#if @model.errors.max_age}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.max_age as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='api_url_prefix'
-    @type='test'
+  <Hds::Form::TextInput::Field
     @value={{@model.api_url_prefix}}
-    @label={{t 'form.api_url_prefix.label'}}
-    @helperText={{t 'form.api_url_prefix.help'}}
-    @error={{@model.errors.api_url_prefix}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.api_url_prefix}}
+    disabled={{form.disabled}}
+    name='api_url_prefix'
+    {{on 'input' (set-from-event @model 'api_url_prefix')}}
+    as |F|
   >
+    <F.Label>{{t 'form.api_url_prefix.label'}}</F.Label>
+    <F.HelperText>{{t 'form.api_url_prefix.help'}}</F.HelperText>
     {{#if @model.errors.api_url_prefix}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.api_url_prefix as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Fieldset @isOptional={{true}} as |F|>
     <F.Legend>{{t 'form.prompts.label'}}</F.Legend>
@@ -499,13 +490,14 @@
   </Hds::Form::Fieldset>
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.callback_url}}
-      @label={{t 'form.callback_url.label'}}
-      @helperText={{t 'form.callback_url.help'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'form.callback_url.label'}}</F.Label>
+      <F.HelperText>{{t 'form.callback_url.help'}}</F.HelperText>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
 
   {{#if (can 'save model' @model)}}
