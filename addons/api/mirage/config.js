@@ -798,6 +798,8 @@ function routes() {
     },
   );
 
+  this.del('/session-recordings/:id');
+
   /* Uncomment the following line and the Response import above
    * Then change the response code to simulate error responses.
    * this.get('/scopes', () => new Response(505));
