@@ -232,7 +232,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('.hds-form-error__message').textContent.trim(),
         'Name is required.',
       );
     });
@@ -267,7 +267,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('.hds-form-error__message').textContent.trim(),
         'Name is required.',
       );
     });
@@ -302,7 +302,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('.hds-form-error__message').textContent.trim(),
         'Name is required.',
       );
     });

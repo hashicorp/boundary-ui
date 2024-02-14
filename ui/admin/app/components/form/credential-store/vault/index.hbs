@@ -11,24 +11,25 @@
   as |form|
 >
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    name='name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
@@ -85,119 +86,133 @@
       </InfoField>
     {{/if}}
   {{/if}}
-  <form.input
-    @name='address'
-    @type='text'
+
+  <Hds::Form::TextInput::Field
     @value={{@model.address}}
-    @label={{t 'resources.credential-store.form.address.label'}}
-    @error={{@model.errors.address}}
-    @helperText={{t 'resources.credential-store.form.address.help'}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.address}}
+    name='address'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'address')}}
+    as |F|
   >
+    <F.Label>{{t 'resources.credential-store.form.address.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.credential-store.form.address.help'}}
+    </F.HelperText>
     {{#if @model.errors.address}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.address as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
+
   {{#if (feature-flag 'vault-worker-filter')}}
-    <form.input
-      @name='worker_filter'
-      @type='text'
+    <Hds::Form::TextInput::Field
       @value={{@model.worker_filter}}
-      @label={{t 'resources.credential-store.form.worker_filter.label'}}
-      @error={{@model.errors.worker_filter}}
-      @helperText={{t 'resources.credential-store.form.worker_filter.help'}}
-      @linkText={{t 'actions.learn-more'}}
-      @link={{doc-url 'worker-filters'}}
-      disabled={{@model.isSaving}}
-      readonly={{false}}
-      as |field|
+      @isInvalid={{@model.errors.worker_filter}}
+      name='worker_filter'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'worker_filter')}}
+      as |F|
     >
+      <F.Label>
+        {{t 'resources.credential-store.form.worker_filter.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.credential-store.form.worker_filter.help'}}
+        <Hds::Link::Inline @href={{doc-url 'worker-filters'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
       {{#if @model.errors.worker_filter}}
-        <field.errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.worker_filter as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </field.errors>
+        </F.Error>
       {{/if}}
-    </form.input>
+    </Hds::Form::TextInput::Field>
   {{/if}}
 
   {{#if (or @model.isNew form.isEditable)}}
-    <form.input
-      @name='token'
-      @type='text'
+    <Hds::Form::TextInput::Field
       @value={{@model.token}}
-      @label={{t 'resources.credential-store.form.token.label'}}
-      @error={{@model.errors.token}}
-      @helperText={{t 'resources.credential-store.form.token.help'}}
-      disabled={{@model.isSaving}}
-      readonly={{false}}
-      as |field|
+      @isInvalid={{@model.errors.token}}
+      name='token'
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'token')}}
+      as |F|
     >
+      <F.Label>{{t 'resources.credential-store.form.token.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.credential-store.form.token.help'}}
+      </F.HelperText>
       {{#if @model.errors.token}}
-        <field.errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.token as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </field.errors>
+        </F.Error>
       {{/if}}
-    </form.input>
+    </Hds::Form::TextInput::Field>
   {{/if}}
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.token_hmac}}
-      @label={{t 'resources.credential-store.form.token_hmac.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.credential-store.form.token_hmac.label'}}
+      </F.Label>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
-
-  <form.input
-    @name='namespace'
-    @type='text'
+  <Hds::Form::TextInput::Field
     @value={{@model.namespace}}
-    @label={{t 'resources.credential-store.form.namespace.label'}}
-    @error={{@model.errors.namespace}}
-    @helperText={{t 'resources.credential-store.form.namespace.help'}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.namespace}}
+    name='namespace'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'namespace')}}
+    as |F|
   >
+    <F.Label>{{t 'resources.credential-store.form.namespace.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.credential-store.form.namespace.help'}}
+    </F.HelperText>
     {{#if @model.errors.namespace}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.namespace as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='tls_server_name'
-    @type='text'
+  <Hds::Form::TextInput::Field
     @value={{@model.tls_server_name}}
-    @label={{t 'resources.credential-store.form.tls_server_name.label'}}
-    @error={{@model.errors.tls_server_name}}
-    @helperText={{t 'resources.credential-store.form.tls_server_name.help'}}
-    disabled={{@model.isSaving}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.tls_server_name}}
+    name='tls_server_name'
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'tls_server_name')}}
+    as |F|
   >
+    <F.Label>
+      {{t 'resources.credential-store.form.tls_server_name.label'}}
+    </F.Label>
+    <F.HelperText>
+      {{t 'resources.credential-store.form.tls_server_name.help'}}
+    </F.HelperText>
     {{#if @model.errors.tls_server_name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.tls_server_name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Checkbox::Field
     name='tls_skip_verify'
@@ -271,14 +286,17 @@
   </Hds::Form::Textarea::Field>
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.client_certificate_key_hmac}}
-      @label={{t
-        'resources.credential-store.form.client_certificate_key_hmac.label'
-      }}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>
+        {{t
+          'resources.credential-store.form.client_certificate_key_hmac.label'
+        }}
+      </F.Label>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
 
   <Hds::Form::Textarea::Field
