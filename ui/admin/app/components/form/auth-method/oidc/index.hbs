@@ -46,6 +46,13 @@
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
     <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    {{#if @model.errors.description}}
+      <F.Error as |E|>
+        {{#each @model.errors.description as |error|}}
+          <E.Message>{{error.message}}</E.Message>
+        {{/each}}
+      </F.Error>
+    {{/if}}
   </Hds::Form::Textarea::Field>
 
   <Hds::Form::TextInput::Field
@@ -401,8 +408,8 @@
     name='max_age'
     @value={{@model.max_age}}
     @isInvalid={{@model.errors.max_age}}
-    step='1'
-    min='0'
+    step={{1}}
+    min={{0}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'max_age')}}
     as |F|
