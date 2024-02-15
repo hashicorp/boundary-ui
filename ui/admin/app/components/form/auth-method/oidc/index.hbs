@@ -245,7 +245,7 @@
     <F.HelperText>{{t 'form.account_claim_maps.help'}}</F.HelperText>
     {{#let (unique-id) (unique-id) as |fromHeaderID toHeaderID|}}
       <F.Control>
-        <Hds::Table class='list-wrapper-field' name='account_claim_maps'>
+        <Hds::Table class='list-wrapper-field'>
           <:head as |H|>
             <H.Tr>
               <H.Th id={{fromHeaderID}}>{{t 'form.from_claim.label'}}</H.Th>
