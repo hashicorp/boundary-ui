@@ -17,10 +17,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    name='name'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
@@ -37,10 +37,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
+    name='description'
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
     disabled={{form.disabled}}
     as |F|
   >
@@ -87,10 +87,10 @@
   </Hds::Form::Checkbox::Field>
 
   <Hds::Form::TextInput::Field
+    name='client_id'
     @value={{@model.client_id}}
     @isInvalid={{@model.errors.client_id}}
     disabled={{form.disabled}}
-    name='client_id'
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|
   >
@@ -106,10 +106,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
+    name='client_secret'
     @value={{@model.client_secret}}
     @isInvalid={{@model.errors.client_secret}}
     disabled={{form.disabled}}
-    name='client_secret'
     {{on 'input' (set-from-event @model 'client_secret')}}
     as |F|
   >
@@ -398,12 +398,12 @@
   </Form::Field::ListWrapper>
 
   <Hds::Form::TextInput::Field
+    name='max_age'
     @value={{@model.max_age}}
     @isInvalid={{@model.errors.max_age}}
     step='1'
     min='0'
     disabled={{form.disabled}}
-    name='max_age'
     {{on 'input' (set-from-event @model 'max_age')}}
     as |F|
   >
@@ -419,10 +419,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
+    name='api_url_prefix'
     @value={{@model.api_url_prefix}}
     @isInvalid={{@model.errors.api_url_prefix}}
     disabled={{form.disabled}}
-    name='api_url_prefix'
     {{on 'input' (set-from-event @model 'api_url_prefix')}}
     as |F|
   >
