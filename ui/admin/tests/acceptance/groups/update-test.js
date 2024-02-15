@@ -102,7 +102,7 @@ module('Acceptance | groups | update', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
+      find('.hds-form-error__message').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );
