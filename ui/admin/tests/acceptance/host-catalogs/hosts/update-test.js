@@ -130,7 +130,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
       'The request was invalid.',
     );
     assert.ok(
-      find('.hds-form-error__message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
     );
   });

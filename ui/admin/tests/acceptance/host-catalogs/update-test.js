@@ -123,7 +123,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
   test('can discard unsaved host catalog changes via dialog', async function (assert) {

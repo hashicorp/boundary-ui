@@ -115,7 +115,7 @@ module('Acceptance | groups | create', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.hds-form-error__message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );
