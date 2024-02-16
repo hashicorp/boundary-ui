@@ -12,24 +12,25 @@
   as |form|
 >
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
+    @isOptional={{true}}
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
@@ -50,12 +51,9 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </InfoField>
 
   <InfoField
     @value={{t 'descriptions.provider'}}
@@ -121,27 +119,30 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.input
-    @name='sync_interval_seconds'
-    @type='number'
+  <Hds::Form::TextInput::Field
+    name='sync_interval_seconds'
+    @isOptional={{true}}
     @value={{@model.sync_interval_seconds}}
-    @label={{t 'form.sync-interval.label'}}
-    @error={{@model.errors.sync_interval_seconds}}
-    @helperText={{t 'form.sync-interval.help'}}
-    @link={{doc-url 'host-set.sync-interval-seconds'}}
-    @linkText={{t 'actions.learn-more'}}
-    min='0'
-    step='1'
-    as |field|
+    @isInvalid={{@model.errors.sync_interval_seconds}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'sync_interval_seconds')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.name.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-set.sync-interval-seconds'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.sync_interval_seconds}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.sync_interval_seconds as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   {{#if (can 'save model' @model)}}
     <form.actions
