@@ -12,9 +12,9 @@
   as |form|
 >
 
-  <Hds::Form::TextInput::Field @value={{@model.type}} disabled={{true}} as |F|>
+  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
+  </InfoField>
 
   <Hds::Form::TextInput::Field
     name='name'
@@ -58,6 +58,7 @@
   <Hds::Form::TextInput::Field
     @value={{@model.issuer}}
     @isInvalid={{@model.errors.issuer}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
     name='issuer'
     {{on 'input' (set-from-event @model 'issuer')}}
@@ -97,6 +98,7 @@
     name='client_id'
     @value={{@model.client_id}}
     @isInvalid={{@model.errors.client_id}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|
@@ -116,7 +118,9 @@
     name='client_secret'
     @value={{@model.client_secret}}
     @isInvalid={{@model.errors.client_secret}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
+    type='password'
     {{on 'input' (set-from-event @model 'client_secret')}}
     as |F|
   >

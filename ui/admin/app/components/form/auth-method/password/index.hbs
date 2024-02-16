@@ -10,9 +10,9 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <Hds::Form::TextInput::Field @value={{@model.type}} disabled={{true}} as |F|>
+  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
-  </Hds::Form::TextInput::Field>
+  </InfoField>
 
   <Hds::Form::TextInput::Field
     name='name'
