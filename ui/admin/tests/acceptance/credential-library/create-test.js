@@ -88,12 +88,22 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
-  test('can create a credential library', async function (assert) {
+  test('can create a new credential library of type vault generic', async function (assert) {
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
+
     await fillIn('[name="name"]', 'random string');
+    await select('[name="credential_type"]', 'ssh_private_key');
+
     await click('[type="submit"]');
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
+
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      name: 'random string',
+    });
+
+    assert.strictEqual(credentialLibrary.name, 'random string');
+    assert.strictEqual(credentialLibrary.credentialType, 'ssh_private_key');
   });
 
   test('can create a new credential library of type vault ssh cert', async function (assert) {
