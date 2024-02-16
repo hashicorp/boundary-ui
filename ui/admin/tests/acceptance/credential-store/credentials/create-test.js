@@ -235,7 +235,7 @@ module(
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
       assert
-        .dom('.hds-form-error__message')
+        .dom('[data-test-error-message-password]')
         .hasText('Field required for creating a username-password credential.');
     });
 
@@ -270,7 +270,7 @@ module(
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
       assert
-        .dom('.hds-form-error__message')
+        .dom('[data-test-error-message-private-key]')
         .hasText('Field required for creating a username-key-pair credential.');
     });
 

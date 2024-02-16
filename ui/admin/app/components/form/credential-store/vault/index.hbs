@@ -12,10 +12,10 @@
 >
 
   <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    name='name'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
@@ -25,17 +25,19 @@
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message data-test-error-message-name>
+            {{error.message}}
+          </E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
+    name='description'
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
     disabled={{form.disabled}}
     as |F|
   >
@@ -88,9 +90,9 @@
   {{/if}}
 
   <Hds::Form::TextInput::Field
+    name='address'
     @value={{@model.address}}
     @isInvalid={{@model.errors.address}}
-    name='address'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'address')}}
     as |F|
@@ -110,9 +112,9 @@
 
   {{#if (feature-flag 'vault-worker-filter')}}
     <Hds::Form::TextInput::Field
+      name='worker_filter'
       @value={{@model.worker_filter}}
       @isInvalid={{@model.errors.worker_filter}}
-      name='worker_filter'
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'worker_filter')}}
       as |F|
@@ -138,9 +140,9 @@
 
   {{#if (or @model.isNew form.isEditable)}}
     <Hds::Form::TextInput::Field
+      name='token'
       @value={{@model.token}}
       @isInvalid={{@model.errors.token}}
-      name='token'
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'token')}}
       as |F|
@@ -171,9 +173,9 @@
     </Hds::Form::TextInput::Field>
   {{/unless}}
   <Hds::Form::TextInput::Field
+    name='namespace'
     @value={{@model.namespace}}
     @isInvalid={{@model.errors.namespace}}
-    name='namespace'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'namespace')}}
     as |F|
@@ -192,9 +194,9 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::TextInput::Field
+    name='tls_server_name'
     @value={{@model.tls_server_name}}
     @isInvalid={{@model.errors.tls_server_name}}
-    name='tls_server_name'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'tls_server_name')}}
     as |F|
@@ -240,10 +242,10 @@
   </Hds::Form::Checkbox::Field>
 
   <Hds::Form::Textarea::Field
+    name='client_certificate'
     @value={{@model.client_certificate}}
     @isInvalid={{@model.errors.client_certificate}}
     @isOptional={{true}}
-    name='client_certificate'
     disabled={{form.disabled}}
     as |F|
   >
@@ -263,10 +265,10 @@
   </Hds::Form::Textarea::Field>
 
   <Hds::Form::Textarea::Field
+    name='client_certificate_key'
     @value={{@model.client_certificate_key}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.client_certificate_key}}
-    name='client_certificate_key'
     disabled={{form.disabled}}
     as |F|
   >
@@ -300,10 +302,10 @@
   {{/unless}}
 
   <Hds::Form::Textarea::Field
+    name='ca_cert'
     @value={{@model.ca_cert}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.ca_cert}}
-    @name='ca_cert'
     disabled={{form.disabled}}
     as |F|
   >
