@@ -102,13 +102,7 @@
             </span>
           </B.Td>
           <B.Td>
-            <Copyable
-              @text={{B.data.id}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-            </Copyable>
+            <Hds::Copy::Snippet @textToCopy={{B.data.id}} @color='secondary' />
           </B.Td>
           <B.Td>
             {{#if B.data.isActive}}
@@ -130,15 +124,10 @@
           </B.Td>
           <B.Td>
             <div>
-              <Copyable
-                @text={{B.data.project.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code
-                  data-test-target-project-id={{B.data.project.id}}
-                >{{B.data.project.id}}</Hds::Text::Code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.project.id}}
+                @color='secondary'
+              />
             </div>
             {{#if B.data.project.name}}
               <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
@@ -225,19 +214,17 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
+              <LinkTo
+                @route='scopes.scope.projects.sessions.session.index'
+                @model={{B.data.id}}
+                data-test-targets-session-detail-link={{B.data.id}}
               >
-                <LinkTo
-                  @route='scopes.scope.projects.sessions.session.index'
-                  @model={{B.data.id}}
-                  data-test-targets-session-detail-link={{B.data.id}}
-                >
-                  <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                </LinkTo>
-              </Copyable>
+                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+              </LinkTo>
             </B.Td>
             <B.Td>
               <time datetime={{format-date-iso B.data.created_time}}>

@@ -77,30 +77,15 @@
       <:body as |B|>
         <B.Tr>
           <B.Td>
+            <Hds::Copy::Snippet @textToCopy={{B.data.id}} @color='secondary' />
             {{#if B.data.isAvailable}}
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
+              <LinkTo
+                @route='scopes.scope.projects.sessions.session.index'
+                @model={{B.data.id}}
+                data-test-session-detail-link={{B.data.id}}
               >
-                <LinkTo
-                  @route='scopes.scope.projects.sessions.session.index'
-                  @model={{B.data.id}}
-                  data-test-session-detail-link={{B.data.id}}
-                >
-                  <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                </LinkTo>
-              </Copyable>
-            {{else}}
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code
-                  data-test-session-id-copy={{B.data.id}}
-                >{{B.data.id}}</Hds::Text::Code>
-              </Copyable>
+                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
+              </LinkTo>
             {{/if}}
           </B.Td>
           <B.Td>
@@ -120,13 +105,10 @@
           <B.Td>
             {{#if B.data.isAvailable}}
               {{#if B.data.proxy}}
-                <Copyable
-                  @text={{B.data.proxy}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <Hds::Text::Code>{{B.data.proxy}}</Hds::Text::Code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.proxy}}
+                  @color='secondary'
+                />
               {{/if}}
             {{/if}}
           </B.Td>

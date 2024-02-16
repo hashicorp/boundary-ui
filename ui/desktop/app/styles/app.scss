@@ -208,32 +208,6 @@
   }
 }
 
-.copyable {
-  white-space: nowrap;
-
-  .copyable-button {
-    margin: 0;
-    padding: 0 sizing.rems(xxs);
-    top: -2px;
-  }
-
-  mark {
-    animation: fadeBackground 0.75s linear;
-    background-color: transparent;
-    color: inherit;
-
-    @keyframes fadeBackground {
-      0% {
-        background-color: var(--action-subtler-1);
-      }
-
-      100% {
-        background-color: transparent;
-      }
-    }
-  }
-}
-
 [class*='session-status-'] {
   color: var(--ui-gray-subtler-2);
 }
@@ -446,47 +420,27 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
     padding: sizing.rems(s);
   }
-
-  // Allow text wrapping for copyable content in table
-  .rose-table .copyable {
-    white-space: inherit;
-    word-break: break-word;
-  }
 }
 
 // Hidden secret component (app/components/hidden-secret)
 .hidden-secret {
   display: flex;
-  align-items: center;
 
-  .copyable {
+  .secret-mask {
+    color: var(--ui-gray-subtler-2);
+  }
+
+  .secret-content {
     display: flex;
     width: 100%;
     justify-content: space-between;
-
-    .copyable-content {
-      display: flex;
-      align-items: center;
-
-      pre {
-        white-space: pre-wrap;
-        line-height: normal;
-      }
-    }
-
-    .secret-mask {
-      color: var(--ui-gray-subtler-2);
-    }
-
-    .rose-button-ghost {
-      // Copyable button icon.
-      color: var(--ui-gray-subtler-1);
-    }
+    align-items: center;
+    margin-left: 0.75rem;
   }
 
-  .rose-button-ghost {
-    // Hide/Show secret button icon.
-    color: var(--ui-gray);
+  pre {
+    white-space: pre-wrap;
+    line-height: normal;
   }
 }
 
@@ -538,10 +492,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .resource-type {
     text-transform: capitalize;
-  }
-
-  .copyable-button {
-    background-color: var(--token-color-palette-neutral-50);
   }
 
   .flight-icon {
