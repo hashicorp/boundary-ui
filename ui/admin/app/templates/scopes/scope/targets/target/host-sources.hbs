@@ -59,13 +59,10 @@
               <HostCatalogTypeBadge @model={{B.data.model}} />
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.model.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.model.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.model.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               {{#if (can 'removeHostSources target' @model)}}
