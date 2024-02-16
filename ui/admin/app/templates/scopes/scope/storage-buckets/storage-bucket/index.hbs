@@ -13,13 +13,7 @@
       {{t 'resources.storage-bucket.title'}}
       <DocLink @doc='storage-bucket' @iconSize='large' />
     </h2>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>

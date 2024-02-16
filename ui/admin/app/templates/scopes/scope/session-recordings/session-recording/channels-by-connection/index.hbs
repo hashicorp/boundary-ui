@@ -88,13 +88,10 @@
                     connection
                   }}
                 </p>
-                <Copyable
-                  @text={{connection.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{connection.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{connection.id}}
+                  @color='secondary'
+                />
               </div>
               {{#if connection.channel_recordings}}
                 <Hds::Table
@@ -156,13 +153,10 @@
                         </Rose::MetadataList>
                       </B.Td>
                       <B.Td>
-                        <Copyable
-                          @text={{B.data.id}}
-                          @buttonText={{t 'actions.copy-to-clipboard'}}
-                          @acknowledgeText={{t 'states.copied'}}
-                        >
-                          <code>{{B.data.id}}</code>
-                        </Copyable>
+                        <Hds::Copy::Snippet
+                          @textToCopy={{B.data.id}}
+                          @color='secondary'
+                        />
                       </B.Td>
                       <B.Td align='right'>
                         {{#if (can 'play channel-recording' B.data)}}
@@ -350,13 +344,10 @@
                 @color='boundary'
                 @text={{t 'resources.session-recording.title'}}
               >
-                <Copyable
-                  @text={{@model.sessionRecording.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{@model.sessionRecording.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{@model.sessionRecording.id}}
+                  @color='secondary'
+                />
               </list.Item>
             </LinkListPanel>
           </div>

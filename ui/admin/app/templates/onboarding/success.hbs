@@ -54,13 +54,7 @@
               'onboarding.success.descriptions.controller'
             }}</span>
           <div class='create-resources-item-controller-copyable'>
-            <Copyable
-              @text={{this.model.clusterUrl}}
-              @buttonText={{t 'actions.copy-to-clipboard'}}
-              @acknowledgeText={{t 'states.copied'}}
-            >
-              <code>{{this.model.clusterUrl}}</code>
-            </Copyable>
+            <Hds::Copy::Snippet @textToCopy={{this.model.clusterUrl}} />
           </div>
 
           <Image @name='targets' />
