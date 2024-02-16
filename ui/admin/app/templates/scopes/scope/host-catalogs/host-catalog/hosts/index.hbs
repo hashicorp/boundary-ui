@@ -52,13 +52,10 @@
               <HostCatalogTypeBadge @model={{B.data}} />
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               <Hds::Text::Code>{{B.data.address}}</Hds::Text::Code>

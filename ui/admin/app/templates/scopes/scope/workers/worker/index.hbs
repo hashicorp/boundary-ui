@@ -15,13 +15,7 @@
       <DocLink @doc='worker' @iconSize='large' />
     </h2>
     <p>{{t 'resources.worker.description'}}</p>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>

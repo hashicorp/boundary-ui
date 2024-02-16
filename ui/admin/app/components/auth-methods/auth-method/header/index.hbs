@@ -13,10 +13,4 @@
   <DocLink @doc='auth-method' @iconSize='large' />
 </h2>
 <p>{{t 'resources.auth-method.description'}}</p>
-<Copyable
-  @text={{@model.id}}
-  @buttonText={{t 'actions.copy-to-clipboard'}}
-  @acknowledgeText={{t 'states.copied'}}
->
-  <code>{{@model.id}}</code>
-</Copyable>
+<Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

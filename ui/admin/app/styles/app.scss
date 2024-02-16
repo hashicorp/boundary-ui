@@ -174,33 +174,6 @@
   }
 }
 
-.copyable {
-  white-space: nowrap;
-
-  .copyable-button {
-    margin: 0;
-    padding: 0 sizing.rems(xxs);
-    position: relative;
-    top: -2px;
-  }
-
-  mark {
-    animation: fade-background 0.75s linear;
-    background-color: transparent;
-    color: inherit;
-
-    @keyframes fade-background {
-      0% {
-        background-color: var(--action-subtler-1);
-      }
-
-      100% {
-        background-color: transparent;
-      }
-    }
-  }
-}
-
 [class*='session-status-'] {
   color: var(--ui-gray-subtler-2);
 }
@@ -284,29 +257,7 @@
       }
 
       .create-resources-item-controller-copyable {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
-        border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-        border-radius: sizing.rems(xxxs);
-        color: var(--action);
-        height: (sizing.rems(xs) * 5);
         margin: sizing.rems(xxs) 0 sizing.rems(l) 0;
-
-        .copyable {
-          display: flex;
-          justify-content: space-between;
-          padding: sizing.rems(s);
-
-          span {
-            display: flex;
-          }
-        }
-
-        .copyable-button {
-          top: 0; // This is to override a negative top declared above
-        }
       }
 
       .image-container > svg {
