@@ -123,7 +123,7 @@
       {{t 'resources.credential-library.form.credential_type.help'}}
     </F.HelperText>
     <F.Options>
-      <option disabled hidden selected value='' />
+      <option selected value='' />
 
       {{#each this.credentialTypes as |type|}}
         <option value={{type}} selected={{eq type @model.credential_type}}>
