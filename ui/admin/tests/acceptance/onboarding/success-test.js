@@ -32,8 +32,11 @@ module('Acceptance | onboarding | success', function (hooks) {
   test('check the controller url is copyable', async function (assert) {
     const origin = window.location.origin;
     await visit(urls.success);
-    assert.dom('.copyable-content').isVisible();
-    assert.strictEqual(find('.copyable-content').textContent.trim(), origin);
+    assert.dom('.hds-copy-snippet__text').isVisible();
+    assert.strictEqual(
+      find('.hds-copy-snippet__text').textContent.trim(),
+      origin,
+    );
   });
 
   test('fill the onboarding form and redirect user to target detail when done is clicked', async function (assert) {
