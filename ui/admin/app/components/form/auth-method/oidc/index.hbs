@@ -30,7 +30,7 @@
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
@@ -408,8 +408,6 @@
     name='max_age'
     @value={{@model.max_age}}
     @isInvalid={{@model.errors.max_age}}
-    step={{1}}
-    min={{0}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'max_age')}}
     as |F|
