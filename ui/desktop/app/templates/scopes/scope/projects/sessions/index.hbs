@@ -86,6 +86,10 @@
               >
                 <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
               </LinkTo>
+            {{else}}
+              <Hds::Text::Code
+                data-test-session-id-copy={{B.data.id}}
+              >{{B.data.id}}</Hds::Text::Code>
             {{/if}}
           </B.Td>
           <B.Td>
