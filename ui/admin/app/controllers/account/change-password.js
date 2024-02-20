@@ -32,7 +32,11 @@ export default class AccountChangePasswordController extends Controller {
     // redirects depending on the authentication context.  These additional
     // redirects may abort this initial transition, resulting in a
     // TransitionAborted error, which we do not want to show to the user.
-    await this.router.replaceWith('index').catch(() => {});
+    try {
+      await this.router.replaceWith('index');
+    } catch (e) {
+      // no-op
+    }
   }
 
   /**
