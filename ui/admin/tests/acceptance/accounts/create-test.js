@@ -178,7 +178,7 @@ module('Acceptance | accounts | create', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );
