@@ -11,24 +11,25 @@
   as |form|
 >
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
@@ -73,42 +74,38 @@
     </F.Control>
   </Hds::Form::Fieldset>
 
-  <form.input
-    @name='address'
-    @type='url'
-    @value={{@model.address}}
-    @label={{t 'form.address.label'}}
-    @helperText={{t 'form.worker_address.help'}}
-    @disabled={{true}}
-    readonly={{true}}
-  />
+  <InfoField @value={{@model.address}} disabled={{form.disabled}} as |F|>
+    <F.Label>{{t 'form.address.label'}}</F.Label>
+    <F.HelperText>{{t 'form.worker_address.help'}}</F.HelperText>
+  </InfoField>
+
   {{#let
     (relative-datetime-live @model.last_status_time)
     (format-date @model.last_status_time format='yymmddt')
     as |relativeDate customFormat|
   }}
-    <form.input
-      @name='last seen'
-      @type='datetime'
+    <InfoField
       @value={{if
         @model.last_status_time
         (concat relativeDate ', ' customFormat)
       }}
-      @label={{t 'form.worker_last_seen.label'}}
-      @helperText={{t 'form.worker_last_seen.help'}}
-      @disabled={{true}}
-      readonly={{true}}
-    />
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>{{t 'form.worker_last_seen.label'}}</F.Label>
+      <F.HelperText>{{t 'form.worker_last_seen.help'}}</F.HelperText>
+    </InfoField>
+
   {{/let}}
 
-  <form.input
-    @name='release version'
+  <InfoField
     @value={{@model.release_version}}
-    @label={{t 'form.worker_release_version.label'}}
-    @helperText={{t 'form.worker_release_version.help'}}
-    @disabled={{true}}
-    readonly={{true}}
-  />
+    disabled={{form.disabled}}
+    as |F|
+  >
+    <F.Label>{{t 'form.worker_release_version.label'}}</F.Label>
+    <F.HelperText>{{t 'form.worker_release_version.help'}}</F.HelperText>
+  </InfoField>
 
   {{#if (can 'save worker' @model)}}
     <form.actions
