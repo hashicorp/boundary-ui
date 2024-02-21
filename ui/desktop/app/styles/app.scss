@@ -645,3 +645,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   display: flex;
   gap: 1rem;
 }
+
+.link-copy-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: inherit;
+}
