@@ -35,10 +35,11 @@ You will need [Homebrew](https://brew.sh/) install. For secure persisting your S
 
 ### Accesses
 
-If you are missing any acccess, requested [through the IT service catalog](https://hashicorp.freshservice.com/support/catalog/items).
-
 - Doormat account: `boundary_team_acctest_dev`.
+  - Request access through Doormat.
 - HCP account: you will need to use Terraform cloud to spin up enos.
+- app.terraform.io org: `hashicorp-qti`.
+  - Request access in `#proj-boundary-qe` slack channel.
 
 ### Software
 
@@ -84,7 +85,7 @@ You need to provide an SSH Key pair for the EC2 instance. We recommend creating 
 
 ### Setup HCP Terraform (Terraform cloud):
 
-Log in to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens).
+Log in to [HCP Production env](https://portal.cloud.hashicorp.com/). Through HCP Terraform, open Terraform cloud, or [access here](https://app.terraform.io/). Then create an API token [following this documentation](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens). Make sure you are added to the `hashicorp-qti` org in order for the created token to be valid.
 
 **Token awareness:** Copy your token from the box and save it in a secure location. Terraform Cloud only displays the token once, right after you create it. And we will need the token later for enos configuration.
 
@@ -117,7 +118,7 @@ Using Terminal 1:
 - `$ cd boundary/enos`.
 - `$ doormat login`. Login with Doormat.
 - `$ eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
-- `$ enos scenario launch e2e_ui builder:local`. Launch enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal.
+- `$ enos scenario launch e2e_ui_aws builder:local`. Launch enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal. Check out more scenarios [here](https://github.com/hashicorp/boundary/tree/main/enos).
 - `$ bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario.
 
 *Be aware once the scenario is launch you will create and run resources within AWS, once you are done using the scenario, [you should destroy it](#destroy-enos-scenario).*
@@ -152,7 +153,7 @@ yarn run e2e:ent:docker
 ### Destroy Enos Scenario
 
 Using Terminal 1:
-- `$ enos scenario destroy e2e_ui builder:local`
+- `$ enos scenario destroy e2e_ui_aws builder:local`
 - After all the steps pass, you should see a `Enos operations finished!`.
 
 
