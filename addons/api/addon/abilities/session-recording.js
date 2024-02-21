@@ -21,6 +21,14 @@ export default class SessionRecordingAbility extends ModelAbility {
     return !this.model.isUnknown && super.canRead;
   }
 
+  /**
+   * Only "known" session recording types may be deleted.
+   * @type {boolean}
+   */
+  get canDelete() {
+    return !this.model.isUnknown && super.canDelete && this.model.isAvailable;
+  }
+
   get canDownload() {
     return this.hasAuthorizedAction('download');
   }
