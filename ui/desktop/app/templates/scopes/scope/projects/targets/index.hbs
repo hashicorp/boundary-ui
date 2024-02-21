@@ -76,7 +76,7 @@
         (hash label=(t 'resources.target.titles.active-sessions'))
         (hash label=(t 'form.type.label'))
         (hash label=(t 'resources.project.title'))
-        (hash label='')
+        (hash label='' align='right')
       }}
       @valign='middle'
     >
@@ -134,26 +134,28 @@
               <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
             {{/if}}
           </B.Td>
-          <B.Td>
-            {{#if (can 'connect target' B.data)}}
-              {{#if (can 'read target' B.data)}}
-                <Hds::Button
-                  data-test-targets-connect-button={{B.data.id}}
-                  @text={{t 'resources.session.actions.connect'}}
-                  @color='secondary'
-                  @route='scopes.scope.projects.targets.target'
-                  @model={{B.data.id}}
-                  @query={{hash isConnecting=true}}
-                />
-              {{else}}
-                <Hds::Button
-                  data-test-targets-connect-button={{B.data.id}}
-                  @text={{t 'resources.session.actions.connect'}}
-                  @color='secondary'
-                  {{on 'click' (fn this.quickConnect B.data)}}
-                />
+          <B.Td @align='right'>
+            <div {{style display='inline-block'}}>
+              {{#if (can 'connect target' B.data)}}
+                {{#if (can 'read target' B.data)}}
+                  <Hds::Button
+                    data-test-targets-connect-button={{B.data.id}}
+                    @text={{t 'resources.session.actions.connect'}}
+                    @color='secondary'
+                    @route='scopes.scope.projects.targets.target'
+                    @model={{B.data.id}}
+                    @query={{hash isConnecting=true}}
+                  />
+                {{else}}
+                  <Hds::Button
+                    data-test-targets-connect-button={{B.data.id}}
+                    @text={{t 'resources.session.actions.connect'}}
+                    @color='secondary'
+                    {{on 'click' (fn this.quickConnect B.data)}}
+                  />
+                {{/if}}
               {{/if}}
-            {{/if}}
+            </div>
           </B.Td>
         </B.Tr>
       </:body>
@@ -191,6 +193,7 @@
 {{#if (and this.selectedTarget this.selectedTarget.isActive)}}
   <Hds::Flyout
     @onClose={{fn this.selectTarget null}}
+    @size='large'
     class='flyout-with-table'
     data-test-targets-sessions-flyout
     as |M|
@@ -208,7 +211,7 @@
           (hash label=(t 'form.started.label'))
           (hash label=(t 'form.session_id.label'))
           (hash label=(t 'form.proxy_url.label'))
-          (hash label='')
+          (hash label='' align='right')
         }}
         @valign='middle'
       >
@@ -228,27 +231,29 @@
             <B.Td>
               {{B.data.proxy}}
             </B.Td>
-            <B.Td>
-              <Hds::ButtonSet>
-                <Hds::Button
-                  @text={{B.data.id}}
-                  @icon='info'
-                  @isIconOnly={{true}}
-                  @route='scopes.scope.projects.sessions.session.index'
-                  @model={{B.data.id}}
-                  @color='secondary'
-                />
-                {{#if (can 'cancel session' B.data)}}
+            <B.Td @align='right'>
+              <div {{style display='inline-block'}}>
+                <Hds::ButtonSet>
                   <Hds::Button
-                    data-test-session-flyout-cancel-button={{B.data.id}}
-                    @text={{t 'resources.session.actions.end'}}
-                    @icon='x'
+                    @text={{B.data.id}}
+                    @icon='info'
                     @isIconOnly={{true}}
+                    @route='scopes.scope.projects.sessions.session.index'
+                    @model={{B.data.id}}
                     @color='secondary'
-                    {{on 'click' (fn this.cancelSession B.data)}}
                   />
-                {{/if}}
-              </Hds::ButtonSet>
+                  {{#if (can 'cancel session' B.data)}}
+                    <Hds::Button
+                      data-test-session-flyout-cancel-button={{B.data.id}}
+                      @text={{t 'resources.session.actions.end'}}
+                      @icon='x'
+                      @isIconOnly={{true}}
+                      @color='secondary'
+                      {{on 'click' (fn this.cancelSession B.data)}}
+                    />
+                  {{/if}}
+                </Hds::ButtonSet>
+              </div>
             </B.Td>
           </B.Tr>
         </:body>
