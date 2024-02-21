@@ -223,37 +223,35 @@
               </time>
             </B.Td>
             <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
+              <div class='link-copy-button-container'>
+                <Hds::Link::Inline
+                  @route='scopes.scope.projects.sessions.session.index'
+                  @model={{B.data.id}}
+                >
+                  {{B.data.id}}
+                </Hds::Link::Inline>
+
+                <Hds::Copy::Button
+                  @text={{B.data.id}}
+                  @isIconOnly={{true}}
+                  @textToCopy={{B.data.id}}
+                />
+              </div>
             </B.Td>
             <B.Td>
               {{B.data.proxy}}
             </B.Td>
             <B.Td @align='right'>
-              <div {{style display='inline-block'}}>
-                <Hds::ButtonSet>
-                  <Hds::Button
-                    @text={{B.data.id}}
-                    @icon='info'
-                    @isIconOnly={{true}}
-                    @route='scopes.scope.projects.sessions.session.index'
-                    @model={{B.data.id}}
-                    @color='secondary'
-                  />
-                  {{#if (can 'cancel session' B.data)}}
-                    <Hds::Button
-                      data-test-session-flyout-cancel-button={{B.data.id}}
-                      @text={{t 'resources.session.actions.end'}}
-                      @icon='x'
-                      @isIconOnly={{true}}
-                      @color='secondary'
-                      {{on 'click' (fn this.cancelSession B.data)}}
-                    />
-                  {{/if}}
-                </Hds::ButtonSet>
-              </div>
+              {{#if (can 'cancel session' B.data)}}
+                <Hds::Button
+                  data-test-session-flyout-cancel-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.end'}}
+                  @icon='x'
+                  @isIconOnly={{true}}
+                  @color='secondary'
+                  {{on 'click' (fn this.cancelSession B.data)}}
+                />
+              {{/if}}
             </B.Td>
           </B.Tr>
         </:body>
