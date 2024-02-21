@@ -39,7 +39,7 @@ You will need [Homebrew](https://brew.sh/) install. For secure persisting your S
   - Request access through Doormat.
 - HCP account: you will need to use Terraform cloud to spin up enos.
 - app.terraform.io org: `hashicorp-qti`.
-  - Request access in `#team-quality` slack channel.
+  - Request access in `#proj-boundary-qe` slack channel.
 
 ### Software
 
