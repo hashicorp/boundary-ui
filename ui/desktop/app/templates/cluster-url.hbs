@@ -19,7 +19,6 @@
         name='host'
         @value={{this.clusterUrl}}
         {{autofocus}}
-        data-test-cluster-url-field
         {{on 'input' (set-from-event this 'clusterUrl')}}
         as |F|
       >
