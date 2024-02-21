@@ -763,6 +763,8 @@ credential-library:
   description: A credential library is a resource that provides credentials.
   titles:
     new: New Credential Library
+    ssh_private_key: SSH Private Key
+    username_password: Username & Password
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -774,6 +776,9 @@ credential-library:
     vault_path:
       label: Vault Path
       help: The path the library uses when requesting credentials from Vault.
+    credential_type:
+      label: Credential Type
+      help: Specify the type of credential this library will issue. This must be set to use credential injection. After this data is saved, it cannot be changed later.
     http_method:
       label: HTTP Method
       help: The HTTP method the library uses when requesting credentials from Vault.

@@ -191,6 +191,12 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     }
   });
 
+  test('cannot update credential type in a vault generic credential library', async function (assert) {
+    await visit(urls.credentialLibrary);
+    await click('form [type="button"]', 'Activate edit mode');
+    assert.dom('[name=credential_type]').isDisabled();
+  });
+
   test('can update a vault ssh cert credential library and save changes', async function (assert) {
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
@@ -226,6 +232,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       '[name="extensions"] tbody td:nth-of-type(2) input',
       'ext_value',
     );
+
     await click('[name="extensions"] button');
     await click('[type="submit"]');
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
