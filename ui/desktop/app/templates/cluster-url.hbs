@@ -15,14 +15,17 @@
       @disabled={{(is-loading)}}
       as |form|
     >
-      <form.input
-        @name='host'
-        @type='text'
+      <Hds::Form::TextInput::Field
+        name='host'
         @value={{this.clusterUrl}}
-        @label={{t 'form.cluster-url.label'}}
-        @helperText={{t 'form.cluster-url.description'}}
         {{autofocus}}
-      />
+        data-test-cluster-url-field
+        {{on 'input' (set-from-event this 'clusterUrl')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.cluster-url.label'}}</F.Label>
+        <F.HelperText>{{t 'form.cluster-url.description'}}</F.HelperText>
+      </Hds::Form::TextInput::Field>
 
       <form.actions>
         <:actions>
