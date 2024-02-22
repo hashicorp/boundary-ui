@@ -16,6 +16,7 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
    */
   httpMethodOptions = options.http_method;
 
+  credentialTypes = options.credential_types;
   /**
    *
    * @type {Array.<string>}
