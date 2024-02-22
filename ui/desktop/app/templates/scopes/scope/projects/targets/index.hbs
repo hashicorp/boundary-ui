@@ -211,7 +211,7 @@
           (hash label=(t 'form.started.label'))
           (hash label=(t 'form.session_id.label'))
           (hash label=(t 'form.proxy_url.label'))
-          (hash label='' align='right')
+          (hash label='' align='right' width='60px')
         }}
         @valign='middle'
       >
@@ -242,7 +242,7 @@
             <B.Td>
               {{B.data.proxy}}
             </B.Td>
-            <B.Td @align='right'>
+            <B.Td @align='right' width='60px'>
               {{#if (can 'cancel session' B.data)}}
                 <Hds::Button
                   data-test-session-flyout-cancel-button={{B.data.id}}
