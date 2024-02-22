@@ -20,7 +20,6 @@ export default class ObjectAsArrayTransform extends Transform {
     return array.reduce((result, currentValue) => {
       const { key, value } = currentValue;
       result[key] = value;
-
       return result;
     }, {});
   }
