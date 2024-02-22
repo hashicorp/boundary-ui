@@ -106,7 +106,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       type: 'org',
       scope: globalScope,
     });
-    const org2Scope = { id: instances.scopes.org2.id, type: 'org' };
+    const org2Scope = { id: instances.scopes.org.id, type: 'org' };
     instances.scopes.project2 = this.server.create('scope', {
       type: 'project',
       scope: org2Scope,
