@@ -121,7 +121,7 @@
     @isOptional={{true}}
     disabled={{form.disabled}}
     @hasVisibilityToggle={{false}}
-    type='password'
+    @type='password'
     {{on 'input' (set-from-event @model 'client_secret')}}
     as |F|
   >
