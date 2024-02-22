@@ -83,17 +83,24 @@
           </B.Td>
           <B.Td>
             <div class='link-copy-button-container'>
-              <Hds::Link::Inline
-                @route='scopes.scope.projects.sessions.session.index'
-                @model={{B.data.id}}
-              >
-                {{B.data.id}}
-              </Hds::Link::Inline>
-
+              {{#if B.data.isAvailable}}
+                <Hds::Link::Inline
+                  @route='scopes.scope.projects.sessions.session.index'
+                  @model={{B.data.id}}
+                  data-test-session-detail-link={{B.data.id}}
+                >
+                  {{B.data.id}}
+                </Hds::Link::Inline>
+              {{else}}
+                <Hds::Text::Code data-test-session-id-copy={{B.data.id}}>
+                  {{B.data.id}}
+                </Hds::Text::Code>
+              {{/if}}
               <Hds::Copy::Button
                 @text={{B.data.id}}
                 @isIconOnly={{true}}
                 @textToCopy={{B.data.id}}
+                data-test-session-id-copy={{B.data.id}}
               />
             </div>
           </B.Td>
