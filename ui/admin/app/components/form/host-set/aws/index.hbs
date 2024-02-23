@@ -14,8 +14,8 @@
 
   <Hds::Form::TextInput::Field
     name='name'
-    @isOptional={{true}}
     @value={{@model.name}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.name}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}

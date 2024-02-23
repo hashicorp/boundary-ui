@@ -33,10 +33,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
+    name='description'
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
     disabled={{form.disabled}}
     as |F|
   >
@@ -99,10 +99,10 @@
   </Form::Field::ListWrapper>
 
   <Hds::Form::Textarea::Field
+    name='filter'
     @value={{@model.filter_string}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.filter_string}}
-    name='filter'
     disabled={{form.disabled}}
     as |F|
   >
