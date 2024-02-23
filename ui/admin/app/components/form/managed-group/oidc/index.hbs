@@ -57,6 +57,7 @@
     name='filter'
     @value={{@model.filter_string}}
     @isInvalid={{@model.errors.filter_string}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'filter_string')}}
     as |F|
