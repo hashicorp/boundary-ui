@@ -5,6 +5,7 @@
 
 /* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
+const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
 
 /**
@@ -134,6 +135,71 @@ exports.createNewHostInHostSet = async (page) => {
   await expect(page.getByRole('link', { name: hostName })).toBeVisible();
 
   return hostName;
+};
+
+/**
+ * Uses the UI to create a credential store. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the credential store
+ */
+exports.createStaticCredentialStore = async (page) => {
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
+  ).toBeVisible();
+
+  return credentialStoreName;
+};
+
+/**
+ * Uses the UI to create a static key pair credential . Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the credential
+ */
+exports.createStaticCredentialKeyPair = async (page) => {
+  const credentialName = 'Credential ' + nanoid();
+  await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Username & Key Pair')
+    .click();
+  await page
+    .getByLabel('Username', { exact: true })
+    .fill(process.env.E2E_SSH_USER);
+  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    encoding: 'utf-8',
+  });
+  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
+
+  return credentialName;
 };
 
 /**
