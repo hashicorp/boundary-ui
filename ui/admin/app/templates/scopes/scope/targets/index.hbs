@@ -66,13 +66,10 @@
                 {{/if}}
               </B.Td>
               <B.Td>
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{B.data.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
               </B.Td>
             </B.Tr>
           {{else}}
@@ -99,13 +96,10 @@
                   {{/if}}
                 </B.Td>
                 <B.Td>
-                  <Copyable
-                    @text={{B.data.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    <code>{{B.data.id}}</code>
-                  </Copyable>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{B.data.id}}
+                    @color='secondary'
+                  />
                 </B.Td>
               </B.Tr>
             {{/if}}

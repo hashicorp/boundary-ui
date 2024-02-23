@@ -16,8 +16,12 @@
     {{#if
       (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
     }}
-      <Hds::Dropdown data-test-manage-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      <Hds::Dropdown as |dd|>
+        <dd.ToggleButton
+          data-test-manage-dropdown
+          @text={{t 'actions.manage'}}
+          @color='secondary'
+        />
 
         <dd.Interactive
           @text={{t 'resources.policy.actions.update'}}
@@ -26,6 +30,15 @@
             (route-action 'reapplyStoragepolicy' @model.sessionRecording)
           }}
         />
+        {{#if (can 'delete session-recording' @model.sessionRecording)}}
+          <dd.Separator />
+          <dd.Interactive
+            data-test-manage-dropdown-delete
+            @color='critical'
+            @text={{t 'resources.policy.actions.delete_recording'}}
+            {{on 'click' (route-action 'delete' @model.sessionRecording)}}
+          />
+        {{/if}}
       </Hds::Dropdown>
     {{/if}}
   </page.actions>
@@ -75,13 +88,10 @@
                     connection
                   }}
                 </p>
-                <Copyable
-                  @text={{connection.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{connection.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{connection.id}}
+                  @color='secondary'
+                />
               </div>
               {{#if connection.channel_recordings}}
                 <Hds::Table
@@ -143,13 +153,10 @@
                         </Rose::MetadataList>
                       </B.Td>
                       <B.Td>
-                        <Copyable
-                          @text={{B.data.id}}
-                          @buttonText={{t 'actions.copy-to-clipboard'}}
-                          @acknowledgeText={{t 'states.copied'}}
-                        >
-                          <code>{{B.data.id}}</code>
-                        </Copyable>
+                        <Hds::Copy::Snippet
+                          @textToCopy={{B.data.id}}
+                          @color='secondary'
+                        />
                       </B.Td>
                       <B.Td align='right'>
                         {{#if (can 'play channel-recording' B.data)}}
@@ -337,13 +344,10 @@
                 @color='boundary'
                 @text={{t 'resources.session-recording.title'}}
               >
-                <Copyable
-                  @text={{@model.sessionRecording.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{@model.sessionRecording.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{@model.sessionRecording.id}}
+                  @color='secondary'
+                />
               </list.Item>
             </LinkListPanel>
           </div>
