@@ -64,7 +64,7 @@ test.beforeEach(async () => {
   await authenticateBoundaryCli();
 });
 
-test('Verify resources can be deleted @ce @aws @docker', async ({ page }) => {
+test('Verify resources can be deleted @ce @aws', async ({ page }) => {
   let orgId;
   try {
     // Create boundary resources using CLI
