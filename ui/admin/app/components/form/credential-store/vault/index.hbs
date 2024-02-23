@@ -35,9 +35,9 @@
 
   <Hds::Form::Textarea::Field
     name='description'
-    @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -93,6 +93,7 @@
     name='address'
     @value={{@model.address}}
     @isInvalid={{@model.errors.address}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'address')}}
     as |F|
@@ -143,6 +144,7 @@
       name='token'
       @value={{@model.token}}
       @isInvalid={{@model.errors.token}}
+      @isRequired={{true}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'token')}}
       as |F|
