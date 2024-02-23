@@ -108,11 +108,9 @@ export default class MappingListComponent extends Component {
       }
     } else {
       const field = this.args.name;
-      const newRow = {};
-      newRow[this.newOptionKey] = this.newOptionValue;
       this.args.model[field] = {
         ...this.args.model[field],
-        ...newRow,
+        [this.newOptionKey]: this.newOptionValue,
       };
     }
 
