@@ -12,9 +12,9 @@
 >
   <Hds::Form::TextInput::Field
     name='name'
-    @isOptional={{true}}
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
@@ -31,10 +31,10 @@
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
