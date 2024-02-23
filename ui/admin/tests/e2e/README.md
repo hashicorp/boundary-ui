@@ -99,7 +99,6 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 - `enos_user`: The user name to use for Boundary.
 - `tfc_api_token`: you need to provide the previously created token in Terraform cloud, there is no shared token within Boundary team.
 - `local_boundary_dir`: The directory that contains Boundary binary.
-- `local_boundary_src_dir`: The directory that contains the copy of boundary you want to use for e2e tests
 - `local_boundary_ui_src_dir`: The directory that contains the copy of boundary-ui you want to use for UI tests.
 - `e2e_debug_no_run`: make sure this is set to true.
 
