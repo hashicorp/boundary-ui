@@ -37,16 +37,10 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
 
   /**
    * Clear the previously selected key value pair when toggling between credential types on a new form
-   *
    */
   @action
   selectCredentialType({ target: { value } }) {
-    if (
-      this.args.model.isNew &&
-      Object.keys(this.args.model.credential_mapping_overrides || {}).length
-    ) {
-      this.args.model.credential_mapping_overrides = {};
-    }
+    this.args.model.credential_mapping_overrides = {};
     this.args.model.credential_type = value;
   }
 }

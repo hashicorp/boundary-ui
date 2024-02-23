@@ -42,22 +42,17 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
       credential_type &&
       !isNew
     ) {
-      //API expects to send null to fields if it is undefined or deleted
-      const remainingAttrs = Object.entries(
+      // API expects to send null to fields if it is undefined or deleted
+      json.credential_mapping_overrides = Object.keys(
         options.mapping_overrides[credential_type],
-      ).reduce(
-        (obj, [key]) =>
-          Object.assign(
-            obj,
-            credential_mapping_overrides[key] ? {} : { [key]: null },
-          ),
-        {},
-      );
-
-      json.credential_mapping_overrides = {
-        ...credential_mapping_overrides,
-        ...remainingAttrs,
-      };
+      ).reduce((obj, key) => {
+        if (credential_mapping_overrides[key]) {
+          obj[key] = credential_mapping_overrides[key];
+        } else {
+          obj[key] = null;
+        }
+        return obj;
+      }, {});
       return value;
     }
   }

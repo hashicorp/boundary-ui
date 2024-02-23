@@ -30,14 +30,38 @@ export default class MappingListComponent extends Component {
   }
 
   /**
-   * Determines if we need to show an empty row to the users to enter more key/value pairs
+   * Determines if we need to show an empty row to the users to enter more key/value pairs based on removeDuplicates arg,
+   * by default it is true
    * @type {object}
    */
   get showNewRow() {
-    return (
-      Object.keys(this.options || {}).length !==
-      Object.keys(this.args.selectOptions || {}).length
-    );
+    if (this.args.removeDuplicates) {
+      return (
+        Object.keys(this.options || {}).length !==
+        Object.keys(this.args.selectOptions || {}).length
+      );
+    } else {
+      return true;
+    }
+  }
+
+  /**
+   * Prevents users from selecting duplicate keys from the select list if there's the arg is set to true
+   * @type {object}
+   */
+  get selectOptions() {
+    const previouslySelectedKeys = Object.keys(this.options || {});
+    if (this.args.removeDuplicates && previouslySelectedKeys.length) {
+      const newObj = { ...this.args.selectOptions };
+      for (const key of Object.keys(newObj)) {
+        if (previouslySelectedKeys.includes(key)) {
+          delete newObj[key];
+        }
+      }
+      return newObj;
+    } else {
+      return this.args.selectOptions;
+    }
   }
   // =actions
 
@@ -49,11 +73,9 @@ export default class MappingListComponent extends Component {
   @action
   selectChange(oldkey, oldVal, { target: { value: newKey } }) {
     const field = this.args.name;
-    delete this.args.model[field][oldkey];
-    this.args.model[field] = {
-      ...this.args.model[field],
-      [newKey]: oldVal,
-    };
+    const newObj = { ...this.args.model[field], [newKey]: oldVal };
+    delete newObj[oldkey];
+    set(this.args.model, field, newObj);
   }
 
   /**
@@ -109,14 +131,8 @@ export default class MappingListComponent extends Component {
       this.args.removeOptionByKey(selectedKey);
     } else {
       const field = this.args.name;
-
-      const newObj = Object.keys(this.args.model[field] || {}).reduce(
-        (obj, key) => {
-          key !== selectedKey && (obj[key] = this.args.model[field][key]);
-          return obj;
-        },
-        {},
-      );
+      const newObj = { ...this.args.model[field] };
+      delete newObj[selectedKey];
       set(this.args.model, field, newObj);
     }
   }

@@ -177,7 +177,7 @@ module('Integration | Component | list-wrapper', function (hooks) {
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}}></F.SelectText>
+            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}}></F.SelectText>
           </:field>
         </Form::Field::ListWrapper>
     `);
@@ -191,7 +191,24 @@ module('Integration | Component | list-wrapper', function (hooks) {
       .hasValue('password_attribute');
   });
 
-  test('it does not render new rows when the select option limit is reached', async function (assert) {
+  test('it does not render new rows when the select option limit is reached by passing in @removeDuplicates', async function (assert) {
+    this.options = { username_attribute: 'user', password_attribute: 'pass' };
+    this.selectOptions = {
+      username_attribute: 'User Key',
+      password_attribute: 'Pass Key',
+    };
+    await render(hbs`
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true'></F.SelectText>
+          </:field>
+        </Form::Field::ListWrapper>
+    `);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+  });
+
+  test('it does render unlimited new rows when @removeDuplicates is not passed', async function (assert) {
     this.options = { username_attribute: 'user', password_attribute: 'pass' };
     this.selectOptions = {
       username_attribute: 'User Key',
@@ -205,6 +222,6 @@ module('Integration | Component | list-wrapper', function (hooks) {
         </Form::Field::ListWrapper>
     `);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom('tbody tr').exists({ count: 3 });
   });
 });

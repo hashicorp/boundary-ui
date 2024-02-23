@@ -20,8 +20,8 @@
           <B.Td>
             <Hds::Form::Select::Base
               @value={{select}}
-              @width={{@width}}
               disabled={{@disabled}}
+              @width={{@width}}
               aria-labelledby={{keyHeaderID}}
               {{on 'change' (fn this.selectChange select val)}}
               as |F|
@@ -40,6 +40,7 @@
             <Hds::Form::TextInput::Field
               @value={{val}}
               @type='text'
+              @width={{@width}}
               disabled={{@disabled}}
               aria-labelledby={{valueHeaderID}}
               {{on 'change' (fn this.updateInput select)}}
@@ -67,15 +68,18 @@
           <B.Td>
             <Hds::Form::Select::Base
               @value={{this.newOptionKey}}
-              @width={{@width}}
               disabled={{@disabled}}
               aria-labelledby={{keyHeaderID}}
+              @width={{@width}}
               {{on 'change' (set-from-event this 'newOptionKey')}}
               as |F|
             >
               <F.Options>
-                <option value='' />
-                {{#each-in @selectOptions as |key value|}}
+
+                <option value=''>
+                  {{t 'titles.choose-an-option'}}
+                </option>
+                {{#each-in this.selectOptions as |key value|}}
                   <option value={{key}} selected={{eq key this.newOptionKey}}>
                     {{value}}
                   </option>
@@ -88,6 +92,7 @@
             <Hds::Form::TextInput::Field
               @value={{this.newOptionValue}}
               @type='text'
+              @width={{@width}}
               disabled={{@disabled}}
               aria-labelledby={{valueHeaderID}}
               {{on 'input' (set-from-event this 'newOptionValue')}}
