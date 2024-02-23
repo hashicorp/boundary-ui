@@ -439,7 +439,7 @@ exports.addBrokeredCredentialsToTarget = async (
 };
 
 /**
- * Uses the UI to navigate to the specified Target and add the Brokered Credentials to it.
+ * Uses the UI to navigate to the specified Target and add the Injected Credentials to it.
  * @param {Page} page Playwright page object
  * @param {string} targetName Name of the target associated with the session
  * @param {string} credentialName Name of the credentials to be added to the target
