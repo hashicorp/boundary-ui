@@ -258,6 +258,66 @@ exports.createNewTargetWithAddress = async (page) => {
 };
 
 /**
+ * Uses the UI to create a new TCP target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
+exports.createTcpTargetWithAddressEnt = async (page) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('TCP').click();
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
+ * Uses the UI to create a new SSH target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
+exports.createSshTargetWithAddressEnt = async (page) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
  * Uses the UI to delete a Boundary resource. Assume you have selected the desired resource.
  * Note: For a resource to be deleted using this method,
  * the resource page should allow to delete the resource using the Manage button.
@@ -370,6 +430,53 @@ exports.addBrokeredCredentialsToTarget = async (
     .click({ force: true });
   await page
     .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+};
+
+/**
+ * Uses the UI to navigate to the specified Target and add the Brokered Credentials to it.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ * @param {string} credentialName Name of the credentials to be added to the target
+ */
+exports.addInjectedCredentialsToTarget = async (
+  page,
+  targetName,
+  credentialName,
+) => {
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: targetName }).click();
+  await page
+    .getByRole('link', {
+      name: 'Injected Application Credentials',
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', {
+      name: 'Add Injected Application Credentials',
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole('cell', { name: credentialName })
+    .locator('..')
+    .getByRole('checkbox')
+    .click({ force: true });
+  await page
+    .getByRole('button', {
+      name: 'Add Injected Application Credentials',
+      exact: true,
+    })
     .click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),

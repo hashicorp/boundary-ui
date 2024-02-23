@@ -25,13 +25,13 @@ exports.authenticateBoundaryCli = async () => {
   try {
     execSync(
       'boundary authenticate password' +
-        ' -addr=' +
-        process.env.BOUNDARY_ADDR +
-        ' -auth-method-id=' +
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID +
-        ' -login-name=' +
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
-        ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
+      ' -addr=' +
+      process.env.BOUNDARY_ADDR +
+      ' -auth-method-id=' +
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID +
+      ' -login-name=' +
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
+      ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -48,18 +48,41 @@ exports.connectToTarget = async (targetId) => {
   try {
     connect = exec(
       'boundary connect' +
-        ' -target-id=' +
-        targetId +
-        ' -exec /usr/bin/ssh --' +
-        ' -l ' +
-        process.env.E2E_SSH_USER +
-        ' -i ' +
-        process.env.E2E_SSH_KEY_PATH +
-        ' -o UserKnownHostsFile=/dev/null' +
-        ' -o StrictHostKeyChecking=no' +
-        ' -o IdentitiesOnly=yes' + // forces the use of the provided key
-        ' -p {{boundary.port}}' +
-        ' {{boundary.ip}}',
+      ' -target-id=' +
+      targetId +
+      ' -exec /usr/bin/ssh --' +
+      ' -l ' +
+      process.env.E2E_SSH_USER +
+      ' -i ' +
+      process.env.E2E_SSH_KEY_PATH +
+      ' -o UserKnownHostsFile=/dev/null' +
+      ' -o StrictHostKeyChecking=no' +
+      ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+      ' -p {{boundary.port}}' +
+      ' {{boundary.ip}}',
+    );
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return connect;
+};
+
+/**
+ * Uses the boundary CLI to connect ssh to the specified target
+ * @param {string} targetId ID of the target to be connected to
+ * @returns ChildProcess representing the result of the command execution
+ */
+exports.connectSshToTarget = async (targetId) => {
+  let connect;
+  try {
+    connect = exec(
+      'boundary connect ssh' +
+      ' -target-id=' +
+      targetId +
+      ' --' +
+      ' -o UserKnownHostsFile=/dev/null' +
+      ' -o StrictHostKeyChecking=no' +
+      ' -o IdentitiesOnly=yes', // forces the use of the provided key
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -78,9 +101,9 @@ exports.createNewOrgCli = async () => {
     newOrg = JSON.parse(
       execSync(
         `boundary scopes create \
-         -name="${orgName}" \
-         -scope-id=global \
-         -format json`,
+        -name="${orgName}" \
+        -scope-id=global \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -113,9 +136,9 @@ exports.createNewProjectCli = async (orgId) => {
     newProject = JSON.parse(
       execSync(
         `boundary scopes create \
-         -name="${projectName}" \
-         -scope-id=${orgId} \
-         -format json`,
+        -name="${projectName}" \
+        -scope-id=${orgId} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -135,8 +158,8 @@ exports.createNewControllerLedWorkerCli = async () => {
     newWorker = JSON.parse(
       execSync(
         `boundary workers create controller-led \
-         -name="${workerName.toLowerCase()}" \
-         -format json`,
+        -name="${workerName.toLowerCase()}" \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -157,9 +180,9 @@ exports.createNewPasswordAuthMethodCli = async (scopeId) => {
     newAuthMethod = JSON.parse(
       execSync(
         `boundary auth-methods create password \
-         -name "${authMethodName}" \
-         -scope-id ${scopeId} \
-         -format json`,
+        -name "${authMethodName}" \
+        -scope-id ${scopeId} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -199,10 +222,10 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
     passwordAccount = JSON.parse(
       execSync(
         `boundary accounts create password \
-         -auth-method-id ${authMethodId} \
-         -login-name ${login} \
-         -password env://ACCOUNT_PASSWORD \
-         -format json`,
+        -auth-method-id ${authMethodId} \
+        -login-name ${login} \
+        -password env://ACCOUNT_PASSWORD \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -223,9 +246,9 @@ exports.createNewRoleCli = async (scopeId) => {
     role = JSON.parse(
       execSync(
         `boundary roles create \
-         -scope-id ${scopeId} \
-         -name ${roleName} \
-         -format json`,
+        -scope-id ${scopeId} \
+        -name ${roleName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -246,9 +269,9 @@ exports.createNewGroupCli = async (scopeId) => {
     group = JSON.parse(
       execSync(
         `boundary groups create \
-         -scope-id ${scopeId} \
-         -name ${groupName} \
-         -format json`,
+        -scope-id ${scopeId} \
+        -name ${groupName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -269,9 +292,9 @@ exports.createNewUserCli = async (scopeId) => {
     user = JSON.parse(
       execSync(
         `boundary users create \
-         -scope-id ${scopeId} \
-         -name ${userName} \
-         -format json`,
+        -scope-id ${scopeId} \
+        -name ${userName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -292,9 +315,9 @@ exports.createNewStaticHostCatalogCli = async (projectId) => {
     hostCatalog = JSON.parse(
       execSync(
         `boundary host-catalogs create static \
-         -scope-id ${projectId} \
-         -name ${hostCatalogName} \
-         -format json`,
+        -scope-id ${projectId} \
+        -name ${hostCatalogName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -343,10 +366,10 @@ exports.createNewStaticHostCli = async (hostCatalogId) => {
     host = JSON.parse(
       execSync(
         `boundary hosts create static \
-         -host-catalog-id ${hostCatalogId} \
-         -name ${hostName} \
-         -address localhost \
-         -format json`,
+        -host-catalog-id ${hostCatalogId} \
+        -name ${hostName} \
+        -address localhost \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -367,9 +390,9 @@ exports.createNewHostSetCli = async (hostCatalogId) => {
     hostSet = JSON.parse(
       execSync(
         `boundary host-sets create static \
-         -host-catalog-id ${hostCatalogId} \
-         -name ${hostSetName} \
-         -format json`,
+        -host-catalog-id ${hostCatalogId} \
+        -name ${hostSetName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -390,9 +413,9 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
     staticCredentialStore = JSON.parse(
       execSync(
         `boundary credential-stores create static \
-         -scope-id ${projectId} \
-         -name ${credentialStoreName} \
-         -format json`,
+        -scope-id ${projectId} \
+        -name ${credentialStoreName} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -464,11 +487,11 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
     usernamePasswordCredential = JSON.parse(
       execSync(
         `boundary credentials create username-password \
-         -name ${login} \
-         -credential-store-id ${credentialStoreId} \
-         -username ${login} \
-         -password env://CREDENTIALS_PASSWORD \
-         -format json`,
+        -name ${login} \
+        -credential-store-id ${credentialStoreId} \
+        -username ${login} \
+        -password env://CREDENTIALS_PASSWORD \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -490,10 +513,10 @@ exports.createNewTcpTarget = async (projectId) => {
     target = JSON.parse(
       execSync(
         `boundary targets create tcp \
-         -default-port ${defaultPort} \
-         -name ${targetName} \
-         -scope-id ${projectId} \
-         -format json`,
+        -default-port ${defaultPort} \
+        -name ${targetName} \
+        -scope-id ${projectId} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
@@ -507,7 +530,7 @@ exports.createNewTcpTarget = async (projectId) => {
  * @param {string} projectId ID of the project under which the target will be created.
  * @returns {Promise<string>} new target's ID
  */
-exports.createNewSshTarget = async (projectId) => {
+exports.createNewSshTargetCli = async (projectId) => {
   const targetName = 'target-' + nanoid();
   const defaultPort = 22;
   let target;
@@ -515,10 +538,10 @@ exports.createNewSshTarget = async (projectId) => {
     target = JSON.parse(
       execSync(
         `boundary targets create ssh \
-         -default-port ${defaultPort} \
-         -name ${targetName} \
-         -scope-id ${projectId} \
-         -format json`,
+        -default-port ${defaultPort} \
+        -name ${targetName} \
+        -scope-id ${projectId} \
+        -format json`,
       ),
     ).item;
   } catch (e) {
