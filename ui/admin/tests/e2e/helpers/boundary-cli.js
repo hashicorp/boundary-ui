@@ -69,7 +69,7 @@ exports.connectToTarget = async (targetId) => {
 
 /**
  * Uses the boundary CLI to create a new org.
- * @returns {string} new org's id
+ * @returns {Promise<string>} new org's id
  */
 exports.createNewOrgCli = async () => {
   const orgName = 'Org ' + nanoid();
@@ -104,7 +104,7 @@ exports.deleteOrgCli = async (orgId) => {
 /**
  * Uses the boundary CLI to create a new project.
  * @param {string} orgId ID of the organization under which the project will be created.
- * @returns {string} new project's ID
+ * @returns {Promise<string>} new project's ID
  */
 exports.createNewProjectCli = async (orgId) => {
   const projectName = 'Project ' + nanoid();
@@ -126,7 +126,7 @@ exports.createNewProjectCli = async (orgId) => {
 
 /**
  * Uses the boundary CLI to create a new controller-led worker.
- * @returns {string} new worker's ID
+ * @returns {Promise<string>} new worker's ID
  */
 exports.createNewControllerLedWorkerCli = async () => {
   const workerName = 'worker-' + nanoid();
@@ -148,7 +148,7 @@ exports.createNewControllerLedWorkerCli = async () => {
 /**
  * Uses the boundary CLI to create a new password auth-method.
  * @param {string} scopeId ID of the scope under which the auth-method will be created.
- * @returns {string} new auth-method's ID
+ * @returns {Promise<string>} new auth-method's ID
  */
 exports.createNewPasswordAuthMethodCli = async (scopeId) => {
   const authMethodName = 'auth-method-' + nanoid();
@@ -189,7 +189,7 @@ exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
 /**
  * Uses the boundary CLI to create a new password account.
  * @param {string} authMethodId ID of the auth-method that the new account will be created for.
- * @returns {string} new account's ID
+ * @returns {Promise<string>} new account's ID
  */
 exports.createNewPasswordAccountCli = async (authMethodId) => {
   let passwordAccount;
@@ -214,7 +214,7 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
 /**
  * Uses the boundary CLI to create a new role.
  * @param {string} scopeId ID of the scope under which the role will be created.
- * @returns {string} new role's ID
+ * @returns {Promise<string>} new role's ID
  */
 exports.createNewRoleCli = async (scopeId) => {
   const roleName = 'role-' + nanoid();
@@ -237,7 +237,7 @@ exports.createNewRoleCli = async (scopeId) => {
 /**
  * Uses the boundary CLI to create a new group.
  * @param {string} scopeId ID of the scope under which the group will be created.
- * @returns {string} new group's ID
+ * @returns {Promise<string>} new group's ID
  */
 exports.createNewGroupCli = async (scopeId) => {
   const groupName = 'group-' + nanoid();
@@ -260,7 +260,7 @@ exports.createNewGroupCli = async (scopeId) => {
 /**
  * Uses the boundary CLI to create a new user.
  * @param {string} scopeId ID of the scope under which the user will be created.
- * @returns {string} new user's ID
+ * @returns {Promise<string>} new user's ID
  */
 exports.createNewUserCli = async (scopeId) => {
   const userName = 'user-' + nanoid();
@@ -283,7 +283,7 @@ exports.createNewUserCli = async (scopeId) => {
 /**
  * Uses the boundary CLI to create a new static host catalog.
  * @param {string} projectId ID of the project under which the host catalog will be created.
- * @returns {string} new host catalog's ID
+ * @returns {Promise<string>} new host catalog's ID
  */
 exports.createNewStaticHostCatalogCli = async (projectId) => {
   const hostCatalogName = 'static-host-catalog-' + nanoid();
@@ -306,7 +306,7 @@ exports.createNewStaticHostCatalogCli = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new dynamic AWS host catalog.
  * @param {string} projectId ID of the project under which the host catalog will be created.
- * @returns {string} new host catalog's ID
+ * @returns {Promise<string>} new host catalog's ID
  */
 exports.createDynamicAwsHostCatalogCli = async (projectId) => {
   const hostCatalogName = 'dynamic-aws-host-catalog-' + nanoid();
@@ -334,7 +334,7 @@ exports.createDynamicAwsHostCatalogCli = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new static host.
  * @param {string} hostCatalogId ID of the host catalog that the host will be created for.
- * @returns {string} new host's ID
+ * @returns {Promise<string>} new host's ID
  */
 exports.createNewStaticHostCli = async (hostCatalogId) => {
   const hostName = 'static-host-' + nanoid();
@@ -358,7 +358,7 @@ exports.createNewStaticHostCli = async (hostCatalogId) => {
 /**
  * Uses the boundary CLI to create a new static host set.
  * @param {string} hostCatalogId ID of the host catalog that the host set will be created for.
- * @returns {string} new host set's ID
+ * @returns {Promise<string>} new host set's ID
  */
 exports.createNewHostSetCli = async (hostCatalogId) => {
   const hostSetName = 'static-host-' + nanoid();
@@ -381,7 +381,7 @@ exports.createNewHostSetCli = async (hostCatalogId) => {
 /**
  * Uses the boundary CLI to create a new static credential store.
  * @param {string} projectId ID of the project under which the credential store will be created.
- * @returns {string} new credential store's ID
+ * @returns {Promise<string>} new credential store's ID
  */
 exports.createNewStaticCredentialStoreCli = async (projectId) => {
   const credentialStoreName = 'static-credential-store-' + nanoid();
@@ -406,7 +406,7 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
  * @param {string} projectId ID of the project under which the credential store will be created.
  * @param {string} secretPolicyName Name of the secret policy that's used to create vault token.
  * @param {string} boundaryPolicyName Name of the boundary policy that's used to create vault token.
- * @returns {string} new credential store's ID
+ * @returns {Promise<string>} new credential store's ID
  */
 exports.createNewVaultCredentialStoreCli = async (
   projectId,
@@ -454,7 +454,7 @@ exports.createNewVaultCredentialStoreCli = async (
 /**
  * Uses the boundary CLI to create a new username-password credential.
  * @param {string} credentialStoreId ID of the credential store that the credential will be created for.
- * @returns {string} new credential's ID
+ * @returns {Promise<string>} new credential's ID
  */
 exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
   let usernamePasswordCredential;
@@ -480,7 +480,7 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
 /**
  * Uses the boundary CLI to create a new TCP target.
  * @param {string} projectId ID of the project under which the target will be created.
- * @returns {string} new target's ID
+ * @returns {Promise<string>} new target's ID
  */
 exports.createNewTcpTarget = async (projectId) => {
   const targetName = 'target-' + nanoid();
@@ -505,7 +505,7 @@ exports.createNewTcpTarget = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new SSH target.
  * @param {string} projectId ID of the project under which the target will be created.
- * @returns {string} new target's ID
+ * @returns {Promise<string>} new target's ID
  */
 exports.createNewSshTarget = async (projectId) => {
   const targetName = 'target-' + nanoid();
