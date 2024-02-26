@@ -5,6 +5,7 @@
 
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
+const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
@@ -74,6 +75,10 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
         retrievedUser,
     );
   }
+
+  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    encoding: 'utf-8',
+  });
   if (keyData != retrievedKey) {
     throw new Error('Stored Key does not match');
   }
