@@ -765,6 +765,10 @@ credential-library:
     new: New Credential Library
     ssh_private_key: SSH Private Key
     username_password: Username & Password
+    username_attribute: Username
+    password_attribute: Password
+    private_key_passphrase_attribute: Private Key Passphrase
+    private_key_attribute: Private Key
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -779,6 +783,9 @@ credential-library:
     credential_type:
       label: Credential Type
       help: Specify the type of credential this library will issue. This must be set to use credential injection. After this data is saved, it cannot be changed later.
+    credential_mapping_overrides:
+      label: Credential mapping overrides
+      help: Specify the credential fields to use instead of the defaults
     http_method:
       label: HTTP Method
       help: The HTTP method the library uses when requesting credentials from Vault.
