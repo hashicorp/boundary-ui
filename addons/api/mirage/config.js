@@ -639,10 +639,7 @@ function routes() {
       // BE API only updates these fields if there's an update mask, otherwise they remain unmodified
       // but we don't need this flow in our mocks, so we are deleting fields with null value
       const { credentialMappingOverrides } = library;
-      if (
-        credentialMappingOverrides &&
-        Object.keys(credentialMappingOverrides).length
-      ) {
+      if (Object.keys(credentialMappingOverrides || {}).length) {
         Object.keys(credentialMappingOverrides).forEach((key) => {
           if (credentialMappingOverrides[key] === null) {
             delete credentialMappingOverrides[key];
