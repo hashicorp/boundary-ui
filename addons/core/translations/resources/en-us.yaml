@@ -957,6 +957,7 @@ policy:
     create_policy_description: Enable session recording for projects in this org.
     retain_until: Retain until
   actions:
+    detach: Detach Storage Policy
     delete: Delete Storage Policy
     add: Add Storage Policy
     apply: Apply the storage policy to this scope and its children
@@ -989,8 +990,8 @@ policy:
         label: Custom
       do_not_protect:
         label: Do not protect, allow deletion any time
-      hippa:
-        label: HIPPA (6 years)
+      hipaa:
+        label: HIPAA (6 years)
       soc:
         label: SOC 2 (7 years)
     deletion_policy_options:
