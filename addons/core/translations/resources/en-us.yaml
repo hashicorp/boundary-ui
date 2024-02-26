@@ -959,6 +959,7 @@ policy:
     retain_until: Retain until
   actions:
     detach: Detach Storage Policy
+    delete: Delete Storage Policy
     add: Add Storage Policy
     apply: Apply the storage policy to this scope and its children
     new: Add a new storage policy

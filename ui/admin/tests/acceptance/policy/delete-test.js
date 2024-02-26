@@ -65,7 +65,7 @@ module('Acceptance | policies | delete', function (hooks) {
     await click(DROPDOWN_BUTTON_SELECTOR);
 
     assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Detach Storage Policy');
+    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Delete Storage Policy');
 
     await click(DROPDOWN_ITEM_SELECTOR);
     assert.strictEqual(policyCount(), count - 1);
