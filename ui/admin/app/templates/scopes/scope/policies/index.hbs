@@ -105,7 +105,7 @@
                     {{/if}}
                     {{#if perms.canDelete}}
                       <dd.Interactive
-                        @text={{t 'resources.policy.actions.delete'}}
+                        @text={{t 'resources.policy.actions.detach'}}
                         @color='critical'
                         {{on 'click' (route-action 'delete' B.data)}}
                       />

@@ -958,7 +958,7 @@ policy:
     create_policy_description: Enable session recording for projects in this org.
     retain_until: Retain until
   actions:
-    delete: Delete Storage Policy
+    detach: Detach Storage Policy
     add: Add Storage Policy
     apply: Apply the storage policy to this scope and its children
     new: Add a new storage policy
