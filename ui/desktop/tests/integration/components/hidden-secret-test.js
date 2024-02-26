@@ -14,6 +14,9 @@ module('Integration | Component | hidden-secret', function (hooks) {
   setupIntl(hooks);
   setupMirage(hooks);
 
+  const HIDDEN_SECRET_TOGGLE = '.hidden-secret > button:first-child';
+  const HIDDEN_SECRET_CONTENT = '.hidden-secret > .secret-content';
+
   // Global Secret for mocking
   this.secret = `{
     "secret_key": "QWERTYUIOP",
@@ -37,15 +40,13 @@ module('Integration | Component | hidden-secret', function (hooks) {
   test('it renders with a secret', async function (assert) {
     assert.expect(1);
     await renderComponent();
-    assert
-      .dom('.hidden-secret > span > span')
-      .hasText('■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+    assert.dom(HIDDEN_SECRET_CONTENT).hasText('■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
   });
 
   test('it reveals secret when button is clicked', async function (assert) {
     assert.expect(1);
     await renderComponent();
-    await click('.hidden-secret > button');
-    assert.dom('.hidden-secret > span > span').hasText(this.secret);
+    await click(HIDDEN_SECRET_TOGGLE);
+    assert.dom(HIDDEN_SECRET_CONTENT).hasText(this.secret);
   });
 });
