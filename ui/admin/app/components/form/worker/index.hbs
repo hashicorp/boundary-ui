@@ -89,7 +89,7 @@
         @model.last_status_time
         (concat relativeDate ', ' customFormat)
       }}
-      disabled={{form.disabled}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'form.worker_last_seen.label'}}</F.Label>
@@ -98,11 +98,7 @@
 
   {{/let}}
 
-  <InfoField
-    @value={{@model.release_version}}
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <InfoField @value={{@model.release_version}} readonly={{true}} as |F|>
     <F.Label>{{t 'form.worker_release_version.label'}}</F.Label>
     <F.HelperText>{{t 'form.worker_release_version.help'}}</F.HelperText>
   </InfoField>
