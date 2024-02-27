@@ -10,25 +10,25 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
   {{#unless @model.isNew}}
 
-    <InfoField @value={{@model.issuer}} disabled={{form.disabled}} as |F|>
+    <InfoField @value={{@model.issuer}} readonly={{true}} as |F|>
       <F.Label>{{t 'form.issuer.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.subject}} disabled={{form.disabled}} as |F|>
+    <InfoField @value={{@model.subject}} readonly={{true}} as |F|>
       <F.Label>{{t 'form.subject.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.email}} disabled={{form.disabled}} as |F|>
+    <InfoField @value={{@model.email}} readonly={{true}} as |F|>
       <F.Label>{{t 'form.email.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.full_name}} disabled={{form.disabled}} as |F|>
+    <InfoField @value={{@model.full_name}} readonly={{true}} as |F|>
       <F.Label>{{t 'form.full_name.label'}}</F.Label>
     </InfoField>
   {{/unless}}
