@@ -115,7 +115,7 @@ module('Acceptance | users | update', function (hooks) {
     await click('[type="submit"]');
 
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
   test('can discard unsaved user changes via dialog', async function (assert) {
