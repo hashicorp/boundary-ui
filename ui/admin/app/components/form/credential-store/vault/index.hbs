@@ -79,6 +79,7 @@
       <InfoField
         @value={{t (concat 'resources.credential-store.types.' @model.type)}}
         @icon='vault'
+        readonly={{true}}
         as |F|
       >
         <F.Label>{{t 'form.type.label'}}</F.Label>
