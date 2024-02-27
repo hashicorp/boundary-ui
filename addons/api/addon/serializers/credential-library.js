@@ -7,6 +7,7 @@ import ApplicationSerializer from './application';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  options,
 } from '../models/credential-library';
 
 export default class CredentialLibrarySerializer extends ApplicationSerializer {
@@ -31,9 +32,34 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         return super.serialize(...arguments);
     }
   }
+  serializeAttribute(snapshot, json) {
+    const value = super.serializeAttribute(...arguments);
+    const { credential_type, type, credential_mapping_overrides, isNew } =
+      snapshot.record;
+    if (
+      type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC &&
+      credential_mapping_overrides &&
+      credential_type &&
+      !isNew
+    ) {
+      // API expects to send null to fields if it is undefined or deleted
+      json.credential_mapping_overrides = Object.keys(
+        options.mapping_overrides[credential_type],
+      ).reduce((obj, key) => {
+        if (credential_mapping_overrides[key]) {
+          obj[key] = credential_mapping_overrides[key];
+        } else {
+          obj[key] = null;
+        }
+        return obj;
+      }, {});
+      return value;
+    }
+  }
 
   serializeVaultGeneric() {
     const serialized = super.serialize(...arguments);
+
     if (serialized.attributes) {
       // Set `http_request_body` only if `http_method` is POST
       // otherwise set to null to have the field removed
