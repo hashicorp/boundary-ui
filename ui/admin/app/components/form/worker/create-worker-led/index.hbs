@@ -15,7 +15,9 @@
       <Hds::Form::TextInput::Field
         name='cluster_id'
         @value={{this.clusterID}}
+        @isOptional={{true}}
         placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
+        {{on 'input' (set-from-event this 'clusterID')}}
         as |F|
       >
         <F.Label>{{t 'resources.worker.form.cluster_id.label'}}</F.Label>
@@ -31,7 +33,9 @@
     <Hds::Form::TextInput::Field
       name='ip_address'
       @value={{this.ipAddress}}
+      @isOptional={{true}}
       placeholder='worker1.example.com'
+      {{on 'input' (set-from-event this 'ipAddress')}}
       as |F|
     >
       <F.Label>{{t 'resources.worker.form.ip_address.label'}}</F.Label>
@@ -46,7 +50,9 @@
     <Hds::Form::TextInput::Field
       name='config_file_path'
       @value={{this.configFilePath}}
+      @isOptional={{true}}
       placeholder='/home/ubuntu/boundary'
+      {{on 'input' (set-from-event this 'configFilePath')}}
       as |F|
     >
       <F.Label>{{t 'resources.worker.form.config_file_path.label'}}</F.Label>
@@ -59,7 +65,9 @@
       <Hds::Form::TextInput::Field
         name='initial_upstreams'
         @value={{this.initialUpstreams}}
+        @isOptional={{true}}
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
+        {{on 'input' (set-from-event this 'initialUpstreams')}}
         as |F|
       >
         <F.Label>{{t 'resources.worker.form.initial_upstreams.label'}}</F.Label>
@@ -68,7 +76,11 @@
         </F.HelperText>
       </Hds::Form::TextInput::Field>
     {{/if}}
-    <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @disabled={{form.disabled}}
+      @isOptional={{true}}
+    >
       <:fieldset as |F|>
         <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
         <F.HelperText>
@@ -88,7 +100,7 @@
     </Form::Field::ListWrapper>
 
     {{#if (feature-flag 'ssh-session-recording')}}
-      <Hds::Form::Fieldset as |F|>
+      <Hds::Form::Fieldset @isOptional={{true}} as |F|>
         <F.Legend>{{t
             'resources.worker.form.local_session_recording_storage.label'
           }}</F.Legend>
@@ -185,6 +197,10 @@
       <Hds::Form::TextInput::Field
         name='worker_auth_registration_request'
         @value={{this.generatedWorkerAuthToken}}
+        @isRequired={{true}}
+        @isInvalid={{@model.errors.worker_generated_auth_token}}
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
         as |F|
       >
         <F.Label>{{t
@@ -195,6 +211,13 @@
             'resources.worker.form.steps.3.worker_auth_registration_request.help'
           }}
         </F.HelperText>
+        {{#if @model.errors.worker_generated_auth_token}}
+          <F.Error as |E|>
+            {{#each @model.errors.worker_generated_auth_token as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
       </Hds::Form::TextInput::Field>
       {{#if (can 'save worker' @model)}}
         <Hds::Button
