@@ -34,8 +34,8 @@
 
   <Hds::Form::Textarea::Field
     name='description'
-    @isOptional={{true}}
     @value={{@model.description}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.description}}
     disabled={{form.disabled}}
     as |F|
