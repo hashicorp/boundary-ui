@@ -51,14 +51,14 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
   <InfoField
     @value={{t 'descriptions.provider'}}
     @icon='azure-color'
-    disabled={{form.disabled}}
+    readonly={{true}}
     as |F|
   >
     <F.Label>{{t 'titles.provider'}}</F.Label>
