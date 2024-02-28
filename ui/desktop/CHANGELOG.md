@@ -6,7 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New
 
-- Upgrade CLI to v0.15.1 ([PR]())
+- Upgrade CLI to v0.15.1 ([PR](https://github.com/hashicorp/boundary-ui/pull/2165))
 - Display only scopes with auth-methods at authenticate ([PR](https://github.com/hashicorp/boundary-ui/pull/2129))
 
 ### Bug Fixes
