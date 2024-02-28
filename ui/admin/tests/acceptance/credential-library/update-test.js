@@ -133,8 +133,6 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     assert.strictEqual(credentialLibrary.attributes.path, 'path');
     assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
       private_key_attribute: 'key',
-      private_key_passphrase_attribute: null,
-      username_attribute: null,
     });
   });
 

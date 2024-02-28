@@ -10,30 +10,31 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -94,7 +95,7 @@
     <InfoField
       @value={{t 'resources.host-catalog.types.aws'}}
       @icon='aws-color'
-      disabled={{form.disabled}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'titles.provider'}}</F.Label>
@@ -103,38 +104,53 @@
     </InfoField>
   {{/if}}
 
-  <form.input
-    @name='region'
-    @type='region'
+  <Hds::Form::TextInput::Field
+    name='region'
     @value={{@model.region}}
-    @label={{t 'resources.host-catalog.form.aws_region.label'}}
-    @helperText={{t 'resources.host-catalog.form.aws_region.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.aws.region'}}
-    readonly={{false}}
-  />
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'region')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.host-catalog.form.aws_region.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.form.aws_region.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws.region'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='access_key_id'
-    @type='access_key_id'
+  <Hds::Form::TextInput::Field
+    name='access_key_id'
     @value={{@model.access_key_id}}
-    @label={{t 'form.access_key_id.label'}}
-    @helperText={{t 'form.access_key_id.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.aws'}}
-    readonly={{false}}
-  />
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'access_key_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.access_key_id.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.access_key_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='secret_access_key'
-    @type='secret_access_key'
+  <Hds::Form::TextInput::Field
+    name='secret_access_key'
     @value={{@model.secret_access_key}}
-    @label={{t 'form.secret_access_key.label'}}
-    @helperText={{t 'form.secret_access_key.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.aws'}}
-    readonly={{false}}
-  />
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'secret_access_key')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.secret_access_key.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.secret_access_key.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Checkbox::Field
     name='disable_credential_rotation'
