@@ -2,6 +2,19 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v2.0.1 [CLI 0.15.1] (2024.02.29)
+
+### New
+
+- Upgrade CLI to v0.15.1 ([PR]())
+- Display only scopes with auth-methods at authenticate ([PR](https://github.com/hashicorp/boundary-ui/pull/2129))
+
+### Bug Fixes
+
+- Fix refresh for Windows ([PR](https://github.com/hashicorp/boundary-ui/pull/2133))
+- Add error notification if adding token to daemon fails ([PR](https://github.com/hashicorp/boundary-ui/pull/2127))
+
+
 ## v2.0.0 [CLI 0.15.0] (2024.01.31)
 
 ### New
@@ -11,6 +24,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 - Add time-remaining to a session ([PR](https://github.com/hashicorp/boundary-ui/pull/2018))
 
 ### Bug Fixes
+
 - Fix copy command not working in embedded terminal for Windows OS ([PR](https://github.com/hashicorp/boundary-ui/pull/2001))
 
 
