@@ -11,30 +11,31 @@
   as |form|
 >
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isOptional={{true}}
+    @isInvalid={{@model.errors.name}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
-    @value={{@model.description}}
-    @isInvalid={{@model.errors.description}}
     name='description'
+    @value={{@model.description}}
+    @isOptional={{true}}
+    @isInvalid={{@model.errors.description}}
     disabled={{form.disabled}}
     as |F|
   >
