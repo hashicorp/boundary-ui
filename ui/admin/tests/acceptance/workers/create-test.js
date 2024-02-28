@@ -53,18 +53,18 @@ module('Acceptance | workers | create', function (hooks) {
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
-    const labels = findAll('label.rose-form-label');
-    assert.dom(labels[0]).hasText('Boundary Cluster ID');
+    const labels = findAll('label.hds-form-label');
+    assert.dom(labels[0]).hasText('Boundary Cluster ID (Optional)');
     assert.dom(labels[2]).doesNotIncludeText('Initial Upstreams');
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
     const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
-    const labels = findAll('label.rose-form-label');
+    const labels = findAll('label.hds-form-label');
     assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
-    assert.dom(labels[2]).hasText('Initial Upstreams');
+    assert.dom(labels[2]).hasText('Initial Upstreams (Optional)');
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
