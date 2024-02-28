@@ -261,8 +261,8 @@
               <B.Td>
                 <Hds::Form::TextInput::Field
                   @value={{claimMap.from}}
-                  @type='text'
                   disabled={{form.disabled}}
+                  @isInvalid={{@model.errors.account_claim_maps}}
                   aria-labelledby='fromClaimHeader'
                   {{on 'input' (set-from-event claimMap 'from')}}
                 />
@@ -272,6 +272,7 @@
                   @value={{claimMap.to}}
                   @width='100%'
                   disabled={{form.disabled}}
+                  @isInvalid={{@model.errors.account_claim_maps}}
                   aria-labelledby='toClaimHeader'
                   {{on 'change' (set-from-event claimMap 'to')}}
                   as |F|
@@ -295,6 +296,7 @@
                   @icon='trash'
                   @isIconOnly={{true}}
                   disabled={{form.disabled}}
+                  @isInvalid={{@model.errors.account_claim_maps}}
                   {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
                   data-test-remove-claim-map={{claimMap.from}}
                 />
@@ -305,8 +307,8 @@
             <B.Td>
               <Hds::Form::TextInput::Field
                 @value={{this.newFromClaim}}
-                @type='text'
                 disabled={{form.disabled}}
+                @isInvalid={{@model.errors.account_claim_maps}}
                 aria-labelledby='fromClaimHeader'
                 {{on 'input' (set-from-event this 'newFromClaim')}}
                 data-test-from-claim-input
@@ -318,6 +320,7 @@
                 @width='100%'
                 disabled={{form.disabled}}
                 aria-labelledby='toClaimHeader'
+                @isInvalid={{@model.errors.account_claim_maps}}
                 {{on 'change' (set-from-event this 'newToClaim')}}
                 data-test-to-claim-select
                 as |F|
