@@ -138,7 +138,7 @@ module('Acceptance | users | create', function (hooks) {
 
     assert.strictEqual(getUsersCount(), usersCount);
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {

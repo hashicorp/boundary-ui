@@ -299,6 +299,10 @@
     align-items: flex-end;
     display: flex;
     gap: sizing.rems(m);
+
+    [class*='hds-form-field--layout'] {
+      margin-bottom: 0;
+    }
   }
 
   .worker-success {
