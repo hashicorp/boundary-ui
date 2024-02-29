@@ -138,7 +138,7 @@ exports.createNewHostInHostSet = async (page) => {
 };
 
 /**
- * Uses the UI to create a credential store. Assumes you have selected the desired project.
+ * Uses the UI to create a static credential store. Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
  * @returns Name of the credential store
  */
@@ -152,6 +152,40 @@ exports.createStaticCredentialStore = async (page) => {
   await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
+  ).toBeVisible();
+
+  return credentialStoreName;
+};
+
+/**
+ * Uses the UI to create a vault credential store. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} clientToken vault token to connect to boundary
+ * @returns Name of the credential store
+ */
+exports.createVaultCredentialStore = async (page, clientToken) => {
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
+  await page
+    .getByLabel('Address', { exact: true })
+    .fill(process.env.E2E_VAULT_ADDR);
+  await page.getByLabel('Token', { exact: true }).fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
