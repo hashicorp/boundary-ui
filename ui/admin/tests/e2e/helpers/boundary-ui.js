@@ -237,6 +237,43 @@ exports.createStaticCredentialKeyPair = async (page) => {
 };
 
 /**
+ * Uses the UI to create a vault credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @param {string} credentialType type of credential for credential injection
+ * @returns Name of the credential library
+ */
+exports.createVaultCredentialLibrary = async (
+  page,
+  vaultPath,
+  credentialType,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page.getByLabel('Vault Path').fill(vaultPath);
+
+  await page
+    .getByRole('combobox', { name: 'Credential Type' })
+    .selectOption(credentialType);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
+};
+
+/**
  * Uses the UI to create a new target. Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
  * @returns Name of the target
