@@ -670,7 +670,7 @@ exports.addMemberToGroup = async (page, userName) => {
  * @param {Page} page Playwright page object
  */
 exports.createRole = async (page) => {
-  const roleName = 'Credential ' + nanoid();
+  const roleName = 'Role ' + nanoid();
 
   await page
     .getByRole('navigation', { name: 'IAM' })
