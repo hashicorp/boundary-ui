@@ -12,45 +12,75 @@
   <h3>{{t 'resources.worker.form.steps.1.title'}}</h3>
   <div class='worker-create-section'>
     {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
-      <form.input
-        @name='cluster_id'
+      <Hds::Form::TextInput::Field
+        name='cluster_id'
         @value={{this.clusterID}}
-        @label={{t 'resources.worker.form.cluster_id.label'}}
-        @helperText={{t 'resources.worker.form.cluster_id.help'}}
-        @linkText={{t 'actions.learn-more'}}
-        @link={{doc-url 'worker.manage-workers'}}
+        @isOptional={{true}}
         placeholder='69b6ddb3-ffec-42ab-a994-f43a6519470a'
-      />
+        {{on 'input' (set-from-event this 'clusterID')}}
+        as |F|
+      >
+        <F.Label>{{t 'resources.worker.form.cluster_id.label'}}</F.Label>
+        <F.HelperText>
+          {{t 'resources.worker.form.cluster_id.help'}}
+          <Hds::Link::Inline @href={{doc-url 'worker.manage-workers'}}>
+            {{t 'actions.learn-more'}}
+          </Hds::Link::Inline>
+        </F.HelperText>
+      </Hds::Form::TextInput::Field>
     {{/if}}
 
-    <form.input
-      @name='ip_address'
+    <Hds::Form::TextInput::Field
+      name='ip_address'
       @value={{this.ipAddress}}
-      @label={{t 'resources.worker.form.ip_address.label'}}
-      @helperText={{t 'resources.worker.form.ip_address.help'}}
-      @linkText={{t 'actions.learn-more'}}
-      @link={{doc-url 'worker'}}
+      @isOptional={{true}}
       placeholder='worker1.example.com'
-    />
+      {{on 'input' (set-from-event this 'ipAddress')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.worker.form.ip_address.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.worker.form.ip_address.help'}}
+        <Hds::Link::Inline @href={{doc-url 'worker'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
 
-    <form.input
-      @name='config_file_path'
+    <Hds::Form::TextInput::Field
+      name='config_file_path'
       @value={{this.configFilePath}}
-      @label={{t 'resources.worker.form.config_file_path.label'}}
-      @helperText={{t 'resources.worker.form.config_file_path.help'}}
+      @isOptional={{true}}
       placeholder='/home/ubuntu/boundary'
-    />
+      {{on 'input' (set-from-event this 'configFilePath')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.worker.form.config_file_path.label'}}</F.Label>
+      <F.HelperText>
+        {{t 'resources.worker.form.config_file_path.help'}}
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
 
     {{#if (not (feature-flag 'byow-pki-hcp-cluster-id'))}}
-      <form.input
-        @name='initial_upstreams'
+      <Hds::Form::TextInput::Field
+        name='initial_upstreams'
         @value={{this.initialUpstreams}}
-        @label={{t 'resources.worker.form.initial_upstreams.label'}}
-        @helperText={{t 'resources.worker.form.initial_upstreams.help'}}
+        @isOptional={{true}}
         placeholder='10.0.0.1, 10.0.0.2, 10.0.0.3'
-      />
+        {{on 'input' (set-from-event this 'initialUpstreams')}}
+        as |F|
+      >
+        <F.Label>{{t 'resources.worker.form.initial_upstreams.label'}}</F.Label>
+        <F.HelperText>
+          {{t 'resources.worker.form.initial_upstreams.help'}}
+        </F.HelperText>
+      </Hds::Form::TextInput::Field>
     {{/if}}
-    <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @disabled={{form.disabled}}
+      @isOptional={{true}}
+    >
       <:fieldset as |F|>
         <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
         <F.HelperText>
@@ -70,7 +100,7 @@
     </Form::Field::ListWrapper>
 
     {{#if (feature-flag 'ssh-session-recording')}}
-      <Hds::Form::Fieldset as |F|>
+      <Hds::Form::Fieldset @isOptional={{true}} as |F|>
         <F.Legend>{{t
             'resources.worker.form.local_session_recording_storage.label'
           }}</F.Legend>
@@ -94,15 +124,19 @@
         </F.Control>
         {{#if this.enableRecordingStoragePath}}
           <F.Control>
-            <form.input
-              @name='recording_storage_path'
+            <Hds::Form::TextInput::Field
+              name='recording_storage_path'
               @value={{this.recording_storage_path}}
-              @label={{t 'resources.worker.form.recording_storage_path.label'}}
-              @helperText={{t
-                'resources.worker.form.recording_storage_path.help'
-              }}
               placeholder='/tmp/worker1'
-            />
+              as |F|
+            >
+              <F.Label>{{t
+                  'resources.worker.form.recording_storage_path.label'
+                }}</F.Label>
+              <F.HelperText>
+                {{t 'resources.worker.form.recording_storage_path.help'}}
+              </F.HelperText>
+            </Hds::Form::TextInput::Field>
           </F.Control>
         {{/if}}
       </Hds::Form::Fieldset>
@@ -160,26 +194,38 @@
   <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>
   <div class='worker-create-section'>
     <div class='worker-auth-token'>
-      <form.input
-        @name='worker_auth_registration_request'
+      <Hds::Form::TextInput::Field
+        name='worker_auth_registration_request'
         @value={{this.generatedWorkerAuthToken}}
-        @disabled={{@model.cannotSave}}
-        @label={{t
-          'resources.worker.form.steps.3.worker_auth_registration_request.label'
-        }}
-        @helperText={{t
-          'resources.worker.form.steps.3.worker_auth_registration_request.help'
-        }}
-      />
+        @isRequired={{true}}
+        @isInvalid={{@model.errors.worker_generated_auth_token}}
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.worker.form.steps.3.worker_auth_registration_request.label'
+          }}</F.Label>
+        <F.HelperText>
+          {{t
+            'resources.worker.form.steps.3.worker_auth_registration_request.help'
+          }}
+        </F.HelperText>
+        {{#if @model.errors.worker_generated_auth_token}}
+          <F.Error as |E|>
+            {{#each @model.errors.worker_generated_auth_token as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
       {{#if (can 'save worker' @model)}}
-        <Rose::Button
-          @onSubmit={{true}}
-          @style='primary'
+        <Hds::Button
+          @text={{t 'resources.worker.actions.register'}}
+          type='submit'
+          disabled={{@model.cannotSave}}
           class='nowrap'
-          @disabled={{@model.cannotSave}}
-        >
-          {{t 'resources.worker.actions.register'}}
-        </Rose::Button>
+        />
       {{/if}}
     </div>
 

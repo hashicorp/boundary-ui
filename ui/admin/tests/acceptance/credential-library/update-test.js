@@ -22,6 +22,17 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
+  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
+  const NAME_INPUT_SELECTOR = '[name="name"]';
+  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
+  const DESC_INPUT_SELECTOR = '[name="description"]';
+  const VAULT_PATH_SELECTOR = '[name="vault_path"]';
+  const CRED_TYPE_SELECTOR = '[name="credential_type"]';
+  const CRED_MAPPING_OVERRIDES_SELECT =
+    '[name="credential_mapping_overrides"] tbody td:nth-of-type(1) select';
+  const CRED_MAPPING_OVERRIDES_INPUT =
+    '[name="credential_mapping_overrides"] tbody td:nth-of-type(2) input';
   const instances = {
     scopes: {
       global: null,
@@ -73,41 +84,56 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     authenticateSession({});
   });
 
-  test('can update resource and save changes', async function (assert) {
-    assert.notEqual(instances.credentialLibrary.name, 'random string');
-    await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
-    assert.strictEqual(currentURL(), urls.credentialLibrary);
-    assert.strictEqual(
-      this.server.schema.credentialLibraries.all().models[0].name,
-      'random string',
-    );
-  });
-
   test('cannot update resource without proper authorization', async function (assert) {
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'update',
       );
     await visit(urls.credentialLibrary);
-    assert.notOk(find('form [type="button"]'));
+    assert.notOk(find(BUTTON_SELECTOR));
   });
 
   test('can update a credential library and cancel changes', async function (assert) {
     await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await click(BUTTON_SELECTOR);
     assert.notEqual(
       this.server.schema.credentialLibraries.all().models[0].name,
       'random string',
     );
     assert.strictEqual(
-      find('[name="name"]').value,
+      find(NAME_INPUT_SELECTOR).value,
       instances.credentialLibrary.name,
     );
+  });
+
+  test('can update a vault generic credential library and save changes', async function (assert) {
+    await visit(
+      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`,
+    );
+
+    await click(BUTTON_SELECTOR);
+
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await fillIn(VAULT_PATH_SELECTOR, 'path');
+
+    await select(CRED_MAPPING_OVERRIDES_SELECT, 'private_key_attribute');
+    await fillIn(CRED_MAPPING_OVERRIDES_INPUT, 'key');
+
+    await click('[name="credential_mapping_overrides"] button');
+
+    await click(SAVE_BTN_SELECTOR);
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      name: 'random string',
+    });
+    assert.strictEqual(credentialLibrary.name, 'random string');
+    assert.strictEqual(credentialLibrary.description, 'description');
+    assert.strictEqual(credentialLibrary.attributes.path, 'path');
+    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
+      private_key_attribute: 'key',
+    });
   });
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
@@ -131,15 +157,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       );
     });
     await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await click(SAVE_BTN_SELECTOR);
     assert.ok(
       find('[role="alert"]').textContent.trim(),
       'The request was invalid.',
     );
     assert.ok(
-      find('.hds-form-error__message').textContent.trim(),
+      find(FIELD_ERROR_TEXT_SELECTOR).textContent.trim(),
       'Name is required.',
     );
   });
@@ -151,8 +177,8 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     assert.notEqual(instances.credentialLibrary.name, 'random string');
 
     await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.credentialLibrary);
 
     try {
@@ -174,8 +200,8 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     confirmService.enabled = true;
     assert.notEqual(instances.credentialLibrary.name, 'random string');
     await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.credentialLibrary);
 
     try {
@@ -193,8 +219,8 @@ module('Acceptance | credential-libraries | update', function (hooks) {
 
   test('cannot update credential type in a vault generic credential library', async function (assert) {
     await visit(urls.credentialLibrary);
-    await click('form [type="button"]', 'Activate edit mode');
-    assert.dom('[name=credential_type]').isDisabled();
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    assert.dom(CRED_TYPE_SELECTOR).isDisabled();
   });
 
   test('can update a vault ssh cert credential library and save changes', async function (assert) {
@@ -206,10 +232,10 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await visit(
       `${urls.credentialLibraries}/${instances.credentialLibrary.id}`,
     );
-    await click('form [type="button"]:not(:disabled)', 'Activate edit mode');
-    await fillIn('[name="name"]', 'name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="vault_path"]', 'path');
+    await click(BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'name');
+    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await fillIn(VAULT_PATH_SELECTOR, 'path');
     await fillIn('[name="username"]', 'username');
     await select('[name="key_type"]', 'rsa');
     await fillIn('[name="key_bits"]', 100);
@@ -234,7 +260,8 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     );
 
     await click('[name="extensions"] button');
-    await click('[type="submit"]');
+
+    await click(SAVE_BTN_SELECTOR);
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });

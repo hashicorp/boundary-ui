@@ -81,6 +81,12 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   })
   credential_type;
 
+  @attr('object', {
+    for: 'vault-generic',
+    description: 'It indicates the credential mapping overrides.',
+  })
+  credential_mapping_overrides;
+
   @attr('string', {
     for: 'vault-ssh-certificate',
     isNestedAttribute: true,
