@@ -56,10 +56,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       ? this.currentModel
       : {};
 
-    if (this.currentModel?.isNew) {
-      this.currentModel.rollbackAttributes();
-    }
-
     // Set the type to generic vault if feature flag isn't enabled in cases where
     // user sets the query parameter manually
     type = this.features.isEnabled('ssh-target')
