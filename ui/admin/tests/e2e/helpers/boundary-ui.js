@@ -739,9 +739,10 @@ exports.addMemberToGroup = async (page, userName) => {
 /**
  * Uses the UI to create a new role. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} roleName Name of the new role
  */
-exports.createNewRole = async (page, roleName) => {
+exports.createRole = async (page) => {
+  const roleName = 'Role ' + nanoid();
+
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Roles' })
@@ -756,6 +757,8 @@ exports.createNewRole = async (page, roleName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(roleName),
   ).toBeVisible();
+
+  return roleName;
 };
 
 /**
