@@ -4,27 +4,25 @@
  */
 
 /* eslint-disable no-undef */
-const { test, expect } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { execSync } = require('child_process');
-const { nanoid } = require('nanoid');
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
+  connectSshToTarget,
+  deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const {
   createNewOrg,
   createNewProject,
+  createSshTargetWithAddressEnt,
   createVaultCredentialStore,
-  createNewHostCatalog,
-  createNewHostSet,
-  createNewHostInHostSet,
-  createNewTarget,
-  addHostSourceToTarget,
-  addBrokeredCredentialsToTarget,
+  createVaultCredentialLibrary,
+  addInjectedCredentialsToTarget,
+  waitForSessionToBeVisible,
 } = require('../helpers/boundary-ui');
-const { readFile } = require('fs/promises');
 
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
@@ -55,11 +53,13 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
+test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
   page,
 }) => {
   let org;
+  let connect;
   try {
+    // Set up vault
     execSync(
       `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
     );
@@ -86,79 +86,54 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
     const clientToken = vaultToken.auth.client_token;
 
+    // Create org
     const orgName = await createNewOrg(page);
     await authenticateBoundaryCli();
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
+    // Create project
     const projectName = await createNewProject(page);
     const projects = JSON.parse(
-      execSync(`boundary scopes list -format json -scope-id ${org.id}`),
+      execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    await createNewHostCatalog(page);
-    const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page);
-    const targetName = await createNewTarget(page);
-    await addHostSourceToTarget(page, hostSetName);
+    // Create target
+    const targetName = await createSshTargetWithAddressEnt(page);
     const targets = JSON.parse(
-      execSync(`boundary targets list -format json -scope-id ${project.id}`),
+      execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
+    // Create credentials
     await createVaultCredentialStore(page, clientToken);
-
-    const credentialLibraryName = 'Credential Library ' + nanoid();
-    await page.getByRole('link', { name: 'Credential Libraries' }).click();
-    await page.getByRole('link', { name: 'New', exact: true }).click();
-    await page
-      .getByLabel('Name (Optional)', { exact: true })
-      .fill(credentialLibraryName);
-    await page
-      .getByLabel('Description (Optional)')
-      .fill('This is an automated test');
-    await page
-      .getByLabel('Vault Path')
-      .fill(`${secretsPath}/data/${secretName}`);
-    await page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
-
-    await addBrokeredCredentialsToTarget(
+    const credentialLibraryName = await createVaultCredentialLibrary(
+      page,
+      `${secretsPath}/data/${secretName}`,
+      'SSH Private Key',
+    );
+    await addInjectedCredentialsToTarget(
       page,
       targetName,
       credentialLibraryName,
     );
 
-    const session = JSON.parse(
-      execSync(
-        `boundary targets authorize-session -id ${target.id} -format json`,
-      ),
-    );
-    const retrievedUser =
-      session.item.credentials[0].secret.decoded.data.username;
-    const retrievedKey =
-      session.item.credentials[0].secret.decoded.data.private_key;
-    if (process.env.E2E_SSH_USER != retrievedUser) {
-      throw new Error(
-        'Stored User does not match. EXPECTED: ' +
-          process.env.E2E_SSH_USER +
-          ', ACTUAL: ' +
-          retrievedUser,
-      );
-    }
-    const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
-      encoding: 'utf-8',
-    });
-    if (keyData != retrievedKey) {
-      throw new Error('Stored Key does not match');
-    }
+    // Connect to target
+    connect = await connectSshToTarget(target.id);
+    await waitForSessionToBeVisible(page, targetName);
+    await page
+      .getByRole('cell', { name: targetName })
+      .locator('..')
+      .getByRole('button', { name: 'Cancel' })
+      .click();
   } finally {
     if (org) {
       await deleteOrgCli(org.id);
+    }
+    // End `boundary connect` process
+    if (connect) {
+      connect.kill('SIGTERM');
     }
   }
 });
