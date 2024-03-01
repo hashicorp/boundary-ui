@@ -24,17 +24,18 @@
   <page.actions>
     <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Actions
       @model={{@model}}
+      @delete={{this.managedGroups.delete}}
     />
   </page.actions>
 
   <page.body>
     <Form::ManagedGroup
       @model={{@model}}
-      @edit={{route-action 'edit' @model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-      @addStringItem={{route-action 'addStringItem' @model}}
+      @edit={{fn this.managedGroups.edit @model}}
+      @submit={{fn this.managedGroups.save @model}}
+      @cancel={{fn this.managedGroups.cancel @model}}
+      @removeItemByIndex={{fn this.authMethods.removeItemByIndex @model}}
+      @addStringItem={{fn this.authMethods.addStringItem @model}}
     />
   </page.body>
 
