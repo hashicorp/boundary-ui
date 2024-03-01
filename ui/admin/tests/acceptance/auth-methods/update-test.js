@@ -53,6 +53,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   const TOGGLE_SELECTOR = '[name="prompts"]';
 
+  const SIGNING_ALGORITHMS_REMOVE_BTN_SELECTOR =
+    '[data-test-remove-option-button]';
+  const SIGNING_ALGORITHMS_INPUT_SELECTOR =
+    '.list-wrapper-field tbody tr:last-child select';
+  const SIGNING_ALGORITHMS_ADD_BTN_SELECTOR = '[data-test-add-option-button]';
+
   const instances = {
     scopes: {
       global: null,
@@ -123,14 +129,16 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="issuer"]', 'issuer');
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
+
     // Remove all signing algorithms
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element),
-      ),
-    );
-    await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    let removeButtons = findAll(SIGNING_ALGORITHMS_REMOVE_BTN_SELECTOR);
+
+    for (const element of removeButtons) {
+      await click(element);
+    }
+    await select(SIGNING_ALGORITHMS_INPUT_SELECTOR, 'RS384');
+    await click(SIGNING_ALGORITHMS_ADD_BTN_SELECTOR);
+
     // Remove all allowed audiences
     const allowedAudiencesList = findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR);
 
@@ -347,8 +355,9 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'existing auth method');
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
+
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {

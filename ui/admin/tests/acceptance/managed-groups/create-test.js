@@ -201,7 +201,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await a11yAudit();
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
   test('When user saving a new ldap managed group with invalid fields displays error message', async function (assert) {

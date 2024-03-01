@@ -280,7 +280,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     instances.session.update({ status: STATUS_SESSION_TERMINATED });
     this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
-
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .doesNotExist();
