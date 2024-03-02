@@ -1,0 +1,21 @@
+<Hds::Form::Select::Base
+  @value={{@value}}
+  @width={{@width}}
+  disabled={{@disabled}}
+  aria-label={{t 'titles.value'}}
+  {{on 'change' @setContext}}
+  as |F|
+>
+
+  <F.Options>
+    <option hidden selected value=''>
+      {{t 'titles.choose-an-option'}}
+    </option>
+    {{#each @selectOptions as |selectOption|}}
+      <option value={{selectOption}} selected={{eq selectOption @value}}>
+        {{selectOption}}
+      </option>
+    {{/each}}
+  </F.Options>
+
+</Hds::Form::Select::Base>

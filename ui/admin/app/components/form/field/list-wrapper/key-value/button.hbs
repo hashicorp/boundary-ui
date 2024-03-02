@@ -1,0 +1,9 @@
+<Hds::Button
+  data-test-remove-button
+  @text={{t 'actions.remove'}}
+  @color='critical'
+  @icon='trash'
+  @isIconOnly={{true}}
+  disabled={{@disabled}}
+  {{on 'click' (fn this.removeOptionByIndex index)}}
+/>

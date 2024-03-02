@@ -113,7 +113,7 @@ export default class MappingListComponent extends Component {
         [this.newOptionKey]: this.newOptionValue,
       };
     }
-
+    
     this.newOptionKey = '';
     this.newOptionValue = '';
   }

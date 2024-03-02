@@ -3,15 +3,24 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 {{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
-
   <Hds::Table class='list-wrapper-field' name={{@name}}>
     <:head as |H|>
       <H.Tr>
-        <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
-        <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
+        <H.Th id={{keyHeaderID}}>
+          {{#if @keyLabel}}
+            {{@keyLabel}}
+          {{else}}
+            {{t 'form.key.label'}}
+          {{/if}}</H.Th>
+        <H.Th id={{valueHeaderID}}>
+          {{#if @valueLabel}}
+            {{@valueLabel}}
+          {{else}}
+            {{t 'form.value.label'}}
+          {{/if}}
+        </H.Th>
         <H.Th>
           {{t 'titles.actions'}}
-
         </H.Th>
       </H.Tr>
     </:head>
@@ -19,23 +28,41 @@
       {{#each this.options as |option index|}}
         <B.Tr>
           <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{option.key}}
-              @type='text'
-              disabled={{@disabled}}
-              aria-labelledby={{keyHeaderID}}
-              {{on 'input' (set-from-event option 'key')}}
-            />
+            {{yield
+              (hash
+                text=(component
+                  'form/field/list-wrapper/key-value/text'
+                  disabled=@disabled
+                  value=option.key
+                  ariaLabel=keyHeaderID
+                  setContext=(set-from-event option 'key')
+                )
+              )
+              to='key'
+            }}
           </B.Td>
 
           <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{option.value}}
-              @type='text'
-              disabled={{@disabled}}
-              aria-labelledby={{valueHeaderID}}
-              {{on 'input' (set-from-event option 'value')}}
-            />
+            {{yield
+              (hash
+                text=(component
+                  'form/field/list-wrapper/key-value/text'
+                  disabled=@disabled
+                  value=option.value
+                  ariaLabel=valueHeaderID
+                  setContext=(set-from-event option 'value')
+                )
+                select=(component
+                  'form/field/list-wrapper/key-value/select'
+                  disabled=@disabled
+                  value=option.value
+                  selectOptions=@selectOptions
+                  ariaLabel=valueHeaderID
+                  setContext=(set-from-event option 'value')
+                )
+              )
+              to='value'
+            }}
           </B.Td>
 
           <B.Td>
@@ -56,23 +83,41 @@
 
       <B.Tr>
         <B.Td>
-          <Hds::Form::TextInput::Field
-            @value={{this.newOptionKey}}
-            @type='text'
-            disabled={{@disabled}}
-            aria-labelledby={{keyHeaderID}}
-            {{on 'input' (set-from-event this 'newOptionKey')}}
-          />
+          {{yield
+            (hash
+              text=(component
+                'form/field/list-wrapper/key-value/text'
+                disabled=@disabled
+                value=this.newOptionKey
+                ariaLabel=keyHeaderID
+                setContext=(set-from-event this 'newOptionKey')
+              )
+            )
+            to='key'
+          }}
         </B.Td>
 
         <B.Td>
-          <Hds::Form::TextInput::Field
-            @value={{this.newOptionValue}}
-            @type='text'
-            disabled={{@disabled}}
-            aria-labelledby={{valueHeaderID}}
-            {{on 'input' (set-from-event this 'newOptionValue')}}
-          />
+          {{yield
+            (hash
+              text=(component
+                'form/field/list-wrapper/key-value/text'
+                disabled=@disabled
+                value=this.newOptionValue
+                ariaLabel=valueHeaderID
+                setContext=(set-from-event this 'newOptionValue')
+              )
+              select=(component
+                'form/field/list-wrapper/key-value/select'
+                disabled=@disabled
+                value=this.newOptionValue
+                selectOptions=@selectOptions
+                ariaLabel=valueHeaderID
+                setContext=(set-from-event this 'newOptionValue')
+              )
+            )
+            to='value'
+          }}
         </B.Td>
 
         <B.Td>

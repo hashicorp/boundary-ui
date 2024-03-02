@@ -198,9 +198,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
    * @param {string} to
    */
   @action
-  async addAccountMapItem(authMethod, field, from, to) {
+  async addAccountMapItem(authMethod, field, key, value) {
     const existingArray = authMethod[field] ?? [];
-    const array = [...existingArray, { from, to }];
+    const array = [...existingArray, { key, value }];
     authMethod.set(field, array);
   }
 

@@ -243,7 +243,48 @@
   </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
-  <Rose::Form::Fieldset>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.account_claim_maps.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.account_claim_maps.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.account_claim_maps}}
+        <F.Error as |E|>
+          {{#each @model.errors.account_claim_maps as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+    <:field as |F|>
+      <F.KeyValue
+        @name='account_claim_maps'
+        @options={{@model.account_claim_maps}}
+        @model={{@model}}
+        @keyLabel={{t 'form.from_claim.label'}}
+        @valueLabel={{t 'form.to_claim.label'}}
+        @selectOptions={{this.toClaims}}
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |V|>
+          <V.select />
+        </:value>
+      </F.KeyValue>
+    </:field>
+
+  </Form::Field::ListWrapper>
+
+  {{!-- <Rose::Form::Fieldset>
     <:title>{{t 'form.account_claim_maps.label'}}</:title>
     <:description>{{t 'form.account_claim_maps.help'}}</:description>
     <:body>
@@ -374,7 +415,7 @@
         </table.body>
       </Rose::Table>
     </:body>
-  </Rose::Form::Fieldset>
+  </Rose::Form::Fieldset> --}}
 
   {{! Certificates }}
   <Form::Field::ListWrapper

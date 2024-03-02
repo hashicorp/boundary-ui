@@ -264,7 +264,14 @@
         @options={{@model.critical_options}}
         @model={{@model}}
         @disabled={{form.disabled}}
-      />
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |K|>
+          <K.text />
+        </:value>
+      </F.KeyValue>
     </:field>
 
   </Form::Field::ListWrapper>
@@ -295,7 +302,14 @@
         @name='extensions'
         @options={{@model.extensions}}
         @model={{@model}}
-      />
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |V|>
+          <V.text />
+        </:value>
+      </F.KeyValue>
     </:field>
 
   </Form::Field::ListWrapper>

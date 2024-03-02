@@ -28,6 +28,8 @@ export default class MappingListComponent extends Component {
 
   get options() {
     return this.args?.options || this.args?.model?.[this.args.name];
+    // const critical_options = [{ key: 'new ssskey', value: 'value' }];
+    // return critical_options;
   }
   // =actions
 
