@@ -19,7 +19,7 @@ const {
   createNewProject,
   createSshTargetWithAddressEnt,
   createVaultCredentialStore,
-  createVaultCredentialLibrary,
+  createVaultGenericCredentialLibrary,
   addInjectedCredentialsToTarget,
   waitForSessionToBeVisible,
 } = require('../helpers/boundary-ui');
@@ -108,7 +108,7 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
 
     // Create credentials
     await createVaultCredentialStore(page, clientToken);
-    const credentialLibraryName = await createVaultCredentialLibrary(
+    const credentialLibraryName = await createVaultGenericCredentialLibrary(
       page,
       `${secretsPath}/data/${secretName}`,
       'SSH Private Key',

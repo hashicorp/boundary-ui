@@ -237,14 +237,14 @@ exports.createStaticCredentialKeyPair = async (page) => {
 };
 
 /**
- * Uses the UI to create a vault credential library. Assumes you have selected
+ * Uses the UI to create a vault-generic credential library. Assumes you have selected
  * the desired credential store.
  * @param {Page} page Playwright page object
  * @param {string} vaultPath path to secret in vault
  * @param {string} credentialType type of credential for credential injection
  * @returns Name of the credential library
  */
-exports.createVaultCredentialLibrary = async (
+exports.createVaultGenericCredentialLibrary = async (
   page,
   vaultPath,
   credentialType,
@@ -258,8 +258,11 @@ exports.createVaultCredentialLibrary = async (
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Generic Secrets')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
-
   await page
     .getByRole('combobox', { name: 'Credential Type' })
     .selectOption(credentialType);
