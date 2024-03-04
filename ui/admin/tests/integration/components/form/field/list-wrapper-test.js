@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -103,6 +103,124 @@ module('Integration | Component | list-wrapper', function (hooks) {
     assert
       .dom('.list-wrapper-field [data-test-remove-button]')
       .exists({ count: 2 });
+
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
+
+  test('it renders multiple options with a single select field', async function (assert) {
+    this.set('options', ['option1', 'option2', 'option3']);
+    this.set('model', { select: [{ value: 'option2' }, { value: 'option3' }] });
+    await render(hbs`
+
+    <Form::Field::ListWrapper>
+      <:field as |F|>
+        <F.Select
+          @name="select"
+          @selectOptions={{this.options}}
+          @options={{this.model.select}}
+          @model={{this.model}}
+          @width='100%'
+        />
+        </:field>
+    </Form::Field::ListWrapper>
+    `);
+
+    assert
+      .dom(
+        `.list-wrapper-field [data-test-remove-option-button=${this.model.select[0].value}]`,
+      )
+      .exists({ count: 1 });
+
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
+
+  test('select field allows you to add and remove options', async function (assert) {
+    this.set('options', ['option1', 'option2', 'option3']);
+    this.set('model', { select: [{ value: 'option2' }, { value: 'option3' }] });
+    await render(hbs`
+
+    <Form::Field::ListWrapper>
+      <:field as |F|>
+        <F.Select
+          @name="select"
+          @selectOptions={{this.options}}
+          @options={{this.model.select}}
+          @model={{this.model}}
+          @width='100%'
+        />
+        </:field>
+    </Form::Field::ListWrapper>
+    `);
+
+    assert.dom('tbody tr').exists({ count: 3 });
+
+    // Add an option
+    await select('.list-wrapper-field tbody tr:last-child select', 'option1');
+    await click('.list-wrapper-field [data-test-add-option-button]');
+    assert.dom('tbody tr').exists({ count: 4 });
+
+    // Remove an option
+    await click('.list-wrapper-field [data-test-remove-option-button=option1]');
+    assert.dom('tbody tr').exists({ count: 3 });
+  });
+
+  test('it renders multiple options with select and text input as key value pair', async function (assert) {
+    this.options = {
+      username_attribute: 'user',
+      password_attribute: 'pass',
+    };
+
+    this.selectOptions = {
+      username_attribute: 'User Key',
+      password_attribute: 'Pass Key',
+    };
+    await render(hbs`
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}}></F.SelectText>
+          </:field>
+        </Form::Field::ListWrapper>
+    `);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+    assert
+      .dom('.list-wrapper-field tbody tr:last-child input')
+      .hasValue('pass');
+    assert
+      .dom('.list-wrapper-field tbody tr:last-child select')
+      .hasValue('password_attribute');
+  });
+
+  test('it does not render new rows when the select option limit is reached by passing in @removeDuplicates', async function (assert) {
+    this.options = { username_attribute: 'user', password_attribute: 'pass' };
+    this.selectOptions = {
+      username_attribute: 'User Key',
+      password_attribute: 'Pass Key',
+    };
+    await render(hbs`
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true'></F.SelectText>
+          </:field>
+        </Form::Field::ListWrapper>
+    `);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+  });
+
+  test('it does render unlimited new rows when @removeDuplicates is not passed', async function (assert) {
+    this.options = { username_attribute: 'user', password_attribute: 'pass' };
+    this.selectOptions = {
+      username_attribute: 'User Key',
+      password_attribute: 'Pass Key',
+    };
+    await render(hbs`
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}}></F.SelectText>
+          </:field>
+        </Form::Field::ListWrapper>
+    `);
 
     assert.dom('tbody tr').exists({ count: 3 });
   });

@@ -16,7 +16,7 @@ const {
   createNewOrg,
   createNewGroup,
   addMemberToGroup,
-  createNewRole,
+  createRole,
   addPrincipalToRole,
   addGrantsToGroup,
 } = require('../helpers/boundary-ui');
@@ -40,7 +40,7 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
     const groupName = 'test-group';
     await createNewGroup(page, groupName);
     await addMemberToGroup(page, 'admin');
-    await createNewRole(page, 'test-role');
+    await createRole(page);
     await addPrincipalToRole(page, groupName);
     await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
   } finally {

@@ -25,7 +25,6 @@ const {
   createNewHostSetCli,
   createNewStaticCredentialStoreCli,
   createNewTcpTarget,
-  createNewSshTarget,
   createNewVaultCredentialStoreCli,
   createNewUsernamePasswordCredentialCli,
   deleteOrgCli,
@@ -64,7 +63,7 @@ test.beforeEach(async () => {
   await authenticateBoundaryCli();
 });
 
-test('Verify resources can be deleted @ce @aws @docker', async ({ page }) => {
+test('Verify resources can be deleted @ce @aws', async ({ page }) => {
   let orgId;
   try {
     // Create boundary resources using CLI
@@ -185,25 +184,6 @@ test('Verify resources can be deleted @ce @aws @docker', async ({ page }) => {
     await deleteResource(page);
   } finally {
     // Delete org in case the test failed before deleting the org using UI
-    await deleteOrgCli(orgId);
-  }
-});
-
-test('Verify enterprise resources can be deleted @ent @aws @docker', async ({
-  page,
-}) => {
-  let orgId;
-  try {
-    orgId = await createNewOrgCli();
-    let projectId = await createNewProjectCli(orgId);
-
-    // Create enterprise boundary resources using CLI
-    let sshTargetId = await createNewSshTarget(projectId);
-
-    // Delete SSH target
-    await page.goto(`/scopes/${projectId}/targets/${sshTargetId}`);
-    await deleteResource(page);
-  } finally {
     await deleteOrgCli(orgId);
   }
 });

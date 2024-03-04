@@ -149,6 +149,9 @@ const searchCliCommand = (requestData) => {
   if (requestData.filter) {
     searchCommand.push(`-filter=${requestData.filter}`);
   }
+  if (requestData.force_refresh) {
+    searchCommand.push(`-force-refresh=true`);
+  }
   const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
 
   const { stdout, stderr } = spawnSync(searchCommand, {

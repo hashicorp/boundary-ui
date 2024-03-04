@@ -76,6 +76,18 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   path;
 
   @attr('string', {
+    for: 'vault-generic',
+    description: 'It indicates the type of credential the library returns.',
+  })
+  credential_type;
+
+  @attr('object', {
+    for: 'vault-generic',
+    description: 'It indicates the credential mapping overrides.',
+  })
+  credential_mapping_overrides;
+
+  @attr('string', {
     for: 'vault-ssh-certificate',
     isNestedAttribute: true,
     description: 'The username to use when making an SSH connection.',

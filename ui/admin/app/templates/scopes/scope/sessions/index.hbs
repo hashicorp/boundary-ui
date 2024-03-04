@@ -90,13 +90,10 @@
                 @name='flight-icons/svg/entry-point-16'
                 @size='medium'
               />
-              <Copyable
-                @text={{B.data.session.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code>{{B.data.session.id}}</Hds::Text::Code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.session.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               <Hds::Text::Code>{{B.data.user.id}}</Hds::Text::Code>

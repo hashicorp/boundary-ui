@@ -5,6 +5,7 @@
 
 /* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
+const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
 
 /**
@@ -137,6 +138,142 @@ exports.createNewHostInHostSet = async (page) => {
 };
 
 /**
+ * Uses the UI to create a static credential store. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the credential store
+ */
+exports.createStaticCredentialStore = async (page) => {
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
+  ).toBeVisible();
+
+  return credentialStoreName;
+};
+
+/**
+ * Uses the UI to create a vault credential store. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} clientToken vault token to connect to boundary
+ * @returns Name of the credential store
+ */
+exports.createVaultCredentialStore = async (page, clientToken) => {
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
+  await page
+    .getByLabel('Address', { exact: true })
+    .fill(process.env.E2E_VAULT_ADDR);
+  await page.getByLabel('Token', { exact: true }).fill(clientToken);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
+  ).toBeVisible();
+
+  return credentialStoreName;
+};
+
+/**
+ * Uses the UI to create a static key pair credential . Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the credential
+ */
+exports.createStaticCredentialKeyPair = async (page) => {
+  const credentialName = 'Credential ' + nanoid();
+  await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Username & Key Pair')
+    .click();
+  await page
+    .getByLabel('Username', { exact: true })
+    .fill(process.env.E2E_SSH_USER);
+  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    encoding: 'utf-8',
+  });
+  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
+
+  return credentialName;
+};
+
+/**
+ * Uses the UI to create a vault credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @param {string} credentialType type of credential for credential injection
+ * @returns Name of the credential library
+ */
+exports.createVaultCredentialLibrary = async (
+  page,
+  vaultPath,
+  credentialType,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page.getByLabel('Vault Path').fill(vaultPath);
+
+  await page
+    .getByRole('combobox', { name: 'Credential Type' })
+    .selectOption(credentialType);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
+};
+
+/**
  * Uses the UI to create a new target. Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
  * @returns Name of the target
@@ -177,6 +314,66 @@ exports.createNewTargetWithAddress = async (page) => {
   await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(targetName);
   await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
+ * Uses the UI to create a new TCP target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
+exports.createTcpTargetWithAddressEnt = async (page) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('TCP').click();
+  await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
+  await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
+ * Uses the UI to create a new SSH target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @returns Name of the target
+ */
+exports.createSshTargetWithAddressEnt = async (page) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
   await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
   await page.getByRole('button', { name: 'Save' }).click();
@@ -304,6 +501,53 @@ exports.addBrokeredCredentialsToTarget = async (
     .click({ force: true });
   await page
     .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
+    .click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('link', { name: credentialName })).toBeVisible();
+};
+
+/**
+ * Uses the UI to navigate to the specified Target and add the Injected Credentials to it.
+ * @param {Page} page Playwright page object
+ * @param {string} targetName Name of the target associated with the session
+ * @param {string} credentialName Name of the credentials to be added to the target
+ */
+exports.addInjectedCredentialsToTarget = async (
+  page,
+  targetName,
+  credentialName,
+) => {
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: targetName }).click();
+  await page
+    .getByRole('link', {
+      name: 'Injected Application Credentials',
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole('article')
+    .getByRole('link', {
+      name: 'Add Injected Application Credentials',
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole('cell', { name: credentialName })
+    .locator('..')
+    .getByRole('checkbox')
+    .click({ force: true });
+  await page
+    .getByRole('button', {
+      name: 'Add Injected Application Credentials',
+      exact: true,
+    })
     .click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -495,9 +739,10 @@ exports.addMemberToGroup = async (page, userName) => {
 /**
  * Uses the UI to create a new role. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} roleName Name of the new role
  */
-exports.createNewRole = async (page, roleName) => {
+exports.createRole = async (page) => {
+  const roleName = 'Role ' + nanoid();
+
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Roles' })
@@ -512,6 +757,8 @@ exports.createNewRole = async (page, roleName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(roleName),
   ).toBeVisible();
+
+  return roleName;
 };
 
 /**

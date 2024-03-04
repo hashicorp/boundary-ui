@@ -20,6 +20,8 @@ const {
   createNewHostSet,
   createNewHostInHostSet,
   createNewTarget,
+  createStaticCredentialStore,
+  createStaticCredentialKeyPair,
   addBrokeredCredentialsToTarget,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
@@ -51,58 +53,13 @@ test.beforeEach(async ({ page }) => {
   await createNewHostInHostSet(page);
   targetName = await createNewTarget(page);
   await addHostSourceToTarget(page, hostSetName);
-
-  const credentialStoreName = 'Credential Store ' + nanoid();
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Credential Stores' })
-    .click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
-  await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByText(credentialStoreName),
-  ).toBeVisible();
+  await createStaticCredentialStore(page);
 });
 
 test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
 }) => {
-  const credentialName = 'Credential ' + nanoid();
-  await page.getByRole('link', { name: 'Credentials', exact: true }).click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
-  await page.getByLabel('Description').fill('This is an automated test');
-  await page
-    .getByRole('group', { name: 'Type' })
-    .getByLabel('Username & Key Pair')
-    .click();
-  await page
-    .getByLabel('Username', { exact: true })
-    .fill(process.env.E2E_SSH_USER);
-  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
-    encoding: 'utf-8',
-  });
-  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByText(credentialName),
-  ).toBeVisible();
-
+  const credentialName = await createStaticCredentialKeyPair(page);
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
   await authenticateBoundaryCli();
@@ -118,6 +75,10 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
         retrievedUser,
     );
   }
+
+  const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    encoding: 'utf-8',
+  });
   if (keyData != retrievedKey) {
     throw new Error('Stored Key does not match');
   }

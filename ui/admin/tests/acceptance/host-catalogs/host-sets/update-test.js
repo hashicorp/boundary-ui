@@ -154,7 +154,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       'The request was invalid.',
     );
     assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
     );
   });
@@ -297,7 +297,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       'The request was invalid.',
     );
     assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
     );
   });
