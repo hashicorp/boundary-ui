@@ -134,18 +134,18 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
-    await click('form button:not([type="submit"])');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.accounts);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
   });
 
   test('can cancel a new LDAP account creation', async function (assert) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
-    await click('form button:not([type="submit"])');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.accounts);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
