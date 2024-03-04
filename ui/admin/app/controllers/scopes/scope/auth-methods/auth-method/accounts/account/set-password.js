@@ -7,7 +7,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeAuthMethodsAuthMethodAccountsAccountSetPasswordController extends Controller {
   // =controllers
 
-  @controller('scopes/scope/auth-methods/auth-method/accounts') accounts;
+  @controller('scopes/scope/auth-methods/auth-method/accounts/index') accounts;
 
   // =services
 

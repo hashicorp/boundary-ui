@@ -5,7 +5,7 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeAuthMethodsAuthMethodAccountsController extends Controller {
+export default class ScopesScopeAuthMethodsAuthMethodAccountsIndexController extends Controller {
   // =services
 
   @service can;
