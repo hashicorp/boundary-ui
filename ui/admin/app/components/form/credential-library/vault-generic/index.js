@@ -8,7 +8,7 @@ import {
   options,
   TYPES_CREDENTIAL_LIBRARY,
 } from 'api/models/credential-library';
-
+import { action } from '@ember/object';
 export default class FormCredentialLibraryVaultGenericComponent extends Component {
   // =properties
   /**
@@ -16,6 +16,7 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
    */
   httpMethodOptions = options.http_method;
 
+  credentialTypes = options.credential_types;
   /**
    *
    * @type {Array.<string>}
@@ -28,5 +29,18 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
    */
   get isHttpRequestBodyAllowed() {
     return this.args.model.http_method?.match(/post/i);
+  }
+
+  get mappingOverrides() {
+    return options.mapping_overrides[this.args.model.credential_type];
+  }
+
+  /**
+   * Clear the previously selected key value pair when toggling between credential types on a new form
+   */
+  @action
+  selectCredentialType({ target: { value } }) {
+    this.args.model.credential_mapping_overrides = {};
+    this.args.model.credential_type = value;
   }
 }
