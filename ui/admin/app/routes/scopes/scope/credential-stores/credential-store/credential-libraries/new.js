@@ -52,15 +52,13 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store',
     );
-    let { name, description } = this.currentModel?.isNew
+    const { name, description } = this.currentModel?.isNew
       ? this.currentModel
       : {};
 
-    // Set the type to generic vault if feature flag isn't enabled in cases where
-    // user sets the query parameter manually
-    type = this.features.isEnabled('ssh-target')
-      ? type
-      : TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
+    if (this.currentModel?.isNew) {
+      this.currentModel.rollbackAttributes();
+    }
 
     return this.store.createRecord('credential-library', {
       type,
