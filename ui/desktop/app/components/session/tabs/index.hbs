@@ -65,13 +65,10 @@
                 {{/if}}
                 {{! Host ID }}
                 <list.Item @icon='hash' @color='faint'>
-                  <Copyable
-                    @text={{@model.host.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    {{@model.host.id}}
-                  </Copyable>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{@model.host.id}}
+                    @color='secondary'
+                  />
                 </list.Item>
               </Rose::MetadataList>
             {{/if}}
@@ -120,13 +117,10 @@
                 {{/if}}
                 {{! Target ID }}
                 <list.Item @icon='hash' @color='faint'>
-                  <Copyable
-                    @text={{@model.target.id}}
-                    @buttonText={{t 'actions.copy-to-clipboard'}}
-                    @acknowledgeText={{t 'states.copied'}}
-                  >
-                    {{@model.target.id}}
-                  </Copyable>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{@model.target.id}}
+                    @color='secondary'
+                  />
                 </list.Item>
               </Rose::MetadataList>
             {{/if}}
