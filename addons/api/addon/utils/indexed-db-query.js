@@ -12,11 +12,8 @@ import { modelIndexes } from '../services/indexed-db';
  * will use the actual index in indexedDb while any subsequent ones will be less efficient.
  *
  * @example
- *   const filter = buildIndexedDbQuery(indexedDb, type, {
- *     search: {
- *       text: 'generated',
- *       fields: ['name', 'description', 'address', 'scope_id'],
- *     },
+ *   const filter = queryIndexedDb(indexedDb, type, {
+ *     search: generated',
  *     filters: {
  *       scope_id: {
  *         logicalOperator: 'and',
@@ -97,12 +94,12 @@ const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
   if (checkAllFilterType('equals')) {
     return table
       .where(getKey(key))
-      .anyOf(filterValueArray.map((obj) => Object.values(obj)[0]));
+      .anyOf(filterValueArray.map((obj) => obj['equals']));
   }
   if (checkAllFilterType('notEquals')) {
     return table
       .where(getKey(key))
-      .noneOf(filterValueArray.map((obj) => Object.values(obj)[0]));
+      .noneOf(filterValueArray.map((obj) => obj['notEquals']));
   }
 
   // Remove the first item to use as the initial where clause and then reduce the remaining ones

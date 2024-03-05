@@ -1,4 +1,4 @@
-import Service, { inject as service } from '@ember/service';
+import Service from '@ember/service';
 import Dexie from 'dexie';
 import { typeOf } from '@ember/utils';
 
@@ -62,9 +62,6 @@ const unconvertBooleansInObject = (result, object) => {
  * `setup` from the application root and
  */
 export default class IndexedDbService extends Service {
-  // =services
-  @service session;
-
   // =attributes
   #db;
   get db() {
