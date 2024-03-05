@@ -5,7 +5,7 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsController extends Controller {
+export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsIndexController extends Controller {
   // =services
 
   @service can;
@@ -50,7 +50,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsController ext
         'scopes.scope.auth-methods.auth-method.managed-groups',
       );
     }
-    this.router.refresh();
+    await this.router.refresh();
   }
 
   /**
@@ -67,7 +67,7 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsController ext
     await this.router.replaceWith(
       'scopes.scope.auth-methods.auth-method.managed-groups',
     );
-    this.router.refresh();
+    await this.router.refresh();
   }
 
   /**
