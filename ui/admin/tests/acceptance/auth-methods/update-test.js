@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  click,
-  fillIn,
-  select,
-  findAll,
-  pauseTest,
-} from '@ember/test-helpers';
+import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -169,9 +162,19 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     // Remove all claim maps
     await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
-        click(element),
+      findAll('[name="account_claim_maps"] button:not(:disabled)').map(
+        (element) => click(element),
       ),
+    );
+
+    await fillIn(
+      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
+      'from_claim',
+    );
+
+    await select(
+      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
+      'email',
     );
 
     // Remove all certificates
@@ -185,14 +188,11 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click(TOGGLE_SELECTOR);
-    await fillIn('[name="account_claim_maps"] input', 'from_claim');
-    await select('[name="account_claim_maps"] select', 'email');
-    await click('[name="account_claim_maps"] button');
 
     await click('.rose-form-actions [type="submit"]');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
-    console.log(authMethod, 'acccou');
+
     assert.strictEqual(authMethod.name, name);
     assert.strictEqual(authMethod.description, 'description');
     assert.strictEqual(authMethod.attributes.issuer, 'issuer');
@@ -204,7 +204,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     assert.deepEqual(authMethod.attributes.claims_scopes, ['claims_scopes']);
     assert.deepEqual(authMethod.attributes.account_claim_maps, [
       'from_claim=email',
-      'fullname=name',
     ]);
     assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
     assert.strictEqual(authMethod.attributes.max_age, 5);
