@@ -35,8 +35,8 @@ module('Acceptance | roles | grants', function (hooks) {
   const GRANT_REMOVE_BTN_SELECTOR =
     '[data-test-remove-button="ids=*;action=*"]';
   const GRANT_ADD_BTN_SELECTOR = '[data-test-add-button]';
-  const GRANT_INPUT_SELECTOR = '[data-input]';
-  const GRANT_INPUT_NEW_OUTPUT_SELECTOR = '[data-input-new-output]';
+  const GRANT_INPUT_SELECTOR = '[data-test-input]';
+  const GRANT_INPUT_NEW_OUTPUT_SELECTOR = '[data-test-input-new-output]';
 
   const instances = {
     scopes: {

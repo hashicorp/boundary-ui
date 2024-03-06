@@ -15,7 +15,7 @@
             @type='text'
             disabled={{@disabled}}
             aria-label={{t 'titles.value'}}
-            data-input={{option.value}}
+            data-test-input={{option.value}}
             {{on 'input' (set-from-event option 'value')}}
           />
         </B.Td>
@@ -44,7 +44,7 @@
           @type='text'
           disabled={{@disabled}}
           aria-label={{t 'titles.value'}}
-          data-input-new-output
+          data-test-input-new-output
           {{on 'input' (set-from-event this 'newOptionValue')}}
         />
       </B.Td>
