@@ -29,7 +29,7 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
         credentialStore,
       );
     } else {
-      await await this.router.transitionTo('scopes.scope.credential-stores');
+      await this.router.transitionTo('scopes.scope.credential-stores');
     }
     await this.router.refresh();
   }
