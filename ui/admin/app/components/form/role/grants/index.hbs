@@ -3,104 +3,51 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{#if (can 'setGrants role' @model)}}
-  <Rose::Form
-    @onSubmit={{fn this.createGrant @addGrant}}
-    @cancel={{@cancel}}
-    @disabled={{@model.isSaving}}
-    as |form|
-  >
-    <Rose::List::KeyValue as |list|>
-      {{! Add grant field (only one per form) }}
-      <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{this.newGrantString}}
-          as |input|
-        >
-          <item.key>
-            <input.label>{{t
-                'resources.role.grant.actions.create'
-              }}</input.label>
-          </item.key>
-          <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
-          </item.cell>
-          <item.cell>
-            <Rose::Button
-              @onSubmit={{true}}
-              @disabled={{this.cannotSave}}
-              @style='secondary'
-              title={{t 'actions.add'}}
-            >
-              {{t 'actions.add'}}
-            </Rose::Button>
-          </item.cell>
-        </form.input>
-      </list.item>
-    </Rose::List::KeyValue>
-  </Rose::Form>
-{{/if}}
-
 <Rose::Form
+  @edit={{@edit}}
   @onSubmit={{fn @submit this.grantStrings}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
+  @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.grant.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.grant.label'}}
+      </F.HelperText>
 
-  {{!--
-  {{#if @model.errors.grants}}
-    <input.errors as |errors|>
-      {{#each @model.errors.grants as |error|}}
-        <errors.message>{{error.message}}</errors.message>
-      {{/each}}
-    </input.errors>
-  {{/if}}
-  --}}
-
-  <Rose::List::KeyValue as |list|>
-    {{#each this.grants as |grant|}}
-      <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{grant.value}}
-          @disabled={{if (can 'setGrants role' @model) false true}}
-          @error={{@model.errors.grant_strings}}
-          as |input|
-        >
-          <item.key>
-            <input.label>{{t 'form.grant.label'}}</input.label>
-          </item.key>
-          <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
-          </item.cell>
-        </form.input>
-        <item.cell>
-          {{#if (can 'setGrants role' @model)}}
-            <Rose::Button
-              @style='secondary'
-              @iconOnly='flight-icons/svg/trash-16'
-              title={{t 'actions.remove'}}
-              {{on 'click' (fn @removeGrant grant.value)}}
-            >
-              {{t 'actions.remove'}}
-            </Rose::Button>
-          {{/if}}
-        </item.cell>
-      </list.item>
-    {{/each}}
-  </Rose::List::KeyValue>
+      {{#if @model.errors.grant_strings}}
+        <F.Error as |E|>
+          {{#each @model.errors.grant_strings as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+    <:field as |F|>
+      <F.TextInput
+        @name='grant_strings'
+        @options={{this.grants}}
+        @model={{@model}}
+        @isInvalid={{@model.errors.grant_strings}}
+        @addOption={{fn this.createGrant @addGrant}}
+      />
+    </:field>
+  </Form::Field::ListWrapper>
 
   {{#if (can 'setGrants role' @model)}}
     <form.actions
+      @enableEditText={{t 'actions.edit-form'}}
       @submitText={{t 'actions.save'}}
       @cancelText={{t 'actions.cancel'}}
     />
   {{/if}}
-
 </Rose::Form>

@@ -15,6 +15,7 @@
             @type='text'
             disabled={{@disabled}}
             aria-label={{t 'titles.value'}}
+            data-input={{option.value}}
             {{on 'input' (set-from-event option 'value')}}
           />
         </B.Td>
@@ -22,12 +23,12 @@
         <B.Td>
           {{#if this.removeOptionByIndex}}
             <Hds::Button
-              data-test-remove-button
               @text={{t 'actions.remove'}}
               @color='critical'
               @icon='trash'
               @isIconOnly={{true}}
               disabled={{@disabled}}
+              data-test-remove-button={{option.value}}
               {{on 'click' (fn this.removeOptionByIndex index)}}
             />
           {{/if}}
@@ -43,6 +44,7 @@
           @type='text'
           disabled={{@disabled}}
           aria-label={{t 'titles.value'}}
+          data-input-new-output
           {{on 'input' (set-from-event this 'newOptionValue')}}
         />
       </B.Td>
@@ -53,6 +55,7 @@
           @color='secondary'
           type='button'
           disabled={{or @disabled (not this.newOptionValue)}}
+          data-test-add-button
           {{on 'click' this.addOption}}
         />
       </B.Td>
