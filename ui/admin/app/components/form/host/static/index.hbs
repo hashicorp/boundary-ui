@@ -11,37 +11,35 @@
   as |form|
 >
 
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <Hds::Form::TextInput::Field @value={{@model.type}} disabled={{true}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @error={{@model.errors.name}}
-    @helperText={{t 'form.name.help'}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -56,24 +54,26 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.input
-    @name='address'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    name='address'
     @value={{@model.address}}
-    @label={{t 'form.address.label'}}
-    @error={{@model.errors.address}}
-    @helperText={{t 'form.address.help'}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.address}}
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'address')}}
+    as |F|
   >
+    <F.Label>{{t 'form.address.label'}}</F.Label>
+    <F.HelperText>{{t 'form.address.help'}}</F.HelperText>
     {{#if @model.errors.address}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.address as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
+
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}
