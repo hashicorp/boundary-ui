@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import factory from '../generated/factories/account';
+import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
@@ -14,7 +14,15 @@ import {
   TYPES_AUTH_METHOD,
 } from 'api/models/auth-method';
 
-export default factory.extend({
+/**
+ * AccountFactory
+ */
+export default Factory.extend({
+  name: () => faker.word.words(),
+  description: () => faker.word.words(),
+  created_time: () => faker.date.recent(),
+  updated_time: () => faker.date.recent(),
+  version: () => faker.number.int(),
   authorized_actions() {
     let authorizedActions = ['no-op', 'read', 'update', 'delete'];
     if (this.type === TYPE_AUTH_METHOD_PASSWORD) {
@@ -23,7 +31,16 @@ export default factory.extend({
     return permissions.authorizedActionsFor('account') || authorizedActions;
   },
 
-  id: () => generateId('acct_'),
+  id() {
+    switch (this.type) {
+      case TYPE_AUTH_METHOD_PASSWORD:
+        return generateId('acctpw_');
+      case TYPE_AUTH_METHOD_LDAP:
+        return generateId('acctldap_');
+      case TYPE_AUTH_METHOD_OIDC:
+        return generateId('acctoidc_');
+    }
+  },
 
   type: (i) => TYPES_AUTH_METHOD[i % TYPES_AUTH_METHOD.length],
 
