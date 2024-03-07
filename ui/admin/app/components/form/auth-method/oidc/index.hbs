@@ -298,7 +298,7 @@
                   disabled={{form.disabled}}
                   @isInvalid={{@model.errors.account_claim_maps}}
                   {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
-                  data-test-remove-claim-map={{claimMap.from}}
+                  data-test-remove-claim-map
                 />
               </B.Td>
             </B.Tr>
@@ -311,7 +311,7 @@
                 @isInvalid={{@model.errors.account_claim_maps}}
                 aria-labelledby='fromClaimHeader'
                 {{on 'input' (set-from-event this 'newFromClaim')}}
-                data-test-from-claim-input
+                data-test-from-claim
               />
             </B.Td>
             <B.Td>
@@ -322,7 +322,7 @@
                 aria-labelledby='toClaimHeader'
                 @isInvalid={{@model.errors.account_claim_maps}}
                 {{on 'change' (set-from-event this 'newToClaim')}}
-                data-test-to-claim-select
+                data-test-to-claim
                 as |F|
               >
                 <F.Options>
