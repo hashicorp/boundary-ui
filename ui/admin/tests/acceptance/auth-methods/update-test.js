@@ -61,7 +61,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
   const ACCOUNT_CLAIM_MAPS_REMOVE_BTN_SELECTOR = '[data-test-remove-claim-map]';
   const ACCOUNT_CLAIM_MAPS_ADD_BTN_SELECTOR = '[data-test-add-claim-map]';
-  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input';
+  const ACCOUNT_CLAIM_MAPS_INPUT_SELECTOR = '[data-test-from-claim-input]';
   const ACCOUNT_CLAIM_MAPS_SELECT_FIELD_SELECTOR =
     '[data-test-to-claim-select]';
 
