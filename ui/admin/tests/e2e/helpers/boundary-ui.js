@@ -376,6 +376,9 @@ exports.createSshTargetWithAddressEnt = async (page) => {
   await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
   await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
+  const workerTag = `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`;
+  await page.getByLabel('Ingress worker filter').click();
+  await page.getByRole('textbox', { name: 'Filter' }).fill(workerTag);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -443,7 +446,8 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
 };
 
 /**
- * Uses the UI to navigate to Sessions and waits for the session to appear.
+ * Uses the UI to navigate to Sessions and waits for the session to appear
+ * and be in Active state.
  * @param {Page} page Playwright page object
  * @param {string} targetName Name of the target associated with the session
  */
@@ -454,12 +458,16 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
     .click();
   let i = 0;
   let sessionIsVisible = false;
+  let sessionIsActive = false;
   do {
     i = i + 1;
     sessionIsVisible = await page
       .getByRole('cell', { name: targetName })
       .isVisible();
-    if (sessionIsVisible) {
+    sessionIsActive = await page
+      .getByRole('cell', { name: 'Active' })
+      .isVisible();
+    if (sessionIsVisible && sessionIsActive) {
       break;
     }
     await page.getByRole('button', { name: 'Refresh' }).click();
@@ -802,4 +810,110 @@ exports.addGrantsToGroup = async (page, grants) => {
   await expect(
     page.getByRole('textbox', { name: 'Grant', exact: true }),
   ).toHaveValue(grants);
+};
+
+/**
+ * Uses the UI to create a new Storage Bucket. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @returns Name of the Storage Bucket
+ */
+exports.createStorageBucket = async (page) => {
+  const storageBucketName = 'Bucket ' + nanoid();
+  await page
+    .getByRole('link', { name: 'Storage Buckets', exact: true })
+    .click();
+  await page.getByRole('link', { name: 'New Storage Bucket' }).click();
+  await page.getByLabel(new RegExp('Name*')).fill(storageBucketName);
+  await page.getByLabel('Bucket name').fill(process.env.E2E_AWS_BUCKET_NAME);
+  await page.getByLabel('Region').fill(process.env.E2E_AWS_REGION);
+  await page
+    .getByLabel('Access key ID')
+    .fill(process.env.E2E_AWS_ACCESS_KEY_ID);
+  await page
+    .getByLabel('Secret access key')
+    .fill(process.env.E2E_AWS_SECRET_ACCESS_KEY);
+  const workerTag = `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`;
+  await page.getByLabel('Worker filter').fill(workerTag);
+  await page.getByLabel('Disable credential rotation').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(storageBucketName),
+  ).toBeVisible();
+
+  return storageBucketName;
+};
+
+/**
+ * Uses the UI to enable session recording for a target. Assumes you have selected the desired target.
+ * @param {Page} page Playwright page object
+ * @param {string} storageBucketName name of the Storage Bucket used for session recording
+ */
+exports.enableSessionRecording = async (page, storageBucketName) => {
+  await page.getByText('Enable recording').click();
+  await page.getByLabel('Record sessions for this target').click();
+  await page
+    .getByLabel('AWS storage buckets')
+    .selectOption({ label: storageBucketName });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('listitem').getByText(storageBucketName),
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to create a Storage Policy. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @returns Name of the Storage Policy
+ */
+exports.createStoragePolicy = async (page) => {
+  const storagePolicyName = 'Policy ' + nanoid();
+  await page
+    .getByRole('link', { name: 'Storage Policies', exact: true })
+    .click();
+  await page
+    .getByRole('link', { name: 'Create a new storage policy', exact: true })
+    .click();
+  await page.getByLabel('Name').fill(storagePolicyName);
+  await page.getByLabel('Retention Policy').selectOption({ label: 'Forever' });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(storagePolicyName),
+  ).toBeVisible();
+
+  return storagePolicyName;
+};
+
+/**
+ * Uses the UI to attach Storage Policy to a scope. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @param {string} policyName name of the Policy to be attached to the scope
+ */
+exports.attachStoragePolicy = async (page, policyName) => {
+  await page
+    .getByRole('link', { name: new RegExp('/*Settings'), exact: true })
+    .click();
+  await page.getByText('Add Storage Policy').click();
+  await page.getByLabel('Storage Policy').selectOption({ label: policyName });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('listitem').getByText(policyName)).toBeVisible();
 };
