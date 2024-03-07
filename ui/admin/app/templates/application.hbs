@@ -27,7 +27,7 @@
             </dropdown.link>
             <dropdown.separator />
 
-            <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
+            <dropdown.button {{on 'click' this.invalidateSession}}>
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
 
@@ -41,7 +41,7 @@
                     this.session.data.theme
                     'system-default-theme'
                   }}
-                  @changed={{route-action 'toggleTheme'}}
+                  @changed={{this.toggleTheme}}
                   as |radioGroup|
                 >
                   <dropdown.item>
@@ -83,7 +83,7 @@
                   <form.radioGroup
                     @name='edition'
                     @selectedValue={{this.featureEdition.edition}}
-                    @changed={{route-action 'toggleEdition'}}
+                    @changed={{this.toggleEdition}}
                     as |radioGroup|
                   >
                     {{#each this.featureEdition.editions as |edition|}}
@@ -105,7 +105,7 @@
                       <form.checkbox
                         @label={{feature}}
                         @checked={{feature-flag feature}}
-                        @onChange={{route-action 'toggleFeature' feature}}
+                        @onChange={{fn this.toggleFeature feature}}
                       />
                     </dropdown.item>
                   {{/each}}
