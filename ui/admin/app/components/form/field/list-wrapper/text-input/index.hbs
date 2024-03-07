@@ -11,8 +11,8 @@
       <B.Tr>
         <B.Td>
           <Hds::Form::TextInput::Field
-            @value={{option.value}}
             @type='text'
+            @value={{option.value}}
             disabled={{@disabled}}
             aria-label={{t 'titles.value'}}
             data-test-input={{option.value}}
@@ -40,8 +40,8 @@
 
       <B.Td>
         <Hds::Form::TextInput::Field
-          @value={{this.newOptionValue}}
           @type='text'
+          @value={{this.newOptionValue}}
           disabled={{@disabled}}
           aria-label={{t 'titles.value'}}
           data-test-input-new-output
@@ -51,9 +51,9 @@
 
       <B.Td>
         <Hds::Button
+          type='button'
           @text={{t 'actions.add'}}
           @color='secondary'
-          type='button'
           disabled={{or @disabled (not this.newOptionValue)}}
           data-test-add-button
           {{on 'click' this.addOption}}
