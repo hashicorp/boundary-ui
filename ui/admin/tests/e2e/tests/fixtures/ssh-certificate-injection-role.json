@@ -1,0 +1,10 @@
+{
+  "key_type": "ca",
+  "allow_user_certificates": true,
+  "default_user": "admin",
+  "default_extensions": {
+    "permit-pty": ""
+  },
+  "allowed_users": "*",
+  "allowed_extensions": "*"
+}
