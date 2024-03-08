@@ -237,14 +237,14 @@ exports.createStaticCredentialKeyPair = async (page) => {
 };
 
 /**
- * Uses the UI to create a vault credential library. Assumes you have selected
+ * Uses the UI to create a vault-generic credential library. Assumes you have selected
  * the desired credential store.
  * @param {Page} page Playwright page object
  * @param {string} vaultPath path to secret in vault
  * @param {string} credentialType type of credential for credential injection
  * @returns Name of the credential library
  */
-exports.createVaultCredentialLibrary = async (
+exports.createVaultGenericCredentialLibrary = async (
   page,
   vaultPath,
   credentialType,
@@ -258,11 +258,66 @@ exports.createVaultCredentialLibrary = async (
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Generic Secrets')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
-
   await page
     .getByRole('combobox', { name: 'Credential Type' })
     .selectOption(credentialType);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
+};
+
+/**
+ * Uses the UI to create a vault-ssh-certificate credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @returns Name of the credential library
+ */
+exports.createVaultSshCertificateCredentialLibrary = async (
+  page,
+  vaultPath,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+
+  // Temporarily putting the Group selection first due to a bug where
+  // Name and Description fields get cleared when the Group is selected
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
+
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page.getByLabel('Vault Path').fill(vaultPath);
+  await page.getByLabel('Username').fill(process.env.E2E_SSH_USER);
+  await page.getByLabel('Key Type').selectOption('ecdsa');
+  await page.getByLabel('Key Bits').fill('521');
+
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByLabel('Key')
+    .fill('permity-pty');
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByRole('button', { name: 'Add' })
+    .click();
 
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
