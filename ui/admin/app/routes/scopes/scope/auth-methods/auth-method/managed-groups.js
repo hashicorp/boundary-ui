@@ -11,7 +11,6 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsRoute extends 
 
   @service store;
   @service can;
-  @service router;
 
   //=methods
 
