@@ -11,11 +11,10 @@
       <B.Tr>
         <B.Td>
           <Hds::Form::TextInput::Field
-            @type='text'
             @value={{option.value}}
+            @type='text'
             disabled={{@disabled}}
             aria-label={{t 'titles.value'}}
-            data-test-input={{option.value}}
             {{on 'input' (set-from-event option 'value')}}
           />
         </B.Td>
@@ -23,12 +22,12 @@
         <B.Td>
           {{#if this.removeOptionByIndex}}
             <Hds::Button
+              data-test-remove-button
               @text={{t 'actions.remove'}}
               @color='critical'
               @icon='trash'
               @isIconOnly={{true}}
               disabled={{@disabled}}
-              data-test-remove-button={{option.value}}
               {{on 'click' (fn this.removeOptionByIndex index)}}
             />
           {{/if}}
@@ -40,22 +39,20 @@
 
       <B.Td>
         <Hds::Form::TextInput::Field
-          @type='text'
           @value={{this.newOptionValue}}
+          @type='text'
           disabled={{@disabled}}
           aria-label={{t 'titles.value'}}
-          data-test-input-new-output
           {{on 'input' (set-from-event this 'newOptionValue')}}
         />
       </B.Td>
 
       <B.Td>
         <Hds::Button
-          type='button'
           @text={{t 'actions.add'}}
           @color='secondary'
+          type='button'
           disabled={{or @disabled (not this.newOptionValue)}}
-          data-test-add-button
           {{on 'click' this.addOption}}
         />
       </B.Td>

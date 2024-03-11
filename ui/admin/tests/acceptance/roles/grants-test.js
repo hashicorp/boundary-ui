@@ -32,11 +32,11 @@ module('Acceptance | roles | grants', function (hooks) {
     '.rose-form-actions button:not([type="submit"])';
   const FORM_ACTIONS_SUBMIT_BTN_SELECTOR =
     '.rose-form-actions [type="submit"]:not(:disabled)';
-  const GRANT_REMOVE_BTN_SELECTOR =
-    '[data-test-remove-button="ids=*;action=*"]';
-  const GRANT_ADD_BTN_SELECTOR = '[data-test-add-button]';
-  const GRANT_INPUT_SELECTOR = '[data-test-input]';
-  const GRANT_INPUT_NEW_OUTPUT_SELECTOR = '[data-test-input-new-output]';
+  const GRANT_REMOVE_BTN_SELECTOR = 'tbody .hds-table__tr:first-child button';
+  const GRANT_ADD_BTN_SELECTOR = 'tbody .hds-table__tr:last-child button';
+  const GRANT_INPUT_SELECTOR = 'tbody .hds-table__tr:not(:last-child) input';
+  const GRANT_INPUT_NEW_OUTPUT_SELECTOR =
+    'tbody .hds-table__tr:last-child input';
 
   const instances = {
     scopes: {
@@ -75,12 +75,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.grants);
 
-    assert.strictEqual(
-      Array.from(document.querySelectorAll(GRANT_INPUT_SELECTOR)).filter(
-        (input) => input.disabled,
-      ).length,
-      grantsCount,
-    );
+    assert.dom(GRANT_INPUT_SELECTOR).exists({ count: grantsCount });
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
@@ -138,6 +133,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
     await click(FORM_ACTIONS_BTN_SELECTOR);
     await fillIn(GRANT_INPUT_NEW_OUTPUT_SELECTOR, 'ids=123,action=delete');
+
     await click(GRANT_ADD_BTN_SELECTOR);
     await click(FORM_ACTIONS_SUBMIT_BTN_SELECTOR);
     assert.strictEqual(findAll(GRANT_INPUT_SELECTOR).length, grantsCount + 1);
