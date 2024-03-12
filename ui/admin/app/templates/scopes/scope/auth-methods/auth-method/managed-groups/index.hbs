@@ -18,7 +18,13 @@
   </page.navigation>
 
   <page.actions>
-    <AuthMethods::AuthMethod::Actions @model={{@model.authMethod}} />
+    <AuthMethods::AuthMethod::Actions
+      @model={{@model.authMethod}}
+      @changeState={{this.authMethods.changeState}}
+      @removeAsPrimary={{this.authMethods.removeAsPrimary}}
+      @makePrimary={{this.authMethods.makePrimary}}
+      @delete={{this.authMethods.delete}}
+    />
   </page.actions>
 
   <page.body>
