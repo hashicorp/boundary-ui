@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { setupTest } from 'admin/tests/helpers';
 
 module(
   'Unit | Controller | scopes/scope/groups/group/members',
