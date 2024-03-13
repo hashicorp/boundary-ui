@@ -209,7 +209,7 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     }
   });
 
-  test('it can filter with "contains" as subsequent operation', async function (assert) {
+  test('it cannot filter with "contains" as subsequent operation', async function (assert) {
     assert.expect(2);
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
