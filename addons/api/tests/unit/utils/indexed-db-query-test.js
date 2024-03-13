@@ -72,7 +72,7 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     assert.strictEqual(result.length, 5);
   });
 
-  test('it filters by single field and specify logicalOperator type', async function (assert) {
+  test('it filters by single field with "and" logicalOperator', async function (assert) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
@@ -88,20 +88,7 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     assert.strictEqual(result.length, 5);
   });
 
-  test('it filters by single field and specify different operators', async function (assert) {
-    await seedIndexDb(resource, store, indexedDb, this.server);
-    const query = {
-      filters: {
-        type: [{ equals: TYPE_TARGET_SSH }, { notEquals: TYPE_TARGET_TCP }],
-      },
-    };
-
-    const result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-  });
-
-  test('it filters by single field with logicalOperator of "or"', async function (assert) {
+  test('it filters by single field with "or" logicalOperator', async function (assert) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
@@ -131,7 +118,7 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     assert.strictEqual(result.length, 5);
   });
 
-  test('it filters by multiple fields and uses logicalOperator "or"', async function (assert) {
+  test('it filters by multiple fields with "or" logicalOperator', async function (assert) {
     this.server.create(resource, { type: TYPE_TARGET_TCP, scopeId: scope1.id });
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
@@ -145,11 +132,27 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     };
 
     const result = await queryIndexedDb(indexedDb.db, resource, query);
-
     assert.strictEqual(result.length, 6);
   });
 
-  test('it filters by multiple fields and uses two logicalOperator "or"s', async function (assert) {
+  test('it filters by multiple fields with "and" logicalOperator', async function (assert) {
+    this.server.create(resource, { type: TYPE_TARGET_TCP, scopeId: scope1.id });
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        type: {
+          logicalOperator: 'and',
+          values: [{ equals: TYPE_TARGET_SSH }, { notEquals: TYPE_TARGET_TCP }],
+        },
+        scope_id: [{ equals: scope1.id }],
+      },
+    };
+
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by multiple fields and uses two "or" logicalOperators', async function (assert) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
@@ -165,11 +168,284 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     };
 
     const result = await queryIndexedDb(indexedDb.db, resource, query);
+    assert.strictEqual(result.length, 10);
+  });
+
+  test('it filters by multiple fields and uses two "and" logicalOperators', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        type: {
+          logicalOperator: 'and',
+          values: [{ notEquals: TYPE_TARGET_SSH }, { equals: TYPE_TARGET_TCP }],
+        },
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope2.id }, { notEquals: scope1.id }],
+        },
+      },
+    };
+
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it cannot filter with "contains" as initial operation', async function (assert) {
+    assert.expect(1);
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: [{ contains: scope1.id }],
+      },
+    };
+
+    try {
+      await queryIndexedDb(indexedDb.db, resource, query);
+    } catch (e) {
+      assert.strictEqual(
+        e.message,
+        'Contains is not supported as the first filter.',
+      );
+    }
+  });
+
+  test('it can filter with "contains" as subsequent operation', async function (assert) {
+    assert.expect(1);
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope1.id }, { contains: scope2.id.slice(0, 2) }],
+        },
+      },
+    };
+
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "gt" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ gt: scope1.id }, { equals: scope2.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "gt" as subsequent operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope2.id }, { gt: scope1.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "gte" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ gte: scope1.id }, { equals: scope2.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 10);
   });
 
-  test('it filters by single field and returns zero results', async function (assert) {
+  test('it filters by single field with "gte" as subsequent operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope2.id }, { gte: scope1.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 10);
+  });
+
+  test('it filters by single field with "lt" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ lt: scope2.id }, { equals: scope1.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "lt" as subsequent operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope1.id }, { lt: scope2.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "lte" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ lte: scope2.id }, { equals: scope1.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 10);
+  });
+
+  test('it filters by single field with "lte" as subsequent operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope1.id }, { lte: scope2.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 10);
+  });
+
+  test('it filters by single field with "notEquals" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ notEquals: scope1.id }, { equals: scope2.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters by single field with "notEquals" as subsequent operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: {
+          logicalOperator: 'and',
+          values: [{ equals: scope2.id }, { notEquals: scope1.id }],
+        },
+      },
+    };
+
+    let result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+
+    query.filters.scope_id.logicalOperator = 'or';
+
+    result = await queryIndexedDb(indexedDb.db, resource, query);
+
+    assert.strictEqual(result.length, 5);
+  });
+
+  test('it filters and returns zero results', async function (assert) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {

@@ -137,12 +137,10 @@ const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
  */
 const buildIndexedDbWhere = ({ table, key, value, operation }) => {
   const baseWhereClause = table.where(key);
-
   switch (operation) {
     case 'contains':
-      // Note that this is just a normal js filter and not a real indexed db query.
-      // We likely should filter something else first for performance.
-      return baseWhereClause.filter((record) => record.includes(value));
+      // We return an error due to not being able to support contains on first filter due to performance.
+      throw new Error('Contains is not supported as the first filter.');
     case 'gt':
       return baseWhereClause.above(value);
     case 'gte':
@@ -191,6 +189,7 @@ const buildIndexedDbCollection = ({
 
   switch (operation) {
     case 'contains':
+      console.log('key, record', key, collection.or(key));
       return collection
         .or(key)
         .filter((record) => get(record, key)?.includes(value));
