@@ -189,10 +189,10 @@ const buildIndexedDbCollection = ({
 
   switch (operation) {
     case 'contains':
-      console.log('key, record', key, collection.or(key));
-      return collection
-        .or(key)
-        .filter((record) => get(record, key)?.includes(value));
+      // We return an error due to not being able to support contains on this filter due to performance.
+      throw new Error(
+        'Contains is not supported as a filter option with "or" operator.',
+      );
     case 'gt':
       return collection.or(key).above(value);
     case 'gte':

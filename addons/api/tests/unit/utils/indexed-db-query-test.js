@@ -210,7 +210,7 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
   });
 
   test('it can filter with "contains" as subsequent operation', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
@@ -222,27 +222,32 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     };
 
     const result = await queryIndexedDb(indexedDb.db, resource, query);
-    assert.strictEqual(result.length, 5);
-  });
-
-  test('it filters by single field with "gt" as initial operation', async function (assert) {
-    await seedIndexDb(resource, store, indexedDb, this.server);
-    const query = {
-      filters: {
-        scope_id: {
-          logicalOperator: 'and',
-          values: [{ gt: scope1.id }, { equals: scope2.id }],
-        },
-      },
-    };
-
-    let result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 5);
 
     query.filters.scope_id.logicalOperator = 'or';
 
-    result = await queryIndexedDb(indexedDb.db, resource, query);
+    try {
+      await queryIndexedDb(indexedDb.db, resource, query);
+    } catch (e) {
+      assert.strictEqual(
+        e.message,
+        'Contains is not supported as a filter option with "or" operator.',
+      );
+    }
+  });
+
+  // TODO: Modify test cases that use comparison opertators to compare fields that
+  // are of type number. Additionally, add test case for searching on boolean fields.
+  test('it filters by single field with "gt" as initial operation', async function (assert) {
+    await seedIndexDb(resource, store, indexedDb, this.server);
+    const query = {
+      filters: {
+        scope_id: [{ gt: scope1.id }],
+      },
+    };
+
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 5);
   });
@@ -273,20 +278,11 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
-        scope_id: {
-          logicalOperator: 'and',
-          values: [{ gte: scope1.id }, { equals: scope2.id }],
-        },
+        scope_id: [{ gte: scope1.id }],
       },
     };
 
-    let result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-
-    query.filters.scope_id.logicalOperator = 'or';
-
-    result = await queryIndexedDb(indexedDb.db, resource, query);
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 10);
   });
@@ -317,20 +313,11 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
-        scope_id: {
-          logicalOperator: 'and',
-          values: [{ lt: scope2.id }, { equals: scope1.id }],
-        },
+        scope_id: [{ lt: scope2.id }],
       },
     };
 
-    let result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-
-    query.filters.scope_id.logicalOperator = 'or';
-
-    result = await queryIndexedDb(indexedDb.db, resource, query);
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 5);
   });
@@ -361,20 +348,11 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
-        scope_id: {
-          logicalOperator: 'and',
-          values: [{ lte: scope2.id }, { equals: scope1.id }],
-        },
+        scope_id: [{ lte: scope2.id }],
       },
     };
 
-    let result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-
-    query.filters.scope_id.logicalOperator = 'or';
-
-    result = await queryIndexedDb(indexedDb.db, resource, query);
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 10);
   });
@@ -405,20 +383,11 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     await seedIndexDb(resource, store, indexedDb, this.server);
     const query = {
       filters: {
-        scope_id: {
-          logicalOperator: 'and',
-          values: [{ notEquals: scope1.id }, { equals: scope2.id }],
-        },
+        scope_id: [{ notEquals: scope1.id }],
       },
     };
 
-    let result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-
-    query.filters.scope_id.logicalOperator = 'or';
-
-    result = await queryIndexedDb(indexedDb.db, resource, query);
+    const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 5);
   });
