@@ -379,7 +379,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     const dryRun = true;
     const issuer = 'http://www.example.net';
     const maxAge = 500;
-    this.server.get('/v1/auth-methods/oidc123', () => ({
+    this.server.get('/auth-methods/oidc123', () => ({
       attributes: {
         account_claim_maps: ['from=to', 'foo=bar'],
         claims_scopes: ['profile', 'email'],
@@ -447,7 +447,7 @@ module('Unit | Serializer | auth method', function (hooks) {
     const clientCerticate = 'certificate-1234';
     const startTls = true;
     const insecureTls = false;
-    this.server.get('/v1/auth-methods/ldap123', () => ({
+    this.server.get('/auth-methods/ldap123', () => ({
       attributes: {
         account_attribute_maps: ['from=to', 'foo=bar'],
         urls: [ldapUrl],
