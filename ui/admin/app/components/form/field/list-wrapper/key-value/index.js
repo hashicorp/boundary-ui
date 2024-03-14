@@ -27,9 +27,7 @@ export default class MappingListComponent extends Component {
    */
 
   get options() {
-    const field = this.args.name;
-    const newArray = this.args.model?.[field];
-    return this.args?.options || newArray;
+    return this.args?.options || this.args?.model?.[this.args.name];
   }
 
   /**
