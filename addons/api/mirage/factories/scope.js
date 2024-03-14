@@ -33,13 +33,13 @@ export default factory.extend({
       roles: ['create', 'list'],
     };
 
-    // Worker permissions only available on the global scope
+    // Resources that are available only on the global scope
     if (this.type === 'global') {
       collectionActions.workers = ['create:worker-led', 'list'];
       collectionActions.aliases = ['create', 'list'];
     }
 
-    // Session recording resources are only available on global or org scope
+    // Resources that are only available on the global or the org scope
     if (this.type === 'global' || this.type === 'org') {
       collectionActions['storage-buckets'] = ['create', 'list'];
       collectionActions['session-recordings'] = ['list'];
