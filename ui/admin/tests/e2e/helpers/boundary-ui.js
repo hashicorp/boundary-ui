@@ -138,7 +138,7 @@ exports.createNewHostInHostSet = async (page) => {
 };
 
 /**
- * Uses the UI to create a credential store. Assumes you have selected the desired project.
+ * Uses the UI to create a static credential store. Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
  * @returns Name of the credential store
  */
@@ -152,6 +152,40 @@ exports.createStaticCredentialStore = async (page) => {
   await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialStoreName),
+  ).toBeVisible();
+
+  return credentialStoreName;
+};
+
+/**
+ * Uses the UI to create a vault credential store. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} clientToken vault token to connect to boundary
+ * @returns Name of the credential store
+ */
+exports.createVaultCredentialStore = async (page, clientToken) => {
+  const credentialStoreName = 'Credential Store ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Credential Stores' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
+  await page
+    .getByLabel('Address', { exact: true })
+    .fill(process.env.E2E_VAULT_ADDR);
+  await page.getByLabel('Token', { exact: true }).fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -200,6 +234,98 @@ exports.createStaticCredentialKeyPair = async (page) => {
   ).toBeVisible();
 
   return credentialName;
+};
+
+/**
+ * Uses the UI to create a vault-generic credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @param {string} credentialType type of credential for credential injection
+ * @returns Name of the credential library
+ */
+exports.createVaultGenericCredentialLibrary = async (
+  page,
+  vaultPath,
+  credentialType,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Generic Secrets')
+    .click();
+  await page.getByLabel('Vault Path').fill(vaultPath);
+  await page
+    .getByRole('combobox', { name: 'Credential Type' })
+    .selectOption(credentialType);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
+};
+
+/**
+ * Uses the UI to create a vault-ssh-certificate credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @returns Name of the credential library
+ */
+exports.createVaultSshCertificateCredentialLibrary = async (
+  page,
+  vaultPath,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+
+  // Temporarily putting the Group selection first due to a bug where
+  // Name and Description fields get cleared when the Group is selected
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
+
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page.getByLabel('Vault Path').fill(vaultPath);
+  await page.getByLabel('Username').fill(process.env.E2E_SSH_USER);
+  await page.getByLabel('Key Type').selectOption('ecdsa');
+  await page.getByLabel('Key Bits').fill('521');
+
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByLabel('Key')
+    .fill('permity-pty');
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByRole('button', { name: 'Add' })
+    .click();
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
 };
 
 /**
@@ -668,9 +794,10 @@ exports.addMemberToGroup = async (page, userName) => {
 /**
  * Uses the UI to create a new role. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} roleName Name of the new role
  */
-exports.createNewRole = async (page, roleName) => {
+exports.createRole = async (page) => {
+  const roleName = 'Role ' + nanoid();
+
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Roles' })
@@ -685,6 +812,8 @@ exports.createNewRole = async (page, roleName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(roleName),
   ).toBeVisible();
+
+  return roleName;
 };
 
 /**

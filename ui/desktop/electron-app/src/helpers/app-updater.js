@@ -62,10 +62,10 @@ const createAppUpdaterConfig = (url, version, destination) => {
 };
 
 const downloadAndInstallUpdate = async (version, url) => {
-  const destination = path.resolve(__dirname, '..', 'nextVersion');
-  if (!fs.existsSync(destination)) fs.mkdirSync(destination);
-
   try {
+    const destination = path.resolve(process.resourcesPath, 'nextVersion');
+    if (!fs.existsSync(destination)) fs.mkdirSync(destination);
+
     const configPath = createAppUpdaterConfig(url, version, destination);
     autoUpdater.on('update-downloaded', () => {
       const dialogOpts = {

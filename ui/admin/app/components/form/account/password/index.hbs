@@ -10,37 +10,35 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </InfoField>
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -55,43 +53,45 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.input
-    @name='login_name'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    name='login_name'
     @value={{@model.login_name}}
-    @label={{t 'form.login_name.label'}}
-    @error={{@model.errors.login_name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.login_name}}
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'login_name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.login_name.label'}}</F.Label>
     {{#if @model.errors.login_name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.login_name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   {{#if @model.isNew}}
-    <form.input
-      @name='password'
+    <Hds::Form::TextInput::Field
+      name='password'
       @type='password'
-      @value={{this.password}}
-      @label={{t 'form.password.label'}}
-      @error={{@model.errors.password}}
-      readonly={{false}}
+      @value={{@model.password}}
+      @isInvalid={{@model.errors.password}}
+      disabled={{form.disabled}}
       autocomplete='new-password'
-      as |field|
+      {{on 'input' (set-from-event @model 'password')}}
+      as |F|
     >
+      <F.Label>{{t 'form.password.label'}}</F.Label>
       {{#if @model.errors.password}}
-        <field.errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.password as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </field.errors>
+        </F.Error>
       {{/if}}
-    </form.input>
+    </Hds::Form::TextInput::Field>
   {{/if}}
 
   {{#if (can 'save model' @model)}}
