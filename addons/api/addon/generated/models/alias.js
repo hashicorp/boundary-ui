@@ -50,6 +50,7 @@ export default class GeneratedAliasModel extends BaseModel {
   destination_id;
 
   @attr('object', {
+    isNestedAttribute: true,
     description:
       'This contains a host_id which is the id of the host that the session will be authorized for.',
   })
