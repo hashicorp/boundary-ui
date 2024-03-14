@@ -31,7 +31,7 @@ export default class MappingListComponent extends Component {
   }
 
   /**
-   * Prevents users from selecting duplicate keys from the select list if there's the arg is set to true
+   * Prevents users from selecting duplicate keys from the select list if the arg is set to true
    * @type {object}
    */
 
