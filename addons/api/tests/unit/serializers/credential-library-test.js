@@ -25,7 +25,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       version: 1,
       credential_type: 'ssh_private_key',
       credential_mapping_overrides: [
-        { key: 'private_key_attribute', value: 'user' },
+        { key: 'username_attribute', value: 'user' },
       ],
     });
     const snapshot = record._createSnapshot();
@@ -38,7 +38,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       version: 1,
       credential_type: 'ssh_private_key',
       credential_mapping_overrides: {
-        private_key_attribute: 'user',
+        username_attribute: 'user',
       },
       attributes: {
         path: '/vault/path',
@@ -99,7 +99,7 @@ module('Unit | Serializer | credential library', function (hooks) {
       http_method: '',
       path: null,
       credential_type: null,
-      credential_mapping_overrides: [],
+      credential_mapping_overrides: {},
     });
     const vaultSSHCertificateRecord = store.createRecord('credential-library', {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
