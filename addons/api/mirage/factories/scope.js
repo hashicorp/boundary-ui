@@ -36,6 +36,7 @@ export default factory.extend({
     // Worker permissions only available on the global scope
     if (this.type === 'global') {
       collectionActions.workers = ['create:worker-led', 'list'];
+      collectionActions.aliases = ['create', 'list'];
     }
 
     // Session recording resources are only available on global or org scope
