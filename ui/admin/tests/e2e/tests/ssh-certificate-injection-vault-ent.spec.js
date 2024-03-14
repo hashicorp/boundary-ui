@@ -19,15 +19,17 @@ const {
   createNewProject,
   createSshTargetWithAddressEnt,
   createVaultCredentialStore,
-  createVaultGenericCredentialLibrary,
+  createVaultSshCertificateCredentialLibrary,
   addInjectedCredentialsToTarget,
   waitForSessionToBeVisible,
 } = require('../helpers/boundary-ui');
 
-const secretsPath = 'e2e_secrets';
-const secretName = 'cred';
-const secretPolicyName = 'kv-policy';
+const sshPolicyName = 'ssh-policy';
 const boundaryPolicyName = 'boundary-controller';
+// This must match the secret path in ssh-policy.hcl
+const secretsPath = 'e2e_secrets';
+// This must match the secret name in ssh-policy.hcl
+const secretName = 'boundary-client';
 
 test.use({ storageState: authenticatedState });
 
@@ -38,24 +40,20 @@ test.beforeAll(async () => {
     'E2E_VAULT_ADDR', // Address used by Boundary Server (could be different from VAULT_ADDR depending on network config (i.e. docker network))
     'E2E_TARGET_ADDRESS',
     'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
+    'E2E_SSH_CA_KEY',
+    'E2E_SSH_CA_KEY_PUBLIC',
   ]);
 
   await checkBoundaryCli();
   await checkVaultCli();
 });
 
-test.beforeEach(async ({ page }) => {
-  execSync(`vault policy delete ${secretPolicyName}`);
-  execSync(`vault policy delete ${boundaryPolicyName}`);
+test.beforeEach(async () => {
   execSync(`vault secrets disable ${secretsPath}`);
-
-  await page.goto('/');
 });
 
-test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
-  page,
-}) => {
+test('SSH Certificate Injection @ent @docker', async ({ page }) => {
+  await page.goto('/');
   let org;
   let connect;
   try {
@@ -63,21 +61,31 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     execSync(
       `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
     );
-    execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
+    execSync(`vault secrets enable -path=${secretsPath} ssh`);
     execSync(
-      `vault kv put -mount ${secretsPath} ${secretName} ` +
-        ` username=${process.env.E2E_SSH_USER}` +
-        ` private_key=@${process.env.E2E_SSH_KEY_PATH}`,
+      `vault policy write ${sshPolicyName} ./tests/e2e/tests/fixtures/ssh-policy.hcl`,
     );
     execSync(
-      `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
+      `vault write ${secretsPath}/roles/${secretName} @./tests/e2e/tests/fixtures/ssh-certificate-injection-role.json`,
     );
+
+    const private_key = atob(process.env.E2E_SSH_CA_KEY);
+    const public_key = atob(process.env.E2E_SSH_CA_KEY_PUBLIC);
+
+    execSync(
+      `vault write ${secretsPath}/config/ca` +
+        ` private_key="${private_key}"` +
+        ` public_key="${public_key}"` +
+        ` generate_signing_key=false`,
+      ` format=json`,
+    );
+
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
           ` -no-default-policy=true` +
           ` -policy=${boundaryPolicyName}` +
-          ` -policy=${secretPolicyName}` +
+          ` -policy=${sshPolicyName}` +
           ` -orphan=true` +
           ` -period=20m` +
           ` -renewable=true` +
@@ -108,11 +116,11 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
 
     // Create credentials
     await createVaultCredentialStore(page, clientToken);
-    const credentialLibraryName = await createVaultGenericCredentialLibrary(
-      page,
-      `${secretsPath}/data/${secretName}`,
-      'SSH Private Key',
-    );
+    const credentialLibraryName =
+      await createVaultSshCertificateCredentialLibrary(
+        page,
+        `${secretsPath}/issue/${secretName}`,
+      );
     await addInjectedCredentialsToTarget(
       page,
       targetName,
@@ -135,5 +143,9 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     if (connect) {
       connect.kill('SIGTERM');
     }
+
+    execSync(`vault secrets disable ${secretsPath}`);
+    execSync(`vault policy delete ${sshPolicyName}`);
+    execSync(`vault policy delete ${boundaryPolicyName}`);
   }
 });
