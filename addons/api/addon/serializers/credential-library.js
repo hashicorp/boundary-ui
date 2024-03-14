@@ -47,7 +47,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         const doesExist = credential_mapping_overrides.some(
           (obj) => obj.key === item,
         );
-        if (!exisiting) {
+        if (!doesExist) {
           credential_mapping_overrides.push({ key: item, value: null });
         }
       });
