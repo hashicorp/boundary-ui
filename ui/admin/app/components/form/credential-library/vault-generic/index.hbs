@@ -168,14 +168,21 @@
       </:fieldset>
 
       <:field as |F|>
-        <F.SelectText
+        <F.KeyValue
           @name='credential_mapping_overrides'
           @selectOptions={{this.mappingOverrides}}
           @model={{@model}}
           @disabled={{form.disabled}}
           @removeDuplicates={{true}}
           @width='400px'
-        />
+        >
+          <:key as |K|>
+            <K.select />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
   {{/if}}

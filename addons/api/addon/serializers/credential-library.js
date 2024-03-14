@@ -36,23 +36,29 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
     const value = super.serializeAttribute(...arguments);
     const { credential_type, type, credential_mapping_overrides, isNew } =
       snapshot.record;
+
     if (
       type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC &&
-      credential_mapping_overrides &&
-      credential_type &&
+      credential_mapping_overrides?.length &&
       !isNew
     ) {
-      // API expects to send null to fields if it is undefined or deleted
-      json.credential_mapping_overrides = Object.keys(
-        options.mapping_overrides[credential_type],
-      ).reduce((obj, key) => {
-        if (credential_mapping_overrides[key]) {
-          obj[key] = credential_mapping_overrides[key];
-        } else {
-          obj[key] = null;
+      options.mapping_overrides[credential_type].forEach((item) => {
+        const exisiting = credential_mapping_overrides.find(
+          (obj) => obj.key === item,
+        );
+        if (!exisiting) {
+          credential_mapping_overrides.push({ key: item, value: null });
         }
-        return obj;
-      }, {});
+      });
+
+      json.credential_mapping_overrides = credential_mapping_overrides.reduce(
+        (result, currentValue) => {
+          const { key, value } = currentValue;
+          result[key] = value;
+          return result;
+        },
+        {},
+      );
       return value;
     }
   }

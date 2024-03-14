@@ -55,7 +55,14 @@ module('Integration | Component | list-wrapper', function (hooks) {
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.KeyValue  @options={{this.options}}></F.KeyValue>
+            <F.KeyValue  @options={{this.options}}>
+              <:key as |K|>
+                <K.text />
+              </:key>
+              <:value as |V|>
+                <V.text />
+              </:value>
+            </F.KeyValue>
           </:field>
         </Form::Field::ListWrapper>
     `);
@@ -165,19 +172,29 @@ module('Integration | Component | list-wrapper', function (hooks) {
   });
 
   test('it renders multiple options with select and text input as key value pair', async function (assert) {
-    this.options = {
-      username_attribute: 'user',
-      password_attribute: 'pass',
-    };
+    this.options = [
+      {
+        key: 'username_attribute',
+        value: 'user',
+      },
+      {
+        key: 'password_attribute',
+        value: 'pass',
+      },
+    ];
 
-    this.selectOptions = {
-      username_attribute: 'User Key',
-      password_attribute: 'Pass Key',
-    };
+    this.selectOptions = ['username_attribute', 'password_attribute'];
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}}></F.SelectText>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}}>
+              <:key as |K|> 
+                <K.select/>
+              </:key>
+              <:value as |V|> 
+                <V.text/>
+              </:value>
+            </F.KeyValue>
           </:field>
         </Form::Field::ListWrapper>
     `);
@@ -192,15 +209,22 @@ module('Integration | Component | list-wrapper', function (hooks) {
   });
 
   test('it does not render new rows when the select option limit is reached by passing in @removeDuplicates', async function (assert) {
-    this.options = { username_attribute: 'user', password_attribute: 'pass' };
-    this.selectOptions = {
-      username_attribute: 'User Key',
-      password_attribute: 'Pass Key',
-    };
+    this.options = [
+      { key: 'username_attribute', value: 'user' },
+      { key: 'password_attribute', value: 'pass' },
+    ];
+    this.selectOptions = ['username_attribute', 'password_attribute'];
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true'></F.SelectText>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true'>
+              <:key as |K|> 
+                <K.select/>
+              </:key>
+              <:value as |V|> 
+                <V.text/>
+              </:value>
+            </F.KeyValue>
           </:field>
         </Form::Field::ListWrapper>
     `);
@@ -209,15 +233,28 @@ module('Integration | Component | list-wrapper', function (hooks) {
   });
 
   test('it does render unlimited new rows when @removeDuplicates is not passed', async function (assert) {
-    this.options = { username_attribute: 'user', password_attribute: 'pass' };
-    this.selectOptions = {
-      username_attribute: 'User Key',
-      password_attribute: 'Pass Key',
-    };
+    this.options = [
+      {
+        key: 'username_attribute',
+        value: 'user',
+      },
+      {
+        key: 'password_attribute',
+        value: 'pass',
+      },
+    ];
+    this.selectOptions = ['username_attribute', 'password_attribute'];
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.SelectText @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}}></F.SelectText>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} >
+              <:key as |K|> 
+                <K.text/>
+              </:key>
+              <:value as |V|> 
+                <V.text/>
+              </:value>
+            </F.KeyValue>
           </:field>
         </Form::Field::ListWrapper>
     `);
