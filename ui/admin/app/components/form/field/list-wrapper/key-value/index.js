@@ -32,6 +32,11 @@ export default class MappingListComponent extends Component {
     return this.args?.options || newArray;
   }
 
+  /**
+   * Prevents users from selecting duplicate keys from the select list if there's the arg is set to true
+   * @type {object}
+   */
+
   get selectOptions() {
     const previouslySelectedKeys = this.options || [];
     if (this.args.removeDuplicates && previouslySelectedKeys.length) {
