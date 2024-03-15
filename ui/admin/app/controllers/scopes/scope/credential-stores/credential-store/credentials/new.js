@@ -11,8 +11,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewCon
   )
   credentials;
 
-  // =services
-
   // =attributes
 
   queryParams = ['type'];

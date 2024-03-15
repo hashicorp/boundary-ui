@@ -11,8 +11,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
   )
   credentialLibraries;
 
-  // =services
-
   // =attributes
   queryParams = ['type'];
 }

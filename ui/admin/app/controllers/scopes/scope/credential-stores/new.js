@@ -8,8 +8,6 @@ import Controller, { inject as controller } from '@ember/controller';
 export default class ScopesScopeCredentialStoresNewController extends Controller {
   @controller('scopes/scope/credential-stores/index') credentialStores;
 
-  // =services
-
   // =attributes
   queryParams = ['type'];
 }

@@ -11,7 +11,6 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsRoute 
 
   @service store;
   @service can;
-  @service router;
 
   // =methods
 
