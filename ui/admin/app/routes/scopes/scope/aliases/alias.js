@@ -8,7 +8,6 @@ import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAliasesAliasRoute extends Route {
   @service store;
-  @service can;
 
   // =methods
 
