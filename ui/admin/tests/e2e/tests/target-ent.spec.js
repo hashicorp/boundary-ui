@@ -47,7 +47,12 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
   let connect;
   try {
     const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
@@ -67,7 +72,11 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target.id);
+    connect = await connectToTarget(
+      target.id,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -93,7 +102,12 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
   let connect;
   try {
     const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 

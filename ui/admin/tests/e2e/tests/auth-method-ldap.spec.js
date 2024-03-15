@@ -43,7 +43,12 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
   try {
     // Create an org
     const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 

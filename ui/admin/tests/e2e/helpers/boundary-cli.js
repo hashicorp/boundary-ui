@@ -20,18 +20,25 @@ exports.checkBoundaryCli = async () => {
 
 /**
  * Uses the boundary CLI to authenticate to the specified Boundary instance
+ * @param {string} addr Address of the Boundary instance to be authenticated to
+ * @param {string} authMethodId ID of the auth method to be used for authentication
+ * @param {string} loginName Login name to be used for authentication
+ * @param {string} password Password to be used for authentication
  */
-exports.authenticateBoundaryCli = async () => {
+exports.authenticateBoundaryCli = async (
+  addr,
+  authMethodId,
+  loginName,
+  password,
+) => {
   try {
     execSync(
       'boundary authenticate password' +
-        ' -addr=' +
-        process.env.BOUNDARY_ADDR +
-        ' -auth-method-id=' +
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID +
-        ' -login-name=' +
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
-        ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
+        ` -addr=${addr}` +
+        ` -auth-method-id=${authMethodId}` +
+        ` -login-name=${loginName}` +
+        ' -password=env://BPASS',
+      { env: { ...process.env, BPASS: password } },
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -41,20 +48,19 @@ exports.authenticateBoundaryCli = async () => {
 /**
  * Uses the boundary CLI to connect to the specified target
  * @param {string} targetId ID of the target to be connected to
+ * @param {string} sshUser User to be used for the ssh connection
+ * @param {string} sshKeyPath Path to the ssh key to be used for the ssh connection
  * @returns ChildProcess representing the result of the command execution
  */
-exports.connectToTarget = async (targetId) => {
+exports.connectToTarget = async (targetId, sshUser, sshKeyPath) => {
   let connect;
   try {
     connect = exec(
       'boundary connect' +
-        ' -target-id=' +
-        targetId +
+        ` -target-id=${targetId}` +
         ' -exec /usr/bin/ssh --' +
-        ' -l ' +
-        process.env.E2E_SSH_USER +
-        ' -i ' +
-        process.env.E2E_SSH_KEY_PATH +
+        ` -l ${sshUser}` +
+        ` -i ${sshKeyPath}` +
         ' -o UserKnownHostsFile=/dev/null' +
         ' -o StrictHostKeyChecking=no' +
         ' -o IdentitiesOnly=yes' + // forces the use of the provided key
@@ -241,7 +247,6 @@ exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
 exports.createNewPasswordAccountCli = async (authMethodId) => {
   let passwordAccount;
   const login = 'test-login';
-  process.env.ACCOUNT_PASSWORD = 'test-password';
   try {
     passwordAccount = JSON.parse(
       execSync(
@@ -250,6 +255,7 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
         -login-name ${login} \
         -password env://ACCOUNT_PASSWORD \
         -format json`,
+        { env: { ...process.env, ACCOUNT_PASSWORD: 'test-password' } },
       ),
     ).item;
   } catch (e) {
@@ -451,12 +457,14 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new vault credential store.
  * @param {string} projectId ID of the project under which the credential store will be created.
+ * @param {string} vaultAddr Address of the vault that the credential store will be created for.
  * @param {string} secretPolicyName Name of the secret policy that's used to create vault token.
  * @param {string} boundaryPolicyName Name of the boundary policy that's used to create vault token.
  * @returns {Promise<string>} new credential store's ID
  */
 exports.createNewVaultCredentialStoreCli = async (
   projectId,
+  vaultAddr,
   secretPolicyName,
   boundaryPolicyName,
 ) => {
@@ -487,7 +495,7 @@ exports.createNewVaultCredentialStoreCli = async (
         `boundary credential-stores create vault \
           -scope-id ${projectId} \
           -name ${credentialStoreName} \
-          -vault-address ${process.env.E2E_VAULT_ADDR} \
+          -vault-address ${vaultAddr} \
           -vault-token ${clientToken} \
           -format json`,
       ),
@@ -506,7 +514,6 @@ exports.createNewVaultCredentialStoreCli = async (
 exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
   let usernamePasswordCredential;
   const login = 'test-login';
-  process.env.CREDENTIALS_PASSWORD = 'credentials-password';
   try {
     usernamePasswordCredential = JSON.parse(
       execSync(
@@ -516,6 +523,9 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
         -username ${login} \
         -password env://CREDENTIALS_PASSWORD \
         -format json`,
+        {
+          env: { ...process.env, CREDENTIALS_PASSWORD: 'credentials-password' },
+        },
       ),
     ).item;
   } catch (e) {
