@@ -7,8 +7,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { hash } from 'rsvp';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
@@ -66,29 +64,6 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   }
 
   // =actions
-
-  /**
-   * Adds members to the group and saves, replaces with the members index
-   * route, and notifies the user of success or error.
-   * @param {GroupModel} group
-   * @param {[string]} userIDs
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async addMembers(group, userIDs) {
-    await group.addMembers(userIDs);
-    await this.router.replaceWith('scopes.scope.groups.group.members');
-  }
-
-  /**
-   * Redirect to group members as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith('scopes.scope.groups.group.members');
-  }
 
   /**
    * Sets the specified resource filter field to the specified value.

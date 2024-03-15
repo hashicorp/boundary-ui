@@ -25,13 +25,13 @@ exports.authenticateBoundaryCli = async () => {
   try {
     execSync(
       'boundary authenticate password' +
-      ' -addr=' +
-      process.env.BOUNDARY_ADDR +
-      ' -auth-method-id=' +
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID +
-      ' -login-name=' +
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
-      ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
+        ' -addr=' +
+        process.env.BOUNDARY_ADDR +
+        ' -auth-method-id=' +
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID +
+        ' -login-name=' +
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
+        ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -48,18 +48,18 @@ exports.connectToTarget = async (targetId) => {
   try {
     connect = exec(
       'boundary connect' +
-      ' -target-id=' +
-      targetId +
-      ' -exec /usr/bin/ssh --' +
-      ' -l ' +
-      process.env.E2E_SSH_USER +
-      ' -i ' +
-      process.env.E2E_SSH_KEY_PATH +
-      ' -o UserKnownHostsFile=/dev/null' +
-      ' -o StrictHostKeyChecking=no' +
-      ' -o IdentitiesOnly=yes' + // forces the use of the provided key
-      ' -p {{boundary.port}}' +
-      ' {{boundary.ip}}',
+        ' -target-id=' +
+        targetId +
+        ' -exec /usr/bin/ssh --' +
+        ' -l ' +
+        process.env.E2E_SSH_USER +
+        ' -i ' +
+        process.env.E2E_SSH_KEY_PATH +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+        ' -p {{boundary.port}}' +
+        ' {{boundary.ip}}',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -77,12 +77,12 @@ exports.connectSshToTarget = async (targetId) => {
   try {
     connect = exec(
       'boundary connect ssh' +
-      ' -target-id=' +
-      targetId +
-      ' --' +
-      ' -o UserKnownHostsFile=/dev/null' +
-      ' -o StrictHostKeyChecking=no' +
-      ' -o IdentitiesOnly=yes', // forces the use of the provided key
+        ' -target-id=' +
+        targetId +
+        ' --' +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes', // forces the use of the provided key
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -119,6 +119,30 @@ exports.createNewOrgCli = async () => {
 exports.deleteOrgCli = async (orgId) => {
   try {
     exec('boundary scopes delete -id=' + orgId);
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
+ * Uses the boundary CLI to delete the specified storage bucket
+ * @param {string} storageBucketId ID of the storage bucket to be deleted
+ */
+exports.deleteStorageBucketCli = async (storageBucketId) => {
+  try {
+    exec('boundary storage-buckets delete -id=' + storageBucketId);
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
+ * Uses the boundary CLI to delete the specified policy
+ * @param {string} policyId ID of the policy to be deleted
+ */
+exports.deletePolicyCli = async (policyId) => {
+  try {
+    exec('boundary policies delete -id=' + policyId);
   } catch (e) {
     console.log(`${e.stderr}`);
   }
@@ -579,4 +603,30 @@ exports.getSessionCli = async (orgName, projectName, targetName) => {
     console.log(`${e.stderr}`);
   }
   return session;
+};
+
+/**
+ * Uses the boundary CLI to wait for a session recording to be available.
+ * @param {string} storageBucketId ID of storage bucket that the session recording is associated with
+ * @returns An object representing a session recording
+ */
+exports.waitForSessionRecordingCli = async (storageBucketId) => {
+  let i = 0;
+  let filteredSessionRecording = [];
+  do {
+    i = i + 1;
+    const sessionRecordings = JSON.parse(
+      execSync('boundary session-recordings list -format json'),
+    );
+    filteredSessionRecording = sessionRecordings.items.filter(
+      (obj) =>
+        obj.storage_bucket_id == storageBucketId && obj.state == 'available',
+    );
+    if (filteredSessionRecording.length > 0) {
+      break;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } while (i < 5);
+
+  return filteredSessionRecording[0];
 };

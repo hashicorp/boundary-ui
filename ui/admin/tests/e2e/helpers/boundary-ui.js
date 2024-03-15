@@ -237,14 +237,14 @@ exports.createStaticCredentialKeyPair = async (page) => {
 };
 
 /**
- * Uses the UI to create a vault credential library. Assumes you have selected
+ * Uses the UI to create a vault-generic credential library. Assumes you have selected
  * the desired credential store.
  * @param {Page} page Playwright page object
  * @param {string} vaultPath path to secret in vault
  * @param {string} credentialType type of credential for credential injection
  * @returns Name of the credential library
  */
-exports.createVaultCredentialLibrary = async (
+exports.createVaultGenericCredentialLibrary = async (
   page,
   vaultPath,
   credentialType,
@@ -258,11 +258,66 @@ exports.createVaultCredentialLibrary = async (
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Generic Secrets')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
-
   await page
     .getByRole('combobox', { name: 'Credential Type' })
     .selectOption(credentialType);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+
+  return credentialLibraryName;
+};
+
+/**
+ * Uses the UI to create a vault-ssh-certificate credential library. Assumes you have selected
+ * the desired credential store.
+ * @param {Page} page Playwright page object
+ * @param {string} vaultPath path to secret in vault
+ * @returns Name of the credential library
+ */
+exports.createVaultSshCertificateCredentialLibrary = async (
+  page,
+  vaultPath,
+) => {
+  const credentialLibraryName = 'Credential Library ' + nanoid();
+
+  await page.getByRole('link', { name: 'Credential Libraries' }).click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+
+  // Temporarily putting the Group selection first due to a bug where
+  // Name and Description fields get cleared when the Group is selected
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
+
+  await page
+    .getByLabel('Name (Optional)', { exact: true })
+    .fill(credentialLibraryName);
+  await page
+    .getByLabel('Description (Optional)')
+    .fill('This is an automated test');
+  await page.getByLabel('Vault Path').fill(vaultPath);
+  await page.getByLabel('Username').fill(process.env.E2E_SSH_USER);
+  await page.getByLabel('Key Type').selectOption('ecdsa');
+  await page.getByLabel('Key Bits').fill('521');
+
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByLabel('Key')
+    .fill('permity-pty');
+  await page
+    .getByRole('group', { name: 'Extensions' })
+    .getByRole('button', { name: 'Add' })
+    .click();
 
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
@@ -389,6 +444,46 @@ exports.createSshTargetWithAddressEnt = async (page) => {
 };
 
 /**
+ * Uses the UI to create a new SSH target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} address Address of the target
+ * @param {string} port Port of the target
+ * @param {string} workerFilterEgress Egress worker filter
+ * @returns Name of the target
+ */
+exports.createSshTargetWithAddressAndWorkerFilterEnt = async (
+  page,
+  address,
+  port,
+  workerFilterEgress,
+) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
+  await page.getByLabel('Target Address').fill(address);
+  await page.getByLabel('Default Port').fill(port);
+  await page.getByLabel('Egress worker filter').click();
+  await page.getByRole('textbox', { name: 'Filter' }).fill(workerFilterEgress);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
  * Uses the UI to delete a Boundary resource. Assume you have selected the desired resource.
  * Note: For a resource to be deleted using this method,
  * the resource page should allow to delete the resource using the Manage button.
@@ -443,7 +538,8 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
 };
 
 /**
- * Uses the UI to navigate to Sessions and waits for the session to appear.
+ * Uses the UI to navigate to Sessions and waits for the session to appear
+ * and be in Active state.
  * @param {Page} page Playwright page object
  * @param {string} targetName Name of the target associated with the session
  */
@@ -454,12 +550,16 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
     .click();
   let i = 0;
   let sessionIsVisible = false;
+  let sessionIsActive = false;
   do {
     i = i + 1;
     sessionIsVisible = await page
       .getByRole('cell', { name: targetName })
       .isVisible();
-    if (sessionIsVisible) {
+    sessionIsActive = await page
+      .getByRole('cell', { name: 'Active' })
+      .isVisible();
+    if (sessionIsVisible && sessionIsActive) {
       break;
     }
     await page.getByRole('button', { name: 'Refresh' }).click();
@@ -802,4 +902,110 @@ exports.addGrantsToGroup = async (page, grants) => {
   await expect(
     page.getByRole('textbox', { name: 'Grant', exact: true }),
   ).toHaveValue(grants);
+};
+
+/**
+ * Uses the UI to create a new Storage Bucket. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @returns Name of the Storage Bucket
+ */
+exports.createStorageBucket = async (page) => {
+  const storageBucketName = 'Bucket ' + nanoid();
+  await page
+    .getByRole('link', { name: 'Storage Buckets', exact: true })
+    .click();
+  await page.getByRole('link', { name: 'New Storage Bucket' }).click();
+  await page.getByLabel(new RegExp('Name*')).fill(storageBucketName);
+  await page.getByLabel('Bucket name').fill(process.env.E2E_AWS_BUCKET_NAME);
+  await page.getByLabel('Region').fill(process.env.E2E_AWS_REGION);
+  await page
+    .getByLabel('Access key ID')
+    .fill(process.env.E2E_AWS_ACCESS_KEY_ID);
+  await page
+    .getByLabel('Secret access key')
+    .fill(process.env.E2E_AWS_SECRET_ACCESS_KEY);
+  const workerTag = `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`;
+  await page.getByLabel('Worker filter').fill(workerTag);
+  await page.getByLabel('Disable credential rotation').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(storageBucketName),
+  ).toBeVisible();
+
+  return storageBucketName;
+};
+
+/**
+ * Uses the UI to enable session recording for a target. Assumes you have selected the desired target.
+ * @param {Page} page Playwright page object
+ * @param {string} storageBucketName name of the Storage Bucket used for session recording
+ */
+exports.enableSessionRecording = async (page, storageBucketName) => {
+  await page.getByText('Enable recording').click();
+  await page.getByLabel('Record sessions for this target').click();
+  await page
+    .getByLabel('AWS storage buckets')
+    .selectOption({ label: storageBucketName });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('listitem').getByText(storageBucketName),
+  ).toBeVisible();
+};
+
+/**
+ * Uses the UI to create a Storage Policy. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @returns Name of the Storage Policy
+ */
+exports.createStoragePolicy = async (page) => {
+  const storagePolicyName = 'Policy ' + nanoid();
+  await page
+    .getByRole('link', { name: 'Storage Policies', exact: true })
+    .click();
+  await page
+    .getByRole('link', { name: 'Create a new storage policy', exact: true })
+    .click();
+  await page.getByLabel('Name').fill(storagePolicyName);
+  await page.getByLabel('Retention Policy').selectOption({ label: 'Forever' });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(storagePolicyName),
+  ).toBeVisible();
+
+  return storagePolicyName;
+};
+
+/**
+ * Uses the UI to attach Storage Policy to a scope. Assumes you have selected the desired scope.
+ * @param {Page} page Playwright page object
+ * @param {string} policyName name of the Policy to be attached to the scope
+ */
+exports.attachStoragePolicy = async (page, policyName) => {
+  await page
+    .getByRole('link', { name: new RegExp('/*Settings'), exact: true })
+    .click();
+  await page.getByText('Add Storage Policy').click();
+  await page.getByLabel('Storage Policy').selectOption({ label: policyName });
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(page.getByRole('listitem').getByText(policyName)).toBeVisible();
 };
