@@ -26,8 +26,8 @@
   <page.body>
     <Form::Group
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.groups.save @model}}
+      @cancel={{fn this.groups.cancel @model}}
     />
   </page.body>
 
