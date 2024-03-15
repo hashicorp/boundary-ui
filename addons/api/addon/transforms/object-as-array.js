@@ -4,11 +4,10 @@
  */
 
 import Transform from '@ember-data/serializer/transform';
-import { TrackedObject } from 'tracked-built-ins';
 
 export default class ObjectAsArrayTransform extends Transform {
   deserialize(serialized) {
-    const obj = new TrackedObject(serialized || {});
+    const obj = serialized || {};
     return Object.entries(obj).map(([key, value]) => ({ key, value }));
   }
   serialize(deserialized) {

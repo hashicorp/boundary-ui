@@ -53,9 +53,7 @@ export default class MappingListComponent extends Component {
    */
   get showNewRow() {
     if (this.args.removeDuplicates) {
-      return (
-        (this.options || []).length !== (this.args.selectOptions || []).length
-      );
+      return this.options?.length !== this.args.selectOptions?.length;
     } else {
       return true;
     }
