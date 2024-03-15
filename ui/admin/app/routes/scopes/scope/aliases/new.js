@@ -1,0 +1,43 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+import { TYPE_ALIAS_TARGET } from 'api/models/alias';
+
+export default class ScopesScopeAliasesNewRoute extends Route {
+  // =services
+
+  @service store;
+  @service can;
+  @service router;
+
+  // =methods
+
+  /**
+   * Redirect to parent route when scope does not have create authorized action.
+   */
+  beforeModel() {
+    const scopeModel = this.modelFor('scopes.scope');
+    if (
+      this.can.cannot('create model', scopeModel, { collection: 'aliases' })
+    ) {
+      this.router.replaceWith('scopes.scope.aliases');
+    }
+  }
+
+  /**
+   * Creates a new unsaved policy.
+   * @return {PolicyModel}
+   */
+  model() {
+    const scopeModel = this.modelFor('scopes.scope');
+    const record = this.store.createRecord('alias', {
+      type: TYPE_ALIAS_TARGET,
+    });
+    record.scopeModel = scopeModel;
+    return record;
+  }
+}
