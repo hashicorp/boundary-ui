@@ -1,17 +1,12 @@
-/**
- * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
- */
-
 import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
 
-module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
+module('Unit | Controller | scopes/scope/groups/group/index', function (hooks) {
   setupTest(hooks);
 
   test('it exists', function (assert) {
     let controller = this.owner.lookup(
-      'controller:scopes/scope/auth-methods/index',
+      'controller:scopes/scope/groups/group/index',
     );
     assert.ok(controller);
   });
