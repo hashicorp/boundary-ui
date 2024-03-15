@@ -17,7 +17,7 @@ const {
   deletePolicyCli,
 } = require('../helpers/boundary-cli');
 const {
-  createSshTargetWithAddressEnt,
+  createSshTargetWithAddressAndWorkerFilterEnt,
   waitForSessionToBeVisible,
   createStorageBucket,
   enableSessionRecording,
@@ -85,7 +85,12 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page.getByRole('link', { name: orgId }).click();
     await page.getByRole('link', { name: projectId }).click();
-    const targetName = await createSshTargetWithAddressEnt(page);
+    const targetName = await createSshTargetWithAddressAndWorkerFilterEnt(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+      `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
+    );
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + projectId),
     );

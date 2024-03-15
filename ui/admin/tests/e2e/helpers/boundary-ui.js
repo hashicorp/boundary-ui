@@ -431,9 +431,46 @@ exports.createSshTargetWithAddressEnt = async (page) => {
   await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
   await page.getByLabel('Target Address').fill(process.env.E2E_TARGET_ADDRESS);
   await page.getByLabel('Default Port').fill(process.env.E2E_TARGET_PORT);
-  const workerTag = `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`;
-  await page.getByLabel('Ingress worker filter').click();
-  await page.getByRole('textbox', { name: 'Filter' }).fill(workerTag);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
+ * Uses the UI to create a new SSH target with address in boundary-enterprise
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} address Address of the target
+ * @param {string} port Port of the target
+ * @param {string} workerFilterEgress Egress worker filter
+ * @returns Name of the target
+ */
+exports.createSshTargetWithAddressAndWorkerFilterEnt = async (
+  page,
+  address,
+  port,
+  workerFilterEgress,
+) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
+  await page.getByLabel('Target Address').fill(address);
+  await page.getByLabel('Default Port').fill(port);
+  await page.getByLabel('Egress worker filter').click();
+  await page.getByRole('textbox', { name: 'Filter' }).fill(workerFilterEgress);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
