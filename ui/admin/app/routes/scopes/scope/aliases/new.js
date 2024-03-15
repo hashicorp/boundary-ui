@@ -29,8 +29,8 @@ export default class ScopesScopeAliasesNewRoute extends Route {
   }
 
   /**
-   * Creates a new unsaved policy.
-   * @return {PolicyModel}
+   * Creates a new unsaved alias.
+   * @return {AliasModel}
    */
   model() {
     const scopeModel = this.modelFor('scopes.scope');
