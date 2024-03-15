@@ -49,8 +49,8 @@ test('Verify session created to target with host, then cancel the session @ce @a
     const projectName = await createNewProject(page);
     await createNewHostCatalog(page);
     const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page);
-    const targetName = await createNewTarget(page);
+    await createNewHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const targetName = await createNewTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
 
     await authenticateBoundaryCli();
@@ -90,7 +90,11 @@ test('Verify session created to target with address, then cancel the session @ce
   try {
     const orgName = await createNewOrg(page);
     const projectName = await createNewProject(page);
-    const targetName = await createNewTargetWithAddress(page);
+    const targetName = await createNewTargetWithAddress(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
 
     await authenticateBoundaryCli();
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
@@ -126,7 +130,11 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
   try {
     orgName = await createNewOrg(page);
     await createNewProject(page);
-    await createNewTargetWithAddress(page);
+    await createNewTargetWithAddress(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
 
     // Update target
     await page.getByRole('button', { name: 'Edit Form' }).click();

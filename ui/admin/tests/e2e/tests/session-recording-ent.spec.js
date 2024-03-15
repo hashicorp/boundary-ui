@@ -73,7 +73,14 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
 
     // Create Storage Bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    const storageBucketName = await createStorageBucket(page);
+    const storageBucketName = await createStorageBucket(
+      page,
+      process.env.E2E_AWS_BUCKET_NAME,
+      process.env.E2E_AWS_REGION,
+      process.env.E2E_AWS_ACCESS_KEY_ID,
+      process.env.E2E_AWS_SECRET_ACCESS_KEY,
+      `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
+    );
     const storageBuckets = JSON.parse(
       execSync('boundary storage-buckets list -format json'),
     );
@@ -96,7 +103,11 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
     await createStaticCredentialStore(page);
-    const credentialName = await createStaticCredentialKeyPair(page);
+    const credentialName = await createStaticCredentialKeyPair(
+      page,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await addInjectedCredentialsToTarget(page, targetName, credentialName);
 
     // Enable session recording for Target

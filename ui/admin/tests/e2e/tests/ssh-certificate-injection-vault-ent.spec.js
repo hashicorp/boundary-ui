@@ -39,6 +39,7 @@ test.beforeAll(async () => {
     'VAULT_TOKEN',
     'E2E_VAULT_ADDR', // Address used by Boundary Server (could be different from VAULT_ADDR depending on network config (i.e. docker network))
     'E2E_TARGET_ADDRESS',
+    'E2E_TARGET_PORT',
     'E2E_SSH_USER',
     'E2E_SSH_CA_KEY',
     'E2E_SSH_CA_KEY_PUBLIC',
@@ -108,18 +109,27 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
     // Create target
-    const targetName = await createSshTargetWithAddressEnt(page);
+    const targetName = await createSshTargetWithAddressEnt(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
     // Create credentials
-    await createVaultCredentialStore(page, clientToken);
+    await createVaultCredentialStore(
+      page,
+      process.env.E2E_VAULT_ADDR,
+      clientToken,
+    );
     const credentialLibraryName =
       await createVaultSshCertificateCredentialLibrary(
         page,
         `${secretsPath}/issue/${secretName}`,
+        process.env.E2E_SSH_USER,
       );
     await addInjectedCredentialsToTarget(
       page,
