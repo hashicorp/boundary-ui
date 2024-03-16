@@ -136,7 +136,8 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(target) {
     await target.destroyRecord();
-    await this.router.replaceWith('scopes.scope.targets');
+    // awaiting this transition causes a transitionAborted error to bubble up
+    this.router.replaceWith('scopes.scope.targets');
     this.refresh();
   }
 }

@@ -28,37 +28,6 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   @tracked pageSize = 10;
   @tracked selectedTarget;
 
-  get showFilters() {
-    return (
-      this.model.allTargets.length ||
-      this.availableSessions.length ||
-      this.types.length ||
-      this.search
-    );
-  }
-
-  /**
-   * Returns true if model is empty but we have a search term or filters
-   * @returns {boolean}
-   */
-  get noResults() {
-    return (
-      this.model.targets.length === 0 &&
-      (this.search || this.availableSessions.length || this.types.length)
-    );
-  }
-
-  /**
-   * Returns true if model is empty and we have no search term or filters
-   * @returns {boolean}
-   */
-  get noTargets() {
-    return (
-      this.model.targets.length === 0 &&
-      !(this.search || this.availableSessions.length || this.types.length)
-    );
-  }
-
   get availableSessionOptions() {
     return [
       { id: 'yes', name: this.intl.t('actions.yes') },

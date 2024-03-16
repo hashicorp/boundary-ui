@@ -72,7 +72,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     });
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
-    this.getAllTargets(scope_id);
+    await this.getAllTargets(scope_id);
 
     let targets;
     let totalItems = 0;
