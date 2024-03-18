@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRoute extends Route {
@@ -76,14 +75,5 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsNewRou
       description,
       ...typeSpecificAttrs,
     });
-  }
-
-  /**
-   * Update type of credential
-   * @param {string} type
-   */
-  @action
-  changeType(type) {
-    this.router.replaceWith({ queryParams: { type } });
   }
 }
