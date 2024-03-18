@@ -999,3 +999,8 @@ policy:
         label: Do not delete
       custom:
         label: Custom
+alias:
+  title: Alias
+  title_plural: Aliases
+  titles:
+    new: New Alias
