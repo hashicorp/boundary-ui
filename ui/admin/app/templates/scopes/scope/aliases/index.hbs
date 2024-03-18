@@ -1,0 +1,27 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.alias.title'}}
+      {{! TODO: Add doc link for alias }}
+    </h2>
+    {{! TODO: Add desc for alias }}
+  </page.header>
+  <page.actions>
+    {{#if (can 'create model' this.scope collection='aliases')}}
+      {{#if @model}}
+        <Hds::Button
+          @route='scopes.scope.aliases.new'
+          @text={{t 'resources.alias.titles.new'}}
+        />
+      {{/if}}
+    {{/if}}
+  </page.actions>
+</Rose::Layout::Page>
