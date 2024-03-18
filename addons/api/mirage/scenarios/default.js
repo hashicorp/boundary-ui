@@ -108,6 +108,9 @@ export default function (server) {
   server.createList('policy', 3, { scope: globalScope });
   server.createList('policy', 3, { scope: orgScope });
 
+  // Aliases
+  server.createList('alias', 3, { scope: globalScope });
+
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');

@@ -11,6 +11,7 @@ const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
+  deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const {
@@ -87,7 +88,12 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const clientToken = vaultToken.auth.client_token;
 
     const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
@@ -99,15 +105,19 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
 
     await createNewHostCatalog(page);
     const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page);
-    const targetName = await createNewTarget(page);
+    await createNewHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const targetName = await createNewTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
     const targets = JSON.parse(
       execSync(`boundary targets list -format json -scope-id ${project.id}`),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    await createVaultCredentialStore(page, clientToken);
+    await createVaultCredentialStore(
+      page,
+      process.env.E2E_VAULT_ADDR,
+      clientToken,
+    );
 
     const credentialLibraryName = 'Credential Library ' + nanoid();
     await page.getByRole('link', { name: 'Credential Libraries' }).click();
