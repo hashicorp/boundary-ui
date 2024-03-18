@@ -14,6 +14,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -61,14 +62,13 @@ module('Acceptance | targets | list', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
-    // TODO improt types
     instances.tcpTarget = this.server.create('target', {
-      type: 'tcp',
+      type: TYPE_TARGET_TCP,
       scope: instances.scopes.project,
     });
     instances.sshTarget = this.server.create('target', {
       id: 'target-1',
-      type: 'ssh',
+      type: TYPE_TARGET_SSH,
       scope: instances.scopes.project,
     });
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
