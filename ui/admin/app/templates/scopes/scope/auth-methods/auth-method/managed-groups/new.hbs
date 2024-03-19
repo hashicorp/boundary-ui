@@ -26,10 +26,10 @@
   <page.body>
     <Form::ManagedGroup
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-      @addStringItem={{route-action 'addStringItem' @model}}
+      @submit={{fn this.managedGroups.save @model}}
+      @cancel={{fn this.managedGroups.cancel @model}}
+      @removeItemByIndex={{fn this.authMethods.removeItemByIndex @model}}
+      @addStringItem={{fn this.authMethods.addStringItem @model}}
     />
   </page.body>
 

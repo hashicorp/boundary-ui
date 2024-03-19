@@ -38,7 +38,7 @@
         <dropdown.button
           @style='danger'
           @disabled={{@model.canSave}}
-          {{on 'click' (route-action 'deleteCredentialLibrary' @model)}}
+          {{on 'click' (fn this.credentialLibraries.delete @model)}}
         >
           {{t 'resources.credential-library.actions.delete'}}
         </dropdown.button>
@@ -49,9 +49,9 @@
   <page.body>
     <Form::CredentialLibrary
       @model={{@model}}
-      @edit={{route-action 'edit' @model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @edit={{fn this.credentialLibraries.edit @model}}
+      @submit={{fn this.credentialLibraries.save @model}}
+      @cancel={{fn this.credentialLibraries.cancel @model}}
     />
   </page.body>
 </Rose::Layout::Page>

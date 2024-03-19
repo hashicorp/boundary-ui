@@ -60,7 +60,12 @@ test.beforeAll(async () => {
 test.beforeEach(async () => {
   execSync(`vault policy delete ${secretPolicyName}`);
   execSync(`vault policy delete ${boundaryPolicyName}`);
-  await authenticateBoundaryCli();
+  await authenticateBoundaryCli(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
 });
 
 test('Verify resources can be deleted @ce @aws', async ({ page }) => {
@@ -87,6 +92,7 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
       await createNewStaticCredentialStoreCli(projectId);
     let vaultCredentialStoreId = await createNewVaultCredentialStoreCli(
       projectId,
+      process.env.E2E_VAULT_ADDR,
       secretPolicyName,
       boundaryPolicyName,
     );
