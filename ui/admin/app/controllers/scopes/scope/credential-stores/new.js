@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 
 export default class ScopesScopeCredentialStoresNewController extends Controller {
-  // =services
+  @controller('scopes/scope/credential-stores/index') credentialStores;
 
   // =attributes
   queryParams = ['type'];

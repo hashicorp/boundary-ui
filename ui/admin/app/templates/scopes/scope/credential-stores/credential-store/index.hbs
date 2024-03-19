@@ -18,14 +18,17 @@
   </page.navigation>
 
   <page.actions>
-    <CredentialStores::CredentialStore::Actions @model={{@model}} />
+    <CredentialStores::CredentialStore::Actions
+      @model={{@model}}
+      @delete={{fn this.credentialStores.delete @model}}
+    />
   </page.actions>
 
   <page.body>
     <Form::CredentialStore
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.credentialStores.save @model}}
+      @cancel={{fn this.credentialStores.cancel @model}}
     />
   </page.body>
 </Rose::Layout::Page>
