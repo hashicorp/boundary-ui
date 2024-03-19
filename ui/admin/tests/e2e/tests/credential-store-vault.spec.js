@@ -15,13 +15,13 @@ const {
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const {
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createVaultCredentialStore,
-  createNewHostCatalog,
-  createNewHostSet,
-  createNewHostInHostSet,
-  createNewTarget,
+  createHostCatalog,
+  createHostSet,
+  createHostInHostSet,
+  createTarget,
   addHostSourceToTarget,
   addBrokeredCredentialsToTarget,
 } = require('../helpers/boundary-ui');
@@ -87,7 +87,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
     const clientToken = vaultToken.auth.client_token;
 
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -97,16 +97,16 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync(`boundary scopes list -format json -scope-id ${org.id}`),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    await createNewHostCatalog(page);
-    const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
-    const targetName = await createNewTarget(page, process.env.E2E_TARGET_PORT);
+    await createHostCatalog(page);
+    const hostSetName = await createHostSet(page);
+    await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
     const targets = JSON.parse(
       execSync(`boundary targets list -format json -scope-id ${project.id}`),

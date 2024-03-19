@@ -14,13 +14,13 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewProject,
-  createNewHostCatalog,
-  createNewHostSet,
-  createNewHostInHostSet,
-  createNewTarget,
-  createNewTargetWithAddress,
+  createOrg,
+  createProject,
+  createHostCatalog,
+  createHostSet,
+  createHostInHostSet,
+  createTarget,
+  createTargetWithAddress,
   waitForSessionToBeVisible,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
@@ -45,12 +45,12 @@ test('Verify session created to target with host, then cancel the session @ce @a
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    const projectName = await createNewProject(page);
-    await createNewHostCatalog(page);
-    const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
-    const targetName = await createNewTarget(page, process.env.E2E_TARGET_PORT);
+    const orgName = await createOrg(page);
+    const projectName = await createProject(page);
+    await createHostCatalog(page);
+    const hostSetName = await createHostSet(page);
+    await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
 
     await authenticateBoundaryCli(
@@ -97,9 +97,9 @@ test('Verify session created to target with address, then cancel the session @ce
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    const projectName = await createNewProject(page);
-    const targetName = await createNewTargetWithAddress(
+    const orgName = await createOrg(page);
+    const projectName = await createProject(page);
+    const targetName = await createTargetWithAddress(
       page,
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
@@ -146,9 +146,9 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
   await page.goto('/');
   let orgName;
   try {
-    orgName = await createNewOrg(page);
-    await createNewProject(page);
-    await createNewTargetWithAddress(
+    orgName = await createOrg(page);
+    await createProject(page);
+    await createTargetWithAddress(
       page,
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,

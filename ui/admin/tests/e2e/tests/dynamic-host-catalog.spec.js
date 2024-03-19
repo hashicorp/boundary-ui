@@ -7,7 +7,7 @@
 const { test, expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 const { checkEnv, authenticatedState } = require('../helpers/general');
-const { createNewOrg, createNewProject } = require('../helpers/boundary-ui');
+const { createOrg, createProject } = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
 
@@ -28,8 +28,8 @@ test.describe('AWS', async () => {
   test('Create a Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
     page,
   }) => {
-    await createNewOrg(page);
-    await createNewProject(page);
+    await createOrg(page);
+    await createProject(page);
 
     const hostCatalogName = 'Host Catalog ' + nanoid();
     await page
