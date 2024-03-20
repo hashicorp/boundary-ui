@@ -13,8 +13,8 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewGroup,
+  createOrg,
+  createGroup,
   addMemberToGroup,
   createRole,
   addPrincipalToRole,
@@ -33,7 +33,7 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
   await page.goto('/');
   let org;
   try {
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -42,8 +42,7 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
     );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    const groupName = 'test-group';
-    await createNewGroup(page, groupName);
+    const groupName = await createGroup(page);
     await addMemberToGroup(page, 'admin');
     await createRole(page);
     await addPrincipalToRole(page, groupName);
