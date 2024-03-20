@@ -12,7 +12,7 @@ export default class FormAliasComponent extends Component {
    * Handles input changes
    */
   @action
-  handleInputChange({ target: { value } }) {
+  handleHostIdChange({ target: { value } }) {
     if (value) {
       this.args.model.authorize_session_arguments = {
         host_id: value,
