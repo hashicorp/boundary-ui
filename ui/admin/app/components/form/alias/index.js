@@ -6,7 +6,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-export default class FormPolicySelectionComponent extends Component {
+export default class FormAliasComponent extends Component {
   //actions
   /**
    * Handles input changes

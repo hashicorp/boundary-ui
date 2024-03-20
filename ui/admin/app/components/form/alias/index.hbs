@@ -53,12 +53,11 @@
       {{t 'resources.alias.form.options.label'}}
     </F.Legend>
     <F.HelperText>
-      {{t 'resources.alias.form.options.help'}}
+      {{t 'resources.alias.description'}}
     </F.HelperText>
     <F.Control>
       <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
         <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
-        <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
         <G.RadioCard @maxWidth='15rem' @checked='true' @disabled='true' as |R|>
           <R.Label>{{t 'resources.alias.form.type.label'}}</R.Label>
           <R.Description>{{t 'resources.alias.form.type.help'}}</R.Description>

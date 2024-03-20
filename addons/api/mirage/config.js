@@ -765,6 +765,7 @@ function routes() {
   this.patch('/aliases/:id');
   this.post('/aliases', function ({ aliases }) {
     const attrs = this.normalizedRequestAttrs();
+
     return aliases.create(attrs);
   });
 
