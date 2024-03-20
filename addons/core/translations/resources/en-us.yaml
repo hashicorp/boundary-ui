@@ -1004,6 +1004,11 @@ alias:
   title_plural: Aliases
   titles:
     new: New Alias
+  messages:
+    none:
+      title: Welcome to Aliases
+      description: No aliases yet
+      link: Create a new alias
   form:
     options:
       label: Alias options

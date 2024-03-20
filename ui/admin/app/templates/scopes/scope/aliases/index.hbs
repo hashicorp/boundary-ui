@@ -24,4 +24,36 @@
       {{/if}}
     {{/if}}
   </page.actions>
+  <page.body>
+    <Rose::Layout::Centered>
+      <Rose::Message
+        @title={{t 'resources.alias.messages.none.title'}}
+        as |message|
+      >
+        <message.description>
+          {{#if (can 'list model' this.scope collection='aliases')}}
+            {{t 'resources.alias.messages.none.description'}}
+          {{else if (can 'create model' this.scope collection='aliases')}}
+            {{t
+              'descriptions.create-but-not-list'
+              resource=(t 'resources.alias.title_plural')
+            }}
+          {{else}}
+            {{t
+              'descriptions.neither-list-nor-create'
+              resource=(t 'resources.alias.title_plural')
+            }}
+          {{/if}}
+        </message.description>
+        {{#if (can 'create model' this.scope collection='aliases')}}
+          <Hds::Link::Standalone
+            @icon='plus-circle'
+            @iconPosition='leading'
+            @route='scopes.scope.aliases.new'
+            @text={{t 'resources.alias.messages.none.link'}}
+          />
+        {{/if}}
+      </Rose::Message>
+    </Rose::Layout::Centered>
+  </page.body>
 </Rose::Layout::Page>
