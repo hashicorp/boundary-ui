@@ -12,6 +12,7 @@ export const modelIndexes = {
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.address, attributes.scope.scope_id',
   session:
     '&id, attributes.created_time, attributes.type, attributes.status, attributes.endpoint, attributes.target_id, attributes.user_id, attributes.scope.scope_id',
+  user: '&id, attributes.name, attributes.description, attributes.created_time',
 };
 
 export const formatDbName = (userId, clusterUrl) =>
