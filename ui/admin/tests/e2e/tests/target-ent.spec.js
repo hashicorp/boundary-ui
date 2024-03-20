@@ -15,8 +15,8 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addInjectedCredentialsToTarget,
@@ -46,7 +46,7 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -56,7 +56,7 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
@@ -101,7 +101,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -111,7 +111,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );

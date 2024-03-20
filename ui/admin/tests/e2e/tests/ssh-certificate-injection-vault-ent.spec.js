@@ -15,8 +15,8 @@ const {
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const {
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createSshTargetWithAddressEnt,
   createVaultCredentialStore,
   createVaultSshCertificateCredentialLibrary,
@@ -96,7 +96,7 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     const clientToken = vaultToken.auth.client_token;
 
     // Create org
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -107,7 +107,7 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
     // Create project
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );

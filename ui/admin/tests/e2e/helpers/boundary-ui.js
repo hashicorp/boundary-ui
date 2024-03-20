@@ -13,7 +13,7 @@ const { nanoid } = require('nanoid');
  * @param {Page} page Playwright page object
  * @returns Name of the organization
  */
-exports.createNewOrg = async (page) => {
+exports.createOrg = async (page) => {
   const orgName = 'Org ' + nanoid();
   await page
     .getByRole('navigation', { name: 'General' })
@@ -39,7 +39,7 @@ exports.createNewOrg = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the project
  */
-exports.createNewProject = async (page) => {
+exports.createProject = async (page) => {
   const projectName = 'Project ' + nanoid();
   await page
     .getByRole('navigation', { name: 'General' })
@@ -67,7 +67,7 @@ exports.createNewProject = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the host catalog
  */
-exports.createNewHostCatalog = async (page) => {
+exports.createHostCatalog = async (page) => {
   const hostCatalogName = 'Host Catalog ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -95,7 +95,7 @@ exports.createNewHostCatalog = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the host set
  */
-exports.createNewHostSet = async (page) => {
+exports.createHostSet = async (page) => {
   const hostSetName = 'Host Set ' + nanoid();
   await page.getByRole('link', { name: 'Host Sets' }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -121,7 +121,7 @@ exports.createNewHostSet = async (page) => {
  * @param {string} address Address of the host
  * @returns Name of the host
  */
-exports.createNewHostInHostSet = async (page, address) => {
+exports.createHostInHostSet = async (page, address) => {
   const hostName = 'Host ' + nanoid();
   await page.getByText('Manage').click();
   await page.getByRole('link', { name: 'Create and Add Host' }).click();
@@ -336,7 +336,7 @@ exports.createVaultSshCertificateCredentialLibrary = async (
  * @param {string} port Port of the target
  * @returns Name of the target
  */
-exports.createNewTarget = async (page, port) => {
+exports.createTarget = async (page, port) => {
   const targetName = 'Target ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -365,7 +365,7 @@ exports.createNewTarget = async (page, port) => {
  * @param {string} port Port of the target
  * @returns Name of the target
  */
-exports.createNewTargetWithAddress = async (page, address, port) => {
+exports.createTargetWithAddress = async (page, address, port) => {
   const targetName = 'Target ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -668,9 +668,10 @@ exports.addInjectedCredentialsToTarget = async (
 /**
  * Uses the UI to create new Auth Method. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} authMethodName Name of new auth method
+ * @returns Name of the auth method
  */
-exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
+exports.createPasswordAuthMethod = async (page) => {
+  const authMethodName = 'Auth Method ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
@@ -688,6 +689,8 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
       .getByRole('navigation', { name: 'breadcrumbs' })
       .getByText(authMethodName),
   ).toBeVisible();
+
+  return authMethodName;
 };
 
 /**
@@ -757,9 +760,10 @@ exports.setPasswordToAccount = async (page, password) => {
 /**
  * Uses the UI to create a new user.
  * @param {Page} page Playwright page object
- * @param {string} userName Name of new user
+ * @returns Name of the user
  */
-exports.createNewUser = async (page, userName) => {
+exports.createUser = async (page) => {
+  const userName = 'User ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Users' })
@@ -777,6 +781,8 @@ exports.createNewUser = async (page, userName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(userName),
   ).toBeVisible();
+
+  return userName;
 };
 
 /**
@@ -803,9 +809,10 @@ exports.addAccountToUser = async (page) => {
 /**
  * Uses the UI to create a new group. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} groupName Name of the new group
+ * @returns Name of the group
  */
-exports.createNewGroup = async (page, groupName) => {
+exports.createGroup = async (page) => {
+  const groupName = 'Group ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Groups' })
@@ -823,6 +830,8 @@ exports.createNewGroup = async (page, groupName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(groupName),
   ).toBeVisible();
+
+  return groupName;
 };
 
 /**

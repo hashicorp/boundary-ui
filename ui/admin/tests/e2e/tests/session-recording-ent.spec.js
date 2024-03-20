@@ -23,8 +23,8 @@ const {
   enableSessionRecording,
   createStoragePolicy,
   attachStoragePolicy,
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addInjectedCredentialsToTarget,
@@ -56,7 +56,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
   let connect;
   try {
     // Create org
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -68,7 +68,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     orgId = org.id;
 
     // Create project
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
