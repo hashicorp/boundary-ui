@@ -1004,3 +1004,19 @@ alias:
   title_plural: Aliases
   titles:
     new: New Alias
+  form:
+    options:
+      label: Alias options
+      help: Description of an alias. Example:`boundary connect ssh alias-example`
+    type:
+      label: Target
+      help: Servers, API Endpoints, and network devices
+    destination_id:
+      label: Target ID
+      help: Any resource in this scope or any orgs and projects inside it
+    value:
+      label: Alias Value
+      help: The alias you would like to use for this resource
+    authorize_session_arguments:
+      label: Host ID
+      help: Always use this host when connecting using this alias
