@@ -225,8 +225,7 @@ const getKey = (key) => {
 
 const cleanValues = (values) => {
   return values.reduce((result, obj) => {
-    // eslint-disable-next-line no-unused-vars
-    const [key, value] = Object.entries(obj)[0];
+    const [, value] = Object.entries(obj)[0];
     if (value) result.push(obj);
     return result;
   }, []);
