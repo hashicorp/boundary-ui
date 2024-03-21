@@ -1002,7 +1002,7 @@ policy:
 alias:
   title: Alias
   title_plural: Aliases
-  description: An Alias is a dns name like string associated with a destination resource
+  description: An Alias is a DNS-like string associated with a destination resource.
   titles:
     new: New Alias
   messages:
