@@ -116,6 +116,11 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     };
   }
 
+  /**
+   * Get all the sessions but only load them once when entering the route.
+   * @param scope_id
+   * @returns {Promise<void>}
+   */
   async getAllSessions(scope_id) {
     const allSessionsQuery = {
       scope_id,
@@ -127,6 +132,10 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
   }
 
+  /**
+   * Get all the users but only load them once when entering the route.
+   * @returns {Promise<void>}
+   */
   async getAllUsers() {
     const uniqueSessionUserIds = new Set(
       this.allSessions.map((session) => session.user_id),
@@ -146,6 +155,11 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
   }
 
+  /**
+   * Get all the targets but only load them once when entering the route.
+   * @param scope_id
+   * @returns {Promise<void>}
+   */
   async getAllTargets(scope_id) {
     const uniqueSessionTargetIds = new Set(
       this.allSessions.map((session) => session.target_id),

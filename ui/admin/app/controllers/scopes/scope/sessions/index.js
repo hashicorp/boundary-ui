@@ -38,6 +38,10 @@ export default class ScopesScopeSessionsIndexController extends Controller {
   @tracked page = 1;
   @tracked pageSize = 10;
 
+  /**
+   * Returns object of filters to be used for displaying selected filters
+   * @returns {object}
+   */
   get filters() {
     return {
       allFilters: {
