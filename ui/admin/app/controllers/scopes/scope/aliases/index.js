@@ -58,5 +58,6 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(alias) {
     await alias.destroyRecord();
+    await this.router.refresh();
   }
 }
