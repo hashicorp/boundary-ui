@@ -48,7 +48,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   }
 
   /**
-   * Delete an alias in current scope and redirect to index
+   * Delete an alias in current scope
    *  @param {AliasModel} alias
    */
   @action
@@ -58,7 +58,5 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(alias) {
     await alias.destroyRecord();
-    await this.router.replaceWith('scopes.scope.aliases');
-    await this.router.refresh();
   }
 }
