@@ -23,5 +23,11 @@
     {{! TODO: Add desc for alias }}
 
   </page.header>
-
+  <page.body>
+    <Form::Alias
+      @model={{@model}}
+      @submit={{fn this.aliases.save @model}}
+      @cancel={{fn this.aliases.cancel @model}}
+    />
+  </page.body>
 </Rose::Layout::Page>

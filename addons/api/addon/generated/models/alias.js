@@ -45,6 +45,12 @@ export default class GeneratedAliasModel extends BaseModel {
   version;
 
   @attr('string', {
+    description:
+      'This is the value referenced by the user that is resolved to the destination id.',
+  })
+  value;
+
+  @attr('string', {
     description: 'This is the id of the resource that this Alias points to.',
   })
   destination_id;

@@ -23,8 +23,8 @@ const {
   enableSessionRecording,
   createStoragePolicy,
   attachStoragePolicy,
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addInjectedCredentialsToTarget,
@@ -55,16 +55,20 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
   let storageBucket;
   let connect;
   try {
-    await authenticateBoundaryCli();
     // Create org
-    const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    const orgName = await createOrg(page);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     const org = orgs.items.filter((obj) => obj.name == orgName)[0];
     orgId = org.id;
 
     // Create project
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
@@ -73,7 +77,14 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
 
     // Create Storage Bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    const storageBucketName = await createStorageBucket(page);
+    const storageBucketName = await createStorageBucket(
+      page,
+      process.env.E2E_AWS_BUCKET_NAME,
+      process.env.E2E_AWS_REGION,
+      process.env.E2E_AWS_ACCESS_KEY_ID,
+      process.env.E2E_AWS_SECRET_ACCESS_KEY,
+      `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
+    );
     const storageBuckets = JSON.parse(
       execSync('boundary storage-buckets list -format json'),
     );
@@ -96,7 +107,11 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
     await createStaticCredentialStore(page);
-    const credentialName = await createStaticCredentialKeyPair(page);
+    const credentialName = await createStaticCredentialKeyPair(
+      page,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await addInjectedCredentialsToTarget(page, targetName, credentialName);
 
     // Enable session recording for Target

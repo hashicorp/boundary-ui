@@ -14,12 +14,12 @@ const {
   getSessionCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewProject,
-  createNewHostCatalog,
-  createNewHostSet,
-  createNewHostInHostSet,
-  createNewTarget,
+  createOrg,
+  createProject,
+  createHostCatalog,
+  createHostSet,
+  createHostInHostSet,
+  createTarget,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addBrokeredCredentialsToTarget,
@@ -46,12 +46,12 @@ let targetName;
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 
-  orgName = await createNewOrg(page);
-  projectName = await createNewProject(page);
-  await createNewHostCatalog(page);
-  const hostSetName = await createNewHostSet(page);
-  await createNewHostInHostSet(page);
-  targetName = await createNewTarget(page);
+  orgName = await createOrg(page);
+  projectName = await createProject(page);
+  await createHostCatalog(page);
+  const hostSetName = await createHostSet(page);
+  await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+  targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
   await addHostSourceToTarget(page, hostSetName);
   await createStaticCredentialStore(page);
 });
@@ -59,10 +59,19 @@ test.beforeEach(async ({ page }) => {
 test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
 }) => {
-  const credentialName = await createStaticCredentialKeyPair(page);
+  const credentialName = await createStaticCredentialKeyPair(
+    page,
+    process.env.E2E_SSH_USER,
+    process.env.E2E_SSH_KEY_PATH,
+  );
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
-  await authenticateBoundaryCli();
+  await authenticateBoundaryCli(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
   const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedKey = session.item.credentials[0].credential.private_key;
@@ -114,7 +123,12 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
 
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
-  await authenticateBoundaryCli();
+  await authenticateBoundaryCli(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
   const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedPassword = session.item.credentials[0].credential.password;
@@ -166,7 +180,12 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
 
   await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
-  await authenticateBoundaryCli();
+  await authenticateBoundaryCli(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
   const session = await getSessionCli(orgName, projectName, targetName);
   const retrievedUser = session.item.credentials[0].credential.username;
   const retrievedPassword = session.item.credentials[0].credential.password;

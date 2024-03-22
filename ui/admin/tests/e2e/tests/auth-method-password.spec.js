@@ -13,11 +13,11 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewPasswordAuthMethod,
+  createOrg,
+  createPasswordAuthMethod,
   addAccountToAuthMethod,
   setPasswordToAccount,
-  createNewUser,
+  createUser,
   addAccountToUser,
   makeAuthMethodPrimary,
 } = require('../helpers/boundary-ui');
@@ -34,11 +34,16 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
   await page.goto('/');
   let org;
   try {
-    const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    const orgName = await createOrg(page);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    await createNewPasswordAuthMethod(page, 'UI Test Auth Method');
+    await createPasswordAuthMethod(page);
     await addAccountToAuthMethod(
       page,
       'UI Test Account',
@@ -47,7 +52,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     );
     await setPasswordToAccount(page, 'password2');
     await makeAuthMethodPrimary(page);
-    await createNewUser(page, 'UI Test User');
+    await createUser(page);
     await addAccountToUser(page);
   } finally {
     await deleteOrgCli(org.id);
