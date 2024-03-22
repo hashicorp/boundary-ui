@@ -46,22 +46,13 @@
 
     {{#if @model.authMethods}}
       {{outlet}}
-
-      <p class='change-origin'>
-        {{t 'cluster-url.connected-to'}}:
-        <code>{{this.clusterUrl}}</code>
-        <br />
-        <LinkTo @route='cluster-url'>
-          {{t 'actions.change-cluster-url'}}
-        </LinkTo>
-      </p>
-
     {{/if}}
     {{#unless @model.authMethods}}
       <Rose::Layout::Centered>
         <Rose::Message
           @title={{t 'resources.auth-method.messages.none.title'}}
           @icon='flight-icons/svg/alert-circle-16'
+          data-test-no-auth-methods
           as |message|
         >
           <message.description>
@@ -70,5 +61,13 @@
         </Rose::Message>
       </Rose::Layout::Centered>
     {{/unless}}
+    <p class='change-origin'>
+      {{t 'cluster-url.connected-to'}}:
+      <code>{{this.clusterUrl}}</code>
+      <br />
+      <LinkTo @route='cluster-url'>
+        {{t 'actions.change-cluster-url'}}
+      </LinkTo>
+    </p>
   </BrandedCard>
 </main>
