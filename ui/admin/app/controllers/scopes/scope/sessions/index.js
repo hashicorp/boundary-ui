@@ -92,4 +92,9 @@ export default class ScopesScopeSessionsIndexController extends Controller {
     this[paramKey] = [...selectedItems];
     this.page = 1;
   }
+
+  @action
+  async refresh() {
+    await this.send('refreshAll');
+  }
 }

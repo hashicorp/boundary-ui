@@ -7,10 +7,6 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import runEvery from 'ember-pollster/decorators/route/run-every';
-import config from '../../../../config/environment';
-
-const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -47,11 +43,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
 
   allUsers;
   allSessions;
-
-  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
-  poller() {
-    return this.refresh();
-  }
 
   /**
    * Loads all sessions under the current scope and encapsulates them into
@@ -193,11 +184,16 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   }
 
   /**
-   * refreshes session data.
+   * refreshes all session route data.
    */
-
   @action
-  refreshSessions() {
+  async refreshAll() {
+    const { id: scope_id } = this.modelFor('scopes.scope');
+
+    await this.getAllSessions(scope_id);
+    await this.getAllUsers();
+    await this.getAllTargets(scope_id);
+
     return super.refresh(...arguments);
   }
 }

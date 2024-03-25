@@ -19,52 +19,58 @@
 
   <page.body class='search-filtering'>
     {{#if @model.allSessions}}
-      <Hds::SegmentedGroup data-test-sessions-bar as |S|>
-        <S.TextInput
-          @value={{this.search}}
-          @type='search'
-          placeholder={{t 'actions.search'}}
-          aria-label={{t 'actions.search'}}
-          {{on 'input' this.handleSearchInput}}
-        />
-        <S.Generic>
-          <Dropdown
-            @name={{t 'resources.user.title'}}
-            @itemOptions={{@model.allUsers}}
-            @checkedItems={{this.users}}
-            @applyFilter={{fn this.applyFilter 'users'}}
-            @isSearchable={{true}}
-            as |FD selectItem itemOptions|
-          >
-            {{#each itemOptions as |itemOption|}}
-              <FD.Checkbox
-                @value={{itemOption.id}}
-                checked={{includes itemOption.id this.users}}
-                {{on 'change' selectItem}}
-              >
-                {{itemOption.name}}
-              </FD.Checkbox>
-            {{/each}}
-          </Dropdown>
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'resources.target.title'}}
-            @itemOptions={{@model.allTargets}}
-            @checkedItems={{this.targets}}
-            @applyFilter={{fn this.applyFilter 'targets'}}
-            @isSearchable={{true}}
+      <div class='search-filtering-toolbar'>
+        <Hds::SegmentedGroup data-test-sessions-bar as |S|>
+          <S.TextInput
+            @value={{this.search}}
+            @type='search'
+            placeholder={{t 'actions.search'}}
+            aria-label={{t 'actions.search'}}
+            {{on 'input' this.handleSearchInput}}
           />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'form.status.label'}}
-            @itemOptions={{this.sessionStatusOptions}}
-            @checkedItems={{this.status}}
-            @applyFilter={{fn this.applyFilter 'status'}}
-          />
-        </S.Generic>
-      </Hds::SegmentedGroup>
+          <S.Generic>
+            <Dropdown
+              @name={{t 'resources.user.title'}}
+              @itemOptions={{@model.allUsers}}
+              @checkedItems={{this.users}}
+              @applyFilter={{fn this.applyFilter 'users'}}
+              @isSearchable={{true}}
+              as |FD selectItem itemOptions|
+            >
+              {{#each itemOptions as |itemOption|}}
+                <FD.Checkbox
+                  @value={{itemOption.id}}
+                  checked={{includes itemOption.id this.users}}
+                  {{on 'change' selectItem}}
+                >
+                  {{itemOption.name}}
+                </FD.Checkbox>
+              {{/each}}
+            </Dropdown>
+          </S.Generic>
+          <S.Generic>
+            <Dropdown
+              @name={{t 'resources.target.title'}}
+              @itemOptions={{@model.allTargets}}
+              @checkedItems={{this.targets}}
+              @applyFilter={{fn this.applyFilter 'targets'}}
+              @isSearchable={{true}}
+            />
+          </S.Generic>
+          <S.Generic>
+            <Dropdown
+              @name={{t 'form.status.label'}}
+              @itemOptions={{this.sessionStatusOptions}}
+              @checkedItems={{this.status}}
+              @applyFilter={{fn this.applyFilter 'status'}}
+            />
+          </S.Generic>
+        </Hds::SegmentedGroup>
+        <span>
+          <ToolbarRefresher @onClick={{this.refresh}} />
+        </span>
+      </div>
+
       <FilterTags @filters={{this.filters}} />
 
       {{#if @model.sessions}}

@@ -105,4 +105,23 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
     assert.strictEqual(controller.page, 1);
     assert.deepEqual(controller.users, selectedItems);
   });
+
+  test('refresh action calls refreshAll', async function (assert) {
+    assert.expect(2);
+    let controller = this.owner.lookup(
+      'controller:scopes/scope/sessions/index',
+    );
+    controller.set('target', {
+      send(actionName, ...args) {
+        assert.strictEqual(actionName, 'refreshAll');
+        assert.deepEqual(
+          args,
+          [],
+          'refreshAll was called with the correct arguments',
+        );
+      },
+    });
+
+    await controller.refresh();
+  });
 });
