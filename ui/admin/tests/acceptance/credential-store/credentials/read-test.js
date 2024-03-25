@@ -153,7 +153,9 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('Users can link to docs page for credential', async function (assert) {
     await visit(urls.usernamePasswordCredential);
     assert.ok(
-      find(`[href="https://boundaryproject.io/help/admin-ui/credentials"]`),
+      find(
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credentials"]`,
+      ),
     );
   });
 

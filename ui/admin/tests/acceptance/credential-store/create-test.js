@@ -143,7 +143,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     await visit(urls.newCredentialStore);
     assert.ok(
       find(
-        `[href="https://boundaryproject.io/help/admin-ui/credential-stores"]`,
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores"]`,
       ),
     );
   });
