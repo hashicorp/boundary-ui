@@ -713,14 +713,16 @@ exports.makeAuthMethodPrimary = async (page) => {
 };
 
 /**
- * Uses the UI to create new Account. Assumes you have selected the desired Auth Method
+ * Uses the UI to create new password Account. Assumes you have selected the desired Auth Method
  * which the account will be created for.
  * @param {Page} page Playwright page object
- * @param {string} accountName Name of new account
  * @param {string} login Login of new account
  * @param {string} password Password of new account
+ * @returns Name of the account
  */
-exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
+exports.createPasswordAccount = async (page, login, password) => {
+  const accountName = 'Account ' + nanoid();
+
   await page.getByRole('link', { name: 'Accounts' }).click();
   await page
     .getByRole('article')
@@ -739,6 +741,8 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
       .getByRole('navigation', { name: 'breadcrumbs' })
       .getByText(accountName),
   ).toBeVisible();
+
+  return accountName;
 };
 
 /**
