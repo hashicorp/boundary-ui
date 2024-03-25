@@ -109,23 +109,41 @@ class ClientDaemonManager {
 }
 
 const addTokenCliCommand = (token) => {
-  const addTokenCommand = [
-    'daemon',
-    'add-token',
+  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
+  // The format of Boundary tokens is
+  //   token-id_token-secret
+  // where token-id has the format
+  //   at_1234567890,
+  // so we extract the token id by finding the last '_' and taking everything before it.
+  lastUnderscoreIndex = sanitizedToken.lastIndexOf('_');
+  if (lastUnderscoreIndex === -1) {
+    return Promise.reject({
+      statusCode: 400,
+      message: 'Invalid token format',
+    });
+  }
+  const tokenId = sanitizedToken.substring(0, lastUnderscoreIndex);
+  // Successfully calling any Boundary CLI command with a token
+  // will add the token both to the Client daemon and the Ferry DNS daemon,
+  // so we just do a simple read on the input token and let the CLI do the rest.
+  const readTokenCommand = [
+    'auth-tokens',
+    'read',
+    '-id',
+    tokenId,
     `-addr=${runtimeSettings.clusterUrl}`,
     '-format=json',
     '-token=env://BOUNDARY_TOKEN',
     '-keyring-type=none',
   ];
-  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
 
-  const { stdout, stderr } = spawnSync(addTokenCommand, {
+  const { stdout, stderr } = spawnSync(readTokenCommand, {
     BOUNDARY_TOKEN: sanitizedToken,
   });
   let parsedResponse = jsonify(stdout);
 
-  if (parsedResponse?.status_code === 204) {
-    // 204 has no response body
+  if (parsedResponse?.status_code === 200) {
+    // Ignore result if the request was successful
     return;
   }
 
