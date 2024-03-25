@@ -15,7 +15,7 @@ const {
 const {
   createOrg,
   createPasswordAuthMethod,
-  addAccountToAuthMethod,
+  createPasswordAccount,
   setPasswordToAccount,
   createUser,
   addAccountToUser,
@@ -44,12 +44,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
     await createPasswordAuthMethod(page);
-    await addAccountToAuthMethod(
-      page,
-      'UI Test Account',
-      'test-user',
-      'password',
-    );
+    await createPasswordAccount(page, 'test-user', 'password');
     await setPasswordToAccount(page, 'password2');
     await makeAuthMethodPrimary(page);
     await createUser(page);
