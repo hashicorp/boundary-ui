@@ -75,7 +75,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
     const projectId = project.id;
 
-    // Create Storage Bucket
+    // Create storage bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     const storageBucketName = await createStorageBucket(
       page,
@@ -92,7 +92,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       (obj) => obj.name == storageBucketName,
     )[0];
 
-    // Create SSH Target
+    // Create target
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page.getByRole('link', { name: orgId }).click();
     await page.getByRole('link', { name: projectId }).click();
@@ -113,20 +113,16 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       process.env.E2E_SSH_KEY_PATH,
     );
     await addInjectedCredentialsToTarget(page, targetName, credentialName);
-
-    // Enable session recording for Target
     await page.getByRole('link', { name: targetName }).click();
     await enableSessionRecording(page, storageBucketName);
 
-    // Create Storage Policy in org scope: keep session recordings forever
+    // Create storage policy in org scope: keep session recordings forever
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page.getByRole('link', { name: orgId }).click();
     const policyName = await createStoragePolicy(page);
-
-    // Attach Storage Policy to org scope
     await attachStoragePolicy(page, policyName);
 
-    // Establish connection to Target and cancel it
+    // Establish connection to target and cancel it
     connect = await connectSshToTarget(target.id);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
@@ -140,11 +136,30 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
-
-    // Try to delete Session Recording: expect failure
     await waitForSessionRecordingCli(storageBucket.id);
+
+    // Play back session recording
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page
+      .getByRole('navigation', { name: 'General' })
+      .getByRole('link', { name: 'Session Recordings', exact: true })
+      .click();
+    await page
+      .getByRole('row', { name: targetName })
+      .getByRole('link', { name: 'View' })
+      .click();
+    await page
+      .getByRole('cell', { name: 'Channel 1' })
+      .locator('..')
+      .getByRole('link', { name: 'Play' })
+      .click();
+    await page.locator('div.session-recording-player').hover();
+    await page.locator('.ap-playback-button').click();
+
+    // Try to delete session recording: expect failure
+    await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+    await page
+      .getByRole('navigation', { name: 'General' })
       .getByRole('link', { name: 'Session Recordings', exact: true })
       .click();
     await page
@@ -159,7 +174,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    // Edit Storage Policy: do not protect from deletion
+    // Edit storage policy: do not protect from deletion
     const storagePolicies = JSON.parse(
       execSync('boundary policies list -format json -scope-id ' + orgId),
     );
@@ -183,8 +198,12 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    // Re-apply Storage Policy to the Session Recording
-    await page.reload(); // fixes error appearing on re-applying storage policy
+    // BUG? After the error trying to delete the session recording, subsequent
+    // actions result in an error. Reloading the page fixes the issue. This is a
+    // temporary workaround.
+    await page.reload();
+
+    // Re-apply storage policy to the session recording
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page
       .getByRole('link', { name: 'Session Recordings', exact: true })
@@ -200,7 +219,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    // Delete Session Recording
+    // Delete session recording
     await page.getByText('Manage').click();
     await page.getByRole('button', { name: 'Delete recording' }).click();
     await page.getByRole('button', { name: 'OK' }).click();
