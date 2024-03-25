@@ -320,8 +320,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.',
     );
-    await visit(urls.authMethod);
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
+
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.strictEqual(
       scope.primaryAuthMethodId,
@@ -359,7 +362,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.',
     );
-    await visit(urls.authMethod);
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
@@ -385,8 +390,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       instances.authMethod.id,
     );
+    await visit(urls.authMethods);
 
-    await visit(urls.authMethod);
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');

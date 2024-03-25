@@ -167,7 +167,7 @@
                   {{#unless B.data.isPrimary}}
                     <dd.Interactive
                       @text={{t 'resources.auth-method.actions.make-primary'}}
-                      {{on 'click' (route-action 'makePrimary' B.data)}}
+                      {{on 'click' (fn this.makePrimary B.data)}}
                     />
                   {{/unless}}
                   {{#if B.data.isPrimary}}
@@ -175,7 +175,7 @@
                       @text={{t
                         'resources.auth-method.actions.remove-as-primary'
                       }}
-                      {{on 'click' (route-action 'removeAsPrimary' B.data)}}
+                      {{on 'click' (fn this.removeAsPrimary B.data)}}
                     />
                   {{/if}}
                 </Hds::Dropdown>
