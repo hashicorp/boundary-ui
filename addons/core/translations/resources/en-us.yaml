@@ -1020,7 +1020,7 @@ alias:
       help: Servers, API Endpoints, and network devices
     destination_id:
       label: Target ID
-      help: Any resource in this scope or any orgs and projects inside it
+      help: Specify any target across your deployment to associate this alias with
     value:
       label: Alias Value
       help: The alias you would like to use for this resource
