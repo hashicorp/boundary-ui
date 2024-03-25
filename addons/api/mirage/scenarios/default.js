@@ -125,12 +125,9 @@ export default function (server) {
   });
 
   // Aliases
-  const aliases = server.createList('alias', 3, { scope: globalScope });
+  const destination_id = server.schema.targets.all().models[0].id;
+  server.createList('alias', 3, { scope: globalScope, destination_id });
 
-  aliases.forEach((alias) => {
-    const destination_id = server.schema.targets.all().models[0].id;
-    alias.update({ destination_id });
-  });
   // Workers
   server.createList('worker', 3, { scope: globalScope });
 
