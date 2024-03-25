@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { all, hash } from 'rsvp';
 
 export default class ScopesScopeAliasesRoute extends Route {
   // =services
@@ -36,7 +37,20 @@ export default class ScopesScopeAliasesRoute extends Route {
         collection: 'aliases',
       })
     ) {
-      return this.store.query('alias', { scope_id });
+      const aliases = await this.store.query('alias', { scope_id });
+      // since we don't receive target info from aliases list API,
+      // we query the store to fetch target information based on the destination id
+      const aliasesWithResourceNames = await all(
+        aliases.map((alias) =>
+          hash({
+            alias,
+            target: alias.destination_id
+              ? this.store.findRecord('target', alias.destination_id)
+              : null,
+          }),
+        ),
+      );
+      return aliasesWithResourceNames;
     }
   }
 }

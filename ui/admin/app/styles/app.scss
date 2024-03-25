@@ -856,7 +856,8 @@
 }
 
 // Session recording - List
-.session-recording-list-cell-item {
+.session-recording-list-cell-item,
+.aliases-list-cell-item {
   display: flex;
   gap: 0.5rem;
 

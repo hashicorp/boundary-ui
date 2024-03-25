@@ -25,35 +25,138 @@
     {{/if}}
   </page.actions>
   <page.body>
-    <Rose::Layout::Centered>
-      <Rose::Message
-        @title={{t 'resources.alias.messages.none.title'}}
-        as |message|
+    {{#if @model}}
+      <Hds::Table
+        @model={{@model}}
+        @columns={{array
+          (hash label=(t 'resources.alias.title'))
+          (hash label=(t 'resources.alias.titles.points_to'))
+          (hash label=(t 'resources.scope.title'))
+          (hash label=(t 'resources.alias.titles.resource_id'))
+          (hash label='')
+        }}
+        @valign='middle'
       >
-        <message.description>
-          {{#if (can 'list model' this.scope collection='aliases')}}
-            {{t 'resources.alias.messages.none.description'}}
-          {{else if (can 'create model' this.scope collection='aliases')}}
-            {{t
-              'descriptions.create-but-not-list'
-              resource=(t 'resources.alias.title_plural')
-            }}
-          {{else}}
-            {{t
-              'descriptions.neither-list-nor-create'
-              resource=(t 'resources.alias.title_plural')
-            }}
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (can 'read model' B.data.alias)}}
+                <LinkTo
+                  @route='scopes.scope.aliases.alias'
+                  @model={{B.data.alias.id}}
+                >
+                  {{B.data.alias.displayName}}
+                </LinkTo>
+              {{else}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.alias.displayName}}
+                </Hds::Text::Body>
+              {{/if}}
+              {{#if B.data.alias.description}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.alias.description}}
+                </Hds::Text::Body>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.target.displayName}}
+                <div class='aliases-list-cell-item'>
+                  <span><FlightIcon @name='target' /></span>
+                  <span> {{B.data.target.displayName}} </span>
+                </div>
+              {{else}}
+                <Hds::Text::Body
+                  @tag='p'
+                  @size='100'
+                  @weight='medium'
+                  @color='faint'
+                >
+                  {{t 'titles.not-set'}}
+                </Hds::Text::Body>
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+            </B.Td>
+            <B.Td>
+              {{#if B.data.alias.destination_id}}
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.alias.destination_id}}
+                  @color='secondary'
+                />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#let
+                (hash
+                  canRead=(can 'read model' B.data.alias)
+                  canDelete=(can 'delete model' B.data.alias)
+                )
+                as |perms|
+              }}
+                {{#if (or perms.canRead perms.canDelete)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    {{#if perms.canRead}}
+                      <dd.Interactive
+                        @route='scopes.scope.aliases.alias'
+                        @model={{B.data.alias.id}}
+                        @text={{t 'actions.edit'}}
+                      />
+                    {{/if}}
+                    {{#if (and perms.canRead perms.canDelete)}}
+                      <dd.Separator />
+                    {{/if}}
+                    {{#if perms.canDelete}}
+                      <dd.Interactive
+                        @text={{t 'actions.delete'}}
+                        @color='critical'
+                        {{on 'click' (fn this.delete B.data.alias)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
+                {{/if}}
+              {{/let}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Rose::Message
+          @title={{t 'resources.alias.messages.none.title'}}
+          as |message|
+        >
+          <message.description>
+            {{#if (can 'list model' this.scope collection='aliases')}}
+              {{t 'resources.alias.messages.none.description'}}
+            {{else if (can 'create model' this.scope collection='aliases')}}
+              {{t
+                'descriptions.create-but-not-list'
+                resource=(t 'resources.alias.title_plural')
+              }}
+            {{else}}
+              {{t
+                'descriptions.neither-list-nor-create'
+                resource=(t 'resources.alias.title_plural')
+              }}
+            {{/if}}
+          </message.description>
+          {{#if (can 'create model' this.scope collection='aliases')}}
+            <Hds::Link::Standalone
+              @icon='plus-circle'
+              @iconPosition='leading'
+              @route='scopes.scope.aliases.new'
+              @text={{t 'resources.alias.messages.none.link'}}
+            />
           {{/if}}
-        </message.description>
-        {{#if (can 'create model' this.scope collection='aliases')}}
-          <Hds::Link::Standalone
-            @icon='plus-circle'
-            @iconPosition='leading'
-            @route='scopes.scope.aliases.new'
-            @text={{t 'resources.alias.messages.none.link'}}
-          />
-        {{/if}}
-      </Rose::Message>
-    </Rose::Layout::Centered>
+        </Rose::Message>
+      </Rose::Layout::Centered>
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>
