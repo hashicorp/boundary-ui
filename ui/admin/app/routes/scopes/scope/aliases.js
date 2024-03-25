@@ -38,7 +38,8 @@ export default class ScopesScopeAliasesRoute extends Route {
       })
     ) {
       const aliases = await this.store.query('alias', { scope_id });
-
+      // since we don't receive target info from aliases list API,
+      // we query the store to fetch target information based on the destination id
       const aliasesWithResourceNames = await all(
         aliases.map((alias) =>
           hash({
