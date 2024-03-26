@@ -19,7 +19,7 @@
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='groups')}}
-      {{#if @model}}
+      {{#if @model.groups}}
         <Rose::LinkButton @route='scopes.scope.groups.new' @style='primary'>{{t
             'resources.group.titles.new'
           }}</Rose::LinkButton>
@@ -27,12 +27,12 @@
     {{/if}}
   </page.actions>
 
-  <page.body>
+  <page.body class='search-filtering'>
 
-    {{#if @model}}
+    {{#if @model.groups}}
 
       <Hds::Table
-        @model={{@model}}
+        @model={{@model.groups}}
         @columns={{array
           (hash label=(t 'form.name.label'))
           (hash label=(t 'form.id.label'))
@@ -60,6 +60,11 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+      <Rose::Pagination
+        @totalItems={{@model.totalItems}}
+        @currentPage={{this.page}}
+        @currentPageSize={{this.pageSize}}
+      />
 
     {{else}}
 

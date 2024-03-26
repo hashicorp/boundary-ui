@@ -12,18 +12,42 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
   @service store;
   @service can;
 
+  // =attributes
+
+  queryParams = {
+    search: {
+      refreshModel: true,
+      replace: true,
+    },
+    page: {
+      refreshModel: true,
+    },
+    pageSize: {
+      refreshModel: true,
+    },
+  };
+
   // =methods
 
   /**
    * Load all groups under current scope
-   * @return {Promise[GroupModel]}
+   * @return {{ groups: [GroupModel], totalItems: number }}
    */
-  async model() {
+  async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
+    let groups = [];
+    let totalItems = 0;
     if (this.can.can('list model', scope, { collection: 'groups' })) {
-      return this.store.query('group', { scope_id });
+      groups = await this.store.query('group', {
+        scope_id,
+        query: { search },
+        page,
+        pageSize,
+      });
+      totalItems = groups.meta?.totalItems;
     }
+    return { groups, totalItems };
   }
 
   setupController(controller) {
