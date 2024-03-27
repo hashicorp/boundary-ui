@@ -72,7 +72,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       query: { search, filters },
       page,
       pageSize,
-      force_refresh: true,
     };
 
     const sessions = await this.store.query('session', queryOptions);
@@ -116,7 +115,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const allSessionsQuery = {
       scope_id,
       recursive: true,
-      force_refresh: true,
     };
     this.allSessions = await this.store.query('session', allSessionsQuery, {
       pushToStore: false,
@@ -138,7 +136,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const allUsersQuery = {
       scope_id: 'global',
       recursive: true,
-      force_refresh: true,
       query: { filters },
     };
     this.allUsers = await this.store.query('user', allUsersQuery, {
@@ -162,7 +159,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const allTargetsQuery = {
       scope_id,
       recursive: true,
-      force_refresh: true,
       query: { filters },
     };
     this.allTargets = await this.store.query('target', allTargetsQuery, {
