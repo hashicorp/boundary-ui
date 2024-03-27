@@ -294,19 +294,16 @@ exports.createVaultSshCertificateCredentialLibrary = async (
   await page.getByRole('link', { name: 'Credential Libraries' }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
 
-  // Temporarily putting the Group selection first due to a bug where
-  // Name and Description fields get cleared when the Group is selected
-  await page
-    .getByRole('group', { name: 'Type' })
-    .getByLabel('SSH Certificates')
-    .click();
-
   await page
     .getByLabel('Name (Optional)', { exact: true })
     .fill(credentialLibraryName);
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
   await page.getByLabel('Username').fill(username);
   await page.getByLabel('Key Type').selectOption('ecdsa');
