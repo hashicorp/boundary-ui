@@ -22,6 +22,8 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     },
   };
 
+  usersExist;
+
   // =services
 
   @service store;
@@ -41,8 +43,6 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       scope_id: [{ equals: scope_id }],
     };
 
-    await this.getUsersExist(scope_id);
-
     let users;
     let totalItems = 0;
     if (this.can.can('list model', scope, { collection: 'users' })) {
@@ -53,11 +53,22 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       });
       totalItems = users.meta?.totalItems;
     }
+    await this.getUsersExist(scope_id, totalItems);
 
     return { users, usersExist: this.usersExist, totalItems };
   }
 
-  async getUsersExist(scopeId) {
+  /**
+   * Sets usersExist to true if there exists any users.
+   * @param {string} scopeId
+   * @param {number} totalItems
+   * @returns
+   */
+  async getUsersExist(scopeId, totalItems) {
+    if (totalItems > 0) {
+      this.usersExist = true;
+      return;
+    }
     const options = { pushToStore: false };
     const user = await this.store.query(
       'user',
