@@ -71,7 +71,6 @@ module('Acceptance | groups | list', function (hooks) {
       ),
     );
 
-    // assert.ok(find(`[href="${urls.groups}"]`));
     assert.dom(`[href="${urls.groups}"]`).isVisible();
   });
 
@@ -84,7 +83,6 @@ module('Acceptance | groups | list', function (hooks) {
       ),
     );
 
-    // assert.notOk(find(`[href="${urls.groups}"]`));
     assert.dom(`[href="${urls.groups}"]`).doesNotExist();
   });
 
@@ -92,7 +90,6 @@ module('Acceptance | groups | list', function (hooks) {
     instances.scopes.org.authorized_collection_actions.groups = ['create'];
     await visit(urls.orgScope);
 
-    // assert.ok(find(`[href="${urls.groups}"]`));
     assert.dom(`[href="${urls.groups}"]`).isVisible();
   });
 
