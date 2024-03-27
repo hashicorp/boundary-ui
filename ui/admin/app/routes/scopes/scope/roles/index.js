@@ -32,8 +32,8 @@ export default class ScopesScopeRolesIndexRoute extends Route {
   // =methods
 
   /**
-   * Load all roles under current scope.
-   * @return {Promise{[RoleModel]}}
+   * Loads queried roles and the number of roles under current scope.
+   * @returns {Promise<{totalItems: number, users: [RoleModel], rolesExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');

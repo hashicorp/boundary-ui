@@ -32,8 +32,8 @@ export default class ScopesScopeUsersIndexRoute extends Route {
   // =methods
 
   /**
-   * Load all users under current scope.
-   * @return {Promise{[UserModel]}}
+   * Loads queried users and the number of users under current scope.
+   * @returns {Promise<{totalItems: number, users: [UserModel], usersExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
