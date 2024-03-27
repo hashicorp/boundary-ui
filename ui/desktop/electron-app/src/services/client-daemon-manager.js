@@ -173,6 +173,5 @@ const searchCliCommand = (requestData) => {
     ...parsedResponse?.api_error,
   });
 };
-log.info('===end===');
 // Export an instance so we get a singleton
 module.exports = new ClientDaemonManager();
