@@ -11,12 +11,7 @@ export default class ScopesScopeRolesIndexController extends Controller {
 
   // =attributes
 
-  queryParams = [
-    'search',
-    { searchAcross: { type: 'array' } },
-    'page',
-    'pageSize',
-  ];
+  queryParams = ['search', 'page', 'pageSize'];
 
   @tracked search = '';
   @tracked page = 1;
