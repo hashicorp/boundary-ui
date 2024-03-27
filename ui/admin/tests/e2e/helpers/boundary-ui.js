@@ -150,7 +150,7 @@ exports.createStaticCredentialStore = async (page) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
   await page.getByRole('button', { name: 'Save' }).click();
@@ -181,11 +181,11 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
-  await page.getByLabel('Address', { exact: true }).fill(vaultAddr);
-  await page.getByLabel('Token', { exact: true }).fill(clientToken);
+  await page.getByLabel('Address').fill(vaultAddr);
+  await page.getByLabel('Token').fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -211,7 +211,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page
     .getByRole('group', { name: 'Type' })
@@ -221,7 +221,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const keyData = await readFile(keyPath, {
     encoding: 'utf-8',
   });
-  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
+  await page.getByLabel('SSH Private Key').fill(keyData);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -725,7 +725,7 @@ exports.createPasswordAccount = async (page, login, password) => {
     .getByRole('article')
     .getByRole('link', { name: 'Create Account', exact: true })
     .click();
-  await page.getByLabel('Name', { exact: true }).fill(accountName);
+  await page.getByLabel('Name (Optional)').fill(accountName);
   await page.getByLabel('Login Name').fill(login);
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
