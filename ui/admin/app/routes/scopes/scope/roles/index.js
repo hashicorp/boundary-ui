@@ -22,8 +22,6 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     },
   };
 
-  rolesExist;
-
   // =services
 
   @service can;
@@ -52,9 +50,9 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       });
       totalItems = roles.meta?.totalItems;
     }
-    await this.getRolesExist(scope_id, totalItems);
+    const rolesExist = await this.getRolesExist(scope_id, totalItems);
 
-    return { roles, rolesExist: this.rolesExist, totalItems };
+    return { roles, rolesExist, totalItems };
   }
 
   /**
@@ -65,8 +63,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
    */
   async getRolesExist(scope_id, totalItems) {
     if (totalItems > 0) {
-      this.rolesExist = true;
-      return;
+      return true;
     }
     const options = { pushToStore: false };
     const role = await this.store.query(
@@ -82,7 +79,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       },
       options,
     );
-    this.rolesExist = role.length > 0;
+    return role.length > 0;
   }
 
   setupController(controller) {

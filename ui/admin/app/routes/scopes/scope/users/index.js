@@ -22,8 +22,6 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     },
   };
 
-  usersExist;
-
   // =services
 
   @service store;
@@ -53,9 +51,9 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       });
       totalItems = users.meta?.totalItems;
     }
-    await this.getUsersExist(scope_id, totalItems);
+    const usersExist = await this.getUsersExist(scope_id, totalItems);
 
-    return { users, usersExist: this.usersExist, totalItems };
+    return { users, usersExist, totalItems };
   }
 
   /**
@@ -66,8 +64,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
    */
   async getUsersExist(scopeId, totalItems) {
     if (totalItems > 0) {
-      this.usersExist = true;
-      return;
+      return true;
     }
     const options = { pushToStore: false };
     const user = await this.store.query(
@@ -83,7 +80,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       },
       options,
     );
-    this.usersExist = user.length > 0;
+    return user.length > 0;
   }
 
   setupController(controller) {
