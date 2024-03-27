@@ -259,4 +259,12 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.dom('.rose-dropdown-content a').exists({ count: 2 });
   });
+
+  test('change cluster url is visible when no auth methods are available', async function (assert) {
+    this.server.get('/auth-methods', () => new Response(200));
+    await visit(urls.authenticate.methods.global);
+
+    assert.dom('[data-test-no-auth-methods]').includesText('No Auth Methods');
+    assert.dom('.change-origin').exists();
+  });
 });

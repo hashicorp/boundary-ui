@@ -24,7 +24,10 @@
   </page.navigation>
 
   <page.actions>
-    <Groups::Group::Actions @model={{@model.group}} />
+    <Groups::Group::Actions
+      @model={{@model.group}}
+      @delete={{fn this.groups.delete @model.group}}
+    />
   </page.actions>
 
   <page.body>
@@ -75,7 +78,7 @@
                     @text={{t 'actions.remove'}}
                     {{on
                       'click'
-                      (route-action 'removeMember' @model.group B.data)
+                      (fn this.groups.removeMember @model.group B.data)
                     }}
                   />
                 </Hds::Dropdown>

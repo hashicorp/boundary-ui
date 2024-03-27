@@ -2,6 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## v2.0.2 [CLI 0.15.3] (2024.03.18)
+
+### New
+
+- Upgrade CLI to v0.15.3 ([PR](https://github.com/hashicorp/boundary-ui/pull/2183))
+
+### Bug Fixes
+
+- Fix auto-updater ([PR](https://github.com/hashicorp/boundary-ui/pull/2179))
+
+
 ## v2.0.1 [CLI 0.15.1] (2024.02.29)
 
 ### New
