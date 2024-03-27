@@ -56,10 +56,10 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
 
   /**
    * Sets groupsExist to true if there exists any groups.
-   * @param {string} scopeId
+   * @param {string} scope_id
    * @param {number} totalItems
    */
-  async getGroupsExist(scopeId, totalItems) {
+  async getGroupsExist(scope_id, totalItems) {
     if (totalItems > 0) {
       this.groupsExist = true;
       return;
@@ -70,7 +70,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
       {
         query: {
           filters: {
-            scope_id: [{ equals: scopeId }],
+            scope_id: [{ equals: scope_id }],
           },
         },
         page: 1,
