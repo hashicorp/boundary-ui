@@ -13,6 +13,7 @@ const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
 const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
+const log = require('electron-log/main');
 
 class ClientDaemonManager {
   #socketPath;
@@ -104,6 +105,7 @@ class ClientDaemonManager {
       path: `http://internal.boundary.local/v1/search?${queryString.toString()}`,
       socketPath: this.#socketPath,
     };
+    log.info('search request in mac or linux except windows', request);
     return unixSocketRequest(request);
   }
 }
@@ -154,6 +156,8 @@ const searchCliCommand = (requestData) => {
   }
   const sanitizedToken = sanitizer.base62EscapeAndValidate(requestData.token);
 
+  log.info('logging search command:', searchCommand);
+
   const { stdout, stderr } = spawnSync(searchCommand, {
     BOUNDARY_TOKEN: sanitizedToken,
   });
@@ -169,6 +173,6 @@ const searchCliCommand = (requestData) => {
     ...parsedResponse?.api_error,
   });
 };
-
+log.info('===end===');
 // Export an instance so we get a singleton
 module.exports = new ClientDaemonManager();

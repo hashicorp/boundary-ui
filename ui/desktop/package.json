@@ -44,6 +44,7 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
+    "electron-log": "^5.1.2",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0",

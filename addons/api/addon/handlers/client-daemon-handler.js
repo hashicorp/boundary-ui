@@ -134,8 +134,9 @@ export default class ClientDaemonHandler {
                 'searchClientDaemon',
                 remainingQuery,
               );
-            } catch {
+            } catch (e) {
               // If it fails again just fall back to fetching controller data
+              console.log(e);
             }
           }
 
