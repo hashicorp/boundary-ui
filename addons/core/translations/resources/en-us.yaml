@@ -999,3 +999,31 @@ policy:
         label: Do not delete
       custom:
         label: Custom
+alias:
+  title: Alias
+  title_plural: Aliases
+  description: An Alias is a DNS-like string associated with a destination resource.
+  titles:
+    new: New Alias
+    resource_id: Resource ID
+    points_to: Points to
+  messages:
+    none:
+      title: Welcome to Aliases
+      description: No Aliases yet
+      link: Create a new alias
+  form:
+    options:
+      label: Alias options
+    type:
+      label: Target
+      help: Servers, API Endpoints, and network devices
+    destination_id:
+      label: Target ID
+      help: Specify any target across your deployment to associate this alias with
+    value:
+      label: Alias Value
+      help: The alias you would like to use for this resource
+    authorize_session_arguments:
+      label: Host ID
+      help: Always use this host when connecting using this alias

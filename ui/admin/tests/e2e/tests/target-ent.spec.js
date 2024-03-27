@@ -15,8 +15,8 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewProject,
+  createOrg,
+  createProject,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addInjectedCredentialsToTarget,
@@ -46,24 +46,37 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    const orgName = await createOrg(page);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    const targetName = await createTcpTargetWithAddressEnt(page);
+    const targetName = await createTcpTargetWithAddressEnt(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target.id);
+    connect = await connectToTarget(
+      target.id,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -88,25 +101,38 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    await authenticateBoundaryCli();
+    const orgName = await createOrg(page);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createNewProject(page);
+    const projectName = await createProject(page);
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    const targetName = await createSshTargetWithAddressEnt(page);
+    const targetName = await createSshTargetWithAddressEnt(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + project.id),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
     await createStaticCredentialStore(page);
-    const credentialName = await createStaticCredentialKeyPair(page);
+    const credentialName = await createStaticCredentialKeyPair(
+      page,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await addInjectedCredentialsToTarget(page, targetName, credentialName);
 
     connect = await connectSshToTarget(target.id);

@@ -26,9 +26,9 @@
   <page.body>
     <Form::CredentialLibrary
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @changeType={{route-action 'changeType'}}
+      @submit={{fn this.credentialLibraries.save @model}}
+      @cancel={{fn this.credentialLibraries.cancel @model}}
+      @changeType={{this.credentialLibraries.changeType}}
     />
   </page.body>
 </Rose::Layout::Page>

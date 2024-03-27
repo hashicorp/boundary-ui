@@ -95,6 +95,11 @@ Router.map(function () {
         this.route('new');
       });
 
+      this.route('aliases', function () {
+        this.route('new');
+        this.route('alias', { path: ':alias_id' }, function () {});
+      });
+
       this.route('host-catalogs', function () {
         this.route('new');
         this.route('host-catalog', { path: ':host_catalog_id' }, function () {
