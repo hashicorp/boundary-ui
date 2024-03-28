@@ -11,7 +11,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
 
   @service store;
-  @service resourceFilterStore;
 
   // =attributes
 
@@ -42,6 +41,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
 
   allUsers;
   allSessions;
+  allTargets;
 
   /**
    * Loads all sessions under the current scope and encapsulates them into
@@ -117,7 +117,9 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAllUsers() {
     const uniqueSessionUserIds = new Set(
-      this.allSessions.map((session) => session.user_id),
+      this.allSessions
+        .filter((session) => session.user_id)
+        .map((session) => session.user_id),
     );
     const filters = { id: { values: [] } };
     uniqueSessionUserIds.forEach((userId) => {
@@ -138,7 +140,9 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAllTargets(scope_id) {
     const uniqueSessionTargetIds = new Set(
-      this.allSessions.map((session) => session.target_id),
+      this.allSessions
+        .filter((session) => session.user_id)
+        .map((session) => session.target_id),
     );
     const filters = { id: { values: [] } };
     uniqueSessionTargetIds.forEach((targetId) => {
