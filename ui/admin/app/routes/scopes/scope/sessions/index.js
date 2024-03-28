@@ -77,15 +77,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const sessions = await this.store.query('session', queryOptions);
     const totalItems = sessions.meta?.totalItems;
 
-    sessions.forEach(async (session) => {
-      if (session.user_id) {
-        session.user = await this.store.findRecord('user', session.user_id);
-      }
-      if (session.target_id) {
-        await this.store.findRecord('target', session.target_id);
-      }
-    });
-
     // Query all sessions, users, and targets for defining filtering values if entering route for the first time
     if (!this.allSessions) {
       await this.getAllSessions(scope_id);
@@ -138,9 +129,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       recursive: true,
       query: { filters },
     };
-    this.allUsers = await this.store.query('user', allUsersQuery, {
-      pushToStore: false,
-    });
+    this.allUsers = await this.store.query('user', allUsersQuery);
   }
 
   /**
@@ -161,9 +150,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       recursive: true,
       query: { filters },
     };
-    this.allTargets = await this.store.query('target', allTargetsQuery, {
-      pushToStore: false,
-    });
+    this.allTargets = await this.store.query('target', allTargetsQuery);
   }
 
   // =actions
