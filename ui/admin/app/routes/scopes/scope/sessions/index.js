@@ -120,7 +120,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const uniqueSessionUserIds = new Set(
       this.allSessions.map((session) => session.user_id),
     );
-    const filters = { id: { logicalOperator: 'or', values: [] } };
+    const filters = { id: { values: [] } };
     uniqueSessionUserIds.forEach((userId) => {
       filters.id.values.push({ equals: userId });
     });
@@ -141,7 +141,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     const uniqueSessionTargetIds = new Set(
       this.allSessions.map((session) => session.target_id),
     );
-    const filters = { id: { logicalOperator: 'or', values: [] } };
+    const filters = { id: { values: [] } };
     uniqueSessionTargetIds.forEach((targetId) => {
       filters.id.values.push({ equals: targetId });
     });
