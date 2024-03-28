@@ -116,7 +116,7 @@
                   <Hds::Button
                     @color='secondary'
                     @text={{t 'actions.cancel'}}
-                    {{on 'click' (route-action 'cancelSession' B.data)}}
+                    {{on 'click' (fn this.cancelSession B.data)}}
                   />
                 {{/if}}
               </B.Td>

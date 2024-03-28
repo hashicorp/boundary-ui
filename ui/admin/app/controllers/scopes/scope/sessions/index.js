@@ -9,6 +9,7 @@ import {
 } from 'api/models/session';
 import { action } from '@ember/object';
 import { debounce } from 'core/decorators/debounce';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeSessionsIndexController extends Controller {
   // =services
@@ -93,8 +94,22 @@ export default class ScopesScopeSessionsIndexController extends Controller {
     this.page = 1;
   }
 
+  /**
+   * Refreshes the all data for the current page
+   */
   @action
-  async refresh() {
-    await this.send('refreshAll');
+  refresh() {
+    this.send('refreshAll');
+  }
+
+  /**
+   * Cancels the specified session and notifies the user of success or error
+   * @param {SessionModel} session
+   */
+  @action
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.canceled-success')
+  cancelSession(session) {
+    session.cancelSession();
   }
 }
