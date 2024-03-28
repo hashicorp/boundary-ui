@@ -13,7 +13,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeGroupsRoute extends Route {
   // =services
 
-  @service store;
   @service intl;
   @service session;
   @service can;
@@ -26,18 +25,6 @@ export default class ScopesScopeGroupsRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Load all groups under current scope
-   * @return {Promise[GroupModel]}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'groups' })) {
-      return this.store.query('group', { scope_id });
-    }
   }
 
   // =actions
@@ -83,7 +70,7 @@ export default class ScopesScopeGroupsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(group) {
     await group.destroyRecord();
-    await this.router.replaceWith('scopes.scope.groups');
+    this.router.replaceWith('scopes.scope.groups');
     this.refresh();
   }
 }
