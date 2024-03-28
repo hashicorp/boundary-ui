@@ -15,6 +15,7 @@ export const modelIndexes = {
   user: '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
   group:
     '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
+  role: '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
 };
 
 export const formatDbName = (userId, clusterUrl) =>
