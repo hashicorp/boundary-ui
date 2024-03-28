@@ -64,6 +64,7 @@
           @columns={{array
             (hash label=(t 'form.name.label'))
             (hash label=(t 'form.type.label'))
+            (hash label=(t 'resources.target.titles.active-sessions'))
             (hash label=(t 'form.id.label'))
           }}
           @model={{@model.targets}}
@@ -90,6 +91,16 @@
                   {{#if B.data.type}}
                     <Hds::Badge
                       @text={{t (concat 'resources.target.types.' B.data.type)}}
+                    />
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if B.data.isActive}}
+                    <Hds::Link::Standalone
+                      @text={{t 'actions.yes'}}
+                      @route='scopes.scope.sessions.index'
+                      @query={{hash targets=(array B.data.id)}}
+                      @icon='info'
                     />
                   {{/if}}
                 </B.Td>
@@ -122,6 +133,16 @@
                         @text={{t
                           (concat 'resources.target.types.' B.data.type)
                         }}
+                      />
+                    {{/if}}
+                  </B.Td>
+                  <B.Td>
+                    {{#if B.data.isActive}}
+                      <Hds::Link::Standalone
+                        @text={{t 'actions.yes'}}
+                        @route='scopes.scope.sessions.index'
+                        @query={{hash targets=(array B.data.id)}}
+                        @icon='info'
                       />
                     {{/if}}
                   </B.Td>
