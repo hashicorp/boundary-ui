@@ -151,6 +151,17 @@ export default class SessionModel extends GeneratedSessionModel {
     return this.store.peekRecord('target', this.target_id);
   }
 
+  /**
+   * The user associated with this session (if loaded).
+   * @type {UserModel}
+   */
+  get user() {
+    if (!this.user_id) {
+      return null;
+    }
+    return this.store.peekRecord('user', this.user_id);
+  }
+
   // =methods
 
   /**
