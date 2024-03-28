@@ -30,8 +30,8 @@ export default class ScopesScopeUsersIndexRoute extends Route {
   // =methods
 
   /**
-   * Load all users under current scope.
-   * @return {Promise{[UserModel]}}
+   * Loads queried users and the number of users under current scope.
+   * @returns {Promise<{totalItems: number, users: [UserModel], usersExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -40,8 +40,6 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     const filters = {
       scope_id: [{ equals: scope_id }],
     };
-
-    await this.getUsersExist(scope_id);
 
     let users;
     let totalItems = 0;
@@ -53,11 +51,21 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       });
       totalItems = users.meta?.totalItems;
     }
+    const usersExist = await this.getUsersExist(scope_id, totalItems);
 
-    return { users, usersExist: this.usersExist, totalItems };
+    return { users, usersExist, totalItems };
   }
 
-  async getUsersExist(scopeId) {
+  /**
+   * Sets usersExist to true if there exists any users.
+   * @param {string} scopeId
+   * @param {number} totalItems
+   * @returns
+   */
+  async getUsersExist(scopeId, totalItems) {
+    if (totalItems > 0) {
+      return true;
+    }
     const options = { pushToStore: false };
     const user = await this.store.query(
       'user',
@@ -72,7 +80,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
       },
       options,
     );
-    this.usersExist = user.length > 0;
+    return user.length > 0;
   }
 
   setupController(controller) {
