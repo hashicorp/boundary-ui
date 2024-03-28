@@ -47,11 +47,11 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
         pageSize,
       });
       totalItems = groups.meta?.totalItems;
-
-      await this.getGroupsExist(scope_id, totalItems);
     }
 
-    return { groups, groupsExist: this.groupsExist, totalItems };
+    const groupsExist = await this.getGroupsExist(scope_id, totalItems);
+
+    return { groups, groupsExist, totalItems };
   }
 
   /**
@@ -61,8 +61,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
    */
   async getGroupsExist(scope_id, totalItems) {
     if (totalItems > 0) {
-      this.groupsExist = true;
-      return;
+      return true;
     }
     const options = { pushToStore: false };
     const group = await this.store.query(
@@ -78,7 +77,8 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
       },
       options,
     );
-    this.groupsExist = group.length > 0;
+
+    return group.length > 0;
   }
 
   setupController(controller) {
