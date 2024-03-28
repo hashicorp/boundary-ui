@@ -29,6 +29,36 @@ export default class MappingListComponent extends Component {
   get options() {
     return this.args?.options || this.args?.model?.[this.args.name];
   }
+
+  /**
+   * Prevents users from selecting duplicate keys from the select list if the arg is set to true
+   * @type {object}
+   */
+
+  get selectOptions() {
+    const previouslySelectedKeys = this.options || [];
+    if (this.args.removeDuplicates && previouslySelectedKeys.length) {
+      return this.args.selectOptions.filter((key) =>
+        previouslySelectedKeys.every((obj) => obj.key !== key),
+      );
+    } else {
+      return this.args.selectOptions;
+    }
+  }
+
+  /**
+   * Determines if we need to show an empty row to the users to enter more key/value pairs based on removeDuplicates arg,
+   * by default it is true
+   * @type {object}
+   */
+  get showNewRow() {
+    if (this.args.removeDuplicates) {
+      return this.options?.length !== this.args.selectOptions?.length;
+    } else {
+      return true;
+    }
+  }
+
   // =actions
 
   /**
@@ -49,6 +79,7 @@ export default class MappingListComponent extends Component {
     } else {
       const field = this.args.name;
       const existingArray = this.args.model[field] ?? [];
+
       const newArray = [
         ...existingArray,
         { key: this.newOptionKey, value: this.newOptionValue },

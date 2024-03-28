@@ -81,7 +81,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   })
   credential_type;
 
-  @attr('object', {
+  @attr('object-as-array', {
     for: 'vault-generic',
     description: 'It indicates the credential mapping overrides.',
   })

@@ -95,7 +95,14 @@
           @disabled={{form.disabled}}
           @addOption={{this.addWorkerTag}}
           @removeOptionByIndex={{this.removeWorkerTagByIndex}}
-        />
+        >
+          <:key as |K|>
+            <K.text />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
 

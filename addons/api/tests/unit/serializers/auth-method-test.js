@@ -45,7 +45,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       type: TYPE_AUTH_METHOD_OIDC,
       name: 'OIDC Auth Method',
       state: 'foo',
-      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      account_claim_maps: [{ key: 'foo', value: 'bar' }],
       claims_scopes: [{ value: 'profile' }, { value: 'email' }],
       signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
       allowed_audiences: [
@@ -96,7 +96,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       type: TYPE_AUTH_METHOD_LDAP,
       name: 'LDAP Auth Method',
       state: 'baz',
-      account_attribute_maps: [{ from: 'foo', to: 'bar' }],
+      account_attribute_maps: [{ key: 'foo', value: 'bar' }],
       urls: [{ value: 'ldap://ldap.example.com' }],
       use_token_groups: false,
       start_tls: true,
@@ -160,7 +160,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       type: TYPE_AUTH_METHOD_OIDC,
       name: 'OIDC Auth Method',
       state: 'foo',
-      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      account_claim_maps: [{ key: 'foo', value: 'bar' }],
       claims_scopes: [{ value: 'profile' }, { value: 'email' }],
       signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
       allowed_audiences: [
@@ -210,7 +210,7 @@ module('Unit | Serializer | auth method', function (hooks) {
       type: TYPE_AUTH_METHOD_LDAP,
       name: 'LDAP Auth Method',
       state: 'baz',
-      account_attribute_maps: [{ from: 'foo', to: 'bar' }],
+      account_attribute_maps: [{ key: 'foo', value: 'bar' }],
       urls: [{ value: 'ldap://ldap.example.com' }],
       use_token_groups: false,
       start_tls: true,
@@ -410,8 +410,8 @@ module('Unit | Serializer | auth method', function (hooks) {
       prompts,
     } = record;
     assert.deepEqual(account_claim_maps, [
-      { from: 'from', to: 'to' },
-      { from: 'foo', to: 'bar' },
+      { key: 'from', value: 'to' },
+      { key: 'foo', value: 'bar' },
     ]);
     assert.deepEqual(claims_scopes, [{ value: 'profile' }, { value: 'email' }]);
     assert.deepEqual(allowed_audiences, [
@@ -481,8 +481,8 @@ module('Unit | Serializer | auth method', function (hooks) {
       certificates: recordCertificates,
     } = record;
     assert.deepEqual(account_attribute_maps, [
-      { from: 'from', to: 'to' },
-      { from: 'foo', to: 'bar' },
+      { key: 'from', value: 'to' },
+      { key: 'foo', value: 'bar' },
     ]);
     assert.deepEqual(urls, [{ value: ldapUrl }]);
     assert.deepEqual(recordCertificates, [

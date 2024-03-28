@@ -13,15 +13,12 @@ export const options = {
   key_type: ['ed25519', 'ecdsa', 'rsa'],
   credential_types: ['ssh_private_key', 'username_password'],
   mapping_overrides: {
-    username_password: {
-      username_attribute: 'Username',
-      password_attribute: 'Password',
-    },
-    ssh_private_key: {
-      private_key_attribute: 'Private Key',
-      private_key_passphrase_attribute: 'Private Key Passphrase',
-      username_attribute: 'Username',
-    },
+    username_password: ['username_attribute', 'password_attribute'],
+    ssh_private_key: [
+      'private_key_attribute',
+      'private_key_passphrase_attribute',
+      'username_attribute',
+    ],
   },
 };
 
