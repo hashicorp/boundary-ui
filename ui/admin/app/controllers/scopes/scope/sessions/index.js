@@ -109,7 +109,7 @@ export default class ScopesScopeSessionsIndexController extends Controller {
   @action
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.canceled-success')
-  cancelSession(session) {
-    session.cancelSession();
+  async cancelSession(session) {
+    await session.cancelSession();
   }
 }
