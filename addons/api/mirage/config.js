@@ -270,26 +270,7 @@ function routes() {
   });
 
   // IAM: Groups
-  this.get(
-    '/groups',
-    ({ groups }, { queryParams: { scope_id, recursive, filter } }) => {
-      let resultSet;
-      if (recursive && scope_id === 'global') {
-        resultSet = groups.all();
-      } else if (recursive) {
-        resultSet = groups.where((group) => {
-          const groupModel = groups.find(group.id);
-          return (
-            group.scopeId === scope_id ||
-            groupModel?.scope?.scope?.id === scope_id
-          );
-        });
-      } else {
-        resultSet = groups.where((group) => group.scopeId === scope_id);
-      }
-      return resultSet.filter(makeBooleanFilter(filter));
-    },
-  );
+  this.get('/groups');
   this.post('/groups');
   this.get('/groups/:id');
   this.patch('/groups/:id');
