@@ -487,41 +487,4 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
 
     assert.strictEqual(result.length, 1);
   });
-
-  test('it removes null or undefined values and filters only on valid values', async function (assert) {
-    await seedIndexDb(resource, store, indexedDb, this.server);
-    const query = {
-      filters: {
-        type: [
-          { equals: TYPE_TARGET_SSH },
-          { equals: null },
-          { equals: undefined },
-        ],
-      },
-    };
-
-    const result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-  });
-
-  test('it removes null or undefined values and filters only on valid values with logicalOperator defined', async function (assert) {
-    await seedIndexDb(resource, store, indexedDb, this.server);
-    const query = {
-      filters: {
-        type: {
-          logicalOperator: 'or',
-          values: [
-            { equals: TYPE_TARGET_SSH },
-            { equals: null },
-            { equals: undefined },
-          ],
-        },
-      },
-    };
-
-    const result = await queryIndexedDb(indexedDb.db, resource, query);
-
-    assert.strictEqual(result.length, 5);
-  });
 });

@@ -223,14 +223,6 @@ const getKey = (key) => {
   }
 };
 
-const cleanValues = (values) => {
-  return values.reduce((result, obj) => {
-    const [, value] = Object.entries(obj)[0];
-    if (value) result.push(obj);
-    return result;
-  }, []);
-};
-
 /**
  * Cleans the object to remove any keys that have a value of an empty array. This makes
  * it easier so we don't have to worry about empty arrays getting queried in indexed db.
@@ -243,10 +235,9 @@ const cleanObject = (obj) => {
   return Object.entries(obj).reduce((result, [key, value]) => {
     if (Array.isArray(value)) {
       if (value.length > 0) {
-        result[key] = cleanValues(value);
+        result[key] = value;
       }
     } else if (value.values.length > 0) {
-      value.values = cleanValues(value.values);
       result[key] = value;
     }
 
