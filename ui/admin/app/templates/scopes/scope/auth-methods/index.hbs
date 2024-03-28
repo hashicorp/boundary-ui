@@ -207,15 +207,6 @@
             resource=(t 'resources.auth-methods.title_plural')
           }}
         />
-        {{#if (can 'create model' this.scope collection='auth-methods')}}
-          <A.Footer as |F|>
-            <F.Link::Standalone
-              @icon='plus-circle'
-              @text={{t 'titles.new'}}
-              @route='scopes.scope.auth-methods.new'
-            />
-          </A.Footer>
-        {{/if}}
       </Hds::ApplicationState>
     {{/if}}
   </page.body>

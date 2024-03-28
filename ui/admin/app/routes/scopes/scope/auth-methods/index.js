@@ -82,7 +82,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
    * Sets authMethodsExist to true if there exists any auth methods.
    * @param {string} scope_id
    * @param {number} totalItems
-   * @returns
+   * @returns {boolean}
    */
   async getAuthMethodsExist(scope_id, totalItems) {
     if (totalItems > 0) {
