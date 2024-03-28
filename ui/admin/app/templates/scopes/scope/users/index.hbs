@@ -48,6 +48,7 @@
             (hash label=(t 'form.name.label'))
             (hash label=(t 'form.id.label'))
           }}
+          @density='short'
           @valign='middle'
         >
           <:body as |B|>
@@ -108,6 +109,7 @@
                 'descriptions.neither-list-nor-create'
               )
             )
+            resource=(t 'resources.user.title_plural')
           }}
         />
         {{#if (can 'create model' this.scope collection='users')}}

@@ -324,9 +324,7 @@ function routes() {
   );
 
   // IAM: Roles
-  this.get('/roles', ({ roles }, { queryParams: { scope_id: scopeId } }) => {
-    return roles.where({ scopeId });
-  });
+  this.get('/roles');
   this.post('/roles');
   this.get('/roles/:id');
   this.patch('/roles/:id');
