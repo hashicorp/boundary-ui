@@ -60,9 +60,7 @@
           </A.Description>
         </Hds::Alert>
       {{/unless}}
-    {{/if}}
 
-    {{#if @model.authMethodsExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
@@ -182,7 +180,7 @@
                 'descriptions.no-filter-results'
               )
               query=this.search
-              resource='auth-methods'
+              resource=(t 'resources.auth-method.title_plural')
             }}
           />
         </Hds::ApplicationState>
@@ -196,15 +194,15 @@
           {{! can neither list nor create:  show neither-list-nor-create welcome message}}
           @text={{t
             (if
-              (can 'list model' this.scope collection='auth-methods')
+              (can 'list model' this.scopeModel collection='auth-methods')
               'resources.auth-method.description'
               (if
-                (can 'create model' this.scope collection='auth-methods')
+                (can 'create model' this.scopeModel collection='auth-methods')
                 'descriptions.create-but-not-list'
                 'descriptions.neither-list-nor-create'
               )
             )
-            resource=(t 'resources.auth-methods.title_plural')
+            resource=(t 'resources.auth-method.title_plural')
           }}
         />
       </Hds::ApplicationState>

@@ -155,7 +155,10 @@
     <Hds::ApplicationState data-test-no-session-results as |A|>
       <A.Header @title={{t 'titles.no-results-found'}} />
       <A.Body
-        @text={{t 'descriptions.no-filter-results' resource='sessions'}}
+        @text={{t
+          'descriptions.no-filter-results'
+          resource=(t 'resources.session.title_plural')
+        }}
       />
     </Hds::ApplicationState>
   {{/if}}
