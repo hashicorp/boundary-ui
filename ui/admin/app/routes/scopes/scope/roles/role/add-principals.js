@@ -6,7 +6,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { hash, all } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
@@ -18,7 +17,6 @@ import {
 export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
   // =services
 
-  @service intl;
   @service router;
   @service store;
   @service resourceFilterStore;
@@ -51,30 +49,20 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     const role = this.modelFor('scopes.scope.roles.role');
     const scopes = this.store.peekAll('scope');
     const scopeIDs = this.scope?.map((scope) => scope.id);
-    const users = scopeIDs?.length
-      ? this.resourceFilterStore.queryBy(
-          'user',
-          {
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          },
-        )
-      : this.store.query('user', { scope_id: 'global', recursive: true });
-    const groups = scopeIDs?.length
-      ? this.resourceFilterStore.queryBy(
-          'group',
-          {
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          },
-        )
-      : this.store.query('group', { scope_id: 'global', recursive: true });
+    const query = { filters: { scope_id: [] } };
+    scopeIDs?.forEach((scopeID) => {
+      query.filters.scope_id.push({ equals: scopeID });
+    });
+    const users = await this.store.query('user', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
+    const groups = await this.store.query('group', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
     //query authmethods from all the scopes
     const authMethods = scopeIDs?.length
       ? await this.resourceFilterStore.queryBy(
@@ -90,24 +78,20 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
           { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
           { scope_id: 'global', recursive: true },
         );
-    //extract oidc and ldap authMethod IDs
-    const authMethodIDs = authMethods.map(({ id }) => id);
     //query all the managed groups for each auth method id
-    const managedGroups = await all(
-      authMethodIDs.map((auth_method_id) =>
+    const managedGroups = await Promise.all(
+      authMethods.map(({ id: auth_method_id }) =>
         this.store.query('managed-group', { auth_method_id }),
       ),
     );
-    const managedGroupModels = managedGroups
-      .map((models) => models.map((model) => model))
-      .flat();
-    return hash({
+
+    return {
       role,
       scopes,
       users,
       groups,
-      managedGroups: managedGroupModels,
-    });
+      managedGroups: managedGroups.flat(),
+    };
   }
 
   // =actions
