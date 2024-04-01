@@ -14,7 +14,7 @@ export default class SessionService extends BaseSessionService {
     super.handleAuthentication(...arguments);
 
     const userId = this.data?.authenticated?.user_id;
-    const hostUrl = this.window.host;
+    const hostUrl = this.window.location.host;
     if (userId && hostUrl) {
       this.indexedDb.setup(formatDbName(userId, hostUrl));
     }
