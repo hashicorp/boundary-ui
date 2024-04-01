@@ -1,11 +1,14 @@
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { TYPES_TARGET } from 'api/models/target';
+import {
+  TYPES_HOST_CATALOG_PLUGIN,
+  TYPES_HOST_CATALOG,
+} from 'api/models/host-catalog';
 import { action } from '@ember/object';
 import { debounce } from 'core/decorators/debounce';
+import { inject as service } from '@ember/service';
 
-export default class ScopesScopeTargetsIndexController extends Controller {
+export default class ScopesScopeHostCatalogsIndexController extends Controller {
   // =services
 
   @service intl;
@@ -14,44 +17,42 @@ export default class ScopesScopeTargetsIndexController extends Controller {
 
   queryParams = [
     'search',
-    { availableSessions: { type: 'array' } },
     { types: { type: 'array' } },
+    { providers: { type: 'array' } },
     'page',
     'pageSize',
   ];
 
   @tracked search;
-  @tracked scopes = [];
-  @tracked availableSessions = [];
   @tracked types = [];
+  @tracked providers = [];
   @tracked page = 1;
   @tracked pageSize = 10;
-  @tracked selectedTarget;
-
-  get availableSessionOptions() {
-    return [
-      { id: 'yes', name: this.intl.t('actions.yes') },
-      { id: 'no', name: this.intl.t('actions.no') },
-    ];
-  }
 
   get filters() {
     return {
       allFilters: {
-        availableSessions: this.availableSessionOptions,
-        types: this.targetTypeOptions,
+        types: this.hostCatalogTypeOptions,
+        providers: this.hostCatalogProviderOptions,
       },
       selectedFilters: {
-        availableSessions: this.availableSessions,
         types: this.types,
+        providers: this.providers,
       },
     };
   }
 
-  get targetTypeOptions() {
-    return TYPES_TARGET.map((type) => ({
+  get hostCatalogTypeOptions() {
+    return TYPES_HOST_CATALOG.map((type) => ({
       id: type,
-      name: this.intl.t(`resources.target.types.${type}`),
+      name: this.intl.t(`resources.host-catalog.types.${type}`),
+    }));
+  }
+
+  get hostCatalogProviderOptions() {
+    return TYPES_HOST_CATALOG_PLUGIN.map((type) => ({
+      id: type,
+      name: this.intl.t(`resources.host-catalog.types.${type}`),
     }));
   }
 
