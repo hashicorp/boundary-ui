@@ -10,24 +10,24 @@ const { authenticatedState, checkEnv } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  createNewOrgCli,
-  createNewProjectCli,
-  createNewControllerLedWorkerCli,
-  createNewPasswordAuthMethodCli,
+  createOrgCli,
+  createProjectCli,
+  createControllerLedWorkerCli,
+  createPasswordAuthMethodCli,
   makeAuthMethodPrimaryCli,
-  createNewPasswordAccountCli,
-  createNewRoleCli,
-  createNewGroupCli,
-  createNewUserCli,
-  createNewStaticHostCatalogCli,
+  createPasswordAccountCli,
+  createRoleCli,
+  createGroupCli,
+  createUserCli,
+  createStaticHostCatalogCli,
   createDynamicAwsHostCatalogCli,
-  createNewStaticHostCli,
-  createNewHostSetCli,
-  createNewStaticCredentialStoreCli,
-  createNewTcpTarget,
-  createNewSshTargetCli,
-  createNewVaultCredentialStoreCli,
-  createNewUsernamePasswordCredentialCli,
+  createStaticHostCli,
+  createHostSetCli,
+  createStaticCredentialStoreCli,
+  createTcpTarget,
+  createSshTargetCli,
+  createVaultCredentialStoreCli,
+  createUsernamePasswordCredentialCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 
@@ -61,7 +61,12 @@ test.beforeAll(async () => {
 test.beforeEach(async () => {
   execSync(`vault policy delete ${secretPolicyName}`);
   execSync(`vault policy delete ${boundaryPolicyName}`);
-  await authenticateBoundaryCli();
+  await authenticateBoundaryCli(
+    process.env.BOUNDARY_ADDR,
+    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
 });
 
 test('Verify resources can be deleted (enterprise) @ent @aws', async ({
@@ -69,37 +74,38 @@ test('Verify resources can be deleted (enterprise) @ent @aws', async ({
 }) => {
   let orgId;
   try {
-    orgId = await createNewOrgCli();
-    let projectId = await createNewProjectCli(orgId);
+    orgId = await createOrgCli();
+    let projectId = await createProjectCli(orgId);
 
     // Create boundary resources using CLI
-    let workerId = await createNewControllerLedWorkerCli();
-    let authMethodId = await createNewPasswordAuthMethodCli(orgId);
+    let workerId = await createControllerLedWorkerCli();
+    let authMethodId = await createPasswordAuthMethodCli(orgId);
     await makeAuthMethodPrimaryCli(orgId, authMethodId);
-    let passwordAccountId = await createNewPasswordAccountCli(authMethodId);
-    let projectScopeRoleId = await createNewRoleCli(projectId);
-    let orgScopeRoleId = await createNewRoleCli(orgId);
-    let globalScopeRoleId = await createNewRoleCli('global');
-    let groupId = await createNewGroupCli(orgId);
-    let userId = await createNewUserCli(orgId);
-    let staticHostCatalogId = await createNewStaticHostCatalogCli(projectId);
+    let passwordAccountId = await createPasswordAccountCli(authMethodId);
+    let projectScopeRoleId = await createRoleCli(projectId);
+    let orgScopeRoleId = await createRoleCli(orgId);
+    let globalScopeRoleId = await createRoleCli('global');
+    let groupId = await createGroupCli(orgId);
+    let userId = await createUserCli(orgId);
+    let staticHostCatalogId = await createStaticHostCatalogCli(projectId);
     let dynamicAwsHostCatalogId =
       await createDynamicAwsHostCatalogCli(projectId);
-    let staticHostId = await createNewStaticHostCli(staticHostCatalogId);
-    let staticHostSetId = await createNewHostSetCli(staticHostCatalogId);
+    let staticHostId = await createStaticHostCli(staticHostCatalogId);
+    let staticHostSetId = await createHostSetCli(staticHostCatalogId);
     let staticCredentialStoreId =
-      await createNewStaticCredentialStoreCli(projectId);
-    let vaultCredentialStoreId = await createNewVaultCredentialStoreCli(
+      await createStaticCredentialStoreCli(projectId);
+    let vaultCredentialStoreId = await createVaultCredentialStoreCli(
       projectId,
+      process.env.E2E_VAULT_ADDR,
       secretPolicyName,
       boundaryPolicyName,
     );
     let usernamePasswordCredentialId =
-      await createNewUsernamePasswordCredentialCli(staticCredentialStoreId);
-    let tcpTargetId = await createNewTcpTarget(projectId);
+      await createUsernamePasswordCredentialCli(staticCredentialStoreId);
+    let tcpTargetId = await createTcpTarget(projectId);
 
     // Create enterprise boundary resources using CLI
-    let sshTargetId = await createNewSshTargetCli(projectId);
+    let sshTargetId = await createSshTargetCli(projectId);
 
     // Delete resources
     await page.goto(`/scopes/${projectId}/targets/${tcpTargetId}`);
