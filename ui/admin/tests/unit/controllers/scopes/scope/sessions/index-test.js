@@ -14,8 +14,8 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
   const target = { id: 't_123', name: 'target' };
   const model = {
     sessions: [session],
-    allUsers: [user],
-    allTargets: [target],
+    associatedUsers: [user],
+    associatedTargets: [target],
     allSessions: [session],
     totalItems: 1,
   };
