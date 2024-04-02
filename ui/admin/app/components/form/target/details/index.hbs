@@ -325,7 +325,10 @@
     </Hds::Form::TextInput::Field>
   {{/if}}
 
-  {{#if @model.isNew}}
+  {{#if
+    (and @model.isNew (can 'create model' @globalScope collection='aliases'))
+  }}
+
     <Form::Field::ListWrapper
       @layout='horizontal'
       @isOptional={{true}}

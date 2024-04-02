@@ -26,6 +26,7 @@
   <page.body>
     <Form::Target
       @model={{@model}}
+      @globalScope={{this.globalScope}}
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
       @changeType={{route-action 'changeType'}}
