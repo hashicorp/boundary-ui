@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitUntil, findAll } from '@ember/test-helpers';
+import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -144,9 +144,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.staticCredentialStore.id);
-    await waitUntil(
-      () => findAll(`[href="${urls.vaultCredentialStore}"]`).length === 0,
-    );
+    await waitFor(`[href="${urls.vaultCredentialStore}"]`, { count: 0 });
 
     assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
@@ -161,7 +159,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake cred store that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
 
     assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
