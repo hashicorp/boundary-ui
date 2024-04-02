@@ -8,12 +8,12 @@ import { TrackedArray } from 'tracked-built-ins';
 
 export default class ArrayTransform extends Transform {
   deserialize(serialized) {
-    const stringValues = new TrackedArray(serialized || []);
-    return stringValues;
+    const arr = new TrackedArray(serialized || []);
+    return arr;
   }
 
   serialize(deserialized) {
-    const strings = deserialized || [];
-    return strings;
+    const arr = deserialized || [];
+    return arr;
   }
 }
