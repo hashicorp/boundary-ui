@@ -105,6 +105,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       throw e;
     }
     await authMethod.save();
+    await this.refresh();
   }
 
   /**
