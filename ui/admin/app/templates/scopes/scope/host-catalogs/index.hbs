@@ -40,24 +40,7 @@
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
-        <S.Generic>
-          <Dropdown
-            @name={{t 'form.type.label'}}
-            @itemOptions={{this.hostCatalogTypeOptions}}
-            @checkedItems={{this.types}}
-            @applyFilter={{fn this.applyFilter 'types'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            @name={{t 'titles.provider'}}
-            @itemOptions={{this.hostCatalogProviderOptions}}
-            @checkedItems={{this.providers}}
-            @applyFilter={{fn this.applyFilter 'providers'}}
-          />
-        </S.Generic>
       </Hds::SegmentedGroup>
-      <FilterTags @filters={{this.filters}} />
 
       {{#if @model.hostCatalogs}}
         <Hds::Table

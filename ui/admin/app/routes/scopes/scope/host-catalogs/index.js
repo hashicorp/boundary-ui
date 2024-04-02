@@ -19,14 +19,6 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
-    types: {
-      refreshModel: true,
-      replace: true,
-    },
-    providers: {
-      refreshModel: true,
-      replace: true,
-    },
     page: {
       refreshModel: true,
     },
@@ -40,7 +32,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   /**
    * Loads all host catalogs under the current scope.
    * @returns {Promise<{totalItems: number, hostCatalogs: [HostCatalogModel] }> }   */
-  async model({ search, types, providers, page, pageSize }) {
+  async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
 
@@ -49,14 +41,6 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       type: [],
       'plugin.name': [],
     };
-
-    types.forEach((type) => {
-      filters.type.push({ equals: type });
-    });
-
-    providers.forEach((type) => {
-      filters['plugin.name'].push({ equals: type });
-    });
 
     let hostCatalogs;
     let totalItems = 0;
