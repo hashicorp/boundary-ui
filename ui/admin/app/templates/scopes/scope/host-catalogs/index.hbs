@@ -93,11 +93,7 @@
           <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
-              (if
-                this.search
-                'descriptions.no-search-results'
-                'descriptions.no-filter-results'
-              )
+              'descriptions.no-search-results'
               query=this.search
               resource=(t 'resources.host-catalog.title_plural')
             }}
