@@ -51,6 +51,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   async model({ search, users, targets, status, page, pageSize }) {
     const { id: scope_id } = this.modelFor('scopes.scope');
     const filters = {
+      scope_id: [{ equals: scope_id }],
       status: [],
       user_id: [],
       target_id: [],
@@ -103,8 +104,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAllSessions(scope_id) {
     const allSessionsQuery = {
-      scope_id,
-      recursive: true,
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
     };
     this.allSessions = await this.store.query('session', allSessionsQuery, {
       pushToStore: false,
@@ -144,13 +144,11 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
         .filter((session) => session.target_id)
         .map((session) => session.target_id),
     );
-    const filters = { id: { values: [] } };
+    const filters = { id: { values: [] }, scope_id: [{ equals: scope_id }] };
     uniqueSessionTargetIds.forEach((targetId) => {
       filters.id.values.push({ equals: targetId });
     });
     const associatedTargetsQuery = {
-      scope_id,
-      recursive: true,
       query: { filters },
     };
     this.associatedTargets = await this.store.query(
