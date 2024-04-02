@@ -106,7 +106,7 @@
           @currentPageSize={{this.pageSize}}
         />
       {{else}}
-        <Hds::ApplicationState data-test-no-target-results as |A|>
+        <Hds::ApplicationState data-test-no-host-catalog-results as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
@@ -121,9 +121,7 @@
           />
         </Hds::ApplicationState>
       {{/if}}
-
     {{else}}
-
       <Hds::ApplicationState as |A|>
         <A.Header
           @title={{t 'resources.host-catalog.messages.welcome.title'}}

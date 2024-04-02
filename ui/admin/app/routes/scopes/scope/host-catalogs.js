@@ -69,7 +69,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(hostCatalog) {
     await hostCatalog.destroyRecord();
-    await this.router.replaceWith('scopes.scope.host-catalogs');
+    this.router.replaceWith('scopes.scope.host-catalogs');
     this.refresh();
   }
 }

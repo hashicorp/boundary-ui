@@ -6,10 +6,10 @@
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
 
 export const TYPE_HOST_CATALOG_STATIC = 'static';
-export const TYPE_HOST_CATALOG_SSH = 'plugin';
+export const TYPE_HOST_CATALOG_DYNAMIC = 'plugin';
 export const TYPES_HOST_CATALOG = Object.freeze([
   TYPE_HOST_CATALOG_STATIC,
-  TYPE_HOST_CATALOG_SSH,
+  TYPE_HOST_CATALOG_DYNAMIC,
 ]);
 
 export const TYPE_HOST_CATALOG_PLUGIN_AWS = 'aws';
