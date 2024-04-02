@@ -93,7 +93,7 @@ module('Acceptance | groups | list', function (hooks) {
     assert.dom(`[href="${urls.groups}"]`).isVisible();
   });
 
-  test('user can search for a specifc group by id', async function (assert) {
+  test('user can search for a specific group by id', async function (assert) {
     await visit(urls.orgScope);
 
     await click(`[href="${urls.groups}"]`);
