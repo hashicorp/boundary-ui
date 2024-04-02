@@ -93,6 +93,8 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
           },
         },
       });
+      // TODO: Refactor to directly use store service
+      // and add managed-group to indexedDB.
       const nestedManagedGroups = await Promise.all(
         authMethods.map(({ id: auth_method_id }) =>
           this.resourceFilterStore.queryBy(
