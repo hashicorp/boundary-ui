@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, findAll, waitUntil, fillIn } from '@ember/test-helpers';
+import { visit, click, waitFor, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -125,9 +125,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.passwordAuthMethod.id);
-    await waitUntil(
-      () => findAll(`[href="${urls.oidcAuthMethod}"]`).length === 0,
-    );
+    await waitFor(`[href="${urls.oidcAuthMethod}"]`, { count: 0 });
 
     assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
@@ -142,7 +140,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake target that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
 
     assert.dom(`[href="${urls.passwordAuthMethod}"]`).doesNotExist();
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
