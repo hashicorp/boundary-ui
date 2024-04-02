@@ -38,11 +38,11 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     const { id: scope_id } = scope;
     let groups = [];
     let totalItems = 0;
+    const filters = { scope_id: [{ equals: scope_id }] };
 
     if (this.can.can('list model', scope, { collection: 'groups' })) {
       groups = await this.store.query('group', {
-        scope_id,
-        query: { search },
+        query: { filters, search },
         page,
         pageSize,
       });
