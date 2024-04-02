@@ -31,7 +31,7 @@
           <S.Generic>
             <Dropdown
               @name={{t 'resources.user.title'}}
-              @itemOptions={{@model.allUsers}}
+              @itemOptions={{@model.associatedUsers}}
               @checkedItems={{this.users}}
               @applyFilter={{fn this.applyFilter 'users'}}
               @isSearchable={{true}}
@@ -51,7 +51,7 @@
           <S.Generic>
             <Dropdown
               @name={{t 'resources.target.title'}}
-              @itemOptions={{@model.allTargets}}
+              @itemOptions={{@model.associatedTargets}}
               @checkedItems={{this.targets}}
               @applyFilter={{fn this.applyFilter 'targets'}}
               @isSearchable={{true}}
