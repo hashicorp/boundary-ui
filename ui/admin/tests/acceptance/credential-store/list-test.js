@@ -135,7 +135,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
       .exists();
   });
 
-  test('user can search for a specifc credential-store by id', async function (assert) {
+  test('user can search for a specific credential-store by id', async function (assert) {
     await visit(urls.projectScope);
 
     await click(`[href="${urls.credentialStores}"]`);
