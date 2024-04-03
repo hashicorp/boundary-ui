@@ -49,7 +49,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    * @return {Promise{[{sessions: [SessionModel], allSessions: [SessionModel], associatedUsers: [UserModel], associatedTargets: [TargetModel], totalItems: number}]}}
    */
   async model({ search, users, targets, status, page, pageSize }) {
-    const { id: scope_id } = this.modelFor('scopes.scope');
+    const { id: scope_id, scope: parentScope } = this.modelFor('scopes.scope');
     const filters = {
       scope_id: [{ equals: scope_id }],
       status: [],
@@ -80,7 +80,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       await this.getAllSessions(scope_id);
     }
     if (!this.associatedUsers) {
-      await this.getAssociatedUsers();
+      await this.getAssociatedUsers(parentScope.id);
     }
     if (!this.associatedTargets) {
       await this.getAssociatedTargets(scope_id);
@@ -113,13 +113,18 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    * Get all the users but only load them once when entering the route.
    * @returns {Promise<void>}
    */
-  async getAssociatedUsers() {
+  async getAssociatedUsers(parentScopeId) {
     const uniqueSessionUserIds = new Set(
       this.allSessions
         .filter((session) => session.user_id)
         .map((session) => session.user_id),
     );
-    const filters = { id: { values: [] } };
+    // Users can belong to the global scope or the org scope
+    // the project is under so we need to query for both.
+    const filters = {
+      id: { values: [] },
+      scope_id: [{ equals: 'global' }, { equals: parentScopeId }],
+    };
     uniqueSessionUserIds.forEach((userId) => {
       filters.id.values.push({ equals: userId });
     });
