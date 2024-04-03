@@ -67,8 +67,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
 
     const queryOptions = {
-      scope_id,
-      recursive: true,
       query: { search, filters },
       page,
       pageSize,
@@ -126,8 +124,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       filters.id.values.push({ equals: userId });
     });
     const associatedUsersQuery = {
-      scope_id: 'global',
-      recursive: true,
       query: { filters },
     };
     this.associatedUsers = await this.store.query('user', associatedUsersQuery);
