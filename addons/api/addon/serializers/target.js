@@ -45,6 +45,7 @@ export default class TargetSerializer extends ApplicationSerializer {
       );
 
     if (serialized?.with_aliases) {
+      // API expects scope id along with every alias value
       serialized.with_aliases = serialized.with_aliases.map((item) => ({
         ...item,
         scope_id: 'global',
