@@ -14,89 +14,111 @@
       {{t 'resources.role.title_plural'}}
       <DocLink @doc='role' @iconSize='large' />
     </h2>
-    {{#if @model}}
+    {{#if @model.rolesExist}}
       <p>{{t 'resources.role.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='roles')}}
-      {{#if @model}}
-        <Rose::LinkButton @route='scopes.scope.roles.new' @style='primary'>{{t
-            'resources.role.titles.new'
-          }}</Rose::LinkButton>
+      {{#if @model.rolesExist}}
+        <Hds::Button
+          @route='scopes.scope.roles.new'
+          @text={{t 'resources.role.titles.new'}}
+        />
       {{/if}}
     {{/if}}
   </page.actions>
 
-  <page.body>
-
-    {{#if @model}}
-
-      <Hds::Table
-        @model={{@model}}
-        @columns={{array
-          (hash label=(t 'form.name.label'))
-          (hash label=(t 'form.id.label'))
-        }}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if (can 'read role' B.data)}}
-                <LinkTo @route='scopes.scope.roles.role' @model={{B.data.id}}>
-                  {{B.data.displayName}}
-                </LinkTo>
-              {{else}}
-                {{B.data.displayName}}
-              {{/if}}
-              <p>{{B.data.description}}</p>
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-
-    {{else}}
-
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.role.messages.welcome.title'}}
-          as |message|
+  <page.body class='search-filtering'>
+    {{#if @model.rolesExist}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+      </Hds::SegmentedGroup>
+      {{#if @model.roles}}
+        <Hds::Table
+          @model={{@model.roles}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @density='short'
+          @valign='middle'
         >
-          <message.description>
-            {{#if (can 'list model' this.scope collection='roles')}}
-              {{! can list (at least):  show default welcome message}}
-              {{t 'resources.role.description'}}
-            {{else if (can 'create model' this.scope collection='roles')}}
-              {{! can create (only):  show create-but-not-list welcome message}}
-              {{t
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (can 'read role' B.data)}}
+                  <LinkTo @route='scopes.scope.roles.role' @model={{B.data.id}}>
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState data-test-no-role-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              'descriptions.no-search-results'
+              query=this.search
+              resource='roles'
+            }}
+          />
+        </Hds::ApplicationState>
+      {{/if}}
+    {{else}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'resources.role.messages.welcome.title'}} />
+        <A.Body
+          {{! can list (at least):  show default welcome message}}
+          {{! can create (only):  show create-but-not-list welcome message}}
+          {{! can neither list nor create:  show neither-list-nor-create welcome message}}
+          @text={{t
+            (if
+              (can 'list model' this.scope collection='roles')
+              'resources.role.description'
+              (if
+                (can 'create model' this.scope collection='roles')
                 'descriptions.create-but-not-list'
-                resource=(t 'resources.role.title_plural')
-              }}
-            {{else}}
-              {{! can neither list nor create }}
-              {{t
                 'descriptions.neither-list-nor-create'
-                resource=(t 'resources.role.title_plural')
-              }}
-            {{/if}}
-          </message.description>
-          {{#if (can 'create model' this.scope collection='roles')}}
-            <message.link @route='scopes.scope.roles.new'>
-              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
-          {{/if}}
-        </Rose::Message>
-      </Rose::Layout::Centered>
-
+              )
+            )
+            resource=(t 'resources.role.title_plural')
+          }}
+        />
+        {{#if (can 'create model' this.scope collection='roles')}}
+          <A.Footer as |F|>
+            <F.Link::Standalone
+              @icon='plus-circle'
+              @text={{t 'titles.new'}}
+              @route='scopes.scope.roles.new'
+            />
+          </A.Footer>
+        {{/if}}
+      </Hds::ApplicationState>
     {{/if}}
 
   </page.body>

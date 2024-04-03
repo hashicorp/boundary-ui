@@ -43,8 +43,9 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   // =methods
 
   /**
-   * Loads all targets under current scope.
-   * @return {Promise{[TargetModel]}}
+   * Loads queried targets, the number of targets under current scope, and
+   * active sessions filtering options.
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], allTargets: [TargetModel] }> }
    */
   async model({ search, availableSessions, types, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
