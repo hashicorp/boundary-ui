@@ -28,16 +28,13 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   /**
    * Redirect to parent route when scope does not have create authorized action.
    */
-  async beforeModel() {
+  beforeModel() {
     const scopeModel = this.modelFor('scopes.scope');
     if (
       this.can.cannot('create model', scopeModel, { collection: 'targets' })
     ) {
       this.router.replaceWith('scopes.scope.targets');
     }
-
-    const globalScope = await this.store.peekRecord('scope', 'global');
-    this.globalScope = globalScope;
   }
 
   /**
