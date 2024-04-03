@@ -36,7 +36,7 @@ module('Unit | Serializer | target', function (hooks) {
       address: '0.0.0.0',
       enable_session_recording: false,
       storage_bucket_id: null,
-      with_aliases: [{ value: 'a', scope_id: 'global' }],
+      with_aliases: [{ value: 'a' }],
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -87,7 +87,7 @@ module('Unit | Serializer | target', function (hooks) {
       enable_session_recording: false,
       storage_bucket_id: null,
       address: '0.0.0.0',
-      with_aliases: [],
+      with_aliases: [{ value: 'www.test.com' }],
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -103,7 +103,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
-      with_aliases: [],
+      with_aliases: [{ value: 'www.test.com', scope_id: 'global' }],
       attributes: {
         default_port: 1234,
         default_client_port: 4321,
