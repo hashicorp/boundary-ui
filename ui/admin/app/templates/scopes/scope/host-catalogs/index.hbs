@@ -21,7 +21,7 @@
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='host-catalogs')}}
-      {{#if @model.hostCatalogs}}
+      {{#if @model.hostCatalogsExist}}
         <Hds::Button
           @route='scopes.scope.host-catalogs.new'
           @text={{t 'resources.host-catalog.titles.new'}}

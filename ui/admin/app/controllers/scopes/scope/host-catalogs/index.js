@@ -11,13 +11,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
 
   // =attributes
 
-  queryParams = [
-    'search',
-    { types: { type: 'array' } },
-    { providers: { type: 'array' } },
-    'page',
-    'pageSize',
-  ];
+  queryParams = ['search', 'page', 'pageSize'];
 
   @tracked search;
   @tracked page = 1;
