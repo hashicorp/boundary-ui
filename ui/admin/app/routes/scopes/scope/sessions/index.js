@@ -165,10 +165,10 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   @action
   async refreshAll() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
+    const { id: scope_id, scope: parentScope } = this.modelFor('scopes.scope');
 
     await this.getAllSessions(scope_id);
-    await this.getAssociatedUsers();
+    await this.getAssociatedUsers(parentScope.id);
     await this.getAssociatedTargets(scope_id);
 
     return super.refresh(...arguments);
