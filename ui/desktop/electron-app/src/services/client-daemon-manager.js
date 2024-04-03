@@ -65,30 +65,41 @@ class ClientDaemonManager {
   }
 
   /**
-   * Makes a request to the socket to add the token to the daemon.
-   * If the token already exists, this will update the token in the
-   * client daemon.
+   * Makes a request to the CLI to add the token to the daemons.
    * @param token
    * @param tokenId
    * @returns {Promise}
    */
   async addToken({ token, tokenId }) {
-    // TODO: Should this and search just always call CLI even for non-Windows?
-    if (isWindows()) {
-      return addTokenCliCommand(token);
+    // Successfully calling any Boundary CLI command with a token
+    // will add the token both to the Client daemon and the Ferry DNS daemon,
+    // so we just do a simple read on the input token and let the CLI do the rest.
+    const readTokenCommand = [
+      'auth-tokens',
+      'read',
+      `-id=${tokenId}`,
+      `-addr=${runtimeSettings.clusterUrl}`,
+      '-format=json',
+      '-token=env://BOUNDARY_TOKEN',
+      '-keyring-type=none',
+    ];
+
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
+    const { stdout, stderr } = spawnSync(readTokenCommand, {
+      BOUNDARY_TOKEN: sanitizedToken,
+    });
+    let parsedResponse = jsonify(stdout);
+
+    if (parsedResponse?.status_code === 200) {
+      // Ignore result if the request was successful
+      return;
     }
 
-    const postBody = {
-      auth_token_id: sanitizer.base62EscapeAndValidate(tokenId),
-      boundary_addr: runtimeSettings.clusterUrl,
-      auth_token: sanitizer.base62EscapeAndValidate(token),
-    };
-    const request = {
-      method: 'POST',
-      path: 'http://internal.boundary.local/v1/tokens',
-      socketPath: this.#socketPath,
-    };
-    return unixSocketRequest(request, postBody);
+    parsedResponse = jsonify(stderr);
+    return Promise.reject({
+      statusCode: parsedResponse?.status_code,
+      ...parsedResponse?.api_error,
+    });
   }
 
   search(requestData) {
@@ -107,34 +118,6 @@ class ClientDaemonManager {
     return unixSocketRequest(request);
   }
 }
-
-const addTokenCliCommand = (token) => {
-  const addTokenCommand = [
-    'daemon',
-    'add-token',
-    `-addr=${runtimeSettings.clusterUrl}`,
-    '-format=json',
-    '-token=env://BOUNDARY_TOKEN',
-    '-keyring-type=none',
-  ];
-  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
-
-  const { stdout, stderr } = spawnSync(addTokenCommand, {
-    BOUNDARY_TOKEN: sanitizedToken,
-  });
-  let parsedResponse = jsonify(stdout);
-
-  if (parsedResponse?.status_code === 204) {
-    // 204 has no response body
-    return;
-  }
-
-  parsedResponse = jsonify(stderr);
-  return Promise.reject({
-    statusCode: parsedResponse?.status_code,
-    ...parsedResponse?.api_error,
-  });
-};
 
 const searchCliCommand = (requestData) => {
   const searchCommand = [
