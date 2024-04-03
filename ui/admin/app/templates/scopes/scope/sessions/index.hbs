@@ -89,7 +89,7 @@
           @valign='middle'
         >
           <:body as |B|>
-            <B.Tr>
+            <B.Tr data-test-sessions-table-row={{B.data.id}}>
               <B.Td>
                 <Hds::Copy::Snippet
                   data-test-session={{B.data.id}}

@@ -4,7 +4,13 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitUntil, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  fillIn,
+  waitFor,
+  currentRouteName,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -15,6 +21,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -23,16 +30,14 @@ module('Acceptance | targets | list', function (hooks) {
 
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-target-results]';
-  const TYPE_FILTER_DROPDOWN_SELECTOR =
-    '.search-filtering [name="Type"] button';
-  const TCP_TYPE_FILTER_OPTION_SELECTOR =
-    '.search-filtering [name="Type"] [data-test-checkbox="tcp"]';
+  const FILTER_DROPDOWN_SELECTOR = (name) =>
+    `.search-filtering [name="${name}"] button`;
   const FILTER_APPLY_BUTTON_SELECTOR =
     '.search-filtering [data-test-dropdown-apply-button]';
-  const ACTIVE_SESSIONS_FILTER_DROPDOWN_SELECTOR =
-    '.search-filtering [name="Active sessions"] button';
-  const YES_FILTER_OPTION_SELECTOR =
-    '.search-filtering [name="Active sessions"] [data-test-checkbox="yes"]';
+  const ACTIVE_SESSIONS_SELECTOR = (id) =>
+    `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
+  const SESSIONS_ID_SELECTOR = (id) =>
+    `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
 
   const instances = {
     scopes: {
@@ -42,6 +47,7 @@ module('Acceptance | targets | list', function (hooks) {
     },
     tcpTarget: null,
     sshTarget: null,
+    session: null,
   };
 
   const urls = {
@@ -70,6 +76,11 @@ module('Acceptance | targets | list', function (hooks) {
       id: 'target-1',
       type: TYPE_TARGET_SSH,
       scope: instances.scopes.project,
+    });
+    instances.session = this.server.create('session', {
+      targetId: instances.sshTarget.id,
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
     });
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -174,7 +185,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.sshTarget.id);
-    await waitUntil(() => findAll(`[href="${urls.tcpTarget}"]`).length === 0);
+    await waitFor(`[href="${urls.tcpTarget}"]`, { count: 0 });
 
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
     assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
@@ -189,7 +200,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake target that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
 
     assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
     assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
@@ -204,10 +215,9 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
-    await click(TYPE_FILTER_DROPDOWN_SELECTOR);
-    await click(TCP_TYPE_FILTER_OPTION_SELECTOR);
+    await click(FILTER_DROPDOWN_SELECTOR('Type'));
+    await click(`input[value="tcp"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
-    await waitUntil(() => findAll(`[href="${urls.sshTarget}"]`).length === 0);
 
     assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
@@ -221,13 +231,21 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
-    await click(ACTIVE_SESSIONS_FILTER_DROPDOWN_SELECTOR);
-    await click(YES_FILTER_OPTION_SELECTOR);
+    await click(FILTER_DROPDOWN_SELECTOR('Active sessions'));
+    await click(`input[value="yes"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
 
-    assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
+    assert.dom(`[href="${urls.sshTarget}"]`).exists();
     assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('user can navigate to active sessions from targets table', async function (assert) {
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.targets}"]`);
+    await click(ACTIVE_SESSIONS_SELECTOR(instances.sshTarget.id));
+
+    assert.strictEqual(currentRouteName(), 'scopes.scope.sessions.index');
+    assert.dom(SESSIONS_ID_SELECTOR(instances.session.id)).exists();
   });
 });

@@ -73,7 +73,7 @@
         >
           <:body as |B|>
             {{#if (feature-flag 'ssh-target')}}
-              <B.Tr>
+              <B.Tr data-test-targets-table-row={{B.data.id}}>
                 <B.Td>
                   {{#if (can 'read model' B.data)}}
                     <LinkTo
@@ -113,7 +113,7 @@
               </B.Tr>
             {{else}}
               {{#if B.data.isTCP}}
-                <B.Tr>
+                <B.Tr data-test-targets-table-row={{B.data.id}}>
                   <B.Td>
                     {{#if (can 'read model' B.data)}}
                       <LinkTo
