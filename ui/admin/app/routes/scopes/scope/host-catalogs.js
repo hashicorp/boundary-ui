@@ -13,10 +13,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeHostCatalogsRoute extends Route {
   // =services
 
-  @service store;
-  @service intl;
   @service session;
-  @service can;
   @service router;
 
   // =methods
@@ -26,18 +23,6 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Loads all host catalogs under the current scope.
-   * @return {Promise{[HostCatalogModel]}}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
-      return this.store.query('host-catalog', { scope_id });
-    }
   }
 
   // =actions
@@ -84,7 +69,7 @@ export default class ScopesScopeHostCatalogsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(hostCatalog) {
     await hostCatalog.destroyRecord();
-    await this.router.replaceWith('scopes.scope.host-catalogs');
+    this.router.replaceWith('scopes.scope.host-catalogs');
     this.refresh();
   }
 }
