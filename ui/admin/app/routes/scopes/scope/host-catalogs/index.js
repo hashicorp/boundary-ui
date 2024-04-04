@@ -31,7 +31,8 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
   /**
    * Loads all host catalogs under the current scope.
-   * @returns {Promise<{totalItems: number, hostCatalogs: [HostCatalogModel] }> }   */
+   * @returns {Promise<{hostCatalogsExist: boolean, totalItems: number, hostCatalogs: [HostCatalogModel]}>}
+   */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;

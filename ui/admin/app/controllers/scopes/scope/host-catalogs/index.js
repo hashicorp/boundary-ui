@@ -30,16 +30,4 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
     this.search = value;
     this.page = 1;
   }
-
-  /**
-   * Sets a query param to the value of selectedItems
-   * and resets the page to 1.
-   * @param {string} paramKey
-   * @param {[string]} selectedItems
-   */
-  @action
-  applyFilter(paramKey, selectedItems) {
-    this[paramKey] = [...selectedItems];
-    this.page = 1;
-  }
 }
