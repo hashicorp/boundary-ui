@@ -403,12 +403,7 @@ function routes() {
   // Other resources
   // host-catalog
 
-  this.get(
-    '/host-catalogs',
-    ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
-      return hostCatalogs.where({ scopeId });
-    },
-  );
+  this.get('/host-catalogs');
   this.post(
     '/host-catalogs',
     function ({ hostCatalogs }, { queryParams: { plugin_name } }) {
@@ -610,11 +605,7 @@ function routes() {
 
   // credential-stores
 
-  this.get(
-    '/credential-stores',
-    ({ credentialStores }, { queryParams: { scope_id: scopeId } }) =>
-      credentialStores.where({ scopeId }),
-  );
+  this.get('/credential-stores');
 
   this.get('/credential-stores/:id');
   this.post('/credential-stores');
