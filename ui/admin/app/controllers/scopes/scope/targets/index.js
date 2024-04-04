@@ -70,9 +70,10 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   }
 
   /**
-   * Sets the scopes query param to value of selectedScopes
-   * to trigger a query and closes the dropdown
-   * @param {function} close
+   * Sets a query param to the value of selectedItems
+   * and resets the page to 1.
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
    */
   @action
   applyFilter(paramKey, selectedItems) {
