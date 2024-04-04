@@ -51,7 +51,7 @@ module('Integration | Component | dropdown/index', function (hooks) {
 />`);
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
-    assert.dom('.hds-dropdown-toggle-button__text').hasText(toggleText);
+    assert.dom(TOGGLE_DROPDOWN_SELECTOR).includesText(toggleText);
     assert.dom(FIRST_ITEM_SELECTOR).isVisible();
     assert.dom(FIRST_ITEM_SELECTOR).isChecked();
     assert.dom(SECOND_ITEM_SELECTOR).isVisible();
