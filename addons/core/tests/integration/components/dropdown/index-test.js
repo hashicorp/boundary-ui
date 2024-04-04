@@ -23,17 +23,19 @@ module('Integration | Component | dropdown/index', function (hooks) {
     name: 'Fake Project',
     displayName: 'Fake Project',
   };
-  const name = 'Click Me';
+  const name = 'test';
+  const toggleText = 'Click Me';
 
   const FIRST_ITEM_SELECTOR = `[data-test-checkbox="${firstItem.id}"]`;
   const SECOND_ITEM_SELECTOR = `[data-test-checkbox="${secondItem.id}"]`;
-  const TOGGLE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const TOGGLE_DROPDOWN_SELECTOR = `[name=${name}] button`;
   const SEARCH_INPUT_SELECTOR = '[data-test-dropdown-search]';
-  const COUNT_SELECTOR = '.hds-dropdown-toggle-button__count';
-  const ITEM_SELECTOR = '.hds-dropdown-list-item';
+  const COUNT_SELECTOR = `[name=${name}] button div:nth-child(2)`;
+  const ITEM_SELECTOR = 'li';
 
   hooks.beforeEach(function () {
     this.set('name', name);
+    this.set('toggleText', toggleText);
     this.set('array', [firstItem, secondItem]);
     this.set('checkedItems', [firstItem.id]);
     this.set('applyFilter', () => {});
@@ -41,14 +43,15 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
   test('it renders', async function (assert) {
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.array}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
 />`);
     await click(TOGGLE_DROPDOWN_SELECTOR);
 
-    assert.dom('.hds-dropdown-toggle-button__text').hasText(name);
+    assert.dom('.hds-dropdown-toggle-button__text').hasText(toggleText);
     assert.dom(FIRST_ITEM_SELECTOR).isVisible();
     assert.dom(FIRST_ITEM_SELECTOR).isChecked();
     assert.dom(SECOND_ITEM_SELECTOR).isVisible();
@@ -58,7 +61,8 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
   test('it renders a search input when isSearchable is true', async function (assert) {
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.array}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
@@ -71,7 +75,8 @@ module('Integration | Component | dropdown/index', function (hooks) {
 
   test('it renders the correct count of checked items', async function (assert) {
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.array}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
@@ -87,7 +92,8 @@ module('Integration | Component | dropdown/index', function (hooks) {
     });
 
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.array}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
@@ -102,7 +108,8 @@ module('Integration | Component | dropdown/index', function (hooks) {
     this.set('checkedItems', []);
 
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.array}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
@@ -128,7 +135,8 @@ module('Integration | Component | dropdown/index', function (hooks) {
     );
 
     await render(hbs`<Dropdown
-  @name={{this.name}}
+  name={{this.name}}
+  @toggleText={{this.toggleText}}
   @itemOptions={{this.itemOptions}}
   @checkedItems={{this.checkedItems}}
   @applyFilter={{this.applyFilter}}
