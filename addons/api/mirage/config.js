@@ -610,11 +610,7 @@ function routes() {
 
   // credential-stores
 
-  this.get(
-    '/credential-stores',
-    ({ credentialStores }, { queryParams: { scope_id: scopeId } }) =>
-      credentialStores.where({ scopeId }),
-  );
+  this.get('/credential-stores');
 
   this.get('/credential-stores/:id');
   this.post('/credential-stores');
