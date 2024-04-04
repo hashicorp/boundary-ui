@@ -42,7 +42,8 @@
         />
         <S.Generic>
           <Dropdown
-            @name={{t 'form.type.label'}}
+            name='type'
+            @toggleText={{t 'form.type.label'}}
             @itemOptions={{this.credStoreTypeOptions}}
             @checkedItems={{this.types}}
             @applyFilter={{fn this.applyFilter 'types'}}

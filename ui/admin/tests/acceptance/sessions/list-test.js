@@ -221,9 +221,9 @@ module('Acceptance | sessions | list', function (hooks) {
     });
 
     await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('User'));
+    await click(FILTER_TOGGLE_SELECTOR('user'));
     await click(`input[value="${instances.dev.id}"]`);
-    await click(FILTER_APPLY_BUTTON('User'));
+    await click(FILTER_APPLY_BUTTON('user'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
     assert.dom('tbody tr').exists({ count: 1 });
@@ -236,9 +236,9 @@ module('Acceptance | sessions | list', function (hooks) {
     });
 
     await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('Target'));
+    await click(FILTER_TOGGLE_SELECTOR('target'));
     await click(`input[value="${instances.sshTarget.id}"]`);
-    await click(FILTER_APPLY_BUTTON('Target'));
+    await click(FILTER_APPLY_BUTTON('target'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
     assert.dom('tbody tr').exists({ count: 1 });
@@ -248,9 +248,9 @@ module('Acceptance | sessions | list', function (hooks) {
     await visit(urls.projectScope);
 
     await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('Status'));
+    await click(FILTER_TOGGLE_SELECTOR('status'));
     await click('input[value="active"]');
-    await click(FILTER_APPLY_BUTTON('Status'));
+    await click(FILTER_APPLY_BUTTON('status'));
 
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });

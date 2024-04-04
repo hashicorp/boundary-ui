@@ -215,7 +215,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
-    await click(FILTER_DROPDOWN_SELECTOR('Type'));
+    await click(FILTER_DROPDOWN_SELECTOR('type'));
     await click(`input[value="tcp"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
 
@@ -231,7 +231,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).exists();
     assert.dom(`[href="${urls.sshTarget}"]`).exists();
 
-    await click(FILTER_DROPDOWN_SELECTOR('Active sessions'));
+    await click(FILTER_DROPDOWN_SELECTOR('active-sessions'));
     await click(`input[value="yes"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
 

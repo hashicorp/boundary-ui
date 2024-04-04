@@ -40,7 +40,8 @@
         />
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.target.titles.active-sessions'}}
+            name='active-sessions'
+            @toggleText={{t 'resources.target.titles.active-sessions'}}
             @itemOptions={{this.availableSessionOptions}}
             @checkedItems={{this.availableSessions}}
             @applyFilter={{fn this.applyFilter 'availableSessions'}}
@@ -49,7 +50,8 @@
         {{#if (feature-flag 'ssh-target')}}
           <S.Generic>
             <Dropdown
-              @name={{t 'form.type.label'}}
+              name='type'
+              @toggleText={{t 'form.type.label'}}
               @itemOptions={{this.targetTypeOptions}}
               @checkedItems={{this.types}}
               @applyFilter={{fn this.applyFilter 'types'}}
