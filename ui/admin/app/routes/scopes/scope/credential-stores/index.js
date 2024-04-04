@@ -34,8 +34,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
   // =methods
 
   /**
-   * Loads queried credential-stores, the number of credential-stores under current scope, and
-   * active sessions filtering options.
+   * Loads queried credential-stores and the number of credential-stores under current scope.
    * @returns {Promise<{totalItems: number, credentialStores: [CredentialStoreModel], credentialStoresExist: boolean }> }
    */
   async model({ search, types, page, pageSize }) {
