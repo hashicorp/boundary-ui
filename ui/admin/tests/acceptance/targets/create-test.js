@@ -340,14 +340,24 @@ module('Acceptance | targets | create', function (hooks) {
       ),
     );
 
-    await fillIn('[name="with_aliases"] input', 'alias 1');
-    await click('[name="with_aliases"] button');
+    await fillIn(
+      '[name="with_aliases"] tbody tr:nth-of-type(1) input',
+      'alias 1',
+    );
+    await click('[name="with_aliases"] tbody tr:nth-of-type(1) button');
+
+    await fillIn(
+      '[name="with_aliases"] tbody tr:nth-of-type(2) input',
+      'alias 2',
+    );
+    await click('[name="with_aliases"] tbody tr:nth-of-type(2) button');
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
     assert.deepEqual(target.withAliases, [
       { value: 'alias 1', scope_id: 'global' },
+      { value: 'alias 2', scope_id: 'global' },
     ]);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
   });
