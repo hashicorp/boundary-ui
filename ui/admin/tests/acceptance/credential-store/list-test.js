@@ -174,7 +174,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
     assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
 
-    await click(FILTER_DROPDOWN_SELECTOR('Type'));
+    await click(FILTER_DROPDOWN_SELECTOR('type'));
     await click(`input[value="${TYPE_CREDENTIAL_STORE_VAULT}"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
 
