@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  waitUntil,
+  findAll,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -16,11 +23,20 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
-module('Acceptance | sessions', function (hooks) {
+module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-results]';
+  const SESSION_ID_SELECTOR = (id) => `[data-test-session="${id}"]`;
+  const FILTER_TOGGLE_SELECTOR = (name) =>
+    `[data-test-sessions-bar] div[name="${name}"] button`;
+  const FILTER_APPLY_BUTTON = (name) =>
+    `[data-test-sessions-bar] div[name="${name}"] div div:last-child button[type="button"]`;
 
   const instances = {
     scopes: {
@@ -29,6 +45,10 @@ module('Acceptance | sessions', function (hooks) {
       project: null,
     },
     sessions: null,
+    tcpTarget: null,
+    sshTarget: null,
+    admin: null,
+    dev: null,
   };
   const urls = {
     orgScope: null,
@@ -38,6 +58,14 @@ module('Acceptance | sessions', function (hooks) {
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.admin = this.server.create('user', {
+      scopeId: 'global',
+      name: 'admin',
+    });
+    instances.dev = this.server.create('user', {
+      scopeId: 'global',
+      name: 'dev',
+    });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -52,10 +80,14 @@ module('Acceptance | sessions', function (hooks) {
       { scope: instances.scopes.org },
       'withMembers',
     );
-    this.server.createList(
+    instances.tcpTarget = this.server.create(
       'target',
-      1,
-      { scope: instances.scopes.project },
+      { scope: instances.scopes.project, type: TYPE_TARGET_TCP },
+      'withAssociations',
+    );
+    instances.sshTarget = this.server.create(
+      'target',
+      { scope: instances.scopes.project, type: TYPE_TARGET_SSH },
       'withAssociations',
     );
     instances.sessions = this.server.createList(
@@ -158,5 +190,68 @@ module('Acceptance | sessions', function (hooks) {
     assert
       .dom(`[href="https://boundaryproject.io/help/admin-ui/sessions"]`)
       .exists();
+  });
+
+  test('user can search for a specific session by id', async function (assert) {
+    await visit(urls.projectScope);
+    const sessionId = instances.sessions[0].id;
+
+    await click(`[href="${urls.sessions}"]`);
+    await fillIn(SEARCH_INPUT_SELECTOR, sessionId);
+    await waitUntil(() => findAll(SESSION_ID_SELECTOR(sessionId)).length === 1);
+
+    assert.dom(SESSION_ID_SELECTOR(sessionId)).hasText(sessionId);
+  });
+
+  test('user can search for sessions and get no results', async function (assert) {
+    await visit(urls.projectScope);
+    const sessionId = 'fake session that does not exist';
+
+    await click(`[href="${urls.sessions}"]`);
+    await fillIn(SEARCH_INPUT_SELECTOR, sessionId);
+    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('user can filter for sessions by user', async function (assert) {
+    await visit(urls.projectScope);
+    instances.sessions[2].update({
+      userId: instances.dev.id,
+    });
+
+    await click(`[href="${urls.sessions}"]`);
+    await click(FILTER_TOGGLE_SELECTOR('User'));
+    await click(`input[value="${instances.dev.id}"]`);
+    await click(FILTER_APPLY_BUTTON('User'));
+
+    assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
+    assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('user can filter for sessions by target', async function (assert) {
+    await visit(urls.projectScope);
+    instances.sessions[2].update({
+      targetId: instances.sshTarget.id,
+    });
+
+    await click(`[href="${urls.sessions}"]`);
+    await click(FILTER_TOGGLE_SELECTOR('Target'));
+    await click(`input[value="${instances.sshTarget.id}"]`);
+    await click(FILTER_APPLY_BUTTON('Target'));
+
+    assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
+    assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('user can filter for sessions by status', async function (assert) {
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.sessions}"]`);
+    await click(FILTER_TOGGLE_SELECTOR('Status'));
+    await click('input[value="active"]');
+    await click(FILTER_APPLY_BUTTON('Status'));
+
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });

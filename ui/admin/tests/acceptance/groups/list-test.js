@@ -4,11 +4,10 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit, click, fillIn, waitUntil, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -21,26 +20,28 @@ module('Acceptance | groups | list', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  let orgURL;
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-groups-results]';
 
   const instances = {
     scopes: {
       global: null,
       org: null,
     },
-    orgScope: null,
+    group1: null,
+    group2: null,
   };
 
   const urls = {
-    scopes: {
-      org: null,
-    },
+    orgScope: null,
     groups: null,
+    group1: null,
+    group2: null,
   };
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    instances.orgScope = this.server.create(
+    instances.scopes.org = this.server.create(
       'scope',
       {
         type: 'org',
@@ -48,35 +49,78 @@ module('Acceptance | groups | list', function (hooks) {
       },
       'withChildren',
     );
-    instances.group = this.server.create('group', {
-      scope: instances.orgScope,
+    instances.group1 = this.server.create('group', {
+      scope: instances.scopes.org,
     });
-    orgURL = `/scopes/${instances.orgScope.id}`;
+    instances.group2 = this.server.create('group', {
+      scope: instances.scopes.org,
+    });
 
-    urls.groups = `/scopes/${instances.orgScope.id}/groups`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
+    urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
+    urls.group1 = `${urls.groups}/${instances.group1.id}`;
+    urls.group2 = `${urls.groups}/${instances.group2.id}`;
     authenticateSession({});
   });
 
   test('can navigate to groups with proper authorization', async function (assert) {
-    await visit(orgURL);
+    await visit(urls.orgScope);
     assert.ok(
-      instances.orgScope.authorized_collection_actions.groups.includes('list'),
+      instances.scopes.org.authorized_collection_actions.groups.includes(
+        'list',
+      ),
     );
-    assert.ok(find(`[href="${urls.groups}"]`));
+
+    assert.dom(`[href="${urls.groups}"]`).isVisible();
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
-    instances.orgScope.authorized_collection_actions.groups = [];
-    await visit(orgURL);
+    instances.scopes.org.authorized_collection_actions.groups = [];
+    await visit(urls.orgScope);
     assert.notOk(
-      instances.orgScope.authorized_collection_actions.groups.includes('list'),
+      instances.scopes.org.authorized_collection_actions.groups.includes(
+        'list',
+      ),
     );
-    assert.notOk(find(`[href="${urls.groups}"]`));
+
+    assert.dom(`[href="${urls.groups}"]`).doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {
-    instances.orgScope.authorized_collection_actions.groups = ['create'];
-    await visit(orgURL);
-    assert.ok(find(`[href="${urls.groups}"]`));
+    instances.scopes.org.authorized_collection_actions.groups = ['create'];
+    await visit(urls.orgScope);
+
+    assert.dom(`[href="${urls.groups}"]`).isVisible();
+  });
+
+  test('user can search for a specific group by id', async function (assert) {
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.groups}"]`);
+
+    assert.dom(`[href="${urls.group1}"]`).exists();
+    assert.dom(`[href="${urls.group2}"]`).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, instances.group1.id);
+    await waitUntil(() => findAll(`[href="${urls.group2}"]`).length === 0);
+
+    assert.dom(`[href="${urls.group1}"]`).exists();
+    assert.dom(`[href="${urls.group2}"]`).doesNotExist();
+  });
+
+  test('user can search for groups and get no results', async function (assert) {
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.groups}"]`);
+
+    assert.dom(`[href="${urls.group1}"]`).exists();
+    assert.dom(`[href="${urls.group2}"]`).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, 'fake group that does not exist');
+    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+
+    assert.dom(`[href="${urls.group1}"]`).doesNotExist();
+    assert.dom(`[href="${urls.group2}"]`).doesNotExist();
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });
