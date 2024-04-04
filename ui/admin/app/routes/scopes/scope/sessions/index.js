@@ -67,6 +67,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
 
     const queryOptions = {
+      include_terminated: true,
       query: { search, filters },
       page,
       pageSize,
@@ -102,6 +103,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAllSessions(scope_id) {
     const allSessionsQuery = {
+      include_terminated: true,
       query: { filters: { scope_id: [{ equals: scope_id }] } },
     };
     this.allSessions = await this.store.query('session', allSessionsQuery, {
