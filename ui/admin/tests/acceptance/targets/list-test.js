@@ -24,15 +24,15 @@ module('Acceptance | targets | list', function (hooks) {
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-target-results]';
   const TYPE_FILTER_DROPDOWN_SELECTOR =
-    '.search-filtering [name="Type"] button';
+    '.search-filtering [name="type"] button';
   const TCP_TYPE_FILTER_OPTION_SELECTOR =
-    '.search-filtering [name="Type"] [data-test-checkbox="tcp"]';
+    '.search-filtering [name="type"] [data-test-checkbox="tcp"]';
   const FILTER_APPLY_BUTTON_SELECTOR =
     '.search-filtering [data-test-dropdown-apply-button]';
   const ACTIVE_SESSIONS_FILTER_DROPDOWN_SELECTOR =
-    '.search-filtering [name="Active sessions"] button';
+    '.search-filtering [name="active-sessions"] button';
   const YES_FILTER_OPTION_SELECTOR =
-    '.search-filtering [name="Active sessions"] [data-test-checkbox="yes"]';
+    '.search-filtering [name="active-sessions"] [data-test-checkbox="yes"]';
 
   const instances = {
     scopes: {
