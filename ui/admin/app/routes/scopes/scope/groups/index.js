@@ -63,7 +63,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const group = await this.store.query(
       'group',
       {

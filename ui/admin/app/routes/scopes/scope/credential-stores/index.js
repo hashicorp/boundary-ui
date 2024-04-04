@@ -81,7 +81,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const credentialStore = await this.store.query(
       'credential-store',
       {
