@@ -21,13 +21,15 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
     //await the store query to fix ember's proxy promise deprecation warning
     if (!currentScope.isProject) {
       const scopes = await this.store.query('scope', {
-        scope_id: currentScope.id,
+        query: { filters: { scope_id: [{ equals: currentScope.id }] } },
       });
       subScopes = await Promise.all(
         scopes.map(async (scope) => ({
           model: scope,
           subScopes: !scope.isProject
-            ? await this.store.query('scope', { scope_id: scope.id })
+            ? await this.store.query('scope', {
+                query: { filters: { scope_id: [{ equals: scope.id }] } },
+              })
             : [],
         })),
       );
