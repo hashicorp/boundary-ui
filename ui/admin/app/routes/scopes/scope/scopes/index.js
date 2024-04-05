@@ -41,8 +41,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
     };
 
     const subScopes = await this.store.query('scope', {
-      scope_id: 'global',
-      recursive: true,
+      scope_id,
       query: { search, filters },
       page,
       pageSize,
@@ -72,10 +71,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
     const scopes = await this.store.query(
       'scope',
       {
-        // TODO: Remove scope_id & recursive once option to peek into
-        // indexedDB has been added.
-        scope_id: 'global',
-        recursive: true,
+        scope_id,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],

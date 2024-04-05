@@ -37,7 +37,6 @@ export default class ScopesRoute extends Route {
     return this.store
       .query('scope', {
         scope_id: 'global',
-        recursive: true,
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
       .catch(() => A([]));

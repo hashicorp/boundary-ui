@@ -62,15 +62,13 @@ export default class ScopesScopeRoute extends Route {
     orgs = await this.store
       .query('scope', {
         scope_id: 'global',
-        recursive: true,
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
       .catch(() => A([]));
 
     if (model.isProject) {
       projects = await this.store.query('scope', {
-        scope_id: 'global',
-        recursive: true,
+        scope_id: model.scopeID,
         query: { filters: { scope_id: [{ equals: model.scopeID }] } },
       });
     }

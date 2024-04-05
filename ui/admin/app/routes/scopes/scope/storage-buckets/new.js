@@ -80,7 +80,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
     const orgScopes = (
       await this.store.query('scope', {
         scope_id: 'global',
-        recursive: true,
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
     ).map((scope) => ({ model: scope }));
