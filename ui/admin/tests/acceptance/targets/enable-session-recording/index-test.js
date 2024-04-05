@@ -104,6 +104,7 @@ module(
     test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
+      console.log(urls.target, 'target');
       assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
       await click(ENABLE_BUTTON_SELECTOR);
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
