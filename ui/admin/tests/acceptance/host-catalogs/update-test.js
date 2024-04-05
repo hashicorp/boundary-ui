@@ -14,10 +14,12 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 module('Acceptance | host-catalogs | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -34,6 +36,14 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     hostCatalogs: null,
     hostCatalog: null,
   };
+
+  const NAME_INPUT_SELECTOR = '[name="name"]';
+  const EDIT_BUTTON_SELECTOR = 'form [type="button"]';
+  const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
+  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
+  const MODAL_DISCARD_BUTTON_SELECTOR =
+    '.rose-dialog-footer button:first-child';
+  const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
 
   hooks.beforeEach(function () {
     // Generate resources
@@ -62,9 +72,9 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await click(SAVE_BUTTON_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.strictEqual(
@@ -82,18 +92,18 @@ module('Acceptance | host-catalogs | update', function (hooks) {
 
     await click(`[href="${urls.hostCatalog}"]`);
 
-    assert.dom('form [type="button"]').doesNotExist();
+    assert.dom(EDIT_BUTTON_SELECTOR).doesNotExist();
   });
 
   test('clicking cancel in edit mode does not save changes', async function (assert) {
     await visit(urls.hostCatalog);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]', 'Click Cancel');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await click(CANCEL_BUTTON_SELECTOR, 'Click Cancel');
 
     assert.notEqual(instances.hostCatalog.name, 'random string');
-    assert.dom('[name="name"]').hasValue(instances.hostCatalog.name);
+    assert.dom(NAME_INPUT_SELECTOR).hasValue(instances.hostCatalog.name);
   });
 
   test('saving an existing host catalog with invalid fields displays error messages', async function (assert) {
@@ -118,8 +128,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     });
 
     await visit(urls.hostCatalog);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
     await click('[type="submit"]');
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
@@ -132,12 +142,12 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
     assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.notEqual(
@@ -152,12 +162,12 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.notEqual(instances.hostCatalog.name, 'random string');
     await visit(urls.hostCatalog);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
     assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.notEqual(

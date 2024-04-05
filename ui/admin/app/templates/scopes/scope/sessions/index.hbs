@@ -30,7 +30,8 @@
           />
           <S.Generic>
             <Dropdown
-              @name={{t 'resources.user.title'}}
+              name='user'
+              @toggleText={{t 'resources.user.title'}}
               @itemOptions={{@model.associatedUsers}}
               @checkedItems={{this.users}}
               @applyFilter={{fn this.applyFilter 'users'}}
@@ -50,7 +51,8 @@
           </S.Generic>
           <S.Generic>
             <Dropdown
-              @name={{t 'resources.target.title'}}
+              name='target'
+              @toggleText={{t 'resources.target.title'}}
               @itemOptions={{@model.associatedTargets}}
               @checkedItems={{this.targets}}
               @applyFilter={{fn this.applyFilter 'targets'}}
@@ -59,7 +61,8 @@
           </S.Generic>
           <S.Generic>
             <Dropdown
-              @name={{t 'form.status.label'}}
+              name='status'
+              @toggleText={{t 'form.status.label'}}
               @itemOptions={{this.sessionStatusOptions}}
               @checkedItems={{this.status}}
               @applyFilter={{fn this.applyFilter 'status'}}
@@ -89,7 +92,7 @@
           @valign='middle'
         >
           <:body as |B|>
-            <B.Tr>
+            <B.Tr data-test-sessions-table-row={{B.data.id}}>
               <B.Td>
                 <Hds::Copy::Snippet
                   data-test-session={{B.data.id}}
