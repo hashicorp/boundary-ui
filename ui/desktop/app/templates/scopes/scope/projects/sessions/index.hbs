@@ -9,7 +9,8 @@
       <Hds::SegmentedGroup as |S|>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.target.title'}}
+            name='target'
+            @toggleText={{t 'resources.target.title'}}
             @itemOptions={{this.availableTargets}}
             @checkedItems={{this.targets}}
             @applyFilter={{fn this.applyFilter 'targets'}}
@@ -19,7 +20,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'form.status.label'}}
+            name='status'
+            @toggleText={{t 'form.status.label'}}
             @itemOptions={{this.sessionStatusOptions}}
             @checkedItems={{this.status}}
             @applyFilter={{fn this.applyFilter 'status'}}
@@ -27,7 +29,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.scope.title'}}
+            name='scope'
+            @toggleText={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
             @applyFilter={{fn this.applyFilter 'scopes'}}

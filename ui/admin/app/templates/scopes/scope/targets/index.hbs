@@ -40,7 +40,8 @@
         />
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.target.titles.active-sessions'}}
+            name='active-sessions'
+            @toggleText={{t 'resources.target.titles.active-sessions'}}
             @itemOptions={{this.availableSessionOptions}}
             @checkedItems={{this.availableSessions}}
             @applyFilter={{fn this.applyFilter 'availableSessions'}}
@@ -49,7 +50,8 @@
         {{#if (feature-flag 'ssh-target')}}
           <S.Generic>
             <Dropdown
-              @name={{t 'form.type.label'}}
+              name='type'
+              @toggleText={{t 'form.type.label'}}
               @itemOptions={{this.targetTypeOptions}}
               @checkedItems={{this.types}}
               @applyFilter={{fn this.applyFilter 'types'}}
@@ -64,6 +66,7 @@
           @columns={{array
             (hash label=(t 'form.name.label'))
             (hash label=(t 'form.type.label'))
+            (hash label=(t 'resources.target.titles.active-sessions'))
             (hash label=(t 'form.id.label'))
           }}
           @model={{@model.targets}}
@@ -72,7 +75,7 @@
         >
           <:body as |B|>
             {{#if (feature-flag 'ssh-target')}}
-              <B.Tr>
+              <B.Tr data-test-targets-table-row={{B.data.id}}>
                 <B.Td>
                   {{#if (can 'read model' B.data)}}
                     <LinkTo
@@ -94,6 +97,16 @@
                   {{/if}}
                 </B.Td>
                 <B.Td>
+                  {{#if B.data.isActive}}
+                    <Hds::Link::Standalone
+                      @text={{t 'actions.yes'}}
+                      @route='scopes.scope.sessions.index'
+                      @query={{hash targets=(array B.data.id)}}
+                      @icon='info'
+                    />
+                  {{/if}}
+                </B.Td>
+                <B.Td>
                   <Hds::Copy::Snippet
                     @textToCopy={{B.data.id}}
                     @color='secondary'
@@ -102,7 +115,7 @@
               </B.Tr>
             {{else}}
               {{#if B.data.isTCP}}
-                <B.Tr>
+                <B.Tr data-test-targets-table-row={{B.data.id}}>
                   <B.Td>
                     {{#if (can 'read model' B.data)}}
                       <LinkTo
@@ -122,6 +135,16 @@
                         @text={{t
                           (concat 'resources.target.types.' B.data.type)
                         }}
+                      />
+                    {{/if}}
+                  </B.Td>
+                  <B.Td>
+                    {{#if B.data.isActive}}
+                      <Hds::Link::Standalone
+                        @text={{t 'actions.yes'}}
+                        @route='scopes.scope.sessions.index'
+                        @query={{hash targets=(array B.data.id)}}
+                        @icon='info'
                       />
                     {{/if}}
                   </B.Td>
