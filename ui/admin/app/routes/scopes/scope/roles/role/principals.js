@@ -90,6 +90,9 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   async getManagedGroups(ids) {
     let managedGroups = [];
     if (ids?.length) {
+      // TODO: Refactor to directly use store service
+      // when types get added to indexedDB.
+
       // Collect all oidc and ldap type auth methods.
       const authMethods = await this.resourceFilterStore.queryBy(
         'auth-method',
