@@ -33,9 +33,13 @@ export default class ScopesRoute extends Route {
     await this.store.findRecord('scope', 'global').catch(() => {
       /* no op */
     });
-    // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
-    // expected to default to the global scope, thus returning org scopes.
-    return this.store.query('scope', {}).catch(() => A([]));
+    // Return all org scopes.
+    return this.store
+      .query('scope', {
+        scope_id: 'global',
+        query: { filters: { scope_id: [{ equals: 'global' }] } },
+      })
+      .catch(() => A([]));
   }
 
   /**

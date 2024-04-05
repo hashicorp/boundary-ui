@@ -18,6 +18,8 @@ export const modelIndexes = {
   role: '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
   'auth-method':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
+  scope:
+    '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id',
   'credential-store':
     '&id, attributes.created_time, attributes.name, attributes.description, attributes.type, attributes.scope.scope_id',
   'host-catalog':
