@@ -155,7 +155,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
 
-    await click(FILTER_DROPDOWN_SELECTOR('Type'));
+    await click(FILTER_DROPDOWN_SELECTOR('type'));
     await click(`input[value="${TYPE_AUTH_METHOD_PASSWORD}"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
 
@@ -173,7 +173,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
 
     await click(AUTH_ACTIONS_SELECTOR(instances.passwordAuthMethod.id));
     await click(MAKE_PRIMARY_ACTION_SELECTOR);
-    await click(FILTER_DROPDOWN_SELECTOR('Primary'));
+    await click(FILTER_DROPDOWN_SELECTOR('primary'));
     await click(`input[value="true"]`);
     await click(FILTER_APPLY_BUTTON_SELECTOR);
 

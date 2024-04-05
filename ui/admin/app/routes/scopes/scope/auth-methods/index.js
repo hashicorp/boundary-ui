@@ -64,6 +64,8 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     let totalItems = 0;
     if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
       authMethods = await this.store.query('auth-method', {
+        scope_id: 'global',
+        recursive: true,
         query: { search, filters },
         page,
         pageSize,
@@ -92,6 +94,10 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     const authMethod = await this.store.query(
       'auth-method',
       {
+        // TODO: Remove scope_id & recursive once option to peek into
+        // indexedDB has been added.
+        scope_id: 'global',
+        recursive: true,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,

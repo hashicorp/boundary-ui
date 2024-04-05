@@ -54,7 +54,11 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     if (ids?.length) {
       const query = { filters: { id: [] } };
       ids.forEach((id) => query.filters.id.push({ equals: id }));
-      users = await this.store.query('user', { query });
+      users = await this.store.query('user', {
+        scope_id: 'global',
+        recursive: true,
+        query,
+      });
     }
     return users;
   }
@@ -69,7 +73,11 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     if (ids?.length) {
       const query = { filters: { id: [] } };
       ids.forEach((id) => query.filters.id.push({ equals: id }));
-      groups = await this.store.query('group', { query });
+      groups = await this.store.query('group', {
+        scope_id: 'global',
+        recursive: true,
+        query,
+      });
     }
     return groups;
   }
@@ -84,6 +92,8 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
     if (ids?.length) {
       // Collect all oidc and ldap type auth methods.
       const authMethods = await this.store.query('auth-method', {
+        scope_id: 'global',
+        recursive: true,
         query: {
           filters: {
             type: [

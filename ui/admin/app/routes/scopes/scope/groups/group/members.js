@@ -37,7 +37,11 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
     if (ids?.length) {
       const query = { filters: { id: [] } };
       ids.forEach((id) => query.filters.id.push({ equals: id }));
-      users = await this.store.query('user', { query });
+      users = await this.store.query('user', {
+        scope_id: 'global',
+        recursive: true,
+        query,
+      });
     }
     return users;
   }

@@ -52,14 +52,26 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
     scopeIDs?.forEach((scopeID) => {
       query.filters.scope_id.push({ equals: scopeID });
     });
-    const users = await this.store.query('user', { query });
-    const groups = await this.store.query('group', { query });
+    const users = await this.store.query('user', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
+    const groups = await this.store.query('group', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
     //query authmethods from all the scopes
     query.filters.type = [
       { equals: TYPE_AUTH_METHOD_OIDC },
       { equals: TYPE_AUTH_METHOD_LDAP },
     ];
-    const authMethods = await this.store.query('auth-method', { query });
+    const authMethods = await this.store.query('auth-method', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
     //query all the managed groups for each auth method id
     const managedGroups = await Promise.all(
       authMethods.map(({ id: auth_method_id }) =>

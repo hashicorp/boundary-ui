@@ -71,7 +71,8 @@
         />
         <S.Generic>
           <Dropdown
-            @name={{t 'form.type.label'}}
+            name='type'
+            @toggleText={{t 'form.type.label'}}
             @itemOptions={{this.authMethodTypeOptions}}
             @checkedItems={{this.types}}
             @applyFilter={{fn this.applyFilter 'types'}}
@@ -79,7 +80,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.auth-method.titles.primary'}}
+            name='primary'
+            @toggleText={{t 'resources.auth-method.titles.primary'}}
             @itemOptions={{this.primaryOptions}}
             @checkedItems={{this.primary}}
             @applyFilter={{fn this.applyFilter 'primary'}}
