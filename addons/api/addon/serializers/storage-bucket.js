@@ -12,27 +12,49 @@ const fieldsByCredentialType = {
     'secret_access_key',
     'region',
     'disable_credential_rotation',
+    'endpoint_url',
   ],
   dynamic: [
     'role_arn',
     'role_external_id',
     'role_session_name',
     'role_tags',
-    'disable_credential_rotation',
     'region',
+    'disable_credential_rotation',
+    'endpoint_url',
   ],
 };
 export default class StorageBucketSerializer extends ApplicationSerializer {
   serialize(snapshot) {
-    const serialized = super.serialize(...arguments);
     const { credentialType } = snapshot.record;
+    const pluginType = snapshot.record.plugin?.name;
+    const serialized = super.serialize(...arguments);
+
+    // Common for all pluginTypes
     if (!snapshot.record.isNew) {
       delete serialized.bucket_name;
       delete serialized.bucket_prefix;
     }
 
-    if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
-      serialized.attributes.disable_credential_rotation = true;
+    switch (pluginType) {
+      case 'minio':
+        return this.serializeMinio(serialized);
+      case 'aws':
+      default:
+        return this.serializeAws(serialized, credentialType);
+    }
+  }
+
+  serializeMinio(serialized) {
+    return serialized;
+  }
+
+  serializeAws(serialized, credentialType) {
+    if (serialized.attributes) {
+      if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+        serialized.attributes.disable_credential_rotation = true;
+      }
+      delete serialized.attributes.endpoint_url;
     }
     return serialized;
   }
@@ -45,7 +67,7 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
     if (options.isNestedAttribute && json.attributes) {
       // The key must be included in the fieldsByType list above
       if (!fieldsByCredentialType[credentialType].includes(key))
-        //API requires these fields to be null
+        // API requires these fields to be null
         json.attributes[key] = null;
     }
 
