@@ -16,6 +16,8 @@ export const modelIndexes = {
   group:
     '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
   role: '&id, attributes.created_time, attributes.name, attributes.description, attributes.scope.scope_id',
+  scope:
+    '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id',
   'credential-store':
     '&id, attributes.created_time, attributes.name, attributes.description, attributes.type, attributes.scope.scope_id',
   'host-catalog':

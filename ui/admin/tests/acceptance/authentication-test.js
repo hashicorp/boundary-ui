@@ -15,6 +15,7 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { runAllJobs } from 'ember-pollster/test-support';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -32,6 +33,7 @@ import {
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let indexURL;
   let globalScope;

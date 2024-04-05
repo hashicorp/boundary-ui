@@ -14,7 +14,6 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeScopesRoute extends Route {
   // =services
 
-  @service store;
   @service session;
   @service router;
 
@@ -25,24 +24,5 @@ export default class ScopesScopeScopesRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Loads sub scopes for the current scope.
-   * @return {Promise}
-   */
-  async model() {
-    const currentScope = this.modelFor('scopes.scope');
-    const parentScope = !currentScope.isGlobal
-      ? await this.store.findRecord('scope', currentScope.scopeID)
-      : null;
-    const subScopes = await this.store.query('scope', {
-      scope_id: currentScope.id,
-    });
-    return {
-      currentScope,
-      parentScope,
-      subScopes,
-    };
   }
 }
