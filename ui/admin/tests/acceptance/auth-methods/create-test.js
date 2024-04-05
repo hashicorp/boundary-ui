@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -18,6 +19,8 @@ import {
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
+
   const DROPDOWN_SELECTOR_ICON =
     'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_SELECTOR_OPTION =
