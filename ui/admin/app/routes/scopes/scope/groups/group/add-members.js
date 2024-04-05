@@ -34,7 +34,9 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
    * Preload all scopes recursively, but allow this to fail.
    */
   async beforeModel() {
-    await this.store.query('scope', {}).catch(() => {});
+    await this.store
+      .query('scope', { scope_id: 'global', recursive: true })
+      .catch(() => {});
   }
 
   /**

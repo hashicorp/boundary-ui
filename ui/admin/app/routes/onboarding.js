@@ -25,6 +25,8 @@ export default class OnboardingRoute extends Route {
    */
   async beforeModel() {
     const orgs = await this.store.query('scope', {
+      scope_id: 'global',
+      recursive: true,
       query: { filters: { scope_id: [{ equals: 'global' }] } },
     });
     if (!this.session.isAuthenticated || orgs.length)

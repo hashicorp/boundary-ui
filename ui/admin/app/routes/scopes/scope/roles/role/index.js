@@ -28,6 +28,8 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
           model: scope,
           subScopes: !scope.isProject
             ? await this.store.query('scope', {
+                scope_id: 'global',
+                recursive: true,
                 query: { filters: { scope_id: [{ equals: scope.id }] } },
               })
             : [],
