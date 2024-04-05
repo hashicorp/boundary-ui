@@ -200,9 +200,6 @@ module('Acceptance | targets | read', function (hooks) {
     });
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
-
-    console.log(instances.tcpTarget, 'tcp');
-
     assert.dom(ALIASES_SIDEBAR_LIST).exists();
     assert.strictEqual(
       find(ALIASES_SIDEBAR_LIST).textContent.trim(),

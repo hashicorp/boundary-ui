@@ -42,7 +42,6 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
    * @returns {boolean}
    */
   get aliases() {
-    console.log(this.model.aliases, 'from miragee');
     if (this.model.aliases.length > 3) {
       const arrWithThreeItems = this.model.aliases.slice(0, 3);
       return arrWithThreeItems;
