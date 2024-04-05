@@ -255,7 +255,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     assert.deepEqual(serializedRecord, expectedResult);
   });
 
-  test('it serializes when updateing a MinIO (static credential by default) storage bucket correctly', async function (assert) {
+  test('it serializes when updating a MinIO (static credential by default) storage bucket correctly', async function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('storage-bucket');
     store.push({
