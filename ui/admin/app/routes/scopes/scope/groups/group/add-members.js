@@ -38,7 +38,7 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
 
   /**
    * Loads all users and returns them with the group.
-   * @return {Promise{group: GroupModel, members: [UserModel]}}
+   * @return {Promise<{group: GroupModel, users: [UserModel], scopes: [ScopeModel] }> }
    */
   async model() {
     const group = this.modelFor('scopes.scope.groups.group');
