@@ -283,7 +283,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     const baseError = {
       isInvalid: true,
       status,
-      code: payload.code,
+      code: payload.kind,
       detail: payload.message,
       source: { pointer: '/data' },
     };
