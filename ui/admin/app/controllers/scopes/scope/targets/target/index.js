@@ -39,7 +39,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
 
   /**
    * Returns only the first three items in the aliases array if there are more than 3
-   * @returns {boolean}
+   * @returns {array}
    */
   get aliases() {
     if (this.model.aliases.length > 3) {
@@ -52,7 +52,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
 
   /**
    * Returns remaining items in the aliases array if there are more than 3
-   * @returns {boolean}
+   * @returns {array}
    */
   get remainingAliases() {
     return this.model.aliases.slice(3, this.model.aliases.length + 1);
