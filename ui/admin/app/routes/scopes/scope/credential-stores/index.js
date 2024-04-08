@@ -51,6 +51,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
 
     let credentialStores;
     let totalItems = 0;
+    let credentialStoresExist = false;
     if (
       this.can.can('list model', scope, {
         collection: 'credential-stores',
@@ -62,11 +63,11 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
         pageSize,
       });
       totalItems = credentialStores.meta?.totalItems;
+      credentialStoresExist = await this.getCredentialStoresExist(
+        scope_id,
+        totalItems,
+      );
     }
-    const credentialStoresExist = await this.getCredentialStoresExist(
-      scope_id,
-      totalItems,
-    );
 
     return { credentialStores, credentialStoresExist, totalItems };
   }

@@ -38,6 +38,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     const { id: scope_id } = scope;
     let groups = [];
     let totalItems = 0;
+    let groupsExist = false;
     const filters = { scope_id: [{ equals: scope_id }] };
 
     if (this.can.can('list model', scope, { collection: 'groups' })) {
@@ -47,9 +48,8 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
         pageSize,
       });
       totalItems = groups.meta?.totalItems;
+      groupsExist = await this.getGroupsExist(scope_id, totalItems);
     }
-
-    const groupsExist = await this.getGroupsExist(scope_id, totalItems);
 
     return { groups, groupsExist, totalItems };
   }
