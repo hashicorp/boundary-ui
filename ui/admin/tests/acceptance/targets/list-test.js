@@ -239,6 +239,18 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
   });
 
+  test('active sessions filter is hidden if user does not have permission to list sessiosn', async function (assert) {
+    instances.scopes.project.authorized_collection_actions.sessions =
+      instances.scopes.project.authorized_collection_actions.sessions.filter(
+        (item) => item !== 'list',
+      );
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.targets}"]`);
+
+    assert.dom(FILTER_DROPDOWN_SELECTOR('active-sessions')).doesNotExist();
+  });
+
   test('user can navigate to active sessions from targets table', async function (assert) {
     await visit(urls.projectScope);
 
