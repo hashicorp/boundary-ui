@@ -60,20 +60,21 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       filters.type.push({ equals: type });
     });
 
-    const sessions = await this.store.query('session', {
-      query: {
-        filters: {
-          scope_id: [{ equals: scope_id }],
-          status: [
-            { equals: STATUS_SESSION_ACTIVE },
-            { equals: STATUS_SESSION_PENDING },
-          ],
+    let sessions = [];
+    if (this.can.can('list model', scope, { collection: 'sessions' })) {
+      sessions = await this.store.query('session', {
+        query: {
+          filters: {
+            scope_id: [{ equals: scope_id }],
+            status: [
+              { equals: STATUS_SESSION_ACTIVE },
+              { equals: STATUS_SESSION_PENDING },
+            ],
+          },
         },
-      },
-    });
-    this.addActiveSessionFilters(filters, availableSessions, sessions);
-
-    await this.getAllTargets(scope_id);
+      });
+      this.addActiveSessionFilters(filters, availableSessions, sessions);
+    }
 
     let targets;
     let totalItems = 0;
@@ -84,6 +85,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         pageSize,
       });
       totalItems = targets.meta?.totalItems;
+      await this.getAllTargets(scope_id);
     }
 
     return { targets, allTargets: this.allTargets, totalItems };

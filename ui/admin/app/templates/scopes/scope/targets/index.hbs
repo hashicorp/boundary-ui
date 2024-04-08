@@ -38,15 +38,17 @@
           aria-label={{t 'actions.search'}}
           {{on 'input' this.handleSearchInput}}
         />
-        <S.Generic>
-          <Dropdown
-            name='active-sessions'
-            @toggleText={{t 'resources.target.titles.active-sessions'}}
-            @itemOptions={{this.availableSessionOptions}}
-            @checkedItems={{this.availableSessions}}
-            @applyFilter={{fn this.applyFilter 'availableSessions'}}
-          />
-        </S.Generic>
+        {{#if (can 'list model' this.scope collection='sessions')}}
+          <S.Generic>
+            <Dropdown
+              name='active-sessions'
+              @toggleText={{t 'resources.target.titles.active-sessions'}}
+              @itemOptions={{this.availableSessionOptions}}
+              @checkedItems={{this.availableSessions}}
+              @applyFilter={{fn this.applyFilter 'availableSessions'}}
+            />
+          </S.Generic>
+        {{/if}}
         {{#if (feature-flag 'ssh-target')}}
           <S.Generic>
             <Dropdown
