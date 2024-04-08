@@ -10,6 +10,7 @@ import { action } from '@ember/object';
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
 
+  @service can;
   @service store;
 
   // =attributes
@@ -40,8 +41,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   };
 
   allSessions;
-  associatedUsers;
-  associatedTargets;
+  associatedUsers = [];
+  associatedTargets = [];
 
   /**
    * Loads all sessions under the current scope and encapsulates them into
@@ -49,7 +50,12 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    * @return {Promise{[{sessions: [SessionModel], allSessions: [SessionModel], associatedUsers: [UserModel], associatedTargets: [TargetModel], totalItems: number}]}}
    */
   async model({ search, users, targets, status, page, pageSize }) {
-    const { id: scope_id } = this.modelFor('scopes.scope');
+    const scope = this.modelFor('scopes.scope');
+    // Fetch the global and org scope to check user permissions
+    const orgScope = await this.store.findRecord('scope', scope.scope.id);
+    const globalScope = await this.store.findRecord('scope', 'global');
+
+    const { id: scope_id } = scope;
     const filters = {
       scope_id: [{ equals: scope_id }],
       status: [],
@@ -80,10 +86,17 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     if (!this.allSessions) {
       await this.getAllSessions(scope_id);
     }
-    if (!this.associatedUsers) {
+    if (
+      this.can.can('list model', globalScope, { collection: 'users' }) &&
+      this.can.can('list model', orgScope, { collection: 'users' }) &&
+      this.associatedUsers.length === 0
+    ) {
       await this.getAssociatedUsers();
     }
-    if (!this.associatedTargets) {
+    if (
+      this.can.can('list model', scope, { collection: 'targets' }) &&
+      this.associatedTargets.length === 0
+    ) {
       await this.getAssociatedTargets();
     }
 
@@ -163,12 +176,27 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   @action
   async refreshAll() {
-    const { id: scope_id } = this.modelFor('scopes.scope');
+    const scope = this.modelFor('scopes.scope');
+    const orgScope = await this.store.findRecord('scope', scope.scope.id);
+    const globalScope = await this.store.findRecord('scope', 'global');
 
-    await this.getAllSessions(scope_id);
-    await this.getAssociatedUsers();
-    await this.getAssociatedTargets();
+    await this.getAllSessions(scope.id);
+    if (
+      this.can.can('list model', globalScope, { collection: 'users' }) &&
+      this.can.can('list model', orgScope, { collection: 'users' })
+    ) {
+      await this.getAssociatedUsers();
+    }
+    if (this.can.can('list model', scope, { collection: 'targets' })) {
+      await this.getAssociatedTargets();
+    }
 
     return super.refresh(...arguments);
+  }
+
+  setupController(controller) {
+    const scope = this.modelFor('scopes.scope');
+    super.setupController(...arguments);
+    controller.setProperties({ scope });
   }
 }
