@@ -123,7 +123,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    */
   @action
   applyFilter(paramKey, selectedItems) {
-    console.log('appy filter', paramKey, selectedItems);
     this[paramKey] = [...selectedItems];
     this.page = 1;
   }

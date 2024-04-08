@@ -45,6 +45,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
     let hostCatalogs;
     let totalItems = 0;
+    let hostCatalogsExist = false;
     if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
       hostCatalogs = await this.store.query('host-catalog', {
         query: { search, filters },
@@ -52,12 +53,8 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
         pageSize,
       });
       totalItems = hostCatalogs.meta?.totalItems;
+      hostCatalogsExist = await this.getHostCatalogsExist(scope_id, totalItems);
     }
-
-    const hostCatalogsExist = await this.getHostCatalogsExist(
-      scope_id,
-      totalItems,
-    );
 
     return { hostCatalogs, totalItems, hostCatalogsExist };
   }

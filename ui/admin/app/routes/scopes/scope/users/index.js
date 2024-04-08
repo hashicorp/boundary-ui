@@ -43,6 +43,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
 
     let users;
     let totalItems = 0;
+    let usersExist = false;
     if (this.can.can('list model', scope, { collection: 'users' })) {
       users = await this.store.query('user', {
         query: { search, filters },
@@ -50,8 +51,8 @@ export default class ScopesScopeUsersIndexRoute extends Route {
         pageSize,
       });
       totalItems = users.meta?.totalItems;
+      usersExist = await this.getUsersExist(scope_id, totalItems);
     }
-    const usersExist = await this.getUsersExist(scope_id, totalItems);
 
     return { users, usersExist, totalItems };
   }
