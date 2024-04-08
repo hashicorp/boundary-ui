@@ -11,6 +11,7 @@ import { next } from '@ember/runloop';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
 
 export default class ScopesScopeRoute extends Route {
   // =services
@@ -33,15 +34,15 @@ export default class ScopesScopeRoute extends Route {
    * @param {string} params.scope_id
    * @return {Promise{ScopeModel}}
    */
-  model({ scope_id: id }) {
+  async model({ scope_id: id }) {
     // Since only global and org scopes are authenticatable, we can infer type
     // from ID because global has a fixed ID.
-    const type = id === 'global' ? 'global' : 'org';
+    const type = id === 'global' ? TYPE_SCOPE_GLOBAL : TYPE_SCOPE_ORG;
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
       const scopeOptions = { id, type };
       /* istanbul ignore else */
-      if (type === 'global') {
+      if (type === TYPE_SCOPE_GLOBAL) {
         scopeOptions.name = this.intl.t('titles.global');
       }
       return (
@@ -59,11 +60,17 @@ export default class ScopesScopeRoute extends Route {
     // First, load orgs and, if necessary, projects
     let orgs, projects;
     orgs = await this.store
-      .query('scope', { scope_id: 'global' })
+      .query('scope', {
+        scope_id: 'global',
+        query: { filters: { scope_id: [{ equals: 'global' }] } },
+      })
       .catch(() => A([]));
 
     if (model.isProject) {
-      projects = await this.store.query('scope', { scope_id: model.scopeID });
+      projects = await this.store.query('scope', {
+        scope_id: model.scopeID,
+        query: { filters: { scope_id: [{ equals: model.scopeID }] } },
+      });
     }
     // Then pull out the "selected" scopes, if relevant
     let selectedOrg, selectedProject;
@@ -148,7 +155,6 @@ export default class ScopesScopeRoute extends Route {
   async delete(scope) {
     const { scopeID } = scope;
     await scope.destroyRecord();
-    await this.router.replaceWith('scopes.scope.scopes', scopeID);
-    //this.refresh();
+    this.router.replaceWith('scopes.scope.scopes', scopeID);
   }
 }
