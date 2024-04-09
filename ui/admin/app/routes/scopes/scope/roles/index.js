@@ -45,6 +45,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     let rolesExist = false;
     if (this.can.can('list model', scope, { collection: 'roles' })) {
       roles = await this.store.query('role', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
@@ -70,6 +71,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     const role = await this.store.query(
       'role',
       {
+        scope_id,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],

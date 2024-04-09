@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
+import { hashCode } from '../utils/hash-code';
 
 /**
  * Handler to sit in front of the API request layer
@@ -34,9 +35,10 @@ export default class IndexedDbHandler {
         }
 
         let { page, pageSize, query: queryObj, ...remainingQuery } = query;
+        const tokenKey = `${type}-${hashCode(remainingQuery)}`;
 
         if (!peekIndexedDB) {
-          const listToken = await indexedDb.token.get(type);
+          const listToken = await indexedDb.token.get(tokenKey);
           const adapter = store.adapterFor(type);
           const schema = store.modelFor(type);
 
@@ -44,35 +46,41 @@ export default class IndexedDbHandler {
           try {
             payload = await adapter.query(store, schema, {
               ...remainingQuery,
-              scope_id: 'global',
-              recursive: true,
               list_token: listToken?.token,
+          });
+        } catch (e) {
+          // If we get an invalid list token, we'll delete the token and
+          // clear the DB and try again without a token.
+          if (
+            e?.errors[0].status === 400 &&
+            e?.errors[0].code === 'invalid list token'
+          ) {
+            await indexedDb[type].clear();
+            // Delete all tokens of the same resource type so we don't keep clearing the DB.
+            // Even if other tokens may still be valid, we might have cleared data that they
+            // depended on so we should clear all tokens of the same type when clearing the DB.
+            const tokenKeys = await indexedDb.token
+              .where(':id')
+              .startsWith(type)
+              .primaryKeys();
+
+            await indexedDb.token.bulkDelete(tokenKeys);
+
+            payload = await adapter.query(store, schema, {
+              ...remainingQuery,
             });
-          } catch (e) {
-            // If we get any error that's not a rate limiting error,
-            // assume the token is not good anymore. We'll delete the token and
-            // clear the DB and try again without a token.
-            // TODO: Probably should check for 400 and bad token error specifically instead?
-            if (e?.errors[0].status !== 429) {
-              await indexedDb[type].clear();
-              await indexedDb.token.delete(type);
-
-              payload = await adapter.query(store, schema, {
-                ...remainingQuery,
-                scope_id: 'global',
-                recursive: true,
-                list_token: null,
-              });
-            } else {
-              throw e;
-            }
+          } else {
+            throw e;
           }
+        }
 
-          // Store the token we just got back from the payload
+          // Store the token we just got back from the payload if it exists
+        if (payload.list_token) {
           await indexedDb.token.put({
-            id: type,
+            id: tokenKey,
             token: payload.list_token,
           });
+        }
 
           // Remove any records from the DB if the API indicates they've been deleted
           if (payload.removed_ids?.length > 0) {
