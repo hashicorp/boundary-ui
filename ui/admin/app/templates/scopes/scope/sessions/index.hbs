@@ -28,37 +28,41 @@
             aria-label={{t 'actions.search'}}
             {{on 'input' this.handleSearchInput}}
           />
-          <S.Generic>
-            <Dropdown
-              name='user'
-              @toggleText={{t 'resources.user.title'}}
-              @itemOptions={{@model.associatedUsers}}
-              @checkedItems={{this.users}}
-              @applyFilter={{fn this.applyFilter 'users'}}
-              @isSearchable={{true}}
-              as |FD selectItem itemOptions|
-            >
-              {{#each itemOptions as |itemOption|}}
-                <FD.Checkbox
-                  @value={{itemOption.id}}
-                  checked={{includes itemOption.id this.users}}
-                  {{on 'change' selectItem}}
-                >
-                  {{itemOption.name}}
-                </FD.Checkbox>
-              {{/each}}
-            </Dropdown>
-          </S.Generic>
-          <S.Generic>
-            <Dropdown
-              name='target'
-              @toggleText={{t 'resources.target.title'}}
-              @itemOptions={{@model.associatedTargets}}
-              @checkedItems={{this.targets}}
-              @applyFilter={{fn this.applyFilter 'targets'}}
-              @isSearchable={{true}}
-            />
-          </S.Generic>
+          {{#if @model.associatedUsers}}
+            <S.Generic>
+              <Dropdown
+                name='user'
+                @toggleText={{t 'resources.user.title'}}
+                @itemOptions={{@model.associatedUsers}}
+                @checkedItems={{this.users}}
+                @applyFilter={{fn this.applyFilter 'users'}}
+                @isSearchable={{true}}
+                as |FD selectItem itemOptions|
+              >
+                {{#each itemOptions as |itemOption|}}
+                  <FD.Checkbox
+                    @value={{itemOption.id}}
+                    checked={{includes itemOption.id this.users}}
+                    {{on 'change' selectItem}}
+                  >
+                    {{itemOption.name}}
+                  </FD.Checkbox>
+                {{/each}}
+              </Dropdown>
+            </S.Generic>
+          {{/if}}
+          {{#if @model.associatedTargets}}
+            <S.Generic>
+              <Dropdown
+                name='target'
+                @toggleText={{t 'resources.target.title'}}
+                @itemOptions={{@model.associatedTargets}}
+                @checkedItems={{this.targets}}
+                @applyFilter={{fn this.applyFilter 'targets'}}
+                @isSearchable={{true}}
+              />
+            </S.Generic>
+          {{/if}}
           <S.Generic>
             <Dropdown
               name='status'
