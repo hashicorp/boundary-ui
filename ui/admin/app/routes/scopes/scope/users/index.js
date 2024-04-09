@@ -46,6 +46,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     let usersExist = false;
     if (this.can.can('list model', scope, { collection: 'users' })) {
       users = await this.store.query('user', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
@@ -59,21 +60,22 @@ export default class ScopesScopeUsersIndexRoute extends Route {
 
   /**
    * Sets usersExist to true if there exists any users.
-   * @param {string} scopeId
+   * @param {string} scope_id
    * @param {number} totalItems
-   * @returns
+   * @returns {Promise<boolean>}
    */
-  async getUsersExist(scopeId, totalItems) {
+  async getUsersExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const user = await this.store.query(
       'user',
       {
+        scope_id,
         query: {
           filters: {
-            scope_id: [{ equals: scopeId }],
+            scope_id: [{ equals: scope_id }],
           },
         },
         page: 1,

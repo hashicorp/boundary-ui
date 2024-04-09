@@ -48,6 +48,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
     let hostCatalogsExist = false;
     if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
       hostCatalogs = await this.store.query('host-catalog', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
@@ -70,10 +71,11 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       return true;
     }
 
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const hostCatalogs = await this.store.query(
       'host-catalog',
       {
+        scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,

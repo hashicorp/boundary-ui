@@ -73,6 +73,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
 
     const queryOptions = {
+      scope_id,
       include_terminated: true,
       query: { search, filters },
       page,
@@ -97,7 +98,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       this.can.can('list model', scope, { collection: 'targets' }) &&
       this.associatedTargets.length === 0
     ) {
-      await this.getAssociatedTargets();
+      await this.getAssociatedTargets(scope_id);
     }
 
     return {
@@ -116,6 +117,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async getAllSessions(scope_id) {
     const allSessionsQuery = {
+      scope_id,
       include_terminated: true,
       query: { filters: { scope_id: [{ equals: scope_id }] } },
     };
@@ -141,6 +143,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       filters.id.values.push({ equals: userId });
     });
     const associatedUsersQuery = {
+      scope_id: 'global',
+      recursive: true,
       query: { filters },
     };
     this.associatedUsers = await this.store.query('user', associatedUsersQuery);
@@ -148,9 +152,10 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
 
   /**
    * Get all the targets but only load them once when entering the route.
+   * @param scope_id
    * @returns {Promise<void>}
    */
-  async getAssociatedTargets() {
+  async getAssociatedTargets(scope_id) {
     const uniqueSessionTargetIds = new Set(
       this.allSessions
         .filter((session) => session.target_id)
@@ -161,6 +166,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       filters.id.values.push({ equals: targetId });
     });
     const associatedTargetsQuery = {
+      scope_id,
       query: { filters },
     };
     this.associatedTargets = await this.store.query(
