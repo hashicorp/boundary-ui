@@ -61,6 +61,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     });
 
     const sessions = await this.store.query('session', {
+      scope_id,
       query: {
         filters: {
           scope_id: [{ equals: scope_id }],
@@ -78,6 +79,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     let targetsExist = false;
     if (this.can.can('list model', scope, { collection: 'targets' })) {
       targets = await this.store.query('target', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,

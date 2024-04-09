@@ -43,6 +43,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
 
     if (this.can.can('list model', scope, { collection: 'groups' })) {
       groups = await this.store.query('group', {
+        scope_id,
         query: { filters, search },
         page,
         pageSize,
@@ -67,6 +68,7 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     const group = await this.store.query(
       'group',
       {
+        scope_id: scope_id,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],
