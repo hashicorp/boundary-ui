@@ -45,7 +45,7 @@
                   @icon='at-sign'
                   @color='boundary'
                   @text={{alias.value}}
-                  {{! @route=' ' }}
+                  @route='scopes.scope.aliases.alias'
                   @model={{alias.id}}
                 />
               </LinkListPanel>
@@ -79,7 +79,7 @@
                         @icon='at-sign'
                         @color='boundary'
                         @text={{alias.value}}
-                        {{! @route='' }}
+                        @route='scopes.scope.aliases.alias'
                         @model={{alias.id}}
                       />
                     </LinkListPanel>
@@ -92,7 +92,7 @@
               @icon='plus'
               @text={{t 'resources.target.actions.add-an-alias'}}
               @color='secondary'
-              {{! @route='' }}
+              @route='scopes.scope.targets.target.create-alias'
             />
           {{/if}}
         </div>
