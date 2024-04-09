@@ -21,7 +21,7 @@ export default class RoleModel extends GeneratedRoleModel {
    * see obvious.  Instead, the application layer is expected to load referenced
    * users and groups as needed.
    */
-  @attr('principal-array', {
+  @attr('array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
@@ -49,7 +49,7 @@ export default class RoleModel extends GeneratedRoleModel {
   get userIDs() {
     return this.principals
       .filter(({ type }) => type === 'user')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
   /**
@@ -59,7 +59,7 @@ export default class RoleModel extends GeneratedRoleModel {
   get groupIDs() {
     return this.principals
       .filter(({ type }) => type === 'group')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
   /**
@@ -69,7 +69,7 @@ export default class RoleModel extends GeneratedRoleModel {
   get managedGroupIDs() {
     return this.principals
       .filter(({ type }) => type === 'managed group')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
   // =methods

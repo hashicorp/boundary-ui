@@ -60,19 +60,21 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       filters.type.push({ equals: type });
     });
 
-    const sessions = await this.store.query('session', {
-      scope_id,
-      query: {
-        filters: {
-          scope_id: [{ equals: scope_id }],
-          status: [
-            { equals: STATUS_SESSION_ACTIVE },
-            { equals: STATUS_SESSION_PENDING },
-          ],
+    if (this.can.can('list model', scope, { collection: 'sessions' })) {
+      const sessions = await this.store.query('session', {
+        scope_id,
+        query: {
+          filters: {
+            scope_id: [{ equals: scope_id }],
+            status: [
+              { equals: STATUS_SESSION_ACTIVE },
+              { equals: STATUS_SESSION_PENDING },
+            ],
+          },
         },
-      },
-    });
-    this.addActiveSessionFilters(filters, availableSessions, sessions);
+      });
+      this.addActiveSessionFilters(filters, availableSessions, sessions);
+    }
 
     let targets;
     let totalItems = 0;

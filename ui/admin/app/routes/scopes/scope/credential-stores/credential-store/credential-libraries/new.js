@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
@@ -52,25 +51,23 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store',
     );
+    const { name, description } = this.currentModel ?? {};
+
+    if (this.currentModel?.isNew) {
+      this.currentModel.rollbackAttributes();
+    }
 
     // Set the type to generic vault if feature flag isn't enabled in cases where
     // user sets the query parameter manually
-    if (!this.features.isEnabled('ssh-target')) {
-      type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
-    }
+    type = this.features.isEnabled('ssh-target')
+      ? type
+      : TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
 
     return this.store.createRecord('credential-library', {
       type,
       credential_store_id,
+      name,
+      description,
     });
-  }
-
-  /**
-   * Update type of credential library
-   * @param {string} type
-   */
-  @action
-  changeType(type) {
-    this.router.replaceWith({ queryParams: { type } });
   }
 }

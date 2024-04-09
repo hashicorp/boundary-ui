@@ -73,11 +73,11 @@ module.exports = {
   /**
    * Spawn child process and return output immediately.
    * This function is intended for non-connection related tasks.
-   * @param {string} command
+   * @param {string[]} args
    * @param {object} envVars
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
-  spawnSync(command, envVars = {}) {
-    const childProcess = spawnSync(path(), command, {
+  spawnSync(args, envVars = {}) {
+    const childProcess = spawnSync(path(), args, {
       env: {
         ...process.env,
         ...envVars,

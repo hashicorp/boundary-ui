@@ -62,29 +62,6 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =actions
 
   /**
-   * Adds members to the group and saves, replaces with the members index
-   * route, and notifies the user of success or error.
-   * @param {GroupModel} group
-   * @param {[string]} userIDs
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async addMembers(group, userIDs) {
-    await group.addMembers(userIDs);
-    await this.router.replaceWith('scopes.scope.groups.group.members');
-  }
-
-  /**
-   * Redirect to group members as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith('scopes.scope.groups.group.members');
-  }
-
-  /**
    * Sets the specified resource filter field to the specified value.
    * @param {string} field
    * @param value

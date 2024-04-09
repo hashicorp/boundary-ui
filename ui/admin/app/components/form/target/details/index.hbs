@@ -325,6 +325,42 @@
     </Hds::Form::TextInput::Field>
   {{/if}}
 
+  {{#if
+    (and @model.isNew (can 'create model' @globalScope collection='aliases'))
+  }}
+
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @isOptional={{true}}
+      @disabled={{form.disabled}}
+    >
+      <:fieldset as |F|>
+        <F.Legend>
+          {{t 'resources.alias.form.alias.label'}}
+        </F.Legend>
+        <F.HelperText>
+          {{t 'resources.alias.form.alias.help'}}
+        </F.HelperText>
+
+        {{#if @model.errors.with_aliases}}
+          <F.Error as |E|>
+            {{#each @model.errors.with_aliases as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </:fieldset>
+
+      <:field as |F|>
+        <F.TextInput
+          @name='with_aliases'
+          @options={{@model.with_aliases}}
+          @model={{@model}}
+        />
+      </:field>
+
+    </Form::Field::ListWrapper>
+  {{/if}}
   {{#if (can 'save model' @model)}}
     <form.actions
       @enableEditText={{t 'actions.edit-form'}}

@@ -229,6 +229,21 @@ module('Acceptance | sessions | list', function (hooks) {
     assert.dom('tbody tr').exists({ count: 1 });
   });
 
+  test('users filter is hidden if no users returned or no list permissions', async function (assert) {
+    instances.scopes.global.authorized_collection_actions.users =
+      instances.scopes.global.authorized_collection_actions.users.filter(
+        (item) => item !== 'list',
+      );
+    instances.scopes.org.authorized_collection_actions.users =
+      instances.scopes.org.authorized_collection_actions.users.filter(
+        (item) => item !== 'list',
+      );
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.sessions}"]`);
+    assert.dom(FILTER_TOGGLE_SELECTOR('user')).doesNotExist();
+  });
+
   test('user can filter for sessions by target', async function (assert) {
     await visit(urls.projectScope);
     instances.sessions[2].update({
@@ -242,6 +257,17 @@ module('Acceptance | sessions | list', function (hooks) {
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
     assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('targets filter is hidden if no targets returned or no list permissions', async function (assert) {
+    instances.scopes.project.authorized_collection_actions.targets =
+      instances.scopes.project.authorized_collection_actions.targets.filter(
+        (item) => item !== 'list',
+      );
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.sessions}"]`);
+    assert.dom(FILTER_TOGGLE_SELECTOR('target')).doesNotExist();
   });
 
   test('user can filter for sessions by status', async function (assert) {

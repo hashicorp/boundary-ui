@@ -20,18 +20,25 @@ exports.checkBoundaryCli = async () => {
 
 /**
  * Uses the boundary CLI to authenticate to the specified Boundary instance
+ * @param {string} addr Address of the Boundary instance to be authenticated to
+ * @param {string} authMethodId ID of the auth method to be used for authentication
+ * @param {string} loginName Login name to be used for authentication
+ * @param {string} password Password to be used for authentication
  */
-exports.authenticateBoundaryCli = async () => {
+exports.authenticateBoundaryCli = async (
+  addr,
+  authMethodId,
+  loginName,
+  password,
+) => {
   try {
     execSync(
       'boundary authenticate password' +
-      ' -addr=' +
-      process.env.BOUNDARY_ADDR +
-      ' -auth-method-id=' +
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID +
-      ' -login-name=' +
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME +
-      ' -password=env://E2E_PASSWORD_ADMIN_PASSWORD',
+        ` -addr=${addr}` +
+        ` -auth-method-id=${authMethodId}` +
+        ` -login-name=${loginName}` +
+        ' -password=env://BPASS',
+      { env: { ...process.env, BPASS: password } },
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -41,25 +48,24 @@ exports.authenticateBoundaryCli = async () => {
 /**
  * Uses the boundary CLI to connect to the specified target
  * @param {string} targetId ID of the target to be connected to
+ * @param {string} sshUser User to be used for the ssh connection
+ * @param {string} sshKeyPath Path to the ssh key to be used for the ssh connection
  * @returns ChildProcess representing the result of the command execution
  */
-exports.connectToTarget = async (targetId) => {
+exports.connectToTarget = async (targetId, sshUser, sshKeyPath) => {
   let connect;
   try {
     connect = exec(
       'boundary connect' +
-      ' -target-id=' +
-      targetId +
-      ' -exec /usr/bin/ssh --' +
-      ' -l ' +
-      process.env.E2E_SSH_USER +
-      ' -i ' +
-      process.env.E2E_SSH_KEY_PATH +
-      ' -o UserKnownHostsFile=/dev/null' +
-      ' -o StrictHostKeyChecking=no' +
-      ' -o IdentitiesOnly=yes' + // forces the use of the provided key
-      ' -p {{boundary.port}}' +
-      ' {{boundary.ip}}',
+        ` -target-id=${targetId}` +
+        ' -exec /usr/bin/ssh --' +
+        ` -l ${sshUser}` +
+        ` -i ${sshKeyPath}` +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes' + // forces the use of the provided key
+        ' -p {{boundary.port}}' +
+        ' {{boundary.ip}}',
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -77,12 +83,12 @@ exports.connectSshToTarget = async (targetId) => {
   try {
     connect = exec(
       'boundary connect ssh' +
-      ' -target-id=' +
-      targetId +
-      ' --' +
-      ' -o UserKnownHostsFile=/dev/null' +
-      ' -o StrictHostKeyChecking=no' +
-      ' -o IdentitiesOnly=yes', // forces the use of the provided key
+        ' -target-id=' +
+        targetId +
+        ' --' +
+        ' -o UserKnownHostsFile=/dev/null' +
+        ' -o StrictHostKeyChecking=no' +
+        ' -o IdentitiesOnly=yes', // forces the use of the provided key
     );
   } catch (e) {
     console.log(`${e.stderr}`);
@@ -94,7 +100,7 @@ exports.connectSshToTarget = async (targetId) => {
  * Uses the boundary CLI to create a new org.
  * @returns {Promise<string>} new org's id
  */
-exports.createNewOrgCli = async () => {
+exports.createOrgCli = async () => {
   const orgName = 'Org ' + nanoid();
   let newOrg;
   try {
@@ -125,11 +131,35 @@ exports.deleteOrgCli = async (orgId) => {
 };
 
 /**
+ * Uses the boundary CLI to delete the specified storage bucket
+ * @param {string} storageBucketId ID of the storage bucket to be deleted
+ */
+exports.deleteStorageBucketCli = async (storageBucketId) => {
+  try {
+    exec('boundary storage-buckets delete -id=' + storageBucketId);
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
+ * Uses the boundary CLI to delete the specified policy
+ * @param {string} policyId ID of the policy to be deleted
+ */
+exports.deletePolicyCli = async (policyId) => {
+  try {
+    exec('boundary policies delete -id=' + policyId);
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
  * Uses the boundary CLI to create a new project.
  * @param {string} orgId ID of the organization under which the project will be created.
  * @returns {Promise<string>} new project's ID
  */
-exports.createNewProjectCli = async (orgId) => {
+exports.createProjectCli = async (orgId) => {
   const projectName = 'Project ' + nanoid();
   let newProject;
   try {
@@ -151,7 +181,7 @@ exports.createNewProjectCli = async (orgId) => {
  * Uses the boundary CLI to create a new controller-led worker.
  * @returns {Promise<string>} new worker's ID
  */
-exports.createNewControllerLedWorkerCli = async () => {
+exports.createControllerLedWorkerCli = async () => {
   const workerName = 'worker-' + nanoid();
   let newWorker;
   try {
@@ -173,7 +203,7 @@ exports.createNewControllerLedWorkerCli = async () => {
  * @param {string} scopeId ID of the scope under which the auth-method will be created.
  * @returns {Promise<string>} new auth-method's ID
  */
-exports.createNewPasswordAuthMethodCli = async (scopeId) => {
+exports.createPasswordAuthMethodCli = async (scopeId) => {
   const authMethodName = 'auth-method-' + nanoid();
   let newAuthMethod;
   try {
@@ -214,10 +244,9 @@ exports.makeAuthMethodPrimaryCli = async (scopeId, authMethodId) => {
  * @param {string} authMethodId ID of the auth-method that the new account will be created for.
  * @returns {Promise<string>} new account's ID
  */
-exports.createNewPasswordAccountCli = async (authMethodId) => {
+exports.createPasswordAccountCli = async (authMethodId) => {
   let passwordAccount;
   const login = 'test-login';
-  process.env.ACCOUNT_PASSWORD = 'test-password';
   try {
     passwordAccount = JSON.parse(
       execSync(
@@ -226,6 +255,7 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
         -login-name ${login} \
         -password env://ACCOUNT_PASSWORD \
         -format json`,
+        { env: { ...process.env, ACCOUNT_PASSWORD: 'test-password' } },
       ),
     ).item;
   } catch (e) {
@@ -239,7 +269,7 @@ exports.createNewPasswordAccountCli = async (authMethodId) => {
  * @param {string} scopeId ID of the scope under which the role will be created.
  * @returns {Promise<string>} new role's ID
  */
-exports.createNewRoleCli = async (scopeId) => {
+exports.createRoleCli = async (scopeId) => {
   const roleName = 'role-' + nanoid();
   let role;
   try {
@@ -262,7 +292,7 @@ exports.createNewRoleCli = async (scopeId) => {
  * @param {string} scopeId ID of the scope under which the group will be created.
  * @returns {Promise<string>} new group's ID
  */
-exports.createNewGroupCli = async (scopeId) => {
+exports.createGroupCli = async (scopeId) => {
   const groupName = 'group-' + nanoid();
   let group;
   try {
@@ -285,7 +315,7 @@ exports.createNewGroupCli = async (scopeId) => {
  * @param {string} scopeId ID of the scope under which the user will be created.
  * @returns {Promise<string>} new user's ID
  */
-exports.createNewUserCli = async (scopeId) => {
+exports.createUserCli = async (scopeId) => {
   const userName = 'user-' + nanoid();
   let user;
   try {
@@ -308,7 +338,7 @@ exports.createNewUserCli = async (scopeId) => {
  * @param {string} projectId ID of the project under which the host catalog will be created.
  * @returns {Promise<string>} new host catalog's ID
  */
-exports.createNewStaticHostCatalogCli = async (projectId) => {
+exports.createStaticHostCatalogCli = async (projectId) => {
   const hostCatalogName = 'static-host-catalog-' + nanoid();
   let hostCatalog;
   try {
@@ -359,7 +389,7 @@ exports.createDynamicAwsHostCatalogCli = async (projectId) => {
  * @param {string} hostCatalogId ID of the host catalog that the host will be created for.
  * @returns {Promise<string>} new host's ID
  */
-exports.createNewStaticHostCli = async (hostCatalogId) => {
+exports.createStaticHostCli = async (hostCatalogId) => {
   const hostName = 'static-host-' + nanoid();
   let host;
   try {
@@ -383,7 +413,7 @@ exports.createNewStaticHostCli = async (hostCatalogId) => {
  * @param {string} hostCatalogId ID of the host catalog that the host set will be created for.
  * @returns {Promise<string>} new host set's ID
  */
-exports.createNewHostSetCli = async (hostCatalogId) => {
+exports.createHostSetCli = async (hostCatalogId) => {
   const hostSetName = 'static-host-' + nanoid();
   let hostSet;
   try {
@@ -406,7 +436,7 @@ exports.createNewHostSetCli = async (hostCatalogId) => {
  * @param {string} projectId ID of the project under which the credential store will be created.
  * @returns {Promise<string>} new credential store's ID
  */
-exports.createNewStaticCredentialStoreCli = async (projectId) => {
+exports.createStaticCredentialStoreCli = async (projectId) => {
   const credentialStoreName = 'static-credential-store-' + nanoid();
   let staticCredentialStore;
   try {
@@ -427,12 +457,14 @@ exports.createNewStaticCredentialStoreCli = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new vault credential store.
  * @param {string} projectId ID of the project under which the credential store will be created.
+ * @param {string} vaultAddr Address of the vault that the credential store will be created for.
  * @param {string} secretPolicyName Name of the secret policy that's used to create vault token.
  * @param {string} boundaryPolicyName Name of the boundary policy that's used to create vault token.
  * @returns {Promise<string>} new credential store's ID
  */
-exports.createNewVaultCredentialStoreCli = async (
+exports.createVaultCredentialStoreCli = async (
   projectId,
+  vaultAddr,
   secretPolicyName,
   boundaryPolicyName,
 ) => {
@@ -463,7 +495,7 @@ exports.createNewVaultCredentialStoreCli = async (
         `boundary credential-stores create vault \
           -scope-id ${projectId} \
           -name ${credentialStoreName} \
-          -vault-address ${process.env.E2E_VAULT_ADDR} \
+          -vault-address ${vaultAddr} \
           -vault-token ${clientToken} \
           -format json`,
       ),
@@ -479,10 +511,9 @@ exports.createNewVaultCredentialStoreCli = async (
  * @param {string} credentialStoreId ID of the credential store that the credential will be created for.
  * @returns {Promise<string>} new credential's ID
  */
-exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
+exports.createUsernamePasswordCredentialCli = async (credentialStoreId) => {
   let usernamePasswordCredential;
   const login = 'test-login';
-  process.env.CREDENTIALS_PASSWORD = 'credentials-password';
   try {
     usernamePasswordCredential = JSON.parse(
       execSync(
@@ -492,6 +523,9 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
         -username ${login} \
         -password env://CREDENTIALS_PASSWORD \
         -format json`,
+        {
+          env: { ...process.env, CREDENTIALS_PASSWORD: 'credentials-password' },
+        },
       ),
     ).item;
   } catch (e) {
@@ -505,7 +539,7 @@ exports.createNewUsernamePasswordCredentialCli = async (credentialStoreId) => {
  * @param {string} projectId ID of the project under which the target will be created.
  * @returns {Promise<string>} new target's ID
  */
-exports.createNewTcpTarget = async (projectId) => {
+exports.createTcpTarget = async (projectId) => {
   const targetName = 'target-' + nanoid();
   const defaultPort = 22;
   let target;
@@ -530,7 +564,7 @@ exports.createNewTcpTarget = async (projectId) => {
  * @param {string} projectId ID of the project under which the target will be created.
  * @returns {Promise<string>} new target's ID
  */
-exports.createNewSshTargetCli = async (projectId) => {
+exports.createSshTargetCli = async (projectId) => {
   const targetName = 'target-' + nanoid();
   const defaultPort = 22;
   let target;
@@ -579,4 +613,30 @@ exports.getSessionCli = async (orgName, projectName, targetName) => {
     console.log(`${e.stderr}`);
   }
   return session;
+};
+
+/**
+ * Uses the boundary CLI to wait for a session recording to be available.
+ * @param {string} storageBucketId ID of storage bucket that the session recording is associated with
+ * @returns An object representing a session recording
+ */
+exports.waitForSessionRecordingCli = async (storageBucketId) => {
+  let i = 0;
+  let filteredSessionRecording = [];
+  do {
+    i = i + 1;
+    const sessionRecordings = JSON.parse(
+      execSync('boundary session-recordings list -format json'),
+    );
+    filteredSessionRecording = sessionRecordings.items.filter(
+      (obj) =>
+        obj.storage_bucket_id == storageBucketId && obj.state == 'available',
+    );
+    if (filteredSessionRecording.length > 0) {
+      break;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  } while (i < 5);
+
+  return filteredSessionRecording[0];
 };

@@ -41,10 +41,6 @@ export default class ScopesScopeRoute extends Route {
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
       const scopeOptions = { id, type };
-      /* istanbul ignore else */
-      if (type === TYPE_SCOPE_GLOBAL) {
-        scopeOptions.name = this.intl.t('titles.global');
-      }
       return (
         maybeExistingScope || this.store.createRecord('scope', scopeOptions)
       );

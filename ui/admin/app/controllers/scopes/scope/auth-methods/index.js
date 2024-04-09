@@ -66,7 +66,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     };
   }
 
-  // =methods
+  // =actions
 
   /**
    * Handles input on each keystroke and the search queryParam
@@ -90,5 +90,33 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   applyFilter(paramKey, selectedItems) {
     this[paramKey] = [...selectedItems];
     this.page = 1;
+
+  /**
+   * Removes an item from array `property` at `index` on the
+   * passed `authMethod`.  This is used to manage entries in fragment array
+   * fields such as `signing_algorithms`.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} property
+   * @param {number} index
+   */
+  @action
+  async removeItemByIndex(authMethod, property, index) {
+    const array = authMethod.get(property).filter((item, i) => i !== index);
+    authMethod.set(property, array);
+  }
+
+  /**
+   * Adds a string item to array `property` on the passed `authMethod`.
+   * This is used to manage entries in fragment OIDC string array fields such
+   * as `signing_algorithms`.
+   * @param {AuthMethodModel} authMethod
+   * @param {string} property
+   * @param {string} value
+   */
+  @action
+  async addStringItem(authMethod, property, value) {
+    const existingArray = authMethod[property] ?? [];
+    const array = [...existingArray, { value }];
+    authMethod.set(property, array);
   }
 }

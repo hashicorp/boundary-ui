@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'api/transforms/principal-array';
+export { default } from 'api/transforms/array';

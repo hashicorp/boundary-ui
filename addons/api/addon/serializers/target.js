@@ -44,6 +44,14 @@ export default class TargetSerializer extends ApplicationSerializer {
         injectedApplicationCredentialSourceIDs,
       );
 
+    if (serialized?.with_aliases) {
+      // API expects scope id along with every alias value
+      serialized.with_aliases = serialized.with_aliases.map((item) => ({
+        ...item,
+        scope_id: 'global',
+      }));
+    }
+
     // Delete session recording related fields from non-SSH targets
     if (type !== TYPE_TARGET_SSH) {
       delete serialized?.attributes?.storage_bucket_id;

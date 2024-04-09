@@ -374,7 +374,7 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.targets);
     await click(`[href="${url}"]`);
 
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="address"]', '0.0.0.0');
     await click('[type="submit"]');
 
@@ -419,7 +419,7 @@ module('Acceptance | targets | update', function (hooks) {
     await visit(urls.targets);
     await click(`[href="${url}"]`);
 
-    await click('form [type="button"]', 'Activate edit mode');
+    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="address"]', '0.0.0.0');
     await click('[type="submit"]');
 

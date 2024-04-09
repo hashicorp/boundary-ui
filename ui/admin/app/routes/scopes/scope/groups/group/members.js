@@ -4,11 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   // =services
@@ -19,7 +15,7 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
 
   /**
    * Returns users associated with this group.
-   * @return {Promise{group: GroupModel, members: [UserModel]}}
+   * @return {Promise<{group: GroupModel, members: [UserModel]}>}
    */
   async model() {
     const group = this.modelFor('scopes.scope.groups.group');
@@ -44,22 +40,5 @@ export default class ScopesScopeGroupsGroupMembersRoute extends Route {
       });
     }
     return users;
-  }
-
-  // =actions
-
-  /**
-   * Remove a member from the current role and redirect to members index.
-   * @param {GroupModel} group
-   * @param {UserModel} member
-   */
-  @action
-  @loading
-  @confirm('questions.remove-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removeMember(group, member) {
-    await group.removeMember(member.id);
-    this.refresh();
   }
 }

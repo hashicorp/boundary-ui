@@ -34,6 +34,8 @@ module('Acceptance | targets | create', function (hooks) {
   let getSSHTargetCount;
   let featuresService;
 
+  const SAVE_BTN_SELECTOR = '[type="submit"]';
+
   const instances = {
     scopes: {
       global: null,
@@ -104,7 +106,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -135,7 +137,7 @@ module('Acceptance | targets | create', function (hooks) {
       'Egress toggle',
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -163,7 +165,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="worker_filter"]', 'random filter');
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
@@ -195,7 +197,7 @@ module('Acceptance | targets | create', function (hooks) {
     );
     await fillIn('[name="egress_worker_filter"]', 'random filter');
 
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
@@ -231,7 +233,7 @@ module('Acceptance | targets | create', function (hooks) {
     );
     await fillIn('[name="ingress_worker_filter"]', 'random filter');
 
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
@@ -325,6 +327,43 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount);
   });
 
+  test('can add aliases during target creation', async function (assert) {
+    const targetCount = getTargetCount();
+    const tcpTargetCount = getTCPTargetCount();
+    await visit(urls.targets);
+    const name = 'target';
+
+    await click(`[href="${urls.newTarget}"]`);
+    await fillIn('[name="name"]', name);
+
+    assert.ok(
+      instances.scopes.global.authorized_collection_actions.aliases.includes(
+        'create',
+      ),
+    );
+
+    await fillIn(
+      '[name="with_aliases"] tbody tr:nth-of-type(1) input',
+      'alias 1',
+    );
+    await click('[name="with_aliases"] tbody tr:nth-of-type(1) button');
+
+    await fillIn(
+      '[name="with_aliases"] tbody tr:nth-of-type(2) input',
+      'alias 2',
+    );
+    await click('[name="with_aliases"] tbody tr:nth-of-type(2) button');
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(getTargetCount(), targetCount + 1);
+    const target = this.server.schema.targets.findBy({ name });
+    assert.deepEqual(target.withAliases, [
+      { value: 'alias 1', scope_id: 'global' },
+      { value: 'alias 2', scope_id: 'global' },
+    ]);
+    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
+  });
+
   test('can cancel create new SSH target', async function (assert) {
     featuresService.enable('ssh-target');
     featuresService.enable('target-worker-filters-v2');
@@ -370,7 +409,7 @@ module('Acceptance | targets | create', function (hooks) {
     });
 
     await visit(urls.newTCPTarget);
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
@@ -397,7 +436,7 @@ module('Acceptance | targets | create', function (hooks) {
       );
     });
     await visit(urls.newSSHTarget);
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.dom('[role="alert"] div').hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
@@ -413,7 +452,7 @@ module('Acceptance | targets | create', function (hooks) {
 
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="address"]', '0.0.0.0');
-    await click('[type="submit"]');
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(

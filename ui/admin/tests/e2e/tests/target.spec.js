@@ -14,13 +14,13 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
-  createNewProject,
-  createNewHostCatalog,
-  createNewHostSet,
-  createNewHostInHostSet,
-  createNewTarget,
-  createNewTargetWithAddress,
+  createOrg,
+  createProject,
+  createHostCatalog,
+  createHostSet,
+  createHostInHostSet,
+  createTarget,
+  createTargetWithAddress,
   waitForSessionToBeVisible,
   addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
@@ -45,15 +45,20 @@ test('Verify session created to target with host, then cancel the session @ce @a
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    const projectName = await createNewProject(page);
-    await createNewHostCatalog(page);
-    const hostSetName = await createNewHostSet(page);
-    await createNewHostInHostSet(page);
-    const targetName = await createNewTarget(page);
+    const orgName = await createOrg(page);
+    const projectName = await createProject(page);
+    await createHostCatalog(page);
+    const hostSetName = await createHostSet(page);
+    await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
 
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
     const projects = JSON.parse(
@@ -65,7 +70,11 @@ test('Verify session created to target with host, then cancel the session @ce @a
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target.id);
+    connect = await connectToTarget(
+      target.id,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -88,11 +97,20 @@ test('Verify session created to target with address, then cancel the session @ce
   let org;
   let connect;
   try {
-    const orgName = await createNewOrg(page);
-    const projectName = await createNewProject(page);
-    const targetName = await createNewTargetWithAddress(page);
+    const orgName = await createOrg(page);
+    const projectName = await createProject(page);
+    const targetName = await createTargetWithAddress(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
 
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
     const projects = JSON.parse(
@@ -104,7 +122,11 @@ test('Verify session created to target with address, then cancel the session @ce
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectToTarget(target.id);
+    connect = await connectToTarget(
+      target.id,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
@@ -124,9 +146,13 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
   await page.goto('/');
   let orgName;
   try {
-    orgName = await createNewOrg(page);
-    await createNewProject(page);
-    await createNewTargetWithAddress(page);
+    orgName = await createOrg(page);
+    await createProject(page);
+    await createTargetWithAddress(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
 
     // Update target
     await page.getByRole('button', { name: 'Edit Form' }).click();
@@ -147,7 +173,12 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
   } finally {
-    await authenticateBoundaryCli();
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     const org = orgs.items.filter((obj) => obj.name === orgName)[0];
     await deleteOrgCli(org.id);
