@@ -51,11 +51,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   async model({ search, users, targets, status, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
-    // Fetch the global and org scope to check user permissions
-    const orgScope = await this.store.findRecord('scope', scope.scope.id);
-    const globalScope = await this.store.findRecord('scope', 'global');
-
     const { id: scope_id } = scope;
+
     const filters = {
       scope_id: [{ equals: scope_id }],
       status: [],
@@ -88,8 +85,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       await this.getAllSessions(scope_id);
     }
     if (
-      this.can.can('list model', globalScope, { collection: 'users' }) &&
-      this.can.can('list model', orgScope, { collection: 'users' }) &&
+      (await this.canListUsers(scope.scope.id)) &&
       this.associatedUsers.length === 0
     ) {
       await this.getAssociatedUsers();
@@ -175,6 +171,16 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     );
   }
 
+  async canListUsers(orgId) {
+    const orgScope = await this.store.findRecord('scope', orgId);
+    const globalScope = await this.store.findRecord('scope', 'global');
+
+    return (
+      this.can.can('list model', globalScope, { collection: 'users' }) &&
+      this.can.can('list model', orgScope, { collection: 'users' })
+    );
+  }
+
   // =actions
 
   /**
@@ -183,26 +189,15 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   @action
   async refreshAll() {
     const scope = this.modelFor('scopes.scope');
-    const orgScope = await this.store.findRecord('scope', scope.scope.id);
-    const globalScope = await this.store.findRecord('scope', 'global');
 
     await this.getAllSessions(scope.id);
-    if (
-      this.can.can('list model', globalScope, { collection: 'users' }) &&
-      this.can.can('list model', orgScope, { collection: 'users' })
-    ) {
+    if (await this.canListUsers(scope.scope.id)) {
       await this.getAssociatedUsers();
     }
     if (this.can.can('list model', scope, { collection: 'targets' })) {
-      await this.getAssociatedTargets();
+      await this.getAssociatedTargets(scope.id);
     }
 
     return super.refresh(...arguments);
-  }
-
-  setupController(controller) {
-    const scope = this.modelFor('scopes.scope');
-    super.setupController(...arguments);
-    controller.setProperties({ scope });
   }
 }
