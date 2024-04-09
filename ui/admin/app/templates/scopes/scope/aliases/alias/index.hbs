@@ -7,5 +7,28 @@
   <page.breadcrumbs>
     <Breadcrumbs::Container />
   </page.breadcrumbs>
+  <page.header>
+    <h2>
+      {{t 'resources.alias.title'}}
+      {{! TODO: DOC LINK }}
+    </h2>
+    <p>{{t 'resources.alias.description'}}</p>
+    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+  </page.header>
 
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.aliases.alias.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+
+  <page.body>
+    <Form::Alias
+      @model={{@model}}
+      @submit={{fn this.aliases.save @model}}
+      @cancel={{fn this.aliases.cancel @model}}
+    />
+  </page.body>
 </Rose::Layout::Page>

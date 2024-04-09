@@ -15,7 +15,7 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
-  createNewOrg,
+  createOrg,
   createRole,
   addPrincipalToRole,
 } = require('../helpers/boundary-ui');
@@ -42,7 +42,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
   let connect;
   try {
     // Create an org
-    const orgName = await createNewOrg(page);
+    const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,

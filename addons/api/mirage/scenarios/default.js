@@ -108,9 +108,6 @@ export default function (server) {
   server.createList('policy', 3, { scope: globalScope });
   server.createList('policy', 3, { scope: orgScope });
 
-  // Aliases
-  server.createList('alias', 3, { scope: globalScope });
-
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');
@@ -126,6 +123,10 @@ export default function (server) {
     server.createList('group', 3, { scope });
     server.createList('role', 3, { scope });
   });
+
+  // Aliases
+  const destination_id = server.schema.targets.all().models[0].id;
+  server.createList('alias', 3, { scope: globalScope, destination_id });
 
   // Workers
   server.createList('worker', 3, { scope: globalScope });

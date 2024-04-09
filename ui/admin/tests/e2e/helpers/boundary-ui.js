@@ -13,7 +13,7 @@ const { nanoid } = require('nanoid');
  * @param {Page} page Playwright page object
  * @returns Name of the organization
  */
-exports.createNewOrg = async (page) => {
+exports.createOrg = async (page) => {
   const orgName = 'Org ' + nanoid();
   await page
     .getByRole('navigation', { name: 'General' })
@@ -39,7 +39,7 @@ exports.createNewOrg = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the project
  */
-exports.createNewProject = async (page) => {
+exports.createProject = async (page) => {
   const projectName = 'Project ' + nanoid();
   await page
     .getByRole('navigation', { name: 'General' })
@@ -67,7 +67,7 @@ exports.createNewProject = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the host catalog
  */
-exports.createNewHostCatalog = async (page) => {
+exports.createHostCatalog = async (page) => {
   const hostCatalogName = 'Host Catalog ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -95,7 +95,7 @@ exports.createNewHostCatalog = async (page) => {
  * @param {Page} page Playwright page object
  * @returns Name of the host set
  */
-exports.createNewHostSet = async (page) => {
+exports.createHostSet = async (page) => {
   const hostSetName = 'Host Set ' + nanoid();
   await page.getByRole('link', { name: 'Host Sets' }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
@@ -121,7 +121,7 @@ exports.createNewHostSet = async (page) => {
  * @param {string} address Address of the host
  * @returns Name of the host
  */
-exports.createNewHostInHostSet = async (page, address) => {
+exports.createHostInHostSet = async (page, address) => {
   const hostName = 'Host ' + nanoid();
   await page.getByText('Manage').click();
   await page.getByRole('link', { name: 'Create and Add Host' }).click();
@@ -150,7 +150,7 @@ exports.createStaticCredentialStore = async (page) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
   await page.getByRole('button', { name: 'Save' }).click();
@@ -181,11 +181,11 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
-  await page.getByLabel('Address', { exact: true }).fill(vaultAddr);
-  await page.getByLabel('Token', { exact: true }).fill(clientToken);
+  await page.getByLabel('Address').fill(vaultAddr);
+  await page.getByLabel('Token').fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -211,7 +211,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page
     .getByRole('group', { name: 'Type' })
@@ -221,7 +221,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const keyData = await readFile(keyPath, {
     encoding: 'utf-8',
   });
-  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
+  await page.getByLabel('SSH Private Key').fill(keyData);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -294,19 +294,16 @@ exports.createVaultSshCertificateCredentialLibrary = async (
   await page.getByRole('link', { name: 'Credential Libraries' }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
 
-  // Temporarily putting the Group selection first due to a bug where
-  // Name and Description fields get cleared when the Group is selected
-  await page
-    .getByRole('group', { name: 'Type' })
-    .getByLabel('SSH Certificates')
-    .click();
-
   await page
     .getByLabel('Name (Optional)', { exact: true })
     .fill(credentialLibraryName);
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
   await page.getByLabel('Username').fill(username);
   await page.getByLabel('Key Type').selectOption('ecdsa');
@@ -336,7 +333,7 @@ exports.createVaultSshCertificateCredentialLibrary = async (
  * @param {string} port Port of the target
  * @returns Name of the target
  */
-exports.createNewTarget = async (page, port) => {
+exports.createTarget = async (page, port) => {
   const targetName = 'Target ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -365,7 +362,7 @@ exports.createNewTarget = async (page, port) => {
  * @param {string} port Port of the target
  * @returns Name of the target
  */
-exports.createNewTargetWithAddress = async (page, address, port) => {
+exports.createTargetWithAddress = async (page, address, port) => {
   const targetName = 'Target ' + nanoid();
   await page
     .getByRole('navigation', { name: 'Resources' })
@@ -668,9 +665,10 @@ exports.addInjectedCredentialsToTarget = async (
 /**
  * Uses the UI to create new Auth Method. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} authMethodName Name of new auth method
+ * @returns Name of the auth method
  */
-exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
+exports.createPasswordAuthMethod = async (page) => {
+  const authMethodName = 'Auth Method ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Auth Methods' })
@@ -688,6 +686,8 @@ exports.createNewPasswordAuthMethod = async (page, authMethodName) => {
       .getByRole('navigation', { name: 'breadcrumbs' })
       .getByText(authMethodName),
   ).toBeVisible();
+
+  return authMethodName;
 };
 
 /**
@@ -710,20 +710,22 @@ exports.makeAuthMethodPrimary = async (page) => {
 };
 
 /**
- * Uses the UI to create new Account. Assumes you have selected the desired Auth Method
+ * Uses the UI to create new password Account. Assumes you have selected the desired Auth Method
  * which the account will be created for.
  * @param {Page} page Playwright page object
- * @param {string} accountName Name of new account
  * @param {string} login Login of new account
  * @param {string} password Password of new account
+ * @returns Name of the account
  */
-exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
+exports.createPasswordAccount = async (page, login, password) => {
+  const accountName = 'Account ' + nanoid();
+
   await page.getByRole('link', { name: 'Accounts' }).click();
   await page
     .getByRole('article')
     .getByRole('link', { name: 'Create Account', exact: true })
     .click();
-  await page.getByLabel('Name', { exact: true }).fill(accountName);
+  await page.getByLabel('Name (Optional)').fill(accountName);
   await page.getByLabel('Login Name').fill(login);
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
@@ -736,6 +738,8 @@ exports.addAccountToAuthMethod = async (page, accountName, login, password) => {
       .getByRole('navigation', { name: 'breadcrumbs' })
       .getByText(accountName),
   ).toBeVisible();
+
+  return accountName;
 };
 
 /**
@@ -757,9 +761,10 @@ exports.setPasswordToAccount = async (page, password) => {
 /**
  * Uses the UI to create a new user.
  * @param {Page} page Playwright page object
- * @param {string} userName Name of new user
+ * @returns Name of the user
  */
-exports.createNewUser = async (page, userName) => {
+exports.createUser = async (page) => {
+  const userName = 'User ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Users' })
@@ -777,6 +782,8 @@ exports.createNewUser = async (page, userName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(userName),
   ).toBeVisible();
+
+  return userName;
 };
 
 /**
@@ -803,9 +810,10 @@ exports.addAccountToUser = async (page) => {
 /**
  * Uses the UI to create a new group. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
- * @param {string} groupName Name of the new group
+ * @returns Name of the group
  */
-exports.createNewGroup = async (page, groupName) => {
+exports.createGroup = async (page) => {
+  const groupName = 'Group ' + nanoid();
   await page
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Groups' })
@@ -823,6 +831,8 @@ exports.createNewGroup = async (page, groupName) => {
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(groupName),
   ).toBeVisible();
+
+  return groupName;
 };
 
 /**
