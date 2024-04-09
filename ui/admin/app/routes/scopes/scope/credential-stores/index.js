@@ -58,6 +58,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
       })
     ) {
       credentialStores = await this.store.query('credential-store', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
@@ -86,6 +87,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
     const credentialStore = await this.store.query(
       'credential-store',
       {
+        scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
