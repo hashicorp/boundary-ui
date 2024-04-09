@@ -42,15 +42,17 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
     let roles;
     let totalItems = 0;
+    let rolesExist = false;
     if (this.can.can('list model', scope, { collection: 'roles' })) {
       roles = await this.store.query('role', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
       });
       totalItems = roles.meta?.totalItems;
+      rolesExist = await this.getRolesExist(scope_id, totalItems);
     }
-    const rolesExist = await this.getRolesExist(scope_id, totalItems);
 
     return { roles, rolesExist, totalItems };
   }
@@ -65,10 +67,11 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const role = await this.store.query(
       'role',
       {
+        scope_id,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],

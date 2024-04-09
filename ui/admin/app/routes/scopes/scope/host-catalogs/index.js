@@ -45,19 +45,17 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
     let hostCatalogs;
     let totalItems = 0;
+    let hostCatalogsExist = false;
     if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
       hostCatalogs = await this.store.query('host-catalog', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
       });
       totalItems = hostCatalogs.meta?.totalItems;
+      hostCatalogsExist = await this.getHostCatalogsExist(scope_id, totalItems);
     }
-
-    const hostCatalogsExist = await this.getHostCatalogsExist(
-      scope_id,
-      totalItems,
-    );
 
     return { hostCatalogs, totalItems, hostCatalogsExist };
   }
@@ -73,10 +71,11 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       return true;
     }
 
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const hostCatalogs = await this.store.query(
       'host-catalog',
       {
+        scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,

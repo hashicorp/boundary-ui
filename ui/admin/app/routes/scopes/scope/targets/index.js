@@ -45,7 +45,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   /**
    * Loads queried targets, the number of targets under current scope, and
    * active sessions filtering options.
-   * @returns {Promise<{totalItems: number, targets: [TargetModel], allTargets: [TargetModel] }> }
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], targetsExist: boolean }> }
    */
   async model({ search, availableSessions, types, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -61,6 +61,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     });
 
     const sessions = await this.store.query('session', {
+      scope_id,
       query: {
         filters: {
           scope_id: [{ equals: scope_id }],
@@ -73,35 +74,49 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     });
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
-    await this.getAllTargets(scope_id);
-
     let targets;
     let totalItems = 0;
+    let targetsExist = false;
     if (this.can.can('list model', scope, { collection: 'targets' })) {
       targets = await this.store.query('target', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
       });
       totalItems = targets.meta?.totalItems;
+      targetsExist = await this.getTargetsExist(scope_id, totalItems);
     }
 
-    return { targets, allTargets: this.allTargets, totalItems };
+    return { targets, targetsExist, totalItems };
   }
 
-  async getAllTargets(scopeId) {
-    const options = { pushToStore: false };
-    this.allTargets = await this.store.query(
+  /**
+   * Sets targetsExist to true if there exists any targets.
+   * @param {string} scope_id
+   * @param {number} totalItems
+   * @returns {Promise<boolean>}
+   */
+  async getTargetsExist(scope_id, totalItems) {
+    if (totalItems > 0) {
+      return true;
+    }
+    const options = { pushToStore: false, peekIndexedDB: true };
+    const targets = await this.store.query(
       'target',
       {
+        scope_id,
         query: {
           filters: {
-            scope_id: [{ equals: scopeId }],
+            scope_id: [{ equals: scope_id }],
           },
         },
+        page: 1,
+        pageSize: 1,
       },
       options,
     );
+    return targets.length > 0;
   }
 
   /**

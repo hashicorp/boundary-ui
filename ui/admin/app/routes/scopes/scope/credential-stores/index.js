@@ -51,22 +51,24 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
 
     let credentialStores;
     let totalItems = 0;
+    let credentialStoresExist = false;
     if (
       this.can.can('list model', scope, {
         collection: 'credential-stores',
       })
     ) {
       credentialStores = await this.store.query('credential-store', {
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
       });
       totalItems = credentialStores.meta?.totalItems;
+      credentialStoresExist = await this.getCredentialStoresExist(
+        scope_id,
+        totalItems,
+      );
     }
-    const credentialStoresExist = await this.getCredentialStoresExist(
-      scope_id,
-      totalItems,
-    );
 
     return { credentialStores, credentialStoresExist, totalItems };
   }
@@ -81,10 +83,11 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const credentialStore = await this.store.query(
       'credential-store',
       {
+        scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
