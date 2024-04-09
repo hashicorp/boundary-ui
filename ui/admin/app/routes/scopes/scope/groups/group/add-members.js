@@ -6,16 +6,15 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { hash } from 'rsvp';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
 
 export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
   @service router;
-  @service resourceFilterStore;
 
   // =attributes
 
@@ -39,28 +38,25 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
 
   /**
    * Loads all users and returns them with the group.
-   * @return {Promise{GroupModel, [UserModel]}}
+   * @return {Promise<{group: GroupModel, users: [UserModel], scopes: [ScopeModel] }> }
    */
-  model() {
+  async model() {
     const group = this.modelFor('scopes.scope.groups.group');
     // filter out projects, since the user resource exists only on org and above
     const scopes = this.store
       .peekAll('scope')
       .filter((scope) => !scope.isProject);
     const scopeIDs = this.scope?.map((scope) => scope.id);
-    const users = scopeIDs?.length
-      ? this.resourceFilterStore.queryBy(
-          'user',
-          {
-            scope_id: scopeIDs,
-          },
-          {
-            scope_id: 'global',
-            recursive: true,
-          },
-        )
-      : this.store.query('user', { scope_id: 'global', recursive: true });
-    return hash({ group, users, scopes });
+    const query = { filters: { scope_id: [] } };
+    scopeIDs?.forEach((scopeID) => {
+      query.filters.scope_id.push({ equals: scopeID });
+    });
+    const users = await this.store.query('user', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
+    return { group, users, scopes };
   }
 
   // =actions

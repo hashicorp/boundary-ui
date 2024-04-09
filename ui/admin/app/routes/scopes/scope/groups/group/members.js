@@ -5,32 +5,40 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
 
 export default class ScopesScopeGroupsGroupMembersRoute extends Route {
   // =services
 
-  @service intl;
-
-  @service resourceFilterStore;
+  @service store;
 
   // =methods
 
   /**
    * Returns users associated with this group.
-   * @return {Promise{group: GroupModel, members: Promise{[UserModel]}}}
+   * @return {Promise<{group: GroupModel, members: [UserModel]}>}
    */
-  model() {
+  async model() {
     const group = this.modelFor('scopes.scope.groups.group');
-    return hash({
-      group,
-      members: group.member_ids?.length
-        ? this.resourceFilterStore.queryBy(
-            'user',
-            { id: group.member_ids },
-            { scope_id: 'global', recursive: true },
-          )
-        : [],
-    });
+    const members = await this.getUsers(group.member_ids);
+    return { group, members };
+  }
+
+  /**
+   * Retrieves group members of user type.
+   * @param {array} ids
+   * @return {Promise[UserModel]}
+   */
+  async getUsers(ids) {
+    let users = [];
+    if (ids?.length) {
+      const query = { filters: { id: [] } };
+      ids.forEach((id) => query.filters.id.push({ equals: id }));
+      users = await this.store.query('user', {
+        scope_id: 'global',
+        recursive: true,
+        query,
+      });
+    }
+    return users;
   }
 }

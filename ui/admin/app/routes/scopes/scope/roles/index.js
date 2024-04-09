@@ -31,7 +31,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
   /**
    * Loads queried roles and the number of roles under current scope.
-   * @returns {Promise<{totalItems: number, users: [RoleModel], rolesExist: boolean }> }
+   * @returns {Promise<{totalItems: number, roles: [RoleModel], rolesExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -61,7 +61,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
    * Sets rolesExist to true if there exists any roles.
    * @param {string} scope_id
    * @param {number} totalItems
-   * @returns
+   * @returns {Promise<boolean>}
    */
   async getRolesExist(scope_id, totalItems) {
     if (totalItems > 0) {
