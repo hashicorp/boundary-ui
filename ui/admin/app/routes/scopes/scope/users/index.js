@@ -62,7 +62,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
    * Sets usersExist to true if there exists any users.
    * @param {string} scope_id
    * @param {number} totalItems
-   * @returns
+   * @returns {Promise<boolean>}
    */
   async getUsersExist(scope_id, totalItems) {
     if (totalItems > 0) {

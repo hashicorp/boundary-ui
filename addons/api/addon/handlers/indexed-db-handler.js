@@ -112,7 +112,7 @@ export default class IndexedDbHandler {
         );
 
         const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          this.indexedDb.normalizeData,
+          (item) => this.indexedDb.normalizeData(item, false),
         );
 
         // Return the raw data if we don't push to the store.
