@@ -70,7 +70,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
       return true;
     }
 
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const hostCatalogs = await this.store.query(
       'host-catalog',
       {

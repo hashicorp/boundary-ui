@@ -14,14 +14,14 @@
       {{t 'resources.target.title_plural'}}
       <DocLink @doc='target' @iconSize='large' />
     </h2>
-    {{#if @model.allTargets}}
+    {{#if @model.targetsExist}}
       <p>{{t 'resources.target.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='targets')}}
-      {{#if @model.allTargets}}
+      {{#if @model.targetsExist}}
         <Rose::LinkButton @route='scopes.scope.targets.new' @style='primary'>{{t
             'resources.target.titles.new'
           }}</Rose::LinkButton>
@@ -29,7 +29,7 @@
     {{/if}}
   </page.actions>
   <page.body class='search-filtering'>
-    {{#if @model.allTargets}}
+    {{#if @model.targetsExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
