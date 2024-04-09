@@ -93,9 +93,9 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
   })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.auth-method.notifications.make-primary-success')
-  async makePrimary(authMethod) {
+  async makePrimary({ id }) {
     const scopeModel = this.modelFor('scopes.scope');
-    scopeModel.primary_auth_method_id = authMethod.id;
+    scopeModel.primary_auth_method_id = id;
     // Attempt to save the change to the scope.  If this operation fails,
     // we rollback the change and rethrow the error so the user can be notified.
     try {
@@ -104,7 +104,6 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       scopeModel.rollbackAttributes();
       throw e;
     }
-    await authMethod.save();
     await this.refresh();
   }
 
@@ -134,7 +133,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
       scopeModel.rollbackAttributes();
       throw e;
     }
-    await authMethod.save();
+    await authMethod.reload();
   }
 
   /**

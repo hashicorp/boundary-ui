@@ -62,20 +62,17 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
 
     let authMethods;
     let totalItems = 0;
+    let authMethodsExist = false;
     if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
       authMethods = await this.store.query('auth-method', {
-        scope_id: 'global',
-        recursive: true,
+        scope_id,
         query: { search, filters },
         page,
         pageSize,
       });
       totalItems = authMethods.meta?.totalItems;
+      authMethodsExist = await this.getAuthMethodsExist(scope_id, totalItems);
     }
-    const authMethodsExist = await this.getAuthMethodsExist(
-      scope_id,
-      totalItems,
-    );
 
     return { authMethods, authMethodsExist, totalItems };
   }
@@ -90,14 +87,12 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
+    // TODO: Add flag to peek indexedDB to bypass network request.
     const options = { pushToStore: false };
     const authMethod = await this.store.query(
       'auth-method',
       {
-        // TODO: Remove scope_id & recursive once option to peek into
-        // indexedDB has been added.
-        scope_id: 'global',
-        recursive: true,
+        scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
