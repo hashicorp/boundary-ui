@@ -60,9 +60,8 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       filters.type.push({ equals: type });
     });
 
-    let sessions = [];
     if (this.can.can('list model', scope, { collection: 'sessions' })) {
-      sessions = await this.store.query('session', {
+      const sessions = await this.store.query('session', {
         scope_id,
         query: {
           filters: {

@@ -239,7 +239,7 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
   });
 
-  test('active sessions filter is hidden if user does not have permission to list sessiosn', async function (assert) {
+  test('active sessions filter is hidden if user does not have permission to list sessions', async function (assert) {
     instances.scopes.project.authorized_collection_actions.sessions =
       instances.scopes.project.authorized_collection_actions.sessions.filter(
         (item) => item !== 'list',
