@@ -87,8 +87,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    // TODO: Add flag to peek indexedDB to bypass network request.
-    const options = { pushToStore: false };
+    const options = { pushToStore: false, peekIndexedDB: true };
     const authMethod = await this.store.query(
       'auth-method',
       {
