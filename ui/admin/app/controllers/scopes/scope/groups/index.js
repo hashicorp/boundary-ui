@@ -35,7 +35,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   async cancel(group) {
     const { isNew } = group;
     group.rollbackAttributes();
-    if (isNew) await this.router.transitionTo('scopes.scope.groups');
+    if (isNew) this.router.transitionTo('scopes.scope.groups');
   }
 
   /**
