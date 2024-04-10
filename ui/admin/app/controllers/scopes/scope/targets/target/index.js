@@ -55,6 +55,6 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
    * @returns {array}
    */
   get remainingAliases() {
-    return this.model.aliases.slice(3, this.model.aliases.length + 1);
+    return this.model.aliases.slice(3);
   }
 }

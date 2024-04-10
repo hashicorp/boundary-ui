@@ -238,16 +238,17 @@
                 {{t 'resources.target.form.worker_filter.help'}}
               </F.HelperText>
             </Hds::Form::TextInput::Field>
+
+            {{#if form.isEditable}}
+              <Hds::Button
+                class='update-filter-button'
+                @text={{t 'resources.target.workers.actions.update-filter'}}
+                @color='secondary'
+                disabled={{form.disabled}}
+                {{on 'click' this.migrateWorkerFilters}}
+              />
+            {{/if}}
           </div>
-          {{#if form.isEditable}}
-            <Hds::Button
-              class='update-filter-button'
-              @text={{t 'resources.target.workers.actions.update-filter'}}
-              @color='secondary'
-              disabled={{form.disabled}}
-              {{on 'click' this.migrateWorkerFilters}}
-            />
-          {{/if}}
         </F.Control>
       {{else}}
         <F.Control>

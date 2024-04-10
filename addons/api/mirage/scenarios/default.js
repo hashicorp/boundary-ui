@@ -125,15 +125,17 @@ export default function (server) {
   });
 
   // Aliases
-  const targets = server.schema.targets.all().models[0];
-  const destination_id = server.schema.targets.all().models[0].id;
-  const aliases = server.createList('alias', 3, {
+  const aliasDestinationTarget = server.schema.targets.all().models[0];
+  const { id: destination_id } = aliasDestinationTarget;
+  const aliases = server.createList('alias', 4, {
     scope: globalScope,
     destination_id,
   });
-  targets.update({
-    aliases: [{ id: aliases[0].id, value: aliases[0].value }],
+
+  aliasDestinationTarget.update({
+    aliases: aliases.map((alias) => ({ id: alias.id, value: alias.value })),
   });
+
   // Workers
   server.createList('worker', 3, { scope: globalScope });
 
