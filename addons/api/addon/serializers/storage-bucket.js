@@ -4,7 +4,10 @@
  */
 
 import ApplicationSerializer from './application';
-import { TYPE_CREDENTIAL_DYNAMIC } from '../models/storage-bucket';
+import {
+  TYPE_CREDENTIAL_DYNAMIC,
+  TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+} from '../models/storage-bucket';
 
 const fieldsByCredentialType = {
   static: [
@@ -25,6 +28,12 @@ const fieldsByCredentialType = {
   ],
 };
 export default class StorageBucketSerializer extends ApplicationSerializer {
+  /**
+   * Serializes storage-bucket. ATM just AWS needs specific serialization,
+   * for the other plugin types use default.
+   * @param {object} snapshot
+   * @returns
+   */
   serialize(snapshot) {
     const { credentialType } = snapshot.record;
     const pluginType = snapshot.record.plugin?.name;
@@ -36,19 +45,19 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
       delete serialized.bucket_prefix;
     }
 
-    switch (pluginType) {
-      case 'minio':
-        return this.serializeMinio(serialized);
-      case 'aws':
-      default:
-        return this.serializeAws(serialized, credentialType);
+    if (pluginType === TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3) {
+      return this.serializeAws(serialized, credentialType);
     }
-  }
 
-  serializeMinio(serialized) {
     return serialized;
   }
 
+  /**
+   * Returns a storage bucket serialized object specific for aws
+   * @param {object} serialized
+   * @param {string} credentialType
+   * @returns
+   */
   serializeAws(serialized, credentialType) {
     if (serialized.attributes) {
       if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {

@@ -81,7 +81,7 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * True if the storage bucket plugin type is MinIO
    * @type {boolean}
    */
-  get isMinio() {
+  get isMinIO() {
     return this.compositeType === TYPE_STORAGE_BUCKET_PLUGIN_MINIO;
   }
 
