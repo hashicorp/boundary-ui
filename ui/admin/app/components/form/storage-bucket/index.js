@@ -12,6 +12,7 @@ import { set } from '@ember/object';
 import {
   TYPES_CREDENTIALS,
   TYPE_CREDENTIAL_DYNAMIC,
+  TYPES_STORAGE_BUCKET_PLUGIN,
 } from 'api/models/storage-bucket';
 
 export default class FormStorageBucketComponent extends Component {
@@ -29,10 +30,17 @@ export default class FormStorageBucketComponent extends Component {
 
   /**
    * returns an array of available credential types
-   * @type {object}
+   * @type {array}
    */
   get credentials() {
     return TYPES_CREDENTIALS;
+  }
+
+  /**
+   * returns an array of available storage bucket plugin types
+   */
+  get pluginTypes() {
+    return TYPES_STORAGE_BUCKET_PLUGIN;
   }
 
   // =actions

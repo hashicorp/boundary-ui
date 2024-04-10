@@ -17,6 +17,13 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   @service can;
   @service router;
 
+  // =attributes
+  queryParams = {
+    compositeType: {
+      refreshModel: true,
+    },
+  };
+
   // =methods
 
   /**
@@ -39,7 +46,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
    * creating another, but reuse name/description/other fields if available.
    * @return {StorageBucket}
    */
-  model() {
+  model({ compositeType = TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 }) {
     const scopeModel = this.store.peekRecord('scope', 'global');
     let name,
       description,
@@ -62,7 +69,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
     }
     const record = this.store.createRecord('storage-bucket', {
       type: TYPE_STORAGE_BUCKET_PLUGIN,
-      compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+      compositeType,
       name,
       description,
       scope,

@@ -434,6 +434,9 @@ storage-bucket:
     dynamic:
       title: Dynamic
       description: Specify an Assume Role used to generate credentials to use with this AWS bucket
+  plugin-types:
+    aws: Aws
+    minio: MinIO
   form:
     scope:
       label: Scope
@@ -443,6 +446,9 @@ storage-bucket:
     provider:
       label: Provider
       help: Boundary currently only supports Amazon S3 storage.
+    endpoint_url:
+      label: Endpoint URL
+      help: Cannot be changed later.
     bucket_name:
       label: Bucket name
       help: The name of this bucket in AWS
