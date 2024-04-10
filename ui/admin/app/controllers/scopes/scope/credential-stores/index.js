@@ -75,7 +75,7 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
     const { isNew } = credentialStore;
     credentialStore.rollbackAttributes();
     if (isNew) {
-      await this.router.transitionTo('scopes.scope.credential-stores');
+      this.router.transitionTo('scopes.scope.credential-stores');
     }
   }
 
@@ -90,7 +90,7 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
   @notifySuccess('notifications.delete-success')
   async delete(credentialStore) {
     await credentialStore.destroyRecord();
-    await this.router.replaceWith('scopes.scope.credential-stores');
+    this.router.replaceWith('scopes.scope.credential-stores');
     await this.router.refresh();
   }
 
