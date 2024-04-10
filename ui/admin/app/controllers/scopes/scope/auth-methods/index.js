@@ -90,6 +90,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   applyFilter(paramKey, selectedItems) {
     this[paramKey] = [...selectedItems];
     this.page = 1;
+  }
 
   /**
    * Removes an item from array `property` at `index` on the
