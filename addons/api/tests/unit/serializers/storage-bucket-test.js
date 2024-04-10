@@ -159,6 +159,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           bucket_name: 'bucketname',
           bucket_prefix: 'bucketprefix',
           worker_filter: 'workerfilter',
+          plugin: { name: 'aws' },
           region: 'eu-west-1',
           access_key_id: 'foobars',
           secret_access_key: 'testing',
@@ -216,6 +217,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           bucket_name: 'bucketname',
           bucket_prefix: 'bucketprefix',
           worker_filter: 'workerfilter',
+          plugin: { name: 'aws' },
           region: 'eu-west-1',
           disable_credential_rotation: true,
           access_key_id: 'test',
@@ -284,7 +286,6 @@ module('Unit | Serializer | storage bucket', function (hooks) {
     record.name = 'This is the new name';
     record.endpoint_url = 'http://developer.hashicorp.com';
     const snapshot = record._createSnapshot();
-    console.log('Snapshot:', snapshot);
     const serializedRecord = serializer.serialize(snapshot);
 
     const expectedResult = {
