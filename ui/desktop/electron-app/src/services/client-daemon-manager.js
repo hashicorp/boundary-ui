@@ -96,11 +96,12 @@ class ClientDaemonManager {
 
   async search(requestData) {
     const start = Date.now();
+
     if (isWindows()) {
       const result = await searchCliCommand(requestData);
 
       const end = Date.now();
-      const { auth_token_id, ...logRequestData } = requestData;
+      const { auth_token_id, token, ...logRequestData } = requestData;
       log.info(`Search request took ${end - start} ms`, logRequestData);
 
       return result;
@@ -181,6 +182,7 @@ const searchCliCommand = (requestData) => {
   }
 
   parsedResponse = jsonify(stderr);
+  log.info(`Search Request Failed`, parsedResponse);
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
     ...parsedResponse?.api_error,
