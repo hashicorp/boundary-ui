@@ -152,4 +152,33 @@ export default class ScopesScopeTargetsRoute extends Route {
     await this.router.replaceWith('scopes.scope.targets');
     this.refresh();
   }
+
+  /**
+   * Delete an alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async deleteAlias(alias) {
+    await alias.destroyRecord();
+    await this.router.replaceWith('scopes.scope.targets.target');
+    this.router.refresh();
+  }
+
+  /**
+   * Remove destaination_id from alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.clear-success')
+  async clearAlias(alias) {
+    alias.destination_id = '';
+    await alias.save();
+    this.router.refresh('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
+  }
 }
