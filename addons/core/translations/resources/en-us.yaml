@@ -576,6 +576,7 @@ target:
     new: New Target
     active-sessions: Active sessions
     sessions-flyout: Active sessions for {targetDisplayName}
+    aliases-flyout: Aliases for {targetDisplayName}
   actions:
     create: New Target
     delete: Delete Target
@@ -586,6 +587,8 @@ target:
     enable-session-recording: Enable Session Recording
     enable-recording: Enable recording
     view-more-sessions: View more sessions
+    add-an-alias: Add an alias
+    view-more-aliases: View more aliases
   types:
     tcp: Generic TCP
     ssh: SSH
@@ -1027,6 +1030,8 @@ alias:
     authorize_session_arguments:
       label: Host ID
       help: Always use this host when connecting using this alias
+    sidebar:
+      help: Use a domain name as a shortcut for anyone with access to this target.
     alias:
       label: Aliases
       help: You can create aliases for this target that will make it easier to reach. Users must have access to this project to use aliases.

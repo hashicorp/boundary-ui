@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -21,7 +21,11 @@ module('Acceptance | targets | read', function (hooks) {
   setupMirage(hooks);
 
   let featuresService;
-
+  const ALIASES_SIDEBAR = '.target-sidebar-aliases';
+  const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
+  const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases button';
+  const VIEW_MORE_BTN = '[data-test-view-more]';
+  const FLYOUT_COMPONENT = '[data-test-flyout]';
   const instances = {
     scopes: {
       global: null,
@@ -188,5 +192,42 @@ module('Acceptance | targets | read', function (hooks) {
 
     assert.notEqual(currentURL(), incorrectUrl);
     assert.strictEqual(currentURL(), urls.sshTarget);
+  });
+
+  test('can view aliases on the right sidebar', async function (assert) {
+    instances.tcpTarget.update({
+      aliases: [{ id: 'alt_123', value: 'alias 1' }],
+    });
+    await visit(urls.tcpTarget);
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
+    assert.strictEqual(
+      find(ALIASES_SIDEBAR_LIST).textContent.trim(),
+      'alias 1',
+    );
+  });
+
+  test('cannot view aliases list on the right sidebar if there is no alias associated with the target', async function (assert) {
+    await visit(urls.tcpTarget);
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(LINK_TO_NEW_ALIAS).hasText('Add an alias');
+    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+  });
+
+  test('can click `view more aliases` to see the remaining associated aliases if there are more than 3', async function (assert) {
+    instances.tcpTarget.update({
+      aliases: [
+        { id: 'alt_123', value: 'alias 1' },
+        { id: 'alt_125', value: 'alias 5' },
+        { id: 'alt_122', value: 'alias 2' },
+        { id: 'alt_124', value: 'alias 4' },
+      ],
+    });
+    await visit(urls.tcpTarget);
+
+    assert.dom(ALIASES_SIDEBAR).exists();
+    assert.dom(VIEW_MORE_BTN).exists();
+    await click(VIEW_MORE_BTN);
+    assert.dom(FLYOUT_COMPONENT).exists();
   });
 });
