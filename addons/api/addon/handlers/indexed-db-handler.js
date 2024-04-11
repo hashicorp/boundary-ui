@@ -35,59 +35,60 @@ export default class IndexedDbHandler {
         }
 
         let { page, pageSize, query: queryObj, ...remainingQuery } = query;
-        const tokenKey = `${type}-${hashCode(remainingQuery)}`;
+
+        const adapter = store.adapterFor(type);
+        const schema = store.modelFor(type);
+        const serializer = store.serializerFor(type);
 
         if (!peekIndexedDB) {
+          const tokenKey = `${type}-${hashCode(remainingQuery)}`;
           const listToken = await indexedDb.token.get(tokenKey);
-          const adapter = store.adapterFor(type);
-          const schema = store.modelFor(type);
 
           let payload;
           try {
             payload = await adapter.query(store, schema, {
               ...remainingQuery,
               list_token: listToken?.token,
-          });
-        } catch (e) {
-          // If we get an invalid list token, we'll delete the token and
-          // clear the DB and try again without a token.
-          if (
-            e?.errors[0].status === 400 &&
-            e?.errors[0].code === 'invalid list token'
-          ) {
-            await indexedDb[type].clear();
-            // Delete all tokens of the same resource type so we don't keep clearing the DB.
-            // Even if other tokens may still be valid, we might have cleared data that they
-            // depended on so we should clear all tokens of the same type when clearing the DB.
-            const tokenKeys = await indexedDb.token
-              .where(':id')
-              .startsWith(type)
-              .primaryKeys();
-
-            await indexedDb.token.bulkDelete(tokenKeys);
-
-            payload = await adapter.query(store, schema, {
-              ...remainingQuery,
             });
-          } else {
-            throw e;
+          } catch (e) {
+            // If we get an invalid list token, we'll delete the token and
+            // clear the DB and try again without a token.
+            if (
+              e?.errors[0].status === 400 &&
+              e?.errors[0].code === 'invalid list token'
+            ) {
+              await indexedDb[type].clear();
+              // Delete all tokens of the same resource type so we don't keep clearing the DB.
+              // Even if other tokens may still be valid, we might have cleared data that they
+              // depended on so we should clear all tokens of the same type when clearing the DB.
+              const tokenKeys = await indexedDb.token
+                .where(':id')
+                .startsWith(type)
+                .primaryKeys();
+
+              await indexedDb.token.bulkDelete(tokenKeys);
+
+              payload = await adapter.query(store, schema, {
+                ...remainingQuery,
+              });
+            } else {
+              throw e;
+            }
           }
-        }
 
           // Store the token we just got back from the payload if it exists
-        if (payload.list_token) {
-          await indexedDb.token.put({
-            id: tokenKey,
-            token: payload.list_token,
-          });
-        }
+          if (payload.list_token) {
+            await indexedDb.token.put({
+              id: tokenKey,
+              token: payload.list_token,
+            });
+          }
 
           // Remove any records from the DB if the API indicates they've been deleted
           if (payload.removed_ids?.length > 0) {
             await indexedDb[type].bulkDelete(payload.removed_ids);
           }
 
-          const serializer = store.serializerFor(type);
           const normalizedPayload = serializer.normalizeResponse(
             store,
             schema,
@@ -100,8 +101,14 @@ export default class IndexedDbHandler {
 
           // Store the new data we just got back from the API refresh
           const items = payloadData.map((datum) =>
-            this.indexedDb.normalizeData(datum, true),
+            this.indexedDb.normalizeData({
+              data: datum,
+              cleanData: true,
+              schema,
+              serializer,
+            }),
           );
+
           await indexedDb[type].bulkPut(items);
         }
 
@@ -112,7 +119,13 @@ export default class IndexedDbHandler {
         );
 
         const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          (item) => this.indexedDb.normalizeData(item, false),
+          (item) =>
+            this.indexedDb.normalizeData({
+              data: item,
+              cleanData: false,
+              schema,
+              serializer,
+            }),
         );
 
         // Return the raw data if we don't push to the store.
