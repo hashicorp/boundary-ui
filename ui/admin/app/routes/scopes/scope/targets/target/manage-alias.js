@@ -39,6 +39,7 @@ export default class ScopesScopeTargetsTargetManageAliasRoute extends Route {
   async save(alias) {
     await alias.save();
     await this.router.refresh('scopes.scope.targets.target');
+    this.router.transitionTo('scopes.scope.targets.target');
   }
 
   /**

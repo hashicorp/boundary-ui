@@ -71,7 +71,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
     authenticateSession({});
   });
 
-  test.skip('users can create a new alias bucket for a target of TCP type', async function (assert) {
+  test('users can create a new alias for a target of TCP type', async function (assert) {
     const aliasCount = getAliasCount();
     await visit(urls.targets);
 
@@ -92,7 +92,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 
-  test('users can create a new alias bucket for a target of SSH type', async function (assert) {
+  test('users can create a new alias for a target of SSH type', async function (assert) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
       type: TYPE_TARGET_SSH,

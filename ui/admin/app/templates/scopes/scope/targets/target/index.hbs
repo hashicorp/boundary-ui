@@ -71,7 +71,7 @@
                 {{on 'click' this.targets.toggleFlyout}}
               />
             {{/if}}
-            {{#if (and this.showFlyout (gt @model.aliases.length 3))}}
+            {{#if this.showFlyOutComponent}}
               <Hds::Flyout
                 data-test-flyout
                 @onClose={{this.toggleFlyout}}
