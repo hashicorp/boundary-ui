@@ -41,7 +41,7 @@ class ClientDaemonManager {
    * @returns {Promise<void>}
    */
   async start() {
-    const startDaemonCommand = ['daemon', 'start'];
+    const startDaemonCommand = ['daemon', 'start', '-log-level=debug'];
     // We use spawn here because we want to check the stderr for specific logs
     const { stderr } = await spawn(startDaemonCommand);
 
