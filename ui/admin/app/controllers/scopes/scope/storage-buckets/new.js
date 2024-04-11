@@ -1,8 +1,11 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 export default class ScopesScopeStorageBucketsNewController extends Controller {
+  @controller('scopes/scope/storage-buckets/index')
+  storageBuckets;
+
   // =services
   @service router;
 
@@ -10,6 +13,10 @@ export default class ScopesScopeStorageBucketsNewController extends Controller {
   queryParams = ['compositeType'];
 
   // =actions
+  /**
+   * Changes the plugin type.
+   * @param {*} pluginType
+   */
   @action
   async changePluginType(pluginType) {
     await this.router.replaceWith({

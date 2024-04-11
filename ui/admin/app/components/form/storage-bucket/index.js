@@ -56,7 +56,7 @@ export default class FormStorageBucketComponent extends Component {
     } else {
       this.showDynamicCredentials = false;
     }
-    this.args.changeType(type);
+    this.args.changeCredentialType(type);
   }
 
   updateScopeFieldDescription() {
