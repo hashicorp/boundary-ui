@@ -30,17 +30,20 @@ export const formatDbName = (userId, clusterUrl) =>
   `boundary-${userId}-${clusterUrl}`;
 
 /**
- * Recursively copy over the object and convert any booleans to "true" or "false" so they can be indexed
+ * Recursively copy over the object and convert any booleans to "true" or "false" so they can be indexed.
+ * Also converts any ember-like arrays back to a standard array.
  * @param result
  * @param object
  * @returns {*}
  */
-const convertBooleansInObject = (result, object) => {
+const convertFields = (result, object) => {
   Object.entries(object).forEach(([key, value]) => {
     if (typeOf(value) === 'object') {
-      result[key] = convertBooleansInObject({}, value);
+      result[key] = convertFields({}, value);
     } else if (typeOf(value) === 'boolean') {
       result[key] = value ? 'true' : 'false';
+    } else if (typeOf(value) === 'array') {
+      result[key] = [...value];
     } else {
       result[key] = value;
     }
@@ -50,17 +53,31 @@ const convertBooleansInObject = (result, object) => {
 };
 
 /**
- * Recursively copy over the object and convert any string "true" or "false" back to booleans
+ * Recursively copy over the object and convert any string "true" or "false" back to booleans.
+ * Will also convert any array fields back using their model transformation.
  * @param result
  * @param object
+ * @param schema
+ * @param serializer
  * @returns {*}
  */
-const unconvertBooleansInObject = (result, object) => {
+const unconvertFields = (result, object, schema, serializer) => {
   Object.entries(object).forEach(([key, value]) => {
     if (typeOf(value) === 'object') {
-      result[key] = unconvertBooleansInObject({}, value);
+      result[key] = unconvertFields({}, value, schema, serializer);
     } else if (value === 'true' || value === 'false') {
       result[key] = value === 'true';
+    } else if (typeOf(value) === 'array') {
+      const attribute = schema.attributes.get(key);
+
+      // If attribute type is array, we transform it back to a tracked array
+      if (attribute?.type === 'array') {
+        const transformer = serializer.transformFor(attribute.type);
+        result[key] = transformer.deserialize(value, attribute.options);
+        return;
+      }
+
+      result[key] = value;
     } else {
       result[key] = value;
     }
@@ -91,20 +108,20 @@ export default class IndexedDbService extends Service {
   }
 
   /**
-   * Cleanup the data by converting all booleans to "false" or "true".
+   * Cleanup the data by converting all fields to plain javascript objects.
+   * We will also convert booleans to "false" or "true".
    * IndexedDB doesn't support indexes on boolean values so we have to
    * convert them to be able to support using boolean values.
    *
-   * Data is assumed to be in POJOs and that our normalized data are not
-   * ember objects, otherwise they should also be converted.
-   *
-   * Undo the operation by setting `convertBooleans` to false.
+   * Undo the operation by setting `convertFields` to false.
    *
    * @param {Object} data
-   * @param {Boolean} convertBooleans
+   * @param {Boolean} cleanData
+   * @param {Object} schema
+   * @param {Object} serializer
    * @return {{id, type, attributes: {}, relationships: {}}}
    */
-  normalizeData(data, convertBooleans) {
+  normalizeData({ data, cleanData, schema, serializer }) {
     if (!data) {
       return data;
     }
@@ -114,12 +131,12 @@ export default class IndexedDbService extends Service {
     return {
       id,
       type,
-      attributes: convertBooleans
-        ? convertBooleansInObject({}, attributes)
-        : unconvertBooleansInObject({}, attributes),
-      relationships: convertBooleans
-        ? convertBooleansInObject({}, relationships)
-        : unconvertBooleansInObject({}, relationships),
+      attributes: cleanData
+        ? convertFields({}, attributes)
+        : unconvertFields({}, attributes, schema, serializer),
+      relationships: cleanData
+        ? convertFields({}, relationships)
+        : unconvertFields({}, relationships, schema, serializer),
     };
   }
 }
