@@ -9,8 +9,10 @@ export const TYPE_STORAGE_BUCKET_PLUGIN = 'plugin';
 export const TYPES_STORAGE_BUCKET = Object.freeze([TYPE_STORAGE_BUCKET_PLUGIN]);
 
 export const TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 = 'aws';
+export const TYPE_STORAGE_BUCKET_PLUGIN_MINIO = 'minio';
 export const TYPES_STORAGE_BUCKET_PLUGIN = Object.freeze([
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+  TYPE_STORAGE_BUCKET_PLUGIN_MINIO,
 ]);
 
 export const TYPE_CREDENTIAL_STATIC = 'static';
@@ -73,6 +75,14 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    */
   get isAWS() {
     return this.compositeType === TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3;
+  }
+
+  /**
+   * True if the storage bucket plugin type is MinIO
+   * @type {boolean}
+   */
+  get isMinIO() {
+    return this.compositeType === TYPE_STORAGE_BUCKET_PLUGIN_MINIO;
   }
 
   /**
