@@ -10,6 +10,7 @@ const runtimeSettings = require('./runtime-settings');
 const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
 const treeKill = require('tree-kill');
+const log = require('electron-log/main');
 
 class ClientDaemonManager {
   #socketPath;
@@ -48,6 +49,8 @@ class ClientDaemonManager {
     if (stderr && !stderr.includes('The daemon is already running')) {
       this.#isClientDaemonAlreadyRunning = false;
     }
+
+    log.info('Client daemon started', stderr);
     this.status();
   }
 
@@ -152,6 +155,7 @@ const searchCliCommand = (requestData) => {
   }
 
   parsedResponse = jsonify(stderr);
+  log.info(`Search Request Failed`, parsedResponse);
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
     ...parsedResponse?.api_error,
