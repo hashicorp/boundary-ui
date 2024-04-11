@@ -25,4 +25,10 @@ export default class ScopesScopeScopesRoute extends Route {
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
+
+  setupController(controller) {
+    const currentScope = this.modelFor('scopes.scope');
+    super.setupController(...arguments);
+    controller.setProperties({ currentScope });
+  }
 }

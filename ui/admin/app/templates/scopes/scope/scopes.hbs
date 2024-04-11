@@ -3,7 +3,7 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-{{#if @model.currentScope.isGlobal}}
+{{#if this.currentScope.isGlobal}}
   {{page-title (t 'resources.org.title_plural')}}
   <Breadcrumbs::Item
     @text={{t 'resources.org.title_plural'}}
@@ -13,13 +13,13 @@
   />
 {{/if}}
 
-{{#if @model.currentScope.isOrg}}
+{{#if this.currentScope.isOrg}}
   {{page-title (t 'resources.project.title_plural')}}
   <Breadcrumbs::Item
     @text={{t 'resources.project.title_plural'}}
     @icon='grid'
     @route='scopes.scope.scopes'
-    @model={{@model.currentScope.id}}
+    @model={{this.currentScope.id}}
   />
 {{/if}}
 
