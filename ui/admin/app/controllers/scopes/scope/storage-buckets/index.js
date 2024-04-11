@@ -55,6 +55,11 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
     if (isNew) this.router.transitionTo('scopes.scope.storage-buckets');
   }
 
+  /**
+   * Updates credentil type
+   * @param {object} storageBucket
+   * @param {string} credentialType
+   */
   @action
   changeCredentialType(storageBucket, credentialType) {
     storageBucket.credentialType = credentialType;

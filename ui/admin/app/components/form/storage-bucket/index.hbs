@@ -2,21 +2,23 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
-{{component
-  (concat 'form/storage-bucket/' @model.compositeType)
-  model=@model
-  submit=@submit
-  cancel=@cancel
-  updateScope=this.updateScope
-  scopeFieldDescription=this.scopeFieldDescription
-  scopes=@scopes
-  pluginTypes=this.pluginTypes
-  changePluginType=@changePluginType
-  changeCredentialType=@changeCredentialType
-  credentials=this.credentials
-  selectedCredentialType=this.selectedCredentialType
-  updateTypeSelection=this.updateTypeSelection
-  showDynamicCredentials=this.showDynamicCredentials
-  rollbackSecretAttrs=this.rollbackSecretAttrs
-  toggleDisableCredentialRotation=this.toggleDisableCredentialRotation
-}}
+{{#if @model.type}}
+  {{component
+    (concat 'form/storage-bucket/' @model.compositeType)
+    model=@model
+    submit=@submit
+    cancel=@cancel
+    updateScope=this.updateScope
+    scopeFieldDescription=this.scopeFieldDescription
+    scopes=@scopes
+    pluginTypes=this.pluginTypes
+    changePluginType=@changePluginType
+    changeCredentialType=@changeCredentialType
+    credentials=this.credentials
+    selectedCredentialType=this.selectedCredentialType
+    updateTypeSelection=this.updateTypeSelection
+    showDynamicCredentials=this.showDynamicCredentials
+    rollbackSecretAttrs=this.rollbackSecretAttrs
+    toggleDisableCredentialRotation=this.toggleDisableCredentialRotation
+  }}
+{{/if}}

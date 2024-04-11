@@ -50,16 +50,16 @@
   {{! scope }}
   {{#if @model.isNew}}
     <Hds::Form::Select::Field
+      name='scope'
       @isRequired={{true}}
       @width='100%'
       disabled={{form.disabled}}
-      name='scope'
       {{on 'change' @updateScope}}
       as |F|
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
       <F.HelperText>
-        {{this.scopeFieldDescription}}
+        {{@scopeFieldDescription}}
       </F.HelperText>
       <F.Options>
         <option disabled hidden selected value=''>

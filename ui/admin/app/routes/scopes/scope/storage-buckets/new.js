@@ -55,6 +55,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       bucket_prefix,
       region,
       worker_filter;
+
     if (this.currentModel?.isNew) {
       ({
         name,
