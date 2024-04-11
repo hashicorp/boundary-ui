@@ -13,6 +13,7 @@ const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
 const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
+const log = require('electron-log/main');
 
 class ClientDaemonManager {
   #socketPath;
@@ -40,7 +41,7 @@ class ClientDaemonManager {
    * @returns {Promise<void>}
    */
   async start() {
-    const startDaemonCommand = ['daemon', 'start'];
+    const startDaemonCommand = ['daemon', 'start', '-log-level=debug'];
     // We use spawn here because we want to check the stderr for specific logs
     const { stderr } = await spawn(startDaemonCommand);
 
@@ -49,6 +50,8 @@ class ClientDaemonManager {
     if (stderr && !stderr.includes('The daemon is already running')) {
       this.#isClientDaemonAlreadyRunning = false;
     }
+
+    log.info('Client daemon started', stderr);
     this.status();
   }
 
@@ -91,9 +94,17 @@ class ClientDaemonManager {
     return unixSocketRequest(request, postBody);
   }
 
-  search(requestData) {
+  async search(requestData) {
+    const start = Date.now();
+
     if (isWindows()) {
-      return searchCliCommand(requestData);
+      const result = await searchCliCommand(requestData);
+
+      const end = Date.now();
+      const { auth_token_id, token, ...logRequestData } = requestData;
+      log.info(`Search request took ${end - start} ms`, logRequestData);
+
+      return result;
     }
 
     delete requestData.token;
@@ -104,7 +115,12 @@ class ClientDaemonManager {
       path: `http://internal.boundary.local/v1/search?${queryString.toString()}`,
       socketPath: this.#socketPath,
     };
-    return unixSocketRequest(request);
+    const result = await unixSocketRequest(request);
+    const end = Date.now();
+    const { auth_token_id, ...logRequestData } = requestData;
+    log.info(`Search request took ${end - start} ms`, logRequestData);
+
+    return result;
   }
 }
 
@@ -130,6 +146,8 @@ const addTokenCliCommand = (token) => {
   }
 
   parsedResponse = jsonify(stderr);
+  log.error('Error adding token to client daemon', parsedResponse);
+
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
     ...parsedResponse?.api_error,
@@ -164,6 +182,7 @@ const searchCliCommand = (requestData) => {
   }
 
   parsedResponse = jsonify(stderr);
+  log.info(`Search Request Failed`, parsedResponse);
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
     ...parsedResponse?.api_error,
