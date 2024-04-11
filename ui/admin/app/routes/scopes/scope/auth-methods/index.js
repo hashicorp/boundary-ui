@@ -64,12 +64,18 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     let totalItems = 0;
     let authMethodsExist = false;
     if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
-      authMethods = await this.store.query('auth-method', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
+      // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
+      const options = { storeToken: false };
+      authMethods = await this.store.query(
+        'auth-method',
+        {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        },
+        options,
+      );
       totalItems = authMethods.meta?.totalItems;
       authMethodsExist = await this.getAuthMethodsExist(scope_id, totalItems);
     }
