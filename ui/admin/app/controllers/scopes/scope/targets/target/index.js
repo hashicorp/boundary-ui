@@ -26,6 +26,9 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
    */
   @action
   toggleFlyout() {
+    if (this.model.aliases.length < 3) {
+      this.showFlyout = false;
+    }
     this.showFlyout = !this.showFlyout;
   }
 

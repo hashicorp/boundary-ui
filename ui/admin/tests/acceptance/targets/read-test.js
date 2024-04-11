@@ -25,10 +25,13 @@ module('Acceptance | targets | read', function (hooks) {
   let featuresService;
   let aliasResource;
   const ALIASES_SIDEBAR = '.target-sidebar-aliases';
-  const ALIASES_SIDEBAR_LIST = '.link-list-item > a';
+  const ALIASES_SIDEBAR_LIST = '.link-list-item';
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
   const VIEW_MORE_BTN = '[data-test-view-more]';
   const FLYOUT_COMPONENT = '[data-test-flyout]';
+  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
+
   const instances = {
     scopes: {
       global: null,
@@ -86,7 +89,7 @@ module('Acceptance | targets | read', function (hooks) {
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.aliases = `${urls.globalScope}/aliases`;
 
-    urls.alias = `${urls.aliases}/${aliasResource.id}`;
+    urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
     authenticateSession({});
   });
@@ -250,7 +253,13 @@ module('Acceptance | targets | read', function (hooks) {
       aliases: [{ id: aliasResource.id, value: aliasResource.value }],
     });
     await visit(urls.tcpTarget);
-    await click(ALIASES_SIDEBAR_LIST);
+
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
+    await click(DROPDOWN_BUTTON_SELECTOR);
+
+    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
+    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
+    await click(DROPDOWN_ITEM_SELECTOR);
     assert.strictEqual(currentURL(), urls.alias);
   });
 });

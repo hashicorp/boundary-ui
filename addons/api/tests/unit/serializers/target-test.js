@@ -364,6 +364,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [
@@ -400,6 +401,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           brokered_credential_source_ids: [],
           injected_application_credential_source_ids: [],
           authorized_actions: [],
@@ -432,6 +434,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
@@ -464,6 +467,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -496,6 +500,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -528,6 +533,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -561,6 +567,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
