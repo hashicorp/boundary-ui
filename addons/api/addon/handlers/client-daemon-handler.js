@@ -134,8 +134,9 @@ export default class ClientDaemonHandler {
                 'searchClientDaemon',
                 remainingQuery,
               );
-            } catch {
+            } catch (err) {
               // If it fails again just fall back to fetching controller data
+              __electronLog?.info('Failed to add token to client daemon', err);
             }
           }
 

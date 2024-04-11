@@ -21,6 +21,7 @@ const {
   shell,
 } = require('electron');
 require('./ipc/handlers.js');
+const log = require('electron-log/main');
 
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
@@ -53,6 +54,11 @@ protocol.registerSchemesAsPrivileged([
 // This is to correctly set the process.env.PATH as electron does not
 // correctly inherit the path variable in production
 fixPath();
+
+// Setup logger
+log.initialize();
+log.transports.file.format =
+  '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 
 const createWindow = (partition, closeWindowCB) => {
   /**
