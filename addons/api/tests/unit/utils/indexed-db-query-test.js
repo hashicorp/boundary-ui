@@ -22,7 +22,14 @@ const seedIndexDb = async (resource, store, indexedDb, server) => {
   );
 
   await indexedDb.db[resource].bulkPut(
-    normalizedPayload.data.map((datum) => indexedDb.normalizeData(datum, true)),
+    normalizedPayload.data.map((datum) =>
+      indexedDb.normalizeData({
+        data: datum,
+        cleanData: true,
+        schema,
+        serializer,
+      }),
+    ),
   );
 };
 
