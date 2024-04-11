@@ -132,16 +132,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     });
   }
 
-  // async canListUsers(orgId) {
-  //   const orgScope = await this.store.findRecord('scope', orgId);
-  //   const globalScope = await this.store.findRecord('scope', 'global');
-
-  //   return (
-  //     this.can.can('list model', globalScope, { collection: 'users' }) &&
-  //     this.can.can('list model', orgScope, { collection: 'users' })
-  //   );
-  // }
-
   /**
    * Get all the users but only load them once when entering the route.
    * @param scope
