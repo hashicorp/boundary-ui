@@ -47,8 +47,8 @@ export default class ScopesScopeTargetsTargetManageAliasRoute extends Route {
    * @param {AliasModel} alias
    */
   @action
-  cancel(alias) {
+  async cancel(alias) {
     alias.rollbackAttributes();
-    this.router.transitionTo('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
   }
 }
