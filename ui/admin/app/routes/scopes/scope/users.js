@@ -13,7 +13,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeUsersRoute extends Route {
   // =services
 
-  @service store;
   @service session;
   @service can;
   @service router;
@@ -25,18 +24,6 @@ export default class ScopesScopeUsersRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Load all users under current scope.
-   * @return {Promise{[UserModel]}}
-   */
-  model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'users' })) {
-      return this.store.query('user', { scope_id });
-    }
   }
 
   // =actions
@@ -83,7 +70,7 @@ export default class ScopesScopeUsersRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(user) {
     await user.destroyRecord();
-    await this.router.replaceWith('scopes.scope.users');
+    this.router.replaceWith('scopes.scope.users');
     this.refresh();
   }
 }

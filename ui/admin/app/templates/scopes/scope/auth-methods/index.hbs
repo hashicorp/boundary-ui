@@ -18,7 +18,7 @@
 
   <page.actions>
     {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
-      <Hds::Dropdown as |dd|>
+      <Hds::Dropdown data-test-new-dropdown as |dd|>
         <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
         <dd.Interactive
           @text={{t 'resources.auth-method.types.password'}}
@@ -41,9 +41,8 @@
     {{/if}}
   </page.actions>
 
-  <page.body>
-
-    {{#if @model}}
+  <page.body class='search-filtering'>
+    {{#if @model.authMethodsExist}}
       {{#unless this.hasPrimaryAuthMethod}}
         <Hds::Alert
           class='auth-methods-list-alert'
@@ -61,172 +60,154 @@
           </A.Description>
         </Hds::Alert>
       {{/unless}}
-    {{/if}}
-    {{#if
-      (or
-        @model
-        (has-resource-filter-selections 'scopes.scope.auth-methods' 'type')
-      )
-    }}
-      <Rose::Toolbar>
-        <Rose::Form as |form|>
-          {{#let
-            (resource-filter 'scopes.scope.auth-methods' 'type')
-            as |filter|
+
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Generic>
+          <Dropdown
+            name='type'
+            @toggleText={{t 'form.type.label'}}
+            @itemOptions={{this.authMethodTypeOptions}}
+            @checkedItems={{this.types}}
+            @applyFilter={{fn this.applyFilter 'types'}}
+          />
+        </S.Generic>
+        <S.Generic>
+          <Dropdown
+            name='primary'
+            @toggleText={{t 'resources.auth-method.titles.primary'}}
+            @itemOptions={{this.primaryOptions}}
+            @checkedItems={{this.primary}}
+            @applyFilter={{fn this.applyFilter 'primary'}}
+          />
+        </S.Generic>
+      </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
+
+      {{#if @model.authMethods}}
+        <Hds::Table
+          class='auth-methods-list-table'
+          @model={{@model.authMethods}}
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.type.label'))
+            (hash label=(t 'form.id.label'))
+            (hash label='')
+            (hash label=(t 'titles.actions'))
           }}
-            <Rose::Dropdown
-              @text={{t (concat 'form.' filter.name '.label')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <form.checkboxGroup
-                @name={{filter.name}}
-                @items={{filter.allowedValues}}
-                @selectedItems={{filter.selectedValue}}
-                @onChange={{route-action 'filterBy' filter.name}}
-                as |group|
-              >
-                <dropdown.item>
-                  <group.checkbox
-                    @label={{t
-                      (concat 'resources.auth-method.types.' group.item)
-                    }}
-                    value={{group.item}}
-                  />
-                </dropdown.item>
-              </form.checkboxGroup>
-            </Rose::Dropdown>
-          {{/let}}
-
-          {{#if
-            (has-resource-filter-selections 'scopes.scope.auth-methods' 'type')
-          }}
-            <Rose::Button
-              @style='inline-link-action'
-              @iconLeft='flight-icons/svg/x-16'
-              {{on 'click' (route-action 'clearAllFilters')}}
-            >{{t 'actions.clear-all-filters'}}</Rose::Button>
-          {{/if}}
-        </Rose::Form>
-      </Rose::Toolbar>
-    {{/if}}
-
-    {{#if @model}}
-      <Hds::Table
-        class='auth-methods-list-table'
-        @model={{@model}}
-        @columns={{array
-          (hash label=(t 'form.name.label'))
-          (hash label=(t 'form.type.label'))
-          (hash label=(t 'form.id.label'))
-          (hash label='')
-          (hash label=(t 'titles.actions'))
-        }}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if (can 'read auth-method' B.data)}}
-                <LinkTo
-                  @route='scopes.scope.auth-methods.auth-method'
-                  @model={{B.data.id}}
-                >
-                  {{B.data.displayName}}
-                </LinkTo>
-              {{else}}
-                {{B.data.displayName}}
-              {{/if}}
-              <p>{{B.data.description}}</p>
-            </B.Td>
-            <B.Td>
-              <Hds::Badge
-                @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
-              />
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-            <B.Td>
-              {{#if B.data.isPrimary}}
-                <Hds::Badge @text={{t 'states.primary'}} @color='success' />
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              {{#if (can 'makePrimary auth-method' B.data)}}
-                <Hds::Dropdown as |dd|>
-                  <dd.ToggleIcon
-                    @icon='more-horizontal'
-                    @text={{t 'actions.manage'}}
-                    @hasChevron={{false}}
-                  />
-                  {{#unless B.data.isPrimary}}
-                    <dd.Interactive
-                      @text={{t 'resources.auth-method.actions.make-primary'}}
-                      {{on 'click' (route-action 'makePrimary' B.data)}}
-                    />
-                  {{/unless}}
-                  {{#if B.data.isPrimary}}
-                    <dd.Interactive
-                      @text={{t
-                        'resources.auth-method.actions.remove-as-primary'
-                      }}
-                      {{on 'click' (route-action 'removeAsPrimary' B.data)}}
-                    />
-                  {{/if}}
-                </Hds::Dropdown>
-              {{/if}}
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-
-    {{else if
-      (has-resource-filter-selections 'scopes.scope.auth-methods' 'type')
-    }}
-
-      <Rose::Layout::Centered>
-        <Rose::Message @title={{t 'titles.no-results'}} as |message|>
-          <message.description>
-            {{t 'descriptions.no-results'}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-
-    {{else}}
-
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.auth-method.messages.welcome.title'}}
-          as |message|
+          @density='short'
+          @valign='middle'
         >
-          <message.description>
-            {{#if (can 'list model' this.scopeModel collection='auth-methods')}}
-              {{! can list (at least):  show default welcome message}}
-              {{t 'resources.auth-method.messages.welcome.description'}}
-            {{else if
-              (can 'create model' this.scopeModel collection='auth-methods')
+          <:body as |B|>
+            <B.Tr data-test-auth-methods-table-row={{B.data.id}}>
+              <B.Td>
+                {{#if (can 'read auth-method' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                <Hds::Badge
+                  @text={{t
+                    (concat 'resources.auth-method.types.' B.data.type)
+                  }}
+                />
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+              <B.Td>
+                {{#if B.data.isPrimary}}
+                  <Hds::Badge @text={{t 'states.primary'}} @color='success' />
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                {{#if (can 'makePrimary auth-method' B.data)}}
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                    />
+                    {{#unless B.data.isPrimary}}
+                      <dd.Interactive
+                        @text={{t 'resources.auth-method.actions.make-primary'}}
+                        data-test-make-primary-action
+                        {{on 'click' (route-action 'makePrimary' B.data)}}
+                      />
+                    {{/unless}}
+                    {{#if B.data.isPrimary}}
+                      <dd.Interactive
+                        @text={{t
+                          'resources.auth-method.actions.remove-as-primary'
+                        }}
+                        {{on 'click' (route-action 'removeAsPrimary' B.data)}}
+                      />
+                    {{/if}}
+                  </Hds::Dropdown>
+                {{/if}}
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState data-test-no-auth-method-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
+              query=this.search
+              resource=(t 'resources.auth-method.title_plural')
             }}
-              {{! can create (only):  show create-but-not-list welcome message}}
-              {{t
+          />
+        </Hds::ApplicationState>
+      {{/if}}
+    {{else}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'resources.auth-method.messages.welcome.title'}} />
+        <A.Body
+          {{! can list (at least):  show default welcome message}}
+          {{! can create (only):  show create-but-not-list welcome message}}
+          {{! can neither list nor create:  show neither-list-nor-create welcome message}}
+          @text={{t
+            (if
+              (can 'list model' this.scopeModel collection='auth-methods')
+              'resources.auth-method.description'
+              (if
+                (can 'create model' this.scopeModel collection='auth-methods')
                 'descriptions.create-but-not-list'
-                resource=(t 'resources.auth-method.title_plural')
-              }}
-            {{else}}
-              {{! can neither list nor create }}
-              {{t
                 'descriptions.neither-list-nor-create'
-                resource=(t 'resources.auth-method.title_plural')
-              }}
-            {{/if}}
-          </message.description>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-
+              )
+            )
+            resource=(t 'resources.auth-method.title_plural')
+          }}
+        />
+      </Hds::ApplicationState>
     {{/if}}
   </page.body>
 </Rose::Layout::Page>

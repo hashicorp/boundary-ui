@@ -13,8 +13,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeRolesRoute extends Route {
   // =services
 
-  @service store;
-  @service intl;
   @service session;
   @service can;
   @service router;
@@ -28,19 +26,8 @@ export default class ScopesScopeRolesRoute extends Route {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
-  /**
-   * Load all roles under current scope.
-   * @return {Promise{[RoleModel]}}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'roles' })) {
-      return this.store.query('role', { scope_id });
-    }
-  }
-
   // =actions
+
   /**
    * Rollback changes on an role.
    * @param {RoleModel} role
@@ -83,7 +70,7 @@ export default class ScopesScopeRolesRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(role) {
     await role.destroyRecord();
-    await this.router.replaceWith('scopes.scope.roles');
+    this.router.replaceWith('scopes.scope.roles');
     this.refresh();
   }
 }

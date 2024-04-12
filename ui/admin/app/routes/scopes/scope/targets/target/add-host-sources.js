@@ -33,7 +33,9 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   async model() {
     const target = this.modelFor('scopes.scope.targets.target');
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const hostCatalogs = await this.store.query('host-catalog', { scope_id });
+    const hostCatalogs = await this.store.query('host-catalog', {
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
+    });
     await all(
       hostCatalogs.map(({ id: host_catalog_id }) =>
         this.store.query('host-set', { host_catalog_id }),

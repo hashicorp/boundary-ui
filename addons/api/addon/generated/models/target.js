@@ -108,4 +108,17 @@ export default class GeneratedTargetModel extends BaseModel {
     isNestedAttribute: true,
   })
   enable_session_recording;
+
+  @attr('array', {
+    description:
+      'with_aliases specify the aliases that should be created when the target is created. ',
+  })
+  with_aliases;
+
+  @attr('array', {
+    readOnly: true,
+    description:
+      'with_aliases specify the aliases that should be created when the target is created. ',
+  })
+  aliases;
 }

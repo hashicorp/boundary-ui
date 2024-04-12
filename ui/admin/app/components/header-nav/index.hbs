@@ -4,7 +4,11 @@
 }}
 
 <Rose::Dropdown
-  @text={{this.scope.org.displayName}}
+  @text={{if
+    this.scope.org.isGlobal
+    (t 'titles.global')
+    this.scope.org.displayName
+  }}
   @icon={{if
     this.scope.org.isGlobal
     'flight-icons/svg/globe-16'

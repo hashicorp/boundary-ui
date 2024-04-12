@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
@@ -18,6 +19,7 @@ import {
 module('Acceptance | roles | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -55,7 +57,8 @@ module('Acceptance | roles | read', function (hooks) {
       },
       'withPrincipals',
     );
-    urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.roles = `${urls.orgScope}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRole = `${urls.roles}/new`;
   });
@@ -67,7 +70,10 @@ module('Acceptance | roles | read', function (hooks) {
   });
 
   test('can navigate to a role form', async function (assert) {
-    await visit(urls.roles);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.roles}"]`);
+
     await click('main tbody .hds-table__tr:nth-child(1) a');
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.role);

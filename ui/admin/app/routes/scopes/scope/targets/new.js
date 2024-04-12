@@ -69,6 +69,15 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   }
 
   /**
+   * Adds global scope to the context so we can check if the user has permissions to create aliases.
+   * @param {Controller} controller
+   */
+  async setupController(controller) {
+    super.setupController(...arguments);
+    const globalScope = await this.store.peekRecord('scope', 'global');
+    controller.set('globalScope', globalScope);
+  }
+  /**
    * Update type of target
    * @param {string} type
    */
