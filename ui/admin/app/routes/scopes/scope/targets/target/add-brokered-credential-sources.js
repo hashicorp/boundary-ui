@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -35,9 +34,9 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
     const target = this.modelFor('scopes.scope.targets.target');
     const { id: scope_id } = this.modelFor('scopes.scope');
     const credentialStores = await this.store.query('credential-store', {
-      scope_id,
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
     });
-    await all(
+    await Promise.all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
         if (isStatic) {
           this.store.query('credential', {

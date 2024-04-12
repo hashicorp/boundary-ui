@@ -82,6 +82,14 @@ export default factory.extend({
         });
       }
 
+      const aliases = server.schema.aliases.all().models;
+      const randomlySelectedAliases =
+        aliases.length === 0 ? undefined : faker.helpers.arrayElement(aliases);
+      if (randomlySelectedAliases) {
+        target.update({
+          aliases: randomlySelectedAliases.aliases,
+        });
+      }
       target.update({
         hostSets: randomlySelectedHostSets,
         brokeredCredentialSourceIds: [

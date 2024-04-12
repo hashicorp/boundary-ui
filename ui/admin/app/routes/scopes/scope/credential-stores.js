@@ -9,24 +9,15 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeCredentialStoresRoute extends Route {
   // =services
 
-  @service store;
-  @service can;
+  @service router;
+  @service session;
 
   // =methods
 
   /**
-   * Load all credential stores under current scope
-   * @returns {Promise[CredentialStoreModel]}
+   * If arriving here unauthenticated, redirect to index for further processing.
    */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (
-      this.can.can('list model', scope, {
-        collection: 'credential-stores',
-      })
-    ) {
-      return this.store.query('credential-store', { scope_id });
-    }
+  beforeModel() {
+    if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 }

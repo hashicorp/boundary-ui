@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
@@ -19,6 +20,15 @@ import {
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
+
+  const ORG_SCOPES_DROPDOWN_SELECTOR = (url) =>
+    `.rose-header-nav .rose-dropdown [href="${url}"]`;
+  const PROJECT_SCOPES_DROPDOWN_SELECTOR = (url) =>
+    `.rose-header-nav .rose-dropdown + .rose-dropdown [href="${url}"]`;
+  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
+  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
+  const NAME_FIELD_SELECTOR = '[name="name"]';
 
   let getScopeCount;
 
@@ -34,10 +44,14 @@ module('Acceptance | scopes', function (hooks) {
   const urls = {
     globalScope: null,
     orgScope: null,
+    orgScopes: null,
+    newOrgScope: null,
     org2Scope: null,
+    org2Scopes: null,
     orgScopeEdit: null,
     org2ScopeEdit: null,
     projectScope: null,
+    newProjectScope: null,
     project2Scope: null,
     projectScopeEdit: null,
     project2ScopeEdit: null,
@@ -64,19 +78,21 @@ module('Acceptance | scopes', function (hooks) {
     });
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
-    urls.newOrgScope = `/scopes/global/scopes/new`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.org2Scope = `/scopes/${instances.scopes.org2.id}/scopes`;
-    urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
-    urls.org2ScopeEdit = `/scopes/${instances.scopes.org2.id}/edit`;
-    urls.newProjectScope = `/scopes/${instances.scopes.org.id}/scopes/new`;
+    urls.newOrgScope = `${urls.globalScope}/new`;
+    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    urls.orgScopes = `${urls.orgScope}/scopes`;
+    urls.org2Scope = `/scopes/${instances.scopes.org2.id}`;
+    urls.org2Scopes = `${urls.org2Scope}/scopes`;
+    urls.orgScopeEdit = `${urls.orgScope}/edit`;
+    urls.org2ScopeEdit = `${urls.org2Scope}/edit`;
+    urls.newProjectScope = `${urls.orgScopes}/new`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
-    urls.projectScopeEdit = `/scopes/${instances.scopes.project.id}/edit`;
-    urls.project2ScopeEdit = `/scopes/${instances.scopes.project2.id}/edit`;
-    // Generate resource couner
+    urls.projectScopeEdit = `${urls.projectScope}/edit`;
+    urls.project2ScopeEdit = `${urls.project2Scope}/edit`;
+    // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({});
+    authenticateSession({ isGlobal: true });
   });
 
   test('visiting global scope', async function (assert) {
@@ -100,67 +116,79 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting org scope', async function (assert) {
-    await visit(urls.orgScope);
+    await visit(urls.orgScopes);
     await a11yAudit();
-    assert.strictEqual(currentURL(), urls.orgScope);
+
+    assert.strictEqual(currentURL(), urls.orgScopes);
   });
 
-  // NOTE:  In reality, we'd have a third "Global" item listed in the org
-  // dropdown.  But since the mock test authenticator bypasses the auth
-  // normalization step, the UI doesn't know it's authenticated with global
-  // and thus doesn't display the "Global" item in the org nav dropdown.
   test('can navigate among org scopes via header navigation', async function (assert) {
     await visit(urls.globalScope);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.globalScope);
-    await click('.rose-header-nav .rose-dropdown a:nth-child(1)');
-    assert.strictEqual(currentURL(), urls.orgScope);
-    // In reality, there would be a third item in the list
-    await click('.rose-header-nav .rose-dropdown a:nth-child(2)');
-    assert.strictEqual(currentURL(), urls.org2Scope);
+
+    await click(ORG_SCOPES_DROPDOWN_SELECTOR(urls.orgScope));
+    assert.strictEqual(currentURL(), urls.orgScopes);
+
+    await click(ORG_SCOPES_DROPDOWN_SELECTOR(urls.org2Scope));
+    assert.strictEqual(currentURL(), urls.org2Scopes);
   });
 
   test('can navigate among project scopes via header navigation', async function (assert) {
     await visit(urls.projectScope);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.projectScopeEdit);
-    await click(
-      '.rose-header-nav .rose-dropdown + .rose-dropdown a:nth-child(2)',
-    );
+
+    await click(PROJECT_SCOPES_DROPDOWN_SELECTOR(urls.project2Scope));
+
     assert.strictEqual(currentURL(), urls.project2ScopeEdit);
   });
 
   test('can create new org scopes', async function (assert) {
     const orgScopeCount = getScopeCount('org');
-    await visit(urls.newOrgScope);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.newOrgScope}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, 'random string');
+    await click(SAVE_BUTTON_SELECTOR);
+
     assert.strictEqual(getScopeCount('org'), orgScopeCount + 1);
   });
 
   test('can create new project scopes', async function (assert) {
     const orgScopeCount = getScopeCount('project');
-    await visit(urls.newProjectScope);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await visit(urls.orgScopes);
+
+    await click(`[href="${urls.newProjectScope}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, 'random string');
+    await click(SAVE_BUTTON_SELECTOR);
+
     assert.strictEqual(getScopeCount('project'), orgScopeCount + 1);
   });
 
   test('can cancel create new org scopes', async function (assert) {
     const orgScopeCount = getScopeCount('org');
-    await visit(urls.newOrgScope);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.newOrgScope}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, 'random string');
+    await click(CANCEL_BUTTON_SELECTOR);
+
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
   });
 
   test('can cancel create new project scopes', async function (assert) {
     const projectScopeCount = getScopeCount('project');
-    await visit(urls.newProjectScope);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.strictEqual(currentURL(), urls.orgScope);
+    await visit(urls.orgScopes);
+
+    await click(`[href="${urls.newProjectScope}"]`);
+    await fillIn(NAME_FIELD_SELECTOR, 'random string');
+    await click(CANCEL_BUTTON_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.orgScopes);
     assert.strictEqual(getScopeCount('project'), projectScopeCount);
   });
 
@@ -184,8 +212,11 @@ module('Acceptance | scopes', function (hooks) {
         },
       );
     });
-    await visit(urls.newOrgScope);
-    await click('[type="submit"]');
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.newOrgScope}"]`);
+    await click(SAVE_BUTTON_SELECTOR);
+
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });

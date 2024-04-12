@@ -19,9 +19,10 @@
   <page.actions>
     {{#if (can 'create worker led worker' this.scope collection='workers')}}
       {{#if @model}}
-        <Rose::LinkButton @route='scopes.scope.workers.new' @style='primary'>{{t
-            'titles.new'
-          }}</Rose::LinkButton>
+        <Hds::Button
+          @route='scopes.scope.workers.new'
+          @text={{t 'titles.new'}}
+        />
       {{/if}}
     {{/if}}
   </page.actions>
