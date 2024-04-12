@@ -44,6 +44,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   associatedUsers = [];
   associatedTargets = [];
 
+  // =methods
+
   /**
    * Loads all sessions under the current scope and encapsulates them into
    * an array of objects containing their associated users and targets.
