@@ -1,0 +1,55 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<Breadcrumbs::Item
+  @text={{t 'resources.alias.title'}}
+  @route='scopes.scope.targets.target.manage-alias'
+/>
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+  <page.header>
+    <h2>
+      {{t 'resources.alias.title'}}
+      {{! TODO: DOC LINK }}
+    </h2>
+    <p>{{t 'resources.alias.description'}}</p>
+    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+  </page.header>
+  <page.actions>
+
+    <Hds::Dropdown as |dd|>
+      <dd.ToggleButton
+        data-test-manage-dropdown
+        @text={{t 'actions.manage'}}
+        @color='secondary'
+      />
+
+      <dd.Interactive
+        @text={{t 'actions.clear'}}
+        {{on 'click' (route-action 'clearAlias' @model)}}
+      />
+      {{#if (can 'delete model' @model)}}
+        <dd.Separator />
+        <dd.Interactive
+          data-test-manage-alias-dropdown-delete
+          @color='critical'
+          @text={{t 'actions.delete'}}
+          {{on 'click' (route-action 'deleteAlias' @model)}}
+        />
+      {{/if}}
+    </Hds::Dropdown>
+
+  </page.actions>
+
+  <page.body>
+    <Form::Alias
+      @model={{@model}}
+      @submit={{route-action 'save' @model}}
+      @cancel={{route-action 'cancel' @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>
