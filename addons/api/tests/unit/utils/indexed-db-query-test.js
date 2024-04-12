@@ -4,10 +4,12 @@ import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { pluralize } from 'ember-inflector';
+import { camelize } from '@ember/string';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 const seedIndexDb = async (resource, store, indexedDb, server) => {
-  const resourceData = server.schema[pluralize(resource)].all().models;
+  const resourceData =
+    server.schema[pluralize(camelize(resource))].all().models;
   const serializedData = resourceData.map((resource) =>
     JSON.parse(JSON.stringify(server.serializerOrRegistry.serialize(resource))),
   );
@@ -493,5 +495,33 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     const result = await queryIndexedDb(indexedDb.db, resource, query);
 
     assert.strictEqual(result.length, 1);
+  });
+
+  test('it filters on boolean type fields with truthy value', async function (assert) {
+    const authMethod = this.server.create('auth-method', {
+      name: 'Generated_auth_method',
+      scopeId: scope1.id,
+    });
+    scope1.update({ primaryAuthMethodId: authMethod.id });
+    await seedIndexDb('auth-method', store, indexedDb, this.server);
+    const query = { filters: { is_primary: [{ equals: 'true' }] } };
+
+    const result = await queryIndexedDb(indexedDb.db, 'auth-method', query);
+
+    assert.strictEqual(result.length, 1);
+  });
+
+  test('it filters on boolean type fields with falsy value', async function (assert) {
+    const authMethod = this.server.create('auth-method', {
+      name: 'Generated_auth_method',
+      scopeId: scope1.id,
+    });
+    scope1.update({ primaryAuthMethodId: authMethod.id });
+    await seedIndexDb('auth-method', store, indexedDb, this.server);
+    const query = { filters: { is_primary: [{ equals: 'false' }] } };
+
+    const result = await queryIndexedDb(indexedDb.db, 'auth-method', query);
+
+    assert.strictEqual(result.length, 0);
   });
 });
