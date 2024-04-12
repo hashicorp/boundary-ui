@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class ScopesScopeScopesIndexRoute extends Route {
   // =attributes
@@ -29,20 +28,6 @@ export default class ScopesScopeScopesIndexRoute extends Route {
   @service store;
 
   // =methods
-
-  /**
-   * Event to determine whether the loading template should be shown.
-   * Only show the loading template during initial loads or when transitioning
-   * from different routes. Don't show it when a user is just searching or
-   * filtering on the same page as it can be jarring.
-   * @param transition
-   * @returns {boolean}
-   */
-  @action
-  loading(transition) {
-    const from = transition.from?.name;
-    return from !== 'scopes.scope.scopes.index';
-  }
 
   /**
    * Loads sub scopes for the current scope.
