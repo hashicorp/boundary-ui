@@ -310,6 +310,27 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
+  {{! disable_credential_rotation }}
+  <Hds::Form::Checkbox::Field
+    name='disable_credential_rotation'
+    disabled={{form.disabled}}
+    checked={{@model.disable_credential_rotation}}
+    {{on 'change' @toggleDisableCredentialRotation}}
+    as |F|
+  >
+    <F.Label>{{t
+        'resources.storage-bucket.form.disable_credential_rotation.label'
+      }}</F.Label>
+    <F.HelperText>
+      {{t 'resources.storage-bucket.form.disable_credential_rotation.help'}}
+      <Hds::Link::Inline
+        @href={{doc-url 'storage-bucket.disable-credential-rotation'}}
+      >
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::Checkbox::Field>
+
   {{! Actions }}
   {{#if (can 'save model' @model)}}
     <form.actions
