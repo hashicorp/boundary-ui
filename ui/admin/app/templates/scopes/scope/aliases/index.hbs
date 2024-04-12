@@ -96,6 +96,7 @@
               }}
                 {{#if (or perms.canRead perms.canDelete)}}
                   <Hds::Dropdown as |dd|>
+
                     <dd.ToggleIcon
                       @icon='more-horizontal'
                       @text={{t 'actions.manage'}}
@@ -116,10 +117,68 @@
                       <dd.Interactive
                         @text={{t 'actions.delete'}}
                         @color='critical'
-                        {{on 'click' (fn this.delete B.data.alias)}}
+                        {{on 'click' (fn this.toggleModal B.data.alias)}}
                       />
+                      {{#if this.showModal}}
+                        <Hds::Modal
+                          class='alias-deletion-modal'
+                          @color='warning'
+                          @onClose={{this.toggleModal}}
+                          as |M|
+                        >
+                          <M.Header @icon='alert-triangle'>
+                            {{t 'questions.delete-confirm'}}
+                          </M.Header>
+
+                          <M.Body>
+
+                            <p
+                              class='hds-typography-body-300 hds-foreground-primary'
+                            >
+                              {{#if this.hasDestinationId}}
+                                {{t 'resources.alias.messages.clear-or-delete'}}
+                              {{else}}
+                                {{t 'resources.alias.messages.delete'}}
+                              {{/if}}
+                            </p>
+
+                          </M.Body>
+
+                          <M.Footer>
+                            <Hds::ButtonSet>
+                              <Hds::Button
+                                type='button'
+                                @text={{t 'actions.delete'}}
+                                {{on
+                                  'click'
+                                  (fn this.deleteAlias this.selectedAlias)
+                                }}
+                              />
+                              {{#if this.hasDestinationId}}
+                                <Hds::Button
+                                  type='button'
+                                  @text={{t 'actions.clear'}}
+                                  @color='secondary'
+                                  {{on
+                                    'click'
+                                    (fn this.clearAlias this.selectedAlias)
+                                  }}
+                                />
+                              {{/if}}
+                              <Hds::Button
+                                type='button'
+                                @text='Confirm'
+                                @color='secondary'
+                                {{on 'click' this.toggleModal}}
+                              />
+                            </Hds::ButtonSet>
+
+                          </M.Footer>
+                        </Hds::Modal>
+                      {{/if}}
                     {{/if}}
                   </Hds::Dropdown>
+
                 {{/if}}
               {{/let}}
             </B.Td>
