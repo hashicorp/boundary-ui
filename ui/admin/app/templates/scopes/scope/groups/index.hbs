@@ -22,9 +22,10 @@
   <page.actions>
     {{#if (can 'create model' this.scope collection='groups')}}
       {{#if @model.groupsExist}}
-        <Rose::LinkButton @route='scopes.scope.groups.new' @style='primary'>{{t
-            'resources.group.titles.new'
-          }}</Rose::LinkButton>
+        <Hds::Button
+          @route='scopes.scope.groups.new'
+          @text={{t 'resources.group.titles.new'}}
+        />
       {{/if}}
     {{/if}}
   </page.actions>
