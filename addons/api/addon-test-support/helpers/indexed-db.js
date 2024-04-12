@@ -20,9 +20,9 @@
  * @param hooks
  */
 export function setupIndexedDb(hooks) {
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     const indexedDb = this.owner.lookup('service:indexed-db');
-    indexedDb.setup(`test-indexed-db-${Date.now()}`);
+    await indexedDb.setup(`test-indexed-db-${Date.now()}`);
   });
 
   hooks.afterEach(async function () {
