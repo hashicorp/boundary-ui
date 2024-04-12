@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
@@ -18,16 +19,14 @@ import {
 module('Acceptance | auth-methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  const AUTH_LINK_SELECTOR = 'main tbody .hds-table__td:nth-child(1) a';
-  const AUTH_TYPE_SELECTOR =
-    'tbody .hds-table__tr:nth-child(1) .hds-table__td:nth-child(2)';
-  const AUTH_ACTIONS_SELECTOR =
-    'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown';
-  const LDAP_AUTH_LINK_SELECTOR = 'tbody .hds-table__tr:nth-child(2) a';
-  const LDAP_AUTH_TYPE_SELECTOR =
-    'tbody .hds-table__tr:nth-child(2) .hds-table__td:nth-child(2)';
-  const LDAP_AUTH_ACTIONS_SELECTOR =
-    'tbody .hds-table__tr:nth-child(2) .hds-table__td:last-child .hds-dropdown';
+  setupIndexedDb(hooks);
+
+  const AUTH_LINK_SELECTOR = (id) =>
+    `tbody [data-test-auth-methods-table-row="${id}"] a`;
+  const AUTH_TYPE_SELECTOR = (id) =>
+    `tbody [data-test-auth-methods-table-row="${id}"] .hds-table__td:nth-child(2)`;
+  const AUTH_ACTIONS_SELECTOR = (id) =>
+    `tbody [data-test-auth-methods-table-row="${id}"] .hds-table__td:last-child .hds-dropdown`;
 
   const instances = {
     scopes: {
@@ -96,10 +95,14 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.orgAuthMethods}"]`);
 
-    assert.dom(AUTH_TYPE_SELECTOR).hasText('Password');
-    assert.dom(AUTH_ACTIONS_SELECTOR).exists();
+    assert
+      .dom(AUTH_TYPE_SELECTOR(instances.passwordAuthMethodOrg.id))
+      .hasText('Password');
+    assert
+      .dom(AUTH_ACTIONS_SELECTOR(instances.passwordAuthMethodOrg.id))
+      .exists();
 
-    await click(AUTH_LINK_SELECTOR);
+    await click(AUTH_LINK_SELECTOR(instances.passwordAuthMethodOrg.id));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.passwordAuthMethodOrg);
@@ -110,10 +113,14 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.globalAuthMethods}"]`);
 
-    assert.dom(AUTH_TYPE_SELECTOR).hasText('OIDC');
-    assert.dom(AUTH_ACTIONS_SELECTOR).exists();
+    assert
+      .dom(AUTH_TYPE_SELECTOR(instances.oidcAuthMethodGlobal.id))
+      .hasText('OIDC');
+    assert
+      .dom(AUTH_ACTIONS_SELECTOR(instances.oidcAuthMethodGlobal.id))
+      .exists();
 
-    await click(AUTH_LINK_SELECTOR);
+    await click(AUTH_LINK_SELECTOR(instances.oidcAuthMethodGlobal.id));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);
@@ -128,7 +135,9 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.orgAuthMethods}"]`);
 
-    assert.dom(AUTH_LINK_SELECTOR).doesNotExist();
+    assert
+      .dom(AUTH_LINK_SELECTOR(instances.passwordAuthMethodOrg.id))
+      .doesNotExist();
   });
 
   test('cannot navigate to an auth method form without proper authorization in global scope', async function (assert) {
@@ -140,7 +149,9 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.globalAuthMethods}"]`);
 
-    assert.dom(AUTH_LINK_SELECTOR).doesNotExist();
+    assert
+      .dom(AUTH_LINK_SELECTOR(instances.oidcAuthMethodGlobal.id))
+      .doesNotExist();
   });
 
   test('cannot navigate to an ldap auth method form in global scope', async function (assert) {
@@ -152,9 +163,11 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.globalAuthMethods}"]`);
 
-    assert.dom(LDAP_AUTH_LINK_SELECTOR).doesNotExist();
-    assert.dom(LDAP_AUTH_TYPE_SELECTOR).hasText('LDAP');
-    assert.dom(LDAP_AUTH_ACTIONS_SELECTOR).doesNotExist();
+    assert.dom(AUTH_LINK_SELECTOR(instances.ldapAuthMethod.id)).doesNotExist();
+    assert.dom(AUTH_TYPE_SELECTOR(instances.ldapAuthMethod.id)).hasText('LDAP');
+    assert
+      .dom(AUTH_ACTIONS_SELECTOR(instances.ldapAuthMethod.id))
+      .doesNotExist();
   });
 
   test('cannot navigate to an ldap auth method form in org scope', async function (assert) {
@@ -166,9 +179,11 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
     await click(`[href="${urls.orgAuthMethods}"]`);
 
-    assert.dom(LDAP_AUTH_LINK_SELECTOR).doesNotExist();
-    assert.dom(LDAP_AUTH_TYPE_SELECTOR).hasText('LDAP');
-    assert.dom(LDAP_AUTH_ACTIONS_SELECTOR).doesNotExist();
+    assert.dom(AUTH_LINK_SELECTOR(instances.ldapAuthMethod.id)).doesNotExist();
+    assert.dom(AUTH_TYPE_SELECTOR(instances.ldapAuthMethod.id)).hasText('LDAP');
+    assert
+      .dom(AUTH_ACTIONS_SELECTOR(instances.ldapAuthMethod.id))
+      .doesNotExist();
   });
 
   test('users can navigate to auth method and incorrect url autocorrects', async function (assert) {

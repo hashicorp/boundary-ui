@@ -31,6 +31,13 @@
     color: var(--token-form-indicator-optional-color);
   }
 
+  // Override for sortable HDS table columns that ignore selected theme in app
+  // and use the system default theme causing color mismatch if selected theme
+  // is not the system default theme
+  .hds-table__th-sort button {
+    color: var(--token-color-foreground-strong);
+  }
+
   // TODO: This is a temporary hack to fix an issue causing weird whitespace
   //   and scrollbars from an accessible class in HDS. We have to use !important
   //   as they already forced it with !important and we can't override it otherwise
