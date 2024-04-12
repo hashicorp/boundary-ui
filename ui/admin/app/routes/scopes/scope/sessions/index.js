@@ -44,6 +44,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   associatedUsers = [];
   associatedTargets = [];
 
+  // =methods
+
   /**
    * Loads all sessions under the current scope and encapsulates them into
    * an array of objects containing their associated users and targets.
@@ -115,16 +117,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       pushToStore: false,
     });
   }
-
-  // async canListUsers(orgId) {
-  //   const orgScope = await this.store.findRecord('scope', orgId);
-  //   const globalScope = await this.store.findRecord('scope', 'global');
-
-  //   return (
-  //     this.can.can('list model', globalScope, { collection: 'users' }) &&
-  //     this.can.can('list model', orgScope, { collection: 'users' })
-  //   );
-  // }
 
   /**
    * Get all the users but only load them once when entering the route.
