@@ -9,22 +9,13 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { resourceFilter } from 'core/decorators/resource-filter';
-import { TYPES_AUTH_METHOD } from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsRoute extends Route {
   // =services
 
-  @service intl;
-
   @service session;
   @service can;
-  @service resourceFilterStore;
   @service router;
-
-  // =attributes
-
-  @resourceFilter({ allowed: TYPES_AUTH_METHOD }) type;
 
   // =methods
 
@@ -35,24 +26,8 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
-  /**
-   * Load all auth-methods under current scope
-   * @return {Promise[AuthMethodModel]}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
-      const { type } = this;
-      return this.resourceFilterStore.queryBy(
-        'auth-method',
-        { type },
-        { scope_id },
-      );
-    }
-  }
-
   // =actions
+
   /**
    * Rollback changes to an auth-method.
    * @param {AuthMethodModel} authMethod
@@ -102,7 +77,7 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     // Reload the scope, since this is where the primary_auth_method_id is
     // stored.  An auth method deletion could affect this field.
     await scopeModel.reload();
-    await this.router.replaceWith('scopes.scope.auth-methods');
+    this.router.replaceWith('scopes.scope.auth-methods');
     this.refresh();
   }
 
@@ -202,23 +177,5 @@ export default class ScopesScopeAuthMethodsRoute extends Route {
     const existingArray = authMethod[field] ?? [];
     const array = [...existingArray, { from, to }];
     authMethod.set(field, array);
-  }
-
-  /**
-   * Sets the specified resource filter field to the specified value.
-   * @param {string} field
-   * @param value
-   */
-  @action
-  filterBy(field, value) {
-    this[field] = value;
-  }
-
-  /**
-   * Clears and filter selections.
-   */
-  @action
-  clearAllFilters() {
-    this.type = [];
   }
 }

@@ -37,7 +37,8 @@ module('Acceptance | authentication', function (hooks) {
 
   let indexURL;
   let globalScope;
-  let orgScope;
+  let orgScope1;
+  let orgScope2;
   let orgScopeID;
   let scopesURL;
   let orgScopeURL;
@@ -70,7 +71,15 @@ module('Acceptance | authentication', function (hooks) {
     invalidateSession();
     indexURL = '/';
     globalScope = this.server.create('scope', { id: 'global' });
-    orgScope = this.server.create(
+    orgScope1 = this.server.create(
+      'scope',
+      {
+        type: 'org',
+        scope: { id: globalScope.id, type: globalScope.type },
+      },
+      'withChildren',
+    );
+    orgScope2 = this.server.create(
       'scope',
       {
         type: 'org',
@@ -87,20 +96,20 @@ module('Acceptance | authentication', function (hooks) {
       },
       'withChildren',
     );
-    scope = { id: orgScope.id, type: orgScope.type };
+    scope = { id: orgScope1.id, type: orgScope1.type };
     globalAuthMethod = this.server.create('auth-method', {
       scope: globalScope,
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
     authMethod = this.server.create('auth-method', {
-      scope: orgScope,
+      scope: orgScope1,
       type: TYPE_AUTH_METHOD_PASSWORD,
     });
     authMethodOIDC = this.server.create('auth-method', {
-      scope: orgScope,
+      scope: orgScope2,
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    orgScopeID = orgScope.id;
+    orgScopeID = orgScope1.id;
     globalAuthMethodID = globalAuthMethod.id;
     authMethodID = authMethod.id;
     authMethodOIDCID = authMethodOIDC.id;
@@ -110,7 +119,7 @@ module('Acceptance | authentication', function (hooks) {
     authenticateURL = `/scopes/${orgScopeID}/authenticate`;
     authMethodGlobalAuthenticateURL = `/scopes/global/authenticate/${globalAuthMethodID}`;
     authMethodAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodID}`;
-    authMethodOIDCAuthenticateURL = `/scopes/${orgScopeID}/authenticate/${authMethodOIDCID}`;
+    authMethodOIDCAuthenticateURL = `/scopes/${orgScope2.id}/authenticate/${authMethodOIDCID}`;
     changePasswordURL = `/account/change-password`;
     orgsURL = `/scopes/global/scopes`;
     orgEditURL = `/scopes/${orgScopeID}/edit`;
@@ -383,6 +392,6 @@ module('Acceptance | authentication', function (hooks) {
 
     await click('.rose-dropdown-trigger');
 
-    assert.dom('.rose-dropdown-content a').exists({ count: 2 });
+    assert.dom('.rose-dropdown-content a').exists({ count: 3 });
   });
 });

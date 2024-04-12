@@ -25,7 +25,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
     'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_SELECTOR_OPTION =
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
-  const NEW_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const NEW_DROPDOWN_SELECTOR =
+    '[data-test-new-dropdown] .hds-dropdown-toggle-button';
   const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';

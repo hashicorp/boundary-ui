@@ -90,16 +90,21 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
   async getManagedGroups(ids) {
     let managedGroups = [];
     if (ids?.length) {
-      // TODO: Refactor to directly use store service
-      // when types get added to indexedDB.
-
       // Collect all oidc and ldap type auth methods.
-      const authMethods = await this.resourceFilterStore.queryBy(
-        'auth-method',
-        { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
-        { scope_id: 'global', recursive: true },
-      );
-
+      const authMethods = await this.store.query('auth-method', {
+        scope_id: 'global',
+        recursive: true,
+        query: {
+          filters: {
+            type: [
+              { equals: TYPE_AUTH_METHOD_OIDC },
+              { equals: TYPE_AUTH_METHOD_LDAP },
+            ],
+          },
+        },
+      });
+      // TODO: Refactor to directly use store service
+      // and add managed-group to indexedDB.
       const nestedManagedGroups = await Promise.all(
         authMethods.map(({ id: auth_method_id }) =>
           this.resourceFilterStore.queryBy(

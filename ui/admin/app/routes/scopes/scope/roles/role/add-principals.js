@@ -19,7 +19,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
   @service router;
   @service store;
-  @service resourceFilterStore;
 
   // =attributes
 
@@ -64,20 +63,15 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
       query,
     });
     //query authmethods from all the scopes
-    const authMethods = scopeIDs?.length
-      ? await this.resourceFilterStore.queryBy(
-          'auth-method',
-          {
-            scope_id: scopeIDs,
-            type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP],
-          },
-          { scope_id: 'global', recursive: true },
-        )
-      : await this.resourceFilterStore.queryBy(
-          'auth-method',
-          { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
-          { scope_id: 'global', recursive: true },
-        );
+    query.filters.type = [
+      { equals: TYPE_AUTH_METHOD_OIDC },
+      { equals: TYPE_AUTH_METHOD_LDAP },
+    ];
+    const authMethods = await this.store.query('auth-method', {
+      scope_id: 'global',
+      recursive: true,
+      query,
+    });
     //query all the managed groups for each auth method id
     const managedGroups = await Promise.all(
       authMethods.map(({ id: auth_method_id }) =>

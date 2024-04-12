@@ -14,8 +14,8 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   test('availableSessionOptions returns expected object', function (assert) {
     let controller = this.owner.lookup('controller:scopes/scope/targets/index');
     assert.deepEqual(controller.availableSessionOptions, [
-      { id: 'yes', name: 'Yes' },
-      { id: 'no', name: 'No' },
+      { id: 'yes', name: 'Has active sessions' },
+      { id: 'no', name: 'No active sessions' },
     ]);
   });
 
