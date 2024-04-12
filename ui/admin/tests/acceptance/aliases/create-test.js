@@ -14,7 +14,6 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 module('Acceptance | aliases | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
   let features;
   let getAliasCount;
 
