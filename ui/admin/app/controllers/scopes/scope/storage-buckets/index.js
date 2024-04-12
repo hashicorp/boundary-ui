@@ -64,4 +64,15 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
   changeCredentialType(storageBucket, credentialType) {
     storageBucket.credentialType = credentialType;
   }
+
+  /**
+   * Changes the plugin type.
+   * @param {*} pluginType
+   */
+  @action
+  async changePluginType(pluginType) {
+    await this.router.replaceWith({
+      queryParams: { compositeType: pluginType },
+    });
+  }
 }
