@@ -97,23 +97,45 @@ const unconvertFields = (result, object, schema, serializer) => {
 
 /**
  * Service to encapsulate the IndexedDB implementation. To use this service, call
- * `setup` from the application root and
+ * `setup` from the application root. This will create the database and the necessary indexes.
+ *
+ * Make sure to increment the version number of the database whenever the indexes change.
+ * This will delete the old database and create a new one with the new indexes.
  */
 export default class IndexedDbService extends Service {
   // =attributes
   #db;
+  #version = 2;
+
   get db() {
     return this.#db;
   }
 
-  setup(dbName) {
+  async setup(dbName) {
     // Don't run setup again if we already have one or if we didn't get a name
     if (this.#db || !dbName) {
       return;
     }
 
+    // If the database doesn't exist, just create it and skip checking version
+    const doesDbExist = await Dexie.exists(dbName);
+    if (!doesDbExist) {
+      this.#db = new Dexie(dbName);
+      this.#db.version(this.#version).stores(modelIndexes);
+      return;
+    }
+
+    // Open the database and check if the version is a lower version than the current one
+    const dbVerifier = new Dexie(dbName);
+    await dbVerifier.open();
+    if (dbVerifier.verno < this.#version) {
+      await dbVerifier.delete();
+    } else {
+      dbVerifier.close();
+    }
+
     this.#db = new Dexie(dbName);
-    this.#db.version(2).stores(modelIndexes);
+    this.#db.version(this.#version).stores(modelIndexes);
   }
 
   /**
