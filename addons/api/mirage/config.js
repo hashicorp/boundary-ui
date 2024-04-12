@@ -117,28 +117,7 @@ function routes() {
   );
   // Auth & IAM resources
 
-  this.get(
-    '/auth-methods',
-    ({ authMethods }, { queryParams: { scope_id, recursive, filter } }) => {
-      let resultSet;
-      if (recursive && scope_id === 'global') {
-        resultSet = authMethods.all();
-      } else if (recursive) {
-        resultSet = authMethods.where((authMethod) => {
-          const authMethodModel = authMethods.find(authMethod.id);
-          return (
-            authMethod.scopeId === scope_id ||
-            authMethodModel?.scope?.scope?.id === scope_id
-          );
-        });
-      } else {
-        resultSet = authMethods.where(
-          (authMethod) => authMethod.scopeId === scope_id,
-        );
-      }
-      return resultSet.filter(makeBooleanFilter(filter));
-    },
-  );
+  this.get('/auth-methods');
   this.post('/auth-methods', function ({ authMethods }) {
     const attrs = this.normalizedRequestAttrs();
     if (attrs.type === 'oidc') {
@@ -324,9 +303,7 @@ function routes() {
   );
 
   // IAM: Roles
-  this.get('/roles', ({ roles }, { queryParams: { scope_id: scopeId } }) => {
-    return roles.where({ scopeId });
-  });
+  this.get('/roles');
   this.post('/roles');
   this.get('/roles/:id');
   this.patch('/roles/:id');
@@ -405,12 +382,7 @@ function routes() {
   // Other resources
   // host-catalog
 
-  this.get(
-    '/host-catalogs',
-    ({ hostCatalogs }, { queryParams: { scope_id: scopeId } }) => {
-      return hostCatalogs.where({ scopeId });
-    },
-  );
+  this.get('/host-catalogs');
   this.post(
     '/host-catalogs',
     function ({ hostCatalogs }, { queryParams: { plugin_name } }) {
@@ -612,11 +584,7 @@ function routes() {
 
   // credential-stores
 
-  this.get(
-    '/credential-stores',
-    ({ credentialStores }, { queryParams: { scope_id: scopeId } }) =>
-      credentialStores.where({ scopeId }),
-  );
+  this.get('/credential-stores');
 
   this.get('/credential-stores/:id');
   this.post('/credential-stores');

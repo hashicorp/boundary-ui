@@ -35,7 +35,7 @@ export default class FormRoleAddPrincipalsIndexComponent extends Component {
   get filteredPrincipals() {
     // Retrieve principal IDs assigned to current role
     const currentPrincipalIDs = this.args.model.principals.map(
-      (principal) => principal.principal_id,
+      (principal) => principal.id,
     );
 
     // Retrieve principal IDs not assigned to current role

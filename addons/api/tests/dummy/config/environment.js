@@ -28,6 +28,10 @@ module.exports = function (environment) {
       host: '',
       namespace: 'v1',
     },
+
+    'ember-cli-mirage': {
+      directory: './mirage',
+    },
   };
 
   if (environment === 'development') {

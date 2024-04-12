@@ -78,7 +78,10 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   async afterModel() {
     let scopes;
     const orgScopes = (
-      await this.store.query('scope', { scope_id: 'global' })
+      await this.store.query('scope', {
+        scope_id: 'global',
+        query: { filters: { scope_id: [{ equals: 'global' }] } },
+      })
     ).map((scope) => ({ model: scope }));
     scopes = [
       { model: this.store.peekRecord('scope', 'global') },
