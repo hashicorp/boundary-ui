@@ -62,6 +62,7 @@ auth-method:
     searching: Searching
     finding: Finding
     always: Always
+    primary: Primary
   types:
     password: Password
     oidc: OIDC

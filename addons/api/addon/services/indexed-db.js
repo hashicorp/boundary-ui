@@ -22,6 +22,8 @@ export const modelIndexes = {
     '&id, attributes.created_time, attributes.name, attributes.description, attributes.type, attributes.scope.scope_id',
   'host-catalog':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id, attributes.plugin.name',
+  'auth-method':
+    '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
 };
 
 export const formatDbName = (userId, clusterUrl) =>

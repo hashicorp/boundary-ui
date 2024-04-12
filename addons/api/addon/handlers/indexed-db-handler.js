@@ -20,10 +20,15 @@ export default class IndexedDbHandler {
     switch (context.request.op) {
       case 'query': {
         const { store, data } = context.request;
+        // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
         const {
           type,
           query,
-          options: { pushToStore = true, peekIndexedDB = false } = {},
+          options: {
+            pushToStore = true,
+            peekIndexedDB = false,
+            storeToken = true,
+          } = {},
         } = data;
         const supportedModels = Object.keys(modelIndexes);
         const { db: indexedDb } = this.indexedDb ?? {};
@@ -42,7 +47,11 @@ export default class IndexedDbHandler {
 
         if (!peekIndexedDB) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
-          const listToken = await indexedDb.token.get(tokenKey);
+
+          let listToken;
+          if (storeToken) {
+            listToken = await indexedDb.token.get(tokenKey);
+          }
 
           let payload;
           try {
@@ -77,7 +86,7 @@ export default class IndexedDbHandler {
           }
 
           // Store the token we just got back from the payload if it exists
-          if (payload.list_token) {
+          if (payload.list_token && storeToken) {
             await indexedDb.token.put({
               id: tokenKey,
               token: payload.list_token,
