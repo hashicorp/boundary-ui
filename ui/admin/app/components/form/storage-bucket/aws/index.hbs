@@ -59,14 +59,25 @@
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
       <F.HelperText>
-        {{@scopeFieldDescription}}
+        {{#if @model.scope}}
+          {{#if @model.scope.isGlobal}}
+            {{t 'resources.storage-bucket.form.scope.help_global'}}
+          {{else if @model.scope.isOrg}}
+            {{t 'resources.storage-bucket.form.scope.help_org'}}
+          {{/if}}
+        {{else}}
+          {{t 'resources.storage-bucket.form.scope.help'}}
+        {{/if}}
       </F.HelperText>
       <F.Options>
-        <option disabled hidden selected value=''>
+        <option disabled selected={{not @model.scope}} value=''>
           {{t 'titles.choose-an-option'}}
         </option>
         {{#each @scopes as |scope|}}
-          <option value={{scope.model.id}}>
+          <option
+            value={{scope.model.id}}
+            selected={{eq scope.model.id @model.scope.scope_id}}
+          >
             {{scope.model.displayName}}
           </option>
         {{/each}}

@@ -47,7 +47,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
    * @return {StorageBucket}
    */
   model({ compositeType = TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 }) {
-    const scopeModel = this.store.peekRecord('scope', 'global');
     let name,
       description,
       scope,
@@ -68,6 +67,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
+
     const record = this.store.createRecord('storage-bucket', {
       type: TYPE_STORAGE_BUCKET_PLUGIN,
       compositeType,
@@ -79,7 +79,6 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       region,
       worker_filter,
     });
-    record.scopeModel = scopeModel;
     return record;
   }
 

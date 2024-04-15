@@ -5,7 +5,6 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { set } from '@ember/object';
 
@@ -18,10 +17,6 @@ export default class FormStorageBucketComponent extends Component {
   // =attributes
   @service intl;
 
-  @tracked scopeFieldDescription = this.intl.t(
-    'resources.storage-bucket.form.scope.help',
-  );
-
   /**
    * returns an array of available storage bucket plugin types
    */
@@ -30,18 +25,6 @@ export default class FormStorageBucketComponent extends Component {
   }
 
   // =actions
-  updateScopeFieldDescription() {
-    if (this.args.model.scopeModel.isGlobal) {
-      this.scopeFieldDescription = this.intl.t(
-        'resources.storage-bucket.form.scope.help_global',
-      );
-    } else {
-      this.scopeFieldDescription = this.intl.t(
-        'resources.storage-bucket.form.scope.help_org',
-      );
-    }
-  }
-
   @action
   updateScope(event) {
     const selectedScopeId = event.target.value;
@@ -49,7 +32,6 @@ export default class FormStorageBucketComponent extends Component {
       (element) => element.model.id === selectedScopeId,
     ).model;
     this.args.model.scopeModel = selectedScopeModel;
-    this.updateScopeFieldDescription();
   }
 
   @action
