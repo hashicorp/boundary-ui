@@ -190,13 +190,13 @@
   {{! credential_type }}
   <Hds::Form::RadioCard::Group name='credential_type' as |G|>
     <G.Legend>{{t 'resources.storage-bucket.types.credential'}}</G.Legend>
-    {{#each @credentials as |credentialType|}}
+    {{#each this.credentials as |credentialType|}}
       <G.RadioCard
         @name={{credentialType}}
         @value={{credentialType}}
-        @checked={{eq credentialType @selectedCredentialType}}
+        @checked={{eq credentialType this.selectedCredentialType}}
         @disabled={{form.disabled}}
-        {{on 'input' (fn @updateTypeSelection credentialType)}}
+        {{on 'input' (fn this.updateCredentialTypeSelection credentialType)}}
         as |R|
       >
         <R.Label>{{t
@@ -212,7 +212,7 @@
   </Hds::Form::RadioCard::Group>
 
   {{! static credentials fields }}
-  {{#unless @showDynamicCredentials}}
+  {{#unless this.showDynamicCredentials}}
     {{! Creation }}
     {{#if @model.isNew}}
       {{! access_key }}
@@ -313,7 +313,7 @@
   {{/unless}}
 
   {{! dynamic credentials }}
-  {{#if @showDynamicCredentials}}
+  {{#if this.showDynamicCredentials}}
     {{! role_arn }}
     <Hds::Form::TextInput::Field
       name='role_arn'
@@ -446,7 +446,7 @@
   </Hds::Form::TextInput::Field>
 
   {{! JUST for static credentials }}
-  {{#unless @showDynamicCredentials}}
+  {{#unless this.showDynamicCredentials}}
     {{! disable_credential_rotation }}
     <Hds::Form::Checkbox::Field
       name='disable_credential_rotation'
