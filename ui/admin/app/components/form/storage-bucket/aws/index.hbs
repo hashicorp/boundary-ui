@@ -93,7 +93,6 @@
   {{! Provider / plugin.name }}
   <Hds::Form::RadioCard::Group @name='plugin_type' @alignment='center' as |G|>
     <G.Legend>{{t 'titles.provider'}}</G.Legend>
-    <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
     <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
 
     {{#each @pluginTypes as |pluginType|}}

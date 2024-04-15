@@ -437,7 +437,7 @@ storage-bucket:
       title: Dynamic
       description: Specify an Assume Role used to generate credentials to use with this AWS bucket
   plugin-types:
-    aws: Aws
+    aws: Amazon S3
     minio: MinIO
   form:
     scope:
