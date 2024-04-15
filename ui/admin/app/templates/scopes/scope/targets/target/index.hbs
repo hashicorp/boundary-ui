@@ -30,9 +30,99 @@
           @cancel={{route-action 'cancel' @model}}
         />
       </bc.Body>
-      {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-        <bc.Sidebar>
-          <div class='target-sidebar'>
+
+      <bc.Sidebar>
+        <div class='target-sidebar-aliases'>
+          <h3>{{t 'resources.alias.title_plural'}}</h3>
+          <p class='description'>
+            {{t 'resources.alias.form.sidebar.help'}}
+          </p>
+          {{#if @model.aliases}}
+            {{#each this.aliases as |alias|}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='at-sign'
+                  @color='boundary'
+                  @text={{alias.value}}
+                />
+                <P.Item>
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    <dd.Interactive
+                      @route='scopes.scope.targets.target.manage-alias'
+                      @model={{alias.id}}
+                      @text={{t 'actions.manage'}}
+                    />
+                  </Hds::Dropdown>
+                </P.Item>
+              </LinkListPanel>
+            {{/each}}
+
+            {{#if this.showFlyoutBtn}}
+              <Hds::Button
+                data-test-view-more
+                @text={{t 'resources.target.actions.view-more-aliases'}}
+                @color='secondary'
+                {{on 'click' this.targets.toggleFlyout}}
+              />
+            {{/if}}
+            {{#if this.showFlyOutComponent}}
+              <Hds::Flyout
+                data-test-flyout
+                @onClose={{this.toggleFlyout}}
+                as |M|
+              >
+                <M.Header>
+                  {{t
+                    'resources.target.titles.aliases-flyout'
+                    targetDisplayName=@model.displayName
+                  }}
+                </M.Header>
+
+                <M.Body>
+                  {{#each this.remainingAliases as |alias|}}
+                    <LinkListPanel as |P|>
+                      <P.Item
+                        @icon='at-sign'
+                        @color='boundary'
+                        @text={{alias.value}}
+                      />
+                      <P.Item>
+                        <Hds::Dropdown as |dd|>
+                          <dd.ToggleIcon
+                            @icon='more-horizontal'
+                            @text={{t 'actions.manage'}}
+                            @hasChevron={{false}}
+                            @size='small'
+                          />
+                          <dd.Interactive
+                            @route='scopes.scope.targets.target.manage-alias'
+                            @model={{alias.id}}
+                            @text={{t 'actions.manage'}}
+                          />
+                        </Hds::Dropdown>
+                      </P.Item>
+                    </LinkListPanel>
+                  {{/each}}
+                </M.Body>
+              </Hds::Flyout>
+            {{/if}}
+          {{else}}
+            <Hds::Button
+              @icon='plus'
+              @text={{t 'resources.target.actions.add-an-alias'}}
+              @color='secondary'
+              @route='scopes.scope.targets.target.create-alias'
+            />
+          {{/if}}
+        </div>
+        <div class='target-sidebar'>
+          {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
             <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
             <p class='description'>
               {{t 'resources.target.form.sidebar.help'}}
@@ -65,11 +155,9 @@
                 @route='scopes.scope.targets.target.enable-session-recording'
               />
             {{/if}}
-          </div>
-        </bc.Sidebar>
-      {{/if}}
+          {{/if}}
+        </div>
+      </bc.Sidebar>
     </Rose::Layout::BodyContent>
-
   </page.body>
-
 </Rose::Layout::Page>

@@ -34,8 +34,9 @@ module.exports = function (defaults) {
       },
     },
     // TODO: Update to 4.12 when deprecations are resolved
+    //   as multiple things break when forcing compatability on > 4.6
     emberData: {
-      compatWith: '4.4',
+      compatWith: '4.6',
     },
   });
 

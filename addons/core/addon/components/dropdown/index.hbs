@@ -4,6 +4,7 @@
 }}
 
 <Hds::Dropdown
+  ...attributes
   @height='314px'
   @onClose={{this.close}}
   @listPosition={{@listPosition}}
@@ -11,7 +12,7 @@
 >
   <DD.ToggleButton
     @color='secondary'
-    @text={{@name}}
+    @text={{@toggleText}}
     @count={{@checkedItems.length}}
     {{on 'click' this.open}}
   />

@@ -16,6 +16,7 @@
   {{#if (can 'addBrokeredCredentialSources target' @model)}}
     <dropdown.link
       @route='scopes.scope.targets.target.add-brokered-credential-sources'
+      data-test-add-brokered-cred-sources-action
     >
       {{t 'resources.target.actions.add-brokered-credential-sources'}}
     </dropdown.link>
@@ -24,6 +25,7 @@
   {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
     <dropdown.link
       @route='scopes.scope.targets.target.add-injected-application-credential-sources'
+      data-test-add-injected-cred-sources-action
     >
       {{t
         'resources.target.actions.add-injected-application-credential-sources'
