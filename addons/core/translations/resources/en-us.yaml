@@ -424,6 +424,7 @@ storage-bucket:
   titles:
     new: New Storage Bucket
     amazon_s3: Amazon S3
+    minio: MinIO
   actions:
     delete: Delete Storage Bucket
   types:
