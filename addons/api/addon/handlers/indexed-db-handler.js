@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { modelIndexes } from 'api/services/indexed-db';
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';

@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+/**
  * Takes an array and the current page and pagesize to calculate the correct
  * number of results to return to the caller.
  *
