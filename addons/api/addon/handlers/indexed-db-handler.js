@@ -102,6 +102,9 @@ export default class IndexedDbHandler {
           if (payload.removed_ids?.length > 0) {
             await indexedDb[type].bulkDelete(payload.removed_ids);
           }
+          if (!storeToken) {
+            await indexedDb[type].clear();
+          }
 
           const normalizedPayload = serializer.normalizeResponse(
             store,
