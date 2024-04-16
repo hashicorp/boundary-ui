@@ -34,6 +34,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
     const target = this.modelFor('scopes.scope.targets.target');
     const { id: scope_id } = this.modelFor('scopes.scope');
     const credentialStores = await this.store.query('credential-store', {
+      scope_id,
       query: { filters: { scope_id: [{ equals: scope_id }] } },
     });
     await Promise.all(
