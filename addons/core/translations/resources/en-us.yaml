@@ -1023,6 +1023,8 @@ alias:
       title: Welcome to Aliases
       description: No Aliases yet
       link: Create a new alias
+    clear-or-delete: Deleting this alias may break any workflows using it. You can also clear the alias of the resource it points to without deleting it and then edit it to point it to a new resource.
+    delete: Deleting this alias may break any workflows using it.
   form:
     options:
       label: Alias options

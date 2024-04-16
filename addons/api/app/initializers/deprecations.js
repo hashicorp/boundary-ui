@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'api/services/indexed-db';
+export { default, initialize } from 'api/initializers/deprecations';

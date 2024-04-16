@@ -7,13 +7,18 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeAliasesIndexController extends Controller {
   // =services
   @service can;
   @service router;
+
+  // =attributes
+  @tracked showModal = false;
+  @tracked selectedAlias;
+  @tracked hasDestinationId;
   // =actions
 
   /**
@@ -48,16 +53,44 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   }
 
   /**
-   * Delete an alias in current scope
-   *  @param {AliasModel} alias
+   * Handles modal visibility and sets the destination_id to a tracked variable so we can handle the clear button visibility on the modal
+   */
+  @action
+  toggleModal(alias) {
+    if (alias?.destination_id) {
+      this.hasDestinationId = true;
+    }
+    this.showModal = !this.showModal;
+    this.selectedAlias = alias;
+  }
+
+  /**
+   * Remove destaination_id from alias
+   * @param {AliasModel} alias
    */
   @action
   @loading
-  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.clear-success')
+  async clearAlias(alias) {
+    alias.destination_id = '';
+    this.hasDestinationId = false;
+    await alias.save();
+    await this.router.refresh();
+    this.showModal = false;
+  }
+
+  /**
+   * Delete an alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async delete(alias) {
+  async deleteAlias(alias) {
     await alias.destroyRecord();
+    this.showModal = false;
     await this.router.refresh();
   }
 }

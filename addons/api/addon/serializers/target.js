@@ -120,4 +120,17 @@ export default class TargetSerializer extends ApplicationSerializer {
       storage_bucket_id: snapshot?.attr('storage_bucket_id'),
     };
   }
+
+  normalize(typeClass, hash, ...rest) {
+    const normalizedHash = structuredClone(hash);
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
+    // Ember data retains the previous entry in the array attr when the updated attr becomes undefined/empty.
+    // So, we explicitly set the attr to an empty array if the updated attribute is undefined from the API
+
+    if (!normalized.data.attributes.aliases) {
+      normalized.data.attributes.aliases = [];
+    }
+
+    return normalized;
+  }
 }

@@ -38,16 +38,28 @@
             {{t 'resources.alias.form.sidebar.help'}}
           </p>
           {{#if @model.aliases}}
-
             {{#each this.aliases as |alias|}}
               <LinkListPanel as |P|>
                 <P.Item
                   @icon='at-sign'
                   @color='boundary'
                   @text={{alias.value}}
-                  {{! @route=' ' }}
-                  @model={{alias.id}}
                 />
+                <P.Item>
+                  <Hds::Dropdown as |dd|>
+                    <dd.ToggleIcon
+                      @icon='more-horizontal'
+                      @text={{t 'actions.manage'}}
+                      @hasChevron={{false}}
+                      @size='small'
+                    />
+                    <dd.Interactive
+                      @route='scopes.scope.targets.target.manage-alias'
+                      @model={{alias.id}}
+                      @text={{t 'actions.manage'}}
+                    />
+                  </Hds::Dropdown>
+                </P.Item>
               </LinkListPanel>
             {{/each}}
 
@@ -59,7 +71,7 @@
                 {{on 'click' this.targets.toggleFlyout}}
               />
             {{/if}}
-            {{#if this.showFlyout}}
+            {{#if this.showFlyOutComponent}}
               <Hds::Flyout
                 data-test-flyout
                 @onClose={{this.toggleFlyout}}
@@ -79,9 +91,22 @@
                         @icon='at-sign'
                         @color='boundary'
                         @text={{alias.value}}
-                        {{! @route='' }}
-                        @model={{alias.id}}
                       />
+                      <P.Item>
+                        <Hds::Dropdown as |dd|>
+                          <dd.ToggleIcon
+                            @icon='more-horizontal'
+                            @text={{t 'actions.manage'}}
+                            @hasChevron={{false}}
+                            @size='small'
+                          />
+                          <dd.Interactive
+                            @route='scopes.scope.targets.target.manage-alias'
+                            @model={{alias.id}}
+                            @text={{t 'actions.manage'}}
+                          />
+                        </Hds::Dropdown>
+                      </P.Item>
                     </LinkListPanel>
                   {{/each}}
                 </M.Body>
@@ -92,7 +117,7 @@
               @icon='plus'
               @text={{t 'resources.target.actions.add-an-alias'}}
               @color='secondary'
-              {{! @route='' }}
+              @route='scopes.scope.targets.target.create-alias'
             />
           {{/if}}
         </div>

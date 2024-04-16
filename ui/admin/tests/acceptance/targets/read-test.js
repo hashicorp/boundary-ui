@@ -23,11 +23,15 @@ module('Acceptance | targets | read', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
+  let aliasResource;
   const ALIASES_SIDEBAR = '.target-sidebar-aliases';
-  const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
-  const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases button';
+  const ALIASES_SIDEBAR_LIST = '.link-list-item';
+  const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
   const VIEW_MORE_BTN = '[data-test-view-more]';
   const FLYOUT_COMPONENT = '[data-test-flyout]';
+  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
+
   const instances = {
     scopes: {
       global: null,
@@ -44,6 +48,8 @@ module('Acceptance | targets | read', function (hooks) {
     targets: null,
     sshTarget: null,
     tcpTarget: null,
+    alias: null,
+    aliases: null,
   };
 
   hooks.beforeEach(function () {
@@ -67,14 +73,23 @@ module('Acceptance | targets | read', function (hooks) {
       scope: instances.scopes.project,
     });
 
+    instances.alias = this.server.createList('alias', 1, {
+      scope: instances.scopes.global,
+    });
+
+    aliasResource = instances.alias[0];
+
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
+    urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.sshTarget = `${urls.targets}/${instances.sshTarget.id}`;
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
+    urls.aliases = `${urls.globalScope}/aliases`;
+
+    urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
     authenticateSession({});
   });
@@ -198,7 +213,7 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('can view aliases on the right sidebar', async function (assert) {
     instances.tcpTarget.update({
-      aliases: [{ id: 'alt_123', value: 'alias 1' }],
+      aliases: [{ id: aliasResource.id, value: 'alias 1' }],
     });
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
@@ -219,10 +234,10 @@ module('Acceptance | targets | read', function (hooks) {
   test('can click `view more aliases` to see the remaining associated aliases if there are more than 3', async function (assert) {
     instances.tcpTarget.update({
       aliases: [
-        { id: 'alt_123', value: 'alias 1' },
-        { id: 'alt_125', value: 'alias 5' },
-        { id: 'alt_122', value: 'alias 2' },
-        { id: 'alt_124', value: 'alias 4' },
+        { id: aliasResource.id, value: 'alias 1' },
+        { id: aliasResource.id, value: 'alias 5' },
+        { id: aliasResource.id, value: 'alias 2' },
+        { id: aliasResource.id, value: 'alias 4' },
       ],
     });
     await visit(urls.tcpTarget);
@@ -231,5 +246,20 @@ module('Acceptance | targets | read', function (hooks) {
     assert.dom(VIEW_MORE_BTN).exists();
     await click(VIEW_MORE_BTN);
     assert.dom(FLYOUT_COMPONENT).exists();
+  });
+
+  test('users can click on associated alias card on the right sidebar', async function (assert) {
+    instances.tcpTarget.update({
+      aliases: [{ id: aliasResource.id, value: aliasResource.value }],
+    });
+    await visit(urls.tcpTarget);
+
+    assert.dom(ALIASES_SIDEBAR_LIST).exists();
+    await click(DROPDOWN_BUTTON_SELECTOR);
+
+    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
+    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
+    await click(DROPDOWN_ITEM_SELECTOR);
+    assert.strictEqual(currentURL(), urls.alias);
   });
 });

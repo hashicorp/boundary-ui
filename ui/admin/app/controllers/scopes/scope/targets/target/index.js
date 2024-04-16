@@ -38,6 +38,13 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   }
 
   /**
+   * Decides when to show the flyout component
+   * @returns {boolean}
+   */
+  get showFlyOutComponent() {
+    return this.showFlyout && this.model.aliases.length > 3;
+  }
+  /**
    * Returns only the first three items in the aliases array if there are more than 3
    * @returns {array}
    */

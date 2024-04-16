@@ -88,6 +88,8 @@ Router.map(function () {
           this.route('injected-application-credential-sources');
           this.route('add-brokered-credential-sources');
           this.route('add-injected-application-credential-sources');
+          this.route('create-alias');
+          this.route('manage-alias', { path: ':alias_id' }, function () {});
           this.route('enable-session-recording', function () {
             this.route('create-storage-bucket');
           });

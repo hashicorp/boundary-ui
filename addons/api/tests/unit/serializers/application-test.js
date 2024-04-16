@@ -285,6 +285,7 @@ module('Unit | Serializer | application', function (hooks) {
         type: 'target',
         attributes: {
           authorized_actions: [],
+          aliases: [],
           name: 'Target 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
           host_sources: [],
