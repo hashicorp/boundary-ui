@@ -1007,6 +1007,7 @@ alias:
   title: Alias
   title_plural: Aliases
   description: An Alias is a DNS-like string associated with a destination resource.
+  details: Alias Details
   titles:
     new: New Alias
     resource_id: Resource ID

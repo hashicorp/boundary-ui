@@ -486,6 +486,13 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     margin-bottom: 2.25rem;
   }
 
+  &.aliases {
+    .rose-metadata-list {
+      &.vertical {
+        row-gap: 0.1rem;
+      }
+    }
+  }
   .title {
     color: var(--token-color-palette-neutral-600);
     margin-bottom: 0.75rem;
