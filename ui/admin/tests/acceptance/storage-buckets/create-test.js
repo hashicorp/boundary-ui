@@ -73,7 +73,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click('[value="global"]');
+    await select(SCOPE_SELECTOR, 'global');
 
     assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
     assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
