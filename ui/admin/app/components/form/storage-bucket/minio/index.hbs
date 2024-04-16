@@ -133,6 +133,7 @@
     @value={{@model.endpoint_url}}
     @isInvalid={{@model.errors.endpoint_url}}
     disabled={{form.disabled}}
+    readOnly={{not @model.isNew}}
     {{on 'input' (set-from-event @model 'endpoint_url')}}
     as |F|
   >
