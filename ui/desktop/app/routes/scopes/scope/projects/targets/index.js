@@ -142,6 +142,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       this.can.can('connect target', target),
     );
 
+    const aliases = await this.store.query('alias', { scope_id: 'global' });
+
+    targets = await Promise.all(
+      targets.map(async (target) => ({
+        target,
+        alias: aliases.filter((i) => i.destination_id === target.id),
+      })),
+    );
+
     return {
       targets,
       projects,
@@ -149,6 +158,16 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       totalItems,
       isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
     };
+  }
+
+  /**
+   * Adds the scopes hash to the controller context (see `afterModel`).
+   * @param {Controller} controller
+   */
+  async setupController(controller) {
+    super.setupController(...arguments);
+    const globalScope = await this.store.peekRecord('scope', 'global');
+    controller.setProperties({ globalScope });
   }
 
   resetController(controller, isExiting, transition) {

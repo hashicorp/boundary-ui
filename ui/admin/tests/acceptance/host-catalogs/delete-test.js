@@ -67,7 +67,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
   test('can delete host catalog', async function (assert) {
     const hostCatalogCount = getHostCatalogCount();
-    console.log(hostCatalogCount);
 
     await visit(urls.hostCatalogs);
     await click(`[href="${urls.hostCatalog}"]`);

@@ -69,13 +69,15 @@
     </div>
     <FilterTags @filters={{this.filters}} />
   {{/if}}
-
   {{#if @model.targets}}
     <Hds::Table
       @model={{@model.targets}}
       @columns={{array
         (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.id.label'))
+        (if
+          (can 'list model' this.globalScope collection='aliases')
+          (hash label=(t 'resources.alias.title'))
+        )
         (hash label=(t 'resources.target.titles.active-sessions'))
         (hash label=(t 'form.type.label'))
         (hash label=(t 'resources.project.title'))
@@ -83,78 +85,90 @@
       }}
       @valign='middle'
     >
+
       <:body as |B|>
         <B.Tr>
           <B.Td>
             <span class='hds-font-weight-semibold'>
-              {{#if (can 'read model' B.data)}}
+              {{#if (can 'read model' B.data.target)}}
                 <LinkTo
-                  data-test-visit-target={{B.data.id}}
+                  data-test-visit-target={{B.data.target.id}}
                   @route='scopes.scope.projects.targets.target'
-                  @model={{B.data.id}}
+                  @model={{B.data.target.id}}
                   @query={{hash isConnecting=false}}
                 >
-                  {{B.data.displayName}}
+                  {{B.data.target.displayName}}
                 </LinkTo>
               {{else}}
-                {{B.data.displayName}}
+                {{B.data.target.displayName}}
               {{/if}}
-              {{#if B.data.description}}
-                <p>{{B.data.description}}</p>
+              {{#if B.data.target.description}}
+                <p>{{B.data.target.description}}</p>
               {{/if}}
             </span>
           </B.Td>
+          {{{log this.globalScope 'scopee??'}}}
+          {{!-- {{can 'list model' this.globalScope collection='aliases'}} --}}
           <B.Td>
-            <Hds::Copy::Snippet @textToCopy={{B.data.id}} @color='secondary' />
+            {{#if (can 'list model' this.globalScope collection='aliases')}}
+              <span data-test-aliases-list={{B.data.alias.id}}>
+                {{truncate-list 'actions.more' B.data.alias 3}}
+              </span>
+            {{/if}}
           </B.Td>
           <B.Td>
-            {{#if B.data.isActive}}
+            {{#if B.data.target.isActive}}
               <Hds::Button
-                data-test-targets-sessions-flyout-button={{B.data.id}}
+                data-test-targets-sessions-flyout-button={{B.data.target.id}}
                 @text={{t 'actions.yes'}}
                 @color='tertiary'
                 @icon='info'
-                {{on 'click' (fn this.selectTarget B.data)}}
+                {{on 'click' (fn this.selectTarget B.data.target)}}
               />
             {{/if}}
           </B.Td>
           <B.Td>
-            {{#if B.data.type}}
+            {{#if B.data.target.type}}
               <Hds::Badge
-                @text={{t (concat 'resources.target.types.' B.data.type)}}
+                @text={{t
+                  (concat 'resources.target.types.' B.data.target.type)
+                }}
               />
             {{/if}}
           </B.Td>
           <B.Td>
             <div>
               <Hds::Copy::Snippet
-                @textToCopy={{B.data.project.id}}
+                @textToCopy={{B.data.target.project.id}}
                 @color='secondary'
-                data-test-target-project-id={{B.data.project.id}}
+                data-test-target-project-id={{B.data.target.project.id}}
               />
             </div>
-            {{#if B.data.project.name}}
-              <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+            {{#if B.data.target.project.name}}
+              <Hds::Badge
+                @color='neutral'
+                @text={{B.data.target.project.name}}
+              />
             {{/if}}
           </B.Td>
           <B.Td @align='right'>
             <div {{style display='inline-block'}}>
-              {{#if (can 'connect target' B.data)}}
-                {{#if (can 'read target' B.data)}}
+              {{#if (can 'connect target' B.data.target)}}
+                {{#if (can 'read target' B.data.target)}}
                   <Hds::Button
-                    data-test-targets-connect-button={{B.data.id}}
+                    data-test-targets-connect-button={{B.data.target.id}}
                     @text={{t 'resources.session.actions.connect'}}
                     @color='secondary'
                     @route='scopes.scope.projects.targets.target'
-                    @model={{B.data.id}}
+                    @model={{B.data.target.id}}
                     @query={{hash isConnecting=true}}
                   />
                 {{else}}
                   <Hds::Button
-                    data-test-targets-connect-button={{B.data.id}}
+                    data-test-targets-connect-button={{B.data.target.id}}
                     @text={{t 'resources.session.actions.connect'}}
                     @color='secondary'
-                    {{on 'click' (fn this.quickConnect B.data)}}
+                    {{on 'click' (fn this.quickConnect B.data.target)}}
                   />
                 {{/if}}
               {{/if}}

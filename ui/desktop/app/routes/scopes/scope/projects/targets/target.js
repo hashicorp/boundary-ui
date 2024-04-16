@@ -78,6 +78,16 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
   }
 
   /**
+   * Adds the scopes hash to the controller context (see `afterModel`).
+   * @param {Controller} controller
+   */
+  async setupController(controller) {
+    super.setupController(...arguments);
+    const globalScope = await this.store.peekRecord('scope', 'global');
+    controller.setProperties({ globalScope });
+  }
+
+  /**
    * Sets the 'isConnecting' queryParam to false if connection failed.
    * @returns {boolean}
    */

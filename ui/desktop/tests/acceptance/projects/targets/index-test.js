@@ -9,6 +9,7 @@ import {
   currentURL,
   currentRouteName,
   click,
+  pauseTest,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -26,7 +27,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   setupMirage(hooks);
   setupStubs(hooks);
 
-  let getTargetCount;
+  let getTargetCount, getAliasCount;
 
   const APP_STATE_TITLE = '.hds-application-state__title';
   const TARGET_DETAILS_ROUTE_NAME =
@@ -57,6 +58,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     target: null,
     target2: null,
     session: null,
+    alias: null,
   };
 
   const urls = {
@@ -92,6 +94,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       id: 'global',
       name: 'Global',
     });
+
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -125,6 +128,12 @@ module('Acceptance | projects | targets | index', function (hooks) {
       scope: instances.scopes.project,
       address: '127.0.0.1',
     });
+
+    instances.alias = this.server.create('alias', {
+      scope: instances.scopes.global,
+      destination_id: instances.target.id,
+    });
+
     instances.session = this.server.create(
       'session',
       {
@@ -151,6 +160,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
+    getAliasCount = () => this.server.schema.aliases.all().models.length;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -266,6 +276,51 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(CHOOSE_HOST_MODAL).doesNotExist();
     assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
+  });
+
+  test('visiting targets index shows associated aliases if there are any', async function (assert) {
+    await visit(urls.scopes.global);
+
+    instances.alias.authorized_collection_actions = ['list'];
+
+    const targetsCount = getTargetCount();
+    await visit(urls.projects);
+
+    const aliasCount = getAliasCount();
+    console.log(currentURL(), 'curr');
+    await this.pauseTest();
+    await click(`[href="${urls.targets}"]`);
+
+    assert.true(instances.alias.authorized_collection_actions.includes('list'));
+
+    assert.dom('.hds-segmented-group').exists();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(getTargetCount(), targetsCount);
+    assert.strictEqual(getAliasCount(), aliasCount);
+    console.log(instances.alias.authorized_collection_actions, 'aaa');
+
+    assert.dom(`[data-test-aliases-list="${instances.target.id}"]`).exists();
+  });
+
+  test('visiting targets index does not show associated aliases without proper authorization', async function (assert) {
+    await visit(urls.scopes.global);
+
+    instances.alias.authorized_collection_actions = [];
+
+    const targetsCount = getTargetCount();
+    await visit(urls.projects);
+    await click(`[href="${urls.targets}"]`);
+
+    assert.false(
+      instances.alias.authorized_collection_actions.includes('list'),
+    );
+
+    assert.dom('.hds-segmented-group').exists();
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(getTargetCount(), targetsCount);
+    assert
+      .dom(`[data-test-aliases-list="${instances.target.id}"]`)
+      .doesNotExist();
   });
 
   test('user can connect without target read permissions', async function (assert) {

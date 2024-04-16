@@ -64,7 +64,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get noResults() {
     return (
-      this.model.targets.length === 0 &&
+      this.model.targets.map((item) => item.target).length === 0 &&
       (this.search || this.availableSessions.length || this.types.length)
     );
   }
@@ -75,7 +75,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    */
   get noTargets() {
     return (
-      this.model.targets.length === 0 &&
+      this.model.targets.map((item) => item.target).length === 0 &&
       !(this.search || this.availableSessions.length || this.types.length)
     );
   }

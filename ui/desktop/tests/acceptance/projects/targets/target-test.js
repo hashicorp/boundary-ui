@@ -39,6 +39,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    alias: null,
   };
 
   const urls = {
@@ -101,6 +102,14 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts',
     );
+
+    instances.alias = this.server.create('alias', {
+      scope: instances.scopes.global,
+      value: 'www.test.com',
+      id: '123',
+      destination_id: instances.target.id,
+    });
+
     instances.session = this.server.create(
       'session',
       {
