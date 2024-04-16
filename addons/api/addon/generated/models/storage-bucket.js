@@ -73,6 +73,12 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   })
   region;
 
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The MinIO location server.',
+  })
+  endpoint_url;
+
   //this field is not used in the UI, but this is kept here to replicate the API
   @attr('string', {
     readOnly: true,
