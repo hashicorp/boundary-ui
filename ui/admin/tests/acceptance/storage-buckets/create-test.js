@@ -32,6 +32,10 @@ module('Acceptance | storage-buckets | create', function (hooks) {
   const ACCESS_KEY_SELECTOR = '[name="access_key_id"]';
   const SECRET_KEY_SELECTOR = '[name="secret_access_key"]';
   const SCOPE_SELECTOR = '[name=scope]';
+  const CREDENTIAL_TYPE_GROUP_SELECTOR = '[name=credential_type]';
+  const MINIO_PLUGIN_TYPE_SELECTOR = '[value=minio]';
+  const ENDPOINT_URL_SELECTOR = '[name=endpoint_url]';
+  const ENDPOINT_URL_TEXT = 'http://www.hashicorp.com';
 
   const instances = {
     scopes: {
@@ -63,13 +67,13 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     authenticateSession({});
   });
 
-  test('users can create a new storage bucket with global scope', async function (assert) {
+  test('users can create a new storage bucket aws plugin type with global scope', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click('[value="global"]');
+    await select(SCOPE_SELECTOR, 'global');
 
     assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
     assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
@@ -86,7 +90,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
-  test('users can create a new storage bucket with org scope', async function (assert) {
+  test('users can create a new storage bucket aws plugin type with org scope', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
@@ -110,13 +114,17 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
-  test('users can create a new storage bucket with dynamic credentials', async function (assert) {
+  test('users can create a new storage bucket aws plugin type with dynamic credentials', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    assert.dom('.hds-form-radio-card').exists({ count: 2 });
+
+    // There are 2 credential types
+    assert
+      .dom(`${CREDENTIAL_TYPE_GROUP_SELECTOR} .hds-form-radio-card`)
+      .exists({ count: 2 });
 
     await click(DYNAMIC_CREDENTIAL_SELECTOR);
     await fillIn(ROLE_ARN_SELECTOR, 'test-arn-id');
@@ -132,13 +140,15 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
-  test('users can create a new storage bucket with static credentials', async function (assert) {
+  test('users can create a new storage bucket aws plugin type with static credentials', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    assert.dom('.hds-form-radio-card').exists({ count: 2 });
+    assert
+      .dom(`${CREDENTIAL_TYPE_GROUP_SELECTOR} .hds-form-radio-card`)
+      .exists({ count: 2 });
 
     await click(STATIC_CREDENTIAL_SELECTOR);
     await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
@@ -153,6 +163,40 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
     //for static credentials, role_arn should be null
     assert.strictEqual(storageBucket.attributes.role_arn, null);
+    assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
+  });
+
+  test('users can create a new storage bucket minio plugin type', async function (assert) {
+    const storageBucketCount = getStorageBucketCount();
+
+    // Navigate to new storage bucket
+    await visit(urls.storageBuckets);
+    await click(`[href="${urls.newStorageBucket}"]`);
+
+    // Fill the form
+    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await click(MINIO_PLUGIN_TYPE_SELECTOR);
+    await fillIn(ENDPOINT_URL_SELECTOR, ENDPOINT_URL_TEXT);
+    await fillIn(BUCKET_NAME_FIELD_SELECTOR, 'Test SB');
+    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
+    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
+
+    await click(SAVE_BTN_SELECTOR);
+
+    // Retrieve recently created SB
+    const storageBucket = await this.server.schema.storageBuckets.findBy({
+      name: NAME_FIELD_TEXT,
+    });
+
+    // Assertions
+    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(
+      storageBucket.attributes.endpoint_url,
+      ENDPOINT_URL_TEXT,
+    );
+    assert.strictEqual(storageBucket.attributes.role_arn, null);
+    assert.strictEqual(storageBucket.plugin.name, 'minio');
+    assert.strictEqual(storageBucket.type, 'plugin');
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
