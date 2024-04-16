@@ -11,6 +11,7 @@ import {
   TYPES_STORAGE_BUCKET as types,
   TYPES_STORAGE_BUCKET_PLUGIN,
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+  TYPE_STORAGE_BUCKET_PLUGIN_MINIO,
 } from 'api/models/storage-bucket';
 
 // Represents known plugin types, except "foobar" which models the possibility
@@ -49,6 +50,10 @@ export default factory.extend({
             9,
           )}`,
           disable_credential_rotation: faker.datatype.boolean(),
+        };
+      case TYPE_STORAGE_BUCKET_PLUGIN_MINIO:
+        return {
+          endpoint_url: faker.internet.url(),
         };
     }
   },
