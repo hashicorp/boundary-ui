@@ -265,12 +265,15 @@ module('Acceptance | projects | targets | target', function (hooks) {
   });
 
   test('user can visit target details and see the associated aliases', async function (assert) {
+    instances.targetWithOneHost.update({
+      aliases: [{ id: 123, val: 'value' }],
+    });
     await visit(urls.targets);
 
     await click(`[href="${urls.targetWithOneHost}"]`);
 
     assert.strictEqual(currentURL(), urls.targetWithOneHost);
-    assert.dom('.details-sidebar .aliases').exists();
+    assert.dom('.aliases').exists();
   });
   test('user can connect to a target without read permissions for host-set', async function (assert) {
     assert.expect(1);
