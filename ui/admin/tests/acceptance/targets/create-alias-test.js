@@ -83,13 +83,13 @@ module('Acceptance | targets | create-alias', function (hooks) {
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
     await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
 
-    await fillIn(DEST_FIELD_SELECTOR, instances.target.id);
     await click(SAVE_BTN_SELECTOR);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,
     });
 
     assert.strictEqual(alias.name, NAME_FIELD_TEXT);
+    assert.strictEqual(alias.destination_id, instances.target.id);
     assert.strictEqual(alias.scopeId, 'global');
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
@@ -109,8 +109,34 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
     await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
-    await fillIn(DEST_FIELD_SELECTOR, instances.target.id);
 
+    await click(SAVE_BTN_SELECTOR);
+    const alias = this.server.schema.aliases.findBy({
+      name: NAME_FIELD_TEXT,
+    });
+
+    assert.strictEqual(alias.name, NAME_FIELD_TEXT);
+    assert.strictEqual(alias.destination_id, instances.target.id);
+    assert.strictEqual(alias.scopeId, 'global');
+    assert.strictEqual(getAliasCount(), aliasCount + 1);
+  });
+
+  test('users should not see destination id input field', async function (assert) {
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+      type: TYPE_TARGET_SSH,
+    });
+    const aliasCount = getAliasCount();
+
+    await visit(urls.targets);
+
+    await click(`[href="${urls.target}"]`);
+
+    await click(ADD_AN_ALIAS_SELECTOR);
+
+    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
+    assert.dom(DEST_FIELD_SELECTOR).doesNotExist();
     await click(SAVE_BTN_SELECTOR);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,

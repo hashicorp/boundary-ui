@@ -87,27 +87,29 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::TextInput::Field
-    name='destination_id'
-    @isOptional={{true}}
-    @value={{@model.destination_id}}
-    @isInvalid={{@model.errors.destination_id}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'destination_id')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.alias.form.destination_id.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.alias.form.destination_id.help'
-      }}</F.HelperText>
-    {{#if @model.errors.destination_id}}
-      <F.Error as |E|>
-        {{#each @model.errors.destination_id as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  {{#unless @hideTargetId}}
+    <Hds::Form::TextInput::Field
+      name='destination_id'
+      @isOptional={{true}}
+      @value={{@model.destination_id}}
+      @isInvalid={{@model.errors.destination_id}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'destination_id')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.alias.form.destination_id.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.alias.form.destination_id.help'
+        }}</F.HelperText>
+      {{#if @model.errors.destination_id}}
+        <F.Error as |E|>
+          {{#each @model.errors.destination_id as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  {{/unless}}
 
   <Hds::Form::TextInput::Field
     name='authorize_session_arguments'

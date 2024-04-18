@@ -147,6 +147,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
+  @confirm('questions.delete-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async deleteAlias(alias) {
@@ -161,6 +162,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
+  @confirm('questions.clear-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.clear-success')
   async clearAlias(alias) {
