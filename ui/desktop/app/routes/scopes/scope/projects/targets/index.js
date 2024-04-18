@@ -100,6 +100,13 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       filters.type.push({ equals: type });
     });
 
+    // TODO: Refactor to run all our promises in parallel
+    await this.store.query('alias', {
+      recursive: true,
+      scope_id: 'global',
+      force_refresh: true,
+    });
+
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
     const sessionQuery = {
