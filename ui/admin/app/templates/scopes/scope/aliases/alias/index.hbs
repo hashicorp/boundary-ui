@@ -10,7 +10,7 @@
   <page.header>
     <h2>
       {{t 'resources.alias.title'}}
-      {{! TODO: DOC LINK }}
+      <DocLink @doc='aliases' @iconSize='large' />
     </h2>
     <p>{{t 'resources.alias.description'}}</p>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
