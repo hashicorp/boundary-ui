@@ -19,31 +19,39 @@
     <p>{{t 'resources.alias.description'}}</p>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
-  <page.actions>
+  {{#let
+    (hash
+      canRead=(can 'read model' @model) canDelete=(can 'delete model' @model)
+    )
+    as |perms|
+  }}
+    <page.actions>
+      {{#if (or perms.canRead perms.canDelete)}}
 
-    <Hds::Dropdown as |dd|>
-      <dd.ToggleButton
-        data-test-manage-dropdown
-        @text={{t 'actions.manage'}}
-        @color='secondary'
-      />
-
-      <dd.Interactive
-        @text={{t 'actions.clear'}}
-        {{on 'click' (route-action 'clearAlias' @model)}}
-      />
-      {{#if (can 'delete model' @model)}}
-        <dd.Separator />
-        <dd.Interactive
-          data-test-manage-alias-dropdown-delete
-          @color='critical'
-          @text={{t 'actions.delete'}}
-          {{on 'click' (route-action 'deleteAlias' @model)}}
-        />
+        <Hds::Dropdown as |dd|>
+          <dd.ToggleButton
+            data-test-manage-dropdown
+            @text={{t 'actions.manage'}}
+            @color='secondary'
+          />
+          {{#if perms.canRead}}
+            <dd.Interactive
+              @text={{t 'actions.clear'}}
+              {{on 'click' (route-action 'clearAlias' @model)}}
+            />
+          {{/if}}
+          {{#if perms.canDelete}}
+            <dd.Separator />
+            <dd.Interactive
+              @color='critical'
+              @text={{t 'actions.delete'}}
+              {{on 'click' (route-action 'deleteAlias' @model)}}
+            />
+          {{/if}}
+        </Hds::Dropdown>
       {{/if}}
-    </Hds::Dropdown>
-
-  </page.actions>
+    </page.actions>
+  {{/let}}
 
   <page.body>
     <Form::Alias

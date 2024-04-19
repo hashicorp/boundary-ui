@@ -147,7 +147,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
-  @confirm('questions.delete-confirm')
+  @confirm('resources.alias.messages.delete')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async deleteAlias(alias) {

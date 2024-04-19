@@ -111,15 +111,18 @@
                         @model={{B.data.alias.id}}
                         @text={{t 'actions.edit'}}
                       />
+                      <dd.Interactive
+                        @text={{t 'actions.clear'}}
+                        @color='action'
+                        {{on 'click' (fn this.clearAlias B.data.alias)}}
+                      />
                     {{/if}}
-                    {{#if (and perms.canRead perms.canDelete)}}
-                      <dd.Separator />
-                    {{/if}}
+
                     {{#if perms.canDelete}}
                       <dd.Interactive
-                        @text={{t 'actions.delete'}}
                         @color='critical'
-                        {{on 'click' (fn this.toggleModal B.data.alias)}}
+                        @text={{t 'actions.delete'}}
+                        {{on 'click' (fn this.deleteAlias B.data.alias)}}
                       />
                     {{/if}}
                   </Hds::Dropdown>
@@ -162,53 +165,6 @@
         </Rose::Message>
       </Rose::Layout::Centered>
     {{/if}}
-    {{#if this.showModal}}
-      <Hds::Modal
-        class='alias-deletion-modal'
-        @color='warning'
-        @onClose={{this.toggleModal}}
-        as |M|
-      >
-        <M.Header @icon='alert-triangle'>
-          {{t 'questions.delete-confirm'}}
-        </M.Header>
 
-        <M.Body>
-          <p class='hds-typography-body-300 hds-foreground-primary'>
-            {{#if this.selectedAlias.destination_id}}
-              {{t 'resources.alias.messages.clear-or-delete'}}
-            {{else}}
-              {{t 'resources.alias.messages.delete'}}
-            {{/if}}
-          </p>
-
-        </M.Body>
-
-        <M.Footer>
-          <Hds::ButtonSet>
-            <Hds::Button
-              type='button'
-              @text={{t 'actions.delete'}}
-              {{on 'click' (fn this.deleteAlias this.selectedAlias)}}
-            />
-            {{#if this.selectedAlias.destination_id}}
-              <Hds::Button
-                type='button'
-                @text={{t 'actions.clear'}}
-                @color='secondary'
-                {{on 'click' (fn this.clearAlias this.selectedAlias)}}
-              />
-            {{/if}}
-            <Hds::Button
-              type='button'
-              @text={{t 'actions.cancel'}}
-              @color='secondary'
-              {{on 'click' this.toggleModal}}
-            />
-          </Hds::ButtonSet>
-
-        </M.Footer>
-      </Hds::Modal>
-    {{/if}}
   </page.body>
 </Rose::Layout::Page>

@@ -18,10 +18,8 @@ module('Acceptance | aliases | delete', function (hooks) {
   let aliasCount;
 
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item button';
-  const MODAL_SELECTOR = '.alias-deletion-modal';
-  const DELETE_BUTTON_SELECTOR = '.hds-modal__footer .hds-button:nth-child(1)';
-  const CLEAR_BUTTON_SELECTOR = '.hds-modal__footer .hds-button:nth-child(2)';
+  const DELETE_DROPDOWN_SELECTOR =
+    '.hds-dropdown-list-item--color-critical button';
 
   const instances = {
     scopes: {
@@ -64,21 +62,14 @@ module('Acceptance | aliases | delete', function (hooks) {
     aliasCount = () => this.server.schema.aliases.all().models.length;
   });
 
-  test('users can delete an alias', async function (assert) {
+  test('users can delete an alias with proper authorization', async function (assert) {
     const count = aliasCount();
 
     assert.true(instances.alias.authorized_actions.includes('delete'));
-    await visit(urls.globalScope);
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
-
-    await click(`[href="${urls.aliases}"]`);
+    await visit(urls.aliases);
     await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Delete');
-    await click(DROPDOWN_ITEM_SELECTOR);
-    assert.dom(MODAL_SELECTOR);
-    await click(DELETE_BUTTON_SELECTOR);
     assert.strictEqual(aliasCount(), count - 1);
   });
 
@@ -93,26 +84,6 @@ module('Acceptance | aliases | delete', function (hooks) {
     await click(`[href="${urls.aliases}"]`);
     await click(DROPDOWN_BUTTON_SELECTOR);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).isNotVisible();
-  });
-
-  test('users have the option to clear an alias instead of deleting it', async function (assert) {
-    const count = aliasCount();
-    assert.true(instances.alias.authorized_actions.includes('delete'));
-
-    await visit(urls.globalScope);
-
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
-
-    await click(`[href="${urls.aliases}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Delete');
-    await click(DROPDOWN_ITEM_SELECTOR);
-    assert.dom(MODAL_SELECTOR);
-    await click(CLEAR_BUTTON_SELECTOR);
-    //  await click(`[href="${urls.aliases}"]`);
-    assert.strictEqual(aliasCount(), count);
+    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
   });
 });
