@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-export { default } from 'api/handlers/client-daemon-handler';
+export { default, resourceNames } from 'api/handlers/client-daemon-handler';
