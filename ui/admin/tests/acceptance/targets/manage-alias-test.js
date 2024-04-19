@@ -23,6 +23,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
   const CLEAR_BTN_SELECTOR = '.hds-dropdown-list-item--color-action button';
   const DELETE_BTN_SELECTOR = '.hds-dropdown-list-item--color-critical button';
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
+  const DEST_FIELD_SELECTOR = '[name="destination_id"]';
 
   const instances = {
     scopes: {
@@ -149,6 +150,8 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
 
     await click(DROPDOWN_ITEM_SELECTOR);
+    assert.dom(DEST_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);
 
