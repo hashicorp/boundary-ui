@@ -122,8 +122,15 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       targetsPromise,
       sessionsPromise,
       allTargetsPromise,
-      aliasPromise,
     ]);
+
+    try {
+      await aliasPromise;
+    } catch {
+      // TODO: Log this error
+      // Separately await and catch the error here so we can continue loading
+      // the page in case the controller doesn't support aliases yet
+    }
 
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
