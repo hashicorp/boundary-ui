@@ -104,7 +104,10 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     const allTargetsPromise = !this.allTargets
       ? this.makeAllTargetsQuery(orgScope, orgFilter)
       : Promise.resolve();
-    const sessionsPromise = this.makeSessionQuery(orgScope, scopes, orgFilter);
+
+    const sessions = await this.makeSessionQuery(orgScope, scopes, orgFilter);
+    this.addActiveSessionFilters(filters, availableSessions, sessions);
+
     const query = {
       recursive: true,
       scope_id: orgScope.id,
@@ -116,13 +119,20 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     if (orgScope.isOrg && scopes.length === 0) {
       query.filter = orgFilter;
     }
-    const targetsPromise = this.store.query('target', query);
+    let targets = await this.store.query('target', query);
+    const totalItems = targets.meta?.totalItems;
+    // Filter out targets to which users do not have the connect ability
+    targets = targets.filter((target) =>
+      this.can.can('connect target', target),
+    );
 
-    let [targets, sessions, allTargets] = await Promise.all([
-      targetsPromise,
-      sessionsPromise,
-      allTargetsPromise,
-    ]);
+    const allTargets = await allTargetsPromise;
+    if (!this.allTargets) {
+      // Filter out targets to which users do not have the connect ability
+      this.allTargets = allTargets.filter((target) =>
+        target.authorized_actions.includes('authorize-session'),
+      );
+    }
 
     try {
       await aliasPromise;
@@ -130,21 +140,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       // TODO: Log this error
       // Separately await and catch the error here so we can continue loading
       // the page in case the controller doesn't support aliases yet
-    }
-
-    this.addActiveSessionFilters(filters, availableSessions, sessions);
-
-    const totalItems = targets.meta?.totalItems;
-    // Filter out targets to which users do not have the connect ability
-    targets = targets.filter((target) =>
-      this.can.can('connect target', target),
-    );
-
-    if (!this.allTargets) {
-      // Filter out targets to which users do not have the connect ability
-      this.allTargets = allTargets.filter((target) =>
-        target.authorized_actions.includes('authorize-session'),
-      );
     }
 
     return {
@@ -156,7 +151,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     };
   }
 
-  makeSessionQuery(orgScope, scopes, orgFilter) {
+  async makeSessionQuery(orgScope, scopes, orgFilter) {
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
     const sessionQuery = {
