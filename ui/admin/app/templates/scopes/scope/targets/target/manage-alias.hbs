@@ -34,7 +34,7 @@
             @text={{t 'actions.manage'}}
             @color='secondary'
           />
-          {{#if perms.canRead}}
+          {{#if (and perms.canRead @model.destination_id)}}
             <dd.Interactive
               @text={{t 'actions.clear'}}
               {{on 'click' (route-action 'clearAlias' @model)}}

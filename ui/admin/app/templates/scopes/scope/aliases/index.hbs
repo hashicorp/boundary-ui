@@ -48,11 +48,11 @@
                   @route='scopes.scope.aliases.alias'
                   @model={{B.data.alias.id}}
                 >
-                  {{B.data.alias.displayName}}
+                  {{B.data.alias.value}}
                 </LinkTo>
               {{else}}
                 <Hds::Text::Body @tag='p'>
-                  {{B.data.alias.displayName}}
+                  {{B.data.alias.value}}
                 </Hds::Text::Body>
               {{/if}}
               {{#if B.data.alias.description}}
@@ -112,11 +112,13 @@
                         @model={{B.data.alias.id}}
                         @text={{t 'actions.edit'}}
                       />
-                      <dd.Interactive
-                        @text={{t 'actions.clear'}}
-                        @color='action'
-                        {{on 'click' (fn this.clearAlias B.data.alias)}}
-                      />
+                      {{#if B.data.alias.destination_id}}
+                        <dd.Interactive
+                          @text={{t 'actions.clear'}}
+                          @color='action'
+                          {{on 'click' (fn this.clearAlias B.data.alias)}}
+                        />
+                      {{/if}}
                     {{/if}}
 
                     {{#if perms.canDelete}}
