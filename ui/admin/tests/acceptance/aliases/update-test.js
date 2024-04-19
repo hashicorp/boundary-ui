@@ -26,7 +26,7 @@ module('Acceptance | aliases | update', function (hooks) {
 
   const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const CLEAR_DROPDOWN_SELECTOR =
-    '.hds-dropdown-list-item--color-action:nth-child(2) button';
+    '.hds-dropdown-list-item--color-action:nth-child(2)';
 
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
   const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item';
@@ -38,12 +38,14 @@ module('Acceptance | aliases | update', function (hooks) {
       project: null,
     },
     alias: null,
+    target: null,
   };
 
   const urls = {
     globalScope: null,
     aliases: null,
     alias: null,
+    target: null,
   };
 
   hooks.beforeEach(function () {
@@ -52,9 +54,12 @@ module('Acceptance | aliases | update', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-
+    instances.target = this.server.create('target', {
+      scope: instances.scopes.project,
+    });
     instances.alias = this.server.create('alias', {
       scope: instances.scopes.global,
+      destination_id: instances.target.id,
     });
     urls.globalScope = `/scopes/global`;
     urls.aliases = `${urls.globalScope}/aliases`;
