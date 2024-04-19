@@ -23,12 +23,76 @@
       </nav.link>
     </Rose::Nav::Tabs>
   </page.navigation>
-
+  {{#if (can 'delete model' @model)}}
+    <page.actions>
+      <Hds::Dropdown as |dd|>
+        <dd.ToggleButton
+          data-test-manage-dropdown
+          @text={{t 'actions.manage'}}
+          @color='secondary'
+        />
+        <dd.Interactive
+          data-test-manage-alias-dropdown-delete
+          @color='critical'
+          @text={{t 'actions.delete'}}
+          {{on 'click' (fn this.aliases.toggleModal @model)}}
+        />
+      </Hds::Dropdown>
+    </page.actions>
+  {{/if}}
   <page.body>
     <Form::Alias
       @model={{@model}}
       @submit={{fn this.aliases.save @model}}
       @cancel={{fn this.aliases.cancel @model}}
     />
+    {{#if this.aliases.showModal}}
+      <Hds::Modal
+        class='alias-deletion-modal'
+        @color='warning'
+        @onClose={{this.aliases.toggleModal}}
+        as |M|
+      >
+        <M.Header @icon='alert-triangle'>
+          {{t 'questions.delete-confirm'}}
+        </M.Header>
+
+        <M.Body>
+          <p class='hds-typography-body-300 hds-foreground-primary'>
+            {{#if @model.destination_id}}
+              {{t 'resources.alias.messages.clear-or-delete'}}
+            {{else}}
+              {{t 'resources.alias.messages.delete'}}
+            {{/if}}
+          </p>
+
+        </M.Body>
+
+        <M.Footer>
+          <Hds::ButtonSet>
+            <Hds::Button
+              type='button'
+              @text={{t 'actions.delete'}}
+              {{on 'click' (fn this.aliases.deleteAlias @model)}}
+            />
+            {{#if @model.destination_id}}
+              <Hds::Button
+                type='button'
+                @text={{t 'actions.clear'}}
+                @color='secondary'
+                {{on 'click' (fn this.aliases.clearAlias @model)}}
+              />
+            {{/if}}
+            <Hds::Button
+              type='button'
+              @text={{t 'actions.cancel'}}
+              @color='secondary'
+              {{on 'click' this.aliases.toggleModal}}
+            />
+          </Hds::ButtonSet>
+
+        </M.Footer>
+      </Hds::Modal>
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>

@@ -174,9 +174,8 @@
         </M.Header>
 
         <M.Body>
-
           <p class='hds-typography-body-300 hds-foreground-primary'>
-            {{#if this.hasDestinationId}}
+            {{#if this.selectedAlias.destination_id}}
               {{t 'resources.alias.messages.clear-or-delete'}}
             {{else}}
               {{t 'resources.alias.messages.delete'}}
@@ -192,7 +191,7 @@
               @text={{t 'actions.delete'}}
               {{on 'click' (fn this.deleteAlias this.selectedAlias)}}
             />
-            {{#if this.hasDestinationId}}
+            {{#if this.selectedAlias.destination_id}}
               <Hds::Button
                 type='button'
                 @text={{t 'actions.clear'}}

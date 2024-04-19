@@ -18,7 +18,6 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   // =attributes
   @tracked showModal = false;
   @tracked selectedAlias;
-  @tracked hasDestinationId;
   // =actions
 
   /**
@@ -57,9 +56,6 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    */
   @action
   toggleModal(alias) {
-    if (alias?.destination_id) {
-      this.hasDestinationId = true;
-    }
     this.showModal = !this.showModal;
     this.selectedAlias = alias;
   }
@@ -73,11 +69,10 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.clear-success')
   async clearAlias(alias) {
+    this.showModal = false;
     alias.destination_id = '';
-    this.hasDestinationId = false;
     await alias.save();
     await this.router.refresh();
-    this.showModal = false;
   }
 
   /**
@@ -91,6 +86,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   async deleteAlias(alias) {
     await alias.destroyRecord();
     this.showModal = false;
+    await this.router.replaceWith('scopes.scope.aliases');
     await this.router.refresh();
   }
 }
