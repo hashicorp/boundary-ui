@@ -138,6 +138,10 @@ module('Acceptance | projects | targets | index', function (hooks) {
       scope: instances.scopes.project2,
       address: 'localhost',
     });
+    instances.alias = this.server.create('alias', {
+      scope: instances.scopes.global,
+      destination_id: instances.target.id,
+    });
 
     // Generate route URLs for resources
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
@@ -157,7 +161,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
@@ -197,7 +201,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('visiting targets list view with no targets', async function (assert) {
     this.server.db.targets.remove();
     this.server.db.sessions.remove();
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -209,7 +213,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user cannot navigate to a target without proper authorization', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -238,7 +242,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -271,7 +275,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user can connect without target read permissions', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -297,7 +301,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -338,9 +342,11 @@ module('Acceptance | projects | targets | index', function (hooks) {
 
   test('user can cancel a session from inside target sessions flyout', async function (assert) {
     this.stubClientDaemonSearch(
+      'aliases',
       'targets',
       'sessions',
       'targets',
+      'aliases',
       {
         resource: 'sessions',
         func: () => [],
@@ -375,7 +381,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'cancel');
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -413,7 +419,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -434,10 +440,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can change org scope and only targets for that org will be displayed', async function (assert) {
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets', 'sessions', {
-      resource: 'targets',
-      func: () => [instances.target],
-    });
+    this.stubClientDaemonSearch(
+      'aliases',
+      'targets',
+      'sessions',
+      'targets',
+      'aliases',
+      'sessions',
+      {
+        resource: 'targets',
+        func: () => [instances.target],
+      },
+    );
 
     await visit(urls.scopes.global);
 
@@ -469,5 +483,18 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.dom('.hds-segmented-group').doesNotExist();
     assert.strictEqual(currentURL(), urls.targets);
     assert.dom('tbody tr').exists({ count: targetsCount });
+  });
+
+  test('target includes aliases', async function (assert) {
+    await visit(urls.projects);
+    await click(`[href="${urls.targets}"]`);
+
+    assert.strictEqual(currentURL(), urls.targets);
+    assert
+      .dom(`[data-test-target-aliases="${instances.target.id}"]`)
+      .hasText(instances.alias.value);
+    assert
+      .dom(`[data-test-target-aliases="${instances.target2.id}"]`)
+      .hasNoText();
   });
 });

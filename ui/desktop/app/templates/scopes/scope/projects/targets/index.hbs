@@ -104,8 +104,8 @@
               {{/if}}
             </span>
           </B.Td>
-          <B.Td>
-            {{truncate-list 'actions.more' B.data.aliases}}
+          <B.Td data-test-target-aliases={{B.data.id}}>
+            {{truncate-list 'actions.more' B.data.associatedAliases}}
           </B.Td>
           <B.Td>
             {{#if B.data.isActive}}

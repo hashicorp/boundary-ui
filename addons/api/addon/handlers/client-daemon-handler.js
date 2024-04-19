@@ -24,7 +24,7 @@ const supportedTypes = {
  * Map the model resource name to the client daemon resource name
  * @type {{session: string, alias: string, target: string}}
  */
-const resourceNames = {
+export const resourceNames = {
   target: 'targets',
   session: 'sessions',
   alias: 'resolvable-aliases',
