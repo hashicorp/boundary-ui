@@ -135,6 +135,12 @@ export default class TargetModel extends GeneratedTargetModel {
     return Boolean(pendingOrActiveSessions.length);
   }
 
+  get associatedAliases() {
+    return this.store
+      .peekAll('alias')
+      .filter((alias) => alias?.destination_id === this.id);
+  }
+
   // =methods
 
   /**

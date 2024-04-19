@@ -111,6 +111,7 @@ module.exports = function (environment) {
         'storage-policy': '/storage-policy',
         'storage-policy.new': '/storage-policy/new',
         'storage-policy.update': '/storage-policy/update',
+        aliases: '/aliases',
       },
     },
 

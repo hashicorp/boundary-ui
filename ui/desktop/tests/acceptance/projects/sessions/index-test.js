@@ -365,6 +365,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       'sessions',
       'sessions',
       'targets',
+      'aliases',
       'targets',
       'sessions',
       'targets',
