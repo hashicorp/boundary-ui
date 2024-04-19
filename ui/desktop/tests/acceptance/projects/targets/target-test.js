@@ -124,7 +124,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('user can connect to a target with an address', async function (assert) {
