@@ -98,6 +98,11 @@
             </B.Tr>
           </:body>
         </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
       {{else}}
         <Hds::ApplicationState data-test-no-credential-store-results as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />
