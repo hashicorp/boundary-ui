@@ -92,12 +92,12 @@
             <B.Td>
               {{#let
                 (hash
-                  canRead=(can 'read model' B.data.alias)
+                  canUpdate=(can 'update model' B.data.alias)
                   canDelete=(can 'delete model' B.data.alias)
                 )
                 as |perms|
               }}
-                {{#if (or perms.canRead perms.canDelete)}}
+                {{#if (or perms.canUpdate perms.canDelete)}}
                   <Hds::Dropdown as |dd|>
 
                     <dd.ToggleIcon
@@ -106,7 +106,7 @@
                       @hasChevron={{false}}
                       @size='small'
                     />
-                    {{#if perms.canRead}}
+                    {{#if perms.canUpdate}}
                       <dd.Interactive
                         @route='scopes.scope.aliases.alias'
                         @model={{B.data.alias.id}}
