@@ -11,10 +11,11 @@
   <page.header>
     <h2>
       {{t 'resources.alias.title_plural'}}
-      {{! TODO: Add doc link for alias }}
+      <DocLink @doc='aliases' @iconSize='large' />
     </h2>
     <p>{{t 'resources.alias.description'}}</p>
   </page.header>
+
   <page.actions>
     {{#if (can 'create model' this.scope collection='aliases')}}
       {{#if @model}}
