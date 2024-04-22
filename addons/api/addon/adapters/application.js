@@ -283,8 +283,8 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     const baseError = {
       isInvalid: true,
       status,
-      code: payload.kind,
-      detail: payload.message,
+      code: payload?.kind,
+      detail: payload?.message,
       source: { pointer: '/data' },
     };
     // Normalize field-specific errors, if any.
@@ -319,6 +319,6 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {String} detailed error message
    */
   generatedDetailedMessage(status, headers, payload /*, requestData*/) {
-    return payload.message;
+    return payload?.message;
   }
 }

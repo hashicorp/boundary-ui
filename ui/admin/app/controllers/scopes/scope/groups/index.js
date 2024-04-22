@@ -69,7 +69,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(group) {
     await group.destroyRecord();
-    await this.router.replaceWith('scopes.scope.groups');
+    this.router.replaceWith('scopes.scope.groups');
     await this.router.refresh();
   }
 

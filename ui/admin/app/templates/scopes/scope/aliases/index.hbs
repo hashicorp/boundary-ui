@@ -2,6 +2,7 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
+
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <Breadcrumbs::Container />
@@ -9,11 +10,12 @@
 
   <page.header>
     <h2>
-      {{t 'resources.alias.title'}}
-      {{! TODO: Add doc link for alias }}
+      {{t 'resources.alias.title_plural'}}
+      <DocLink @doc='aliases' @iconSize='large' />
     </h2>
     <p>{{t 'resources.alias.description'}}</p>
   </page.header>
+
   <page.actions>
     {{#if (can 'create model' this.scope collection='aliases')}}
       {{#if @model}}
@@ -25,6 +27,7 @@
     {{/if}}
   </page.actions>
   <page.body>
+
     {{#if @model}}
       <Hds::Table
         @model={{@model}}
@@ -119,63 +122,6 @@
                         @color='critical'
                         {{on 'click' (fn this.toggleModal B.data.alias)}}
                       />
-                      {{#if this.showModal}}
-                        <Hds::Modal
-                          class='alias-deletion-modal'
-                          @color='warning'
-                          @onClose={{this.toggleModal}}
-                          as |M|
-                        >
-                          <M.Header @icon='alert-triangle'>
-                            {{t 'questions.delete-confirm'}}
-                          </M.Header>
-
-                          <M.Body>
-
-                            <p
-                              class='hds-typography-body-300 hds-foreground-primary'
-                            >
-                              {{#if this.hasDestinationId}}
-                                {{t 'resources.alias.messages.clear-or-delete'}}
-                              {{else}}
-                                {{t 'resources.alias.messages.delete'}}
-                              {{/if}}
-                            </p>
-
-                          </M.Body>
-
-                          <M.Footer>
-                            <Hds::ButtonSet>
-                              <Hds::Button
-                                type='button'
-                                @text={{t 'actions.delete'}}
-                                {{on
-                                  'click'
-                                  (fn this.deleteAlias this.selectedAlias)
-                                }}
-                              />
-                              {{#if this.hasDestinationId}}
-                                <Hds::Button
-                                  type='button'
-                                  @text={{t 'actions.clear'}}
-                                  @color='secondary'
-                                  {{on
-                                    'click'
-                                    (fn this.clearAlias this.selectedAlias)
-                                  }}
-                                />
-                              {{/if}}
-                              <Hds::Button
-                                type='button'
-                                @text={{t 'actions.cancel'}}
-                                @color='secondary'
-                                {{on 'click' this.toggleModal}}
-                              />
-                            </Hds::ButtonSet>
-
-                          </M.Footer>
-                        </Hds::Modal>
-                      {{/if}}
                     {{/if}}
                   </Hds::Dropdown>
 
@@ -216,6 +162,55 @@
           {{/if}}
         </Rose::Message>
       </Rose::Layout::Centered>
+    {{/if}}
+    {{#if this.showModal}}
+      <Hds::Modal
+        class='alias-deletion-modal'
+        @color='warning'
+        @onClose={{this.toggleModal}}
+        as |M|
+      >
+        <M.Header @icon='alert-triangle'>
+          {{t 'questions.delete-confirm'}}
+        </M.Header>
+
+        <M.Body>
+
+          <p class='hds-typography-body-300 hds-foreground-primary'>
+            {{#if this.hasDestinationId}}
+              {{t 'resources.alias.messages.clear-or-delete'}}
+            {{else}}
+              {{t 'resources.alias.messages.delete'}}
+            {{/if}}
+          </p>
+
+        </M.Body>
+
+        <M.Footer>
+          <Hds::ButtonSet>
+            <Hds::Button
+              type='button'
+              @text={{t 'actions.delete'}}
+              {{on 'click' (fn this.deleteAlias this.selectedAlias)}}
+            />
+            {{#if this.hasDestinationId}}
+              <Hds::Button
+                type='button'
+                @text={{t 'actions.clear'}}
+                @color='secondary'
+                {{on 'click' (fn this.clearAlias this.selectedAlias)}}
+              />
+            {{/if}}
+            <Hds::Button
+              type='button'
+              @text={{t 'actions.cancel'}}
+              @color='secondary'
+              {{on 'click' this.toggleModal}}
+            />
+          </Hds::ButtonSet>
+
+        </M.Footer>
+      </Hds::Modal>
     {{/if}}
   </page.body>
 </Rose::Layout::Page>

@@ -3,20 +3,18 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const {
-  spawnSync,
-  spawn,
-  spawnAsyncJSONPromise,
-} = require('../helpers/spawn-promise');
+const { spawnSync, spawn } = require('../helpers/spawn-promise');
 const jsonify = require('../utils/jsonify.js');
 const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
 const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
+const treeKill = require('tree-kill');
 
 class ClientDaemonManager {
   #socketPath;
   #isClientDaemonAlreadyRunning = true;
+  #clientDaemonProcess;
 
   get socketPath() {
     return this.#socketPath;
@@ -42,7 +40,8 @@ class ClientDaemonManager {
   async start() {
     const startDaemonCommand = ['daemon', 'start'];
     // We use spawn here because we want to check the stderr for specific logs
-    const { stderr } = await spawn(startDaemonCommand);
+    const { childProcess, stderr } = await spawn(startDaemonCommand);
+    this.#clientDaemonProcess = childProcess;
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
     // we close the desktop client
@@ -56,12 +55,18 @@ class ClientDaemonManager {
    * Stops the daemon.
    */
   stop() {
-    if (this.#isClientDaemonAlreadyRunning) {
-      return;
+    // We started up the daemon so we should stop it
+    if (!this.#isClientDaemonAlreadyRunning) {
+      const stopDaemonCommand = ['daemon', 'stop'];
+      spawnSync(stopDaemonCommand);
     }
 
-    const stopDaemonCommand = ['daemon', 'stop'];
-    spawnSync(stopDaemonCommand);
+    // Kill the process if it's still running
+    if (this.#clientDaemonProcess && !this.#clientDaemonProcess.killed) {
+      isWindows()
+        ? treeKill(this.#clientDaemonProcess.pid)
+        : this.#clientDaemonProcess.kill();
+    }
   }
 
   /**
