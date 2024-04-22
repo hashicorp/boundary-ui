@@ -163,11 +163,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'allowed_audiences');
 
     // Remove all claim maps
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
-        click(element),
-      ),
+    const claimMaps = await Promise.all(
+      findAll('form fieldset:nth-of-type(4) [title="Remove"]'),
     );
+    for (const element of claimMaps) {
+      await click(element);
+    }
     await fillIn('[name="from_claim"]', 'from_claim');
     await select('form fieldset:nth-of-type(4) select', 'email');
     await click('form fieldset:nth-of-type(4) [title="Add"]');
@@ -235,11 +236,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="user_attr"]', 'user attr');
     await fillIn('[name="user_filter"]', 'user filter');
     // Remove all attribute maps
-    await Promise.all(
-      findAll(
-        '[name="account_attribute_maps"] .hds-button--color-critical',
-      ).map((element) => click(element)),
+    const attributeMaps = await Promise.all(
+      findAll('[name="account_attribute_maps"] .hds-button--color-critical'),
     );
+    for (const element of attributeMaps) {
+      await click(element);
+    }
     await fillIn('[name="account_attribute_maps"] input', 'attribute');
     await select('[name="account_attribute_maps"] select', 'email');
     await click('[name="account_attribute_maps"] button');
