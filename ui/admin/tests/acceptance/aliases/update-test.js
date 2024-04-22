@@ -96,7 +96,7 @@ module('Acceptance | aliases | update', function (hooks) {
 
   test('users have the option to clear an alias', async function (assert) {
     const count = aliasCount();
-    assert.true(instances.alias.authorized_actions.includes('read'));
+    assert.true(instances.alias.authorized_actions.includes('update'));
 
     await visit(urls.globalScope);
 
