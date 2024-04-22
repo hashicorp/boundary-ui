@@ -97,7 +97,6 @@ module('Acceptance | aliases | update', function (hooks) {
   test('users have the option to clear an alias', async function (assert) {
     const count = aliasCount();
     assert.true(instances.alias.authorized_actions.includes('update'));
-
     await visit(urls.globalScope);
 
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
@@ -109,5 +108,19 @@ module('Acceptance | aliases | update', function (hooks) {
     assert.dom(CLEAR_DROPDOWN_SELECTOR).exists();
     await click(CLEAR_DROPDOWN_SELECTOR);
     assert.strictEqual(aliasCount(), count);
+  });
+
+  test('users can not see the option to clear an alias without proper authorization', async function (assert) {
+    instances.alias.authorized_actions =
+      instances.alias.authorized_actions.filter((item) => item !== 'update');
+    await visit(urls.globalScope);
+
+    assert.false(instances.alias.authorized_actions.includes('update'));
+
+    urls.alias = `${urls.aliases}/${instances.alias.id}`;
+    await click(`[href="${urls.aliases}"]`);
+    await click(DROPDOWN_BUTTON_SELECTOR);
+    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
+    assert.dom(CLEAR_DROPDOWN_SELECTOR).doesNotExist();
   });
 });
