@@ -3,10 +3,6 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<Breadcrumbs::Item
-  @text={{t 'resources.alias.title'}}
-  @route='scopes.scope.targets.target.manage-alias'
-/>
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <Breadcrumbs::Container />
@@ -19,6 +15,13 @@
     <p>{{t 'resources.alias.description'}}</p>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.targets.target.manage-alias'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
   {{#let
     (hash
       canUpdate=(can 'update model' @model)
