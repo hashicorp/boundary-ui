@@ -60,6 +60,7 @@ questions:
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
   retry-confirm: Would you like to retry?
+  clear-confirm: Are you sure you want to clear the resource id?
 themes:
   system: System Default
   light: Light

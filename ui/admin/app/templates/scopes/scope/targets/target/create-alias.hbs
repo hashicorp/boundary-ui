@@ -25,6 +25,7 @@
   <page.body>
     <Form::Alias
       @model={{@model}}
+      @hideTargetId='true'
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
     />
