@@ -31,23 +31,6 @@
         />
       </bc.Body>
       <bc.Sidebar>
-        {{#unless @model.aliases}}
-          {{#if (can 'create model' this.globalScope collection='aliases')}}
-            <div class='target-sidebar-aliases'>
-              <h3>{{t 'resources.alias.title_plural'}}</h3>
-              <p class='description'>
-                {{t 'resources.alias.form.sidebar.help'}}
-              </p>
-
-              <Hds::Button
-                @icon='plus'
-                @text={{t 'resources.target.actions.add-an-alias'}}
-                @color='secondary'
-                @route='scopes.scope.targets.target.create-alias'
-              />
-            </div>
-          {{/if}}
-        {{/unless}}
         {{#if @model.aliases}}
           <div class='target-sidebar-aliases'>
             <h3>{{t 'resources.alias.title_plural'}}</h3>
@@ -103,6 +86,22 @@
               </Hds::Flyout>
             {{/if}}
           </div>
+        {{else}}
+          {{#if (can 'create model' this.globalScope collection='aliases')}}
+            <div class='target-sidebar-aliases'>
+              <h3>{{t 'resources.alias.title_plural'}}</h3>
+              <p class='description'>
+                {{t 'resources.alias.form.sidebar.help'}}
+              </p>
+
+              <Hds::Button
+                @icon='plus'
+                @text={{t 'resources.target.actions.add-an-alias'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.create-alias'
+              />
+            </div>
+          {{/if}}
         {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
