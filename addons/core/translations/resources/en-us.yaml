@@ -84,7 +84,7 @@ auth-method:
   form:
     urls:
       label: Server address (URL and port)
-      help: 'The domain name or IP address of the LDAP server. (Example: ldap.example.com:389)'
+      help: 'The domain name or IP address of the LDAP server. (Example: ldaps://ldap.example.com:636)'
     certificates:
       label: Certificates
       help: PEM encoded x509 certificates in ASN.1 DER form that can be used as trust anchors when connecting to an LDAP provider.
