@@ -14,29 +14,6 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
   // =methods
 
   /**
-   * Query the global scope aliases and look for record using id from the target model,
-   * this is needed to check for alias read permisssion in the sidebar list
-   * @param {Model} model
-   */
-
-  async afterModel(target) {
-    let alisesModel = [];
-    const { aliases } = target;
-    if (aliases.length) {
-      const availableAliases = await this.store.query('alias', {
-        scope_id: 'global',
-      });
-      if (availableAliases.length) {
-        alisesModel = await Promise.all(
-          aliases
-            .map(async (i) => this.store.peekRecord('alias', i.id))
-            .filter(Boolean),
-        );
-      }
-    }
-    this.aliasesList = alisesModel;
-  }
-  /**
    * Adds storage bucket name, globalScope and aliases model to the context.
    * @param {Controller} controller
    * @param {TargetModel} target

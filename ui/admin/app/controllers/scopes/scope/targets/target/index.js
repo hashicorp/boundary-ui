@@ -42,24 +42,26 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
    * @returns {boolean}
    */
   get showFlyOutComponent() {
-    const aliases = this.aliasesList?.length
-      ? this.aliasesList
-      : this.model.aliases;
-    return this.showFlyout && aliases.length > 3;
+    return this.showFlyout && this.model.aliases.length > 3;
   }
   /**
    * Returns only the first three items in the aliases array if there are more than 3
    * @returns {array}
    */
   get aliases() {
-    const aliases = this.aliasesList?.length
-      ? this.aliasesList
-      : this.model.aliases;
-    if (aliases.length > 3) {
-      const arrWithThreeItems = aliases.slice(0, 3);
+    if (this.model.aliases.length > 3) {
+      const arrWithThreeItems = this.model.aliases.slice(0, 3);
       return arrWithThreeItems;
     } else {
-      return aliases;
+      return this.model.aliases;
     }
+  }
+
+  /**
+   * Returns remaining items in the aliases array if there are more than 3
+   * @returns {array}
+   */
+  get remainingAliases() {
+    return this.model.aliases.slice(3);
   }
 }

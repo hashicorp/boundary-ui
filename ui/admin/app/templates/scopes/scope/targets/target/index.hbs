@@ -60,10 +60,7 @@
                   @icon='at-sign'
                   @color='boundary'
                   @text={{alias.value}}
-                  @route={{and
-                    (can 'read model' alias)
-                    'scopes.scope.targets.target.manage-alias'
-                  }}
+                  @route={{'scopes.scope.targets.target.manage-alias'}}
                   @model={{alias.id}}
                 />
               </LinkListPanel>

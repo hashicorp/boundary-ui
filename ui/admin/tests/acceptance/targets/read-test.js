@@ -29,8 +29,6 @@ module('Acceptance | targets | read', function (hooks) {
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
   const VIEW_MORE_BTN = '[data-test-view-more]';
   const FLYOUT_COMPONENT = '[data-test-flyout]';
-  const ITEM_SELECTOR = '.link-list-item a';
-  const EDIT_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
 
   const instances = {
     scopes: {
@@ -261,33 +259,5 @@ module('Acceptance | targets | read', function (hooks) {
     assert.dom(VIEW_MORE_BTN).exists();
     await click(VIEW_MORE_BTN);
     assert.dom(FLYOUT_COMPONENT).exists();
-  });
-
-  test('without read permission, users cannot click on the card to view alias form', async function (assert) {
-    aliasResource.authorized_actions = aliasResource.authorized_actions.filter(
-      (item) => item !== 'read',
-    );
-    instances.tcpTarget.update({
-      aliases: [{ id: aliasResource.id, value: aliasResource.value }],
-    });
-    await visit(urls.tcpTarget);
-
-    assert.dom(ALIASES_SIDEBAR_LIST).exists();
-
-    assert.dom(ITEM_SELECTOR).doesNotExist();
-  });
-
-  test('with read permission, users can click on associated alias card on the right sidebar and make updates', async function (assert) {
-    assert.ok(aliasResource.authorized_actions.includes('read'));
-    instances.tcpTarget.update({
-      aliases: [{ id: aliasResource.id, value: aliasResource.value }],
-    });
-    await visit(urls.tcpTarget);
-
-    assert.dom(ALIASES_SIDEBAR_LIST).exists();
-
-    await click(ITEM_SELECTOR);
-    assert.strictEqual(currentURL(), urls.alias);
-    assert.dom(EDIT_BUTTON_SELECTOR).exists();
   });
 });
