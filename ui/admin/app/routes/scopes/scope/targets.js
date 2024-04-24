@@ -152,8 +152,8 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async deleteAlias(alias) {
     await alias.destroyRecord();
-    await this.router.replaceWith('scopes.scope.targets.target');
-    this.router.refresh();
+    this.router.refresh('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
   }
 
   /**

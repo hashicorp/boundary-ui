@@ -14,12 +14,15 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
   // =methods
 
   /**
-   * Adds storage bucket name to the context.
+   * Adds storage bucket name, globalScope and aliases model to the context.
    * @param {Controller} controller
    * @param {TargetModel} target
    */
   async setupController(controller, target) {
     super.setupController(...arguments);
+    const globalScope = await this.store.peekRecord('scope', 'global');
+    controller.set('globalScope', globalScope);
+
     if (target?.storage_bucket_id) {
       const { storage_bucket_id } = target;
       const storageBucket = await this.store.findRecord(

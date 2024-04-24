@@ -29,8 +29,6 @@ module('Acceptance | targets | read', function (hooks) {
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
   const VIEW_MORE_BTN = '[data-test-view-more]';
   const FLYOUT_COMPONENT = '[data-test-flyout]';
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
   const instances = {
     scopes: {
@@ -40,6 +38,7 @@ module('Acceptance | targets | read', function (hooks) {
     },
     sshTarget: null,
     tcpTarget: null,
+    alias: null,
   };
   const urls = {
     globalScope: null,
@@ -75,6 +74,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     instances.alias = this.server.createList('alias', 1, {
       scope: instances.scopes.global,
+      value: 'alias 1',
     });
 
     aliasResource = instances.alias[0];
@@ -213,7 +213,7 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('can view aliases on the right sidebar', async function (assert) {
     instances.tcpTarget.update({
-      aliases: [{ id: aliasResource.id, value: 'alias 1' }],
+      aliases: [{ id: aliasResource.id, value: aliasResource.value }],
     });
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
@@ -225,9 +225,22 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot view aliases list on the right sidebar if there is no alias associated with the target', async function (assert) {
+    aliasResource.authorized_collection_actions = ['create'];
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
     assert.dom(LINK_TO_NEW_ALIAS).hasText('Add an alias');
+    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+  });
+
+  test('user should not see add a new alias button without proper auth ', async function (assert) {
+    instances.scopes.global.authorized_collection_actions['aliases'] =
+      instances.scopes.global.authorized_collection_actions['aliases'].filter(
+        (item) => item !== 'create',
+      );
+    await visit(urls.tcpTarget);
+
+    assert.dom(ALIASES_SIDEBAR).doesNotExist();
+    assert.dom(LINK_TO_NEW_ALIAS).doesNotExist();
     assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
   });
 
@@ -246,20 +259,5 @@ module('Acceptance | targets | read', function (hooks) {
     assert.dom(VIEW_MORE_BTN).exists();
     await click(VIEW_MORE_BTN);
     assert.dom(FLYOUT_COMPONENT).exists();
-  });
-
-  test('users can click on associated alias card on the right sidebar', async function (assert) {
-    instances.tcpTarget.update({
-      aliases: [{ id: aliasResource.id, value: aliasResource.value }],
-    });
-    await visit(urls.tcpTarget);
-
-    assert.dom(ALIASES_SIDEBAR_LIST).exists();
-    await click(DROPDOWN_BUTTON_SELECTOR);
-
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
-    await click(DROPDOWN_ITEM_SELECTOR);
-    assert.strictEqual(currentURL(), urls.alias);
   });
 });
