@@ -19,6 +19,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   @service router;
   @service can;
   @service intl;
+  @service store;
 
   // =attributes
 
@@ -144,7 +145,8 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     await authMethod.destroyRecord();
     // Reload the scope, since this is where the primary_auth_method_id is
     // stored.  An auth method deletion could affect this field.
-    await this.scopeModel.reload();
+    const scope = this.store.peekRecord('scope', authMethod.scopeID);
+    await scope.reload();
     this.router.replaceWith('scopes.scope.auth-methods');
     await this.router.refresh();
   }
@@ -161,14 +163,15 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   })
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.auth-method.notifications.make-primary-success')
-  async makePrimary({ id }) {
-    this.scopeModel.primary_auth_method_id = id;
+  async makePrimary(authMethod) {
+    const scope = this.store.peekRecord('scope', authMethod.scopeID);
+    scope.primary_auth_method_id = authMethod.id;
     // Attempt to save the change to the scope.  If this operation fails,
     // we rollback the change and rethrow the error so the user can be notified.
     try {
-      await this.scopeModel.save();
+      await scope.save();
     } catch (e) {
-      this.scopeModel.rollbackAttributes();
+      scope.rollbackAttributes();
       throw e;
     }
     await this.router.refresh();
@@ -190,13 +193,14 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     'resources.auth-method.notifications.remove-as-primary-success',
   )
   async removeAsPrimary(authMethod) {
-    this.scopeModel.primary_auth_method_id = null;
+    const scope = this.store.peekRecord('scope', authMethod.scopeID);
+    scope.primary_auth_method_id = null;
     // Attempt to save the change to the scope.  If this operation fails,
     // we rollback the change and rethrow the error so the user can be notified.
     try {
-      await this.scopeModel.save();
+      await scope.save();
     } catch (e) {
-      this.scopeModel.rollbackAttributes();
+      scope.rollbackAttributes();
       throw e;
     }
     await authMethod.reload();
