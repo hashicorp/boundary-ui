@@ -30,36 +30,42 @@
           @cancel={{route-action 'cancel' @model}}
         />
       </bc.Body>
-
       <bc.Sidebar>
-        <div class='target-sidebar-aliases'>
-          <h3>{{t 'resources.alias.title_plural'}}</h3>
-          <p class='description'>
-            {{t 'resources.alias.form.sidebar.help'}}
-          </p>
-          {{#if @model.aliases}}
+        {{#unless @model.aliases}}
+          {{#if (can 'create model' this.globalScope collection='aliases')}}
+            <div class='target-sidebar-aliases'>
+              <h3>{{t 'resources.alias.title_plural'}}</h3>
+              <p class='description'>
+                {{t 'resources.alias.form.sidebar.help'}}
+              </p>
+
+              <Hds::Button
+                @icon='plus'
+                @text={{t 'resources.target.actions.add-an-alias'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.create-alias'
+              />
+            </div>
+          {{/if}}
+        {{/unless}}
+        {{#if @model.aliases}}
+          <div class='target-sidebar-aliases'>
+            <h3>{{t 'resources.alias.title_plural'}}</h3>
+            <p class='description'>
+              {{t 'resources.alias.form.sidebar.help'}}
+            </p>
             {{#each this.aliases as |alias|}}
               <LinkListPanel as |P|>
                 <P.Item
                   @icon='at-sign'
                   @color='boundary'
                   @text={{alias.value}}
+                  @route={{and
+                    (can 'read model' alias)
+                    'scopes.scope.targets.target.manage-alias'
+                  }}
+                  @model={{alias.id}}
                 />
-                <P.Item>
-                  <Hds::Dropdown as |dd|>
-                    <dd.ToggleIcon
-                      @icon='more-horizontal'
-                      @text={{t 'actions.manage'}}
-                      @hasChevron={{false}}
-                      @size='small'
-                    />
-                    <dd.Interactive
-                      @route='scopes.scope.targets.target.manage-alias'
-                      @model={{alias.id}}
-                      @text={{t 'actions.manage'}}
-                    />
-                  </Hds::Dropdown>
-                </P.Item>
               </LinkListPanel>
             {{/each}}
 
@@ -91,36 +97,16 @@
                         @icon='at-sign'
                         @color='boundary'
                         @text={{alias.value}}
+                        @route='scopes.scope.targets.target.manage-alias'
+                        @model={{alias.id}}
                       />
-                      <P.Item>
-                        <Hds::Dropdown as |dd|>
-                          <dd.ToggleIcon
-                            @icon='more-horizontal'
-                            @text={{t 'actions.manage'}}
-                            @hasChevron={{false}}
-                            @size='small'
-                          />
-                          <dd.Interactive
-                            @route='scopes.scope.targets.target.manage-alias'
-                            @model={{alias.id}}
-                            @text={{t 'actions.manage'}}
-                          />
-                        </Hds::Dropdown>
-                      </P.Item>
                     </LinkListPanel>
                   {{/each}}
                 </M.Body>
               </Hds::Flyout>
             {{/if}}
-          {{else}}
-            <Hds::Button
-              @icon='plus'
-              @text={{t 'resources.target.actions.add-an-alias'}}
-              @color='secondary'
-              @route='scopes.scope.targets.target.create-alias'
-            />
-          {{/if}}
-        </div>
+          </div>
+        {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
             <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
