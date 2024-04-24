@@ -107,6 +107,7 @@
   <Hds::Form::TextInput::Field
     name='tenant_id'
     @value={{@model.tenant_id}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'tenant_id')}}
     as |F|
@@ -123,6 +124,7 @@
   <Hds::Form::TextInput::Field
     name='subscription_id'
     @value={{@model.subscription_id}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'subscription_id')}}
     as |F|
@@ -139,6 +141,7 @@
   <Hds::Form::TextInput::Field
     name='client_id'
     @value={{@model.client_id}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|
@@ -155,6 +158,7 @@
   <Hds::Form::TextInput::Field
     name='secret_value'
     @value={{@model.secret_value}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'secret_value')}}
     as |F|
