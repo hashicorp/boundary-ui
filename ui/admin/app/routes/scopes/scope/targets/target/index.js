@@ -32,6 +32,5 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
       const storage_bucket_name = storageBucket.displayName;
       controller.set('storage_bucket_name', storage_bucket_name);
     }
-    controller.set('aliasesList', this.aliasesList);
   }
 }
