@@ -51,9 +51,10 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
     const { id: credential_store_id } = this.modelFor(
       'scopes.scope.credential-stores.credential-store',
     );
-    const { name, description } = this.currentModel ?? {};
 
+    let name, description;
     if (this.currentModel?.isNew) {
+      ({ name, description } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
 
