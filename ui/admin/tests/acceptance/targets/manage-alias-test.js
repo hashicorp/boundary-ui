@@ -147,7 +147,6 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await click(DELETE_BTN_SELECTOR);
 
     assert.strictEqual(getAliasCount(), aliasCount - 1);
-    // instances.alias.authorized_collection_actions = ['create'];
 
     assert.strictEqual(currentURL(), urls.tcpTarget);
 

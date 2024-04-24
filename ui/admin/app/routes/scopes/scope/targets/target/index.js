@@ -13,6 +13,9 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
 
   // =methods
 
+  // Query the global and look for record using id from the target model,
+  // this is needed to check for alias read permisssion in the sidebar list
+
   async afterModel(target) {
     const availableAliases = await this.store.query('alias', {
       scope_id: 'global',
