@@ -419,7 +419,7 @@ storage-bucket:
   messages:
     none:
       title: No storage buckets yet
-      description: To start using session recording, you need to have an Amazon S3 bucket.
+      description: To start using session recording, you need to have an storage bucket.
       link: Add a new storage bucket
   titles:
     new: New Storage Bucket
