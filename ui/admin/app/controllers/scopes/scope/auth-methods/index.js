@@ -142,11 +142,11 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async delete(authMethod) {
+    const scopeID = authMethod.scopeID;
     await authMethod.destroyRecord();
     // Reload the scope, since this is where the primary_auth_method_id is
     // stored.  An auth method deletion could affect this field.
-    const scope = this.store.peekRecord('scope', authMethod.scopeID);
-    await scope.reload();
+    await this.store.findRecord('scope', scopeID, { reload: true });
     this.router.replaceWith('scopes.scope.auth-methods');
     await this.router.refresh();
   }
