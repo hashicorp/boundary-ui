@@ -107,6 +107,7 @@
   <Hds::Form::TextInput::Field
     name='region'
     @value={{@model.region}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'region')}}
     as |F|
@@ -123,6 +124,7 @@
   <Hds::Form::TextInput::Field
     name='access_key_id'
     @value={{@model.access_key_id}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'access_key_id')}}
     as |F|
@@ -139,6 +141,7 @@
   <Hds::Form::TextInput::Field
     name='secret_access_key'
     @value={{@model.secret_access_key}}
+    @isRequired={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'secret_access_key')}}
     as |F|

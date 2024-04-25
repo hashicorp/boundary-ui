@@ -18,11 +18,7 @@ const {
   createOrg,
   createProject,
   createVaultCredentialStore,
-  createHostCatalog,
-  createHostSet,
-  createHostInHostSet,
-  createTarget,
-  addHostSourceToTarget,
+  createTargetWithAddress,
   addBrokeredCredentialsToTarget,
 } = require('../helpers/boundary-ui');
 const { readFile } = require('fs/promises');
@@ -103,11 +99,11 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    await createHostCatalog(page);
-    const hostSetName = await createHostSet(page);
-    await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
-    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
-    await addHostSourceToTarget(page, hostSetName);
+    const targetName = await createTargetWithAddress(
+      page,
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
     const targets = JSON.parse(
       execSync(`boundary targets list -format json -scope-id ${project.id}`),
     );

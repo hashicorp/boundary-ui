@@ -17,8 +17,7 @@
   <page.header>
     <h2>
       {{t 'resources.alias.titles.new'}}
-      {{! TODO: Add doc link for alias }}
-
+      <DocLink @doc='aliases' @iconSize='large' />
     </h2>
     <p>{{t 'resources.alias.description'}}</p>
 
@@ -26,6 +25,7 @@
   <page.body>
     <Form::Alias
       @model={{@model}}
+      @hideTargetId='true'
       @submit={{route-action 'save' @model}}
       @cancel={{route-action 'cancel' @model}}
     />

@@ -123,13 +123,14 @@
     name='sync_interval_seconds'
     @value={{@model.sync_interval_seconds}}
     @isInvalid={{@model.errors.sync_interval_seconds}}
+    @isOptional={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'sync_interval_seconds')}}
     as |F|
   >
-    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.Label>{{t 'form.sync-interval.label'}}</F.Label>
     <F.HelperText>
-      {{t 'form.name.help'}}
+      {{t 'form.sync-interval.help'}}
       <Hds::Link::Inline @href={{doc-url 'host-set.sync-interval-seconds'}}>
         {{t 'actions.learn-more'}}
       </Hds::Link::Inline>

@@ -6,7 +6,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { all } from 'rsvp';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
@@ -37,10 +36,16 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
       scope_id,
       query: { filters: { scope_id: [{ equals: scope_id }] } },
     });
-    await all(
-      hostCatalogs.map(({ id: host_catalog_id }) =>
-        this.store.query('host-set', { host_catalog_id }),
-      ),
+
+    // TODO: For some reason, not returning promises fixes
+    //  an ember bug similar to this reported issue:
+    //  https://github.com/emberjs/data/issues/8299.
+    //  This is a temporary fix until we can find a better solution or
+    //  we upgrade ember data to try to fix the issue.
+    await Promise.all(
+      hostCatalogs.map(({ id: host_catalog_id }) => {
+        this.store.query('host-set', { host_catalog_id });
+      }),
     );
     const hostSets = this.store.peekAll('host-set');
     return {

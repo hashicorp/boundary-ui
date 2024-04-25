@@ -17,12 +17,12 @@ module('Acceptance | targets | manage-alias', function (hooks) {
   let aliasResourceTwo, aliasResourceOne, getAliasCount;
   const ALIASES_SIDEBAR = '.target-sidebar-aliases';
   const ALIASES_SIDEBAR_LIST = '.link-list-item';
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
   const DROPDOWN_ACTION = '.hds-dropdown-toggle-button__text';
   const CLEAR_BTN_SELECTOR = '.hds-dropdown-list-item--color-action button';
   const DELETE_BTN_SELECTOR = '.hds-dropdown-list-item--color-critical button';
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
+  const DEST_FIELD_SELECTOR = '[name="destination_id"]';
+  const ITEM_SELECTOR = '.link-list-item a';
 
   const instances = {
     scopes: {
@@ -32,6 +32,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     },
     sshTarget: null,
     tcpTarget: null,
+    alias: null,
   };
   const urls = {
     globalScope: null,
@@ -96,13 +97,8 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
     assert.dom(ALIASES_SIDEBAR_LIST).exists();
+    await click(ITEM_SELECTOR);
 
-    await click(DROPDOWN_BUTTON_SELECTOR);
-
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
-
-    await click(DROPDOWN_ITEM_SELECTOR);
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await a11yAudit();
   });
@@ -114,12 +110,9 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
     assert.dom(ALIASES_SIDEBAR_LIST).exists();
-    await click(DROPDOWN_BUTTON_SELECTOR);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
+    await click(ITEM_SELECTOR);
 
-    await click(DROPDOWN_ITEM_SELECTOR);
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);
 
@@ -143,12 +136,11 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await visit(urls.tcpTarget);
     assert.dom(ALIASES_SIDEBAR).exists();
     assert.dom(ALIASES_SIDEBAR_LIST).exists();
-    await click(DROPDOWN_BUTTON_SELECTOR);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Manage');
+    await click(ITEM_SELECTOR);
 
-    await click(DROPDOWN_ITEM_SELECTOR);
+    assert.dom(DEST_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);
 

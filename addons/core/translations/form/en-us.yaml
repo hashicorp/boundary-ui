@@ -168,7 +168,7 @@ ip_addresses:
   help: Read-only public and private IP addresses given by the plugin host catalog provider
 sync-interval:
   label: Sync Interval
-  help: Optional. Number of seconds between the time Boundary syncs hosts in this set.
+  help: Number of seconds between the time Boundary syncs hosts in this set.
 tags:
   label: Tags
 secret-editor:

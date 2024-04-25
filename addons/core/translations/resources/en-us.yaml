@@ -84,7 +84,7 @@ auth-method:
   form:
     urls:
       label: Server address (URL and port)
-      help: 'The domain name or IP address of the LDAP server. (Example: ldap.example.com:389)'
+      help: 'The domain name or IP address of the LDAP server. (Example: ldaps://ldap.example.com:636)'
     certificates:
       label: Certificates
       help: PEM encoded x509 certificates in ASN.1 DER form that can be used as trust anchors when connecting to an LDAP provider.
@@ -419,7 +419,7 @@ storage-bucket:
   messages:
     none:
       title: No storage buckets yet
-      description: To start using session recording, you need to have an Amazon S3 bucket.
+      description: To start using session recording, you need to have a storage bucket.
       link: Add a new storage bucket
   titles:
     new: New Storage Bucket
@@ -1024,8 +1024,7 @@ alias:
       title: Welcome to Aliases
       description: No Aliases yet
       link: Create a new alias
-    clear-or-delete: Deleting this alias may break any workflows using it. You can also clear the alias of the resource it points to without deleting it and then edit it to point it to a new resource.
-    delete: Deleting this alias may break any workflows using it.
+    delete: Deleting this alias may break any workflows using it. You can also clear the alias of the resource it points to without deleting it and then edit it to point it to a new resource.
   form:
     options:
       label: Alias options

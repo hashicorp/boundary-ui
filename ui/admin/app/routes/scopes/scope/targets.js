@@ -147,12 +147,13 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
+  @confirm('resources.alias.messages.delete')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async deleteAlias(alias) {
     await alias.destroyRecord();
-    await this.router.replaceWith('scopes.scope.targets.target');
-    this.router.refresh();
+    this.router.refresh('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
   }
 
   /**
@@ -161,6 +162,7 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   @action
   @loading
+  @confirm('questions.clear-confirm')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.clear-success')
   async clearAlias(alias) {

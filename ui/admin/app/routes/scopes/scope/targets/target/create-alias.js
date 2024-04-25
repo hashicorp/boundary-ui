@@ -23,8 +23,10 @@ export default class ScopesScopeTargetsTargetCreateAliasRoute extends Route {
    */
   model() {
     const scopeModel = this.store.peekRecord('scope', 'global');
+    const { id } = this.modelFor('scopes.scope.targets.target');
     const record = this.store.createRecord('alias', {
       type: TYPE_ALIAS_TARGET,
+      destination_id: id,
     });
     record.scopeModel = scopeModel;
     return record;
