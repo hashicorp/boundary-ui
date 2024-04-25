@@ -169,7 +169,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       .click();
     await page.getByText('Manage').click();
     await page.getByRole('button', { name: 'Delete recording' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Error', { exact: true }),
     ).toBeVisible();
