@@ -8,12 +8,7 @@ import { visit, click, fillIn, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | storage-buckets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,7 +20,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const ALERT_TEXT_SELECTOR = '[role="alert"] div';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const SECRET_FIELD_BUTTON_SELECTOR = '.secret-input [type="button"]';
   const ACCESS_KEY_ID_FIELD_SELECTOR = '[name="access_key_id"]';
   const SECRET_ACCESS_KEY_FIELD_SELECTOR = '[name="secret_access_key"]';
@@ -35,6 +29,12 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
   const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
   const WORKER_FILTER = '[name="worker_filter"]';
+  const FIELD_STORAGE_BUCKET_NAME_ERROR = '#error-bucket_name';
+  const FIELD_WORKER_FILTER_ERROR = '#error-worker_filter';
+  const FIELD_REGION = '[name=region]';
+  const FIELD_PROVIDER = '[name=plugin_type]';
+  const FIELD_ENDPOINT_URL = '[name=endpoint_url]';
+  const FIELD_SCOPE = '[name=scope]';
 
   const instances = {
     scopes: {
@@ -54,9 +54,14 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     instances.storageBucket = this.server.create('storage-bucket', {
       scope: instances.scopes.global,
     });
+    instances.storageBucketMinio = this.server.create('storage-bucket', {
+      scope: instances.scopes.global,
+      plugin: { name: 'minio' },
+    });
     urls.globalScope = `/scopes/global`;
     urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
     urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
+    urls.storageBucketMinio = `${urls.storageBuckets}/${instances.storageBucketMinio.id}`;
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
@@ -157,6 +162,10 @@ module('Acceptance | storage-buckets | update', function (hooks) {
           details: {
             request_fields: [
               {
+                name: 'bucket_name',
+                description: 'This is a required field.',
+              },
+              {
                 name: 'worker_filter',
                 description: 'Worker filter is required.',
               },
@@ -172,10 +181,13 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(SAVE_BUTTON_SELECTOR);
 
     assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Worker filter is required.');
+    assert
+      .dom(FIELD_STORAGE_BUCKET_NAME_ERROR)
+      .hasText('This is a required field.');
+    assert.dom(FIELD_WORKER_FILTER_ERROR).hasText('Worker filter is required.');
   });
 
-  test('user cannot edit bucket name and bucket prefix fields in a storage bucket form', async function (assert) {
+  test('user cannot edit scope, provider, bucket name, bucket prefix and region fields in a Amazon S3 storage bucket form', async function (assert) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
@@ -185,9 +197,29 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(BUTTON_SELECTOR, 'Click edit mode');
 
+    assert.dom(FIELD_SCOPE).doesNotExist();
+    assert.dom(FIELD_PROVIDER).isDisabled();
     assert.dom(BUCKET_NAME_FIELD_SELECTOR).hasAttribute('readOnly');
     assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(FIELD_REGION).hasAttribute('readOnly');
     assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
     assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
+    assert.dom(FIELD_REGION).isNotDisabled();
+  });
+
+  test('user cannot edit scope, provider, endpoint_url, bucket name or region fields in a MinIO storage bucket', async function (assert) {
+    await visit(urls.storageBuckets);
+
+    await click(`[href="${urls.storageBucketMinio}"]`);
+
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isDisabled();
+
+    await click(BUTTON_SELECTOR, 'Click edit mode');
+
+    assert.dom(FIELD_SCOPE).doesNotExist();
+    assert.dom(FIELD_PROVIDER).isDisabled();
+    assert.dom(FIELD_ENDPOINT_URL).isNotDisabled();
+    assert.dom(BUCKET_NAME_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(FIELD_REGION).hasAttribute('readOnly');
   });
 });
