@@ -76,11 +76,11 @@
     <Hds::Form::TextInput::Field
       name='password'
       @type='password'
-      @value={{@model.password}}
+      @value={{this.password}}
       @isInvalid={{@model.errors.password}}
       disabled={{form.disabled}}
       autocomplete='new-password'
-      {{on 'input' (set-from-event @model 'password')}}
+      {{on 'input' (set-from-event this 'password')}}
       as |F|
     >
       <F.Label>{{t 'form.password.label'}}</F.Label>
