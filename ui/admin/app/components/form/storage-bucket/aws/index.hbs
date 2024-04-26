@@ -142,6 +142,7 @@
   {{! bucket_name }}
   <Hds::Form::TextInput::Field
     name='bucket_name'
+    @id='bucket_name'
     @isRequired={{true}}
     @value={{@model.bucket_name}}
     @isInvalid={{@model.errors.bucket_name}}
@@ -296,6 +297,7 @@
       {{! access_key }}
       <Form::Field::SecretInput
         @name='access_key_id'
+        @id='access_key_id'
         @isRequired={{true}}
         @value={{@model.access_key_id}}
         @isInvalid={{@model.errors.access_key_id}}
@@ -316,6 +318,7 @@
       {{! secret_access_key }}
       <Form::Field::SecretInput
         @name='secret_access_key'
+        @id='secret_access_key'
         @isRequired={{true}}
         @value={{@model.secret_access_key}}
         @isInvalid={{@model.errors.secret_access_key}}
@@ -446,6 +449,7 @@
   {{! worker_filter }}
   <Hds::Form::TextInput::Field
     name='worker_filter'
+    @id='worker_filter'
     @isRequired={{true}}
     @value={{@model.worker_filter}}
     @isInvalid={{@model.errors.worker_filter}}
