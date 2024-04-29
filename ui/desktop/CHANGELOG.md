@@ -2,6 +2,18 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.0.3 [CLI 0.16.0] (2024.03.30)
+
+### New
+
+- Upgrade CLI to v0.16.0 ( [PR]() )
+- Add Aliases support ( [PR](https://github.com/hashicorp/boundary-ui/pull/2256) )
+- ARM64 Support.
+
+### Bug Fixes
+
+- Fix client daemon search for Windows ( [PR](https://github.com/hashicorp/boundary-ui/pull/2245) )
+
 ## v2.0.2 [CLI 0.15.3] (2024.03.18)
 
 ### New
