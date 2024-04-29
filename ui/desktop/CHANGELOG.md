@@ -12,7 +12,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### Bug Fixes
 
-- Fix client daemon search for Windows ( [PR](https://github.com/hashicorp/boundary-ui/pull/2245) )
+- Fix client daemon search for Windows ([PR](https://github.com/hashicorp/boundary-ui/pull/2245))
 
 ## v2.0.2 [CLI 0.15.3] (2024.03.18)
 
