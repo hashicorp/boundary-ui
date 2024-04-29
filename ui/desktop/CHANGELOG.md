@@ -6,7 +6,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 
 ### New
 
-- Upgrade CLI to v0.16.0 ( [PR]() )
+- Upgrade CLI to v0.16.0 ( [PR](https://github.com/hashicorp/boundary-ui/pull/2280) )
 - Add Aliases support ( [PR](https://github.com/hashicorp/boundary-ui/pull/2256) )
 - ARM64 Support.
 
