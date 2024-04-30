@@ -5,6 +5,8 @@
 
 import sinon from 'sinon';
 import { typeOf } from '@ember/utils';
+import { resourceNames } from 'api/handlers/client-daemon-handler';
+import { singularize } from 'ember-inflector';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
@@ -99,7 +101,8 @@ export default function setupStubs(hooks) {
         resource = type.resource;
       }
 
-      sinon.assert.match(ipcCall.args[1], { resource });
+      const mappedResourceName = resourceNames[singularize(resource)];
+      sinon.assert.match(ipcCall.args[1], { resource: mappedResourceName });
     });
 
     sinon.restore();

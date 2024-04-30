@@ -116,6 +116,7 @@
     <Hds::Form::TextInput::Field
       name='worker_filter'
       @value={{@model.worker_filter}}
+      @isOptional={{true}}
       @isInvalid={{@model.errors.worker_filter}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'worker_filter')}}
@@ -178,6 +179,7 @@
   <Hds::Form::TextInput::Field
     name='namespace'
     @value={{@model.namespace}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.namespace}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'namespace')}}
@@ -199,6 +201,7 @@
   <Hds::Form::TextInput::Field
     name='tls_server_name'
     @value={{@model.tls_server_name}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.tls_server_name}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'tls_server_name')}}

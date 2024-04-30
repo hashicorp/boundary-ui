@@ -79,6 +79,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     const storageBucketName = await createStorageBucket(
       page,
+      orgName,
       process.env.E2E_AWS_BUCKET_NAME,
       process.env.E2E_AWS_REGION,
       process.env.E2E_AWS_ACCESS_KEY_ID,
@@ -86,7 +87,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
     );
     const storageBuckets = JSON.parse(
-      execSync('boundary storage-buckets list -format json'),
+      execSync('boundary storage-buckets list --recursive -format json'),
     );
     storageBucket = storageBuckets.items.filter(
       (obj) => obj.name == storageBucketName,
@@ -94,8 +95,8 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
 
     // Create target
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    await page.getByRole('link', { name: orgId }).click();
-    await page.getByRole('link', { name: projectId }).click();
+    await page.getByRole('link', { name: orgName }).click();
+    await page.getByRole('link', { name: projectName }).click();
     const targetName = await createSshTargetWithAddressAndWorkerFilterEnt(
       page,
       process.env.E2E_TARGET_ADDRESS,
@@ -118,7 +119,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
 
     // Create storage policy in org scope: keep session recordings forever
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    await page.getByRole('link', { name: orgId }).click();
+    await page.getByRole('link', { name: orgName }).click();
     const policyName = await createStoragePolicy(page);
     await attachStoragePolicy(page, policyName);
 
@@ -135,7 +136,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
+    await page.getByRole('button', { name: 'Dismiss', exact: true }).click();
     await waitForSessionRecordingCli(storageBucket.id);
 
     // Play back session recording
@@ -168,7 +169,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       .click();
     await page.getByText('Manage').click();
     await page.getByRole('button', { name: 'Delete recording' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Error', { exact: true }),
     ).toBeVisible();
@@ -182,7 +183,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
       (obj) => obj.name == policyName,
     )[0];
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    await page.getByRole('link', { name: orgId }).click();
+    await page.getByRole('link', { name: orgName }).click();
     await page
       .getByRole('link', { name: 'Storage Policies', exact: true })
       .click();

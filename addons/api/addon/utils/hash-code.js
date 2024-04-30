@@ -1,4 +1,9 @@
 /**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
+/**
  * Takes an object and gets the JSON stringified version of it to be converted
  * to a hash code. Taken from https://stackoverflow.com/a/8076436
  * @param obj

@@ -44,6 +44,7 @@ toggle-secret: Toggle secret visibility
 minimize: Minimize
 fullscreen: Fullscreen
 clear-all-filters: Clear all filters
+clear: Clear
 clear-filters: Clear filters
 learn-more: Learn more
 read-more: Read more

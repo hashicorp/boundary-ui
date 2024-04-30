@@ -97,8 +97,8 @@
   <Hds::Form::TextInput::Field
     name='client_id'
     @value={{@model.client_id}}
+    @isRequired={{true}}
     @isInvalid={{@model.errors.client_id}}
-    @isOptional={{true}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|
@@ -117,8 +117,8 @@
   <Hds::Form::TextInput::Field
     name='client_secret'
     @value={{@model.client_secret}}
+    @isRequired={{true}}
     @isInvalid={{@model.errors.client_secret}}
-    @isOptional={{true}}
     disabled={{form.disabled}}
     @hasVisibilityToggle={{false}}
     @type='password'
@@ -147,7 +147,11 @@
   {{/unless}}
 
   {{! Signing Algorithms }}
-  <Form::Field::ListWrapper @layout='horizontal' @disabled={{form.disabled}}>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
     <:fieldset as |F|>
       <F.Legend>
         {{t 'form.signing_algorithms.label'}}
@@ -412,6 +416,7 @@
   <Hds::Form::TextInput::Field
     name='max_age'
     @value={{@model.max_age}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.max_age}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'max_age')}}
@@ -431,6 +436,7 @@
   <Hds::Form::TextInput::Field
     name='api_url_prefix'
     @value={{@model.api_url_prefix}}
+    @isRequired={{true}}
     @isInvalid={{@model.errors.api_url_prefix}}
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'api_url_prefix')}}

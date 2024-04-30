@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 import { hashCode } from 'api/utils/hash-code';
 import { module, test } from 'qunit';
 
