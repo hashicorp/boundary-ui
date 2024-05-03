@@ -12,7 +12,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
 
   @service router;
   @service can;
-  @service store;
 
   // =actions
 
