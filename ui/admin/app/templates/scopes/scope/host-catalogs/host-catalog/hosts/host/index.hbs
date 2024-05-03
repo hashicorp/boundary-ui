@@ -13,7 +13,10 @@
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::Hosts::Host::Actions @model={{@model}} />
+    <HostCatalogs::HostCatalog::Hosts::Host::Actions
+      @model={{@model}}
+      @delete={{this.hosts.delete}}
+    />
   </page.actions>
 
   <page.navigation>
@@ -23,8 +26,8 @@
   <page.body>
     <Form::Host
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.hosts.save @model}}
+      @cancel={{fn this.hosts.cancel @model}}
     />
   </page.body>
 

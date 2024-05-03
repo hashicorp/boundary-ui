@@ -26,9 +26,9 @@
   <page.body>
     <Form::HostCatalog
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @changeType={{route-action 'changeType'}}
+      @submit={{fn this.hostCatalogs.save @model}}
+      @cancel={{fn this.hostCatalogs.cancel @model}}
+      @changeType={{this.hostCatalogs.changeType}}
     />
   </page.body>
 

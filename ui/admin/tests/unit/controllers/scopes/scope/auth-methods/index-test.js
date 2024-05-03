@@ -106,7 +106,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     );
 
     assert.notEqual(authMethodModelAfter.name, 'test');
-    assert.strictEqual(authMethodModelAfter.name, authMethodModelBefore.name);
+    assert.deepEqual(authMethodModelAfter, authMethodModelBefore);
   });
 
   test('save action saves changes on the specified model', async function (assert) {

@@ -13,7 +13,10 @@
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::Actions @model={{@model.hostCatalog}} />
+    <HostCatalogs::HostCatalog::Actions
+      @model={{@model.hostCatalog}}
+      @delete={{this.hostCatalogs.delete}}
+    />
   </page.actions>
 
   <page.navigation>

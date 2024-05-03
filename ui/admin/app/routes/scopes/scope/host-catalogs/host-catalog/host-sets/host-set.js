@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { paramValueFinder } from 'admin/utils/param-value-finder';
 
@@ -45,28 +44,6 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetRoute exte
         hostSet.id,
         ...paramValues,
       );
-    }
-  }
-
-  /**
-   * Copies the contents of string array fields in order to force the instance
-   * into a dirty state.  This ensures that `model.rollbackAttributes()` reverts
-   * to the original expected array.
-   *
-   * The deep copy implemented here is required to ensure that both the
-   * array itself as well as its members are all new.
-   *
-   * @param {hostSetModel} hostSet
-   */
-  @action
-  edit(hostSet) {
-    if (hostSet.preferred_endpoints) {
-      hostSet.preferred_endpoints = structuredClone(
-        hostSet.preferred_endpoints,
-      );
-    }
-    if (hostSet.filters) {
-      hostSet.filters = structuredClone(hostSet.filters);
     }
   }
 }
