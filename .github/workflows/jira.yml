@@ -87,7 +87,7 @@ jobs:
           echo "name=Done" >> $GITHUB_OUTPUT
         elif [[ "${{ github.event.action }}" == "reopened" ]]; then
           echo "Reopening ticket"
-          echo "name='To Do'" >> $GITHUB_OUTPUT
+          echo "name=Reopen" >> $GITHUB_OUTPUT
         fi
 
     # Transition issue API reference: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-post
