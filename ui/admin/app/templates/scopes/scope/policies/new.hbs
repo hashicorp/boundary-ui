@@ -25,8 +25,8 @@
   <page.body>
     <Form::Policy
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.policies.save @model}}
+      @cancel={{fn this.policies.cancel @model}}
     />
   </page.body>
 
