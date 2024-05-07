@@ -7,7 +7,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const https = require('https');
-const decompress = require('decompress');
+const unzipper = require('unzipper');
 const { isMac, isWindows, isLinux } = require('../src/helpers/platform.js');
 
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
@@ -42,7 +42,7 @@ const downloadArtifact = (version) => {
   }
 
   console.log(
-    `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`
+    `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`,
   );
 
   const archiveName = `boundary_${version}_${archivePlatform.name}_${archivePlatform.arch}.zip`;
@@ -68,8 +68,13 @@ const downloadArtifact = (version) => {
 
 const extract = (artifactPath, destination) => {
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
-  console.log('Extract artifact to: ', destination);
-  return decompress(artifactPath, destination);
+
+  return fs
+    .createReadStream(artifactPath)
+    .pipe(unzipper.Extract({ path: destination }))
+    .on('close', () => {
+      console.log('Extract artifact to: ', destination);
+    });
 };
 
 module.exports = {
@@ -81,10 +86,10 @@ module.exports = {
     try {
       const artifactVersion = await fs.promises.readFile(
         path.resolve(__dirname, 'cli', 'VERSION'),
-        'utf8'
+        'utf8',
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
-      await extract(artifactPath, artifactDestination);
+      extract(artifactPath, artifactDestination);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
       process.exit(1);
