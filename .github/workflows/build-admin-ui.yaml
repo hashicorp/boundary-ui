@@ -22,6 +22,9 @@ jobs:
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: 16
+          corepack: true
+          cache: true
+          install: true
       - run: yarn install
   build-admin-ui-oss:
     name: Build Admin UI OSS
