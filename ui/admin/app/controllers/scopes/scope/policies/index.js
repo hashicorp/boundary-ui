@@ -8,7 +8,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopePoliciesIndexController extends Controller {
   // =services
 
-  //@service can;
+  @service can;
   @service router;
 
   // =actions
@@ -34,10 +34,14 @@ export default class ScopesScopePoliciesIndexController extends Controller {
   @notifySuccess('notifications.save-success')
   async save(policy) {
     await policy.save();
-    await this.router.transitionTo('scopes.scope.policies.policy', policy);
-
+    if (this.can.can('read model', policy)) {
+      await this.router.transitionTo('scopes.scope.policies.policy', policy);
+    } else {
+      await this.router.transitionTo('scopes.scope.policies');
+    }
     await this.router.refresh();
   }
+
   /**
    * Deletes the policy.
    * @param {PolicyModel} policy
