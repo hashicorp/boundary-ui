@@ -40,3 +40,12 @@ yarn-error.log
 # Ignore all local history of files
 .history
 .ionide
+
+# yarn
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
