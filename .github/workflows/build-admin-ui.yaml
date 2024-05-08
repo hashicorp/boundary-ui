@@ -19,9 +19,12 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
+      - name: Enable Corepack
+        run: corepack enable
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 16
+          node-version: 18
+          cache: "yarn"
       - run: yarn install
   build-admin-ui-oss:
     name: Build Admin UI OSS
@@ -39,7 +42,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 16
+          node-version: 18
       - run: yarn run build:ui:admin:oss
       - name: Upload artifact admin-ui
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
@@ -67,7 +70,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 16
+          node-version: 18
       - run: yarn run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
@@ -90,7 +93,7 @@ jobs:
       - name: Build
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 16
+          node-version: 18
       - run: yarn run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
