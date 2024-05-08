@@ -15,7 +15,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 18
+          node-version: 16
       - run: yarn install
 
   compliance:
@@ -33,7 +33,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 18
+          node-version: 16
       - run: yarn run compliance:licenses
 
   lint:
@@ -52,7 +52,7 @@ jobs:
             node-modules-
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 18
+          node-version: 16
       - run: yarn lint
 
   test:
@@ -69,5 +69,5 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          node-version: 18
+          node-version: 16
       - run: yarn test
