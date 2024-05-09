@@ -24,7 +24,7 @@ jobs:
           node-version: 18
           cache: yarn
           cache-dependency-path: yarn.lock
-      - run: yarn install --immutable
+      - run: yarn install
   build-admin-ui-oss:
     name: Build Admin UI OSS
     needs: [dependencies]
