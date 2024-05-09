@@ -233,6 +233,23 @@
         </Rose::Nav::Sidebar>
       {{/if}}
 
+      <Rose::Nav::Sidebar @title={{t 'help.title'}} as |nav|>
+        <nav.link @route='help'>
+          <div class='help-nav-link'>
+            {{! <div> }}
+            <Rose::Icon @name='flight-icons/svg/help-16' @size='medium' />
+            {{t 'help.title'}}
+            {{! </div> }}
+            {{! <div> }}
+            <Hds::Badge
+              @text='Powered by AI'
+              @color='highlight'
+              @type='outlined'
+            />
+            {{! </div> }}
+          </div>
+        </nav.link>
+      </Rose::Nav::Sidebar>
     </sidebarLayout.sidebar>
   {{/if}}
 

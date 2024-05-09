@@ -105,3 +105,19 @@ unsupported-controller:
     releases-page: Go to releases page
     change-cluster-url: Change cluster URL
   error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page
+help:
+  title: Help
+  titles:
+    back: Back
+  loading:
+    title: Loading...
+    description: Retrieving search results.
+  error:
+    title: Error
+    description: An error has occurred...
+  no-results:
+    title: No search results
+    description: Ask a question and results will appear here.
+  page:
+    title: Ask about Boundary
+    description: Using our Boundary developer docs as context for an LLM, get answers to any question you have about Boundary.

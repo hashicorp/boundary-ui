@@ -1036,3 +1036,32 @@
 .loading-indicator {
   margin-top: 20%;
 }
+
+.help-nav-link {
+  // display: flex;
+  // flex-direction: column;
+  .hds-badge {
+    margin-left: 0.75rem;
+  }
+}
+
+.boundary-help-page {
+  .search-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .hds-segmented-group {
+    width: 38rem;
+  }
+
+  .hds-card__container {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+
+  .hds-application-state {
+    margin-top: 3rem;
+  }
+}

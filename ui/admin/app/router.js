@@ -184,4 +184,5 @@ Router.map(function () {
   this.route('onboarding', function () {
     this.route('success');
   });
+  this.route('help', function () {});
 });

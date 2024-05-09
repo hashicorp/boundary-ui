@@ -1,0 +1,33 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: MPL-2.0
+}}
+
+<div class='search-bar'>
+  <Hds::SegmentedGroup as |S|>
+    <S.TextInput
+      @value={{this.query}}
+      @type='search'
+      placeholder={{t 'actions.search'}}
+      aria-label={{t 'actions.search'}}
+      {{on 'keydown' this.handleSearchInput}}
+      {{on 'input' this.handleSearchInput}}
+    />
+  </Hds::SegmentedGroup>
+</div>
+{{#if @model}}
+  <Hds::Card::Container
+    @level='mid'
+    @hasBorder={{true}}
+    @background='neutral-secondary'
+  >
+    <Hds::Text::Body @tag='p'><MarkdownToHtml
+        @markdown={{@model.answer}}
+      /></Hds::Text::Body>
+  </Hds::Card::Container>
+{{else}}
+  <Hds::ApplicationState as |A|>
+    <A.Header @title={{t 'help.no-results.title'}} />
+    <A.Body @text={{t 'help.no-results.description'}} />
+  </Hds::ApplicationState>
+{{/if}}
