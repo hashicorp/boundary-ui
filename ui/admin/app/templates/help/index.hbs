@@ -3,27 +3,20 @@
   SPDX-License-Identifier: MPL-2.0
 }}
 
-<div class='search-bar'>
-  <Hds::SegmentedGroup as |S|>
-    <S.TextInput
-      @value={{this.query}}
-      @type='search'
-      placeholder={{t 'actions.search'}}
-      aria-label={{t 'actions.search'}}
-      {{on 'keydown' this.handleSearchInput}}
-      {{on 'input' this.handleSearchInput}}
-    />
-  </Hds::SegmentedGroup>
-</div>
 {{#if @model}}
   <Hds::Card::Container
     @level='mid'
     @hasBorder={{true}}
     @background='neutral-secondary'
   >
-    <Hds::Text::Body @tag='p'><MarkdownToHtml
+    <Hds::Text::Body @tag='div'>
+      <MarkdownToHtml
         @markdown={{@model.answer}}
-      /></Hds::Text::Body>
+        @tables={{true}}
+        @tasklists={{true}}
+        @openLinksInNewWindow={{true}}
+      />
+    </Hds::Text::Body>
   </Hds::Card::Container>
 {{else}}
   <Hds::ApplicationState as |A|>

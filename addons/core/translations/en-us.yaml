@@ -114,7 +114,7 @@ help:
     description: Retrieving search results.
   error:
     title: Error
-    description: An error has occurred...
+    description: An error has occurred. Please try again...
   no-results:
     title: No search results
     description: Ask a question and results will appear here.

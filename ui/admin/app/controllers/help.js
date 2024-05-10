@@ -3,11 +3,12 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class HelpIndexController extends Controller {
+export default class HelpController extends Controller {
   // =services
 
   @service store;
   @service router;
+  @service session;
 
   // =attributes
   queryParams = ['query'];
