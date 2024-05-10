@@ -13,7 +13,7 @@ export default class HelpController extends Controller {
   // =attributes
   queryParams = ['query'];
 
-  @tracked query;
+  @tracked query = '';
 
   /**
    * Handles the query queryParam
