@@ -43,17 +43,15 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
 
   test('cancel action rolls-back changes on the specified model', async function (assert) {
     await visit(urls.grants);
-    const roleBefore = await store.findRecord('role', instances.role.id);
-    const grantStrings = roleBefore.grant_strings;
-    roleBefore.grant_strings = ['ids=*;type=*;actions=read'];
+    const role = await store.findRecord('role', instances.role.id);
+    const grantStrings = role.grant_strings;
+    role.grant_strings = ['ids=*;type=*;actions=read'];
 
-    assert.deepEqual(roleBefore.grant_strings, ['ids=*;type=*;actions=read']);
+    assert.deepEqual(role.grant_strings, ['ids=*;type=*;actions=read']);
 
-    await controller.cancel(roleBefore);
-    const roleAfter = await store.findRecord('role', instances.role.id);
+    await controller.cancel(role);
 
-    assert.deepEqual(roleAfter.grant_strings, grantStrings);
-    assert.deepEqual(roleBefore, roleAfter);
+    assert.deepEqual(role.grant_strings, grantStrings);
   });
 
   test('save action saves grantStrings to specified model', async function (assert) {

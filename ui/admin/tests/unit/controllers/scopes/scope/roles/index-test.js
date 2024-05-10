@@ -67,16 +67,14 @@ module('Unit | Controller | scopes/scope/roles/index', function (hooks) {
 
   test('cancel action rolls-back changes on the specified model', async function (assert) {
     await visit(urls.roles);
-    const roleBefore = await store.findRecord('role', instances.role.id);
-    roleBefore.name = 'test';
+    const role = await store.findRecord('role', instances.role.id);
+    role.name = 'test';
 
-    assert.strictEqual(roleBefore.name, 'test');
+    assert.strictEqual(role.name, 'test');
 
-    await controller.cancel(roleBefore);
-    const roleAfter = await store.findRecord('role', instances.role.id);
+    await controller.cancel(role);
 
-    assert.notEqual(roleAfter.name, 'test');
-    assert.deepEqual(roleBefore, roleAfter);
+    assert.notEqual(role.name, 'test');
   });
 
   test('save action saves changes on the specified model', async function (assert) {
@@ -100,15 +98,15 @@ module('Unit | Controller | scopes/scope/roles/index', function (hooks) {
   });
 
   test('removePrincipal action removes a principal from specified model', async function (assert) {
-    const roleBefore = await store.findRecord('role', instances.role.id);
-    await roleBefore.addPrincipals([instances.user.id]);
-    assert.deepEqual(roleBefore.principals, [
+    const role = await store.findRecord('role', instances.role.id);
+    await role.addPrincipals([instances.user.id]);
+
+    assert.deepEqual(role.principals, [
       { id: instances.user.id, scope_id: instances.user.scopeId, type: 'user' },
     ]);
 
-    await controller.removePrincipal(roleBefore, instances.user);
-    const roleAfter = await store.findRecord('role', instances.role.id);
+    await controller.removePrincipal(role, instances.user);
 
-    assert.deepEqual(roleAfter.principals, []);
+    assert.deepEqual(role.principals, []);
   });
 });
