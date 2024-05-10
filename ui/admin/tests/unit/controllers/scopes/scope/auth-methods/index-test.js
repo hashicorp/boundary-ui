@@ -91,164 +91,145 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
 
   test('cancel action rolls-back changes on the specified model', async function (assert) {
     await visit('/scopes/global/auth-methods');
-    const authMethodModelBefore = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
-    authMethodModelBefore.name = 'test';
+    authMethod.name = 'test';
 
-    assert.strictEqual(authMethodModelBefore.name, 'test');
+    assert.strictEqual(authMethod.name, 'test');
 
-    await controller.cancel(authMethodModelBefore);
-    const authMethodModelAfter = await store.findRecord(
-      'auth-method',
-      instances.authMethod.id,
-    );
+    await controller.cancel(authMethod);
 
-    assert.notEqual(authMethodModelAfter.name, 'test');
-    assert.deepEqual(authMethodModelAfter, authMethodModelBefore);
+    assert.notEqual(authMethod.name, 'test');
   });
 
   test('save action saves changes on the specified model', async function (assert) {
     await visit('/scopes/global/auth-methods');
-    const authMethodModelBefore = await store.findRecord(
+    const authMethodBefore = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
-    authMethodModelBefore.name = 'test';
+    authMethodBefore.name = 'test';
 
-    await controller.save(authMethodModelBefore);
-    const authMethodModelAfter = await store.findRecord(
+    await controller.save(authMethodBefore);
+    const authMethodAfter = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    assert.strictEqual(authMethodModelAfter.name, 'test');
+    assert.strictEqual(authMethodAfter.name, 'test');
   });
 
   test('delete action destroys specified model', async function (assert) {
     await visit('/scopes/global/scopes');
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
     const authMethodCount = getAuthMethodCount();
 
-    await controller.delete(authMethodModel);
+    await controller.delete(authMethod);
 
     assert.strictEqual(getAuthMethodCount(), authMethodCount - 1);
   });
 
   test('makePrimary action updates scope with auth-method id', async function (assert) {
     await visit('/scopes/global/auth-methods');
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    await controller.makePrimary(authMethodModel);
-    const scopeModel = await store.findRecord(
-      'scope',
-      instances.scope.global.id,
-    );
+    await controller.makePrimary(authMethod);
+    const scope = await store.findRecord('scope', instances.scope.global.id);
 
-    assert.strictEqual(
-      scopeModel.primary_auth_method_id,
-      instances.authMethod.id,
-    );
+    assert.strictEqual(scope.primary_auth_method_id, instances.authMethod.id);
   });
 
   test('removeAsPrimary action updates scope with null as auth-method id', async function (assert) {
     await visit('/scopes/global/auth-methods');
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    await controller.removeAsPrimary(authMethodModel);
-    const scopeModel = await store.findRecord(
-      'scope',
-      instances.scope.global.id,
-    );
+    await controller.removeAsPrimary(authMethod);
+    const scope = await store.findRecord('scope', instances.scope.global.id);
 
-    assert.notOk(scopeModel.primary_auth_method_id);
+    assert.notOk(scope.primary_auth_method_id);
   });
 
   test('addStringItem action adds item to field and removeItemByIndex removes correct item', async function (assert) {
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    controller.addStringItem(authMethodModel, 'certificates', 'cert_123');
+    controller.addStringItem(authMethod, 'certificates', 'cert_123');
 
-    assert.deepEqual(authMethodModel.certificates, [{ value: 'cert_123' }]);
+    assert.deepEqual(authMethod.certificates, [{ value: 'cert_123' }]);
 
-    controller.addStringItem(authMethodModel, 'certificates', 'cert_456');
-    controller.removeItemByIndex(authMethodModel, 'certificates', 0);
+    controller.addStringItem(authMethod, 'certificates', 'cert_456');
+    controller.removeItemByIndex(authMethod, 'certificates', 0);
 
-    assert.deepEqual(authMethodModel.certificates, [{ value: 'cert_456' }]);
+    assert.deepEqual(authMethod.certificates, [{ value: 'cert_456' }]);
   });
 
   test('addAccountMapItem action adds item to field and removeItemByIndex removes correct item', async function (assert) {
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
     controller.addAccountMapItem(
-      authMethodModel,
+      authMethod,
       'account_attribute_maps',
       'name123',
       'fullName',
     );
 
-    assert.deepEqual(authMethodModel.account_attribute_maps, [
+    assert.deepEqual(authMethod.account_attribute_maps, [
       { from: 'name123', to: 'fullName' },
     ]);
 
     controller.addAccountMapItem(
-      authMethodModel,
+      authMethod,
       'account_attribute_maps',
       'name456',
       'fullName',
     );
-    controller.removeItemByIndex(authMethodModel, 'account_attribute_maps', 0);
+    controller.removeItemByIndex(authMethod, 'account_attribute_maps', 0);
 
-    assert.deepEqual(authMethodModel.account_attribute_maps, [
+    assert.deepEqual(authMethod.account_attribute_maps, [
       { from: 'name456', to: 'fullName' },
     ]);
   });
 
   test('edit action updates to a dirty state', async function (assert) {
-    const authMethodModel = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    assert.false(authMethodModel.hasDirtyAttributes);
+    assert.false(authMethod.hasDirtyAttributes);
 
-    controller.edit(authMethodModel);
+    controller.edit(authMethod);
 
-    assert.true(authMethodModel.hasDirtyAttributes);
+    assert.true(authMethod.hasDirtyAttributes);
   });
 
   test('changeState action updates state of auth-method', async function (assert) {
     instances.authMethod.update({ type: TYPE_AUTH_METHOD_LDAP });
-    const authMethodModelBefore = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
 
-    assert.notOk(authMethodModelBefore.state);
+    assert.notOk(authMethod.state);
 
-    await controller.changeState(authMethodModelBefore, 'public');
+    await controller.changeState(authMethod, 'public');
 
-    const authMethodModelAfter = await store.findRecord(
-      'auth-method',
-      instances.authMethod.id,
-    );
-
-    assert.strictEqual(authMethodModelAfter.state, 'public');
+    assert.strictEqual(authMethod.state, 'public');
   });
 });

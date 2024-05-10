@@ -78,22 +78,17 @@ module(
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
       await visit(urls.hostCatalogs);
-      const hostCatalogBefore = await store.findRecord(
+      const hostCatalog = await store.findRecord(
         'host-catalog',
         instances.hostCatalog.id,
       );
-      hostCatalogBefore.name = 'test';
+      hostCatalog.name = 'test';
 
-      assert.strictEqual(hostCatalogBefore.name, 'test');
+      assert.strictEqual(hostCatalog.name, 'test');
 
-      await controller.cancel(hostCatalogBefore);
-      const hostCatalogAfter = await store.findRecord(
-        'host-catalog',
-        instances.hostCatalog.id,
-      );
+      await controller.cancel(hostCatalog);
 
-      assert.notEqual(hostCatalogAfter.name, 'test');
-      assert.deepEqual(hostCatalogAfter, hostCatalogBefore);
+      assert.notEqual(hostCatalog.name, 'test');
     });
 
     test('save action saves changes on the specified model', async function (assert) {

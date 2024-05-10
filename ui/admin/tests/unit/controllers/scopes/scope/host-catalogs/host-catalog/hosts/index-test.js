@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_HOST_CATALOG_STATIC } from 'api/models/host-catalog';
 
@@ -11,7 +10,6 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupIndexedDb(hooks);
 
     let store;
     let controller;
@@ -70,16 +68,14 @@ module(
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
       await visit(urls.hosts);
-      const hostBefore = await store.findRecord('host', instances.host.id);
-      hostBefore.name = 'test';
+      const host = await store.findRecord('host', instances.host.id);
+      host.name = 'test';
 
-      assert.strictEqual(hostBefore.name, 'test');
+      assert.strictEqual(host.name, 'test');
 
-      await controller.cancel(hostBefore);
-      const hostAfter = await store.findRecord('host', instances.host.id);
+      await controller.cancel(host);
 
-      assert.notEqual(hostAfter.name, 'test');
-      assert.deepEqual(hostAfter, hostBefore);
+      assert.notEqual(host.name, 'test');
     });
 
     test('save action saves changes on the specified model', async function (assert) {

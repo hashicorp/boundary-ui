@@ -68,22 +68,14 @@ module(
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
       await visit(urls.hostSets);
-      const hostSetBefore = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
-      hostSetBefore.name = 'test';
+      const hostSet = await store.findRecord('host-set', instances.hostSet.id);
+      hostSet.name = 'test';
 
-      assert.strictEqual(hostSetBefore.name, 'test');
+      assert.strictEqual(hostSet.name, 'test');
 
-      await controller.cancel(hostSetBefore);
-      const hostSetAfter = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
+      await controller.cancel(hostSet);
 
-      assert.notEqual(hostSetAfter.name, 'test');
-      assert.deepEqual(hostSetAfter, hostSetBefore);
+      assert.notEqual(hostSet.name, 'test');
     });
 
     test('save action saves changes on the specified model', async function (assert) {
@@ -129,21 +121,14 @@ module(
         scopeId: instances.scopes.project.id,
         hostCatalog: instances.hostCatalog,
       });
-      const hostSetBefore = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
-      await hostSetBefore.addHost(host.id);
+      const hostSet = await store.findRecord('host-set', instances.hostSet.id);
+      await hostSet.addHost(host.id);
 
-      assert.deepEqual(hostSetBefore.host_ids, [host.id]);
+      assert.deepEqual(hostSet.host_ids, [host.id]);
 
-      await controller.removeHost(hostSetBefore, host);
-      const hostSetAfter = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
+      await controller.removeHost(hostSet, host);
 
-      assert.deepEqual(hostSetAfter.host_ids, []);
+      assert.deepEqual(hostSet.host_ids, []);
     });
   },
 );

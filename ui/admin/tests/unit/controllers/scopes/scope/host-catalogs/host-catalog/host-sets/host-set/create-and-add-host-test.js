@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
@@ -10,7 +9,6 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupIndexedDb(hooks);
 
     let store;
     let controller;

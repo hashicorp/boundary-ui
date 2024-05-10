@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
@@ -10,7 +9,6 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
-    setupIndexedDb(hooks);
 
     let store;
     let controller;
@@ -70,20 +68,13 @@ module(
 
     test('addHosts action adds selected hosts to the specified host-set', async function (assert) {
       await visit(urls.addHosts);
-      const hostSetBefore = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
+      const hostSet = await store.findRecord('host-set', instances.hostSet.id);
 
-      assert.deepEqual(hostSetBefore.host_ids, []);
+      assert.deepEqual(hostSet.host_ids, []);
 
-      await controller.addHosts(hostSetBefore, [instances.host.id]);
-      const hostSetAfter = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
+      await controller.addHosts(hostSet, [instances.host.id]);
 
-      assert.deepEqual(hostSetAfter.host_ids, [instances.host.id]);
+      assert.deepEqual(hostSet.host_ids, [instances.host.id]);
     });
   },
 );
