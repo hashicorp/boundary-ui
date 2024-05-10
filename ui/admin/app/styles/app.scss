@@ -1057,6 +1057,21 @@
   .hds-card__container {
     margin-top: 1.5rem;
     padding: 1rem;
+
+    .markdown {
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        padding: 0.5rem;
+      }
+
+      ul,
+      ol {
+        list-style-type: circle;
+        margin: 1rem;
+      }
+    }
   }
 
   .hds-application-state {
