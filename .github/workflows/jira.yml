@@ -84,10 +84,10 @@ jobs:
       run: |
         if [[ "${{ github.event.action }}" == "closed" || "${{ github.event.action }}" == "deleted" ]]; then
           echo "Closing ticket"
-          echo "name=Done" >> $GITHUB_OUTPUT
+          echo "name=Done" >> "$GITHUB_OUTPUT"
         elif [[ "${{ github.event.action }}" == "reopened" ]]; then
           echo "Reopening ticket"
-          echo "name=Reopen" >> $GITHUB_OUTPUT
+          echo "name=Reopen" >> "$GITHUB_OUTPUT"
         fi
 
     # Transition issue API reference: https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-transitions-post
