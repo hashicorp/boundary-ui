@@ -68,16 +68,14 @@ module(
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
       await visit(urls.createAndAddhost);
-      const hostBefore = await store.findRecord('host', instances.host.id);
-      hostBefore.name = 'test';
+      const host = await store.findRecord('host', instances.host.id);
+      host.name = 'test';
 
-      assert.strictEqual(hostBefore.name, 'test');
+      assert.strictEqual(host.name, 'test');
 
-      await controller.cancel(hostBefore);
-      const hostAfter = await store.findRecord('host', instances.host.id);
+      await controller.cancel(host);
 
-      assert.notEqual(hostAfter.name, 'test');
-      assert.deepEqual(hostAfter, hostBefore);
+      assert.notEqual(host.name, 'test');
     });
 
     test('save action saves host and adds to the specified host-set', async function (assert) {
