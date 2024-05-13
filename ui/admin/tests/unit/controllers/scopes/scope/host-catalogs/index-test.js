@@ -93,19 +93,15 @@ module(
 
     test('save action saves changes on the specified model', async function (assert) {
       await visit(urls.hostCatalogs);
-      const hostCatalogBefore = await store.findRecord(
+      const hostCatalog = await store.findRecord(
         'host-catalog',
         instances.hostCatalog.id,
       );
-      hostCatalogBefore.name = 'test';
+      hostCatalog.name = 'test';
 
-      await controller.save(hostCatalogBefore);
-      const hostCatalogAfter = await store.findRecord(
-        'host-catalog',
-        instances.hostCatalog.id,
-      );
+      await controller.save(hostCatalog);
 
-      assert.strictEqual(hostCatalogAfter.name, 'test');
+      assert.strictEqual(hostCatalog.name, 'test');
     });
 
     test('delete action destroys specified model', async function (assert) {

@@ -106,19 +106,15 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
 
   test('save action saves changes on the specified model', async function (assert) {
     await visit('/scopes/global/auth-methods');
-    const authMethodBefore = await store.findRecord(
+    const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
     );
-    authMethodBefore.name = 'test';
+    authMethod.name = 'test';
 
-    await controller.save(authMethodBefore);
-    const authMethodAfter = await store.findRecord(
-      'auth-method',
-      instances.authMethod.id,
-    );
+    await controller.save(authMethod);
 
-    assert.strictEqual(authMethodAfter.name, 'test');
+    assert.strictEqual(authMethod.name, 'test');
   });
 
   test('delete action destroys specified model', async function (assert) {

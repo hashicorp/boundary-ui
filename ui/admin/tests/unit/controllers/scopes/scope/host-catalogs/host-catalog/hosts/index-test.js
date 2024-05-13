@@ -80,13 +80,12 @@ module(
 
     test('save action saves changes on the specified model', async function (assert) {
       await visit(urls.hosts);
-      const hostBefore = await store.findRecord('host', instances.host.id);
-      hostBefore.name = 'test';
+      const host = await store.findRecord('host', instances.host.id);
+      host.name = 'test';
 
-      await controller.save(hostBefore);
-      const hostAfter = await store.findRecord('host', instances.host.id);
+      await controller.save(host);
 
-      assert.strictEqual(hostAfter.name, 'test');
+      assert.strictEqual(host.name, 'test');
     });
 
     test('delete action destroys specified model', async function (assert) {

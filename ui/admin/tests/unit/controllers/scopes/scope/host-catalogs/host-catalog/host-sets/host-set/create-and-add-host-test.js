@@ -82,24 +82,16 @@ module(
 
     test('save action saves host and adds to the specified host-set', async function (assert) {
       await visit(urls.createAndAddhost);
-      const hostSetBefore = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
-      const hostBefore = await store.findRecord('host', instances.host.id);
-      hostBefore.name = 'test';
+      const hostSet = await store.findRecord('host-set', instances.hostSet.id);
+      const host = await store.findRecord('host', instances.host.id);
+      host.name = 'test';
 
-      assert.deepEqual(hostSetBefore.host_ids, []);
+      assert.deepEqual(hostSet.host_ids, []);
 
-      await controller.save(hostBefore);
-      const hostAfter = await store.findRecord('host', instances.host.id);
-      const hostSetAfter = await store.findRecord(
-        'host-set',
-        instances.hostSet.id,
-      );
+      await controller.save(host);
 
-      assert.strictEqual(hostAfter.name, 'test');
-      assert.deepEqual(hostSetAfter.host_ids, [instances.host.id]);
+      assert.strictEqual(host.name, 'test');
+      assert.deepEqual(hostSet.host_ids, [instances.host.id]);
     });
   },
 );
