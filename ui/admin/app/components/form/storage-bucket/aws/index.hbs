@@ -140,29 +140,30 @@
   </Hds::Form::RadioCard::Group>
 
   {{! bucket_name }}
-  <Hds::Form::TextInput::Field
-    name='bucket_name'
-    @id='bucket_name'
-    @isRequired={{true}}
-    @value={{@model.bucket_name}}
-    @isInvalid={{@model.errors.bucket_name}}
-    disabled={{form.disabled}}
-    readOnly={{not @model.isNew}}
-    {{on 'input' (set-from-event @model 'bucket_name')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.storage-bucket.form.bucket_name.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.storage-bucket.form.bucket_name.help'
-      }}</F.HelperText>
-    {{#if @model.errors.bucket_name}}
-      <F.Error as |E|>
-        {{#each @model.errors.bucket_name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  <div data-test-bucket-name>
+    <Hds::Form::TextInput::Field
+      name='bucket_name'
+      @isRequired={{true}}
+      @value={{@model.bucket_name}}
+      @isInvalid={{@model.errors.bucket_name}}
+      disabled={{form.disabled}}
+      readOnly={{not @model.isNew}}
+      {{on 'input' (set-from-event @model 'bucket_name')}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.storage-bucket.form.bucket_name.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.storage-bucket.form.bucket_name.help'
+        }}</F.HelperText>
+      {{#if @model.errors.bucket_name}}
+        <F.Error as |E|>
+          {{#each @model.errors.bucket_name as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  </div>
 
   {{! bucket_prefix }}
   <Hds::Form::TextInput::Field
@@ -445,31 +446,34 @@
   {{/if}}
 
   {{! worker_filter }}
-  <Hds::Form::TextInput::Field
-    name='worker_filter'
-    @id='worker_filter'
-    @isRequired={{true}}
-    @value={{@model.worker_filter}}
-    @isInvalid={{@model.errors.worker_filter}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'worker_filter')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.storage-bucket.form.worker_filter.label'}}</F.Label>
-    <F.HelperText>
-      {{t 'resources.storage-bucket.form.worker_filter.help'}}
-      <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-    {{#if @model.errors.worker_filter}}
-      <F.Error as |E|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+  <div data-test-worker-filter>
+    <Hds::Form::TextInput::Field
+      name='worker_filter'
+      @isRequired={{true}}
+      @value={{@model.worker_filter}}
+      @isInvalid={{@model.errors.worker_filter}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'worker_filter')}}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.storage-bucket.form.worker_filter.label'
+        }}</F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.worker_filter.help'}}
+        <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+      {{#if @model.errors.worker_filter}}
+        <F.Error as |E|>
+          {{#each @model.errors.worker_filter as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+  </div>
 
   {{! JUST for static credentials }}
   {{#unless this.showDynamicCredentials}}

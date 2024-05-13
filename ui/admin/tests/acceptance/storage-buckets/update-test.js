@@ -29,8 +29,10 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
   const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
   const WORKER_FILTER = '[name="worker_filter"]';
-  const FIELD_STORAGE_BUCKET_NAME_ERROR = '#error-bucket_name';
-  const FIELD_WORKER_FILTER_ERROR = '#error-worker_filter';
+  const FIELD_STORAGE_BUCKET_NAME_ERROR =
+    '[data-test-bucket-name] .hds-form-error__message';
+  const FIELD_WORKER_FILTER_ERROR =
+    '[data-test-worker-filter] .hds-form-error__message';
   const FIELD_REGION = '[name=region]';
   const FIELD_PROVIDER = '[name=plugin_type]';
   const FIELD_ENDPOINT_URL = '[name=endpoint_url]';
@@ -181,6 +183,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(SAVE_BUTTON_SELECTOR);
 
     assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
+
     assert
       .dom(FIELD_STORAGE_BUCKET_NAME_ERROR)
       .hasText('This is a required field.');
