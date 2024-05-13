@@ -56,14 +56,13 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
 
   test('save action saves grantStrings to specified model', async function (assert) {
     await visit(urls.grants);
-    const roleBefore = await store.findRecord('role', instances.role.id);
-    const grantStrings = roleBefore.grant_strings;
+    const role = await store.findRecord('role', instances.role.id);
+    const grantStrings = role.grant_strings;
     const newGrantStrings = [...grantStrings, 'ids=*;type=*;actions=read'];
 
-    await controller.save(roleBefore, newGrantStrings);
-    const roleAfter = await store.findRecord('role', instances.role.id);
+    await controller.save(role, newGrantStrings);
 
-    assert.deepEqual(roleAfter.grant_strings, newGrantStrings);
+    assert.deepEqual(role.grant_strings, newGrantStrings);
   });
 
   test('removeGrant action removes a grant string from a role', async function (assert) {

@@ -79,13 +79,12 @@ module('Unit | Controller | scopes/scope/roles/index', function (hooks) {
 
   test('save action saves changes on the specified model', async function (assert) {
     await visit(urls.roles);
-    const roleBefore = await store.findRecord('role', instances.role.id);
-    roleBefore.name = 'test';
+    const role = await store.findRecord('role', instances.role.id);
+    role.name = 'test';
 
-    await controller.save(roleBefore);
-    const roleAfter = await store.findRecord('role', instances.role.id);
+    await controller.save(role);
 
-    assert.strictEqual(roleAfter.name, 'test');
+    assert.strictEqual(role.name, 'test');
   });
 
   test('delete action destroys specified model', async function (assert) {
