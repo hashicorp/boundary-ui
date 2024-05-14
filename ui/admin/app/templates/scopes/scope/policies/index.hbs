@@ -107,7 +107,7 @@
                       <dd.Interactive
                         @text={{t 'resources.policy.actions.delete'}}
                         @color='critical'
-                        {{on 'click' (route-action 'delete' B.data)}}
+                        {{on 'click' (fn this.delete B.data)}}
                       />
                     {{/if}}
                   </Hds::Dropdown>
