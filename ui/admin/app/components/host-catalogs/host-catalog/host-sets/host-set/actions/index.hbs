@@ -25,7 +25,7 @@
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'deleteHostSet' @model)}}
+      {{on 'click' (fn @delete @model)}}
     >
       {{t 'resources.host-set.actions.delete'}}
     </dropdown.button>

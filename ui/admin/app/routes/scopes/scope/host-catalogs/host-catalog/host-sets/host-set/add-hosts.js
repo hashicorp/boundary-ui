@@ -5,10 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { hash } from 'rsvp';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRoute extends Route {
   // =services
@@ -40,32 +37,5 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetAddHostsRo
       ),
       hosts: this.store.query('host', { host_catalog_id }),
     });
-  }
-
-  // =actions
-
-  /**
-   * Saves host IDs on the host set.
-   * @param {HostSetModel} hostSet
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async addHosts(hostSet, hostIDs) {
-    await hostSet.addHosts(hostIDs);
-    await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
-    );
-  }
-
-  /**
-   * Redirect to hosts as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
-    );
   }
 }

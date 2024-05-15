@@ -5,17 +5,12 @@
 
 import Route from '@ember/routing/route';
 import { hash, all } from 'rsvp';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
 
   // =methods
 
@@ -35,26 +30,5 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetHostsRoute
         ),
       ),
     });
-  }
-
-  /**
-   * Remove a host from the current host set and redirect to hosts index.
-   * @param {HostSetModel} hostSet
-   * @param {HostModel} host
-   */
-  @action
-  @loading
-  @confirm('questions.remove-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removeHost(hostSet, host) {
-    const scopeID = this.modelFor('scopes.scope').id;
-    const hostCatalogID = this.modelFor(
-      'scopes.scope.host-catalogs.host-catalog',
-    ).id;
-    await hostSet.removeHost(host.id, {
-      adapterOptions: { scopeID, hostCatalogID },
-    });
-    this.refresh();
   }
 }

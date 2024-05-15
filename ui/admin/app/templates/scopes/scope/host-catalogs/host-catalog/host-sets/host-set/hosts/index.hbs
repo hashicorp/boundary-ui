@@ -17,6 +17,7 @@
   <page.actions>
     <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
       @model={{@model.hostSet}}
+      @delete={{this.hostSets.delete}}
     />
   </page.actions>
 
@@ -77,7 +78,7 @@
                       @color='critical'
                       {{on
                         'click'
-                        (route-action 'removeHost' @model.hostSet B.data)
+                        (fn this.hostSets.removeHost @model.hostSet B.data)
                       }}
                     />
                   </Hds::Dropdown>
