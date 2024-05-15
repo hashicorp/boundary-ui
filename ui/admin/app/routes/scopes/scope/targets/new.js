@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
@@ -76,13 +75,5 @@ export default class ScopesScopeTargetsNewRoute extends Route {
     super.setupController(...arguments);
     const globalScope = await this.store.peekRecord('scope', 'global');
     controller.set('globalScope', globalScope);
-  }
-  /**
-   * Update type of target
-   * @param {string} type
-   */
-  @action
-  changeType(type) {
-    this.router.replaceWith({ queryParams: { type } });
   }
 }

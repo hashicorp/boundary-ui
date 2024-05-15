@@ -8,8 +8,8 @@ import { inject as service } from '@ember/service';
 
 export default class ScopesScopeTargetsTargetEnableSessionRecordingIndexRoute extends Route {
   // =services
+
   @service store;
-  @service router;
 
   // =methods
 

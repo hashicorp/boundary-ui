@@ -24,8 +24,8 @@
   <page.body>
     <Form::StorageBucket
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.save @model}}
+      @cancel={{fn this.cancel @model}}
       @scopes={{this.scopes}}
       @changeCredentialType={{fn
         this.storageBuckets.changeCredentialType

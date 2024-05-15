@@ -24,7 +24,10 @@
   </page.navigation>
 
   <page.actions>
-    <Targets::Target::Actions @model={{@model}} />
+    <Targets::Target::Actions
+      @model={{@model}}
+      @delete={{this.targets.delete}}
+    />
   </page.actions>
 
   <page.body>
@@ -77,7 +80,7 @@
                     @text={{t 'actions.remove'}}
                     {{on
                       'click'
-                      (route-action 'removeHostSource' @model B.data.model)
+                      (fn this.targets.removeHostSource @model B.data.model)
                     }}
                   />
                 </Hds::Dropdown>
