@@ -114,6 +114,39 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
+  test('users can create a new storage bucket minio plugin type with org scope', async function (assert) {
+    const storageBucketCount = getStorageBucketCount();
+
+    // Navigate to new storage bucket
+    await visit(urls.storageBuckets);
+    await click(`[href="${urls.newStorageBucket}"]`);
+
+    // Fill the form
+    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await click(MINIO_PLUGIN_TYPE_SELECTOR);
+    await select(SCOPE_SELECTOR, instances.scopes.org.id);
+    await fillIn(ENDPOINT_URL_SELECTOR, ENDPOINT_URL_TEXT);
+    await fillIn(BUCKET_NAME_FIELD_SELECTOR, 'Test SB');
+    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
+    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
+    await click(SAVE_BTN_SELECTOR);
+
+    // Assertions
+    const storageBucket = this.server.schema.storageBuckets.findBy({
+      name: NAME_FIELD_TEXT,
+    });
+    assert.dom(ALERT_TEXT_SELECTOR).hasText('Saved successfully.');
+    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(
+      storageBucket.attributes.endpoint_url,
+      ENDPOINT_URL_TEXT,
+    );
+    assert.strictEqual(storageBucket.attributes.role_arn, null);
+    assert.strictEqual(storageBucket.plugin.name, 'minio');
+    assert.strictEqual(storageBucket.scopeId, instances.scopes.org.id);
+    assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
+  });
+
   test('users can create a new storage bucket aws plugin type with dynamic credentials', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
