@@ -5,15 +5,11 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndAddHostRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
   @service router;
   @service can;
 
@@ -48,34 +44,11 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsHostSetCreateAndA
     });
   }
 
-  // =actions
-
-  /**
-   * Saves host and add it to current host set.
-   * @param {HostSetModel,HostModel} model
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(host) {
+  setupController(controller) {
     const hostSet = this.modelFor(
       'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
     );
-    await host.save();
-    await hostSet.addHost(host.id);
-    await this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
-    );
-  }
-
-  /**
-   * Redirect to hosts in host set as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith(
-      'scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts',
-    );
+    super.setupController(...arguments);
+    controller.setProperties({ hostSet });
   }
 }

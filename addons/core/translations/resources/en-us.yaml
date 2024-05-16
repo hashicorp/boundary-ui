@@ -657,8 +657,8 @@ target:
       filter:
         label: Record sessions for this target
       select:
-        label: AWS storage buckets
-        description: Sessions will be recorded and stored in this location. Must use Amazon S3.
+        label: Storage buckets
+        description: Sessions will be recorded and stored in this location.
   brokered-credential-source:
     title: Brokered Credential
     title_plural: Brokered Credentials

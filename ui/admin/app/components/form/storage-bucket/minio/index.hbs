@@ -180,7 +180,7 @@
         'resources.storage-bucket.form.bucket_name.help'
       }}</F.HelperText>
     {{#if @model.errors.bucket_name}}
-      <F.Error as |E|>
+      <F.Error data-test-bucket-name-error as |E|>
         {{#each @model.errors.bucket_name as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
@@ -330,7 +330,7 @@
       </Hds::Link::Inline>
     </F.HelperText>
     {{#if @model.errors.worker_filter}}
-      <F.Error as |E|>
+      <F.Error data-test-worker-filter-error as |E|>
         {{#each @model.errors.worker_filter as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
