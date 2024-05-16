@@ -26,8 +26,8 @@
   <page.body>
     <Form::User
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.users.save @model}}
+      @cancel={{fn this.users.cancel @model}}
     />
   </page.body>
 

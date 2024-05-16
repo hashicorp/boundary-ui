@@ -18,14 +18,14 @@
   </page.navigation>
 
   <page.actions>
-    <Users::User::Actions @model={{@model}} />
+    <Users::User::Actions @model={{@model}} @delete={{this.users.delete}} />
   </page.actions>
 
   <page.body>
     <Form::User
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.users.save @model}}
+      @cancel={{fn this.users.cancel @model}}
     />
   </page.body>
 

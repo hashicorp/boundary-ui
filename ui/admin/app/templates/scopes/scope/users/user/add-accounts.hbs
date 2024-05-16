@@ -26,8 +26,8 @@
         @model={{@model.user}}
         @authMethods={{@model.authMethods}}
         @accounts={{@model.accounts}}
-        @submit={{route-action 'addAccounts' @model.user}}
-        @cancel={{route-action 'cancel'}}
+        @submit={{fn this.addAccounts @model.user}}
+        @cancel={{this.cancel}}
       />
     {{/if}}
 
