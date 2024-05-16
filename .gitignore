@@ -42,10 +42,10 @@ yarn-error.log
 .ionide
 
 # yarn
+.pnp.*
 .yarn/*
 !.yarn/patches
-!.yarn/releases
 !.yarn/plugins
+!.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.pnp.*

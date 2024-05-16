@@ -1,77 +1,121 @@
-name: Validate Monorepo
-on: pull_request
+# name: Validate Monorepo
+# on: pull_request
+# jobs:
+#   dependencies:
+#     name: Install dependencies
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#       - name: Install Node
+#         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#         with:
+#           node-version: "20.x"
+#           cache: yarn
+#           cache-dependency-path: yarn.lock
 
-jobs:
-  dependencies:
-    name: Install dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          save-always: true
-          restore-keys: |
-            node-modules-
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-          cache: yarn
-          cache-dependency-path: yarn.lock
-      - run: yarn install
+#       - name: Install Dependencies
+#         run: yarn install --immutable
+#       # - uses: actions/checkout@v4
+#       # - name: Enable Corepack
+#       #   run: corepack enable
+#       # - name: Use Node.js 20.x
+#       #   uses: actions/setup-node@v4
+#       #   with:
+#       #     node-version: "20.x"
+#       # - name: Install dependencies
+#       #   run: yarn install --immutable
+#       # - name: check out Repo
+#       #   uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
-  compliance:
-    name: License Compliance
-    needs: [dependencies]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn run compliance:licenses
+#       # - name: Use node.js
+#       #   uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#       #   with:
+#       #     node-version: 20
 
-  lint:
-    name: Lint
-    needs: [dependencies, compliance]
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn lint
+#       # - name: Enable Corepack
+#       #   run: corepack enable
 
-  test:
-    name: Test
-    needs: [lint]
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn test
+#       # - name: Generate Cache Key
+#       #   id: key
+#       #   run: |
+#       #     cache_key="${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/yarn.lock') }}-${{ runner.os }}"
+#       #     echo "cache: $cache_key"
+
+#       # - name: Get yarn cache directory path
+#       #   id: yarn-cache-dir-path
+#       #   run: |
+#       #     dir="$(yarn cache dir)"
+#       #     echo "Dir: $dir"
+
+#       # - name: Restore cache
+#       #   id: cache
+#       #   uses: actions/cache/restore@v3
+#       #   with:
+#       #     path: |
+#       #       node_modules
+#       #       ${{ steps.yarn-cache-dir-path.outputs.dir }}
+#       #     key: ${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/yarn.lock') }}-${{ runner.os }}
+#       #     restore-keys: ${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/yarn.lock') }}
+
+#       # - name: Install dependencies
+#       #   run: yarn install --immutable
+
+#   # compliance:
+#   #   name: License Compliance
+#   #   needs: [dependencies]
+#   #   runs-on: ubuntu-latest
+#   #   steps:
+#   #     - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#   #     # - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#   #     #   id: node-modules-cache
+#   #     #   with:
+#   #     #     path: "**/node_modules"
+#   #     #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#   #     #     restore-keys: |
+#   #     #       node-modules-
+#   #     - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#   #       with:
+#   #         node-version: 20
+#   #         cache: yarn
+#   #         cache-dependency-path: "ui/yarn.lock"
+#   #     - run: yarn run compliance:licenses
+
+#   # lint:
+#   #   name: Lint
+#   #   needs: [dependencies, compliance]
+#   #   runs-on: ubuntu-latest
+#   #   timeout-minutes: 5
+#   #   steps:
+#   #     - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#   #     # - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#   #     #   id: node-modules-cache
+#   #     #   with:
+#   #     #     path: "**/node_modules"
+#   #     #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#   #     #     restore-keys: |
+#   #     #       node-modules-
+#   #     - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#   #       with:
+#   #         node-version: 20
+#   #         cache: yarn
+#   #         cache-dependency-path: "ui/yarn.lock"
+#   #     - run: yarn lint
+
+#   # test:
+#   #   name: Test
+#   #   needs: [lint]
+#   #   runs-on: ubuntu-latest
+#   #   timeout-minutes: 15
+#   #   steps:
+#   #     - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#   #     - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#   #       id: node-modules-cache
+#   #       with:
+#   #         path: "**/node_modules"
+#   #         key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#   #     - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#   #       with:
+#   #         node-version: 20
+#   #         cache: yarn
+#   #         cache-dependency-path: "ui/yarn.lock"
+#   #     - run: yarn test

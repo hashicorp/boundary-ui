@@ -1,25 +1,25 @@
-name: "Trigger Test Boundary UI release"
+# name: "Trigger Test Boundary UI release"
 
-on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: Please use tag-like format n.n.n-someword (1.111.11-beta)
-        required: true
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       branch:
+#         description: Please use tag-like format n.n.n-someword (1.111.11-beta)
+#         required: true
 
-jobs:
-  trigger-gha-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Release description
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          echo "Triggering Test release using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
-      - name: Trigger Release workflow in boundary-ui-releases
-        run: |
-          export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
-          gh workflow run release.yml \
-          --repo hashicorp/boundary-ui-releases \
-          --ref main \
-          -f TAG="${{ github.event.inputs.branch }}"
+# jobs:
+#   trigger-gha-release:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Release description
+#         if: github.event_name == 'workflow_dispatch'
+#         run: |
+#           echo "Triggering Test release using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
+#       - name: Trigger Release workflow in boundary-ui-releases
+#         run: |
+#           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
+#           gh workflow run release.yml \
+#           --repo hashicorp/boundary-ui-releases \
+#           --ref main \
+#           -f TAG="${{ github.event.inputs.branch }}"
 

@@ -52,7 +52,9 @@
   "resolutions": {
     "request": "^2.88.0",
     "loader-utils": "^2.0.4",
-    "@embroider/macros": "^1.13.1"
+    "@embroider/macros": "^1.13.1",
+    "minimist": "^1.2.6",
+    "underscore": "^1.13.6"
   },
   "config": {
     "commitizen": {
@@ -62,5 +64,5 @@
   "engines": {
     "node": "18.* || 20.*"
   },
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.0.2"
 }

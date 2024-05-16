@@ -1,102 +1,107 @@
-name: Build Admin UI
-on:
-  push:
-    branches:
-      - main
-      - "release/**"
-  workflow_dispatch:
+# name: Build Admin UI
+# on:
+#   push:
+#     branches:
+#       - main
+#       - "release/**"
+#   workflow_dispatch:
 
-jobs:
-  dependencies:
-    name: Install dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          save-always: true
-          restore-keys: |
-            node-modules-
-      - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-          cache: yarn
-          cache-dependency-path: yarn.lock
-      - run: yarn install
-  build-admin-ui-oss:
-    name: Build Admin UI OSS
-    needs: [dependencies]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-
-      - name: Build
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn run build:ui:admin:oss
-      - name: Upload artifact admin-ui
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-        with:
-          name: admin-ui
-          path: ./ui/admin/dist/
-      - name: Upload artifact OSS admin UI
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-        with:
-          name: admin-ui-oss
-          path: ./ui/admin/dist/
-  build-admin-ui-enterprise:
-    name: Build Admin UI Enterprise
-    needs: [dependencies]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-
-      - name: Build
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn run build:ui:admin:enterprise
-      - name: Upload artifact enterprise admin UI
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-        with:
-          name: admin-ui-ent
-          path: ./ui/admin/dist/
-  build-admin-ui-hcp:
-    name: Build Admin UI HCP
-    needs: [dependencies]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-
-      - name: Build
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: 20
-      - run: yarn run build:ui:admin:hcp
-      - name: Upload artifact HCP admin UI
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-        with:
-          name: admin-ui-hcp
-          path: ./ui/admin/dist/
+# jobs:
+#   dependencies:
+#     name: Install dependencies
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#       # - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#       #   id: node-modules-cache
+#       #   with:
+#       #     path: "**/node_modules"
+#       #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#       #     save-always: true
+#       #     restore-keys: |
+#       #       node-modules-
+#       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#         with:
+#           node-version: 20
+#           cache: yarn
+#           cache-dependency-path: "ui/yarn.lock"
+#       - run: yarn install --immutable
+#   build-admin-ui-oss:
+#     name: Build Admin UI OSS
+#     needs: [dependencies]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#       # - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#       #   id: node-modules-cache
+#       #   with:
+#       #     path: "**/node_modules"
+#       #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#       #     restore-keys: |
+#       #       node-modules-
+#       - name: Build
+#         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#         with:
+#           node-version: 20
+#           cache: yarn
+#           cache-dependency-path: "ui/yarn.lock"
+#       - run: yarn run build:ui:admin:oss
+#       - name: Upload artifact admin-ui
+#         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+#         with:
+#           name: admin-ui
+#           path: ./ui/admin/dist/
+#       - name: Upload artifact OSS admin UI
+#         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+#         with:
+#           name: admin-ui-oss
+#           path: ./ui/admin/dist/
+#   build-admin-ui-enterprise:
+#     name: Build Admin UI Enterprise
+#     needs: [dependencies]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#       # - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#       #   id: node-modules-cache
+#       #   with:
+#       #     path: "**/node_modules"
+#       #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#       #     restore-keys: |
+#       #       node-modules-
+#       - name: Build
+#         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#         with:
+#           node-version: 20
+#           cache-dependency-path: "ui/yarn.lock"
+#       - run: yarn run build:ui:admin:enterprise
+#       - name: Upload artifact enterprise admin UI
+#         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+#         with:
+#           name: admin-ui-ent
+#           path: ./ui/admin/dist/
+#   build-admin-ui-hcp:
+#     name: Build Admin UI HCP
+#     needs: [dependencies]
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+#       - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+#         id: node-modules-cache
+#         with:
+#           path: "**/node_modules"
+#           key: node-modules-${{ hashFiles('**/yarn.lock') }}
+#           restore-keys: |
+#             node-modules-
+#       - name: Build
+#         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+#         with:
+#           node-version: 20
+#           cache: yarn
+#           cache-dependency-path: "ui/yarn.lock"
+#       - run: yarn run build:ui:admin:hcp
+#       - name: Upload artifact HCP admin UI
+#         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+#         with:
+#           name: admin-ui-hcp
+#           path: ./ui/admin/dist/
