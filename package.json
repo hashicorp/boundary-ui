@@ -8,7 +8,7 @@
       "addons/*",
       "ui/*"
     ],
-    "nohoist": [
+    "installConfig.hoistingLimits": [
       "**/electron**"
     ]
   },
@@ -81,5 +81,6 @@
   },
   "engines": {
     "node": "18.* || 20.*"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }

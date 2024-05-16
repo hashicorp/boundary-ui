@@ -10426,11 +10426,14 @@ ember-page-title@^7.0.0:
     ember-cli-babel "^7.26.6"
 
 "ember-pollster@https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539":
-  version "0.0.1-beta.2"
-  resolved "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539"
+  version: 0.0.1-beta.2
+  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=718db797382b04aca281216319885c5ff625f539"
   dependencies:
-    ember-cli-babel "^7.26.8"
-    ember-cli-htmlbars "^6.0.1"
+    ember-cli-babel: "npm:^7.26.8"
+    ember-cli-htmlbars: "npm:^6.0.1"
+  checksum: a526541d1c80a585fe3fa5365f1743e2cc46a65b999fa552cd88d7c08bad503654d5b3bd827c9d1b71b0584dfdaa197a421a994a9a27ac9c2baa64943c4262b0
+  languageName: node
+  linkType: hard
 
 ember-power-select@^8.2.0:
   version "8.2.0"
@@ -10450,15 +10453,22 @@ ember-qunit@^6.2.0:
   resolved "https://registry.yarnpkg.com/ember-qunit/-/ember-qunit-6.2.0.tgz#4d492951035d1df5c7802c4ae6cf299c8f41d75b"
   integrity sha512-mC+0bp8DwWzJLn8SW3GS8KDZIkl4yLsNYwMi5Dw6+aFllq7FM2crd/dfY4MuOIHK7GKdjtmWJTMGnjSpeSayaw==
   dependencies:
-    broccoli-funnel "^3.0.8"
-    broccoli-merge-trees "^3.0.2"
-    common-tags "^1.8.0"
-    ember-auto-import "^2.6.0"
-    ember-cli-babel "^7.26.11"
-    ember-cli-test-loader "^3.0.0"
-    resolve-package-path "^4.0.3"
-    silent-error "^1.1.1"
-    validate-peer-dependencies "^2.2.0"
+    broccoli-funnel: "npm:^3.0.8"
+    broccoli-merge-trees: "npm:^3.0.2"
+    common-tags: "npm:^1.8.0"
+    ember-auto-import: "npm:^2.6.0"
+    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-test-loader: "npm:^3.0.0"
+    resolve-package-path: "npm:^4.0.3"
+    silent-error: "npm:^1.1.1"
+    validate-peer-dependencies: "npm:^2.2.0"
+  peerDependencies:
+    "@ember/test-helpers": ^2.9.3
+    ember-source: ">=3.28"
+    qunit: ^2.13.0
+  checksum: 08d161dbd5ba2d2e47cd1b696dbc96dedc776328c61a61342ce2bb9fbc28c9996d439f5717719ccdff9d6bd88b3dc68a7e30372f7dbf37d91241b3f5f4879df3
+  languageName: node
+  linkType: hard
 
 "ember-radio-button@github:yapplabs/ember-radio-button.git#b2ab65f":
   version "0.0.0"
