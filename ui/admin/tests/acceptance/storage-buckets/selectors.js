@@ -10,7 +10,7 @@ export const FIELD_ENDPOINT_URL = '[name=endpoint_url]';
 export const FIELD_ENDPOINT_URL_VALUE = 'http://www.hashicorp.com';
 export const FIELD_BUCKET_NAME = '[name=bucket_name]';
 export const FIELD_BUCKET_NAME_VALUE = 'Test Bucket name';
-export const FIELD_BUCKET_NAME_ERROR = '#error-bucket_name';
+export const FIELD_BUCKET_NAME_ERROR = '[data-test-bucket-name-error]';
 export const FIELD_BUCKET_PREFIX = '[name=bucket_prefix]';
 export const FIELD_REGION = '[name=region]';
 export const GROUP_CREDENTIAL_TYPE = '[name=credential_type]';
