@@ -9,7 +9,7 @@ jobs:
       - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         id: node-modules-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.CACHE_DIR_YARN }}
+          path: "**/.yarn"
           key: yarn-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           save-always: true
           # key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
