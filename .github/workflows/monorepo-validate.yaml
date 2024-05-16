@@ -25,7 +25,6 @@ jobs:
       #     key: node-modules-${{ hashFiles('**/yarn.lock') }}
       #     restore-keys: |
       #       node-modules-
-
       - run: yarn install
 
   compliance:
