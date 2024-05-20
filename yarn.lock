@@ -10431,7 +10431,7 @@ ember-page-title@^7.0.0:
   dependencies:
     ember-cli-babel: "npm:^7.26.8"
     ember-cli-htmlbars: "npm:^6.0.1"
-  checksum: a526541d1c80a585fe3fa5365f1743e2cc46a65b999fa552cd88d7c08bad503654d5b3bd827c9d1b71b0584dfdaa197a421a994a9a27ac9c2baa64943c4262b0
+  checksum: 10c0/a526541d1c80a585fe3fa5365f1743e2cc46a65b999fa552cd88d7c08bad503654d5b3bd827c9d1b71b0584dfdaa197a421a994a9a27ac9c2baa64943c4262b0
   languageName: node
   linkType: hard
 
@@ -10466,7 +10466,7 @@ ember-qunit@^6.2.0:
     "@ember/test-helpers": ^2.9.3
     ember-source: ">=3.28"
     qunit: ^2.13.0
-  checksum: 08d161dbd5ba2d2e47cd1b696dbc96dedc776328c61a61342ce2bb9fbc28c9996d439f5717719ccdff9d6bd88b3dc68a7e30372f7dbf37d91241b3f5f4879df3
+  checksum: 10c0/08d161dbd5ba2d2e47cd1b696dbc96dedc776328c61a61342ce2bb9fbc28c9996d439f5717719ccdff9d6bd88b3dc68a7e30372f7dbf37d91241b3f5f4879df3
   languageName: node
   linkType: hard
 
