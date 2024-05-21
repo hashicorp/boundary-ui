@@ -36,7 +36,7 @@
         <dropdown.button
           @style='danger'
           @disabled={{@model.canSave}}
-          {{on 'click' (route-action 'delete' @model)}}
+          {{on 'click' (fn this.workers.delete @model)}}
         >
           {{t 'resources.worker.actions.delete'}}
         </dropdown.button>
@@ -47,8 +47,8 @@
   <page.body>
     <Form::Worker
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.workers.save @model}}
+      @cancel={{fn this.workers.cancel @model}}
     />
   </page.body>
 

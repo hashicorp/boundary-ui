@@ -24,8 +24,8 @@
   <page.body>
     <Form::Worker::CreateWorkerLed
       @model={{@model}}
-      @cancel={{route-action 'cancel' @model}}
-      @submit={{route-action 'createWorkerLed' @model}}
+      @cancel={{fn this.cancel @model}}
+      @submit={{fn this.createWorkerLed @model}}
     />
   </page.body>
 
