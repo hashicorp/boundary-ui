@@ -98,8 +98,6 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     this.page = 1;
   }
 
-  // =actions
-
   /**
    * Rollback changes on a target.
    * @param {TargetModel} target
