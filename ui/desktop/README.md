@@ -195,7 +195,9 @@ The workaround to fix this issue is to reset/clear cookies and data (local stora
 
 #### Node-gyp build errors after package upgrades
 
-If you are running into issues with running the desktop client after a node upgrade you may need to rebuild some tools needed for building the electron app. Be sure to remove `node_models/` for `ui/desktop/` and `ui/desktop/electron-app/` to make sure you have a clean slate. First thing you will need to check is if you have `python-setuptools` installed. It is needed for node-gyp to rebuild the native tools for electron. If you are on a mac and use Homebrew, you can run `brew install python-setuptools`. You should be able to run `yarn start:desktop` now. This will trigger the rebuild for electron but if you want to be safe you can run `./electron-app/node_modules/.bin/electron-rebuild` before trying to start up the desktop client.
+This issue will likely pop up if you are using Python v3.12 and above as `python-setuptools` is no longer included by default.
+
+If you are running into issues with running the desktop client after a node upgrade you may need to rebuild some tools needed for building the electron app. Be sure to remove `node_models/` for `ui/desktop/` and `ui/desktop/electron-app/` to make sure you have a clean slate. First thing you will need to check is if you have `python-setuptools` installed. It is needed for node-gyp to rebuild the native tools for electron. If you are on a mac and use Homebrew, you can run `brew install python-setuptools`. If you aren't using Homebrew you can run use tthe following command: `python3 -m pip install setuptools`. You should be able to run `yarn start:desktop` now. This will trigger the rebuild for electron but if you want to be safe you can run `./electron-app/node_modules/.bin/electron-rebuild` before trying to start up the desktop client.
 
 ### Deploying
 
