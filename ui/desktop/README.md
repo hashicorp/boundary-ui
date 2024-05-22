@@ -6,25 +6,25 @@ The desktop client UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Desktop client UI](#desktop-client-ui)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
-  - [Running / Development](#running--development)
-    - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
-    - [Environment Variables](#environment-variables)
-    - [Building for Production](#building-for-production)
-      - [Environment Variables](#environment-variables-1)
-    - [Running Tests](#running-tests)
-    - [Running end to end Tests](#running-end-to-end-tests)
-    - [Troubleshooting](#troubleshooting)
-      - [Blank screen and/or hang browser tab when running as web app](#blank-screen-andor-hang-browser-tab-when-running-as-web-app)
-    - [Deploying](#deploying)
-  - [Debug desktop client](#debug-desktop-client)
-    - [Debug `renderer` process](#debug-renderer-process)
-    - [Debug `main` process ](#debug-main-process)
-    - [Debug `binary`](#debug-binary)
-  - [Further Reading / Useful Links](#further-reading--useful-links)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Yarn Commands](#yarn-commands)
+- [Running / Development](#running--development)
+  - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
+  - [Environment Variables](#environment-variables)
+  - [Building for Production](#building-for-production)
+    - [Environment Variables](#environment-variables-1)
+  - [Running Tests](#running-tests)
+  - [Running end to end Tests](#running-end-to-end-tests)
+  - [Troubleshooting](#troubleshooting)
+    - [Blank screen and/or hang browser tab when running as web app](#blank-screen-andor-hang-browser-tab-when-running-as-web-app)
+    - [Node-gyp build errors after package upgrades](#node-gyp-build-errors-after-package-upgrades)
+  - [Deploying](#deploying)
+- [Debug desktop client](#debug-desktop-client)
+  - [Debug `renderer` process](#debug-renderer-process)
+  - [Debug `main` process ](#debug-main-process)
+  - [Debug `binary`](#debug-binary)
+- [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -189,6 +189,11 @@ Steps:
 We are aware of an issue of the desktop client not being able to start correctly when running as web app within development mode. This issue reproduces when the developer is enabling/disabling Mirage ([more info](#environment-variables) about environment variables).
 
 The workaround to fix this issue is to reset/clear cookies and data (local storage and session storage).
+
+#### Node-gyp build errors after package upgrades
+
+If you are running into issues with running the desktop client after a node upgrade you may need to rebuild some tools needed for building the electron app. Be sure to remove `node_models/` for `ui/desktop/` and `ui/desktop/electron-app/` to make sure you have a clean slate. First thing you will need to check is if you have `python-setuptools` installed. It is needed for node-gyp to rebuild the native tools for electron. If you are on a mac and use Homebrew, you can run `brew install python-setuptools`. You should be able to run `yarn start:desktop` now. This will trigger the rebuild for electron but if you want to be safe you can run `./electron-app/node_modules/.bin/electron-rebuild` before trying to start up the desktop client.
+
 ### Deploying
 
 TBD
