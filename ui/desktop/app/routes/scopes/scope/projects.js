@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import runEvery from 'ember-pollster/decorators/route/run-every';
 
 /**
  * TODO:  This route is now vestigial.  Desktop does not provide project-based
@@ -26,6 +27,9 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service session;
   @service resourceFilterStore;
   @service router;
+  @service intl;
+  @service ipc;
+  @service clientAgentSessions;
 
   // =methods
 
@@ -48,5 +52,25 @@ export default class ScopesScopeProjectsRoute extends Route {
       { recursive: true, scope_id },
     );
     return projects;
+  }
+
+  @runEvery(2000)
+  async poller() {
+    const sessions =
+      await this.clientAgentSessions.getNewSessionsWithCredentials();
+
+    sessions.forEach((session) => {
+      new window.Notification(
+        this.intl.t('notifications.connected-to-target.title', {
+          target: session.alias,
+        }),
+        {
+          body: this.intl.t('notifications.connected-to-target.description'),
+        },
+      ).onclick = () => {
+        window.location.href = `serve://boundary/#/scopes/global/projects/sessions/${session.session_authorization.session_id}`;
+        this.ipc.invoke('focusWindow');
+      };
+    });
   }
 }

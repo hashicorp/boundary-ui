@@ -16,6 +16,7 @@ const pty = require('node-pty');
 const which = require('which');
 const { unixSocketRequest } = require('../helpers/request-promise');
 const clientDaemonManager = require('../services/client-daemon-manager');
+const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -115,6 +116,13 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
+ * Focus the window
+ */
+handle('focusWindow', async () => {
+  BrowserWindow.getFocusedWindow().show();
+});
+
+/**
  * Return the location of where a user's binary for a command is. If it isn't found, return null.
  */
 handle('checkCommand', async (command) => which(command, { nothrow: true }));
@@ -149,6 +157,13 @@ handle('searchClientDaemon', async (request) =>
 handle('isClientDaemonRunning', async () => {
   clientDaemonManager.status();
   return Boolean(clientDaemonManager.socketPath);
+});
+
+/**
+ * Gets the client agent's sessions
+ */
+handle('getClientAgentSessions', async () => {
+  return clientAgentDaemonManager.getSessions();
 });
 
 /**

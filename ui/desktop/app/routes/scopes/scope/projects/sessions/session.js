@@ -10,6 +10,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
 
   @service store;
+  @service clientAgentSessions;
 
   // =methods
 
@@ -21,6 +22,18 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    */
   async model({ session_id }) {
     const session = await this.store.findRecord('session', session_id);
+
+    // If we don't have any credentials, we'll try to fetch them from the client agent in case this session
+    // was initiated through the client agent.
+    if (!session.credentials.length) {
+      const clientAgentSessions =
+        await this.clientAgentSessions.getClientAgentSession(session.id);
+      if (clientAgentSessions) {
+        clientAgentSessions.session_authorization.credentials.forEach((cred) =>
+          session.addCredential(cred),
+        );
+      }
+    }
 
     /**
      * If the session has a host_id and the user has grants,
