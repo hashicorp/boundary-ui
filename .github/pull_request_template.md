@@ -1,24 +1,15 @@
-:tickets: [Jira ticket](https://hashicorp.atlassian.net/browse/JIRA_TICKET_NUMBER)
-
-## Description
-
+# Description
 <!-- Add a brief description of changes here -->
 
-## Screenshots (if appropriate):
+<!-- Uncomment line below to manually add link to JIRA ticket -->
+<!-- :tickets: [Jira ticket](https://hashicorp.atlassian.net/browse/JIRA_TICKET_NUMBER) -->
+
+## Screenshots (if appropriate)
 
 ## How to Test
-
 <!-- Add steps to test this change. Include any other necessary relevant links -->
 
-<!--
-Replace PATH_TO_FEATURE with Vercel link
--->
-
-:technologist: [Admin preview](PATH_TO_FEATURE)
-
-:desktop_computer: [Desktop preview](PATH_TO_FEATURE)
-
-## Checklist:
+## Checklist
 <!-- strikethrough the checklist item that is not relevant to your change -->
 
 - [ ] I have added before and after screenshots for UI changes
