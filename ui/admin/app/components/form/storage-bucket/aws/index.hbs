@@ -324,7 +324,6 @@
         @showEditButton={{true}}
         @data-test-selector='secret_access_key'
         @cancel={{fn @rollbackSecretAttrs 'secret_access_key'}}
-        data-test-secret-access-key
         {{on 'input' (set-from-event @model 'secret_access_key')}}
         as |F|
       >
