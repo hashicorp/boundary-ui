@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 
 export default class ScopesScopeHostCatalogsNewController extends Controller {
-  // =services
+  @controller('scopes/scope/host-catalogs/index') hostCatalogs;
 
   // =attributes
 

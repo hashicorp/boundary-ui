@@ -21,8 +21,8 @@
   <page.body>
     <Form::HostSet
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.hostSets.save @model}}
+      @cancel={{fn this.hostSets.cancel @model}}
     />
   </page.body>
 </Rose::Layout::Page>
