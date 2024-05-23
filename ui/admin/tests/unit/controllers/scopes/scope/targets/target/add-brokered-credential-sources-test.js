@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { visit } from '@ember/test-helpers';
+import { currentURL, visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -31,6 +31,7 @@ module(
     const urls = {
       projectScope: null,
       addCredentialSources: null,
+      credentialSources: null,
     };
 
     hooks.beforeEach(function () {
@@ -58,6 +59,7 @@ module(
 
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.addCredentialSources = `${urls.projectScope}/targets/${instances.target.id}/add-brokered-credential-sources`;
+      urls.credentialSources = `${urls.projectScope}/targets/${instances.target.id}/brokered-credential-sources`;
     });
 
     test('it exists', function (assert) {
@@ -101,6 +103,14 @@ module(
       assert.deepEqual(target.brokered_credential_source_ids, [
         { value: instances.credential.id },
       ]);
+    });
+
+    test('cancel action causes transition to expected route', async function (assert) {
+      await visit(urls.addCredentialSources);
+
+      await controller.cancel();
+
+      assert.strictEqual(currentURL(), urls.credentialSources);
     });
   },
 );

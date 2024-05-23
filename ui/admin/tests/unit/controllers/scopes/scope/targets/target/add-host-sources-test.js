@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { visit } from '@ember/test-helpers';
+import { currentURL, visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -26,6 +26,7 @@ module(
     const urls = {
       projectScope: null,
       addHostSources: null,
+      hostSources: null,
     };
 
     hooks.beforeEach(function () {
@@ -53,6 +54,7 @@ module(
 
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
       urls.addHostSources = `${urls.projectScope}/targets/${instances.target.id}/add-host-sources`;
+      urls.hostSources = `${urls.projectScope}/targets/${instances.target.id}/host-sources`;
     });
 
     test('it exists', function (assert) {
@@ -70,6 +72,14 @@ module(
       assert.deepEqual(target.host_sources, [
         { host_source_id: instances.hostSet.id },
       ]);
+    });
+
+    test('cancel action causes transition to expected route', async function (assert) {
+      await visit(urls.addHostSources);
+
+      await controller.cancel();
+
+      assert.strictEqual(currentURL(), urls.hostSources);
     });
   },
 );
