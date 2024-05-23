@@ -76,7 +76,6 @@ export default class ScopesScopeProjectsRoute extends Route {
 
         try {
           const aliases = await this.store.query('alias', {
-            recursive: true,
             scope_id: 'global',
             force_refresh: true,
           });
@@ -92,7 +91,7 @@ export default class ScopesScopeProjectsRoute extends Route {
         }
 
         window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
-        this.ipc.invoke('focusWindow');
+        await this.ipc.invoke('focusWindow');
       };
     });
   }

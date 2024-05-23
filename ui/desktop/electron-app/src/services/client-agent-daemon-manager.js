@@ -5,15 +5,13 @@
 
 const { spawnSync, spawn } = require('../helpers/spawn-promise');
 
-// TODO: Rename commands from ferry to client-agent
-
 class ClientAgentDaemonManager {
   /**
    * Checks the status of the client agent daemon.
    * @returns {string}
    */
   status() {
-    const clientAgentStatusCommand = ['ferry', 'status', '-format=json'];
+    const clientAgentStatusCommand = ['client-agent', 'status', '-format=json'];
     const { stdout } = spawnSync(clientAgentStatusCommand);
 
     return JSON.parse(stdout);
@@ -24,7 +22,11 @@ class ClientAgentDaemonManager {
    * @returns {*|Promise}
    */
   getSessions() {
-    const clientAgentSessionsCommand = ['ferry', 'sessions', '-format=json'];
+    const clientAgentSessionsCommand = [
+      'client-agent',
+      'sessions',
+      '-format=json',
+    ];
     const { stdout, stderr } = spawnSync(clientAgentSessionsCommand);
 
     let parsedResponse = JSON.parse(stdout);

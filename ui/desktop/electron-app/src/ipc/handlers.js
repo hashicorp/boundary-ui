@@ -118,7 +118,7 @@ handle('closeWindow', () => app.quit());
 /**
  * Focus the window
  */
-handle('focusWindow', async () => {
+handle('focusWindow', () => {
   BrowserWindow.getFocusedWindow().show();
 });
 
