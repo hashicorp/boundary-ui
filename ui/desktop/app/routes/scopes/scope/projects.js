@@ -27,6 +27,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service session;
   @service resourceFilterStore;
   @service router;
+  @service store;
   @service intl;
   @service ipc;
   @service clientAgentSessions;
@@ -54,6 +55,9 @@ export default class ScopesScopeProjectsRoute extends Route {
     return projects;
   }
 
+  /**
+   * Poll for new sessions with credentials. Sends a notification for each new session that has a credential.
+   */
   @runEvery(2000)
   async poller() {
     const sessions =
@@ -67,8 +71,27 @@ export default class ScopesScopeProjectsRoute extends Route {
         {
           body: this.intl.t('notifications.connected-to-target.description'),
         },
-      ).onclick = () => {
-        window.location.href = `serve://boundary/#/scopes/global/projects/sessions/${session.session_authorization.session_id}`;
+      ).onclick = async () => {
+        let orgScope = 'global';
+
+        try {
+          const aliases = await this.store.query('alias', {
+            recursive: true,
+            scope_id: 'global',
+            force_refresh: true,
+          });
+          const alias = aliases.find((alias) => alias.value === session.alias);
+
+          const target = await this.store.findRecord(
+            'target',
+            alias.destination_id,
+          );
+          orgScope = target.scope.parent_scope_id;
+        } catch (e) {
+          // Do nothing and default scope to global if an error occurs
+        }
+
+        window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
         this.ipc.invoke('focusWindow');
       };
     });
