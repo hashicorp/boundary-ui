@@ -301,6 +301,7 @@
         @isInvalid={{@model.errors.access_key_id}}
         @isDisabled={{form.disabled}}
         @showEditButton={{true}}
+        @data-test-selector='access_key_id'
         @cancel={{fn @rollbackSecretAttrs 'access_key_id'}}
         {{on 'input' (set-from-event @model 'access_key_id')}}
         as |F|
@@ -321,6 +322,7 @@
         @isInvalid={{@model.errors.secret_access_key}}
         @isDisabled={{form.disabled}}
         @showEditButton={{true}}
+        @data-test-selector='secret_access_key'
         @cancel={{fn @rollbackSecretAttrs 'secret_access_key'}}
         data-test-secret-access-key
         {{on 'input' (set-from-event @model 'secret_access_key')}}

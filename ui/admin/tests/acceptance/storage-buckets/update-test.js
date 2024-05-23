@@ -82,7 +82,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).exists();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).exists();
 

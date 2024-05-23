@@ -19,12 +19,14 @@ export const FIELD_DYNAMIC_CREDENTIAL = '[value=dynamic]';
 export const FIELD_ROLE_ARN = '[name=role_arn]';
 export const FIELD_ROLE_ARN_VALUE = 'test-arn-id';
 export const FIELD_ACCESS_KEY = '[name=access_key_id]';
-export const FIELD_ACCESS_KEY_EDIT_BTN = '#access_key_id [type=button]';
+export const FIELD_ACCESS_KEY_EDIT_BTN =
+  '[data-test=access_key_id] [type=button]';
 export const FIELD_ACCESS_KEY_VALUE = '45$#@%!783528';
 export const FIELD_SECRET_KEY = '[name=secret_access_key] ';
 export const FIELD_SECRET_KEY_VALUE = '87^%$#@^86382';
-export const FIELD_SECRET_KEY_EDIT_BTN = '#secret_access_key [type=button]';
+export const FIELD_SECRET_KEY_EDIT_BTN =
+  '[data-test=secret_access_key] [type=button]';
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
-export const FIELD_WORKER_FILTER_ERROR = '#error-worker_filter';
+export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFULL_VALUE = 'Saved successfully.';
