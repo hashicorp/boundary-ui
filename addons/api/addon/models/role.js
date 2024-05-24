@@ -75,6 +75,34 @@ export default class RoleModel extends GeneratedRoleModel {
   // =methods
 
   /**
+   * Saves grant scope ids on the role via the `set-grant-scopes` method.
+   * @param {[string]} grantScopeIDs
+   * @return {Promise}
+   */
+  setGrantScopes(grantScopeIDs) {
+    return this.save({
+      adapterOptions: {
+        method: 'set-grant-scopes',
+        grantScopeIDs,
+      },
+    });
+  }
+
+  /**
+   * Removes grant scope ids on the role via the `remove-grant-scopes` method.
+   * @param {[string]} grantScopeIDs
+   * @return {Promise}
+   */
+  removeGrantScopes(grantScopeIDs) {
+    return this.save({
+      adapterOptions: {
+        method: 'remove-grant-scopes',
+        grantScopeIDs,
+      },
+    });
+  }
+
+  /**
    * Saves grant strings on the role via the `set-grants` method.
    * See serializer and adapter for more information.
    * @param {[string]} grantStrings

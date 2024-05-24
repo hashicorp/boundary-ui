@@ -15,23 +15,32 @@ export default class RoleSerializer extends ApplicationSerializer {
    * serialized.
    * If `adapterOptions.principalIDs` is set (to an array of user and
    * group IDs), then the payload is serialized via `serializeWithPrincipals`.
+   * If `adapterOptions.grantScopeIDs` is set (to an array of scope IDs or
+   * keywords), then the payload is serialized via `serializeWithGrantScopeIDs`.
    * @override
    * @param {Snapshot} snapshot
    * @return {object}
    */
   serialize(snapshot) {
-    const grantStrings = get(snapshot, 'adapterOptions.grantStrings');
     let serialized = super.serialize(...arguments);
+
+    const grantStrings = get(snapshot, 'adapterOptions.grantStrings');
     if (grantStrings)
       serialized = this.serializeWithGrantStrings(snapshot, grantStrings);
+
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs)
       serialized = this.serializeWithPrincipals(snapshot, principalIDs);
+
+    const grantScopeIDs = snapshot?.adapterOptions?.grantScopeIDs;
+    if (grantScopeIDs)
+      serialized = this.serializeWithGrantScopeIDs(snapshot, grantScopeIDs);
+
     return serialized;
   }
 
   /**
-   * Returns a payload containing only the grants array.
+   * Returns a payload containing only the grants array and version.
    * @param {Snapshot} snapshot
    * @param {[string]} grantStrings
    * @return {object}
@@ -44,8 +53,8 @@ export default class RoleSerializer extends ApplicationSerializer {
   }
 
   /**
-   * Returns a payload containing only the principal_ids array using IDs
-   * passed into the function (rather than existing principals on the model).
+   * Returns a payload containing only the principal_ids array using IDs passed
+   * into the function (rather than existing principals on the model) and version.
    * @param {Snapshot} snapshot
    * @param {[string]} principalIDs
    * @return {object}
@@ -54,6 +63,19 @@ export default class RoleSerializer extends ApplicationSerializer {
     return {
       version: snapshot.attr('version'),
       principal_ids: principalIDs,
+    };
+  }
+
+  /**
+   * Returns a payload containing only the grant_scope_ids array and version.
+   * @param {Snapshot} snapshot
+   * @param {[string]} grantScopeIDs
+   * @return {object}
+   */
+  serializeWithGrantScopeIDs(snapshot, grantScopeIDs) {
+    return {
+      version: snapshot.attr('version'),
+      grant_scope_ids: grantScopeIDs,
     };
   }
 }

@@ -26,6 +26,7 @@ module('Unit | Serializer | role', function (hooks) {
       description: 'Description',
       version: 1,
       grant_scope_id: null,
+      grant_scope_ids: [],
     });
   });
 
@@ -45,6 +46,46 @@ module('Unit | Serializer | role', function (hooks) {
     const serializedRecord = serializer.serialize(snapshot);
     assert.deepEqual(serializedRecord, {
       grant_strings: ['foo', 'bar'],
+      version: 1,
+    });
+  });
+
+  test('it serializes only principals when `adapterOptions.principalIDs` is set', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('role');
+    const record = store.createRecord('role', {
+      name: 'User',
+      description: 'Description',
+      principal_ids: [],
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      principalIDs: ['u_123'],
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      principal_ids: ['u_123'],
+      version: 1,
+    });
+  });
+
+  test('it serializes only grant scope IDs when `adapterOptions.grantScopeIDs` is set', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('role');
+    const record = store.createRecord('role', {
+      name: 'User',
+      description: 'Description',
+      grant_scope_ids: ['this'],
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      grantScopeIDs: ['this', 'children'],
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      grant_scope_ids: ['this', 'children'],
       version: 1,
     });
   });
