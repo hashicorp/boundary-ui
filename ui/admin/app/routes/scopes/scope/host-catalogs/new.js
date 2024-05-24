@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeHostCatalogsNewRoute extends Route {
@@ -62,15 +61,5 @@ export default class ScopesScopeHostCatalogsNewRoute extends Route {
     });
     record.scopeModel = scopeModel;
     return record;
-  }
-
-  /**
-   * Update type of host catalog
-   * @param {string} type
-   */
-  @action
-  changeType(type) {
-    if (type === 'plugin') type = 'aws';
-    this.router.replaceWith({ queryParams: { type } });
   }
 }

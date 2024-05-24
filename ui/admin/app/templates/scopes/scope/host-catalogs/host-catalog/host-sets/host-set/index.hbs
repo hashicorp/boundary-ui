@@ -13,7 +13,10 @@
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions @model={{@model}} />
+    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
+      @model={{@model}}
+      @delete={{this.hostSets.delete}}
+    />
   </page.actions>
 
   <page.navigation>
@@ -25,9 +28,9 @@
   <page.body>
     <Form::HostSet
       @model={{@model}}
-      @edit={{route-action 'edit' @model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @edit={{fn this.hostSets.edit @model}}
+      @submit={{fn this.hostSets.save @model}}
+      @cancel={{fn this.hostSets.cancel @model}}
     />
   </page.body>
 </Rose::Layout::Page>

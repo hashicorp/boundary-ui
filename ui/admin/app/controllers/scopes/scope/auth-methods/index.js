@@ -239,13 +239,13 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
    * Adds an account map fragment to the passed `authMethod`.
    * @param {AuthMethodModel} authMethod
    * @param {string} field
-   * @param {string} key
-   * @param {string} value
+   * @param {string} from
+   * @param {string} to
    */
   @action
-  addAccountMapItem(authMethod, field, key, value) {
+  addAccountMapItem(authMethod, field, from, to) {
     const existingArray = authMethod[field] ?? [];
-    const array = [...existingArray, { key, value }];
+    const array = [...existingArray, { from, to }];
     authMethod.set(field, array);
   }
 
