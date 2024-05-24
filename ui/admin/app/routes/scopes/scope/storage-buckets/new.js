@@ -17,6 +17,13 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
   @service can;
   @service router;
 
+  // =attributes
+  queryParams = {
+    compositeType: {
+      refreshModel: true,
+    },
+  };
+
   // =methods
 
   /**
@@ -39,8 +46,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
    * creating another, but reuse name/description/other fields if available.
    * @return {StorageBucket}
    */
-  model() {
-    const scopeModel = this.store.peekRecord('scope', 'global');
+  model({ compositeType = TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3 }) {
     let name,
       description,
       scope,
@@ -48,6 +54,7 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       bucket_prefix,
       region,
       worker_filter;
+
     if (this.currentModel?.isNew) {
       ({
         name,
@@ -60,9 +67,10 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       } = this.currentModel);
       this.currentModel.rollbackAttributes();
     }
+
     const record = this.store.createRecord('storage-bucket', {
       type: TYPE_STORAGE_BUCKET_PLUGIN,
-      compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+      compositeType,
       name,
       description,
       scope,
@@ -71,20 +79,24 @@ export default class ScopesScopeStorageBucketsNewRoute extends Route {
       region,
       worker_filter,
     });
-    record.scopeModel = scopeModel;
     return record;
   }
 
   async afterModel() {
-    let scopes;
-    const orgScopes = (
-      await this.store.query('scope', { scope_id: 'global' })
-    ).map((scope) => ({ model: scope }));
-    scopes = [
-      { model: this.store.peekRecord('scope', 'global') },
-      ...orgScopes,
-    ];
-    this.scopes = scopes;
+    if (!this.scopes) {
+      let scopes;
+      const orgScopes = (
+        await this.store.query('scope', {
+          scope_id: 'global',
+          query: { filters: { scope_id: [{ equals: 'global' }] } },
+        })
+      ).map((scope) => ({ model: scope }));
+      scopes = [
+        { model: this.store.peekRecord('scope', 'global') },
+        ...orgScopes,
+      ];
+      this.scopes = scopes;
+    }
   }
 
   /**

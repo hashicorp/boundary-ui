@@ -135,6 +135,7 @@
               name='recording_storage_path'
               @value={{this.recording_storage_path}}
               placeholder='/tmp/worker1'
+              {{on 'input' (set-from-event this 'recording_storage_path')}}
               as |F|
             >
               <F.Label>{{t

@@ -44,6 +44,14 @@ export default class TargetSerializer extends ApplicationSerializer {
         injectedApplicationCredentialSourceIDs,
       );
 
+    if (serialized?.with_aliases) {
+      // API expects scope id along with every alias value
+      serialized.with_aliases = serialized.with_aliases.map((item) => ({
+        ...item,
+        scope_id: 'global',
+      }));
+    }
+
     // Delete session recording related fields from non-SSH targets
     if (type !== TYPE_TARGET_SSH) {
       delete serialized?.attributes?.storage_bucket_id;
@@ -111,5 +119,18 @@ export default class TargetSerializer extends ApplicationSerializer {
       version: snapshot.attr('version'),
       storage_bucket_id: snapshot?.attr('storage_bucket_id'),
     };
+  }
+
+  normalize(typeClass, hash, ...rest) {
+    const normalizedHash = structuredClone(hash);
+    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
+    // Ember data retains the previous entry in the array attr when the updated attr becomes undefined/empty.
+    // So, we explicitly set the attr to an empty array if the updated attribute is undefined from the API
+
+    if (!normalized.data.attributes.aliases) {
+      normalized.data.attributes.aliases = [];
+    }
+
+    return normalized;
   }
 }

@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -36,8 +35,15 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
     const { id: scope_id } = this.modelFor('scopes.scope');
     const credentialStores = await this.store.query('credential-store', {
       scope_id,
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
     });
-    await all(
+
+    // TODO: For some reason, not returning promises fixes
+    //  an ember bug similar to this reported issue:
+    //  https://github.com/emberjs/data/issues/8299.
+    //  This is a temporary fix until we can find a better solution or
+    //  we upgrade ember data to try to fix the issue.
+    await Promise.all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
         if (isStatic) {
           this.store.query('credential', {

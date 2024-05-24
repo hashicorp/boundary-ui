@@ -115,6 +115,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {Promise} promise
    */
   async query(store, schema, query) {
+    const queryObject = structuredClone(query);
     let result;
     let data = [];
 
@@ -128,12 +129,12 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
     // Run this loop as long as the response_type is delta,
     // which indicates that there are more items in the list
     do {
-      result = await super.query(store, schema, query);
+      result = await super.query(store, schema, queryObject);
       //add the result items to a data array
       if (result && result.items) {
         data.push(...result.items);
         //pass in the list token for subsequent calls to fetch the remaining list items
-        query.list_token = result.list_token;
+        queryObject.list_token = result.list_token;
       }
     } while (result && result.response_type === 'delta');
 
@@ -211,7 +212,10 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
   handleResponse(status, headers, payload, requestData) {
     if (this.isInvalid(status, headers, payload)) {
       const detailedMessage = this.generatedDetailedMessage(...arguments);
-      const transformedPayload = this.transformValidationErrors(payload);
+      const transformedPayload = this.transformValidationErrors(
+        payload,
+        status,
+      );
       return new InvalidError(transformedPayload.errors, detailedMessage);
     }
     return super.handleResponse(status, headers, payload, requestData);
@@ -269,17 +273,18 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * error format.
    *
    * @param {object} payload
+   * @param status
    * @return {object}
    */
-  transformValidationErrors(payload) {
+  transformValidationErrors(payload, status) {
     const fieldErrors = get(payload, 'details.request_fields') || [];
     // Normalize the primary error message into "base", which is an error
     // that applies to the whole model instance
     const baseError = {
       isInvalid: true,
-      status: payload.source,
-      code: payload.code,
-      detail: payload.message,
+      status,
+      code: payload?.kind,
+      detail: payload?.message,
       source: { pointer: '/data' },
     };
     // Normalize field-specific errors, if any.
@@ -314,6 +319,6 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {String} detailed error message
    */
   generatedDetailedMessage(status, headers, payload /*, requestData*/) {
-    return payload.message;
+    return payload?.message;
   }
 }

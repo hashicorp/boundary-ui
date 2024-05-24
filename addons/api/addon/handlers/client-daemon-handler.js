@@ -5,43 +5,29 @@
 
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
-import { pluralize } from 'ember-inflector';
 import { generateMQLExpression } from '../utils/mql-query';
+import { paginateResults } from '../utils/paginate-results';
 
 /**
  * Not all types are yet supported by the client daemon so we'll
  * just whitelist the ones we need to start with. Keys are the resource
  * types and the values are the fields that are searchable by the client.
- * @type {{session: string[], target: string[]}}
+ * @type {{session: string[], alias: string[], target: string[]}}
  */
 const supportedTypes = {
   target: ['id', 'name', 'description', 'address', 'scope_id'],
   session: ['id', 'type', 'status', 'endpoint', 'scope_id', 'target_id'],
+  alias: ['id', 'type', 'value', 'destination_id'],
 };
 
 /**
- * Takes an array and the current page and pagesize to calculate the correct
- * number of results to return to the caller.
- *
- * @param array
- * @param page
- * @param pageSize
- * @returns {[*]}
+ * Map the model resource name to the client daemon resource name
+ * @type {{session: string, alias: string, target: string}}
  */
-const paginateResults = (array, page, pageSize) => {
-  const length = array?.length;
-  if (!array || length === 0) {
-    return [];
-  }
-  if (!page || !pageSize) {
-    return array;
-  }
-
-  const offset = (page - 1) * pageSize;
-  const start = Math.min(length - 1, offset);
-  const end = Math.min(length, offset + pageSize);
-
-  return array.slice(start, end);
+export const resourceNames = {
+  target: 'targets',
+  session: 'sessions',
+  alias: 'resolvable-aliases',
 };
 
 const fetchControllerData = async (context, next) => {
@@ -112,7 +98,7 @@ export default class ClientDaemonHandler {
           query: searchQuery,
           auth_token_id,
           token,
-          resource: pluralize(type),
+          resource: resourceNames[type],
         };
 
         let clientDaemonResults = {};

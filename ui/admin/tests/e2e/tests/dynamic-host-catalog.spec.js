@@ -70,7 +70,7 @@ test.describe('AWS', async () => {
     const hostSetName = 'Host Set ' + nanoid();
     await page.getByRole('link', { name: 'Host Sets' }).click();
     await page.getByRole('link', { name: 'New', exact: true }).click();
-    await page.getByLabel('Name').fill(hostSetName);
+    await page.getByLabel('Name (Optional)').fill(hostSetName);
     await page.getByLabel('Description').fill('This is an automated test');
     await page
       .getByRole('group', { name: 'Filter' })

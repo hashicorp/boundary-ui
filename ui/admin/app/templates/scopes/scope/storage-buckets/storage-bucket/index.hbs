@@ -27,10 +27,14 @@
   <page.body>
     <Form::StorageBucket
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.storageBuckets.save @model}}
+      @cancel={{fn this.storageBuckets.cancel @model}}
       @scopes={{this.scopes}}
-      @changeType={{route-action 'changeType' @model}}
+      @changeCredentialType={{fn
+        this.storageBuckets.changeCredentialType
+        @model
+      }}
+      @changePluginType={{this.storageBuckets.changePluginType}}
     />
   </page.body>
 </Rose::Layout::Page>

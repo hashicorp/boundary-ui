@@ -4,16 +4,26 @@
  */
 
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { debounce } from 'core/decorators/debounce';
 
 export default class ScopesScopeGroupsIndexController extends Controller {
   // =services
   @service can;
   @service router;
+
+  // =attributes
+
+  queryParams = ['search', 'page', 'pageSize'];
+
+  @tracked search = '';
+  @tracked page = 1;
+  @tracked pageSize = 10;
 
   // =actions
 
@@ -25,7 +35,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   async cancel(group) {
     const { isNew } = group;
     group.rollbackAttributes();
-    if (isNew) await this.router.transitionTo('scopes.scope.groups');
+    if (isNew) this.router.transitionTo('scopes.scope.groups');
   }
 
   /**
@@ -59,7 +69,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(group) {
     await group.destroyRecord();
-    await this.router.replaceWith('scopes.scope.groups');
+    this.router.replaceWith('scopes.scope.groups');
     await this.router.refresh();
   }
 
@@ -76,5 +86,17 @@ export default class ScopesScopeGroupsIndexController extends Controller {
   async removeMember(group, member) {
     await group.removeMember(member.id);
     await this.router.refresh();
+  }
+
+  /**
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
+   */
+  @action
+  @debounce(250)
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
   }
 }

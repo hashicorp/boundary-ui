@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
@@ -23,6 +24,7 @@ import {
 module('Acceptance | auth-methods | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
 
@@ -161,11 +163,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'allowed_audiences');
 
     // Remove all claim maps
-    await Promise.all(
-      findAll('[name="account_claim_maps"] button:not(:disabled)').map(
-        (element) => click(element),
-      ),
+    const claimMaps = await Promise.all(
+      findAll('[name="account_claim_maps"] [data-test-remove-button]'),
     );
+    for (const element of claimMaps) {
+      await click(element);
+    }
 
     await fillIn(
       '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
@@ -176,6 +179,8 @@ module('Acceptance | auth-methods | update', function (hooks) {
       '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
       'email',
     );
+
+    await click('[name="account_claim_maps"] button');
 
     // Remove all certificates
     const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
@@ -188,7 +193,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click(TOGGLE_SELECTOR);
-
     await click('.rose-form-actions [type="submit"]');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
@@ -241,11 +245,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="user_attr"]', 'user attr');
     await fillIn('[name="user_filter"]', 'user filter');
     // Remove all attribute maps
-    await Promise.all(
-      findAll(
-        '[name="account_attribute_maps"] .hds-button--color-critical',
-      ).map((element) => click(element)),
+    const attributeMaps = await Promise.all(
+      findAll('[name="account_attribute_maps"] .hds-button--color-critical'),
     );
+    for (const element of attributeMaps) {
+      await click(element);
+    }
     await fillIn('[name="account_attribute_maps"] input', 'attribute');
     await select('[name="account_attribute_maps"] select', 'email');
     await click('[name="account_attribute_maps"] button');

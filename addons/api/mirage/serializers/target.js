@@ -20,7 +20,7 @@ export default ApplicationSerializer.extend({
       this,
       arguments,
     );
-    const { hostSets } = this.schema;
+    const { hostSets, aliases } = this.schema;
     if (model.hostSetIds?.length) {
       json.host_sources = model.hostSetIds.map((host_set_id) => {
         const hostSet = hostSets.find(host_set_id);
@@ -28,6 +28,23 @@ export default ApplicationSerializer.extend({
         return { id: host_set_id, host_catalog_id };
       });
     }
+
+    // After we clear an associated alias, we try to mimic the BE logic
+    // by manually filter out the alias id from the target model
+
+    const associatedAliases = aliases
+      .all()
+      .models.reduce((arr, { destinationId, id }) => {
+        // We iterate through the aliases list and
+        // find the cleared alias by looking for camelCase destinationId since there is no other way to find the impacted alias
+        if (destinationId !== null) arr.push(id);
+        return arr;
+      }, []);
+
+    json.aliases = model.aliases?.filter((alias) =>
+      associatedAliases.includes(alias.id),
+    );
+
     return json;
   },
 });

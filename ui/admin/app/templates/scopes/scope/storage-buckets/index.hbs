@@ -69,6 +69,12 @@
                   @text={{t 'resources.storage-bucket.titles.amazon_s3'}}
                   @icon='aws-color'
                 />
+
+              {{else if B.data.isMinIO}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.minio'}}
+                  @icon='cloud-upload'
+                />
               {{else}}
                 {{B.data.plugin.name}}
               {{/if}}
@@ -113,7 +119,7 @@
                       <dd.Interactive
                         @text={{t 'resources.storage-bucket.actions.delete'}}
                         @color='critical'
-                        {{on 'click' (route-action 'delete' B.data)}}
+                        {{on 'click' (fn this.delete B.data)}}
                       />
                     {{/if}}
                   </Hds::Dropdown>

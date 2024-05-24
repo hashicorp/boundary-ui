@@ -150,7 +150,7 @@ exports.createStaticCredentialStore = async (page) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
   await page.getByRole('button', { name: 'Save' }).click();
@@ -181,11 +181,11 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
     .getByRole('link', { name: 'Credential Stores' })
     .click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialStoreName);
+  await page.getByLabel('Name (Optional)').fill(credentialStoreName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('Vault').click();
-  await page.getByLabel('Address', { exact: true }).fill(vaultAddr);
-  await page.getByLabel('Token', { exact: true }).fill(clientToken);
+  await page.getByLabel('Address').fill(vaultAddr);
+  await page.getByLabel('Token').fill(clientToken);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -211,7 +211,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page
     .getByRole('group', { name: 'Type' })
@@ -221,7 +221,7 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const keyData = await readFile(keyPath, {
     encoding: 'utf-8',
   });
-  await page.getByLabel('SSH Private Key', { exact: true }).fill(keyData);
+  await page.getByLabel('SSH Private Key').fill(keyData);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -294,19 +294,16 @@ exports.createVaultSshCertificateCredentialLibrary = async (
   await page.getByRole('link', { name: 'Credential Libraries' }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
 
-  // Temporarily putting the Group selection first due to a bug where
-  // Name and Description fields get cleared when the Group is selected
-  await page
-    .getByRole('group', { name: 'Type' })
-    .getByLabel('SSH Certificates')
-    .click();
-
   await page
     .getByLabel('Name (Optional)', { exact: true })
     .fill(credentialLibraryName);
   await page
     .getByLabel('Description (Optional)')
     .fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('SSH Certificates')
+    .click();
   await page.getByLabel('Vault Path').fill(vaultPath);
   await page.getByLabel('Username').fill(username);
   await page.getByLabel('Key Type').selectOption('ecdsa');
@@ -557,6 +554,9 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Sessions' })
     .click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Sessions'),
+  ).toBeVisible();
   let i = 0;
   let sessionIsVisible = false;
   let sessionIsActive = false;
@@ -571,8 +571,17 @@ exports.waitForSessionToBeVisible = async (page, targetName) => {
     if (sessionIsVisible && sessionIsActive) {
       break;
     }
-    await page.getByRole('button', { name: 'Refresh' }).click();
-    await expect(page.getByRole('button', { name: 'Refresh' })).toBeEnabled();
+
+    const noSessionsAvailable = await page
+      .getByText('No Sessions Available', { exact: true })
+      .isVisible();
+    if (noSessionsAvailable) {
+      await new Promise((r) => setTimeout(r, 1000));
+      await page.reload();
+    } else {
+      await page.getByRole('button', { name: 'Refresh' }).click();
+      await expect(page.getByRole('button', { name: 'Refresh' })).toBeEnabled();
+    }
   } while (i < 5);
 
   if (!sessionIsVisible) {
@@ -728,7 +737,7 @@ exports.createPasswordAccount = async (page, login, password) => {
     .getByRole('article')
     .getByRole('link', { name: 'Create Account', exact: true })
     .click();
-  await page.getByLabel('Name', { exact: true }).fill(accountName);
+  await page.getByLabel('Name (Optional)').fill(accountName);
   await page.getByLabel('Login Name').fill(login);
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
@@ -772,10 +781,7 @@ exports.createUser = async (page) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Users' })
     .click();
-  await page
-    .getByRole('article')
-    .getByRole('link', { name: 'New', exact: true })
-    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(userName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
@@ -821,10 +827,7 @@ exports.createGroup = async (page) => {
     .getByRole('navigation', { name: 'IAM' })
     .getByRole('link', { name: 'Groups' })
     .click();
-  await page
-    .getByRole('article')
-    .getByRole('link', { name: 'New', exact: true })
-    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
   await page.getByLabel('Name').fill(groupName);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
@@ -929,6 +932,7 @@ exports.addGrantsToGroup = async (page, grants) => {
 /**
  * Uses the UI to create a new Storage Bucket. Assumes you have selected the desired scope.
  * @param {Page} page Playwright page object
+ * @param {string} scope Scope of the Storage Bucket
  * @param {string} bucketName Name of the Storage Bucket
  * @param {string} region Region of the Storage Bucket
  * @param {string} accessKeyId Access Key ID for the Storage Bucket
@@ -938,6 +942,7 @@ exports.addGrantsToGroup = async (page, grants) => {
  */
 exports.createStorageBucket = async (
   page,
+  scope,
   bucketName,
   region,
   accessKeyId,
@@ -950,6 +955,7 @@ exports.createStorageBucket = async (
     .click();
   await page.getByRole('link', { name: 'New Storage Bucket' }).click();
   await page.getByLabel(new RegExp('Name*')).fill(storageBucketName);
+  await page.getByLabel('Scope').selectOption({ label: scope });
   await page.getByLabel('Bucket name').fill(bucketName);
   await page.getByLabel('Region').fill(region);
   await page.getByLabel('Access key ID').fill(accessKeyId);

@@ -3,20 +3,18 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-const {
-  spawnSync,
-  spawn,
-  spawnAsyncJSONPromise,
-} = require('../helpers/spawn-promise');
+const { spawnSync, spawn } = require('../helpers/spawn-promise');
 const jsonify = require('../utils/jsonify.js');
 const { unixSocketRequest } = require('../helpers/request-promise');
 const runtimeSettings = require('./runtime-settings');
 const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
+const treeKill = require('tree-kill');
 
 class ClientDaemonManager {
   #socketPath;
   #isClientDaemonAlreadyRunning = true;
+  #clientDaemonProcess;
 
   get socketPath() {
     return this.#socketPath;
@@ -42,7 +40,8 @@ class ClientDaemonManager {
   async start() {
     const startDaemonCommand = ['daemon', 'start'];
     // We use spawn here because we want to check the stderr for specific logs
-    const { stderr } = await spawn(startDaemonCommand);
+    const { childProcess, stderr } = await spawn(startDaemonCommand);
+    this.#clientDaemonProcess = childProcess;
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
     // we close the desktop client
@@ -56,39 +55,56 @@ class ClientDaemonManager {
    * Stops the daemon.
    */
   stop() {
-    if (this.#isClientDaemonAlreadyRunning) {
-      return;
+    // We started up the daemon so we should stop it
+    if (!this.#isClientDaemonAlreadyRunning) {
+      const stopDaemonCommand = ['daemon', 'stop'];
+      spawnSync(stopDaemonCommand);
     }
 
-    const stopDaemonCommand = ['daemon', 'stop'];
-    spawnSync(stopDaemonCommand);
+    // Kill the process if it's still running
+    if (this.#clientDaemonProcess && !this.#clientDaemonProcess.killed) {
+      isWindows()
+        ? treeKill(this.#clientDaemonProcess.pid)
+        : this.#clientDaemonProcess.kill();
+    }
   }
 
   /**
-   * Makes a request to the socket to add the token to the daemon.
-   * If the token already exists, this will update the token in the
-   * client daemon.
+   * Makes a request to the CLI to add the token to the daemons.
    * @param token
    * @param tokenId
    * @returns {Promise}
    */
   async addToken({ token, tokenId }) {
-    // TODO: Should this and search just always call CLI even for non-Windows?
-    if (isWindows()) {
-      return addTokenCliCommand(token);
+    // Successfully calling any Boundary CLI command with a token
+    // will add the token both to the Client daemon and the Ferry DNS daemon,
+    // so we just do a simple read on the input token and let the CLI do the rest.
+    const readTokenCommand = [
+      'auth-tokens',
+      'read',
+      `-id=${tokenId}`,
+      `-addr=${runtimeSettings.clusterUrl}`,
+      '-format=json',
+      '-token=env://BOUNDARY_TOKEN',
+      '-keyring-type=none',
+    ];
+
+    const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
+    const { stdout, stderr } = spawnSync(readTokenCommand, {
+      BOUNDARY_TOKEN: sanitizedToken,
+    });
+    let parsedResponse = jsonify(stdout);
+
+    if (parsedResponse?.status_code === 200) {
+      // Ignore result if the request was successful
+      return;
     }
 
-    const postBody = {
-      auth_token_id: sanitizer.base62EscapeAndValidate(tokenId),
-      boundary_addr: runtimeSettings.clusterUrl,
-      auth_token: sanitizer.base62EscapeAndValidate(token),
-    };
-    const request = {
-      method: 'POST',
-      path: 'http://internal.boundary.local/v1/tokens',
-      socketPath: this.#socketPath,
-    };
-    return unixSocketRequest(request, postBody);
+    parsedResponse = jsonify(stderr);
+    return Promise.reject({
+      statusCode: parsedResponse?.status_code,
+      ...parsedResponse?.api_error,
+    });
   }
 
   search(requestData) {
@@ -107,34 +123,6 @@ class ClientDaemonManager {
     return unixSocketRequest(request);
   }
 }
-
-const addTokenCliCommand = (token) => {
-  const addTokenCommand = [
-    'daemon',
-    'add-token',
-    `-addr=${runtimeSettings.clusterUrl}`,
-    '-format=json',
-    '-token=env://BOUNDARY_TOKEN',
-    '-keyring-type=none',
-  ];
-  const sanitizedToken = sanitizer.base62EscapeAndValidate(token);
-
-  const { stdout, stderr } = spawnSync(addTokenCommand, {
-    BOUNDARY_TOKEN: sanitizedToken,
-  });
-  let parsedResponse = jsonify(stdout);
-
-  if (parsedResponse?.status_code === 204) {
-    // 204 has no response body
-    return;
-  }
-
-  parsedResponse = jsonify(stderr);
-  return Promise.reject({
-    statusCode: parsedResponse?.status_code,
-    ...parsedResponse?.api_error,
-  });
-};
 
 const searchCliCommand = (requestData) => {
   const searchCommand = [

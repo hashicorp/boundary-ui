@@ -13,7 +13,6 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeTargetsRoute extends Route {
   // =services
 
-  @service store;
   @service intl;
   @service session;
   @service can;
@@ -27,18 +26,6 @@ export default class ScopesScopeTargetsRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-  }
-
-  /**
-   * Loads all targets under current scope.
-   * @return {Promise{[TargetModel]}}
-   */
-  async model() {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    if (this.can.can('list model', scope, { collection: 'targets' })) {
-      return this.store.query('target', { scope_id });
-    }
   }
 
   // =actions
@@ -149,7 +136,39 @@ export default class ScopesScopeTargetsRoute extends Route {
   @notifySuccess('notifications.delete-success')
   async delete(target) {
     await target.destroyRecord();
-    await this.router.replaceWith('scopes.scope.targets');
+    // awaiting this transition causes a transitionAborted error to bubble up
+    this.router.replaceWith('scopes.scope.targets');
     this.refresh();
+  }
+
+  /**
+   * Delete an alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @confirm('resources.alias.messages.delete')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async deleteAlias(alias) {
+    await alias.destroyRecord();
+    this.router.refresh('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
+  }
+
+  /**
+   * Remove destaination_id from alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @confirm('questions.clear-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.clear-success')
+  async clearAlias(alias) {
+    alias.destination_id = '';
+    await alias.save();
+    this.router.refresh('scopes.scope.targets.target');
+    await this.router.transitionTo('scopes.scope.targets.target');
   }
 }

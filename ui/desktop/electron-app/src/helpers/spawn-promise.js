@@ -73,11 +73,17 @@ module.exports = {
   /**
    * Spawn child process and return output immediately.
    * This function is intended for non-connection related tasks.
-   * @param {string} command
+   * @param {string[]} args
    * @param {object} envVars
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
-  spawnSync(command, envVars = {}) {
-    const childProcess = spawnSync(path(), command, {
+  spawnSync(args, envVars = {}) {
+    const childProcess = spawnSync(path(), args, {
+      // Some of our outputs (namely client daemon searching) can be very large.
+      // This an undocumented hack to allow for an unlimited buffer size which
+      // could change at any time. If it does, we should just set an arbitrarily
+      // large buffer size or switch to spawn and stream the output and handle
+      // killing the process ourselves.
+      maxBuffer: undefined,
       env: {
         ...process.env,
         ...envVars,
@@ -103,7 +109,7 @@ module.exports = {
       childProcess.stderr.on('data', (data) => {
         resolve({ childProcess, stderr: data.toString() });
       });
-      childProcess.on('error', (err) => reject(e));
+      childProcess.on('error', (err) => reject(err));
     });
   },
 };

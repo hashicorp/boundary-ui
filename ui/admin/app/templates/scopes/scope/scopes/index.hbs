@@ -15,7 +15,7 @@
         {{t 'resources.org.title_plural'}}
         <DocLink @doc='org' @iconSize='large' />
       </h2>
-      {{#if @model.subScopes}}
+      {{#if @model.scopesExist}}
         <p>{{t 'resources.org.description'}}</p>
       {{/if}}
     {{else if @model.currentScope.isOrg}}
@@ -23,7 +23,7 @@
         {{t 'resources.project.title_plural'}}
         <DocLink @doc='project' @iconSize='large' />
       </h2>
-      {{#if @model.subScopes}}
+      {{#if @model.scopesExist}}
         <p>{{t 'resources.project.description'}}</p>
       {{/if}}
     {{/if}}
@@ -31,79 +31,115 @@
 
   <page.actions>
     {{#if (can 'create model' @model.currentScope collection='scopes')}}
-      {{#if @model.subScopes}}
-        <Rose::LinkButton @route='scopes.scope.scopes.new' @style='primary'>
-          {{#if @model.currentScope.isGlobal}}
-            {{t 'resources.org.titles.new'}}
-          {{else if @model.currentScope.isOrg}}
-            {{t 'resources.project.titles.new'}}
-          {{/if}}
-        </Rose::LinkButton>
+      {{#if @model.scopesExist}}
+        <Hds::Button
+          @route='scopes.scope.scopes.new'
+          @text={{t
+            (if
+              @model.currentScope.isGlobal
+              'resources.org.titles.new'
+              'resources.project.titles.new'
+            )
+          }}
+        />
       {{/if}}
     {{/if}}
   </page.actions>
 
-  <page.body>
+  <page.body class='search-filtering'>
 
-    {{#if @model.subScopes}}
-
-      <Rose::Cards as |cards|>
-        {{#each @model.subScopes as |scope|}}
-          <cards.link
-            @title={{scope.name}}
-            @description={{scope.description}}
-            @id={{scope.id}}
-            @icon={{if
-              scope.isOrg
-              'flight-icons/svg/org-16'
-              'flight-icons/svg/grid-16'
+    {{#if @model.scopesExist}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+      </Hds::SegmentedGroup>
+      {{#if @model.subScopes}}
+        <Hds::Table
+          @columns={{array
+            (hash label=(t 'form.name.label'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @model={{@model.subScopes}}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr data-test-scopes-table-row={{B.data.id}}>
+              <B.Td>
+                {{#if (can 'read model' B.data)}}
+                  <LinkTo @route='scopes.scope' @model={{B.data.id}}>
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.displayName}}
+                  </Hds::Text::Body>
+                {{/if}}
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState data-test-no-scope-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              'descriptions.no-search-results'
+              query=this.search
+              resource=(t 'resources.scope.title_plural')
             }}
-            @route='scopes.scope'
-            @model={{scope.id}}
           />
-        {{/each}}
-      </Rose::Cards>
+        </Hds::ApplicationState>
+      {{/if}}
 
     {{else}}
-
-      {{#if @model.currentScope.isGlobal}}
-        <Rose::Layout::Centered>
-          <Rose::Message
-            @title={{t 'resources.org.messages.welcome.title'}}
-            as |message|
-          >
-            <message.description>
-              {{t 'resources.org.description'}}
-            </message.description>
-            {{#if (can 'create model' @model.currentScope collection='scopes')}}
-              <message.link @route='scopes.scope.scopes.new'>
-                <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-                {{t 'titles.new'}}
-              </message.link>
-            {{/if}}
-          </Rose::Message>
-        </Rose::Layout::Centered>
-      {{/if}}
-
-      {{#if @model.currentScope.isOrg}}
-        <Rose::Layout::Centered>
-          <Rose::Message
-            @title={{t 'resources.project.messages.welcome.title'}}
-            as |message|
-          >
-            <message.description>
-              {{t 'resources.project.description'}}
-            </message.description>
-            {{#if (can 'create model' @model.currentScope collection='scopes')}}
-              <message.link @route='scopes.scope.scopes.new'>
-                <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-                {{t 'titles.new'}}
-              </message.link>
-            {{/if}}
-          </Rose::Message>
-        </Rose::Layout::Centered>
-      {{/if}}
-
+      <Hds::ApplicationState as |A|>
+        <A.Header
+          @title={{t
+            (if
+              @model.currentScope.isGlobal
+              'resources.org.messages.welcome.title'
+              'resources.project.messages.welcome.title'
+            )
+          }}
+        />
+        <A.Body
+          @text={{t
+            (if
+              @model.currentScope.isGlobal
+              'resources.org.description'
+              'resources.project.description'
+            )
+          }}
+        />
+        {{#if (can 'create model' @model.currentScope collection='scopes')}}
+          <A.Footer as |F|>
+            <F.Link::Standalone
+              @icon='plus-circle'
+              @text={{t 'titles.new'}}
+              @route='scopes.scope.scopes.new'
+            />
+          </A.Footer>
+        {{/if}}
+      </Hds::ApplicationState>
     {{/if}}
 
   </page.body>

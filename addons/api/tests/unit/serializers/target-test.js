@@ -36,6 +36,7 @@ module('Unit | Serializer | target', function (hooks) {
       address: '0.0.0.0',
       enable_session_recording: false,
       storage_bucket_id: null,
+      with_aliases: [{ value: 'a' }],
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -51,6 +52,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      with_aliases: [{ value: 'a', scope_id: 'global' }],
       attributes: {
         default_port: 1234,
         default_client_port: 4321,
@@ -85,6 +87,7 @@ module('Unit | Serializer | target', function (hooks) {
       enable_session_recording: false,
       storage_bucket_id: null,
       address: '0.0.0.0',
+      with_aliases: [{ value: 'www.test.com' }],
     });
     const snapshot = record._createSnapshot();
     snapshot.adapterOptions = {};
@@ -100,6 +103,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      with_aliases: [{ value: 'www.test.com', scope_id: 'global' }],
       attributes: {
         default_port: 1234,
         default_client_port: 4321,
@@ -189,6 +193,7 @@ module('Unit | Serializer | target', function (hooks) {
       enable_session_recording: true,
       storage_bucket_id: 'bucketID',
       default_port: 1234,
+      with_aliases: [],
       scope: {
         scope_id: 'org_1',
       },
@@ -206,6 +211,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      with_aliases: [],
       attributes: {
         default_port: 1234,
         default_client_port: null,
@@ -226,6 +232,7 @@ module('Unit | Serializer | target', function (hooks) {
       type: TYPE_TARGET_SSH,
       worker_filter: 'worker',
       default_port: 1234,
+      with_aliases: [],
       scope: {
         scope_id: 'org_1',
       },
@@ -243,6 +250,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: 'worker',
       egress_worker_filter: null,
       ingress_worker_filter: null,
+      with_aliases: [],
       attributes: {
         default_port: 1234,
         default_client_port: null,
@@ -263,6 +271,7 @@ module('Unit | Serializer | target', function (hooks) {
       type: TYPE_TARGET_SSH,
       egress_worker_filter: 'egress worker',
       default_port: 1234,
+      with_aliases: [],
       scope: {
         scope_id: 'org_1',
       },
@@ -280,6 +289,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: 'egress worker',
       ingress_worker_filter: null,
+      with_aliases: [],
       attributes: {
         default_port: 1234,
         default_client_port: null,
@@ -300,6 +310,7 @@ module('Unit | Serializer | target', function (hooks) {
       type: TYPE_TARGET_SSH,
       ingress_worker_filter: 'ingress worker',
       default_port: 1234,
+      with_aliases: [],
       scope: {
         scope_id: 'org_1',
       },
@@ -317,6 +328,7 @@ module('Unit | Serializer | target', function (hooks) {
       worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: 'ingress worker',
+      with_aliases: [],
       attributes: {
         default_port: 1234,
         default_client_port: null,
@@ -352,6 +364,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [
@@ -388,6 +401,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           brokered_credential_source_ids: [],
           injected_application_credential_source_ids: [],
           authorized_actions: [],
@@ -420,6 +434,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           scope: { id: 'o_123', scope_id: 'o_123' },
@@ -452,6 +467,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -484,6 +500,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -516,6 +533,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],
@@ -549,6 +567,7 @@ module('Unit | Serializer | target', function (hooks) {
         id: '1',
         type: 'target',
         attributes: {
+          aliases: [],
           authorized_actions: [],
           name: 'Target 1',
           host_sources: [],

@@ -14,12 +14,14 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 module('Acceptance | host-catalogs | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
-  let gethostCatalogCount;
+  let getHostCatalogCount;
 
   const instances = {
     scopes: {
@@ -57,20 +59,20 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
-    // Generate resource couner
-    gethostCatalogCount = () =>
+    // Generate resource counter
+    getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
     authenticateSession({});
   });
 
   test('can delete host catalog', async function (assert) {
-    const hostCatalogCount = gethostCatalogCount();
+    const hostCatalogCount = getHostCatalogCount();
 
     await visit(urls.hostCatalogs);
     await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
 
-    assert.strictEqual(gethostCatalogCount(), hostCatalogCount - 1);
+    assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
   });
 
   test('cannot delete host catalog without proper authorization', async function (assert) {
@@ -90,7 +92,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   test('can accept delete host catalog via dialog', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const hostCatalogCount = gethostCatalogCount();
+    const hostCatalogCount = getHostCatalogCount();
     await visit(urls.hostCatalogs);
 
     await click(`[href="${urls.hostCatalog}"]`);
@@ -98,21 +100,21 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await click('.rose-dialog .rose-button-primary');
 
     assert.dom('.rose-notification-body').hasText('Deleted successfully.');
-    assert.strictEqual(gethostCatalogCount(), hostCatalogCount - 1);
+    assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
     assert.strictEqual(currentURL(), urls.hostCatalogs);
   });
 
   test('can cancel delete host catalog via dialog', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const hostCatalogCount = gethostCatalogCount();
+    const hostCatalogCount = getHostCatalogCount();
     await visit(urls.hostCatalogs);
 
     await click(`[href="${urls.hostCatalog}"]`);
     await click('.rose-layout-page-actions .rose-dropdown-button-danger');
     await click('.rose-dialog .rose-button-secondary');
 
-    assert.strictEqual(gethostCatalogCount(), hostCatalogCount);
+    assert.strictEqual(getHostCatalogCount(), hostCatalogCount);
     assert.strictEqual(currentURL(), urls.hostCatalog);
   });
 

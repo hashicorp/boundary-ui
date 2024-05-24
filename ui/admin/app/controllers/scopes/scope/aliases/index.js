@@ -7,13 +7,14 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { confirm } from 'core/decorators/confirm';
 
 export default class ScopesScopeAliasesIndexController extends Controller {
   // =services
   @service can;
   @service router;
+
   // =actions
 
   /**
@@ -48,16 +49,32 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   }
 
   /**
-   * Delete an alias in current scope
-   *  @param {AliasModel} alias
+   * Remove destaination_id from alias
+   * @param {AliasModel} alias
    */
   @action
   @loading
-  @confirm('questions.delete-confirm')
+  @confirm('questions.clear-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.clear-success')
+  async clearAlias(alias) {
+    alias.destination_id = '';
+    await alias.save();
+    await this.router.refresh();
+  }
+
+  /**
+   * Delete an alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @confirm('resources.alias.messages.delete')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async delete(alias) {
+  async deleteAlias(alias) {
     await alias.destroyRecord();
+    await this.router.replaceWith('scopes.scope.aliases');
     await this.router.refresh();
   }
 }

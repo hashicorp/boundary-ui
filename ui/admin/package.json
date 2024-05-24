@@ -60,7 +60,7 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
-    "@playwright/test": "^1.30.0",
+    "@playwright/test": "^1.43.0",
     "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.0.1",
@@ -110,7 +110,7 @@
     "webpack": "^5.78.0"
   },
   "engines": {
-    "node": "16.* || 18.*"
+    "node": "18.* || 20.*"
   },
   "ember": {
     "edition": "octane"

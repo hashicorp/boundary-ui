@@ -16,7 +16,8 @@
         />
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.target.titles.active-sessions'}}
+            name='active-sessions'
+            @toggleText={{t 'resources.target.titles.active-sessions'}}
             @itemOptions={{this.availableSessionOptions}}
             @checkedItems={{this.availableSessions}}
             @applyFilter={{fn this.applyFilter 'availableSessions'}}
@@ -24,7 +25,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'form.type.label'}}
+            name='type'
+            @toggleText={{t 'form.type.label'}}
             @itemOptions={{this.targetTypeOptions}}
             @checkedItems={{this.types}}
             @applyFilter={{fn this.applyFilter 'types'}}
@@ -32,7 +34,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.scope.title'}}
+            name='scope'
+            @toggleText={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
             @applyFilter={{fn this.applyFilter 'scopes'}}
@@ -72,7 +75,7 @@
       @model={{@model.targets}}
       @columns={{array
         (hash label=(t 'form.name.label'))
-        (hash label=(t 'form.id.label'))
+        (hash label=(t 'resources.alias.title_plural'))
         (hash label=(t 'resources.target.titles.active-sessions'))
         (hash label=(t 'form.type.label'))
         (hash label=(t 'resources.project.title'))
@@ -101,8 +104,8 @@
               {{/if}}
             </span>
           </B.Td>
-          <B.Td>
-            <Hds::Copy::Snippet @textToCopy={{B.data.id}} @color='secondary' />
+          <B.Td data-test-target-aliases={{B.data.id}}>
+            {{truncate-list 'actions.more' B.data.associatedAliases}}
           </B.Td>
           <B.Td>
             {{#if B.data.isActive}}
@@ -178,7 +181,7 @@
             'descriptions.no-filter-results'
           )
           query=this.search
-          resource='targets'
+          resource=(t 'resources.target.title_plural')
         }}
       />
     </Hds::ApplicationState>

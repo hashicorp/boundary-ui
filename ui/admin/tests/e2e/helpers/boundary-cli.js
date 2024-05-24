@@ -626,7 +626,7 @@ exports.waitForSessionRecordingCli = async (storageBucketId) => {
   do {
     i = i + 1;
     const sessionRecordings = JSON.parse(
-      execSync('boundary session-recordings list -format json'),
+      execSync('boundary session-recordings list --recursive -format json'),
     );
     filteredSessionRecording = sessionRecordings.items.filter(
       (obj) =>

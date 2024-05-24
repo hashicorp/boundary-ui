@@ -16,14 +16,10 @@ const {
 const {
   createOrg,
   createProject,
-  createHostCatalog,
-  createHostSet,
-  createHostInHostSet,
-  createTarget,
+  createTargetWithAddress,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
   addBrokeredCredentialsToTarget,
-  addHostSourceToTarget,
 } = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
@@ -48,11 +44,11 @@ test.beforeEach(async ({ page }) => {
 
   orgName = await createOrg(page);
   projectName = await createProject(page);
-  await createHostCatalog(page);
-  const hostSetName = await createHostSet(page);
-  await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
-  targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
-  await addHostSourceToTarget(page, hostSetName);
+  targetName = await createTargetWithAddress(
+    page,
+    process.env.E2E_TARGET_ADDRESS,
+    process.env.E2E_TARGET_PORT,
+  );
   await createStaticCredentialStore(page);
 });
 
@@ -99,7 +95,7 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page
     .getByRole('group', { name: 'Type' })
@@ -155,7 +151,7 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name', { exact: true }).fill(credentialName);
+  await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('JSON').click();
   await page.getByText('{}').click();
