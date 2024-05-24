@@ -119,7 +119,11 @@ handle('closeWindow', () => app.quit());
  * Focus the window
  */
 handle('focusWindow', () => {
-  BrowserWindow.getFocusedWindow().show();
+  // On windows, `Browser.getFocusedWindow()` can return null depending on
+  // the context so we just grab the first window from all windows. Because we
+  // currently only ever have one window active, this should be the same window.
+  const window = BrowserWindow.getAllWindows()[0];
+  window.show();
 });
 
 /**
