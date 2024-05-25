@@ -182,9 +182,12 @@ export default function initializeMockIPC(server, config) {
     checkCommand() {
       return faker.system.filePath();
     }
-    addTokenToClientDaemon() {}
+    addTokenToDaemons() {}
     searchClientDaemon() {}
     isClientDaemonRunning() {
+      return false;
+    }
+    isClientAgentRunning() {
       return false;
     }
   }

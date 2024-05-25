@@ -25,3 +25,5 @@ cluster-url-verification-failed:
 onboarding-failed:
   description: We're sorry, onboarding was unable to generate a TCP target.
 required-field: This is a required field.
+client-agent-failed:
+  sessions: Unable to retrieve sessions from the client agent.

@@ -14,11 +14,7 @@ export default class ClientAgentSessionsService extends Service {
    * @returns {Promise<*>}
    */
   async getClientAgentSessions() {
-    try {
-      return await this.ipc.invoke('getClientAgentSessions');
-    } catch (e) {
-      console.error('Error getting client agent sessions:', e);
-    }
+    return this.ipc.invoke('getClientAgentSessions');
   }
 
   /**

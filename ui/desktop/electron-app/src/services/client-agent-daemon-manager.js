@@ -4,24 +4,31 @@
  */
 
 const { spawnSync, spawn } = require('../helpers/spawn-promise');
+const jsonify = require('../utils/jsonify.js');
+const generateErrorPromise = require('../utils/generateErrorPromise');
 
 class ClientAgentDaemonManager {
   /**
    * Checks the status of the client agent daemon.
    * @returns {string}
    */
-  status() {
+  async status() {
     const clientAgentStatusCommand = ['client-agent', 'status', '-format=json'];
-    const { stdout } = spawnSync(clientAgentStatusCommand);
+    const { stdout, stderr } = spawnSync(clientAgentStatusCommand);
 
-    return JSON.parse(stdout);
+    let parsedResponse = jsonify(stdout);
+    if (parsedResponse?.status_code === 200) {
+      return parsedResponse.item;
+    }
+
+    return generateErrorPromise(stderr);
   }
 
   /**
    * Gets the sessions from the client agent daemon.
    * @returns {*|Promise}
    */
-  getSessions() {
+  async getSessions() {
     const clientAgentSessionsCommand = [
       'client-agent',
       'sessions',
@@ -29,17 +36,13 @@ class ClientAgentDaemonManager {
     ];
     const { stdout, stderr } = spawnSync(clientAgentSessionsCommand);
 
-    let parsedResponse = JSON.parse(stdout);
+    let parsedResponse = jsonify(stdout);
 
     if (parsedResponse?.status_code === 200) {
       return parsedResponse.items;
     }
 
-    parsedResponse = JSON.parse(stderr);
-    return Promise.reject({
-      statusCode: parsedResponse?.status_code,
-      ...parsedResponse?.api_error,
-    });
+    return generateErrorPromise(stderr);
   }
 }
 

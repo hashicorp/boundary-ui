@@ -132,11 +132,9 @@ handle('focusWindow', () => {
 handle('checkCommand', async (command) => which(command, { nothrow: true }));
 
 /**
- * Adds the user's token to the client daemon.
+ * Adds the user's token to the daemons.
  */
-handle('addTokenToClientDaemon', async (data) =>
-  clientDaemonManager.addToken(data),
-);
+handle('addTokenToDaemons', async (data) => clientDaemonManager.addToken(data));
 
 /**
  * Return an object containing helper fields for determining what OS we're running on
@@ -168,6 +166,28 @@ handle('isClientDaemonRunning', async () => {
  */
 handle('getClientAgentSessions', async () => {
   return clientAgentDaemonManager.getSessions();
+});
+
+/**
+ * Check to see if the client daemon is running.
+ */
+handle('isClientAgentRunning', async () => {
+  try {
+    const status = await clientAgentDaemonManager.status();
+
+    // Check if we got an error for connecting to a non-enterprise controller
+    const isWrongControllerError = status.errors?.some((error) =>
+      error.includes('controller is not an enterprise edition controller'),
+    );
+    if (isWrongControllerError) {
+      return false;
+    }
+
+    return status.status === 'running';
+  } catch (e) {
+    // There was likely an error connecting to client agent.
+    return false;
+  }
 });
 
 /**

@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import runEvery from 'ember-pollster/decorators/route/run-every';
 
 /**
  * TODO:  This route is now vestigial.  Desktop does not provide project-based
@@ -22,6 +21,10 @@ import runEvery from 'ember-pollster/decorators/route/run-every';
  * It no longer makes sense as a dedicated route.
  */
 export default class ScopesScopeProjectsRoute extends Route {
+  // =attributes
+
+  job;
+
   // =services
 
   @service session;
@@ -31,6 +34,8 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service intl;
   @service ipc;
   @service clientAgentSessions;
+  @service pollster;
+  @service flashMessages;
 
   // =methods
 
@@ -45,7 +50,18 @@ export default class ScopesScopeProjectsRoute extends Route {
    * Primes the store with _all project scopes_ under global.
    * @return {Promise{ScopeModel}}
    */
-  model() {
+  async model() {
+    // Setup the poller job
+    if (!this.job) {
+      this.boundPoller = this.poller.bind(this);
+      this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
+    }
+
+    const isClientAgentRunning = await this.ipc.invoke('isClientAgentRunning');
+    if (isClientAgentRunning) {
+      this.job.start();
+    }
+
     const { id: scope_id } = this.modelFor('scopes.scope');
     const projects = this.resourceFilterStore.queryBy(
       'scope',
@@ -55,13 +71,57 @@ export default class ScopesScopeProjectsRoute extends Route {
     return projects;
   }
 
+  willDestroy() {
+    this.job?.stop();
+    super.willDestroy();
+  }
+
   /**
    * Poll for new sessions with credentials. Sends a notification for each new session that has a credential.
    */
-  @runEvery(2000)
   async poller() {
-    const sessions =
-      await this.clientAgentSessions.getNewSessionsWithCredentials();
+    let sessions;
+
+    try {
+      sessions = await this.clientAgentSessions.getNewSessionsWithCredentials();
+    } catch (e) {
+      // TODO: Log this error
+
+      // If we're unauthenticated, try and re-authenticate
+      if (e.statusCode === 401 || e.statusCode === 403) {
+        const sessionData = this.session.data?.authenticated;
+        const auth_token_id = sessionData?.id;
+        const token = sessionData?.token;
+
+        try {
+          await this.ipc.invoke('addTokenToDaemons', {
+            tokenId: auth_token_id,
+            token,
+          });
+          this.job.start();
+          return;
+        } catch (e) {
+          // TODO: Log this error
+          // If it fails again, just let the poller be killed
+        }
+      }
+
+      if (this.job) {
+        this.flashMessages.danger(
+          this.intl.t('errors.client-agent-failed.sessions'),
+          {
+            notificationType: 'error',
+            sticky: true,
+            dismiss: (flash) => flash.destroyMessage(),
+          },
+        );
+
+        // Kill the poller if we get an error
+        this.job.stop();
+      }
+
+      return;
+    }
 
     sessions.forEach((session) => {
       new window.Notification(
