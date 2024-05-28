@@ -15,6 +15,7 @@ const os = require('node:os');
 const pty = require('node-pty');
 const which = require('which');
 const clientDaemonManager = require('../services/client-daemon-manager');
+const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -114,16 +115,25 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
+ * Focus the window
+ */
+handle('focusWindow', () => {
+  // On windows, `Browser.getFocusedWindow()` can return null depending on
+  // the context so we just grab the first window from all windows. Because we
+  // currently only ever have one window active, this should be the same window.
+  const window = BrowserWindow.getAllWindows()[0];
+  window.show();
+});
+
+/**
  * Return the location of where a user's binary for a command is. If it isn't found, return null.
  */
 handle('checkCommand', async (command) => which(command, { nothrow: true }));
 
 /**
- * Adds the user's token to the client daemon.
+ * Adds the user's token to the daemons.
  */
-handle('addTokenToClientDaemon', async (data) =>
-  clientDaemonManager.addToken(data),
-);
+handle('addTokenToDaemons', async (data) => clientDaemonManager.addToken(data));
 
 /**
  * Return an object containing helper fields for determining what OS we're running on
@@ -148,6 +158,35 @@ handle('searchClientDaemon', async (request) =>
 handle('isClientDaemonRunning', async () => {
   clientDaemonManager.status();
   return Boolean(clientDaemonManager.socketPath);
+});
+
+/**
+ * Gets the client agent's sessions
+ */
+handle('getClientAgentSessions', async () => {
+  return clientAgentDaemonManager.getSessions();
+});
+
+/**
+ * Check to see if the client daemon is running.
+ */
+handle('isClientAgentRunning', async () => {
+  try {
+    const status = await clientAgentDaemonManager.status();
+
+    // Check if we got an error for connecting to a non-enterprise controller
+    const isWrongControllerError = status.errors?.some((error) =>
+      error.includes('controller is not an enterprise edition controller'),
+    );
+    if (isWrongControllerError) {
+      return false;
+    }
+
+    return status.status === 'running';
+  } catch (e) {
+    // There was likely an error connecting to client agent.
+    return false;
+  }
 });
 
 /**
