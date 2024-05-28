@@ -171,14 +171,14 @@
       <:field as |F|>
         <F.KeyValue
           @name='credential_mapping_overrides'
-          @selectOptions={{this.mappingOverrides}}
           @model={{@model}}
           @disabled={{form.disabled}}
           @removeDuplicates={{true}}
           @width='400px'
+          @allowedEntries={{this.allowedEntries}}
         >
           <:key as |K|>
-            <K.select />
+            <K.select @selectOptions={{this.mappingOverrides}} />
           </:key>
           <:value as |V|>
             <V.text />

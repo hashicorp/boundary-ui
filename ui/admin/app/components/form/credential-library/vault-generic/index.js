@@ -17,6 +17,7 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
   httpMethodOptions = options.http_method;
 
   credentialTypes = options.credential_types;
+
   /**
    *
    * @type {Array.<string>}
@@ -35,6 +36,10 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
     return options.mapping_overrides[this.args.model.credential_type];
   }
 
+  get allowedEntries() {
+    return this.mappingOverrides.length;
+  }
+
   /**
    * Clear the previously selected key value pair when toggling between credential types on a new form
    */
@@ -42,5 +47,26 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
   selectCredentialType({ target: { value } }) {
     this.args.model.credential_mapping_overrides = [];
     this.args.model.credential_type = value;
+  }
+
+  get dup() {
+    if (this.args.model.credential_mapping_overrides) {
+      return this.args.model.credential_mapping_overrides;
+    } else {
+      const previouslySelectedKeys =
+        this.args.model.credential_mapping_overrides;
+      console.log(previouslySelectedKeys, 'oreo');
+      // if (previouslySelectedKeys.length === this.toAttributes.length) {
+      //   return true;
+      // }
+      if (previouslySelectedKeys?.length) {
+        console.log('in here', this.toAttributes);
+        return this.mappingOverrides.filter((key) =>
+          previouslySelectedKeys.every((obj) => obj.key !== key),
+        );
+      } else {
+        return this.mappingOverrides;
+      }
+    }
   }
 }

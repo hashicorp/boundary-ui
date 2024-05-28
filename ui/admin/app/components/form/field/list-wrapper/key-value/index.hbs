@@ -2,6 +2,7 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: MPL-2.0
 }}
+
 {{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
   <Hds::Table class='list-wrapper-field' name={{@name}}>
     <:head as |H|>
@@ -106,7 +107,7 @@
                   'form/field/list-wrapper/key-value/select'
                   disabled=@disabled
                   value=this.newOptionKey
-                  selectOptions=this.selectOptions
+                  selectOptions=@selectOptions
                   ariaLabel=keyHeaderID
                   width=@width
                   setContext=(set-from-event this 'newOptionKey')
@@ -130,7 +131,7 @@
                   'form/field/list-wrapper/key-value/select'
                   disabled=@disabled
                   value=this.newOptionValue
-                  selectOptions=this.selectOptions
+                  selectOptions=@selectOptions
                   ariaLabel=valueHeaderID
                   width=@width
                   setContext=(set-from-event this 'newOptionValue')
@@ -141,6 +142,7 @@
           </B.Td>
 
           <B.Td>
+
             <Hds::Button
               @text={{t 'actions.add'}}
               @color='secondary'
@@ -153,5 +155,4 @@
       {{/if}}
     </:body>
   </Hds::Table>
-
 {{/let}}

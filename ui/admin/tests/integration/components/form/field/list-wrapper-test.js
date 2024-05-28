@@ -184,10 +184,11 @@ module('Integration | Component | list-wrapper', function (hooks) {
     ];
 
     this.selectOptions = ['username_attribute', 'password_attribute'];
+    this.len = this.selectOptions.length;
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}}>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}} @allowedEntries={{this.len}}>
               <:key as |K|> 
                 <K.select/>
               </:key>
@@ -213,11 +214,12 @@ module('Integration | Component | list-wrapper', function (hooks) {
       { key: 'username_attribute', value: 'user' },
       { key: 'password_attribute', value: 'pass' },
     ];
+    this.len = this.options.length;
     this.selectOptions = ['username_attribute', 'password_attribute'];
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true'>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true' @allowedEntries={{this.len}}>
               <:key as |K|> 
                 <K.select/>
               </:key>
