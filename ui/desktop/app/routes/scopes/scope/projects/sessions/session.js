@@ -10,6 +10,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
 
   @service store;
+  @service ipc;
   @service clientAgentSessions;
 
   // =methods
@@ -25,12 +26,27 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
 
     // If we don't have any credentials, we'll try to fetch them from the client agent in case this session
     // was initiated through the client agent.
-    if (!session.credentials.length) {
-      const clientAgentSessions =
-        await this.clientAgentSessions.getClientAgentSession(session.id);
-      if (clientAgentSessions) {
-        clientAgentSessions.session_authorization.credentials.forEach((cred) =>
-          session.addCredential(cred),
+    if (
+      !session.credentials.length &&
+      (await this.ipc.invoke('isClientAgentRunning'))
+    ) {
+      try {
+        const clientAgentSession =
+          await this.clientAgentSessions.getClientAgentSession(session.id);
+        if (clientAgentSession) {
+          clientAgentSession.session_authorization.credentials.forEach((cred) =>
+            session.addCredential(cred),
+          );
+        }
+      } catch (e) {
+        // TODO: Log this error
+        this.flashMessages.danger(
+          this.intl.t('errors.client-agent-failed.sessions'),
+          {
+            notificationType: 'error',
+            sticky: true,
+            dismiss: (flash) => flash.destroyMessage(),
+          },
         );
       }
     }
