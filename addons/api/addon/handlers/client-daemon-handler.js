@@ -113,7 +113,7 @@ export default class ClientDaemonHandler {
           // I'm not sure if we can get a 401 since we always send a token but we'll handle it in the same way
           if (e.statusCode === 403 || e.statusCode === 401) {
             try {
-              await this.ipc.invoke('addTokenToClientDaemon', {
+              await this.ipc.invoke('addTokenToDaemons', {
                 tokenId: auth_token_id,
                 token,
               });

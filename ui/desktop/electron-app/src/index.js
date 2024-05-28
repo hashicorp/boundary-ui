@@ -203,7 +203,10 @@ app.on('ready', async () => {
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     // We need to allow this for native clipboard usage
-    if (permission === 'clipboard-sanitized-write') {
+    if (
+      permission === 'clipboard-sanitized-write' ||
+      permission === 'notifications'
+    ) {
       // Approves the permissions request
       return callback(true);
     }
