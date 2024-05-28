@@ -24,9 +24,12 @@ class MockIPC {
   resetClusterUrl() {}
   hasMacOSChrome() {}
   showWindowActions() {}
-  addTokenToClientDaemon() {}
+  addTokenToDaemons() {}
   searchClientDaemon() {}
   isClientDaemonRunning() {
+    return false;
+  }
+  isClientAgentRunning() {
     return false;
   }
 }

@@ -20,7 +20,7 @@ export default class SessionService extends BaseSessionService {
 
     if (this.session.isAuthenticated) {
       const sessionData = this.data?.authenticated;
-      await this.ipc.invoke('addTokenToClientDaemon', {
+      await this.ipc.invoke('addTokenToDaemons', {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });

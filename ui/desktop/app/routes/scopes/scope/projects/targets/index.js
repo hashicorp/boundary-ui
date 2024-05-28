@@ -97,7 +97,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     });
 
     const aliasPromise = this.store.query('alias', {
-      recursive: true,
       scope_id: 'global',
       force_refresh: true,
     });

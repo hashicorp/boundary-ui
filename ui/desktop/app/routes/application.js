@@ -41,7 +41,7 @@ export default class ApplicationRoute extends Route {
     // Add token to client daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      await this.ipc.invoke('addTokenToClientDaemon', {
+      await this.ipc.invoke('addTokenToDaemons', {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
