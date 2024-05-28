@@ -74,7 +74,7 @@ export default class ClusterUrlRoute extends Route {
         'errors.cluster-url-verification-failed.description',
       );
       this.flashMessages.danger(errorMessage, {
-        noticationType: 'error',
+        notificationType: 'error',
         sticky: true,
         dismiss: (flash) => flash.destroyMessage(),
       });
