@@ -359,9 +359,10 @@ exports.createStaticHostCatalogCli = async (projectId) => {
 /**
  * Uses the boundary CLI to create a new dynamic AWS host catalog.
  * @param {string} projectId ID of the project under which the host catalog will be created.
+ * @param {string} region Name of the AWS region that the host catalog will be created for.
  * @returns {Promise<string>} new host catalog's ID
  */
-exports.createDynamicAwsHostCatalogCli = async (projectId) => {
+exports.createDynamicAwsHostCatalogCli = async (projectId, region) => {
   const hostCatalogName = 'dynamic-aws-host-catalog-' + nanoid();
   let hostCatalog;
   try {
@@ -372,7 +373,7 @@ exports.createDynamicAwsHostCatalogCli = async (projectId) => {
           -scope-id ${projectId} \
           -plugin-name aws \
           -attr disable_credential_rotation=true \
-          -attr region=us-east-1 \
+          -attr region=${region} \
           -secret access_key_id=env://E2E_AWS_ACCESS_KEY_ID \
           -secret secret_access_key=env://E2E_AWS_SECRET_ACCESS_KEY \
           -format json`,

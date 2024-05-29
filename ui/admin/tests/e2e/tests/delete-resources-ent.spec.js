@@ -66,6 +66,7 @@ test.beforeEach(async () => {
     process.env.E2E_PASSWORD_AUTH_METHOD_ID,
     process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
     process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    process.env.E2E_AWS_REGION,
   );
 });
 
@@ -88,8 +89,10 @@ test('Verify resources can be deleted (enterprise) @ent @aws', async ({
     let groupId = await createGroupCli(orgId);
     let userId = await createUserCli(orgId);
     let staticHostCatalogId = await createStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId =
-      await createDynamicAwsHostCatalogCli(projectId);
+    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
+      projectId,
+      process.env.E2E_AWS_REGION,
+    );
     let staticHostId = await createStaticHostCli(staticHostCatalogId);
     let staticHostSetId = await createHostSetCli(staticHostCatalogId);
     let staticCredentialStoreId =
