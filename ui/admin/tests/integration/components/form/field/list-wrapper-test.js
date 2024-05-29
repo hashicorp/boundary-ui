@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render, select } from '@ember/test-helpers';
+import { click, findAll, render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -262,5 +262,49 @@ module('Integration | Component | list-wrapper', function (hooks) {
     `);
 
     assert.dom('tbody tr').exists({ count: 3 });
+  });
+
+  test('it renders `newKey` and `newValue` named blocks when passed instead of key and value blocks', async function (assert) {
+    this.options = ['option1', 'option2', 'option3'];
+    this.selectOptionsNewValue = [
+      'username_attribute_new_val',
+      'password_attribute_new_val',
+    ];
+
+    this.selectOptionsNewKey = [
+      'username_attribute_new_key',
+      'password_attribute_new_key',
+    ];
+    await render(hbs`
+        <Form::Field::ListWrapper>
+          <:field as |F|>
+            <F.KeyValue @name="credential_mapping_overrides">
+              <:key as |K|> 
+                <K.select @selectOptions = {{this.options}}/>
+              </:key>
+               <:newKey as |N|> 
+                <N.select @selectOptions= {{this.selectOptionsNewKey}}/>
+              </:newKey>
+              <:newValue as |S|> 
+                <S.select @selectOptions= {{this.selectOptionsNewValue}}/>
+              </:newValue>
+              <:value as |V|> 
+                <V.select @selectOptions = {{this.options}}/>
+              </:value>
+            </F.KeyValue>
+          </:field>
+        </Form::Field::ListWrapper>
+    `);
+
+    assert.strictEqual(
+      findAll('.list-wrapper-field tbody td:nth-of-type(1) select option')
+        .length,
+      3,
+    );
+    assert.strictEqual(
+      findAll('.list-wrapper-field tbody td:nth-of-type(2) select option')
+        .length,
+      3,
+    );
   });
 });

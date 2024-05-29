@@ -94,51 +94,101 @@
       {{#if this.showNewRow}}
         <B.Tr>
           <B.Td>
-            {{yield
-              (hash
-                text=(component
-                  'form/field/list-wrapper/key-value/text'
-                  disabled=@disabled
-                  value=this.newOptionKey
-                  ariaLabel=keyHeaderID
-                  setContext=(set-from-event this 'newOptionKey')
+            {{#if (has-block 'newKey')}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    selectOptions=@selectOptions
+                    ariaLabel=keyHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
                 )
-                select=(component
-                  'form/field/list-wrapper/key-value/select'
-                  disabled=@disabled
-                  value=this.newOptionKey
-                  selectOptions=@selectOptions
-                  ariaLabel=keyHeaderID
-                  width=@width
-                  setContext=(set-from-event this 'newOptionKey')
+                to='newKey'
+              }}
+
+            {{else}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    selectOptions=@selectOptions
+                    ariaLabel=keyHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
                 )
-              )
-              to='key'
-            }}
+                to='key'
+              }}
+            {{/if}}
           </B.Td>
 
           <B.Td>
-            {{yield
-              (hash
-                text=(component
-                  'form/field/list-wrapper/key-value/text'
-                  disabled=@disabled
-                  value=this.newOptionValue
-                  ariaLabel=valueHeaderID
-                  setContext=(set-from-event this 'newOptionValue')
+            {{#if (has-block 'newValue')}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    selectOptions=@selectOptions
+                    ariaLabel=valueHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
                 )
-                select=(component
-                  'form/field/list-wrapper/key-value/select'
-                  disabled=@disabled
-                  value=this.newOptionValue
-                  selectOptions=@selectOptions
-                  ariaLabel=valueHeaderID
-                  width=@width
-                  setContext=(set-from-event this 'newOptionValue')
+                to='newValue'
+              }}
+
+            {{else}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    selectOptions=@selectOptions
+                    ariaLabel=valueHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
                 )
-              )
-              to='value'
-            }}
+                to='value'
+              }}
+            {{/if}}
           </B.Td>
 
           <B.Td>

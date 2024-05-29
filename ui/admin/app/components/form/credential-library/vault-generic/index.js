@@ -49,24 +49,20 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
     this.args.model.credential_type = value;
   }
 
-  get dup() {
-    if (this.args.model.credential_mapping_overrides) {
-      return this.args.model.credential_mapping_overrides;
+  /**
+   * Prevents users from selecting duplicate keys from the select list if the arg is set to true
+   * @type {array}
+   */
+
+  get selectOptions() {
+    const previouslySelectedKeys =
+      this.args.model.credential_mapping_overrides || [];
+    if (previouslySelectedKeys.length) {
+      return this.mappingOverrides.filter((key) =>
+        previouslySelectedKeys.every((obj) => obj.key !== key),
+      );
     } else {
-      const previouslySelectedKeys =
-        this.args.model.credential_mapping_overrides;
-      console.log(previouslySelectedKeys, 'oreo');
-      // if (previouslySelectedKeys.length === this.toAttributes.length) {
-      //   return true;
-      // }
-      if (previouslySelectedKeys?.length) {
-        console.log('in here', this.toAttributes);
-        return this.mappingOverrides.filter((key) =>
-          previouslySelectedKeys.every((obj) => obj.key !== key),
-        );
-      } else {
-        return this.mappingOverrides;
-      }
+      return this.mappingOverrides;
     }
   }
 }

@@ -174,9 +174,12 @@
           @model={{@model}}
           @disabled={{form.disabled}}
           @removeDuplicates={{true}}
-          @width='400px'
+          @width='100%'
           @allowedEntries={{this.allowedEntries}}
         >
+          <:newKey as |N|>
+            <N.select @selectOptions={{this.selectOptions}} />
+          </:newKey>
           <:key as |K|>
             <K.select @selectOptions={{this.mappingOverrides}} />
           </:key>
