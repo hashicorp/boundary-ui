@@ -17,6 +17,7 @@ test.beforeAll(async () => {
     'E2E_AWS_SECRET_ACCESS_KEY',
     'E2E_AWS_HOST_SET_FILTER',
     'E2E_AWS_HOST_SET_IPS',
+    'E2E_AWS_REGION',
   ]);
 });
 
@@ -47,7 +48,7 @@ test.describe('AWS', async () => {
       .getByRole('group', { name: 'Provider' })
       .getByLabel('AWS')
       .click();
-    await page.getByLabel('AWS Region').fill('us-east-1');
+    await page.getByLabel('AWS Region').fill(process.env.E2E_AWS_REGION);
     await page
       .getByLabel('Access Key ID')
       .fill(process.env.E2E_AWS_ACCESS_KEY_ID);
