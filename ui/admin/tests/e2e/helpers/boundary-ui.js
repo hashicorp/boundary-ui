@@ -930,7 +930,7 @@ exports.addGrantsToGroup = async (page, grants) => {
 };
 
 /**
- * Uses the UI to create a new Storage Bucket. Assumes you have selected the desired scope.
+ * Uses the UI to create a new AWS Storage Bucket.
  * @param {Page} page Playwright page object
  * @param {string} scope Scope of the Storage Bucket
  * @param {string} bucketName Name of the Storage Bucket
@@ -940,7 +940,7 @@ exports.addGrantsToGroup = async (page, grants) => {
  * @param {string} workerFilter Worker filter for the Storage Bucket
  * @returns Name of the Storage Bucket
  */
-exports.createStorageBucket = async (
+exports.createStorageBucketAws = async (
   page,
   scope,
   bucketName,
@@ -956,6 +956,64 @@ exports.createStorageBucket = async (
   await page.getByRole('link', { name: 'New Storage Bucket' }).click();
   await page.getByLabel(new RegExp('Name*')).fill(storageBucketName);
   await page.getByLabel('Scope').selectOption({ label: scope });
+  await page
+    .getByRole('group', { name: 'Provider' })
+    .getByLabel('Amazon S3')
+    .click();
+  await page.getByLabel('Bucket name').fill(bucketName);
+  await page.getByLabel('Region').fill(region);
+  await page.getByLabel('Access key ID').fill(accessKeyId);
+  await page.getByLabel('Secret access key').fill(secretAccessKey);
+  await page.getByLabel('Worker filter').fill(workerFilter);
+  await page.getByLabel('Disable credential rotation').click();
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(storageBucketName),
+  ).toBeVisible();
+
+  return storageBucketName;
+};
+
+/**
+ * Uses the UI to create a new MinIO Storage Bucket.
+ * @param {Page} page Playwright page object
+ * @param {string} scope Scope of the Storage Bucket
+ * @param {string} endpointUrl Endpoint URL of the Storage Bucket
+ * @param {string} bucketName Name of the Storage Bucket
+ * @param {string} region Region of the Storage Bucket
+ * @param {string} accessKeyId Access Key ID for the Storage Bucket
+ * @param {string} secretAccessKey Secret Access Key for the Storage Bucket
+ * @param {string} workerFilter Worker filter for the Storage Bucket
+ * @returns Name of the Storage Bucket
+ */
+exports.createStorageBucketMinio = async (
+  page,
+  scope,
+  endpointUrl,
+  bucketName,
+  region,
+  accessKeyId,
+  secretAccessKey,
+  workerFilter,
+) => {
+  const storageBucketName = 'Bucket ' + nanoid();
+  await page
+    .getByRole('link', { name: 'Storage Buckets', exact: true })
+    .click();
+  await page.getByRole('link', { name: 'New Storage Bucket' }).click();
+  await page.getByLabel(new RegExp('Name*')).fill(storageBucketName);
+  await page.getByLabel('Scope').selectOption({ label: scope });
+  await page
+    .getByRole('group', { name: 'Provider' })
+    .getByLabel('MinIO')
+    .click();
+  await page.getByLabel('Endpoint URL').fill(endpointUrl);
   await page.getByLabel('Bucket name').fill(bucketName);
   await page.getByLabel('Region').fill(region);
   await page.getByLabel('Access key ID').fill(accessKeyId);
