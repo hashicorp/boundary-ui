@@ -20,6 +20,11 @@ module.exports = {
       'entitlements-inherit': './assets/macos/entitlements.plist',
       'signature-flags': 'library',
     },
+    // Add extra keys to our Info.plist
+    extendInfo: {
+      // Set the default notification style to be alert instead of banner
+      NSUserNotificationAlertStyle: 'alert',
+    },
     asar: {
       // We need to unpack node-pty helpers so we have them available
       // outside of the ASAR when they are called
@@ -78,13 +83,13 @@ module.exports = {
         !process.env.BUILD_DEBIAN
       )
         console.warn(
-          '[package] WARNING: Could not find signing identity. Proceeding without signing.'
+          '[package] WARNING: Could not find signing identity. Proceeding without signing.',
         );
     },
     postPackage: async (forgeConfig, options) => {
       if (options.spinner) {
         options.spinner.info(
-          `Packaged for ${options.platform}-${options.arch} at ${options.outputPaths[0]}`
+          `Packaged for ${options.platform}-${options.arch} at ${options.outputPaths[0]}`,
         );
       }
     },
@@ -99,14 +104,14 @@ module.exports = {
         // Copy artifacts
         artifacts.forEach(async (artifact) => {
           const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
-            artifact
+            artifact,
           )}`;
           const artifactDestination = path.join(destination, name);
           console.log(`[release] Found artifact: ${artifact}`);
           try {
             await fs.promises.copyFile(artifact, artifactDestination);
             console.log(
-              `[release] Copied artifact: ${path.resolve(artifactDestination)}`
+              `[release] Copied artifact: ${path.resolve(artifactDestination)}`,
             );
           } catch (e) {
             console.warn(`[release] Could not copy ${artifact}`, e);
@@ -126,7 +131,7 @@ module.exports = {
         'node_modules',
         'node-pty',
         'build',
-        'node_gyp_bins'
+        'node_gyp_bins',
       );
       await fs.promises.rm(gypPath, { recursive: true, force: true });
     },
