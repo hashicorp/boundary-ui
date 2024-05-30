@@ -65,4 +65,17 @@ export default class FormCredentialLibraryVaultGenericComponent extends Componen
       return this.mappingOverrides;
     }
   }
+
+  /**
+   * Determines if we need to show an empty row to the users to enter more key/value pairs based on removeDuplicates arg,
+   * by default it is true
+   * @type {object}
+   */
+  @action
+  showNewRow() {
+    return (
+      this.args.model.credential_mapping_overrides?.length !==
+      this.allowedEntries
+    );
+  }
 }

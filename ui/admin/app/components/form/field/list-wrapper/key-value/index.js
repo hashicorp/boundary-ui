@@ -36,8 +36,8 @@ export default class MappingListComponent extends Component {
    * @type {object}
    */
   get showNewRow() {
-    if (this.args.removeDuplicates) {
-      return this.options?.length !== this.args.allowedEntries;
+    if (this.args.showNewRow) {
+      return this.args.showNewRow();
     } else {
       return true;
     }

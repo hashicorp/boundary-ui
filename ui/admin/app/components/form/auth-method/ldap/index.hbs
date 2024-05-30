@@ -410,14 +410,13 @@
         @model={{@model}}
         @keyLabel={{t 'form.from_claim.label'}}
         @valueLabel={{t 'form.to_claim.label'}}
-        @selectOptions={{this.toAttributes}}
         @width='100%'
       >
         <:key as |K|>
           <K.text />
         </:key>
         <:value as |V|>
-          <V.select />
+          <V.select @selectOptions={{this.toAttributes}} />
         </:value>
       </F.KeyValue>
     </:field>

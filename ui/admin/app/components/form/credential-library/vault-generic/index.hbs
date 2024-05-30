@@ -173,9 +173,8 @@
           @name='credential_mapping_overrides'
           @model={{@model}}
           @disabled={{form.disabled}}
-          @removeDuplicates={{true}}
           @width='100%'
-          @allowedEntries={{this.allowedEntries}}
+          @showNewRow={{this.showNewRow}}
         >
           <:newKey as |N|>
             <N.select @selectOptions={{this.selectOptions}} />

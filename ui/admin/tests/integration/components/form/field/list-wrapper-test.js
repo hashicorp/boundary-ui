@@ -184,13 +184,13 @@ module('Integration | Component | list-wrapper', function (hooks) {
     ];
 
     this.selectOptions = ['username_attribute', 'password_attribute'];
-    this.len = this.selectOptions.length;
+
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @removeDuplicates='true' @selectOptions={{this.selectOptions}} @allowedEntries={{this.len}}>
+            <F.KeyValue @name="credential_mapping_overrides">
               <:key as |K|> 
-                <K.select/>
+                <K.select @selectOptions={{this.selectOptions}}/>
               </:key>
               <:value as |V|> 
                 <V.text/>
@@ -200,28 +200,23 @@ module('Integration | Component | list-wrapper', function (hooks) {
         </Form::Field::ListWrapper>
     `);
 
-    assert.dom('tbody tr').exists({ count: 2 });
-    assert
-      .dom('.list-wrapper-field tbody tr:last-child input')
-      .hasValue('pass');
-    assert
-      .dom('.list-wrapper-field tbody tr:last-child select')
-      .hasValue('password_attribute');
+    assert.dom('tbody tr').exists({ count: 1 });
   });
 
-  test('it does not render new rows when the select option limit is reached by passing in @removeDuplicates', async function (assert) {
+  test('it does not render new rows when the select option limit is reached when showNewRow is passed', async function (assert) {
     this.options = [
       { key: 'username_attribute', value: 'user' },
       { key: 'password_attribute', value: 'pass' },
     ];
-    this.len = this.options.length;
+
     this.selectOptions = ['username_attribute', 'password_attribute'];
+    this.showNewRow = () => false;
     await render(hbs`
         <Form::Field::ListWrapper>
           <:field as |F|>
-            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @selectOptions={{this.selectOptions}} @removeDuplicates='true' @allowedEntries={{this.len}}>
+            <F.KeyValue @name="credential_mapping_overrides" @options={{this.options}} @showNewRow={{this.showNewRow}}>
               <:key as |K|> 
-                <K.select/>
+                <K.select  @selectOptions={{this.selectOptions}}/>
               </:key>
               <:value as |V|> 
                 <V.text/>
@@ -234,7 +229,7 @@ module('Integration | Component | list-wrapper', function (hooks) {
     assert.dom('tbody tr').exists({ count: 2 });
   });
 
-  test('it does render unlimited new rows when @removeDuplicates is not passed', async function (assert) {
+  test('it does render unlimited new rows when @showNewRow is not passed', async function (assert) {
     this.options = [
       {
         key: 'username_attribute',
