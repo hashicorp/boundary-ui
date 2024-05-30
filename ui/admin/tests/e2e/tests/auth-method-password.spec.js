@@ -4,7 +4,7 @@
  */
 
 /* eslint-disable no-undef */
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { authenticatedState } = require('../helpers/general');
 const {
@@ -43,12 +43,89 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    await createPasswordAuthMethod(page);
-    await createPasswordAccount(page, 'test-user', 'password');
-    await setPasswordToAccount(page, 'password2');
+
+    // Create a new password auth method and account
+    const authMethodName = await createPasswordAuthMethod(page);
+    const username = 'test-user';
+    const password = 'password';
+    await createPasswordAccount(page, username, password);
     await makeAuthMethodPrimary(page);
     await createUser(page);
     await addAccountToUser(page);
+
+    // Log out
+    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+
+    // Log in using new account
+    await page.getByText('Choose a different scope').click();
+    await page.getByRole('link', { name: orgName }).click();
+    await page.getByRole('link', { name: authMethodName }).click();
+    await page.getByLabel('Login Name').fill(username);
+    await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(page.getByText(username)).toBeEnabled();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Projects'),
+    ).toBeVisible();
+
+    // Log out
+    await page.getByText(username).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+
+    // Log back in as admin
+    await page
+      .getByLabel('Login Name')
+      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await page
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    // Set a new password on the account
+    await page
+      .getByRole('navigation', { name: 'General' })
+      .getByRole('link', { name: 'Orgs' })
+      .click();
+    await page.getByRole('link', { name: orgName }).click();
+    await page
+      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('link', { name: 'Auth Methods' })
+      .click();
+    await page.getByRole('link', { name: authMethodName }).click();
+    await page.getByRole('link', { name: 'Accounts', exact: true }).click();
+    await page.getByRole('link', { name: username }).click();
+    const newPassword = 'new-password';
+    await setPasswordToAccount(page, newPassword);
+
+    // Log out
+    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+
+    // Log in using new password
+    await page.getByText('Choose a different scope').click();
+    await page.getByRole('link', { name: orgName }).click();
+    await page.getByRole('link', { name: authMethodName }).click();
+    await page.getByLabel('Login Name').fill(username);
+    await page.getByLabel('Password', { exact: true }).fill(newPassword);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(page.getByText(username)).toBeEnabled();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Projects'),
+    ).toBeVisible();
   } finally {
     await deleteOrgCli(org.id);
   }
