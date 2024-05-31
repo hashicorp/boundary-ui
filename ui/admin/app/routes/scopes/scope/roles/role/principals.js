@@ -4,11 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
@@ -117,22 +113,5 @@ export default class ScopesScopeRolesRolePrincipalsRoute extends Route {
       managedGroups = nestedManagedGroups.flat();
     }
     return managedGroups;
-  }
-
-  // =actions
-
-  /**
-   * Remove a principal from the current role and redirect to principals index.
-   * @param {UserModel, GroupModel, ManagedGroupModel} principal
-   */
-  @action
-  @loading
-  @confirm('questions.remove-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removePrincipal(principal) {
-    const role = this.modelFor('scopes.scope.roles.role');
-    await role.removePrincipal(principal.id);
-    this.refresh();
   }
 }

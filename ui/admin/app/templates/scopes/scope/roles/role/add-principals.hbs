@@ -88,8 +88,8 @@
       @users={{@model.users}}
       @groups={{@model.groups}}
       @managedGroups={{@model.managedGroups}}
-      @submit={{route-action 'addPrincipals' @model.role}}
-      @cancel={{route-action 'cancel'}}
+      @submit={{fn this.addPrincipals @model.role}}
+      @cancel={{this.cancel}}
     />
   </page.body>
 

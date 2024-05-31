@@ -25,7 +25,10 @@
   </page.header>
 
   <page.actions>
-    <Roles::Role::Actions @model={{@model.role}} />
+    <Roles::Role::Actions
+      @model={{@model.role}}
+      @delete={{this.roles.delete}}
+    />
   </page.actions>
 
   <page.navigation>
@@ -81,7 +84,10 @@
                   <dd.Interactive
                     @color='critical'
                     @text={{t 'actions.remove'}}
-                    {{on 'click' (route-action 'removePrincipal' B.data)}}
+                    {{on
+                      'click'
+                      (fn this.roles.removePrincipal @model.role B.data)
+                    }}
                   />
                 </Hds::Dropdown>
               {{/if}}

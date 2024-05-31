@@ -6,8 +6,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { resourceFilter } from 'core/decorators/resource-filter';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -86,30 +84,6 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
       groups,
       managedGroups: managedGroups.flat(),
     };
-  }
-
-  // =actions
-
-  /**
-   * Save principal IDs to current role via the API.
-   * @param {RoleModel} role
-   * @param {[string]} principalIDs
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async addPrincipals(role, principalIDs) {
-    await role.addPrincipals(principalIDs);
-    this.router.replaceWith('scopes.scope.roles.role.principals');
-  }
-
-  /**
-   * Redirect to role principals as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith('scopes.scope.roles.role.principals');
   }
 
   /**

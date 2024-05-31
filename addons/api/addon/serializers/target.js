@@ -23,7 +23,7 @@ export default class TargetSerializer extends ApplicationSerializer {
    */
   serialize(snapshot) {
     let serialized = super.serialize(...arguments);
-    const { type } = snapshot.record;
+    const { type, isNew } = snapshot.record;
     const hostSourceIDs = snapshot?.adapterOptions?.hostSetIDs;
     if (hostSourceIDs) {
       serialized = this.serializeWithHostSources(snapshot, hostSourceIDs);
@@ -44,14 +44,16 @@ export default class TargetSerializer extends ApplicationSerializer {
         injectedApplicationCredentialSourceIDs,
       );
 
-    if (serialized?.with_aliases) {
+    if (isNew && serialized?.with_aliases) {
       // API expects scope id along with every alias value
       serialized.with_aliases = serialized.with_aliases.map((item) => ({
         ...item,
         scope_id: 'global',
       }));
+    } else {
+      // This field can't be updated, it is used only during creation time
+      delete serialized.with_aliases;
     }
-
     // Delete session recording related fields from non-SSH targets
     if (type !== TYPE_TARGET_SSH) {
       delete serialized?.attributes?.storage_bucket_id;

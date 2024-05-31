@@ -985,7 +985,7 @@ exports.enableSessionRecording = async (page, storageBucketName) => {
   await page.getByText('Enable recording').click();
   await page.getByLabel('Record sessions for this target').click();
   await page
-    .getByLabel('AWS storage buckets')
+    .getByLabel('Storage buckets')
     .selectOption({ label: storageBucketName });
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
