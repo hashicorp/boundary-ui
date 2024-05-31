@@ -12,6 +12,8 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   @service store;
   @service ipc;
   @service clientAgentSessions;
+  @service flashMessages;
+  @service intl;
 
   // =methods
 
@@ -33,11 +35,9 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
       try {
         const clientAgentSession =
           await this.clientAgentSessions.getClientAgentSession(session.id);
-        if (clientAgentSession) {
-          clientAgentSession.session_authorization.credentials.forEach((cred) =>
-            session.addCredential(cred),
-          );
-        }
+        clientAgentSession?.session_authorization?.credentials?.forEach(
+          (cred) => session.addCredential(cred),
+        );
       } catch (e) {
         // TODO: Log this error
         this.flashMessages.danger(
