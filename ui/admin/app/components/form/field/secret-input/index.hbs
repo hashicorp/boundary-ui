@@ -1,9 +1,9 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
-<div class='secret-input'>
+<div class='secret-input' ...attributes>
   {{#if (or this.isDisabled this.isActionable)}}
     <span class='overlay'></span>
   {{/if}}
@@ -15,7 +15,6 @@
     name={{@name}}
     disabled={{or @isDisabled (not this.isEditing)}}
     @hasVisibilityToggle={{false}}
-    ...attributes
     as |F|
   >
     {{yield F}}

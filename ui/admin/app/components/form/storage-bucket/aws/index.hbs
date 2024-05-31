@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -302,6 +302,7 @@
         @isDisabled={{form.disabled}}
         @showEditButton={{true}}
         @cancel={{fn @rollbackSecretAttrs 'access_key_id'}}
+        data-test-access-key-id
         {{on 'input' (set-from-event @model 'access_key_id')}}
         as |F|
       >
@@ -322,6 +323,7 @@
         @isDisabled={{form.disabled}}
         @showEditButton={{true}}
         @cancel={{fn @rollbackSecretAttrs 'secret_access_key'}}
+        data-test-secret-access-key
         {{on 'input' (set-from-event @model 'secret_access_key')}}
         as |F|
       >
