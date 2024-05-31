@@ -1,7 +1,7 @@
 {
   "private": true,
   "description": "Monorepo for Boundary UIs and addons.",
-  "license": "MPL-2.0",
+  "license": "BUSL-1.1",
   "author": "HashiCorp",
   "workspaces": {
     "packages": [
