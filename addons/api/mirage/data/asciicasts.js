@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 export const asciicast1 = `{"version": 2, "width": 124, "height": 36, "timestamp": 1670352594, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}}
