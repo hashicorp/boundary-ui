@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: MPL-2.0
+ */
+
 export const SAVE_BTN = '[type=submit]';
 export const CANCEL_BTN = '.rose-form-actions [type=button]';
 export const EDIT_BTN = '.rose-form-actions [type=button]';
