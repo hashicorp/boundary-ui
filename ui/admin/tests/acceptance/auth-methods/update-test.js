@@ -164,14 +164,23 @@ module('Acceptance | auth-methods | update', function (hooks) {
 
     // Remove all claim maps
     const claimMaps = await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]'),
+      findAll('[name="account_claim_maps"] [data-test-remove-button]'),
     );
     for (const element of claimMaps) {
       await click(element);
     }
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+
+    await fillIn(
+      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
+      'from_claim',
+    );
+
+    await select(
+      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
+      'email',
+    );
+
+    await click('[name="account_claim_maps"] button');
 
     // Remove all certificates
     const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
@@ -179,15 +188,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
     for (const element of certificatesList) {
       await click(element);
     }
-
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click(TOGGLE_SELECTOR);
-    await click('form [type="submit"]:not(:disabled)');
+    await click('.rose-form-actions [type="submit"]');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
+
     assert.strictEqual(authMethod.name, name);
     assert.strictEqual(authMethod.description, 'description');
     assert.strictEqual(authMethod.attributes.issuer, 'issuer');
