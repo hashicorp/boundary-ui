@@ -22,6 +22,7 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 const log = require('electron-log/main');
+const fs = require('fs');
 
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
@@ -60,6 +61,27 @@ log.initialize();
 log.transports.console.level = false;
 log.transports.file.format =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
+log.transports.file.fileName = 'desktop-client.log';
+log.transports.file.archiveLogFn = (file) => {
+  file = file.toString();
+  const info = path.parse(file);
+
+  // This renames old files to the format of `desktop-client-(iso string date).log`
+  // TODO: Should we compress or delete old log files after a certain time?
+  try {
+    fs.renameSync(
+      file,
+      path.join(
+        info.dir,
+        info.name +
+          `-${new Date().toISOString().replace(/:/g, '-')}` +
+          info.ext,
+      ),
+    );
+  } catch (e) {
+    console.error('Could not rotate log', e);
+  }
+};
 
 const createWindow = (partition, closeWindowCB) => {
   /**
