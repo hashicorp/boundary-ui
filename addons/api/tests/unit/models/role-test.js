@@ -48,37 +48,6 @@ module('Unit | Model | role', function (hooks) {
     await model.setGrantScopes(['this', 'children']);
   });
 
-  test('it has a `removeGrantScopes` method that targets a specific POST API endpoint and serialization', async function (assert) {
-    assert.expect(1);
-    this.server.post('/roles/r_123:remove-grant-scopes', (schema, request) => {
-      const body = JSON.parse(request.requestBody);
-      assert.deepEqual(body, {
-        grant_scope_ids: ['children'],
-        version: 1,
-      });
-      return { id: 'r_123' };
-    });
-    const store = this.owner.lookup('service:store');
-    store.push({
-      data: {
-        id: 'r_123',
-        type: 'role',
-        attributes: {
-          name: 'Role',
-          description: 'Description',
-          grant_scope_ids: ['this', 'children'],
-          version: 1,
-          scope: {
-            scope_id: 'o_1',
-            type: 'scope',
-          },
-        },
-      },
-    });
-    const model = store.peekRecord('role', 'r_123');
-    await model.removeGrantScopes(['children']);
-  });
-
   test('it has a `saveGrantStrings` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post('/roles/123abc:set-grants', (schema, request) => {
