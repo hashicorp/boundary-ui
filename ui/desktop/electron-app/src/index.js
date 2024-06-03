@@ -57,6 +57,7 @@ fixPath();
 
 // Setup logger
 log.initialize();
+log.transports.console.level = false;
 log.transports.file.format =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 

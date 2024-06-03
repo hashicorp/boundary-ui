@@ -45,12 +45,15 @@ class ClientDaemonManager {
     this.#clientDaemonProcess = childProcess;
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
-    // we close the desktop client
+    // we close the desktop client as the absence of the "daemon is already running"
+    // message doesn't necessarily guarantee it's running (but it likely should be)
     if (stderr && !stderr.includes('The daemon is already running')) {
       this.#isClientDaemonAlreadyRunning = false;
+      log.info('Cache daemon started, status from daemon:\n', stderr);
+    } else {
+      log.info('The cache daemon is already running at startup.');
     }
 
-    log.info('Client daemon started', stderr);
     this.status();
   }
 
@@ -155,7 +158,12 @@ const searchCliCommand = (requestData) => {
   }
 
   parsedResponse = jsonify(stderr);
-  log.info(`Search Request Failed`, parsedResponse);
+
+  // Log request data and response, but clean up token from log
+  const requestCopy = { ...requestData };
+  delete requestData.token;
+  log.error(`searchCliCommand(${JSON.stringify(requestCopy)}):`, stderr);
+
   return Promise.reject({
     statusCode: parsedResponse?.status_code,
     ...parsedResponse?.api_error,
