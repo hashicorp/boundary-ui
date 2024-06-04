@@ -39,6 +39,7 @@ export default ApplicationSerializer.extend({
     if (!json.principals.length) delete json.principals;
 
     // default grant scopes
+    // TODO: all grant_scope_id instances will be removed in future PR
     if (!json.grant_scope_id) json.grant_scope_id = 'this';
     if (json.grant_scope_ids.length === 0) {
       json.grant_scope_ids = ['this'];
