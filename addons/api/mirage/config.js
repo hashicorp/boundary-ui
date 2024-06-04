@@ -320,6 +320,13 @@ function routes() {
       const role = roles.find(id);
       let updatedAttrs = {};
 
+      if (method === 'set-grant-scopes') {
+        updatedAttrs = {
+          version: attrs.version,
+          grantScopeIds: attrs.grantScopeIds,
+        };
+      }
+
       // Principals is a combined list of users, groups and managed groups, but in Mirage we've
       // internally modelled them as separate lists.  Therefore we must check
       // the type by looking up the user or group first, then determine which
