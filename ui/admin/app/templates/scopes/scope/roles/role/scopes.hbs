@@ -1,0 +1,35 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.role.scope.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.scope.title_plural'}}
+  @route='scopes.scope.roles.role.scopes'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.role.title'}}
+      <DocLink @doc='role' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.role.scope.description'}}</p>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+  </page.header>
+
+  <page.actions>
+    <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
+  </page.actions>
+
+  <page.navigation>
+    <Roles::Role::Nav @model={{@model}} />
+  </page.navigation>
+
+</Rose::Layout::Page>

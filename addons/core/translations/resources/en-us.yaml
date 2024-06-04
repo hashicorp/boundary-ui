@@ -560,6 +560,9 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources.
     actions:
       create: New Grant
+  scope:
+    title_plural: Scopes
+    description: Role grant sets can be applied to multiple descendants underneath this scope.
 target:
   title: Target
   title_plural: Targets
