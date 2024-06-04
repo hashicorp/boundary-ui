@@ -62,26 +62,8 @@ log.transports.console.level = false;
 log.transports.file.format =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 log.transports.file.fileName = 'desktop-client.log';
-log.transports.file.archiveLogFn = (file) => {
-  file = file.toString();
-  const info = path.parse(file);
-
-  // This renames old files to the format of `desktop-client-(iso string date).log`
-  // TODO: Should we compress or delete old log files after a certain time?
-  try {
-    fs.renameSync(
-      file,
-      path.join(
-        info.dir,
-        info.name +
-          `-${new Date().toISOString().replace(/:/g, '-')}` +
-          info.ext,
-      ),
-    );
-  } catch (e) {
-    console.error('Could not rotate log', e);
-  }
-};
+// Set the max file size to 10MB
+log.transports.file.maxSize = 10485760;
 
 const createWindow = (partition, closeWindowCB) => {
   /**
