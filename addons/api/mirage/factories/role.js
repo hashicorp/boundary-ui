@@ -26,6 +26,8 @@ export default factory.extend({
   ],
 
   id: () => generateId('r_'),
+  grant_scope_id: 'this',
+  grant_scope_ids: () => ['this'],
 
   /**
    * Adds principals to the role.
@@ -42,14 +44,4 @@ export default factory.extend({
       role.update({ users, groups, managedGroups });
     },
   }),
-
-  /**
-   * Set the grant scope ID to match the scope ID.
-   */
-  afterCreate(role) {
-    const {
-      scope: { id },
-    } = role;
-    role.update({ grant_scope_id: id });
-  },
 });
