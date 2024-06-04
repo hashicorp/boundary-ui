@@ -11,6 +11,8 @@ export default class FormRoleGrantsComponent extends Component {
 
   @action
   updateGrantScopeID(id) {
+    // TODO: all grant_scope_id instances will be removed in future PR
     this.args.model.grant_scope_id = id;
+    this.args.model.grant_scope_ids = [id];
   }
 }
