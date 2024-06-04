@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+/* global __electronLog */
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { generateMQLExpression } from '../utils/mql-query';
