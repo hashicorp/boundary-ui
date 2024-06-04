@@ -12,5 +12,6 @@ export default class FormRoleGrantsComponent extends Component {
   @action
   updateGrantScopeID(id) {
     this.args.model.grant_scope_id = id;
+    this.args.model.grant_scope_ids = [id];
   }
 }
