@@ -73,9 +73,24 @@ exports.createHostCatalog = async (page) => {
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Host Catalogs' })
     .click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Host Catalogs' }),
+  ).toBeVisible();
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'New', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page.getByRole('link', { name: 'New', exact: true }).click();
+  } else {
+    await page
+      .getByRole('link', { name: 'New Host Catalog', exact: true })
+      .click();
+  }
+
   await page.getByLabel('Name').fill(hostCatalogName);
   await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('Static').click();
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -526,10 +541,26 @@ exports.removeAuthMethodAsPrimary = async (page) => {
  */
 exports.addHostSourceToTarget = async (page, hostSourceName) => {
   await page.getByRole('link', { name: 'Host Sources', exact: true }).click();
-  await page
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Host Sources'),
+  ).toBeVisible();
+
+  const emptyLinkIsVisible = await page
     .getByRole('article')
     .getByRole('link', { name: 'Add Host Sources', exact: true })
-    .click();
+    .isVisible();
+  if (emptyLinkIsVisible) {
+    await page
+      .getByRole('article')
+      .getByRole('link', { name: 'Add Host Sources', exact: true })
+      .click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'Add Host Sources' }).click();
+  }
+
   await page
     .getByRole('cell', { name: hostSourceName })
     .locator('..')
