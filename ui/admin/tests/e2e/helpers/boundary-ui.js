@@ -1065,9 +1065,25 @@ exports.createStoragePolicy = async (page) => {
   await page
     .getByRole('link', { name: 'Storage Policies', exact: true })
     .click();
-  await page
-    .getByRole('link', { name: 'Create a new storage policy', exact: true })
-    .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Storage Policies'),
+  ).toBeVisible();
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'New Storage Policy', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page
+      .getByRole('link', { name: 'New Storage Policy', exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole('link', { name: 'Create a new storage policy', exact: true })
+      .click();
+  }
+
   await page.getByLabel('Name').fill(storagePolicyName);
   await page.getByLabel('Retention Policy').selectOption({ label: 'Forever' });
   await page.getByRole('button', { name: 'Save' }).click();
