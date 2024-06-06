@@ -2,16 +2,26 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-{{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
 
+{{#let (unique-id) (unique-id) as |keyHeaderID valueHeaderID|}}
   <Hds::Table class='list-wrapper-field' name={{@name}}>
     <:head as |H|>
       <H.Tr>
-        <H.Th id={{keyHeaderID}}>{{t 'form.key.label'}}</H.Th>
-        <H.Th id={{valueHeaderID}}>{{t 'form.value.label'}}</H.Th>
+        <H.Th id={{keyHeaderID}}>
+          {{#if @keyLabel}}
+            {{@keyLabel}}
+          {{else}}
+            {{t 'form.key.label'}}
+          {{/if}}</H.Th>
+        <H.Th id={{valueHeaderID}}>
+          {{#if @valueLabel}}
+            {{@valueLabel}}
+          {{else}}
+            {{t 'form.value.label'}}
+          {{/if}}
+        </H.Th>
         <H.Th>
           {{t 'titles.actions'}}
-
         </H.Th>
       </H.Tr>
     </:head>
@@ -19,23 +29,49 @@
       {{#each this.options as |option index|}}
         <B.Tr>
           <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{option.key}}
-              @type='text'
-              disabled={{@disabled}}
-              aria-labelledby={{keyHeaderID}}
-              {{on 'input' (set-from-event option 'key')}}
-            />
+            {{yield
+              (hash
+                text=(component
+                  'form/field/list-wrapper/key-value/text'
+                  disabled=@disabled
+                  value=option.key
+                  ariaLabel=keyHeaderID
+                  setContext=(set-from-event option 'key')
+                )
+                select=(component
+                  'form/field/list-wrapper/key-value/select'
+                  disabled=@disabled
+                  value=option.key
+                  ariaLabel=keyHeaderID
+                  setContext=(set-from-event option 'key')
+                  width=@width
+                )
+              )
+              to='key'
+            }}
           </B.Td>
 
           <B.Td>
-            <Hds::Form::TextInput::Field
-              @value={{option.value}}
-              @type='text'
-              disabled={{@disabled}}
-              aria-labelledby={{valueHeaderID}}
-              {{on 'input' (set-from-event option 'value')}}
-            />
+            {{yield
+              (hash
+                text=(component
+                  'form/field/list-wrapper/key-value/text'
+                  disabled=@disabled
+                  value=option.value
+                  ariaLabel=valueHeaderID
+                  setContext=(set-from-event option 'value')
+                )
+                select=(component
+                  'form/field/list-wrapper/key-value/select'
+                  disabled=@disabled
+                  value=option.value
+                  ariaLabel=valueHeaderID
+                  width=@width
+                  setContext=(set-from-event option 'value')
+                )
+              )
+              to='value'
+            }}
           </B.Td>
 
           <B.Td>
@@ -53,40 +89,114 @@
           </B.Td>
         </B.Tr>
       {{/each}}
+      {{#if this.showNewRow}}
+        <B.Tr>
+          <B.Td>
+            {{#if (has-block 'newKey')}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                )
+                to='newKey'
+              }}
 
-      <B.Tr>
-        <B.Td>
-          <Hds::Form::TextInput::Field
-            @value={{this.newOptionKey}}
-            @type='text'
-            disabled={{@disabled}}
-            aria-labelledby={{keyHeaderID}}
-            {{on 'input' (set-from-event this 'newOptionKey')}}
-          />
-        </B.Td>
+            {{else}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionKey
+                    ariaLabel=keyHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionKey')
+                  )
+                )
+                to='key'
+              }}
+            {{/if}}
+          </B.Td>
 
-        <B.Td>
-          <Hds::Form::TextInput::Field
-            @value={{this.newOptionValue}}
-            @type='text'
-            disabled={{@disabled}}
-            aria-labelledby={{valueHeaderID}}
-            {{on 'input' (set-from-event this 'newOptionValue')}}
-          />
-        </B.Td>
+          <B.Td>
+            {{#if (has-block 'newValue')}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                )
+                to='newValue'
+              }}
 
-        <B.Td>
-          <Hds::Button
-            @text={{t 'actions.add'}}
-            @color='secondary'
-            type='button'
-            disabled={{or @disabled (not this.newOptionKey)}}
-            {{on 'click' this.addOption}}
-          />
-        </B.Td>
-      </B.Tr>
+            {{else}}
+              {{yield
+                (hash
+                  text=(component
+                    'form/field/list-wrapper/key-value/text'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                  select=(component
+                    'form/field/list-wrapper/key-value/select'
+                    disabled=@disabled
+                    value=this.newOptionValue
+                    ariaLabel=valueHeaderID
+                    width=@width
+                    setContext=(set-from-event this 'newOptionValue')
+                  )
+                )
+                to='value'
+              }}
+            {{/if}}
+          </B.Td>
 
+          <B.Td>
+
+            <Hds::Button
+              @text={{t 'actions.add'}}
+              @color='secondary'
+              type='button'
+              disabled={{or @disabled (not this.newOptionKey)}}
+              {{on 'click' this.addOption}}
+            />
+          </B.Td>
+        </B.Tr>
+      {{/if}}
     </:body>
   </Hds::Table>
-
 {{/let}}
