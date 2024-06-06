@@ -113,7 +113,22 @@ exports.createHostCatalog = async (page) => {
 exports.createHostSet = async (page) => {
   const hostSetName = 'Host Set ' + nanoid();
   await page.getByRole('link', { name: 'Host Sets' }).click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Host Sets'),
+  ).toBeVisible();
+
+  const emptyLinkIsVisible = await page
+    .getByRole('link', { name: 'New', exact: true })
+    .isVisible();
+  if (emptyLinkIsVisible) {
+    await page.getByRole('link', { name: 'New', exact: true }).click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'New Host Set' }).click();
+  }
+
   await page.getByLabel('Name').fill(hostSetName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('button', { name: 'Save' }).click();
@@ -419,6 +434,36 @@ exports.createTcpTargetWithAddressEnt = async (page, address, port) => {
   await page.getByLabel('Description').fill('This is an automated test');
   await page.getByRole('group', { name: 'Type' }).getByLabel('TCP').click();
   await page.getByLabel('Target Address').fill(address);
+  await page.getByLabel('Default Port').fill(port);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
+ * Uses the UI to create a new SSH target
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} port Port of the target
+ * @returns Name of the target
+ */
+exports.createSshTargetEnt = async (page, port) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
   await page.getByLabel('Default Port').fill(port);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(

@@ -47,12 +47,40 @@ test('Verify session created to target with host, then cancel the session @ce @a
   try {
     const orgName = await createOrg(page);
     const projectName = await createProject(page);
-    await createHostCatalog(page);
+
+    // Create host set
+    const hostCatalogName = await createHostCatalog(page);
     const hostSetName = await createHostSet(page);
     await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+
+    // Create another host set
+    await page
+      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('link', { name: 'Host Catalogs' })
+      .click();
+    await page.getByRole('link', { name: hostCatalogName }).click();
+    const hostSetName2 = await createHostSet(page);
+
+    // Create target
     const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
     await addHostSourceToTarget(page, hostSetName);
 
+    // Add/Remove another host source
+    await addHostSourceToTarget(page, hostSetName2);
+    await page
+      .getByRole('link', { name: hostSetName2 })
+      .locator('..')
+      .locator('..')
+      .getByRole('button', { name: 'Manage' })
+      .click();
+    await page.getByRole('button', { name: 'Remove' }).click();
+    await page.getByRole('button', { name: 'OK' }).click();
+    await expect(
+      page.getByRole('alert').getByText('Success', { exact: true }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Dismiss' }).click();
+
+    // Connect to target
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
