@@ -6,7 +6,6 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
-const { authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -22,8 +21,6 @@ const {
   makeAuthMethodPrimary,
 } = require('../helpers/boundary-ui');
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
   await checkBoundaryCli();
 });
@@ -34,6 +31,25 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
   await page.goto('/');
   let org;
   try {
+    // Log in
+    await page
+      .getByLabel('Login Name')
+      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await page
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
+    ).toBeEnabled();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
+    ).toBeVisible();
+
+    // Create an org
     const orgName = await createOrg(page);
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -127,6 +143,8 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
         .getByText('Projects'),
     ).toBeVisible();
   } finally {
-    await deleteOrgCli(org.id);
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
   }
 });
