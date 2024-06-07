@@ -7,6 +7,15 @@ import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 
+export const GRANT_SCOPE_THIS = 'this';
+export const GRANT_SCOPE_CHILDREN = 'children';
+export const GRANT_SCOPE_DESCENDANTS = 'descendants';
+export const GRANT_SCOPE_KEYWORDS = Object.freeze([
+  GRANT_SCOPE_THIS,
+  GRANT_SCOPE_CHILDREN,
+  GRANT_SCOPE_DESCENDANTS,
+]);
+
 export default class RoleModel extends GeneratedRoleModel {
   // =services
 
@@ -40,6 +49,61 @@ export default class RoleModel extends GeneratedRoleModel {
     return this.grant_scope_id
       ? this.store.peekRecord('scope', this.grant_scope_id)
       : null;
+  }
+
+  /**
+   * Convenience for looking up the grant scopes, if loaded.
+   */
+  get grantScopes() {
+    // filter out scopes that start with an o_ or p_
+    // then sort the keywords
+    const grantScopes = [];
+    if (this.grant_scope_ids) {
+      const keywordIDs = this.grant_scope_ids.filter((id) => {
+        return !id.startsWith('o_') && !id.startsWith('p_') && id !== 'global';
+      });
+      // using filter instead of find to get the global id and allow for
+      // spreading into sortedScopeIDs if globalID is undefined
+      const globalID = this.grant_scope_ids.filter((id) => {
+        return id === 'global';
+      });
+      const orgIDs = this.grant_scope_ids.filter((id) => {
+        return id.startsWith('o_');
+      });
+      const projectIDs = this.grant_scope_ids.filter((id) => {
+        return id.startsWith('p_');
+      });
+
+      const sortedKeywords = keywordIDs.sort((a, b) => {
+        return (
+          GRANT_SCOPE_KEYWORDS.indexOf(a) - GRANT_SCOPE_KEYWORDS.indexOf(b)
+        );
+      });
+
+      const sortedScopeIDs = [
+        ...sortedKeywords,
+        ...globalID,
+        ...orgIDs,
+        ...projectIDs,
+      ];
+
+      sortedScopeIDs.forEach((id) => {
+        if (
+          id === GRANT_SCOPE_THIS ||
+          id === GRANT_SCOPE_CHILDREN ||
+          id === GRANT_SCOPE_DESCENDANTS
+        ) {
+          grantScopes.push({ id });
+        } else {
+          const scope = this.store.peekRecord('scope', id);
+          if (scope) {
+            grantScopes.push(scope);
+          }
+        }
+      });
+    }
+
+    return grantScopes;
   }
 
   /**
