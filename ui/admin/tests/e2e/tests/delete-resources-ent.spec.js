@@ -171,6 +171,8 @@ test('Verify resources can be deleted (enterprise) @ent @aws', async ({
     await page.goto(`/scopes/${orgId}/edit`);
     await deleteResource(page);
   } finally {
-    await deleteOrgCli(orgId);
+    if (orgId) {
+      await deleteOrgCli(orgId);
+    }
   }
 });

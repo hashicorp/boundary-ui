@@ -29,7 +29,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgName;
   try {
     // Log in
     await page
@@ -49,18 +49,8 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
 
-    // Create an org
-    const orgName = await createOrg(page);
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
     // Create a new password auth method and account
+    orgName = await createOrg(page);
     const authMethodName = await createPasswordAuthMethod(page);
     const username = 'test-user';
     const password = 'password';
@@ -143,6 +133,14 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
         .getByText('Projects'),
     ).toBeVisible();
   } finally {
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
+    let orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    let org = orgs.items.filter((obj) => obj.name == orgName)[0];
     if (org) {
       await deleteOrgCli(org.id);
     }

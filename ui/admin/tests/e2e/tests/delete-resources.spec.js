@@ -193,6 +193,8 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     await deleteResource(page);
   } finally {
     // Delete org in case the test failed before deleting the org using UI
-    await deleteOrgCli(orgId);
+    if (orgId) {
+      await deleteOrgCli(orgId);
+    }
   }
 });

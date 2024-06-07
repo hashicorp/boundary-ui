@@ -31,23 +31,25 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgName;
   try {
-    const orgName = await createOrg(page);
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    orgName = await createOrg(page);
     const groupName = await createGroup(page);
     await addMemberToGroup(page, 'admin');
     await createRole(page);
     await addPrincipalToRole(page, groupName);
     await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
   } finally {
-    await deleteOrgCli(org.id);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
+    let orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    let org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
   }
 });
