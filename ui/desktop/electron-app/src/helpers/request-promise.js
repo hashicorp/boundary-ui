@@ -5,6 +5,7 @@
 
 const { net } = require('electron');
 const http = require('http');
+const log = require('electron-log/main');
 
 const requestTimeoutSeconds = 10;
 // Simple promise wrapper around Electron's net.request feature.
@@ -65,6 +66,14 @@ const unixSocketRequest = (options, reqBody) =>
 
         resolve(parsedResponse);
       } catch (e) {
+        log.error(
+          `unixSocketRequest(${JSON.stringify({
+            path: options.path,
+            socketPath: options.socketPath,
+          })}):`,
+          e,
+        );
+
         reject(e);
       }
     });
