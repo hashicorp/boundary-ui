@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+/* global __electronLog */
 import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { generateMQLExpression } from '../utils/mql-query';
@@ -120,12 +121,18 @@ export default class ClientDaemonHandler {
                 'searchClientDaemon',
                 remainingQuery,
               );
-            } catch {
+            } catch (err) {
               // If it fails again just fall back to fetching controller data
+              __electronLog?.error('Failed to add token to daemons', err);
             }
-          }
+          } else {
+            __electronLog?.error(
+              'Failed to search cache daemon; falling back to search controller',
+              e,
+            );
 
-          return fetchControllerData(context, next);
+            return fetchControllerData(context, next);
+          }
         }
 
         // Currently returns with a singular top level field with resource name
