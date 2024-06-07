@@ -29,7 +29,7 @@ const clientDaemonManager = require('./services/client-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
-const { isMac, isLinux } = require('./helpers/platform.js');
+const { isMac, isLinux, isWindows } = require('./helpers/platform.js');
 const fixPath = require('./utils/fixPath');
 const isDev = require('electron-is-dev');
 
@@ -53,6 +53,12 @@ protocol.registerSchemesAsPrivileged([
 // This is to correctly set the process.env.PATH as electron does not
 // correctly inherit the path variable in production
 fixPath();
+
+// Set the app user model ID so it matches with the binary shortcut on windows.
+// This is needed to properly display the app icon and name in notifications.
+if (isWindows()) {
+  app.setAppUserModelId(process.execPath);
+}
 
 const createWindow = (partition, closeWindowCB) => {
   /**
