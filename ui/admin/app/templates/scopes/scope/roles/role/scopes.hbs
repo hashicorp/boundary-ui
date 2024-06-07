@@ -32,4 +32,112 @@
     <Roles::Role::Nav @model={{@model}} />
   </page.navigation>
 
+  <page.body>
+    {{#if @model.grant_scope_ids}}
+      <Hds::Table
+        @model={{@model.grantScopes}}
+        @columns={{array
+          (hash label=(t 'resources.role.scope.title'))
+          (hash label=(t 'form.id.label'))
+          (hash label=(t 'resources.role.scope.titles.parent_scope'))
+          (hash label=(t 'resources.role.scope.titles.resource_type'))
+        }}
+        @valin='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              {{#if (this.isKeywordThis B.data.id)}}
+                <Hds::Text::Body @tag='p'>
+                  {{#if @model.scope.name}}
+                    {{@model.scope.name}}
+                  {{else}}
+                    {{@model.scope.id}}
+                  {{/if}}
+                </Hds::Text::Body>
+                <Hds::Text::Body @tag='p'>
+                  <Hds::Badge
+                    @text={{t 'resources.role.scope.keywords.this.sub-title'}}
+                    @size='small'
+                  />
+                </Hds::Text::Body>
+              {{else if (this.isKeywordChildren B.data.id)}}
+                <Hds::Text::Body @tag='p'>
+                  {{t 'resources.role.scope.keywords.children.title'}}
+                </Hds::Text::Body>
+                <Hds::Text::Body @tag='p'>
+                  {{t 'resources.role.scope.keywords.children.sub-title'}}
+                </Hds::Text::Body>
+              {{else if (this.isKeywordDescendants B.data.id)}}
+                <Hds::Text::Body @tag='p'>
+                  {{t 'resources.role.scope.keywords.descendants.title'}}
+                </Hds::Text::Body>
+                <Hds::Text::Body @tag='p'>
+                  {{t 'resources.role.scope.keywords.descendants.sub-title'}}
+                </Hds::Text::Body>
+              {{else}}
+                {{#if (can 'read model' B.data)}}
+                  <LinkTo @route='scopes.scope' @model={{B.data}}>
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
+            </B.Td>
+            <B.Td>
+              {{#if B.data.scope.isGlobal}}
+                <Hds::Link::Inline
+                  @route='scopes.scope'
+                  @model={{B.data.scope.id}}
+                  @icon='globe'
+                  @iconPosition='leading'
+                >
+                  {{#if B.data.scope.name}}
+                    {{B.data.scope.name}}
+                  {{else}}
+                    {{B.data.scope.id}}
+                  {{/if}}
+                </Hds::Link::Inline>
+              {{else if B.data.scope.isOrg}}
+                <Hds::Link::Inline
+                  @route='scopes.scope'
+                  @model={{B.data.scope.id}}
+                  @icon='org'
+                  @iconPosition='leading'
+                >
+                  {{#if B.data.scope.name}}
+                    {{B.data.scope.name}}
+                  {{else}}
+                    {{B.data.scope.id}}
+                  {{/if}}
+                </Hds::Link::Inline>
+              {{else}}
+                {{#if B.data.scope.name}}
+                  {{B.data.scope.name}}
+                {{else}}
+                  {{B.data.scope.id}}
+                {{/if}}
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if B.data.type}}
+                <Hds::Badge
+                  @text={{t (concat 'resources.scope.types.' B.data.type)}}
+                />
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{/if}}
+
+  </page.body>
+
 </Rose::Layout::Page>
