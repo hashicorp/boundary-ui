@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -18,8 +18,8 @@
     <Form::Target::EnableSessionRecording
       @model={{@model}}
       @storageBucketList={{this.storageBucketList}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.targets.save @model}}
+      @cancel={{fn this.cancel @model}}
     />
   </page.body>
 

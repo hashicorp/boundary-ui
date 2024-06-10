@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -82,7 +82,9 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    await deleteOrgCli(org.id);
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
@@ -134,7 +136,9 @@ test('Verify session created to target with address, then cancel the session @ce
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    await deleteOrgCli(org.id);
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
@@ -181,6 +185,8 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
     );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     const org = orgs.items.filter((obj) => obj.name === orgName)[0];
-    await deleteOrgCli(org.id);
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
   }
 });

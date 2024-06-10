@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.role.grant.title_plural')}}
@@ -25,7 +25,7 @@
   </page.header>
 
   <page.actions>
-    <Roles::Role::Actions @model={{@model}} />
+    <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
   </page.actions>
 
   <page.navigation>
@@ -35,10 +35,10 @@
   <page.body>
     <Form::Role::Grants
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @addGrant={{route-action 'addGrant' @model}}
-      @removeGrant={{route-action 'removeGrant' @model}}
+      @submit={{fn this.save @model}}
+      @cancel={{fn this.cancel @model}}
+      @addGrant={{fn this.addGrant @model}}
+      @removeGrant={{fn this.removeGrant @model}}
     />
   </page.body>
 

@@ -1,12 +1,18 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSourcesController extends Controller {
   // =services
+
+  @service router;
 
   // =attributes
 
@@ -36,5 +42,33 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
       ({ id, type }) => !currentCredentialSourceIDs.has(id) && type !== 'json',
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
+  }
+
+  // =actions
+
+  /**
+   * Add credential libraries to current target
+   * @param {TargetModel} target
+   * @param {[string]} credentialLibraryIDs
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async save(target, credentialLibraryIDs) {
+    await target.addInjectedApplicationCredentialSources(credentialLibraryIDs);
+    this.router.replaceWith(
+      'scopes.scope.targets.target.injected-application-credential-sources',
+    );
+  }
+
+  /**
+   * Redirect to target credential sources as if nothing ever happened.
+   */
+  @action
+  cancel() {
+    this.router.replaceWith(
+      'scopes.scope.targets.target.injected-application-credential-sources',
+    );
   }
 }

@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.target.actions.add-host-sources')}}
@@ -29,8 +29,8 @@
         @model={{@model.target}}
         @hostCatalogs={{@model.hostCatalogs}}
         @hostSets={{@model.hostSets}}
-        @submit={{route-action 'save' @model.target}}
-        @cancel={{route-action 'cancel'}}
+        @submit={{fn this.save @model.target}}
+        @cancel={{this.cancel}}
       />
     {{/if}}
 

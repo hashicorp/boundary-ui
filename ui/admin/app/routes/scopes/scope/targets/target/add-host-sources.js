@@ -1,20 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
-  @service router;
 
   // =methods
 
@@ -53,24 +48,5 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
       hostCatalogs,
       hostSets,
     };
-  }
-
-  // =actions
-
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(target, hostSetIDs) {
-    await target.addHostSources(hostSetIDs);
-    this.router.replaceWith('scopes.scope.targets.target.host-sources');
-  }
-
-  /**
-   * Redirect to target host sources as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith('scopes.scope.targets.target.host-sources');
   }
 }

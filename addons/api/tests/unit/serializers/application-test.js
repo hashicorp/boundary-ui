@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -139,7 +139,7 @@ module('Unit | Serializer | application', function (hooks) {
       type: TYPE_AUTH_METHOD_OIDC, //has both string and array `for` option
       name: 'OIDC Auth Method',
       state: 'foo',
-      account_claim_maps: [{ from: 'foo', to: 'bar' }],
+      account_claim_maps: [{ key: 'foo', value: 'bar' }],
       claims_scopes: [{ value: 'profile' }, { value: 'email' }],
       signing_algorithms: [{ value: 'RS256' }, { value: 'RS384' }],
       allowed_audiences: [

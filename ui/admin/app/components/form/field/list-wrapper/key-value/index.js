@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Component from '@glimmer/component';
@@ -29,6 +29,20 @@ export default class MappingListComponent extends Component {
   get options() {
     return this.args?.options || this.args?.model?.[this.args.name];
   }
+
+  /**
+   * Determines if we need to show an empty row to the users to enter more key/value pairs based on removeDuplicates arg,
+   * by default it is true
+   * @type {object}
+   */
+  get showNewRow() {
+    if (this.args.showNewRow) {
+      return this.args.showNewRow();
+    } else {
+      return true;
+    }
+  }
+
   // =actions
 
   /**
@@ -49,6 +63,7 @@ export default class MappingListComponent extends Component {
     } else {
       const field = this.args.name;
       const existingArray = this.args.model[field] ?? [];
+
       const newArray = [
         ...existingArray,
         { key: this.newOptionKey, value: this.newOptionValue },

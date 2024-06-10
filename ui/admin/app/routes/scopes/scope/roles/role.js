@@ -1,10 +1,9 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRoleRoute extends Route {
@@ -40,16 +39,5 @@ export default class ScopesScopeRolesRoleRoute extends Route {
     if (role.scopeID !== scope.id) {
       this.router.replaceWith(transition.to.name, role.scopeID, role.id);
     }
-  }
-
-  // =actions
-  /**
-   * Rollback changes on a role.
-   * @param {RoleModel} role
-   */
-  @action
-  cancel(role) {
-    role.rollbackAttributes();
-    this.refresh();
   }
 }

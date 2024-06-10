@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -38,21 +38,11 @@ test.beforeAll(async () => {
 
 test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
   await page.goto('/');
-  let org;
+  let orgName;
   let connect;
   try {
-    // Create an org
-    const orgName = await createOrg(page);
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
-    // Navigate to LDAP auth method creation page
+    // Create an LDAP auth method
+    orgName = await createOrg(page);
     await page
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })
@@ -135,6 +125,14 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await createRole(page);
     await addPrincipalToRole(page, ldapManagedGroupName);
   } finally {
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
+    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
     if (org) {
       await deleteOrgCli(org.id);
     }

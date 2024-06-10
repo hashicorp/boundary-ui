@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'titles.new')}}
@@ -26,8 +26,8 @@
     <Form::Alias
       @model={{@model}}
       @hideTargetId='true'
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.targets.saveAlias @model}}
+      @cancel={{fn this.targets.cancelAlias @model}}
     />
   </page.body>
 </Rose::Layout::Page>
