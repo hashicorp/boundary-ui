@@ -6,6 +6,11 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import {
+  GRANT_SCOPE_THIS,
+  GRANT_SCOPE_CHILDREN,
+  GRANT_SCOPE_DESCENDANTS,
+} from 'api/models/role';
 
 module('Unit | Model | role', function (hooks) {
   setupTest(hooks);
@@ -182,5 +187,111 @@ module('Unit | Model | role', function (hooks) {
     });
     const model = store.peekRecord('role', '123abc');
     await model.removePrincipal('3');
+  });
+
+  test('grantScopes returns an empty array when no grant_scope_ids are present', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const role = store.createRecord('role');
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 0);
+  });
+
+  test('grantScopes returns an empty array when no grant_scope_ids are loaded', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const role = store.createRecord('role', {
+      grant_scope_ids: ['o_123'],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 0);
+  });
+
+  test('grantScopes returns an array of scope records', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [orgScope.id],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 1);
+    assert.strictEqual(grantScopes[0].id, orgScope.id);
+  });
+
+  test('grantScopes returns an array of scope records ordered by orgs then projects', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [projectScope.id, orgScope.id],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 2);
+    assert.strictEqual(grantScopes[0].id, orgScope.id);
+    assert.strictEqual(grantScopes[1].id, projectScope.id);
+  });
+
+  test('grantScopes returns an array of scope records and keywords', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [projectScope.id, GRANT_SCOPE_THIS, orgScope.id],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 3);
+    assert.strictEqual(grantScopes[0].id, GRANT_SCOPE_THIS);
+    assert.strictEqual(grantScopes[1].id, orgScope.id);
+    assert.strictEqual(grantScopes[2].id, projectScope.id);
+  });
+
+  test('grantScopes orders keywords by this, children, descendants', async function (assert) {
+    // A role cannot have this, children, and descendants at the same time
+    // but for testing purposes, we want to show the order they are sorted in
+    const store = this.owner.lookup('service:store');
+    const role = store.createRecord('role', {
+      grant_scope_ids: [
+        GRANT_SCOPE_CHILDREN,
+        GRANT_SCOPE_DESCENDANTS,
+        GRANT_SCOPE_THIS,
+      ],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 3);
+    assert.strictEqual(grantScopes[0].id, GRANT_SCOPE_THIS);
+    assert.strictEqual(grantScopes[1].id, GRANT_SCOPE_CHILDREN);
+    assert.strictEqual(grantScopes[2].id, GRANT_SCOPE_DESCENDANTS);
+  });
+
+  test('grantScopes returns an array of keywords and scopes in the correct order', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [
+        projectScope.id,
+        GRANT_SCOPE_THIS,
+        orgScope.id,
+        GRANT_SCOPE_CHILDREN,
+      ],
+    });
+
+    const grantScopes = role.grantScopes;
+
+    assert.strictEqual(grantScopes.length, 4);
+    assert.strictEqual(grantScopes[0].id, GRANT_SCOPE_THIS);
+    assert.strictEqual(grantScopes[1].id, GRANT_SCOPE_CHILDREN);
+    assert.strictEqual(grantScopes[2].id, orgScope.id);
+    assert.strictEqual(grantScopes[3].id, projectScope.id);
   });
 });
