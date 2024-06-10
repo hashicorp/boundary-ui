@@ -1,20 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
-  @service router;
 
   // =methods
 
@@ -64,33 +59,5 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
       credentialLibraries,
       credentials,
     };
-  }
-
-  // =actions
-
-  /**
-   * Add credential libraries to current target
-   * @param {TargetModel} target
-   * @param {[string]} credentialLibraryIDs
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(target, credentialLibraryIDs) {
-    await target.addBrokeredCredentialSources(credentialLibraryIDs);
-    this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources',
-    );
-  }
-
-  /**
-   * Redirect to target credential sources as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources',
-    );
   }
 }

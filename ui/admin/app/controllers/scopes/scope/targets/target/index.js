@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Controller, { inject as controller } from '@ember/controller';
@@ -9,7 +9,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeTargetsTargetIndexController extends Controller {
-  @controller('scopes/scope/targets/target/index') targets;
+  @controller('scopes/scope/targets/index') targets;
 
   // =services
 
@@ -17,6 +17,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   @service router;
 
   // =attributes
+
   @tracked showFlyout = false;
 
   // =actions

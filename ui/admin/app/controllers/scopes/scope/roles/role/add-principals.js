@@ -1,12 +1,18 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeRolesRoleAddPrincipalsController extends Controller {
   // =services
+
+  @service router;
 
   // =attributes
 
@@ -25,5 +31,29 @@ export default class ScopesScopeRolesRoleAddPrincipalsController extends Control
       ]);
     const sorted = [global, ...orgsAndProjects].flat();
     return sorted;
+  }
+
+  // =actions
+
+  /**
+   * Save principal IDs to current role via the API.
+   * @param {RoleModel} role
+   * @param {[string]} principalIDs
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async addPrincipals(role, principalIDs) {
+    await role.addPrincipals(principalIDs);
+    this.router.replaceWith('scopes.scope.roles.role.principals');
+  }
+
+  /**
+   * Redirect to role principals as if nothing ever happened.
+   */
+  @action
+  cancel() {
+    this.router.replaceWith('scopes.scope.roles.role.principals');
   }
 }

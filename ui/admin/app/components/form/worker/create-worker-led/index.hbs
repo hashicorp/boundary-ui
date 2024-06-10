@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -95,7 +95,14 @@
           @disabled={{form.disabled}}
           @addOption={{this.addWorkerTag}}
           @removeOptionByIndex={{this.removeWorkerTagByIndex}}
-        />
+        >
+          <:key as |K|>
+            <K.text />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
 

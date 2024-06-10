@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 const { app, shell, BrowserWindow, ipcMain } = require('electron');
@@ -14,7 +14,6 @@ const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
 const which = require('which');
-const { unixSocketRequest } = require('../helpers/request-promise');
 const clientDaemonManager = require('../services/client-daemon-manager');
 
 /**

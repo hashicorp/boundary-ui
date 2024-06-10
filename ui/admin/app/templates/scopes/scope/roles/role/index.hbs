@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -14,7 +14,7 @@
   </page.header>
 
   <page.actions>
-    <Roles::Role::Actions @model={{@model}} />
+    <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
   </page.actions>
 
   <page.navigation>
@@ -25,8 +25,8 @@
     <Form::Role
       @model={{@model}}
       @grantScopes={{this.grantScopes}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.roles.save @model}}
+      @cancel={{fn this.roles.cancel @model}}
     />
   </page.body>
 

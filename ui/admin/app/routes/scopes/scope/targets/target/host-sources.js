@@ -1,21 +1,16 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { all, hash } from 'rsvp';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
 
   // =methods
 
@@ -51,22 +46,5 @@ export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
    */
   model() {
     return this.modelFor('scopes.scope.targets.target');
-  }
-
-  // =actions
-
-  /**
-   * Removes a host set from the current target and redirects to index.
-   * @param {TargetModel} target
-   * @param {HostSetModel} hostSet
-   */
-  @action
-  @loading
-  @confirm('questions.remove-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removeHostSource(target, hostSet) {
-    await target.removeHostSource(hostSet.id);
-    this.refresh();
   }
 }

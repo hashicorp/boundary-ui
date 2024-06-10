@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-console */
@@ -21,6 +21,8 @@ const {
   shell,
 } = require('electron');
 require('./ipc/handlers.js');
+const log = require('electron-log/main');
+const fs = require('fs');
 
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
@@ -53,6 +55,15 @@ protocol.registerSchemesAsPrivileged([
 // This is to correctly set the process.env.PATH as electron does not
 // correctly inherit the path variable in production
 fixPath();
+
+// Setup logger
+log.initialize();
+log.transports.console.level = false;
+log.transports.file.format =
+  '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
+log.transports.file.fileName = 'desktop-client.log';
+// Set the max file size to 10MB
+log.transports.file.maxSize = 10485760;
 
 const createWindow = (partition, closeWindowCB) => {
   /**

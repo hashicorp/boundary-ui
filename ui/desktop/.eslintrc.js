@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 'use strict';
@@ -25,6 +25,7 @@ module.exports = {
   env: {
     browser: true,
   },
+  globals: { __electronLog: 'true' },
   rules: {
     'ember/no-get': 'off',
     'ember/no-get-with-default': 'off',

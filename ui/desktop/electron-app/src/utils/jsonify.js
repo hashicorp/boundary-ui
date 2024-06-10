@@ -1,7 +1,9 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
+
+const log = require('electron-log/main');
 
 // Convert to json
 const jsonify = (data) => {
@@ -9,6 +11,7 @@ const jsonify = (data) => {
   try {
     return JSON.parse(data);
   } catch (e) {
+    log.error('jsonify:', e);
     // Ignore parse errors
   }
 };

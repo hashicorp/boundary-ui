@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -65,6 +65,7 @@ test.beforeEach(async () => {
     process.env.E2E_PASSWORD_AUTH_METHOD_ID,
     process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
     process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    process.env.E2E_AWS_REGION,
   );
 });
 
@@ -84,8 +85,10 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     let groupId = await createGroupCli(orgId);
     let userId = await createUserCli(orgId);
     let staticHostCatalogId = await createStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId =
-      await createDynamicAwsHostCatalogCli(projectId);
+    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
+      projectId,
+      process.env.E2E_AWS_REGION,
+    );
     let staticHostId = await createStaticHostCli(staticHostCatalogId);
     let staticHostSetId = await createHostSetCli(staticHostCatalogId);
     let staticCredentialStoreId =
@@ -190,6 +193,8 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     await deleteResource(page);
   } finally {
     // Delete org in case the test failed before deleting the org using UI
-    await deleteOrgCli(orgId);
+    if (orgId) {
+      await deleteOrgCli(orgId);
+    }
   }
 });
