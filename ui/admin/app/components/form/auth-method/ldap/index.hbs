@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -382,124 +382,45 @@
       }}</F.HelperText>
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::Fieldset @isOptional={{true}} as |F|>
-    <F.Legend>{{t
-        'resources.auth-method.form.account_attribute_maps.label'
-      }}</F.Legend>
-    <F.HelperText>{{t
-        'resources.auth-method.form.account_attribute_maps.help'
-      }}</F.HelperText>
-    {{#let (unique-id) (unique-id) as |fromHeaderID toHeaderID|}}
-      <F.Control>
-        <Hds::Table class='list-wrapper-field' name='account_attribute_maps'>
-          <:head as |H|>
-            <H.Tr>
-              <H.Th id={{fromHeaderID}}>{{t
-                  'resources.auth-method.titles.from-attr'
-                }}</H.Th>
-              <H.Th id={{toHeaderID}}>{{t
-                  'resources.auth-method.titles.to-attr'
-                }}</H.Th>
-              <H.Th>{{t 'titles.actions'}}</H.Th>
-            </H.Tr>
-          </:head>
-          <:body as |B|>
-            {{#each @model.account_attribute_maps as |attrMap i|}}
-              <B.Tr>
-                <B.Td>
-                  <Hds::Form::TextInput::Field
-                    @value={{attrMap.from}}
-                    @type='text'
-                    disabled={{form.disabled}}
-                    aria-labelledby={{fromHeaderID}}
-                    {{on 'input' (set-from-event attrMap 'from')}}
-                  />
-                </B.Td>
-                <B.Td>
-                  <Hds::Form::Select::Field
-                    @value={{attrMap.to}}
-                    @width='100%'
-                    disabled={{form.disabled}}
-                    aria-labelledby={{toHeaderID}}
-                    {{on 'change' (set-from-event attrMap 'to')}}
-                    as |F|
-                  >
-                    <F.Options>
-                      {{#each this.toAttributes as |toAttrOption|}}
-                        <option
-                          value={{toAttrOption}}
-                          selected={{eq toAttrOption attrMap.to}}
-                        >{{toAttrOption}}</option>
-                      {{/each}}
-                    </F.Options>
-                  </Hds::Form::Select::Field>
-                </B.Td>
-                <B.Td>
-                  <Hds::Button
-                    @text={{t 'actions.remove'}}
-                    @color='critical'
-                    @icon='trash'
-                    @isIconOnly={{true}}
-                    disabled={{form.disabled}}
-                    {{on
-                      'click'
-                      (fn @removeItemByIndex 'account_attribute_maps' i)
-                    }}
-                  />
-                </B.Td>
-              </B.Tr>
-            {{/each}}
-            <B.Tr>
-              <B.Td>
-                <Hds::Form::TextInput::Field
-                  @value={{this.newFromAttribute}}
-                  @type='text'
-                  @isOptional={{true}}
-                  disabled={{form.disabled}}
-                  aria-labelledby={{fromHeaderID}}
-                  {{on 'input' (set-from-event this 'newFromAttribute')}}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Form::Select::Field
-                  @value={{this.newToAttribute}}
-                  @width='100%'
-                  disabled={{form.disabled}}
-                  aria-labelledby={{toHeaderID}}
-                  {{on 'change' (set-from-event this 'newToAttribute')}}
-                  as |F|
-                >
-                  <F.Options>
-                    {{#each this.toAttributes as |toAttrOption|}}
-                      <option
-                        value={{toAttrOption}}
-                        selected={{eq toAttrOption this.newToAttribute}}
-                      >{{toAttrOption}}</option>
-                    {{/each}}
-                  </F.Options>
-                </Hds::Form::Select::Field>
-              </B.Td>
-              <B.Td>
-                <Hds::Button
-                  @text={{t 'actions.add'}}
-                  @color='secondary'
-                  disabled={{or form.disabled (not this.newFromAttribute)}}
-                  {{on 'click' this.addAttributeMap}}
-                />
-              </B.Td>
-            </B.Tr>
-          </:body>
-        </Hds::Table>
-      </F.Control>
-    {{/let}}
-    {{#if @model.errors.account_attribute_maps}}
-      <F.Error as |E|>
-        {{#each @model.errors.account_attribute_maps as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Fieldset>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.auth-method.form.account_attribute_maps.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.auth-method.form.account_attribute_maps.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.account_attribute_maps}}
+        <F.Error as |E|>
+          {{#each @model.errors.account_attribute_maps as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+    <:field as |F|>
+      <F.KeyValue
+        @name='account_attribute_maps'
+        @options={{@model.account_attribute_maps}}
+        @model={{@model}}
+        @keyLabel={{t 'form.from_claim.label'}}
+        @valueLabel={{t 'form.to_claim.label'}}
+        @width='100%'
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |V|>
+          <V.select @selectOptions={{this.toAttributes}} />
+        </:value>
+      </F.KeyValue>
+    </:field>
+  </Form::Field::ListWrapper>
 
   <div class='ldap-section'>
     <p class='hds-typography-display-300 hds-font-weight-bold'>{{t

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -128,10 +128,16 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'claims_scopes');
 
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
+    await fillIn(
+      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
+      'from_claim',
+    );
+    await select(
+      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
+      'email',
+    );
 
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await click('[name="account_claim_maps"] button');
 
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -31,9 +31,15 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgName;
   try {
-    const orgName = await createOrg(page);
+    orgName = await createOrg(page);
+    const groupName = await createGroup(page);
+    await addMemberToGroup(page, 'admin');
+    await createRole(page);
+    await addPrincipalToRole(page, groupName);
+    await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
+  } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -41,13 +47,9 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    const groupName = await createGroup(page);
-    await addMemberToGroup(page, 'admin');
-    await createRole(page);
-    await addPrincipalToRole(page, groupName);
-    await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
-  } finally {
-    await deleteOrgCli(org.id);
+    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+    if (org) {
+      await deleteOrgCli(org.id);
+    }
   }
 });

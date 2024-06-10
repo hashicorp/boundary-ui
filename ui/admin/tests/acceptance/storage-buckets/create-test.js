@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 
 module('Acceptance | storage-buckets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,25 +18,6 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
   let features;
   let getStorageBucketCount;
-
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-  const ALERT_TEXT_SELECTOR = '[role="alert"] div';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-  const NAME_FIELD_TEXT = 'random string';
-  const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
-  const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
-  const STATIC_CREDENTIAL_SELECTOR = '[value="static"]';
-  const DYNAMIC_CREDENTIAL_SELECTOR = '[value="dynamic"]';
-  const ROLE_ARN_SELECTOR = '[name="role_arn"]';
-  const ACCESS_KEY_SELECTOR = '[name="access_key_id"]';
-  const SECRET_KEY_SELECTOR = '[name="secret_access_key"]';
-  const SCOPE_SELECTOR = '[name=scope]';
-  const CREDENTIAL_TYPE_GROUP_SELECTOR = '[name=credential_type]';
-  const MINIO_PLUGIN_TYPE_SELECTOR = '[value=minio]';
-  const ENDPOINT_URL_SELECTOR = '[name=endpoint_url]';
-  const ENDPOINT_URL_TEXT = 'http://www.hashicorp.com';
 
   const instances = {
     scopes: {
@@ -72,20 +54,20 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await select(SCOPE_SELECTOR, 'global');
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await select(selectors.FIELD_SCOPE, 'global');
 
-    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
-    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
-    assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
-    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).isNotDisabled();
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).isNotDisabled();
+    assert.dom(selectors.FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     assert.strictEqual(storageBucket.scopeId, 'global');
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
@@ -95,21 +77,21 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await select(SCOPE_SELECTOR, instances.scopes.org.id);
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await select(selectors.FIELD_SCOPE, instances.scopes.org.id);
 
-    assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
-    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
-    assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
-    assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).isNotDisabled();
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).isNotDisabled();
+    assert.dom(selectors.FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
 
-    assert.dom(ALERT_TEXT_SELECTOR).hasText('Saved successfully.');
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.dom(selectors.TOAST).hasText(selectors.TOAST_SUCCESSFULL_VALUE);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     assert.strictEqual(storageBucket.scopeId, instances.scopes.org.id);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
@@ -122,24 +104,30 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(`[href="${urls.newStorageBucket}"]`);
 
     // Fill the form
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(MINIO_PLUGIN_TYPE_SELECTOR);
-    await select(SCOPE_SELECTOR, instances.scopes.org.id);
-    await fillIn(ENDPOINT_URL_SELECTOR, ENDPOINT_URL_TEXT);
-    await fillIn(BUCKET_NAME_FIELD_SELECTOR, 'Test SB');
-    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
-    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await click(selectors.FIELD_PLUGIN_TYPE_MINIO);
+    await select(selectors.FIELD_SCOPE, instances.scopes.org.id);
+    await fillIn(
+      selectors.FIELD_ENDPOINT_URL,
+      selectors.FIELD_ENDPOINT_URL_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_BUCKET_NAME,
+      selectors.FIELD_BUCKET_NAME_VALUE,
+    );
+    await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
+    await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
+    await click(selectors.SAVE_BTN);
 
     // Assertions
     const storageBucket = this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
-    assert.dom(ALERT_TEXT_SELECTOR).hasText('Saved successfully.');
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.dom(selectors.TOAST).hasText(selectors.TOAST_SUCCESSFULL_VALUE);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     assert.strictEqual(
       storageBucket.attributes.endpoint_url,
-      ENDPOINT_URL_TEXT,
+      selectors.FIELD_ENDPOINT_URL_VALUE,
     );
     assert.strictEqual(storageBucket.attributes.role_arn, null);
     assert.strictEqual(storageBucket.plugin.name, 'minio');
@@ -152,22 +140,22 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
 
     // There are 2 credential types
     assert
-      .dom(`${CREDENTIAL_TYPE_GROUP_SELECTOR} .hds-form-radio-card`)
+      .dom(`${selectors.GROUP_CREDENTIAL_TYPE} .hds-form-radio-card`)
       .exists({ count: 2 });
 
-    await click(DYNAMIC_CREDENTIAL_SELECTOR);
-    await fillIn(ROLE_ARN_SELECTOR, 'test-arn-id');
+    await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
+    await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     //for dynamic credentials, there should be no secret field
     assert.notOk(storageBucket.secret);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
@@ -178,22 +166,22 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
     assert
-      .dom(`${CREDENTIAL_TYPE_GROUP_SELECTOR} .hds-form-radio-card`)
+      .dom(`${selectors.GROUP_CREDENTIAL_TYPE} .hds-form-radio-card`)
       .exists({ count: 2 });
 
-    await click(STATIC_CREDENTIAL_SELECTOR);
-    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
-    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
+    await click(selectors.FIELD_STATIC_CREDENTIAL);
+    await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
+    await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
 
     const storageBucket = this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     //for static credentials, role_arn should be null
     assert.strictEqual(storageBucket.attributes.role_arn, null);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
@@ -207,25 +195,31 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(`[href="${urls.newStorageBucket}"]`);
 
     // Fill the form
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(MINIO_PLUGIN_TYPE_SELECTOR);
-    await fillIn(ENDPOINT_URL_SELECTOR, ENDPOINT_URL_TEXT);
-    await fillIn(BUCKET_NAME_FIELD_SELECTOR, 'Test SB');
-    await fillIn(ACCESS_KEY_SELECTOR, 'access_key_id');
-    await fillIn(SECRET_KEY_SELECTOR, 'secret_access_key');
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await click(selectors.FIELD_PLUGIN_TYPE_MINIO);
+    await fillIn(
+      selectors.FIELD_ENDPOINT_URL,
+      selectors.FIELD_ENDPOINT_URL_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_BUCKET_NAME,
+      selectors.FIELD_BUCKET_NAME_VALUE,
+    );
+    await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
+    await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
 
     // Retrieve recently created SB
     const storageBucket = await this.server.schema.storageBuckets.findBy({
-      name: NAME_FIELD_TEXT,
+      name: selectors.FIELD_NAME_VALUE,
     });
 
     // Assertions
-    assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+    assert.strictEqual(storageBucket.name, selectors.FIELD_NAME_VALUE);
     assert.strictEqual(
       storageBucket.attributes.endpoint_url,
-      ENDPOINT_URL_TEXT,
+      selectors.FIELD_ENDPOINT_URL_VALUE,
     );
     assert.strictEqual(storageBucket.attributes.role_arn, null);
     assert.strictEqual(storageBucket.plugin.name, 'minio');
@@ -238,8 +232,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(CANCEL_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+
+    await click(selectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.storageBuckets);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount);
@@ -257,8 +252,8 @@ module('Acceptance | storage-buckets | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'bucket_name',
+                description: 'This is a required field.',
               },
             ],
           },
@@ -268,11 +263,13 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SAVE_BTN);
     await a11yAudit();
 
-    assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(selectors.TOAST).hasText('The request was invalid.');
+    assert
+      .dom(selectors.FIELD_BUCKET_NAME_ERROR)
+      .hasText('This is a required field.');
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {

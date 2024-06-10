@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -19,7 +19,7 @@ const {
 const {
   createSshTargetWithAddressAndWorkerFilterEnt,
   waitForSessionToBeVisible,
-  createStorageBucket,
+  createStorageBucketAws,
   enableSessionRecording,
   createStoragePolicy,
   attachStoragePolicy,
@@ -48,7 +48,7 @@ test.beforeAll(async () => {
   await checkBoundaryCli();
 });
 
-test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
+test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
   await page.goto('/');
   let orgId;
   let storagePolicy;
@@ -77,7 +77,7 @@ test('Verify session recording can be deleted @ent @aws', async ({ page }) => {
 
     // Create storage bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    const storageBucketName = await createStorageBucket(
+    const storageBucketName = await createStorageBucketAws(
       page,
       orgName,
       process.env.E2E_AWS_BUCKET_NAME,

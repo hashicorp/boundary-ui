@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -247,138 +247,45 @@
   </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.account_claim_maps.label'}}</:title>
-    <:description>{{t 'form.account_claim_maps.help'}}</:description>
-    <:body>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.account_claim_maps.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.account_claim_maps.help'}}
+      </F.HelperText>
+
       {{#if @model.errors.account_claim_maps}}
-        <Rose::Form::Errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.account_claim_maps as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </Rose::Form::Errors>
+        </F.Error>
       {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.from_claim.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.to_claim.label'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.account_claim_maps as |claimMap i|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @name='from_claim'
-                  @value={{claimMap.from}}
-                  @error={{@model.errors.account_claim_maps}}
-                  @contextual={{true}}
-                  as |field|
-                >
-                  <field.label>{{t 'form.from_claim.label'}}</field.label>
-                  <field.field />
-                </form.input>
-              </row.cell>
-              <row.cell>
-
-                <Hds::Form::Select::Field
-                  @value={{claimMap.to}}
-                  @isInvalid={{@model.errors.account_claim_maps}}
-                  disabled={{form.disabled}}
-                  {{on 'change' (set-from-event claimMap 'to')}}
-                  as |F|
-                >
-                  <F.Label class='sr-only'>{{t 'form.to_claim.label'}}</F.Label>
-                  <F.Options>
-                    {{#each this.toClaims as |toClaimOption|}}
-                      <option
-                        value={{toClaimOption}}
-                        selected={{eq toClaimOption claimMap.to}}
-                      >{{toClaimOption}}</option>
-                    {{/each}}
-                  </F.Options>
-                </Hds::Form::Select::Field>
-
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
-
-          <body.row as |row|>
-            <row.cell>
-              <form.input
-                @type='text'
-                @name='from_claim'
-                @value={{this.newFromClaim}}
-                @label={{t 'resources.auth-method.titles.new-from-claim'}}
-              />
-            </row.cell>
-            <row.cell>
-
-              <Hds::Form::Select::Field
-                @value={{this.newToClaim}}
-                disabled={{form.disabled}}
-                {{on 'change' (set-from-event this 'newToClaim')}}
-                as |F|
-              >
-                <F.Label class='sr-only'>{{t
-                    'resources.auth-method.titles.new-to-claim'
-                  }}</F.Label>
-                <F.Options>
-                  {{#each this.toClaims as |toClaimOption|}}
-                    <option
-                      value={{toClaimOption}}
-                      selected={{eq toClaimOption this.newToClaim}}
-                    >{{toClaimOption}}</option>
-                  {{/each}}
-                </F.Options>
-              </Hds::Form::Select::Field>
-
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn
-                    @addAccountMapItem
-                    'account_claim_maps'
-                    this.newFromClaim
-                    this.newToClaim
-                  )
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+    </:fieldset>
+    <:field as |F|>
+      <F.KeyValue
+        @name='account_claim_maps'
+        @options={{@model.account_claim_maps}}
+        @model={{@model}}
+        @keyLabel={{t 'form.from_claim.label'}}
+        @valueLabel={{t 'form.to_claim.label'}}
+        @width='100%'
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |V|>
+          <V.select @selectOptions={{this.toClaims}} />
+        </:value>
+      </F.KeyValue>
+    </:field>
+  </Form::Field::ListWrapper>
 
   {{! Certificates }}
   <Form::Field::ListWrapper

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import BaseModel from '../../models/base';
@@ -81,7 +81,7 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
   })
   credential_type;
 
-  @attr('object', {
+  @attr('object-as-array', {
     for: 'vault-generic',
     description: 'It indicates the credential mapping overrides.',
   })

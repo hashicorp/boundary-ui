@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -10,6 +10,7 @@ import {
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
 import { action } from '@ember/object';
+import { run } from '@ember/runloop';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
@@ -72,6 +73,13 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
+
+    // Unload all sessions from the store as we might have sessions still in store
+    // if they were canceled outside of the desktop client
+    // Not wrapping it an ember run seems to cause a test to fail as well as an error
+    // if you switch between orgs due to a similar issue as this
+    // https://github.com/emberjs/data/issues/5447#issuecomment-845672812
+    run(() => this.store.unloadAll('session'));
   }
 
   /**
