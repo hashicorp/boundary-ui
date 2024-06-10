@@ -34,15 +34,6 @@ export default class RoleModel extends GeneratedRoleModel {
   @attr({ readOnly: true, emptyArrayIfMissing: true }) grant_strings;
 
   /**
-   * Convenience for looking up the grant scope, if loaded.
-   */
-  get grantScope() {
-    return this.grant_scope_id
-      ? this.store.peekRecord('scope', this.grant_scope_id)
-      : null;
-  }
-
-  /**
    * A list of IDs for principals of type `user`.
    * @type {string[]}
    */
