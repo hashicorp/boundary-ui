@@ -14,7 +14,6 @@ const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
 const which = require('which');
-const { unixSocketRequest } = require('../helpers/request-promise');
 const clientDaemonManager = require('../services/client-daemon-manager');
 
 /**
