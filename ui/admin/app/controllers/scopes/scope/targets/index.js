@@ -6,14 +6,20 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { TYPES_TARGET } from 'api/models/target';
 import { action } from '@ember/object';
 import { debounce } from 'core/decorators/debounce';
+import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TYPES_TARGET } from 'api/models/target';
 
 export default class ScopesScopeTargetsIndexController extends Controller {
   // =services
 
   @service intl;
+  @service can;
+  @service router;
+  @service confirm;
 
   // =attributes
 
@@ -66,7 +72,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     }));
   }
 
-  // =methods
+  // =actions
 
   /**
    * Handles input on each keystroke and the search queryParam
@@ -90,5 +96,224 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   applyFilter(paramKey, selectedItems) {
     this[paramKey] = [...selectedItems];
     this.page = 1;
+  }
+
+  /**
+   * Rollback changes on a target.
+   * @param {TargetModel} target
+   */
+  @action
+  cancel(target) {
+    const { isNew } = target;
+    target.rollbackAttributes();
+    if (isNew) this.router.transitionTo('scopes.scope.targets');
+  }
+
+  /**
+   * Saves the target and refreshes the list.
+   * @param {TargetModel} target
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess(({ isNew }) =>
+    isNew ? 'notifications.create-success' : 'notifications.save-success',
+  )
+  async save(target) {
+    await target.save();
+    if (this.can.can('read model', target)) {
+      await this.router.transitionTo('scopes.scope.targets.target', target);
+    } else {
+      await this.router.transitionTo('scopes.scope.targets');
+    }
+    await this.router.refresh();
+  }
+
+  /**
+   * Targets may have either an `address` _or_ host sources, but not both.
+   *
+   * In order to save a target with an `address`, any existing host sources
+   * must first be removed.  Once host sources are removed, the target with
+   * `address` may be saved via the standard `save` action.
+   *
+   * If `address` and host sources are both present, the user is asked to
+   * confirm that they wish to remove all host sources.  If the user declines,
+   * no changes are persisted; the form remains editable and unsaved.
+   *
+   * If `address` is set and the target has no host sources, the save proceeds
+   * as normal.
+   *
+   * If neither `address` nor host sources are set, the save proceeds as normal.
+   *
+   * @param {TargetModel} target
+   */
+  @action
+  async saveWithAddress(target) {
+    if (target.address) {
+      const { address } = target;
+      // Remove host sources if necessary.  This is cancelable by the user.
+      await this.removeHostSources(target);
+      // After removing host sources, the model is reset to an empty address,
+      // so we need to update the address with the previous value.
+      target.address = address;
+    }
+
+    // Proceed with standard save.
+    await this.save(target);
+  }
+
+  /**
+   * If the passed target has host sources:
+   *   - Request confirmation from the user for host source removal.
+   *   - Persist removal of all host sources.
+   * @param {TargetModel} target
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  async removeHostSources(target) {
+    const hostSourceCount = target.host_sources?.length;
+
+    if (hostSourceCount) {
+      const hostSourceIDs = target.host_sources.map(
+        ({ host_source_id }) => host_source_id,
+      );
+      const confirmMessage = this.intl.t(
+        'resources.target.questions.delete-host-sources.message',
+        { hostSourceCount },
+      );
+
+      // Ask for confirmation
+      await this.confirm.confirm(confirmMessage, {
+        title: 'resources.target.questions.delete-host-sources.title',
+        confirm: 'actions.remove-resources',
+      });
+      // Remove host sources.  This step is reached only if the user accepts.
+      await target.removeHostSources(hostSourceIDs);
+    }
+  }
+
+  /**
+   * Deletes a target and redirects to targets index.
+   * @param {TargetModel} target
+   */
+  @action
+  @loading
+  @confirm('questions.delete-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(target) {
+    await target.destroyRecord();
+    this.router.replaceWith('scopes.scope.targets');
+    await this.router.refresh();
+  }
+
+  /**
+   * Update type of target
+   * @param {string} type
+   */
+  @action
+  changeType(type) {
+    this.router.replaceWith({ queryParams: { type } });
+  }
+
+  /**
+   * Remove a credential source from the current target.
+   * @param {TargetModel} target
+   * @param {CredentialLibraryModel, credentialModel} credentialSource
+   */
+  @action
+  @loading
+  @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
+  async removeInjectedApplicationCredentialSource(target, credentialSource) {
+    await target.removeInjectedApplicationCredentialSource(credentialSource.id);
+    await this.router.refresh();
+  }
+
+  /**
+   * Remove a credential source from the current target.
+   * @param {TargetModel} target
+   * @param {CredentialLibraryModel, credentialModel} credentialSource
+   */
+  @action
+  @loading
+  @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
+  async removeBrokeredCredentialSource(target, credentialSource) {
+    await target.removeBrokeredCredentialSource(credentialSource.id);
+    await this.router.refresh();
+  }
+
+  /**
+   * Removes a host set from the current target and redirects to index.
+   * @param {TargetModel} target
+   * @param {HostSetModel} hostSet
+   */
+  @action
+  @loading
+  @confirm('questions.remove-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.remove-success')
+  async removeHostSource(target, hostSet) {
+    await target.removeHostSource(hostSet.id);
+    await this.router.refresh();
+  }
+
+  /**
+   * Delete an alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @confirm('resources.alias.messages.delete')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async deleteAlias(alias) {
+    await alias.destroyRecord();
+    await this.router.transitionTo('scopes.scope.targets.target');
+    await this.router.refresh('scopes.scope.targets.target');
+  }
+
+  /**
+   * Remove destaination_id from alias
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @confirm('questions.clear-confirm')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.clear-success')
+  async clearAlias(alias) {
+    alias.destination_id = '';
+    await alias.save();
+    await this.router.transitionTo('scopes.scope.targets.target');
+    await this.router.refresh('scopes.scope.targets.target');
+  }
+
+  /**
+   * Handle save
+   * @param {AliasModel} alias
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message)
+  @notifySuccess('notifications.save-success')
+  async saveAlias(alias) {
+    await alias.save();
+    await this.router.transitionTo('scopes.scope.targets.target');
+    await this.router.refresh();
+  }
+
+  /**
+   * Rollback changes on alias.
+   * @param {AliasModel} alias
+   */
+  @action
+  async cancelAlias(alias) {
+    alias.rollbackAttributes();
+    await this.router.transitionTo('scopes.scope.targets.target');
   }
 }

@@ -9,8 +9,8 @@ export function targetHandler({ targets }, { params: { idMethod } }) {
   const method = idMethod.split(':')[1];
   const target = targets.find(id);
   const {
-    brokeredCredentialSourceIds: originalBrokeredCredentials,
-    injectedApplicationCredentialSourceIds: originalInjectedCredentials,
+    brokeredCredentialSourceIds: originalBrokeredCredentials = [],
+    injectedApplicationCredentialSourceIds: originalInjectedCredentials = [],
   } = target;
   const selectedBrokeredCredentials = attrs.brokeredCredentialSourceIds;
   const selectedInjectedCredentials =

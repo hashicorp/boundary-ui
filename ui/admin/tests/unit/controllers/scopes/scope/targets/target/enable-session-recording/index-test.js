@@ -1,8 +1,3 @@
-/**
- * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: BUSL-1.1
- */
-
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
@@ -10,7 +5,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
-  'Unit | Controller | scopes/scope/targets/target/enable-session-recording/create-storage-bucket',
+  'Unit | Controller | scopes/scope/targets/target/enable-session-recording/index',
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
@@ -25,19 +20,18 @@ module(
         project: null,
       },
       target: null,
-      storageBucket: null,
     };
 
     const urls = {
       projectScope: null,
-      createStorageBucket: null,
+      enableSessionRecording: null,
     };
 
     hooks.beforeEach(function () {
       authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/enable-session-recording/create-storage-bucket',
+        'controller:scopes/scope/targets/target/enable-session-recording/index',
       );
 
       instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -52,12 +46,9 @@ module(
       instances.target = this.server.create('target', {
         scope: instances.scopes.project,
       });
-      instances.storageBucket = this.server.create('storage-bucket', {
-        scope: instances.scopes.org,
-      });
 
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.createStorageBucket = `${urls.projectScope}/targets/${instances.target.id}/enable-session-recording`;
+      urls.enableSessionRecording = `${urls.projectScope}/targets/${instances.target.id}/enable-session-recording`;
     });
 
     test('it exists', function (assert) {
@@ -65,31 +56,15 @@ module(
     });
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
-      await visit(urls.createStorageBucket);
-      const storageBucket = await store.findRecord(
-        'storage-bucket',
-        instances.storageBucket.id,
-      );
-      storageBucket.name = 'test';
+      await visit(urls.enableSessionRecording);
+      const target = await store.findRecord('target', instances.target.id);
+      target.enable_session_recording = 'true';
 
-      assert.strictEqual(storageBucket.name, 'test');
+      assert.strictEqual(target.enable_session_recording, 'true');
 
-      await controller.cancel(storageBucket);
+      await controller.cancel(target);
 
-      assert.notEqual(storageBucket.name, 'test');
-    });
-
-    test('save action saves changes on the specified model', async function (assert) {
-      await visit(urls.createStorageBucket);
-      const storageBucket = await store.findRecord(
-        'storage-bucket',
-        instances.storageBucket.id,
-      );
-      storageBucket.name = 'test';
-
-      await controller.save(storageBucket);
-
-      assert.strictEqual(storageBucket.name, 'test');
+      assert.notEqual(target.enable_session_recording, 'true');
     });
   },
 );
