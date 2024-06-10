@@ -38,7 +38,9 @@ const findLatestVersion = (url) => {
 
 // Find zip archive for update
 const findUpdateArchive = (version) => {
-  const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+  // If architecture is not ARM64 assign AMD64 for broader compatibility
+  const architecture = process.arch === 'arm64' ? process.arch : 'amd64';
+  const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
       if (response.statusCode === 403)
