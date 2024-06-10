@@ -132,8 +132,6 @@ export default class OnboardingRoute extends Route {
 
   async createGrants(org, project, target, role) {
     role.scopeID = org.id;
-    // TODO: all grant_scope_id instances will be removed in future PR
-    role.grant_scope_id = project.id;
     role.grant_scope_ids = [project.id];
     try {
       await role.save();

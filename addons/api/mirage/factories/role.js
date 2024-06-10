@@ -26,8 +26,6 @@ export default factory.extend({
   ],
 
   id: () => generateId('r_'),
-  // TODO: all grant_scope_id instances will be removed in future PR
-  grant_scope_id: 'this',
   grant_scope_ids: () => ['this'],
 
   /**

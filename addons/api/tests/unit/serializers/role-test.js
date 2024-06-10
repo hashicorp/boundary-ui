@@ -25,7 +25,6 @@ module('Unit | Serializer | role', function (hooks) {
       name: 'User',
       description: 'Description',
       version: 1,
-      grant_scope_id: null,
       grant_scope_ids: [],
     });
   });
