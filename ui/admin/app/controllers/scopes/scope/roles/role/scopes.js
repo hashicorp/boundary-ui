@@ -4,7 +4,6 @@
  */
 
 import Controller, { inject as controller } from '@ember/controller';
-import { action } from '@ember/object';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
@@ -14,17 +13,14 @@ import {
 export default class ScopesScopeRolesRoleScopesController extends Controller {
   @controller('scopes/scope/roles/index') roles;
 
-  @action
   isKeywordThis(id) {
     return id === GRANT_SCOPE_THIS;
   }
 
-  @action
   isKeywordChildren(id) {
     return id === GRANT_SCOPE_CHILDREN;
   }
 
-  @action
   isKeywordDescendants(id) {
     return id === GRANT_SCOPE_DESCENDANTS;
   }

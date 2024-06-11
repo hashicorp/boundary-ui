@@ -51,7 +51,7 @@ export default class RoleModel extends GeneratedRoleModel {
     const grantScopes = [];
     if (this.grant_scope_ids) {
       const keywordIDs = this.grant_scope_ids.filter((id) => {
-        return !id.startsWith('o_') && !id.startsWith('p_') && id !== 'global';
+        return GRANT_SCOPE_KEYWORDS.includes(id);
       });
       // using filter instead of find to get the global id and allow for
       // spreading into sortedScopeIDs if globalID is undefined
@@ -71,6 +71,9 @@ export default class RoleModel extends GeneratedRoleModel {
         );
       });
 
+      // sort the grant scopes by keywords, global, org, then project
+      // as the API returns them in an arbitrary order and we want to
+      // display them in a consistent order
       const sortedScopeIDs = [
         ...sortedKeywords,
         ...globalID,
