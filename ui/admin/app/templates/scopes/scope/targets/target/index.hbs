@@ -18,7 +18,10 @@
   </page.navigation>
 
   <page.actions>
-    <Targets::Target::Actions @model={{@model}} />
+    <Targets::Target::Actions
+      @model={{@model}}
+      @delete={{this.targets.delete}}
+    />
   </page.actions>
 
   <page.body>
@@ -26,8 +29,8 @@
       <bc.Body>
         <Form::Target
           @model={{@model}}
-          @submit={{route-action 'saveWithAddress' @model}}
-          @cancel={{route-action 'cancel' @model}}
+          @submit={{fn this.targets.saveWithAddress @model}}
+          @cancel={{fn this.targets.cancel @model}}
         />
       </bc.Body>
       <bc.Sidebar>
@@ -54,7 +57,7 @@
                 data-test-view-more
                 @text={{t 'resources.target.actions.view-more-aliases'}}
                 @color='secondary'
-                {{on 'click' this.targets.toggleFlyout}}
+                {{on 'click' this.toggleFlyout}}
               />
             {{/if}}
             {{#if this.showFlyOutComponent}}

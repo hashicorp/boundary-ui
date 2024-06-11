@@ -4,14 +4,8 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends Route {
-  // =services
-  @service store;
-  @service router;
-
   // =methods
 
   /**
@@ -21,17 +15,5 @@ export default class ScopesScopeTargetsTargetEnableSessionRecordingRoute extends
 
   model() {
     return this.modelFor('scopes.scope.targets.target');
-  }
-
-  // =actions
-  /**
-   * Reset the selected storage bucket and redirect to target
-   * @param {TargetModel} target
-   */
-  @action
-  cancel(target) {
-    const { id } = target;
-    target.rollbackAttributes();
-    this.router.replaceWith('scopes.scope.targets.target', id);
   }
 }
