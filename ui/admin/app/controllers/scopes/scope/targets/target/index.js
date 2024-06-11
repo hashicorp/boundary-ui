@@ -9,7 +9,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeTargetsTargetIndexController extends Controller {
-  @controller('scopes/scope/targets/target/index') targets;
+  @controller('scopes/scope/targets/index') targets;
 
   // =services
 
@@ -17,6 +17,7 @@ export default class ScopesScopeTargetsTargetIndexController extends Controller 
   @service router;
 
   // =attributes
+
   @tracked showFlyout = false;
 
   // =actions

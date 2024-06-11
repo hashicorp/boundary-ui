@@ -3,6 +3,11 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.targets.target.manage-alias'
+/>
+
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
     <Breadcrumbs::Container />
@@ -41,14 +46,14 @@
           {{#if (and perms.canUpdate @model.destination_id)}}
             <dd.Interactive
               @text={{t 'actions.clear'}}
-              {{on 'click' (route-action 'clearAlias' @model)}}
+              {{on 'click' (fn this.targets.clearAlias @model)}}
             />
           {{/if}}
           {{#if perms.canDelete}}
             <dd.Interactive
               @color='critical'
               @text={{t 'actions.delete'}}
-              {{on 'click' (route-action 'deleteAlias' @model)}}
+              {{on 'click' (fn this.targets.deleteAlias @model)}}
             />
           {{/if}}
         </Hds::Dropdown>
@@ -59,8 +64,8 @@
   <page.body>
     <Form::Alias
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.targets.saveAlias @model}}
+      @cancel={{fn this.targets.cancelAlias @model}}
     />
   </page.body>
 </Rose::Layout::Page>

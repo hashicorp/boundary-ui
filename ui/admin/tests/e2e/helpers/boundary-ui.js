@@ -827,19 +827,24 @@ exports.createUser = async (page) => {
 };
 
 /**
- * Uses the UI to add the first available account to a user.
+ * Uses the UI to add an account to a user
  * Assumes you have selected the desired user.
  * Assumes you have created new account.
  * @param {Page} page Playwright page object
+ * @param {string} loginName Login name of the account
  */
-exports.addAccountToUser = async (page) => {
+exports.addAccountToUser = async (page, loginName) => {
   await page.getByRole('link', { name: 'Accounts', exact: true }).click();
   await page
     .getByRole('article')
     .getByRole('link', { name: 'Add Accounts', exact: true })
     .click();
+  await page
+    .getByRole('cell', { name: loginName })
+    .locator('..')
+    .getByRole('checkbox')
+    .click({ force: true });
 
-  await page.getByRole('checkbox').click();
   await page.getByRole('button', { name: 'Add Accounts', exact: true }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -1096,9 +1101,25 @@ exports.createStoragePolicy = async (page) => {
   await page
     .getByRole('link', { name: 'Storage Policies', exact: true })
     .click();
-  await page
-    .getByRole('link', { name: 'Create a new storage policy', exact: true })
-    .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Storage Policies'),
+  ).toBeVisible();
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'New Storage Policy', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page
+      .getByRole('link', { name: 'New Storage Policy', exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole('link', { name: 'Create a new storage policy', exact: true })
+      .click();
+  }
+
   await page.getByLabel('Name').fill(storagePolicyName);
   await page.getByLabel('Retention Policy').selectOption({ label: 'Forever' });
   await page.getByRole('button', { name: 'Save' }).click();

@@ -4,9 +4,15 @@
  */
 
 import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesController extends Controller {
   // =services
+
+  @service router;
 
   // =attributes
 
@@ -37,5 +43,33 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
       ({ id }) => !currentCredentialSourceIDs.has(id),
     );
     return [...notAddedCredentialLibraries, ...notAddedCredentials];
+  }
+
+  // =actions
+
+  /**
+   * Add credential libraries to current target
+   * @param {TargetModel} target
+   * @param {[string]} credentialLibraryIDs
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async save(target, credentialLibraryIDs) {
+    await target.addBrokeredCredentialSources(credentialLibraryIDs);
+    this.router.replaceWith(
+      'scopes.scope.targets.target.brokered-credential-sources',
+    );
+  }
+
+  /**
+   * Redirect to target credential sources as if nothing ever happened.
+   */
+  @action
+  cancel() {
+    this.router.replaceWith(
+      'scopes.scope.targets.target.brokered-credential-sources',
+    );
   }
 }
