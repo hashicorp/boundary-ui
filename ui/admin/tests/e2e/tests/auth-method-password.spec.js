@@ -57,7 +57,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await createPasswordAccount(page, username, password);
     await makeAuthMethodPrimary(page);
     await createUser(page);
-    await addAccountToUser(page);
+    await addAccountToUser(page, username);
 
     // Log out
     await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
