@@ -563,7 +563,10 @@ role:
   scope:
     title: Scope
     title_plural: Scopes
-    description: Role grant sets can be applied to multiple descendants underneath this scope.
+    description:
+      global: Role grant sets can be applied to multiple descendants underneath this scope.
+      org: Role grant sets can be applied to multiple children underneath this scope.
+      project: Role grant sets can only be applied to this scope.
     titles:
       parent_scope: Parent scope
       resource_type: Resource type
