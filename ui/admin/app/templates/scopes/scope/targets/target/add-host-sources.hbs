@@ -29,8 +29,8 @@
         @model={{@model.target}}
         @hostCatalogs={{@model.hostCatalogs}}
         @hostSets={{@model.hostSets}}
-        @submit={{route-action 'save' @model.target}}
-        @cancel={{route-action 'cancel'}}
+        @submit={{fn this.save @model.target}}
+        @cancel={{this.cancel}}
       />
     {{/if}}
 

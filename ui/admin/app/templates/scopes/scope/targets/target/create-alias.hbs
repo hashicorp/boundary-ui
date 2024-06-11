@@ -26,8 +26,8 @@
     <Form::Alias
       @model={{@model}}
       @hideTargetId='true'
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.targets.saveAlias @model}}
+      @cancel={{fn this.targets.cancelAlias @model}}
     />
   </page.body>
 </Rose::Layout::Page>
