@@ -6,7 +6,7 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
-const { checkEnv, authenticatedState } = require('../helpers/general');
+const { checkEnv } = require('../helpers/general');
 const { nanoid } = require('nanoid');
 
 const {
@@ -15,12 +15,13 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const {
+  addAccountToUser,
+  createPasswordAuthMethod,
   createOrg,
   createRole,
+  createUser,
   addPrincipalToRole,
 } = require('../helpers/boundary-ui');
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await checkEnv([
@@ -39,8 +40,25 @@ test.beforeAll(async () => {
 test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
   await page.goto('/');
   let orgName;
-  let connect;
   try {
+    // Log in
+    await page
+      .getByLabel('Login Name')
+      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await page
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
+    ).toBeEnabled();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
+    ).toBeVisible();
+
     // Create an LDAP auth method
     orgName = await createOrg(page);
     await page
@@ -50,7 +68,6 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await page.getByRole('button', { name: 'New' }).click();
     await page.getByRole('link', { name: 'LDAP' }).click();
 
-    // Fill out the form
     const ldapAuthMethodName = 'LDAP ' + nanoid();
     await page.getByLabel('Name').fill(ldapAuthMethodName);
     await page.getByLabel('Description').fill('LDAP Auth Method');
@@ -124,6 +141,38 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     // Create a role and add LDAP managed group to role
     await createRole(page);
     await addPrincipalToRole(page, ldapManagedGroupName);
+
+    // Create a user and attach LDAP account to it
+    await createUser(page);
+    await addAccountToUser(page, process.env.E2E_LDAP_USER_NAME);
+
+    // Create a second auth method so that there's multiple auth methods on the
+    // login screen
+    await createPasswordAuthMethod(page);
+
+    // Log out
+    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+
+    // Log in using ldap account
+    await page.getByText('Choose a different scope').click();
+    await page.getByRole('link', { name: orgName }).click();
+    await page.getByRole('link', { name: ldapAuthMethodName }).click();
+    await page.getByLabel('Login Name').fill(process.env.E2E_LDAP_USER_NAME);
+    await page
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.E2E_LDAP_USER_PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(page.getByText(process.env.E2E_LDAP_USER_NAME)).toBeEnabled();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Projects'),
+    ).toBeVisible();
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -135,10 +184,6 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     const org = orgs.items.filter((obj) => obj.name == orgName)[0];
     if (org) {
       await deleteOrgCli(org.id);
-    }
-    // End `boundary connect` process
-    if (connect) {
-      connect.kill('SIGTERM');
     }
   }
 });
