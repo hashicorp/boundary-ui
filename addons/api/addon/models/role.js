@@ -16,6 +16,17 @@ export const GRANT_SCOPE_KEYWORDS = Object.freeze([
   GRANT_SCOPE_DESCENDANTS,
 ]);
 
+// Sort the grant scope IDs by the order in which they should be displayed
+// in the UI as the API will return them in an arbitrary order.
+const sortOrder = {
+  [GRANT_SCOPE_THIS]: 0,
+  [GRANT_SCOPE_CHILDREN]: 1,
+  [GRANT_SCOPE_DESCENDANTS]: 2,
+  global: 3,
+  o: 4,
+  p: 5,
+};
+
 export default class RoleModel extends GeneratedRoleModel {
   // =services
 
@@ -48,17 +59,6 @@ export default class RoleModel extends GeneratedRoleModel {
   get grantScopes() {
     const grantScopes = [];
     if (this.grant_scope_ids) {
-      // Sort the grant scope IDs by the order in which they should be displayed
-      // in the UI as the API will return them in an arbitrary order.
-      const sortOrder = {
-        [GRANT_SCOPE_THIS]: 0,
-        [GRANT_SCOPE_CHILDREN]: 1,
-        [GRANT_SCOPE_DESCENDANTS]: 2,
-        global: 3,
-        o: 4,
-        p: 5,
-      };
-
       const sortedScopeIDs = [...this.grant_scope_ids].sort((a, b) => {
         const aSplit = a.split('_')[0];
         const bSplit = b.split('_')[0];
@@ -67,11 +67,7 @@ export default class RoleModel extends GeneratedRoleModel {
       });
 
       sortedScopeIDs.forEach((id) => {
-        if (
-          id === GRANT_SCOPE_THIS ||
-          id === GRANT_SCOPE_CHILDREN ||
-          id === GRANT_SCOPE_DESCENDANTS
-        ) {
+        if (GRANT_SCOPE_KEYWORDS.includes(id)) {
           grantScopes.push({ id });
         } else {
           const scope = this.store.peekRecord('scope', id);
