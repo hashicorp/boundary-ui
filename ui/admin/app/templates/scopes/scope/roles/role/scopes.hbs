@@ -86,7 +86,11 @@
               {{else}}
                 {{#if (can 'read model' B.data)}}
                   <LinkTo @route='scopes.scope' @model={{B.data}}>
-                    {{B.data.displayName}}
+                    {{#if B.data.isGlobal}}
+                      {{t 'titles.global'}}
+                    {{else}}
+                      {{B.data.displayName}}
+                    {{/if}}
                   </LinkTo>
                 {{else}}
                   {{B.data.displayName}}
@@ -108,7 +112,7 @@
                   @iconPosition='leading'
                 >
                   {{#if B.data.scope.name}}
-                    {{B.data.scope.name}}
+                    {{t 'titles.global'}}
                   {{else}}
                     {{B.data.scope.id}}
                   {{/if}}
