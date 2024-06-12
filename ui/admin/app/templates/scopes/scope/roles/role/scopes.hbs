@@ -69,19 +69,18 @@
                     @size='small'
                   />
                 </Hds::Text::Body>
-              {{else if (this.isKeywordChildren B.data.id)}}
+              {{else if (this.isKeywordChildrenOrDescendants B.data.id)}}
                 <Hds::Text::Body @tag='p'>
-                  {{t 'resources.role.scope.keywords.children.title'}}
+                  {{t
+                    (concat 'resources.role.scope.keywords.' B.data.id '.title')
+                  }}
                 </Hds::Text::Body>
                 <Hds::Text::Body @tag='p'>
-                  {{t 'resources.role.scope.keywords.children.sub-title'}}
-                </Hds::Text::Body>
-              {{else if (this.isKeywordDescendants B.data.id)}}
-                <Hds::Text::Body @tag='p'>
-                  {{t 'resources.role.scope.keywords.descendants.title'}}
-                </Hds::Text::Body>
-                <Hds::Text::Body @tag='p'>
-                  {{t 'resources.role.scope.keywords.descendants.sub-title'}}
+                  {{t
+                    (concat
+                      'resources.role.scope.keywords.' B.data.id '.sub-title'
+                    )
+                  }}
                 </Hds::Text::Body>
               {{else}}
                 {{#if (can 'read model' B.data)}}

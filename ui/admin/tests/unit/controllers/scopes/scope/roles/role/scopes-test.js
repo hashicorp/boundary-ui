@@ -53,13 +53,11 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
     assert.notOk(controller.isKeywordThis(GRANT_SCOPE_CHILDREN));
   });
 
-  test('isKeywordChildren action returns true if id is GRANT_SCOPE_CHILDREN', function (assert) {
-    assert.ok(controller.isKeywordChildren(GRANT_SCOPE_CHILDREN));
-    assert.notOk(controller.isKeywordChildren(GRANT_SCOPE_DESCENDANTS));
-  });
-
-  test('isKeywordDescendants action returns true if id is GRANT_SCOPE_DESCENDANTS', function (assert) {
-    assert.ok(controller.isKeywordDescendants(GRANT_SCOPE_DESCENDANTS));
-    assert.notOk(controller.isKeywordDescendants(GRANT_SCOPE_THIS));
+  test('isKeywordChildrenOrDescendants action returns true if id is GRANT_SCOPE_CHILDREN or GRANT_SCOPE_DESCENDANTS', function (assert) {
+    assert.ok(controller.isKeywordChildrenOrDescendants(GRANT_SCOPE_CHILDREN));
+    assert.ok(
+      controller.isKeywordChildrenOrDescendants(GRANT_SCOPE_DESCENDANTS),
+    );
+    assert.notOk(controller.isKeywordChildrenOrDescendants(GRANT_SCOPE_THIS));
   });
 });

@@ -17,11 +17,7 @@ export default class ScopesScopeRolesRoleScopesController extends Controller {
     return id === GRANT_SCOPE_THIS;
   }
 
-  isKeywordChildren(id) {
-    return id === GRANT_SCOPE_CHILDREN;
-  }
-
-  isKeywordDescendants(id) {
-    return id === GRANT_SCOPE_DESCENDANTS;
+  isKeywordChildrenOrDescendants(id) {
+    return id === GRANT_SCOPE_CHILDREN || id === GRANT_SCOPE_DESCENDANTS;
   }
 }
