@@ -40,7 +40,7 @@
     <Roles::Role::Nav @model={{@model}} />
   </page.navigation>
 
-  <page.body>
+  <page.body class='role-grant-scopes'>
     {{#if @model.grant_scope_ids}}
       <Hds::Table
         @model={{@model.grantScopes}}
@@ -147,6 +147,21 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+    {{else}}
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'resources.role.scope.messages.title'}} />
+        <A.Body @text={{t 'resources.role.scope.messages.description'}} />
+        {{#if (can 'create model' this.scope collection='roles')}}
+          <A.Footer as |F|>
+            {{! TODO: Update route to manage-scopes once it is implemented }}
+            <F.Link::Standalone
+              @icon='plus-circle'
+              @text={{t 'resources.role.scope.messages.action'}}
+              @route='scopes.scope.roles.role.scopes'
+            />
+          </A.Footer>
+        {{/if}}
+      </Hds::ApplicationState>
     {{/if}}
 
   </page.body>

@@ -75,4 +75,10 @@ module('Acceptance | roles | scopes', function (hooks) {
       `/scopes/${instances.scopes.global.id}/scopes`,
     );
   });
+
+  test('user sees no scopes message when role has no grant scopes', async function (assert) {
+    instances.role.update({ grant_scope_ids: [] });
+    await visit(urls.roleScopes);
+    assert.dom('.role-grant-scopes div').includesText('No scopes added');
+  });
 });
