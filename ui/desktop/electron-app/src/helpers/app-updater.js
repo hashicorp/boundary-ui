@@ -11,6 +11,7 @@ const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
+const { exec } = require('child_process');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -18,6 +19,33 @@ const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
 if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
   currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
 }
+
+const returnArchitectureToUpdate = () => {
+  const nodeArchitecture = process.arch;
+
+  if (nodeArchitecture === 'arm64') {
+    return nodeArchitecture;
+  }
+
+  if (nodeArchitecture === 'amd64') {
+    const runsOnRosetta = exec(
+      'sysctl -in sysctl.proc_translated',
+      (err, stdout, stderr) => {
+        if (err) {
+          console.error(`returnArchitectureToUpdate error: ${err}`);
+          return;
+        }
+        return stdout;
+      },
+    );
+
+    if (runsOnRosetta) {
+      return 'arm64';
+    } else {
+      return nodeArchitecture; // amd64
+    }
+  }
+};
 
 // Query releases url to find latest version
 const findLatestVersion = (url) => {
@@ -39,7 +67,7 @@ const findLatestVersion = (url) => {
 // Find zip archive for update
 const findUpdateArchive = (version) => {
   // If architecture is not ARM64 assign AMD64 for broader compatibility
-  const architecture = process.arch === 'arm64' ? process.arch : 'amd64';
+  const architecture = returnArchitectureToUpdate();
   const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
