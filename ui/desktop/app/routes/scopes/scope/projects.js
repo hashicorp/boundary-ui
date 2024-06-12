@@ -130,6 +130,8 @@ export default class ScopesScopeProjectsRoute extends Route {
         }),
         {
           body: this.intl.t('notifications.connected-to-target.description'),
+          // This only has an effect on windows
+          requireInteraction: true,
         },
       ).onclick = async () => {
         let orgScope = 'global';
