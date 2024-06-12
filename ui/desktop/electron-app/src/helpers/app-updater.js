@@ -11,7 +11,7 @@ const { parse } = require('node-html-parser');
 const { autoUpdater, dialog } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -20,6 +20,7 @@ if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
   currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
 }
 
+// Returns the real CPU architecture of the machine.
 const returnArchitectureToUpdate = () => {
   const nodeArchitecture = process.arch;
 
@@ -27,24 +28,21 @@ const returnArchitectureToUpdate = () => {
     return nodeArchitecture;
   }
 
-  if (nodeArchitecture === 'amd64') {
-    const runsOnRosetta = exec(
+  try {
+    const runsOnRosetta = execSync(
       'sysctl -in sysctl.proc_translated',
-      (err, stdout, stderr) => {
-        if (err) {
-          console.error(`returnArchitectureToUpdate error: ${err}`);
-          return;
-        }
-        return stdout;
-      },
-    );
+    ).toString();
 
     if (runsOnRosetta) {
       return 'arm64';
     } else {
       return nodeArchitecture; // amd64
     }
+  } catch (err) {
+    console.error(`returnArchitectureToUpdate error: ${err}`);
   }
+
+  return 'arm64';
 };
 
 // Query releases url to find latest version
@@ -66,7 +64,6 @@ const findLatestVersion = (url) => {
 
 // Find zip archive for update
 const findUpdateArchive = (version) => {
-  // If architecture is not ARM64 assign AMD64 for broader compatibility
   const architecture = returnArchitectureToUpdate();
   const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
