@@ -560,6 +560,25 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources.
     actions:
       create: New Grant
+  scope:
+    title: Scope
+    title_plural: Scopes
+    description:
+      global: Role grant sets can be applied to multiple descendants underneath this scope.
+      org: Role grant sets can be applied to multiple children underneath this scope.
+      project: Role grant sets can only be applied to this scope.
+    titles:
+      parent_scope: Parent scope
+      resource_type: Resource type
+    keywords:
+      this:
+        sub-title: This scope
+      children:
+        title: All Children
+        sub-title: All children under this scope
+      descendants:
+        title: All Descendants
+        sub-title: Add all of the orgs and the projects in the orgs that are underneath this scope
 target:
   title: Target
   title_plural: Targets
@@ -872,6 +891,10 @@ scope:
   title_plural: Scopes
   messages:
     cannot_read: While you do not have permission to read this scope, you may have permission to view resources within it.
+  types:
+    global: Global
+    org: Org
+    project: Project
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
