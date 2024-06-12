@@ -29,6 +29,16 @@ export default factory.extend({
   grant_scope_ids: () => ['this'],
 
   /**
+   * Adds grant scopes to the role.
+   */
+  withScopes: trait({
+    afterCreate(role) {
+      const { scope } = role;
+      role.update({ grant_scope_ids: ['this', scope.id] });
+    },
+  }),
+
+  /**
    * Adds principals to the role.
    */
   withPrincipals: trait({
