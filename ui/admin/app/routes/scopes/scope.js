@@ -53,12 +53,6 @@ export default class ScopesScopeRoute extends Route {
    * a project.  These are used for scope navigation.
    */
   async afterModel(model) {
-    // fetch all scopes for multi-scope grants
-    // TODO: address if existing logic needs corrected
-    await this.store.query('scope', {
-      scope_id: model.scopeID,
-      recursive: true,
-    });
     // First, load orgs and, if necessary, projects
     let orgs, projects;
     orgs = await this.store
