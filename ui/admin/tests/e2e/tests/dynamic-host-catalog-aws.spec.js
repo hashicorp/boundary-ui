@@ -7,7 +7,14 @@
 const { test, expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 const { checkEnv, authenticatedState } = require('../helpers/general');
-const { createOrg, createProject } = require('../helpers/boundary-ui');
+const {
+  addHostSourceToTarget,
+  createHostCatalog,
+  createHostSet,
+  createOrg,
+  createProject,
+  createTarget,
+} = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
 
@@ -18,6 +25,7 @@ test.beforeAll(async () => {
     'E2E_AWS_HOST_SET_FILTER',
     'E2E_AWS_HOST_SET_IPS',
     'E2E_AWS_REGION',
+    'E2E_TARGET_PORT',
   ]);
 });
 
@@ -26,12 +34,13 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('AWS', async () => {
-  test('Create a Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
+  test('Create an AWS Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
     page,
   }) => {
     await createOrg(page);
     await createProject(page);
 
+    // Create host catalog
     const hostCatalogName = 'Host Catalog ' + nanoid();
     await page
       .getByRole('navigation', { name: 'Resources' })
@@ -155,5 +164,36 @@ test.describe('AWS', async () => {
         .click();
       await page.getByRole('link', { name: 'Hosts' }).click();
     }
+
+    // Create a target and add DHC host set as a host source
+    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
+    await addHostSourceToTarget(page, hostSetName);
+
+    // Add another host source
+    await createHostCatalog(page);
+    const newHostSetName = await createHostSet(page);
+    await page
+      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('link', { name: 'Targets' })
+      .click();
+    await page.getByRole('link', { name: targetName }).click();
+    await addHostSourceToTarget(page, newHostSetName);
+
+    // Remove the host source from the target
+    await page
+      .getByRole('link', { name: newHostSetName })
+      .locator('..')
+      .locator('..')
+      .getByRole('button', { name: 'Manage' })
+      .click();
+    await page.getByRole('button', { name: 'Remove' }).click();
+    await page.getByRole('button', { name: 'OK' }).click();
+    await expect(
+      page.getByRole('alert').getByText('Success', { exact: true }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Dismiss' }).click();
+
+    // Add the host source back
+    await addHostSourceToTarget(page, newHostSetName);
   });
 });
