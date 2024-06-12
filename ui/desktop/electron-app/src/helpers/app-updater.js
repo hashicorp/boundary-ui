@@ -12,6 +12,7 @@ const { autoUpdater, dialog } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
 const { execSync } = require('child_process');
+const log = require('electron-log/main');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -29,9 +30,9 @@ const returnArchitectureToUpdate = () => {
   }
 
   try {
-    const runsOnRosetta = execSync(
-      'sysctl -in sysctl.proc_translated',
-    ).toString();
+    const runsOnRosetta = parseInt(
+      execSync('sysctl -in sysctl.proc_translated'),
+    );
 
     if (runsOnRosetta) {
       return 'arm64';
@@ -39,10 +40,8 @@ const returnArchitectureToUpdate = () => {
       return nodeArchitecture; // amd64
     }
   } catch (err) {
-    console.error(`returnArchitectureToUpdate error: ${err}`);
+    log.error(`returnArchitectureToUpdate error: ${err}`);
   }
-
-  return 'arm64';
 };
 
 // Query releases url to find latest version
