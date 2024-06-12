@@ -48,39 +48,22 @@ export default class RoleModel extends GeneratedRoleModel {
   get grantScopes() {
     const grantScopes = [];
     if (this.grant_scope_ids) {
-      const sortedScopeIDs = this.grant_scope_ids.slice().sort((a, b) => {
-        const aIndex = GRANT_SCOPE_KEYWORDS.indexOf(a);
-        const bIndex = GRANT_SCOPE_KEYWORDS.indexOf(b);
+      // Sort the grant scope IDs by the order in which they should be displayed
+      // in the UI as the API will return them in an arbitrary order.
+      const sortOrder = {
+        [GRANT_SCOPE_THIS]: 0,
+        [GRANT_SCOPE_CHILDREN]: 1,
+        [GRANT_SCOPE_DESCENDANTS]: 2,
+        global: 3,
+        o: 4,
+        p: 5,
+      };
 
-        // both a and b are keywords
-        if (aIndex !== -1 && bIndex !== -1) {
-          return aIndex - bIndex;
-        }
-        // only a or b is a keyword
-        if (aIndex !== -1) return -1;
-        if (bIndex !== -1) return 1;
+      const sortedScopeIDs = [...this.grant_scope_ids].sort((a, b) => {
+        const aSplit = a.split('_')[0];
+        const bSplit = b.split('_')[0];
 
-        // only a is global
-        if (a === 'global') return -1;
-        // only b is global
-        if (b === 'global') return 1;
-
-        // both a and b are orgs - keep original order
-        if (a.startsWith('o_') && b.startsWith('o_')) return 0;
-        // only a is an org
-        if (a.startsWith('o_')) return -1;
-        // only b is an org
-        if (b.startsWith('o_')) return 1;
-
-        // both a and b are projects - keep original order
-        if (a.startsWith('p_') && b.startsWith('p_')) return 0;
-        // only a is a project
-        if (a.startsWith('p_')) return -1;
-        // only b is a project
-        if (b.startsWith('p_')) return 1;
-
-        // default - keep original order
-        return 0;
+        return sortOrder[aSplit] - sortOrder[bSplit];
       });
 
       sortedScopeIDs.forEach((id) => {
