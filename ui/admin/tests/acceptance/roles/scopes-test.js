@@ -76,9 +76,21 @@ module('Acceptance | roles | scopes', function (hooks) {
     );
   });
 
-  test('user sees no scopes message when role has no grant scopes', async function (assert) {
+  test('user sees no scopes message and action when role has no grant scopes', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.roleScopes);
     assert.dom('.role-grant-scopes div').includesText('No scopes added');
+    assert.dom('.role-grant-scopes div div:nth-child(3) a').isVisible();
+  });
+
+  test('user does not see action to add scopes when role has no grant scopes without proper permissions', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [],
+      authorized_actions: instances.role.authorized_actions.filter(
+        (action) => action !== 'set-grant-scopes',
+      ),
+    });
+    await visit(urls.roleScopes);
+    assert.dom('.role-grant-scopes div div:nth-child(3) a').doesNotExist();
   });
 });

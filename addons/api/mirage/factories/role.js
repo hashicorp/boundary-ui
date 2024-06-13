@@ -18,6 +18,7 @@ export default factory.extend({
       'set-grants',
       'add-principals',
       'remove-principals',
+      'set-grant-scopes',
     ],
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [

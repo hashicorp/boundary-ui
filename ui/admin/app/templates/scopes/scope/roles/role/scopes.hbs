@@ -151,7 +151,7 @@
       <Hds::ApplicationState as |A|>
         <A.Header @title={{t 'resources.role.scope.messages.title'}} />
         <A.Body @text={{t 'resources.role.scope.messages.description'}} />
-        {{#if (can 'create model' this.scope collection='roles')}}
+        {{#if (can 'setGrantScopes role' @model)}}
           <A.Footer as |F|>
             {{! TODO: Update route to manage-scopes once it is implemented }}
             <F.Link::Standalone
