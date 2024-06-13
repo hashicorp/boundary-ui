@@ -53,7 +53,7 @@ test('Create a worker (enterprise) @ent @docker @aws', async ({ page }) => {
   await page.getByLabel('Recording Storage Path').fill('/tmp/recordings');
 
   // Check auto-populated config
-  const configLocator = '[data-test-worker-config=""]';
+  const configLocator = '[data-test-worker-config]';
   await expect(page.locator(configLocator)).toContainText(
     'public_addr = "worker1.example.com"',
   );

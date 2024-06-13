@@ -50,7 +50,7 @@ test('Create a worker @ce @docker @aws', async ({ page }) => {
     .click();
 
   // Check auto-populated config
-  const configLocator = '[data-test-worker-config=""]';
+  const configLocator = '[data-test-worker-config]';
   await expect(page.locator(configLocator)).toContainText(
     'public_addr = "worker1.example.com"',
   );
