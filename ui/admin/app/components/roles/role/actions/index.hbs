@@ -10,7 +10,10 @@
   as |dropdown|
 >
   {{#if (can 'addPrincipals role' @model)}}
-    <dropdown.link @route='scopes.scope.roles.role.add-principals'>
+    <dropdown.link
+      @route='scopes.scope.roles.role.add-principals'
+      data-test-manage-dropdown-principals
+    >
       {{t 'resources.role.principal.actions.add-principals'}}
     </dropdown.link>
   {{/if}}
