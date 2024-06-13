@@ -571,9 +571,16 @@ role:
       parent_scope: Parent scope
       resource_type: Resource type
     messages:
-      title: No scopes added
-      description: You haven’t added any scopes to this role’s grant sets.
-      action: Add scopes to this role
+      none:
+        title: No scopes added
+        description: You haven't added any scopes to this role's grant sets.
+        action: Add scopes to this role
+      manage-scopes:
+        title: Manage Scopes
+        description: Select which scopes you want to add to this role.
+      keywords-selected:
+        description: Just a heads up, you can't select both add all descendants and add all children. You can only choose one or the other.
+        link: You can read more about it here
     keywords:
       this:
         sub-title: This scope
@@ -583,6 +590,23 @@ role:
       descendants:
         title: All Descendants
         sub-title: Add all of the orgs and the projects in the orgs that are underneath this scope
+    actions:
+      manage-scopes: Manage Scopes
+      add-custom-scopes:
+        text: Add custom scopes
+        help: Customize which scopes are added to this role.
+    form:
+      this:
+        label: Add this scope
+        help: Add this scope.
+      children:
+        label: Add all children
+        help:
+          0: Add all of the orgs underneath this scope.
+          1: Add all of the projects underneath the org.
+      descendants:
+        label: Add all descendants
+        help: Add all of the orgs and the projects in the orgs that are underneath this scope.
 target:
   title: Target
   title_plural: Targets
