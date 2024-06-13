@@ -38,11 +38,6 @@ export default ApplicationSerializer.extend({
 
     if (!json.principals.length) delete json.principals;
 
-    // default grant scopes
-    if (json.grant_scope_ids.length === 0) {
-      json.grant_scope_ids = ['this'];
-    }
-
     return json;
   },
 });
