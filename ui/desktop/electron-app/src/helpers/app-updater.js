@@ -38,7 +38,7 @@ const returnArchitectureToUpdate = () => {
       return 'arm64';
     }
   } catch (err) {
-    log.error(`returnArchitectureToUpdate error: ${err}`);
+    log.error(`returnArchitectureToUpdate: ${err}`);
   }
   return nodeArchitecture;
 };
