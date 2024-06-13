@@ -9,7 +9,10 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
 
   async model() {
     const role = this.modelFor('scopes.scope.roles.role');
-    if (!GRANT_SCOPE_KEYWORDS.some((id) => role.grant_scope_ids.includes(id))) {
+    if (
+      role.grant_scope_ids &&
+      !GRANT_SCOPE_KEYWORDS.some((id) => role.grant_scope_ids.includes(id))
+    ) {
       await this.store.query('scope', {
         scope_id: role.scope.id,
         recursive: true,
