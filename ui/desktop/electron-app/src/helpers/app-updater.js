@@ -36,12 +36,11 @@ const returnArchitectureToUpdate = () => {
 
     if (runsOnRosetta) {
       return 'arm64';
-    } else {
-      return nodeArchitecture; // amd64
     }
   } catch (err) {
     log.error(`returnArchitectureToUpdate error: ${err}`);
   }
+  return nodeArchitecture;
 };
 
 // Query releases url to find latest version
