@@ -570,6 +570,10 @@ role:
     titles:
       parent_scope: Parent scope
       resource_type: Resource type
+    messages:
+      title: No scopes added
+      description: You haven’t added any scopes to this role’s grant sets.
+      action: Add scopes to this role
     keywords:
       this:
         sub-title: This scope
