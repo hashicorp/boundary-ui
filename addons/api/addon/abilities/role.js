@@ -30,6 +30,13 @@ export default class RoleAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
+  get canSetGrantScopes() {
+    return this.hasAuthorizedAction('set-grant-scopes');
+  }
+
+  /**
+   * @type {boolean}
+   */
   get canAddPrincipals() {
     return this.hasAuthorizedAction('add-principals');
   }
