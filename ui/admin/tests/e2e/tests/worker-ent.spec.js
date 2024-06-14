@@ -58,6 +58,14 @@ test('Create a worker (enterprise) @ent @docker @aws', async ({
   await page.getByLabel('Recording Storage Path').fill('/tmp/recordings');
 
   // Check auto-populated config
+  const dirLocator = '[data-test-worker-directory]';
+  await expect(page.locator(dirLocator)).toContainText(
+    'mkdir /home/ubuntu/boundary/ ;',
+  );
+  await expect(page.locator(dirLocator)).toContainText(
+    'touch /home/ubuntu/boundary/pki-worker.hcl',
+  );
+
   const configLocator = '[data-test-worker-config]';
   await expect(page.locator(configLocator)).toContainText(
     'public_addr = "worker1.example.com"',

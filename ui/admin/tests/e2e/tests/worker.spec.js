@@ -51,7 +51,15 @@ test('Create a worker @ce @docker @aws', async ({ page, browserName }) => {
     .getByRole('button', { name: 'Add' })
     .click();
 
-  // Check auto-populated config
+  // Check auto-populated configs
+  const dirLocator = '[data-test-worker-directory]';
+  await expect(page.locator(dirLocator)).toContainText(
+    'mkdir /home/ubuntu/boundary/ ;',
+  );
+  await expect(page.locator(dirLocator)).toContainText(
+    'touch /home/ubuntu/boundary/pki-worker.hcl',
+  );
+
   const configLocator = '[data-test-worker-config]';
   await expect(page.locator(configLocator)).toContainText(
     'public_addr = "worker1.example.com"',
