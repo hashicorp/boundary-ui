@@ -78,7 +78,7 @@ module.exports = {
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
   spawnSync(args, envVars = {}) {
     const childProcess = spawnSync(path(), args, {
-      // Some of our outputs (namely client daemon searching) can be very large.
+      // Some of our outputs (namely cache daemon searching) can be very large.
       // This an undocumented hack to allow for an unlimited buffer size which
       // could change at any time. If it does, we should just set an arbitrarily
       // large buffer size or switch to spawn and stream the output and handle

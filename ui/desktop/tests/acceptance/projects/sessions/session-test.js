@@ -14,7 +14,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -114,7 +114,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
   });
 
   hooks.afterEach(function () {
