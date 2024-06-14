@@ -1,7 +1,7 @@
 name: Check Copyright Headers
 
 on:
-  # - pull_request
+  # - pull_request [should we include for all types]
   push:
     branches:
       - gh-copyright-workflow
