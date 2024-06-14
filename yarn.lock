@@ -9047,6 +9047,11 @@ copy-descriptor@^0.1.0:
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
   integrity sha1-Z29us8OZl8LuGsOpJP1hJHSPV40=
 
+copywrite@^0.18.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/copywrite/-/copywrite-1.0.0.tgz#0380122dc9c6b5a024ab23a00a96a58292c7627c"
+  integrity sha512-JQZjvBHNOnGV83r33L6Tz/sTEj012PQcrajQ/K4UBY6bmpLDZwiU8EhI2XEfwxE+dSX3MVmJZmonWgXHMElPkg==
+
 core-js-compat@^3.14.0, core-js-compat@^3.16.0:
   version "3.16.1"
   resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.16.1.tgz#c44b7caa2dcb94b673a98f27eee1c8312f55bc2d"
