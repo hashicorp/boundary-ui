@@ -10,6 +10,7 @@ const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
+  connectToTarget,
   connectSshToTarget,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
@@ -76,7 +77,11 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    connect = await connectSshToTarget(target.id);
+    connect = await connectToTarget(
+      target.id,
+      process.env.E2E_SSH_USER,
+      process.env.E2E_SSH_KEY_PATH,
+    );
     await waitForSessionToBeVisible(page, targetName);
     await page
       .getByRole('cell', { name: targetName })
