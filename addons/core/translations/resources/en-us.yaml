@@ -603,7 +603,7 @@ role:
         label: Add all children
         help:
           0: Add all of the orgs underneath this scope.
-          1: Add all of the projects underneath the org.
+          1: Add all of the projects underneath this org.
       descendants:
         label: Add all descendants
         help: Add all of the orgs and the projects in the orgs that are underneath this scope.
