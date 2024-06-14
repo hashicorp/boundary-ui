@@ -47,8 +47,7 @@
     "git-cz": "^4.8.0",
     "husky": "^8.0.0",
     "license-checker": "^25.0.1",
-    "lint-staged": "^13.0.2",
-    "copywrite": "^0.18.0"
+    "lint-staged": "^13.0.2"
   },
   "resolutions": {
     "request": "^2.88.0",

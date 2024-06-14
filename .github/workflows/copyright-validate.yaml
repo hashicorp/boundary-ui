@@ -4,7 +4,7 @@ on:
   # - pull_request
   push:
     branches:
-      - test-commit
+      - gh-copyright-workflow
 jobs:
   copywrite:
     runs-on: ubuntu-latest
