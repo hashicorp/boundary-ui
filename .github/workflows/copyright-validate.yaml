@@ -1,4 +1,4 @@
-name: Check Copywrite Headers
+name: Check Copyright Headers
 
 on:
   # - pull_request
