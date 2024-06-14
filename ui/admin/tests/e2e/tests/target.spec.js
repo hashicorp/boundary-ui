@@ -74,7 +74,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .getByRole('button', { name: 'Manage' })
       .click();
     await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
