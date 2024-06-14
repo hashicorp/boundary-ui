@@ -85,8 +85,6 @@ export default class ScopesScopeProjectsRoute extends Route {
     try {
       sessions = await this.clientAgentSessions.getNewSessionsWithCredentials();
     } catch (e) {
-      // TODO: Log this error
-
       // If we're unauthenticated, try and re-authenticate
       if (e.statusCode === 401 || e.statusCode === 403) {
         const sessionData = this.session.data?.authenticated;
@@ -99,13 +97,15 @@ export default class ScopesScopeProjectsRoute extends Route {
             token,
           });
           this.job.start();
+          __electronLog?.info('Starting polling of new sessions again');
           return;
         } catch (e) {
-          // TODO: Log this error
+          __electronLog?.error('Failed to add token to daemons', e);
           // If it fails again, just let the poller be killed
         }
       }
 
+      __electronLog?.error('Failed to get new Sessions', e);
       if (this.job) {
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),
@@ -118,6 +118,7 @@ export default class ScopesScopeProjectsRoute extends Route {
 
         // Kill the poller if we get an error
         this.job.stop();
+        __electronLog?.info('Stopping polling of new sessions');
       }
 
       return;
