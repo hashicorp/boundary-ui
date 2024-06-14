@@ -9,6 +9,8 @@ export default class ScopesScopeRolesRoleManageScopesController extends Controll
 
   @service router;
 
+  // =actions
+
   /**
    * Save grant scope IDs to current role via the API.
    * @param {RoleModel} role
