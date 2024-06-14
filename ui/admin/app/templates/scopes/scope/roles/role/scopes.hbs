@@ -153,11 +153,10 @@
         <A.Body @text={{t 'resources.role.scope.messages.none.description'}} />
         {{#if (can 'setGrantScopes role' @model)}}
           <A.Footer as |F|>
-            {{! TODO: Update route to manage-scopes once it is implemented }}
             <F.Link::Standalone
               @icon='plus-circle'
               @text={{t 'resources.role.scope.messages.none.action'}}
-              @route='scopes.scope.roles.role.scopes'
+              @route='scopes.scope.roles.role.manage-scopes'
             />
           </A.Footer>
         {{/if}}

@@ -10,13 +10,19 @@ import {
 export default class FormRoleManageScopesIndexComponent extends Component {
   // =attributes
 
-  KEYWORDS = {
-    THIS: GRANT_SCOPE_THIS,
-    CHILDREN: GRANT_SCOPE_CHILDREN,
-    DESCENDANTS: GRANT_SCOPE_DESCENDANTS,
+  keywords = {
+    keyThis: GRANT_SCOPE_THIS,
+    keyChildren: GRANT_SCOPE_CHILDREN,
+    keyDescendants: GRANT_SCOPE_DESCENDANTS,
   };
+
   @tracked selectedItems = [...this.args.model.grant_scope_ids];
 
+  /**
+   * Returns true if role is global level and either
+   * "children" or "descendants" is toggled on.
+   * @type {boolean}
+   */
   get showAlert() {
     return (
       this.args.model.scope.isGlobal &&
@@ -34,10 +40,19 @@ export default class FormRoleManageScopesIndexComponent extends Component {
   @action
   toggleField(event) {
     const { checked, value } = event.target;
+    const removeValue = (value) => {
+      this.selectedItems = this.selectedItems.filter((item) => item !== value);
+    };
     if (checked) {
       this.selectedItems = [...this.selectedItems, value];
+      if (value === GRANT_SCOPE_CHILDREN) {
+        removeValue(GRANT_SCOPE_DESCENDANTS);
+      }
+      if (value === GRANT_SCOPE_DESCENDANTS) {
+        removeValue(GRANT_SCOPE_CHILDREN);
+      }
     } else {
-      this.selectedItems = this.selectedItems.filter((item) => item !== value);
+      removeValue(value);
     }
   }
 }
