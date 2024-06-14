@@ -40,9 +40,4 @@ export default class FormRoleManageScopesIndexComponent extends Component {
       this.selectedItems = this.selectedItems.filter((item) => item !== value);
     }
   }
-
-  @action
-  submit(fn) {
-    fn(this.selectedItems);
-  }
 }
