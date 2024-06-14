@@ -10,7 +10,12 @@ const { authenticatedState } = require('../helpers/general');
 
 test.use({ storageState: authenticatedState });
 
-test('Create a worker (enterprise) @ent @docker @aws', async ({ page }) => {
+test('Create a worker (enterprise) @ent @docker @aws', async ({
+  page,
+  browserName,
+}) => {
+  test.skip(browserName === 'webkit', 'Bug in worker form on Safari');
+
   await page.goto('/');
   await page
     .getByRole('navigation', { name: 'General' })
