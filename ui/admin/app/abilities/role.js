@@ -12,6 +12,6 @@ export default class OverrideRoleAbility extends RoleAbility {
    * @type {boolean}
    */
   get canSetGrantScopes() {
-    return !this.model.scope.isProject ? super.canSetGrantScopes : false;
+    return !this.model.scope.isProject && super.canSetGrantScopes;
   }
 }
