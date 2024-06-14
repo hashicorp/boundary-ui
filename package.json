@@ -40,7 +40,6 @@
     "doc:toc": "doctoc README.md",
     "prepare": "husky install"
   },
- 
   "devDependencies": {
     "cz-conventional-changelog": "^3.1.0",
     "doctoc": "^2.2.0",
