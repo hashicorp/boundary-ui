@@ -97,6 +97,8 @@ module('Unit | Serializer | role', function (hooks) {
       id: '1',
       name: 'Role 1',
       grant_strings: ['*', '*'],
+      grant_scope_ids: ['*', '*'],
+      principals: ['*'],
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
@@ -112,15 +114,15 @@ module('Unit | Serializer | role', function (hooks) {
           authorized_actions: [],
           name: 'Role 1',
           grant_strings: ['*', '*'],
-          grant_scope_ids: [],
-          principals: [],
+          grant_scope_ids: ['*', '*'],
+          principals: ['*'],
         },
         relationships: {},
       },
     });
   });
 
-  test('it normalizes missing principals to empty array', function (assert) {
+  test('it normalizes missing arrays to empty array', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('role');
     const role = store.createRecord('role').constructor;
