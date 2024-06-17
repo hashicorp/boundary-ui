@@ -592,6 +592,16 @@ role:
       no-org-scopes:
         title: No Org Scopes Available
         description: Org scopes are not available for assignment.
+      none:
+        title: No scopes added
+        description: You haven't added any scopes to this role's grant sets.
+        action: Add scopes to this role
+      manage-scopes:
+        title: Manage Scopes
+        description: Select which scopes you want to add to this role.
+      keywords-selected:
+        description: Just a heads up, you can't select both add all descendants and add all children. You can only choose one or the other.
+        link: You can read more about it here
     keywords:
       this:
         sub-title: This scope
