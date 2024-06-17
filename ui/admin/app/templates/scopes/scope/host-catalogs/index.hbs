@@ -124,7 +124,7 @@
         />
         {{#if (can 'create model' this.scope collection='host-catalogs')}}
           <A.Footer as |F|>
-            <F.Link::Standalone
+            <F.LinkStandalone
               @icon='plus-circle'
               @text={{t 'titles.new'}}
               @route='scopes.scope.host-catalogs.new'

@@ -111,7 +111,7 @@
         />
         {{#if (can 'create model' this.scope collection='roles')}}
           <A.Footer as |F|>
-            <F.Link::Standalone
+            <F.LinkStandalone
               @icon='plus-circle'
               @text={{t 'titles.new'}}
               @route='scopes.scope.roles.new'
