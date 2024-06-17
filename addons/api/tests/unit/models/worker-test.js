@@ -48,9 +48,9 @@ module('Unit | Model | worker', function (hooks) {
       },
     });
     const expected = [
-      { key: 'tag1', value: 'value1' },
-      { key: 'tag1', value: 'value2' },
-      { key: 'tag2', value: 'value3' },
+      { key: 'tag1', value: 'value1', type: 'config' },
+      { key: 'tag1', value: 'value2', type: 'config' },
+      { key: 'tag2', value: 'value3', type: 'config' },
     ];
 
     assert.deepEqual(model.getConfigTagList(), expected);
@@ -72,9 +72,9 @@ module('Unit | Model | worker', function (hooks) {
       },
     });
     const expected = [
-      { key: 'tag1', value: 'value1' },
-      { key: 'tag1', value: 'value2' },
-      { key: 'tag2', value: 'value3' },
+      { key: 'tag1', value: 'value1', type: 'api' },
+      { key: 'tag1', value: 'value2', type: 'api' },
+      { key: 'tag2', value: 'value3', type: 'api' },
     ];
 
     assert.deepEqual(model.getApiTagList(), expected);

@@ -50,7 +50,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     }
 
     return Object.entries(this.config_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag })),
+      value.map((tag) => ({ key, value: tag, type: 'config' })),
     );
   }
 
@@ -64,7 +64,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     }
 
     return Object.entries(this.api_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag })),
+      value.map((tag) => ({ key, value: tag, type: 'api' })),
     );
   }
 
@@ -74,11 +74,8 @@ export default class WorkerModel extends GeneratedWorkerModel {
    */
   getAllTags() {
     return [
-      ...(this.getConfigTagList() || []).map((tag) => ({
-        ...tag,
-        type: 'config',
-      })),
-      ...(this.getApiTagList() || []).map((tag) => ({ ...tag, type: 'api' })),
+      ...(this.getConfigTagList() ?? []),
+      ...(this.getApiTagList() ?? []),
     ];
   }
 
