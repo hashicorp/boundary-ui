@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -129,8 +129,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('user can connect to a target with an address', async function (assert) {
@@ -142,7 +142,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
 
     await visit(urls.target);
 
@@ -190,7 +190,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   test('user can retry on error', async function (assert) {
     assert.expect(1);
     this.ipcStub.withArgs('cliExists').rejects();
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 

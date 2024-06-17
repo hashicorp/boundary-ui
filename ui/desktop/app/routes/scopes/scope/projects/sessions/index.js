@@ -118,7 +118,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       allTargets: this.allTargets,
       totalItems,
-      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
+      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
     };
   }
 

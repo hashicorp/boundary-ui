@@ -19,7 +19,7 @@ import {
   invalidateSession,
   currentSession,
 } from 'ember-simple-auth/test-support';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | targets | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -160,13 +160,13 @@ module('Acceptance | projects | targets | index', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
     await visit(urls.targets);
     await a11yAudit();
 
@@ -201,7 +201,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('visiting targets list view with no targets', async function (assert) {
     this.server.db.targets.remove();
     this.server.db.sessions.remove();
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -213,7 +213,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user cannot navigate to a target without proper authorization', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -242,7 +242,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter(
         (item) => item !== 'authorize-session',
       );
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.projects);
 
@@ -275,7 +275,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user can connect without target read permissions', async function (assert) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -301,7 +301,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
       instances.target.authorized_actions.filter((item) => item !== 'read');
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').rejects();
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.projects);
@@ -341,7 +341,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can cancel a session from inside target sessions flyout', async function (assert) {
-    this.stubClientDaemonSearch(
+    this.stubCacheDaemonSearch(
       'aliases',
       'targets',
       'sessions',
@@ -381,7 +381,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user cannot cancel a session from inside target sessions flyout without permissions', async function (assert) {
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'cancel');
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -419,7 +419,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   test('user can navigate to session details from sessions table in flyout without permissions', async function (assert) {
     instances.session.authorized_actions =
       instances.session.authorized_actions.filter((item) => item !== 'read');
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
@@ -440,7 +440,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('user can change org scope and only targets for that org will be displayed', async function (assert) {
-    this.stubClientDaemonSearch(
+    this.stubCacheDaemonSearch(
       'aliases',
       'targets',
       'sessions',
@@ -471,9 +471,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .doesNotExist();
   });
 
-  test('targets list view still loads with no client daemon', async function (assert) {
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
-    this.stubClientDaemonSearch();
+  test('targets list view still loads with no cache daemon', async function (assert) {
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+    this.stubCacheDaemonSearch();
     const targetsCount = getTargetCount();
 
     await visit(urls.projects);
