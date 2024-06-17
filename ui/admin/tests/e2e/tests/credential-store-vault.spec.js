@@ -148,14 +148,9 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       session.item.credentials[0].secret.decoded.data.username;
     const retrievedKey =
       session.item.credentials[0].secret.decoded.data.private_key;
-    if (process.env.E2E_SSH_USER != retrievedUser) {
-      throw new Error(
-        'Stored User does not match. EXPECTED: ' +
-          process.env.E2E_SSH_USER +
-          ', ACTUAL: ' +
-          retrievedUser,
-      );
-    }
+
+    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
+
     const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
       encoding: 'utf-8',
     });
