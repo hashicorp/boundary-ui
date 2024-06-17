@@ -39,7 +39,7 @@ module('Unit | Model | worker', function (hooks) {
     assert.ok(worker);
   });
 
-  test('it has a `getConfigTagList` method that returns an array of key/value pair objects', function (assert) {
+  test('it has a `configTagList` method that returns an array of key/value pair objects', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
       config_tags: {
@@ -53,17 +53,17 @@ module('Unit | Model | worker', function (hooks) {
       { key: 'tag2', value: 'value3', type: 'config' },
     ];
 
-    assert.deepEqual(model.getConfigTagList(), expected);
+    assert.deepEqual(model.configTagList, expected);
   });
 
-  test('it has a `getConfigTagList` method that returns null if there are no config tags', function (assert) {
+  test('it has a `configTagList` method that returns null if there are no config tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker');
 
-    assert.deepEqual(model.getConfigTagList(), null);
+    assert.deepEqual(model.configTagList, null);
   });
 
-  test('it has a `getApiTagList` method that returns an array of key/value pair objects', function (assert) {
+  test('it has a `apiTagList` method that returns an array of key/value pair objects', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
       api_tags: {
@@ -77,17 +77,17 @@ module('Unit | Model | worker', function (hooks) {
       { key: 'tag2', value: 'value3', type: 'api' },
     ];
 
-    assert.deepEqual(model.getApiTagList(), expected);
+    assert.deepEqual(model.apiTagList, expected);
   });
 
-  test('it has a `getApiTagList` method that returns null if there are no api tags', function (assert) {
+  test('it has a `apiTagList` method that returns null if there are no api tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker');
 
-    assert.deepEqual(model.getApiTagList(), null);
+    assert.deepEqual(model.apiTagList, null);
   });
 
-  test('it has a `getAllTags` method that returns an array of key/value pair objects with tag type', function (assert) {
+  test('it has a `allTags` method that returns an array of key/value pair objects with tag type', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
       config_tags: {
@@ -108,14 +108,14 @@ module('Unit | Model | worker', function (hooks) {
       { key: 'tag2', value: 'value3', type: 'api' },
     ];
 
-    assert.deepEqual(model.getAllTags(), expected);
+    assert.deepEqual(model.allTags, expected);
   });
 
-  test('it has a `getAllTags` method that returns an empty array if there are no config or api tags', function (assert) {
+  test('it has a `allTags` method that returns an empty array if there are no config or api tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker');
 
-    assert.deepEqual(model.getAllTags(), []);
+    assert.deepEqual(model.allTags, []);
   });
 
   test('tagCount returns the total number of tags', function (assert) {

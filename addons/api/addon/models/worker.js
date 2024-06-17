@@ -44,7 +44,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * Returns the config tags as an array of key/value pair objects.
    * @type {[object]}
    */
-  getConfigTagList() {
+  get configTagList() {
     if (!this.config_tags) {
       return null;
     }
@@ -58,7 +58,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * Returns the api tags as an array of key/value pair objects.
    * @type {[object]}
    */
-  getApiTagList() {
+  get apiTagList() {
     if (!this.api_tags) {
       return null;
     }
@@ -72,11 +72,8 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * Returns all tags as an array of key/value pair objects with tag type.
    * @type {[object]}
    */
-  getAllTags() {
-    return [
-      ...(this.getConfigTagList() ?? []),
-      ...(this.getApiTagList() ?? []),
-    ];
+  get allTags() {
+    return [...(this.configTagList ?? []), ...(this.apiTagList ?? [])];
   }
 
   @attr({
