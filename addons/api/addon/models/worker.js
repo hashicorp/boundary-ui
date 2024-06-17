@@ -31,14 +31,24 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * @type {number}
    */
   get tagCount() {
-    if (!this.config_tags) {
+    if (!this.config_tags && !this.api_tags) {
       return 0;
     }
 
-    return Object.values(this.config_tags).reduce(
-      (previousCount, currentTags) => previousCount + currentTags.length,
-      0,
-    );
+    const configTagCount = this.config_tags
+      ? Object.values(this.config_tags).reduce(
+          (previousCount, currentTags) => previousCount + currentTags.length,
+          0,
+        )
+      : 0;
+    const apiTagCount = this.api_tags
+      ? Object.values(this.api_tags).reduce(
+          (previousCount, currentTags) => previousCount + currentTags.length,
+          0,
+        )
+      : 0;
+
+    return configTagCount + apiTagCount;
   }
 
   /**
@@ -55,6 +65,34 @@ export default class WorkerModel extends GeneratedWorkerModel {
     );
   }
 
+  /**
+   * Returns the api tags as an array of key/value pair objects.
+   * @type {[object]}
+   */
+  getApiTagList() {
+    if (!this.api_tags) {
+      return null;
+    }
+
+    return Object.entries(this.api_tags).flatMap(([key, value]) =>
+      value.map((tag) => ({ key, value: tag })),
+    );
+  }
+
+  /**
+   * Returns all tags as an array of key/value pair objects with tag type.
+   * @type {[object]}
+   */
+  getAllTags() {
+    return [
+      ...(this.getConfigTagList() || []).map((tag) => ({
+        ...tag,
+        type: 'config',
+      })),
+      ...(this.getApiTagList() || []).map((tag) => ({ ...tag, type: 'api' })),
+    ];
+  }
+
   @attr({
     description:
       'The deduplicated union of the tags reported by the worker ' +
@@ -69,6 +107,12 @@ export default class WorkerModel extends GeneratedWorkerModel {
     readOnly: true,
   })
   config_tags;
+
+  @attr({
+    description: 'The api tags set for the worker.\nOutput only.',
+    readOnly: true,
+  })
+  api_tags;
 
   /**
    * Method to modify the adapter to handle custom POST route for creating worker.
