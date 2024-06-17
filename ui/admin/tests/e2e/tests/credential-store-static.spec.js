@@ -76,14 +76,7 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedKey = session.item.credentials[0].credential.private_key;
 
-    if (process.env.E2E_SSH_USER != retrievedUser) {
-      throw new Error(
-        'Stored User does not match. EXPECTED: ' +
-          process.env.E2E_SSH_USER +
-          ', ACTUAL: ' +
-          retrievedUser,
-      );
-    }
+    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
 
     const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
       encoding: 'utf-8',
@@ -128,22 +121,8 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
 
-    if (process.env.E2E_SSH_USER != retrievedUser) {
-      throw new Error(
-        'Stored User does not match. EXPECTED: ' +
-          process.env.E2E_SSH_USER +
-          ', ACTUAL: ' +
-          retrievedUser,
-      );
-    }
-    if (testPassword != retrievedPassword) {
-      throw new Error(
-        'Stored Password does not match. EXPECTED: ' +
-          testPassword +
-          ', ACTUAL: ' +
-          retrievedPassword,
-      );
-    }
+    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
+    expect(retrievedPassword).toBe(testPassword);
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -200,30 +179,9 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
     const retrievedPassword = session.item.credentials[0].credential.password;
     const retrievedId = session.item.credentials[0].credential.id;
 
-    if (testName != retrievedUser) {
-      throw new Error(
-        'Stored User does not match. EXPECTED: ' +
-          process.env.E2E_SSH_USER +
-          ', ACTUAL: ' +
-          retrievedUser,
-      );
-    }
-    if (testPassword != retrievedPassword) {
-      throw new Error(
-        'Stored Password does not match. EXPECTED: ' +
-          testPassword +
-          ', ACTUAL: ' +
-          retrievedPassword,
-      );
-    }
-    if (testId != retrievedId) {
-      throw new Error(
-        'Stored ID does not match. EXPECTED: ' +
-          testId +
-          ', ACTUAL: ' +
-          retrievedId,
-      );
-    }
+    expect(retrievedUser).toBe(testName);
+    expect(retrievedPassword).toBe(testPassword);
+    expect(retrievedId).toBe(testId);
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
