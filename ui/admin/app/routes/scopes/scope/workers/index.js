@@ -19,7 +19,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     allowed: (route) => {
       const configTags = route
         .modelFor('scopes.scope.workers')
-        .flatMap((worker) => worker.getConfigTagList())
+        .flatMap((worker) => worker.configTagList)
         .filter(Boolean);
 
       // Filter out duplicate tags
@@ -56,7 +56,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
           return null;
         }
 
-        const workerTags = worker.getConfigTagList();
+        const workerTags = worker.configTagList;
         return this.tags.some((tag) =>
           workerTags.some(
             (workerTag) =>
