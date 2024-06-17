@@ -31,7 +31,7 @@ const clientDaemonManager = require('./services/client-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
-const { isMac, isLinux } = require('./helpers/platform.js');
+const { isMac, isLinux, isWindows } = require('./helpers/platform.js');
 const fixPath = require('./utils/fixPath');
 const isDev = require('electron-is-dev');
 
@@ -64,6 +64,12 @@ log.transports.file.format =
 log.transports.file.fileName = 'desktop-client.log';
 // Set the max file size to 10MB
 log.transports.file.maxSize = 10485760;
+
+if (isWindows()) {
+  // Set the app user model ID to the app name as it will display the ID
+  // in any notifications on windows unless a squirrel installation is used.
+  app.setAppUserModelId(app.name);
+}
 
 const createWindow = (partition, closeWindowCB) => {
   /**
@@ -203,7 +209,10 @@ app.on('ready', async () => {
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     // We need to allow this for native clipboard usage
-    if (permission === 'clipboard-sanitized-write') {
+    if (
+      permission === 'clipboard-sanitized-write' ||
+      permission === 'notifications'
+    ) {
       // Approves the permissions request
       return callback(true);
     }
