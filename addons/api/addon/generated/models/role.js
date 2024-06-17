@@ -23,6 +23,7 @@ export default class GeneratedRoleModel extends BaseModel {
   description;
 
   @attr('array', {
+    emptyArrayIfMissing: true,
     description:
       "The scopes to which this role applies.  Defaults to the role's scope.",
   })
