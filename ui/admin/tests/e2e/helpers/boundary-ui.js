@@ -231,7 +231,8 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
 };
 
 /**
- * Uses the UI to create a static key pair credential . Assumes you have selected the desired project.
+ * Uses the UI to create a static key pair credential.
+ * Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
  * @param {string} username username for the credential
  * @param {string} keyPath path to the private key
@@ -240,7 +241,17 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
 exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
   await page.getByRole('link', { name: 'Credentials', exact: true }).click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'New', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page.getByRole('link', { name: 'New', exact: true }).click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'New Credential' }).click();
+  }
+
   await page.getByLabel('Name (Optional)').fill(credentialName);
   await page.getByLabel('Description').fill('This is an automated test');
   await page
@@ -252,6 +263,61 @@ exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
     encoding: 'utf-8',
   });
   await page.getByLabel('SSH Private Key').fill(keyData);
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText(credentialName),
+  ).toBeVisible();
+
+  return credentialName;
+};
+
+/**
+ * Uses the UI to create a static username and password credential.
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} username username for the credential
+ * @param {string} password password for the credential
+ * @returns Name of the credential
+ */
+exports.createStaticCredentialUsernamePassword = async (
+  page,
+  username,
+  password,
+) => {
+  const credentialsBreadcrumbIsVisible = await page
+    .getByRole('breadcrumbs', { name: 'Credentials' })
+    .isVisible();
+  if (credentialsBreadcrumbIsVisible) {
+    await page.getByRole('breadcrumbs', { name: 'Credentials' }).click();
+  } else {
+    await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+  }
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'New', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page.getByRole('link', { name: 'New', exact: true }).click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'New Credential' }).click();
+  }
+
+  const credentialName = 'Credential ' + nanoid();
+  await page.getByLabel('Name (Optional)').fill(credentialName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page
+    .getByRole('group', { name: 'Type' })
+    .getByLabel('Username & Password')
+    .click();
+  await page.getByLabel('Username', { exact: true }).fill(username);
+  await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Save' }).click();
   await expect(
     page.getByRole('alert').getByText('Success', { exact: true }),
@@ -684,10 +750,22 @@ exports.addBrokeredCredentialsToTarget = async (
   await page
     .getByRole('link', { name: 'Brokered Credentials', exact: true })
     .click();
-  await page
+
+  const addBrokeredCredentialsButtonIsVisible = await page
     .getByRole('article')
     .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-    .click();
+    .isVisible();
+
+  if (addBrokeredCredentialsButtonIsVisible) {
+    await page
+      .getByRole('article')
+      .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
+      .click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'Add Brokered Credentials' }).click();
+  }
+
   await page
     .getByRole('cell', { name: credentialName })
     .locator('..')
@@ -725,13 +803,28 @@ exports.addInjectedCredentialsToTarget = async (
       exact: true,
     })
     .click();
-  await page
+
+  const addInjectedCredentialsButtonIsVisible = await page
     .getByRole('article')
     .getByRole('link', {
       name: 'Add Injected Application Credentials',
       exact: true,
     })
-    .click();
+    .isVisible();
+
+  if (addInjectedCredentialsButtonIsVisible) {
+    await page
+      .getByRole('article')
+      .getByRole('link', {
+        name: 'Add Injected Application Credentials',
+        exact: true,
+      })
+      .click();
+  } else {
+    await page.getByText('Manage').click();
+    await page.getByRole('link', { name: 'Add Injected Application' }).click();
+  }
+
   await page
     .getByRole('cell', { name: credentialName })
     .locator('..')
