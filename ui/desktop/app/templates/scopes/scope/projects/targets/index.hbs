@@ -4,7 +4,7 @@
 }}
 
 {{#if this.showFilters}}
-  {{#if @model.isClientDaemonRunning}}
+  {{#if @model.isCacheDaemonRunning}}
     <div class='search-filtering-toolbar'>
       <Hds::SegmentedGroup as |S|>
         <S.TextInput

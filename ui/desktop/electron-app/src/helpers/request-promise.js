@@ -33,7 +33,7 @@ const netRequest = (url) =>
 /**
  * Promise wrapper around node's http request function. The primary
  * use case is to pass in a socket path to be able to make http
- * requests to the client daemon.
+ * requests to the cache daemon.
  * @param options
  * @param reqBody
  * @returns {Promise}

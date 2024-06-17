@@ -3,4 +3,4 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export { default, resourceNames } from 'api/handlers/client-daemon-handler';
+export { default, resourceNames } from 'api/handlers/cache-daemon-handler';
