@@ -14,7 +14,7 @@ const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
 const which = require('which');
-const clientDaemonManager = require('../services/client-daemon-manager');
+const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 
 /**
@@ -133,7 +133,7 @@ handle('checkCommand', async (command) => which(command, { nothrow: true }));
 /**
  * Adds the user's token to the daemons.
  */
-handle('addTokenToDaemons', async (data) => clientDaemonManager.addToken(data));
+handle('addTokenToDaemons', async (data) => cacheDaemonManager.addToken(data));
 
 /**
  * Return an object containing helper fields for determining what OS we're running on
@@ -145,19 +145,19 @@ handle('checkOS', () => ({
 }));
 
 /**
- * Call the client daemon's search endpoint to retrieve cached results.
+ * Call the cache daemon's search endpoint to retrieve cached results.
  */
-handle('searchClientDaemon', async (request) =>
-  clientDaemonManager.search(request),
+handle('searchCacheDaemon', async (request) =>
+  cacheDaemonManager.search(request),
 );
 
 /**
- * Check to see if the client daemon is running. We use the presence of a
+ * Check to see if the cache daemon is running. We use the presence of a
  * socket path as a proxy for whether the daemon is running.
  */
-handle('isClientDaemonRunning', async () => {
-  clientDaemonManager.status();
-  return Boolean(clientDaemonManager.socketPath);
+handle('isCacheDaemonRunning', async () => {
+  cacheDaemonManager.status();
+  return Boolean(cacheDaemonManager.socketPath);
 });
 
 /**
@@ -168,7 +168,7 @@ handle('getClientAgentSessions', async () => {
 });
 
 /**
- * Check to see if the client daemon is running.
+ * Check to see if the client agent daemon is running.
  */
 handle('isClientAgentRunning', async () => {
   try {

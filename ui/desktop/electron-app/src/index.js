@@ -27,7 +27,7 @@ const fs = require('fs');
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
-const clientDaemonManager = require('./services/client-daemon-manager');
+const cacheDaemonManager = require('./services/cache-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -260,7 +260,7 @@ app.on('ready', async () => {
     }
   });
 
-  await clientDaemonManager.start();
+  await cacheDaemonManager.start();
 });
 
 /**
@@ -280,7 +280,7 @@ app.on('before-quit', (event) => {
 });
 
 app.on('quit', () => {
-  clientDaemonManager.stop();
+  cacheDaemonManager.stop();
 });
 
 // Handle an unhandled error in the main thread

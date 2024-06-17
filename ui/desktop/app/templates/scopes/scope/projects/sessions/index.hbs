@@ -4,7 +4,7 @@
 }}
 
 {{#if (or @model.sessions @model.allSessions)}}
-  {{#if @model.isClientDaemonRunning}}
+  {{#if @model.isCacheDaemonRunning}}
     <div class='search-filtering-toolbar'>
       <Hds::SegmentedGroup as |S|>
         <S.Generic>

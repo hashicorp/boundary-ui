@@ -10,7 +10,7 @@ import { generateMQLExpression } from '../utils/mql-query';
 import { paginateResults } from '../utils/paginate-results';
 
 /**
- * Not all types are yet supported by the client daemon so we'll
+ * Not all types are yet supported by the cache daemon so we'll
  * just whitelist the ones we need to start with. Keys are the resource
  * types and the values are the fields that are searchable by the client.
  * @type {{session: string[], alias: string[], target: string[]}}
@@ -22,7 +22,7 @@ const supportedTypes = {
 };
 
 /**
- * Map the model resource name to the client daemon resource name
+ * Map the model resource name to the cache daemon resource name
  * @type {{session: string, alias: string, target: string}}
  */
 export const resourceNames = {
@@ -34,11 +34,11 @@ export const resourceNames = {
 const fetchControllerData = async (context, next) => {
   const { data } = context.request;
   const { query: originalQuery } = data;
-  // remove client daemon specific query params
+  // remove cache daemon specific query params
   // eslint-disable-next-line no-unused-vars
   const { query, page, pageSize, ...remainingQuery } = originalQuery;
 
-  // If we get an error or client daemon is unavailable, fall back to calling the API
+  // If we get an error or cache daemon is unavailable, fall back to calling the API
   context.request.data.query = remainingQuery;
   const results = await next(context.request);
   const models = results.content.toArray();
@@ -52,7 +52,7 @@ const fetchControllerData = async (context, next) => {
  * Handler to sit in front of the API request layer
  * so we can request from the daemon first
  */
-export default class ClientDaemonHandler {
+export default class CacheDaemonHandler {
   @service session;
   @service ipc;
 
@@ -65,8 +65,8 @@ export default class ClientDaemonHandler {
       case 'query': {
         const { store, data } = context.request;
         const { type, query, options: { pushToStore = true } = {} } = data;
-        const isClientDaemonRunning = await this.ipc.invoke(
-          'isClientDaemonRunning',
+        const isCacheDaemonRunning = await this.ipc.invoke(
+          'isCacheDaemonRunning',
         );
 
         // eslint-disable-next-line no-unused-vars
@@ -75,7 +75,7 @@ export default class ClientDaemonHandler {
 
         if (
           !Object.keys(supportedTypes).includes(type) ||
-          !isClientDaemonRunning
+          !isCacheDaemonRunning
         ) {
           return fetchControllerData(context, next);
         }
@@ -102,14 +102,14 @@ export default class ClientDaemonHandler {
           resource: resourceNames[type],
         };
 
-        let clientDaemonResults = {};
+        let cacheDaemonResults = {};
         try {
-          clientDaemonResults = await this.ipc.invoke(
-            'searchClientDaemon',
+          cacheDaemonResults = await this.ipc.invoke(
+            'searchCacheDaemon',
             remainingQuery,
           );
         } catch (e) {
-          // If we got a 403, most likely the client daemon was restarted and our token is no longer valid
+          // If we got a 403, most likely the cache daemon was restarted and our token is no longer valid
           // I'm not sure if we can get a 401 since we always send a token but we'll handle it in the same way
           if (e.statusCode === 403 || e.statusCode === 401) {
             try {
@@ -117,8 +117,8 @@ export default class ClientDaemonHandler {
                 tokenId: auth_token_id,
                 token,
               });
-              clientDaemonResults = await this.ipc.invoke(
-                'searchClientDaemon',
+              cacheDaemonResults = await this.ipc.invoke(
+                'searchCacheDaemon',
                 remainingQuery,
               );
             } catch (err) {
@@ -138,7 +138,7 @@ export default class ClientDaemonHandler {
         // Currently returns with a singular top level field with resource name
         // e.g. { targets: [...] } or { sessions: [..] }
         // So this just unwraps to the array, or undefined
-        const [results] = Object.values(clientDaemonResults);
+        const [results] = Object.values(cacheDaemonResults);
         const payload = { items: paginateResults(results, page, pageSize) };
 
         const schema = store.modelFor(type);
