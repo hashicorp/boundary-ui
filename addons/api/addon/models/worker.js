@@ -27,28 +27,17 @@ export default class WorkerModel extends GeneratedWorkerModel {
   }
 
   /**
-   * Returns the number of config tags present on the worker.
+   * Returns the number of canonical tags present on the worker.
    * @type {number}
    */
   get tagCount() {
-    if (!this.config_tags && !this.api_tags) {
+    if (!this.canonical_tags) {
       return 0;
     }
-
-    const configTagCount = this.config_tags
-      ? Object.values(this.config_tags).reduce(
-          (previousCount, currentTags) => previousCount + currentTags.length,
-          0,
-        )
-      : 0;
-    const apiTagCount = this.api_tags
-      ? Object.values(this.api_tags).reduce(
-          (previousCount, currentTags) => previousCount + currentTags.length,
-          0,
-        )
-      : 0;
-
-    return configTagCount + apiTagCount;
+    return Object.values(this.canonical_tags).reduce(
+      (previousCount, currentTags) => previousCount + currentTags.length,
+      0,
+    );
   }
 
   /**

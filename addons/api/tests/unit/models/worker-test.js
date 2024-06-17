@@ -118,50 +118,22 @@ module('Unit | Model | worker', function (hooks) {
     assert.deepEqual(model.getAllTags(), []);
   });
 
-  test('tagCount returns the total number of config and api tags', function (assert) {
+  test('tagCount returns the total number of tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
-      config_tags: {
-        tag1: ['value1', 'value2'],
-        tag2: ['value3'],
-      },
-      api_tags: {
+      canonical_tags: {
         tag1: ['value1', 'value2'],
         tag2: ['value3'],
       },
     });
 
-    assert.strictEqual(model.tagCount, 6);
+    assert.strictEqual(model.tagCount, 3);
   });
 
-  test('tagCount returns 0 if there are no config or api tags', function (assert) {
+  test('tagCount returns 0 if there are no tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker');
 
     assert.strictEqual(model.tagCount, 0);
-  });
-
-  test('tagCount returns the total number of config tags if there are no api tags', function (assert) {
-    const store = this.owner.lookup('service:store');
-    const model = store.createRecord('worker', {
-      config_tags: {
-        tag1: ['value1', 'value2'],
-        tag2: ['value3'],
-      },
-    });
-
-    assert.strictEqual(model.tagCount, 3);
-  });
-
-  test('tagCount returns the total number of api tags if there are no config tags', function (assert) {
-    const store = this.owner.lookup('service:store');
-    const model = store.createRecord('worker', {
-      api_tags: {
-        tag1: ['value1', 'value2'],
-        tag2: ['value3'],
-      },
-    });
-
-    assert.strictEqual(model.tagCount, 3);
   });
 });
