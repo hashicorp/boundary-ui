@@ -1,0 +1,34 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.role.scope.actions.manage-scopes')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.scope.actions.manage-scopes'}}
+  @route='scopes.scope.roles.role.manage-scopes'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.role.scope.messages.manage-scopes.title'}}
+      {{! TODO: Add doclink }}
+    </h2>
+    <p>{{t 'resources.role.scope.messages.manage-scopes.description'}}</p>
+  </page.header>
+
+  <page.body>
+    <Form::Role::ManageScopes
+      @model={{@model}}
+      @submit={{fn this.setGrantScopes @model}}
+      @cancel={{this.cancel}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>
