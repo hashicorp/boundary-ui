@@ -109,7 +109,6 @@ test.describe('AWS', async () => {
     // Check number of hosts in host set
     let i = 0;
     let rowCount = 0;
-    let hostsAreVisible = false;
     let expectedHosts = JSON.parse(process.env.E2E_AWS_HOST_SET_IPS);
     do {
       i = i + 1;
@@ -120,10 +119,6 @@ test.describe('AWS', async () => {
         .nth(1)
         .getByRole('row')
         .count();
-      if (rowCount == expectedHosts.length) {
-        hostsAreVisible = true;
-        break;
-      }
       await page.reload();
       await page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -131,14 +126,7 @@ test.describe('AWS', async () => {
         .waitFor();
     } while (i < 5);
 
-    if (!hostsAreVisible) {
-      throw new Error(
-        'Hosts are not visible. EXPECTED: ' +
-          expectedHosts.length +
-          ', ACTUAL: ' +
-          rowCount,
-      );
-    }
+    expect(rowCount).toBe(expectedHosts.length);
 
     // Navigate to each host in the host set
     for (let i = 0; i < expectedHosts.length; i++) {
@@ -187,7 +175,7 @@ test.describe('AWS', async () => {
       .getByRole('button', { name: 'Manage' })
       .click();
     await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
