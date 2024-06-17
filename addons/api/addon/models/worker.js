@@ -27,15 +27,14 @@ export default class WorkerModel extends GeneratedWorkerModel {
   }
 
   /**
-   * Returns the number of config tags present on the worker.
+   * Returns the number of canonical tags present on the worker.
    * @type {number}
    */
   get tagCount() {
-    if (!this.config_tags) {
+    if (!this.canonical_tags) {
       return 0;
     }
-
-    return Object.values(this.config_tags).reduce(
+    return Object.values(this.canonical_tags).reduce(
       (previousCount, currentTags) => previousCount + currentTags.length,
       0,
     );
@@ -45,14 +44,36 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * Returns the config tags as an array of key/value pair objects.
    * @type {[object]}
    */
-  getConfigTagList() {
+  get configTagList() {
     if (!this.config_tags) {
       return null;
     }
 
     return Object.entries(this.config_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag })),
+      value.map((tag) => ({ key, value: tag, type: 'config' })),
     );
+  }
+
+  /**
+   * Returns the api tags as an array of key/value pair objects.
+   * @type {[object]}
+   */
+  get apiTagList() {
+    if (!this.api_tags) {
+      return null;
+    }
+
+    return Object.entries(this.api_tags).flatMap(([key, value]) =>
+      value.map((tag) => ({ key, value: tag, type: 'api' })),
+    );
+  }
+
+  /**
+   * Returns all tags as an array of key/value pair objects with tag type.
+   * @type {[object]}
+   */
+  get allTags() {
+    return [...(this.configTagList ?? []), ...(this.apiTagList ?? [])];
   }
 
   @attr({
@@ -69,6 +90,12 @@ export default class WorkerModel extends GeneratedWorkerModel {
     readOnly: true,
   })
   config_tags;
+
+  @attr({
+    description: 'The api tags set for the worker.\nOutput only.',
+    readOnly: true,
+  })
+  api_tags;
 
   /**
    * Method to modify the adapter to handle custom POST route for creating worker.
