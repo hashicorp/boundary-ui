@@ -13,14 +13,13 @@ module.exports = {
   name: require('./package').name,
   included(app) {
     this._super.included.apply(this, arguments);
-    app.import(
-      'node_modules/@hashicorp/design-system-components/dist/styles/@hashicorp/design-system-components.css',
-    );
+
     app.import('node_modules/codemirror/lib/codemirror.css');
     app.import('node_modules/codemirror/theme/monokai.css');
     app.import('node_modules/codemirror/addon/lint/lint.css');
     app.import('node_modules/jsonlint/lib/jsonlint.js');
 
+    this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);
     this.setupSVGO(app);
@@ -35,6 +34,29 @@ module.exports = {
     return this.findOwnAddonByName('@hashicorp/design-system-components')
       .findOwnAddonByName('@hashicorp/ember-flight-icons')
       .contentFor(type, config);
+  },
+
+  /**
+   * Finds the HDS styles folder and includes it into the running
+   * application's `sassOptions.includePaths`.
+   */
+  includeHDSStyles(app) {
+    const tokensPath =
+      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+    const hdsPath =
+      '../../node_modules/@hashicorp/design-system-components/dist/styles';
+    const iconsPath =
+      '../../node_modules/@hashicorp/ember-flight-icons/dist/styles';
+
+    // Setup default sassOptions on the running application
+    app.options.sassOptions = app.options.sassOptions || {};
+    app.options.sassOptions.includePaths =
+      app.options.sassOptions.includePaths || [];
+
+    // Include the addon styles
+    app.options.sassOptions.includePaths.push(tokensPath);
+    app.options.sassOptions.includePaths.push(hdsPath);
+    app.options.sassOptions.includePaths.push(iconsPath);
   },
 
   /**
