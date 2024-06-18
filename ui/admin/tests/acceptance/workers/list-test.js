@@ -19,6 +19,8 @@ const WORKERS_FLYOUT = '[data-test-worker-tags-flyout]';
 const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] div button';
 const WORKERS_FLYOUT_TABLE_BODY = '[data-test-worker-tags-flyout] tbody';
 const WORKERS_FLYOUT_TABLE_ROWS = '[data-test-worker-tags-flyout] tbody tr';
+const WORKERS_FLYOUT_VIEW_MORE_TAGS =
+  '[data-test-worker-tags-flyout] .view-more-tags';
 const WORKER_TAG_BUTTON = (workerId) =>
   `[data-test-worker-tags-flyout-button="${workerId}"]`;
 
@@ -154,7 +156,7 @@ module('Acceptance | workers | list', function (hooks) {
     await click(WORKER_TAG_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
-    assert.dom('.view-more-tags').isVisible();
+    assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isVisible();
   });
 
   test('Users do not see "view more tags" if there are less than 10 tags', async function (assert) {
@@ -173,6 +175,6 @@ module('Acceptance | workers | list', function (hooks) {
     await click(WORKER_TAG_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 5 });
-    assert.dom('.view-more-tags').isNotVisible();
+    assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isNotVisible();
   });
 });
