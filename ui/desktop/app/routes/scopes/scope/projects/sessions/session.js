@@ -39,7 +39,11 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
           (cred) => session.addCredential(cred),
         );
       } catch (e) {
-        // TODO: Log this error
+        __electronLog?.error(
+          'Failed to fetch credentials from client agent',
+          e,
+        );
+
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),
           {
