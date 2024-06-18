@@ -912,6 +912,8 @@ worker:
     ip_address: IP Address
     release_version: Release Version
     tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
+  tags:
+    title_plural: Tags
   form:
     cluster_id:
       label: Boundary Cluster ID
