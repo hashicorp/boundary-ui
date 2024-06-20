@@ -235,7 +235,7 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     // Delete session recording
     await page.getByText('Manage').click();
     await page.getByRole('button', { name: 'Delete recording' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
