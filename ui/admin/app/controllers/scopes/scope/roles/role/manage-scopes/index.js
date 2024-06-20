@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
-export default class ScopesScopeRolesRoleManageScopesController extends Controller {
+export default class ScopesScopeRolesRoleManageScopesIndexController extends Controller {
   // =services
 
   @service router;
@@ -21,7 +21,7 @@ export default class ScopesScopeRolesRoleManageScopesController extends Controll
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async setGrantScopes(role, grantScopeIDs) {
-    await role.setGrantScopes(grantScopeIDs);
+    await role.setGrantScopes([...grantScopeIDs]);
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 
