@@ -47,6 +47,7 @@ exports.authenticateBoundaryCli = async (
 
 /**
  * Uses the boundary CLI to connect to the specified target
+ * exec is used here to keep the session open
  * @param {string} targetId ID of the target to be connected to
  * @param {string} sshUser User to be used for the ssh connection
  * @param {string} sshKeyPath Path to the ssh key to be used for the ssh connection
@@ -56,8 +57,7 @@ exports.connectToTarget = async (targetId, sshUser, sshKeyPath) => {
   let connect;
   try {
     connect = exec(
-      'boundary connect' +
-        ` -target-id=${targetId}` +
+      `boundary connect -target-id=${targetId}` +
         ' -exec /usr/bin/ssh --' +
         ` -l ${sshUser}` +
         ` -i ${sshKeyPath}` +
@@ -75,6 +75,7 @@ exports.connectToTarget = async (targetId, sshUser, sshKeyPath) => {
 
 /**
  * Uses the boundary CLI to connect ssh to the specified target
+ * exec is used here to keep the session open
  * @param {string} targetId ID of the target to be connected to
  * @returns ChildProcess representing the result of the command execution
  */
@@ -83,8 +84,7 @@ exports.connectSshToTarget = async (targetId) => {
   try {
     connect = exec(
       'boundary connect ssh' +
-        ' -target-id=' +
-        targetId +
+        ` -target-id=${targetId}` +
         ' --' +
         ' -o UserKnownHostsFile=/dev/null' +
         ' -o StrictHostKeyChecking=no' +
@@ -94,6 +94,20 @@ exports.connectSshToTarget = async (targetId) => {
     console.log(`${e.stderr}`);
   }
   return connect;
+};
+
+/**
+ * Uses the bounadry CLI to connect to the specified alias
+ * If the alias
+ * @param {string} alias alias of the target to be connected to
+ * @returns ChildProcess representing the result of the command execution
+ */
+exports.authorizeAlias = async (alias) => {
+  try {
+    execSync(`boundary targets authorize-session ${alias}`);
+  } catch (e) {
+    throw new Error(`Failed to connect to alias: ${e.stderr}`);
+  }
 };
 
 /**
@@ -124,7 +138,7 @@ exports.createOrgCli = async () => {
  */
 exports.deleteOrgCli = async (orgId) => {
   try {
-    exec('boundary scopes delete -id=' + orgId);
+    execSync('boundary scopes delete -id=' + orgId);
   } catch (e) {
     console.log(`${e.stderr}`);
   }
@@ -136,7 +150,7 @@ exports.deleteOrgCli = async (orgId) => {
  */
 exports.deleteStorageBucketCli = async (storageBucketId) => {
   try {
-    exec('boundary storage-buckets delete -id=' + storageBucketId);
+    execSync('boundary storage-buckets delete -id=' + storageBucketId);
   } catch (e) {
     console.log(`${e.stderr}`);
   }
@@ -148,7 +162,22 @@ exports.deleteStorageBucketCli = async (storageBucketId) => {
  */
 exports.deletePolicyCli = async (policyId) => {
   try {
-    exec('boundary policies delete -id=' + policyId);
+    execSync('boundary policies delete -id=' + policyId);
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+};
+
+/**
+ * Uses the boundary CLI to delete the specified alias
+ * @param {string} aliasValue Value of the alias to be deleted
+ */
+exports.deleteAliasCli = async (aliasValue) => {
+  try {
+    const aliases = JSON.parse(execSync('boundary aliases list -format json'));
+    const alias = aliases.items.filter((obj) => obj.value == aliasValue)[0];
+
+    execSync('boundary aliases delete -id=' + alias.id);
   } catch (e) {
     console.log(`${e.stderr}`);
   }
