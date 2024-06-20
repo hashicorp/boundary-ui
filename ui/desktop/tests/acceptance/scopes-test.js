@@ -22,7 +22,7 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -142,8 +142,8 @@ module('Acceptance | scopes', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('visiting index', async function (assert) {
@@ -194,7 +194,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
-    this.stubClientDaemonSearch(
+    this.stubCacheDaemonSearch(
       'aliases',
       'targets',
       'sessions',
@@ -224,7 +224,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
     assert.expect(2);
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
 
     await visit(urls.targets);
     await a11yAudit();
@@ -246,7 +246,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     this.server.db.targets.remove();
     this.server.db.sessions.remove();
-    this.stubClientDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
 
     await visit(urls.targets);
 
@@ -347,7 +347,7 @@ module('Acceptance | scopes', function (hooks) {
 
   test('pagination is not supported - navigate to cluster url page', async function (assert) {
     invalidateSession();
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
     this.ipcStub.withArgs('checkOS').returns({
       isWindows: true,
       isMac: false,

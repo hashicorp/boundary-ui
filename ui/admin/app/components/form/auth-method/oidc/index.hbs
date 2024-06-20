@@ -386,7 +386,7 @@
           as |G|
         >
           {{#each this.prompts as |prompt|}}
-            <G.Checkbox::Field
+            <G.CheckboxField
               @id={{prompt}}
               checked={{includes prompt this.selectedPrompts}}
               {{on 'change' (fn this.updatePrompt prompt)}}
@@ -398,7 +398,7 @@
               <F.HelperText>
                 {{t (concat 'resources.auth-method.form.' prompt '.help')}}
               </F.HelperText>
-            </G.Checkbox::Field>
+            </G.CheckboxField>
           {{/each}}
         </Hds::Form::Checkbox::Group>
       {{/unless}}

@@ -143,8 +143,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     try {
       await aliasPromise;
-    } catch {
-      // TODO: Log this error
+    } catch (e) {
+      __electronLog?.warn('Could not retrieve aliases for targets', e);
       // Separately await and catch the error here so we can continue loading
       // the page in case the controller doesn't support aliases yet
     }
@@ -154,7 +154,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       projects,
       allTargets: this.allTargets,
       totalItems,
-      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
+      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
     };
   }
 

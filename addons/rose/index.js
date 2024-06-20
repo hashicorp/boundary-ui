@@ -44,7 +44,9 @@ module.exports = {
     const tokensPath =
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
     const hdsPath =
-      '../../node_modules/@hashicorp/design-system-components/app/styles';
+      '../../node_modules/@hashicorp/design-system-components/dist/styles';
+    const iconsPath =
+      '../../node_modules/@hashicorp/ember-flight-icons/dist/styles';
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -54,6 +56,7 @@ module.exports = {
     // Include the addon styles
     app.options.sassOptions.includePaths.push(tokensPath);
     app.options.sassOptions.includePaths.push(hdsPath);
+    app.options.sassOptions.includePaths.push(iconsPath);
   },
 
   /**
@@ -96,6 +99,9 @@ module.exports = {
 
   /**
    * Adjust SVG optimizer defaults (used by ember-inline-svg).
+   * Note: Currently, there is a svgo pre-release that disables removeViewBox
+   * by default. So, this extra setup can be discarded once ember-inline-svg
+   * is updated to svgo v4.
    */
   setupSVGO(app) {
     app.options.svg = app.options.svg || {};
