@@ -87,6 +87,8 @@ module.exports = {
         'utf8',
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
+      console.log(process.memoryUsage());
+      console.log(v8.getHeapStatistics());
       extract(artifactPath, artifactDestination);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
