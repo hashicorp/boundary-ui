@@ -121,9 +121,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page.getByRole('link', { name: orgName }).click();
     await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: orgName }),
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
     ).toBeVisible();
     const policyName = await createStoragePolicy(page);
     await attachStoragePolicy(page, policyName);
@@ -190,9 +188,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page.getByRole('link', { name: orgName }).click();
     await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: orgName }),
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
     ).toBeVisible();
     await page
       .getByRole('link', { name: 'Storage Policies', exact: true })

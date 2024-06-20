@@ -102,9 +102,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
       .click();
     await page.getByRole('link', { name: orgName }).click();
     await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByRole('link', { name: orgName }),
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
     ).toBeVisible();
     await page
       .getByRole('navigation', { name: 'IAM' })
