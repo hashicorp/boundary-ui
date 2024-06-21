@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  findAll,
+  fillIn,
+  waitUntil,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -30,6 +37,8 @@ module('Acceptance | roles | scopes', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
   const TOAST_SELECTOR = '[role="alert"]';
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-scope-results]';
 
   const instances = {
     scopes: {
@@ -130,7 +139,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.dom('.role-grant-scopes div div:nth-child(3) a').doesNotExist();
   });
 
-  test('toggle and save scope keywords to add', async function (assert) {
+  test('user can toggle and save scope keywords to add on manage scopes page', async function (assert) {
     instances.orgRole.update({ grant_scope_ids: [] });
     await visit(urls.orgRole);
 
@@ -152,7 +161,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
   });
 
-  test('correct toggles are visible for global level role', async function (assert) {
+  test('correct toggles are visible for global level role on manage scopes page', async function (assert) {
     await visit(urls.globalRole);
 
     await click(MANAGE_SCOPES_SELECTOR);
@@ -163,7 +172,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.dom(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_DESCENDANTS)).isVisible();
   });
 
-  test('correct toggles are visible for org level role', async function (assert) {
+  test('correct toggles are visible for org level role on manage scopes page', async function (assert) {
     await visit(urls.orgRole);
 
     await click(MANAGE_SCOPES_SELECTOR);
@@ -174,7 +183,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.dom(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_DESCENDANTS)).doesNotExist();
   });
 
-  test('toggle and cancel scope keywords to add', async function (assert) {
+  test('user can toggle and cancel scope keywords to add on manage scopes page', async function (assert) {
     instances.orgRole.update({ grant_scope_ids: [] });
     await visit(urls.orgRole);
 
@@ -196,7 +205,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
   });
 
-  test('shows error message on scope save', async function (assert) {
+  test('shows error message on scope save on manage scopes page', async function (assert) {
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -219,7 +228,7 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.dom(TOAST_SELECTOR).isVisible();
   });
 
-  test('select and save custom scopes to add', async function (assert) {
+  test('user can select and save custom scopes to add on manage custom scopes page', async function (assert) {
     instances.globalRole.update({ grant_scope_ids: [] });
     await visit(urls.globalRole);
 
@@ -247,7 +256,35 @@ module('Acceptance | roles | scopes', function (hooks) {
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
   });
 
-  test('shows error message on custom scope save', async function (assert) {
+  test('user can select and cancel custom scopes to add on manage custom scopes page', async function (assert) {
+    instances.globalRole.update({ grant_scope_ids: [] });
+    await visit(urls.globalRole);
+
+    await click(`[href="${urls.globalRoleScopes}"]`);
+
+    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+
+    await click(MANAGE_SCOPES_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.globalManageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+
+    // Click three times to select, unselect, then reselect (for coverage)
+    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id));
+    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id));
+    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id));
+    await click(CANCEL_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.globalManageScopes);
+
+    await click(CANCEL_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.globalRoleScopes);
+    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+  });
+
+  test('shows error message on custom scope save on manage custom scopes page', async function (assert) {
     this.server.post('/roles/:idMethod', () => {
       return new Response(
         400,
@@ -269,5 +306,46 @@ module('Acceptance | roles | scopes', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.dom(TOAST_SELECTOR).isVisible();
+  });
+
+  test('user can search for a specifc org scope by id on manage custom scopes page', async function (assert) {
+    const anotherOrg = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    await visit(urls.globalManageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id)).exists();
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherOrg.id)).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, instances.scopes.org.id);
+    await waitUntil(
+      () => findAll(SCOPE_CHECKBOX_SELECTOR(anotherOrg.id)).length === 0,
+    );
+
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id)).exists();
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherOrg.id)).doesNotExist();
+  });
+
+  test('user can search for org scopes and get no results on manage custom scopes page', async function (assert) {
+    const anotherOrg = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    await visit(urls.globalManageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.org.id)).exists();
+    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherOrg.id)).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, 'fake scope that does not exist');
+    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+
+    assert.dom(`[href="${urls.role1}"]`).doesNotExist();
+    assert.dom(`[href="${urls.role2}"]`).doesNotExist();
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });
