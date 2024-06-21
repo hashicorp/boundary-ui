@@ -39,6 +39,7 @@ export default factory.extend({
         os: ['z-os'],
         env: ['prod', 'qa'],
         sample: [faker.word.words(1), faker.word.words(1)],
+        path: [faker.word.words(1)],
       };
     }
     if (i % 2 === 0) {
