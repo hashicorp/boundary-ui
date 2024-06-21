@@ -66,15 +66,31 @@ const downloadArtifact = (version) => {
   });
 };
 
-const extract = (artifactPath, destination) => {
+const extract = async (artifactPath, destination) => {
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
+  const directory = await unzipper.Open.file(artifactPath);
 
-  return fs
-    .createReadStream(artifactPath)
-    .pipe(unzipper.Extract({ path: destination }))
-    .on('close', () => {
-      console.log('Extract artifact to: ', destination);
-    });
+  return Promise.all(
+    directory.files.map((file) => {
+      return new Promise((resolve, reject) => {
+        file
+          .stream()
+          .pipe(
+            fs.createWriteStream(path.join(destination, file.path), {
+              // Creating a new file stream sets the permission bits on the file
+              // to node's default. We need to set the permission bits ourselves.
+              // We could just force the mode to 0o755, but we can also just convert it.
+              // This should also work on windows as the permission bits will still be set
+              // correctly but they just won't have any effect.
+              // Taken from here: https://github.com/thejoshwolfe/yauzl/issues/101#issuecomment-448073570
+              mode: file.externalFileAttributes >>> 16,
+            }),
+          )
+          .on('error', reject)
+          .on('finish', resolve);
+      });
+    }),
+  );
 };
 
 module.exports = {
