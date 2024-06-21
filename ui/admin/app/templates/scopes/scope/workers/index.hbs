@@ -184,7 +184,7 @@
                 </B.Tr>
               </:body>
             </Hds::Table>
-            {{#if (eq this.selectedWorkerTags.length 10)}}
+            {{#if (gt this.selectedWorker.allTags.length 10)}}
               <div class='view-more-tags'>
                 {{! TODO: Update route to worker.tags once route is added }}
                 <Hds::Link::Standalone

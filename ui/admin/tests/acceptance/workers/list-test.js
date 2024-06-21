@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -20,8 +20,8 @@ const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] div button';
 const WORKERS_FLYOUT_TABLE_BODY = '[data-test-worker-tags-flyout] tbody';
 const WORKERS_FLYOUT_TABLE_ROWS = '[data-test-worker-tags-flyout] tbody tr';
 const WORKERS_FLYOUT_VIEW_MORE_TAGS =
-  '[data-test-worker-tags-flyout] .view-more-tags';
-const WORKER_TAG_BUTTON = (workerId) =>
+  '[data-test-worker-tags-flyout] .view-more-tags a';
+const WORKER_TAGS_BUTTON = (workerId) =>
   `[data-test-worker-tags-flyout-button="${workerId}"]`;
 
 module('Acceptance | workers | list', function (hooks) {
@@ -41,6 +41,7 @@ module('Acceptance | workers | list', function (hooks) {
   const urls = {
     globalScope: null,
     workers: null,
+    worker: null,
   };
 
   hooks.beforeEach(function () {
@@ -49,6 +50,7 @@ module('Acceptance | workers | list', function (hooks) {
     instances.worker = this.server.create('worker', { scopeId: scope.id });
     urls.globalScope = `/scopes/global/scopes`;
     urls.workers = `/scopes/global/workers`;
+    urls.worker = `${urls.workers}/${instances.worker.id}`;
     authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
@@ -95,17 +97,17 @@ module('Acceptance | workers | list', function (hooks) {
     await visit(urls.workers);
     assert.dom(WORKERS_FLYOUT).isNotVisible();
 
-    await click(WORKER_TAG_BUTTON(instances.worker.id));
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
     assert.dom(WORKERS_FLYOUT).isVisible();
 
     await click(WORKERS_FLYOUT_DISMISS);
     assert.dom(WORKERS_FLYOUT).isNotVisible();
   });
 
-  test('Users can see config tags in the tags flyout', async function (assert) {
+  test('Users can see worker tags in the tags flyout', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.workers);
-    await click(WORKER_TAG_BUTTON(instances.worker.id));
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_BODY).includesText('os = z-os');
   });
@@ -129,7 +131,7 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAG_BUTTON(instances.worker.id));
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
   });
@@ -153,7 +155,7 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAG_BUTTON(instances.worker.id));
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
     assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isVisible();
@@ -172,9 +174,26 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAG_BUTTON(instances.worker.id));
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
     assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 5 });
     assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isNotVisible();
+  });
+
+  test('Users do not see worker tags flyout when returning to workers list', async function (assert) {
+    featuresService.enable('byow');
+    await visit(urls.workers);
+    await click(WORKER_TAGS_BUTTON(instances.worker.id));
+
+    assert.dom(WORKERS_FLYOUT).isVisible();
+
+    await click(WORKERS_FLYOUT_VIEW_MORE_TAGS);
+
+    assert.strictEqual(currentURL(), urls.worker);
+
+    await click(`[href="${urls.workers}"]`);
+
+    assert.strictEqual(currentURL(), urls.workers);
+    assert.dom(WORKERS_FLYOUT).isNotVisible();
   });
 });
