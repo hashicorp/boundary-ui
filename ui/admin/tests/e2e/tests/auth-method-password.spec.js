@@ -101,6 +101,9 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
       .getByRole('link', { name: 'Orgs' })
       .click();
     await page.getByRole('link', { name: orgName }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
+    ).toBeVisible();
     await page
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })
