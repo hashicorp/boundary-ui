@@ -240,7 +240,21 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
  */
 exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
-  await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+
+  const credentialsBreadcrumbIsVisible = await page
+    .getByRole('breadcrumbs', { name: 'Credentials' })
+    .isVisible();
+  if (credentialsBreadcrumbIsVisible) {
+    await page.getByRole('breadcrumbs', { name: 'Credentials' }).click();
+  } else {
+    await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+  }
+
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Credentials'),
+  ).toBeVisible();
 
   const newButtonIsVisible = await page
     .getByRole('link', { name: 'New', exact: true })
@@ -298,6 +312,12 @@ exports.createStaticCredentialUsernamePassword = async (
   } else {
     await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   }
+
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Credentials'),
+  ).toBeVisible();
 
   const newButtonIsVisible = await page
     .getByRole('link', { name: 'New', exact: true })
@@ -750,6 +770,11 @@ exports.addBrokeredCredentialsToTarget = async (
   await page
     .getByRole('link', { name: 'Brokered Credentials', exact: true })
     .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Brokered Credentials'),
+  ).toBeVisible();
 
   const addBrokeredCredentialsButtonIsVisible = await page
     .getByRole('article')
@@ -796,6 +821,7 @@ exports.addInjectedCredentialsToTarget = async (
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
+  await expect(page.getByRole('heading', { name: 'Targets' })).toBeVisible();
   await page.getByRole('link', { name: targetName }).click();
   await page
     .getByRole('link', {
@@ -803,6 +829,11 @@ exports.addInjectedCredentialsToTarget = async (
       exact: true,
     })
     .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Injected Application Credentials'),
+  ).toBeVisible();
 
   const addInjectedCredentialsButtonIsVisible = await page
     .getByRole('article')
