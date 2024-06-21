@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{#if @model.scopesExist}}
+{{#if @model.totalItemsCount}}
   <Rose::Form
     class='full-width role-manage-custom-scopes-form'
     @onSubmit={{fn @submit this.allGrantScopes}}
@@ -27,7 +27,7 @@
             {{t
               'resources.role.scope.titles.selected'
               items=this.selectedItems.length
-              total=@model.totalItems
+              total=@model.totalItemsCount
             }}
           </Hds::Text::Body>
         </div>
@@ -68,6 +68,7 @@
         </:body>
       </Hds::Table>
       <Rose::Pagination
+        @model={{array 'global' @model.role.id}}
         @totalItems={{@model.totalItems}}
         @currentPage={{@page}}
         @currentPageSize={{@pageSize}}

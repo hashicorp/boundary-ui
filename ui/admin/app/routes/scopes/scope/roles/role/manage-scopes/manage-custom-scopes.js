@@ -30,7 +30,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{role: RoleModel, subScopes: [ScopeModel], scopesExist: boolean, totalItems: number}> }
+   * @returns {Promise<{role: RoleModel, subScopes: [ScopeModel], totalItems: number, totalItemsCount: number}> }
    */
   async model({ search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -47,25 +47,31 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       pageSize,
     });
     const totalItems = subScopes.meta?.totalItems;
-    const scopesExist = await this.getScopesExist(scope_id, totalItems);
+    const totalItemsCount = await this.getTotalItemsCount(
+      scope_id,
+      search,
+      totalItems,
+    );
 
     return {
       role,
       subScopes,
-      scopesExist,
       totalItems,
+      totalItemsCount,
     };
   }
 
   /**
-   * Sets scopesExist to true if there exists any scopes.
+   * Sets scopesExist to true if there exists any scopes and
+   * sets totalItemsCount to the number of scopes that exist.
    * @param {string} scope_id
+   * @param {string} search
    * @param {number} totalItems
-   * @returns {Promise<boolean>}
+   * @returns {Promise<number>}
    */
-  async getScopesExist(scope_id, totalItems) {
-    if (totalItems > 0) {
-      return true;
+  async getTotalItemsCount(scope_id, search, totalItems) {
+    if (!search) {
+      return totalItems;
     }
     const options = { pushToStore: false, peekIndexedDB: true };
     const scopes = await this.store.query(
@@ -82,6 +88,6 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       },
       options,
     );
-    return scopes.length > 0;
+    return scopes.meta?.totalItems;
   }
 }
