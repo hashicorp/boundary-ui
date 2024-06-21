@@ -221,7 +221,7 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
       .getByRole('button', { name: 'Manage' })
       .click();
     await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
