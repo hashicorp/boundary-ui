@@ -37,9 +37,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    * @returns {string}
    */
   tagDisplayName(tag) {
-    const key =
-      tag.key.length > 16 ? tag.key.substring(0, 16) + '...' : tag.key;
-    return `${key} = ${tag.value}`;
+    return `${tag.key} = ${tag.value}`;
   }
 
   // =actions

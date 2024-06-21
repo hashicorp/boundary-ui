@@ -1037,6 +1037,17 @@
   margin-top: 20%;
 }
 
+// workers
 .view-more-tags {
   margin-top: 1.5rem;
+}
+
+.tag-container {
+  display: flex;
+  max-width: 310px;
+}
+
+.tag-shortener {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

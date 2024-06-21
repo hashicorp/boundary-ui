@@ -23,10 +23,6 @@ export default factory.extend({
   config_tags: (i) => {
     if (i % 3 === 0) {
       return {
-        typeissuddenlyareallylongword: [
-          faker.word.words(1),
-          faker.word.words(1),
-        ],
         os: ['ubuntu'],
         env: ['dev', 'local'],
       };
