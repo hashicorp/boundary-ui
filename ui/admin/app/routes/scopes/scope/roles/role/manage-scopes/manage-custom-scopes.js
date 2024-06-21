@@ -30,7 +30,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{totalItems: number, subScopes: [ScopeModel], scopesExist: boolean }> }
+   * @returns {Promise<{role: RoleModel, subScopes: [ScopeModel], scopesExist: boolean, totalItems: number}> }
    */
   async model({ search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
