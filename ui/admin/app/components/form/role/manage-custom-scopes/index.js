@@ -33,8 +33,7 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
       const includesId = this.selectedItems.includes(key);
       if (isSelected) {
         if (!includesId) this.selectedItems = [...this.selectedItems, key];
-      } else {
-        if (includesId)
+      } else if (includesId) {
           this.selectedItems = this.selectedItems.filter(
             (item) => item !== key,
           );
