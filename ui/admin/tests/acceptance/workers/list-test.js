@@ -161,7 +161,7 @@ module('Acceptance | workers | list', function (hooks) {
     assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isVisible();
   });
 
-  test('Users do not see "view more tags" if there are less than 10 tags', async function (assert) {
+  test('Users do not see "view more tags" if there are 10 or less tags', async function (assert) {
     featuresService.enable('byow');
     instances.worker.update({
       configTags: {
