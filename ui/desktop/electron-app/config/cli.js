@@ -66,15 +66,27 @@ const downloadArtifact = (version) => {
   });
 };
 
-const extract = (artifactPath, destination) => {
+const extract = async (artifactPath, destination) => {
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
+  const directory = await unzipper.Open.file(artifactPath);
 
-  return fs
-    .createReadStream(artifactPath)
-    .pipe(unzipper.Extract({ path: destination }))
-    .on('close', () => {
-      console.log('Extract artifact to: ', destination);
+  return new Promise((resolve, reject) => {
+    directory.files.forEach((file) => {
+      file
+        .stream()
+        .pipe(
+          fs.createWriteStream(path.join(destination, file.path), {
+            // Creating a new file stream sets the permission bits on the file
+            // to node's default. We need to set the permission bits ourselves.
+            // We could just force the mode to 0o755, but we can also just convert it.
+            // Taken from here: https://github.com/thejoshwolfe/yauzl/issues/101#issuecomment-448073570
+            mode: file.externalFileAttributes >>> 16,
+          }),
+        )
+        .on('error', reject)
+        .on('finish', resolve);
     });
+  });
 };
 
 module.exports = {
@@ -89,9 +101,7 @@ module.exports = {
         'utf8',
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
-      console.log(process.memoryUsage());
-      console.log(v8.getHeapStatistics());
-      extract(artifactPath, artifactDestination);
+      await extract(artifactPath, artifactDestination);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
       process.exit(1);
