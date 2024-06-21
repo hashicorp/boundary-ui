@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
@@ -43,8 +48,8 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.add-success')
   async setGrantScopes(role, grantScopeIDs) {
-    await role.setGrantScopes([...grantScopeIDs]);
-    this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
+    await role.setGrantScopes(grantScopeIDs);
+    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 
   /**

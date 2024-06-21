@@ -5,10 +5,14 @@ import { tracked } from '@glimmer/tracking';
 export default class FormRoleManageCustomScopesIndexComponent extends Component {
   // =attributes
 
-  @tracked selectedItems = [...this.args.model.role.grantScopeOrgs];
+  @tracked selectedItems = [...this.args.model.role.grantScopeOrgIDs];
 
   get allGrantScopes() {
-    return [...this.args.model.role.grantScopeKeywords, ...this.selectedItems];
+    return [
+      ...this.args.model.role.grantScopeKeywords,
+      ...this.args.model.role.grantScopeProjectIDs,
+      ...this.selectedItems,
+    ];
   }
 
   // =actions

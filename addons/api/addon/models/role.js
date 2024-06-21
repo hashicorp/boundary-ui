@@ -95,8 +95,16 @@ export default class RoleModel extends GeneratedRoleModel {
    * Helper for retrieving grant_scope_ids that are orgs.
    * @type {string[]}
    */
-  get grantScopeOrgs() {
+  get grantScopeOrgIDs() {
     return this.grant_scope_ids.filter((id) => id.split('_')[0] === 'o');
+  }
+
+  /**
+   * Helper for retrieving grant_scope_ids that are projects.
+   * @type {string[]}
+   */
+  get grantScopeProjectIDs() {
+    return this.grant_scope_ids.filter((id) => id.split('_')[0] === 'p');
   }
 
   /**
