@@ -96,7 +96,7 @@ export default class RoleModel extends GeneratedRoleModel {
    * @type {string[]}
    */
   get grantScopeOrgIDs() {
-    return this.grant_scope_ids.filter((id) => id.split('_')[0] === 'o');
+    return this.grant_scope_ids.filter((id) => id.startsWith('o_'));
   }
 
   /**
