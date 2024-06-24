@@ -31,8 +31,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   }
 
   /**
-   * Build the display name for a worker tag and will
-   * truncate the key if it's too long.
+   * Build the display name for a worker tag
    * @param {object} tag
    * @returns {string}
    */
