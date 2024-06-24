@@ -1,0 +1,20 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Dropdown
+  @text={{t 'actions.manage'}}
+  @dropdownRight={{true}}
+  as |dropdown|
+>
+  {{#if (can 'delete worker' @model)}}
+    <dropdown.button
+      @style='danger'
+      @disabled={{@model.canSave}}
+      {{on 'click' (fn @delete @model)}}
+    >
+      {{t 'resources.worker.actions.delete'}}
+    </dropdown.button>
+  {{/if}}
+</Rose::Dropdown>

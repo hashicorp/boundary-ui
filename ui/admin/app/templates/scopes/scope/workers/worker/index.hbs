@@ -18,21 +18,10 @@
   </page.navigation>
 
   <page.actions>
-    <Rose::Dropdown
-      @text={{t 'actions.manage'}}
-      @dropdownRight={{true}}
-      as |dropdown|
-    >
-      {{#if (can 'delete worker' @model)}}
-        <dropdown.button
-          @style='danger'
-          @disabled={{@model.canSave}}
-          {{on 'click' (fn this.workers.delete @model)}}
-        >
-          {{t 'resources.worker.actions.delete'}}
-        </dropdown.button>
-      {{/if}}
-    </Rose::Dropdown>
+    <Workers::Worker::Actions
+      @model={{@model}}
+      @delete={{this.workers.delete}}
+    />
   </page.actions>
 
   <page.body>
