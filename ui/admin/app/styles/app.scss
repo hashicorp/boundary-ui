@@ -1042,12 +1042,9 @@
   margin-top: 1.5rem;
 }
 
-.tag-container {
-  display: flex;
-  max-width: 310px;
-}
-
 .tag-shortener {
+  display: inline-block;
+  max-width: 310px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
