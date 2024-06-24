@@ -1,3 +1,8 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
 <Rose::Form
   class='full-width role-manage-scopes-form'
   @onSubmit={{fn @submit this.selectedItems}}
@@ -63,10 +68,15 @@
   {{/if}}
 
   {{! TODO: Add correct route string once route is created}}
+  {{! TODO: Add check-circle icon if custom scopes were added}}
   <Hds::Button
     @text={{t 'resources.role.scope.actions.add-custom-scopes.text'}}
     @color='secondary'
-    @route='scopes.scope.roles.role'
+    @route={{if
+      @model.scope.isGlobal
+      'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+      'scopes.scope.roles.role.manage-scopes'
+    }}
   />
 
   <Hds::Form::HelperText

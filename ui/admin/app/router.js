@@ -53,7 +53,9 @@ Router.map(function () {
           this.route('principals');
           this.route('add-principals');
           this.route('scopes');
-          this.route('manage-scopes');
+          this.route('manage-scopes', function () {
+            this.route('manage-custom-scopes');
+          });
         });
         this.route('new');
       });

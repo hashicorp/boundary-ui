@@ -82,6 +82,32 @@ export default class RoleModel extends GeneratedRoleModel {
   }
 
   /**
+   * Helper for retrieving grant scope ids that are keywords.
+   * @type {string[]}
+   */
+  get grantScopeKeywords() {
+    return this.grant_scope_ids.filter((id) =>
+      GRANT_SCOPE_KEYWORDS.includes(id),
+    );
+  }
+
+  /**
+   * Helper for retrieving grant_scope_ids that are orgs.
+   * @type {string[]}
+   */
+  get grantScopeOrgIDs() {
+    return this.grant_scope_ids.filter((id) => id.startsWith('o_'));
+  }
+
+  /**
+   * Helper for retrieving grant_scope_ids that are projects.
+   * @type {string[]}
+   */
+  get grantScopeProjectIDs() {
+    return this.grant_scope_ids.filter((id) => id.startsWith('p_'));
+  }
+
+  /**
    * A list of IDs for principals of type `user`.
    * @type {string[]}
    */
