@@ -914,6 +914,7 @@ worker:
     tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
   tags:
     title_plural: Tags
+    description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
   form:
     cluster_id:
       label: Boundary Cluster ID
