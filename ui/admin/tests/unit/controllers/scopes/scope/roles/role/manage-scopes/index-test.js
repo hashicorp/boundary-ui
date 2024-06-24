@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit, currentURL } from '@ember/test-helpers';
@@ -5,7 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module(
-  'Unit | Controller | scopes/scope/roles/role/manage-scopes',
+  'Unit | Controller | scopes/scope/roles/role/manage-scopes/index',
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
@@ -30,7 +35,7 @@ module(
       authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
-        'controller:scopes/scope/roles/role/manage-scopes',
+        'controller:scopes/scope/roles/role/manage-scopes/index',
       );
 
       instances.scopes.global = this.server.create('scope', { id: 'global' });
