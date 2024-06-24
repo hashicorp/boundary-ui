@@ -898,6 +898,7 @@ exports.addBrokeredCredentialsToTarget = async (
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
+  await expect(page.getByRole('heading', { name: 'Targets' })).toBeVisible();
   await page.getByRole('link', { name: targetName }).click();
   await page
     .getByRole('link', { name: 'Brokered Credentials', exact: true })
