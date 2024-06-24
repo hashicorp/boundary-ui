@@ -30,4 +30,33 @@
     />
   </page.actions>
 
+  <page.body>
+    {{#if @model.allTags}}
+      <Hds::Table
+        @model={{@model.allTags}}
+        @columns={{array
+          (hash label=(t 'resources.worker.table.key'))
+          (hash label=(t 'resources.worker.table.value'))
+          (hash label=(t 'resources.worker.table.type'))
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Text::Code @tag='pre'>{{B.data.key}}</Hds::Text::Code>
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Code @tag='pre'>{{B.data.value}}</Hds::Text::Code>
+            </B.Td>
+            <B.Td>
+              <Hds::Badge @text={{B.data.type}} />
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{/if}}
+
+  </page.body>
+
 </Rose::Layout::Page>
