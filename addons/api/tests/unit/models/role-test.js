@@ -317,4 +317,64 @@ module('Unit | Model | role', function (hooks) {
     assert.strictEqual(grantScopes[2].id, orgScope.id);
     assert.strictEqual(grantScopes[3].id, projectScope.id);
   });
+
+  test('grantScopeKeywords returns an array with only keywords in grant_scope_ids', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const globalScope = store.createRecord('scope', { id: 'global' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [
+        projectScope.id,
+        orgScope.id,
+        GRANT_SCOPE_THIS,
+        globalScope.id,
+      ],
+    });
+
+    const grantScopeKeywords = role.grantScopeKeywords;
+
+    assert.strictEqual(grantScopeKeywords.length, 1);
+    assert.strictEqual(grantScopeKeywords[0], GRANT_SCOPE_THIS);
+  });
+
+  test('grantScopeOrgIDs returns an array with only org ids in grant_scope_ids', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const globalScope = store.createRecord('scope', { id: 'global' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [
+        projectScope.id,
+        orgScope.id,
+        GRANT_SCOPE_THIS,
+        globalScope.id,
+      ],
+    });
+
+    const grantScopeOrgIDs = role.grantScopeOrgIDs;
+
+    assert.strictEqual(grantScopeOrgIDs.length, 1);
+    assert.strictEqual(grantScopeOrgIDs[0], orgScope.id);
+  });
+
+  test('grantScopeProjectIDs returns an array with only project ids in grant_scope_ids', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const orgScope = store.createRecord('scope', { id: 'o_123' });
+    const projectScope = store.createRecord('scope', { id: 'p_123' });
+    const globalScope = store.createRecord('scope', { id: 'global' });
+    const role = store.createRecord('role', {
+      grant_scope_ids: [
+        projectScope.id,
+        orgScope.id,
+        GRANT_SCOPE_THIS,
+        globalScope.id,
+      ],
+    });
+
+    const grantScopeProjectIDs = role.grantScopeProjectIDs;
+
+    assert.strictEqual(grantScopeProjectIDs.length, 1);
+    assert.strictEqual(grantScopeProjectIDs[0], projectScope.id);
+  });
 });

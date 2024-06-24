@@ -570,6 +570,8 @@ role:
     titles:
       parent_scope: Parent scope
       resource_type: Resource type
+      projects_selected: Projects selected
+      selected: '{items} selected out of {total}'
     messages:
       none:
         title: No scopes added
@@ -581,6 +583,12 @@ role:
       keywords-selected:
         description: Just a heads up, you can't select both add all descendants and add all children. You can only choose one or the other.
         link: You can read more about it here
+      manage-custom-scopes:
+        title: Manage Custom Scopes
+        description: Select which specific orgs you want to apply to this role's grant sets.
+      no-org-scopes:
+        title: No Org Scopes Available
+        description: Org scopes are not available for assignment.
     keywords:
       this:
         sub-title: This scope

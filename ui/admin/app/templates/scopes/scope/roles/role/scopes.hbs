@@ -153,7 +153,7 @@
         <A.Body @text={{t 'resources.role.scope.messages.none.description'}} />
         {{#if (can 'setGrantScopes role' @model)}}
           <A.Footer as |F|>
-            <F.Link::Standalone
+            <F.LinkStandalone
               @icon='plus-circle'
               @text={{t 'resources.role.scope.messages.none.action'}}
               @route='scopes.scope.roles.role.manage-scopes'
