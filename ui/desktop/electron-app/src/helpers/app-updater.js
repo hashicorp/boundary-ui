@@ -8,10 +8,9 @@ const path = require('path');
 const https = require('https');
 const semver = require('semver');
 const { parse } = require('node-html-parser');
-const { autoUpdater, dialog } = require('electron');
+const { autoUpdater, dialog, app } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
-const { execSync } = require('child_process');
 const log = require('electron-log/main');
 
 let currentVersion = config.releaseVersion;
@@ -30,11 +29,7 @@ const returnArchitectureToUpdate = () => {
   }
 
   try {
-    const runsOnRosetta = parseInt(
-      execSync('sysctl -in sysctl.proc_translated'),
-    );
-
-    if (runsOnRosetta) {
+    if (app.runningUnderARM64Translation) {
       return 'arm64';
     }
   } catch (err) {
