@@ -5,7 +5,7 @@
 
 /**
  * Takes a POJO representing a filter query and converts it to an
- * MQL expression string which is understood by the client daemon.
+ * MQL expression string which is understood by the cache daemon.
  *
  * @example
  *   const filter = generateMQLFilterExpression({
@@ -68,7 +68,7 @@ export function generateMQLFilterExpression(filterObj) {
 
 /**
  * Takes a POJO representing a search query and converts it to an
- * MQL expression string which is understood by the client daemon.
+ * MQL expression string which is understood by the cache daemon.
  *
  * @example
  *   const search = generateMQLSearchExpression({

@@ -12,7 +12,7 @@ export default class SessionService extends BaseSessionService {
 
   /**
    * Extend ember simple auth's handleAuthentication method
-   * so we can hook in and add the user's token to the client daemon
+   * so we can hook in and add the user's token to the cache daemon
    */
   @notifyError(({ message }) => message, { catch: true })
   async handleAuthentication() {

@@ -22,6 +22,7 @@
     "forge": "config/forge.config.js"
   },
   "dependencies": {
+    "adm-zip": "^0.5.14",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-log": "^5.1.2",
@@ -40,8 +41,7 @@
     "@electron-forge/maker-dmg": "^7.2.0",
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
-    "electron": "26.2.4",
-    "unzipper": "^0.11.5"
+    "electron": "31.0.1"
   },
   "resolutions": {
     "highlight.js": "^10.4.1"

@@ -205,13 +205,13 @@
       {{t 'resources.credential-library.form.http_method.help'}}
     </G.HelperText>
     {{#each this.httpMethodOptions as |httpMethod|}}
-      <G.Radio::Field
+      <G.RadioField
         checked={{eq @model.http_method httpMethod}}
         @value={{httpMethod}}
         as |F|
       >
         <F.Label>{{httpMethod}}</F.Label>
-      </G.Radio::Field>
+      </G.RadioField>
     {{/each}}
   </Hds::Form::Radio::Group>
 

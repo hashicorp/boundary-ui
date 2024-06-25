@@ -204,7 +204,7 @@
         />
         {{#if (can 'create model' this.scope collection='targets')}}
           <A.Footer as |F|>
-            <F.Link::Standalone
+            <F.LinkStandalone
               @icon='plus-circle'
               @text={{t 'titles.new'}}
               @route='scopes.scope.targets.new'
