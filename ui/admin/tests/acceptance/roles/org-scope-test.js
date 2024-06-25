@@ -38,7 +38,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
   const TOAST_SELECTOR = '[role="alert"]';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-scope-results]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
 
   const instances = {
     scopes: {
