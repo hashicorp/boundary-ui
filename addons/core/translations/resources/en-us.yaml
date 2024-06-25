@@ -983,6 +983,13 @@ worker:
     ip_address: IP Address
     release_version: Release Version
     tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
+  flyout:
+    title: Tags in {workerName}
+    table:
+      tag: Tag
+      type: Type
+    action:
+      view_more: View more tags
   form:
     cluster_id:
       label: Boundary Cluster ID
