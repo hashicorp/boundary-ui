@@ -918,6 +918,13 @@ worker:
   tags:
     title_plural: Tags
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
+  flyout:
+    title: Tags in {workerName}
+    table:
+      tag: Tag
+      type: Type
+    action:
+      view_more: View more tags
   form:
     cluster_id:
       label: Boundary Cluster ID

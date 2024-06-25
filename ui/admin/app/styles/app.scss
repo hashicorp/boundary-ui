@@ -1036,3 +1036,15 @@
 .loading-indicator {
   margin-top: 20%;
 }
+
+// workers
+.view-more-tags {
+  margin-top: 1.5rem;
+}
+
+.tag-shortener {
+  display: inline-block;
+  max-width: 310px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
