@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
+import { tracked } from '@glimmer/tracking';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
@@ -16,7 +17,38 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   @service router;
   @service can;
 
+  // =attributes
+
+  @tracked selectedWorker;
+
+  /**
+   * Get the first 10 tags of the selected worker.
+   * @type {object[]}
+   */
+  get selectedWorkerTags() {
+    // only show the first 10 tags if there are more than 10
+    return this.selectedWorker.allTags.slice(0, 10);
+  }
+
+  /**
+   * Build the display name for a worker tag
+   * @param {object} tag
+   * @returns {string}
+   */
+  tagDisplayName(tag) {
+    return `${tag.key} = ${tag.value}`;
+  }
+
   // =actions
+
+  /**
+   * Toggle the tags flyout to display or hide the tags of a worker.
+   * @param {object} selectedWorker
+   */
+  @action
+  selectWorker(selectedWorker) {
+    this.selectedWorker = selectedWorker;
+  }
 
   /**
    * Rollback changes on workers.

@@ -68,6 +68,16 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     return workers;
   }
 
+  resetController(controller, isExiting) {
+    // Clear selected worker when exiting route to prevent
+    // the flyout from showing when returning to this route
+    if (isExiting) {
+      controller.setProperties({
+        selectedWorker: null,
+      });
+    }
+  }
+
   /**
    * Clears filter selections.
    */
