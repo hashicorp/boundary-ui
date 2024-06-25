@@ -53,12 +53,81 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       totalItems,
     );
 
+    const projectsSelected = await this.getProjectsSelected(
+      role.grantScopeProjectIDs,
+      subScopes,
+    );
+
     return {
       role,
       subScopes,
+      projectsSelected,
       totalItems,
       totalItemsCount,
     };
+  }
+
+  async getProjectsSelected(projectIDs, orgScopes) {
+    const options = { pushToStore: false, peekIndexedDB: true };
+    const projectsSelected = {};
+
+    const projectScopes = await Promise.all(
+      orgScopes.map(({ id: scope_id }) =>
+        this.store.query(
+          'scope',
+          {
+            scope_id,
+            query: {
+              filters: {
+                scope_id: [{ equals: scope_id }],
+              },
+            },
+            page: 1,
+            pageSize: 1,
+          },
+          options,
+        ),
+      ),
+    );
+
+    projectScopes.forEach((items) => {
+      if (items.length)
+        projectsSelected[items[0].scope.id] = {
+          selected: 0,
+          total: items.meta?.totalItems,
+        };
+    });
+
+    if (projectIDs.length) {
+      const id = [];
+      projectIDs.forEach((proj_id) => id.push({ equals: proj_id }));
+
+      const selectedProjects = await Promise.all(
+        orgScopes.map(({ id: scope_id }) =>
+          this.store.query(
+            'scope',
+            {
+              scope_id,
+              query: {
+                filters: {
+                  scope_id: [{ equals: scope_id }],
+                  id,
+                },
+              },
+              page: 1,
+              pageSize: 1,
+            },
+            options,
+          ),
+        ),
+      );
+      selectedProjects.forEach((items) => {
+        if (items.length)
+          projectsSelected[items[0].scope.id].selected = items.meta?.totalItems;
+      });
+    }
+
+    return projectsSelected;
   }
 
   /**

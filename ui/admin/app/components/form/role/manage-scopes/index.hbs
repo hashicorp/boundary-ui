@@ -75,8 +75,9 @@
     @route={{if
       @model.scope.isGlobal
       'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
-      'scopes.scope.roles.role.manage-scopes'
+      'scopes.scope.roles.role.manage-scopes.manage-org-projects'
     }}
+    @model={{if @model.scope.isOrg @model.scope.id}}
   />
 
   <Hds::Form::HelperText

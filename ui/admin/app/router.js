@@ -55,6 +55,7 @@ Router.map(function () {
           this.route('scopes');
           this.route('manage-scopes', function () {
             this.route('manage-custom-scopes');
+            this.route('manage-org-projects', { path: ':org_id' });
           });
         });
         this.route('new');
