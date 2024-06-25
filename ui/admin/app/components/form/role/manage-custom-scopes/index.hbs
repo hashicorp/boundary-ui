@@ -20,7 +20,7 @@
         {{on 'input' @handleSearchInput}}
       />
     </Hds::SegmentedGroup>
-    {{#if @model.subScopes}}
+    {{#if @model.orgScopes}}
       {{#if this.selectedItems.length}}
         <div class='table-selected-items-text'>
           <Hds::Text::Body @tag='p' @color='faint'>
@@ -38,7 +38,7 @@
           (hash label=(t 'form.id.label'))
           (hash label=(t 'resources.role.scope.titles.projects_selected'))
         }}
-        @model={{@model.subScopes}}
+        @model={{@model.orgScopes}}
         @isSelectable={{true}}
         @onSelectionChange={{this.selectionChange}}
         @valign='middle'

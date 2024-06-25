@@ -30,7 +30,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{role: RoleModel, subScopes: [ScopeModel], totalItems: number, totalItemsCount: number}> }
+   * @returns {Promise<{role: RoleModel, orgScopes: [ScopeModel], totalItems: number, totalItemsCount: number}> }
    */
   async model({ search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -40,13 +40,13 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       scope_id: [{ equals: scope_id }],
     };
 
-    const subScopes = await this.store.query('scope', {
+    const orgScopes = await this.store.query('scope', {
       scope_id,
       query: { search, filters },
       page,
       pageSize,
     });
-    const totalItems = subScopes.meta?.totalItems;
+    const totalItems = orgScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(
       scope_id,
       search,
@@ -55,12 +55,12 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
     const projectsSelected = await this.getProjectsSelected(
       role.grantScopeProjectIDs,
-      subScopes,
+      orgScopes,
     );
 
     return {
       role,
-      subScopes,
+      orgScopes,
       projectsSelected,
       totalItems,
       totalItemsCount,

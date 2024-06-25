@@ -30,7 +30,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
 
   /**
    * Loads projects for current org scope.
-   * @return {Promise<{role: RoleModel, orgScope: [ScopeModel], subScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
+   * @return {Promise<{role: RoleModel, orgScope: [ScopeModel], projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
    */
   async model({ org_id, search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -59,13 +59,13 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       scope_id: [{ equals: org_id }],
     };
 
-    const subScopes = await this.store.query('scope', {
+    const projectScopes = await this.store.query('scope', {
       scope_id: org_id,
       query: { search, filters },
       page,
       pageSize,
     });
-    const totalItems = subScopes.meta?.totalItems;
+    const totalItems = projectScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(
       org_id,
       search,
@@ -75,7 +75,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
     return {
       role,
       orgScope,
-      subScopes,
+      projectScopes,
       totalItems,
       totalItemsCount,
       selectedProjectIDs,
