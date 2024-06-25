@@ -42,6 +42,6 @@ module('Acceptance | workers | tags', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tags);
-    assert.strictEqual(findAll('tbody tr').length, 1);
+    assert.strictEqual(findAll('tbody tr').length, 11);
   });
 });
