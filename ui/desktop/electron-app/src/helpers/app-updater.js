@@ -8,9 +8,10 @@ const path = require('path');
 const https = require('https');
 const semver = require('semver');
 const { parse } = require('node-html-parser');
-const { autoUpdater, dialog } = require('electron');
+const { autoUpdater, dialog, app } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
+const log = require('electron-log/main');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -18,6 +19,24 @@ const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
 if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
   currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
 }
+
+// Returns the real CPU architecture of the machine.
+const returnArchitectureToUpdate = () => {
+  const nodeArchitecture = process.arch;
+
+  if (nodeArchitecture === 'arm64') {
+    return nodeArchitecture;
+  }
+
+  try {
+    if (app.runningUnderARM64Translation) {
+      return 'arm64';
+    }
+  } catch (err) {
+    log.error(`returnArchitectureToUpdate: ${err}`);
+  }
+  return nodeArchitecture;
+};
 
 // Query releases url to find latest version
 const findLatestVersion = (url) => {
@@ -38,7 +57,8 @@ const findLatestVersion = (url) => {
 
 // Find zip archive for update
 const findUpdateArchive = (version) => {
-  const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_amd64.zip`;
+  const architecture = returnArchitectureToUpdate();
+  const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
       if (response.statusCode === 403)
