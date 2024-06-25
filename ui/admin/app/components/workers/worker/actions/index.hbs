@@ -3,18 +3,14 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown data-test-manage-worker-dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'delete worker' @model)}}
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
+    <dd.Interactive
+      @icon='trash'
+      @text={{t 'resources.worker.actions.delete'}}
+      @color='critical'
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.worker.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>
