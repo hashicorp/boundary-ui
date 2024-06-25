@@ -30,11 +30,30 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
 
   /**
    * Loads projects for current org scope.
-   * @return {Promise<{role: RoleModel, orgScope: [ScopeModel], subScopes: [ScopeModel], totalItems: number, totalItemsCount: number}> }
+   * @return {Promise<{role: RoleModel, orgScope: [ScopeModel], subScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
    */
   async model({ org_id, search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
     const orgScope = this.store.peekRecord('scope', org_id);
+
+    let selectedProjectIDs = role.grantScopeProjectIDs;
+    let remainingProjectIDs = [];
+    if (role.scope.isGlobal) {
+      const projects = await Promise.all(
+        role.grantScopeProjectIDs.map((id) =>
+          this.store.findRecord('scope', id),
+        ),
+      );
+
+      selectedProjectIDs = projects.reduce(function (filtered, proj) {
+        if (proj.scopeID === org_id) {
+          filtered.push(proj.id);
+        } else {
+          remainingProjectIDs.push(proj.id);
+        }
+        return filtered;
+      }, []);
+    }
 
     const filters = {
       scope_id: [{ equals: org_id }],
@@ -59,6 +78,8 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       subScopes,
       totalItems,
       totalItemsCount,
+      selectedProjectIDs,
+      remainingProjectIDs,
     };
   }
 

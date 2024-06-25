@@ -10,12 +10,13 @@ import { tracked } from '@glimmer/tracking';
 export default class FormRoleManageOrgProjectsIndexComponent extends Component {
   // =attributes
 
-  @tracked selectedItems = [...this.args.model.role.grantScopeProjectIDs];
+  @tracked selectedItems = [...this.args.model.selectedProjectIDs];
 
   get allGrantScopes() {
     return [
       ...this.args.model.role.grantScopeKeywords,
       ...this.args.model.role.grantScopeOrgIDs,
+      ...this.args.model.remainingProjectIDs,
       ...this.selectedItems,
     ];
   }
