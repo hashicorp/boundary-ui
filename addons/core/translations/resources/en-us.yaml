@@ -904,6 +904,7 @@ worker:
   actions:
     register: Register Worker
     delete: Remove Worker
+    create_tags: Create new tags
   messages:
     welcome:
       title: Welcome to Workers
