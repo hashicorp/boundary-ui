@@ -1,0 +1,13 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Nav::Tabs as |nav|>
+  <nav.link @route='scopes.scope.workers.worker.index'>
+    {{t 'titles.details'}}
+  </nav.link>
+  <nav.link @route='scopes.scope.workers.worker.tags'>
+    {{t 'resources.worker.tags.title_plural'}}
+  </nav.link>
+</Rose::Nav::Tabs>

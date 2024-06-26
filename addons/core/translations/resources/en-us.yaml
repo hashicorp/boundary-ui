@@ -912,11 +912,15 @@ worker:
     ip_address: IP Address
     release_version: Release Version
     tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
+    tag: Tag
+    key: Key
+    value: Value
+    type: Type
+  tags:
+    title_plural: Tags
+    description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
   flyout:
     title: Tags in {workerName}
-    table:
-      tag: Tag
-      type: Type
     action:
       view_more: View more tags
   form:
