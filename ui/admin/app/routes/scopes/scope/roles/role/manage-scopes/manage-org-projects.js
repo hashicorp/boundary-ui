@@ -45,7 +45,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
         ),
       );
 
-      selectedProjectIDs = projects.reduce(function (filtered, proj) {
+      selectedProjectIDs = projects.reduce((filtered, proj) => {
         if (proj.scopeID === org_id) {
           filtered.push(proj.id);
         } else {
