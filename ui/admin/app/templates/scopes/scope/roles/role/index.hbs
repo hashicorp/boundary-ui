@@ -24,7 +24,6 @@
   <page.body>
     <Form::Role
       @model={{@model}}
-      @grantScopes={{this.grantScopes}}
       @submit={{fn this.roles.save @model}}
       @cancel={{fn this.roles.cancel @model}}
     />
