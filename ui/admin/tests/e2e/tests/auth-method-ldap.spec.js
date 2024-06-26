@@ -82,6 +82,35 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await page.getByLabel('Group DN').fill(process.env.E2E_LDAP_DOMAIN_DN);
     await page.getByRole('switch', { name: 'Enable Groups' }).click();
 
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByLabel('From Attribute')
+      .last()
+      .fill('cn');
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByLabel('To Attribute')
+      .last()
+      .selectOption('fullName');
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByLabel('From Attribute')
+      .last()
+      .fill('mail');
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByLabel('To Attribute')
+      .last()
+      .selectOption('email');
+    await page
+      .getByRole('group', { name: 'Account Attribute Maps' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
@@ -143,7 +172,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await addPrincipalToRole(page, ldapManagedGroupName);
 
     // Create a user and attach LDAP account to it
-    await createUser(page);
+    const userName = await createUser(page);
     await addAccountToUser(page, process.env.E2E_LDAP_USER_NAME);
 
     // Create a second auth method so that there's multiple auth methods on the
@@ -173,6 +202,91 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByText('Projects'),
     ).toBeVisible();
+
+    // Log out
+    await page.getByText(process.env.E2E_LDAP_USER_NAME).click();
+    await page.getByRole('button', { name: 'Sign Out' }).click();
+    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+
+    // Log back in as an admin
+    await page
+      .getByLabel('Login Name')
+      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await page
+      .getByLabel('Password', { exact: true })
+      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
+    await page.getByRole('button', { name: 'Sign In' }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
+    ).toBeEnabled();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
+    ).toBeVisible();
+
+    // View the LDAP account and verify account attributes
+    await page.getByRole('link', { name: orgName }).click();
+    await page
+      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('link', { name: 'Auth Methods' })
+      .click();
+    await page.getByRole('link', { name: ldapAuthMethodName }).click();
+    await page.getByRole('link', { name: 'Accounts' }).click();
+
+    const headersCount = await page
+      .getByRole('table')
+      .getByRole('columnheader')
+      .count();
+    let fullNameIndex;
+    let emailIndex;
+    for (let i = 0; i < headersCount; i++) {
+      const header = await page
+        .getByRole('table')
+        .getByRole('columnheader')
+        .nth(i)
+        .innerText();
+      if (header == 'Full Name') {
+        fullNameIndex = i;
+      } else if (header == 'Email') {
+        emailIndex = i;
+      }
+    }
+
+    expect(
+      await page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(fullNameIndex)
+        .innerText(),
+    ).toBe(process.env.E2E_LDAP_USER_NAME);
+    expect(
+      await page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(emailIndex)
+        .innerText(),
+    ).toBe(process.env.E2E_LDAP_USER_NAME + '@mail.com');
+
+    // View the User account and verify attributes
+    await page
+      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('link', { name: 'Users' })
+      .click();
+    await page.getByRole('link', { name: userName }).click();
+    await page.getByRole('link', { name: 'Accounts' }).click();
+    expect(
+      await page
+        .getByRole('table')
+        .getByRole('row')
+        .nth(1) // Account row
+        .getByRole('cell')
+        .nth(0) // Name field
+        .innerText(),
+    ).toContain(process.env.E2E_LDAP_USER_NAME + '@mail.com');
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,

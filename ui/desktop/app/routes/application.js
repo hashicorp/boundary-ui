@@ -38,7 +38,7 @@ export default class ApplicationRoute extends Route {
     this.toggleTheme(theme);
     await this.clusterUrl.updateClusterUrl();
 
-    // Add token to client daemon after a successful authentication restoration
+    // Add token to cache daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
       await this.ipc.invoke('addTokenToDaemons', {

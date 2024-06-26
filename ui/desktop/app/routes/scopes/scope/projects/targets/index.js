@@ -10,7 +10,6 @@ import {
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
 import { action } from '@ember/object';
-import { run } from '@ember/runloop';
 
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
@@ -73,13 +72,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    */
   beforeModel() {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
-
-    // Unload all sessions from the store as we might have sessions still in store
-    // if they were canceled outside of the desktop client
-    // Not wrapping it an ember run seems to cause a test to fail as well as an error
-    // if you switch between orgs due to a similar issue as this
-    // https://github.com/emberjs/data/issues/5447#issuecomment-845672812
-    run(() => this.store.unloadAll('session'));
   }
 
   /**
@@ -143,8 +135,8 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
     try {
       await aliasPromise;
-    } catch {
-      // TODO: Log this error
+    } catch (e) {
+      __electronLog?.warn('Could not retrieve aliases for targets', e);
       // Separately await and catch the error here so we can continue loading
       // the page in case the controller doesn't support aliases yet
     }
@@ -154,7 +146,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       projects,
       allTargets: this.allTargets,
       totalItems,
-      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
+      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
     };
   }
 

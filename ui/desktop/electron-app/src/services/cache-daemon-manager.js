@@ -12,21 +12,21 @@ const { isWindows } = require('../helpers/platform.js');
 const treeKill = require('tree-kill');
 const log = require('electron-log/main');
 
-class ClientDaemonManager {
+class CacheDaemonManager {
   #socketPath;
-  #isClientDaemonAlreadyRunning = true;
-  #clientDaemonProcess;
+  #isCacheDaemonAlreadyRunning = true;
+  #cacheDaemonProcess;
 
   get socketPath() {
     return this.#socketPath;
   }
 
   /**
-   * Checks the status of the client daemon.
+   * Checks the status of the cache daemon.
    * @returns {string}
    */
   status() {
-    const daemonStatusCommand = ['daemon', 'status', '-format=json'];
+    const daemonStatusCommand = ['cache', 'status', '-format=json'];
     const { stdout } = spawnSync(daemonStatusCommand);
 
     const status = jsonify(stdout);
@@ -39,16 +39,16 @@ class ClientDaemonManager {
    * @returns {Promise<void>}
    */
   async start() {
-    const startDaemonCommand = ['daemon', 'start'];
+    const startDaemonCommand = ['cache', 'start'];
     // We use spawn here because we want to check the stderr for specific logs
     const { childProcess, stderr } = await spawn(startDaemonCommand);
-    this.#clientDaemonProcess = childProcess;
+    this.#cacheDaemonProcess = childProcess;
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
     // we close the desktop client as the absence of the "daemon is already running"
     // message doesn't necessarily guarantee it's running (but it likely should be)
     if (stderr && !stderr.includes('The daemon is already running')) {
-      this.#isClientDaemonAlreadyRunning = false;
+      this.#isCacheDaemonAlreadyRunning = false;
       log.info('Cache daemon started, status from daemon:\n', stderr);
     } else {
       log.info('The cache daemon is already running at startup.');
@@ -62,16 +62,16 @@ class ClientDaemonManager {
    */
   stop() {
     // We started up the daemon so we should stop it
-    if (!this.#isClientDaemonAlreadyRunning) {
-      const stopDaemonCommand = ['daemon', 'stop'];
+    if (!this.#isCacheDaemonAlreadyRunning) {
+      const stopDaemonCommand = ['cache', 'stop'];
       spawnSync(stopDaemonCommand);
     }
 
     // Kill the process if it's still running
-    if (this.#clientDaemonProcess && !this.#clientDaemonProcess.killed) {
+    if (this.#cacheDaemonProcess && !this.#cacheDaemonProcess.killed) {
       isWindows()
-        ? treeKill(this.#clientDaemonProcess.pid)
-        : this.#clientDaemonProcess.kill();
+        ? treeKill(this.#cacheDaemonProcess.pid)
+        : this.#cacheDaemonProcess.kill();
     }
   }
 
@@ -83,7 +83,7 @@ class ClientDaemonManager {
    */
   async addToken({ token, tokenId }) {
     // Successfully calling any Boundary CLI command with a token
-    // will add the token both to the Client daemon and the Ferry DNS daemon,
+    // will add the token both to the cache daemon and the Ferry DNS daemon,
     // so we just do a simple read on the input token and let the CLI do the rest.
     const readTokenCommand = [
       'auth-tokens',
@@ -171,4 +171,4 @@ const searchCliCommand = (requestData) => {
 };
 
 // Export an instance so we get a singleton
-module.exports = new ClientDaemonManager();
+module.exports = new CacheDaemonManager();
