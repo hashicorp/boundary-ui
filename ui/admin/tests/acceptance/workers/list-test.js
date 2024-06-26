@@ -42,6 +42,7 @@ module('Acceptance | workers | list', function (hooks) {
     globalScope: null,
     workers: null,
     worker: null,
+    workerTags: null,
   };
 
   hooks.beforeEach(function () {
@@ -51,6 +52,7 @@ module('Acceptance | workers | list', function (hooks) {
     urls.globalScope = `/scopes/global/scopes`;
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
+    urls.workerTags = `${urls.worker}/tags`;
     authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
@@ -189,7 +191,7 @@ module('Acceptance | workers | list', function (hooks) {
 
     await click(WORKERS_FLYOUT_VIEW_MORE_TAGS);
 
-    assert.strictEqual(currentURL(), urls.worker);
+    assert.strictEqual(currentURL(), urls.workerTags);
 
     await click(`[href="${urls.workers}"]`);
 

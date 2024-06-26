@@ -153,7 +153,9 @@ Router.map(function () {
       });
       this.route('workers', function () {
         this.route('new');
-        this.route('worker', { path: ':worker_id' }, function () {});
+        this.route('worker', { path: ':worker_id' }, function () {
+          this.route('tags');
+        });
       });
       this.route('session-recordings', function () {
         this.route(

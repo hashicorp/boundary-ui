@@ -166,8 +166,8 @@
             <Hds::Table
               @model={{this.selectedWorkerTags}}
               @columns={{array
-                (hash label=(t 'resources.worker.flyout.table.tag'))
-                (hash label=(t 'resources.worker.flyout.table.type'))
+                (hash label=(t 'resources.worker.table.tag'))
+                (hash label=(t 'resources.worker.table.type'))
               }}
               @valign='middle'
             >
@@ -186,12 +186,11 @@
             </Hds::Table>
             {{#if (gt this.selectedWorker.allTags.length 10)}}
               <div class='view-more-tags'>
-                {{! TODO: Update route to worker.tags once route is added }}
                 <Hds::Link::Standalone
                   @icon='arrow-right'
                   @iconPosition='trailing'
                   @text={{t 'resources.worker.flyout.action.view_more'}}
-                  @route='scopes.scope.workers.worker'
+                  @route='scopes.scope.workers.worker.tags'
                   @model={{this.selectedWorker}}
                 />
               </div>
