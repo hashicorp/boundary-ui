@@ -674,6 +674,25 @@ function routes() {
     });
     return workers.create(newWorker.attrs);
   });
+  this.post(
+    '/workers/:idMethod',
+    function ({ workers }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const worker = workers.find(id);
+      let updatedAttrs = {};
+
+      if (method === 'set-worker-tags') {
+        updatedAttrs = {
+          version: attrs.version,
+          api_tags: attrs.api_tags,
+        };
+      }
+
+      worker.update(updatedAttrs);
+    },
+  );
 
   // storage-buckets
   this.get(

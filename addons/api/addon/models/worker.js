@@ -117,4 +117,15 @@ export default class WorkerModel extends GeneratedWorkerModel {
       },
     });
   }
+
+  /**
+   * Method to set api tags on the worker.
+   * @param {object} apiTags
+   * @return {Promise}
+   */
+  setApiTags(apiTags) {
+    return this.save({
+      adapterOptions: { method: 'set-worker-tags', apiTags },
+    });
+  }
 }
