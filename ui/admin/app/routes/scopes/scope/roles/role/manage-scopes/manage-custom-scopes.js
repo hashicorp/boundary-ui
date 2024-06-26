@@ -122,8 +122,9 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         ),
       );
       selectedProjects.forEach((items) => {
-        if (items.length)
+        if (items.length) {
           projectsSelected[items[0].scope.id].selected = items.meta?.totalItems;
+        }
       });
     }
 
