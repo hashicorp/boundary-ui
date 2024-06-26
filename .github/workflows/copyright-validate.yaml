@@ -1,10 +1,5 @@
 name: Check Copyright Headers
-
-on:
-  # - pull_request [should we include for all types]
-  push:
-    branches:
-      - gh-copyright-workflow
+on: pull_request
 jobs:
   copywrite:
     runs-on: ubuntu-latest
