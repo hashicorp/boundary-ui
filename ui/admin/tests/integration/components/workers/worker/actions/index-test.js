@@ -6,7 +6,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { setupIntl } from 'ember-intl/test-support';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module(
@@ -22,6 +22,7 @@ module(
       await render(
         hbs`<Workers::Worker::Actions @model={{this.model}} @delete={{this.delete}} />`,
       );
+      await click('button');
 
       assert.dom(this.element).includesText('Remove Worker');
     });
