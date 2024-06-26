@@ -33,12 +33,17 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const SCOPE_CHECKBOX_SELECTOR = (id) =>
     `tbody [data-test-org-scopes-table-row="${id}"] input`;
   const TABLE_ROW_SELECTOR = 'tbody tr';
+  const TABLE_SCOPE_SELECTOR = 'tbody tr:nth-child(2) a';
+  const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
   const SAVE_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
   const TOAST_SELECTOR = '[role="alert"]';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
+  const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
+  const NO_SCOPES_MSG_LINK_SELECTOR =
+    '.role-grant-scopes div div:nth-child(3) a';
 
   const instances = {
     scopes: {
@@ -99,7 +104,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
-    await click('tbody tr:nth-child(2) a');
+    await click(TABLE_SCOPE_SELECTOR);
 
     assert.strictEqual(
       currentURL(),
@@ -111,7 +116,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
-    await click('tbody tr:nth-child(2) td:nth-child(3) a');
+    await click(TABLE_PARENT_SCOPE_SELECTOR);
 
     assert.strictEqual(
       currentURL(),
@@ -125,8 +130,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.dom('.role-grant-scopes div').includesText('No scopes added');
-    assert.dom('.role-grant-scopes div div:nth-child(3) a').isVisible();
+    assert.dom(NO_SCOPES_MSG_SELECTOR).includesText('No scopes added');
+    assert.dom(NO_SCOPES_MSG_LINK_SELECTOR).isVisible();
   });
 
   test('user does not see action to add scopes when role has no grant scopes without proper permissions', async function (assert) {
@@ -140,7 +145,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.dom('.role-grant-scopes div div:nth-child(3) a').doesNotExist();
+    assert.dom(NO_SCOPES_MSG_LINK_SELECTOR).doesNotExist();
   });
 
   test('correct toggles are visible for org level role on manage scopes page', async function (assert) {
