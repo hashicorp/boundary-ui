@@ -4,5 +4,25 @@
  */
 
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
-export default class ScopesScopeRolesRoleIndexRoute extends Route {}
+export default class ScopesScopeRolesRoleIndexRoute extends Route {
+  // =services
+
+  @service store;
+
+  // =methods
+
+  /**
+   * Pre-loads all scopes since they will be necessary in sub-routes.
+   * @param {RoleModel} role
+   */
+  async afterModel(role) {
+    if (role.scope.isGlobal) {
+      await this.store.query('scope', {
+        scope_id: role.scope.id,
+        recursive: true,
+      });
+    }
+  }
+}

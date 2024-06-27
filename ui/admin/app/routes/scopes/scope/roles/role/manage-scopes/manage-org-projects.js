@@ -30,31 +30,11 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
 
   /**
    * Loads projects for current org scope.
-   * @return {Promise<{role: RoleModel, orgScope: [ScopeModel], projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
+   * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
    */
   async model({ org_id, search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
     const orgScope = this.store.peekRecord('scope', org_id);
-
-    let selectedProjectIDs = role.grantScopeProjectIDs;
-    let remainingProjectIDs = [];
-    if (role.scope.isGlobal) {
-      const projects = await Promise.all(
-        role.grantScopeProjectIDs.map((id) =>
-          this.store.findRecord('scope', id),
-        ),
-      );
-
-      selectedProjectIDs = projects.reduce((filtered, proj) => {
-        if (proj.scopeID === org_id) {
-          filtered.push(proj.id);
-        } else {
-          remainingProjectIDs.push(proj.id);
-        }
-        return filtered;
-      }, []);
-    }
-
     const filters = {
       scope_id: [{ equals: org_id }],
     };
@@ -71,6 +51,9 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       search,
       totalItems,
     );
+
+    const { selectedProjectIDs, remainingProjectIDs } =
+      await this.getSelectedProjects(role, org_id);
 
     return {
       role,
@@ -111,5 +94,34 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       options,
     );
     return scopes.meta?.totalItems;
+  }
+
+  /**
+   * Extract project type grant scope ids that belong to this org scope.
+   * @param {RoleModel} role
+   * @param {string} org_id
+   * @returns {object}
+   */
+  async getSelectedProjects(role, org_id) {
+    // also simplify this
+    let selectedProjectIDs = role.grantScopeProjectIDs;
+    let remainingProjectIDs = [];
+    if (role.scope.isGlobal) {
+      const projects = await Promise.all(
+        role.grantScopeProjectIDs.map((id) =>
+          this.store.findRecord('scope', id),
+        ),
+      );
+
+      selectedProjectIDs = projects.reduce((filtered, proj) => {
+        if (proj.scopeID === org_id) {
+          filtered.push(proj.id);
+        } else {
+          remainingProjectIDs.push(proj.id);
+        }
+        return filtered;
+      }, []);
+    }
+    return { selectedProjectIDs, remainingProjectIDs };
   }
 }
