@@ -18,7 +18,7 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
    * @param {RoleModel} role
    */
   async afterModel(role) {
-    if (role.scope.isGlobal) {
+    if (!role.scope.isProject) {
       await this.store.query('scope', {
         scope_id: role.scope.id,
         recursive: true,
