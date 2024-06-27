@@ -103,23 +103,24 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
    * @returns {object}
    */
   async getSelectedProjects(role, org_id) {
-    // also simplify this
     let selectedProjectIDs = role.grantScopeProjectIDs;
     let remainingProjectIDs = [];
     if (role.scope.isGlobal) {
-      const projects = await Promise.all(
-        role.grantScopeProjectIDs.map((id) =>
-          this.store.findRecord('scope', id),
-        ),
+      const id = [];
+      selectedProjectIDs.forEach((projectID) => id.push({ equals: projectID }));
+      const options = { pushToStore: false, peekIndexedDB: true };
+      const projects = await this.store.query(
+        'scope',
+        { scope_id: 'global', query: { filters: { id } } },
+        options,
       );
-
-      selectedProjectIDs = projects.reduce((filtered, proj) => {
-        if (proj.scopeID === org_id) {
-          filtered.push(proj.id);
+      selectedProjectIDs = projects.reduce((selectedIDs, project) => {
+        if (project.scope.id === org_id) {
+          selectedIDs.push(project.id);
         } else {
-          remainingProjectIDs.push(proj.id);
+          remainingProjectIDs.push(project.id);
         }
-        return filtered;
+        return selectedIDs;
       }, []);
     }
     return { selectedProjectIDs, remainingProjectIDs };
