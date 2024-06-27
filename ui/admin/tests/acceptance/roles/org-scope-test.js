@@ -30,8 +30,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
   const SCOPE_TOGGLE_SELECTOR = (name) =>
     `.hds-form-toggle input[name="${name}"]`;
-  const SCOPE_CHECKBOX_SELECTOR = (id) =>
-    `tbody [data-test-org-scopes-table-row="${id}"] input`;
+  const SCOPE_CHECKBOX_SELECTOR = (type, id) =>
+    `tbody [data-test-${type}-scopes-table-row="${id}"] input`;
   const TABLE_ROW_SELECTOR = 'tbody tr';
   const TABLE_SCOPE_SELECTOR = 'tbody tr:nth-child(2) a';
   const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
@@ -240,9 +240,15 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
@@ -266,9 +272,15 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
     await click(CANCEL_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
@@ -297,7 +309,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
-    await click(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id));
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
     await click(SAVE_BTN_SELECTOR);
 
     assert.dom(TOAST_SELECTOR).isVisible();
@@ -313,16 +327,24 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
 
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id)).exists();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherProject.id)).exists();
+    assert
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
+      .exists();
+    assert.dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id)).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.scopes.project.id);
     await waitUntil(
-      () => findAll(SCOPE_CHECKBOX_SELECTOR(anotherProject.id)).length === 0,
+      () =>
+        findAll(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+          .length === 0,
     );
 
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id)).exists();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherProject.id)).doesNotExist();
+    assert
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
+      .exists();
+    assert
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+      .doesNotExist();
   });
 
   test('user can search for project scopes and get no results on manage org projects page', async function (assert) {
@@ -335,16 +357,20 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
 
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id)).exists();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherProject.id)).exists();
+    assert
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
+      .exists();
+    assert.dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id)).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake scope that does not exist');
     await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
 
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR(instances.scopes.project.id))
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
       .doesNotExist();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR(anotherProject.id)).doesNotExist();
+    assert
+      .dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+      .doesNotExist();
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });

@@ -105,7 +105,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   async getSelectedProjects(role, org_id) {
     let selectedProjectIDs = role.grantScopeProjectIDs;
     let remainingProjectIDs = [];
-    if (role.scope.isGlobal) {
+    if (role.scope.isGlobal && selectedProjectIDs.length) {
       const id = [];
       selectedProjectIDs.forEach((projectID) => id.push({ equals: projectID }));
       const options = { pushToStore: false, peekIndexedDB: true };
