@@ -1059,7 +1059,10 @@
   .table-selected-items-text {
     display: flex;
     justify-content: end;
-    margin-bottom: 0.5rem;
+  }
+
+  .hds-table {
+    margin-top: 0.5rem;
   }
 
   .hds-pagination {
