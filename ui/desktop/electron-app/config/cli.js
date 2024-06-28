@@ -7,7 +7,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const https = require('https');
-const admZip = require('adm-zip');
+const unzipper = require('unzipper');
 const { isMac, isWindows, isLinux } = require('../src/helpers/platform.js');
 
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
@@ -66,13 +66,31 @@ const downloadArtifact = (version) => {
   });
 };
 
-const extract = (artifactPath, destination) => {
+const extract = async (artifactPath, destination) => {
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
+  const directory = await unzipper.Open.file(artifactPath);
 
-  const zip = new admZip(artifactPath);
-  // The first boolean flag is to overwrite files, the second is to preserve original
-  // file permissions which doesn't seem to be documented.
-  return zip.extractAllTo(destination, true, true);
+  return Promise.all(
+    directory.files.map((file) => {
+      return new Promise((resolve, reject) => {
+        file
+          .stream()
+          .pipe(
+            fs.createWriteStream(path.join(destination, file.path), {
+              // Creating a new file stream sets the permission bits on the file
+              // to node's default. We need to set the permission bits ourselves.
+              // We could just force the mode to 0o755, but we can also just convert it.
+              // This should also work on windows as the permission bits will still be set
+              // correctly but they just won't have any effect.
+              // Taken from here: https://github.com/thejoshwolfe/yauzl/issues/101#issuecomment-448073570
+              mode: file.externalFileAttributes >>> 16,
+            }),
+          )
+          .on('error', reject)
+          .on('finish', resolve);
+      });
+    }),
+  );
 };
 
 module.exports = {
@@ -87,7 +105,7 @@ module.exports = {
         'utf8',
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
-      extract(artifactPath, artifactDestination);
+      await extract(artifactPath, artifactDestination);
     } catch (e) {
       console.error('ERROR: Failed setting up CLI.', e);
       process.exit(1);
