@@ -20,7 +20,7 @@
         {{on 'input' @handleSearchInput}}
       />
     </Hds::SegmentedGroup>
-    {{#if @model.orgScopes}}
+    {{#if @model.projectScopes}}
       {{#if this.selectedItems.length}}
         <div class='table-selected-items-text'>
           <Hds::Text::Body @tag='p' @color='faint'>
@@ -34,11 +34,10 @@
       {{/if}}
       <Hds::Table
         @columns={{array
-          (hash label=(t 'resources.role.scope.title'))
+          (hash label=(t 'resources.project.title'))
           (hash label=(t 'form.id.label'))
-          (hash label=(t 'resources.role.scope.titles.projects_selected'))
         }}
-        @model={{@model.orgScopes}}
+        @model={{@model.projectScopes}}
         @isSelectable={{true}}
         @onSelectionChange={{this.selectionChange}}
         @valign='middle'
@@ -48,7 +47,7 @@
             @selectionKey={{B.data.id}}
             @isSelected={{includes B.data.id this.selectedItems}}
             @selectionAriaLabelSuffix='row {{B.data.id}}'
-            data-test-org-scopes-table-row={{B.data.id}}
+            data-test-project-scopes-table-row={{B.data.id}}
           >
             <B.Td>
               <Hds::Text::Body @tag='p'>
@@ -61,28 +60,11 @@
                 @color='secondary'
               />
             </B.Td>
-            <B.Td>
-              {{#let (get @model.projectTotals B.data.id) as |projectTotals|}}
-                {{#if projectTotals}}
-                  <Hds::Link::Standalone
-                    @icon='arrow-right'
-                    @iconPosition='trailing'
-                    @text={{t
-                      'resources.role.scope.actions.view-projects'
-                      selected=projectTotals.selected
-                      total=projectTotals.total
-                    }}
-                    @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
-                    @model={{B.data.id}}
-                  />
-                {{/if}}
-              {{/let}}
-            </B.Td>
           </B.Tr>
         </:body>
       </Hds::Table>
       <Rose::Pagination
-        @model={{@model.role.id}}
+        @model={{array @model.role.id @model.orgScope.id}}
         @totalItems={{@model.totalItems}}
         @currentPage={{@page}}
         @currentPageSize={{@pageSize}}

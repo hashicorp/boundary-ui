@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute extends Route {
   // =attributes
@@ -30,7 +31,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{role: RoleModel, subScopes: [ScopeModel], totalItems: number, totalItemsCount: number}> }
+   * @returns {Promise<{role: RoleModel, orgScopes: [ScopeModel], projectTotals: object, totalItems: number, totalItemsCount: number}> }
    */
   async model({ search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -40,25 +41,61 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       scope_id: [{ equals: scope_id }],
     };
 
-    const subScopes = await this.store.query('scope', {
+    const orgScopes = await this.store.query('scope', {
       scope_id,
       query: { search, filters },
       page,
       pageSize,
     });
-    const totalItems = subScopes.meta?.totalItems;
+    const totalItems = orgScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(
       scope_id,
       search,
       totalItems,
     );
 
+    const projectTotals = await this.getProjectTotals(
+      role.grantScopeProjectIDs,
+    );
+
     return {
       role,
-      subScopes,
+      orgScopes,
+      projectTotals,
       totalItems,
       totalItemsCount,
     };
+  }
+
+  /**
+   * Creates an object that contains the number of selected projects
+   * and the total number of projects for each org scope.
+   * @param {[string]} projectIDs
+   * @returns {object}
+   */
+  async getProjectTotals(projectIDs) {
+    const options = { pushToStore: false, peekIndexedDB: true };
+    const projects = await this.store.query(
+      'scope',
+      {
+        scope_id: 'global',
+        query: { filters: { type: [{ equals: TYPE_SCOPE_PROJECT }] } },
+      },
+      options,
+    );
+
+    const projectTotals = {};
+    projects.forEach(({ id, scope }) => {
+      if (!projectTotals[scope.id]) {
+        projectTotals[scope.id] = { selected: 0, total: 0 };
+      }
+      if (projectIDs.includes(id)) {
+        projectTotals[scope.id].selected++;
+      }
+      projectTotals[scope.id].total++;
+    });
+
+    return projectTotals;
   }
 
   /**
