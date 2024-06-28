@@ -132,7 +132,7 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
       page.getByRole('link', { name: targets[targets.length - 1].name }),
     ).toBeVisible();
 
-    // Use the "Items per page" option
+    // Use the "Items per page" options to show 30 items per page.
     await page
       .getByRole('combobox', { name: 'Items per page' })
       .selectOption('30');
