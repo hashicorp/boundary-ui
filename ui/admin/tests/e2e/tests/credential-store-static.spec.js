@@ -85,16 +85,18 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
       throw new Error('Stored Key does not match');
     }
   } finally {
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });
@@ -124,16 +126,18 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
     expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
     expect(retrievedPassword).toBe(testPassword);
   } finally {
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });
@@ -183,16 +187,18 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
     expect(retrievedPassword).toBe(testPassword);
     expect(retrievedId).toBe(testId);
   } finally {
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });
@@ -227,16 +233,18 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });

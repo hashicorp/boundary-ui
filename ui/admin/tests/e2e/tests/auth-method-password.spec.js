@@ -30,6 +30,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
 }) => {
   await page.goto('/');
   let orgName;
+  let authMethodName;
   try {
     // Log in
     await page
@@ -51,7 +52,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
 
     // Create a new password auth method and account
     orgName = await createOrg(page);
-    const authMethodName = await createPasswordAuthMethod(page);
+    authMethodName = await createPasswordAuthMethod(page);
     const username = 'test-user';
     const password = 'password';
     await createPasswordAccount(page, username, password);
@@ -142,10 +143,31 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+
+    // There is an issue with deleting an org that has an auth method unless you
+    // delete the auth method first
+    if (authMethodName) {
+      const authMethods = JSON.parse(
+        execSync('boundary auth-methods list --recursive -format json'),
+      );
+      const authMethod = authMethods.items.filter(
+        (obj) => obj.name == authMethodName,
+      )[0];
+      if (authMethod) {
+        try {
+          execSync('boundary auth-methods delete -id=' + authMethod.id);
+        } catch (e) {
+          console.log(`${e.stderr}`);
+        }
+      }
+    }
+
+    if (orgName) {
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });

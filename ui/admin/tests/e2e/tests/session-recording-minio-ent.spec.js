@@ -260,11 +260,11 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     if (storagePolicy) {
       await deletePolicyCli(storagePolicy.id);
     }
-    if (orgId) {
-      await deleteOrgCli(orgId);
-    }
     if (storageBucket) {
       await deleteStorageBucketCli(storageBucket.id);
+    }
+    if (orgId) {
+      await deleteOrgCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
