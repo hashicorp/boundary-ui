@@ -40,7 +40,7 @@
     "ember-composable-helpers": "^5.0.0",
     "ember-focus-trap": "^1.0.1",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "ember-radio-button": "github:yapplabs/ember-radio-button.git#b2ab65f",
+    "ember-radio-button": "^3.0.0-beta.1",
     "ember-uuid": "^2.1.0",
     "jsonlint": "^1.6.3",
     "sass": "^1.69.5"
