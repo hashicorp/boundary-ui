@@ -95,6 +95,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
 
     // Create target
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: projectName }).click();
     const targetName = await createSshTargetWithAddressAndWorkerFilterEnt(
@@ -119,7 +120,11 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
 
     // Create storage policy in org scope: keep session recordings forever
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
+    ).toBeVisible();
     const policyName = await createStoragePolicy(page);
     await attachStoragePolicy(page, policyName);
 
@@ -183,7 +188,11 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
       (obj) => obj.name == policyName,
     )[0];
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
+    await expect(
+      page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
+    ).toBeVisible();
     await page
       .getByRole('link', { name: 'Storage Policies', exact: true })
       .click();
@@ -228,15 +237,32 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
+
+    // Detach storage bucket from target
+    await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
+    await page.getByRole('link', { name: orgName }).click();
+    await page.getByRole('link', { name: projectName }).click();
+    await page.getByRole('link', { name: 'Targets', exact: true }).click();
+    await page.getByRole('link', { name: targetName }).click();
+    await page
+      .getByRole('link', { name: 'Session Recording settings' })
+      .click();
+    await page.getByLabel('Record sessions for this target').uncheck();
+    await page.getByRole('button', { name: 'Save' }).click();
+    await expect(
+      page.getByRole('alert').getByText('Success', { exact: true }),
+    ).toBeVisible();
+    await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
     if (storagePolicy) {
       await deletePolicyCli(storagePolicy.id);
     }
-    if (orgId) {
-      await deleteOrgCli(orgId);
-    }
     if (storageBucket) {
       await deleteStorageBucketCli(storageBucket.id);
+    }
+    if (orgId) {
+      await deleteOrgCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {

@@ -125,7 +125,7 @@ const createWindow = (partition, closeWindowCB) => {
     browserWindow.loadURL(emberAppURL);
   });
 
-  browserWindow.webContents.on('crashed', () => {
+  browserWindow.webContents.on('render-process-gone', () => {
     console.log(
       'Your Ember app (or other code) in the main window has crashed.',
     );

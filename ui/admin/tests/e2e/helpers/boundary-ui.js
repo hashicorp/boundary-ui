@@ -240,7 +240,21 @@ exports.createVaultCredentialStore = async (page, vaultAddr, clientToken) => {
  */
 exports.createStaticCredentialKeyPair = async (page, username, keyPath) => {
   const credentialName = 'Credential ' + nanoid();
-  await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+
+  const credentialsBreadcrumbIsVisible = await page
+    .getByRole('breadcrumbs', { name: 'Credentials' })
+    .isVisible();
+  if (credentialsBreadcrumbIsVisible) {
+    await page.getByRole('breadcrumbs', { name: 'Credentials' }).click();
+  } else {
+    await page.getByRole('link', { name: 'Credentials', exact: true }).click();
+  }
+
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Credentials'),
+  ).toBeVisible();
 
   const newButtonIsVisible = await page
     .getByRole('link', { name: 'New', exact: true })
@@ -298,6 +312,12 @@ exports.createStaticCredentialUsernamePassword = async (
   } else {
     await page.getByRole('link', { name: 'Credentials', exact: true }).click();
   }
+
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Credentials'),
+  ).toBeVisible();
 
   const newButtonIsVisible = await page
     .getByRole('link', { name: 'New', exact: true })
@@ -482,6 +502,49 @@ exports.createTargetWithAddress = async (page, address, port) => {
 };
 
 /**
+ * Uses the UI to create a new target with address and alias. Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} address Address of the target
+ * @param {string} port Port of the target
+ * @param {string} alias alias used for the target
+ * @returns Name of the target
+ */
+exports.createTargetWithAddressAndAlias = async (
+  page,
+  address,
+  port,
+  alias,
+) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByLabel('Target Address').fill(address);
+  await page.getByLabel('Default Port').fill(port);
+  await page
+    .getByRole('group', { name: 'Aliases' })
+    .getByLabel('value')
+    .last()
+    .fill(alias);
+  await page.getByRole('button', { name: 'Add' }).click();
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
  * Uses the UI to create a new TCP target with address in boundary-enterprise
  * Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
@@ -576,6 +639,51 @@ exports.createSshTargetWithAddressEnt = async (page, address, port) => {
 };
 
 /**
+ * Uses the UI to create a new SSH target with address and alias.
+ * Assumes you have selected the desired project.
+ * @param {Page} page Playwright page object
+ * @param {string} address Address of the target
+ * @param {string} port Port of the target
+ * @param {string} alias alias used for the target
+ * @returns Name of the target
+ */
+exports.createSshTargetWithAddressAndAlias = async (
+  page,
+  address,
+  port,
+  alias,
+) => {
+  const targetName = 'Target ' + nanoid();
+  await page
+    .getByRole('navigation', { name: 'Resources' })
+    .getByRole('link', { name: 'Targets' })
+    .click();
+  await page.getByRole('link', { name: 'New', exact: true }).click();
+  await page.getByLabel('Name').fill(targetName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
+  await page.getByLabel('Target Address').fill(address);
+  await page.getByLabel('Default Port').fill(port);
+  await page
+    .getByRole('group', { name: 'Aliases' })
+    .getByLabel('value')
+    .last()
+    .fill(alias);
+  await page.getByRole('button', { name: 'Add' }).click();
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
+  ).toBeVisible();
+
+  return targetName;
+};
+
+/**
  * Uses the UI to create a new SSH target with address in boundary-enterprise
  * Assumes you have selected the desired project.
  * @param {Page} page Playwright page object
@@ -613,6 +721,50 @@ exports.createSshTargetWithAddressAndWorkerFilterEnt = async (
   ).toBeVisible();
 
   return targetName;
+};
+
+/**
+ * Uses the UI to create an alias
+ * @param {Page} page Playwright page object
+ * @param {string} alias Value of the alias
+ * @param {string} targetId ID of the target
+ * @returns Name of the alias
+ */
+exports.createAliasForTarget = async (page, alias, targetId) => {
+  const aliasName = 'Alias ' + nanoid();
+
+  await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+  await page.getByRole('link', { name: 'Aliases' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Aliases'),
+  ).toBeVisible();
+
+  const newButtonIsVisible = await page
+    .getByRole('link', { name: 'Create a new alias', exact: true })
+    .isVisible();
+  if (newButtonIsVisible) {
+    await page
+      .getByRole('link', { name: 'Create a new alias', exact: true })
+      .click();
+  } else {
+    await page.getByRole('link', { name: 'New Alias', exact: true }).click();
+  }
+
+  await page.getByLabel('Name').fill(aliasName);
+  await page.getByLabel('Description').fill('This is an automated test');
+  await page.getByLabel('Alias Value').fill(alias);
+  await page.getByLabel('Target ID').fill(targetId);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(aliasName),
+  ).toBeVisible();
+
+  return aliasName;
 };
 
 /**
@@ -746,10 +898,16 @@ exports.addBrokeredCredentialsToTarget = async (
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
+  await expect(page.getByRole('heading', { name: 'Targets' })).toBeVisible();
   await page.getByRole('link', { name: targetName }).click();
   await page
     .getByRole('link', { name: 'Brokered Credentials', exact: true })
     .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Brokered Credentials'),
+  ).toBeVisible();
 
   const addBrokeredCredentialsButtonIsVisible = await page
     .getByRole('article')
@@ -796,6 +954,7 @@ exports.addInjectedCredentialsToTarget = async (
     .getByRole('navigation', { name: 'Resources' })
     .getByRole('link', { name: 'Targets' })
     .click();
+  await expect(page.getByRole('heading', { name: 'Targets' })).toBeVisible();
   await page.getByRole('link', { name: targetName }).click();
   await page
     .getByRole('link', {
@@ -803,6 +962,11 @@ exports.addInjectedCredentialsToTarget = async (
       exact: true,
     })
     .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Injected Application Credentials'),
+  ).toBeVisible();
 
   const addInjectedCredentialsButtonIsVisible = await page
     .getByRole('article')

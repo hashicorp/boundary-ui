@@ -72,7 +72,7 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
       .getByRole('button', { name: 'Manage' })
       .click();
     await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
@@ -89,22 +89,24 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
       .getByRole('button', { name: 'Manage' })
       .click();
     await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK' }).click();
+    await page.getByRole('button', { name: 'OK', exact: true }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
+      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
+      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
+      if (org) {
+        await deleteOrgCli(org.id);
+      }
     }
   }
 });
