@@ -54,7 +54,9 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
         'scopes.scope.roles.role.manage-scopes.manage-custom-scopes',
       );
     } else {
-      this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
+      this.router.replaceWith('scopes.scope.roles.role.manage-scopes', {
+        queryParams: { showCheckIcon: true },
+      });
     }
   }
 

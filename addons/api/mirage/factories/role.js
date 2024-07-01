@@ -33,9 +33,19 @@ export default factory.extend({
    * Adds grant scopes to the role.
    */
   withScopes: trait({
-    afterCreate(role) {
+    afterCreate(role, server) {
       const { scope } = role;
-      role.update({ grant_scope_ids: ['this', scope.id] });
+      const newScope =
+        scope.id === 'global'
+          ? server.create('scope', {
+              scope: { id: 'global', type: 'global' },
+              type: 'org',
+            })
+          : server.create('scope', {
+              scope: { id: scope.id, type: 'org' },
+              type: 'project',
+            });
+      role.update({ grant_scope_ids: ['this', newScope.id] });
     },
   }),
 

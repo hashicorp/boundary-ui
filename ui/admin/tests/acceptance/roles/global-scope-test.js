@@ -22,6 +22,7 @@ import {
   GRANT_SCOPE_CHILDREN,
   GRANT_SCOPE_DESCENDANTS,
 } from 'api/models/role';
+import { TYPE_SCOPE_ORG } from 'api/models/scope';
 
 module('Acceptance | roles | global-scope', function (hooks) {
   setupApplicationTest(hooks);
@@ -32,6 +33,12 @@ module('Acceptance | roles | global-scope', function (hooks) {
     `.hds-form-toggle input[name="${name}"]`;
   const SCOPE_CHECKBOX_SELECTOR = (type, id) =>
     `tbody [data-test-${type}-scopes-table-row="${id}"] input`;
+  const GRANT_SCOPE_ROW_SELECTOR = (id) =>
+    `tbody [data-test-grant-scope-row="${id}"]`;
+  const FILTER_DROPDOWN_SELECTOR = (name) =>
+    `.search-filtering [name="${name}"] button`;
+  const FILTER_APPLY_BUTTON_SELECTOR =
+    '.search-filtering [data-test-dropdown-apply-button]';
   const TABLE_ROW_SELECTOR = 'tbody tr';
   const TABLE_SCOPE_SELECTOR = 'tbody tr:nth-child(2) a';
   const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
@@ -108,8 +115,107 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     assert.strictEqual(
       currentURL(),
-      `/scopes/${instances.scopes.global.id}/scopes`,
+      `/scopes/${instances.role.grant_scope_ids[1]}/scopes`,
     );
+  });
+
+  test('user can search for existing grant scope on a role', async function (assert) {
+    await visit(urls.role);
+
+    await click(`[href="${urls.roleScopes}"]`);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .exists();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, instances.role.grant_scope_ids[0]);
+    await waitUntil(
+      () =>
+        findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+          .length === 0,
+    );
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .exists();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .doesNotExist();
+  });
+
+  test('user can search for grant scopes on a role and get no results', async function (assert) {
+    await visit(urls.role);
+
+    await click(`[href="${urls.roleScopes}"]`);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .exists();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, 'fake scope that does not exist');
+    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .doesNotExist();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .doesNotExist();
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('user can filter for grant scopes on a role by parent scope', async function (assert) {
+    await visit(urls.role);
+
+    await click(`[href="${urls.roleScopes}"]`);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .exists();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
+
+    await click(FILTER_DROPDOWN_SELECTOR('parent-scope'));
+    await click(`input[value="${instances.scopes.global.id}"]`);
+    await click(FILTER_APPLY_BUTTON_SELECTOR);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .doesNotExist();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
+  });
+
+  test('user can filter for grant scopes on a role by type', async function (assert) {
+    await visit(urls.role);
+
+    await click(`[href="${urls.roleScopes}"]`);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .exists();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
+
+    await click(FILTER_DROPDOWN_SELECTOR('type'));
+    await click(`input[value="${TYPE_SCOPE_ORG}"]`);
+    await click(FILTER_APPLY_BUTTON_SELECTOR);
+
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .doesNotExist();
+    assert
+      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .exists();
   });
 
   test('user can naviage to parent scope from role grant scopes', async function (assert) {
@@ -253,7 +359,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
     await click(SAVE_BTN_SELECTOR);
 
-    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.strictEqual(currentURL(), `${urls.manageScopes}?showCheckIcon=true`);
 
     await click(SAVE_BTN_SELECTOR);
 
@@ -393,7 +499,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(SAVE_BTN_SELECTOR);
 
-    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.strictEqual(currentURL(), `${urls.manageScopes}?showCheckIcon=true`);
 
     await click(SAVE_BTN_SELECTOR);
 
