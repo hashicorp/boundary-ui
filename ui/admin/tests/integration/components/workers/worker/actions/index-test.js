@@ -16,7 +16,10 @@ module(
     setupIntl(hooks);
 
     test('it renders', async function (assert) {
-      this.set('model', { id: 'w_123', authorized_actions: ['delete'] });
+      this.set('model', {
+        id: 'w_123',
+        authorized_actions: ['delete', 'set-worker-tags'],
+      });
       this.set('delete', () => {});
 
       await render(
@@ -25,6 +28,7 @@ module(
       await click('button');
 
       assert.dom(this.element).includesText('Remove Worker');
+      assert.dom(this.element).includesText('Create new tags');
     });
   },
 );

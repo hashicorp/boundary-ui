@@ -8,8 +8,6 @@ import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
 import { faker } from '@faker-js/faker';
 
-const types = ['pki', 'kms'];
-
 export default factory.extend({
   id: () => generateId('w_'),
   authorized_actions: () =>
@@ -18,8 +16,8 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'set-worker-tags',
     ],
-  type: (i) => types[i % types.length],
   config_tags: (i) => {
     if (i % 3 === 0) {
       return {

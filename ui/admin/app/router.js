@@ -150,6 +150,7 @@ Router.map(function () {
         this.route('new');
         this.route('worker', { path: ':worker_id' }, function () {
           this.route('tags');
+          this.route('create-tags');
         });
       });
       this.route('session-recordings', function () {

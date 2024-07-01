@@ -13,6 +13,7 @@ import { faker } from '@faker-js/faker';
 export default Factory.extend({
   name: () => faker.word.words(),
   description: () => faker.word.words(),
+  type: 'pki',
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.number.int(),

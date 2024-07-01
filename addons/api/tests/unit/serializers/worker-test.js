@@ -50,4 +50,25 @@ module('Unit | Serializer | worker', function (hooks) {
       worker_generated_auth_token: '123-abc',
     });
   });
+
+  test('it serializes using `adapterOptions.apiTags`', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('worker');
+    const record = store.createRecord('worker', {
+      name: 'worker',
+      api_tags: null,
+      version: 1,
+    });
+    const snapshot = record._createSnapshot();
+    snapshot.adapterOptions = {
+      apiTags: {
+        key: ['value'],
+      },
+    };
+    const serializedRecord = serializer.serialize(snapshot);
+    assert.deepEqual(serializedRecord, {
+      version: 1,
+      api_tags: { key: ['value'] },
+    });
+  });
 });

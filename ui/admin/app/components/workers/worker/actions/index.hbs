@@ -5,6 +5,12 @@
 
 <Hds::Dropdown data-test-manage-worker-dropdown as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+  {{#if (can 'setWorkerTags worker' @model)}}
+    <dd.Interactive
+      @text={{t 'resources.worker.actions.create_tags'}}
+      @route='scopes.scope.workers.worker.create-tags'
+    />
+  {{/if}}
   {{#if (can 'delete worker' @model)}}
     <dd.Interactive
       @icon='trash'

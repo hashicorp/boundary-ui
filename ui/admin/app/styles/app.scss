@@ -699,7 +699,13 @@
     .hds-table__th {
       height: auto;
       line-height: 1;
+      border-bottom: unset;
     }
+  }
+
+  // Remove divider between table header cells
+  .hds-table__thead .hds-table__tr .hds-table__th + .hds-table__th::before {
+    all: unset;
   }
 
   .hds-table__thead,
