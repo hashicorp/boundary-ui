@@ -690,7 +690,7 @@ function routes() {
         };
       }
 
-      worker.update(updatedAttrs);
+      return worker.update(updatedAttrs);
     },
   );
 

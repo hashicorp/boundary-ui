@@ -89,7 +89,13 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   @action
   save() {
     this.removeExitHandler();
-    const existingApiTags = this.args.model.api_tags;
+
+    if (!this.apiTags.isEmpty) {
+      this.router.transitionTo('scopes.scope.workers.worker.tags');
+      return;
+    }
+
+    const existingApiTags = this.args.model.api_tags || {};
     this.apiTags.forEach((tag) => {
       let key = tag.key;
       let values = tag.value.split(',');
