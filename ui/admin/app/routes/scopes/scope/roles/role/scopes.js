@@ -86,7 +86,6 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
    * @returns {Promise<void>}
    */
   async getAllGrantScopes(id) {
-    // only do this if they enter this route for first time ?
     const options = { pushToStore: false, peekIndexedDb: true };
     return this.store.query(
       'scope',

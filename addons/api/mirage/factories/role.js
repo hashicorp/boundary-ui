@@ -7,6 +7,11 @@ import factory from '../generated/factories/role';
 import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import {
+  TYPE_SCOPE_GLOBAL,
+  TYPE_SCOPE_ORG,
+  TYPE_SCOPE_PROJECT,
+} from 'api/models/scope';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -38,12 +43,12 @@ export default factory.extend({
       const newScope =
         scope.id === 'global'
           ? server.create('scope', {
-              scope: { id: 'global', type: 'global' },
+              scope: { id: 'global', type: TYPE_SCOPE_GLOBAL },
               type: 'org',
             })
           : server.create('scope', {
-              scope: { id: scope.id, type: 'org' },
-              type: 'project',
+              scope: { id: scope.id, type: TYPE_SCOPE_ORG },
+              type: TYPE_SCOPE_PROJECT,
             });
       role.update({ grant_scope_ids: ['this', newScope.id] });
     },
