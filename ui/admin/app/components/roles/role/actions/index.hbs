@@ -3,7 +3,6 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{!TODO Refactor page to use hds dropdown in ICU-13879}}
 <Rose::Dropdown
   @text={{t 'actions.manage'}}
   @dropdownRight={{true}}
@@ -38,3 +37,24 @@
     </dropdown.button>
   {{/if}}
 </Rose::Dropdown>
+
+
+
+<Hds::Dropdown as |dd|>
+  <dd.ToggleButton @text= {{t 'actions.manage'}} @color ='secondary'/>
+  {{#if (can 'addPrincipals role' @model)}}
+    <dd.Interactive
+      @text={{t 'resources.role.principal.actions.add-principals'}}
+      @route = 'scopes.scope.roles.role.add-principals'
+    />
+  {{/if}}
+  {{#if (can 'delete model' @model)}}
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.role.actions.delete'}}
+      @color='critical'
+      @disabled={{@model.canSave}}
+      {{on 'click' (fn @delete @model)}}
+    />
+  {{/if}}
+ </Hds::Dropdown>
