@@ -90,7 +90,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   save() {
     this.removeExitHandler();
 
-    if (!this.apiTags.isEmpty) {
+    if (this.apiTags.isEmpty) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
       return;
     }

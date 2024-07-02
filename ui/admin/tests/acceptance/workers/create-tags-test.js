@@ -23,6 +23,11 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   const KEY_INPUT_SELECTOR = '[name="api_tags"] tr td:first-child input';
   const VALUE_INPUT_SELECTOR = '[name="api_tags"] tr td:nth-child(2) input';
   const ADD_INPUT_SELECTOR = '[name="api_tags"] tr td:last-child button';
+  const DISCARD_CHANGES_DIALOG = '.rose-dialog';
+  const DISCARD_CHANGES_DISCARD_BUTTON =
+    '.rose-dialog-footer .rose-button-primary';
+  const DISCARD_CHANGES_CANCEL_BUTTON =
+    '.rose-dialog-footer .rose-button-secondary';
 
   const instances = {
     scopes: {
@@ -43,6 +48,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     const scope = instances.scopes.global;
     instances.worker = this.server.create('worker', {
       scopeId: scope.id,
+      // authorized_actions: [],
     });
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
@@ -62,10 +68,10 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     assert.strictEqual(currentURL(), urls.createTags);
   });
 
-  test.skip('cannot visit worker create tags without proper permissions', async function (assert) {
+  test('cannot visit worker create tags without proper permissions', async function (assert) {
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter(
-        (action) => action !== 'set-worker-tags',
+        (item) => item !== 'set-worker-tags',
       );
     await visit(urls.worker);
 
@@ -74,15 +80,20 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     assert.dom(CREATE_TAGS_BUTTON_SELECTOR).doesNotExist();
   });
 
-  test.skip('user can save worker tags', async function (assert) {
-    await visit(urls.createTags);
+  test('user can save worker tags', async function (assert) {
+    await visit(urls.tags);
+
+    assert.dom('tbody tr').exists({ count: 11 });
+
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(CREATE_TAGS_BUTTON_SELECTOR);
     await fillIn(KEY_INPUT_SELECTOR, 'key');
     await fillIn(VALUE_INPUT_SELECTOR, 'value');
     await click(ADD_INPUT_SELECTOR);
 
     await click(SAVE_BUTTON_SELECTOR);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom('tbody tr').exists({ count: 12 });
     assert.strictEqual(currentURL(), urls.tags);
   });
 
@@ -97,7 +108,9 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     assert.strictEqual(currentURL(), urls.tags);
   });
 
-  test.skip('user is prompted to confirm exit when there are unsaved changes', async function (assert) {
+  test('user is prompted to confirm exit when there are unsaved changes', async function (assert) {
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
     await visit(urls.createTags);
     await fillIn(KEY_INPUT_SELECTOR, 'key');
     await fillIn(VALUE_INPUT_SELECTOR, 'value');
@@ -105,6 +118,27 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
 
     await click(CANCEL_BUTTON_SELECTOR);
 
-    assert.dom('.confirm-dialog').exists();
+    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+
+    await click(DISCARD_CHANGES_DISCARD_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.tags);
+  });
+
+  test('user can cancel transition when there are unsaved changes', async function (assert) {
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.createTags);
+    await fillIn(KEY_INPUT_SELECTOR, 'key');
+    await fillIn(VALUE_INPUT_SELECTOR, 'value');
+    await click(ADD_INPUT_SELECTOR);
+
+    await click(CANCEL_BUTTON_SELECTOR);
+
+    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+
+    await click(DISCARD_CHANGES_CANCEL_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.createTags);
   });
 });

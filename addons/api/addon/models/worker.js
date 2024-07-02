@@ -93,7 +93,6 @@ export default class WorkerModel extends GeneratedWorkerModel {
 
   @attr({
     description: 'The api tags set for the worker.\nOutput only.',
-    readOnly: true,
   })
   api_tags;
 
