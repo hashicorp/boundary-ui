@@ -4,12 +4,25 @@
 }}
 
 <Hds::Dropdown as |dd|>
-  <dd.ToggleButton @text= {{t 'actions.manage'}} @color ='secondary'/>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary'/>
   {{#if (can 'addPrincipals role' @model)}}
     <dd.Interactive
       @text={{t 'resources.role.principal.actions.add-principals'}}
-      @route = 'scopes.scope.roles.role.add-principals'
+      @route='scopes.scope.roles.role.add-principals'
     />
+    <dd.link
+      @route='scopes.scope.roles.role.add-principals'
+      data-test-manage-dropdown-principals>
+        data-test-manage-dropdown-principals      
+    </dd.link>
+  {{/if}}
+  {{#if (can 'setGrantScopes role' @model)}}
+    <dd.link
+      @route='scopes.scope.roles.role.manage-scopes'
+      data-test-manage-dropdown-scopes
+    >
+      {{t 'resources.role.scope.actions.manage-scopes'}}
+    </dd.link>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
@@ -21,3 +34,4 @@
     />
   {{/if}}
  </Hds::Dropdown>
+
