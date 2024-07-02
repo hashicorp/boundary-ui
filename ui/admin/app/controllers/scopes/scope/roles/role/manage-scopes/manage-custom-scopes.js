@@ -49,7 +49,9 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @notifySuccess('notifications.add-success')
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
-    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
+    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes', {
+      queryParams: { showCheckIcon: true },
+    });
   }
 
   /**

@@ -21,137 +21,192 @@
       <DocLink @doc='role' @iconSize='large' />
     </h2>
     <p>
-      {{#if @model.scope.isOrg}}
+      {{#if @model.role.scope.isOrg}}
         {{t 'resources.role.scope.description.org'}}
-      {{else if @model.scope.isProject}}
+      {{else if @model.role.scope.isProject}}
         {{t 'resources.role.scope.description.project'}}
       {{else}}
         {{t 'resources.role.scope.description.global'}}
       {{/if}}
     </p>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+    <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
   </page.header>
 
   <page.actions>
-    <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
+    <Roles::Role::Actions
+      @model={{@model.role}}
+      @delete={{this.roles.delete}}
+    />
   </page.actions>
 
   <page.navigation>
-    <Roles::Role::Nav @model={{@model}} />
+    <Roles::Role::Nav @model={{@model.role}} />
   </page.navigation>
 
-  <page.body class='role-grant-scopes'>
-    {{#if @model.grant_scope_ids}}
-      <Hds::Table
-        @model={{@model.grantScopes}}
-        @columns={{array
-          (hash label=(t 'resources.role.scope.title'))
-          (hash label=(t 'form.id.label'))
-          (hash label=(t 'resources.role.scope.titles.parent_scope'))
-          (hash label=(t 'resources.role.scope.titles.resource_type'))
-        }}
-        @valin='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if (this.isKeywordThis B.data.id)}}
-                <Hds::Text::Body @tag='p'>
-                  {{#if @model.scope.name}}
-                    {{@model.scope.name}}
-                  {{else}}
-                    {{@model.scope.id}}
-                  {{/if}}
-                </Hds::Text::Body>
-                <Hds::Text::Body @tag='p'>
-                  <Hds::Badge
-                    @text={{t 'resources.role.scope.keywords.this.sub-title'}}
-                    @size='small'
-                  />
-                </Hds::Text::Body>
-              {{else if (this.isKeywordChildrenOrDescendants B.data.id)}}
-                <Hds::Text::Body @tag='p'>
-                  {{t
-                    (concat 'resources.role.scope.keywords.' B.data.id '.title')
-                  }}
-                </Hds::Text::Body>
-                <Hds::Text::Body @tag='p'>
-                  {{t
-                    (concat
-                      'resources.role.scope.keywords.' B.data.id '.sub-title'
-                    )
-                  }}
-                </Hds::Text::Body>
-              {{else}}
-                {{#if (can 'read model' B.data)}}
-                  <LinkTo @route='scopes.scope' @model={{B.data}}>
-                    {{#if B.data.isGlobal}}
-                      {{t 'titles.global'}}
+  <page.body class='search-filtering role-grant-scopes'>
+    {{#if @model.role.grant_scope_ids}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        {{#if @model.role.scope.isGlobal}}
+          <S.Generic>
+            <Dropdown
+              name='parent-scope'
+              @toggleText={{t 'resources.role.scope.titles.parent_scope'}}
+              @itemOptions={{this.availableParentScopes}}
+              @checkedItems={{this.parentScopes}}
+              @applyFilter={{fn this.applyFilter 'parentScopes'}}
+              @isSearchable={{true}}
+            />
+          </S.Generic>
+          <S.Generic>
+            <Dropdown
+              name='type'
+              @toggleText={{t 'resources.role.scope.titles.resource_type'}}
+              @itemOptions={{this.scopeTypeOptions}}
+              @checkedItems={{this.types}}
+              @applyFilter={{fn this.applyFilter 'types'}}
+            />
+          </S.Generic>
+        {{/if}}
+      </Hds::SegmentedGroup>
+
+      {{#if @model.role.scope.isGlobal}}
+        <FilterTags @filters={{this.filters}} />
+      {{/if}}
+
+      {{#if @model.grantScopes}}
+        <Hds::Table
+          @model={{@model.grantScopes}}
+          @columns={{array
+            (hash label=(t 'resources.role.scope.title'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'resources.role.scope.titles.parent_scope'))
+            (hash label=(t 'resources.role.scope.titles.resource_type'))
+          }}
+          @valin='middle'
+        >
+          <:body as |B|>
+            <B.Tr data-test-grant-scope-row={{B.data.id}}>
+              <B.Td>
+                {{#if (this.isKeywordThis B.data.id)}}
+                  <Hds::Text::Body @tag='p'>
+                    {{#if @model.role.scope.name}}
+                      {{@model.role.scope.name}}
                     {{else}}
-                      {{B.data.displayName}}
+                      {{@model.role.scope.id}}
                     {{/if}}
-                  </LinkTo>
+                  </Hds::Text::Body>
+                  <Hds::Text::Body @tag='p'>
+                    <Hds::Badge
+                      @text={{t 'resources.role.scope.keywords.this.sub-title'}}
+                      @size='small'
+                    />
+                  </Hds::Text::Body>
+                {{else if (this.isKeywordChildrenOrDescendants B.data.id)}}
+                  <Hds::Text::Body @tag='p'>
+                    {{t
+                      (concat
+                        'resources.role.scope.keywords.' B.data.id '.title'
+                      )
+                    }}
+                  </Hds::Text::Body>
+                  <Hds::Text::Body @tag='p'>
+                    {{t
+                      (concat
+                        'resources.role.scope.keywords.' B.data.id '.sub-title'
+                      )
+                    }}
+                  </Hds::Text::Body>
                 {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-            <B.Td>
-              {{#if B.data.scope.isGlobal}}
-                <Hds::Link::Inline
-                  @route='scopes.scope'
-                  @model={{B.data.scope.id}}
-                  @icon='globe'
-                  @iconPosition='leading'
-                >
-                  {{#if B.data.scope.name}}
-                    {{t 'titles.global'}}
+                  {{#if (can 'read model' B.data)}}
+                    <LinkTo @route='scopes.scope' @model={{B.data}}>
+                      {{#if B.data.isGlobal}}
+                        {{t 'titles.global'}}
+                      {{else}}
+                        {{B.data.displayName}}
+                      {{/if}}
+                    </LinkTo>
                   {{else}}
-                    {{B.data.scope.id}}
+                    {{B.data.displayName}}
                   {{/if}}
-                </Hds::Link::Inline>
-              {{else if B.data.scope.isOrg}}
-                <Hds::Link::Inline
-                  @route='scopes.scope'
-                  @model={{B.data.scope.id}}
-                  @icon='org'
-                  @iconPosition='leading'
-                >
-                  {{#if B.data.scope.name}}
-                    {{B.data.scope.name}}
-                  {{else}}
-                    {{B.data.scope.id}}
-                  {{/if}}
-                </Hds::Link::Inline>
-              {{else}}
-                {{#if B.data.scope.name}}
-                  {{B.data.scope.name}}
-                {{else}}
-                  {{B.data.scope.id}}
                 {{/if}}
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              {{#if B.data.type}}
-                <Hds::Badge
-                  @text={{t (concat 'resources.scope.types.' B.data.type)}}
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
                 />
-              {{/if}}
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
+              </B.Td>
+              <B.Td>
+                {{#if B.data.scope.isGlobal}}
+                  <Hds::Link::Inline
+                    @route='scopes.scope'
+                    @model={{B.data.scope.id}}
+                    @icon='globe'
+                    @iconPosition='leading'
+                  >
+                    {{~if
+                      B.data.scope.name
+                      (t 'titles.global')
+                      B.data.scope.id
+                    }}
+                  </Hds::Link::Inline>
+                {{else if B.data.scope.isOrg}}
+                  <Hds::Link::Inline
+                    @route='scopes.scope'
+                    @model={{B.data.scope.id}}
+                    @icon='org'
+                    @iconPosition='leading'
+                  >
+                    {{~if B.data.scope.name B.data.scope.name B.data.scope.id}}
+                  </Hds::Link::Inline>
+                {{else}}
+                  {{if B.data.scope.name B.data.scope.name B.data.scope.id}}
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                {{#if B.data.type}}
+                  <Hds::Badge
+                    @text={{t (concat 'resources.scope.types.' B.data.type)}}
+                  />
+                {{/if}}
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @model={{@model.role.id}}
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+      {{else}}
+        <Hds::ApplicationState data-test-no-grant-scope-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
+              query=this.search
+              resource=(t 'resources.role.scope.title_plural')
+            }}
+          />
+        </Hds::ApplicationState>
+      {{/if}}
     {{else}}
       <Hds::ApplicationState as |A|>
         <A.Header @title={{t 'resources.role.scope.messages.none.title'}} />
         <A.Body @text={{t 'resources.role.scope.messages.none.description'}} />
-        {{#if (can 'setGrantScopes role' @model)}}
+        {{#if (can 'setGrantScopes role' @model.role)}}
           <A.Footer as |F|>
             <F.LinkStandalone
               @icon='plus-circle'

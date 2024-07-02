@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { visit, currentURL } from '@ember/test-helpers';
+import { visit, currentURL, waitUntil } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -67,7 +67,8 @@ module(
     test('cancel action causes transition to expected route', async function (assert) {
       await visit(urls.manageScopes);
 
-      await controller.cancel();
+      controller.cancel();
+      await waitUntil(() => currentURL() === urls.scopes);
 
       assert.strictEqual(currentURL(), urls.scopes);
     });

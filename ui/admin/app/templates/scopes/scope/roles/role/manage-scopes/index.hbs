@@ -20,7 +20,7 @@
   <page.body>
     <Form::Role::ManageScopes
       @model={{@model}}
-      @showCheckIcon={{this.savedScopes}}
+      @showCheckIcon={{this.showCheckIcon}}
       @submit={{fn this.setGrantScopes @model}}
       @cancel={{this.cancel}}
     />
