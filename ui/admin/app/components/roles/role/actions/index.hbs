@@ -9,20 +9,17 @@
     <dd.Interactive
       @text={{t 'resources.role.principal.actions.add-principals'}}
       @route='scopes.scope.roles.role.add-principals'
+      data-test-manage-dropdown-principals   
     />
-    <dd.link
-      @route='scopes.scope.roles.role.add-principals'
-      data-test-manage-dropdown-principals>
-        data-test-manage-dropdown-principals      
-    </dd.link>
   {{/if}}
   {{#if (can 'setGrantScopes role' @model)}}
-    <dd.link
+    <dd.Interactive
+      @text='Manage Scopes'
       @route='scopes.scope.roles.role.manage-scopes'
       data-test-manage-dropdown-scopes
     >
       {{t 'resources.role.scope.actions.manage-scopes'}}
-    </dd.link>
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
