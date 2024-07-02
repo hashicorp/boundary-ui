@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, findAll, click, fillIn, waitUntil } from '@ember/test-helpers';
+import {
+  visit,
+  findAll,
+  click,
+  fillIn,
+  waitUntil,
+  focus,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -21,10 +28,14 @@ module('Acceptance | roles | list', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-role-results]';
   const ROLE_BADGE_SELECTOR = (id) =>
     `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
+  const ROLE_TOOLTIP_BTN_SELECTOR = (id) =>
+    `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-tooltip-button`;
+  const ROLE_TOOLTIP_CONTENT_SELECTOR = (id) =>
+    `tbody [data-test-role-row="${id}"] td:nth-child(2) [data-tippy-root]`;
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-role-results]';
 
   const instances = {
     scopes: {
@@ -137,5 +148,17 @@ module('Acceptance | roles | list', function (hooks) {
     assert.true(instances.role2.grant_scope_ids.includes(GRANT_SCOPE_THIS));
     assert.dom(ROLE_BADGE_SELECTOR(instances.role1.id)).hasText('No');
     assert.dom(ROLE_BADGE_SELECTOR(instances.role2.id)).hasText('Yes');
+
+    await focus(ROLE_TOOLTIP_BTN_SELECTOR(instances.role1.id));
+
+    assert
+      .dom(ROLE_TOOLTIP_CONTENT_SELECTOR(instances.role1.id))
+      .hasText('The grants on this role have not been applied to this scope.');
+
+    await focus(ROLE_TOOLTIP_BTN_SELECTOR(instances.role2.id));
+
+    assert
+      .dom(ROLE_TOOLTIP_CONTENT_SELECTOR(instances.role2.id))
+      .hasText('The grants on this role have been applied to this scope.');
   });
 });
