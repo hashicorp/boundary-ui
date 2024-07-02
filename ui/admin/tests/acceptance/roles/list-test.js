@@ -14,6 +14,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,6 +23,8 @@ module('Acceptance | roles | list', function (hooks) {
 
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-role-results]';
+  const ROLE_BADGE_SELECTOR = (id) =>
+    `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
 
   const instances = {
     scopes: {
@@ -121,5 +124,18 @@ module('Acceptance | roles | list', function (hooks) {
     assert.dom(`[href="${urls.role1}"]`).doesNotExist();
     assert.dom(`[href="${urls.role2}"]`).doesNotExist();
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('correct badge in grants applied column is visible to user', async function (assert) {
+    instances.role1.grant_scope_ids = instances.role1.grant_scope_ids.filter(
+      (id) => id !== GRANT_SCOPE_THIS,
+    );
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.roles}"]`);
+
+    assert.true(instances.role2.grant_scope_ids.includes(GRANT_SCOPE_THIS));
+    assert.dom(ROLE_BADGE_SELECTOR(instances.role1.id)).hasText('No');
+    assert.dom(ROLE_BADGE_SELECTOR(instances.role2.id)).hasText('Yes');
   });
 });
