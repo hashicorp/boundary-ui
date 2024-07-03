@@ -22,6 +22,7 @@ module('Acceptance | roles | principals', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
   const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-dropdown-principals]';
 
   const instances = {
@@ -120,6 +121,7 @@ module('Acceptance | roles | principals', function (hooks) {
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, 0);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_PRINCIPALS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addPrincipals);
     // Click three times to select, unselect, then reselect (for coverage)
@@ -138,6 +140,7 @@ module('Acceptance | roles | principals', function (hooks) {
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_PRINCIPALS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addPrincipals);
     await click('tbody label');
