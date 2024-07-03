@@ -120,4 +120,15 @@ export default class WorkerModel extends GeneratedWorkerModel {
       },
     });
   }
+
+  /**
+   * Method to remove api tags on the worker.
+   * @param {object} apiTags
+   * @return {Promise}
+   */
+  removeApiTags(apiTags) {
+    return this.save({
+      adapterOptions: { method: 'remove-worker-tags', apiTags },
+    });
+  }
 }
