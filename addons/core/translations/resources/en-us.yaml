@@ -920,6 +920,8 @@ worker:
   tags:
     title_plural: Tags
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
+    actions:
+      remove: Remove Tag
   flyout:
     title: Tags in {workerName}
     action:

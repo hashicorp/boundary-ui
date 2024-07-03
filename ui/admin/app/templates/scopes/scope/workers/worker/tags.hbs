@@ -38,6 +38,7 @@
           (hash label=(t 'resources.worker.table.key'))
           (hash label=(t 'resources.worker.table.value'))
           (hash label=(t 'resources.worker.table.type'))
+          (hash label=(t 'titles.actions') isVisuallyHidden=true width='60px')
         }}
         @valign='middle'
       >
@@ -60,6 +61,19 @@
               {{else}}
                 <Hds::Badge @text={{B.data.type}} />
               {{/if}}
+            </B.Td>
+            <B.Td>
+              <Hds::Dropdown as |dd|>
+                <dd.ToggleIcon
+                  @icon='more-horizontal'
+                  @text='Overflow Options'
+                  @hasChevron={{false}}
+                  @size='small'
+                />
+                <dd.Interactive
+                  @text={{t 'resources.worker.tags.actions.remove'}}
+                />
+              </Hds::Dropdown>
             </B.Td>
           </B.Tr>
         </:body>
