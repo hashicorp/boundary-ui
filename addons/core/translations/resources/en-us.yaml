@@ -978,6 +978,7 @@ worker:
   messages:
     welcome:
       title: Welcome to Workers
+  tooltip: To edit config tags, edit them in your worker config file.
   table:
     session_count: Session Count
     ip_address: IP Address
