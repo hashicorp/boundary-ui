@@ -50,7 +50,16 @@
               <Hds::Text::Code @tag='pre'>{{B.data.value}}</Hds::Text::Code>
             </B.Td>
             <B.Td>
-              <Hds::Badge @text={{B.data.type}} />
+              {{#if (eq B.data.type this.tagTypeConfig)}}
+                <Hds::TooltipButton
+                  @text={{t 'resources.worker.tooltip'}}
+                  @offset={{array -50 8}}
+                >
+                  <Hds::Badge @text={{B.data.type}} />
+                </Hds::TooltipButton>
+              {{else}}
+                <Hds::Badge @text={{B.data.type}} />
+              {{/if}}
             </B.Td>
           </B.Tr>
         </:body>

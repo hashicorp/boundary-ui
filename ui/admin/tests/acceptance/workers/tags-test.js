@@ -4,15 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click, focus } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | workers | tags', function (hooks) {
+module('Acceptance | workers | worker | tags', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  const CONFIG_TAG_TOOLTIP_SELECTOR =
+    'tbody tr:first-child td:nth-child(3) button';
+  const CONFIG_TAG_TOOLTIP_TEXT_SELECTOR =
+    'tbody tr:first-child td:nth-child(3) > div';
 
   const instances = {
     scopes: {
@@ -43,6 +48,17 @@ module('Acceptance | workers | tags', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tags);
-    assert.strictEqual(findAll('tbody tr').length, 11);
+    assert.dom('tbody tr').exists({ count: 11 });
+  });
+
+  test('config tags display a tooltip', async function (assert) {
+    await visit(urls.tags);
+    await a11yAudit();
+
+    await focus(CONFIG_TAG_TOOLTIP_SELECTOR);
+
+    assert
+      .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
+      .hasText('To edit config tags, edit them in your worker config file.');
   });
 });

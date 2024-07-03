@@ -6,6 +6,9 @@
 import GeneratedWorkerModel from '../generated/models/worker';
 import { attr } from '@ember-data/model';
 
+export const TAG_TYPE_CONFIG = 'config';
+export const TAG_TYPE_API = 'api';
+
 export default class WorkerModel extends GeneratedWorkerModel {
   // =attributes
 
@@ -50,7 +53,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     }
 
     return Object.entries(this.config_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag, type: 'config' })),
+      value.map((tag) => ({ key, value: tag, type: TAG_TYPE_CONFIG })),
     );
   }
 
@@ -64,7 +67,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
     }
 
     return Object.entries(this.api_tags).flatMap(([key, value]) =>
-      value.map((tag) => ({ key, value: tag, type: 'api' })),
+      value.map((tag) => ({ key, value: tag, type: TAG_TYPE_API })),
     );
   }
 
