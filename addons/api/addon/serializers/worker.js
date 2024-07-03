@@ -28,6 +28,9 @@ export default class WorkerSerializer extends ApplicationSerializer {
     const apiTags = snapshot?.adapterOptions?.apiTags;
     if (apiTags) {
       serialized = this.serializeWithApiTags(snapshot, apiTags);
+    } else {
+      // remove api_tags from payload if not set
+      delete serialized.api_tags;
     }
     return serialized;
   }
