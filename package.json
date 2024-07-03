@@ -51,7 +51,8 @@
   },
   "resolutions": {
     "request": "^2.88.0",
-    "loader-utils": "^2.0.4"
+    "loader-utils": "^2.0.4",
+    "@embroider/macros": "^1.16.5"
   },
   "config": {
     "commitizen": {

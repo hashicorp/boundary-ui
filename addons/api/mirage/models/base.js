@@ -3,9 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { Model } from 'miragejs';
+import { Model, hasMany } from 'miragejs';
 
 export default Model.extend({
+  authMethods: hasMany(),
   assignDefaults(defaultAttrs, attrs) {
     Object.entries(defaultAttrs).map(([key, value]) => {
       if (!attrs[key]) {
