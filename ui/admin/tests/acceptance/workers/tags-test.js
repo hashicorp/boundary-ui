@@ -58,6 +58,6 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     assert
       .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
-      .hasText('To edit config tags, edit them in your worker config file');
+      .hasText('To edit config tags, edit them in your worker config file.');
   });
 });
