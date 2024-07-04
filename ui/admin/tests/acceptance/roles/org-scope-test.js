@@ -41,6 +41,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
   const SAVE_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
+  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
   const TOAST_SELECTOR = '[role="alert"]';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
@@ -217,6 +218,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   test('correct toggles are visible for org level role on manage scopes page', async function (assert) {
     await visit(urls.role);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
@@ -233,6 +235,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await a11yAudit();
 
@@ -256,6 +259,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
@@ -286,6 +290,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
     await click(SAVE_BTN_SELECTOR);
@@ -301,6 +306,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
     await a11yAudit();
@@ -334,6 +340,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
     await a11yAudit();
@@ -374,6 +381,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
     await click(
@@ -391,6 +399,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     });
     await visit(urls.role);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
 
@@ -421,6 +430,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     });
     await visit(urls.role);
 
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
     await click(`[href="${urls.manageOrgProjects}"]`);
 
