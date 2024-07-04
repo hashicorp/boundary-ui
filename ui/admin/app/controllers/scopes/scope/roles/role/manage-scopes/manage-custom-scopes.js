@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
@@ -12,6 +12,8 @@ import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesController extends Controller {
+  @controller('scopes/scope/roles/role/manage-scopes/index') manageScopes;
+
   // =services
 
   @service router;
@@ -49,9 +51,8 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @notifySuccess('notifications.add-success')
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
-    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes', {
-      queryParams: { showCheckIcon: true },
-    });
+    this.manageScopes.showCheckIcon = true;
+    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 
   /**

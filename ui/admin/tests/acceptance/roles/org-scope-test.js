@@ -48,6 +48,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
   const NO_SCOPES_MSG_LINK_SELECTOR =
     '.role-grant-scopes div div:nth-child(3) a';
+  const BUTTON_ICON_SELECTOR =
+    '.hds-button__icon [data-test-icon="check-circle"]';
 
   const instances = {
     scopes: {
@@ -315,7 +317,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
     );
     await click(SAVE_BTN_SELECTOR);
 
-    assert.strictEqual(currentURL(), `${urls.manageScopes}?showCheckIcon=true`);
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
 
     await click(SAVE_BTN_SELECTOR);
 

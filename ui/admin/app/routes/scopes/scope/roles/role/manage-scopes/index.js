@@ -6,14 +6,6 @@
 import Route from '@ember/routing/route';
 
 export default class ScopesScopeRolesRoleManageScopesIndexRoute extends Route {
-  // =attributes
-
-  queryParams = {
-    showCheckIcon: {
-      replace: true,
-    },
-  };
-
   // =methods
 
   /**

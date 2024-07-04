@@ -16,8 +16,6 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
 
   // =attributes
 
-  queryParams = ['showCheckIcon'];
-
   showCheckIcon = false;
 
   // =actions

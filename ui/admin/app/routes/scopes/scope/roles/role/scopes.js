@@ -36,6 +36,10 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
 
   // =methods
 
+  /**
+   * Loads grant scopes for current role.
+   * @return {Promise<{role: RoleModel, grantScopes: [ScopeModel], allGrantScopes: [ScopeModel], totalItems: number}> }
+   */
   async model({ search, parentScopes, types, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
     const filters = {
@@ -81,9 +85,8 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
 
   /**
    * Get all the grant scopes but only load them once when entering the route.
-   * @param orgScope
-   * @param orgFilter
-   * @returns {Promise<void>}
+   * @param {[object]} id
+   * @returns {Promise<[ScopeModel]>}
    */
   async getAllGrantScopes(id) {
     const options = { pushToStore: false, peekIndexedDb: true };
