@@ -5,7 +5,6 @@
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
 import Tag from '../tag';
 
@@ -18,7 +17,6 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
   // =attributes
 
-  apiTags = new TrackedArray([]);
   hasRemovedExitHandler = false;
 
   constructor() {
@@ -45,7 +43,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   confirmTransition(transition) {
     if (transition.isAborted) return;
 
-    if (this.apiTags.length) {
+    if (this.args.apiTags.length) {
       this.confirmExit(transition);
     }
   }
@@ -58,7 +56,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
         title: 'titles.abandon-confirm',
         confirm: 'actions.discard',
       });
-      this.apiTags = new TrackedArray([]);
+      this.args.apiTags = this.args.apiTags.splice(0, this.args.apiTags.length);
       transition.retry();
     } catch (e) {
       // if user denies, do nothing
@@ -79,7 +77,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   addApiTag(option) {
-    this.apiTags.push(new Tag(option.key, option.value));
+    this.args.apiTags.push(new Tag(option.key, option.value));
   }
 
   /**
@@ -88,7 +86,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   removeApiTagByIndex(index) {
-    this.apiTags.splice(index, 1);
+    this.args.apiTags.splice(index, 1);
   }
 
   /**
@@ -98,16 +96,15 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   save() {
-    console.log(this.apiTags);
     this.removeExitHandler();
 
-    if (this.apiTags.length === 0) {
+    if (this.args.apiTags.length === 0) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
       return;
     }
 
     const existingApiTags = this.args.model.api_tags ?? {};
-    this.apiTags.forEach((tag) => {
+    this.args.apiTags.forEach((tag) => {
       let key = tag.key;
       let values = tag.value.split(',');
 

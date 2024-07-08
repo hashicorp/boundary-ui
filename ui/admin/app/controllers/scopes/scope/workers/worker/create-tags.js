@@ -8,11 +8,15 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeWorkersWorkerCreateTagsController extends Controller {
   // =services
 
   @service router;
+
+  // =attributes
+  apiTags = new TrackedArray([]);
 
   // =actions
 
