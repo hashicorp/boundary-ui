@@ -12,8 +12,6 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   // =services
 
   @service router;
-  @service confirm;
-  @service intl;
 
   // =actions
 
