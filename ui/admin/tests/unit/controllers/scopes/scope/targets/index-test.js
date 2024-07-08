@@ -36,6 +36,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   const urls = {
     projectScope: null,
     targets: null,
+    target: null,
     alias: null,
   };
 
@@ -68,7 +69,8 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
 
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
-    urls.alias = `${urls.projectScope}/targets/${instances.target.id}/${instances.alias.id}`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
+    urls.alias = `${urls.target}/${instances.alias.id}`;
 
     getTargetCount = () => this.server.schema.targets.all().models.length;
     getAliasCount = () => this.server.schema.aliases.all().models.length;
@@ -218,7 +220,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   });
 
   test('deleteAlias action destroys specified model', async function (assert) {
-    await visit(urls.targets);
+    await visit(urls.target);
     const alias = await store.findRecord('alias', instances.alias.id);
     const aliasCount = getAliasCount();
 

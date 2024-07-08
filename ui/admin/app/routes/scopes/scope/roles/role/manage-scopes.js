@@ -1,9 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeRolesRoleManageScopesRoute extends Route {
-  // =methods
-
-  model() {
-    return this.modelFor('scopes.scope.roles.role');
-  }
-}
+export default class ScopesScopeRolesRoleManageScopesRoute extends Route {}
