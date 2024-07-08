@@ -33,13 +33,17 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
   constructor() {
     super(...arguments);
+    // this is added to prevent the user from accidentally navigating away
+    // from the page when they have unsaved changes
     this.addExitHandler();
   }
 
+  // adds an exit handler to prevent the user from accidentally navigating away
   addExitHandler() {
     this.router.on('routeWillChange', this, this.confirmTransition);
   }
 
+  // removes the exit handler
   removeExitHandler() {
     if (!this.hasRemovedExitHandler) {
       this.router.off('routeWillChange', this, this.confirmTransition);
@@ -47,6 +51,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
     }
   }
 
+  // checks if the transition is aborted and if there are any tags
   confirmTransition(transition) {
     if (transition.isAborted) return;
 
@@ -55,6 +60,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
     }
   }
 
+  // displays a confirmation dialog to the user
   async confirmExit(transition) {
     transition.abort();
     try {
@@ -69,6 +75,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
     }
   }
 
+  // removes the exit handler when the component is destroyed
   willDestroy() {
     super.willDestroy(...arguments);
     this.removeExitHandler();
@@ -76,16 +83,29 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
   // =actions
 
+  /**
+   * Creates a new Tag object and adds it to the `apiTags` array.
+   * @param {object} option
+   */
   @action
-  addApiTag(e) {
-    this.apiTags.pushObject(new Tag(e.key, e.value));
+  addApiTag(option) {
+    this.apiTags.pushObject(new Tag(option.key, option.value));
   }
 
+  /**
+   * Removes a Tag object from the `apiTags` array by index.
+   * @param {number} index
+   */
   @action
   removeApiTagByIndex(index) {
     this.apiTags.removeAt(index);
   }
 
+  /**
+   * Builds the `apiTags` object and submits it to the parent component.
+   * If there are no tags, it transitions to the tags route.
+   * @returns {void}
+   */
   @action
   save() {
     this.removeExitHandler();
