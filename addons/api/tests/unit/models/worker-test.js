@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { TYPE_WORKER_PKI } from 'api/models/worker';
 
 module('Unit | Model | worker', function (hooks) {
   setupTest(hooks);
@@ -26,7 +27,7 @@ module('Unit | Model | worker', function (hooks) {
 
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
-      type: 'pki',
+      type: TYPE_WORKER_PKI,
       scope: {
         scope_id: scopeId,
         type: 'global',
