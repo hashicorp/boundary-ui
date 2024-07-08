@@ -67,11 +67,10 @@
     </Hds::Alert>
   {{/if}}
 
-  {{! TODO: Add correct route string once route is created}}
-  {{! TODO: Add check-circle icon if custom scopes were added}}
   <Hds::Button
     @text={{t 'resources.role.scope.actions.add-custom-scopes.text'}}
     @color='secondary'
+    @icon={{if @showCheckIcon 'check-circle'}}
     @route={{if
       @model.scope.isGlobal
       'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'

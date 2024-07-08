@@ -14,6 +14,10 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
 
   @service router;
 
+  // =attributes
+
+  showCheckIcon = false;
+
   // =actions
 
   /**
@@ -27,14 +31,14 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
   @notifySuccess('notifications.add-success')
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
-    await this.router.replaceWith('scopes.scope.roles.role.scopes');
+    this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 
   /**
    * Redirect to role scopes as if nothing ever happened.
    */
   @action
-  async cancel() {
-    await this.router.replaceWith('scopes.scope.roles.role.scopes');
+  cancel() {
+    this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 }
