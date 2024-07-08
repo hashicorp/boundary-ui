@@ -15,60 +15,6 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   @service confirm;
   @service intl;
 
-  // =attributes
-
-  hasRemovedExitHandler = false;
-
-  constructor() {
-    super(...arguments);
-    // this is added to prevent the user from accidentally navigating away
-    // from the page when they have unsaved changes
-    this.addExitHandler();
-  }
-
-  // adds an exit handler to prevent the user from accidentally navigating away
-  addExitHandler() {
-    this.router.on('routeWillChange', this, this.confirmTransition);
-  }
-
-  // removes the exit handler
-  removeExitHandler() {
-    if (!this.hasRemovedExitHandler) {
-      this.router.off('routeWillChange', this, this.confirmTransition);
-      this.hasRemovedExitHandler = true;
-    }
-  }
-
-  // checks if the transition is aborted and if there are any tags
-  confirmTransition(transition) {
-    if (transition.isAborted) return;
-
-    if (this.args.apiTags.length) {
-      this.confirmExit(transition);
-    }
-  }
-
-  // displays a confirmation dialog to the user
-  async confirmExit(transition) {
-    transition.abort();
-    try {
-      await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
-        title: 'titles.abandon-confirm',
-        confirm: 'actions.discard',
-      });
-      this.args.apiTags = this.args.apiTags.splice(0, this.args.apiTags.length);
-      transition.retry();
-    } catch (e) {
-      // if user denies, do nothing
-    }
-  }
-
-  // removes the exit handler when the component is destroyed
-  willDestroy() {
-    super.willDestroy(...arguments);
-    this.removeExitHandler();
-  }
-
   // =actions
 
   /**
@@ -96,8 +42,6 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   save() {
-    this.removeExitHandler();
-
     if (this.args.apiTags.length === 0) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
       return;
