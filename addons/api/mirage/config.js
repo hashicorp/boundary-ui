@@ -687,7 +687,7 @@ function routes() {
       if (method === 'set-worker-tags') {
         updatedAttrs = {
           version: attrs.version,
-          api_tags: attrs.api_tags,
+          apiTags: attrs.apiTags,
         };
       }
 

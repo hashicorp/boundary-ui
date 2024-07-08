@@ -36,7 +36,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
   }
 
   /**
-   * Uses `apiTags` to build and submits it to the parent component.
+   * Uses `@apiTags` to build and submits it to the parent component.
    * If there are no tags, it transitions to the tags route.
    * @returns {void}
    */
@@ -47,20 +47,18 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
       return;
     }
 
-    const existingApiTags = this.args.model.api_tags ?? {};
+    const apiTags = structuredClone(this.args.model.api_tags ?? {});
     this.args.apiTags.forEach((tag) => {
       let key = tag.key;
       let values = tag.value.split(',');
 
-      if (!existingApiTags[key]) {
-        existingApiTags[key] = values;
+      if (!apiTags[key]) {
+        apiTags[key] = values;
       } else {
-        existingApiTags[key] = [
-          ...new Set([...existingApiTags[key], ...values]),
-        ];
+        apiTags[key] = [...new Set([...apiTags[key], ...values])];
       }
     });
 
-    this.args.submit(existingApiTags);
+    this.args.submit(apiTags);
   }
 }

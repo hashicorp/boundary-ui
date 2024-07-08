@@ -31,7 +31,9 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
   async save(apiTags) {
     const worker = this.model;
     await worker.setApiTags(apiTags);
-    await this.router.transitionTo('scopes.scope.workers.worker.tags', worker);
+    // Clear the apiTags array after saving
+    this.apiTags = new TrackedArray([]);
+    this.router.transitionTo('scopes.scope.workers.worker.tags', worker);
   }
 
   /**
@@ -39,6 +41,8 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
    */
   @action
   cancel() {
+    // Clear the apiTags array when canceling
+    this.apiTags = new TrackedArray([]);
     this.router.replaceWith('scopes.scope.workers.worker.tags');
   }
 }

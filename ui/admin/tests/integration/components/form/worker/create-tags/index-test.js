@@ -20,11 +20,12 @@ module(
 
     test('it renders', async function (assert) {
       this.model = {};
+      this.apiTags = [];
       this.save = () => {};
       this.cancel = () => {};
 
       await render(
-        hbs`<Form::Worker::CreateTags @model={{this.model}} @submit={{this.save}} @cancel={{this.cancel}} />`,
+        hbs`<Form::Worker::CreateTags @model={{this.model}} @apiTags={{this.apiTags}} @submit={{this.save}} @cancel={{this.cancel}} />`,
       );
 
       assert
@@ -34,13 +35,14 @@ module(
 
     test('it calls the passed in save action', async function (assert) {
       this.model = {};
+      this.apiTags = [{ key: 'key', value: 'value' }];
       this.save = () => {
         this.set('called', true);
       };
       this.cancel = () => {};
 
       await render(
-        hbs`<Form::Worker::CreateTags @model={{this.model}} @submit={{this.save}} @cancel={{this.cancel}} />`,
+        hbs`<Form::Worker::CreateTags @model={{this.model}} @apiTags={{this.apiTags}} @submit={{this.save}} @cancel={{this.cancel}} />`,
       );
 
       await click(SAVE_BUTTON_SELECTOR);
@@ -50,13 +52,14 @@ module(
 
     test('it calls the passed in cancel action', async function (assert) {
       this.model = {};
+      this.apiTags = [];
       this.save = () => {};
       this.cancel = () => {
         this.set('called', true);
       };
 
       await render(
-        hbs`<Form::Worker::CreateTags @model={{this.model}} @submit={{this.save}} @cancel={{this.cancel}} />`,
+        hbs`<Form::Worker::CreateTags @model={{this.model}} @apiTags={{this.apiTags}} @submit={{this.save}} @cancel={{this.cancel}} />`,
       );
 
       await click(CANCEL_BUTTON_SELECTOR);

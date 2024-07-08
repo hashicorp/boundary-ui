@@ -26,6 +26,11 @@ export default class ScopesScopeWorkersWorkerCreateTagsRoute extends Route {
     this.router.on('routeWillChange', async (transition) => {
       const fromName = transition?.from?.name;
       const toName = transition?.to?.name;
+      // This will prevent the confirmation dialog from showing when the user
+      // saves or cancels the form.
+      if (toName === 'scopes.scope.workers.worker.tags') {
+        return;
+      }
       // eslint-disable-next-line ember/no-controller-access-in-routes
       const controller = this.controllerFor(
         'scopes.scope.workers.worker.create-tags',

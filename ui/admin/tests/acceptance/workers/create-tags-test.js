@@ -114,13 +114,13 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     await fillIn(VALUE_INPUT_SELECTOR, 'value');
     await click(ADD_INPUT_SELECTOR);
 
-    await click(CANCEL_BUTTON_SELECTOR);
+    await click(`[href="${urls.workers}"]`);
 
     assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
 
     await click(DISCARD_CHANGES_DISCARD_BUTTON);
 
-    assert.strictEqual(currentURL(), urls.tags);
+    assert.strictEqual(currentURL(), urls.workers);
   });
 
   test('user can cancel transition when there are unsaved changes', async function (assert) {
@@ -131,7 +131,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     await fillIn(VALUE_INPUT_SELECTOR, 'value');
     await click(ADD_INPUT_SELECTOR);
 
-    await click(CANCEL_BUTTON_SELECTOR);
+    await click(`[href="${urls.workers}"]`);
 
     assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
 
