@@ -11,6 +11,7 @@ import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 export default class ScopesScopeRolesIndexController extends Controller {
   // =services
@@ -25,6 +26,8 @@ export default class ScopesScopeRolesIndexController extends Controller {
   @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
+
+  grantScopeThis = GRANT_SCOPE_THIS;
 
   // =actions
 

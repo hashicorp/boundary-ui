@@ -529,8 +529,12 @@ role:
   messages:
     welcome:
       title: Welcome to Roles
+    tooltips:
+      yes: The grants on this role have been applied to this scope.
+      no: The grants on this role have not been applied to this scope.
   titles:
     new: New Role
+    grants-applied: Grants applied on this scope?
   actions:
     create: Create Role
     delete: Delete Role
