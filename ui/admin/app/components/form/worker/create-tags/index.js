@@ -5,19 +5,9 @@
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
+import { TrackedArray } from 'tracked-built-ins';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
-
-class Tag {
-  @tracked key;
-  @tracked value;
-
-  constructor(key, value) {
-    this.key = key;
-    this.value = value;
-  }
-}
+import Tag from '../tag';
 
 export default class FormWorkerCreateTagsIndexComponent extends Component {
   // =services
@@ -28,7 +18,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
 
   // =attributes
 
-  @tracked apiTags = A([]);
+  apiTags = new TrackedArray([]);
   hasRemovedExitHandler = false;
 
   constructor() {
@@ -68,7 +58,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
         title: 'titles.abandon-confirm',
         confirm: 'actions.discard',
       });
-      this.apiTags = A([]);
+      this.apiTags = new TrackedArray([]);
       transition.retry();
     } catch (e) {
       // if user denies, do nothing
@@ -89,7 +79,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   addApiTag(option) {
-    this.apiTags.pushObject(new Tag(option.key, option.value));
+    this.apiTags.push(new Tag(option.key, option.value));
   }
 
   /**
@@ -98,24 +88,25 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
    */
   @action
   removeApiTagByIndex(index) {
-    this.apiTags.removeAt(index);
+    this.apiTags.splice(index, 1);
   }
 
   /**
-   * Builds the `apiTags` object and submits it to the parent component.
+   * Uses `apiTags` to build and submits it to the parent component.
    * If there are no tags, it transitions to the tags route.
    * @returns {void}
    */
   @action
   save() {
+    console.log(this.apiTags);
     this.removeExitHandler();
 
-    if (this.apiTags.isEmpty) {
+    if (this.apiTags.length === 0) {
       this.router.transitionTo('scopes.scope.workers.worker.tags');
       return;
     }
 
-    const existingApiTags = this.args.model.api_tags || {};
+    const existingApiTags = this.args.model.api_tags ?? {};
     this.apiTags.forEach((tag) => {
       let key = tag.key;
       let values = tag.value.split(',');
@@ -123,9 +114,9 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
       if (!existingApiTags[key]) {
         existingApiTags[key] = values;
       } else {
-        existingApiTags[key] = Array.from(
-          new Set([...existingApiTags[key], ...values]),
-        );
+        existingApiTags[key] = [
+          ...new Set([...existingApiTags[key], ...values]),
+        ];
       }
     });
 
