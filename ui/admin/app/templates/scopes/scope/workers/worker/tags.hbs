@@ -63,21 +63,72 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              <Hds::Dropdown as |dd|>
-                <dd.ToggleIcon
-                  @icon='more-horizontal'
-                  @text='Overflow Options'
-                  @hasChevron={{false}}
-                  @size='small'
-                />
-                <dd.Interactive
-                  @text={{t 'resources.worker.tags.actions.remove'}}
-                />
-              </Hds::Dropdown>
+              {{#if (eq B.data.type this.tagTypeApi)}}
+                <Hds::Dropdown as |dd|>
+                  <dd.ToggleIcon
+                    @icon='more-horizontal'
+                    @text='Overflow Options'
+                    @hasChevron={{false}}
+                    @size='small'
+                  />
+                  <dd.Interactive
+                    @text={{t 'resources.worker.tags.actions.remove'}}
+                    {{on 'click' (fn this.toggleModal 'remove' B.data)}}
+                  />
+                </Hds::Dropdown>
+              {{/if}}
             </B.Td>
           </B.Tr>
         </:body>
       </Hds::Table>
+    {{/if}}
+    {{#if this.openRemoveTagModal}}
+      <Hds::Modal
+        id='remove-tag-modal'
+        @color='critical'
+        @onClose={{fn this.toggleModal 'remove'}}
+        as |M|
+      >
+        <M.Header @icon='alert-diamond'>
+          {{t 'resources.worker.tags.remove.title'}}
+        </M.Header>
+        <M.Body>
+          <Hds::Text::Body @color='primary'>
+            {{this.tagDisplayName}}
+            {{t 'resources.worker.tags.remove.warning'}}
+          </Hds::Text::Body>
+          <Hds::Form::TextInput::Field
+            name='removal-confirmation'
+            @value={{this.removalConfirmation}}
+            {{on 'input' (set-from-event this 'removalConfirmation')}}
+            as |F|
+          >
+            <F.Label>{{t
+                'resources.worker.tags.remove.confirm.label'
+              }}</F.Label>
+            <F.HelperText>{{t
+                'resources.worker.tags.remove.confirm.help'
+              }}</F.HelperText>
+          </Hds::Form::TextInput::Field>
+        </M.Body>
+        <M.Footer as |F|>
+          <Hds::ButtonSet>
+            <Hds::Button
+              type='button'
+              disabled={{this.isRemovalConfirmed}}
+              @color='critical'
+              @text='Remove'
+              {{on 'click' this.removeApiTag}}
+            />
+            <Hds::Button
+              type='button'
+              @color='secondary'
+              @text='Cancel'
+              {{on 'click' F.close}}
+            />
+          </Hds::ButtonSet>
+        </M.Footer>
+      </Hds::Modal>
     {{/if}}
 
   </page.body>
