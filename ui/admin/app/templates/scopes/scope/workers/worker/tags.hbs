@@ -82,7 +82,8 @@
         </:body>
       </Hds::Table>
     {{/if}}
-    {{#if this.openRemoveTagModal}}
+
+    {{#if this.modals.remove}}
       <Hds::Modal
         id='remove-tag-modal'
         @color='critical'
@@ -115,7 +116,7 @@
           <Hds::ButtonSet>
             <Hds::Button
               type='button'
-              disabled={{this.isRemovalConfirmed}}
+              disabled={{(not this.isRemovalConfirmed)}}
               @color='critical'
               @text='Remove'
               {{on 'click' this.removeApiTag}}

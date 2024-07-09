@@ -10,6 +10,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { TAG_TYPE_CONFIG, TAG_TYPE_API } from 'api/models/worker';
+import { TrackedObject } from 'tracked-built-ins';
 
 export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   @controller('scopes/scope/workers/index') workers;
@@ -20,7 +21,10 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   tagTypeConfig = TAG_TYPE_CONFIG;
   tagTypeApi = TAG_TYPE_API;
 
-  @tracked openRemoveTagModal = false;
+  modals = new TrackedObject({
+    remove: false,
+    edit: false,
+  });
   @tracked removalConfirmation = null;
   @tracked apiTagToRemove = null;
 
@@ -38,7 +42,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
    */
   get isRemovalConfirmed() {
     return (
-      this.removalConfirmation !== this.intl.t('actions.remove').toUpperCase()
+      this.removalConfirmation === this.intl.t('actions.remove').toUpperCase()
     );
   }
 
@@ -53,7 +57,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
     await this.model.removeApiTags({
       [this.apiTagToRemove.key]: [this.apiTagToRemove.value],
     });
-    this.openRemoveTagModal = false;
+    this.modals.remove = false;
     this.apiTagToRemove = null;
     this.removalConfirmation = null;
   }
@@ -66,7 +70,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   @action
   toggleModal(action, apiTag = null) {
     if (action === 'remove') {
-      this.openRemoveTagModal = !this.openRemoveTagModal;
+      this.modals.remove = !this.modals.remove;
       this.apiTagToRemove = apiTag;
       this.removalConfirmation = null;
     }
