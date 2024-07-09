@@ -62,13 +62,11 @@ module(
       assert.deepEqual(worker.api_tags, apiTags);
     });
 
-    test('cancel action clears api tags for a worker', async function (assert) {
+    test('cancel action takes user back to tags route', async function (assert) {
       await visit(urls.createTags);
-      controller.apiTags = [{ key: 'key', value: 'value' }];
 
       await controller.cancel();
 
-      assert.deepEqual(controller.apiTags, []);
       assert.strictEqual(currentURL(), urls.tags);
     });
   },
