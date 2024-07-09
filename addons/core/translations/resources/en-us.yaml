@@ -975,6 +975,7 @@ worker:
   actions:
     register: Register Worker
     delete: Remove Worker
+    create_tags: Create new tags
   messages:
     welcome:
       title: Welcome to Workers
@@ -990,6 +991,10 @@ worker:
     type: Type
   tags:
     title_plural: Tags
+    create:
+      title: Create new tags
+      description: Create new api worker tags. You can only add API tags in the admin UI or CLI. Config tags are added in the worker config file.
+      success: Tag(s) successfully created
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
   flyout:
     title: Tags in {workerName}

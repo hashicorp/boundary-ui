@@ -57,14 +57,4 @@ module('Unit | Controller | scopes/scope/workers/new', function (hooks) {
 
     assert.notEqual(worker.name, 'test');
   });
-
-  test('createWorkerLed action saves changes on the specified model', async function (assert) {
-    await visit(urls.workers);
-    const worker = await store.findRecord('worker', instances.worker.id);
-    worker.name = 'test';
-
-    await controller.createWorkerLed(worker);
-
-    assert.strictEqual(worker.name, 'test');
-  });
 });

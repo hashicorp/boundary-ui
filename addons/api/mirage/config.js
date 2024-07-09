@@ -16,6 +16,7 @@ import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
+import { TYPE_WORKER_PKI } from 'api/models/worker';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -676,11 +677,30 @@ function routes() {
 
     // This POST only takes in a token so we need to generate a random worker to return
     const newWorker = this.create('worker', {
-      type: 'pki',
+      type: TYPE_WORKER_PKI,
       scope: globalScope,
     });
     return workers.create(newWorker.attrs);
   });
+  this.post(
+    '/workers/:idMethod',
+    function ({ workers }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const worker = workers.find(id);
+      let updatedAttrs = {};
+
+      if (method === 'set-worker-tags') {
+        updatedAttrs = {
+          version: attrs.version,
+          apiTags: attrs.apiTags,
+        };
+      }
+
+      return worker.update(updatedAttrs);
+    },
+  );
 
   // storage-buckets
   this.get(
