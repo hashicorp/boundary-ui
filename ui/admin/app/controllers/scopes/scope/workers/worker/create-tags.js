@@ -41,6 +41,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsController extends Contro
    */
   @action
   cancel() {
+    this.apiTags = new TrackedArray([]);
     this.router.replaceWith('scopes.scope.workers.worker.tags');
   }
 }

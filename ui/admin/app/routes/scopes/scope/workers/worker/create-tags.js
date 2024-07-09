@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable ember/no-controller-access-in-routes */
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
@@ -17,14 +16,16 @@ export default class ScopesScopeWorkersWorkerCreateTagsRoute extends Route {
 
   @action
   async willTransition(transition) {
-    if (this.controller.get('apiTags').length) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    if (controller.get('apiTags').length) {
       transition.abort();
       try {
         await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
           title: 'titles.abandon-confirm',
           confirm: 'actions.discard',
         });
-        this.controller.set('apiTags', new TrackedArray([]));
+        controller.set('apiTags', new TrackedArray([]));
         transition.retry();
       } catch (e) {
         // if user denies, do nothing
