@@ -21,6 +21,13 @@ export default class WorkerAbility extends ModelAbility {
   /**
    * @type {boolean}
    */
+  get canSetWorkerTags() {
+    return this.hasAuthorizedAction('set-worker-tags');
+  }
+
+  /**
+   * @type {boolean}
+   */
   get canRemoveTags() {
     return this.hasAuthorizedAction('remove-worker-tags');
   }

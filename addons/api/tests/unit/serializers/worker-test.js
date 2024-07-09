@@ -9,7 +9,7 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Serializer | worker', function (hooks) {
   setupTest(hooks);
 
-  test('it serializes normally without adapterOptions.workerGeneratedAuthToken', function (assert) {
+  test('it serializes normally', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('worker');
     const record = store.createRecord('worker', {
