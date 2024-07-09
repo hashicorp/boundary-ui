@@ -699,7 +699,7 @@ function routes() {
       }
 
       if (method === 'set-worker-tags') {
-        updatedAttrs.apiTags = attrs.apitTags
+        updatedAttrs.apiTags = attrs.apiTags;
       }
 
       return worker.update(updatedAttrs);
