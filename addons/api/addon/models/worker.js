@@ -6,6 +6,8 @@
 import GeneratedWorkerModel from '../generated/models/worker';
 import { attr } from '@ember-data/model';
 
+export const TYPE_WORKER_PKI = 'pki';
+
 export const TAG_TYPE_CONFIG = 'config';
 export const TAG_TYPE_API = 'api';
 
@@ -26,7 +28,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * @type {boolean}
    */
   get isPki() {
-    return this.type === 'pki';
+    return this.type === TYPE_WORKER_PKI;
   }
 
   /**
@@ -96,7 +98,6 @@ export default class WorkerModel extends GeneratedWorkerModel {
 
   @attr({
     description: 'The api tags set for the worker.\nOutput only.',
-    readOnly: true,
   })
   api_tags;
 
@@ -118,6 +119,17 @@ export default class WorkerModel extends GeneratedWorkerModel {
         ...defaultAdapterOptions,
         ...options.adapterOptions,
       },
+    });
+  }
+
+  /**
+   * Method to set api tags on the worker.
+   * @param {object} apiTags
+   * @return {Promise}
+   */
+  setApiTags(apiTags) {
+    return this.save({
+      adapterOptions: { method: 'set-worker-tags', apiTags },
     });
   }
 }
