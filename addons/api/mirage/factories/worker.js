@@ -18,6 +18,7 @@ export default factory.extend({
       'read',
       'update',
       'delete',
+      'remove-worker-tags',
     ],
   type: (i) => types[i % types.length],
   config_tags: (i) => {

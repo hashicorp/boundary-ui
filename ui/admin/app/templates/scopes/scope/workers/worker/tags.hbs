@@ -71,10 +71,12 @@
                     @hasChevron={{false}}
                     @size='small'
                   />
-                  <dd.Interactive
-                    @text={{t 'resources.worker.tags.actions.remove'}}
-                    {{on 'click' (fn this.toggleModal 'remove' B.data)}}
-                  />
+                  {{#if (can 'removeTags worker' @model)}}
+                    <dd.Interactive
+                      @text={{t 'resources.worker.tags.actions.remove'}}
+                      {{on 'click' (fn this.toggleModal 'remove' B.data)}}
+                    />
+                  {{/if}}
                 </Hds::Dropdown>
               {{/if}}
             </B.Td>
