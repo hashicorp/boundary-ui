@@ -32,6 +32,20 @@
       }}
     </dropdown.link>
   {{/if}}
+  {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
+    <dropdown.link
+      @route='scopes.scope.targets.target.add-ingress-worker-filter'
+      data-test-add-ingress-worker-filter-action
+    >
+      {{t 'resources.target.workers.actions.add-ingress-worker-filter'}}
+    </dropdown.link>
+  {{/if}}
+  <dropdown.link
+    @route='scopes.scope.targets.target.add-egress-worker-filter'
+    data-test-add-egress-worker-filter-action
+  >
+    {{t 'resources.target.workers.actions.add-egress-worker-filter'}}
+  </dropdown.link>
   {{#if (can 'delete model' @model)}}
     <dropdown.separator />
     <dropdown.button

@@ -117,50 +117,6 @@ module('Acceptance | targets | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.tcpTarget);
   });
 
-  test('visiting an ssh target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    instances.sshTarget.worker_filter = 'worker filter present';
-    await visit(urls.sshTarget);
-
-    assert.dom('.hds-alert').isVisible();
-  });
-
-  test('visiting a tcp target shows the worker_filter deprecation message when worker_filter has value and "target-worker-filters-v2" is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    instances.tcpTarget.worker_filter = 'worker filter present';
-    await visit(urls.tcpTarget);
-
-    assert.dom('.hds-alert').isVisible();
-  });
-
-  test('visiting an ssh target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    instances.sshTarget.worker_filter = null;
-    await visit(urls.sshTarget);
-
-    assert.dom('.hds-alert').doesNotExist();
-  });
-
-  test('visiting a tcp target does not show the worker_filter deprecation message when worker_filter has no value and "target-worker-filters-v2" is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    instances.tcpTarget.worker_filter = null;
-    await visit(urls.tcpTarget);
-
-    assert.dom('.hds-alert').doesNotExist();
-  });
-
-  test('visiting an ssh target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    await visit(urls.sshTarget);
-    assert.false(featuresService.isEnabled('target-worker-filters-v2'));
-    assert.dom('.hds-alert').doesNotExist();
-  });
-
-  test('visiting a tcp target does not show the worker_filter deprecation message when "target-worker-filters-v2" is disabled', async function (assert) {
-    await visit(urls.tcpTarget);
-    assert.false(featuresService.isEnabled('target-worker-filters-v2'));
-    assert.dom('.hds-alert').doesNotExist();
-  });
-
   test('cannot navigate to an ssh target form without proper authorization', async function (assert) {
     featuresService.enable('ssh-target');
     await visit(urls.projectScope);
