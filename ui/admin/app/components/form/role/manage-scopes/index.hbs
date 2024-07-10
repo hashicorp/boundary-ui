@@ -68,7 +68,7 @@
   {{/if}}
 
   <Hds::Button
-    @text={{t 'resources.role.scope.actions.add-custom-scopes.text'}}
+    @text={{t 'resources.role.scope.actions.manage-custom-scopes.text'}}
     @color='secondary'
     @icon={{if @showCheckIcon 'check-circle'}}
     @route={{if
@@ -80,10 +80,10 @@
   />
 
   <Hds::Form::HelperText
-    @controlId='for-add-custom-scopes-button'
-    class='add-custom-scopes-helper-text'
+    @controlId='for-manage-custom-scopes-button'
+    class='manage-custom-scopes-helper-text'
   >
-    {{t 'resources.role.scope.actions.add-custom-scopes.help'}}
+    {{t 'resources.role.scope.actions.manage-custom-scopes.help'}}
   </Hds::Form::HelperText>
 
   <form.actions
