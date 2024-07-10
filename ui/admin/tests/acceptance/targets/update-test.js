@@ -128,28 +128,22 @@ module('Acceptance | targets | update', function (hooks) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, 'random string');
-    assert.notEqual(
-      instances.target.egressWorkerFilter,
-      'random worker string',
-    );
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await click('.hds-button[type="button"]', 'Update Filter');
-    await fillIn('[name="egress_worker_filter"]', 'random worker string');
+
     assert.strictEqual(currentURL(), urls.target);
+
     await click(`[href="${urls.targets}"]`);
+
     assert.dom('.rose-dialog').exists();
+
     await click('.rose-dialog-footer button:first-child', 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
-    assert.notEqual(
-      this.server.schema.targets.first().egressWorkerFilter,
-      'random worker string',
-    );
   });
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
