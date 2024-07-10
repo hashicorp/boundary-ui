@@ -607,9 +607,9 @@ role:
         sub-title: Add all of the orgs and the projects in the orgs that are underneath this scope
     actions:
       manage-scopes: Manage Scopes
-      add-custom-scopes:
-        text: Add custom scopes
-        help: Customize which scopes are added to this role.
+      manage-custom-scopes:
+        text: Manage custom scopes
+        help: Customize which scopes are associated with this role.
       view-projects: '{selected}/{total} total projects'
     form:
       this:
