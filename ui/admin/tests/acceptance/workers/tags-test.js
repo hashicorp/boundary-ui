@@ -22,11 +22,11 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     'tbody tr:nth-child(4) td:nth-child(4) button';
   const API_TAG_REMOVE_ACTION_SELECTOR =
     'tbody tr:nth-child(4) td:nth-child(4) ul li button';
-  const REMOVE_TAG_REMOVE_SELECTOR = '#remove-tag-modal input';
+  const REMOVE_TAG_REMOVE_SELECTOR = '.remove-tag-modal input';
   const REMOVE_TAG_REMOVE_BUTTON_SELECTOR =
-    '#remove-tag-modal button:first-child';
+    '.remove-tag-modal button:first-child';
   const REMOVE_TAG_CANCEL_BUTTON_SELECTOR =
-    '#remove-tag-modal button:last-child';
+    '.remove-tag-modal button:last-child';
 
   const instances = {
     scopes: {

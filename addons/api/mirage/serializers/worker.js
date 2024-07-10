@@ -16,7 +16,7 @@ export default ApplicationSerializer.extend({
     if (json.api_tags) {
       const keys = Object.keys(model.api_tags);
       keys.forEach((key) => {
-        if (json.api_tags[key].length === 0) {
+        if (json.api_tags[key]?.length === 0) {
           delete json.api_tags[key];
         }
       });
