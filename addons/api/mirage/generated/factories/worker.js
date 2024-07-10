@@ -5,6 +5,7 @@
 
 import { Factory } from 'miragejs';
 import { faker } from '@faker-js/faker';
+import { TYPE_WORKER_PKI } from 'api/models/worker';
 
 /**
  * GeneratedWorkerModelFactory
@@ -13,6 +14,7 @@ import { faker } from '@faker-js/faker';
 export default Factory.extend({
   name: () => faker.word.words(),
   description: () => faker.word.words(),
+  type: TYPE_WORKER_PKI,
   created_time: () => faker.date.recent(),
   updated_time: () => faker.date.recent(),
   version: () => faker.number.int(),
