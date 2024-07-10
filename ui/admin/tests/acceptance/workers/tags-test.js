@@ -33,8 +33,9 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    const scope = instances.scopes.global;
-    instances.worker = this.server.create('worker', { scopeId: scope.id });
+    instances.worker = this.server.create('worker', {
+      scope: instances.scopes.global,
+    });
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
