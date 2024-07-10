@@ -693,9 +693,6 @@ function routes() {
         updatedAttrs.apiTags[key] = updatedAttrs.apiTags[key].filter((tag) => {
           return tag !== value;
         });
-        if (updatedAttrs.apiTags[key].length === 0) {
-          delete updatedAttrs.apiTags[key];
-        }
       }
 
       if (method === 'set-worker-tags') {
