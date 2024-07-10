@@ -24,7 +24,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
     assert
-      .dom('[data-test-code-editor-field-editor] textarea')
+      .dom('[data-test-code-editor-field-editor] .CodeMirror-line')
       .hasText(this.model.egress_worker_filter);
   });
 
@@ -39,7 +39,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
     assert
-      .dom('[data-test-code-editor-field-editor] textarea')
+      .dom('[data-test-code-editor-field-editor] .CodeMirror-line')
       .hasText(this.model.ingress_worker_filter);
   });
 });

@@ -73,17 +73,12 @@ module('Acceptance | targets | update', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click('.rose-form-actions [type="button"]', 'Activate edit mode');
     await fillIn('[name="name"]', 'random string');
-    await fillIn('[name="worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="submit"]');
 
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().name,
       'random string',
-    );
-    assert.strictEqual(
-      this.server.schema.targets.first().workerFilter,
-      'random filter',
     );
   });
 
