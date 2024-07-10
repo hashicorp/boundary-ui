@@ -100,8 +100,10 @@
             {{this.tagDisplayName}}
             {{t 'resources.worker.tags.remove.warning'}}
           </Hds::Text::Body>
+          {{! template-lint-disable no-autofocus-attribute }}
           <Hds::Form::TextInput::Field
             name='removal-confirmation'
+            autofocus={{true}}
             @value={{this.removalConfirmation}}
             {{on 'input' (set-from-event this 'removalConfirmation')}}
             as |F|
