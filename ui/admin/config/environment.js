@@ -128,7 +128,7 @@ module.exports = function (environment) {
           '/docs/configuration/session-recording/configure-storage-policy',
         'storage-policy.update':
           '/docs/configuration/session-recording/update-storage-policy',
-        aliases: '/aliases',
+        alias: '/docs/concepts/aliases',
       },
     },
 
