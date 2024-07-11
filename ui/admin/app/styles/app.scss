@@ -732,6 +732,7 @@
       }
     }
   }
+  /* stylelint-enable selector-class-pattern */
 }
 
 .auth-methods-list-alert {
@@ -934,6 +935,7 @@
 // Session Recording Status
 // overwrites recording badge icon to red
 .session-recording-status-badge {
+  /* stylelint-disable selector-class-pattern */
   div.hds-badge__icon {
     svg.flight-icon-circle-dot {
       color: var(--token-color-palette-red-200);
