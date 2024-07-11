@@ -48,7 +48,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
+  @notifySuccess('resources.role.scope.messages.manage-custom-scopes.success')
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
     this.manageScopes.showCheckIcon = true;

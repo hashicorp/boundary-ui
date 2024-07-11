@@ -584,15 +584,18 @@ role:
       manage-scopes:
         title: Manage Scopes
         description: Select which scopes you want to add to this role.
+        success: Scope selection saved
       keywords-selected:
         description: Just a heads up, you can't select both add all descendants and add all children. You can only choose one or the other.
         link: You can read more about it here
       manage-custom-scopes:
         title: Manage Custom Scopes
         description: Select which specific orgs you want to apply to this role's grant sets.
+        success: Custom scope selection saved
       manage-org-projects:
-        title: 'Add Projects in {orgDisplayName}'
+        title: Add Projects in {orgDisplayName}
         description: Select which projects in this org you want to apply to this role's grant sets.
+        success: Projects in org have been updated
       no-org-scopes:
         title: No Org Scopes Available
         description: Org scopes are not available for assignment.
@@ -611,6 +614,7 @@ role:
         text: Manage custom scopes
         help: Customize which scopes are associated with this role.
       view-projects: '{selected}/{total} total projects'
+      apply: Apply changes to org
     form:
       this:
         label: Add this scope
