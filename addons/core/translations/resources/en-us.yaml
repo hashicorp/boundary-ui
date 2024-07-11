@@ -993,7 +993,8 @@ worker:
     title_plural: Tags
     create:
       title: Create new tags
-      description: Create new api worker tags. You can only add API tags in the admin UI or CLI. Config tags are added in the worker config file.
+      description: Create new api worker tags. You can only add API tags in the admin UI or CLI.
+      link: Config tags are added in the worker config file.
       success: Tag(s) successfully created
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
   flyout:
