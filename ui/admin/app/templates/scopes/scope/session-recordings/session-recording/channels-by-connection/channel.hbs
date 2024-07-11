@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.session-recording.channel.title')}}
@@ -26,13 +26,10 @@
         @model.channelRecording
       }}
     </h2>
-    <Copyable
-      @text={{@model.channelRecording.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.channelRecording.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet
+      @textToCopy={{@model.channelRecording.id}}
+      @color='secondary'
+    />
   </page.header>
 
   <page.body>
@@ -142,13 +139,10 @@
               @color='boundary'
               @text={{t 'resources.session-recording.title'}}
             >
-              <Copyable
-                @text={{@model.sessionRecording.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{@model.sessionRecording.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{@model.sessionRecording.id}}
+                @color='secondary'
+              />
             </list.Item>
             {{! Connection Recording ID }}
             <list.Item
@@ -156,13 +150,10 @@
               @color='boundary'
               @text={{t 'resources.session-recording.connection.title'}}
             >
-              <Copyable
-                @text={{@model.channelRecording.connection_recording.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{@model.channelRecording.connection_recording.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{@model.channelRecording.connection_recording.id}}
+                @color='secondary'
+              />
             </list.Item>
           </LinkListPanel>
         </div>

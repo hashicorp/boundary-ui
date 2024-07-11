@@ -1,10 +1,9 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
@@ -69,11 +68,12 @@ export default class ScopesScopeTargetsNewRoute extends Route {
   }
 
   /**
-   * Update type of target
-   * @param {string} type
+   * Adds global scope to the context so we can check if the user has permissions to create aliases.
+   * @param {Controller} controller
    */
-  @action
-  changeType(type) {
-    this.router.replaceWith({ queryParams: { type } });
+  async setupController(controller) {
+    super.setupController(...arguments);
+    const globalScope = await this.store.peekRecord('scope', 'global');
+    controller.set('globalScope', globalScope);
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -134,18 +134,18 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
-    await click('form button:not([type="submit"])');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.accounts);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
   });
 
   test('can cancel a new LDAP account creation', async function (assert) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.newAccount);
     await fillIn('[name="name"]', 'Account name');
-    await click('form button:not([type="submit"])');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.accounts);
+    assert.strictEqual(this.server.db.accounts.length, accountsCount);
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
@@ -178,7 +178,7 @@ module('Acceptance | accounts | create', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );

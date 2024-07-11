@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -9,7 +9,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -39,6 +39,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    alias: null,
   };
 
   const urls = {
@@ -91,6 +92,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
       scope: instances.scopes.project,
       address: 'localhost',
     });
+
     instances.targetWithOneHost = this.server.create(
       'target',
       { scope: instances.scopes.project },
@@ -101,6 +103,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts',
     );
+    instances.alias = this.server.create('alias', {
+      scope: instances.scopes.global,
+      destination_id: instances.targetWithOneHost.id,
+    });
     instances.session = this.server.create(
       'session',
       {
@@ -123,8 +129,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('targets', 'sessions', 'targets');
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
   });
 
   test('user can connect to a target with an address', async function (assert) {
@@ -136,7 +142,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
       port: 'p_123',
       protocol: 'tcp',
     });
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
 
     await visit(urls.target);
 
@@ -184,7 +190,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
   test('user can retry on error', async function (assert) {
     assert.expect(1);
     this.ipcStub.withArgs('cliExists').rejects();
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
 
@@ -264,6 +270,25 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetWithOneHost);
   });
 
+  test('user can visit target details and should not see the associated aliases if there are none', async function (assert) {
+    await visit(urls.targets);
+
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+    assert.dom('.aliases').doesNotExist();
+  });
+
+  test('user can visit target details and see the associated aliases', async function (assert) {
+    await visit(urls.targets);
+    instances.targetWithOneHost.update({
+      aliases: [{ id: instances.alias.id, value: instances.alias.value }],
+    });
+    await click(`[href="${urls.targetWithOneHost}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetWithOneHost);
+    assert.dom('.aliases').exists();
+  });
   test('user can connect to a target without read permissions for host-set', async function (assert) {
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));

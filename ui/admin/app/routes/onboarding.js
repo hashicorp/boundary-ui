@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifyError } from 'core/decorators/notify';
 import { TYPE_TARGET_TCP } from 'api/models/target';
+
 export default class OnboardingRoute extends Route {
   // =services
 
@@ -25,6 +26,7 @@ export default class OnboardingRoute extends Route {
   async beforeModel() {
     const orgs = await this.store.query('scope', {
       scope_id: 'global',
+      query: { filters: { scope_id: [{ equals: 'global' }] } },
     });
     if (!this.session.isAuthenticated || orgs.length)
       this.router.transitionTo('index');

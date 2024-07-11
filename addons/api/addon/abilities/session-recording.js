@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import ModelAbility from './model';
@@ -19,6 +19,14 @@ export default class SessionRecordingAbility extends ModelAbility {
    */
   get canRead() {
     return !this.model.isUnknown && super.canRead;
+  }
+
+  /**
+   * Only "known" session recording types may be deleted.
+   * @type {boolean}
+   */
+  get canDelete() {
+    return !this.model.isUnknown && super.canDelete && this.model.isAvailable;
   }
 
   get canDownload() {

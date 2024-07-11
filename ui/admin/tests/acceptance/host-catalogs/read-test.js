@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -14,10 +14,12 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 module('Acceptance | host-catalogs | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {

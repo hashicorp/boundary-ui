@@ -1,12 +1,12 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Store, { CacheHandler } from '@ember-data/store';
 import RequestManager from '@ember-data/request';
 import { LegacyNetworkHandler } from '@ember-data/legacy-compat';
-import ClientDaemonHandler from 'api/handlers/client-daemon-handler';
+import CacheDaemonHandler from 'api/handlers/cache-daemon-handler';
 
 export default class extends Store {
   requestManager = new RequestManager();
@@ -14,9 +14,9 @@ export default class extends Store {
   constructor(args) {
     super(args);
 
-    const clientDaemonHandler = new ClientDaemonHandler(this);
+    const cacheDaemonHandler = new CacheDaemonHandler(this);
 
-    this.requestManager.use([clientDaemonHandler, LegacyNetworkHandler]);
+    this.requestManager.use([cacheDaemonHandler, LegacyNetworkHandler]);
     this.requestManager.useCache(CacheHandler);
   }
 }

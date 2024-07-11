@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -118,7 +118,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       allSessions: this.allSessions,
       allTargets: this.allTargets,
       totalItems,
-      isClientDaemonRunning: await this.ipc.invoke('isClientDaemonRunning'),
+      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
     };
   }
 

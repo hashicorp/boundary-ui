@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { faker } from '@faker-js/faker';
@@ -182,9 +182,12 @@ export default function initializeMockIPC(server, config) {
     checkCommand() {
       return faker.system.filePath();
     }
-    addTokenToClientDaemon() {}
-    searchClientDaemon() {}
-    isClientDaemonRunning() {
+    addTokenToDaemons() {}
+    searchCacheDaemon() {}
+    isCacheDaemonRunning() {
+      return false;
+    }
+    isClientAgentRunning() {
       return false;
     }
   }

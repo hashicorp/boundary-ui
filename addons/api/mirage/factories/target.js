@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import factory from '../generated/factories/target';
@@ -82,6 +82,14 @@ export default factory.extend({
         });
       }
 
+      const aliases = server.schema.aliases.all().models;
+      const randomlySelectedAliases =
+        aliases.length === 0 ? undefined : faker.helpers.arrayElement(aliases);
+      if (randomlySelectedAliases) {
+        target.update({
+          aliases: randomlySelectedAliases.aliases,
+        });
+      }
       target.update({
         hostSets: randomlySelectedHostSets,
         brokeredCredentialSourceIds: [

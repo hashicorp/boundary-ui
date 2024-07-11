@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import SessionRecordingAbility from 'api/abilities/session-recording';
@@ -27,6 +27,16 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
   get canReapplyStoragePolicy() {
     return this.features.isEnabled('ssh-session-recording')
       ? this.hasAuthorizedAction('reapply-storage-policy')
+      : false;
+  }
+
+  /**
+   * This override ensures that session recordings may be deleted only if the
+   * session-recording feature flag is enabled.
+   */
+  get canDelete() {
+    return this.features.isEnabled('ssh-session-recording')
+      ? super.canDelete
       : false;
   }
 }

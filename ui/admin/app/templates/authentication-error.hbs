@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'auth.titles.flow-error')}}
@@ -10,13 +10,7 @@
     <Rose::Notification @style='error' @heading={{t 'auth.titles.flow-error'}}>
       {{t 'auth.descriptions.flow-error'}}
       <br />
-      <Copyable
-        @text={{@model}}
-        @buttonText={{t 'actions.copy-error-detail-to-clipboard'}}
-        @acknowledgeText={{t 'states.copied'}}
-      >
-        {{t 'actions.copy-error-detail-to-clipboard'}}
-      </Copyable>
+      <Hds::Copy::Snippet @textToCopy={{@model}} @color='secondary' />
     </Rose::Notification>
   </Rose::Layout::Centered>
 </main>

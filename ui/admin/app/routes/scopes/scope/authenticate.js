@@ -1,11 +1,10 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
@@ -13,6 +12,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   @service session;
   @service router;
   @service resourceFilterStore;
+
   // =methods
 
   beforeModel() {
@@ -27,16 +27,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    */
   async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
-    // Fetch auth methods for the current scope
-    const authMethods = await this.resourceFilterStore.queryBy(
-      'auth-method',
-      {
-        authorized_actions: [{ contains: 'authenticate' }],
-      },
-      {
-        scope_id,
-      },
-    );
+
     // Preload all authenticatable auth methods into the store
     const authMethodsForAllScopes = await this.resourceFilterStore.queryBy(
       'auth-method',
@@ -48,22 +39,25 @@ export default class ScopesScopeAuthenticateRoute extends Route {
         recursive: true,
       },
     );
-    // Fetch org scopes
-    // and filter out any that have no auth methods
-    const scopes = this.modelFor('scopes').filter(
-      ({ id: scope_id, isOrg }) =>
-        isOrg &&
-        authMethodsForAllScopes.filter((i) => i.scopeID === scope_id).length,
+
+    const scopeIDs = new Set(
+      authMethodsForAllScopes.map((authMethod) => authMethod.scopeID),
     );
-    return hash({
+
+    // Fetch org scopes and filter out any that have no auth methods
+    const scopes = this.modelFor('scopes').filter(({ id: scope_id }) =>
+      scopeIDs.has(scope_id),
+    );
+
+    // Filter out auth methods that are not for the current scope
+    const authMethods = authMethodsForAllScopes.filter(
+      (authMethod) => authMethod.scopeID === scope_id,
+    );
+
+    return {
       scope: this.modelFor('scopes.scope'),
       scopes,
       authMethods,
-      // for integration testing:
-      // authMethods: A([{
-      //   id: 'am_1234567890',
-      //   type: 'password'
-      // }])
-    });
+    };
   }
 }

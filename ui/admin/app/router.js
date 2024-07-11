@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import EmberRouter from '@ember/routing/router';
@@ -88,11 +88,18 @@ Router.map(function () {
           this.route('injected-application-credential-sources');
           this.route('add-brokered-credential-sources');
           this.route('add-injected-application-credential-sources');
+          this.route('create-alias');
+          this.route('manage-alias', { path: ':alias_id' }, function () {});
           this.route('enable-session-recording', function () {
             this.route('create-storage-bucket');
           });
         });
         this.route('new');
+      });
+
+      this.route('aliases', function () {
+        this.route('new');
+        this.route('alias', { path: ':alias_id' }, function () {});
       });
 
       this.route('host-catalogs', function () {

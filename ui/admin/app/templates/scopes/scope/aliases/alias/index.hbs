@@ -1,0 +1,64 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+  <page.header>
+    <h2>
+      {{t 'resources.alias.title'}}
+      <DocLink @doc='aliases' @iconSize='large' />
+    </h2>
+    <p>{{t 'resources.alias.description'}}</p>
+    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+  </page.header>
+
+  <page.navigation>
+    <Rose::Nav::Tabs as |nav|>
+      <nav.link @route='scopes.scope.aliases.alias.index'>
+        {{t 'titles.details'}}
+      </nav.link>
+    </Rose::Nav::Tabs>
+  </page.navigation>
+  {{#let
+    (hash
+      canUpdate=(can 'update model' @model)
+      canDelete=(can 'delete model' @model)
+    )
+    as |perms|
+  }}
+    <page.actions>
+
+      {{#if (or perms.canUpdate perms.canDelete)}}
+        <Hds::Dropdown as |dd|>
+          <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+          {{#if (and perms.canUpdate @model.destination_id)}}
+            <dd.Interactive
+              @text={{t 'actions.clear'}}
+              @color='action'
+              {{on 'click' (fn this.aliases.clearAlias @model)}}
+            />
+          {{/if}}
+          {{#if perms.canDelete}}
+            <dd.Interactive
+              @color='critical'
+              @text={{t 'actions.delete'}}
+              {{on 'click' (fn this.aliases.deleteAlias @model)}}
+            />
+          {{/if}}
+        </Hds::Dropdown>
+
+      {{/if}}
+    </page.actions>
+  {{/let}}
+  <page.body>
+    <Form::Alias
+      @model={{@model}}
+      @submit={{fn this.aliases.save @model}}
+      @cancel={{fn this.aliases.cancel @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

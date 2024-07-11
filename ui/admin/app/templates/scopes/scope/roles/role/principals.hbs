@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.role.principal.title_plural')}}
@@ -21,17 +21,14 @@
       <DocLink @doc='role' @iconSize='large' />
     </h2>
     <p>{{t 'resources.role.principal.description'}}</p>
-    <Copyable
-      @text={{@model.role.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.role.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
   </page.header>
 
   <page.actions>
-    <Roles::Role::Actions @model={{@model.role}} />
+    <Roles::Role::Actions
+      @model={{@model.role}}
+      @delete={{this.roles.delete}}
+    />
   </page.actions>
 
   <page.navigation>
@@ -65,13 +62,10 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               <PrincipalTypeBadge @model={{B.data}} />
@@ -90,7 +84,10 @@
                   <dd.Interactive
                     @color='critical'
                     @text={{t 'actions.remove'}}
-                    {{on 'click' (route-action 'removePrincipal' B.data)}}
+                    {{on
+                      'click'
+                      (fn this.roles.removePrincipal @model.role B.data)
+                    }}
                   />
                 </Hds::Dropdown>
               {{/if}}

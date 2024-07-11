@@ -1,5 +1,5 @@
 # Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
+# SPDX-License-Identifier: BUSL-1.1
 
 id:
   label: ID
@@ -48,6 +48,8 @@ session_max_seconds:
 session_connection_limit:
   label: Maximum Connections
   help: The maximum number of connections allowed per session.  For unlimited, specify "-1".
+session_id:
+  label: Session ID
 worker_release_version:
   label: Release Version
   help: The version of the Boundary binary the worker is running.
@@ -58,8 +60,6 @@ worker_last_seen:
   help: Last time the worker reported status.
 worker_address:
   help: URL and port for this worker.
-worker_type:
-  help: Type of worker
 host_set:
   label: Host Set
 grant_scope:
@@ -168,7 +168,7 @@ ip_addresses:
   help: Read-only public and private IP addresses given by the plugin host catalog provider
 sync-interval:
   label: Sync Interval
-  help: Optional. Number of seconds between the time Boundary syncs hosts in this set.
+  help: Number of seconds between the time Boundary syncs hosts in this set.
 tags:
   label: Tags
 secret-editor:

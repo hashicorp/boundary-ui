@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.host-set.actions.add-hosts')}}
@@ -22,8 +22,8 @@
     <Form::HostSet::AddHosts
       @model={{@model.hostSet}}
       @hosts={{@model.hosts}}
-      @submit={{route-action 'addHosts' @model.hostSet}}
-      @cancel={{route-action 'cancel'}}
+      @submit={{fn this.addHosts @model.hostSet}}
+      @cancel={{this.cancel}}
     />
   </page.body>
 </Rose::Layout::Page>

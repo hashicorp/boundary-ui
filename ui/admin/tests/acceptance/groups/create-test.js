@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -18,6 +19,7 @@ import {
 module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -115,7 +117,7 @@ module('Acceptance | groups | create', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );

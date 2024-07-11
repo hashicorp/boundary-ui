@@ -1,15 +1,16 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{#if (or @model.sessions @model.allSessions)}}
-  {{#if @model.isClientDaemonRunning}}
+  {{#if @model.isCacheDaemonRunning}}
     <div class='search-filtering-toolbar'>
       <Hds::SegmentedGroup as |S|>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.target.title'}}
+            name='target'
+            @toggleText={{t 'resources.target.title'}}
             @itemOptions={{this.availableTargets}}
             @checkedItems={{this.targets}}
             @applyFilter={{fn this.applyFilter 'targets'}}
@@ -19,7 +20,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'form.status.label'}}
+            name='status'
+            @toggleText={{t 'form.status.label'}}
             @itemOptions={{this.sessionStatusOptions}}
             @checkedItems={{this.status}}
             @applyFilter={{fn this.applyFilter 'status'}}
@@ -27,7 +29,8 @@
         </S.Generic>
         <S.Generic>
           <Dropdown
-            @name={{t 'resources.scope.title'}}
+            name='scope'
+            @toggleText={{t 'resources.scope.title'}}
             @itemOptions={{this.availableScopes}}
             @checkedItems={{this.scopes}}
             @applyFilter={{fn this.applyFilter 'scopes'}}
@@ -65,43 +68,44 @@
     <Hds::Table
       @model={{this.sortedSessions}}
       @columns={{array
-        (hash label=(t 'form.id.label'))
+        (hash label=(t 'form.started.label'))
+        (hash label=(t 'form.session_id.label'))
         (hash label=(t 'resources.target.title'))
         (hash label=(t 'form.proxy_url.label'))
-        (hash label=(t 'form.started.label'))
         (hash label=(t 'form.status.label'))
-        (hash label='')
+        (hash label='' align='right' width='60px')
       }}
       @valign='middle'
     >
       <:body as |B|>
         <B.Tr>
           <B.Td>
-            {{#if B.data.isAvailable}}
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <LinkTo
+            <time datetime={{format-date-iso B.data.created_time}}>
+              {{format-date-iso-human B.data.created_time}}
+            </time>
+          </B.Td>
+          <B.Td>
+            <div class='link-copy-button-container'>
+              {{#if B.data.isAvailable}}
+                <Hds::Link::Inline
                   @route='scopes.scope.projects.sessions.session.index'
                   @model={{B.data.id}}
                   data-test-session-detail-link={{B.data.id}}
                 >
-                  <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-                </LinkTo>
-              </Copyable>
-            {{else}}
-              <Copyable
+                  {{B.data.id}}
+                </Hds::Link::Inline>
+              {{else}}
+                <Hds::Text::Body data-test-session-id-copy={{B.data.id}}>
+                  {{B.data.id}}
+                </Hds::Text::Body>
+              {{/if}}
+              <Hds::Copy::Button
                 @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code
-                  data-test-session-id-copy={{B.data.id}}
-                >{{B.data.id}}</Hds::Text::Code>
-              </Copyable>
-            {{/if}}
+                @isIconOnly={{true}}
+                @textToCopy={{B.data.id}}
+                data-test-session-id-copy={{B.data.id}}
+              />
+            </div>
           </B.Td>
           <B.Td>
             {{B.data.target.displayName}}
@@ -120,28 +124,22 @@
           <B.Td>
             {{#if B.data.isAvailable}}
               {{#if B.data.proxy}}
-                <Copyable
-                  @text={{B.data.proxy}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <Hds::Text::Code>{{B.data.proxy}}</Hds::Text::Code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.proxy}}
+                  @color='secondary'
+                />
               {{/if}}
             {{/if}}
           </B.Td>
           <B.Td>
-            <time datetime={{format-date-iso B.data.created_time}}>
-              {{format-date-iso-human B.data.created_time}}
-            </time>
-          </B.Td>
-          <B.Td>
             <SessionStatus @model={{B.data}} />
           </B.Td>
-          <B.Td>
+          <B.Td @align='right' width='60px'>
             {{#if (can 'cancel session' B.data)}}
               <Hds::Button
                 @text={{t 'actions.cancel'}}
+                @icon='x'
+                @isIconOnly={{true}}
                 @color='secondary'
                 {{on 'click' (route-action 'cancelSession' B.data)}}
                 data-test-session-cancel-button={{B.data.id}}
@@ -160,7 +158,10 @@
     <Hds::ApplicationState data-test-no-session-results as |A|>
       <A.Header @title={{t 'titles.no-results-found'}} />
       <A.Body
-        @text={{t 'descriptions.no-filter-results' resource='sessions'}}
+        @text={{t
+          'descriptions.no-filter-results'
+          resource=(t 'resources.session.title_plural')
+        }}
       />
     </Hds::ApplicationState>
   {{/if}}

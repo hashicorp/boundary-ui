@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -18,14 +18,17 @@
   </page.navigation>
 
   <page.actions>
-    <Groups::Group::Actions @model={{@model}} />
+    <Groups::Group::Actions
+      @model={{@model}}
+      @delete={{fn this.groups.delete @model}}
+    />
   </page.actions>
 
   <page.body>
     <Form::Group
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.groups.save @model}}
+      @cancel={{fn this.groups.cancel @model}}
     />
   </page.body>
 

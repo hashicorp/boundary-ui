@@ -1,16 +1,18 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import GeneratedScopeModel from '../generated/models/scope';
-import { computed } from '@ember/object';
 
-export const scopeTypes = {
-  global: 'global',
-  org: 'org',
-  project: 'project',
-};
+export const TYPE_SCOPE_GLOBAL = 'global';
+export const TYPE_SCOPE_ORG = 'org';
+export const TYPE_SCOPE_PROJECT = 'project';
+export const TYPES_SCOPE = Object.freeze([
+  TYPE_SCOPE_GLOBAL,
+  TYPE_SCOPE_ORG,
+  TYPE_SCOPE_PROJECT,
+]);
 
 export default class ScopeModel extends GeneratedScopeModel {
   // =attributes
@@ -18,9 +20,8 @@ export default class ScopeModel extends GeneratedScopeModel {
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isGlobal() {
-    return this.type === scopeTypes.global;
+    return this.type === TYPE_SCOPE_GLOBAL;
   }
   // There is only one global scope and it cannot be created by clients,
   // thus no set.
@@ -28,23 +29,21 @@ export default class ScopeModel extends GeneratedScopeModel {
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isOrg() {
-    return this.type === scopeTypes.org;
+    return this.type === TYPE_SCOPE_ORG;
   }
   set isOrg(value) {
-    if (value) this.type = scopeTypes.org;
+    if (value) this.type = TYPE_SCOPE_ORG;
   }
 
   /**
    * @type {boolean}
    */
-  @computed('type')
   get isProject() {
-    return this.type === scopeTypes.project;
+    return this.type === TYPE_SCOPE_PROJECT;
   }
   set isProject(value) {
-    if (value) this.type = scopeTypes.project;
+    if (value) this.type = TYPE_SCOPE_PROJECT;
   }
 
   /**

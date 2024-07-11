@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.user.messages.accounts.title')}}
@@ -24,7 +24,10 @@
   </page.navigation>
 
   <page.actions>
-    <Users::User::Actions @model={{@model.user}} />
+    <Users::User::Actions
+      @model={{@model.user}}
+      @delete={{this.users.delete}}
+    />
   </page.actions>
 
   <page.body>
@@ -60,13 +63,10 @@
               />
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
 
@@ -82,7 +82,7 @@
                     @text={{t 'actions.remove'}}
                     {{on
                       'click'
-                      (route-action 'removeAccount' @model.user B.data)
+                      (fn this.users.removeAccount @model.user B.data)
                     }}
                   />
                 </Hds::Dropdown>

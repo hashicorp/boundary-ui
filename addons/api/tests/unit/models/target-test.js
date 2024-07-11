@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -79,17 +79,14 @@ module('Unit | Model | target', function (hooks) {
 
   test('it has an `addHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post(
-      '/v1/targets/123abc:add-host-sources',
-      (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        assert.deepEqual(body, {
-          host_source_ids: ['123_abc', 'foobar'],
-          version: 1,
-        });
-        return { id: '123abc' };
-      },
-    );
+    this.server.post('/targets/123abc:add-host-sources', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        host_source_ids: ['123_abc', 'foobar'],
+        version: 1,
+      });
+      return { id: '123abc' };
+    });
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -117,7 +114,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeHostSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-host-sources',
+      '/targets/123abc:remove-host-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -154,7 +151,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeHostSource` method that deletes a single host set using `removeHostSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-host-sources',
+      '/targets/123abc:remove-host-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -283,7 +280,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has an `addBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:add-credential-sources',
+      '/targets/123abc:add-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -317,7 +314,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeBrokeredCredentialSources` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-credential-sources',
+      '/targets/123abc:remove-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -351,7 +348,7 @@ module('Unit | Model | target', function (hooks) {
   test('it has a `removeBrokeredCredentialSource` method that deletes a single credential library using `removeBrokeredCredentialSources` method', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/targets/123abc:remove-credential-sources',
+      '/targets/123abc:remove-credential-sources',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {

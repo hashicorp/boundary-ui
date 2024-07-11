@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'titles.new')}}
@@ -24,8 +24,8 @@
   <page.body>
     <Form::Worker::CreateWorkerLed
       @model={{@model}}
-      @cancel={{route-action 'cancel' @model}}
-      @submit={{route-action 'createWorkerLed' @model}}
+      @cancel={{fn this.cancel @model}}
+      @submit={{fn this.createWorkerLed @model}}
     />
   </page.body>
 

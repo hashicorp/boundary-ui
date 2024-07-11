@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -11,6 +11,7 @@ test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
 }) => {
   await page.goto('/');
 
+  // Log in
   await page
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
@@ -22,13 +23,18 @@ test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
   await expect(
     page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
   ).toBeEnabled();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
+  ).toBeVisible();
 
+  // Log out
   await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
   await page.getByRole('button', { name: 'Sign Out' }).click();
   await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
 
   await page.reload();
 
+  // Log back in
   await page
     .getByLabel('Login Name')
     .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);

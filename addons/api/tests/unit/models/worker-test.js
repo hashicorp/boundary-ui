@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -15,7 +15,7 @@ module('Unit | Model | worker', function (hooks) {
     assert.expect(2);
     const scopeId = 'global';
     const workerGeneratedAuthToken = 'token';
-    this.server.post('/v1/workers:create:worker-led', (schema, request) => {
+    this.server.post('/workers:create:worker-led', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         scope_id: scopeId,

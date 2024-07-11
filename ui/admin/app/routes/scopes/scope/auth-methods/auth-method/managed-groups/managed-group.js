@@ -1,17 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRoute extends Route {
   // =services
 
   @service store;
-  @service can;
   @service router;
 
   // =methods
@@ -42,23 +40,6 @@ export default class ScopesScopeAuthMethodsAuthMethodManagedGroupsManagedGroupRo
         auth_method_id,
         managedGroup.id,
       );
-    }
-  }
-
-  /**
-   * Copies the contents of string array fields in order to force the instance
-   * into a dirty state.  This ensures that `model.rollbackAttributes()` reverts
-   * to the original expected array.
-   *
-   * The deep copy implemented here is required to ensure that both the
-   * array itself and its members are all new.
-   *
-   * @param {managedGroupModel} managedGroup
-   */
-  @action
-  edit(managedGroup) {
-    if (managedGroup.group_names) {
-      managedGroup.group_names = structuredClone(managedGroup.group_names);
     }
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-console */
@@ -21,15 +21,17 @@ const {
   shell,
 } = require('electron');
 require('./ipc/handlers.js');
+const log = require('electron-log/main');
+const fs = require('fs');
 
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
-const clientDaemonManager = require('./services/client-daemon-manager');
+const cacheDaemonManager = require('./services/cache-daemon-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
-const { isMac, isLinux } = require('./helpers/platform.js');
+const { isMac, isLinux, isWindows } = require('./helpers/platform.js');
 const fixPath = require('./utils/fixPath');
 const isDev = require('electron-is-dev');
 
@@ -53,6 +55,21 @@ protocol.registerSchemesAsPrivileged([
 // This is to correctly set the process.env.PATH as electron does not
 // correctly inherit the path variable in production
 fixPath();
+
+// Setup logger
+log.initialize();
+log.transports.console.level = false;
+log.transports.file.format =
+  '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
+log.transports.file.fileName = 'desktop-client.log';
+// Set the max file size to 10MB
+log.transports.file.maxSize = 10485760;
+
+if (isWindows()) {
+  // Set the app user model ID to the app name as it will display the ID
+  // in any notifications on windows unless a squirrel installation is used.
+  app.setAppUserModelId(app.name);
+}
 
 const createWindow = (partition, closeWindowCB) => {
   /**
@@ -108,7 +125,7 @@ const createWindow = (partition, closeWindowCB) => {
     browserWindow.loadURL(emberAppURL);
   });
 
-  browserWindow.webContents.on('crashed', () => {
+  browserWindow.webContents.on('render-process-gone', () => {
     console.log(
       'Your Ember app (or other code) in the main window has crashed.',
     );
@@ -192,7 +209,10 @@ app.on('ready', async () => {
   // per Electronegativity PERMISSION_REQUEST_HANDLER_GLOBAL_CHECK
   ses.setPermissionRequestHandler((webContents, permission, callback) => {
     // We need to allow this for native clipboard usage
-    if (permission === 'clipboard-sanitized-write') {
+    if (
+      permission === 'clipboard-sanitized-write' ||
+      permission === 'notifications'
+    ) {
       // Approves the permissions request
       return callback(true);
     }
@@ -240,7 +260,7 @@ app.on('ready', async () => {
     }
   });
 
-  await clientDaemonManager.start();
+  await cacheDaemonManager.start();
 });
 
 /**
@@ -260,7 +280,7 @@ app.on('before-quit', (event) => {
 });
 
 app.on('quit', () => {
-  clientDaemonManager.stop();
+  cacheDaemonManager.stop();
 });
 
 // Handle an unhandled error in the main thread

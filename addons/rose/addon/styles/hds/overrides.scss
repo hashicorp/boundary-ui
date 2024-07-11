@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 // field and button bottom margin (HDS leaves this to implementers)
@@ -29,6 +29,13 @@
 
   .hds-table__td p {
     color: var(--token-form-indicator-optional-color);
+  }
+
+  // Override for sortable HDS table columns that ignore selected theme in app
+  // and use the system default theme causing color mismatch if selected theme
+  // is not the system default theme
+  .hds-table__th-sort button {
+    color: var(--token-color-foreground-strong);
   }
 
   // TODO: This is a temporary hack to fix an issue causing weird whitespace

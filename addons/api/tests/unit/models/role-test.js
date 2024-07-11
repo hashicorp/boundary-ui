@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -19,7 +19,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `saveGrantStrings` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/roles/123abc:set-grants', (schema, request) => {
+    this.server.post('/roles/123abc:set-grants', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         grant_strings: ['foo', 'bar'],
@@ -50,7 +50,7 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has an `addPrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/roles/123abc:add-principals', (schema, request) => {
+    this.server.post('/roles/123abc:add-principals', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         principal_ids: ['123_abc', 'foobar'],
@@ -85,17 +85,14 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipals` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post(
-      '/v1/roles/123abc:remove-principals',
-      (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        assert.deepEqual(body, {
-          principal_ids: ['1', '3', '5'],
-          version: 1,
-        });
-        return { id: '123abc' };
-      },
-    );
+    this.server.post('/roles/123abc:remove-principals', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        principal_ids: ['1', '3', '5'],
+        version: 1,
+      });
+      return { id: '123abc' };
+    });
     const store = this.owner.lookup('service:store');
     store.push({
       data: {
@@ -123,17 +120,14 @@ module('Unit | Model | role', function (hooks) {
 
   test('it has a `removePrincipal` method that deletes a single principal using `removePrincipals` method', async function (assert) {
     assert.expect(1);
-    this.server.post(
-      '/v1/roles/123abc:remove-principals',
-      (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        assert.deepEqual(body, {
-          principal_ids: ['3'],
-          version: 1,
-        });
-        return { id: '123abc' };
-      },
-    );
+    this.server.post('/roles/123abc:remove-principals', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        principal_ids: ['3'],
+        version: 1,
+      });
+      return { id: '123abc' };
+    });
     const store = this.owner.lookup('service:store');
     store.push({
       data: {

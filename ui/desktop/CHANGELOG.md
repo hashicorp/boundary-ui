@@ -2,6 +2,42 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.0.3 [CLI 0.16.0] (2024.03.30)
+
+### New
+
+- Upgrade CLI to v0.16.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2280))
+- Add Aliases support ([PR](https://github.com/hashicorp/boundary-ui/pull/2256))
+- Darwin ARM64 Support.
+
+### Bug Fixes
+
+- Fix client daemon search for Windows ([PR](https://github.com/hashicorp/boundary-ui/pull/2245))
+
+## v2.0.2 [CLI 0.15.3] (2024.03.18)
+
+### New
+
+- Upgrade CLI to v0.15.3 ([PR](https://github.com/hashicorp/boundary-ui/pull/2183))
+
+### Bug Fixes
+
+- Fix auto-updater ([PR](https://github.com/hashicorp/boundary-ui/pull/2179))
+
+
+## v2.0.1 [CLI 0.15.1] (2024.02.29)
+
+### New
+
+- Upgrade CLI to v0.15.1 ([PR](https://github.com/hashicorp/boundary-ui/pull/2165))
+- Display only scopes with auth-methods at authenticate ([PR](https://github.com/hashicorp/boundary-ui/pull/2129))
+
+### Bug Fixes
+
+- Fix refresh for Windows ([PR](https://github.com/hashicorp/boundary-ui/pull/2133))
+- Add error notification if adding token to daemon fails ([PR](https://github.com/hashicorp/boundary-ui/pull/2127))
+
+
 ## v2.0.0 [CLI 0.15.0] (2024.01.31)
 
 ### New
@@ -11,6 +47,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 - Add time-remaining to a session ([PR](https://github.com/hashicorp/boundary-ui/pull/2018))
 
 ### Bug Fixes
+
 - Fix copy command not working in embedded terminal for Windows OS ([PR](https://github.com/hashicorp/boundary-ui/pull/2001))
 
 

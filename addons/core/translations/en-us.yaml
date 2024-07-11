@@ -1,5 +1,5 @@
 # Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
+# SPDX-License-Identifier: BUSL-1.1
 
 auth:
   titles:
@@ -41,6 +41,7 @@ titles:
   no-results-found: No results found
   filters-applied: 'Filters Applied:'
   unit: Unit
+  not-set: Not set
   year: '{numberOfYears, plural, =1 {# year} other {# years}}'
   days: '{days, plural, =1 {# day} other {# days}}'
 descriptions:
@@ -59,6 +60,7 @@ questions:
   remove-confirm: Are you sure you want to remove this association?
   abandon-confirm: Are you sure you want to navigate away?  Your unsaved changes will be lost.
   retry-confirm: Would you like to retry?
+  clear-confirm: Are you sure you want to clear the resource id?
 themes:
   system: System Default
   light: Light

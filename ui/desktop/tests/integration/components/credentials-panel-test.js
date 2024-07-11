@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -60,6 +60,6 @@ module('Integration | Component | credentials-panel', function (hooks) {
 
     await click('[data-test-toggle-credentials]');
 
-    assert.dom("[data-test-raw-secret]").isVisible();
+    assert.dom('[data-test-raw-secret]').isVisible();
   });
 });

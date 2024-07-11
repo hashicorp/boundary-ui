@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -100,7 +100,7 @@ module('Unit | Adapter | application', function (hooks) {
   test('it can request records through the store from a specified scope', async function (assert) {
     assert.expect(1);
     const store = this.owner.lookup('service:store');
-    this.server.get('/v1/groups', (_, { queryParams: { scope_id } }) => {
+    this.server.get('/groups', (_, { queryParams: { scope_id } }) => {
       assert.strictEqual(
         scope_id,
         'p_456',

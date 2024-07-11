@@ -1,13 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const https = require('https');
-const decompress = require('decompress');
+const unzipper = require('unzipper');
 const { isMac, isWindows, isLinux } = require('../src/helpers/platform.js');
 
 const artifactDestination = path.resolve(__dirname, '..', 'cli');
@@ -42,7 +42,7 @@ const downloadArtifact = (version) => {
   }
 
   console.log(
-    `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`
+    `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`,
   );
 
   const archiveName = `boundary_${version}_${archivePlatform.name}_${archivePlatform.arch}.zip`;
@@ -66,10 +66,31 @@ const downloadArtifact = (version) => {
   });
 };
 
-const extract = (artifactPath, destination) => {
+const extract = async (artifactPath, destination) => {
   if (!fs.existsSync(destination)) fs.mkdirSync(destination);
-  console.log('Extract artifact to: ', destination);
-  return decompress(artifactPath, destination);
+  const directory = await unzipper.Open.file(artifactPath);
+
+  return Promise.all(
+    directory.files.map((file) => {
+      return new Promise((resolve, reject) => {
+        file
+          .stream()
+          .pipe(
+            fs.createWriteStream(path.join(destination, file.path), {
+              // Creating a new file stream sets the permission bits on the file
+              // to node's default. We need to set the permission bits ourselves.
+              // We could just force the mode to 0o755, but we can also just convert it.
+              // This should also work on windows as the permission bits will still be set
+              // correctly but they just won't have any effect.
+              // Taken from here: https://github.com/thejoshwolfe/yauzl/issues/101#issuecomment-448073570
+              mode: file.externalFileAttributes >>> 16,
+            }),
+          )
+          .on('error', reject)
+          .on('finish', resolve);
+      });
+    }),
+  );
 };
 
 module.exports = {
@@ -81,7 +102,7 @@ module.exports = {
     try {
       const artifactVersion = await fs.promises.readFile(
         path.resolve(__dirname, 'cli', 'VERSION'),
-        'utf8'
+        'utf8',
       );
       const artifactPath = await downloadArtifact(artifactVersion.trim());
       await extract(artifactPath, artifactDestination);

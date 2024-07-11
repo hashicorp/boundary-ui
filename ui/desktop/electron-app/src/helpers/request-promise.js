@@ -1,10 +1,11 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 const { net } = require('electron');
 const http = require('http');
+const log = require('electron-log/main');
 
 const requestTimeoutSeconds = 10;
 // Simple promise wrapper around Electron's net.request feature.
@@ -32,7 +33,7 @@ const netRequest = (url) =>
 /**
  * Promise wrapper around node's http request function. The primary
  * use case is to pass in a socket path to be able to make http
- * requests to the client daemon.
+ * requests to the cache daemon.
  * @param options
  * @param reqBody
  * @returns {Promise}
@@ -65,6 +66,14 @@ const unixSocketRequest = (options, reqBody) =>
 
         resolve(parsedResponse);
       } catch (e) {
+        log.error(
+          `unixSocketRequest(${JSON.stringify({
+            path: options.path,
+            socketPath: options.socketPath,
+          })}):`,
+          e,
+        );
+
         reject(e);
       }
     });

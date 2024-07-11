@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -63,7 +63,7 @@ module('Unit | Model | group', function (hooks) {
 
   test('it has an `addMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/groups/123abc:add-members', (schema, request) => {
+    this.server.post('/groups/123abc:add-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['123_abc', 'foobar'],
@@ -94,7 +94,7 @@ module('Unit | Model | group', function (hooks) {
 
   test('it has a `removeMembers` method that groups a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/groups/123abc:remove-members', (schema, request) => {
+    this.server.post('/groups/123abc:remove-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['1', '3'],
@@ -125,7 +125,7 @@ module('Unit | Model | group', function (hooks) {
 
   test('it has a `removeMember` method that deletes a single member set using `removeMembers` method', async function (assert) {
     assert.expect(1);
-    this.server.post('/v1/groups/123abc:remove-members', (schema, request) => {
+    this.server.post('/groups/123abc:remove-members', (schema, request) => {
       const body = JSON.parse(request.requestBody);
       assert.deepEqual(body, {
         member_ids: ['3'],

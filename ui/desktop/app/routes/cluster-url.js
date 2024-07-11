@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -74,7 +74,7 @@ export default class ClusterUrlRoute extends Route {
         'errors.cluster-url-verification-failed.description',
       );
       this.flashMessages.danger(errorMessage, {
-        noticationType: 'error',
+        notificationType: 'error',
         sticky: true,
         dismiss: (flash) => flash.destroyMessage(),
       });

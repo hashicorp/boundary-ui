@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -23,6 +23,10 @@ module('Unit | Serializer | credential library', function (hooks) {
       path: '/vault/path',
       http_method: 'GET',
       version: 1,
+      credential_type: 'ssh_private_key',
+      credential_mapping_overrides: [
+        { key: 'username_attribute', value: 'user' },
+      ],
     });
     const snapshot = record._createSnapshot();
     const serializedRecord = serializer.serialize(snapshot);
@@ -32,6 +36,10 @@ module('Unit | Serializer | credential library', function (hooks) {
       name: 'Name',
       description: 'Description',
       version: 1,
+      credential_type: 'ssh_private_key',
+      credential_mapping_overrides: {
+        username_attribute: 'user',
+      },
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
@@ -54,6 +62,10 @@ module('Unit | Serializer | credential library', function (hooks) {
           path: '/vault/path',
           http_method: 'GET',
           version: 1,
+          credential_type: 'ssh_private_key',
+          credential_mapping_overrides: [
+            { key: 'private_key_attribute', value: 'test' },
+          ],
         },
       },
     });
@@ -65,6 +77,12 @@ module('Unit | Serializer | credential library', function (hooks) {
       credential_store_id: null,
       name: 'Name',
       description: 'Description',
+      credential_type: 'ssh_private_key',
+      credential_mapping_overrides: {
+        private_key_attribute: 'test',
+        private_key_passphrase_attribute: null,
+        username_attribute: null,
+      },
       attributes: {
         path: '/vault/path',
         http_method: 'GET',
@@ -80,6 +98,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
       http_method: '',
       path: null,
+      credential_type: null,
+      credential_mapping_overrides: {},
     });
     const vaultSSHCertificateRecord = store.createRecord('credential-library', {
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
@@ -99,6 +119,8 @@ module('Unit | Serializer | credential library', function (hooks) {
       description: null,
       name: null,
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+      credential_type: null,
+      credential_mapping_overrides: null,
     });
     assert.deepEqual(serializedVaultSSHCertificateRecord, {
       attributes: {
@@ -138,6 +160,8 @@ module('Unit | Serializer | credential library', function (hooks) {
         description: null,
         name: null,
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: null,
+        credential_mapping_overrides: null,
       },
       'http_request_body attribute is not expected',
     );
@@ -156,6 +180,8 @@ module('Unit | Serializer | credential library', function (hooks) {
         description: null,
         name: null,
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: null,
+        credential_mapping_overrides: null,
       },
       'http_request_body attribute is expected',
     );

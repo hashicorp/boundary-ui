@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -10,30 +10,31 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -94,7 +95,7 @@
     <InfoField
       @value={{t 'resources.host-catalog.types.azure'}}
       @icon='azure-color'
-      disabled={{form.disabled}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'titles.provider'}}</F.Label>
@@ -103,49 +104,73 @@
     </InfoField>
   {{/if}}
 
-  <form.input
-    @name='tenant_id'
-    @type='tenant_id'
+  <Hds::Form::TextInput::Field
+    name='tenant_id'
     @value={{@model.tenant_id}}
-    @label={{t 'form.tenant_id.label'}}
-    @helperText={{t 'form.tenant_id.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.azure'}}
-    readonly={{false}}
-  />
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'tenant_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.tenant_id.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.tenant_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='subscription_id'
-    @type='subscription_id'
+  <Hds::Form::TextInput::Field
+    name='subscription_id'
     @value={{@model.subscription_id}}
-    @label={{t 'form.subscription_id.label'}}
-    @helperText={{t 'form.subscription_id.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.azure'}}
-    readonly={{false}}
-  />
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'subscription_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.subscription_id.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.subscription_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='client_id'
-    @type='client_id'
+  <Hds::Form::TextInput::Field
+    name='client_id'
     @value={{@model.client_id}}
-    @label={{t 'resources.host-catalog.form.azure_client_id.label'}}
-    @helperText={{t 'resources.host-catalog.form.azure_client_id.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.azure'}}
-    readonly={{false}}
-  />
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'client_id')}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.host-catalog.form.azure_client_id.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'resources.host-catalog.form.azure_client_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='secret_value'
-    @type='secret_value'
+  <Hds::Form::TextInput::Field
+    name='secret_value'
     @value={{@model.secret_value}}
-    @label={{t 'form.secret.label'}}
-    @helperText={{t 'form.secret.help'}}
-    @linkText={{t 'actions.learn-more'}}
-    @link={{doc-url 'host-catalog.azure'}}
-    readonly={{false}}
-  />
+    @isRequired={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'secret_value')}}
+    as |F|
+  >
+    <F.Label>{{t 'form.secret.label'}}</F.Label>
+    <F.HelperText>
+      {{t 'form.secret.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.azure'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Checkbox::Field
     name='disable_credential_rotation'

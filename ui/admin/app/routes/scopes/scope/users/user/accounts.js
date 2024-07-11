@@ -1,20 +1,16 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { hash, all } from 'rsvp';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeUsersUserAccountsRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
 
   // =methods
 
@@ -33,21 +29,5 @@ export default class ScopesScopeUsersUserAccountsRoute extends Route {
         ),
       ),
     });
-  }
-
-  // =actions
-
-  /**
-   * Remove an account from the current role and redirect to accounts index.
-   * @param {UserModel} user
-   * @param {AccountModel} account
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removeAccount(user, account) {
-    await user.removeAccount(account.id);
-    await this.refresh();
   }
 }

@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -13,7 +13,10 @@
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::Actions @model={{@model.hostCatalog}} />
+    <HostCatalogs::HostCatalog::Actions
+      @model={{@model.hostCatalog}}
+      @delete={{this.hostCatalogs.delete}}
+    />
   </page.actions>
 
   <page.navigation>
@@ -52,13 +55,10 @@
               <HostCatalogTypeBadge @model={{B.data}} />
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <Hds::Text::Code>{{B.data.id}}</Hds::Text::Code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               <Hds::Text::Code>{{B.data.address}}</Hds::Text::Code>

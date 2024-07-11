@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
@@ -9,7 +9,7 @@
 
   <page.header>
     <h2>
-      {{t 'resources.policy.title'}}
+      {{t 'resources.policy.title_plural'}}
       <DocLink @doc='storage-policy' @iconSize='large' />
     </h2>
     <p>{{t 'resources.policy.description'}}</p>
@@ -107,7 +107,7 @@
                       <dd.Interactive
                         @text={{t 'resources.policy.actions.delete'}}
                         @color='critical'
-                        {{on 'click' (route-action 'delete' B.data)}}
+                        {{on 'click' (fn this.delete B.data)}}
                       />
                     {{/if}}
                   </Hds::Dropdown>

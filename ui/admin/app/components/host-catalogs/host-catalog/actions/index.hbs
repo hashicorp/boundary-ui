@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Dropdown
@@ -29,7 +29,7 @@
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'delete' @model)}}
+      {{on 'click' (fn @delete @model)}}
     >
       {{t 'resources.host-catalog.actions.delete'}}
     </dropdown.button>

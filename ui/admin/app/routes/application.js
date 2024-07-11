@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -8,6 +8,7 @@ import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
+import { formatDbName } from 'api/services/indexed-db';
 
 /**
  * Entry route for the application.
@@ -21,6 +22,8 @@ export default class ApplicationRoute extends Route {
   @service intl;
   @service features;
   @service featureEdition;
+  @service indexedDb;
+  @service('browser/window') window;
 
   // =attributes
 
@@ -62,33 +65,15 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     const theme = this.session.get('data.theme');
     this.toggleTheme(theme);
-  }
 
-  // =actions
-
-  /**
-   * Delegates invalidation to the session service.
-   */
-  @action
-  invalidateSession() {
-    this.session.invalidate();
-  }
-
-  /**
-   * Invalidates the session if a 401 error occurs and returns false to
-   * prevent further error handling.
-   * Returns true in all other cases, allowing error handling to occur (such
-   * as displaying the `error.hbs` template, if one exists).
-   * @param {Error} e
-   */
-  @action
-  error(e) {
-    const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
-    if (isUnauthenticated) {
-      this.session.invalidate();
-      return false;
+    // Setup the DB from a successful authentication restoration
+    if (this.session.isAuthenticated) {
+      const userId = this.session.data?.authenticated?.user_id;
+      const hostUrl = this.window.location.host;
+      if (userId && hostUrl) {
+        this.indexedDb.setup(formatDbName(userId, hostUrl));
+      }
     }
-    return true;
   }
 
   /**
@@ -117,17 +102,20 @@ export default class ApplicationRoute extends Route {
     }
   }
 
+  /**
+   * Invalidates the session if a 401 error occurs and returns false to
+   * prevent further error handling.
+   * Returns true in all other cases, allowing error handling to occur (such
+   * as displaying the `error.hbs` template, if one exists).
+   * @param {Error} e
+   */
   @action
-  toggleEdition(edition) {
-    this.featureEdition.setEdition(edition);
-  }
-
-  @action
-  toggleFeature(feature) {
-    if (this.features.isEnabled(feature)) {
-      this.features.disable(feature);
-    } else {
-      this.features.enable(feature);
+  error(e) {
+    const isUnauthenticated = A(e?.errors)?.[0]?.isUnauthenticated;
+    if (isUnauthenticated) {
+      this.session.invalidate();
+      return false;
     }
+    return true;
   }
 }

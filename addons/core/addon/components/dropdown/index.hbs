@@ -1,9 +1,10 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Hds::Dropdown
+  ...attributes
   @height='314px'
   @onClose={{this.close}}
   @listPosition={{@listPosition}}
@@ -11,7 +12,7 @@
 >
   <DD.ToggleButton
     @color='secondary'
-    @text={{@name}}
+    @text={{@toggleText}}
     @count={{@checkedItems.length}}
     {{on 'click' this.open}}
   />

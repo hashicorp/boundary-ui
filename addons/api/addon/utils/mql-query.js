@@ -1,16 +1,16 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /**
  * Takes a POJO representing a filter query and converts it to an
- * MQL expression string which is understood by the client daemon.
+ * MQL expression string which is understood by the cache daemon.
  *
  * @example
  *   const filter = generateMQLFilterExpression({
- *     name: [{ contains: 'search text' }],
- *     scope: [{ equals: 'scope1'}, { equals: 'scope2' }],
+ *     name: { logicalOperator: 'and', values: [{ notEquals: 'search text' }, { notEquals: 'test' }] },
+ *     scope_id: [{ equals: 'scope1'}, { equals: 'scope2' }],
  *   });
  *
  *   // (name % "search text") and (scope_id = "scope1" or scope_id = "scope2")
@@ -21,10 +21,10 @@ export function generateMQLFilterExpression(filterObj) {
   }
 
   const expressions = Object.entries(filterObj)
-    .map(([key, filterObjValue]) => {
-      const filterValueArray = Array.isArray(filterObjValue)
-        ? filterObjValue
-        : filterObjValue.values;
+    .map(([key, filterArrayOrObject]) => {
+      const filterValueArray = Array.isArray(filterArrayOrObject)
+        ? filterArrayOrObject
+        : filterArrayOrObject.values;
 
       let clauses;
       const filterValues = filterValueArray.map((filterObjValue) => {
@@ -53,7 +53,7 @@ export function generateMQLFilterExpression(filterObj) {
       });
 
       // Default to `or` if we don't have a logical operator
-      const { logicalOperator } = filterObjValue;
+      const { logicalOperator } = filterArrayOrObject;
       if (logicalOperator === 'and') {
         clauses = and(filterValues);
       } else {
@@ -68,7 +68,7 @@ export function generateMQLFilterExpression(filterObj) {
 
 /**
  * Takes a POJO representing a search query and converts it to an
- * MQL expression string which is understood by the client daemon.
+ * MQL expression string which is understood by the cache daemon.
  *
  * @example
  *   const search = generateMQLSearchExpression({

@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -58,19 +58,22 @@
               {{/if}}
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               {{#if B.data.isAWS}}
                 <Hds::Badge
                   @text={{t 'resources.storage-bucket.titles.amazon_s3'}}
                   @icon='aws-color'
+                />
+
+              {{else if B.data.isMinIO}}
+                <Hds::Badge
+                  @text={{t 'resources.storage-bucket.titles.minio'}}
+                  @icon='cloud-upload'
                 />
               {{else}}
                 {{B.data.plugin.name}}
@@ -116,7 +119,7 @@
                       <dd.Interactive
                         @text={{t 'resources.storage-bucket.actions.delete'}}
                         @color='critical'
-                        {{on 'click' (route-action 'delete' B.data)}}
+                        {{on 'click' (fn this.delete B.data)}}
                       />
                     {{/if}}
                   </Hds::Dropdown>

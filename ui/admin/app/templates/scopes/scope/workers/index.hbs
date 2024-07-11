@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -19,9 +19,10 @@
   <page.actions>
     {{#if (can 'create worker led worker' this.scope collection='workers')}}
       {{#if @model}}
-        <Rose::LinkButton @route='scopes.scope.workers.new' @style='primary'>{{t
-            'titles.new'
-          }}</Rose::LinkButton>
+        <Hds::Button
+          @route='scopes.scope.workers.new'
+          @text={{t 'titles.new'}}
+        />
       {{/if}}
     {{/if}}
   </page.actions>
@@ -136,13 +137,10 @@
             <B.Td>{{B.data.release_version}}</B.Td>
             <B.Td>{{B.data.address}} </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
           </B.Tr>
         </:body>

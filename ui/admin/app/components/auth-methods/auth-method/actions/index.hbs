@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{#if (or @model.isOIDC @model.isLDAP)}}
@@ -23,7 +23,7 @@
         <form.radioGroup
           @name='theme'
           @selectedValue={{@model.state}}
-          @changed={{route-action 'changeState'}}
+          @changed={{fn @changeState @model}}
           as |radioGroup|
         >
           {{#each @model.options.state as |state|}}
@@ -48,14 +48,14 @@
   {{#if @model.isPrimary}}
     <dropdown.button
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'removeAsPrimary' @model)}}
+      {{on 'click' (fn @removeAsPrimary @model)}}
     >
       {{t 'resources.auth-method.actions.remove-as-primary'}}
     </dropdown.button>
   {{else}}
     <dropdown.button
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'makePrimary' @model)}}
+      {{on 'click' (fn @makePrimary @model)}}
     >
       {{t 'resources.auth-method.actions.make-primary'}}
     </dropdown.button>
@@ -86,7 +86,7 @@
     <dropdown.button
       @style='danger'
       @disabled={{@model.canSave}}
-      {{on 'click' (route-action 'delete' @model)}}
+      {{on 'click' (fn @delete @model)}}
     >
       {{t 'resources.auth-method.actions.delete'}}
     </dropdown.button>

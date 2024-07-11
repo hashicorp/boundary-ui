@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import BaseModel from '../../models/base';
@@ -74,6 +74,18 @@ export default class GeneratedCredentialLibraryModel extends BaseModel {
     description: 'The path in Vault to request credentials from.',
   })
   path;
+
+  @attr('string', {
+    for: 'vault-generic',
+    description: 'It indicates the type of credential the library returns.',
+  })
+  credential_type;
+
+  @attr('object-as-array', {
+    for: 'vault-generic',
+    description: 'It indicates the credential mapping overrides.',
+  })
+  credential_mapping_overrides;
 
   @attr('string', {
     for: 'vault-ssh-certificate',

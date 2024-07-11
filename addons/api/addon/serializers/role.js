@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import ApplicationSerializer from './application';
@@ -14,7 +14,7 @@ export default class RoleSerializer extends ApplicationSerializer {
    * include **only grants** and the version.  Normally, grants are not
    * serialized.
    * If `adapterOptions.principalIDs` is set (to an array of user and
-   * group IDs), then the payload is serialized via `serializewithPrincipals`.
+   * group IDs), then the payload is serialized via `serializeWithPrincipals`.
    * @override
    * @param {Snapshot} snapshot
    * @return {object}
@@ -26,7 +26,7 @@ export default class RoleSerializer extends ApplicationSerializer {
       serialized = this.serializeWithGrantStrings(snapshot, grantStrings);
     const principalIDs = snapshot?.adapterOptions?.principalIDs;
     if (principalIDs)
-      serialized = this.serializewithPrincipals(snapshot, principalIDs);
+      serialized = this.serializeWithPrincipals(snapshot, principalIDs);
     return serialized;
   }
 
@@ -50,7 +50,7 @@ export default class RoleSerializer extends ApplicationSerializer {
    * @param {[string]} principalIDs
    * @return {object}
    */
-  serializewithPrincipals(snapshot, principalIDs) {
+  serializeWithPrincipals(snapshot, principalIDs) {
     return {
       version: snapshot.attr('version'),
       principal_ids: principalIDs,

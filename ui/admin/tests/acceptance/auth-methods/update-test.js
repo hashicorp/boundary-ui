@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
@@ -23,6 +24,7 @@ import {
 module('Acceptance | auth-methods | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
 
@@ -52,6 +54,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
   const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   const TOGGLE_SELECTOR = '[name="prompts"]';
+
+  const SIGNING_ALGORITHMS_REMOVE_BTN_SELECTOR =
+    '[data-test-remove-option-button]';
+  const SIGNING_ALGORITHMS_INPUT_SELECTOR =
+    '.list-wrapper-field tbody tr:last-child select';
+  const SIGNING_ALGORITHMS_ADD_BTN_SELECTOR = '[data-test-add-option-button]';
 
   const instances = {
     scopes: {
@@ -123,14 +131,16 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="issuer"]', 'issuer');
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
+
     // Remove all signing algorithms
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(1) [title="Remove"]').map((element) =>
-        click(element),
-      ),
-    );
-    await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    let removeButtons = findAll(SIGNING_ALGORITHMS_REMOVE_BTN_SELECTOR);
+
+    for (const element of removeButtons) {
+      await click(element);
+    }
+    await select(SIGNING_ALGORITHMS_INPUT_SELECTOR, 'RS384');
+    await click(SIGNING_ALGORITHMS_ADD_BTN_SELECTOR);
+
     // Remove all allowed audiences
     const allowedAudiencesList = findAll(ALLOWED_AUDIENCES_REMOVE_BTN_SELECTOR);
 
@@ -153,14 +163,24 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'allowed_audiences');
 
     // Remove all claim maps
-    await Promise.all(
-      findAll('form fieldset:nth-of-type(4) [title="Remove"]').map((element) =>
-        click(element),
-      ),
+    const claimMaps = await Promise.all(
+      findAll('[name="account_claim_maps"] [data-test-remove-button]'),
     );
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    for (const element of claimMaps) {
+      await click(element);
+    }
+
+    await fillIn(
+      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
+      'from_claim',
+    );
+
+    await select(
+      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
+      'email',
+    );
+
+    await click('[name="account_claim_maps"] button');
 
     // Remove all certificates
     const certificatesList = findAll(IDP_CERTS_REMOVE_BTN_SELECTOR);
@@ -168,15 +188,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
     for (const element of certificatesList) {
       await click(element);
     }
-
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);
     await fillIn('[name="max_age"]', '5');
     await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
     await click(TOGGLE_SELECTOR);
-    await click('form [type="submit"]:not(:disabled)');
+    await click('.rose-form-actions [type="submit"]');
 
     const authMethod = this.server.schema.authMethods.findBy({ name });
+
     assert.strictEqual(authMethod.name, name);
     assert.strictEqual(authMethod.description, 'description');
     assert.strictEqual(authMethod.attributes.issuer, 'issuer');
@@ -225,11 +245,12 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn('[name="user_attr"]', 'user attr');
     await fillIn('[name="user_filter"]', 'user filter');
     // Remove all attribute maps
-    await Promise.all(
-      findAll(
-        '[name="account_attribute_maps"] .hds-button--color-critical',
-      ).map((element) => click(element)),
+    const attributeMaps = await Promise.all(
+      findAll('[name="account_attribute_maps"] .hds-button--color-critical'),
     );
+    for (const element of attributeMaps) {
+      await click(element);
+    }
     await fillIn('[name="account_attribute_maps"] input', 'attribute');
     await select('[name="account_attribute_maps"] select', 'email');
     await click('[name="account_attribute_maps"] button');
@@ -347,8 +368,9 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'existing auth method');
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
+
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
   test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {

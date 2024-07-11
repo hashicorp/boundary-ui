@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -12,37 +12,35 @@
   as |form|
 >
 
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </InfoField>
 
-  <form.input
-    @name='name'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
-    @isOptional={{true}}
+    name='description'
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    name='description'
+    @isOptional={{true}}
     disabled={{form.disabled}}
     as |F|
   >
@@ -57,24 +55,25 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <form.input
-    @name='issuer'
-    @type='text'
+  <Hds::Form::TextInput::Field
     @value={{@model.issuer}}
-    @label={{t 'form.issuer.label'}}
-    @helperText={{t 'form.issuer.help'}}
-    @error={{@model.errors.issuer}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.issuer}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    name='issuer'
+    {{on 'input' (set-from-event @model 'issuer')}}
+    as |F|
   >
+    <F.Label>{{t 'form.issuer.label'}}</F.Label>
+    <F.HelperText>{{t 'form.issuer.help'}}</F.HelperText>
     {{#if @model.errors.issuer}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.issuer as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Checkbox::Field
     name='disable_discovered_config_validation'
@@ -95,164 +94,90 @@
     </F.HelperText>
   </Hds::Form::Checkbox::Field>
 
-  <form.input
-    @name='client_id'
-    @type='text'
+  <Hds::Form::TextInput::Field
+    name='client_id'
     @value={{@model.client_id}}
-    @label={{t 'form.client_id.label'}}
-    @helperText={{t 'form.client_id.help'}}
-    @error={{@model.errors.client_id}}
-    readonly={{false}}
-    as |field|
+    @isRequired={{true}}
+    @isInvalid={{@model.errors.client_id}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'client_id')}}
+    as |F|
   >
+    <F.Label>{{t 'form.client_id.label'}}</F.Label>
+    <F.HelperText>{{t 'form.client_id.help'}}</F.HelperText>
     {{#if @model.errors.client_id}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.client_id as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='client_secret'
-    @type='password'
+  <Hds::Form::TextInput::Field
+    name='client_secret'
     @value={{@model.client_secret}}
-    @label={{t 'form.client_secret.label'}}
-    @helperText={{t 'form.client_secret.help'}}
-    @error={{@model.errors.client_secret}}
-    readonly={{false}}
+    @isRequired={{true}}
+    @isInvalid={{@model.errors.client_secret}}
+    disabled={{form.disabled}}
     @hasVisibilityToggle={{false}}
-    as |field|
+    @type='password'
+    {{on 'input' (set-from-event @model 'client_secret')}}
+    as |F|
   >
+    <F.Label>{{t 'form.client_secret.label'}}</F.Label>
+    <F.HelperText>{{t 'form.client_secret.help'}}</F.HelperText>
     {{#if @model.errors.client_secret}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.client_secret as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.client_secret_hmac}}
-      @label={{t 'form.client_secret_hmac.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'form.client_secret_hmac.label'}}</F.Label>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
 
   {{! Signing Algorithms }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.signing_algorithms.label'}}</:title>
-    <:description>{{t 'form.signing_algorithms.help'}}</:description>
-    <:body>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.signing_algorithms.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.signing_algorithms.help'}}
+      </F.HelperText>
+
       {{#if @model.errors.signing_algorithms}}
-        <Rose::Form::Errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.signing_algorithms as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </Rose::Form::Errors>
+        </F.Error>
       {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row @hidden={{true}} as |row|>
-            <row.headerCell>{{t 'titles.value'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.signing_algorithms as |algorithm i|}}
-            <body.row as |row|>
-              <row.cell>
+    </:fieldset>
 
-                <Hds::Form::Select::Field
-                  @value={{algorithm.value}}
-                  @isInvalid={{@model.errors.signing_algorithms}}
-                  disabled={{form.disabled}}
-                  {{on 'change' (set-from-event algorithm 'value')}}
-                  as |F|
-                >
-                  <F.Label class='sr-only'>{{t
-                      'form.algorithm.label'
-                    }}</F.Label>
-                  <F.Options>
-                    {{#each this.signingAlgorithms as |algorithmOption|}}
-                      <option
-                        value={{algorithmOption}}
-                        selected={{eq algorithmOption algorithm.value}}
-                      >{{algorithmOption}}</option>
-                    {{/each}}
-                  </F.Options>
-                </Hds::Form::Select::Field>
-
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'signing_algorithms' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
-
-          <body.row as |row|>
-            <row.cell>
-
-              <Hds::Form::Select::Field
-                @value={{this.newSigningAlgorithm}}
-                disabled={{form.disabled}}
-                {{on 'change' (set-from-event this 'newSigningAlgorithm')}}
-                as |F|
-              >
-                <F.Label class='sr-only'>{{t
-                    'resources.auth-method.titles.new-signing-algorithm'
-                  }}</F.Label>
-                <F.Options>
-                  {{#each this.signingAlgorithms as |algorithmOption|}}
-                    <option
-                      value={{algorithmOption}}
-                      selected={{eq algorithmOption this.newSigningAlgorithm}}
-                    >{{algorithmOption}}</option>
-                  {{/each}}
-                </F.Options>
-              </Hds::Form::Select::Field>
-
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn
-                    @addStringItem 'signing_algorithms' this.newSigningAlgorithm
-                  )
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+    <:field as |F|>
+      <F.Select
+        @name='signing_algorithms'
+        @model={{@model}}
+        @selectOptions={{this.signingAlgorithms}}
+        @width='100%'
+      />
+    </:field>
+  </Form::Field::ListWrapper>
 
   {{! Allowed Audiences }}
   <Form::Field::ListWrapper
@@ -322,138 +247,45 @@
   </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
-  <Rose::Form::Fieldset>
-    <:title>{{t 'form.account_claim_maps.label'}}</:title>
-    <:description>{{t 'form.account_claim_maps.help'}}</:description>
-    <:body>
+  <Form::Field::ListWrapper
+    @layout='horizontal'
+    @isOptional={{true}}
+    @disabled={{form.disabled}}
+  >
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'form.account_claim_maps.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'form.account_claim_maps.help'}}
+      </F.HelperText>
+
       {{#if @model.errors.account_claim_maps}}
-        <Rose::Form::Errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.account_claim_maps as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </Rose::Form::Errors>
+        </F.Error>
       {{/if}}
-      <Rose::Table @style='condensed' as |table|>
-        <table.header as |header|>
-          <header.row as |row|>
-            <row.headerCell>{{t 'form.from_claim.label'}}</row.headerCell>
-            <row.headerCell>{{t 'form.to_claim.label'}}</row.headerCell>
-            <row.headerCell>{{t 'titles.actions'}}</row.headerCell>
-          </header.row>
-        </table.header>
-        <table.body as |body|>
-          {{#each @model.account_claim_maps as |claimMap i|}}
-            <body.row as |row|>
-              <row.cell>
-                <form.input
-                  @type='text'
-                  @name='from_claim'
-                  @value={{claimMap.from}}
-                  @error={{@model.errors.account_claim_maps}}
-                  @contextual={{true}}
-                  as |field|
-                >
-                  <field.label>{{t 'form.from_claim.label'}}</field.label>
-                  <field.field />
-                </form.input>
-              </row.cell>
-              <row.cell>
-
-                <Hds::Form::Select::Field
-                  @value={{claimMap.to}}
-                  @isInvalid={{@model.errors.account_claim_maps}}
-                  disabled={{form.disabled}}
-                  {{on 'change' (set-from-event claimMap 'to')}}
-                  as |F|
-                >
-                  <F.Label class='sr-only'>{{t 'form.to_claim.label'}}</F.Label>
-                  <F.Options>
-                    {{#each this.toClaims as |toClaimOption|}}
-                      <option
-                        value={{toClaimOption}}
-                        selected={{eq toClaimOption claimMap.to}}
-                      >{{toClaimOption}}</option>
-                    {{/each}}
-                  </F.Options>
-                </Hds::Form::Select::Field>
-
-              </row.cell>
-              <row.cell @shrink={{true}}>
-                <Rose::Button
-                  @style='warning'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title={{t 'actions.remove'}}
-                  @disabled={{if
-                    @model.isNew
-                    false
-                    (if form.isEditable false true)
-                  }}
-                  {{on 'click' (fn @removeItemByIndex 'account_claim_maps' i)}}
-                >
-                  {{t 'actions.remove'}}
-                </Rose::Button>
-              </row.cell>
-            </body.row>
-          {{/each}}
-
-          <body.row as |row|>
-            <row.cell>
-              <form.input
-                @type='text'
-                @name='from_claim'
-                @value={{this.newFromClaim}}
-                @label={{t 'resources.auth-method.titles.new-from-claim'}}
-              />
-            </row.cell>
-            <row.cell>
-
-              <Hds::Form::Select::Field
-                @value={{this.newToClaim}}
-                disabled={{form.disabled}}
-                {{on 'change' (set-from-event this 'newToClaim')}}
-                as |F|
-              >
-                <F.Label class='sr-only'>{{t
-                    'resources.auth-method.titles.new-to-claim'
-                  }}</F.Label>
-                <F.Options>
-                  {{#each this.toClaims as |toClaimOption|}}
-                    <option
-                      value={{toClaimOption}}
-                      selected={{eq toClaimOption this.newToClaim}}
-                    >{{toClaimOption}}</option>
-                  {{/each}}
-                </F.Options>
-              </Hds::Form::Select::Field>
-
-            </row.cell>
-            <row.cell @shrink={{true}}>
-              <Rose::Button
-                @style='secondary'
-                title={{t 'actions.add'}}
-                @disabled={{if
-                  @model.isNew
-                  false
-                  (if form.isEditable false true)
-                }}
-                {{on
-                  'click'
-                  (fn
-                    @addAccountMapItem
-                    'account_claim_maps'
-                    this.newFromClaim
-                    this.newToClaim
-                  )
-                }}
-              >
-                {{t 'actions.add'}}
-              </Rose::Button>
-            </row.cell>
-          </body.row>
-        </table.body>
-      </Rose::Table>
-    </:body>
-  </Rose::Form::Fieldset>
+    </:fieldset>
+    <:field as |F|>
+      <F.KeyValue
+        @name='account_claim_maps'
+        @options={{@model.account_claim_maps}}
+        @model={{@model}}
+        @keyLabel={{t 'form.from_claim.label'}}
+        @valueLabel={{t 'form.to_claim.label'}}
+        @width='100%'
+      >
+        <:key as |K|>
+          <K.text />
+        </:key>
+        <:value as |V|>
+          <V.select @selectOptions={{this.toClaims}} />
+        </:value>
+      </F.KeyValue>
+    </:field>
+  </Form::Field::ListWrapper>
 
   {{! Certificates }}
   <Form::Field::ListWrapper
@@ -488,45 +320,45 @@
 
   </Form::Field::ListWrapper>
 
-  <form.input
-    @name='max_age'
-    @type='number'
+  <Hds::Form::TextInput::Field
+    name='max_age'
     @value={{@model.max_age}}
-    @label={{t 'form.max_age.label'}}
-    @helperText={{t 'form.max_age.help'}}
-    @error={{@model.errors.max_age}}
-    readonly={{false}}
-    step='1'
-    min='0'
-    as |field|
+    @isOptional={{true}}
+    @isInvalid={{@model.errors.max_age}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'max_age')}}
+    as |F|
   >
+    <F.Label>{{t 'form.max_age.label'}}</F.Label>
+    <F.HelperText>{{t 'form.max_age.help'}}</F.HelperText>
     {{#if @model.errors.max_age}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.max_age as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
-  <form.input
-    @name='api_url_prefix'
-    @type='test'
+  <Hds::Form::TextInput::Field
+    name='api_url_prefix'
     @value={{@model.api_url_prefix}}
-    @label={{t 'form.api_url_prefix.label'}}
-    @helperText={{t 'form.api_url_prefix.help'}}
-    @error={{@model.errors.api_url_prefix}}
-    readonly={{false}}
-    as |field|
+    @isRequired={{true}}
+    @isInvalid={{@model.errors.api_url_prefix}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'api_url_prefix')}}
+    as |F|
   >
+    <F.Label>{{t 'form.api_url_prefix.label'}}</F.Label>
+    <F.HelperText>{{t 'form.api_url_prefix.help'}}</F.HelperText>
     {{#if @model.errors.api_url_prefix}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.api_url_prefix as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Fieldset @isOptional={{true}} as |F|>
     <F.Legend>{{t 'form.prompts.label'}}</F.Legend>
@@ -554,7 +386,7 @@
           as |G|
         >
           {{#each this.prompts as |prompt|}}
-            <G.Checkbox::Field
+            <G.CheckboxField
               @id={{prompt}}
               checked={{includes prompt this.selectedPrompts}}
               {{on 'change' (fn this.updatePrompt prompt)}}
@@ -566,7 +398,7 @@
               <F.HelperText>
                 {{t (concat 'resources.auth-method.form.' prompt '.help')}}
               </F.HelperText>
-            </G.Checkbox::Field>
+            </G.CheckboxField>
           {{/each}}
         </Hds::Form::Checkbox::Group>
       {{/unless}}
@@ -581,13 +413,14 @@
   </Hds::Form::Fieldset>
 
   {{#unless @model.isNew}}
-    <form.input
+    <Hds::Form::TextInput::Field
       @value={{@model.callback_url}}
-      @label={{t 'form.callback_url.label'}}
-      @helperText={{t 'form.callback_url.help'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>{{t 'form.callback_url.label'}}</F.Label>
+      <F.HelperText>{{t 'form.callback_url.help'}}</F.HelperText>
+    </Hds::Form::TextInput::Field>
   {{/unless}}
 
   {{#if (can 'save model' @model)}}

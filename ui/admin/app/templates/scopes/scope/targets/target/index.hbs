@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -18,7 +18,10 @@
   </page.navigation>
 
   <page.actions>
-    <Targets::Target::Actions @model={{@model}} />
+    <Targets::Target::Actions
+      @model={{@model}}
+      @delete={{this.targets.delete}}
+    />
   </page.actions>
 
   <page.body>
@@ -26,13 +29,85 @@
       <bc.Body>
         <Form::Target
           @model={{@model}}
-          @submit={{route-action 'saveWithAddress' @model}}
-          @cancel={{route-action 'cancel' @model}}
+          @submit={{fn this.targets.saveWithAddress @model}}
+          @cancel={{fn this.targets.cancel @model}}
         />
       </bc.Body>
-      {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-        <bc.Sidebar>
-          <div class='target-sidebar'>
+      <bc.Sidebar>
+        {{#if @model.aliases}}
+          <div class='target-sidebar-aliases'>
+            <h3>{{t 'resources.alias.title_plural'}}</h3>
+            <p class='description'>
+              {{t 'resources.alias.form.sidebar.help'}}
+            </p>
+            {{#each this.aliases as |alias|}}
+              <LinkListPanel as |P|>
+                <P.Item
+                  @icon='at-sign'
+                  @color='boundary'
+                  @text={{alias.value}}
+                  @route={{'scopes.scope.targets.target.manage-alias'}}
+                  @model={{alias.id}}
+                />
+              </LinkListPanel>
+            {{/each}}
+
+            {{#if this.showFlyoutBtn}}
+              <Hds::Button
+                data-test-view-more
+                @text={{t 'resources.target.actions.view-more-aliases'}}
+                @color='secondary'
+                {{on 'click' this.toggleFlyout}}
+              />
+            {{/if}}
+            {{#if this.showFlyOutComponent}}
+              <Hds::Flyout
+                data-test-flyout
+                @onClose={{this.toggleFlyout}}
+                as |M|
+              >
+                <M.Header>
+                  {{t
+                    'resources.target.titles.aliases-flyout'
+                    targetDisplayName=@model.displayName
+                  }}
+                </M.Header>
+
+                <M.Body>
+                  {{#each this.remainingAliases as |alias|}}
+                    <LinkListPanel as |P|>
+                      <P.Item
+                        @icon='at-sign'
+                        @color='boundary'
+                        @text={{alias.value}}
+                        @route='scopes.scope.targets.target.manage-alias'
+                        @model={{alias.id}}
+                      />
+                    </LinkListPanel>
+                  {{/each}}
+                </M.Body>
+              </Hds::Flyout>
+            {{/if}}
+          </div>
+        {{else}}
+          {{#if (can 'create model' this.globalScope collection='aliases')}}
+            <div class='target-sidebar-aliases'>
+              <h3>{{t 'resources.alias.title_plural'}}</h3>
+              <p class='description'>
+                {{t 'resources.alias.form.sidebar.help'}}
+              </p>
+
+              <Hds::Button
+                @icon='plus'
+                @text={{t 'resources.target.actions.add-an-alias'}}
+                @color='secondary'
+                @route='scopes.scope.targets.target.create-alias'
+              />
+            </div>
+          {{/if}}
+        {{/if}}
+        <div class='target-sidebar'>
+          {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
             <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
             <p class='description'>
               {{t 'resources.target.form.sidebar.help'}}
@@ -65,11 +140,9 @@
                 @route='scopes.scope.targets.target.enable-session-recording'
               />
             {{/if}}
-          </div>
-        </bc.Sidebar>
-      {{/if}}
+          {{/if}}
+        </div>
+      </bc.Sidebar>
     </Rose::Layout::BodyContent>
-
   </page.body>
-
 </Rose::Layout::Page>

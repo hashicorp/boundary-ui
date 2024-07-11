@@ -1,21 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { all } from 'rsvp';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
-  @service router;
 
   // =methods
 
@@ -36,8 +30,15 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
     const { id: scope_id } = this.modelFor('scopes.scope');
     const credentialStores = await this.store.query('credential-store', {
       scope_id,
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
     });
-    await all(
+
+    // TODO: For some reason, not returning promises fixes
+    //  an ember bug similar to this reported issue:
+    //  https://github.com/emberjs/data/issues/8299.
+    //  This is a temporary fix until we can find a better solution or
+    //  we upgrade ember data to try to fix the issue.
+    await Promise.all(
       credentialStores.map(({ id: credential_store_id, isStatic }) => {
         if (isStatic) {
           this.store.query('credential', {
@@ -58,33 +59,5 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesRoute e
       credentialLibraries,
       credentials,
     };
-  }
-
-  // =actions
-
-  /**
-   * Add credential libraries to current target
-   * @param {TargetModel} target
-   * @param {[string]} credentialLibraryIDs
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(target, credentialLibraryIDs) {
-    await target.addBrokeredCredentialSources(credentialLibraryIDs);
-    this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources',
-    );
-  }
-
-  /**
-   * Redirect to target credential sources as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith(
-      'scopes.scope.targets.target.brokered-credential-sources',
-    );
   }
 }

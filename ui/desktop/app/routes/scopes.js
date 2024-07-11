@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -23,7 +23,6 @@ export default class ScopesRoute extends Route {
     try {
       const scopesCheck = await adapter.query(this.store, scopeSchema, {
         page_size: 1,
-        recursive: true,
       });
       // we use the response_type to determine if pagination is supported
       // and this will still pass even if there are no scopes returned

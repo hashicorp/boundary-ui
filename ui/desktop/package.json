@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Client UI for Boundary.",
-  "license": "MPL-2.0",
+  "license": "BUSL-1.1",
   "author": "HashiCorp",
   "directories": {
     "doc": "doc",
@@ -63,10 +63,9 @@
     "@faker-js/faker": "^8.0.2",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@playwright/test": "^1.30.0",
+    "@playwright/test": "^1.43.0",
     "babel-loader": "^8.2.5",
     "broccoli-asset-rev": "^3.0.0",
-    "clipboard": "^2.0.8",
     "concurrently": "^8.0.1",
     "core": "*",
     "cross-env": "^7.0.3",
@@ -105,7 +104,7 @@
     "eslint-plugin-qunit": "^8.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
-    "playwright": "^1.30.0",
+    "playwright": "^1.43.0",
     "prettier": "^3.0.0",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
@@ -121,7 +120,7 @@
     "webpack": "^5.78.0"
   },
   "engines": {
-    "node": "16.* || 18.*"
+    "node": "18.* || 20.*"
   },
   "ember": {
     "edition": "octane"

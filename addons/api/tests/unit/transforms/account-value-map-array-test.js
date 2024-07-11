@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -13,16 +13,16 @@ module('Unit | Transform | account value map array', function (hooks) {
     const transform = this.owner.lookup('transform:account-value-map-array');
     const deserialized = transform.deserialize(['oid=sub', 'full_name=name']);
     assert.deepEqual(deserialized, [
-      { from: 'oid', to: 'sub' },
-      { from: 'full_name', to: 'name' },
+      { key: 'oid', value: 'sub' },
+      { key: 'full_name', value: 'name' },
     ]);
   });
 
   test('it serializes an array of account claims', function (assert) {
     const transform = this.owner.lookup('transform:account-value-map-array');
     const serialized = transform.serialize([
-      { from: 'oid', to: 'sub' },
-      { from: 'full_name', to: 'name' },
+      { key: 'oid', value: 'sub' },
+      { key: 'full_name', value: 'name' },
     ]);
     assert.deepEqual(serialized, ['oid=sub', 'full_name=name']);
   });

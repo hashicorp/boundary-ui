@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 /* eslint-disable no-undef */
@@ -28,6 +28,14 @@ module.exports = async () => {
   await page.getByRole('button', { name: 'Sign In' }).click();
   await page.getByRole('navigation', { name: 'General' }).waitFor();
   await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).waitFor();
-  await page.context().storageState({ path: authenticatedState });
+  const storageState = await page
+    .context()
+    .storageState({ path: authenticatedState });
+
+  const state = JSON.parse(storageState.origins[0].localStorage[0].value);
+
+  // Set the token in the environment for use in API requests
+  process.env.E2E_TOKEN = state.authenticated.token;
+
   await browser.close();
 };

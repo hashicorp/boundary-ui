@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -38,10 +38,10 @@ export default class ApplicationRoute extends Route {
     this.toggleTheme(theme);
     await this.clusterUrl.updateClusterUrl();
 
-    // Add token to client daemon after a successful authentication restoration
+    // Add token to cache daemon after a successful authentication restoration
     if (this.session.isAuthenticated) {
       const sessionData = this.session.data?.authenticated;
-      await this.ipc.invoke('addTokenToClientDaemon', {
+      await this.ipc.invoke('addTokenToDaemons', {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });

@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'titles.new')}}
@@ -26,8 +26,8 @@
   <page.body>
     <Form::Account
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.accounts.save @model}}
+      @cancel={{fn this.accounts.cancel @model}}
     />
 
   </page.body>

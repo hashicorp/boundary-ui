@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -15,13 +15,7 @@
       <DocLink @doc='worker' @iconSize='large' />
     </h2>
     <p>{{t 'resources.worker.description'}}</p>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
@@ -42,7 +36,7 @@
         <dropdown.button
           @style='danger'
           @disabled={{@model.canSave}}
-          {{on 'click' (route-action 'delete' @model)}}
+          {{on 'click' (fn this.workers.delete @model)}}
         >
           {{t 'resources.worker.actions.delete'}}
         </dropdown.button>
@@ -53,8 +47,8 @@
   <page.body>
     <Form::Worker
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.workers.save @model}}
+      @cancel={{fn this.workers.cancel @model}}
     />
   </page.body>
 

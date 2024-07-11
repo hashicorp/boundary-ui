@@ -1,21 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { all } from 'rsvp';
-import { loading } from 'ember-loading';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
-  @service router;
 
   // =methods
 
@@ -33,11 +27,20 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
   async model() {
     const target = this.modelFor('scopes.scope.targets.target');
     const { id: scope_id } = this.modelFor('scopes.scope');
-    const hostCatalogs = await this.store.query('host-catalog', { scope_id });
-    await all(
-      hostCatalogs.map(({ id: host_catalog_id }) =>
-        this.store.query('host-set', { host_catalog_id }),
-      ),
+    const hostCatalogs = await this.store.query('host-catalog', {
+      scope_id,
+      query: { filters: { scope_id: [{ equals: scope_id }] } },
+    });
+
+    // TODO: For some reason, not returning promises fixes
+    //  an ember bug similar to this reported issue:
+    //  https://github.com/emberjs/data/issues/8299.
+    //  This is a temporary fix until we can find a better solution or
+    //  we upgrade ember data to try to fix the issue.
+    await Promise.all(
+      hostCatalogs.map(({ id: host_catalog_id }) => {
+        this.store.query('host-set', { host_catalog_id });
+      }),
     );
     const hostSets = this.store.peekAll('host-set');
     return {
@@ -45,24 +48,5 @@ export default class ScopesScopeTargetsTargetAddHostSourcesRoute extends Route {
       hostCatalogs,
       hostSets,
     };
-  }
-
-  // =actions
-
-  @action
-  @loading
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.add-success')
-  async save(target, hostSetIDs) {
-    await target.addHostSources(hostSetIDs);
-    this.router.replaceWith('scopes.scope.targets.target.host-sources');
-  }
-
-  /**
-   * Redirect to target host sources as if nothing ever happened.
-   */
-  @action
-  cancel() {
-    this.router.replaceWith('scopes.scope.targets.target.host-sources');
   }
 }

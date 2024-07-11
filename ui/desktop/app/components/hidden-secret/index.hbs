@@ -1,29 +1,28 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <div class='hidden-secret'>
-  <Rose::Button
-    @style='ghost'
-    @iconOnly={{if
-      this.isHidden
-      'flight-icons/svg/eye-16'
-      'flight-icons/svg/eye-off-16'
-    }}
+  <Hds::Button
+    @text={{t 'actions.toggle-secret'}}
+    @icon={{if this.isHidden 'eye' 'eye-off'}}
+    @isIconOnly={{true}}
+    @color='secondary'
     {{on 'click' this.toggleSecretVisibility}}
-  >
-    {{t 'actions.toggle-secret'}}
-  </Rose::Button>
-  <Copyable
-    @text={{this.displaySecretValue}}
-    @buttonText={{t 'actions.copy-to-clipboard'}}
-    @acknowledgeText={{t 'states.copied'}}
-  >
+  />
+
+  <div class='secret-content'>
     {{#if this.isHidden}}
       <pre>{{this.displaySecretValue}}</pre>
     {{else}}
       <span class='secret-mask'>{{this.textMask}}</span>
     {{/if}}
-  </Copyable>
+  </div>
+
+  <Hds::Copy::Button
+    @text={{t 'actions.copy-to-clipboard'}}
+    @isIconOnly={{true}}
+    @textToCopy={{this.displaySecretValue}}
+  />
 </div>

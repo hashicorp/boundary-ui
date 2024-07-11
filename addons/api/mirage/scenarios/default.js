@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
@@ -122,6 +122,18 @@ export default function (server) {
     // Create IAM resources for project
     server.createList('group', 3, { scope });
     server.createList('role', 3, { scope });
+  });
+
+  // Aliases
+  const aliasDestinationTarget = server.schema.targets.all().models[0];
+  const { id: destination_id } = aliasDestinationTarget;
+  const aliases = server.createList('alias', 4, {
+    scope: globalScope,
+    destination_id,
+  });
+
+  aliasDestinationTarget.update({
+    aliases: aliases.map((alias) => ({ id: alias.id, value: alias.value })),
   });
 
   // Workers

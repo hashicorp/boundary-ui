@@ -1,22 +1,16 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
-import { all, resolve } from 'rsvp';
-import {
-  TYPE_AUTH_METHOD_OIDC,
-  TYPE_AUTH_METHOD_LDAP,
-} from 'api/models/auth-method';
 
 export default class RoleModel extends GeneratedRoleModel {
   // =services
 
   @service store;
-  @service resourceFilterStore;
 
   // =attributes
 
@@ -27,7 +21,7 @@ export default class RoleModel extends GeneratedRoleModel {
    * see obvious.  Instead, the application layer is expected to load referenced
    * users and groups as needed.
    */
-  @attr('principal-array', {
+  @attr('array', {
     readOnly: true,
     emptyArrayIfMissing: true,
   })
@@ -55,7 +49,7 @@ export default class RoleModel extends GeneratedRoleModel {
   get userIDs() {
     return this.principals
       .filter(({ type }) => type === 'user')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
   /**
@@ -65,7 +59,7 @@ export default class RoleModel extends GeneratedRoleModel {
   get groupIDs() {
     return this.principals
       .filter(({ type }) => type === 'group')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
   /**
@@ -75,94 +69,9 @@ export default class RoleModel extends GeneratedRoleModel {
   get managedGroupIDs() {
     return this.principals
       .filter(({ type }) => type === 'managed group')
-      .map(({ principal_id }) => principal_id);
+      .map(({ id }) => id);
   }
 
-  /**
-   * A promise that resolves to an array of User instances.
-   * When calling this getter, be sure to await resolution
-   * before interacting with the results.
-   * @type {Promise[UserModel]}
-   */
-  get users() {
-    const ids = this.userIDs;
-
-    // Role has prinicipal IDs,
-    // return a promise which resolves model instances for those IDs
-    if (ids?.length) {
-      return this.resourceFilterStore
-        .queryBy('user', { id: ids }, { scope_id: 'global', recursive: true })
-        .then((models) => models.map((model) => model));
-    }
-
-    // No principal IDs,
-    // return a promise resolving to an empty array
-    return resolve([]);
-  }
-
-  /**
-   * A promise that resolves to an array of Group instances.
-   * When calling this getter, be sure to await resolution
-   * before interacting with the results.
-   * @type {Promise[GroupModel]}
-   */
-  get groups() {
-    const ids = this.groupIDs;
-
-    // Role has prinicipal IDs,
-    // return a promise which resolves model instances for those IDs
-    if (ids?.length) {
-      return this.resourceFilterStore
-        .queryBy('group', { id: ids }, { scope_id: 'global', recursive: true })
-        .then((models) => models.map((model) => model));
-    }
-
-    // No principal IDs,
-    // return a promise resolving to an empty array
-    return resolve([]);
-  }
-
-  /**
-   * A promise that resolves to an array of ManagedGroup instances.
-   * When calling this getter, be sure to await resolution
-   * before interacting with the results.
-   * @type {Promise[ManagedGroupModel]}
-   */
-  get managedGroups() {
-    const ids = this.managedGroupIDs;
-
-    // Role has prinicipal IDs
-    // return a promise which resolves model instances for those IDs
-    if (ids?.length) {
-      // Collect all auth methods.
-      const authMethods = this.resourceFilterStore.queryBy(
-        'auth-method',
-        { type: [TYPE_AUTH_METHOD_OIDC, TYPE_AUTH_METHOD_LDAP] },
-        { scope_id: 'global', recursive: true },
-      );
-
-      // For each auth method, query all managed groups with IDs
-      // that match the role's manage group principal IDs.
-      const managedGroups = authMethods
-        .then((methods) =>
-          all(
-            methods.map(({ id: auth_method_id }) =>
-              this.resourceFilterStore
-                .queryBy('managed-group', { id: ids }, { auth_method_id })
-                .then((models) => models.map((model) => model)),
-            ),
-          ),
-        )
-        // The result is an array of arrays of model instances (grouped by
-        // auth methods), so these must be flattened.
-        .then((grouped) => grouped.flat());
-      return managedGroups;
-    }
-
-    // No principal IDs,
-    // return a promise resolving to an empty array
-    return resolve([]);
-  }
   // =methods
 
   /**

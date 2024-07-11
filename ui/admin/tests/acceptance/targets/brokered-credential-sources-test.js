@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -246,7 +246,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         (item) => item !== 'add-credential-sources',
       );
     await visit(urls.brokeredCredentialSources);
-    assert.dom('.rose-dropdown-content a:nth-child(2)').doesNotExist();
+    assert.dom('[data-test-add-brokered-cred-sources-action]').doesNotExist();
   });
 
   test('can select and cancel credential sources to add', async function (assert) {

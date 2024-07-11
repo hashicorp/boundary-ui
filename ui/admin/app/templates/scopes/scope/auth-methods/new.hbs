@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'titles.new')}}
@@ -25,11 +25,11 @@
   <page.body>
     <Form::AuthMethod
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
-      @removeItemByIndex={{route-action 'removeItemByIndex' @model}}
-      @addStringItem={{route-action 'addStringItem' @model}}
-      @addAccountMapItem={{route-action 'addAccountMapItem' @model}}
+      @submit={{fn this.authMethods.save @model}}
+      @cancel={{fn this.authMethods.cancel @model}}
+      @removeItemByIndex={{fn this.authMethods.removeItemByIndex @model}}
+      @addStringItem={{fn this.authMethods.addStringItem @model}}
+      @addAccountMapItem={{fn this.authMethods.addAccountMapItem @model}}
     />
   </page.body>
 </Rose::Layout::Page>

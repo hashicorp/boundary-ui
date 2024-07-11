@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { inject as service } from '@ember/service';
@@ -12,7 +12,7 @@ export default class SessionService extends BaseSessionService {
 
   /**
    * Extend ember simple auth's handleAuthentication method
-   * so we can hook in and add the user's token to the client daemon
+   * so we can hook in and add the user's token to the cache daemon
    */
   @notifyError(({ message }) => message, { catch: true })
   async handleAuthentication() {
@@ -20,7 +20,7 @@ export default class SessionService extends BaseSessionService {
 
     if (this.session.isAuthenticated) {
       const sessionData = this.data?.authenticated;
-      await this.ipc.invoke('addTokenToClientDaemon', {
+      await this.ipc.invoke('addTokenToDaemons', {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });

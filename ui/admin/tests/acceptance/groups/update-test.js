@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -102,7 +102,7 @@ module('Acceptance | groups | update', function (hooks) {
       'Displays primary error message.',
     );
     assert.strictEqual(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );

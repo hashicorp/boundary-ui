@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (app-name)}}
@@ -106,12 +106,12 @@
     {{#each this.flashMessages.queue as |flash|}}
       <div
         class='ember-notify-show callout
-          {{flash.noticationType}}
+          {{flash.notificationType}}
           ember-view ember-notify clearfix'
       >
         <Rose::Notification
-          @style={{flash.noticationType}}
-          @heading={{t (concat 'states.' flash.noticationType)}}
+          @style={{flash.notificationType}}
+          @heading={{t (concat 'states.' flash.notificationType)}}
           @dismiss={{fn flash.dismiss flash}}
           @dismissText={{t 'actions.dismiss'}}
         >

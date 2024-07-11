@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{#if @model.isGlobal}}
@@ -41,13 +41,7 @@
       </h2>
       <p>{{t 'resources.project.description'}}</p>
     {{/if}}
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   {{#if (can 'read model' @model)}}
@@ -178,7 +172,7 @@
                       />
                       <dd.Separator />
                       <dd.Interactive
-                        @text={{t 'resources.policy.actions.delete'}}
+                        @text={{t 'resources.policy.actions.detach'}}
                         @color='critical'
                         {{on
                           'click'

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import GeneratedTargetModel from '../generated/models/target';
@@ -133,6 +133,12 @@ export default class TargetModel extends GeneratedTargetModel {
       (s) => s.isActive || s.isPending,
     );
     return Boolean(pendingOrActiveSessions.length);
+  }
+
+  get associatedAliases() {
+    return this.store
+      .peekAll('alias')
+      .filter((alias) => alias?.destination_id === this.id);
   }
 
   // =methods

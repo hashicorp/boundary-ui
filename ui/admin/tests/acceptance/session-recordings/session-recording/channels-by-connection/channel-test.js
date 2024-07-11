@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -17,7 +17,10 @@ module(
     setupMirage(hooks);
 
     let featuresService;
+    let getRecordingCount;
 
+    const DELETE_DROPDOWN_SELECTOR = '[data-test-manage-dropdown-delete]';
+    const DROPDOWN_SELECTOR = '[data-test-manage-dropdown]';
     // Instances
     const instances = {
       scopes: {
@@ -43,8 +46,14 @@ module(
         type: 'org',
         scope: { id: 'global', type: 'global' },
       });
+      instances.scopes.targetModel = this.server.create('target', {
+        scope: instances.scopes.global,
+      });
       instances.sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
+        create_time_values: {
+          target: instances.scopes.targetModel.attrs,
+        },
       });
       instances.connectionRecording = this.server.create(
         'connection-recording',
@@ -59,6 +68,9 @@ module(
       urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
       urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
       urls.channelRecording = `${urls.sessionRecording}/${instances.channelRecording.id}`;
+      getRecordingCount = () =>
+        this.server.schema.sessionRecordings.all().models.length;
+
       featuresService = this.owner.lookup('service:features');
       authenticateSession({});
     });
@@ -157,7 +169,7 @@ module(
         );
       await visit(urls.sessionRecording);
 
-      assert.dom('[data-test-manage-dropdown]').doesNotExist();
+      assert.dom(DROPDOWN_SELECTOR).doesNotExist();
     });
 
     test('user can view manage dropdown with proper authorization', async function (assert) {
@@ -166,7 +178,34 @@ module(
 
       await visit(urls.sessionRecording);
 
-      assert.dom('[data-test-manage-dropdown]').isVisible();
+      assert.dom(DROPDOWN_SELECTOR).isVisible();
+    });
+
+    test('user can delete a recording with proper authorization', async function (assert) {
+      // Visit channel
+      const count = getRecordingCount();
+      featuresService.enable('ssh-session-recording');
+      assert.true(
+        instances.sessionRecording.authorized_actions.includes('delete'),
+      );
+      await visit(urls.sessionRecording);
+      await click(DROPDOWN_SELECTOR);
+
+      await click(DELETE_DROPDOWN_SELECTOR);
+      assert.strictEqual(currentURL(), urls.sessionRecordings);
+
+      assert.strictEqual(getRecordingCount(), count - 1);
+    });
+
+    test('user cannot delete a recording without proper authorization', async function (assert) {
+      // Visit channel
+      featuresService.enable('ssh-session-recording');
+      instances.sessionRecording.authorized_actions =
+        instances.sessionRecording.authorized_actions.filter(
+          (item) => item !== 'delete',
+        );
+      await visit(urls.sessionRecording);
+      assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
     });
 
     test('both retain until and delete after can be seen with proper authorization', async function (assert) {

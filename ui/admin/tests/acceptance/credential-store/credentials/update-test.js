@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -22,6 +22,8 @@ module(
   function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
+
+    let featuresService;
 
     const instances = {
       scopes: {
@@ -83,6 +85,8 @@ module(
       urls.usernamePasswordCredential = `${urls.credentials}/${instances.usernamePasswordCredential.id}`;
       urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
       urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
+
+      featuresService = this.owner.lookup('service:features');
       authenticateSession({});
     });
 
@@ -117,6 +121,7 @@ module(
     });
 
     test('can save changes to existing JSON credential', async function (assert) {
+      featuresService.enable('json-credentials');
       const mockInput = 'random string';
       assert.notEqual(instances.jsonCredential.name, mockInput);
       await visit(urls.jsonCredential);
@@ -232,7 +237,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',
       );
     });
@@ -267,7 +272,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',
       );
     });
@@ -302,7 +307,7 @@ module(
         'Error in provided request.',
       );
       assert.ok(
-        find('.rose-form-error-message').textContent.trim(),
+        find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',
       );
     });

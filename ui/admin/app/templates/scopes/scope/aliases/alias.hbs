@@ -1,0 +1,13 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title @model.displayName}}
+<Breadcrumbs::Item
+  @text={{@model.displayName}}
+  @route='scopes.scope.aliases.alias'
+  @model={{@model}}
+/>
+
+{{outlet}}

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import GeneratedCredentialLibraryModel from '../generated/models/credential-library';
@@ -11,6 +11,15 @@ import GeneratedCredentialLibraryModel from '../generated/models/credential-libr
 export const options = {
   http_method: ['GET', 'POST'],
   key_type: ['ed25519', 'ecdsa', 'rsa'],
+  credential_types: ['ssh_private_key', 'username_password'],
+  mapping_overrides: {
+    username_password: ['username_attribute', 'password_attribute'],
+    ssh_private_key: [
+      'private_key_attribute',
+      'private_key_passphrase_attribute',
+      'username_attribute',
+    ],
+  },
 };
 
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -22,12 +22,16 @@ export default class ScopesScopeRolesRoleIndexRoute extends Route {
     if (!currentScope.isProject) {
       const scopes = await this.store.query('scope', {
         scope_id: currentScope.id,
+        query: { filters: { scope_id: [{ equals: currentScope.id }] } },
       });
       subScopes = await Promise.all(
         scopes.map(async (scope) => ({
           model: scope,
           subScopes: !scope.isProject
-            ? await this.store.query('scope', { scope_id: scope.id })
+            ? await this.store.query('scope', {
+                scope_id: scope.id,
+                query: { filters: { scope_id: [{ equals: scope.id }] } },
+              })
             : [],
         })),
       );

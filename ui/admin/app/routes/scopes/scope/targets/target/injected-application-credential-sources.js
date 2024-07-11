@@ -1,14 +1,10 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { all } from 'rsvp';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSourcesRoute extends Route {
@@ -47,22 +43,5 @@ export default class ScopesScopeTargetsTargetInjectedApplicationCredentialSource
    */
   model() {
     return this.modelFor('scopes.scope.targets.target');
-  }
-
-  // =actions
-
-  /**
-   * Remove a credential source from the current target.
-   * @param {TargetModel} target
-   * @param {CredentialLibraryModel, credentialModel} credentialSource
-   */
-  @action
-  @loading
-  @confirm('questions.remove-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.remove-success')
-  async removeInjectedApplicationCredentialSource(target, credentialSource) {
-    await target.removeInjectedApplicationCredentialSource(credentialSource.id);
-    this.refresh();
   }
 }

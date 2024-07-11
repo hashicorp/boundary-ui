@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
@@ -14,7 +14,6 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeScopesRoute extends Route {
   // =services
 
-  @service store;
   @service session;
   @service router;
 
@@ -27,22 +26,9 @@ export default class ScopesScopeScopesRoute extends Route {
     if (!this.session.isAuthenticated) this.router.transitionTo('index');
   }
 
-  /**
-   * Loads sub scopes for the current scope.
-   * @return {Promise}
-   */
-  async model() {
+  setupController(controller) {
     const currentScope = this.modelFor('scopes.scope');
-    const parentScope = !currentScope.isGlobal
-      ? await this.store.findRecord('scope', currentScope.scopeID)
-      : null;
-    const subScopes = await this.store.query('scope', {
-      scope_id: currentScope.id,
-    });
-    return {
-      currentScope,
-      parentScope,
-      subScopes,
-    };
+    super.setupController(...arguments);
+    controller.setProperties({ currentScope });
   }
 }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 'use strict';
@@ -34,17 +34,11 @@ module.exports = function (defaults) {
       },
     },
     // TODO: Update to 4.12 when deprecations are resolved
+    //   as multiple things break when forcing compatability on > 4.6
     emberData: {
-      compatWith: '4.4',
+      compatWith: '4.6',
     },
   });
-
-  // Only import when in development or test mode
-  if (app.env.match(/(development)|(test)/i)) {
-    app.import('node_modules/clipboard/dist/clipboard.js');
-  } else {
-    app.import('node_modules/clipboard/dist/clipboard.min.js');
-  }
 
   // Use `app.import` to add additional libraries to the generated
   // output files.

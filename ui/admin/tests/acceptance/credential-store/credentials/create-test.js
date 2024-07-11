@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
@@ -15,6 +16,7 @@ module(
   function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
+    setupIndexedDb(hooks);
 
     let getCredentialsCount;
     let getUsernamePasswordCredentialCount;
@@ -235,7 +237,7 @@ module(
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
       assert
-        .dom('.rose-form-error-message')
+        .dom('[data-test-error-message-password]')
         .hasText('Field required for creating a username-password credential.');
     });
 
@@ -270,7 +272,7 @@ module(
         .dom('.rose-notification-body')
         .hasText('Error in provided request.');
       assert
-        .dom('.hds-form-error__message')
+        .dom('[data-test-error-message-private-key]')
         .hasText('Field required for creating a username-key-pair credential.');
     });
 

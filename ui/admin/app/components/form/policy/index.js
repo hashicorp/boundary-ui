@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Component from '@glimmer/component';
@@ -10,7 +10,7 @@ const RETENTION_POLICY = {
   custom: 1,
   do_not_protect: 0,
   soc: 2555,
-  hippa: 2190,
+  hipaa: 2190,
 };
 
 const DELETION_POLICY = { do_not_delete: 0, custom: 1 };

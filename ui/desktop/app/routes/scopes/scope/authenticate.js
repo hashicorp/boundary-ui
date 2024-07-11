@@ -1,11 +1,10 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
 
 export default class ScopesScopeAuthenticateRoute extends Route {
   // =services
@@ -14,6 +13,7 @@ export default class ScopesScopeAuthenticateRoute extends Route {
   @service session;
   @service clusterUrl;
   @service router;
+  @service resourceFilterStore;
 
   // =methods
 
@@ -28,14 +28,40 @@ export default class ScopesScopeAuthenticateRoute extends Route {
    * scope and all scopes (for org navigation).
    * @return {Promise} `{scope, scopes, authMethods}`
    */
-  model() {
+  async model() {
     const { id: scope_id } = this.modelFor('scopes.scope');
 
-    return hash({
+    // Preload all authenticatable auth methods into the store
+    const authMethodsForAllScopes = await this.resourceFilterStore.queryBy(
+      'auth-method',
+      {
+        authorized_actions: [{ contains: 'authenticate' }],
+      },
+      {
+        scope_id: 'global',
+        recursive: true,
+      },
+    );
+
+    const scopeIDs = new Set(
+      authMethodsForAllScopes.map((authMethod) => authMethod.scopeID),
+    );
+
+    // Fetch org scopes and filter out any that have no auth methods
+    const scopes = this.modelFor('scopes').filter(({ id: scope_id }) =>
+      scopeIDs.has(scope_id),
+    );
+
+    // Filter out auth methods that are not for the current scope
+    const authMethods = authMethodsForAllScopes.filter(
+      (authMethod) => authMethod.scopeID === scope_id,
+    );
+
+    return {
       scope: this.modelFor('scopes.scope'),
-      scopes: this.modelFor('scopes').filter((scope) => scope.isOrg),
-      authMethods: this.store.query('auth-method', { scope_id }),
-    });
+      scopes,
+      authMethods,
+    };
   }
 
   redirect() {

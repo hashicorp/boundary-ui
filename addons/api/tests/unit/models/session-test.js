@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -71,5 +71,89 @@ module('Unit | Model | session', function (hooks) {
     });
     assert.false(modelA.isUnknownStatus);
     assert.true(modelB.isUnknownStatus);
+  });
+
+  test('it has target property and returns the null with no target_id set', function (assert) {
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: 's_123',
+        type: 'session',
+        attributes: { target_id: null },
+      },
+    });
+    const session = store.peekRecord('session', 's_123');
+
+    assert.strictEqual(session.target, null);
+  });
+
+  test('it has target property and returns the correct target', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const targetId = 'ttcp_123';
+    store.push({
+      data: {
+        id: targetId,
+        type: 'target',
+        attributes: {
+          name: 'admin',
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    store.push({
+      data: {
+        id: 's_123',
+        type: 'session',
+        attributes: { target_id: targetId },
+      },
+    });
+    const session = store.peekRecord('session', 's_123');
+
+    assert.strictEqual(session.target.id, targetId);
+  });
+
+  test('it has user property and returns the null with no user_id set', function (assert) {
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: 's_123',
+        type: 'session',
+        attributes: { user_id: null },
+      },
+    });
+    const session = store.peekRecord('session', 's_123');
+
+    assert.strictEqual(session.user, null);
+  });
+
+  test('it has user property and returns the correct user', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const userId = 'u_123';
+    store.push({
+      data: {
+        id: userId,
+        type: 'user',
+        attributes: {
+          name: 'admin',
+          scope: {
+            scope_id: 'o_1',
+            type: 'scope',
+          },
+        },
+      },
+    });
+    store.push({
+      data: {
+        id: 's_123',
+        type: 'session',
+        attributes: { user_id: userId },
+      },
+    });
+    const session = store.peekRecord('session', 's_123');
+
+    assert.strictEqual(session.user.id, userId);
   });
 });

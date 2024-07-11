@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{page-title (t 'resources.group.messages.members.title')}}
@@ -24,7 +24,10 @@
   </page.navigation>
 
   <page.actions>
-    <Groups::Group::Actions @model={{@model.group}} />
+    <Groups::Group::Actions
+      @model={{@model.group}}
+      @delete={{fn this.groups.delete @model.group}}
+    />
   </page.actions>
 
   <page.body>
@@ -54,13 +57,10 @@
               </span>
             </B.Td>
             <B.Td>
-              <Copyable
-                @text={{B.data.id}}
-                @buttonText={{t 'actions.copy-to-clipboard'}}
-                @acknowledgeText={{t 'states.copied'}}
-              >
-                <code>{{B.data.id}}</code>
-              </Copyable>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
             </B.Td>
             <B.Td>
               <ScopeBadge @scope={{B.data.scopeModel}} />
@@ -78,7 +78,7 @@
                     @text={{t 'actions.remove'}}
                     {{on
                       'click'
-                      (route-action 'removeMember' @model.group B.data)
+                      (fn this.groups.removeMember @model.group B.data)
                     }}
                   />
                 </Hds::Dropdown>

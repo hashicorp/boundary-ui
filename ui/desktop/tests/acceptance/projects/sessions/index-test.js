@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -21,7 +21,7 @@ import {
   STATUS_SESSION_CANCELING,
   STATUS_SESSION_TERMINATED,
 } from 'api/models/session';
-import setupStubs from 'api/test-support/handlers/client-daemon-search';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | sessions | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -158,13 +158,13 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(true);
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     invalidateSession();
-    this.stubClientDaemonSearch();
+    this.stubCacheDaemonSearch();
 
     await visit(urls.sessions);
     await a11yAudit();
@@ -186,7 +186,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('visiting empty sessions', async function (assert) {
     this.server.db.sessions.remove();
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -229,7 +229,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('can link to an active session with read:self permissions', async function (assert) {
     instances.session.update({ authorized_actions: ['read:self'] });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -241,7 +241,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('can link to a pending session', async function (assert) {
     instances.session.update({ status: STATUS_SESSION_PENDING });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -253,7 +253,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('can link to session even without read permissions', async function (assert) {
     instances.session.update({ authorized_actions: [] });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -265,7 +265,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('cannot link to a canceling session', async function (assert) {
     instances.session.update({ status: STATUS_SESSION_CANCELING });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
 
     assert
@@ -278,9 +278,8 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('cannot link to a terminated session', async function (assert) {
     instances.session.update({ status: STATUS_SESSION_TERMINATED });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
-
     assert
       .dom(`[data-test-session-detail-link="${instances.session.id}"]`)
       .doesNotExist();
@@ -301,7 +300,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('can cancel an active session with cancel:self permissions', async function (assert) {
     instances.session.update({ authorized_actions: ['cancel:self'] });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -313,7 +312,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('cannot click cancel button without cancel permissions', async function (assert) {
     instances.session.update({ authorized_actions: [] });
-    this.stubClientDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
     await visit(urls.sessions);
 
     assert
@@ -362,10 +361,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('user can change org scope and only sessions for that org will be displayed', async function (assert) {
-    this.stubClientDaemonSearch(
+    this.stubCacheDaemonSearch(
       'sessions',
       'sessions',
       'targets',
+      'aliases',
       'targets',
       'sessions',
       'targets',
@@ -396,9 +396,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       .isVisible();
   });
 
-  test('sessions list view still loads with no client daemon', async function (assert) {
-    this.ipcStub.withArgs('isClientDaemonRunning').returns(false);
-    this.stubClientDaemonSearch();
+  test('sessions list view still loads with no cache daemon', async function (assert) {
+    this.ipcStub.withArgs('isCacheDaemonRunning').returns(false);
+    this.stubCacheDaemonSearch();
     const sessionsCount = this.server.schema.sessions.all().models.length;
 
     await visit(urls.globalSessions);

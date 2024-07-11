@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Electron UI for client for Boundary.",
-  "license": "MPL-2.0",
+  "license": "BUSL-1.1",
   "author": "HashiCorp",
   "main": "src/index.js",
   "scripts": {
@@ -24,6 +24,7 @@
   "dependencies": {
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
+    "electron-log": "^5.1.2",
     "electron-squirrel-startup": "^1.0.0",
     "node-html-parser": "^5.3.3",
     "node-pty": "^1.0.0",
@@ -39,8 +40,8 @@
     "@electron-forge/maker-dmg": "^7.2.0",
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
-    "decompress": "^4.2.1",
-    "electron": "26.2.4"
+    "electron": "31.0.1",
+    "unzipper": "^0.11.5"
   },
   "resolutions": {
     "highlight.js": "^10.4.1"

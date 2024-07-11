@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import factory from '../generated/factories/session-recording';
@@ -60,6 +60,7 @@ export default factory.extend({
       'read',
       'download',
       'reapply-storage-policy',
+      'delete',
     ],
 
   withNonExistingUserAndTarget: trait({

@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -18,6 +19,7 @@ import {
 module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let getUsersCount;
 
@@ -138,7 +140,7 @@ module('Acceptance | users | create', function (hooks) {
 
     assert.strictEqual(getUsersCount(), usersCount);
     assert.dom('.rose-notification-body').hasText('The request was invalid.');
-    assert.dom('.rose-form-error-message').hasText('Name is required.');
+    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {

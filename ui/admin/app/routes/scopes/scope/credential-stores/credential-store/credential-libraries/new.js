@@ -1,10 +1,9 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
@@ -53,24 +52,23 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialLibrari
       'scopes.scope.credential-stores.credential-store',
     );
 
+    let name, description;
+    if (this.currentModel?.isNew) {
+      ({ name, description } = this.currentModel);
+      this.currentModel.rollbackAttributes();
+    }
+
     // Set the type to generic vault if feature flag isn't enabled in cases where
     // user sets the query parameter manually
-    if (!this.features.isEnabled('ssh-target')) {
-      type = TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
-    }
+    type = this.features.isEnabled('ssh-target')
+      ? type
+      : TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC;
 
     return this.store.createRecord('credential-library', {
       type,
       credential_store_id,
+      name,
+      description,
     });
-  }
-
-  /**
-   * Update type of credential library
-   * @param {string} type
-   */
-  @action
-  changeType(type) {
-    this.router.replaceWith({ queryParams: { type } });
   }
 }

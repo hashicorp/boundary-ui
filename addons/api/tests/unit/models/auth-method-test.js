@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -29,19 +29,16 @@ module('Unit | Model | auth method', function (hooks) {
 
   test('it has a `changeState` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
-    this.server.post(
-      '/v1/auth-methods/123abc:change-state',
-      (schema, request) => {
-        const body = JSON.parse(request.requestBody);
-        assert.deepEqual(body, {
-          attributes: {
-            state: 'foobar',
-          },
-          version: 1,
-        });
-        return { id: '123abc' };
-      },
-    );
+    this.server.post('/auth-methods/123abc:change-state', (schema, request) => {
+      const body = JSON.parse(request.requestBody);
+      assert.deepEqual(body, {
+        attributes: {
+          state: 'foobar',
+        },
+        version: 1,
+      });
+      return { id: '123abc' };
+    });
     store.push({
       data: {
         id: '123abc',

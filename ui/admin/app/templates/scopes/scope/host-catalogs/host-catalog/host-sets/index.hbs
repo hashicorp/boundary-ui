@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -13,7 +13,10 @@
   </page.header>
 
   <page.actions>
-    <HostCatalogs::HostCatalog::Actions @model={{@model.hostCatalog}} />
+    <HostCatalogs::HostCatalog::Actions
+      @model={{@model.hostCatalog}}
+      @delete={{this.hostCatalogs.delete}}
+    />
   </page.actions>
 
   <page.navigation>

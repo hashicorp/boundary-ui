@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 {{#if @model.isOrg}}
@@ -67,6 +67,12 @@
                 @size='medium'
               />
               {{t 'resources.policy.title_plural'}}
+            </nav.link>
+          {{/if}}
+          {{#if (can 'navigate scope' @model collection='aliases')}}
+            <nav.link @route='scopes.scope.aliases'>
+              <Rose::Icon @name='flight-icons/svg/at-sign-16' @size='medium' />
+              {{t 'resources.alias.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if

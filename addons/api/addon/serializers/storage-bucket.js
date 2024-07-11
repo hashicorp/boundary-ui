@@ -1,10 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import ApplicationSerializer from './application';
-import { TYPE_CREDENTIAL_DYNAMIC } from '../models/storage-bucket';
+import {
+  TYPE_CREDENTIAL_DYNAMIC,
+  TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+} from '../models/storage-bucket';
 
 const fieldsByCredentialType = {
   static: [
@@ -12,27 +15,55 @@ const fieldsByCredentialType = {
     'secret_access_key',
     'region',
     'disable_credential_rotation',
+    'endpoint_url',
   ],
   dynamic: [
     'role_arn',
     'role_external_id',
     'role_session_name',
     'role_tags',
-    'disable_credential_rotation',
     'region',
+    'disable_credential_rotation',
+    'endpoint_url',
   ],
 };
 export default class StorageBucketSerializer extends ApplicationSerializer {
+  /**
+   * Serializes storage-bucket. ATM just AWS needs specific serialization,
+   * for the other plugin types use default.
+   * @param {object} snapshot
+   * @returns
+   */
   serialize(snapshot) {
-    const serialized = super.serialize(...arguments);
     const { credentialType } = snapshot.record;
+    const pluginType = snapshot.record.plugin?.name;
+    const serialized = super.serialize(...arguments);
+
+    // Common for all pluginTypes
     if (!snapshot.record.isNew) {
       delete serialized.bucket_name;
       delete serialized.bucket_prefix;
     }
 
-    if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
-      serialized.attributes.disable_credential_rotation = true;
+    if (pluginType === TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3) {
+      return this.serializeAws(serialized, credentialType);
+    }
+
+    return serialized;
+  }
+
+  /**
+   * Returns a storage bucket serialized object specific for aws
+   * @param {object} serialized
+   * @param {string} credentialType
+   * @returns
+   */
+  serializeAws(serialized, credentialType) {
+    if (serialized.attributes) {
+      if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+        serialized.attributes.disable_credential_rotation = true;
+      }
+      delete serialized.attributes.endpoint_url;
     }
     return serialized;
   }
@@ -45,7 +76,7 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
     if (options.isNestedAttribute && json.attributes) {
       // The key must be included in the fieldsByType list above
       if (!fieldsByCredentialType[credentialType].includes(key))
-        //API requires these fields to be null
+        // API requires these fields to be null
         json.attributes[key] = null;
     }
 

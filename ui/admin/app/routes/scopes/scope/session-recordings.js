@@ -1,11 +1,15 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import orderBy from 'lodash/orderBy';
+import { loading } from 'ember-loading';
+import { confirm } from 'core/decorators/confirm';
+import { action } from '@ember/object';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeSessionRecordingsRoute extends Route {
   // =services
@@ -67,5 +71,20 @@ export default class ScopesScopeSessionRecordingsRoute extends Route {
         storageBuckets,
       };
     }
+  }
+
+  /**
+   * Deletes the session recording
+   * @param {SessionRecording} recording
+   */
+  @action
+  @loading
+  @confirm('resources.session-recording.questions.delete')
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.delete-success')
+  async delete(recording) {
+    await recording.destroyRecord();
+    await this.router.replaceWith('scopes.scope.session-recordings');
+    this.router.refresh();
   }
 }

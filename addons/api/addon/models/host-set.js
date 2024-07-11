@@ -1,10 +1,10 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import GeneratedHostSetModel from '../generated/models/host-set';
-import { pluginTypes } from './host-catalog';
+import { TYPES_HOST_CATALOG_PLUGIN } from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
   // =attributes
@@ -30,7 +30,9 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return this.isPlugin && !pluginTypes.includes(this.plugin?.name);
+    return (
+      this.isPlugin && !TYPES_HOST_CATALOG_PLUGIN.includes(this.plugin?.name)
+    );
   }
 
   /**

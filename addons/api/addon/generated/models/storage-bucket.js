@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import BaseModel from '../../models/base';
@@ -72,6 +72,12 @@ export default class GeneratedStorageBucketModel extends BaseModel {
     description: 'The AWS region to use.',
   })
   region;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The MinIO location server.',
+  })
+  endpoint_url;
 
   //this field is not used in the UI, but this is kept here to replicate the API
   @attr('string', {

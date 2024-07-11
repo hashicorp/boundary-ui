@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -15,13 +15,7 @@
       <DocLink @doc='credential-library' @iconSize='large' />
     </h2>
     <p>{{t 'resources.credential-library.description'}}</p>
-    <Copyable
-      @text={{@model.id}}
-      @buttonText={{t 'actions.copy-to-clipboard'}}
-      @acknowledgeText={{t 'states.copied'}}
-    >
-      <code>{{@model.id}}</code>
-    </Copyable>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
@@ -44,7 +38,7 @@
         <dropdown.button
           @style='danger'
           @disabled={{@model.canSave}}
-          {{on 'click' (route-action 'deleteCredentialLibrary' @model)}}
+          {{on 'click' (fn this.credentialLibraries.delete @model)}}
         >
           {{t 'resources.credential-library.actions.delete'}}
         </dropdown.button>
@@ -55,9 +49,9 @@
   <page.body>
     <Form::CredentialLibrary
       @model={{@model}}
-      @edit={{route-action 'edit' @model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @edit={{fn this.credentialLibraries.edit @model}}
+      @submit={{fn this.credentialLibraries.save @model}}
+      @cancel={{fn this.credentialLibraries.cancel @model}}
     />
   </page.body>
 </Rose::Layout::Page>

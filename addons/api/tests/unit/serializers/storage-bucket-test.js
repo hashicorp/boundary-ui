@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import {
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
+  TYPE_STORAGE_BUCKET_PLUGIN_MINIO,
   TYPE_STORAGE_BUCKET_PLUGIN,
   TYPE_CREDENTIAL_STATIC,
   TYPE_CREDENTIAL_DYNAMIC,
@@ -14,15 +15,6 @@ import {
 
 module('Unit | Serializer | storage bucket', function (hooks) {
   setupTest(hooks);
-
-  test('it serializes records', function (assert) {
-    let store = this.owner.lookup('service:store');
-    let record = store.createRecord('storage-bucket', {});
-
-    let serializedRecord = record.serialize();
-
-    assert.ok(serializedRecord);
-  });
 
   test('it serializes a new static aws plugin as expected', async function (assert) {
     const store = this.owner.lookup('service:store');
@@ -56,6 +48,47 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       attributes: {
         region: 'eu-west-1',
         disable_credential_rotation: true,
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
+        secrets_hmac: null,
+      },
+      secrets: {
+        access_key_id: 'foobars',
+        secret_access_key: 'testing',
+      },
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
+
+  test('it serializes a new minio (static by default) plugin as expected', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('storage-bucket', {
+      compositeType: TYPE_STORAGE_BUCKET_PLUGIN_MINIO,
+      credentialType: TYPE_CREDENTIAL_STATIC,
+      name: 'minio',
+      description: 'this has a minio plugin',
+      bucket_name: 'bucketname',
+      bucket_prefix: 'bucketprefix',
+      worker_filter: 'workerfilter',
+      endpoint_url: 'http://hashicorp.com',
+      region: 'eu-west-1',
+      access_key_id: 'foobars',
+      secret_access_key: 'testing',
+      disable_credential_rotation: true,
+    });
+    const expectedResult = {
+      name: 'minio',
+      description: 'this has a minio plugin',
+      type: TYPE_STORAGE_BUCKET_PLUGIN,
+      bucket_name: 'bucketname',
+      bucket_prefix: 'bucketprefix',
+      worker_filter: 'workerfilter',
+      attributes: {
+        region: 'eu-west-1',
+        disable_credential_rotation: true,
+        endpoint_url: 'http://hashicorp.com',
         role_arn: null,
         role_external_id: null,
         role_session_name: null,
@@ -126,6 +159,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           bucket_name: 'bucketname',
           bucket_prefix: 'bucketprefix',
           worker_filter: 'workerfilter',
+          plugin: { name: 'aws' },
           region: 'eu-west-1',
           access_key_id: 'foobars',
           secret_access_key: 'testing',
@@ -183,6 +217,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           bucket_name: 'bucketname',
           bucket_prefix: 'bucketprefix',
           worker_filter: 'workerfilter',
+          plugin: { name: 'aws' },
           region: 'eu-west-1',
           disable_credential_rotation: true,
           access_key_id: 'test',
@@ -216,6 +251,61 @@ module('Unit | Serializer | storage bucket', function (hooks) {
         role_session_name: 'my-session',
         role_tags: { Project: 'Automation', foo: 'bar' },
         secrets_hmac: null,
+      },
+      version: 1,
+    };
+    assert.deepEqual(serializedRecord, expectedResult);
+  });
+
+  test('it serializes when updating a MinIO (static credential by default) storage bucket correctly', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('storage-bucket');
+    store.push({
+      data: {
+        id: '3',
+        type: 'storage-bucket',
+        attributes: {
+          type: TYPE_STORAGE_BUCKET_PLUGIN,
+          plugin: { name: 'minio' },
+          name: 'minio',
+          description: 'this has a minio plugin',
+          bucket_name: 'bucketname',
+          bucket_prefix: 'bucketprefix',
+          worker_filter: 'workerfilter',
+          endpoint_url: 'http://hashicorp.com',
+          region: 'eu-west-1',
+          disable_credential_rotation: true,
+          access_key_id: 'test',
+          secret_access_key: 'test',
+          version: 1,
+        },
+      },
+    });
+    const record = store.peekRecord('storage-bucket', '3');
+    record.description = 'This is new description';
+    record.name = 'This is the new name';
+    record.endpoint_url = 'http://developer.hashicorp.com';
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    const expectedResult = {
+      name: 'This is the new name',
+      description: 'This is new description',
+      type: TYPE_STORAGE_BUCKET_PLUGIN,
+      worker_filter: 'workerfilter',
+      attributes: {
+        region: 'eu-west-1',
+        disable_credential_rotation: true,
+        endpoint_url: 'http://developer.hashicorp.com',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
+        secrets_hmac: null,
+      },
+      secrets: {
+        access_key_id: 'test',
+        secret_access_key: 'test',
       },
       version: 1,
     };

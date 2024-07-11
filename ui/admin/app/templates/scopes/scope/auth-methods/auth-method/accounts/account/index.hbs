@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -18,14 +18,17 @@
   </page.navigation>
 
   <page.actions>
-    <AuthMethods::AuthMethod::Accounts::Account::Actions @model={{@model}} />
+    <AuthMethods::AuthMethod::Accounts::Account::Actions
+      @model={{@model}}
+      @delete={{this.accounts.delete}}
+    />
   </page.actions>
 
   <page.body>
     <Form::Account
       @model={{@model}}
-      @submit={{route-action 'save' @model}}
-      @cancel={{route-action 'cancel' @model}}
+      @submit={{fn this.accounts.save @model}}
+      @cancel={{fn this.accounts.cancel @model}}
     />
 
   </page.body>

@@ -1,12 +1,13 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -18,11 +19,14 @@ import {
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
+
   const DROPDOWN_SELECTOR_ICON =
     'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_SELECTOR_OPTION =
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
-  const NEW_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const NEW_DROPDOWN_SELECTOR =
+    '[data-test-new-dropdown] .hds-dropdown-toggle-button';
   const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
@@ -118,16 +122,22 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="client_id"]', 'client_id');
     await fillIn('[name="client_secret"]', 'client_secret');
     await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('form fieldset:nth-of-type(1) [title="Add"]');
+    await click('[data-test-add-option-button]');
     await fillIn(ALLOWED_AUDIENCES_INPUT_SELECTOR, 'allowed_audiences');
     await click(ALLOWED_AUDIENCES_BTN_SELECTOR, 'allowed_audiences');
     await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
     await click(CLAIMS_SCOPES_BTN_SELECTOR, 'claims_scopes');
 
-    await fillIn('[name="from_claim"]', 'from_claim');
-    await select('form fieldset:nth-of-type(4) select', 'email');
+    await fillIn(
+      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
+      'from_claim',
+    );
+    await select(
+      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
+      'email',
+    );
 
-    await click('form fieldset:nth-of-type(4) [title="Add"]');
+    await click('[name="account_claim_maps"] button');
 
     await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
     await click(IDP_CERTS_BTN_SELECTOR);
@@ -320,8 +330,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.',
     );
-    await visit(urls.authMethod);
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
+
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.strictEqual(
       scope.primaryAuthMethodId,
@@ -359,7 +372,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is set.',
     );
-    await visit(urls.authMethod);
+    await visit(urls.authMethods);
+
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
@@ -385,8 +400,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       instances.authMethod.id,
     );
+    await visit(urls.authMethods);
 
-    await visit(urls.authMethod);
+    await click(`[href="${urls.authMethod}"]`);
     await click(MAKE_PRIMARY_SELECTOR);
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');

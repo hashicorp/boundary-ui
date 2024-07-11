@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Layout::Page as |page|>
@@ -18,7 +18,13 @@
   </page.navigation>
 
   <page.actions>
-    <AuthMethods::AuthMethod::Actions @model={{@model.authMethod}} />
+    <AuthMethods::AuthMethod::Actions
+      @model={{@model.authMethod}}
+      @changeState={{this.authMethods.changeState}}
+      @removeAsPrimary={{this.authMethods.removeAsPrimary}}
+      @makePrimary={{this.authMethods.makePrimary}}
+      @delete={{this.authMethods.delete}}
+    />
   </page.actions>
 
   <page.body>
@@ -69,13 +75,10 @@
                 <Hds::Badge @text={{B.data.type}} />
               </B.Td>
               <B.Td>
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{B.data.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
               </B.Td>
             </B.Tr>
           </:body>
@@ -154,13 +157,10 @@
                 <Hds::Badge @text={{B.data.type}} />
               </B.Td>
               <B.Td>
-                <Copyable
-                  @text={{B.data.id}}
-                  @buttonText={{t 'actions.copy-to-clipboard'}}
-                  @acknowledgeText={{t 'states.copied'}}
-                >
-                  <code>{{B.data.id}}</code>
-                </Copyable>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
               </B.Td>
             </B.Tr>
           </:body>

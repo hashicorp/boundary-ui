@@ -1,6 +1,6 @@
 {{!
   Copyright (c) HashiCorp, Inc.
-  SPDX-License-Identifier: MPL-2.0
+  SPDX-License-Identifier: BUSL-1.1
 }}
 
 <Rose::Form
@@ -10,58 +10,48 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <form.input
-    @value={{@model.type}}
-    @label={{t 'form.type.label'}}
-    readonly={{true}}
-    @disabled={{true}}
-  />
+  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
+    <F.Label>{{t 'form.type.label'}}</F.Label>
+  </InfoField>
 
   {{#unless @model.isNew}}
-    <form.input
-      @value={{@model.issuer}}
-      @label={{t 'form.issuer.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
-    <form.input
-      @value={{@model.subject}}
-      @label={{t 'form.subject.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
-    <form.input
-      @value={{@model.email}}
-      @label={{t 'form.email.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
-    <form.input
-      @value={{@model.full_name}}
-      @label={{t 'form.full_name.label'}}
-      readonly={{true}}
-      @disabled={{true}}
-    />
+
+    <InfoField @value={{@model.issuer}} readonly={{true}} as |F|>
+      <F.Label>{{t 'form.issuer.label'}}</F.Label>
+    </InfoField>
+
+    <InfoField @value={{@model.subject}} readonly={{true}} as |F|>
+      <F.Label>{{t 'form.subject.label'}}</F.Label>
+    </InfoField>
+
+    <InfoField @value={{@model.email}} readonly={{true}} as |F|>
+      <F.Label>{{t 'form.email.label'}}</F.Label>
+    </InfoField>
+
+    <InfoField @value={{@model.full_name}} readonly={{true}} as |F|>
+      <F.Label>{{t 'form.full_name.label'}}</F.Label>
+    </InfoField>
   {{/unless}}
 
-  <form.input
-    @name='name'
-    @type='name'
+  <Hds::Form::TextInput::Field
+    name='name'
     @value={{@model.name}}
-    @label={{t 'form.name.label'}}
-    @helperText={{t 'form.name.help'}}
-    @error={{@model.errors.name}}
-    readonly={{false}}
-    as |field|
+    @isInvalid={{@model.errors.name}}
+    @isOptional={{true}}
+    disabled={{form.disabled}}
+    {{on 'input' (set-from-event @model 'name')}}
+    as |F|
   >
+    <F.Label>{{t 'form.name.label'}}</F.Label>
+    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
     {{#if @model.errors.name}}
-      <field.errors as |errors|>
+      <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <errors.message>{{error.message}}</errors.message>
+          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
         {{/each}}
-      </field.errors>
+      </F.Error>
     {{/if}}
-  </form.input>
+  </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
@@ -83,41 +73,41 @@
   </Hds::Form::Textarea::Field>
 
   {{#if @model.isNew}}
-    <form.input
-      @name='issuer'
-      @type='text'
+    <Hds::Form::TextInput::Field
+      name='issuer'
       @value={{@model.issuer}}
-      @label={{t 'form.issuer.label'}}
-      @error={{@model.errors.issuer}}
-      readonly={{false}}
-      as |field|
+      @isInvalid={{@model.errors.issuer}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'issuer')}}
+      as |F|
     >
+      <F.Label>{{t 'form.issuer.label'}}</F.Label>
       {{#if @model.errors.issuer}}
-        <field.errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.issuer as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </field.errors>
+        </F.Error>
       {{/if}}
-    </form.input>
+    </Hds::Form::TextInput::Field>
 
-    <form.input
-      @name='subject'
-      @type='text'
+    <Hds::Form::TextInput::Field
+      name='subject'
       @value={{@model.subject}}
-      @label={{t 'form.subject.label'}}
-      @error={{@model.errors.subject}}
-      readonly={{false}}
-      as |field|
+      @isInvalid={{@model.errors.subject}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'subject')}}
+      as |F|
     >
+      <F.Label>{{t 'form.subject.label'}}</F.Label>
       {{#if @model.errors.subject}}
-        <field.errors as |errors|>
+        <F.Error as |E|>
           {{#each @model.errors.subject as |error|}}
-            <errors.message>{{error.message}}</errors.message>
+            <E.Message>{{error.message}}</E.Message>
           {{/each}}
-        </field.errors>
+        </F.Error>
       {{/if}}
-    </form.input>
+    </Hds::Form::TextInput::Field>
   {{/if}}
 
   {{#if (can 'save model' @model)}}

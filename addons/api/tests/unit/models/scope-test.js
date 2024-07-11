@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
@@ -13,7 +13,7 @@ module('Unit | Model | scope', function (hooks) {
 
   test('it may have a scope fragment', async function (assert) {
     const store = this.owner.lookup('service:store');
-    this.server.get('/v1/scopes', () => ({
+    this.server.get('/scopes', () => ({
       items: [
         { id: 'global', type: 'global' },
         { id: 'o_1', type: 'org', scope: { scope_id: 'global' } },
@@ -72,7 +72,7 @@ module('Unit | Model | scope', function (hooks) {
   test('it has an `attachStoragePolicy` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/scopes/123abc:attach-storage-policy',
+      '/scopes/123abc:attach-storage-policy',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {
@@ -106,7 +106,7 @@ module('Unit | Model | scope', function (hooks) {
   test('it has a `detachStoragePolicy` method that targets a specific POST API endpoint and serialization', async function (assert) {
     assert.expect(1);
     this.server.post(
-      '/v1/scopes/123abc:detach-storage-policy',
+      '/scopes/123abc:detach-storage-policy',
       (schema, request) => {
         const body = JSON.parse(request.requestBody);
         assert.deepEqual(body, {

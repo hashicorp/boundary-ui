@@ -1,18 +1,20 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 import { module, test } from 'qunit';
 import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 
 module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
   let getCredentialStoresCount;
@@ -134,7 +136,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
       'The request was invalid.',
     );
     assert.ok(
-      find('.rose-form-error-message').textContent.trim(),
+      find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',
     );
   });

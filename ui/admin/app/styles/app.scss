@@ -1,6 +1,6 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
 @use 'rose/variables/sizing';
@@ -174,33 +174,6 @@
   }
 }
 
-.copyable {
-  white-space: nowrap;
-
-  .copyable-button {
-    margin: 0;
-    padding: 0 sizing.rems(xxs);
-    position: relative;
-    top: -2px;
-  }
-
-  mark {
-    animation: fade-background 0.75s linear;
-    background-color: transparent;
-    color: inherit;
-
-    @keyframes fade-background {
-      0% {
-        background-color: var(--action-subtler-1);
-      }
-
-      100% {
-        background-color: transparent;
-      }
-    }
-  }
-}
-
 [class*='session-status-'] {
   color: var(--ui-gray-subtler-2);
 }
@@ -284,29 +257,7 @@
       }
 
       .create-resources-item-controller-copyable {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: center;
-        border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
-        border-radius: sizing.rems(xxxs);
-        color: var(--action);
-        height: (sizing.rems(xs) * 5);
         margin: sizing.rems(xxs) 0 sizing.rems(l) 0;
-
-        .copyable {
-          display: flex;
-          justify-content: space-between;
-          padding: sizing.rems(s);
-
-          span {
-            display: flex;
-          }
-        }
-
-        .copyable-button {
-          top: 0; // This is to override a negative top declared above
-        }
       }
 
       .image-container > svg {
@@ -348,6 +299,10 @@
     align-items: flex-end;
     display: flex;
     gap: sizing.rems(m);
+
+    [class*='hds-form-field--layout'] {
+      margin-bottom: 0;
+    }
   }
 
   .worker-success {
@@ -668,6 +623,44 @@
   }
 }
 
+.target-sidebar-aliases {
+  margin-bottom: 3rem;
+
+  .description {
+    color: var(--token-form-helper-text-color);
+    font-weight: var(--token-typography-font-weight-normal);
+    font-size: var(--token-typography-body-200-font-size);
+  }
+
+  .hds-link-standalone {
+    margin-top: 1rem;
+  }
+
+  .link-list-item:first-of-type {
+    width: 90%;
+  }
+
+  .link-list-item {
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+  }
+
+  /* stylelint-disable selector-class-pattern */
+  .hds-card__container > ul {
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+
+  .hds-link-standalone__text {
+    margin: 1rem 0;
+  }
+  /* stylelint-enable selector-class-pattern */
+
+  .hds-dropdown .hds-dropdown-toggle-icon {
+    color: var(--stark);
+  }
+}
+
 .link-list-item {
   display: flex;
   align-items: center;
@@ -901,7 +894,8 @@
 }
 
 // Session recording - List
-.session-recording-list-cell-item {
+.session-recording-list-cell-item,
+.aliases-list-cell-item {
   display: flex;
   gap: 0.5rem;
 
@@ -957,6 +951,12 @@
   .hds-form-helper-text {
     margin-top: 0.5rem;
     margin-bottom: 1.5rem;
+  }
+}
+
+.alias-deletion-modal {
+  .hds-button-set {
+    margin: 0;
   }
 }
 
@@ -1030,4 +1030,9 @@
 
 .add-policy-link {
   margin-bottom: 1.5rem;
+}
+
+// generic loading indicator
+.loading-indicator {
+  margin-top: 20%;
 }
