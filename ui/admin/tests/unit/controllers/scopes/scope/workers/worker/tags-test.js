@@ -51,7 +51,7 @@ module(
     });
 
     test('tagDisplayName returns the display name of the tag', function (assert) {
-      controller.apiTagToRemove = { key: 'test', value: 'test' };
+      controller.modalTag = { key: 'test', value: 'test' };
 
       assert.strictEqual(controller.tagDisplayName, '"test = test"');
     });
@@ -72,23 +72,23 @@ module(
       await visit(urls.tags);
       const worker = await store.findRecord('worker', instances.worker.id);
       const apiTagCount = worker.apiTagList.length;
-      controller.apiTagToRemove = { key: 'test', value: 'test' };
+      controller.modalTag = { key: 'test', value: 'test' };
 
       await controller.removeApiTag();
 
       assert.strictEqual(worker.apiTagList.length, apiTagCount - 1);
-      assert.false(controller.modals.remove);
-      assert.strictEqual(controller.apiTagToRemove, null);
+      assert.false(controller.removeModal);
+      assert.strictEqual(controller.modalTag, null);
     });
 
     test('toggleModal toggles the modal and sets the apiTagToRemove', function (assert) {
-      assert.false(controller.modals.remove);
-      assert.strictEqual(controller.apiTagToRemove, null);
+      assert.false(controller.removeModal);
+      assert.strictEqual(controller.modalTag, null);
 
       controller.toggleModal('remove', { key: 'test', value: 'test' });
 
-      assert.true(controller.modals.remove);
-      assert.deepEqual(controller.apiTagToRemove, {
+      assert.true(controller.removeModal);
+      assert.deepEqual(controller.modalTag, {
         key: 'test',
         value: 'test',
       });
