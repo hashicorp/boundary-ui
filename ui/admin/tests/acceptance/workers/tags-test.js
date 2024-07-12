@@ -27,6 +27,8 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     '.confirmation-modal button:first-child';
   const CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR =
     '.confirmation-modal button:last-child';
+  const NO_TAGS_STATE_TITLE = '[data-test-no-tags] div:first-child';
+  const NO_TAGS_STATE_ACTION = '[data-test-no-tags] div:nth-child(3) a';
 
   const instances = {
     scopes: {
@@ -38,6 +40,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     workers: null,
     worker: null,
     tags: null,
+    createTags: null,
   };
 
   hooks.beforeEach(function () {
@@ -48,6 +51,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
+    urls.createTags = `${urls.worker}/create-tags`;
     authenticateSession({});
   });
 
@@ -115,5 +119,16 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await click(API_TAG_ACTION_SELECTOR);
 
     assert.dom(API_TAG_REMOVE_ACTION_SELECTOR).doesNotExist();
+  });
+
+  test('shows "No tags added" message when there are no worker tags', async function (assert) {
+    instances.worker.api_tags = {};
+    instances.worker.config_tags = {};
+    instances.worker.canonical_tags = {};
+
+    await visit(urls.tags);
+
+    assert.dom(NO_TAGS_STATE_TITLE).hasText('No tags added');
+    assert.dom(NO_TAGS_STATE_ACTION).hasAttribute('href', urls.createTags);
   });
 });

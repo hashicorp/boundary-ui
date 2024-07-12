@@ -928,6 +928,10 @@ worker:
       link: Config tags are added in the worker config file.
       success: Tag(s) successfully created
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
+    messages:
+      no-tags:
+        title: No tags added
+        body: You haven’t added any tags to this worker yet
     remove:
       title: Remove worker tag?
       success: Tag successfully removed
@@ -937,6 +941,7 @@ worker:
         help: 'Enter “REMOVE” to confirm — this is case-sensitive.'
     actions:
       remove: Remove Tag
+      add: Add tags to this worker
   flyout:
     title: Tags in {workerName}
     action:

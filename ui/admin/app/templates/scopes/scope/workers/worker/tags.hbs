@@ -30,7 +30,7 @@
     />
   </page.actions>
 
-  <page.body>
+  <page.body class='worker-tags'>
     {{#if @model.allTags}}
       <Hds::Table
         @model={{@model.allTags}}
@@ -83,6 +83,18 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+    {{else}}
+      <Hds::ApplicationState data-test-no-tags as |A|>
+        <A.Header @title={{t 'resources.worker.tags.messages.no-tags.title'}} />
+        <A.Body @text={{t 'resources.worker.tags.messages.no-tags.body'}} />
+        <A.Footer as |F|>
+          <F.LinkStandalone
+            @icon='plus'
+            @text={{t 'resources.worker.tags.actions.add'}}
+            @route='scopes.scope.workers.worker.create-tags'
+          />
+        </A.Footer>
+      </Hds::ApplicationState>
     {{/if}}
 
     {{#if this.removeModal}}
