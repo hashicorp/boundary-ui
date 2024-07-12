@@ -15,6 +15,6 @@ project {
     "**/coverage/**",
     "ui/desktop/electron-app/out/**",
     "ui/desktop/electron-app/ember-dist/**",
-    "**/yarn/**",
+    "**/.yarn/**"
   ]
 }
