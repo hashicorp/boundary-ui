@@ -93,10 +93,8 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
   });
 
-  test('can create type `ssh` when `target-worker-filters-v2` is disabled', async function (assert) {
+  test('can create a type `ssh` target', async function (assert) {
     featuresService.enable('ssh-target');
-
-    assert.false(featuresService.isEnabled('target-worker-filters-v2'));
 
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -105,7 +103,6 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
-    await fillIn('[name="worker_filter"]', 'random filter');
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
@@ -114,48 +111,10 @@ module('Acceptance | targets | create', function (hooks) {
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string',
     );
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1]
-        .workerFilter,
-      'random filter',
-    );
   });
 
-  test('can create type `ssh` when `target-worker-filters-v2` is enabled', async function (assert) {
+  test('can create a type `tcp` target', async function (assert) {
     featuresService.enable('ssh-target');
-    featuresService.enable('target-worker-filters-v2');
-
-    const targetCount = getTargetCount();
-    const sshTargetCount = getSSHTargetCount();
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[value="ssh"]');
-    await fillIn('[name="name"]', 'random string');
-    await click(
-      '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle',
-    );
-    await fillIn('[name="egress_worker_filter"]', 'random filter');
-    await click(SAVE_BTN_SELECTOR);
-
-    assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
-    assert.strictEqual(getTargetCount(), targetCount + 1);
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string',
-    );
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1]
-        .egressWorkerFilter,
-      'random filter',
-    );
-  });
-
-  test('can create type `tcp` when `target-worker-filters-v2` is disabled', async function (assert) {
-    featuresService.enable('ssh-target');
-
-    assert.false(featuresService.isEnabled('target-worker-filters-v2'));
 
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
@@ -164,7 +123,6 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
-    await fillIn('[name="worker_filter"]', 'random filter');
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -172,79 +130,6 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
       'random string',
-    );
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1]
-        .workerFilter,
-      'random filter',
-    );
-  });
-
-  test('can create type `tcp` when `target-worker-filters-v2` is enabled', async function (assert) {
-    featuresService.enable('ssh-target');
-    featuresService.enable('target-worker-filters-v2');
-
-    const targetCount = getTargetCount();
-    const tcpTargetCount = getTCPTargetCount();
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[value="tcp"]');
-    await fillIn('[name="name"]', 'random string');
-    await click(
-      '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle',
-    );
-    await fillIn('[name="egress_worker_filter"]', 'random filter');
-
-    await click(SAVE_BTN_SELECTOR);
-
-    assert.strictEqual(getTargetCount(), targetCount + 1);
-    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string',
-    );
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1]
-        .egressWorkerFilter,
-      'random filter',
-    );
-  });
-
-  test('can create type `tcp` when `target-worker-filters-v2` and `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('ssh-target');
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
-
-    const targetCount = getTargetCount();
-    const tcpTargetCount = getTCPTargetCount();
-    await visit(urls.targets);
-
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[value="tcp"]');
-    await fillIn('[name="name"]', 'random string');
-    await click(
-      '[data-test-filter="egress_worker_filter"] .hds-form-toggle__control',
-    );
-    await fillIn('[name="egress_worker_filter"]', 'random filter');
-    await click(
-      '[data-test-filter="ingress_worker_filter"] .hds-form-toggle__control',
-    );
-    await fillIn('[name="ingress_worker_filter"]', 'random filter');
-
-    await click(SAVE_BTN_SELECTOR);
-
-    assert.strictEqual(getTargetCount(), targetCount + 1);
-    assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string',
-    );
-    assert.strictEqual(
-      this.server.schema.targets.all().models[getTargetCount() - 1]
-        .egressWorkerFilter,
-      'random filter',
     );
   });
 
@@ -306,20 +191,12 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new TCP target', async function (assert) {
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
-
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
 
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
-    await click(
-      '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle',
-    );
-    await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
     assert.strictEqual(currentURL(), urls.targets);
@@ -366,8 +243,6 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('can cancel create new SSH target', async function (assert) {
     featuresService.enable('ssh-target');
-    featuresService.enable('target-worker-filters-v2');
-    featuresService.enable('target-worker-filters-v2-ingress');
 
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -375,11 +250,6 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await fillIn('[name="name"]', 'random string');
     await click('[value="ssh"]');
-    await click(
-      '[name="target-worker-filter-toggle-egress_worker_filter"]',
-      'Egress toggle',
-    );
-    await fillIn('[name="egress_worker_filter"]', 'random filter');
     await click('.rose-form-actions [type="button"]');
 
     assert.strictEqual(currentURL(), urls.targets);
