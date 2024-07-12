@@ -22,11 +22,11 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     'tbody tr:nth-child(4) td:nth-child(4) button';
   const API_TAG_REMOVE_ACTION_SELECTOR =
     'tbody tr:nth-child(4) td:nth-child(4) ul li button';
-  const REMOVE_TAG_REMOVE_SELECTOR = '.remove-tag-modal input';
-  const REMOVE_TAG_REMOVE_BUTTON_SELECTOR =
-    '.remove-tag-modal button:first-child';
-  const REMOVE_TAG_CANCEL_BUTTON_SELECTOR =
-    '.remove-tag-modal button:last-child';
+  const CONFIRMATION_MODAL_INPUT_SELECTOR = '.confirmation-modal input';
+  const CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR =
+    '.confirmation-modal button:first-child';
+  const CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR =
+    '.confirmation-modal button:last-child';
 
   const instances = {
     scopes: {
@@ -79,13 +79,13 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await click(API_TAG_ACTION_SELECTOR);
     await click(API_TAG_REMOVE_ACTION_SELECTOR);
 
-    assert.dom(REMOVE_TAG_REMOVE_BUTTON_SELECTOR).isDisabled();
+    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isDisabled();
 
-    await fillIn(REMOVE_TAG_REMOVE_SELECTOR, 'REMOVE');
+    await fillIn(CONFIRMATION_MODAL_INPUT_SELECTOR, 'REMOVE');
 
-    assert.dom(REMOVE_TAG_REMOVE_BUTTON_SELECTOR).isEnabled();
+    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isEnabled();
 
-    await click(REMOVE_TAG_REMOVE_BUTTON_SELECTOR);
+    await click(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR);
 
     assert.dom('tbody tr').exists({ count: 10 });
   });
@@ -98,7 +98,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await click(API_TAG_ACTION_SELECTOR);
     await click(API_TAG_REMOVE_ACTION_SELECTOR);
 
-    await click(REMOVE_TAG_CANCEL_BUTTON_SELECTOR);
+    await click(CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR);
 
     assert.dom('tbody tr').exists({ count: 11 });
   });
