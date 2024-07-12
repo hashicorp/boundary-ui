@@ -3,9 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.target.workers.actions.add-ingress-worker-filter')}}
+{{page-title (t 'resources.target.workers.add-ingress-worker-filter.title')}}
 <Breadcrumbs::Item
-  @text={{t 'resources.target.workers.actions.add-ingress-worker-filter'}}
+  @text={{t 'resources.target.workers.add-ingress-worker-filter.title'}}
   @route='scopes.scope.targets.target.add-ingress-worker-filter'
 />
 
@@ -17,17 +17,18 @@
 
   <page.header>
     <h2>
-      {{t 'resources.target.workers.actions.add-ingress-worker-filter'}}
+      {{t 'resources.target.workers.add-ingress-worker-filter.title'}}
       <DocLink @doc='target.worker-filters' @iconSize='large' />
     </h2>
-    <p>{{t 'resources.target.workers.ingress-workers.description'}}</p>
+    <p>{{t
+        'resources.target.workers.add-ingress-worker-filter.description'
+      }}</p>
   </page.header>
 
   <page.body class='target-workers'>
     <Form::Target::WorkerFilter
       @name='ingress_worker_filter'
       @model={{@model}}
-      @onInput={{fn (mut @model.ingress_worker_filter)}}
       @submit={{fn this.targets.saveWorkerFilter @model}}
       @cancel={{fn this.targets.cancelWorkerFilter @model}}
     />

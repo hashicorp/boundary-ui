@@ -40,10 +40,22 @@
     />
     <Hds::Accordion as |A|>
       {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
-        <A.Item data-test-target-ingress-workers-accordion-item>
-          <:toggle>{{t
-              'resources.target.workers.ingress-workers.title'
-            }}</:toggle>
+        <A.Item
+          @containsInteractive={{true}}
+          data-test-target-ingress-workers-accordion-item
+        >
+          <:toggle>
+            <div class='accordion-item-toggle-content'>
+              <span>{{t
+                  'resources.target.workers.accordion-label.ingress-workers'
+                }}</span>
+              <Hds::Link::Standalone
+                @icon='plus'
+                @text={{t 'resources.target.workers.actions.add-worker-filter'}}
+                @route='scopes.scope.targets.target.add-ingress-worker-filter'
+              />
+            </div>
+          </:toggle>
           <:content>
             {{#if @model.ingress_worker_filter}}
               <Hds::CodeBlock
@@ -70,22 +82,27 @@
                     type='ingress'
                   }}
                 />
-                <A.Footer as |F|>
-                  <F.LinkStandalone
-                    @icon='plus'
-                    @text={{t
-                      'resources.target.workers.actions.add-ingress-worker-filter'
-                    }}
-                    @route='scopes.scope.targets.target.add-ingress-worker-filter'
-                  />
-                </A.Footer>
               </Hds::ApplicationState>
             {{/if}}
           </:content>
         </A.Item>
       {{/if}}
-      <A.Item data-test-target-egress-workers-accordion-item>
-        <:toggle>{{t 'resources.target.workers.egress-workers.title'}}</:toggle>
+      <A.Item
+        @containsInteractive={{true}}
+        data-test-target-egress-workers-accordion-item
+      >
+        <:toggle>
+          <div class='accordion-item-toggle-content'>
+            <span>{{t
+                'resources.target.workers.accordion-label.egress-workers'
+              }}</span>
+            <Hds::Link::Standalone
+              @icon='plus'
+              @text={{t 'resources.target.workers.actions.add-worker-filter'}}
+              @route='scopes.scope.targets.target.add-egress-worker-filter'
+            />
+          </div>
+        </:toggle>
         <:content>
           {{#if @model.egress_worker_filter}}
             <Hds::CodeBlock
@@ -112,15 +129,6 @@
                   type='egress'
                 }}
               />
-              <A.Footer as |F|>
-                <F.LinkStandalone
-                  @icon='plus'
-                  @text={{t
-                    'resources.target.workers.actions.add-egress-worker-filter'
-                  }}
-                  @route='scopes.scope.targets.target.add-egress-worker-filter'
-                />
-              </A.Footer>
             </Hds::ApplicationState>
           {{/if}}
         </:content>

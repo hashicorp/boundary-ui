@@ -15,7 +15,7 @@
       <Rose::CodeEditor as |c|>
         <c.toolbar @copyText={{get @model @name}} />
         <c.fieldEditor
-          @onInput={{@onInput}}
+          @onInput={{fn this.setWorkerFilter @model @name}}
           @value={{or (get @model @name) ''}}
           @options={{hash
             mode='text/x-sh'

@@ -551,6 +551,13 @@
 
 // target worker filters
 .target-workers {
+  .accordion-item-toggle-content {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .rose-form-actions {
     margin-top: 2rem;
   }

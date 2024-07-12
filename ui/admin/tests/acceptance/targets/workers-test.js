@@ -21,8 +21,6 @@ module('Acceptance | targets | workers', function (hooks) {
     `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
   const CODE_BLOCK_SELECTOR = (name) =>
     `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
-  const DROPDOWN_ACTION_SELECTOR = (name) =>
-    `[data-test-add-${name}-worker-filter-action]`;
   const CODE_EDITOR_CONTENT_SELECTOR =
     '[data-test-code-editor-field-editor] textarea';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
@@ -98,8 +96,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
-    assert.dom(DROPDOWN_ACTION_SELECTOR('ingress')).isVisible();
-    assert.dom(DROPDOWN_ACTION_SELECTOR('egress')).isVisible();
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);
@@ -116,8 +112,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
-    assert.dom(DROPDOWN_ACTION_SELECTOR('ingress')).isVisible();
-    assert.dom(DROPDOWN_ACTION_SELECTOR('egress')).isVisible();
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);
@@ -133,8 +127,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(`[href="${urls.targetWorkers}"]`);
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
-    assert.dom(DROPDOWN_ACTION_SELECTOR('ingress')).doesNotExist();
-    assert.dom(DROPDOWN_ACTION_SELECTOR('egress')).isVisible();
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
       .dom(CODE_BLOCK_SELECTOR('egress'))
@@ -149,8 +141,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
-    assert.dom(DROPDOWN_ACTION_SELECTOR('ingress')).isVisible();
-    assert.dom(DROPDOWN_ACTION_SELECTOR('egress')).isVisible();
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);
@@ -166,8 +156,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(`[href="${urls.targetWorkers}"]`);
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
-    assert.dom(DROPDOWN_ACTION_SELECTOR('ingress')).doesNotExist();
-    assert.dom(DROPDOWN_ACTION_SELECTOR('egress')).isVisible();
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
       .dom(CODE_BLOCK_SELECTOR('egress'))
@@ -181,7 +169,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('ingress'));
+    await click(`[href="${urls.targetAddIngressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
     await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
@@ -196,7 +187,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('ingress'));
+    await click(`[href="${urls.targetAddIngressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
     await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
@@ -214,7 +208,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('egress'));
+    await click(`[href="${urls.targetAddEgressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
@@ -228,7 +225,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('egress'));
+    await click(`[href="${urls.targetAddEgressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
     await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
@@ -248,7 +247,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('ingress'));
+    await click(`[href="${urls.targetAddIngressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -271,7 +272,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('ingress'));
+    await click(`[href="${urls.targetAddIngressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -293,7 +296,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('egress'));
+    await click(`[href="${urls.targetAddEgressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -306,14 +311,15 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved egress worker filter changes', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const egressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(DROPDOWN_ACTION_SELECTOR('egress'));
+    await click(`[href="${urls.targetAddEgressFilter}"]`);
+
+    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
