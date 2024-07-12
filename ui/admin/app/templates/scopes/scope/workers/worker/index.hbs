@@ -27,21 +27,21 @@
   </page.navigation>
 
   <page.actions>
-    <Rose::Dropdown
-      @text={{t 'actions.manage'}}
-      @dropdownRight={{true}}
-      as |dropdown|
-    >
-      {{#if (can 'delete worker' @model)}}
-        <dropdown.button
-          @style='danger'
-          @disabled={{@model.canSave}}
-          {{on 'click' (fn this.workers.delete @model)}}
-        >
-          {{t 'resources.worker.actions.delete'}}
-        </dropdown.button>
-      {{/if}}
-    </Rose::Dropdown>
+    <Hds::Dropdown as |dd|>
+      <dd.ToggleButton
+        @text={{t 'actions.manage'}}
+        @color='secondary'
+      />
+
+    {{#if (can 'delete worker' @model)}}
+      <dd.Interactive
+        @text={{t 'resources.worker.actions.delete'}}
+        @color='critical'
+        @disabled={{@model.canSave}}
+        {{on 'click' (fn this.workers.delete @model)}}
+      />
+    {{/if}}
+    </Hds::Dropdown>
   </page.actions>
 
   <page.body>
