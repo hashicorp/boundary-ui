@@ -28,7 +28,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
 
   /**
    * Build the display name for a worker tag
-   * @returns {string}
+   * @type {string}
    */
   get tagDisplayName() {
     return `"${this.modalTag?.key} = ${this.modalTag?.value}"`;
@@ -36,7 +36,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
 
   /**
    * Checks if user entered REMOVE to enable the remove button.
-   * @returns {boolean}
+   * @type {boolean}
    */
   get isRemovalConfirmed() {
     return (
