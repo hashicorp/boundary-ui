@@ -60,18 +60,4 @@ export default class WorkerSerializer extends ApplicationSerializer {
       api_tags: apiTags,
     };
   }
-
-  normalize(typeClass, hash, ...rest) {
-    const normalizedHash = structuredClone(hash);
-    const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-
-    // api_tags is not returned by the API if it is null so we need to set it
-    // to an empty object if it is not present to prevent not updating the
-    // worker correctly if the api_tags are removed.
-    if (!normalized.data.attributes.api_tags) {
-      normalized.data.attributes.api_tags = {};
-    }
-
-    return normalized;
-  }
 }

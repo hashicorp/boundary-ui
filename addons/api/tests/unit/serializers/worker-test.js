@@ -72,7 +72,7 @@ module('Unit | Serializer | worker', function (hooks) {
     });
   });
 
-  test('it normalizes missing `apiTags`', function (assert) {
+  test('it normalizes missing `api_tags`, `config_tags`, and `canonical_tags`', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('worker');
     const worker = store.createRecord('worker').constructor;
@@ -84,13 +84,20 @@ module('Unit | Serializer | worker', function (hooks) {
       address: 'localhost',
     };
 
-    const normalized = serializer.normalize(worker, payload);
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      worker,
+      payload,
+    );
 
     assert.deepEqual(normalized, {
       data: {
         attributes: {
           address: 'localhost',
           api_tags: {},
+          authorized_actions: [],
+          canonical_tags: {},
+          config_tags: {},
           name: 'hardest worker',
           scope: {
             id: 'global',
@@ -102,6 +109,7 @@ module('Unit | Serializer | worker', function (hooks) {
         relationships: {},
         type: 'worker',
       },
+      included: [],
     });
   });
 });
