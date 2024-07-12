@@ -71,4 +71,45 @@ module('Unit | Serializer | worker', function (hooks) {
       api_tags: { key: ['value'] },
     });
   });
+
+  test('it normalizes missing `api_tags`, `config_tags`, and `canonical_tags`', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('worker');
+    const worker = store.createRecord('worker').constructor;
+    const payload = {
+      id: 'w_123',
+      name: 'hardest worker',
+      scope: { id: 'global' },
+      version: 1,
+      address: 'localhost',
+    };
+
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      worker,
+      payload,
+    );
+
+    assert.deepEqual(normalized, {
+      data: {
+        attributes: {
+          address: 'localhost',
+          api_tags: {},
+          authorized_actions: [],
+          canonical_tags: {},
+          config_tags: {},
+          name: 'hardest worker',
+          scope: {
+            id: 'global',
+            scope_id: 'global',
+          },
+          version: 1,
+        },
+        id: 'w_123',
+        relationships: {},
+        type: 'worker',
+      },
+      included: [],
+    });
+  });
 });

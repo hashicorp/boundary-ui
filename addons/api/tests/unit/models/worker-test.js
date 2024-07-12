@@ -71,6 +71,38 @@ module('Unit | Model | worker', function (hooks) {
     const model = store.peekRecord('worker', workerId);
     await model.setApiTags(tags);
   });
+  
+  test('it has a `removeApiTags` method that targets a specific POST API', async function (assert) {
+    assert.expect(1);
+    const workerId = 'w_123';
+    const tags = {
+      tag1: ['value1'],
+    };
+    this.server.post(
+      `/workers/${workerId}:remove-worker-tags`,
+      (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+        assert.deepEqual(body, { api_tags: tags, version: 1 });
+        return { id: workerId };
+      },
+    );
+
+    const store = this.owner.lookup('service:store');
+    store.push({
+      data: {
+        id: workerId,
+        type: 'worker',
+        attributes: {
+          name: 'fake worker',
+          version: 1,
+          api_tags: tags,
+        },
+      },
+    });
+    const model = store.peekRecord('worker', workerId);
+
+    await model.removeApiTags(tags);
+  });
 
   test('it has a `configTagList` method that returns an array of key/value pair objects', function (assert) {
     const store = this.owner.lookup('service:store');

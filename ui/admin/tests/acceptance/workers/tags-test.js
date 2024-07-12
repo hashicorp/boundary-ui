@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, focus } from '@ember/test-helpers';
+import { visit, currentURL, click, focus, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -18,6 +18,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     'tbody tr:first-child td:nth-child(3) button';
   const CONFIG_TAG_TOOLTIP_TEXT_SELECTOR =
     'tbody tr:first-child td:nth-child(3) > div';
+  const API_TAG_ACTION_SELECTOR =
+    'tbody tr:nth-child(4) td:nth-child(4) button';
+  const API_TAG_REMOVE_ACTION_SELECTOR =
+    'tbody tr:nth-child(4) td:nth-child(4) ul li button';
+  const CONFIRMATION_MODAL_INPUT_SELECTOR = '.confirmation-modal input';
+  const CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR =
+    '.confirmation-modal button:first-child';
+  const CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR =
+    '.confirmation-modal button:last-child';
 
   const instances = {
     scopes: {
@@ -60,5 +69,51 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     assert
       .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
       .hasText('To edit config tags, edit them in your worker config file.');
+  });
+
+  test('users can remove a specific tag', async function (assert) {
+    await visit(urls.tags);
+
+    assert.dom('tbody tr').exists({ count: 11 });
+
+    await click(API_TAG_ACTION_SELECTOR);
+    await click(API_TAG_REMOVE_ACTION_SELECTOR);
+
+    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isDisabled();
+
+    await fillIn(CONFIRMATION_MODAL_INPUT_SELECTOR, 'REMOVE');
+
+    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isEnabled();
+
+    await click(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR);
+
+    assert.dom('tbody tr').exists({ count: 10 });
+  });
+
+  test('user can cancel tag removal', async function (assert) {
+    await visit(urls.tags);
+
+    assert.dom('tbody tr').exists({ count: 11 });
+
+    await click(API_TAG_ACTION_SELECTOR);
+    await click(API_TAG_REMOVE_ACTION_SELECTOR);
+
+    await click(CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR);
+
+    assert.dom('tbody tr').exists({ count: 11 });
+  });
+
+  test('user cannot remove a tag without proper permission', async function (assert) {
+    instances.worker.authorized_actions =
+      instances.worker.authorized_actions.filter(
+        (item) => item !== 'remove-worker-tags',
+      );
+    await visit(urls.tags);
+
+    assert.dom('tbody tr').exists({ count: 11 });
+
+    await click(API_TAG_ACTION_SELECTOR);
+
+    assert.dom(API_TAG_REMOVE_ACTION_SELECTOR).doesNotExist();
   });
 });

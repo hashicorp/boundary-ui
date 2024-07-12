@@ -17,6 +17,7 @@ export default factory.extend({
       'update',
       'delete',
       'set-worker-tags',
+      'remove-worker-tags',
     ],
   config_tags: (i) => {
     if (i % 3 === 0) {

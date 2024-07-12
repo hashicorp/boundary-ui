@@ -928,6 +928,15 @@ worker:
       link: Config tags are added in the worker config file.
       success: Tag(s) successfully created
     description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
+    remove:
+      title: Remove worker tag?
+      success: Tag successfully removed
+      warning: will be removed but removing these may affect certain targets
+      confirm:
+        label: Confirm removal
+        help: 'Enter “REMOVE” to confirm — this is case-sensitive.'
+    actions:
+      remove: Remove Tag
   flyout:
     title: Tags in {workerName}
     action:

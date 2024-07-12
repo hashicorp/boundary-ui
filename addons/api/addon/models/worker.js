@@ -86,6 +86,7 @@ export default class WorkerModel extends GeneratedWorkerModel {
       'The deduplicated union of the tags reported by the worker ' +
       'from its configuration and any tags added through other means.\nOutput only.',
     readOnly: true,
+    emptyObjectIfMissing: true,
   })
   canonical_tags;
 
@@ -93,11 +94,13 @@ export default class WorkerModel extends GeneratedWorkerModel {
     description:
       "The tags set in the worker's configuration file.\nOutput only.",
     readOnly: true,
+    emptyObjectIfMissing: true,
   })
   config_tags;
 
   @attr({
     description: 'The api tags set for the worker.\nOutput only.',
+    emptyObjectIfMissing: true,
   })
   api_tags;
 
@@ -130,6 +133,17 @@ export default class WorkerModel extends GeneratedWorkerModel {
   setApiTags(apiTags) {
     return this.save({
       adapterOptions: { method: 'set-worker-tags', apiTags },
+    });
+  }
+
+  /**
+   * Method to remove api tags on the worker.
+   * @param {object} apiTags
+   * @return {Promise}
+   */
+  removeApiTags(apiTags) {
+    return this.save({
+      adapterOptions: { method: 'remove-worker-tags', apiTags },
     });
   }
 }

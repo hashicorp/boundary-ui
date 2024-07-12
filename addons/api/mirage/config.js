@@ -682,13 +682,23 @@ function routes() {
       const id = idMethod.split(':')[0];
       const method = idMethod.split(':')[1];
       const worker = workers.find(id);
-      let updatedAttrs = {};
+      let updatedAttrs = {
+        version: attrs.version,
+        api_tags: worker.api_tags,
+      };
+
+      if (method === 'remove-worker-tags') {
+        const key = Object.keys(attrs.apiTags)[0];
+        const value = attrs.apiTags[key][0];
+        updatedAttrs.api_tags[key] = updatedAttrs.api_tags[key].filter(
+          (tag) => {
+            return tag !== value;
+          },
+        );
+      }
 
       if (method === 'set-worker-tags') {
-        updatedAttrs = {
-          version: attrs.version,
-          apiTags: attrs.apiTags,
-        };
+        updatedAttrs.api_tags = attrs.apiTags;
       }
 
       return worker.update(updatedAttrs);
