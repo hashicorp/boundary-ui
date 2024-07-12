@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, focus, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  focus,
+  fillIn,
+  find,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -18,10 +25,20 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     'tbody tr:first-child td:nth-child(3) button';
   const CONFIG_TAG_TOOLTIP_TEXT_SELECTOR =
     'tbody tr:first-child td:nth-child(3) > div';
+  const API_TAG_KEY_SELECTOR = (row) =>
+    `tbody tr:nth-child(${row}) td:first-child pre`;
+  const API_TAG_VALUE_SELECTOR = (row) =>
+    `tbody tr:nth-child(${row}) td:nth-child(2) pre`;
   const API_TAG_ACTION_SELECTOR =
     'tbody tr:nth-child(4) td:nth-child(4) button';
-  const API_TAG_REMOVE_ACTION_SELECTOR =
-    'tbody tr:nth-child(4) td:nth-child(4) ul li button';
+  const API_TAG_FIRST_BUTTON_SELECTOR =
+    'tbody tr:nth-child(4) td:nth-child(4) ul li:first-child button';
+  const API_TAG_LAST_BUTTON_SELECTOR =
+    'tbody tr:nth-child(4) td:nth-child(4) ul li:nth-child(2) button';
+  const EDIT_TAG_KEY_INPUT_SELECTOR = '.edit-modal [name="edit-tag-key"]';
+  const EDIT_TAG_VALUE_INPUT_SELECTOR = '.edit-modal [name="edit-tag-value"]';
+  const EDIT_TAG_CONFIRM_BUTTON = '.edit-modal button:first-child';
+  const EDIT_TAG_CANCEL_BUTTON = '.edit-modal button:last-child';
   const CONFIRMATION_MODAL_INPUT_SELECTOR = '.confirmation-modal input';
   const CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR =
     '.confirmation-modal button:first-child';
@@ -81,7 +98,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     assert.dom('tbody tr').exists({ count: 11 });
 
     await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_REMOVE_ACTION_SELECTOR);
+    await click(API_TAG_LAST_BUTTON_SELECTOR);
 
     assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isDisabled();
 
@@ -100,7 +117,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     assert.dom('tbody tr').exists({ count: 11 });
 
     await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_REMOVE_ACTION_SELECTOR);
+    await click(API_TAG_LAST_BUTTON_SELECTOR);
 
     await click(CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR);
 
@@ -118,7 +135,63 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     await click(API_TAG_ACTION_SELECTOR);
 
-    assert.dom(API_TAG_REMOVE_ACTION_SELECTOR).doesNotExist();
+    // Asserts first button is for editing and there is on second button
+    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Edit tag');
+    assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
+  });
+
+  test('users can edit a specific tag', async function (assert) {
+    await visit(urls.tags);
+    const key = find(API_TAG_KEY_SELECTOR(4)).textContent.trim();
+    const value = find(API_TAG_VALUE_SELECTOR(4)).textContent.trim();
+
+    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
+    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+
+    await click(API_TAG_ACTION_SELECTOR);
+    await click(API_TAG_FIRST_BUTTON_SELECTOR);
+
+    await fillIn(EDIT_TAG_KEY_INPUT_SELECTOR, 'red');
+    await fillIn(EDIT_TAG_VALUE_INPUT_SELECTOR, 'blue');
+
+    await click(EDIT_TAG_CONFIRM_BUTTON);
+
+    assert.dom(API_TAG_KEY_SELECTOR(11)).hasText('red');
+    assert.dom(API_TAG_VALUE_SELECTOR(11)).hasText('blue');
+  });
+
+  test('users can cancel editing a tag', async function (assert) {
+    await visit(urls.tags);
+    const key = find(API_TAG_KEY_SELECTOR(4)).textContent.trim();
+    const value = find(API_TAG_VALUE_SELECTOR(4)).textContent.trim();
+
+    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
+    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+
+    await click(API_TAG_ACTION_SELECTOR);
+    await click(API_TAG_FIRST_BUTTON_SELECTOR);
+
+    await fillIn(EDIT_TAG_KEY_INPUT_SELECTOR, 'red');
+    await fillIn(EDIT_TAG_VALUE_INPUT_SELECTOR, 'blue');
+
+    await click(EDIT_TAG_CANCEL_BUTTON);
+
+    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
+    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+  });
+
+  test('user cannot edit a tag without proper permission', async function (assert) {
+    instances.worker.authorized_actions =
+      instances.worker.authorized_actions.filter(
+        (item) => item !== 'set-worker-tags',
+      );
+    await visit(urls.tags);
+
+    await click(API_TAG_ACTION_SELECTOR);
+
+    // Asserts first button is for removing and there is on second button
+    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Remove tag');
+    assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
   });
 
   test('shows "No tags added" message when there are no worker tags', async function (assert) {

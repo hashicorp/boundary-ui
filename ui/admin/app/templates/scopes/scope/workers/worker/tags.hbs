@@ -71,6 +71,12 @@
                     @hasChevron={{false}}
                     @size='small'
                   />
+                  {{#if (can 'setWorkerTags worker' @model)}}
+                    <dd.Interactive
+                      @text={{t 'resources.worker.tags.edit.title'}}
+                      {{on 'click' (fn this.toggleEditModal B.data)}}
+                    />
+                  {{/if}}
                   {{#if (can 'removeTags worker' @model)}}
                     <dd.Interactive
                       @text={{t 'resources.worker.tags.actions.remove'}}
@@ -95,6 +101,54 @@
           />
         </A.Footer>
       </Hds::ApplicationState>
+    {{/if}}
+
+    {{#if this.editModal}}
+      <Hds::Modal class='edit-modal' @onClose={{this.toggleEditModal}} as |M|>
+        <M.Header>
+          {{t 'resources.worker.tags.edit.title'}}
+        </M.Header>
+        <M.Body>
+          <Hds::Text::Body @color='primary'>
+            {{t 'resources.worker.tags.edit.description'}}
+          </Hds::Text::Body>
+          {{! template-lint-disable no-autofocus-attribute }}
+          <Hds::Form::TextInput::Field
+            name='edit-tag-key'
+            autofocus={{true}}
+            @value={{this.editKey}}
+            {{on 'input' (set-from-event this 'editKey')}}
+            as |F|
+          >
+            <F.Label>{{t 'resources.worker.table.key'}}</F.Label>
+          </Hds::Form::TextInput::Field>
+          <Hds::Form::TextInput::Field
+            name='edit-tag-value'
+            autofocus={{true}}
+            @value={{this.editValue}}
+            {{on 'input' (set-from-event this 'editValue')}}
+            as |F|
+          >
+            <F.Label>{{t 'resources.worker.table.value'}}</F.Label>
+            <F.HelperText>{{t
+                'resources.worker.tags.edit.helper-text'
+              }}</F.HelperText>
+          </Hds::Form::TextInput::Field>
+        </M.Body>
+        <M.Footer as |F|>
+          <Hds::ButtonSet>
+            <Hds::Button
+              @text={{t 'actions.confirm'}}
+              {{on 'click' this.editApiTag}}
+            />
+            <Hds::Button
+              @color='secondary'
+              @text={{t 'actions.cancel'}}
+              {{on 'click' F.close}}
+            />
+          </Hds::ButtonSet>
+        </M.Footer>
+      </Hds::Modal>
     {{/if}}
 
     {{#if this.removeModal}}

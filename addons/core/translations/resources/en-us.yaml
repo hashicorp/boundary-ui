@@ -939,8 +939,13 @@ worker:
       confirm:
         label: Confirm removal
         help: 'Enter “REMOVE” to confirm — this is case-sensitive.'
+    edit:
+      title: Edit tag
+      description: Edit the existing worker tag
+      success: Tag successfully edited
+      helper-text: Separate multiple values by comma
     actions:
-      remove: Remove Tag
+      remove: Remove tag
       add: Add tags to this worker
   flyout:
     title: Tags in {workerName}

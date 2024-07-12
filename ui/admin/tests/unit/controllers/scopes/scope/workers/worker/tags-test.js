@@ -17,6 +17,7 @@ module(
 
     let store;
     let controller;
+    const apiTags = { test: ['test'], key: ['value'] };
 
     const instances = {
       scopes: {
@@ -40,7 +41,7 @@ module(
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.worker = this.server.create('worker', {
         scope: instances.scopes.global,
-        api_tags: { test: ['test'], key: ['value'] },
+        api_tags: apiTags,
       });
       urls.workers = `/scopes/global/workers`;
       urls.tags = `${urls.workers}/${instances.worker.id}/tags`;
@@ -78,7 +79,43 @@ module(
 
       assert.strictEqual(worker.apiTagList.length, apiTagCount - 1);
       assert.false(controller.removeModal);
-      assert.strictEqual(controller.modalTag, null);
+    });
+
+    test('editApiTags calls setApiTags on the model and closes modal', async function (assert) {
+      await visit(urls.tags);
+      const worker = await store.findRecord('worker', instances.worker.id);
+
+      assert.deepEqual(worker.api_tags, apiTags);
+
+      // set controller values needed for editing
+      controller.modalTag = { key: 'test', value: 'test' };
+      controller.editKey = 'unit';
+      controller.editValue = 'test';
+
+      await controller.editApiTag();
+
+      assert.deepEqual(worker.api_tags, { unit: ['test'], key: ['value'] });
+      assert.false(controller.editModal);
+    });
+
+    test('editApiTags can handle comma separate string value', async function (assert) {
+      await visit(urls.tags);
+      const worker = await store.findRecord('worker', instances.worker.id);
+
+      assert.deepEqual(worker.api_tags, apiTags);
+
+      // set controller values needed for editing
+      controller.modalTag = { key: 'test', value: 'test' };
+      controller.editKey = 'unit';
+      controller.editValue = 'test, are, fun';
+
+      await controller.editApiTag();
+
+      assert.deepEqual(worker.api_tags, {
+        unit: ['test', 'are', 'fun'],
+        key: ['value'],
+      });
+      assert.false(controller.editModal);
     });
 
     test('toggleRemoveModal toggles the modal and sets the modalTag', function (assert) {
@@ -88,6 +125,19 @@ module(
       controller.toggleRemoveModal({ key: 'test', value: 'test' });
 
       assert.true(controller.removeModal);
+      assert.deepEqual(controller.modalTag, {
+        key: 'test',
+        value: 'test',
+      });
+    });
+
+    test('toggleEditModal toggles the modal and sets the modalTag', function (assert) {
+      assert.false(controller.editModal);
+      assert.strictEqual(controller.modalTag, null);
+
+      controller.toggleEditModal({ key: 'test', value: 'test' });
+
+      assert.true(controller.editModal);
       assert.deepEqual(controller.modalTag, {
         key: 'test',
         value: 'test',

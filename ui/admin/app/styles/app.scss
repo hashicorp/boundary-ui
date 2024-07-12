@@ -1025,18 +1025,28 @@
   text-overflow: ellipsis;
 }
 
-.confirmation-modal {
-  .hds-button-set {
-    margin-bottom: 0;
-  }
-
-  .hds-form-field--layout-vertical {
-    margin-top: 1.5rem;
-    margin-bottom: 0;
-  }
-}
-
 .worker-tags {
+  .confirmation-modal {
+    .hds-button-set {
+      margin-bottom: 0;
+    }
+
+    .hds-form-field--layout-vertical {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .edit-modal {
+    .hds-button-set {
+      margin-bottom: 0;
+    }
+
+    // div:nth-child(2) span {
+    //   margin-bottom: 1.5rem;
+    // }
+  }
+
   .hds-application-state {
     margin-top: 1.5rem;
   }
