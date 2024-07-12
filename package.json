@@ -61,9 +61,5 @@
   "engines": {
     "node": "18.* || 20.*"
   },
-  "dependencies": {
-    "@babel/helpers": "^7.24.8",
-    "@babel/runtime": "^7.24.8"
-  },
   "packageManager": "yarn@4.3.1"
 }

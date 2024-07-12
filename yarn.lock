@@ -1462,7 +1462,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.24.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.8.4":
   version: 7.24.8
   resolution: "@babel/runtime@npm:7.24.8"
   dependencies:
@@ -4267,8 +4267,8 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.18.5"
     "@babel/eslint-parser": "npm:^7.21.3"
-    "@babel/helpers": "npm:^7.24.8"
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
+    "@babel/runtime": "npm:7.12.18"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^3.0.1"
@@ -4285,10 +4285,10 @@ __metadata:
     core: "npm:*"
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^4.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
     ember-cli-app-version: "npm:^6.0.0"
-    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-code-coverage: "npm:^1.0.3"
     ember-cli-content-security-policy: "npm:^2.0.3"
     ember-cli-dependency-checker: "npm:^3.3.1"
@@ -4632,10 +4632,10 @@ __metadata:
     concurrently: "npm:^8.0.1"
     dexie: "npm:^3.2.4"
     doctoc: "npm:^2.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-can: "npm:^4.2.0"
     ember-cli: "npm:^4.12.1"
-    ember-cli-babel: "npm:^7.26.10"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -4664,7 +4664,7 @@ __metadata:
     qunit: "npm:^2.19.4"
     qunit-dom: "npm:^2.0.0"
     tracked-built-ins: "npm:^3.1.1"
-    webpack: "npm:^5.78.0"
+    webpack: "npm:^5.93.0"
   peerDependencies:
     "@babel/helpers": ^7.24.8
     ember-source: ">4.0.0"
@@ -5008,9 +5008,9 @@ __metadata:
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^8.0.1"
     doctoc: "npm:^2.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -5038,7 +5038,7 @@ __metadata:
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.19.4"
     qunit-dom: "npm:^2.0.0"
-    webpack: "npm:^5.78.0"
+    webpack: "npm:^5.93.0"
   languageName: unknown
   linkType: soft
 
@@ -7788,10 +7788,10 @@ __metadata:
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^8.0.1"
     doctoc: "npm:^2.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-browser-services: "npm:^4.0.3"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -7827,7 +7827,7 @@ __metadata:
     rose: "npm:*"
     sass: "npm:^1.69.5"
     sinon: "npm:^17.0.1"
-    webpack: "npm:^5.78.0"
+    webpack: "npm:^5.93.0"
   peerDependencies:
     ember-source: ^4.0.0
     lodash: ^4.17.21
@@ -8518,11 +8518,11 @@ __metadata:
     cross-env: "npm:^7.0.3"
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^4.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-autofocus-modifier: "npm:^4.0.1"
     ember-cli: "npm:^4.12.2"
     ember-cli-app-version: "npm:^6.0.0"
-    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-code-coverage: "npm:^1.0.3"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-flash: "npm:^4.0.0"
@@ -8566,7 +8566,7 @@ __metadata:
     stylelint-config-standard-scss: "npm:^13.1.0"
     tracked-built-ins: "npm:^3.1.1"
     uuid: "npm:^9.0.0"
-    webpack: "npm:^5.78.0"
+    webpack: "npm:^5.93.0"
     xterm: "npm:^5.2.1"
     xterm-addon-canvas: "npm:^0.5.0"
     xterm-addon-fit: "npm:^0.7.0"
@@ -9003,7 +9003,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-auto-import@npm:^2.2.3, ember-auto-import@npm:^2.4.1, ember-auto-import@npm:^2.4.2, ember-auto-import@npm:^2.5.0, ember-auto-import@npm:^2.6.0, ember-auto-import@npm:^2.6.1, ember-auto-import@npm:^2.6.3, ember-auto-import@npm:^2.7.2":
+"ember-auto-import@npm:^2.2.3, ember-auto-import@npm:^2.4.1, ember-auto-import@npm:^2.4.2, ember-auto-import@npm:^2.5.0, ember-auto-import@npm:^2.6.0, ember-auto-import@npm:^2.6.1, ember-auto-import@npm:^2.6.3, ember-auto-import@npm:^2.7.2, ember-auto-import@npm:^2.7.4":
   version: 2.7.4
   resolution: "ember-auto-import@npm:2.7.4"
   dependencies:
@@ -9123,7 +9123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.10, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.26.8, ember-cli-babel@npm:^7.7.3":
+"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.26.8, ember-cli-babel@npm:^7.7.3":
   version: 7.26.11
   resolution: "ember-cli-babel@npm:7.26.11"
   dependencies:
@@ -19713,8 +19713,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@babel/helpers": "npm:^7.24.8"
-    "@babel/runtime": "npm:^7.24.8"
     concurrently: "npm:^8.2.2"
     cz-conventional-changelog: "npm:^3.1.0"
     doctoc: "npm:^2.2.0"
@@ -19746,9 +19744,9 @@ __metadata:
     codemirror: "npm:5.65.7"
     concurrently: "npm:^8.0.1"
     doctoc: "npm:^2.2.0"
-    ember-auto-import: "npm:^2.6.3"
+    ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^7.26.11"
+    ember-cli-babel: "npm:^8.2.0"
     ember-cli-clipboard: "npm:^1.0.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
@@ -19794,7 +19792,7 @@ __metadata:
     stylelint: "npm:^15.10.1"
     stylelint-config-prettier-scss: "npm:^1.0.0"
     stylelint-config-standard-scss: "npm:^11.0.0"
-    webpack: "npm:^5.78.0"
+    webpack: "npm:^5.93.0"
   peerDependencies:
     ember-source: ^4.0.0
   languageName: unknown
@@ -23078,7 +23076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.72.1, webpack@npm:^5.78.0":
+"webpack@npm:^5.72.1, webpack@npm:^5.78.0, webpack@npm:^5.93.0":
   version: 5.93.0
   resolution: "webpack@npm:5.93.0"
   dependencies:

@@ -24,9 +24,9 @@
   },
   "dependencies": {
     "dexie": "^3.2.4",
-    "ember-auto-import": "^2.6.3",
+    "ember-auto-import": "^2.7.4",
     "ember-can": "^4.2.0",
-    "ember-cli-babel": "^7.26.10",
+    "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-mirage": "^3.0.3",
     "ember-data": "~4.12.0",
@@ -71,7 +71,7 @@
     "prettier": "^3.0.0",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
-    "webpack": "^5.78.0"
+    "webpack": "^5.93.0"
   },
   "peerDependencies": {
     "@babel/helpers": "^7.24.8",
@@ -90,6 +90,5 @@
     "*.js": "eslint --fix",
     "*.hbs": "ember-template-lint --fix",
     "*.{js,scss,yaml}": "prettier --write"
-  },
-  "packageManager": "yarn@4.2.2"
+  }
 }
