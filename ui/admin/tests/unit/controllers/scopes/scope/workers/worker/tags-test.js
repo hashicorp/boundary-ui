@@ -81,11 +81,11 @@ module(
       assert.strictEqual(controller.modalTag, null);
     });
 
-    test('toggleModal toggles the modal and sets the apiTagToRemove', function (assert) {
+    test('toggleRemoveModal toggles the modal and sets the apiTagToRemove', function (assert) {
       assert.false(controller.removeModal);
       assert.strictEqual(controller.modalTag, null);
 
-      controller.toggleModal('remove', { key: 'test', value: 'test' });
+      controller.toggleRemoveModal({ key: 'test', value: 'test' });
 
       assert.true(controller.removeModal);
       assert.deepEqual(controller.modalTag, {

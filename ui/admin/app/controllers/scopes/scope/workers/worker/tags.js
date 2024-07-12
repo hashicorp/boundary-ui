@@ -62,15 +62,12 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
 
   /**
    * Opens the remove tag modal.
-   * @param {string} action
    * @param {object} apiTag
    */
   @action
-  toggleModal(action, apiTag = null) {
-    if (action === 'remove') {
-      this.removeModal = !this.removeModal;
-      this.modalTag = apiTag;
-      this.removalConfirmation = null;
-    }
+  toggleRemoveModal(apiTag = null) {
+    this.removeModal = !this.removeModal;
+    this.modalTag = apiTag;
+    this.removalConfirmation = null;
   }
 }

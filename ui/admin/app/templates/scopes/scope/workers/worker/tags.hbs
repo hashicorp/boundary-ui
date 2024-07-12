@@ -67,14 +67,14 @@
                 <Hds::Dropdown as |dd|>
                   <dd.ToggleIcon
                     @icon='more-horizontal'
-                    @text='Overflow Options'
+                    @text={{t 'actions.overflow-options'}}
                     @hasChevron={{false}}
                     @size='small'
                   />
                   {{#if (can 'removeTags worker' @model)}}
                     <dd.Interactive
                       @text={{t 'resources.worker.tags.actions.remove'}}
-                      {{on 'click' (fn this.toggleModal 'remove' B.data)}}
+                      {{on 'click' (fn this.toggleRemoveModal B.data)}}
                     />
                   {{/if}}
                 </Hds::Dropdown>
@@ -89,7 +89,7 @@
       <Hds::Modal
         class='confirmation-modal'
         @color='critical'
-        @onClose={{fn this.toggleModal 'remove'}}
+        @onClose={{this.toggleRemoveModal}}
         as |M|
       >
         <M.Header @icon='alert-diamond'>
@@ -121,12 +121,12 @@
             <Hds::Button
               disabled={{not this.isRemovalConfirmed}}
               @color='critical'
-              @text='Remove'
+              @text={{t 'actions.remove'}}
               {{on 'click' this.removeApiTag}}
             />
             <Hds::Button
               @color='secondary'
-              @text='Cancel'
+              @text={{t 'actions.cancel'}}
               {{on 'click' F.close}}
             />
           </Hds::ButtonSet>
