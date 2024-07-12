@@ -11,7 +11,6 @@ module.exports = {
     'max-nesting-depth': 4,
     'selector-max-compound-selectors': 4,
     'scss/at-extend-no-missing-placeholder': null,
-    'function-parentheses-space-inside': null,
     'property-no-vendor-prefix': null,
     'at-rule-no-vendor-prefix': null,
     // This is often limited by the DOM and we want to order our declarations by our own standard

@@ -31,6 +31,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@babel/helpers": "^7.24.8",
     "api": "*",
     "auth": "*",
     "ember-auto-import": "^2.6.3",
@@ -43,6 +44,7 @@
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^4.0.3",
     "filesize": "^10.0.7",
+    "intl-messageformat": "^10.5.14",
     "intl-unofficial-duration-unit-format": "^3.1.0",
     "sass": "^1.69.5"
   },

@@ -44,6 +44,7 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
+    "@babel/helpers": "^7.24.8",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21"
   },
@@ -85,7 +86,7 @@
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
     "ember-page-title": "^7.0.0",
-    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539",
+    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2",
     "ember-qunit": "^6.2.0",
     "ember-resolver": "^10.0.0",
     "ember-source": "~4.12.0",
@@ -104,7 +105,7 @@
     "rose": "*",
     "sinon": "^14.0.0",
     "stylelint": "^15.10.1",
-    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-prettier-scss": "^1.0.0",
     "stylelint-config-standard-scss": "^11.0.0",
     "tracked-built-ins": "^3.1.1",
     "webpack": "^5.78.0"

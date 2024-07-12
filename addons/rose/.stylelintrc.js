@@ -6,7 +6,7 @@
 'use strict';
 
 module.exports = {
-  extends: ['stylelint-config-standard-scss', 'stylelint-config-prettier-scss'],
+  extends: ['stylelint-config-standard-scss'],
   rules: {
     // This could be fixed in the future if we don't want to use the legacy format
     'color-function-notation': 'legacy',

@@ -74,6 +74,7 @@
     "webpack": "^5.78.0"
   },
   "peerDependencies": {
+    "@babel/helpers": "^7.24.8",
     "ember-source": ">4.0.0"
   },
   "engines": {
