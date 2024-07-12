@@ -80,6 +80,5 @@
     "*.js": "eslint --fix",
     "*.hbs": "ember-template-lint --fix",
     "*.{js,scss,yaml}": "prettier --write"
-  },
-  "packageManager": "yarn@4.2.2"
+  }
 }

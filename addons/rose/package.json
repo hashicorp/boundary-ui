@@ -115,6 +115,5 @@
     "*.hbs": "ember-template-lint --fix",
     "*.scss": "stylelint --fix",
     "*.{js,scss,mdx,yaml}": "prettier --write"
-  },
-  "packageManager": "yarn@4.2.2"
+  }
 }
