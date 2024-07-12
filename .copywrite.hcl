@@ -15,5 +15,7 @@ project {
     "**/coverage/**",
     "ui/desktop/electron-app/out/**",
     "ui/desktop/electron-app/ember-dist/**",
+    "ui/desktop/electron-app/.yarnrc.yml",
+    ".yarn/**",
   ]
 }
