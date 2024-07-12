@@ -43,7 +43,6 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
-    "@electron-forge/plugin-webpack": "^7.4.0",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0",
@@ -115,6 +114,7 @@
     "sinon": "^14.0.0",
     "stylelint": "^16.6.1",
     "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-standard": "^36.0.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "tracked-built-ins": "^3.1.1",
     "webpack": "^5.93.0"
