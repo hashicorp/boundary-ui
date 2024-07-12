@@ -119,14 +119,12 @@
         <M.Footer as |F|>
           <Hds::ButtonSet>
             <Hds::Button
-              type='button'
               disabled={{not this.isRemovalConfirmed}}
               @color='critical'
               @text='Remove'
               {{on 'click' this.removeApiTag}}
             />
             <Hds::Button
-              type='button'
               @color='secondary'
               @text='Cancel'
               {{on 'click' F.close}}
