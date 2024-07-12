@@ -16,6 +16,10 @@ const config = {
     baseURL: process.env.BOUNDARY_ADDR,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    extraHTTPHeaders: {
+      // This token is set in global-setup.js
+      Authorization: `Bearer ${process.env.E2E_TOKEN}`,
+    },
   },
   projects: [
     {
