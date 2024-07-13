@@ -8147,7 +8147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cz-conventional-changelog@npm:3.3.0, cz-conventional-changelog@npm:^3.1.0":
+"cz-conventional-changelog@npm:3.3.0, cz-conventional-changelog@npm:^3.3.0":
   version: 3.3.0
   resolution: "cz-conventional-changelog@npm:3.3.0"
   dependencies:
@@ -19717,7 +19717,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     concurrently: "npm:^8.2.2"
-    cz-conventional-changelog: "npm:^3.1.0"
+    cz-conventional-changelog: "npm:^3.3.0"
     doctoc: "npm:^2.2.0"
     git-cz: "npm:^4.8.0"
     husky: "npm:^8.0.0"
