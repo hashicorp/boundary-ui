@@ -48,36 +48,31 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   }
 
   updateApiTags() {
-    const currentApiTags = structuredClone(this.model.api_tags);
+    const apiTags = structuredClone(this.model.api_tags);
     const { key, value } = this.modalTag;
     const editedValues = this.editValue.split(',').map((value) => value.trim());
 
     // remove the old value
-    currentApiTags[key] = currentApiTags[key].filter((val) => val !== value);
+    apiTags[key] = apiTags[key].filter((val) => val !== value);
 
     // remove key if value is empty array
-    if (currentApiTags[key].length === 0) {
-      delete currentApiTags[key];
+    if (apiTags[key].length === 0) {
+      delete apiTags[key];
     }
 
-    // add the new value under the new key
-    if (this.editKey in currentApiTags) {
-      // if the new key exist, add the new values to
-      // its array if not already present
-      if (!currentApiTags[this.editKey].includes(this.editValue)) {
-        // currentApiTags[this.editKey].push(this.editValue);
-        editedValues.forEach((value) => {
-          if (!currentApiTags[this.editKey].includes(value)) {
-            currentApiTags[this.editKey].push(value);
-          }
-        });
-      }
+    // add new key/value to apiTags
+    if (this.editKey in apiTags) {
+      // if editKey exist, add the new values to its array if not already preset
+      editedValues.forEach((value) => {
+        if (!apiTags[this.editKey].includes(value)) {
+          apiTags[this.editKey].push(value);
+        }
+      });
     } else {
-      // add to api tags if does not exist
-      currentApiTags[this.editKey] = editedValues;
+      apiTags[this.editKey] = editedValues;
     }
 
-    return currentApiTags;
+    return apiTags;
   }
 
   /**
