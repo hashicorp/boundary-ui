@@ -79,7 +79,7 @@
         (hash label=(t 'resources.target.titles.active-sessions'))
         (hash label=(t 'form.type.label'))
         (hash label=(t 'resources.project.title'))
-        (hash label='' align='right')
+        (hash label=(t 'titles.actions') isVisuallyHidden=true align='right')
       }}
       @valign='middle'
     >
@@ -214,7 +214,12 @@
           (hash label=(t 'form.started.label'))
           (hash label=(t 'form.session_id.label'))
           (hash label=(t 'form.proxy_url.label'))
-          (hash label='' align='right' width='60px')
+          (hash
+            label=(t 'titles.actions')
+            isVisuallyHidden=true
+            align='right'
+            width='60px'
+          )
         }}
         @valign='middle'
       >
