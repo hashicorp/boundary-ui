@@ -656,12 +656,7 @@ function routes() {
   this.del('/managed-groups/:id');
 
   // workers
-  this.get(
-    '/workers',
-    ({ workers }, { queryParams: { scope_id: scopeId } }) => {
-      return workers.where({ scopeId });
-    },
-  );
+  this.get('/workers');
   this.get('/workers/:id');
   this.del('/workers/:id');
   this.patch('/workers/:id');

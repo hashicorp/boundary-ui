@@ -27,213 +27,179 @@
     {{/if}}
   </page.actions>
 
-  <page.body>
-    {{#if @model}}
-      <Rose::Toolbar as |toolbar|>
-        <toolbar.primary>
-          <Rose::Form as |form|>
-            {{#let
-              (resource-filter 'scopes.scope.workers.index' 'tags')
-              as |filter|
-            }}
-              {{#if filter.allowedValues}}
-                <Rose::Dropdown
-                  @text={{t (concat 'form.' filter.name '.label')}}
-                  @count={{filter.selectedValue.length}}
-                  @ignoreClickInside={{true}}
-                  as |dropdown|
-                >
-                  {{#each-in
-                    (group-by 'key' filter.allowedValues)
-                    as |key tags|
-                  }}
-                    <dropdown.section
-                      @title={{key}}
-                      @icon='flight-icons/svg/tag-16'
-                    />
-                    <form.checkboxGroup
-                      @name={{key}}
-                      @items={{tags}}
-                      @selectedItems={{filter.selectedValue}}
-                      @onChange={{route-action 'filterBy' filter.name}}
-                      @itemEqualityFunc={{route-action 'isEqual'}}
-                      as |group|
-                    >
-                      <dropdown.item class='indent-label-1'>
-                        <group.checkbox
-                          @label={{group.item.value}}
-                          value={{group.item}}
-                        />
-                      </dropdown.item>
-                    </form.checkboxGroup>
-                  {{/each-in}}
-                </Rose::Dropdown>
-              {{/if}}
-            {{/let}}
-            {{#if
-              (has-resource-filter-selections
-                'scopes.scope.workers.index' 'tags'
-              )
-            }}
-              <Rose::Button
-                @style='inline-link-action'
-                @iconLeft='flight-icons/svg/x-16'
-                {{on 'click' (route-action 'clearAllFilters')}}
-              >{{t 'actions.clear-all-filters'}}
-              </Rose::Button>
-            {{/if}}
-          </Rose::Form>
-        </toolbar.primary>
+  <page.body class='search-filtering'>
+    {{#if @model.workersExist}}
+      <Hds::SegmentedGroup as |S|>
+        <S.TextInput
+          @value={{this.search}}
+          @type='search'
+          placeholder={{t 'actions.search'}}
+          aria-label={{t 'actions.search'}}
+          {{on 'input' this.handleSearchInput}}
+        />
+        <S.Generic>
+          <Dropdown
+            name='release_version'
+            @toggleText={{t 'form.worker_release_version.label'}}
+            @itemOptions={{this.releaseVersionOptions}}
+            @checkedItems={{this.releaseVersions}}
+            @applyFilter={{fn this.applyFilter 'releaseVersions'}}
+          />
+        </S.Generic>
+      </Hds::SegmentedGroup>
+      <FilterTags @filters={{this.filters}} />
 
-        <toolbar.secondary>
-          <ToolbarRefresher @onClick={{route-action 'refresh'}} />
-        </toolbar.secondary>
-
-      </Rose::Toolbar>
-
-      <Hds::Table
-        class='workers-list-table'
-        @model={{@model}}
-        @columns={{array
-          (hash label=(t 'resources.worker.title'))
-          (hash label=(t 'form.tags.label'))
-          (hash label=(t 'resources.session.title_plural'))
-          (hash label=(t 'resources.worker.table.release_version'))
-          (hash label=(t 'resources.worker.table.ip_address'))
-          (hash label=(t 'form.id.label'))
-        }}
-        @density='short'
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr>
-            <B.Td>
-              {{#if (and (can 'read worker' B.data) B.data.isPki)}}
-                <LinkTo
-                  @route='scopes.scope.workers.worker'
-                  @model={{B.data.id}}
-                >
-                  {{B.data.displayName}}
-                </LinkTo>
-              {{else}}
-                {{B.data.displayName}}
-              {{/if}}
-              {{#if B.data.description}}
-                <p>{{B.data.description}}</p>
-              {{/if}}
-            </B.Td>
-            <B.Td>
-              {{#if B.data.tagCount}}
-                <Hds::Button
-                  data-test-worker-tags-flyout-button={{B.data.id}}
-                  @icon='tag'
-                  @text={{t
-                    'resources.worker.table.tag_count'
-                    tagCount=B.data.tagCount
-                  }}
-                  @color='tertiary'
-                  @size='small'
-                  {{on 'click' (fn this.selectWorker B.data)}}
-                />
-              {{/if}}
-            </B.Td>
-            <B.Td>{{B.data.active_connection_count}}</B.Td>
-            <B.Td>{{B.data.release_version}}</B.Td>
-            <B.Td>{{B.data.address}} </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
-
-      {{#if this.selectedWorker}}
-        <Hds::Flyout
-          data-test-worker-tags-flyout
-          @onClose={{fn this.selectWorker null}}
-          as |M|
+      {{#if @model.workers}}
+        <Hds::Table
+          class='workers-list-table'
+          @model={{@model.workers}}
+          @columns={{array
+            (hash label=(t 'resources.worker.title'))
+            (hash label=(t 'form.tags.label'))
+            (hash label=(t 'resources.session.title_plural'))
+            (hash label=(t 'resources.worker.table.release_version'))
+            (hash label=(t 'resources.worker.table.ip_address'))
+            (hash label=(t 'form.id.label'))
+          }}
+          @density='short'
+          @valign='middle'
         >
-          <M.Header>
-            {{t
-              'resources.worker.flyout.title'
-              workerName=this.selectedWorker.displayName
-            }}
-          </M.Header>
-          <M.Body>
-            <Hds::Table
-              @model={{this.selectedWorkerTags}}
-              @columns={{array
-                (hash label=(t 'resources.worker.table.tag'))
-                (hash label=(t 'resources.worker.table.type'))
-              }}
-              @valign='middle'
-            >
-              <:body as |B|>
-                <B.Tr>
-                  <B.Td>
-                    <Hds::Text::Code class='tag-shortener'>
-                      {{this.tagDisplayName B.data}}
-                    </Hds::Text::Code>
-                  </B.Td>
-                  <B.Td>
-                    <Hds::Badge @text={{B.data.type}} />
-                  </B.Td>
-                </B.Tr>
-              </:body>
-            </Hds::Table>
-            {{#if (gt this.selectedWorker.allTags.length 10)}}
-              <div class='view-more-tags'>
-                <Hds::Link::Standalone
-                  @icon='arrow-right'
-                  @iconPosition='trailing'
-                  @text={{t 'resources.worker.flyout.action.view_more'}}
-                  @route='scopes.scope.workers.worker.tags'
-                  @model={{this.selectedWorker}}
+          <:body as |B|>
+            <B.Tr>
+              <B.Td>
+                {{#if (and (can 'read worker' B.data) B.data.isPki)}}
+                  <LinkTo
+                    @route='scopes.scope.workers.worker'
+                    @model={{B.data.id}}
+                  >
+                    {{B.data.displayName}}
+                  </LinkTo>
+                {{else}}
+                  {{B.data.displayName}}
+                {{/if}}
+                {{#if B.data.description}}
+                  <p>{{B.data.description}}</p>
+                {{/if}}
+              </B.Td>
+              <B.Td>
+                {{#if B.data.tagCount}}
+                  <Hds::Button
+                    data-test-worker-tags-flyout-button={{B.data.id}}
+                    @icon='tag'
+                    @text={{t
+                      'resources.worker.table.tag_count'
+                      tagCount=B.data.tagCount
+                    }}
+                    @color='tertiary'
+                    @size='small'
+                    {{on 'click' (fn this.selectWorker B.data)}}
+                  />
+                {{/if}}
+              </B.Td>
+              <B.Td>{{B.data.active_connection_count}}</B.Td>
+              <B.Td>{{B.data.release_version}}</B.Td>
+              <B.Td>{{B.data.address}} </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
                 />
-              </div>
-            {{/if}}
-          </M.Body>
-        </Hds::Flyout>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+        <Rose::Pagination
+          @totalItems={{@model.totalItems}}
+          @currentPage={{this.page}}
+          @currentPageSize={{this.pageSize}}
+        />
+
+      {{else}}
+        <Hds::ApplicationState data-test-no-worker-results as |A|>
+          <A.Header @title={{t 'titles.no-results-found'}} />
+          <A.Body
+            @text={{t
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
+              query=this.search
+              resource=(t 'resources.worker.title_plural')
+            }}
+          />
+        </Hds::ApplicationState>
       {{/if}}
     {{else}}
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.worker.messages.welcome.title'}}
-          as |message|
-        >
-          <message.description>
-            {{#if (can 'list worker' this.scope collection='workers')}}
-              {{! can list (at least):  show default welcome message}}
-              {{t 'resources.worker.description'}}
-            {{else if
-              (can 'create worker led worker' this.scope collection='workers')
-            }}
-              {{! can create (only):  show create-but-not-list welcome message}}
-              {{t
+      <Hds::ApplicationState as |A|>
+        <A.Header @title={{t 'resources.worker.messages.welcome.title'}} />
+        <A.Body
+          {{! can list (at least):  show default welcome message}}
+          {{! can create (only):  show create-but-not-list welcome message}}
+          {{! can neither list nor create:  show neither-list-nor-create welcome message}}
+          @text={{t
+            (if
+              (can 'list worker' this.scope collection='workers')
+              'resources.worker.description'
+              (if
+                (can 'create worker led worker' this.scope collection='workers')
                 'descriptions.create-but-not-list'
-                resource=(t 'resources.worker.title_plural')
-              }}
-            {{else}}
-              {{! can neither list nor create }}
-              {{t
                 'descriptions.neither-list-nor-create'
-                resource=(t 'resources.worker.title_plural')
-              }}
-            {{/if}}
-          </message.description>
-          {{#if
-            (can 'create worker led worker' this.scope collection='workers')
+              )
+            )
+            resource=(t 'resources.worker.title_plural')
           }}
-            <message.link @route='scopes.scope.workers.new'>
-              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
+        />
+      </Hds::ApplicationState>
+    {{/if}}
+
+    {{#if this.selectedWorker}}
+      <Hds::Flyout
+        data-test-worker-tags-flyout
+        @onClose={{fn this.selectWorker null}}
+        as |M|
+      >
+        <M.Header>
+          {{t
+            'resources.worker.flyout.title'
+            workerName=this.selectedWorker.displayName
+          }}
+        </M.Header>
+        <M.Body>
+          <Hds::Table
+            @model={{this.selectedWorkerTags}}
+            @columns={{array
+              (hash label=(t 'resources.worker.table.tag'))
+              (hash label=(t 'resources.worker.table.type'))
+            }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Hds::Text::Code class='tag-shortener'>
+                    {{this.tagDisplayName B.data}}
+                  </Hds::Text::Code>
+                </B.Td>
+                <B.Td>
+                  <Hds::Badge @text={{B.data.type}} />
+                </B.Td>
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+          {{#if (gt this.selectedWorker.allTags.length 10)}}
+            <div class='view-more-tags'>
+              <Hds::Link::Standalone
+                @icon='arrow-right'
+                @iconPosition='trailing'
+                @text={{t 'resources.worker.flyout.action.view_more'}}
+                @route='scopes.scope.workers.worker.tags'
+                @model={{this.selectedWorker}}
+              />
+            </div>
           {{/if}}
-        </Rose::Message>
-      </Rose::Layout::Centered>
+        </M.Body>
+      </Hds::Flyout>
     {{/if}}
 
   </page.body>

@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { confirm } from 'core/decorators/confirm';
+import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeWorkersIndexController extends Controller {
@@ -19,7 +20,47 @@ export default class ScopesScopeWorkersIndexController extends Controller {
 
   // =attributes
 
+  queryParams = [
+    'search',
+    { releaseVersions: { type: 'array' } },
+    'page',
+    'pageSize',
+  ];
+
+  @tracked search;
+  @tracked releaseVersions = [];
+  @tracked page = 1;
+  @tracked pageSize = 10;
   @tracked selectedWorker;
+
+  /**
+   * Get release_versions for filter
+   * @type {object[]}
+   */
+  get releaseVersionOptions() {
+    const releaseVersions = this.model.workers
+      .filter((worker) => {
+        if (worker.release_version) return worker;
+      })
+      .map((worker) => worker.release_version);
+
+    return [...new Set(releaseVersions)].map((version) => ({ id: version }));
+  }
+
+  /**
+   * Return all and selected filters for filterTags component
+   * @type {object}
+   */
+  get filters() {
+    return {
+      allFilters: {
+        releaseVersions: this.releaseVersionOptions,
+      },
+      selectedFilters: {
+        releaseVersions: this.releaseVersions,
+      },
+    };
+  }
 
   /**
    * Get the first 10 tags of the selected worker.
@@ -40,6 +81,30 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   }
 
   // =actions
+
+  /**
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
+   */
+  @action
+  @debounce(250)
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
+  }
+
+  /**
+   * Sets a query param to the value of selectedItems
+   * and resets the page to 1.
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+    this.page = 1;
+  }
 
   /**
    * Toggle the tags flyout to display or hide the tags of a worker.
