@@ -4288,7 +4288,7 @@ __metadata:
     ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
     ember-cli-app-version: "npm:^6.0.0"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-code-coverage: "npm:^1.0.3"
     ember-cli-content-security-policy: "npm:^2.0.3"
     ember-cli-dependency-checker: "npm:^3.3.1"
@@ -4636,7 +4636,7 @@ __metadata:
     ember-auto-import: "npm:^2.7.4"
     ember-can: "npm:^4.2.0"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -5012,7 +5012,7 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -7793,7 +7793,7 @@ __metadata:
     ember-auto-import: "npm:^2.7.4"
     ember-browser-services: "npm:^4.0.3"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
@@ -7827,7 +7827,7 @@ __metadata:
     qunit: "npm:^2.19.4"
     qunit-dom: "npm:^2.0.0"
     rose: "npm:*"
-    sass: "npm:^1.69.5"
+    sass: "npm:1.77.6"
     sinon: "npm:^17.0.1"
     webpack: "npm:^5.93.0"
   peerDependencies:
@@ -8524,7 +8524,7 @@ __metadata:
     ember-autofocus-modifier: "npm:^4.0.1"
     ember-cli: "npm:^4.12.2"
     ember-cli-app-version: "npm:^6.0.0"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-code-coverage: "npm:^1.0.3"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-flash: "npm:^4.0.0"
@@ -8561,7 +8561,7 @@ __metadata:
     qunit: "npm:^2.19.4"
     qunit-dom: "npm:^2.0.0"
     rose: "npm:*"
-    sass: "npm:^1.69.5"
+    sass: "npm:1.77.6"
     shx: "npm:^0.3.4"
     sinon: "npm:^14.0.0"
     stylelint: "npm:^16.6.1"
@@ -19770,7 +19770,7 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.7.4"
     ember-cli: "npm:^4.12.2"
-    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-babel: "npm:^7.26.11"
     ember-cli-clipboard: "npm:^1.0.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
@@ -19812,7 +19812,7 @@ __metadata:
     react: "npm:^16"
     react-dom: "npm:^16"
     react-syntax-highlighter: "npm:^15.5.0"
-    sass: "npm:^1.69.5"
+    sass: "npm:1.77.6"
     stylelint: "npm:^15.10.1"
     stylelint-config-prettier-scss: "npm:^1.0.0"
     stylelint-config-standard-scss: "npm:^11.0.0"
@@ -19995,6 +19995,19 @@ __metadata:
   bin:
     sane: src/cli.js
   checksum: 10/b5b8a47bfc39e1c9fd86b27185fbec1d6517f76e660a1406d6c941ee6d16f9299590700499a69e2d68a78af1883df41c5ed4c0453b0e9baa5fa76b3f3aed1023
+  languageName: node
+  linkType: hard
+
+"sass@npm:1.77.6":
+  version: 1.77.6
+  resolution: "sass@npm:1.77.6"
+  dependencies:
+    chokidar: "npm:>=3.0.0 <4.0.0"
+    immutable: "npm:^4.0.0"
+    source-map-js: "npm:>=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 10/695f9864e4a32a68eaf69c4675eccaf7feef25b5656dff72f896901d37580bdfc1fd84dae81e176dc4f6b40536b89cb8f7d7e00a33e919caad8a547cbce098f3
   languageName: node
   linkType: hard
 
