@@ -24,3 +24,27 @@
     </dropdown.button>
   {{/if}}
 </Rose::Dropdown>
+
+<Hds::Dropdown as |dd|>
+  <dd.ToggleButton
+    @text= {{t 'actions.manage'}}
+    @color='secondary'
+  />
+
+  {{#if (can 'addAccounts user' @model)}}
+    <dd.Interactive 
+      @route='scopes.scope.users.user.add-accounts'
+      @text={{t 'resources.user.actions.add-accounts'}}
+    />
+  {{/if}}
+
+  {{#if (can 'delete model' @model)}}
+    <dd.Separator />
+    <dd.Interactive
+      @color='critical'
+      @text={{t 'resources.user.actions.delete' }}
+      @disabled={{@model.canSave}}
+      {{on 'click' (fn @delete @model)}}
+    />
+  {{/if}}
+</Hds::Dropdown>
