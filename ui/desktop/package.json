@@ -32,7 +32,7 @@
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve --port 4201",
     "prestart:desktop": "cd electron-app && yarn premake",
-    "start:desktop": "ember electron",
+    "start:desktop": "yarn prestart:desktop && ember electron",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
     "test": "concurrently \"npm:test:*\" --names \"test:\"",
