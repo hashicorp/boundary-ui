@@ -47,12 +47,12 @@ module.exports = function (environment) {
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
-      baseURL: 'https://developer.hashicorp.com',
+      baseURL: 'https://developer.hashicorp.com/boundary',
       topics: {
         targets:
-          '/boundary/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
+          '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
         sessions:
-          '/boundary/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
+          '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
       },
     },
 
