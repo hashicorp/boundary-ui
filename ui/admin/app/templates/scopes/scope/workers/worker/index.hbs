@@ -28,19 +28,16 @@
 
   <page.actions>
     <Hds::Dropdown as |dd|>
-      <dd.ToggleButton
-        @text={{t 'actions.manage'}}
-        @color='secondary'
-      />
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
-    {{#if (can 'delete worker' @model)}}
-      <dd.Interactive
-        @text={{t 'resources.worker.actions.delete'}}
-        @color='critical'
-        @disabled={{@model.canSave}}
-        {{on 'click' (fn this.workers.delete @model)}}
-      />
-    {{/if}}
+      {{#if (can 'delete worker' @model)}}
+        <dd.Interactive
+          @text={{t 'resources.worker.actions.delete'}}
+          @color='critical'
+          @disabled={{@model.canSave}}
+          {{on 'click' (fn this.workers.delete @model)}}
+        />
+      {{/if}}
     </Hds::Dropdown>
   </page.actions>
 
