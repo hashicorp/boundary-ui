@@ -56,79 +56,84 @@ module.exports = function (environment) {
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
-      baseURL: 'https://developer.hashicorp.com/boundary',
+      baseURL: 'https://developer.hashicorp.com',
       topics: {
-        global: '/docs/concepts/domain-model/scopes#global',
-        org: '/docs/concepts/domain-model/scopes#organizations',
-        'org.new': '/docs/common-workflows/manage-scopes',
-        project: '/docs/concepts/domain-model/scopes#projects',
-        'project.new': '/docs/common-workflows/manage-scopes',
-        account: '/docs/concepts/domain-model/accounts',
+        global: '/boundary/docs/concepts/domain-model/scopes#global',
+        org: '/boundary/docs/concepts/domain-model/scopes#organizations',
+        'org.new': '/boundary/docs/common-workflows/manage-scopes',
+        project: '/boundary/docs/concepts/domain-model/scopes#projects',
+        'project.new': '/boundary/docs/common-workflows/manage-scopes',
+        account: '/boundary/docs/concepts/domain-model/accounts',
         'account.new':
-          '/tutorials/oss-administration/oss-manage-users-groups#create-an-account',
-        'auth-method': '/docs/concepts/domain-model/auth-methods',
-        'managed-groups': '/docs/concepts/domain-model/managed-groups',
-        group: '/docs/concepts/domain-model/groups',
+          '/boundary/tutorials/oss-administration/oss-manage-users-groups#create-an-account',
+        'auth-method': '/boundary/docs/concepts/domain-model/auth-methods',
+        'managed-groups': '/boundary/docs/concepts/domain-model/managed-groups',
+        group: '/boundary/docs/concepts/domain-model/groups',
         'group.add-members':
-          '/tutorials/oss-administration/oss-manage-users-groups#create-a-group',
-        'host-catalog': '/docs/concepts/domain-model/host-catalogs',
-        'host-catalog.new': '/docs/common-workflows/manage-targets',
-        'host-catalog.azure': '/docs/concepts/host-discovery/azure',
-        'host-catalog.aws': '/docs/concepts/host-discovery/aws',
+          '/boundary/tutorials/oss-administration/oss-manage-users-groups#create-a-group',
+        'host-catalog': '/boundary/docs/concepts/domain-model/host-catalogs',
+        'host-catalog.new': '/boundary/docs/common-workflows/manage-targets',
+        'host-catalog.azure': '/boundary/docs/concepts/host-discovery/azure',
+        'host-catalog.aws': '/boundary/docs/concepts/host-discovery/aws',
         'host-catalog.aws.region':
           'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html',
-        'host-set': '/docs/concepts/domain-model/host-sets',
+        'host-set': '/boundary/docs/concepts/domain-model/host-sets',
         'host-set.new':
-          '/docs/common-workflows/manage-targets#define-a-host-set',
-        'host-set.add-hosts': '/docs/concepts/domain-model/hosts',
+          '/boundary/docs/common-workflows/manage-targets#define-a-host-set',
+        'host-set.add-hosts': '/boundary/docs/concepts/domain-model/hosts',
         'host-set.preferred-endpoints':
-          '/docs/concepts/domain-model/host-sets#preferred_endpoints',
+          '/boundary/docs/concepts/domain-model/host-sets#preferred_endpoints',
         'host-set.sync-interval-seconds':
-          '/docs/concepts/domain-model/host-sets#sync_interval_seconds',
-        'credential-store': '/docs/concepts/domain-model/credential-stores',
+          '/boundary/docs/concepts/domain-model/host-sets#sync_interval_seconds',
+        'credential-store':
+          '/boundary/docs/concepts/domain-model/credential-stores',
         'credential-library':
-          '/docs/concepts/domain-model/credential-libraries',
-        credential: '/docs/concepts/domain-model/credentials',
-        host: '/docs/concepts/domain-model/hosts',
-        'host.new': '/docs/common-workflows/manage-targets#define-a-host',
-        role: '/docs/concepts/domain-model/roles',
+          '/boundary/docs/concepts/domain-model/credential-libraries',
+        credential: '/boundary/docs/concepts/domain-model/credentials',
+        host: '/boundary/docs/concepts/domain-model/hosts',
+        'host.new':
+          '/boundary/docs/common-workflows/manage-targets#define-a-host',
+        role: '/boundary/docs/concepts/domain-model/roles',
         'role.add-principals':
-          '/tutorials/oss-administration/oss-manage-roles#create-a-role',
-        session: '/docs/concepts/domain-model/sessions',
-        target: '/docs/concepts/domain-model/targets',
-        'target.new': '/docs/common-workflows/manage-targets',
-        'target.add-host-sources': '/docs/concepts/domain-model/host-sets',
+          '/boundary/tutorials/oss-administration/oss-manage-roles#create-a-role',
+        session: '/boundary/docs/concepts/domain-model/sessions',
+        target: '/boundary/docs/concepts/domain-model/targets',
+        'target.new': '/boundary/docs/common-workflows/manage-targets',
+        'target.add-host-sources':
+          '/boundary/docs/concepts/domain-model/host-sets',
         'target.enable-session-recording':
-          '/docs/configuration/session-recording/enable-session-recording',
+          '/boundary/docs/configuration/session-recording/enable-session-recording',
         'target.worker-filters':
-          '/docs/concepts/filtering/worker-tags#worker-filtering',
-        user: '/docs/concepts/domain-model/users',
-        downloads: '/install',
+          '/boundary/docs/concepts/filtering/worker-tags#worker-filtering',
+        user: '/boundary/docs/concepts/domain-model/users',
+        downloads: '/boundary/install',
         'getting-started.desktop':
-          '/tutorials/oss-getting-started/oss-getting-started-desktop-app',
-        'api-client.cli': '/docs/commands',
-        'api-client.api': '/docs/api-clients/api',
-        worker: '/docs/configuration/worker',
+          '/boundary/tutorials/oss-getting-started/oss-getting-started-desktop-app',
+        'api-client.cli': '/boundary/docs/commands',
+        'api-client.api': '/boundary/docs/api-clients/api',
+        worker: '/boundary/docs/configuration/worker',
         'worker.manage-workers':
-          '/tutorials/hcp-administration/hcp-manage-workers',
+          '/boundary/tutorials/hcp-administration/hcp-manage-workers',
         'worker-filters':
-          '/docs/concepts/domain-model/credential-stores#worker_filter',
-        'storage-bucket': '/docs/concepts/domain-model/storage-buckets',
+          '/boundary/docs/concepts/domain-model/credential-stores#worker_filter',
+        'storage-bucket':
+          '/boundary/docs/concepts/domain-model/storage-buckets',
         'storage-bucket.new':
-          '/docs/configuration/session-recording/create-storage-bucket',
+          '/boundary/docs/configuration/session-recording/create-storage-bucket',
         'storage-bucket.worker-filter':
-          '/docs/concepts/domain-model/storage-buckets#worker_filter',
+          '/boundary/docs/concepts/domain-model/storage-buckets#worker_filter',
         'storage-bucket.disable-credential-rotation':
-          '/docs/concepts/domain-model/storage-buckets#disable_credential_rotation',
-        'session-recording': '/docs/concepts/domain-model/session-recordings',
+          '/boundary/docs/concepts/domain-model/storage-buckets#disable_credential_rotation',
+        'session-recording':
+          '/boundary/docs/concepts/domain-model/session-recordings',
         'session-recording.retrieve-lost-session-recordings':
-          '/docs/operations/manage-recorded-sessions',
-        'storage-policy': '/docs/concepts/domain-model/storage-policy',
+          '/boundary/docs/operations/manage-recorded-sessions',
+        'storage-policy': '/boundary/docs/concepts/domain-model/storage-policy',
         'storage-policy.new':
-          '/docs/configuration/session-recording/configure-storage-policy',
+          '/boundary/docs/configuration/session-recording/configure-storage-policy',
         'storage-policy.update':
-          '/docs/configuration/session-recording/update-storage-policy',
-        alias: '/docs/concepts/aliases',
+          '/boundary/docs/configuration/session-recording/update-storage-policy',
+        alias: '/boundary/docs/concepts/aliases',
       },
     },
 

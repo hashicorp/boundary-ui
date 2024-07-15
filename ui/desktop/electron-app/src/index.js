@@ -147,7 +147,7 @@ const createWindow = (partition, closeWindowCB) => {
   // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (
-      url.startsWith('https://developer.hashicorp.com/boundary/') ||
+      url.startsWith('https://developer.hashicorp.com/') ||
       url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
     ) {
       shell.openExternal(url);
