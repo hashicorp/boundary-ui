@@ -4658,7 +4658,7 @@ __metadata:
     eslint-plugin-ember: "npm:^11.11.1"
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
-    is-core-module: "npm:^2.14.0"
+    has: "npm:^1.0.4"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     miragejs: "npm:^0.1.48"
@@ -13042,6 +13042,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"has@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "has@npm:1.0.4"
+  checksum: 10/c245f332fe78c7b6b8753857240ac12b3286f995f656a33c77e0f5baab7d0157e6ddb1c34940ffd2bffc51f75ede50cd8b29ff65c13e336376aca8cf3df58043
+  languageName: node
+  linkType: hard
+
 "hash-base@npm:^3.0.0":
   version: 3.1.0
   resolution: "hash-base@npm:3.1.0"
@@ -13894,7 +13901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0, is-core-module@npm:^2.14.0, is-core-module@npm:^2.5.0":
+"is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0, is-core-module@npm:^2.5.0":
   version: 2.14.0
   resolution: "is-core-module@npm:2.14.0"
   dependencies:
