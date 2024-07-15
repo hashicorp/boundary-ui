@@ -4635,7 +4635,7 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.7.4"
     ember-can: "npm:^4.2.0"
-    ember-cli: "npm:^4.12.1"
+    ember-cli: "npm:^4.12.2"
     ember-cli-babel: "npm:^8.2.0"
     ember-cli-dependency-checker: "npm:^3.3.1"
     ember-cli-htmlbars: "npm:^6.2.0"
@@ -9619,7 +9619,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-cli@npm:^4.12.1, ember-cli@npm:^4.12.2":
+"ember-cli@npm:^4.12.2":
   version: 4.12.3
   resolution: "ember-cli@npm:4.12.3"
   dependencies:
