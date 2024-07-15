@@ -194,6 +194,17 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
   });
 
+  test('user does not see tag action dropdown if they cannot edit or remove tags', async function (assert) {
+    instances.worker.authorized_actions =
+      instances.worker.authorized_actions.filter(
+        (item) => item !== 'set-worker-tags' && item !== 'remove-worker-tags',
+      );
+
+    await visit(urls.tags);
+
+    assert.dom(API_TAG_ACTION_SELECTOR).doesNotExist();
+  });
+
   test('shows "No tags added" message when there are no worker tags', async function (assert) {
     instances.worker.api_tags = {};
     instances.worker.config_tags = {};

@@ -64,26 +64,36 @@
             </B.Td>
             <B.Td>
               {{#if (eq B.data.type this.tagTypeApi)}}
-                <Hds::Dropdown as |dd|>
-                  <dd.ToggleIcon
-                    @icon='more-horizontal'
-                    @text={{t 'actions.overflow-options'}}
-                    @hasChevron={{false}}
-                    @size='small'
-                  />
-                  {{#if (can 'setWorkerTags worker' @model)}}
-                    <dd.Interactive
-                      @text={{t 'resources.worker.tags.edit.title'}}
-                      {{on 'click' (fn this.toggleEditModal B.data)}}
-                    />
+                {{#let
+                  (hash
+                    canEdit=(can 'setWorkerTags worker' @model)
+                    canRemove=(can 'removeTags worker' @model)
+                  )
+                  as |perms|
+                }}
+                  {{#if (or perms.canEdit perms.canRemove)}}
+                    <Hds::Dropdown as |dd|>
+                      <dd.ToggleIcon
+                        @icon='more-horizontal'
+                        @text={{t 'actions.overflow-options'}}
+                        @hasChevron={{false}}
+                        @size='small'
+                      />
+                      {{#if perms.canEdit}}
+                        <dd.Interactive
+                          @text={{t 'resources.worker.tags.edit.title'}}
+                          {{on 'click' (fn this.toggleEditModal B.data)}}
+                        />
+                      {{/if}}
+                      {{#if perms.canRemove}}
+                        <dd.Interactive
+                          @text={{t 'resources.worker.tags.actions.remove'}}
+                          {{on 'click' (fn this.toggleRemoveModal B.data)}}
+                        />
+                      {{/if}}
+                    </Hds::Dropdown>
                   {{/if}}
-                  {{#if (can 'removeTags worker' @model)}}
-                    <dd.Interactive
-                      @text={{t 'resources.worker.tags.actions.remove'}}
-                      {{on 'click' (fn this.toggleRemoveModal B.data)}}
-                    />
-                  {{/if}}
-                </Hds::Dropdown>
+                {{/let}}
               {{/if}}
             </B.Td>
           </B.Tr>
