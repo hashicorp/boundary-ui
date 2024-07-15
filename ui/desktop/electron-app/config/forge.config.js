@@ -103,6 +103,13 @@ module.exports = {
           fs.mkdirSync(destination, { recursive: true });
         // Copy artifacts
         artifacts.forEach(async (artifact) => {
+          // Changing arch and platform to be compliant with artifact namings.
+          if (arch === 'x64') {
+            arch = 'amd64';
+          }
+          if (platform === 'win32') {
+            platform = 'windows';
+          }
           const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
             artifact,
           )}`;
