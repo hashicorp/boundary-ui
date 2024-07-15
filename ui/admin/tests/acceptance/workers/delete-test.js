@@ -21,6 +21,9 @@ module('Acceptance | workers | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item--color-critical button';
+
   let getWorkerCount;
 
   const instances = {
@@ -52,9 +55,11 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can delete a worker', async function (assert) {
+
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_DROPDOWN_SELECTOR);
     assert.strictEqual(getWorkerCount(), count - 1);
   });
 
@@ -64,7 +69,8 @@ module('Acceptance | workers | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_DROPDOWN_SELECTOR);
     assert.strictEqual(getWorkerCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -75,7 +81,8 @@ module('Acceptance | workers | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_DROPDOWN_SELECTOR);
     assert.strictEqual(getWorkerCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -85,7 +92,8 @@ module('Acceptance | workers | delete', function (hooks) {
       instances.worker.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.worker);
     assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .dom(await click(MANAGE_DROPDOWN_SELECTOR))
+      .dom(await click(DELETE_DROPDOWN_SELECTOR))
       .isNotVisible();
   });
 
@@ -102,7 +110,8 @@ module('Acceptance | workers | delete', function (hooks) {
       );
     });
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_DROPDOWN_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });
