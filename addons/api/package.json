@@ -23,7 +23,6 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
-    "core-util-is": "^1.0.3",
     "dexie": "^3.2.4",
     "ember-auto-import": "^2.7.4",
     "ember-can": "^4.2.0",
@@ -32,6 +31,7 @@
     "ember-cli-mirage": "^3.0.3",
     "ember-data": "~4.12.0",
     "ember-fetch": "^8.1.1",
+    "is-core-module": "^2.14.0",
     "tracked-built-ins": "^3.1.1"
   },
   "devDependencies": {

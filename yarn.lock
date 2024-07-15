@@ -4631,7 +4631,6 @@ __metadata:
     "@glimmer/tracking": "npm:^1.1.2"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^8.0.1"
-    core-util-is: "npm:^1.0.3"
     dexie: "npm:^3.2.4"
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.7.4"
@@ -4659,6 +4658,7 @@ __metadata:
     eslint-plugin-ember: "npm:^11.11.1"
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
+    is-core-module: "npm:^2.14.0"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     miragejs: "npm:^0.1.48"
@@ -7762,7 +7762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-util-is@npm:^1.0.3, core-util-is@npm:~1.0.0":
+"core-util-is@npm:~1.0.0":
   version: 1.0.3
   resolution: "core-util-is@npm:1.0.3"
   checksum: 10/9de8597363a8e9b9952491ebe18167e3b36e7707569eed0ebf14f8bba773611376466ae34575bca8cfe3c767890c859c74056084738f09d4e4a6f902b2ad7d99
@@ -8147,7 +8147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cz-conventional-changelog@npm:3.3.0, cz-conventional-changelog@npm:^3.3.0":
+"cz-conventional-changelog@npm:3.3.0, cz-conventional-changelog@npm:^3.1.0":
   version: 3.3.0
   resolution: "cz-conventional-changelog@npm:3.3.0"
   dependencies:
@@ -13894,7 +13894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0, is-core-module@npm:^2.5.0":
+"is-core-module@npm:^2.12.1, is-core-module@npm:^2.13.0, is-core-module@npm:^2.14.0, is-core-module@npm:^2.5.0":
   version: 2.14.0
   resolution: "is-core-module@npm:2.14.0"
   dependencies:
@@ -19717,7 +19717,7 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     concurrently: "npm:^8.2.2"
-    cz-conventional-changelog: "npm:^3.3.0"
+    cz-conventional-changelog: "npm:^3.1.0"
     doctoc: "npm:^2.2.0"
     git-cz: "npm:^4.8.0"
     husky: "npm:^8.0.0"
