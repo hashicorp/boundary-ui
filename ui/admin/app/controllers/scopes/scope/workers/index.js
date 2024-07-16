@@ -38,7 +38,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    * @type {object[]}
    */
   get releaseVersionOptions() {
-    const releaseVersions = this.model.workers
+    const releaseVersions = this.model.allWorkers
       .filter((worker) => worker.release_version)
       .map((worker) => worker.release_version);
 
@@ -156,7 +156,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(worker) {
     await worker.destroyRecord();
-    await this.router.replaceWith('scopes.scope.workers');
+    this.router.replaceWith('scopes.scope.workers');
     await this.router.refresh();
   }
 }

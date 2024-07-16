@@ -28,7 +28,7 @@
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.workersExist}}
+    {{#if @model.allWorkers}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}

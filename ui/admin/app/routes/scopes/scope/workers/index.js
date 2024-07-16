@@ -35,7 +35,7 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
 
   /**
    * Loads queried workers
-   * @returns {Promise<{totalItems: number, workers: [WorkerModel], workersExist: boolean}>}
+   * @returns {Promise<{totalItems: number, workers: [WorkerModel], allWorkers: [WorkerModel]}>}
    */
   async model({ search, releaseVersions, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -51,7 +51,8 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
 
     let workers;
     let totalItems = 0;
-    let workersExist = false;
+    let allWorkers;
+
     if (this.can.can('list model', scope, { collection: 'workers' })) {
       workers = await this.store.query('worker', {
         scope_id,
@@ -60,28 +61,21 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
         pageSize,
       });
       totalItems = workers.meta?.totalItems;
-      workersExist = await this.getWorkersExist(scope_id, totalItems);
+      allWorkers = await this.getAllWorkers(scope_id);
     }
 
-    return { workers, workersExist, totalItems };
+    return { workers, allWorkers, totalItems };
   }
 
-  async getWorkersExist(scope_id, totalItems) {
-    if (totalItems > 0) {
-      return true;
-    }
-    const options = { pushToStore: false, peekIndexedDB: true };
-    const worker = await this.store.query(
+  async getAllWorkers(scope_id) {
+    return await this.store.query(
       'worker',
       {
         scope_id,
         query: { filters: { scope_id: [{ equals: scope_id }] } },
-        page: 1,
-        pageSize: 1,
       },
-      options,
+      { pushToStore: false },
     );
-    return worker.length > 0;
   }
 
   resetController(controller, isExiting) {
