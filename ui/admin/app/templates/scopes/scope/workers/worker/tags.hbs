@@ -94,6 +94,7 @@
                       {{#if perms.canRemove}}
                         <dd.Interactive
                           @text={{t 'resources.worker.tags.actions.remove'}}
+                          @color='critical'
                           {{on 'click' (fn this.toggleRemoveModal B.data)}}
                         />
                       {{/if}}

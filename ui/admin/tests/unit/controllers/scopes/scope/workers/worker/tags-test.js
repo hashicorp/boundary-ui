@@ -134,6 +134,28 @@ module(
       assert.false(controller.editModal);
     });
 
+    test('updateApiTags returns an update apiTags object with edited values added', async function (assert) {
+      await visit(urls.tags);
+      const worker = await store.findRecord('worker', instances.worker.id);
+
+      assert.deepEqual(worker.api_tags, {
+        key: ['value'],
+        test: ['test'],
+      });
+
+      // set controller values needed for editing
+      controller.modalTag = { key: 'test', value: 'test' };
+      controller.editKey = 'unit';
+      controller.editValue = 'test, are, fun';
+
+      const result = controller.updateApiTags();
+
+      assert.deepEqual(result, {
+        key: ['value'],
+        unit: ['test', 'are', 'fun'],
+      });
+    });
+
     test('toggleRemoveModal toggles the modal and sets the modalTag', function (assert) {
       assert.false(controller.removeModal);
       assert.strictEqual(controller.modalTag, null);

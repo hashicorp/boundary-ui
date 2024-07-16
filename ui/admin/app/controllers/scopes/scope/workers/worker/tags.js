@@ -75,12 +75,9 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
 
     // add new key/value to apiTags
     if (this.editKey in apiTags) {
-      // if editKey exist, add the new values to its array if not already preset
-      editedValues.forEach((value) => {
-        if (!apiTags[this.editKey].includes(value)) {
-          apiTags[this.editKey].push(value);
-        }
-      });
+      apiTags[this.editKey] = [
+        ...new Set([...apiTags[this.editKey], ...editedValues]),
+      ];
     } else {
       apiTags[this.editKey] = editedValues;
     }
@@ -117,7 +114,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   }
 
   /**
-   * Opens the remove tag modal.
+   * Toggles the remove tag modal.
    * @param {object} apiTag
    */
   @action
@@ -128,7 +125,7 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   }
 
   /**
-   * Opens the edit tag modal.
+   * Toggles the edit tag modal.
    * @param {object} apiTag
    */
   @action
