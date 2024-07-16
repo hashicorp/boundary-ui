@@ -1047,6 +1047,13 @@
 }
 
 // workers
+.workers {
+  .rose-dropdown-content {
+    max-height: 300px;
+    overflow: scroll;
+  }
+}
+
 .view-more-tags {
   margin-top: 1.5rem;
 }
