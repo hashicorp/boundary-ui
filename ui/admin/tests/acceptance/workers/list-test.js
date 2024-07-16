@@ -23,6 +23,9 @@ const WORKERS_FLYOUT_VIEW_MORE_TAGS =
   '[data-test-worker-tags-flyout] .view-more-tags a';
 const WORKER_TAGS_BUTTON = (workerId) =>
   `[data-test-worker-tags-flyout-button="${workerId}"]`;
+const TAGS_FILTER_TOGGLE = '.workers details summary';
+const TAGS_FILTER_FIRST_ITEM_SELECTOR =
+  '.workers details div input:first-child';
 
 module('Acceptance | workers | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -36,6 +39,7 @@ module('Acceptance | workers | list', function (hooks) {
       global: null,
     },
     worker: null,
+    worker2: null,
   };
 
   const urls = {
@@ -47,8 +51,12 @@ module('Acceptance | workers | list', function (hooks) {
 
   hooks.beforeEach(function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
-    const scope = instances.scopes.global;
-    instances.worker = this.server.create('worker', { scopeId: scope.id });
+    instances.worker = this.server.create('worker', {
+      scope: instances.scopes.global,
+    });
+    instances.worker2 = this.server.create('worker', {
+      scope: instances.scopes.global,
+    });
     urls.globalScope = `/scopes/global/scopes`;
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
@@ -92,6 +100,18 @@ module('Acceptance | workers | list', function (hooks) {
 
     await visit(urls.globalScope);
     assert.dom(`[href="${urls.workers}"]`).isVisible();
+  });
+
+  test('Users can filter by tags', async function (assert) {
+    featuresService.enable('byow');
+    await visit(urls.workers);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+
+    await click(TAGS_FILTER_TOGGLE);
+    await click(TAGS_FILTER_FIRST_ITEM_SELECTOR);
+
+    assert.dom('tbody tr').exists({ count: 1 });
   });
 
   test('Users can open and close tags flyout for a specific worker', async function (assert) {
