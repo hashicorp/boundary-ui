@@ -6,6 +6,7 @@
 const { spawnSync, spawn } = require('../helpers/spawn-promise');
 const jsonify = require('../utils/jsonify.js');
 const generateErrorPromise = require('../utils/generateErrorPromise');
+const log = require('electron-log/main');
 
 class ClientAgentDaemonManager {
   /**
@@ -21,6 +22,7 @@ class ClientAgentDaemonManager {
       return parsedResponse.item;
     }
 
+    log.warn('Client Agent Status:', stderr);
     return generateErrorPromise(stderr);
   }
 
@@ -42,6 +44,7 @@ class ClientAgentDaemonManager {
       return parsedResponse.items;
     }
 
+    log.warn('Client Agent Sessions:', stderr);
     return generateErrorPromise(stderr);
   }
 }

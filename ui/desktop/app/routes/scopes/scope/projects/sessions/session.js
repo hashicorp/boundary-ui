@@ -41,7 +41,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
       } catch (e) {
         __electronLog?.error(
           'Failed to fetch credentials from client agent',
-          e,
+          e.message,
         );
 
         this.flashMessages.danger(
