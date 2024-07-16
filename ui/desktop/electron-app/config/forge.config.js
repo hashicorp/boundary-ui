@@ -105,18 +105,19 @@ module.exports = {
         artifacts.forEach(async (artifact) => {
           // Change arch and platform to be compliant with blob signature naming rules.
           let name;
+          if (arch === 'x64') {
+            arch = 'amd64';
+          }
+
+          if (platform === 'win32') {
+            platform = 'windows';
+          }
+
           if (platform === 'linux' && artifact.endsWith('.deb')) {
-            // The .deb can't not have the platform on the name, otherwise signature process will fail.
             name = `boundary-desktop_${version}_${arch}${path.extname(
               artifact,
             )}`;
           } else {
-            if (arch === 'x64') {
-              arch = 'amd64';
-            }
-            if (platform === 'win32') {
-              platform = 'windows';
-            }
             name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
               artifact,
             )}`;
