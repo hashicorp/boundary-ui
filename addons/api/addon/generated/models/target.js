@@ -40,12 +40,6 @@ export default class GeneratedTargetModel extends BaseModel {
 
   @attr('string', {
     description:
-      'Optional boolean expression to filter the workers that are allowed to satisfy this request.',
-  })
-  worker_filter;
-
-  @attr('string', {
-    description:
       'Optional boolean expressions to filter the egress workers that are allowed to satisfy this request.',
   })
   egress_worker_filter;

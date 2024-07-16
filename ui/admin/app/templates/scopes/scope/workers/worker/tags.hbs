@@ -1,0 +1,222 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.worker.tags.title_plural')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.worker.tags.title_plural'}}
+  @route='scopes.scope.workers.worker.tags'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Workers::Worker::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <Workers::Worker::Nav />
+  </page.navigation>
+
+  <page.actions>
+    <Workers::Worker::Actions
+      @model={{@model}}
+      @delete={{this.workers.delete}}
+    />
+  </page.actions>
+
+  <page.body class='worker-tags'>
+    {{#if @model.allTags}}
+      <Hds::Table
+        @model={{@model.allTags}}
+        @columns={{array
+          (hash label=(t 'resources.worker.table.key'))
+          (hash label=(t 'resources.worker.table.value'))
+          (hash label=(t 'resources.worker.table.type'))
+          (hash label=(t 'titles.actions') isVisuallyHidden=true width='60px')
+        }}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr>
+            <B.Td>
+              <Hds::Text::Code @tag='pre'>{{B.data.key}}</Hds::Text::Code>
+            </B.Td>
+            <B.Td>
+              <Hds::Text::Code @tag='pre'>{{B.data.value}}</Hds::Text::Code>
+            </B.Td>
+            <B.Td>
+              {{#if (eq B.data.type this.tagTypeConfig)}}
+                <Hds::TooltipButton
+                  @text={{t
+                    (if
+                      (this.isHcpManaged B.data)
+                      'resources.worker.tooltip.hcp'
+                      'resources.worker.tooltip.self'
+                    )
+                  }}
+                  @offset={{array -50 8}}
+                >
+                  <Hds::Badge @text={{B.data.type}} />
+                </Hds::TooltipButton>
+              {{else}}
+                <Hds::Badge @text={{B.data.type}} />
+              {{/if}}
+            </B.Td>
+            <B.Td>
+              {{#if (eq B.data.type this.tagTypeApi)}}
+                {{#let
+                  (hash
+                    canEdit=(can 'setWorkerTags worker' @model)
+                    canRemove=(can 'removeTags worker' @model)
+                  )
+                  as |perms|
+                }}
+                  {{#if (or perms.canEdit perms.canRemove)}}
+                    <Hds::Dropdown as |dd|>
+                      <dd.ToggleIcon
+                        @icon='more-horizontal'
+                        @text={{t 'actions.overflow-options'}}
+                        @hasChevron={{false}}
+                        @size='small'
+                      />
+                      {{#if perms.canEdit}}
+                        <dd.Interactive
+                          @text={{t 'resources.worker.tags.edit.title'}}
+                          {{on 'click' (fn this.toggleEditModal B.data)}}
+                        />
+                      {{/if}}
+                      {{#if perms.canRemove}}
+                        <dd.Interactive
+                          @text={{t 'resources.worker.tags.actions.remove'}}
+                          @color='critical'
+                          {{on 'click' (fn this.toggleRemoveModal B.data)}}
+                        />
+                      {{/if}}
+                    </Hds::Dropdown>
+                  {{/if}}
+                {{/let}}
+              {{/if}}
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+    {{else}}
+      <Hds::ApplicationState data-test-no-tags as |A|>
+        <A.Header @title={{t 'resources.worker.tags.messages.no-tags.title'}} />
+        <A.Body @text={{t 'resources.worker.tags.messages.no-tags.body'}} />
+        <A.Footer as |F|>
+          <F.LinkStandalone
+            @icon='plus'
+            @text={{t 'resources.worker.tags.actions.add'}}
+            @route='scopes.scope.workers.worker.create-tags'
+          />
+        </A.Footer>
+      </Hds::ApplicationState>
+    {{/if}}
+
+    {{#if this.editModal}}
+      <Hds::Modal data-test-edit-modal @onClose={{this.toggleEditModal}} as |M|>
+        <M.Header>
+          {{t 'resources.worker.tags.edit.title'}}
+        </M.Header>
+        <M.Body class='modal-body'>
+          <Hds::Text::Body @color='primary'>
+            {{t 'resources.worker.tags.edit.description'}}
+          </Hds::Text::Body>
+          {{! template-lint-disable no-autofocus-attribute }}
+          <Hds::Form::TextInput::Field
+            name='edit-tag-key'
+            autofocus={{true}}
+            @value={{this.editKey}}
+            {{on 'input' (set-from-event this 'editKey')}}
+            as |F|
+          >
+            <F.Label>{{t 'resources.worker.table.key'}}</F.Label>
+          </Hds::Form::TextInput::Field>
+          <Hds::Form::TextInput::Field
+            name='edit-tag-value'
+            autofocus={{true}}
+            @value={{this.editValue}}
+            {{on 'input' (set-from-event this 'editValue')}}
+            as |F|
+          >
+            <F.Label>{{t 'resources.worker.table.value'}}</F.Label>
+            <F.HelperText>{{t
+                'resources.worker.tags.edit.helper-text'
+              }}</F.HelperText>
+          </Hds::Form::TextInput::Field>
+        </M.Body>
+        <M.Footer as |F|>
+          <Hds::ButtonSet>
+            <Hds::Button
+              @text={{t 'actions.confirm'}}
+              {{on 'click' this.editApiTag}}
+            />
+            <Hds::Button
+              @color='secondary'
+              @text={{t 'actions.cancel'}}
+              {{on 'click' F.close}}
+            />
+          </Hds::ButtonSet>
+        </M.Footer>
+      </Hds::Modal>
+    {{/if}}
+
+    {{#if this.removeModal}}
+      <Hds::Modal
+        data-test-confirmation-modal
+        @color='critical'
+        @onClose={{this.toggleRemoveModal}}
+        as |M|
+      >
+        <M.Header @icon='alert-diamond'>
+          {{t 'resources.worker.tags.remove.title'}}
+        </M.Header>
+        <M.Body class='modal-body'>
+          <Hds::Text::Body @tag='p' @color='primary'>
+            {{this.tagDisplayName}}
+            {{t 'resources.worker.tags.remove.warning'}}
+          </Hds::Text::Body>
+          {{! template-lint-disable no-autofocus-attribute }}
+          <Hds::Form::TextInput::Field
+            name='removal-confirmation'
+            autofocus={{true}}
+            @value={{this.removalConfirmation}}
+            {{on 'input' (set-from-event this 'removalConfirmation')}}
+            as |F|
+          >
+            <F.Label>{{t
+                'resources.worker.tags.remove.confirm.label'
+              }}</F.Label>
+            <F.HelperText>{{t
+                'resources.worker.tags.remove.confirm.help'
+              }}</F.HelperText>
+          </Hds::Form::TextInput::Field>
+        </M.Body>
+        <M.Footer as |F|>
+          <Hds::ButtonSet>
+            <Hds::Button
+              disabled={{not this.isRemovalConfirmed}}
+              @color='critical'
+              @text={{t 'actions.remove'}}
+              {{on 'click' this.removeApiTag}}
+            />
+            <Hds::Button
+              @color='secondary'
+              @text={{t 'actions.cancel'}}
+              {{on 'click' F.close}}
+            />
+          </Hds::ButtonSet>
+        </M.Footer>
+      </Hds::Modal>
+    {{/if}}
+
+  </page.body>
+
+</Rose::Layout::Page>

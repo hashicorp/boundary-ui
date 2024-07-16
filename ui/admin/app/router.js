@@ -98,6 +98,9 @@ Router.map(function () {
           this.route('enable-session-recording', function () {
             this.route('create-storage-bucket');
           });
+          this.route('workers');
+          this.route('add-ingress-worker-filter');
+          this.route('add-egress-worker-filter');
         });
         this.route('new');
       });
@@ -153,7 +156,10 @@ Router.map(function () {
       });
       this.route('workers', function () {
         this.route('new');
-        this.route('worker', { path: ':worker_id' }, function () {});
+        this.route('worker', { path: ':worker_id' }, function () {
+          this.route('tags');
+          this.route('create-tags');
+        });
       });
       this.route('session-recordings', function () {
         this.route(

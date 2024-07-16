@@ -262,4 +262,26 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
 
     assert.notEqual(alias.name, 'test');
   });
+
+  test('cancelWorkerFilter action rolls-back changes on the specified model', async function (assert) {
+    await visit(urls.target);
+    const target = await store.findRecord('target', instances.target.id);
+    target.egress_worker_filter = 'test';
+
+    assert.strictEqual(target.egress_worker_filter, 'test');
+
+    await controller.cancelWorkerFilter(target);
+
+    assert.notEqual(target.egress_worker_filter, 'test');
+  });
+
+  test('saveWorkerFilter action saves changes on the specified model', async function (assert) {
+    await visit(urls.target);
+    const target = await store.findRecord('target', instances.target.id);
+    target.egress_worker_filter = 'test';
+
+    await controller.saveWorkerFilter(target);
+
+    assert.strictEqual(target.egress_worker_filter, 'test');
+  });
 });

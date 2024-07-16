@@ -94,6 +94,7 @@ module.exports = function (environment) {
         role: '/docs/concepts/domain-model/roles',
         'role.add-principals':
           '/tutorials/oss-administration/oss-manage-roles#create-a-role',
+        'role.add-grant-scopes': '/docs/commands/roles/add-grant-scopes',
         session: '/docs/concepts/domain-model/sessions',
         target: '/docs/concepts/domain-model/targets',
         'target.new': '/docs/common-workflows/manage-targets',
