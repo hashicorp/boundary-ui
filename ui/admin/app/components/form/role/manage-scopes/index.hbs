@@ -55,12 +55,14 @@
     </Hds::Form::Toggle::Field>
   {{/if}}
 
-  {{! TODO: Add correct href value inline link}}
   {{#if this.showAlert}}
     <Hds::Alert @type='compact' as |A|>
       <A.Description>
         {{t 'resources.role.scope.messages.keywords-selected.description'}}
-        <Hds::Link::Inline @color='secondary' @href={{(doc-url 'role')}}>
+        <Hds::Link::Inline
+          @color='secondary'
+          @href={{(doc-url 'role.add-grant-scopes')}}
+        >
           {{t 'resources.role.scope.messages.keywords-selected.link'}}
         </Hds::Link::Inline>
       </A.Description>
