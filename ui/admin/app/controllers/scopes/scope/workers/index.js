@@ -39,9 +39,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    */
   get releaseVersionOptions() {
     const releaseVersions = this.model.workers
-      .filter((worker) => {
-        if (worker.release_version) return worker;
-      })
+      .filter((worker) => worker.release_version)
       .map((worker) => worker.release_version);
 
     return [...new Set(releaseVersions)].map((version) => ({ id: version }));

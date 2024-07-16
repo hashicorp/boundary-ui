@@ -111,7 +111,7 @@ export default class IndexedDbService extends Service {
     }
 
     this.#db = new Dexie(dbName);
-    this.#db.version(1).stores(modelIndexes);
+    this.#db.version(2).stores(modelIndexes);
   }
 
   /**
