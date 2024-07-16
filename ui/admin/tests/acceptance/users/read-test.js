@@ -85,7 +85,9 @@ module('Acceptance | users | read', function (hooks) {
     await click(`[href="${urls.users}"]`);
 
     assert
-      .dom(`[href="https://boundaryproject.io/help/admin-ui/users"]`)
+      .dom(
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/users"]`,
+      )
       .exists();
   });
 
