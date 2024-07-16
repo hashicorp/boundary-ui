@@ -9,7 +9,11 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TAG_TYPE_CONFIG, TAG_TYPE_API } from 'api/models/worker';
+import {
+  TAG_TYPE_CONFIG,
+  TAG_TYPE_API,
+  HCP_MANAGED_KEY,
+} from 'api/models/worker';
 
 export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   @controller('scopes/scope/workers/index') workers;
@@ -45,6 +49,15 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
     return (
       this.removalConfirmation === this.intl.t('actions.remove').toUpperCase()
     );
+  }
+
+  /**
+   * Determines if a config tag is managed by HCP
+   * @param {object} tag
+   * @returns {boolean}
+   */
+  isHcpManaged(tag) {
+    return tag.key === HCP_MANAGED_KEY && tag.value === 'true';
   }
 
   updateApiTags() {

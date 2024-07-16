@@ -16,6 +16,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { HCP_MANAGED_KEY } from 'api/models/worker';
 
 module('Acceptance | workers | worker | tags', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,9 +82,21 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     assert.dom('tbody tr').exists({ count: 11 });
   });
 
-  test('config tags display a tooltip', async function (assert) {
+  test('config tags display a tooltip for HCP managed tag', async function (assert) {
+    instances.worker.config_tags = { [HCP_MANAGED_KEY]: ['true'] };
     await visit(urls.tags);
-    await a11yAudit();
+
+    await focus(CONFIG_TAG_TOOLTIP_SELECTOR);
+
+    assert
+      .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
+      .hasText(
+        'This is a HCP managed worker, you cannot edit or delete this worker’s tags.',
+      );
+  });
+
+  test('config tags display a tooltip self managed tag', async function (assert) {
+    await visit(urls.tags);
 
     await focus(CONFIG_TAG_TOOLTIP_SELECTOR);
 

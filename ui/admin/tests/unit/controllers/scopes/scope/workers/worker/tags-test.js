@@ -8,6 +8,7 @@ import { visit } from '@ember/test-helpers';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { HCP_MANAGED_KEY } from 'api/models/worker';
 
 module(
   'Unit | Controller | scopes/scope/workers/worker/tags',
@@ -67,6 +68,21 @@ module(
       controller.removalConfirmation = 'remove';
 
       assert.false(controller.isRemovalConfirmed);
+    });
+
+    test('isHcpManged returns true if tag key matches `HCP_MANAGED_KEY` and value is true', async function (assert) {
+      assert.true(
+        controller.isHcpManaged({ key: HCP_MANAGED_KEY, value: 'true' }),
+      );
+    });
+
+    test('isHcpManged returns false if tag key does not match `HCP_MANAGED_KEY` or value is not true', async function (assert) {
+      assert.false(
+        controller.isHcpManaged({ key: 'self.managed', value: 'true' }),
+      );
+      assert.false(
+        controller.isHcpManaged({ key: HCP_MANAGED_KEY, value: 'false' }),
+      );
     });
 
     test('removeApiTag calls removeApiTags on the model and closes modal', async function (assert) {

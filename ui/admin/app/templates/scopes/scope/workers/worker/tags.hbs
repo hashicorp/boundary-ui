@@ -53,7 +53,13 @@
             <B.Td>
               {{#if (eq B.data.type this.tagTypeConfig)}}
                 <Hds::TooltipButton
-                  @text={{t 'resources.worker.tooltip'}}
+                  @text={{t
+                    (if
+                      (this.isHcpManaged B.data)
+                      'resources.worker.tooltip.hcp'
+                      'resources.worker.tooltip.self'
+                    )
+                  }}
                   @offset={{array -50 8}}
                 >
                   <Hds::Badge @text={{B.data.type}} />
