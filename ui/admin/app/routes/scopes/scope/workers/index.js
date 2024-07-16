@@ -64,30 +64,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     }
 
     return { workers, workersExist, totalItems };
-
-    // const workers = sortBy(
-    //   this.modelFor('scopes.scope.workers'),
-    //   'displayName',
-    // );
-
-    // if (this.tags_REMOVE?.length) {
-    //   // Return workers that have config tags that have at
-    //   // least one intersection with the filter tags
-    //   return workers.filter((worker) => {
-    //     if (!worker.config_tags) {
-    //       return null;
-    //     }
-
-    //     const workerTags = worker.configTagList;
-    //     return this.tags_REMOVE.some((tag) =>
-    //       workerTags.some(
-    //         (workerTag) =>
-    //           tag.key === workerTag.key && tag.value === workerTag.value,
-    //       ),
-    //     );
-    //   });
-    // }
-    // return workers;
   }
 
   async getWorkersExist(scope_id, totalItems) {
@@ -117,31 +93,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
       });
     }
   }
-
-  // /**
-  //  * Clears filter selections.
-  //  */
-  // @action
-  // clearAllFilters() {
-  //   this.tags = [];
-  //   this.refresh();
-  // }
-
-  // /**
-  //  * Sets the specified resource filter field to the specified value.
-  //  * @param {string} field
-  //  * @param value
-  //  */
-  // @action
-  // filterBy(field, value) {
-  //   this[field] = value;
-  //   this.refresh();
-  // }
-
-  // @action
-  // isEqual(firstTag, secondTag) {
-  //   return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
-  // }
 
   setupController(controller) {
     const scope = this.modelFor('scopes.scope');
