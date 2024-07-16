@@ -9,7 +9,11 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TAG_TYPE_CONFIG, TAG_TYPE_API } from 'api/models/worker';
+import {
+  TAG_TYPE_CONFIG,
+  TAG_TYPE_API,
+  HCP_MANAGED_KEY,
+} from 'api/models/worker';
 
 export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   @controller('scopes/scope/workers/index') workers;
@@ -24,7 +28,10 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
 
   @tracked removeModal = false;
   @tracked removalConfirmation = null;
+  @tracked editModal = false;
   @tracked modalTag = null;
+  @tracked editKey = null;
+  @tracked editValue = null;
 
   /**
    * Build the display name for a worker tag
@@ -45,6 +52,40 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
   }
 
   /**
+   * Determines if a config tag is managed by HCP
+   * @param {object} tag
+   * @returns {boolean}
+   */
+  isHcpManaged(tag) {
+    return tag.key === HCP_MANAGED_KEY && tag.value === 'true';
+  }
+
+  updateApiTags() {
+    const apiTags = structuredClone(this.model.api_tags);
+    const { key, value } = this.modalTag;
+    const editedValues = this.editValue.split(',').map((value) => value.trim());
+
+    // remove the old value
+    apiTags[key] = apiTags[key].filter((val) => val !== value);
+
+    // remove key if value is empty array
+    if (apiTags[key].length === 0) {
+      delete apiTags[key];
+    }
+
+    // add new key/value to apiTags
+    if (this.editKey in apiTags) {
+      apiTags[this.editKey] = [
+        ...new Set([...apiTags[this.editKey], ...editedValues]),
+      ];
+    } else {
+      apiTags[this.editKey] = editedValues;
+    }
+
+    return apiTags;
+  }
+
+  /**
    * Removes selected tag from the worker.
    */
   @action
@@ -56,12 +97,24 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
       [this.modalTag.key]: [this.modalTag.value],
     });
     this.removeModal = false;
-    this.modalTag = null;
     this.removalConfirmation = null;
   }
 
   /**
-   * Opens the remove tag modal.
+   * Edits selected tag on the worker
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('resources.worker.tags.edit.success')
+  async editApiTag() {
+    const apiTags = this.updateApiTags();
+    await this.model.setApiTags(apiTags);
+    this.editModal = false;
+  }
+
+  /**
+   * Toggles the remove tag modal.
    * @param {object} apiTag
    */
   @action
@@ -69,5 +122,17 @@ export default class ScopesScopeWorkersWorkerTagsController extends Controller {
     this.removeModal = !this.removeModal;
     this.modalTag = apiTag;
     this.removalConfirmation = null;
+  }
+
+  /**
+   * Toggles the edit tag modal.
+   * @param {object} apiTag
+   */
+  @action
+  toggleEditModal(apiTag) {
+    this.editModal = !this.editModal;
+    this.modalTag = apiTag;
+    this.editKey = apiTag?.key;
+    this.editValue = apiTag?.value;
   }
 }

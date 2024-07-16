@@ -1025,13 +1025,10 @@
   text-overflow: ellipsis;
 }
 
-.confirmation-modal {
-  .hds-button-set {
-    margin-bottom: 0;
-  }
-
-  .hds-form-field--layout-vertical {
-    margin-top: 1.5rem;
-    margin-bottom: 0;
+.worker-tags {
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 }
