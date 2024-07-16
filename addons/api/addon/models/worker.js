@@ -11,6 +11,8 @@ export const TYPE_WORKER_PKI = 'pki';
 export const TAG_TYPE_CONFIG = 'config';
 export const TAG_TYPE_API = 'api';
 
+export const HCP_MANAGED_KEY = 'boundary.cloud.hashicorp.com:managed';
+
 export default class WorkerModel extends GeneratedWorkerModel {
   // =attributes
 
