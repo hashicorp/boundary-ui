@@ -36,15 +36,18 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     'tbody tr:nth-child(4) td:nth-child(4) ul li:first-child button';
   const API_TAG_LAST_BUTTON_SELECTOR =
     'tbody tr:nth-child(4) td:nth-child(4) ul li:nth-child(2) button';
-  const EDIT_TAG_KEY_INPUT_SELECTOR = '.edit-modal [name="edit-tag-key"]';
-  const EDIT_TAG_VALUE_INPUT_SELECTOR = '.edit-modal [name="edit-tag-value"]';
-  const EDIT_TAG_CONFIRM_BUTTON = '.edit-modal button:first-child';
-  const EDIT_TAG_CANCEL_BUTTON = '.edit-modal button:last-child';
-  const CONFIRMATION_MODAL_INPUT_SELECTOR = '.confirmation-modal input';
+  const EDIT_TAG_KEY_INPUT_SELECTOR =
+    '[data-test-edit-modal] [name="edit-tag-key"]';
+  const EDIT_TAG_VALUE_INPUT_SELECTOR =
+    '[data-test-edit-modal] [name="edit-tag-value"]';
+  const EDIT_TAG_CONFIRM_BUTTON = '[data-test-edit-modal] button:first-child';
+  const EDIT_TAG_CANCEL_BUTTON = '[data-test-edit-modal] button:last-child';
+  const CONFIRMATION_MODAL_INPUT_SELECTOR =
+    '[data-test-confirmation-modal] input';
   const CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR =
-    '.confirmation-modal button:first-child';
+    '[data-test-confirmation-modal] button:first-child';
   const CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR =
-    '.confirmation-modal button:last-child';
+    '[data-test-confirmation-modal] button:last-child';
   const NO_TAGS_STATE_TITLE = '[data-test-no-tags] div:first-child';
   const NO_TAGS_STATE_ACTION = '[data-test-no-tags] div:nth-child(3) a';
 

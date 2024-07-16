@@ -121,11 +121,11 @@
     {{/if}}
 
     {{#if this.editModal}}
-      <Hds::Modal class='edit-modal' @onClose={{this.toggleEditModal}} as |M|>
+      <Hds::Modal data-test-edit-modal @onClose={{this.toggleEditModal}} as |M|>
         <M.Header>
           {{t 'resources.worker.tags.edit.title'}}
         </M.Header>
-        <M.Body>
+        <M.Body class='modal-body'>
           <Hds::Text::Body @color='primary'>
             {{t 'resources.worker.tags.edit.description'}}
           </Hds::Text::Body>
@@ -170,7 +170,7 @@
 
     {{#if this.removeModal}}
       <Hds::Modal
-        class='confirmation-modal'
+        data-test-confirmation-modal
         @color='critical'
         @onClose={{this.toggleRemoveModal}}
         as |M|
@@ -178,8 +178,8 @@
         <M.Header @icon='alert-diamond'>
           {{t 'resources.worker.tags.remove.title'}}
         </M.Header>
-        <M.Body>
-          <Hds::Text::Body @color='primary'>
+        <M.Body class='modal-body'>
+          <Hds::Text::Body @tag='p' @color='primary'>
             {{this.tagDisplayName}}
             {{t 'resources.worker.tags.remove.warning'}}
           </Hds::Text::Body>
