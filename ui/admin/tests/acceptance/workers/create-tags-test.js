@@ -8,11 +8,13 @@ import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | workers | worker | create-tags', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
