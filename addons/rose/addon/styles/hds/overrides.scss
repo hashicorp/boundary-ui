@@ -4,10 +4,12 @@
  */
 
 // field and button bottom margin (HDS leaves this to implementers)
-[class*='hds-form-field--layout'],
-[class*='hds-form-group--layout'],
-.hds-button-set {
-  margin-bottom: 1.5rem;
+form {
+  [class*='hds-form-field--layout'],
+  [class*='hds-form-group--layout'],
+  .rose-form-actions.hds-button-set {
+    margin-bottom: 1.5rem;
+  }
 }
 
 /* stylelint-disable selector-class-pattern */
