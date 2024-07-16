@@ -75,4 +75,14 @@ module('Unit | Abilities | Role', function (hooks) {
     });
     assert.true(service.can('read account', account));
   });
+
+  test('can set grant scopes based on authorized_actions', function (assert) {
+    const service = this.owner.lookup('service:can');
+    const model = {
+      authorized_actions: ['set-grant-scopes'],
+    };
+    assert.true(service.can('setGrantScopes role', model));
+    model.authorized_actions = [];
+    assert.false(service.can('setGrantScopes role', model));
+  });
 });

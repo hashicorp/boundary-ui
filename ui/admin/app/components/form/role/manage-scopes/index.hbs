@@ -1,0 +1,93 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form
+  class='full-width role-manage-scopes-form'
+  @onSubmit={{fn @submit this.selectedItems}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+
+  <Hds::Form::Toggle::Field
+    @value={{this.keywords.keyThis}}
+    name={{this.keywords.keyThis}}
+    checked={{includes this.keywords.keyThis this.selectedItems}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
+    <F.HelperText>{{t 'resources.role.scope.form.this.help'}}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Form::Toggle::Field
+    @value={{this.keywords.keyChildren}}
+    name={{this.keywords.keyChildren}}
+    checked={{includes this.keywords.keyChildren this.selectedItems}}
+    disabled={{form.disabled}}
+    {{on 'change' this.toggleField}}
+    as |F|
+  >
+    <F.Label>{{t 'resources.role.scope.form.children.label'}}</F.Label>
+    <F.HelperText>{{if
+        @model.scope.isGlobal
+        (t 'resources.role.scope.form.children.help.0')
+        (t 'resources.role.scope.form.children.help.1')
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  {{#if @model.scope.isGlobal}}
+    <Hds::Form::Toggle::Field
+      @value={{this.keywords.keyDescendants}}
+      name={{this.keywords.keyDescendants}}
+      checked={{includes this.keywords.keyDescendants this.selectedItems}}
+      disabled={{form.disabled}}
+      {{on 'change' this.toggleField}}
+      as |F|
+    >
+      <F.Label>{{t 'resources.role.scope.form.descendants.label'}}</F.Label>
+      <F.HelperText>{{t
+          'resources.role.scope.form.descendants.help'
+        }}</F.HelperText>
+    </Hds::Form::Toggle::Field>
+  {{/if}}
+
+  {{! TODO: Add correct href value inline link}}
+  {{#if this.showAlert}}
+    <Hds::Alert @type='compact' as |A|>
+      <A.Description>
+        {{t 'resources.role.scope.messages.keywords-selected.description'}}
+        <Hds::Link::Inline @color='secondary' @href={{(doc-url 'role')}}>
+          {{t 'resources.role.scope.messages.keywords-selected.link'}}
+        </Hds::Link::Inline>
+      </A.Description>
+    </Hds::Alert>
+  {{/if}}
+
+  <Hds::Button
+    @text={{t 'resources.role.scope.actions.manage-custom-scopes.text'}}
+    @color='secondary'
+    @icon={{if @showCheckIcon 'check-circle'}}
+    @route={{if
+      @model.scope.isGlobal
+      'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+      'scopes.scope.roles.role.manage-scopes.manage-org-projects'
+    }}
+    @model={{if @model.scope.isOrg @model.scope.id}}
+  />
+
+  <Hds::Form::HelperText
+    @controlId='for-manage-custom-scopes-button'
+    class='manage-custom-scopes-helper-text'
+  >
+    {{t 'resources.role.scope.actions.manage-custom-scopes.help'}}
+  </Hds::Form::HelperText>
+
+  <form.actions
+    @submitText={{t 'actions.save'}}
+    @cancelText={{t 'actions.cancel'}}
+  />
+</Rose::Form>
