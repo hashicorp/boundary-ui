@@ -11,6 +11,7 @@ const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
 const treeKill = require('tree-kill');
 const log = require('electron-log/main');
+const generateErrorPromise = require('../utils/generateErrorPromise');
 
 class CacheDaemonManager {
   #socketPath;
@@ -23,15 +24,21 @@ class CacheDaemonManager {
 
   /**
    * Checks the status of the cache daemon.
-   * @returns {string}
+   * @returns {Promise}
    */
   status() {
     const daemonStatusCommand = ['cache', 'status', '-format=json'];
-    const { stdout } = spawnSync(daemonStatusCommand);
+    const { stdout, stderr } = spawnSync(daemonStatusCommand);
 
-    const status = jsonify(stdout);
-    this.#socketPath = status?.item?.socket_address;
-    return status;
+    const parsedResponse = jsonify(stdout);
+    this.#socketPath = parsedResponse?.item?.socket_address;
+
+    if (parsedResponse?.status_code === 200) {
+      return parsedResponse.item;
+    }
+
+    log.warn('Cache Daemon Status:', stderr);
+    return generateErrorPromise(stderr);
   }
 
   /**
@@ -106,11 +113,8 @@ class CacheDaemonManager {
       return;
     }
 
-    parsedResponse = jsonify(stderr);
-    return Promise.reject({
-      statusCode: parsedResponse?.status_code,
-      ...parsedResponse?.api_error,
-    });
+    log.warn('Cache Daemon Add Token:', stderr);
+    return generateErrorPromise(stderr);
   }
 
   search(requestData) {
@@ -157,17 +161,12 @@ const searchCliCommand = (requestData) => {
     return parsedResponse?.item;
   }
 
-  parsedResponse = jsonify(stderr);
-
   // Log request data and response, but clean up token from log
   const requestCopy = { ...requestData };
   delete requestData.token;
   log.error(`searchCliCommand(${JSON.stringify(requestCopy)}):`, stderr);
 
-  return Promise.reject({
-    statusCode: parsedResponse?.status_code,
-    ...parsedResponse?.api_error,
-  });
+  return generateErrorPromise(stderr);
 };
 
 // Export an instance so we get a singleton
