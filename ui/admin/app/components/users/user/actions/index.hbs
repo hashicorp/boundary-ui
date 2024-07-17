@@ -2,25 +2,23 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
+<Hds::Dropdown data-test-manage-user-dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
   {{#if (can 'addAccounts user' @model)}}
-    <dropdown.link @route='scopes.scope.users.user.add-accounts'>
-      {{t 'resources.user.actions.add-accounts'}}
-    </dropdown.link>
+    <dd.Interactive
+      @route='scopes.scope.users.user.add-accounts'
+      @text={{t 'resources.user.actions.add-accounts'}}
+    />
   {{/if}}
+
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
+    <dd.Separator />
+    <dd.Interactive
+      @color='critical'
       @disabled={{@model.canSave}}
+      @text={{t 'resources.user.actions.delete'}}
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.user.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>

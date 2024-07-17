@@ -17,21 +17,21 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
   // it's loaded.
   @resourceFilter({
     allowed: (route) => {
-      const configTags = route
+      const allTags = route
         .modelFor('scopes.scope.workers')
-        .flatMap((worker) => worker.configTagList)
+        .flatMap((worker) => worker.allTags)
         .filter(Boolean);
 
       // Filter out duplicate tags
-      return configTags.reduce((uniqueConfigTags, currentTag) => {
-        const isDuplicateTag = uniqueConfigTags.some(
+      return allTags.reduce((uniqueTags, currentTag) => {
+        const isDuplicateTag = uniqueTags.some(
           (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
         );
 
         if (!isDuplicateTag) {
-          uniqueConfigTags.push(currentTag);
+          uniqueTags.push(currentTag);
         }
-        return uniqueConfigTags;
+        return uniqueTags;
       }, []);
     },
     findBySerialized: ({ key: itemKey, value: itemValue }, { key, value }) =>
@@ -49,14 +49,14 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     );
 
     if (this.tags?.length) {
-      // Return workers that have config tags that have at
+      // Return workers that have config and/or api tags that have at
       // least one intersection with the filter tags
       return workers.filter((worker) => {
-        if (!worker.config_tags) {
+        if (!worker.config_tags && !worker.api_tags) {
           return null;
         }
 
-        const workerTags = worker.configTagList;
+        const workerTags = worker.allTags;
         return this.tags.some((tag) =>
           workerTags.some(
             (workerTag) =>

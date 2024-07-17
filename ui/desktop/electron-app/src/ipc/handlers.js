@@ -156,7 +156,12 @@ handle('searchCacheDaemon', async (request) =>
  * socket path as a proxy for whether the daemon is running.
  */
 handle('isCacheDaemonRunning', async () => {
-  cacheDaemonManager.status();
+  try {
+    await cacheDaemonManager.status();
+  } catch (e) {
+    // There was likely an error connecting to the cache daemon.
+    return false;
+  }
   return Boolean(cacheDaemonManager.socketPath);
 });
 

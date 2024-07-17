@@ -36,6 +36,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service clientAgentSessions;
   @service pollster;
   @service flashMessages;
+  @service features;
 
   // =methods
 
@@ -48,18 +49,22 @@ export default class ScopesScopeProjectsRoute extends Route {
 
   /**
    * Primes the store with _all project scopes_ under global.
-   * @return {Promise{ScopeModel}}
+   * @return {Promise<ScopeModel>}
    */
   async model() {
-    // Setup the poller job
-    if (!this.job) {
-      this.boundPoller = this.poller.bind(this);
-      this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
-    }
+    if (this.features.isEnabled('client-agent')) {
+      // Setup the poller job
+      if (!this.job) {
+        this.boundPoller = this.poller.bind(this);
+        this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
+      }
 
-    const isClientAgentRunning = await this.ipc.invoke('isClientAgentRunning');
-    if (isClientAgentRunning) {
-      this.job.start();
+      const isClientAgentRunning = await this.ipc.invoke(
+        'isClientAgentRunning',
+      );
+      if (isClientAgentRunning) {
+        this.job.start();
+      }
     }
 
     const { id: scope_id } = this.modelFor('scopes.scope');
@@ -100,12 +105,12 @@ export default class ScopesScopeProjectsRoute extends Route {
           __electronLog?.info('Starting polling of new sessions again');
           return;
         } catch (e) {
-          __electronLog?.error('Failed to add token to daemons', e);
+          __electronLog?.error('Failed to add token to daemons', e.message);
           // If it fails again, just let the poller be killed
         }
       }
 
-      __electronLog?.error('Failed to get new Sessions', e);
+      __electronLog?.error('Failed to get new Sessions', e.message);
       if (this.job) {
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),

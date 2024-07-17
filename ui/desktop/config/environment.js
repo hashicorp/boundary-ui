@@ -61,9 +61,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      search: false,
-      filter: true,
-      'post-connection-workflow': false,
+      'client-agent': false,
     },
   };
 
@@ -84,7 +82,7 @@ module.exports = function (environment) {
       : true;
 
     // Enable features in development
-    ENV.featureFlags['post-connection-workflow'] = true;
+    ENV.featureFlags['client-agent'] = true;
   }
 
   if (environment === 'test') {
