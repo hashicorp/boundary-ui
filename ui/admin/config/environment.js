@@ -114,6 +114,7 @@ module.exports = function (environment) {
           '/tutorials/hcp-administration/hcp-manage-workers',
         'worker-filters':
           '/docs/concepts/domain-model/credential-stores#worker_filter',
+        'worker.create-tags': '/docs/concepts/filtering/worker-tags',
         'storage-bucket': '/docs/concepts/domain-model/storage-buckets',
         'storage-bucket.new':
           '/docs/configuration/session-recording/create-storage-bucket',
