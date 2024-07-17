@@ -2,6 +2,16 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.1.0 [CLI 0.17.0] (2024.07.31)
+
+### New
+
+- Upgrade CLI to v0.17.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2396))
+- Add logging for the client ([PR](https://github.com/hashicorp/boundary-ui/pull/2318))
+- Add support for auto-updating to ARM64 Mac Clients ([PR](https://github.com/hashicorp/boundary-ui/pull/2327))
+- Update client license to BSL ([PR](https://github.com/hashicorp/boundary-ui/pull/2307))
+
+
 ## V2.0.3 [CLI 0.16.0] (2024.03.30)
 
 ### New
