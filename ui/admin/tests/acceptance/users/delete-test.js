@@ -20,7 +20,8 @@ module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
+  const DELETE_ACTION_SELECTOR = "[data-test-manage-user-dropdown] ul li button"
+  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-user-dropdown] div:first-child button"
   const instances = {
     scopes: {
       global: null,
@@ -57,7 +58,8 @@ module('Acceptance | users | delete', function (hooks) {
 
     await click(`[href="${urls.user}"]`);
 
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(this.server.db.users.length, usersCount - 1);
   });
@@ -66,11 +68,12 @@ module('Acceptance | users | delete', function (hooks) {
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.users);
-
+    
     await click(`[href="${urls.user}"]`);
-
+    
+    await click(MANAGE_DROPDOWN_SELECTOR);
     assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
+      .dom('[data-test-manage-user-dropdown] ul li button')
       .doesNotExist();
   });
 
@@ -79,9 +82,11 @@ module('Acceptance | users | delete', function (hooks) {
     confirmService.enabled = true;
     const usersCount = this.server.db.users.length;
     await visit(urls.users);
+    
 
     await click(`[href="${urls.user}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
     assert.dom('.rose-notification-body').hasText('Deleted successfully.');
@@ -96,7 +101,8 @@ module('Acceptance | users | delete', function (hooks) {
     await visit(urls.users);
 
     await click(`[href="${urls.user}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-secondary');
 
     assert.strictEqual(this.server.db.users.length, usersCount);
@@ -118,8 +124,8 @@ module('Acceptance | users | delete', function (hooks) {
     });
 
     await click(`[href="${urls.user}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.dom('.rose-notification-body').hasText('Oops.');
   });
 });
