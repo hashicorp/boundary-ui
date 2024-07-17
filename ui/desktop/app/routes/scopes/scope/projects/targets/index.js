@@ -136,7 +136,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     try {
       await aliasPromise;
     } catch (e) {
-      __electronLog?.warn('Could not retrieve aliases for targets', e);
+      __electronLog?.warn('Could not retrieve aliases for targets', e.message);
       // Separately await and catch the error here so we can continue loading
       // the page in case the controller doesn't support aliases yet
     }

@@ -10,38 +10,18 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
-      {{t 'resources.worker.title'}}
-      <DocLink @doc='worker' @iconSize='large' />
-    </h2>
-    <p>{{t 'resources.worker.description'}}</p>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+    <Workers::Worker::Header @model={{@model}} />
   </page.header>
 
   <page.navigation>
-    <Rose::Nav::Tabs as |nav|>
-      <nav.link @route='scopes.scope.workers.worker.index'>
-        {{t 'titles.details'}}
-      </nav.link>
-    </Rose::Nav::Tabs>
+    <Workers::Worker::Nav />
   </page.navigation>
 
   <page.actions>
-    <Rose::Dropdown
-      @text={{t 'actions.manage'}}
-      @dropdownRight={{true}}
-      as |dropdown|
-    >
-      {{#if (can 'delete worker' @model)}}
-        <dropdown.button
-          @style='danger'
-          @disabled={{@model.canSave}}
-          {{on 'click' (fn this.workers.delete @model)}}
-        >
-          {{t 'resources.worker.actions.delete'}}
-        </dropdown.button>
-      {{/if}}
-    </Rose::Dropdown>
+    <Workers::Worker::Actions
+      @model={{@model}}
+      @delete={{this.workers.delete}}
+    />
   </page.actions>
 
   <page.body>

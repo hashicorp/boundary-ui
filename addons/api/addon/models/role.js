@@ -7,6 +7,26 @@ import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
 
+export const GRANT_SCOPE_THIS = 'this';
+export const GRANT_SCOPE_CHILDREN = 'children';
+export const GRANT_SCOPE_DESCENDANTS = 'descendants';
+export const GRANT_SCOPE_KEYWORDS = Object.freeze([
+  GRANT_SCOPE_THIS,
+  GRANT_SCOPE_CHILDREN,
+  GRANT_SCOPE_DESCENDANTS,
+]);
+
+// Sort the grant scope IDs by the order in which they should be displayed
+// in the UI as the API will return them in an arbitrary order.
+const sortOrder = {
+  [GRANT_SCOPE_THIS]: 0,
+  [GRANT_SCOPE_CHILDREN]: 1,
+  [GRANT_SCOPE_DESCENDANTS]: 2,
+  global: 3,
+  o: 4,
+  p: 5,
+};
+
 export default class RoleModel extends GeneratedRoleModel {
   // =services
 
@@ -34,12 +54,57 @@ export default class RoleModel extends GeneratedRoleModel {
   @attr({ readOnly: true, emptyArrayIfMissing: true }) grant_strings;
 
   /**
-   * Convenience for looking up the grant scope, if loaded.
+   * Convenience for looking up the grant scopes, if loaded.
    */
-  get grantScope() {
-    return this.grant_scope_id
-      ? this.store.peekRecord('scope', this.grant_scope_id)
-      : null;
+  get grantScopes() {
+    const grantScopes = [];
+    if (this.grant_scope_ids) {
+      const sortedScopeIDs = [...this.grant_scope_ids].sort((a, b) => {
+        const aSplit = a.split('_')[0];
+        const bSplit = b.split('_')[0];
+
+        return sortOrder[aSplit] - sortOrder[bSplit];
+      });
+
+      sortedScopeIDs.forEach((id) => {
+        if (GRANT_SCOPE_KEYWORDS.includes(id)) {
+          grantScopes.push({ id });
+        } else {
+          const scope = this.store.peekRecord('scope', id);
+          if (scope) {
+            grantScopes.push(scope);
+          }
+        }
+      });
+    }
+
+    return grantScopes;
+  }
+
+  /**
+   * Helper for retrieving grant scope ids that are keywords.
+   * @type {string[]}
+   */
+  get grantScopeKeywords() {
+    return this.grant_scope_ids.filter((id) =>
+      GRANT_SCOPE_KEYWORDS.includes(id),
+    );
+  }
+
+  /**
+   * Helper for retrieving grant_scope_ids that are orgs.
+   * @type {string[]}
+   */
+  get grantScopeOrgIDs() {
+    return this.grant_scope_ids.filter((id) => id.startsWith('o_'));
+  }
+
+  /**
+   * Helper for retrieving grant_scope_ids that are projects.
+   * @type {string[]}
+   */
+  get grantScopeProjectIDs() {
+    return this.grant_scope_ids.filter((id) => id.startsWith('p_'));
   }
 
   /**
@@ -73,6 +138,20 @@ export default class RoleModel extends GeneratedRoleModel {
   }
 
   // =methods
+
+  /**
+   * Saves grant scope ids on the role via the `set-grant-scopes` method.
+   * @param {[string]} grantScopeIDs
+   * @return {Promise}
+   */
+  setGrantScopes(grantScopeIDs) {
+    return this.save({
+      adapterOptions: {
+        method: 'set-grant-scopes',
+        grantScopeIDs,
+      },
+    });
+  }
 
   /**
    * Saves grant strings on the role via the `set-grants` method.

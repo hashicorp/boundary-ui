@@ -100,12 +100,12 @@ export default class ScopesScopeProjectsRoute extends Route {
           __electronLog?.info('Starting polling of new sessions again');
           return;
         } catch (e) {
-          __electronLog?.error('Failed to add token to daemons', e);
+          __electronLog?.error('Failed to add token to daemons', e.message);
           // If it fails again, just let the poller be killed
         }
       }
 
-      __electronLog?.error('Failed to get new Sessions', e);
+      __electronLog?.error('Failed to get new Sessions', e.message);
       if (this.job) {
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),

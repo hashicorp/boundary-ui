@@ -16,6 +16,7 @@ import initializeMockIPC from './scenarios/ipc';
 import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
+import { TYPE_WORKER_PKI } from 'api/models/worker';
 
 const isTesting = environmentConfig.environment === 'test';
 
@@ -319,6 +320,13 @@ function routes() {
       const method = idMethod.split(':')[1];
       const role = roles.find(id);
       let updatedAttrs = {};
+
+      if (method === 'set-grant-scopes') {
+        updatedAttrs = {
+          version: attrs.version,
+          grantScopeIds: attrs.grantScopeIds,
+        };
+      }
 
       // Principals is a combined list of users, groups and managed groups, but in Mirage we've
       // internally modelled them as separate lists.  Therefore we must check
@@ -669,11 +677,40 @@ function routes() {
 
     // This POST only takes in a token so we need to generate a random worker to return
     const newWorker = this.create('worker', {
-      type: 'pki',
+      type: TYPE_WORKER_PKI,
       scope: globalScope,
     });
     return workers.create(newWorker.attrs);
   });
+  this.post(
+    '/workers/:idMethod',
+    function ({ workers }, { params: { idMethod } }) {
+      const attrs = this.normalizedRequestAttrs();
+      const id = idMethod.split(':')[0];
+      const method = idMethod.split(':')[1];
+      const worker = workers.find(id);
+      let updatedAttrs = {
+        version: attrs.version,
+        api_tags: worker.api_tags,
+      };
+
+      if (method === 'remove-worker-tags') {
+        const key = Object.keys(attrs.apiTags)[0];
+        const value = attrs.apiTags[key][0];
+        updatedAttrs.api_tags[key] = updatedAttrs.api_tags[key].filter(
+          (tag) => {
+            return tag !== value;
+          },
+        );
+      }
+
+      if (method === 'set-worker-tags') {
+        updatedAttrs.api_tags = attrs.apiTags;
+      }
+
+      return worker.update(updatedAttrs);
+    },
+  );
 
   // storage-buckets
   this.get(
