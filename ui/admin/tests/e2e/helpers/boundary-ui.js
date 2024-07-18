@@ -734,7 +734,7 @@ exports.createAliasForTarget = async (page, alias, targetId) => {
  * @param {Page} page Playwright page object
  */
 exports.deleteResource = async (page) => {
-  await page.getByTitle('Manage').click();
+  await page.getByText('Manage').click();
   await page.getByRole('button', { name: /^(Delete|Remove Worker)/ }).click();
   await page.getByText('OK', { exact: true }).click();
   await expect(
