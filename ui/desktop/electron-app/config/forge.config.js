@@ -4,6 +4,20 @@ const { isMac } = require('../src/helpers/platform.js');
 const fs = require('fs');
 const path = require('path');
 
+// If we want to skip CLI we avoid packing it
+const beforeAsar = process.env.BYPASS_CLI_SETUP
+  ? []
+  : [
+      async (buildPath, electronVersion, platform, arch, done) => {
+        // Delete the boundary CLI before we build the ASAR as it gets copied outside
+        // in the resources folder
+        const cliPath = path.join(buildPath, 'cli');
+        await fs.promises.rm(cliPath, { recursive: true, force: true });
+        done();
+      },
+    ];
+const extraResource = process.env.BYPASS_CLI_SETUP ? [] : ['./cli'];
+
 module.exports = {
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
@@ -30,16 +44,8 @@ module.exports = {
       // outside of the ASAR when they are called
       unpack: '**/node_modules/node-pty/build/Release/*',
     },
-    beforeAsar: [
-      async (buildPath, electronVersion, platform, arch, done) => {
-        // Delete the boundary CLI before we build the ASAR as it gets copied outside
-        // in the resources folder
-        const cliPath = path.join(buildPath, 'cli');
-        await fs.promises.rm(cliPath, { recursive: true, force: true });
-        done();
-      },
-    ],
-    extraResource: ['./cli'],
+    beforeAsar,
+    extraResource,
   },
   makers: [
     {
