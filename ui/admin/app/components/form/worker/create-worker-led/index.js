@@ -8,16 +8,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
-
-class Tag {
-  @tracked key;
-  @tracked value;
-
-  constructor(key, value) {
-    this.key = key;
-    this.value = value;
-  }
-}
+import Tag from '../tag';
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
   // =services

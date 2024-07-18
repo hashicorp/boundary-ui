@@ -46,13 +46,14 @@
           @model={{@model.roles}}
           @columns={{array
             (hash label=(t 'form.name.label'))
+            (hash label=(t 'resources.role.titles.grants-applied'))
             (hash label=(t 'form.id.label'))
           }}
           @density='short'
           @valign='middle'
         >
           <:body as |B|>
-            <B.Tr>
+            <B.Tr data-test-role-row={{B.data.id}}>
               <B.Td>
                 {{#if (can 'read role' B.data)}}
                   <LinkTo @route='scopes.scope.roles.role' @model={{B.data.id}}>
@@ -62,6 +63,21 @@
                   {{B.data.displayName}}
                 {{/if}}
                 <p>{{B.data.description}}</p>
+              </B.Td>
+              <B.Td>
+                {{#if (includes this.grantScopeThis B.data.grant_scope_ids)}}
+                  <Hds::TooltipButton
+                    @text={{t 'resources.role.messages.tooltips.yes'}}
+                  >
+                    <Hds::Badge @text={{t 'actions.yes'}} @color='success' />
+                  </Hds::TooltipButton>
+                {{else}}
+                  <Hds::TooltipButton
+                    @text={{t 'resources.role.messages.tooltips.no'}}
+                  >
+                    <Hds::Badge @text={{t 'actions.no'}} />
+                  </Hds::TooltipButton>
+                {{/if}}
               </B.Td>
               <B.Td>
                 <Hds::Copy::Snippet

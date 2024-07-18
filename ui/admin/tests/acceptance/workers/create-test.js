@@ -122,7 +122,7 @@ module('Acceptance | workers | create', function (hooks) {
     assert.dom(`[href="${newWorkerURL}"]`).isNotVisible();
   });
 
-  test('saving a new user with invalid fields displays error messages', async function (assert) {
+  test('saving a new worker with invalid fields displays error messages', async function (assert) {
     this.server.post('/workers:create:worker-led', () => {
       return new Response(
         500,

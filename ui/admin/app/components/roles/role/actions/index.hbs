@@ -3,24 +3,29 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'addPrincipals role' @model)}}
-    <dropdown.link @route='scopes.scope.roles.role.add-principals'>
-      {{t 'resources.role.principal.actions.add-principals'}}
-    </dropdown.link>
+    <dd.Interactive
+      @text={{t 'resources.role.principal.actions.add-principals'}}
+      @route='scopes.scope.roles.role.add-principals'
+      data-test-manage-dropdown-principals
+    />
+  {{/if}}
+  {{#if (can 'setGrantScopes role' @model)}}
+    <dd.Interactive
+      @text={{t 'resources.role.scope.actions.manage-scopes'}}
+      @route='scopes.scope.roles.role.manage-scopes'
+      data-test-manage-dropdown-scopes
+    />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.role.actions.delete'}}
+      @color='critical'
       @disabled={{@model.canSave}}
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.role.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>

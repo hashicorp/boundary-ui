@@ -132,7 +132,7 @@ export default class OnboardingRoute extends Route {
 
   async createGrants(org, project, target, role) {
     role.scopeID = org.id;
-    role.grant_scope_id = project.id;
+    role.grant_scope_ids = [project.id];
     try {
       await role.save();
       await role.saveGrantStrings([

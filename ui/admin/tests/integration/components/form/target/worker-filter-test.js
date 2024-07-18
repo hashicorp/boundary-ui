@@ -13,25 +13,33 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
 
-  test('it only renders a toggle field when "toggleEnabled" is false', async function (assert) {
-    this.onChange = () => {};
-    this.toggleAction = () => {};
+  test('it renders correct content when egress_worker_filter is passed in', async function (assert) {
+    this.onInput = () => {};
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { egress_worker_filter: 'egress filter' };
     await render(
-      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{false}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`,
+      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
     );
 
-    assert.dom('.hds-form-toggle').isVisible();
-    assert.dom('.hds-form-text-input').doesNotExist();
+    assert.dom('[data-test-code-editor-field-editor]').isVisible();
+    assert
+      .dom('[data-test-code-editor-field-editor] .CodeMirror-line')
+      .hasText(this.model.egress_worker_filter);
   });
 
-  test('it renders a toggle field and text input field when "toggleEnabled" is true', async function (assert) {
-    this.onChange = () => {};
-    this.toggleAction = () => {};
+  test('it renders correct content when ingress_worker_filter is passed in', async function (assert) {
+    this.onInput = () => {};
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
     await render(
-      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @toggleEnabled={{true}} @toggleAction={{this.toggleAction}} @onChange={{this.onChange}}/>`,
+      hbs`<Form::Target::WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
     );
 
-    assert.dom('.hds-form-toggle').isVisible();
-    assert.dom('.hds-form-text-input').isVisible();
+    assert.dom('[data-test-code-editor-field-editor]').isVisible();
+    assert
+      .dom('[data-test-code-editor-field-editor] .CodeMirror-line')
+      .hasText(this.model.ingress_worker_filter);
   });
 });

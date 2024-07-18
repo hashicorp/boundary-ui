@@ -27,7 +27,7 @@
     {{/if}}
   </page.actions>
 
-  <page.body>
+  <page.body class='workers'>
     {{#if @model}}
       <Rose::Toolbar as |toolbar|>
         <toolbar.primary>
@@ -124,12 +124,16 @@
             </B.Td>
             <B.Td>
               {{#if B.data.tagCount}}
-                <Hds::Badge
+                <Hds::Button
+                  data-test-worker-tags-flyout-button={{B.data.id}}
                   @icon='tag'
                   @text={{t
                     'resources.worker.table.tag_count'
                     tagCount=B.data.tagCount
                   }}
+                  @color='tertiary'
+                  @size='small'
+                  {{on 'click' (fn this.selectWorker B.data)}}
                 />
               {{/if}}
             </B.Td>
@@ -145,6 +149,55 @@
           </B.Tr>
         </:body>
       </Hds::Table>
+
+      {{#if this.selectedWorker}}
+        <Hds::Flyout
+          data-test-worker-tags-flyout
+          @onClose={{fn this.selectWorker null}}
+          as |M|
+        >
+          <M.Header>
+            {{t
+              'resources.worker.flyout.title'
+              workerName=this.selectedWorker.displayName
+            }}
+          </M.Header>
+          <M.Body>
+            <Hds::Table
+              @model={{this.selectedWorkerTags}}
+              @columns={{array
+                (hash label=(t 'resources.worker.table.tag'))
+                (hash label=(t 'resources.worker.table.type'))
+              }}
+              @valign='middle'
+            >
+              <:body as |B|>
+                <B.Tr>
+                  <B.Td>
+                    <Hds::Text::Code class='tag-shortener'>
+                      {{this.tagDisplayName B.data}}
+                    </Hds::Text::Code>
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Badge @text={{B.data.type}} />
+                  </B.Td>
+                </B.Tr>
+              </:body>
+            </Hds::Table>
+            {{#if (gt this.selectedWorker.allTags.length 10)}}
+              <div class='view-more-tags'>
+                <Hds::Link::Standalone
+                  @icon='arrow-right'
+                  @iconPosition='trailing'
+                  @text={{t 'resources.worker.flyout.action.view_more'}}
+                  @route='scopes.scope.workers.worker.tags'
+                  @model={{this.selectedWorker}}
+                />
+              </div>
+            {{/if}}
+          </M.Body>
+        </Hds::Flyout>
+      {{/if}}
     {{else}}
       <Rose::Layout::Centered>
         <Rose::Message

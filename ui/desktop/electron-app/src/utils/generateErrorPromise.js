@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 const jsonify = require('./jsonify');
+const log = require('electron-log/main');
 
 // Convert to json
 const generateErrorPromise = async (stderr) => {
@@ -11,12 +12,12 @@ const generateErrorPromise = async (stderr) => {
   if (parsedResponse?.status_code) {
     return Promise.reject({
       statusCode: parsedResponse?.status_code,
-      error: parsedResponse?.api_error,
+      message: parsedResponse?.api_error,
     });
   }
 
   return Promise.reject({
-    error: parsedResponse?.error,
+    message: parsedResponse?.error,
   });
 };
 

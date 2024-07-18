@@ -103,9 +103,25 @@ module.exports = {
           fs.mkdirSync(destination, { recursive: true });
         // Copy artifacts
         artifacts.forEach(async (artifact) => {
-          const name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
-            artifact,
-          )}`;
+          // Change arch and platform to be compliant with blob signature naming rules.
+          let name;
+          if (arch === 'x64') {
+            arch = 'amd64';
+          }
+
+          if (platform === 'win32') {
+            platform = 'windows';
+          }
+
+          if (platform === 'linux' && artifact.endsWith('.deb')) {
+            name = `boundary-desktop_${version}_${arch}${path.extname(
+              artifact,
+            )}`;
+          } else {
+            name = `boundary-desktop_${version}_${platform}_${arch}${path.extname(
+              artifact,
+            )}`;
+          }
           const artifactDestination = path.join(destination, name);
           console.log(`[release] Found artifact: ${artifact}`);
           try {

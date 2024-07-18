@@ -22,6 +22,9 @@ module('Acceptance | roles | principals', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-dropdown-principals]';
+
   const instances = {
     scopes: {
       global: null,
@@ -111,14 +114,15 @@ module('Acceptance | roles | principals', function (hooks) {
     );
     instances.role.update({ authorized_actions });
     await visit(urls.rolePrincipals);
-    assert.notOk(find('.rose-layout-page-actions a'));
+    assert.dom(ADD_PRINCIPALS_SELECTOR).doesNotExist();
   });
 
   test('select and save principals to add', async function (assert) {
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_PRINCIPALS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addPrincipals);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -136,7 +140,8 @@ module('Acceptance | roles | principals', function (hooks) {
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_PRINCIPALS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addPrincipals);
     await click('tbody label');
     await click('form [type="button"]');

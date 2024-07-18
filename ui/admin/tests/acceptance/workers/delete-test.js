@@ -21,6 +21,10 @@ module('Acceptance | workers | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_TOGGLE =
+    '[data-test-manage-worker-dropdown] div button';
+  const REMOVE_WORKER_BUTTON =
+    '[data-test-manage-worker-dropdown] div:nth-child(2) button';
   let getWorkerCount;
 
   const instances = {
@@ -54,7 +58,8 @@ module('Acceptance | workers | delete', function (hooks) {
   test('can delete a worker', async function (assert) {
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(REMOVE_WORKER_BUTTON);
     assert.strictEqual(getWorkerCount(), count - 1);
   });
 
@@ -64,7 +69,8 @@ module('Acceptance | workers | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(REMOVE_WORKER_BUTTON);
     assert.strictEqual(getWorkerCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -75,7 +81,8 @@ module('Acceptance | workers | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getWorkerCount();
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(REMOVE_WORKER_BUTTON);
     assert.strictEqual(getWorkerCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -84,9 +91,8 @@ module('Acceptance | workers | delete', function (hooks) {
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.worker);
-    assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-      .isNotVisible();
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    assert.dom(REMOVE_WORKER_BUTTON).isNotVisible();
   });
 
   test('deleting a worker which errors displays error messages', async function (assert) {
@@ -102,7 +108,8 @@ module('Acceptance | workers | delete', function (hooks) {
       );
     });
     await visit(urls.worker);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(REMOVE_WORKER_BUTTON);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

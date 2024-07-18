@@ -49,7 +49,6 @@ module('Unit | Serializer | target', function (hooks) {
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
-      worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
       with_aliases: [{ value: 'a', scope_id: 'global' }],
@@ -100,7 +99,6 @@ module('Unit | Serializer | target', function (hooks) {
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
-      worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
       with_aliases: [{ value: 'www.test.com', scope_id: 'global' }],
@@ -208,7 +206,6 @@ module('Unit | Serializer | target', function (hooks) {
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
-      worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: null,
       with_aliases: [],
@@ -217,45 +214,6 @@ module('Unit | Serializer | target', function (hooks) {
         default_client_port: null,
         enable_session_recording: true,
         storage_bucket_id: 'bucketID',
-      },
-      address: null,
-    });
-  });
-
-  test('it serializes the worker_filter attribute if present', function (assert) {
-    const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('target');
-    const record = store.createRecord('target', {
-      name: 'User',
-      description: 'Description',
-      version: 1,
-      type: TYPE_TARGET_SSH,
-      worker_filter: 'worker',
-      default_port: 1234,
-      with_aliases: [],
-      scope: {
-        scope_id: 'org_1',
-      },
-    });
-    const snapshot = record._createSnapshot();
-    const serializedRecord = serializer.serialize(snapshot);
-    assert.deepEqual(serializedRecord, {
-      name: 'User',
-      description: 'Description',
-      version: 1,
-      type: TYPE_TARGET_SSH,
-      scope_id: 'org_1',
-      session_max_seconds: 28800,
-      session_connection_limit: null,
-      worker_filter: 'worker',
-      egress_worker_filter: null,
-      ingress_worker_filter: null,
-      with_aliases: [],
-      attributes: {
-        default_port: 1234,
-        default_client_port: null,
-        enable_session_recording: false,
-        storage_bucket_id: null,
       },
       address: null,
     });
@@ -286,7 +244,6 @@ module('Unit | Serializer | target', function (hooks) {
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
-      worker_filter: null,
       egress_worker_filter: 'egress worker',
       ingress_worker_filter: null,
       with_aliases: [],
@@ -325,7 +282,6 @@ module('Unit | Serializer | target', function (hooks) {
       scope_id: 'org_1',
       session_max_seconds: 28800,
       session_connection_limit: null,
-      worker_filter: null,
       egress_worker_filter: null,
       ingress_worker_filter: 'ingress worker',
       with_aliases: [],
@@ -441,39 +397,6 @@ module('Unit | Serializer | target', function (hooks) {
           host_sources: [],
           brokered_credential_source_ids: [],
           injected_application_credential_source_ids: [],
-        },
-        relationships: {},
-      },
-    });
-  });
-
-  test('it normalizes the worker_filter attribute if present', function (assert) {
-    const store = this.owner.lookup('service:store');
-    const serializer = store.serializerFor('target');
-    const target = store.createRecord('target').constructor;
-    const payload = {
-      id: '1',
-      name: 'Target 1',
-      worker_filter: 'worker',
-    };
-    const normalized = serializer.normalizeSingleResponse(
-      store,
-      target,
-      payload,
-    );
-    assert.deepEqual(normalized, {
-      included: [],
-      data: {
-        id: '1',
-        type: 'target',
-        attributes: {
-          aliases: [],
-          authorized_actions: [],
-          name: 'Target 1',
-          host_sources: [],
-          brokered_credential_source_ids: [],
-          injected_application_credential_source_ids: [],
-          worker_filter: 'worker',
         },
         relationships: {},
       },

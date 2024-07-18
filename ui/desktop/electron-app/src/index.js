@@ -33,6 +33,8 @@ const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
 const { isMac, isLinux, isWindows } = require('./helpers/platform.js');
 const fixPath = require('./utils/fixPath');
+const config = require('../config/config.js');
+const { version } = require('./cli/index.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
@@ -60,10 +62,19 @@ fixPath();
 log.initialize();
 log.transports.console.level = false;
 log.transports.file.format =
-  '[{y}-{m}-{d} {h}:{i}:{s}.{ms}{z}] [{level}] {text}';
+  '[{y}-{m}-{d}T{h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 log.transports.file.fileName = 'desktop-client.log';
 // Set the max file size to 10MB
 log.transports.file.maxSize = 10485760;
+
+// Immediately log the version information
+log.info(
+  `Boundary Desktop Client Version: ${config.releaseVersion} | Commit: ${config.releaseCommit}`,
+);
+const cliInfo = version();
+log.info(
+  `Boundary CLI Version: ${cliInfo.versionNumber} | Commit: ${cliInfo.gitRevision}`,
+);
 
 if (isWindows()) {
   // Set the app user model ID to the app name as it will display the ID
@@ -142,12 +153,12 @@ const createWindow = (partition, closeWindowCB) => {
   });
 
   // Opens external links in the host default browser.
-  // We allow boundaryproject.io domain to open on external window (for now)
+  // We allow developer.hashicorp.com domain to open on external window
   // and releases.hashicorp.com domain to download the desktop app or
   // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (
-      url.startsWith('https://boundaryproject.io/') ||
+      url.startsWith('https://developer.hashicorp.com/') ||
       url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
     ) {
       shell.openExternal(url);

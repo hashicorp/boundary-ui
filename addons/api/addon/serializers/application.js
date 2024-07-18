@@ -179,6 +179,8 @@ export default class ApplicationSerializer extends RESTSerializer {
     payload = structuredClone(payload);
     // Check for and normalize missing arrays
     payload = this.normalizeMissingArrays(store, primaryModelClass, payload);
+    // Check for and normalize missing objects
+    payload = this.normalizeMissingObjects(store, primaryModelClass, payload);
     // Setup a new payload data structure.
     const transformedPayload = {};
     // Find the Ember-data-expected root key name.
@@ -199,7 +201,7 @@ export default class ApplicationSerializer extends RESTSerializer {
 
   /**
    * Resets missing array fields to an empty array if they are annotated by
-   * `normalizeToEmptyArray: true` in the associated model attribute
+   * `emptyArrayIfMissing: true` in the associated model attribute
    * declaration.  Our API excludes arrays when they are empty from
    * singular responses.
    *
@@ -216,6 +218,30 @@ export default class ApplicationSerializer extends RESTSerializer {
       Object.keys(attrDefs).forEach((key) => {
         if (!payload[key] && attrDefs[key]?.options?.emptyArrayIfMissing) {
           payload[key] = [];
+        }
+      });
+    }
+    return payload;
+  }
+
+  /**
+   * Resets missing object fields to an empty object if they are annotated by
+   * `emptyObjectIfMissing: true` in the associated model attribute
+   * declaration.
+   *
+   * @param {Store} store
+   * @param {Model} primaryModelClass
+   * @param {object} payload
+   * @return {object}
+   */
+  normalizeMissingObjects(store, primaryModelClass, payload) {
+    const attrDefs = store
+      .getSchemaDefinitionService()
+      .attributesDefinitionFor({ type: primaryModelClass.modelName });
+    if (attrDefs) {
+      Object.keys(attrDefs).forEach((key) => {
+        if (!payload[key] && attrDefs[key]?.options?.emptyObjectIfMissing) {
+          payload[key] = {};
         }
       });
     }

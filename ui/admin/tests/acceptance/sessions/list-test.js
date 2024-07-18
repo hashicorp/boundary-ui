@@ -188,7 +188,9 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
 
     assert
-      .dom(`[href="https://boundaryproject.io/help/admin-ui/sessions"]`)
+      .dom(
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/sessions"]`,
+      )
       .exists();
   });
 

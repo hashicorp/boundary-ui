@@ -14,6 +14,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   @service clientAgentSessions;
   @service flashMessages;
   @service intl;
+  @service features;
 
   // =methods
 
@@ -29,6 +30,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
     // If we don't have any credentials, we'll try to fetch them from the client agent in case this session
     // was initiated through the client agent.
     if (
+      this.features.isEnabled('client-agent') &&
       !session.credentials.length &&
       (await this.ipc.invoke('isClientAgentRunning'))
     ) {
@@ -41,7 +43,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
       } catch (e) {
         __electronLog?.error(
           'Failed to fetch credentials from client agent',
-          e,
+          e.message,
         );
 
         this.flashMessages.danger(

@@ -123,12 +123,15 @@ export default class CacheDaemonHandler {
               );
             } catch (err) {
               // If it fails again just fall back to fetching controller data
-              __electronLog?.error('Failed to add token to daemons', err);
+              __electronLog?.error(
+                'Failed to add token to daemons',
+                err.message,
+              );
             }
           } else {
             __electronLog?.error(
               'Failed to search cache daemon; falling back to search controller',
-              e,
+              e.message,
             );
 
             return fetchControllerData(context, next);

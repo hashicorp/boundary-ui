@@ -316,4 +316,27 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     alias.rollbackAttributes();
     await this.router.transitionTo('scopes.scope.targets.target');
   }
+
+  /**
+   * Handle save
+   * @param {TargetModel} target
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async saveWorkerFilter(target) {
+    await target.save();
+    await this.router.replaceWith('scopes.scope.targets.target.workers');
+  }
+
+  /**
+   * Rollback changes on target.
+   * @param {TargetModel} target
+   */
+  @action
+  async cancelWorkerFilter(target) {
+    target.rollbackAttributes();
+    await this.router.replaceWith('scopes.scope.targets.target.workers');
+  }
 }

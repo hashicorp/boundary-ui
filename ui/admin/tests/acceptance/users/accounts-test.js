@@ -25,7 +25,8 @@ module('Acceptance | users | accounts', function (hooks) {
   let features;
 
   const ACCOUNTS_TYPE_SELECTOR = 'tbody tr .hds-badge__text';
-  const ADD_ACCOUNTS_ACTION_SELECTOR = '.rose-layout-page-actions a';
+  const ADD_ACCOUNTS_ACTION_SELECTOR = "[data-test-manage-user-dropdown] ul li:first-child a"
+  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-user-dropdown] div:first-child button"
   const ERROR_MSG_SELECTOR = '[role="alert"]';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
@@ -168,7 +169,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('visiting account add accounts', async function (assert) {
     await visit(urls.accounts);
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
     await a11yAudit();
 
@@ -177,10 +178,10 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('can navigate to add accounts with proper authorization', async function (assert) {
     await visit(urls.user);
-
     await click(`[href="${urls.accounts}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(`[href="${urls.addAccounts}"]`).exists();
+    assert.dom(`[href="${urls.addAccounts}"]`).isVisible();
   });
 
   test('cannot navigate to add accounts without proper authorization', async function (assert) {
@@ -210,6 +211,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
 
     assert
@@ -234,7 +236,10 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
+    
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
+
 
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsAvailableCount });
   });
@@ -245,6 +250,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(`[href="${urls.accounts}"]`);
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: 0 });
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
     assert.strictEqual(currentURL(), urls.addAccounts);
     // Click three times to select, unselect, then reselect (for coverage)
@@ -260,18 +266,20 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('select and cancel accounts to add', async function (assert) {
     await visit(urls.user);
-
-    await click(`[href="${urls.accounts}"]`);
+    await click(`[href="${urls.accounts}"]`)
+    
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
-    await click(ACCOUNTS_ACTION_SELECTOR);
-    await click(REMOVE_ACTION_SELECTOR);
-    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount - 1 });
+
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
+
     assert.strictEqual(currentURL(), urls.addAccounts);
+
     await click(CHECKBOX_SELECTOR);
     await click(CANCEL_BTN_SELECTOR);
-    await visit(urls.accounts);
-    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount - 1 });
+    
+    assert.strictEqual(currentURL(), urls.accounts);
+    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount});
   });
 
   test('shows error message on account add', async function (assert) {

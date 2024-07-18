@@ -50,30 +50,6 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <Hds::Form::Fieldset as |F|>
-    <F.Legend>{{t 'resources.worker.form.worker_tags.label'}}</F.Legend>
-    <F.HelperText>{{t 'resources.worker.form.worker_tags.help'}}</F.HelperText>
-    <F.Control>
-      <Hds::Table class='list-wrapper-field config-tags' name='config_tags'>
-        <:body as |B|>
-          {{#each-in @model.config_tags as |key value|}}
-            <B.Tr>
-              <B.Td>
-                <Hds::Form::TextInput::Base @value={{key}} disabled={{true}} />
-              </B.Td>
-              <B.Td>
-                <Hds::Form::TextInput::Base
-                  @value={{value}}
-                  disabled={{true}}
-                />
-              </B.Td>
-            </B.Tr>
-          {{/each-in}}
-        </:body>
-      </Hds::Table>
-    </F.Control>
-  </Hds::Form::Fieldset>
-
   <InfoField @value={{@model.address}} disabled={{form.disabled}} as |F|>
     <F.Label>{{t 'form.address.label'}}</F.Label>
     <F.HelperText>{{t 'form.worker_address.help'}}</F.HelperText>

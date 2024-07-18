@@ -23,6 +23,6 @@ export default class extends Helper {
       );
     }
     const path = configuredPath || '';
-    return `${baseURL}${path}`;
+    return path.startsWith('https') ? path : `${baseURL}${path}`;
   }
 }

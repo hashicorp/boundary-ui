@@ -36,7 +36,6 @@ export default factory.extend({
    */
   session_connection_limit: () =>
     faker.helpers.arrayElement([-1, faker.number.int()]),
-  worker_filter: (i) => (i % 2 === 0 ? randomFilter() : null),
   egress_worker_filter: (i) => (i % 2 !== 0 ? randomFilter() : null),
   ingress_worker_filter: (i) => (i % 2 !== 0 ? randomFilter() : null),
   type: (i) => types[i % types.length],

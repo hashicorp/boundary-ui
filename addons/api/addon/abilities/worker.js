@@ -17,4 +17,18 @@ export default class WorkerAbility extends ModelAbility {
   get canCreateWorkerLed() {
     return this.hasAuthorizedCollectionAction('create:worker-led');
   }
+
+  /**
+   * @type {boolean}
+   */
+  get canSetWorkerTags() {
+    return this.hasAuthorizedAction('set-worker-tags');
+  }
+
+  /**
+   * @type {boolean}
+   */
+  get canRemoveTags() {
+    return this.hasAuthorizedAction('remove-worker-tags');
+  }
 }

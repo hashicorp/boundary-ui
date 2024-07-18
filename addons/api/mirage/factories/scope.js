@@ -7,6 +7,7 @@ import factory from '../generated/factories/scope';
 import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import { faker } from '@faker-js/faker';
 
 export default factory.extend({
   type: 'global',
@@ -58,7 +59,24 @@ export default factory.extend({
     return collectionActions;
   },
 
-  id: () => generateId('s_'),
+  id() {
+    let id = 'global';
+    if (this.type === 'org') {
+      id = generateId('o_');
+    }
+    if (this.type === 'project') {
+      id = generateId('p_');
+    }
+    return id;
+  },
+
+  name() {
+    let name = faker.word.words();
+    if (this.type === 'global') {
+      name = 'global';
+    }
+    return name;
+  },
 
   withChildren: trait({
     afterCreate(record, server) {

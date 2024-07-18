@@ -5,6 +5,7 @@
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class RosePaginationComponent extends Component {
   @service router;
@@ -20,5 +21,13 @@ export default class RosePaginationComponent extends Component {
         pageSize,
       };
     };
+  }
+
+  @action
+  async handlePageSizeChange(pageSize) {
+    // Reset to the first page when changing the page size
+    const queryParams = { page: 1, pageSize };
+
+    await this.router.transitionTo({ queryParams });
   }
 }
