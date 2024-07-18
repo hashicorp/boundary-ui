@@ -93,8 +93,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -109,8 +107,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -125,7 +121,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
@@ -133,13 +128,37 @@ module('Acceptance | targets | workers', function (hooks) {
       .hasText(instances.target.egress_worker_filter);
   });
 
+  test('user will automatically see worker filters if set', async function (assert) {
+    featureEdition.setEdition('hcp');
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .hasText(instances.target.ingress_worker_filter);
+    assert
+      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .hasText(instances.target.egress_worker_filter);
+  });
+
+  test('user will not automatically see worker filters if not set', async function (assert) {
+    featureEdition.setEdition('hcp');
+    instances.target.egress_worker_filter = null;
+    instances.target.ingress_worker_filter = null;
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert.dom(CODE_BLOCK_SELECTOR('ingress')).doesNotExist();
+    assert.dom(CODE_BLOCK_SELECTOR('egress')).doesNotExist();
+  });
+
   test('user can view egress and ingress filters when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2-ingress');
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -154,7 +173,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
@@ -175,7 +193,6 @@ module('Acceptance | targets | workers', function (hooks) {
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('ingress')).hasText(ingressWorkerFilter);
@@ -193,7 +210,6 @@ module('Acceptance | targets | workers', function (hooks) {
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.notEqual(instances.target.inress_worker_filter, ingressWorkerFilter);
@@ -214,7 +230,6 @@ module('Acceptance | targets | workers', function (hooks) {
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('egress')).hasText(egressWorkerFilter);
@@ -230,7 +245,6 @@ module('Acceptance | targets | workers', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);

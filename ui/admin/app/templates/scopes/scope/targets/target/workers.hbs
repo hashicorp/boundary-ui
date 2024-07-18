@@ -42,6 +42,7 @@
       {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
         <A.Item
           @containsInteractive={{true}}
+          @isOpen={{@model.ingress_worker_filter}}
           data-test-target-ingress-workers-accordion-item
         >
           <:toggle>
@@ -91,6 +92,7 @@
       {{/if}}
       <A.Item
         @containsInteractive={{true}}
+        @isOpen={{@model.egress_worker_filter}}
         data-test-target-egress-workers-accordion-item
       >
         <:toggle>
