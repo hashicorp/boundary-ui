@@ -50,8 +50,10 @@
                   'resources.target.workers.accordion-label.ingress-workers'
                 }}</span>
               <Hds::Link::Standalone
-                @icon='plus'
-                @text={{t 'resources.target.workers.actions.add-worker-filter'}}
+                @icon='edit'
+                @text={{t
+                  'resources.target.workers.actions.edit-worker-filter'
+                }}
                 @route='scopes.scope.targets.target.add-ingress-worker-filter'
               />
             </div>
@@ -97,8 +99,8 @@
                 'resources.target.workers.accordion-label.egress-workers'
               }}</span>
             <Hds::Link::Standalone
-              @icon='plus'
-              @text={{t 'resources.target.workers.actions.add-worker-filter'}}
+              @icon='edit'
+              @text={{t 'resources.target.workers.actions.edit-worker-filter'}}
               @route='scopes.scope.targets.target.add-egress-worker-filter'
             />
           </div>
