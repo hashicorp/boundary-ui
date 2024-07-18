@@ -195,6 +195,13 @@ handle('isClientAgentRunning', async () => {
 });
 
 /**
+ * Gets boundary cli version
+ */
+  handle('getCliVersion', async () => boundaryCli.version());
+ 
+
+
+/**
  * Handler to help create terminal windows. We don't use the helper `handle` method
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
