@@ -593,7 +593,7 @@ role:
         description: Select which specific orgs you want to apply to this role's grant sets.
         success: Custom scope selection saved
       manage-org-projects:
-        title: Add Projects in {orgDisplayName}
+        title: Manage Projects in {orgDisplayName}
         description: Select which projects in this org you want to apply to this role's grant sets.
         success: Projects in org have been updated
       no-org-scopes:
