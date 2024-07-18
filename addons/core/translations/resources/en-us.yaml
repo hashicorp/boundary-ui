@@ -977,7 +977,7 @@ worker:
   actions:
     register: Register Worker
     delete: Remove Worker
-    create_tags: Create new tags
+    create_tags: Create New Tags
   messages:
     welcome:
       title: Welcome to Workers
@@ -996,7 +996,7 @@ worker:
   tags:
     title_plural: Tags
     create:
-      title: Create new tags
+      title: Create New Tags
       description: Create new API tags. You can only add API tags in the admin UI or CLI.
       link: Config tags are added in the worker config file.
       success: Tag(s) successfully created
@@ -1013,12 +1013,12 @@ worker:
         label: Confirm removal
         help: 'Enter “REMOVE” to confirm — this is case-sensitive.'
     edit:
-      title: Edit tag
+      title: Edit Tag
       description: Edit the existing worker tag
       success: Tag successfully edited
       helper-text: Separate multiple values by comma
     actions:
-      remove: Remove tag
+      remove: Remove Tag
       add: Add tags to this worker
   flyout:
     title: Tags in {workerName}
