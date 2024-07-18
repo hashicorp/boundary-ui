@@ -684,46 +684,6 @@ exports.createSshTargetWithAddressAndAlias = async (
 };
 
 /**
- * Uses the UI to create a new SSH target with address in boundary-enterprise
- * Assumes you have selected the desired project.
- * @param {Page} page Playwright page object
- * @param {string} address Address of the target
- * @param {string} port Port of the target
- * @param {string} workerFilterEgress Egress worker filter
- * @returns Name of the target
- */
-exports.createSshTargetWithAddressAndWorkerFilterEnt = async (
-  page,
-  address,
-  port,
-  workerFilterEgress,
-) => {
-  const targetName = 'Target ' + nanoid();
-  await page
-    .getByRole('navigation', { name: 'Resources' })
-    .getByRole('link', { name: 'Targets' })
-    .click();
-  await page.getByRole('link', { name: 'New', exact: true }).click();
-  await page.getByLabel('Name').fill(targetName);
-  await page.getByLabel('Description').fill('This is an automated test');
-  await page.getByRole('group', { name: 'Type' }).getByLabel('SSH').click();
-  await page.getByLabel('Target Address').fill(address);
-  await page.getByLabel('Default Port').fill(port);
-  await page.getByLabel('Egress worker filter').click();
-  await page.getByRole('textbox', { name: 'Filter' }).fill(workerFilterEgress);
-  await page.getByRole('button', { name: 'Save' }).click();
-  await expect(
-    page.getByRole('alert').getByText('Success', { exact: true }),
-  ).toBeVisible();
-  await page.getByRole('button', { name: 'Dismiss' }).click();
-  await expect(
-    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(targetName),
-  ).toBeVisible();
-
-  return targetName;
-};
-
-/**
  * Uses the UI to create an alias
  * @param {Page} page Playwright page object
  * @param {string} alias Value of the alias
@@ -835,6 +795,37 @@ exports.addHostSourceToTarget = async (page, hostSourceName) => {
   ).toBeVisible();
   await page.getByRole('button', { name: 'Dismiss' }).click();
   await expect(page.getByRole('link', { name: hostSourceName })).toBeVisible();
+};
+
+/**
+ * Uses the UI to add an egress worker filter to a target. Assume you have selected the desired target.
+ * @param {Page} page Playwright page object
+ * @param {string} filter Egress worker filter to be added to the target
+ */
+exports.addEgressWorkerFilterToTarget = async (page, filter) => {
+  await page.getByRole('link', { name: 'Workers', exact: true }).click();
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Workers'),
+  ).toBeVisible();
+
+  await page
+    .getByText('Egress workers')
+    .locator('..')
+    .getByRole('link', { name: 'Edit worker filter' })
+    .click();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'breadcrumbs' })
+      .getByText('Edit Egress Worker Filter'),
+  ).toBeVisible();
+
+  await page.getByRole('textbox').fill(filter);
+
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(
+    page.getByRole('alert').getByText('Success', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Dismiss' }).click();
 };
 
 /**
