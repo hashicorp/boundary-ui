@@ -3,4 +3,59 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{outlet}}
+<SettingsCard @header={{t 'titles.application'}} @icon='boundary'>
+  <div class='content'>
+    <div class='section'>
+      <div>
+        <Hds::Text::Display @tag='h5'>
+          {{t 'titles.version'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @size='300'>
+          {{@model.versionNumber}}
+        </Hds::Text::Body>
+      </div>
+      <div>
+        <Hds::Text::Display @tag='h5'>
+          {{t 'titles.cli'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @size='300'>
+          {{#if @model.cliExists }}   
+            {{t 'states.installed' }}
+          {{/if}}
+        </Hds::Text::Body>
+      </div>
+      <div>
+        <Hds::Text::Display @tag='h5'>
+          {{t 'titles.cache-daemon'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @size='300'>
+          {{#if @model.isCacheDaemonRunning }}   
+            {{t 'states.running' }}
+          {{/if}}
+        </Hds::Text::Body>
+      </div>
+    </div>
+  
+   <div class="theme">
+    <Hds::Form::Select::Field
+      {{on 'change' this.toggleTheme}}
+      as |F|
+    >
+      <F.Label>{{t 'titles.color-theme'}}</F.Label>
+      {{{log this.session.data.theme 'ws  '}}}
+      <F.Options>
+        {{#each this.themes as |theme|}}
+          <option
+            value={{theme.value}}
+            selected={{eq this.session.data.theme theme.value}}
+          >
+            {{t (concat 'themes.' theme.label)}}
+          </option>
+        {{/each}}
+
+      </F.Options>
+    </Hds::Form::Select::Field>
+   </div>
+
+  </div>
+</SettingsCard>
