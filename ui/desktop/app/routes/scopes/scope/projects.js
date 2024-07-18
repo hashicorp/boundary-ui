@@ -36,6 +36,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service clientAgentSessions;
   @service pollster;
   @service flashMessages;
+  @service features;
 
   // =methods
 
@@ -48,18 +49,22 @@ export default class ScopesScopeProjectsRoute extends Route {
 
   /**
    * Primes the store with _all project scopes_ under global.
-   * @return {Promise{ScopeModel}}
+   * @return {Promise<ScopeModel>}
    */
   async model() {
-    // Setup the poller job
-    if (!this.job) {
-      this.boundPoller = this.poller.bind(this);
-      this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
-    }
+    if (this.features.isEnabled('client-agent')) {
+      // Setup the poller job
+      if (!this.job) {
+        this.boundPoller = this.poller.bind(this);
+        this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
+      }
 
-    const isClientAgentRunning = await this.ipc.invoke('isClientAgentRunning');
-    if (isClientAgentRunning) {
-      this.job.start();
+      const isClientAgentRunning = await this.ipc.invoke(
+        'isClientAgentRunning',
+      );
+      if (isClientAgentRunning) {
+        this.job.start();
+      }
     }
 
     const { id: scope_id } = this.modelFor('scopes.scope');
