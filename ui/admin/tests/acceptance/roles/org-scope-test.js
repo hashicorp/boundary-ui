@@ -135,6 +135,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
+    // console.log(instances.role)
+    // await this.pauseTest();
 
     assert
       .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
@@ -147,7 +149,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await waitUntil(
       () =>
         findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
-          .length === 0,
+          .length === 0 &&
+        findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+          .length === 1,
     );
 
     assert

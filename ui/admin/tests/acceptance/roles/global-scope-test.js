@@ -138,7 +138,9 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await waitUntil(
       () =>
         findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
-          .length === 0,
+          .length === 0 &&
+        findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+          .length === 1,
     );
 
     assert
