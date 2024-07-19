@@ -586,7 +586,7 @@ role:
         description: Select which scopes you want to add to this role.
         success: Scope selection saved
       keywords-selected:
-        description: Just a heads up, you can't select both add all descendants and add all children. You can only choose one or the other.
+        description: Just a heads up, you can't select both <strong>add all descendants</strong> and <strong>add all children</strong>. You can only choose one or the other.
         link: You can read more about it here
       manage-custom-scopes:
         title: Manage Custom Scopes
@@ -618,7 +618,7 @@ role:
     form:
       this:
         label: Add this scope
-        help: Add this scope.
+        help: Add {scopeDisplayName} scope.
       children:
         label: Add all children
         help:
