@@ -5,6 +5,6 @@
 
 import Controller, { inject as controller } from '@ember/controller';
 
-export default class ScopesScopeTargetsTargetAddEgressWorkerFilterController extends Controller {
+export default class ScopesScopeTargetsTargetEditIngressWorkerFilterController extends Controller {
   @controller('scopes/scope/targets/index') targets;
 }
