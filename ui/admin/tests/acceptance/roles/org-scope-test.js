@@ -135,8 +135,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
-    // console.log(instances.role)
-    // await this.pauseTest();
 
     assert
       .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
