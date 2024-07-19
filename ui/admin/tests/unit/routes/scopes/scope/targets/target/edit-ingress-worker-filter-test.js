@@ -7,15 +7,15 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module(
-  'Unit | Controller | scopes/scope/targets/target/add-ingress-worker-filter',
+  'Unit | Route | scopes/scope/targets/target/edit-ingress-worker-filter',
   function (hooks) {
     setupTest(hooks);
 
     test('it exists', function (assert) {
-      let controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/add-ingress-worker-filter',
+      let route = this.owner.lookup(
+        'route:scopes/scope/targets/target/edit-ingress-worker-filter',
       );
-      assert.ok(controller);
+      assert.ok(route);
     });
   },
 );
