@@ -7,16 +7,14 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
-
   @service ipc;
 
   async model() {
-    const {versionNumber} = await this.ipc.invoke('getCliVersion');     
+    const { versionNumber } = await this.ipc.invoke('getCliVersion');
     const cliExists = await this.ipc.invoke('cliExists');
-    const isCacheDaemonRunning = await this.ipc.invoke(
-      'isCacheDaemonRunning',
+    const getCacheDaemonVersion = await this.ipc.invoke(
+      'getCacheDaemonVersion',
     );
-    console.log('isCacheDaemonRunning', isCacheDaemonRunning);
-    return {versionNumber, cliExists, isCacheDaemonRunning };
+    return { versionNumber, cliExists, getCacheDaemonVersion };
   }
 }

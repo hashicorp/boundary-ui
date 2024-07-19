@@ -197,9 +197,22 @@ handle('isClientAgentRunning', async () => {
 /**
  * Gets boundary cli version
  */
-  handle('getCliVersion', async () => boundaryCli.version());
- 
+handle('getCliVersion', async () => boundaryCli.version());
 
+/**
+ * Gets Cache Daemon version
+ */
+handle('getCacheDaemonVersion', async () => {
+  let version = '';
+  try {
+    const cache = await cacheDaemonManager.status();
+    version = cache.version;
+  } catch (e) {
+    // There was likely an error connecting to the cache daemon.
+    return false;
+  }
+  return version && /(\d+\.\d+\.\d+)/.exec(version)[0];
+});
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

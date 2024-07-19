@@ -41,7 +41,6 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
       .lookup('service:-document')
       .querySelector(rootElementSelector);
     this.session.set('data.theme', theme);
-    console.log(this.session.data.theme, 'theeeee')
     switch (theme) {
       case 'light':
         rootEl.classList.add('rose-theme-light');
