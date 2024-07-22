@@ -677,14 +677,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     padding-left: 2.2rem;
   }
 
-  .section {
+  .app-information {
     display: grid;
     gap: 1rem;
     grid-template-columns: auto auto auto;
-    margin-top: 2rem;
-  }
-
-  .theme {
-    margin-top: 1rem;
+    margin: 1rem 0;
   }
 }

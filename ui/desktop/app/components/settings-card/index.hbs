@@ -23,14 +23,14 @@
       </div>
     {{/if}}
 
+    {{#if @description}}
+      <Hds::Text::Body @tag='p'>
+        {{@description}}
+      </Hds::Text::Body>
+    {{/if}}
   </div>
 
-  {{#if @description}}
-    <Hds::Text::Body @tag='p'>
-      {{@description}}
-    </Hds::Text::Body>
-  {{/if}}
-
+  {{! this yields the body from consumer }}
   {{yield}}
 
 </Hds::Card::Container>

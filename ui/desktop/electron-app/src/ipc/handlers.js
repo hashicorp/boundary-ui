@@ -200,18 +200,25 @@ handle('isClientAgentRunning', async () => {
 handle('getCliVersion', async () => boundaryCli.version());
 
 /**
+ * Returns desktop version
+ */
+handle('getDesktopVersion', async () => {
+  const desktopVersion = app.getVersion();
+  return desktopVersion;
+});
+
+/**
  * Gets Cache Daemon version
  */
-handle('getCacheDaemonVersion', async () => {
-  let version = '';
+handle('getCacheDaemonStatus', async () => {
+  let cache = '';
   try {
-    const cache = await cacheDaemonManager.status();
-    version = cache.version;
+    cache = await cacheDaemonManager.status();
   } catch (e) {
     // There was likely an error connecting to the cache daemon.
-    return false;
+    return e;
   }
-  return version && /(\d+\.\d+\.\d+)/.exec(version)[0];
+  return cache;
 });
 
 /**

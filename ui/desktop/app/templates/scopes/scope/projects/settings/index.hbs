@@ -5,37 +5,33 @@
 
 <SettingsCard @header={{t 'titles.application'}} @icon='boundary'>
   <div class='content'>
-    <div class='section'>
+    <div class='app-information'>
       <div>
-        <Hds::Text::Display @tag='h5'>
+        <Hds::Text::Display>
           {{t 'titles.version'}}
         </Hds::Text::Display>
-        <Hds::Text::Body @tag='p' @size='300'>
-          {{@model.versionNumber}}
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{@model.desktopVersion}}
         </Hds::Text::Body>
       </div>
       <div>
-        <Hds::Text::Display @tag='h5'>
+        <Hds::Text::Display>
           {{t 'titles.cli'}}
         </Hds::Text::Display>
-        <Hds::Text::Body @tag='p' @size='300'>
-          {{#if @model.cliExists}}
-            {{t 'states.installed'}}
-          {{else}}
-            {{t 'states.not-available'}}
-          {{/if}}
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{@model.cliVersion}}
         </Hds::Text::Body>
       </div>
       <div>
-        <Hds::Text::Display @tag='h5'>
+        <Hds::Text::Display>
           {{t 'titles.cache-daemon'}}
         </Hds::Text::Display>
-        <Hds::Text::Body @tag='p' @size='300'>
-          {{#if @model.getCacheDaemonVersion}}
-            {{@model.getCacheDaemonVersion}}
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{#if @model.formattedCacheVersion}}
+            {{@model.formattedCacheVersion}}
             <Hds::Badge
               @text={{t 'states.running'}}
-              @icon='loading'
+              @icon='running'
               @color='success'
             />
           {{/if}}
@@ -43,21 +39,18 @@
       </div>
     </div>
 
-    <div class='theme'>
-      <Hds::Form::Select::Field {{on 'change' this.toggleTheme}} as |F|>
-        <F.Label>{{t 'titles.color-theme'}}</F.Label>
-        <F.Options>
-          {{#each this.themes as |theme|}}
-            <option
-              value={{theme.value}}
-              selected={{eq this.session.data.theme theme.value}}
-            >
-              {{t (concat 'themes.' theme.label)}}
-            </option>
-          {{/each}}
-        </F.Options>
-      </Hds::Form::Select::Field>
-    </div>
-
+    <Hds::Form::Select::Field {{on 'change' this.toggleTheme}} as |F|>
+      <F.Label>{{t 'titles.color-theme'}}</F.Label>
+      <F.Options>
+        {{#each this.themes as |theme|}}
+          <option
+            value={{theme.value}}
+            selected={{eq this.session.data.theme theme.value}}
+          >
+            {{t (concat 'themes.' theme.label)}}
+          </option>
+        {{/each}}
+      </F.Options>
+    </Hds::Form::Select::Field>
   </div>
 </SettingsCard>

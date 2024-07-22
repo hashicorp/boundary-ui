@@ -78,12 +78,14 @@ module('Acceptance | projects | settings | index', function (hooks) {
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
 
-    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub
+      .withArgs('getDesktopVersion')
+      .returns({ desktopVersion: '0.1.0' });
     this.ipcStub
       .withArgs('getCliVersion')
       .returns({ versionNumber: 'Boundary CLI v0.1.0' });
     this.ipcStub
-      .withArgs('getCacheDaemonVersion')
+      .withArgs('getCacheDaemonStatus')
       .returns({ versionNumber: 'Boundary CLI v0.1.0' });
   });
 
