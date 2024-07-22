@@ -41,12 +41,19 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       scope_id: [{ equals: scope_id }],
     };
 
-    const orgScopes = await this.store.query('scope', {
-      scope_id,
-      query: { search, filters },
-      page,
-      pageSize,
-    });
+    // All scopes have already been pre-loaded in the `scopes.scopes.roles.role` route.
+    // Therefore, we can simply peek into indexedDB to retrieve results.
+    const options = { peekIndexedDB: true };
+    const orgScopes = await this.store.query(
+      'scope',
+      {
+        scope_id,
+        query: { search, filters },
+        page,
+        pageSize,
+      },
+      options,
+    );
     const totalItems = orgScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(
       scope_id,

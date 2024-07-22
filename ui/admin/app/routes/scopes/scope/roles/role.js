@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ScopesScopeRolesRoleRoute extends Route {
   // =services
@@ -39,5 +40,19 @@ export default class ScopesScopeRolesRoleRoute extends Route {
     if (role.scopeID !== scope.id) {
       this.router.replaceWith(transition.to.name, role.scopeID, role.id);
     }
+  }
+
+  // =actions
+
+  /**
+   * Event to determine whether the loading template should be shown.
+   * Only show the loading template when transitioning into the specified route.
+   * @param transition
+   * @returns {boolean}
+   */
+  @action
+  loading(transition) {
+    const to = transition.to?.name;
+    return to === 'scopes.scope.roles.role.index';
   }
 }

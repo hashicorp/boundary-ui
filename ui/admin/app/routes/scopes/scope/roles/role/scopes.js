@@ -70,12 +70,17 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
 
       allGrantScopes = await this.getAllGrantScopes(filters.id);
 
-      const queriedScopes = await this.store.query('scope', {
-        scope_id: 'global',
-        query: { search, filters },
-        page,
-        pageSize: pageSize - totalItems,
-      });
+      const options = { peekIndexedDB: true };
+      const queriedScopes = await this.store.query(
+        'scope',
+        {
+          scope_id: 'global',
+          query: { search, filters },
+          page,
+          pageSize: pageSize - totalItems,
+        },
+        options,
+      );
       grantScopes =
         page === 1 ? [...grantScopes, ...queriedScopes] : queriedScopes;
       totalItems += queriedScopes.meta?.totalItems;
