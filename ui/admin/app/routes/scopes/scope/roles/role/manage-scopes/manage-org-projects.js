@@ -39,19 +39,13 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       scope_id: [{ equals: org_id }],
     };
 
-    // All scopes have already been pre-loaded in the `scopes.scopes.roles.role` route.
-    // Therefore, we can simply peek into indexedDB to retrieve results.
-    const options = { peekIndexedDB: true };
-    const projectScopes = await this.store.query(
-      'scope',
-      {
-        scope_id: org_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      },
-      options,
-    );
+    const projectScopes = await this.store.query('scope', {
+      scope_id: role.scope.id,
+      query: { search, filters },
+      page,
+      pageSize,
+      recursive: true,
+    });
     const totalItems = projectScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(
       org_id,
