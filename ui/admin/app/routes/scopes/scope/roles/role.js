@@ -46,13 +46,22 @@ export default class ScopesScopeRolesRoleRoute extends Route {
 
   /**
    * Event to determine whether the loading template should be shown.
-   * Only show the loading template when transitioning into the specified route.
+   * Only show the loading template during initial loads for specified
+   * routes. Don't show it when a user is just searching or
+   * filtering on the same page as it can be jarring.
    * @param transition
    * @returns {boolean}
    */
   @action
   loading(transition) {
     const to = transition.to?.name;
-    return to === 'scopes.scope.roles.role.index';
+    const from = transition.from?.name;
+    return (
+      (to === 'scopes.scope.roles.role.index' ||
+        to === 'scopes.scope.roles.role.manage-scopes.manage-custom-scopes' ||
+        to === 'scopes.scope.roles.role.manage-scopes.manage-org-projects' ||
+        to === 'scopes.scope.roles.role.scopes') &&
+      from !== to
+    );
   }
 }
