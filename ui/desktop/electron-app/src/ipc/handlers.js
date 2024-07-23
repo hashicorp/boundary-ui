@@ -208,7 +208,7 @@ handle('getDesktopVersion', async () => {
 });
 
 /**
- * Gets Cache Daemon version
+ * Returns the Cache daemon status
  */
 handle('getCacheDaemonStatus', async () => {
   let cache = '';
