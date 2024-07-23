@@ -64,7 +64,7 @@
         </:body>
       </Hds::Table>
       <Rose::Pagination
-        @model={{array @model.role.id @model.orgScope.id}}
+        @model={{@model.orgScope.id}}
         @totalItems={{@model.totalItems}}
         @currentPage={{@page}}
         @currentPageSize={{@pageSize}}
@@ -90,16 +90,26 @@
 {{else}}
   <Hds::ApplicationState as |A|>
     <A.Header
-      @title={{t 'resources.role.scope.messages.no-org-scopes.title'}}
+      @title={{t
+        'resources.role.scope.messages.no-scopes.title'
+        type=(t 'resources.project.title')
+      }}
     />
     <A.Body
-      @text={{t 'resources.role.scope.messages.no-org-scopes.description'}}
+      @text={{t
+        'resources.role.scope.messages.no-scopes.description'
+        type=(t 'resources.project.title')
+      }}
     />
     <A.Footer as |F|>
       <F.LinkStandalone
         @icon='arrow-left'
         @text={{t 'actions.back'}}
-        @route='scopes.scope.roles.role.manage-scopes'
+        @route={{if
+          @model.role.scope.isGlobal
+          'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+          'scopes.scope.roles.role.manage-scopes'
+        }}
       />
     </A.Footer>
   </Hds::ApplicationState>

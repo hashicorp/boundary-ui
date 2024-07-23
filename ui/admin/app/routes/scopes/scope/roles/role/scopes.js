@@ -71,10 +71,11 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
       allGrantScopes = await this.getAllGrantScopes(filters.id);
 
       const queriedScopes = await this.store.query('scope', {
-        scope_id: 'global',
+        scope_id: role.scope.id,
         query: { search, filters },
         page,
         pageSize: pageSize - totalItems,
+        recursive: true,
       });
       grantScopes =
         page === 1 ? [...grantScopes, ...queriedScopes] : queriedScopes;

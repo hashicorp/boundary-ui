@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ScopesScopeRolesRoleRoute extends Route {
   // =services
@@ -39,5 +40,28 @@ export default class ScopesScopeRolesRoleRoute extends Route {
     if (role.scopeID !== scope.id) {
       this.router.replaceWith(transition.to.name, role.scopeID, role.id);
     }
+  }
+
+  // =actions
+
+  /**
+   * Event to determine whether the loading template should be shown.
+   * Only show the loading template during initial loads for specified
+   * routes. Don't show it when a user is just searching or
+   * filtering on the same page as it can be jarring.
+   * @param transition
+   * @returns {boolean}
+   */
+  @action
+  loading(transition) {
+    const to = transition.to?.name;
+    const from = transition.from?.name;
+    return (
+      (to === 'scopes.scope.roles.role.index' ||
+        to === 'scopes.scope.roles.role.manage-scopes.manage-custom-scopes' ||
+        to === 'scopes.scope.roles.role.manage-scopes.manage-org-projects' ||
+        to === 'scopes.scope.roles.role.scopes') &&
+      from !== to
+    );
   }
 }

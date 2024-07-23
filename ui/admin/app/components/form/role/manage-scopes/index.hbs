@@ -20,7 +20,12 @@
     as |F|
   >
     <F.Label>{{t 'resources.role.scope.form.this.label'}}</F.Label>
-    <F.HelperText>{{t 'resources.role.scope.form.this.help'}}</F.HelperText>
+    <F.HelperText>{{t
+        'resources.role.scope.form.this.help'
+        scopeDisplayName=(if
+          @model.scope.name @model.scope.name @model.scope.id
+        )
+      }}</F.HelperText>
   </Hds::Form::Toggle::Field>
 
   <Hds::Form::Toggle::Field
@@ -58,7 +63,10 @@
   {{#if this.showAlert}}
     <Hds::Alert @type='compact' as |A|>
       <A.Description>
-        {{t 'resources.role.scope.messages.keywords-selected.description'}}
+        {{t
+          'resources.role.scope.messages.keywords-selected.description'
+          htmlSafe=true
+        }}
         <Hds::Link::Inline
           @color='secondary'
           @href={{(doc-url 'role.add-grant-scopes')}}
