@@ -15,7 +15,7 @@ module('Integration | Component | settings card', function (hooks) {
     await render(hbs`<SettingsCard 
         @header='This is a heading test'
         @icon='boundary'/>`);
-    assert.ok(find('.settings-card'));
+    assert.ok(find('.hds-card__container'));
   });
 
   test('header renders an icon when defined', async function (assert) {
@@ -26,7 +26,7 @@ module('Integration | Component | settings card', function (hooks) {
       </SettingsCard>
     `);
 
-    assert.ok(find('.settings-card'));
+    assert.ok(find('.hds-card__container'));
     assert.ok(find('.header-and-icon'));
     assert.strictEqual(
       this.element.textContent.trim(),

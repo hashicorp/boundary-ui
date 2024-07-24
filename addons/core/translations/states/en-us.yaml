@@ -15,7 +15,7 @@ recording: Recording
 completed: Completed
 failed: Failed
 installed: Installed
-not-available: Not available
+not-running: Not Running
 running: Running
 loading:
   title: Loading all items...
