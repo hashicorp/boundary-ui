@@ -8,10 +8,10 @@
     <div class='app-information'>
       <div>
         <Hds::Text::Display>
-          {{t 'titles.version'}}
+          {{t 'titles.client'}}
         </Hds::Text::Display>
         <Hds::Text::Body @tag='p' @weight='medium'>
-          {{@model.desktopVersion}}
+          {{@model.formattedDesktopVersion}}
         </Hds::Text::Body>
       </div>
       <div>
@@ -19,7 +19,7 @@
           {{t 'titles.cli'}}
         </Hds::Text::Display>
         <Hds::Text::Body @tag='p' @weight='medium'>
-          {{@model.cliVersion}}
+          {{@model.formattedCliVersion}}
         </Hds::Text::Body>
       </div>
       <div>
@@ -34,12 +34,29 @@
               @icon='running'
               @color='success'
             />
+          {{else}}
+            <Hds::Badge
+              @text={{t 'states.not-running'}}
+              @icon='stop-circle'
+              @color='neutral'
+            />
           {{/if}}
         </Hds::Text::Body>
       </div>
     </div>
 
-    <Hds::Form::Select::Field {{on 'change' this.toggleTheme}} as |F|>
+    {{#if @model.warning}}
+      <Hds::Alert @type='inline' @color='warning' as |A|>
+        <A.Title>{{t 'errors.settings-cache.title'}}</A.Title>
+        {{! todo: description link }}
+      </Hds::Alert>
+    {{/if}}
+
+    <Hds::Form::Select::Field
+      @width='30%'
+      {{on 'change' this.toggleTheme}}
+      as |F|
+    >
       <F.Label>{{t 'titles.color-theme'}}</F.Label>
       <F.Options>
         {{#each this.themes as |theme|}}

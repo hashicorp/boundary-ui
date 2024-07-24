@@ -16,6 +16,7 @@ const pty = require('node-pty');
 const which = require('which');
 const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
+const { releaseVersion } = require('../../config/config.js');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -202,24 +203,12 @@ handle('getCliVersion', async () => boundaryCli.version());
 /**
  * Returns desktop version
  */
-handle('getDesktopVersion', async () => {
-  const desktopVersion = app.getVersion();
-  return desktopVersion;
-});
+handle('getDesktopVersion', async () => ({ desktopVersion: releaseVersion }));
 
 /**
  * Returns the Cache daemon status
  */
-handle('getCacheDaemonStatus', async () => {
-  let cache = '';
-  try {
-    cache = await cacheDaemonManager.status();
-  } catch (e) {
-    // There was likely an error connecting to the cache daemon.
-    return e;
-  }
-  return cache;
-});
+handle('cacheDaemonStatus', async () => await cacheDaemonManager.status());
 
 /**
  * Handler to help create terminal windows. We don't use the helper `handle` method

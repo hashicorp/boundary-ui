@@ -665,7 +665,9 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
 // Settings
 .settings-card {
-  padding: 1rem;
+  .hds-card__container {
+    padding: 1rem;
+  }
 
   .header-and-icon {
     display: flex;
@@ -675,6 +677,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .content {
     padding-left: 2.2rem;
+
+    .hds-form-field--layout-vertical {
+      margin-top: 2rem;
+    }
   }
 
   .app-information {

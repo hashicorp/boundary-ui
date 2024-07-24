@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Card::Container @level='mid' @hasBorder={{true}} class='settings-card'>
+<Hds::Card::Container @level='mid' @hasBorder={{true}}>
 
   <div class='header-and-icon'>
     <Hds::IconTile @icon={{@icon}} @size='small' />
@@ -22,15 +22,13 @@
         <Hds::Badge @text={{@state}} @icon='loading' />
       </div>
     {{/if}}
-
-    {{#if @description}}
-      <Hds::Text::Body @tag='p'>
-        {{@description}}
-      </Hds::Text::Body>
-    {{/if}}
   </div>
+  {{#if @description}}
+    <Hds::Text::Body @tag='p'>
+      {{@description}}
+    </Hds::Text::Body>
+  {{/if}}
 
   {{! this yields the body from consumer }}
   {{yield}}
-
 </Hds::Card::Container>

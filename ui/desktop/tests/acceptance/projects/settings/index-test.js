@@ -85,8 +85,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
       .withArgs('getCliVersion')
       .returns({ versionNumber: 'Boundary CLI v0.1.0' });
     this.ipcStub
-      .withArgs('getCacheDaemonStatus')
-      .returns({ versionNumber: 'Boundary CLI v0.1.0' });
+      .withArgs('cacheDaemonStatus')
+      .returns({ version: 'Boundary CLI v0.1.0' });
   });
 
   test('can navigate to the settings page', async function (assert) {

@@ -10,15 +10,33 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
   @service ipc;
 
   async model() {
+    let cacheDaemonStatus,
+      formattedCacheVersion,
+      formattedCliVersion,
+      formattedDesktopVersion;
     const { versionNumber: cliVersion } =
       await this.ipc.invoke('getCliVersion');
-    const getCacheDaemon = await this.ipc.invoke('getCacheDaemonStatus');
-    const { version } = getCacheDaemon;
-    // Format the version
+    formattedCliVersion = `v${cliVersion}`;
 
-    const formattedCacheVersion = version && /(\d+\.\d+\.\d+)/.exec(version)[0];
-    const desktopVersion = await this.ipc.invoke('getDesktopVersion');
-
-    return { cliVersion, formattedCacheVersion, desktopVersion };
+    const { desktopVersion } = await this.ipc.invoke('getDesktopVersion');
+    formattedDesktopVersion = `v${desktopVersion}`;
+    try {
+      cacheDaemonStatus = await this.ipc.invoke('cacheDaemonStatus');
+    } catch (e) {
+      __electronLog?.warn('cache daemon is not running', e.message);
+      return {
+        formattedCliVersion,
+        formattedCacheVersion,
+        formattedDesktopVersion,
+        warning: true,
+      };
+    }
+    const { version } = cacheDaemonStatus;
+    formattedCacheVersion = version.match(/v\d+\.\d+\.\d+/)?.[0];
+    return {
+      formattedCliVersion,
+      formattedCacheVersion,
+      formattedDesktopVersion,
+    };
   }
 }
