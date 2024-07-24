@@ -45,8 +45,8 @@ module('Acceptance | targets | workers', function (hooks) {
     targets: null,
     target: null,
     targetWorkers: null,
-    targetAddEgressFilter: null,
-    targetAddIngressFilter: null,
+    targetEditEgressFilter: null,
+    targetEditIngressFilter: null,
   };
 
   hooks.beforeEach(function () {
@@ -73,8 +73,8 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetWorkers = `${urls.target}/workers`;
-    urls.targetAddEgressFilter = `${urls.target}/add-egress-worker-filter`;
-    urls.targetAddIngressFilter = `${urls.target}/add-ingress-worker-filter`;
+    urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
+    urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
 
     authenticateSession({});
   });
@@ -93,8 +93,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -109,8 +107,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -125,7 +121,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
@@ -133,13 +128,37 @@ module('Acceptance | targets | workers', function (hooks) {
       .hasText(instances.target.egress_worker_filter);
   });
 
+  test('user will automatically see worker filters if set', async function (assert) {
+    featureEdition.setEdition('hcp');
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .hasText(instances.target.ingress_worker_filter);
+    assert
+      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .hasText(instances.target.egress_worker_filter);
+  });
+
+  test('user will not automatically see worker filters if not set', async function (assert) {
+    featureEdition.setEdition('hcp');
+    instances.target.egress_worker_filter = null;
+    instances.target.ingress_worker_filter = null;
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert.dom(CODE_BLOCK_SELECTOR('ingress')).doesNotExist();
+    assert.dom(CODE_BLOCK_SELECTOR('egress')).doesNotExist();
+  });
+
   test('user can view egress and ingress filters when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
     featuresService.enable('target-worker-filters-v2-ingress');
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
@@ -154,7 +173,6 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
     assert
@@ -169,13 +187,12 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddIngressFilter}"]`);
+    await click(`[href="${urls.targetEditIngressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('ingress')).hasText(ingressWorkerFilter);
@@ -187,13 +204,12 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddIngressFilter}"]`);
+    await click(`[href="${urls.targetEditIngressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('ingress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.notEqual(instances.target.inress_worker_filter, ingressWorkerFilter);
@@ -208,13 +224,12 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddEgressFilter}"]`);
+    await click(`[href="${urls.targetEditEgressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
 
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(SAVE_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('egress')).hasText(egressWorkerFilter);
@@ -225,12 +240,11 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddEgressFilter}"]`);
+    await click(`[href="${urls.targetEditEgressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(CANCEL_BUTTON_SELECTOR);
-    await click(ACCORDION_DROPDOWN_SELECTOR('egress'));
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
@@ -247,9 +261,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddIngressFilter}"]`);
+    await click(`[href="${urls.targetEditIngressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -272,9 +286,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddIngressFilter}"]`);
+    await click(`[href="${urls.targetEditIngressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -282,7 +296,7 @@ module('Acceptance | targets | workers', function (hooks) {
 
     await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
 
-    assert.strictEqual(currentURL(), urls.targetAddIngressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     assert.notEqual(
       instances.target.ingress_worker_filter,
       ingressWorkerFilter,
@@ -296,9 +310,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddEgressFilter}"]`);
+    await click(`[href="${urls.targetEditEgressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -317,9 +331,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetAddEgressFilter}"]`);
+    await click(`[href="${urls.targetEditEgressFilter}"]`);
 
-    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
@@ -327,7 +341,7 @@ module('Acceptance | targets | workers', function (hooks) {
 
     await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
 
-    assert.strictEqual(currentURL(), urls.targetAddEgressFilter);
+    assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
   });
 });

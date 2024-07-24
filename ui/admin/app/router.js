@@ -99,8 +99,8 @@ Router.map(function () {
             this.route('create-storage-bucket');
           });
           this.route('workers');
-          this.route('add-ingress-worker-filter');
-          this.route('add-egress-worker-filter');
+          this.route('edit-ingress-worker-filter');
+          this.route('edit-egress-worker-filter');
         });
         this.route('new');
       });

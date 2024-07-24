@@ -48,7 +48,7 @@ export default class FormWorkerCreateTagsIndexComponent extends Component {
     const apiTags = structuredClone(this.args.model.api_tags ?? {});
     this.args.apiTags.forEach((tag) => {
       let key = tag.key;
-      let values = tag.value.split(',');
+      let values = tag.value.split(',').map((value) => value.trim());
 
       if (!apiTags[key]) {
         apiTags[key] = values;

@@ -28,7 +28,7 @@ module(
       await click('button');
 
       assert.dom(this.element).includesText('Remove Worker');
-      assert.dom(this.element).includesText('Create new tags');
+      assert.dom(this.element).includesText('Create New Tags');
     });
   },
 );
