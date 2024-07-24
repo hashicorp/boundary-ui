@@ -54,6 +54,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     '.role-grant-scopes div div:nth-child(3) a';
   const BUTTON_ICON_SELECTOR =
     '.hds-button__icon [data-test-icon="check-circle"]';
+  const PAGINATION_SELECTOR = '.hds-pagination';
 
   const instances = {
     scopes: {
@@ -141,6 +142,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
           .length === 0,
     );
 
+    assert.dom(PAGINATION_SELECTOR).exists();
     assert
       .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
       .exists();

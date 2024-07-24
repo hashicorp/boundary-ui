@@ -24,6 +24,7 @@ module('Acceptance | roles | project-scope', function (hooks) {
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
   const NO_SCOPES_MSG_LINK_SELECTOR =
     '.role-grant-scopes div div:nth-child(3) a';
+  const PAGINATION_SELECTOR = '.hds-pagination';
 
   const instances = {
     scopes: {
@@ -67,19 +68,20 @@ module('Acceptance | roles | project-scope', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(GRANT_SCOPE_ROW_SELECTOR(GRANT_SCOPE_THIS)).isVisible();
+    assert.dom(GRANT_SCOPE_ROW_SELECTOR(GRANT_SCOPE_THIS)).exists();
     assert
       .dom(TABLE_ROW_SELECTOR)
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
-  test('search is not visible for project role scopes', async function (assert) {
+  test('search and pagination is not visible for project role scopes', async function (assert) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert.dom(SEARCH_INPUT_SELECTOR).doesNotExist();
+    assert.dom(PAGINATION_SELECTOR).doesNotExist();
   });
 
   test('user cannot manage scopes for project role scopes', async function (assert) {
