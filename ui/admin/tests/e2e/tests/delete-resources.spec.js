@@ -71,6 +71,7 @@ test.beforeEach(async () => {
 
 test('Verify resources can be deleted @ce @aws', async ({ page }) => {
   let orgId;
+  let orgDeleted = false;
   try {
     // Create boundary resources using CLI
     orgId = await createOrgCli();
@@ -191,9 +192,10 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     // Delete org
     await page.goto(`/scopes/${orgId}/edit`);
     await deleteResource(page);
+    orgDeleted = true;
   } finally {
     // Delete org in case the test failed before deleting the org using UI
-    if (orgId) {
+    if (orgId && orgDeleted === false) {
       await deleteOrgCli(orgId);
     }
   }

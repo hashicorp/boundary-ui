@@ -23,6 +23,7 @@ const {
   createTargetWithAddress,
   waitForSessionToBeVisible,
   addHostSourceToTarget,
+  addEgressWorkerFilterToTarget,
 } = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
@@ -195,15 +196,14 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
     await page.getByLabel('Default Client Port').fill('10');
     await page.getByLabel('Maximum Duration').fill('1000');
     await page.getByLabel('Maximum Connections').fill('10');
-    await page.getByLabel('Egress worker filter').click();
-    await page
-      .getByRole('textbox', { name: /^Filter/, exact: true })
-      .fill('"dev" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();
 
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
+    await page.getByRole('button', { name: 'Dismiss' }).click();
+
+    await addEgressWorkerFilterToTarget(page, '"dev" in "/tags/type"');
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,

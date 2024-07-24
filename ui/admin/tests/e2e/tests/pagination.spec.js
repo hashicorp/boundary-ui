@@ -14,7 +14,6 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
   page,
   request,
 }) => {
-  await page.goto('/');
   let org;
   try {
     const newOrg = await request.post(`/v1/scopes`, {
@@ -52,6 +51,7 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
     }
 
     // Navigate to targets page
+    await page.goto('/');
     await page.getByRole('link', { name: org.name }).click();
     await page.getByRole('link', { name: project.name }).click();
     await page
