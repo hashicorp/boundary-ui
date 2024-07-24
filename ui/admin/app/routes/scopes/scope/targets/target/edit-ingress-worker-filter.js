@@ -5,4 +5,4 @@
 
 import Route from '@ember/routing/route';
 
-export default class ScopesScopeTargetsTargetAddIngressWorkerFilterRoute extends Route {}
+export default class ScopesScopeTargetsTargetEditIngressWorkerFilterRoute extends Route {}

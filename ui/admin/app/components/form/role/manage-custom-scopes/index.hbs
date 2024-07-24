@@ -108,10 +108,16 @@
 {{else}}
   <Hds::ApplicationState as |A|>
     <A.Header
-      @title={{t 'resources.role.scope.messages.no-org-scopes.title'}}
+      @title={{t
+        'resources.role.scope.messages.no-scopes.title'
+        type=(t 'resources.org.title')
+      }}
     />
     <A.Body
-      @text={{t 'resources.role.scope.messages.no-org-scopes.description'}}
+      @text={{t
+        'resources.role.scope.messages.no-scopes.description'
+        type=(t 'resources.org.title')
+      }}
     />
     <A.Footer as |F|>
       <F.LinkStandalone

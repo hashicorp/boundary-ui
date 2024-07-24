@@ -117,9 +117,18 @@ class CacheDaemonManager {
     return generateErrorPromise(stderr);
   }
 
-  search(requestData) {
+  async search(requestData) {
+    const start = Date.now();
+    // Log request data, but clean up token from log
+    const { auth_token_id, token, ...logRequestData } = requestData;
+
     if (isWindows()) {
-      return searchCliCommand(requestData);
+      const result = await searchCliCommand(requestData);
+
+      const end = Date.now();
+      log.debug(`Search request took ${end - start} ms`, logRequestData);
+
+      return result;
     }
 
     delete requestData.token;
@@ -130,7 +139,12 @@ class CacheDaemonManager {
       path: `http://internal.boundary.local/v1/search?${queryString.toString()}`,
       socketPath: this.#socketPath,
     };
-    return unixSocketRequest(request);
+
+    const result = await unixSocketRequest(request);
+    const end = Date.now();
+    log.debug(`Search request took ${end - start} ms`, logRequestData);
+
+    return result;
   }
 }
 
