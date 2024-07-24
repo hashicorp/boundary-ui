@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 
 module('Acceptance | storage-buckets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,9 +18,6 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   setupIndexedDb(hooks);
 
   let features;
-
-  const MESSAGE_SELECTOR = '.rose-message-subtitle';
-  const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
 
   const instances = {
     scopes: {
@@ -56,12 +54,9 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   });
 
   test('visiting a storage bucket', async function (assert) {
-    await visit(urls.globalScope);
-    await a11yAudit();
+    await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await a11yAudit();
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(selectors.HREF_SELECTOR(urls.storageBucket));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.storageBucket);
@@ -74,16 +69,18 @@ module('Acceptance | storage-buckets | read', function (hooks) {
         (item) => item !== 'read',
       );
 
-    await click(`[href="${urls.storageBuckets}"]`);
+    await click(selectors.HREF_SELECTOR(urls.storageBuckets));
 
-    assert.dom(TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(selectors.TABLE_RESOURCE_LINK_SELECTOR).doesNotExist();
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
     await visit(urls.unknownStorageBucket);
     await a11yAudit();
 
-    assert.dom(MESSAGE_SELECTOR).hasText('Error 404');
+    assert
+      .dom(selectors.RESOURCE_NOT_FOUND_SUBTITLE_SELECTOR)
+      .hasText('Error 404');
   });
 
   test('users can navigate to storage bucket and incorrect url autocorrects', async function (assert) {
