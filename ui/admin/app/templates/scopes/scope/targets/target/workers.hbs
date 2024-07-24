@@ -42,6 +42,7 @@
       {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
         <A.Item
           @containsInteractive={{true}}
+          @isOpen={{@model.ingress_worker_filter}}
           data-test-target-ingress-workers-accordion-item
         >
           <:toggle>
@@ -50,9 +51,11 @@
                   'resources.target.workers.accordion-label.ingress-workers'
                 }}</span>
               <Hds::Link::Standalone
-                @icon='plus'
-                @text={{t 'resources.target.workers.actions.add-worker-filter'}}
-                @route='scopes.scope.targets.target.add-ingress-worker-filter'
+                @icon='edit'
+                @text={{t
+                  'resources.target.workers.actions.edit-worker-filter'
+                }}
+                @route='scopes.scope.targets.target.edit-ingress-worker-filter'
               />
             </div>
           </:toggle>
@@ -89,6 +92,7 @@
       {{/if}}
       <A.Item
         @containsInteractive={{true}}
+        @isOpen={{@model.egress_worker_filter}}
         data-test-target-egress-workers-accordion-item
       >
         <:toggle>
@@ -97,9 +101,9 @@
                 'resources.target.workers.accordion-label.egress-workers'
               }}</span>
             <Hds::Link::Standalone
-              @icon='plus'
-              @text={{t 'resources.target.workers.actions.add-worker-filter'}}
-              @route='scopes.scope.targets.target.add-egress-worker-filter'
+              @icon='edit'
+              @text={{t 'resources.target.workers.actions.edit-worker-filter'}}
+              @route='scopes.scope.targets.target.edit-egress-worker-filter'
             />
           </div>
         </:toggle>
