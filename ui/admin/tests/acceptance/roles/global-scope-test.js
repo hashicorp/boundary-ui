@@ -110,7 +110,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
-  test('user can naviage to scope from role grant scopes', async function (assert) {
+  test('user can navigate to scope from role grant scopes', async function (assert) {
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);
@@ -221,7 +221,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
       .exists();
   });
 
-  test('user can naviage to parent scope from role grant scopes', async function (assert) {
+  test('user can navigate to parent scope from role grant scopes', async function (assert) {
     instances.role.update({
       grant_scope_ids: ['this', instances.scopes.org.id],
     });
@@ -430,7 +430,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.dom(TOAST_SELECTOR).isVisible();
   });
 
-  test('user can search for a specifc org scope by id on manage custom scopes page', async function (assert) {
+  test('user can search for a specific org scope by id on manage custom scopes page', async function (assert) {
     const anotherOrg = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -589,7 +589,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.dom(TOAST_SELECTOR).isVisible();
   });
 
-  test('user can search for a specifc project scope by id on manage org projects page', async function (assert) {
+  test('user can search for a specific project scope by id on manage org projects page', async function (assert) {
     const anotherProject = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
