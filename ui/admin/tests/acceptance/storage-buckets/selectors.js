@@ -3,11 +3,14 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+// START TODO: Remove common selectors from storage-bucket specific selectors
 export const SAVE_BTN = '[type=submit]';
 export const CANCEL_BTN = '.rose-form-actions [type=button]';
 export const EDIT_BTN = '.rose-form-actions [type=button]';
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
+// END TODO: Remove common selectors from storage-bucket specific selectors
+
 export const FIELD_SCOPE = '[name=scope]';
 export const FIELD_PLUGIN_TYPE = '[name=plugin_type]';
 export const FIELD_PLUGIN_TYPE_MINIO = '[value=minio]'; // Provider
@@ -35,7 +38,3 @@ export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFULL_VALUE = 'Saved successfully.';
-export const TABLE_RESOURCE_LINK_SELECTOR =
-  '.hds-table__tbody tr:first-child a';
-export const RESOURCE_NOT_FOUND_SUBTITLE_SELECTOR = '.rose-message-subtitle';
-export const HREF_SELECTOR = (url) => `[href="${url}"]`;

@@ -10,7 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -56,7 +56,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
   test('visiting a storage bucket', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(selectors.HREF_SELECTOR(urls.storageBucket));
+    await click(commonSelectors.HREF(urls.storageBucket));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.storageBucket);
@@ -69,9 +69,9 @@ module('Acceptance | storage-buckets | read', function (hooks) {
         (item) => item !== 'read',
       );
 
-    await click(selectors.HREF_SELECTOR(urls.storageBuckets));
+    await click(commonSelectors.HREF(urls.storageBuckets));
 
-    assert.dom(selectors.TABLE_RESOURCE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK).doesNotExist();
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
@@ -79,8 +79,8 @@ module('Acceptance | storage-buckets | read', function (hooks) {
     await a11yAudit();
 
     assert
-      .dom(selectors.RESOURCE_NOT_FOUND_SUBTITLE_SELECTOR)
-      .hasText('Error 404');
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can navigate to storage bucket and incorrect url autocorrects', async function (assert) {
