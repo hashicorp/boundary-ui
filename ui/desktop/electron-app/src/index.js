@@ -61,6 +61,7 @@ fixPath();
 // Setup logger
 log.initialize();
 log.transports.console.level = false;
+log.transports.file.level = process.env.BOUNDARY_DESKTOP_LOG_LEVEL ?? 'info';
 log.transports.file.format =
   '[{y}-{m}-{d}T{h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 log.transports.file.fileName = 'desktop-client.log';
