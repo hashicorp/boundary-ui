@@ -34,14 +34,18 @@ export default class WorkerModel extends GeneratedWorkerModel {
   }
 
   /**
-   * Returns the number of canonical tags present on the worker.
+   * Returns the number of tags present on the worker.
    * @type {number}
    */
   get tagCount() {
     if (!this.canonical_tags) {
       return 0;
     }
-    return Object.values(this.canonical_tags).reduce(
+    const allTags = [
+      ...Object.values(this.config_tags),
+      ...Object.values(this.api_tags),
+    ];
+    return allTags.reduce(
       (previousCount, currentTags) => previousCount + currentTags.length,
       0,
     );
