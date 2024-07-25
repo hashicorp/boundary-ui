@@ -38,7 +38,10 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * @type {number}
    */
   get tagCount() {
-    if (!this.canonical_tags) {
+    if (
+      !Object.keys(this.config_tags).length &&
+      !Object.keys(this.api_tags).length
+    ) {
       return 0;
     }
     const allTags = [
