@@ -606,11 +606,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:^20.9.0":
-  version: 20.14.11
-  resolution: "@types/node@npm:20.14.11"
+  version: 20.14.12
+  resolution: "@types/node@npm:20.14.12"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/344e1ce1ed16c86ed1c4209ab4d1de67db83dd6b694a6fabe295c47144dde2c58dabddae9f39a0a2bdd246e95f8d141ccfe848e464884b48b8918df4f7788025
+  checksum: 10/9205bf46ef6a99d99cdde9efeb8218cd15803cc407249c2336557cd630b006380dad68c03ee574934414639f8e450044f45530c92788a8e82078bae45ee40f93
   languageName: node
   linkType: hard
 
@@ -1539,9 +1539,9 @@ __metadata:
   linkType: hard
 
 "electron-log@npm:^5.1.2":
-  version: 5.1.6
-  resolution: "electron-log@npm:5.1.6"
-  checksum: 10/62b5b4108a86013b016d43aeb3cd774ffd2c23c4f497cdf4460cd4384d02055647cc1b4b0e744e7c32c75e36bb54243292bac6c8c1fb0536a1990f61652ab107
+  version: 5.1.7
+  resolution: "electron-log@npm:5.1.7"
+  checksum: 10/3b5e338e1c4a8b0267b7d77ed7456fbe4047b29d533db381da39c156ad5c239fb91eadc2d322467f6b96e3e0adb5678d14a124ace643966e3878786dd64a3c92
   languageName: node
   linkType: hard
 
@@ -1555,8 +1555,8 @@ __metadata:
   linkType: hard
 
 "electron-winstaller@npm:^5.3.0":
-  version: 5.3.1
-  resolution: "electron-winstaller@npm:5.3.1"
+  version: 5.4.0
+  resolution: "electron-winstaller@npm:5.4.0"
   dependencies:
     "@electron/asar": "npm:^3.2.1"
     "@electron/windows-sign": "npm:^1.1.2"
@@ -1567,7 +1567,7 @@ __metadata:
   dependenciesMeta:
     "@electron/windows-sign":
       optional: true
-  checksum: 10/c37bcea39ea03b160f12bd44d2137f1f9702d4f6c96a46cd27c162b5712479dca942a5b85d2655d2dbd862698dbb447e521da7c15ad71b01cbdcf6bce97972d8
+  checksum: 10/7165f1fe1ba749357fa26423e1092fb2efb53e424066279d4c1be1552ae658cd570286dc57eaa403f652a0007aefdafda4ff075ad9f814433768f1ee18ec3edb
   languageName: node
   linkType: hard
 
@@ -2491,11 +2491,11 @@ __metadata:
   linkType: hard
 
 "is-core-module@npm:^2.13.0":
-  version: 2.14.0
-  resolution: "is-core-module@npm:2.14.0"
+  version: 2.15.0
+  resolution: "is-core-module@npm:2.15.0"
   dependencies:
     hasown: "npm:^2.0.2"
-  checksum: 10/1e0d1a16cb3a94746f6a28db09ccab4562860c94c74bacedb3a6729736d61cfb97001d2052f9622637aa7ea8e0643a3f0f4f16965c70ba6ce30a8ccfe8074af8
+  checksum: 10/70e962543e5d3a97c07cb29144a86792d545a21f28e67da5401d85878a0193d46fbab8d97bc3ca680e2778705dca66e7b6ca840c493497a27ca0e8c5f3ac3d1d
   languageName: node
   linkType: hard
 
