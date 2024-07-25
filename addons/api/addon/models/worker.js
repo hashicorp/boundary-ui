@@ -37,9 +37,6 @@ export default class WorkerModel extends GeneratedWorkerModel {
    * @type {number}
    */
   get tagCount() {
-    if (!this.config_tags && !this.api_tags) {
-      return 0;
-    }
     const allTags = [
       ...Object.values(this.config_tags ?? {}),
       ...Object.values(this.api_tags ?? {}),
