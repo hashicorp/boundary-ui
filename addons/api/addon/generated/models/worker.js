@@ -72,4 +72,27 @@ export default class GeneratedWorkerModel extends BaseModel {
     readOnly: true,
   })
   type;
+
+  @attr({
+    description:
+      'The deduplicated union of the tags reported by the worker ' +
+      'from its configuration and any tags added through other means.\nOutput only.',
+    readOnly: true,
+    emptyObjectIfMissing: true,
+  })
+  canonical_tags;
+
+  @attr({
+    description:
+      "The tags set in the worker's configuration file.\nOutput only.",
+    readOnly: true,
+    emptyObjectIfMissing: true,
+  })
+  config_tags;
+
+  @attr({
+    description: 'The api tags set for the worker.\nOutput only.',
+    emptyObjectIfMissing: true,
+  })
+  api_tags;
 }

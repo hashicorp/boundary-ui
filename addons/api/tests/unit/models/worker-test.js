@@ -71,7 +71,7 @@ module('Unit | Model | worker', function (hooks) {
     const model = store.peekRecord('worker', workerId);
     await model.setApiTags(tags);
   });
-  
+
   test('it has a `removeApiTags` method that targets a specific POST API', async function (assert) {
     assert.expect(1);
     const workerId = 'w_123';
@@ -186,13 +186,16 @@ module('Unit | Model | worker', function (hooks) {
   test('tagCount returns the total number of tags', function (assert) {
     const store = this.owner.lookup('service:store');
     const model = store.createRecord('worker', {
-      canonical_tags: {
+      config_tags: {
         tag1: ['value1', 'value2'],
+        tag2: ['value3'],
+      },
+      api_tags: {
         tag2: ['value3'],
       },
     });
 
-    assert.strictEqual(model.tagCount, 3);
+    assert.strictEqual(model.tagCount, 4);
   });
 
   test('tagCount returns 0 if there are no tags', function (assert) {

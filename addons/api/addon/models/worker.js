@@ -4,7 +4,6 @@
  */
 
 import GeneratedWorkerModel from '../generated/models/worker';
-import { attr } from '@ember-data/model';
 
 export const TYPE_WORKER_PKI = 'pki';
 
@@ -34,14 +33,15 @@ export default class WorkerModel extends GeneratedWorkerModel {
   }
 
   /**
-   * Returns the number of canonical tags present on the worker.
+   * Returns the number of tags present on the worker.
    * @type {number}
    */
   get tagCount() {
-    if (!this.canonical_tags) {
-      return 0;
-    }
-    return Object.values(this.canonical_tags).reduce(
+    const allTags = [
+      ...Object.values(this.config_tags ?? {}),
+      ...Object.values(this.api_tags ?? {}),
+    ];
+    return allTags.reduce(
       (previousCount, currentTags) => previousCount + currentTags.length,
       0,
     );
@@ -82,29 +82,6 @@ export default class WorkerModel extends GeneratedWorkerModel {
   get allTags() {
     return [...(this.configTagList ?? []), ...(this.apiTagList ?? [])];
   }
-
-  @attr({
-    description:
-      'The deduplicated union of the tags reported by the worker ' +
-      'from its configuration and any tags added through other means.\nOutput only.',
-    readOnly: true,
-    emptyObjectIfMissing: true,
-  })
-  canonical_tags;
-
-  @attr({
-    description:
-      "The tags set in the worker's configuration file.\nOutput only.",
-    readOnly: true,
-    emptyObjectIfMissing: true,
-  })
-  config_tags;
-
-  @attr({
-    description: 'The api tags set for the worker.\nOutput only.',
-    emptyObjectIfMissing: true,
-  })
-  api_tags;
 
   /**
    * Method to modify the adapter to handle custom POST route for creating worker.
