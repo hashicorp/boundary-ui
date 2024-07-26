@@ -7,6 +7,11 @@ import factory from '../generated/factories/role';
 import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import generateId from '../helpers/id';
+import {
+  TYPE_SCOPE_GLOBAL,
+  TYPE_SCOPE_ORG,
+  TYPE_SCOPE_PROJECT,
+} from 'api/models/scope';
 
 export default factory.extend({
   authorized_actions: () =>
@@ -18,6 +23,7 @@ export default factory.extend({
       'set-grants',
       'add-principals',
       'remove-principals',
+      'set-grant-scopes',
     ],
   // eslint-disable-next-line ember/avoid-leaking-state-in-ember-objects
   grant_strings: () => [
@@ -26,6 +32,27 @@ export default factory.extend({
   ],
 
   id: () => generateId('r_'),
+  grant_scope_ids: () => ['this'],
+
+  /**
+   * Adds grant scopes to the role.
+   */
+  withScopes: trait({
+    afterCreate(role, server) {
+      const { scope } = role;
+      const newScope =
+        scope.id === 'global'
+          ? server.create('scope', {
+              scope: { id: 'global', type: TYPE_SCOPE_GLOBAL },
+              type: 'org',
+            })
+          : server.create('scope', {
+              scope: { id: scope.id, type: TYPE_SCOPE_ORG },
+              type: TYPE_SCOPE_PROJECT,
+            });
+      role.update({ grant_scope_ids: ['this', newScope.id] });
+    },
+  }),
 
   /**
    * Adds principals to the role.
@@ -42,14 +69,4 @@ export default factory.extend({
       role.update({ users, groups, managedGroups });
     },
   }),
-
-  /**
-   * Set the grant scope ID to match the scope ID.
-   */
-  afterCreate(role) {
-    const {
-      scope: { id },
-    } = role;
-    role.update({ grant_scope_id: id });
-  },
 });

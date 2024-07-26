@@ -99,7 +99,9 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     await click(`[href="${urls.hostCatalogs}"]`);
 
     assert
-      .dom(`[href="https://boundaryproject.io/help/admin-ui/host-catalogs"]`)
+      .dom(
+        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs"]`,
+      )
       .exists();
   });
 

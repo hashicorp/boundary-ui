@@ -11,7 +11,7 @@
   <page.header>
     <h2>
       {{t 'resources.alias.title_plural'}}
-      <DocLink @doc='aliases' @iconSize='large' />
+      <DocLink @doc='alias' @iconSize='large' />
     </h2>
     <p>{{t 'resources.alias.description'}}</p>
   </page.header>
@@ -36,7 +36,7 @@
           (hash label=(t 'resources.alias.titles.points_to'))
           (hash label=(t 'resources.scope.title'))
           (hash label=(t 'resources.alias.titles.resource_id'))
-          (hash label='')
+          (hash label=(t 'titles.actions') isVisuallyHidden=true)
         }}
         @valign='middle'
       >

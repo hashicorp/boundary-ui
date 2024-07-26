@@ -36,7 +36,7 @@
           (hash label=(t 'form.id.label'))
           (hash label=(t 'resources.storage-bucket.form.provider.label'))
           (hash label=(t 'resources.storage-bucket.form.scope.label'))
-          (hash label='')
+          (hash label=(t 'titles.actions') isVisuallyHidden=true)
         }}
         @valign='middle'
       >
@@ -101,7 +101,7 @@
                   <Hds::Dropdown as |dd|>
                     <dd.ToggleIcon
                       @icon='more-horizontal'
-                      @text='Overflow Options'
+                      @text={{t 'actions.overflow-options'}}
                       @hasChevron={{false}}
                       @size='small'
                     />

@@ -47,10 +47,12 @@ module.exports = function (environment) {
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
-      baseURL: 'https://boundaryproject.io/help/desktop',
+      baseURL: 'https://developer.hashicorp.com/boundary',
       topics: {
-        targets: '/targets',
-        sessions: '/sessions',
+        targets:
+          '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
+        sessions:
+          '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
       },
     },
 
@@ -59,9 +61,7 @@ module.exports = function (environment) {
     },
 
     featureFlags: {
-      search: false,
-      filter: true,
-      'post-connection-workflow': false,
+      'client-agent': false,
     },
   };
 
@@ -82,7 +82,7 @@ module.exports = function (environment) {
       : true;
 
     // Enable features in development
-    ENV.featureFlags['post-connection-workflow'] = true;
+    ENV.featureFlags['client-agent'] = true;
   }
 
   if (environment === 'test') {

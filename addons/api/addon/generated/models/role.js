@@ -22,11 +22,12 @@ export default class GeneratedRoleModel extends BaseModel {
   })
   description;
 
-  @attr('string', {
+  @attr('array', {
+    emptyArrayIfMissing: true,
     description:
-      "The scope to which this role applies.  Defaults to the role's scope.",
+      "The scopes to which this role applies.  Defaults to the role's scope.",
   })
-  grant_scope_id;
+  grant_scope_ids;
 
   @attr('date', {
     description: 'The time this resource was created\nOutput only.',

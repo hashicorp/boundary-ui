@@ -11,7 +11,6 @@ const jsonify = (data) => {
   try {
     return JSON.parse(data);
   } catch (e) {
-    log.warn('jsonify:', e);
     // Ignore parse errors
   }
 };
