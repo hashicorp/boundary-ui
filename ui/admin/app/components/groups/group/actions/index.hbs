@@ -3,24 +3,24 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown data-test-manage-group-dropdown as |dd|>
+  <dd.ToggleButton 
+    @text={{t 'actions.manage'}} 
+    @color='secondary'
+  />
   {{#if (can 'addMembers group' @model)}}
-    <dropdown.link @route='scopes.scope.groups.group.add-members'>
-      {{t 'resources.group.actions.add-members'}}
-    </dropdown.link>
+    <dd.Interactive 
+      @route='scopes.scope.groups.group.add-members'
+      @text={{t 'resources.group.actions.add-members'}}
+    />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
+    <dd.Separator />
+    <dd.Interactive
+      @color='critical'
       @disabled={{@model.canSave}}
+      @text={{t 'resources.group.actions.delete'}}
       {{on 'click' @delete}}
-    >
-      {{t 'resources.group.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>

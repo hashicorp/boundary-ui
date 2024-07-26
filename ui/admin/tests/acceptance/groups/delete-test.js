@@ -19,6 +19,9 @@ module('Acceptance | groups | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-group-dropdown] div:first-child button"
+  const DELETE_ACTION_SELECTOR = "[data-test-manage-group-dropdown] ul li button"
+
   const instances = {
     scopes: {
       global: null,
@@ -51,7 +54,8 @@ module('Acceptance | groups | delete', function (hooks) {
   test('can delete a group', async function (assert) {
     const groupsCount = this.server.db.groups.length;
     await visit(urls.group);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(this.server.db.groups.length, groupsCount - 1);
   });
 
@@ -77,7 +81,8 @@ module('Acceptance | groups | delete', function (hooks) {
       );
     });
     await visit(urls.group);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
       'Oops.',
