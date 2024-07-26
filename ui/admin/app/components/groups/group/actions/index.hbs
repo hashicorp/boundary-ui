@@ -4,12 +4,9 @@
 }}
 
 <Hds::Dropdown data-test-manage-group-dropdown as |dd|>
-  <dd.ToggleButton 
-    @text={{t 'actions.manage'}} 
-    @color='secondary'
-  />
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'addMembers group' @model)}}
-    <dd.Interactive 
+    <dd.Interactive
       @route='scopes.scope.groups.group.add-members'
       @text={{t 'resources.group.actions.add-members'}}
     />
