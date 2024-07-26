@@ -58,6 +58,10 @@ const findLatestVersion = (url) => {
 // Find zip archive for update
 const findUpdateArchive = (version) => {
   const architecture = returnArchitectureToUpdate();
+
+  console.log('Release URL: ', releasesUrl);
+  console.log('Version: ', version);
+  console.log('architecture: ', architecture);
   const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
