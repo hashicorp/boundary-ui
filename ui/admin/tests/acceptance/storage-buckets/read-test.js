@@ -71,7 +71,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBuckets));
 
-    assert.dom(commonSelectors.TABLE_RESOURCE_LINK).doesNotExist();
+    assert.dom(commonSelectors.TABLE_ROW_RESOURCE_LINK).doesNotExist();
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
