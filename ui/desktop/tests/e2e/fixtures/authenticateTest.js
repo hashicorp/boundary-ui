@@ -1,0 +1,28 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+/* eslint-disable no-undef, no-empty-pattern */
+
+const { electronTest } = require('../fixtures/electronTest');
+const LoginPage = require('../pages/loginPage');
+
+exports.authenticateTest = electronTest.extend({
+  // TODO: Should we put these in a config file?
+  clusterUrl: ({}, use) => {
+    use(process.env.BOUNDARY_ADDR ?? 'http://localhost:9200');
+  },
+  username: ({}, use) => {
+    use(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME ?? 'admin');
+  },
+  password: ({}, use) => {
+    use(process.env.E2E_PASSWORD_ADMIN_PASSWORD ?? 'password');
+  },
+  authedPage: async ({ electronPage, clusterUrl, username, password }, use) => {
+    const loginPage = new LoginPage(electronPage);
+    await loginPage.setClusterUrl(clusterUrl);
+    await loginPage.loginWithPassword(username, password);
+    use(electronPage);
+  },
+});
