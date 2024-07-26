@@ -17,7 +17,6 @@ const {
   deletePolicyCli,
 } = require('../helpers/boundary-cli');
 const {
-  createSshTargetWithAddressAndWorkerFilterEnt,
   waitForSessionToBeVisible,
   createStorageBucketMinio,
   enableSessionRecording,
@@ -27,7 +26,9 @@ const {
   createProject,
   createStaticCredentialStore,
   createStaticCredentialKeyPair,
+  createSshTargetWithAddressEnt,
   addInjectedCredentialsToTarget,
+  addEgressWorkerFilterToTarget,
 } = require('../helpers/boundary-ui');
 
 test.use({ storageState: authenticatedState });
@@ -100,12 +101,16 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: projectName }).click();
-    const targetName = await createSshTargetWithAddressAndWorkerFilterEnt(
+    const targetName = await createSshTargetWithAddressEnt(
       page,
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
+    );
+    await addEgressWorkerFilterToTarget(
+      page,
       `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
     );
+
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + projectId),
     );

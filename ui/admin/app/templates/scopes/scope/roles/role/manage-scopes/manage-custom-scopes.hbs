@@ -1,0 +1,40 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.role.scope.messages.manage-custom-scopes.title')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.role.scope.messages.manage-custom-scopes.title'}}
+  @route='scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+/>
+
+<Rose::Layout::Page as |page|>
+
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <h2>
+      {{t 'resources.role.scope.messages.manage-custom-scopes.title'}}
+      <DocLink @doc='role.add-grant-scopes' @iconSize='large' />
+    </h2>
+    <p>{{t
+        'resources.role.scope.messages.manage-custom-scopes.description'
+      }}</p>
+  </page.header>
+
+  <page.body class='search-filtering'>
+    <Form::Role::ManageCustomScopes
+      @model={{@model}}
+      @search={{this.search}}
+      @page={{this.page}}
+      @pageSize={{this.pageSize}}
+      @handleSearchInput={{this.handleSearchInput}}
+      @submit={{fn this.setGrantScopes @model.role}}
+      @cancel={{this.cancel}}
+    />
+  </page.body>
+
+</Rose::Layout::Page>

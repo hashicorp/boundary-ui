@@ -1,0 +1,116 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{#if @model.totalItemsCount}}
+  <Rose::Form
+    class='full-width role-manage-custom-scopes-form'
+    @onSubmit={{fn @submit this.allGrantScopes}}
+    @cancel={{@cancel}}
+    @disabled={{@model.role.isSaving}}
+    as |form|
+  >
+    <Hds::SegmentedGroup as |S|>
+      <S.TextInput
+        @value={{@search}}
+        @type='search'
+        placeholder={{t 'actions.search'}}
+        aria-label={{t 'actions.search'}}
+        {{on 'input' @handleSearchInput}}
+      />
+    </Hds::SegmentedGroup>
+    {{#if @model.projectScopes}}
+      {{#if this.selectedItems.length}}
+        <div class='table-selected-items-text'>
+          <Hds::Text::Body @tag='p' @color='faint'>
+            {{t
+              'resources.role.scope.titles.selected'
+              items=this.selectedItems.length
+              total=@model.totalItemsCount
+            }}
+          </Hds::Text::Body>
+        </div>
+      {{/if}}
+      <Hds::Table
+        @columns={{array
+          (hash label=(t 'resources.project.title'))
+          (hash label=(t 'form.id.label'))
+        }}
+        @model={{@model.projectScopes}}
+        @isSelectable={{true}}
+        @onSelectionChange={{this.selectionChange}}
+        @valign='middle'
+      >
+        <:body as |B|>
+          <B.Tr
+            @selectionKey={{B.data.id}}
+            @isSelected={{includes B.data.id this.selectedItems}}
+            @selectionAriaLabelSuffix='row {{B.data.id}}'
+            data-test-project-scopes-table-row={{B.data.id}}
+          >
+            <B.Td>
+              <Hds::Text::Body @tag='p'>
+                {{B.data.displayName}}
+              </Hds::Text::Body>
+            </B.Td>
+            <B.Td>
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.id}}
+                @color='secondary'
+              />
+            </B.Td>
+          </B.Tr>
+        </:body>
+      </Hds::Table>
+      <Rose::Pagination
+        @model={{@model.orgScope.id}}
+        @totalItems={{@model.totalItems}}
+        @currentPage={{@page}}
+        @currentPageSize={{@pageSize}}
+      />
+
+      <form.actions
+        @submitText={{t 'resources.role.scope.actions.apply'}}
+        @cancelText={{t 'actions.cancel'}}
+      />
+    {{else}}
+      <Hds::ApplicationState data-test-no-grant-scope-results as |A|>
+        <A.Header @title={{t 'titles.no-results-found'}} />
+        <A.Body
+          @text={{t
+            'descriptions.no-search-results'
+            query=@search
+            resource=(t 'resources.scope.title_plural')
+          }}
+        />
+      </Hds::ApplicationState>
+    {{/if}}
+  </Rose::Form>
+{{else}}
+  <Hds::ApplicationState as |A|>
+    <A.Header
+      @title={{t
+        'resources.role.scope.messages.no-scopes.title'
+        type=(t 'resources.project.title')
+      }}
+    />
+    <A.Body
+      @text={{t
+        'resources.role.scope.messages.no-scopes.description'
+        type=(t 'resources.project.title')
+      }}
+    />
+    <A.Footer as |F|>
+      <F.LinkStandalone
+        @icon='arrow-left'
+        @text={{t 'actions.back'}}
+        @route={{if
+          @model.role.scope.isGlobal
+          'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+          'scopes.scope.roles.role.manage-scopes'
+        }}
+      />
+    </A.Footer>
+  </Hds::ApplicationState>
+{{/if}}

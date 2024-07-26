@@ -39,7 +39,6 @@ test.beforeAll(async () => {
     'E2E_TARGET_ADDRESS',
     'E2E_SSH_USER',
     'E2E_SSH_KEY_PATH',
-    'E2E_WORKER_TAG_EGRESS',
   ]);
 
   await checkBoundaryCli();

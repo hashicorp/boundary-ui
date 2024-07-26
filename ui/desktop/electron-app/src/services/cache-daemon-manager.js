@@ -11,6 +11,7 @@ const sanitizer = require('../utils/sanitizer.js');
 const { isWindows } = require('../helpers/platform.js');
 const treeKill = require('tree-kill');
 const log = require('electron-log/main');
+const generateErrorPromise = require('../utils/generateErrorPromise');
 
 class CacheDaemonManager {
   #socketPath;
@@ -23,15 +24,21 @@ class CacheDaemonManager {
 
   /**
    * Checks the status of the cache daemon.
-   * @returns {string}
+   * @returns {Promise}
    */
   status() {
     const daemonStatusCommand = ['cache', 'status', '-format=json'];
-    const { stdout } = spawnSync(daemonStatusCommand);
+    const { stdout, stderr } = spawnSync(daemonStatusCommand);
 
-    const status = jsonify(stdout);
-    this.#socketPath = status?.item?.socket_address;
-    return status;
+    const parsedResponse = jsonify(stdout);
+    this.#socketPath = parsedResponse?.item?.socket_address;
+
+    if (parsedResponse?.status_code === 200) {
+      return parsedResponse.item;
+    }
+
+    log.warn('Cache Daemon Status:', stderr);
+    return generateErrorPromise(stderr);
   }
 
   /**
@@ -106,16 +113,22 @@ class CacheDaemonManager {
       return;
     }
 
-    parsedResponse = jsonify(stderr);
-    return Promise.reject({
-      statusCode: parsedResponse?.status_code,
-      ...parsedResponse?.api_error,
-    });
+    log.warn('Cache Daemon Add Token:', stderr);
+    return generateErrorPromise(stderr);
   }
 
-  search(requestData) {
+  async search(requestData) {
+    const start = Date.now();
+    // Log request data, but clean up token from log
+    const { auth_token_id, token, ...logRequestData } = requestData;
+
     if (isWindows()) {
-      return searchCliCommand(requestData);
+      const result = await searchCliCommand(requestData);
+
+      const end = Date.now();
+      log.debug(`Search request took ${end - start} ms`, logRequestData);
+
+      return result;
     }
 
     delete requestData.token;
@@ -126,7 +139,12 @@ class CacheDaemonManager {
       path: `http://internal.boundary.local/v1/search?${queryString.toString()}`,
       socketPath: this.#socketPath,
     };
-    return unixSocketRequest(request);
+
+    const result = await unixSocketRequest(request);
+    const end = Date.now();
+    log.debug(`Search request took ${end - start} ms`, logRequestData);
+
+    return result;
   }
 }
 
@@ -157,17 +175,12 @@ const searchCliCommand = (requestData) => {
     return parsedResponse?.item;
   }
 
-  parsedResponse = jsonify(stderr);
-
   // Log request data and response, but clean up token from log
   const requestCopy = { ...requestData };
   delete requestData.token;
   log.error(`searchCliCommand(${JSON.stringify(requestCopy)}):`, stderr);
 
-  return Promise.reject({
-    statusCode: parsedResponse?.status_code,
-    ...parsedResponse?.api_error,
-  });
+  return generateErrorPromise(stderr);
 };
 
 // Export an instance so we get a singleton

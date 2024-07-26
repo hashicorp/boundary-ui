@@ -28,9 +28,11 @@ module.exports = function (environment) {
     companyName: 'Company Name',
 
     documentation: {
-      baseURL: 'https://boundaryproject.io/help/admin-ui',
+      baseURL: 'https://developer.hashicorp.com/boundary',
       topics: {
-        account: '/accounts',
+        account: '/docs/concepts/domain-model/accounts',
+        'host-catalog.aws.region':
+          'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html',
       },
     },
 

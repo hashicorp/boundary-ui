@@ -529,8 +529,12 @@ role:
   messages:
     welcome:
       title: Welcome to Roles
+    tooltips:
+      yes: The grants on this role have been applied to this scope.
+      no: The grants on this role have not been applied to this scope.
   titles:
     new: New Role
+    grants-applied: Grants applied on this scope?
   actions:
     create: Create Role
     delete: Delete Role
@@ -560,6 +564,69 @@ role:
     description: Grants are permissions which allow roles to take actions and access resources.
     actions:
       create: New Grant
+  scope:
+    title: Scope
+    title_plural: Scopes
+    description:
+      global: Role grant sets can be applied to multiple descendants underneath this scope.
+      org: Role grant sets can be applied to multiple children underneath this scope.
+      project: Role grant sets can only be applied to this scope.
+    titles:
+      parent_scope: Parent scope
+      resource_type: Resource type
+      projects_selected: Projects selected
+      selected: '{items} selected out of {total}'
+    messages:
+      none:
+        title: No scopes added
+        description: You haven't added any scopes to this role's grant sets.
+        action: Add scopes to this role
+      manage-scopes:
+        title: Manage Scopes
+        description: Select which scopes you want to add to this role.
+        success: Scope selection saved
+      keywords-selected:
+        description: Just a heads up, you can't select both <strong>add all descendants</strong> and <strong>add all children</strong>. You can only choose one or the other.
+        link: You can read more about it here
+      manage-custom-scopes:
+        title: Manage Custom Scopes
+        description: Select which specific orgs you want to apply to this role's grant sets.
+        success: Custom scope selection saved
+      manage-org-projects:
+        title: Manage Projects in {orgDisplayName}
+        description: Select which projects in this org you want to apply to this role's grant sets.
+        success: Projects in org have been updated
+      no-scopes:
+        title: No {type} Scopes Available
+        description: '{type} scopes are not available for assignment.'
+    keywords:
+      this:
+        sub-title: This scope
+      children:
+        title: All Children
+        sub-title: All children under this scope
+      descendants:
+        title: All Descendants
+        sub-title: Add all of the orgs and the projects in the orgs that are underneath this scope
+    actions:
+      manage-scopes: Manage Scopes
+      manage-custom-scopes:
+        text: Manage custom scopes
+        help: Customize which scopes are associated with this role.
+      view-projects: '{selected}/{total} total projects'
+      apply: Apply changes to org
+    form:
+      this:
+        label: Add this scope
+        help: Add {scopeDisplayName} scope.
+      children:
+        label: Add all children
+        help:
+          0: Add all of the orgs underneath this scope.
+          1: Add all of the projects underneath this org.
+      descendants:
+        label: Add all descendants
+        help: Add all of the orgs and the projects in the orgs that are underneath this scope.
 target:
   title: Target
   title_plural: Targets
@@ -614,9 +681,6 @@ target:
     target-address:
       label: Target Address
       help: Must be a valid IP address or DNS name. We recommend leaving this blank and using host catalogs and host sets instead if you want to use this target on multiple hosts.
-    worker_filter:
-      label: Worker Filter
-      help: Deprecated. Boolean expression to filter the workers that are allowed to satisfy this request.
     default_port:
       label: Default Port
       help: The default port on which to connect.
@@ -688,9 +752,10 @@ target:
   workers:
     title: Workers
     description: You can customize how your workers route traffic to this target by setting up a filter that matches specific worker tags. If your target is in a private network, we recommend setting up an egress filter to specify a worker inside the network so that Boundary can access the host. Ingress and egress filters are allowed to select the same worker.
-    deprecation_message:
-      title: Worker filters have been updated
-      description: This target is configured using an older version of worker filters. You can update to the new filters but this will also update this field in the Boundary API. We will continue to use this filter until you update.
+    messages:
+      none:
+        title: No worker filter added
+        description: You haven't added an {type} worker filter yet.
     diagram:
       client: Client
       any-worker: Any worker
@@ -708,17 +773,20 @@ target:
       dual-egress-on: In this configuration, the client will attempt to  connect through any client-accessible "frontline" worker and reach the host through any filtered egress worker.
       dual-egress-on-ingress-on: In this configuration, the client will attempt to connect through any filtered ingress worker and reach the host through any filtered egress worker.
       hcp-dual-egress-on: In this configuration, the client will attempt to connect through any HCP-managed worker and reach the host through any filtered egress worker.
-    filter:
-      title: Filter
-      description: Boolean expression.
-    egress_worker_filter:
-      title: Egress worker filter
+    edit-egress-worker-filter:
+      title: Edit Egress Worker Filter
       description: Specify workers that have access to the target (such as within a private network).
-    ingress_worker_filter:
-      title: Ingress worker filter
+    edit-ingress-worker-filter:
+      title: Edit Ingress Worker Filter
       description: Specify workers Boundary should use to start the route to this target.
+    worker-filter:
+      title: Worker filter
+      description: The worker filter format for this target.
+    accordion-label:
+      egress-workers: Egress workers
+      ingress-workers: Ingress workers
     actions:
-      update-filter: Update Filter
+      edit-worker-filter: Edit worker filter
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
@@ -872,6 +940,10 @@ scope:
   title_plural: Scopes
   messages:
     cannot_read: While you do not have permission to read this scope, you may have permission to view resources within it.
+  types:
+    global: Global
+    org: Org
+    project: Project
 managed-group:
   title: Managed Group
   title_plural: Managed Groups
@@ -904,14 +976,53 @@ worker:
   actions:
     register: Register Worker
     delete: Remove Worker
+    create_tags: Create New Tags
   messages:
     welcome:
       title: Welcome to Workers
+  tooltip:
+    hcp: This is a HCP managed worker, you cannot edit or delete this worker’s tags.
+    self: To edit config tags, edit them in your worker config file.
   table:
     session_count: Session Count
     ip_address: IP Address
     release_version: Release Version
     tag_count: '{tagCount, plural, =1 {# tag} other {# tags}}'
+    tag: Tag
+    key: Key
+    value: Value
+    type: Type
+  tags:
+    title_plural: Tags
+    create:
+      title: Create New Tags
+      description: Create new API tags. You can only add API tags in the admin UI or CLI.
+      link: Config tags are added in the worker config file.
+      success: Tag(s) successfully created
+    description: Tags are used to define the type of worker and to make it distinguishable amongst other workers.
+    messages:
+      no-tags:
+        title: No tags added
+        body: You haven’t added any tags to this worker yet
+    remove:
+      title: Remove worker tag?
+      success: Tag successfully removed
+      warning: will be removed but removing these may affect certain targets
+      confirm:
+        label: Confirm removal
+        help: 'Enter “REMOVE” to confirm — this is case-sensitive.'
+    edit:
+      title: Edit Tag
+      description: Edit the existing worker tag
+      success: Tag successfully edited
+      helper-text: Separate multiple values by comma
+    actions:
+      remove: Remove Tag
+      add: Add tags to this worker
+  flyout:
+    title: Tags in {workerName}
+    action:
+      view_more: View more tags
   form:
     cluster_id:
       label: Boundary Cluster ID
