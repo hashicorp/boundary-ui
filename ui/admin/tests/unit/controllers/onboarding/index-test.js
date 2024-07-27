@@ -46,8 +46,8 @@ module('Unit | Controller | onboarding/index', function (hooks) {
     });
 
     urls.onboarding = '/onboarding';
-    (urls.success = '/onboarding/success'),
-      (urls.globalScope = '/scopes/global/scopes');
+    urls.success = '/onboarding/success';
+    urls.globalScope = '/scopes/global/scopes';
   });
 
   test('it exists', function (assert) {
@@ -65,28 +65,15 @@ module('Unit | Controller | onboarding/index', function (hooks) {
 
   test('createResources action creates and saves resources', async function (assert) {
     await visit(urls.onboarding);
-    instances.scopes.org = this.server.create('scope', {
-      type: 'org',
-      scope: { id: 'global', type: 'global' },
-    });
-    instances.scopes.project = this.server.create('scope', {
-      type: 'project',
-      scope: { id: instances.scopes.org.id, type: 'org' },
-    });
-    instances.target = this.server.create('target', {
+    const global = await store.findRecord('scope', instances.scopes.global.id);
+    const org = store.createRecord('scope', { type: 'org' });
+    org.scopeModel = global;
+    const project = store.createRecord('scope', { type: 'project' });
+    const target = store.createRecord('target', {
       type: TYPE_TARGET_TCP,
-      scope: instances.scopes.project,
+      scope: project,
     });
-    instances.role = this.server.create('role', {
-      scope: instances.scopes.org,
-    });
-    const org = await store.findRecord('scope', instances.scopes.org.id);
-    const project = await store.findRecord(
-      'scope',
-      instances.scopes.project.id,
-    );
-    const target = await store.findRecord('target', instances.target.id);
-    const role = await store.findRecord('role', instances.role.id);
+    const role = store.createRecord('role', { scope: org });
 
     await controller.createResources(
       { org, project, target, role },
@@ -94,8 +81,24 @@ module('Unit | Controller | onboarding/index', function (hooks) {
       '22',
     );
 
+    assert.strictEqual(project.scopeID, org.id);
     assert.strictEqual(target.address, 'localhost');
     assert.strictEqual(target.default_port, 22);
+    assert.strictEqual(target.scopeID, project.id);
+    assert.strictEqual(role.scopeID, org.id);
+    assert.deepEqual(role.grant_strings, [
+      'type=target;actions=list',
+      'ids=1;actions=authorize-session',
+    ]);
     assert.strictEqual(currentURL(), urls.success);
+  });
+
+  test('doLater action redirects user to correct page', async function (assert) {
+    await visit(urls.onboarding);
+
+    controller.doLater();
+    await waitUntil(() => currentURL() === urls.globalScope);
+
+    assert.strictEqual(currentURL(), urls.globalScope);
   });
 });

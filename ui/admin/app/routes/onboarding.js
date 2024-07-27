@@ -30,7 +30,7 @@ export default class OnboardingRoute extends Route {
 
   /**
    * List all scopes (orgs) under global.
-   * Creare org, project, target and roles
+   * Create org, project, target and roles
    */
   async model() {
     return {

@@ -16,14 +16,14 @@ export default class OnboardingSuccessController extends Controller {
 
   /**
    * Redirect user to target created during onboarding.
-   * @param {ScopeModel} scope
+   * @param {object} model
    */
   @action
-  showTargetList(scope) {
+  showTargetList(model) {
     const {
       project: { id: scopeID },
       target: { id: targetID },
-    } = scope;
+    } = model;
     this.router.transitionTo('scopes.scope.targets.target', scopeID, targetID);
   }
 }

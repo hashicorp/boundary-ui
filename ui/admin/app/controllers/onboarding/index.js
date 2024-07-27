@@ -73,7 +73,7 @@ export default class OnboardingIndexController extends Controller {
   }
 
   /**
-   * Creates a Target, if fails redirects to Targets empyt list.
+   * Creates a Target, if fails redirects to Targets empty list.
    * @param {ScopeModel} project
    * @param {TargetModel} target
    * @param {string} targetAddress
@@ -117,7 +117,7 @@ export default class OnboardingIndexController extends Controller {
   }
 
   /**
-   * Redirects user to index route for futher processing.
+   * Redirects user to index route for further processing.
    */
   @action
   doLater() {
