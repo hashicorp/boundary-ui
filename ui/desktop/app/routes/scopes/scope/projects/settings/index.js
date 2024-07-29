@@ -28,7 +28,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
         formattedCliVersion,
         formattedCacheVersion,
         formattedDesktopVersion,
-        warning: true,
+        error: e,
       };
     }
     const { version } = cacheDaemonStatus;

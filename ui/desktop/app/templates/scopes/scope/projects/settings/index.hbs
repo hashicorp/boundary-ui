@@ -45,10 +45,12 @@
       </div>
     </div>
 
-    {{#if @model.warning}}
+    {{#if @model.error}}
       <Hds::Alert @type='inline' @color='warning' as |A|>
         <A.Title>{{t 'errors.settings-cache.title'}}</A.Title>
-        {{! todo: description link }}
+        {{#if @model.error.message}}
+          <A.Description>{{@model.error.message}}</A.Description>
+        {{/if}}
       </Hds::Alert>
     {{/if}}
 
