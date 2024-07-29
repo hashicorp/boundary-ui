@@ -22,7 +22,7 @@ exports.authenticateTest = electronTest.extend({
   authedPage: async ({ electronPage, clusterUrl, username, password }, use) => {
     const loginPage = new LoginPage(electronPage);
     await loginPage.setClusterUrl(clusterUrl);
-    await loginPage.loginWithPassword(username, password);
+    await loginPage.logInWithPassword(username, password);
     use(electronPage);
   },
 });

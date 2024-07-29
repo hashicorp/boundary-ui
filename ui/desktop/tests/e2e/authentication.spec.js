@@ -18,7 +18,7 @@ test.describe('user/password authentication tests', async () => {
   }) => {
     const loginPage = new LoginPage(electronPage);
     await loginPage.setClusterUrl(clusterUrl);
-    await loginPage.loginWithPassword(username, password);
+    await loginPage.logInWithPassword(username, password);
 
     await expect(electronPage).toHaveURL(
       /.*\/scopes\/global\/projects\/targets$/,
@@ -40,7 +40,7 @@ test.describe('user/password authentication tests', async () => {
   }) => {
     const loginPage = new LoginPage(electronPage);
     await loginPage.setClusterUrl(clusterUrl);
-    await loginPage.loginWithPassword(username, 'wrong password!!');
+    await loginPage.logInWithPassword(username, 'wrong password!!');
 
     await expect(electronPage).toHaveURL(/.*\/scopes\/global\/authenticate\//);
     await expect(electronPage.getByText('Authentication Failed')).toBeVisible();
@@ -56,7 +56,7 @@ test.describe('LDAP authentication tests', async () => {
   }) => {
     const loginPage = new LoginPage(electronPage);
     await loginPage.setClusterUrl(clusterUrl);
-    await loginPage.loginWithLDAP(username, password);
+    await loginPage.logInWithLDAP(username, password);
 
     await expect(electronPage).toHaveURL(
       /.*\/scopes\/global\/projects\/targets$/,
@@ -78,7 +78,7 @@ test.describe('LDAP authentication tests', async () => {
   }) => {
     const loginPage = new LoginPage(electronPage);
     await loginPage.setClusterUrl(clusterUrl);
-    await loginPage.loginWithLDAP(username, 'wrong password!!');
+    await loginPage.logInWithLDAP(username, 'wrong password!!');
 
     await expect(electronPage).toHaveURL(/.*\/scopes\/global\/authenticate\//);
     await expect(electronPage.getByText('Authentication Failed')).toBeVisible();

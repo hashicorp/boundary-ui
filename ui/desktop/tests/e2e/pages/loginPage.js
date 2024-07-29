@@ -16,19 +16,19 @@ class LoginPage {
     await this.page.getByRole('button', { name: 'Submit' }).click();
   }
 
-  async loginWithPassword(username, password) {
+  async logInWithPassword(username, password) {
     await this.page.getByLabel('Login Name').fill(username);
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Sign In' }).click();
   }
 
-  async loginWithLDAP(username, password) {
+  async logInWithLDAP(username, password) {
     await this.page
       .getByRole('link', {
         name: 'Generated global scope initial ldap auth method',
       })
       .click();
-    await this.loginWithPassword(username, password);
+    await this.logInWithPassword(username, password);
   }
 
   // Can't login with OIDC as we can't control the external browser that is opened
