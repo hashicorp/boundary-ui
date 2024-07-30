@@ -37,6 +37,8 @@ module('Acceptance | groups | members', function (hooks) {
     addMembers: null,
   };
   let membersCount;
+  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-group-dropdown] div:first-child button"
+  const ADD_MEMBERS_ACTION_SELECTOR = "[data-test-manage-group-dropdown] ul li a"
 
   hooks.beforeEach(function () {
     authenticateSession({});
@@ -111,7 +113,8 @@ module('Acceptance | groups | members', function (hooks) {
 
   test('can navigate to add members with proper authorization', async function (assert) {
     await visit(urls.group);
-    assert.ok(find(`[href="${urls.addMembers}"]`));
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(ADD_MEMBERS_ACTION_SELECTOR).isVisible()
   });
 
   test('cannot navigate to add members without proper authorization', async function (assert) {
@@ -127,7 +130,8 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_MEMBERS_ACTION_SELECTOR);
     assert.strictEqual(currentURL(), urls.addMembers);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -144,7 +148,8 @@ module('Acceptance | groups | members', function (hooks) {
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_MEMBERS_ACTION_SELECTOR);
     assert.strictEqual(currentURL(), urls.addMembers);
     await click('tbody label');
     await click('form [type="button"]');
