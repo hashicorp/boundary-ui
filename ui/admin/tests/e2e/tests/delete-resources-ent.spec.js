@@ -74,6 +74,7 @@ test('Verify resources can be deleted (enterprise) @ent @aws', async ({
   page,
 }) => {
   let orgId;
+  let orgDeleted = false;
   try {
     orgId = await createOrgCli();
     let projectId = await createProjectCli(orgId);
@@ -170,8 +171,9 @@ test('Verify resources can be deleted (enterprise) @ent @aws', async ({
     await deleteResource(page);
     await page.goto(`/scopes/${orgId}/edit`);
     await deleteResource(page);
+    orgDeleted = true;
   } finally {
-    if (orgId) {
+    if (orgId && orgDeleted == false) {
       await deleteOrgCli(orgId);
     }
   }

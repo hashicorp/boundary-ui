@@ -152,7 +152,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await click(API_TAG_ACTION_SELECTOR);
 
     // Asserts first button is for editing and there is no second button
-    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Edit tag');
+    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Edit Tag');
     assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
   });
 
@@ -206,7 +206,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await click(API_TAG_ACTION_SELECTOR);
 
     // Asserts first button is for removing and there is no second button
-    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Remove tag');
+    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Remove Tag');
     assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
   });
 

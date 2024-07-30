@@ -3,10 +3,10 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.target.workers.add-egress-worker-filter.title')}}
+{{page-title (t 'resources.target.workers.edit-egress-worker-filter.title')}}
 <Breadcrumbs::Item
-  @text={{t 'resources.target.workers.add-egress-worker-filter.title'}}
-  @route='scopes.scope.targets.target.add-egress-worker-filter'
+  @text={{t 'resources.target.workers.edit-egress-worker-filter.title'}}
+  @route='scopes.scope.targets.target.edit-egress-worker-filter'
 />
 
 <Rose::Layout::Page as |page|>
@@ -16,10 +16,12 @@
   </page.breadcrumbs>
   <page.header>
     <h2>
-      {{t 'resources.target.workers.add-egress-worker-filter.title'}}
+      {{t 'resources.target.workers.edit-egress-worker-filter.title'}}
       <DocLink @doc='target.worker-filters' @iconSize='large' />
     </h2>
-    <p>{{t 'resources.target.workers.add-egress-worker-filter.description'}}</p>
+    <p>{{t
+        'resources.target.workers.edit-egress-worker-filter.description'
+      }}</p>
   </page.header>
 
   <page.body class='target-workers'>

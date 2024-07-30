@@ -46,6 +46,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       query: { search, filters },
       page,
       pageSize,
+      recursive: true,
     });
     const totalItems = orgScopes.meta?.totalItems;
     const totalItemsCount = await this.getTotalItemsCount(

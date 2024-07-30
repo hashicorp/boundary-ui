@@ -35,7 +35,7 @@ const returnArchitectureToUpdate = () => {
   } catch (err) {
     log.error(`returnArchitectureToUpdate:`, err.message);
   }
-  return nodeArchitecture;
+  return 'amd64';
 };
 
 // Query releases url to find latest version
@@ -61,9 +61,11 @@ const findUpdateArchive = (version) => {
   const url = `${releasesUrl}${version}/boundary-desktop_${version}_darwin_${architecture}.zip`;
   return new Promise((resolve, reject) => {
     https.get(url, (response) => {
-      if (response.statusCode === 403)
+      if (response.statusCode === 200) {
+        resolve(url);
+      } else {
         reject({ message: 'Archive not available' });
-      if (response.statusCode === 200) resolve(url);
+      }
       response.on('error', (err) => reject(err));
     });
   });

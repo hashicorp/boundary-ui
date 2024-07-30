@@ -45,36 +45,38 @@
 
   <page.body class='search-filtering role-grant-scopes'>
     {{#if @model.role.grant_scope_ids}}
-      <Hds::SegmentedGroup as |S|>
-        <S.TextInput
-          @value={{this.search}}
-          @type='search'
-          placeholder={{t 'actions.search'}}
-          aria-label={{t 'actions.search'}}
-          {{on 'input' this.handleSearchInput}}
-        />
-        {{#if @model.role.scope.isGlobal}}
-          <S.Generic>
-            <Dropdown
-              name='parent-scope'
-              @toggleText={{t 'resources.role.scope.titles.parent_scope'}}
-              @itemOptions={{this.availableParentScopes}}
-              @checkedItems={{this.parentScopes}}
-              @applyFilter={{fn this.applyFilter 'parentScopes'}}
-              @isSearchable={{true}}
-            />
-          </S.Generic>
-          <S.Generic>
-            <Dropdown
-              name='type'
-              @toggleText={{t 'resources.role.scope.titles.resource_type'}}
-              @itemOptions={{this.scopeTypeOptions}}
-              @checkedItems={{this.types}}
-              @applyFilter={{fn this.applyFilter 'types'}}
-            />
-          </S.Generic>
-        {{/if}}
-      </Hds::SegmentedGroup>
+      {{#unless @model.role.scope.isProject}}
+        <Hds::SegmentedGroup as |S|>
+          <S.TextInput
+            @value={{this.search}}
+            @type='search'
+            placeholder={{t 'actions.search'}}
+            aria-label={{t 'actions.search'}}
+            {{on 'input' this.handleSearchInput}}
+          />
+          {{#if @model.role.scope.isGlobal}}
+            <S.Generic>
+              <Dropdown
+                name='parent-scope'
+                @toggleText={{t 'resources.role.scope.titles.parent_scope'}}
+                @itemOptions={{this.availableParentScopes}}
+                @checkedItems={{this.parentScopes}}
+                @applyFilter={{fn this.applyFilter 'parentScopes'}}
+                @isSearchable={{true}}
+              />
+            </S.Generic>
+            <S.Generic>
+              <Dropdown
+                name='type'
+                @toggleText={{t 'resources.role.scope.titles.resource_type'}}
+                @itemOptions={{this.scopeTypeOptions}}
+                @checkedItems={{this.types}}
+                @applyFilter={{fn this.applyFilter 'types'}}
+              />
+            </S.Generic>
+          {{/if}}
+        </Hds::SegmentedGroup>
+      {{/unless}}
 
       {{#if @model.role.scope.isGlobal}}
         <FilterTags @filters={{this.filters}} />
@@ -89,7 +91,7 @@
             (hash label=(t 'resources.role.scope.titles.parent_scope'))
             (hash label=(t 'resources.role.scope.titles.resource_type'))
           }}
-          @valin='middle'
+          @valign='middle'
         >
           <:body as |B|>
             <B.Tr data-test-grant-scope-row={{B.data.id}}>
@@ -178,12 +180,14 @@
             </B.Tr>
           </:body>
         </Hds::Table>
-        <Rose::Pagination
-          @model={{@model.role.id}}
-          @totalItems={{@model.totalItems}}
-          @currentPage={{this.page}}
-          @currentPageSize={{this.pageSize}}
-        />
+        {{#unless @model.role.scope.isProject}}
+          <Rose::Pagination
+            @model={{@model.role.id}}
+            @totalItems={{@model.totalItems}}
+            @currentPage={{this.page}}
+            @currentPageSize={{this.pageSize}}
+          />
+        {{/unless}}
       {{else}}
         <Hds::ApplicationState data-test-no-grant-scope-results as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />
