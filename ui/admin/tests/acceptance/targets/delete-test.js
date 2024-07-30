@@ -22,6 +22,10 @@ module('Acceptance | targets | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getTargetCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-targets-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-targets-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -69,8 +73,8 @@ module('Acceptance | targets | delete', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getTargetCount(), targetCount - 1);
   });
 
@@ -81,7 +85,8 @@ module('Acceptance | targets | delete', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
     assert.dom('.rose-notification-body').hasText('Deleted successfully.');
@@ -96,7 +101,8 @@ module('Acceptance | targets | delete', function (hooks) {
     await visit(urls.targets);
 
     await click(`[href="${urls.target}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-secondary');
 
     assert.strictEqual(getTargetCount(), targetCount);
@@ -130,7 +136,8 @@ module('Acceptance | targets | delete', function (hooks) {
     });
 
     await click(`[href="${urls.target}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.dom('.rose-notification-body').hasText('Oops.');
   });

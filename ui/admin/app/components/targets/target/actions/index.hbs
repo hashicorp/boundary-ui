@@ -2,44 +2,40 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
+<Hds::Dropdown data-test-manage-targets-dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
   {{#if (can 'addHostSources target' @model)}}
-    <dropdown.link @route='scopes.scope.targets.target.add-host-sources'>
-      {{t 'resources.target.actions.add-host-sources'}}
-    </dropdown.link>
+    <dd.Interactive
+      @route='scopes.scope.targets.target.add-host-sources'
+      @text={{t 'resources.target.actions.add-host-sources'}}
+    />
   {{/if}}
   {{#if (can 'addBrokeredCredentialSources target' @model)}}
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.targets.target.add-brokered-credential-sources'
+      @text={{t 'resources.target.actions.add-brokered-credential-sources'}}
       data-test-add-brokered-cred-sources-action
-    >
-      {{t 'resources.target.actions.add-brokered-credential-sources'}}
-    </dropdown.link>
+    />
   {{/if}}
-
   {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.targets.target.add-injected-application-credential-sources'
-      data-test-add-injected-cred-sources-action
-    >
-      {{t
+      @text={{t
         'resources.target.actions.add-injected-application-credential-sources'
       }}
-    </dropdown.link>
+      data-test-add-injected-cred-sources-action
+    />
   {{/if}}
+
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.target.actions.delete'}}
+      @color='critical'
       @disabled={{@model.canSave}}
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.target.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+
+</Hds::Dropdown>
