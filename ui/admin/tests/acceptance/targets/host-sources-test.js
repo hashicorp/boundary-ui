@@ -200,9 +200,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click(`[href="${urls.targetHostSources}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
-    assert
-      .dom('[data-test-manage-targets-dropdown] ul li a')
-      .doesNotIncludeText('Add Host Sources');
+    assert.dom(ADD_HOSTSOURCE_SELECTOR).doesNotIncludeText('Add Host Sources');
   });
 
   test('select and cancel host sets to add', async function (assert) {
