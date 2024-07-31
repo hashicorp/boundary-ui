@@ -677,16 +677,11 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .content {
     padding-left: 2.2rem;
-
-    .hds-form-field--layout-vertical {
-      margin-top: 2rem;
-    }
   }
 
   .app-information {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: auto auto auto;
+    display: flex;
+    justify-content: space-between;
     margin: 1rem 0;
   }
 }

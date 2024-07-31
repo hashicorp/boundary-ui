@@ -17,13 +17,12 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     const { versionNumber: cliVersion } =
       await this.ipc.invoke('getCliVersion');
     formattedCliVersion = `v${cliVersion}`;
-
+    console.log('formattedCliVersion', formattedCliVersion);
     const { desktopVersion } = await this.ipc.invoke('getDesktopVersion');
     formattedDesktopVersion = `v${desktopVersion}`;
     try {
       cacheDaemonStatus = await this.ipc.invoke('cacheDaemonStatus');
     } catch (e) {
-      __electronLog?.warn('cache daemon is not running', e.message);
       return {
         formattedCliVersion,
         formattedCacheVersion,
