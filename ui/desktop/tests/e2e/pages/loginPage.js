@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
-
 class LoginPage {
   constructor(page) {
     this.page = page;

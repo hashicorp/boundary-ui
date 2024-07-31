@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef, ember/avoid-leaking-state-in-ember-objects */
+/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
 const { test } = require('@playwright/test');
 const path = require('path');
 const fs = require('fs');

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test } = require('./fixtures/baseTest');
 const { expect } = require('@playwright/test');
 

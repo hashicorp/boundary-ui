@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test } = require('./fixtures/baseTest');
 const LoginPage = require('./pages/loginPage');
 const { expect } = require('@playwright/test');
 
-/* eslint-disable no-undef */
 test.describe('user/password authentication tests', async () => {
   test('Authenticates and signs out', async ({
     electronPage,

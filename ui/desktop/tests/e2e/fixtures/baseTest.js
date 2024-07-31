@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { mergeTests } = require('@playwright/test');
 const { electronTest } = require('../fixtures/electronTest');
 const { authenticateTest } = require('./authenticateTest');

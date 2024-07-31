@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef, no-empty-pattern */
-
 const { electronTest } = require('../fixtures/electronTest');
 const LoginPage = require('../pages/loginPage');
 
