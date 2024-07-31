@@ -26,9 +26,7 @@ Router.map(function () {
         this.route('sessions', function () {
           this.route('session', { path: ':session_id' }, function () {});
         });
-        this.route('settings', function () {
-          this.route('setting', function () {});
-        });
+        this.route('settings', function () {});
       });
     });
   });

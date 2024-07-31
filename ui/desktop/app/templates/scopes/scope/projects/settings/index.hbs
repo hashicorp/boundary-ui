@@ -3,4 +3,54 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{outlet}}
+<SettingsCard @header={{t 'titles.application'}} @icon='boundary'>
+  <:body>
+    <div class='app-information'>
+      <div>
+        <Hds::Text::Display>
+          {{t 'titles.client'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{@model.formattedDesktopVersion}}
+        </Hds::Text::Body>
+      </div>
+      <div>
+        <Hds::Text::Display>
+          {{t 'titles.cli'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{@model.formattedCliVersion}}
+        </Hds::Text::Body>
+      </div>
+      <div>
+        <Hds::Text::Display>
+          {{t 'titles.cache-daemon'}}
+        </Hds::Text::Display>
+        <Hds::Text::Body @tag='p' @weight='medium'>
+          {{#if @model.formattedCacheVersion}}
+            {{@model.formattedCacheVersion}}
+            <Hds::Badge
+              @text={{t 'states.running'}}
+              @icon='running'
+              @color='success'
+            />
+          {{else}}
+            <Hds::Badge
+              @text={{t 'states.not-running'}}
+              @icon='stop-circle'
+              @color='neutral'
+            />
+          {{/if}}
+        </Hds::Text::Body>
+      </div>
+    </div>
+    {{#if @model.error}}
+      <Hds::Alert @type='inline' @color='warning' as |A|>
+        <A.Title>{{t 'errors.settings-cache.title'}}</A.Title>
+        {{#if @model.error.message}}
+          <A.Description>{{@model.error.message}}</A.Description>
+        {{/if}}
+      </Hds::Alert>
+    {{/if}}
+  </:body>
+</SettingsCard>

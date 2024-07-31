@@ -27,3 +27,5 @@ onboarding-failed:
 required-field: This is a required field.
 client-agent-failed:
   sessions: Unable to retrieve sessions from the client agent.
+settings-cache:
+  title: There is a problem with the cache daemon

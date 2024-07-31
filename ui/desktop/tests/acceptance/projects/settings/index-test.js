@@ -9,10 +9,12 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const instances = {
     scopes: {
@@ -70,10 +72,21 @@ module('Acceptance | projects | settings | index', function (hooks) {
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
+
     urls.settings = `${urls.projects}/settings`;
 
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);
+
+    this.ipcStub
+      .withArgs('getDesktopVersion')
+      .returns({ desktopVersion: '0.1.0' });
+    this.ipcStub
+      .withArgs('getCliVersion')
+      .returns({ versionNumber: 'Boundary CLI v0.1.0' });
+    this.ipcStub
+      .withArgs('cacheDaemonStatus')
+      .returns({ version: 'Boundary CLI v0.1.0' });
   });
 
   test('can navigate to the settings page', async function (assert) {
