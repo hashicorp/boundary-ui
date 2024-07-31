@@ -190,6 +190,15 @@ export default function initializeMockIPC(server, config) {
     isClientAgentRunning() {
       return false;
     }
+    cacheDaemonStatus() {
+      return { version: 'Boundary v1.0.0' };
+    }
+    getCliVersion() {
+      return { versionNumber: '1.0.0' };
+    }
+    getDesktopVersion() {
+      return { desktopVersion: '1.0.0' };
+    }
   }
 
   /**
