@@ -5,11 +5,10 @@
 
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
+
 const { authenticatedState } = require('../helpers/general');
-const {
-  attachStoragePolicy,
-  createStoragePolicy,
-} = require('../helpers/boundary-ui');
+const OrgsPage = require('../pages/orgs');
+const StoragePoliciesPage = require('../pages/storage-policies');
 
 test.use({ storageState: authenticatedState });
 
@@ -17,8 +16,10 @@ test('Global Settings @ent @aws @docker', async ({ page }) => {
   await page.goto('/');
 
   // Create a storage policy
-  const policyName = await createStoragePolicy(page);
-  await attachStoragePolicy(page, policyName);
+  const storagePoliciesPage = new StoragePoliciesPage(page);
+  const policyName = await storagePoliciesPage.createStoragePolicy();
+  const orgsPage = new OrgsPage(page);
+  await orgsPage.attachStoragePolicy(policyName);
 
   // Detach storage policy
   await page.getByRole('button', { name: 'Manage', exact: true }).click();

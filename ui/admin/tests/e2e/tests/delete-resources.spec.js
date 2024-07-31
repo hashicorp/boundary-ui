@@ -5,6 +5,7 @@
 
 /* eslint-disable no-undef */
 const { test } = require('@playwright/test');
+const { execSync } = require('child_process');
 
 const { authenticatedState, checkEnv } = require('../helpers/general');
 const {
@@ -29,13 +30,9 @@ const {
   createUsernamePasswordCredentialCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-
-const {
-  deleteResource,
-  removeAuthMethodAsPrimary,
-} = require('../helpers/boundary-ui');
+const { deleteResource } = require('../helpers/boundary-ui');
 const { checkVaultCli } = require('../helpers/vault-cli');
-const { execSync } = require('child_process');
+const AuthMethodsPage = require('../pages/auth-methods');
 
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
@@ -178,7 +175,8 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
 
     // Delete auth method
     await page.goto(`/scopes/${orgId}/auth-methods/${authMethodId}`);
-    await removeAuthMethodAsPrimary(page);
+    const authMethodsPage = new AuthMethodsPage(page);
+    await authMethodsPage.removeAuthMethodAsPrimary();
     await deleteResource(page);
 
     // Delete worker

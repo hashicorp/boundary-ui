@@ -6,20 +6,16 @@
 /* eslint-disable no-undef */
 const { test } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const { authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  createOrg,
-  createGroup,
-  addMemberToGroup,
-  createRole,
-  addPrincipalToRole,
-  addGrantsToGroup,
-} = require('../helpers/boundary-ui');
+const GroupsPage = require('../pages/groups');
+const OrgsPage = require('../pages/orgs');
+const RolesPage = require('../pages/roles');
 
 test.use({ storageState: authenticatedState });
 
@@ -33,12 +29,15 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
   await page.goto('/');
   let orgName;
   try {
-    orgName = await createOrg(page);
-    const groupName = await createGroup(page);
-    await addMemberToGroup(page, 'admin');
-    await createRole(page);
-    await addPrincipalToRole(page, groupName);
-    await addGrantsToGroup(page, 'ids=*;type=*;actions=read,list');
+    const orgsPage = new OrgsPage(page);
+    orgName = await orgsPage.createOrg();
+    const groupsPage = new GroupsPage(page);
+    const groupName = await groupsPage.createGroup();
+    await groupsPage.addMemberToGroup('admin');
+    const rolesPage = new RolesPage(page);
+    await rolesPage.createRole();
+    await rolesPage.addPrincipalToRole(groupName);
+    await rolesPage.addGrantsToRole('ids=*;type=*;actions=read,list');
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,

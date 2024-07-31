@@ -8,6 +8,7 @@ const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -15,15 +16,10 @@ const {
   deleteOrgCli,
   getSessionCli,
 } = require('../helpers/boundary-cli');
-const {
-  addBrokeredCredentialsToTarget,
-  createOrg,
-  createProject,
-  createTargetWithAddress,
-  createStaticCredentialStore,
-  createStaticCredentialKeyPair,
-  createStaticCredentialUsernamePassword,
-} = require('../helpers/boundary-ui');
+const CredentialStoresPage = require('../pages/credential-stores');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -45,26 +41,34 @@ let targetName;
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 
-  orgName = await createOrg(page);
-  projectName = await createProject(page);
-  targetName = await createTargetWithAddress(
-    page,
+  const orgsPage = new OrgsPage(page);
+  orgName = await orgsPage.createOrg();
+  const projectsPage = new ProjectsPage(page);
+  projectName = await projectsPage.createProject();
+  const targetsPage = new TargetsPage(page);
+  targetName = await targetsPage.createTargetWithAddress(
     process.env.E2E_TARGET_ADDRESS,
     process.env.E2E_TARGET_PORT,
   );
-  await createStaticCredentialStore(page);
+  const credentialStoresPage = new CredentialStoresPage(page);
+  await credentialStoresPage.createStaticCredentialStore();
 });
 
 test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
 }) => {
   try {
-    const credentialName = await createStaticCredentialKeyPair(
-      page,
-      process.env.E2E_SSH_USER,
-      process.env.E2E_SSH_KEY_PATH,
+    const credentialStoresPage = new CredentialStoresPage(page);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        process.env.E2E_SSH_USER,
+        process.env.E2E_SSH_KEY_PATH,
+      );
+    const targetsPage = new TargetsPage(page);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
     );
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -106,12 +110,17 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
 }) => {
   try {
     const testPassword = 'password';
-    const credentialName = await createStaticCredentialUsernamePassword(
-      page,
-      process.env.E2E_SSH_USER,
-      testPassword,
+    const credentialStoresPage = new CredentialStoresPage(page);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialUsernamePassword(
+        process.env.E2E_SSH_USER,
+        testPassword,
+      );
+    const targetsPage = new TargetsPage(page);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
     );
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName);
 
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -170,7 +179,11 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
         .getByText(credentialName),
     ).toBeVisible();
 
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName);
+    const targetsPage = new TargetsPage(page);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
@@ -205,19 +218,27 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
 
 test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
   try {
-    const credentialName = await createStaticCredentialKeyPair(
-      page,
-      process.env.E2E_SSH_USER,
-      process.env.E2E_SSH_KEY_PATH,
-    );
-    const credentialName2 = await createStaticCredentialUsernamePassword(
-      page,
-      process.env.E2E_SSH_USER,
-      'testPassword',
-    );
+    const credentialStoresPage = new CredentialStoresPage(page);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        process.env.E2E_SSH_USER,
+        process.env.E2E_SSH_KEY_PATH,
+      );
+    const credentialName2 =
+      await credentialStoresPage.createStaticCredentialUsernamePassword(
+        process.env.E2E_SSH_USER,
+        'testPassword',
+      );
 
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName);
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName2);
+    const targetsPage = new TargetsPage(page);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName2,
+    );
 
     // Remove the host source from the target
     await page
