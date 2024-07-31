@@ -662,3 +662,26 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   gap: 0.5rem;
   width: inherit;
 }
+
+// Settings
+.settings-card {
+  .hds-card__container {
+    padding: 1rem;
+  }
+
+  .header-and-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .content {
+    padding-left: 2.2rem;
+  }
+
+  .app-information {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 2rem 1rem 0;
+  }
+}
