@@ -1,0 +1,41 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Hds::Card::Container @level='mid' @hasBorder={{true}}>
+
+  <div class='header-and-icon'>
+    <Hds::IconTile @icon={{@icon}} @size='small' />
+    <Hds::Text::Display @tag='h4'>
+      {{@header}}
+    </Hds::Text::Display>
+
+    {{#if (has-block 'action')}}
+      <div class='action'>
+        {{! this will contain buttons }}
+        {{yield to='action'}}
+      </div>
+    {{/if}}
+
+    {{#if @state}}
+      <div class='state'>
+        <Hds::Badge @text={{@state}} @icon='loading' />
+      </div>
+    {{/if}}
+  </div>
+
+  {{#if @description}}
+    <Hds::Text::Body @tag='p'>
+      {{@description}}
+    </Hds::Text::Body>
+  {{/if}}
+
+  {{! this yields the body from consumer }}
+  {{#if (has-block 'body')}}
+    <div class='content'>
+      {{yield to='body'}}
+    </div>
+  {{/if}}
+
+</Hds::Card::Container>
