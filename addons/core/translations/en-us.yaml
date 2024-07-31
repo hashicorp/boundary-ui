@@ -45,7 +45,6 @@ titles:
   year: '{numberOfYears, plural, =1 {# year} other {# years}}'
   days: '{days, plural, =1 {# day} other {# days}}'
   application: Application
-  color-theme: Color Theme
   cli: CLI
   cache-daemon: Cache Daemon
   client: Client
