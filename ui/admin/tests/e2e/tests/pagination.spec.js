@@ -145,6 +145,34 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
     await expect(
       page.getByRole('link', { name: targets[targets.length - 2].name }),
     ).toBeVisible();
+
+    // Use the "Items per page" options to show 50 items per page.
+    await page
+      .getByRole('combobox', { name: 'Items per page' })
+      .selectOption('50');
+    await expect(
+      page.getByRole('link', { name: targets[0].name }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: targets[targets.length - 1].name }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: targets[targets.length - 2].name }),
+    ).toBeVisible();
+
+    // Use the "Items per page" options to show 10 items per page.
+    await page
+      .getByRole('combobox', { name: 'Items per page' })
+      .selectOption('10');
+    await expect(
+      page.getByRole('link', { name: targets[0].name }),
+    ).toBeHidden();
+    await expect(
+      page.getByRole('link', { name: targets[targets.length - 2].name }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('link', { name: targets[targets.length - 1].name }),
+    ).toBeVisible();
   } finally {
     if (org.id) {
       org = await request.delete(`/v1/scopes/${org.id}`);
