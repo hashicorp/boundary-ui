@@ -4,10 +4,5 @@
  */
 
 import Controller from '@ember/controller';
-import { inject as service } from '@ember/service';
 
-export default class ScopesScopeProjectsSettingsIndexController extends Controller {
-  @service session;
-  @service ipc;
-  // Methods
-}
+export default class ScopesScopeProjectsSettingsIndexController extends Controller {}
