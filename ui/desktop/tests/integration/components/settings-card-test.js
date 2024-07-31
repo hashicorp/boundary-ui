@@ -14,7 +14,10 @@ module('Integration | Component | settings card', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<SettingsCard 
         @header='This is a heading test'
-        @icon='boundary'/>`);
+        @icon='boundary'>
+        <:body></:body>
+        <:action></:action>
+        </SettingsCard>`);
     assert.ok(find('.hds-card__container'));
   });
 
@@ -23,6 +26,8 @@ module('Integration | Component | settings card', function (hooks) {
       <SettingsCard
         @header='This is a heading test'
         @icon='boundary'>
+        <:body></:body>
+        <:action></:action>
       </SettingsCard>
     `);
 

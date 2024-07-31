@@ -11,10 +11,10 @@
       {{@header}}
     </Hds::Text::Display>
 
-    {{#if @action}}
+    {{#if (has-block 'action')}}
       <div class='action'>
         {{! this will contain buttons }}
-        {{@action}}
+        {{yield to='action'}}
       </div>
     {{/if}}
 
@@ -24,6 +24,7 @@
       </div>
     {{/if}}
   </div>
+
   {{#if @description}}
     <Hds::Text::Body @tag='p'>
       {{@description}}
@@ -31,8 +32,10 @@
   {{/if}}
 
   {{! this yields the body from consumer }}
-  <div class='content'>
-    {{yield}}
-  </div>
+  {{#if (has-block 'body')}}
+    <div class='content'>
+      {{yield to='body'}}
+    </div>
+  {{/if}}
 
 </Hds::Card::Container>
