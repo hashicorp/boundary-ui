@@ -126,6 +126,7 @@ exports.electronTest = test.extend({
   },
   electronPage: async ({ electronApp }, use) => {
     const page = await electronApp.firstWindow();
+    await page.evaluate(() => localStorage.clear());
     await page.context().tracing.start({ screenshots: true, snapshots: true });
 
     await use(page);

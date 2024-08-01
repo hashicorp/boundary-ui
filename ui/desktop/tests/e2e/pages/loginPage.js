@@ -9,7 +9,6 @@ class LoginPage {
   }
 
   async setClusterUrl(clusterUrl) {
-    await this.page.evaluate(() => localStorage.clear());
     await this.page.getByLabel('Cluster URL').fill(clusterUrl);
     await this.page.getByRole('button', { name: 'Submit' }).click();
   }
