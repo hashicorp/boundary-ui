@@ -80,12 +80,19 @@ module(
     test('setGrantScopes action adds scopes to specified model', async function (assert) {
       await visit(urls.manageOrgProjects);
       const role = await store.findRecord('role', instances.role.id);
-
+      const grantScopeIDs = [
+        instances.scopes.org.id,
+        instances.scopes.project.id,
+      ];
       assert.deepEqual(role.grant_scope_ids, []);
 
-      await controller.setGrantScopes(role, [instances.scopes.project.id]);
+      await controller.setGrantScopes(
+        role,
+        [instances.scopes.project.id],
+        grantScopeIDs,
+      );
 
-      assert.deepEqual(role.grant_scope_ids, [instances.scopes.project.id]);
+      assert.deepEqual(role.grant_scope_ids, grantScopeIDs);
 
       await waitUntil(() => currentURL() === urls.manageCustomScopes);
 
