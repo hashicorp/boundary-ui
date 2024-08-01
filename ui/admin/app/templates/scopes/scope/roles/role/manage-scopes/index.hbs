@@ -21,8 +21,9 @@
     <Form::Role::ManageScopes
       @model={{@model}}
       @showCheckIcon={{this.showCheckIcon}}
+      @selectedItems={{this.selectedItems}}
       @submit={{fn this.setGrantScopes @model}}
-      @cancel={{this.cancel}}
+      @cancel={{fn this.cancel @model.grant_scope_ids}}
     />
   </page.body>
 

@@ -9,8 +9,6 @@ import { action } from '@ember/object';
 export default class FormRoleManageOrgProjectsIndexComponent extends Component {
   // =attributes
 
-  // @tracked selectedItems = [...this.args.model.selectedProjectIDs];
-
   get allGrantScopes() {
     return [
       ...this.args.model.role.grantScopeKeywords,
@@ -30,13 +28,13 @@ export default class FormRoleManageOrgProjectsIndexComponent extends Component {
   selectionChange({ selectableRowsStates }) {
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
-      const includesId = this.args.selectedItems.includes(key);
+      // If index is -1 then key does not exist in the array.
+      const index = this.args.selectedItems.indexOf(key);
       if (isSelected) {
-        if (!includesId) {
+        if (index === -1) {
           this.args.selectedItems.push(key);
         }
-      } else if (includesId) {
-        const index = this.args.selectedItems.indexOf(key);
+      } else if (index !== -1) {
         this.args.selectedItems.splice(index, 1);
       }
     });

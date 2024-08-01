@@ -5,7 +5,6 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
@@ -21,8 +20,6 @@ export default class FormRoleManageScopesIndexComponent extends Component {
     keyDescendants: GRANT_SCOPE_DESCENDANTS,
   };
 
-  @tracked selectedItems = [...this.args.model.grant_scope_ids];
-
   /**
    * Returns true if role is global level and either
    * "children" or "descendants" is toggled on.
@@ -31,8 +28,8 @@ export default class FormRoleManageScopesIndexComponent extends Component {
   get showAlert() {
     return (
       this.args.model.scope.isGlobal &&
-      (this.selectedItems.includes(GRANT_SCOPE_CHILDREN) ||
-        this.selectedItems.includes(GRANT_SCOPE_DESCENDANTS))
+      (this.args.selectedItems.includes(GRANT_SCOPE_CHILDREN) ||
+        this.args.selectedItems.includes(GRANT_SCOPE_DESCENDANTS))
     );
   }
 
@@ -46,10 +43,11 @@ export default class FormRoleManageScopesIndexComponent extends Component {
   toggleField(event) {
     const { checked, value } = event.target;
     const removeValue = (value) => {
-      this.selectedItems = this.selectedItems.filter((item) => item !== value);
+      const index = this.args.selectedItems.indexOf(value);
+      if (index !== -1) this.args.selectedItems.splice(index, 1);
     };
     if (checked) {
-      this.selectedItems = [...this.selectedItems, value];
+      this.args.selectedItems.push(value);
       if (value === GRANT_SCOPE_CHILDREN) {
         removeValue(GRANT_SCOPE_DESCENDANTS);
       }

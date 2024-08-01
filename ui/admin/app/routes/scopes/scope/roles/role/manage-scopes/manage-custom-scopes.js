@@ -135,7 +135,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   }
 
   /**
-   * Sets selectedItems to correct value only when entering route for the first time and on page refresh.
+   * Sets selectedItems to initial value only when entering route for the first time and on page refresh.
    * @param {Controller} controller
    * @param {object} model
    * @param {object} transition
@@ -147,17 +147,6 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         'selectedItems',
         new TrackedArray(model.role.grantScopeOrgIDs),
       );
-    }
-  }
-
-  /**
-   * Sets selectedItems to empty array when exiting this route.
-   * @param {Controller} controller
-   * @param {boolean} isExiting
-   */
-  resetController(controller, isExiting) {
-    if (isExiting) {
-      controller.set('selectedItems', new TrackedArray([]));
     }
   }
 

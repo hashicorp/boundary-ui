@@ -27,12 +27,13 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
   selectionChange({ selectableRowsStates }) {
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
-      const includesId = this.args.selectedItems.includes(key);
+      // If index is equal to -1 then key does not exist in the array.
+      const index = this.args.selectedItems.indexOf(key);
       if (isSelected) {
-        if (!includesId) {
+        if (index === -1) {
           this.args.selectedItems.push(key);
         }
-      } else if (includesId) {
+      } else if (index !== -1) {
         const index = this.args.selectedItems.indexOf(key);
         this.args.selectedItems.splice(index, 1);
       }

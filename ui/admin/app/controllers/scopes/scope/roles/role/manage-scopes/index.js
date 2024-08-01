@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesIndexController extends Controller {
   // =services
@@ -17,6 +18,7 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
   // =attributes
 
   showCheckIcon = false;
+  selectedItems;
 
   // =actions
 
@@ -31,14 +33,17 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
   @notifySuccess('resources.role.scope.messages.manage-scopes.success')
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
+    this.selectedItems = new TrackedArray(role.grant_scope_ids);
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 
   /**
    * Redirect to role scopes as if nothing ever happened.
+   * @param {[string]} grantScopeIDs
    */
   @action
-  cancel() {
+  cancel(grantScopeIDs) {
+    this.selectedItems = new TrackedArray(grantScopeIDs);
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 }

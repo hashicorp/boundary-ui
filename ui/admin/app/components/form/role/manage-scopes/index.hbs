@@ -5,7 +5,7 @@
 
 <Rose::Form
   class='full-width role-manage-scopes-form'
-  @onSubmit={{fn @submit this.selectedItems}}
+  @onSubmit={{fn @submit @selectedItems}}
   @cancel={{@cancel}}
   @disabled={{@model.isSaving}}
   as |form|
@@ -14,7 +14,7 @@
   <Hds::Form::Toggle::Field
     @value={{this.keywords.keyThis}}
     name={{this.keywords.keyThis}}
-    checked={{includes this.keywords.keyThis this.selectedItems}}
+    checked={{includes this.keywords.keyThis @selectedItems}}
     disabled={{form.disabled}}
     {{on 'change' this.toggleField}}
     as |F|
@@ -31,7 +31,7 @@
   <Hds::Form::Toggle::Field
     @value={{this.keywords.keyChildren}}
     name={{this.keywords.keyChildren}}
-    checked={{includes this.keywords.keyChildren this.selectedItems}}
+    checked={{includes this.keywords.keyChildren @selectedItems}}
     disabled={{form.disabled}}
     {{on 'change' this.toggleField}}
     as |F|
@@ -48,7 +48,7 @@
     <Hds::Form::Toggle::Field
       @value={{this.keywords.keyDescendants}}
       name={{this.keywords.keyDescendants}}
-      checked={{includes this.keywords.keyDescendants this.selectedItems}}
+      checked={{includes this.keywords.keyDescendants @selectedItems}}
       disabled={{form.disabled}}
       {{on 'change' this.toggleField}}
       as |F|
