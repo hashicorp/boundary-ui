@@ -10,6 +10,7 @@ import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController extends Controller {
   @controller('scopes/scope/roles/role/manage-scopes/index') manageScopes;
@@ -25,6 +26,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
   @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
+  selectedItems;
 
   // =actions
 
@@ -49,9 +51,10 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.role.scope.messages.manage-org-projects.success')
-  async setGrantScopes(role, grantScopeIDs) {
+  async setGrantScopes(role, selectedProjectIDs, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
     this.manageScopes.showCheckIcon = true;
+    this.selectedItems = new TrackedArray(selectedProjectIDs);
     if (role.scope.isGlobal) {
       this.router.replaceWith(
         'scopes.scope.roles.role.manage-scopes.manage-custom-scopes',
@@ -65,7 +68,8 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
    * Redirect to previous as if nothing ever happened.
    */
   @action
-  cancel(role) {
+  cancel(role, selectedProjectIDs) {
+    this.selectedItems = new TrackedArray(selectedProjectIDs);
     if (role.scope.isGlobal) {
       this.router.replaceWith(
         'scopes.scope.roles.role.manage-scopes.manage-custom-scopes',

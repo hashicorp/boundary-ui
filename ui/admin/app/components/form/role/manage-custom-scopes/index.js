@@ -5,18 +5,15 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 export default class FormRoleManageCustomScopesIndexComponent extends Component {
   // =attributes
-
-  @tracked selectedItems = [...this.args.model.role.grantScopeOrgIDs];
 
   get allGrantScopes() {
     return [
       ...this.args.model.role.grantScopeKeywords,
       ...this.args.model.role.grantScopeProjectIDs,
-      ...this.selectedItems,
+      ...this.args.selectedItems,
     ];
   }
 
@@ -30,13 +27,14 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
   selectionChange({ selectableRowsStates }) {
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
-      const includesId = this.selectedItems.includes(key);
+      const includesId = this.args.selectedItems.includes(key);
       if (isSelected) {
-        if (!includesId) this.selectedItems = [...this.selectedItems, key];
+        if (!includesId) {
+          this.args.selectedItems.push(key);
+        }
       } else if (includesId) {
-          this.selectedItems = this.selectedItems.filter(
-            (item) => item !== key,
-          );
+        const index = this.args.selectedItems.indexOf(key);
+        this.args.selectedItems.splice(index, 1);
       }
     });
   }

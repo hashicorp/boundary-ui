@@ -10,6 +10,7 @@ import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesController extends Controller {
   @controller('scopes/scope/roles/role/manage-scopes/index') manageScopes;
@@ -25,6 +26,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
+  selectedItems;
 
   // =actions
 
@@ -52,14 +54,17 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   async setGrantScopes(role, grantScopeIDs) {
     await role.setGrantScopes(grantScopeIDs);
     this.manageScopes.showCheckIcon = true;
-    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
+    this.selectedItems = new TrackedArray(role.grantScopeOrgIDs);
+    this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 
   /**
    * Redirect to manage scopes as if nothing ever happened.
+   * @param {[string]} grantScopeOrgIDs
    */
   @action
-  async cancel() {
-    await this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
+  cancel(grantScopeOrgIDs) {
+    this.selectedItems = new TrackedArray(grantScopeOrgIDs);
+    this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 }

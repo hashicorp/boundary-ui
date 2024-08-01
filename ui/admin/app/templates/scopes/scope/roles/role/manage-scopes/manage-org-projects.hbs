@@ -47,9 +47,10 @@
       @search={{this.search}}
       @page={{this.page}}
       @pageSize={{this.pageSize}}
+      @selectedItems={{this.selectedItems}}
       @handleSearchInput={{this.handleSearchInput}}
-      @submit={{fn this.setGrantScopes @model.role}}
-      @cancel={{fn this.cancel @model.role}}
+      @submit={{fn this.setGrantScopes @model.role @model.selectedProjectIDs}}
+      @cancel={{fn this.cancel @model.role @model.selectedProjectIDs}}
     />
   </page.body>
 

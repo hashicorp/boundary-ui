@@ -4,7 +4,10 @@
  */
 
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import isEqual from 'lodash/isEqual';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute extends Route {
   // =attributes
@@ -25,6 +28,8 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   // =services
 
   @service store;
+  @service intl;
+  @service confirm;
 
   // =methods
 
@@ -125,5 +130,62 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       }, []);
     }
     return { selectedProjectIDs, remainingProjectIDs };
+  }
+
+  /**
+   * Sets selectedItems to correct value only when entering route for the first time and on page refresh.
+   * @param {Controller} controller
+   * @param {object} model
+   * @param {object} transition
+   */
+  setupController(controller, model, transition) {
+    const { from, to } = transition;
+    if (from?.name !== to?.name) {
+      controller.set(
+        'selectedItems',
+        new TrackedArray(model.selectedProjectIDs),
+      );
+    }
+  }
+
+  /**
+   * Sets selectedItems to empty array when exiting this route.
+   * @param {Controller} controller
+   * @param {boolean} isExiting
+   */
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.set('selectedItems', new TrackedArray([]));
+    }
+  }
+
+  // =actions
+
+  /**
+   * Triggers confirm pop-up only when user has made changes and is trying to navigate away from current route.
+   * @param {object} transition
+   */
+  @action
+  async willTransition(transition) {
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const controller = this.controllerFor(this.routeName);
+    const { selectedProjectIDs } = this.modelFor(this.routeName);
+    const { from, to } = transition;
+    if (
+      !isEqual(controller.get('selectedItems'), selectedProjectIDs) &&
+      from?.name !== to?.name
+    ) {
+      transition.abort();
+      try {
+        await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
+          title: 'titles.abandon-confirm',
+          confirm: 'actions.discard',
+        });
+        controller.set('selectedItems', new TrackedArray(selectedProjectIDs));
+        transition.retry();
+      } catch (e) {
+        // if user denies, do nothing
+      }
+    }
   }
 }

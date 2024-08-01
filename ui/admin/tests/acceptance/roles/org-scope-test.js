@@ -52,6 +52,11 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const BUTTON_ICON_SELECTOR =
     '.hds-button__icon [data-test-icon="check-circle"]';
   const PAGINATION_SELECTOR = '.hds-pagination';
+  const DISCARD_CHANGES_DIALOG = '.rose-dialog';
+  const DISCARD_CHANGES_DISCARD_BUTTON =
+    '.rose-dialog-footer .rose-button-primary';
+  const DISCARD_CHANGES_CANCEL_BUTTON =
+    '.rose-dialog-footer .rose-button-secondary';
 
   const instances = {
     scopes: {
@@ -392,6 +397,46 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.dom(TOAST_SELECTOR).isVisible();
+  });
+
+  test('user is prompted to confirm exit when there are unsaved changes on manage org projects page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [] });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+
+    await click(`[href="${urls.roles}"]`);
+
+    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+
+    await click(DISCARD_CHANGES_DISCARD_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.roles);
+  });
+
+  test('user user can cancel transition when there are unsaved changes on manage org projects page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [] });
+    const confirmService = this.owner.lookup('service:confirm');
+    confirmService.enabled = true;
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(
+      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+    );
+
+    await click(`[href="${urls.roles}"]`);
+
+    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+
+    await click(DISCARD_CHANGES_CANCEL_BUTTON);
+
+    assert.strictEqual(currentURL(), urls.manageOrgProjects);
   });
 
   test('user can search for a specific project scope by id on manage org projects page', async function (assert) {
