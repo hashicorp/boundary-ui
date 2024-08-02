@@ -76,7 +76,7 @@
 
 <SettingsCard @header={{t 'resources.user.title'}} @icon='user'>
   <:state>
-    {{#if this.userInfo}}
+    {{#if this.isAuthenticated}}
       <Hds::Badge
         @text={{t 'states.autheticated'}}
         @icon='check'
@@ -85,7 +85,6 @@
     {{else}}
       <Hds::Badge @text={{t 'states.unauthenticated'}} @color='neutral' />
     {{/if}}
-
   </:state>
   <:body>
     <div class='app-information'>
@@ -107,4 +106,15 @@
       </div>
     </div>
   </:body>
+
+  <:action>
+    <Hds::Button
+      data-test-signout-button
+      @text={{t 'actions.deauthenticate'}}
+      @color='critical'
+      @icon='sign-out'
+      @size='small'
+      {{on 'click' this.invalidateSession}}
+    />
+  </:action>
 </SettingsCard>

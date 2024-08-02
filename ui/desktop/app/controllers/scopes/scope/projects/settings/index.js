@@ -42,7 +42,6 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
  * @type {string}
  */
   get userInfo() {
-    console.log(this.session);
     const {
       data: {
         authenticated: { username },
@@ -56,9 +55,7 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
    * @type {boolean}
    */
   get isAuthenticated() {
-    const {
-      data: { isAuthenticated },
-    } = this.session;
+    const { isAuthenticated } = this.session;
     return isAuthenticated;
   }
  
@@ -84,5 +81,13 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
   @action
   toggleTheme({ target: { value: theme } }) {
     return this.application.toggleTheme(theme);
+  }
+
+  /**
+   * Delegates invalidation to the session service.
+   */
+  @action
+  invalidateSession() {
+    this.session.invalidate();
   }
 }

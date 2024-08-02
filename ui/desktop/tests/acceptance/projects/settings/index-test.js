@@ -22,6 +22,8 @@ import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 const USERNAME_SELECTOR = '[data-test-username]';
 const AUTH_METHOD_SELECTOR = '[data-test-auth-method]';
+const SIGNOUT_SELECTOR = '[data-test-signout-button]';
+
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -147,5 +149,15 @@ module('Acceptance | projects | settings | index', function (hooks) {
     await visit(urls.settings);
     assert.ok(currentSession().isAuthenticated);
     assert.dom(AUTH_METHOD_SELECTOR).hasText('test');
+  });
+
+  test('clicking signout button logs out the user', async function (assert) {
+    authenticateSession({ username: 'testuser' });
+    assert.expect(2);
+    await visit(urls.settings);
+    console.log('currentSession', currentSession());
+    assert.ok(currentSession().isAuthenticated);
+    await click(SIGNOUT_SELECTOR);
+    assert.notOk(currentSession().isAuthenticated);
   });
 });

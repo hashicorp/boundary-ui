@@ -11,6 +11,12 @@
       {{@header}}
     </Hds::Text::Display>
 
+    {{#if (has-block 'state')}}
+      <div class='state'>
+        {{yield to='state'}}
+      </div>
+    {{/if}}
+
     {{#if (has-block 'action')}}
       <div class='action'>
         {{! this will contain buttons }}
@@ -18,11 +24,6 @@
       </div>
     {{/if}}
 
-    {{#if (has-block 'state')}}
-      <div class='state'>
-        {{yield to='state'}}
-      </div>
-    {{/if}}
   </div>
 
   {{#if @description}}
