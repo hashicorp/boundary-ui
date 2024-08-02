@@ -12,9 +12,7 @@
     </Hds::Text::Display>
 
     {{#if (has-block 'state')}}
-      <div class='state'>
-        {{yield to='state'}}
-      </div>
+      {{yield to='state'}}
     {{/if}}
 
     {{#if (has-block 'action')}}
