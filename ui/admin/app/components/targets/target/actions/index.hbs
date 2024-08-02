@@ -33,7 +33,6 @@
     <dd.Interactive
       @text={{t 'resources.target.actions.delete'}}
       @color='critical'
-      @disabled={{@model.canSave}}
       {{on 'click' (fn @delete @model)}}
     />
   {{/if}}
