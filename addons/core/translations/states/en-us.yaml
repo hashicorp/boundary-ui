@@ -17,6 +17,8 @@ failed: Failed
 installed: Installed
 not-running: Not Running
 running: Running
+autheticated: Authenticated
+unauthenticated: Unauthenticated
 loading:
   title: Loading all items...
   description: All of your {resource} are still loading. Please wait while we finish loading everything on screen.

@@ -18,9 +18,9 @@
       </div>
     {{/if}}
 
-    {{#if @state}}
+    {{#if (has-block 'state')}}
       <div class='state'>
-        <Hds::Badge @text={{@state}} @icon='loading' />
+        {{yield to='state'}}
       </div>
     {{/if}}
   </div>

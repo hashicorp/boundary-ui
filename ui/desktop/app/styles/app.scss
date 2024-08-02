@@ -665,14 +665,17 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
 // Settings
 .settings-card {
+  margin-bottom: 1rem;
+
   .hds-card__container {
     padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   .header-and-icon {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
   .content {

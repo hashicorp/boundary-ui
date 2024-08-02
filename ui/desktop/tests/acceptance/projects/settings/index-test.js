@@ -20,6 +20,8 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
+const USERNAME_SELECTOR = '[data-test-username]';
+const AUTH_METHOD_SELECTOR = '[data-test-auth-method]';
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -129,5 +131,21 @@ module('Acceptance | projects | settings | index', function (hooks) {
     );
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+  });
+
+  test('displays userinfo when authenticated', async function (assert) {
+    authenticateSession({ username: 'testuser' });
+    assert.expect(2);
+    await visit(urls.settings);
+    assert.ok(currentSession().isAuthenticated);
+    assert.dom(USERNAME_SELECTOR).hasText('testuser');
+  });
+
+  test('displays type of auth method when authenticated', async function (assert) {
+    authenticateSession({ authenticator: 'authenticator:test' });
+    assert.expect(2);
+    await visit(urls.settings);
+    assert.ok(currentSession().isAuthenticated);
+    assert.dom(AUTH_METHOD_SELECTOR).hasText('test');
   });
 });

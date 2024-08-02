@@ -37,6 +37,46 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
     return THEMES;
   }
 
+   /**
+ * Returns the username of the current user
+ * @type {string}
+ */
+  get userInfo() {
+    console.log(this.session);
+    const {
+      data: {
+        authenticated: { username },
+      },
+    } = this.session;
+    return username;
+  }
+
+  /**
+   * Returns true if user is authenticated
+   * @type {boolean}
+   */
+  get isAuthenticated() {
+    const {
+      data: { isAuthenticated },
+    } = this.session;
+    return isAuthenticated;
+  }
+ 
+  /**
+  * Returns the type of authmethod used by the user
+  * @type {string}
+  */
+  get authMethod() {
+    const {
+      data: {
+        authenticated: { authenticator },
+      },
+    } = this.session;
+    const formattedAuthenticator = authenticator.split(':')[1];
+    return formattedAuthenticator;
+  }
+
+  //actions
   /**
    * Calls the Application controller's toggleTheme method
    * @param {string} theme - "light", "dark", or nullish (system default)
