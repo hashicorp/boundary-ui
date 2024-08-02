@@ -9,7 +9,6 @@
     <dd.Interactive
       @text={{t 'resources.host.actions.delete'}}
       @color='critical'
-      @disabled={{@model.canSave}}
       {{on 'click' (fn @delete @model)}}
     />
   </Hds::Dropdown>
