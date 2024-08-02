@@ -23,8 +23,9 @@
 # Vagrant
 .vagrant/
 
-# End 2 end testing screenshots
-/tests/end2end/screenshots/
+# End 2 end test artifacts
+/playwright-report
+/tests/e2e/artifacts
 
 # ember-try
 /.node_modules.ember-try/
