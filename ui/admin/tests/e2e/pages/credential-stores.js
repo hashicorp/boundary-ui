@@ -8,11 +8,9 @@ const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 const { readFile } = require('fs/promises');
 
-class CredentialStoresPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class CredentialStoresPage extends BaseResourcePage {
   /**
    * Creates a static credential store. Assumes you have selected the desired project.
    * @returns Name of the credential store
@@ -31,10 +29,7 @@ class CredentialStoresPage {
       .getByLabel('Static')
       .click();
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -66,10 +61,7 @@ class CredentialStoresPage {
     await this.page.getByLabel('Address').fill(vaultAddr);
     await this.page.getByLabel('Token').fill(clientToken);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -127,10 +119,7 @@ class CredentialStoresPage {
     });
     await this.page.getByLabel('SSH Private Key').fill(keyData);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -185,10 +174,7 @@ class CredentialStoresPage {
     await this.page.getByLabel('Username', { exact: true }).fill(username);
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -225,10 +211,7 @@ class CredentialStoresPage {
       .selectOption(credentialType);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
 
     return credentialLibraryName;
   }
@@ -271,10 +254,7 @@ class CredentialStoresPage {
       .click();
 
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
 
     return credentialLibraryName;
   }

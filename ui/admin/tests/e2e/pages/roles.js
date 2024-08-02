@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class RolesPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class RolesPage extends BaseResourcePage {
   /**
    * Creates a new role. Assumes you have selected the desired scope.
    */
@@ -25,10 +23,7 @@ class RolesPage {
     await this.page.getByRole('link', { name: 'New Role' }).click();
     await this.page.getByLabel('Name').fill(roleName);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -54,10 +49,7 @@ class RolesPage {
     await this.page
       .getByRole('button', { name: 'Add Principals', exact: true })
       .click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('table').getByRole('link', { name: principalName }),
     ).toBeVisible();

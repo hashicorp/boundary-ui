@@ -30,9 +30,10 @@ const {
   createUsernamePasswordCredentialCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const { deleteResource } = require('../helpers/boundary-ui');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const AuthMethodsPage = require('../pages/auth-methods');
+const BaseResourcePage = require('../pages/base-resource');
+const WorkersPage = require('../pages/workers');
 
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
@@ -101,95 +102,98 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
       await createUsernamePasswordCredentialCli(staticCredentialStoreId);
     let tcpTargetId = await createTcpTarget(projectId);
 
+    const baseResourcePage = new BaseResourcePage(page);
+
     // Delete TCP target
     await page.goto(`/scopes/${projectId}/targets/${tcpTargetId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete username-password credentials
     await page.goto(
       `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}/credentials/${usernamePasswordCredentialId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete static credential store
     await page.goto(
       `/scopes/${projectId}/credential-stores/${staticCredentialStoreId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete vault credential store
     await page.goto(
       `/scopes/${projectId}/credential-stores/${vaultCredentialStoreId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete static host set
     await page.goto(
       `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/host-sets/${staticHostSetId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete static host
     await page.goto(
       `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}/hosts/${staticHostId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete static host catalog
     await page.goto(
       `/scopes/${projectId}/host-catalogs/${staticHostCatalogId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete dynamic aws host catalog
     await page.goto(
       `/scopes/${projectId}/host-catalogs/${dynamicAwsHostCatalogId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete user
     await page.goto(`/scopes/${projectId}/users/${userId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete group
     await page.goto(`/scopes/${projectId}/groups/${groupId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete role under global scope
     await page.goto(`/scopes/global/roles/${globalScopeRoleId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete role under org scope
     await page.goto(`/scopes/${projectId}/roles/${orgScopeRoleId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete role under project scope
     await page.goto(`/scopes/${projectId}/roles/${projectScopeRoleId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete password account
     await page.goto(
       `/scopes/${orgId}/auth-methods/${authMethodId}/accounts/${passwordAccountId}`,
     );
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete auth method
     await page.goto(`/scopes/${orgId}/auth-methods/${authMethodId}`);
     const authMethodsPage = new AuthMethodsPage(page);
     await authMethodsPage.removeAuthMethodAsPrimary();
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete worker
     await page.goto(`/scopes/global/workers/${workerId}`);
-    await deleteResource(page);
+    const workersPage = new WorkersPage(page);
+    await workersPage.deleteResource(page);
 
     // Delete project
     await page.goto(`/scopes/${projectId}`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
 
     // Delete org
     await page.goto(`/scopes/${orgId}/edit`);
-    await deleteResource(page);
+    await baseResourcePage.deleteResource(page);
     orgDeleted = true;
   } finally {
     // Delete org in case the test failed before deleting the org using UI

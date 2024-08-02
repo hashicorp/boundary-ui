@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class StoragePoliciesPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class StoragePoliciesPage extends BaseResourcePage {
   /**
    * Creates a Storage Policy. Assumes you have selected the desired scope.
    * @returns Name of the Storage Policy
@@ -45,10 +43,7 @@ class StoragePoliciesPage {
       .getByLabel('Retention Policy')
       .selectOption({ label: 'Forever' });
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })

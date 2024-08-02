@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class TargetsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class TargetsPage extends BaseResourcePage {
   /**
    * Creates a new target. Assumes you have selected the desired project.
    * @param {string} port Port of the target
@@ -28,10 +26,7 @@ class TargetsPage {
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -59,10 +54,7 @@ class TargetsPage {
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -98,10 +90,7 @@ class TargetsPage {
     await this.page.getByRole('button', { name: 'Add' }).click();
 
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -134,10 +123,7 @@ class TargetsPage {
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -167,10 +153,7 @@ class TargetsPage {
       .click();
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -203,10 +186,7 @@ class TargetsPage {
     await this.page.getByLabel('Target Address').fill(address);
     await this.page.getByLabel('Default Port').fill(port);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -247,10 +227,7 @@ class TargetsPage {
     await this.page.getByRole('button', { name: 'Add' }).click();
 
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -294,10 +271,7 @@ class TargetsPage {
       .getByRole('checkbox')
       .click({ force: true });
     await this.page.getByRole('button', { name: 'Add Host Sources' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('link', { name: hostSourceName }),
     ).toBeVisible();
@@ -329,10 +303,7 @@ class TargetsPage {
     await this.page.getByRole('textbox').fill(filter);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
   }
 
   /**
@@ -383,10 +354,7 @@ class TargetsPage {
     await this.page
       .getByRole('button', { name: 'Add Brokered Credentials', exact: true })
       .click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('link', { name: credentialName }),
     ).toBeVisible();
@@ -452,10 +420,7 @@ class TargetsPage {
         exact: true,
       })
       .click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('link', { name: credentialName }),
     ).toBeVisible();
@@ -472,10 +437,7 @@ class TargetsPage {
       .getByLabel('Storage buckets')
       .selectOption({ label: storageBucketName });
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(storageBucketName),
     ).toBeVisible();

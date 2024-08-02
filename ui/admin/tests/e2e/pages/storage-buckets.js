@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class StorageBucketsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class StorageBucketsPage extends BaseResourcePage {
   /**
    * Creates a new AWS Storage Bucket.
    * @param {string} scope Scope of the Storage Bucket
@@ -48,10 +46,7 @@ class StorageBucketsPage {
     await this.page.getByLabel('Worker filter').fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -100,10 +95,7 @@ class StorageBucketsPage {
     await this.page.getByLabel('Worker filter').fill(workerFilter);
     await this.page.getByLabel('Disable credential rotation').click();
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })

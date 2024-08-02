@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class AuthMethodsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class AuthMethodsPage extends BaseResourcePage {
   /**
    * Creates a new Password Auth Method. Assumes you have selected the desired scope.
    * @returns Name of the auth method
@@ -26,10 +24,7 @@ class AuthMethodsPage {
     await this.page.getByText('Password', { exact: true }).click();
     await this.page.getByLabel('Name').fill(authMethodName);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -51,10 +46,7 @@ class AuthMethodsPage {
     await this.page.getByRole('button', { name: 'Manage' }).click();
     await this.page.getByText('Make Primary', { exact: true }).click();
     await this.page.getByText('OK', { exact: true }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
   }
 
   /**
@@ -64,10 +56,7 @@ class AuthMethodsPage {
     await this.page.getByTitle('Manage').click();
     await this.page.getByRole('button', { name: 'Remove as primary' }).click();
     await this.page.getByText('OK', { exact: true }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
   }
 
   /**
@@ -89,10 +78,7 @@ class AuthMethodsPage {
     await this.page.getByLabel('Login Name').fill(login);
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -110,10 +96,7 @@ class AuthMethodsPage {
     await this.page.getByRole('link', { name: 'Set Password' }).click();
     await this.page.getByLabel(new RegExp('Password*')).fill(password);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
   }
 }
 

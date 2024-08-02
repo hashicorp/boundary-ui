@@ -6,11 +6,9 @@
 /* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
 
-class SessionsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BasePage = require('./base');
 
+class SessionsPage extends BasePage {
   /**
    * Waits for the session to appear and be in Active state.
    * @param {string} targetName Name of the target associated with the session

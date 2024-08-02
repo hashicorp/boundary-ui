@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class OrgsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class OrgsPage extends BaseResourcePage {
   /**
    * Creates a new organization
    * @returns Name of the organization
@@ -26,10 +24,7 @@ class OrgsPage {
     await this.page.getByLabel('Name').fill(orgName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -52,10 +47,7 @@ class OrgsPage {
       .getByLabel('Storage Policy')
       .selectOption({ label: policyName });
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('listitem').getByText(policyName),
     ).toBeVisible();

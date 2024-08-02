@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class HostCatalogsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class HostCatalogsPage extends BaseResourcePage {
   /**
    * Creates a new host catalog. Assumes you have selected the desired project.
    * @returns Name of the host catalog
@@ -44,10 +42,7 @@ class HostCatalogsPage {
       .getByLabel('Static')
       .click();
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -83,10 +78,7 @@ class HostCatalogsPage {
     await this.page.getByLabel('Name').fill(hostSetName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -109,10 +101,7 @@ class HostCatalogsPage {
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByLabel('Address').fill(address);
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(this.page.getByRole('link', { name: hostName })).toBeVisible();
 
     return hostName;

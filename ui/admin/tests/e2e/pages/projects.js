@@ -7,11 +7,9 @@
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 
-class ProjectsPage {
-  constructor(page) {
-    this.page = page;
-  }
+const BaseResourcePage = require('./base-resource');
 
+class ProjectsPage extends BaseResourcePage {
   /**
    * Creates a new project. Assumes you have selected the desired org.
    * @returns Name of the project
@@ -26,10 +24,7 @@ class ProjectsPage {
     await this.page.getByLabel('Name').fill(projectName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page
         .getByRole('navigation', { name: 'breadcrumbs' })
