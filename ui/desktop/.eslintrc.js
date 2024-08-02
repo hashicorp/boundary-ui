@@ -44,6 +44,7 @@ module.exports = {
         './ember-cli-build.js',
         './testem.js',
         './testem-electron.js',
+        './playwright.config.js',
         './blueprints/*/index.js',
         './config/**/*.js',
         './lib/*/index.js',
@@ -64,6 +65,20 @@ module.exports = {
       extends: ['plugin:qunit/recommended'],
       rules: {
         'qunit/require-expect': [2, 'except-simple'],
+      },
+    },
+    {
+      // e2e files
+      files: ['tests/e2e/**'],
+      env: {
+        node: true,
+      },
+      extends: ['eslint:recommended', 'prettier'],
+      rules: {
+        'no-empty-pattern': [
+          'error',
+          { allowObjectPatternsAsParameters: true },
+        ],
       },
     },
   ],
