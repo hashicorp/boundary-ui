@@ -17,7 +17,7 @@ failed: Failed
 installed: Installed
 not-running: Not Running
 running: Running
-autheticated: Authenticated
+authenticated: Authenticated
 unauthenticated: Unauthenticated
 loading:
   title: Loading all items...

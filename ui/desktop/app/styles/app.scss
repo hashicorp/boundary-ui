@@ -674,7 +674,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .header-and-icon {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 1rem;
   }
 
@@ -683,9 +683,12 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   }
 
   .app-information {
-    display: grid;
+    display: flex;
     margin: 1rem 2rem 1rem 0;
-    grid-template-columns: repeat(3, 1fr);
+
+    > div {
+      flex-basis: 12rem;
+    }
   }
 
   .action {
