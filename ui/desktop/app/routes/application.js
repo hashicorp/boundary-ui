@@ -36,9 +36,7 @@ export default class ApplicationRoute extends Route {
     await this.clusterUrl.updateClusterUrl();
     const theme = this.session.get('data.theme');
     /* eslint-disable-next-line ember/no-controller-access-in-routes */
-    const controller = this.controllerFor(
-      'scopes.scope.projects.settings.index',
-    );
+    const controller = this.controllerFor(this.routeName);
     controller.toggleTheme(theme);
 
     // Add token to cache daemon after a successful authentication restoration
