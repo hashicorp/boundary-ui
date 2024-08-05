@@ -21,6 +21,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
   setupMirage(hooks);
 
   let getTargetHostSetCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-targets-dropdown] div:first-child button';
+  const ADD_HOSTSOURCE_SELECTOR = '[data-test-manage-targets-dropdown] ul li a';
 
   const instances = {
     scopes: {
@@ -171,10 +174,10 @@ module('Acceptance | targets | host-sources', function (hooks) {
     instances.target.update({ hostSetIds: [] });
     await visit(urls.target);
     const targetHostSetCount = getTargetHostSetCount();
-
     await click(`[href="${urls.targetHostSources}"]`);
     assert.dom('tbody tr').exists({ count: 0 });
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
 
     // Click three times to select, unselect, then reselect (for coverage)
@@ -196,10 +199,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetHostSources}"]`);
-
-    assert
-      .dom('.rose-layout-page-actions a')
-      .doesNotIncludeText('Add Host Sources');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(ADD_HOSTSOURCE_SELECTOR).doesNotIncludeText('Add Host Sources');
   });
 
   test('select and cancel host sets to add', async function (assert) {
@@ -214,7 +215,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody tr .hds-dropdown-list-item button');
     assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
 
-    await click('.rose-layout-page-actions a');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
     await click('tbody label');
     await click('form [type="button"]');
@@ -241,7 +243,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     instances.target.update({ hostSetIds: [] });
     const targetHostSetCount = getTargetHostSetCount();
 
-    await click(`[href="${urls.targetAddHostSources}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
     assert.strictEqual(targetHostSetCount, 0);
     await click('tbody label');
     await click('form [type="submit"]');
@@ -268,7 +271,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
     await click(`[href="${targetUrl}/host-sources"]`);
-    await click('.rose-layout-page-actions a', 'Click add host set');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
 
     await click('tbody label');
     await click('form [type="submit"]');
@@ -303,7 +307,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
     await click(`[href="${targetUrl}/host-sources"]`);
-    await click('.rose-layout-page-actions a', 'Click add host set');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_HOSTSOURCE_SELECTOR);
 
     await click('tbody label');
     await click('form [type="submit"]');
