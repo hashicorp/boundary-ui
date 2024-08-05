@@ -45,7 +45,12 @@ export default class SettingsUserInfoComponent extends Component {
       },
     } = this.session;
     const formattedAuthenticator = authenticator.split(':')[1];
-    console.log(this.session);
+    if (
+      formattedAuthenticator === 'oidc' ||
+      formattedAuthenticator === 'ldap'
+    ) {
+      return formattedAuthenticator.toUpperCase();
+    }
     return formattedAuthenticator;
   }
 
