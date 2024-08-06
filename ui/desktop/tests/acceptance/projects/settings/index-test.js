@@ -4,10 +4,19 @@
  */
 
 import { module, test } from 'qunit';
-import { currentURL, click, visit } from '@ember/test-helpers';
+import {
+  currentURL,
+  click,
+  visit,
+  getRootElement,
+  select,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import {
+  authenticateSession,
+  currentSession,
+} from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
@@ -93,5 +102,32 @@ module('Acceptance | projects | settings | index', function (hooks) {
     await visit(urls.projects);
     await click(`[href="${urls.settings}"]`);
     assert.strictEqual(currentURL(), urls.settings);
+  });
+
+  test('color theme is applied from session data', async function (assert) {
+    await visit(urls.settings);
+
+    // system default
+    assert.notOk(currentSession().get('data.theme'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle light mode
+    await select('[name="theme"]', 'light');
+    assert.strictEqual(currentSession().get('data.theme'), 'light');
+    assert.ok(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle dark mode
+    await select('[name="theme"]', 'dark');
+    assert.strictEqual(currentSession().get('data.theme'), 'dark');
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+    // toggle system default
+    await select('[name="theme"]', 'system-default-theme');
+    assert.strictEqual(
+      currentSession().get('data.theme'),
+      'system-default-theme',
+    );
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 });

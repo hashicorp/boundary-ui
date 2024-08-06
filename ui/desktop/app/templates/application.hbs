@@ -53,41 +53,6 @@
             <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
-
-            <dropdown.separator />
-
-            <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
-              <Rose::Form as |form|>
-                <form.radioGroup
-                  @name='theme'
-                  @selectedValue={{or
-                    this.session.data.theme
-                    'system-default-theme'
-                  }}
-                  @changed={{route-action 'toggleTheme'}}
-                  as |radioGroup|
-                >
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.system'}}
-                      @value='system-default-theme'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.light'}}
-                      @value='light'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.dark'}}
-                      @value='dark'
-                    />
-                  </dropdown.item>
-                </form.radioGroup>
-              </Rose::Form>
-            </dropdown.section>
           </utilities.dropdown>
         {{/if}}
 

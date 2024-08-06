@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  fillIn,
-  click,
-  find,
-  getRootElement,
-} from '@ember/test-helpers';
+import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -217,39 +210,6 @@ module('Acceptance | authentication', function (hooks) {
       currentSession().isAuthenticated,
       'Session is unauthenticated, after encountering 401',
     );
-  });
-
-  test('color theme is applied from session data', async function (assert) {
-    assert.expect(12);
-    authenticateSession({
-      scope: {
-        id: instances.scopes.global.id,
-        type: instances.scopes.global.type,
-      },
-    });
-    await visit(urls.scopes.org);
-    // system default
-    assert.notOk(currentSession().get('data.theme'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-    // toggle light mode
-    await click('[name="theme"][value="light"]');
-    assert.strictEqual(currentSession().get('data.theme'), 'light');
-    assert.ok(getRootElement().classList.contains('rose-theme-light'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-    // toggle dark mode
-    await click('[name="theme"][value="dark"]');
-    assert.strictEqual(currentSession().get('data.theme'), 'dark');
-    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-    assert.ok(getRootElement().classList.contains('rose-theme-dark'));
-    // toggle system default
-    await click('[name="theme"][value="system-default-theme"]');
-    assert.strictEqual(
-      currentSession().get('data.theme'),
-      'system-default-theme',
-    );
-    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 
   test('org scopes with no auth methods are not visible in dropdown', async function (assert) {
