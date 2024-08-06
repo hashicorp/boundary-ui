@@ -665,14 +665,17 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
 // Settings
 .settings-card {
+  margin-bottom: 1rem;
+
   .hds-card__container {
     padding: 1rem;
+    margin-bottom: 1rem;
   }
 
   .header-and-icon {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
   }
 
   .content {
@@ -681,7 +684,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
   .app-information {
     display: flex;
-    justify-content: space-between;
     margin: 1rem 2rem 1rem 0;
+
+    > div {
+      flex-basis: 12rem;
+    }
+  }
+
+  .action {
+    margin-left: auto;
   }
 }
