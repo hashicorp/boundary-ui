@@ -6,20 +6,15 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  createOrg,
-  createPasswordAuthMethod,
-  createPasswordAccount,
-  setPasswordToAccount,
-  createUser,
-  addAccountToUser,
-  makeAuthMethodPrimary,
-} = require('../helpers/boundary-ui');
+const AuthMethodsPage = require('../pages/auth-methods');
+const OrgsPage = require('../pages/orgs');
+const UsersPage = require('../pages/users');
 
 test.beforeAll(async () => {
   await checkBoundaryCli();
@@ -51,14 +46,19 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     ).toBeVisible();
 
     // Create a new password auth method and account
-    orgName = await createOrg(page);
-    authMethodName = await createPasswordAuthMethod(page);
+    const orgsPage = new OrgsPage(page);
+    orgName = await orgsPage.createOrg();
+
+    const authMethodsPage = new AuthMethodsPage(page);
+    authMethodName = await authMethodsPage.createPasswordAuthMethod();
     const username = 'test-user';
     const password = 'password';
-    await createPasswordAccount(page, username, password);
-    await makeAuthMethodPrimary(page);
-    await createUser(page);
-    await addAccountToUser(page, username);
+
+    await authMethodsPage.createPasswordAccount(username, password);
+    await authMethodsPage.makeAuthMethodPrimary();
+    const usersPage = new UsersPage(page);
+    await usersPage.createUser();
+    await usersPage.addAccountToUser(username);
 
     // Log out
     await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
@@ -113,7 +113,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await page.getByRole('link', { name: 'Accounts', exact: true }).click();
     await page.getByRole('link', { name: username }).click();
     const newPassword = 'new-password';
-    await setPasswordToAccount(page, newPassword);
+    await authMethodsPage.setPasswordToAccount(newPassword);
 
     // Log out
     await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();

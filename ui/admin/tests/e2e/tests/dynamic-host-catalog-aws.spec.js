@@ -5,21 +5,18 @@
 
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
-import { execSync } from 'child_process';
 const { nanoid } = require('nanoid');
+import { execSync } from 'child_process';
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  addHostSourceToTarget,
-  createHostCatalog,
-  createHostSet,
-  createOrg,
-  createProject,
-  createTarget,
-} = require('../helpers/boundary-ui');
+const HostCatalogsPage = require('../pages/host-catalogs');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -44,8 +41,10 @@ test.describe('AWS', async () => {
   }) => {
     let orgName;
     try {
-      orgName = await createOrg(page);
-      await createProject(page);
+      const orgsPage = new OrgsPage(page);
+      orgName = await orgsPage.createOrg();
+      const projectsPage = new ProjectsPage(page);
+      await projectsPage.createProject();
 
       // Create host catalog
       const hostCatalogName = 'Host Catalog ' + nanoid();
@@ -165,18 +164,22 @@ test.describe('AWS', async () => {
       }
 
       // Create a target and add DHC host set as a host source
-      const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
-      await addHostSourceToTarget(page, hostSetName);
+      const targetsPage = new TargetsPage(page);
+      const targetName = await targetsPage.createTarget(
+        process.env.E2E_TARGET_PORT,
+      );
+      await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add another host source
-      await createHostCatalog(page);
-      const newHostSetName = await createHostSet(page);
+      const hostCatalogsPage = new HostCatalogsPage(page);
+      await hostCatalogsPage.createHostCatalog();
+      const newHostSetName = await hostCatalogsPage.createHostSet();
       await page
         .getByRole('navigation', { name: 'Resources' })
         .getByRole('link', { name: 'Targets' })
         .click();
       await page.getByRole('link', { name: targetName }).click();
-      await addHostSourceToTarget(page, newHostSetName);
+      await targetsPage.addHostSourceToTarget(newHostSetName);
 
       // Remove the host source from the target
       await page
@@ -193,7 +196,7 @@ test.describe('AWS', async () => {
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
       // Add the host source back
-      await addHostSourceToTarget(page, newHostSetName);
+      await targetsPage.addHostSourceToTarget(newHostSetName);
     } finally {
       await authenticateBoundaryCli(
         process.env.BOUNDARY_ADDR,

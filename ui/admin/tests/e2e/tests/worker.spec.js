@@ -6,6 +6,7 @@
 /* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
 const { test } = require('@playwright/test');
+
 const { authenticatedState } = require('../helpers/general');
 
 test.use({ storageState: authenticatedState });

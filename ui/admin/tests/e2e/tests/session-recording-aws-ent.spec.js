@@ -6,6 +6,7 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -16,20 +17,13 @@ const {
   deleteStorageBucketCli,
   deletePolicyCli,
 } = require('../helpers/boundary-cli');
-const {
-  waitForSessionToBeVisible,
-  createStorageBucketAws,
-  enableSessionRecording,
-  createStoragePolicy,
-  attachStoragePolicy,
-  createOrg,
-  createProject,
-  createStaticCredentialStore,
-  createStaticCredentialKeyPair,
-  createSshTargetWithAddressEnt,
-  addInjectedCredentialsToTarget,
-  addEgressWorkerFilterToTarget,
-} = require('../helpers/boundary-ui');
+const CredentialStoresPage = require('../pages/credential-stores');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const SessionsPage = require('../pages/sessions');
+const StorageBucketsPage = require('../pages/storage-buckets');
+const StoragePoliciesPage = require('../pages/storage-policies');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -57,7 +51,8 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
   let connect;
   try {
     // Create org
-    const orgName = await createOrg(page);
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -69,7 +64,8 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     orgId = org.id;
 
     // Create project
-    const projectName = await createProject(page);
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
@@ -78,8 +74,8 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
 
     // Create storage bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-    const storageBucketName = await createStorageBucketAws(
-      page,
+    const storageBucketsPage = new StorageBucketsPage(page);
+    const storageBucketName = await storageBucketsPage.createStorageBucketAws(
       orgName,
       process.env.E2E_AWS_BUCKET_NAME,
       process.env.E2E_AWS_REGION,
@@ -99,28 +95,31 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: projectName }).click();
-    const targetName = await createSshTargetWithAddressEnt(
-      page,
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
-    await addEgressWorkerFilterToTarget(
-      page,
+    await targetsPage.addEgressWorkerFilterToTarget(
       `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
     );
     const targets = JSON.parse(
       execSync('boundary targets list -format json -scope-id ' + projectId),
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
-    await createStaticCredentialStore(page);
-    const credentialName = await createStaticCredentialKeyPair(
-      page,
-      process.env.E2E_SSH_USER,
-      process.env.E2E_SSH_KEY_PATH,
+    const credentialStoresPage = new CredentialStoresPage(page);
+    await credentialStoresPage.createStaticCredentialStore();
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        process.env.E2E_SSH_USER,
+        process.env.E2E_SSH_KEY_PATH,
+      );
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName,
     );
-    await addInjectedCredentialsToTarget(page, targetName, credentialName);
     await page.getByRole('link', { name: targetName }).click();
-    await enableSessionRecording(page, storageBucketName);
+    await targetsPage.enableSessionRecording(storageBucketName);
 
     // Create storage policy in org scope: keep session recordings forever
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
@@ -129,14 +128,16 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
     ).toBeVisible();
-    const policyName = await createStoragePolicy(page);
-    await attachStoragePolicy(page, policyName);
+    const storagePoliciesPage = new StoragePoliciesPage(page);
+    const policyName = await storagePoliciesPage.createStoragePolicy();
+    await orgsPage.attachStoragePolicy(policyName);
 
     // Establish connection to target and cancel it
     connect = await connectSshToTarget(target.id);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
-    await waitForSessionToBeVisible(page, targetName);
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')

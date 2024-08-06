@@ -6,22 +6,18 @@
 /* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
-const { checkEnv } = require('../helpers/general');
 const { nanoid } = require('nanoid');
 
+const { checkEnv } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  addAccountToUser,
-  createPasswordAuthMethod,
-  createOrg,
-  createRole,
-  createUser,
-  addPrincipalToRole,
-} = require('../helpers/boundary-ui');
+const AuthMethodsPage = require('../pages/auth-methods');
+const OrgsPage = require('../pages/orgs');
+const RolesPage = require('../pages/roles');
+const UsersPage = require('../pages/users');
 
 test.beforeAll(async () => {
   await checkEnv([
@@ -60,7 +56,8 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     ).toBeVisible();
 
     // Create an LDAP auth method
-    orgName = await createOrg(page);
+    const orgsPage = new OrgsPage(page);
+    orgName = await orgsPage.createOrg();
     await page
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })
@@ -168,16 +165,19 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
     // Create a role and add LDAP managed group to role
-    await createRole(page);
-    await addPrincipalToRole(page, ldapManagedGroupName);
+    const rolesPage = new RolesPage(page);
+    await rolesPage.createRole();
+    await rolesPage.addPrincipalToRole(ldapManagedGroupName);
 
     // Create a user and attach LDAP account to it
-    const userName = await createUser(page);
-    await addAccountToUser(page, process.env.E2E_LDAP_USER_NAME);
+    const usersPage = new UsersPage(page);
+    const userName = await usersPage.createUser();
+    await usersPage.addAccountToUser(process.env.E2E_LDAP_USER_NAME);
 
     // Create a second auth method so that there's multiple auth methods on the
     // login screen
-    await createPasswordAuthMethod(page);
+    const authMethodsPage = new AuthMethodsPage(page);
+    await authMethodsPage.createPasswordAuthMethod();
 
     // Log out
     await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();

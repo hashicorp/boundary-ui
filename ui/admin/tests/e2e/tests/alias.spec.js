@@ -7,6 +7,7 @@
 const { test, expect } = require('@playwright/test');
 import { execSync } from 'child_process';
 import { customAlphabet } from 'nanoid';
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -15,13 +16,10 @@ const {
   deleteAliasCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  createAliasForTarget,
-  createOrg,
-  createProject,
-  createTargetWithAddress,
-  createTargetWithAddressAndAlias,
-} = require('../helpers/boundary-ui');
+const AliasesPage = require('../pages/aliases');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -45,10 +43,12 @@ test.describe('Aliases', async () => {
     let alias;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
-      orgName = await createOrg(page);
-      await createProject(page);
-      await createTargetWithAddress(
-        page,
+      const orgsPage = new OrgsPage(page);
+      orgName = await orgsPage.createOrg();
+      const projectsPage = new ProjectsPage(page);
+      await projectsPage.createProject();
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.createTargetWithAddress(
         process.env.E2E_TARGET_ADDRESS,
         process.env.E2E_TARGET_PORT,
       );
@@ -112,17 +112,19 @@ test.describe('Aliases', async () => {
     let alias;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
-      orgName = await createOrg(page);
+      const orgsPage = new OrgsPage(page);
+      orgName = await orgsPage.createOrg();
       await authenticateBoundaryCli(
         process.env.BOUNDARY_ADDR,
         process.env.E2E_PASSWORD_AUTH_METHOD_ID,
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      await createProject(page);
+      const projectsPage = new ProjectsPage(page);
+      await projectsPage.createProject();
       alias = 'example.alias.' + nanoid();
-      await createTargetWithAddressAndAlias(
-        page,
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.createTargetWithAddressAndAlias(
         process.env.E2E_TARGET_ADDRESS,
         process.env.E2E_TARGET_PORT,
         alias,
@@ -157,10 +159,12 @@ test.describe('Aliases', async () => {
     let org;
     let alias;
     try {
-      const orgName = await createOrg(page);
-      const projectName = await createProject(page);
-      const targetName = await createTargetWithAddress(
-        page,
+      const orgsPage = new OrgsPage(page);
+      const orgName = await orgsPage.createOrg();
+      const projectsPage = new ProjectsPage(page);
+      const projectName = await projectsPage.createProject();
+      const targetsPage = new TargetsPage(page);
+      const targetName = await targetsPage.createTargetWithAddress(
         process.env.E2E_TARGET_ADDRESS,
         process.env.E2E_TARGET_PORT,
       );
@@ -187,7 +191,8 @@ test.describe('Aliases', async () => {
       const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
       alias = 'example.alias.' + nanoid();
-      await createAliasForTarget(page, alias, target.id);
+      const aliasesPage = new AliasesPage(page);
+      await aliasesPage.createAliasForTarget(alias, target.id);
       await authorizeAlias(alias);
     } finally {
       await authenticateBoundaryCli(
