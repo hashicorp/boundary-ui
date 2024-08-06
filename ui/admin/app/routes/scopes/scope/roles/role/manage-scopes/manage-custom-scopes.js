@@ -6,8 +6,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import isEqual from 'lodash/isEqual';
-import { TrackedArray } from 'tracked-built-ins';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute extends Route {
@@ -29,8 +27,8 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   // =services
 
   @service store;
-  @service confirm;
   @service intl;
+  @service confirm;
 
   // =methods
 
@@ -134,22 +132,6 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
     return scopes.meta?.totalItems;
   }
 
-  /**
-   * Sets selectedItems to initial value only when entering route for the first time and on page refresh.
-   * @param {Controller} controller
-   * @param {object} model
-   * @param {object} transition
-   */
-  setupController(controller, model, transition) {
-    const { from, to } = transition;
-    if (from?.name !== to?.name) {
-      controller.set(
-        'selectedItems',
-        new TrackedArray(model.role.grantScopeOrgIDs),
-      );
-    }
-  }
-
   // =actions
 
   /**
@@ -158,24 +140,16 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
    */
   @action
   async willTransition(transition) {
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor(this.routeName);
-    const role = this.modelFor('scopes.scope.roles.role');
     const { from, to } = transition;
-    if (
-      !isEqual(controller.get('selectedItems'), role.grantScopeOrgIDs) &&
-      from?.name !== to?.name
-    ) {
+    const { role } = from.attributes;
+    if (from.name !== to.name && role.hasDirtyAttributes) {
       transition.abort();
       try {
         await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
           title: 'titles.abandon-confirm',
           confirm: 'actions.discard',
         });
-        controller.set(
-          'selectedItems',
-          new TrackedArray(role.grantScopeOrgIDs),
-        );
+        role.rollbackAttributes();
         transition.retry();
       } catch (e) {
         // if user denies, do nothing

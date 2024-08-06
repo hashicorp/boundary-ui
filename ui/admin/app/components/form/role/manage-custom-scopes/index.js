@@ -7,16 +7,6 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 export default class FormRoleManageCustomScopesIndexComponent extends Component {
-  // =attributes
-
-  get allGrantScopes() {
-    return [
-      ...this.args.model.role.grantScopeKeywords,
-      ...this.args.model.role.grantScopeProjectIDs,
-      ...this.args.selectedItems,
-    ];
-  }
-
   // =actions
 
   /**
@@ -25,16 +15,16 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
    */
   @action
   selectionChange({ selectableRowsStates }) {
+    const { role } = this.args.model;
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
-      // If index is equal to -1 then key does not exist in the array.
-      const index = this.args.selectedItems.indexOf(key);
-      if (isSelected) {
-        if (index === -1) {
-          this.args.selectedItems.push(key);
-        }
-      } else if (index !== -1) {
-        this.args.selectedItems.splice(index, 1);
+      const includesId = role.grant_scope_ids.includes(key);
+      if (isSelected && !includesId) {
+        role.grant_scope_ids = [...role.grant_scope_ids, key];
+      } else if (!isSelected && includesId) {
+        role.grant_scope_ids = role.grant_scope_ids.filter(
+          (item) => item !== key,
+        );
       }
     });
   }

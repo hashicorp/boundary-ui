@@ -10,7 +10,6 @@ import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesController extends Controller {
   @controller('scopes/scope/roles/role/manage-scopes/index') manageScopes;
@@ -26,7 +25,6 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
-  selectedItems;
 
   // =actions
 
@@ -45,26 +43,24 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   /**
    * Save grant scope IDs to current role via the API.
    * @param {RoleModel} role
-   * @param {[string]} grantScopeIDs
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.role.scope.messages.manage-custom-scopes.success')
-  async setGrantScopes(role, grantScopeIDs) {
-    await role.setGrantScopes(grantScopeIDs);
+  async setGrantScopes(role) {
+    await role.setGrantScopes(role.grant_scope_ids);
     this.manageScopes.showCheckIcon = true;
-    this.selectedItems = new TrackedArray(role.grantScopeOrgIDs);
     this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 
   /**
    * Redirect to manage scopes as if nothing ever happened.
-   * @param {[string]} grantScopeOrgIDs
+   * @param {RoleModel} role
    */
   @action
-  cancel(grantScopeOrgIDs) {
-    this.selectedItems = new TrackedArray(grantScopeOrgIDs);
+  cancel(role) {
+    role.rollbackAttributes();
     this.router.replaceWith('scopes.scope.roles.role.manage-scopes');
   }
 }

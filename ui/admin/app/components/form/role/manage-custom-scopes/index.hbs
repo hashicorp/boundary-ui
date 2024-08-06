@@ -6,7 +6,7 @@
 {{#if @model.totalItemsCount}}
   <Rose::Form
     class='full-width role-manage-custom-scopes-form'
-    @onSubmit={{fn @submit this.allGrantScopes}}
+    @onSubmit={{@submit}}
     @cancel={{@cancel}}
     @disabled={{@model.role.isSaving}}
     as |form|
@@ -21,12 +21,12 @@
       />
     </Hds::SegmentedGroup>
     {{#if @model.orgScopes}}
-      {{#if @selectedItems.length}}
+      {{#if @model.role.grantScopeOrgIDs.length}}
         <div class='table-selected-items-text'>
           <Hds::Text::Body @tag='p' @color='faint'>
             {{t
               'resources.role.scope.titles.selected'
-              items=@selectedItems.length
+              items=@model.role.grantScopeOrgIDs.length
               total=@model.totalItemsCount
             }}
           </Hds::Text::Body>
@@ -46,7 +46,7 @@
         <:body as |B|>
           <B.Tr
             @selectionKey={{B.data.id}}
-            @isSelected={{includes B.data.id @selectedItems}}
+            @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}}
             @selectionAriaLabelSuffix='row {{B.data.id}}'
             data-test-org-scopes-table-row={{B.data.id}}
           >

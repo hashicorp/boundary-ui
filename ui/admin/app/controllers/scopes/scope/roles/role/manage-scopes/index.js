@@ -8,7 +8,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesIndexController extends Controller {
   // =services
@@ -18,32 +17,29 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
   // =attributes
 
   showCheckIcon = false;
-  selectedItems;
 
   // =actions
 
   /**
    * Save grant scope IDs to current role via the API.
    * @param {RoleModel} role
-   * @param {[string]} grantScopeIDs
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.role.scope.messages.manage-scopes.success')
-  async setGrantScopes(role, grantScopeIDs) {
-    await role.setGrantScopes(grantScopeIDs);
-    this.selectedItems = new TrackedArray(role.grant_scope_ids);
+  async setGrantScopes(role) {
+    await role.setGrantScopes(role.grant_scope_ids);
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 
   /**
    * Redirect to role scopes as if nothing ever happened.
-   * @param {[string]} grantScopeIDs
+   * @param {RoleModel} role
    */
   @action
-  cancel(grantScopeIDs) {
-    this.selectedItems = new TrackedArray(grantScopeIDs);
+  cancel(role) {
+    role.rollbackAttributes();
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 }

@@ -6,8 +6,6 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import isEqual from 'lodash/isEqual';
-import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute extends Route {
   // =attributes
@@ -35,7 +33,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
 
   /**
    * Loads projects for current org scope.
-   * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
+   * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, remainingProjectIDs: [string]}> }
    */
   async model({ org_id, search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -58,8 +56,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       totalItems,
     );
 
-    const { selectedProjectIDs, remainingProjectIDs } =
-      await this.getSelectedProjects(role, org_id);
+    const remainingProjectIDs = await this.getSelectedProjects(role, org_id);
 
     return {
       role,
@@ -67,7 +64,6 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       projectScopes,
       totalItems,
       totalItemsCount,
-      selectedProjectIDs,
       remainingProjectIDs,
     };
   }
@@ -106,7 +102,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
    * Extract project type grant scope ids that belong to this org scope.
    * @param {RoleModel} role
    * @param {string} org_id
-   * @returns {object}
+   * @returns {Promise<[string]>} remainingProjectIDs
    */
   async getSelectedProjects(role, org_id) {
     let selectedProjectIDs = role.grantScopeProjectIDs;
@@ -120,32 +116,13 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
         { scope_id: 'global', query: { filters: { id } } },
         options,
       );
-      selectedProjectIDs = projects.reduce((selectedIDs, project) => {
-        if (project.scope.id === org_id) {
-          selectedIDs.push(project.id);
-        } else {
+      projects.forEach((project) => {
+        if (project.scope.id !== org_id) {
           remainingProjectIDs.push(project.id);
         }
-        return selectedIDs;
-      }, []);
+      });
     }
-    return { selectedProjectIDs, remainingProjectIDs };
-  }
-
-  /**
-   * Sets selectedItems to initial value only when entering route for the first time and on page refresh.
-   * @param {Controller} controller
-   * @param {object} model
-   * @param {object} transition
-   */
-  setupController(controller, model, transition) {
-    const { from, to } = transition;
-    if (from?.name !== to?.name) {
-      controller.set(
-        'selectedItems',
-        new TrackedArray(model.selectedProjectIDs),
-      );
-    }
+    return remainingProjectIDs;
   }
 
   // =actions
@@ -156,21 +133,16 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
    */
   @action
   async willTransition(transition) {
-    // eslint-disable-next-line ember/no-controller-access-in-routes
-    const controller = this.controllerFor(this.routeName);
-    const { selectedProjectIDs } = this.modelFor(this.routeName);
     const { from, to } = transition;
-    if (
-      !isEqual(controller.get('selectedItems'), selectedProjectIDs) &&
-      from?.name !== to?.name
-    ) {
+    const { role } = from.attributes;
+    if (from.name !== to.name && role.hasDirtyAttributes) {
       transition.abort();
       try {
         await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
           title: 'titles.abandon-confirm',
           confirm: 'actions.discard',
         });
-        controller.set('selectedItems', new TrackedArray(selectedProjectIDs));
+        role.rollbackAttributes();
         transition.retry();
       } catch (e) {
         // if user denies, do nothing

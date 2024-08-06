@@ -28,8 +28,8 @@ export default class FormRoleManageScopesIndexComponent extends Component {
   get showAlert() {
     return (
       this.args.model.scope.isGlobal &&
-      (this.args.selectedItems.includes(GRANT_SCOPE_CHILDREN) ||
-        this.args.selectedItems.includes(GRANT_SCOPE_DESCENDANTS))
+      (this.args.model.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN) ||
+        this.args.model.grant_scope_ids.includes(GRANT_SCOPE_DESCENDANTS))
     );
   }
 
@@ -43,11 +43,15 @@ export default class FormRoleManageScopesIndexComponent extends Component {
   toggleField(event) {
     const { checked, value } = event.target;
     const removeValue = (value) => {
-      const index = this.args.selectedItems.indexOf(value);
-      if (index !== -1) this.args.selectedItems.splice(index, 1);
+      this.args.model.grant_scope_ids = this.args.model.grant_scope_ids.filter(
+        (item) => item !== value,
+      );
     };
     if (checked) {
-      this.args.selectedItems.push(value);
+      this.args.model.grant_scope_ids = [
+        ...this.args.model.grant_scope_ids,
+        value,
+      ];
       if (value === GRANT_SCOPE_CHILDREN) {
         removeValue(GRANT_SCOPE_DESCENDANTS);
       }

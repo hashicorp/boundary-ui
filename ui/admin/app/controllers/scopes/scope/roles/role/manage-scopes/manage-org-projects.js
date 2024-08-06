@@ -10,7 +10,6 @@ import { loading } from 'ember-loading';
 import { tracked } from '@glimmer/tracking';
 import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController extends Controller {
   @controller('scopes/scope/roles/role/manage-scopes/index') manageScopes;
@@ -26,7 +25,6 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
   @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
-  selectedItems;
 
   // =actions
 
@@ -45,16 +43,14 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
   /**
    * Save grant scope IDs to current role via the API.
    * @param {RoleModel} role
-   * @param {[string]} grantScopeIDs
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.role.scope.messages.manage-org-projects.success')
-  async setGrantScopes(role, selectedProjectIDs, grantScopeIDs) {
-    await role.setGrantScopes(grantScopeIDs);
+  async setGrantScopes(role) {
+    await role.setGrantScopes(role.grant_scope_ids);
     this.manageScopes.showCheckIcon = true;
-    this.selectedItems = new TrackedArray(selectedProjectIDs);
     if (role.scope.isGlobal) {
       this.router.replaceWith(
         'scopes.scope.roles.role.manage-scopes.manage-custom-scopes',
@@ -66,10 +62,11 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsController
 
   /**
    * Redirect to previous as if nothing ever happened.
+   * @param {RoleModel} role
    */
   @action
-  cancel(role, selectedProjectIDs) {
-    this.selectedItems = new TrackedArray(selectedProjectIDs);
+  cancel(role) {
+    role.rollbackAttributes();
     if (role.scope.isGlobal) {
       this.router.replaceWith(
         'scopes.scope.roles.role.manage-scopes.manage-custom-scopes',
