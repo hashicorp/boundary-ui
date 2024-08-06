@@ -20,8 +20,6 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
-const USERNAME_SELECTOR = '[data-test-username]';
-const AUTH_METHOD_SELECTOR = '[data-test-auth-method]';
 const SIGNOUT_SELECTOR = '[data-test-signout-button]';
 
 module('Acceptance | projects | settings | index', function (hooks) {

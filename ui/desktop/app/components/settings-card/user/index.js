@@ -11,6 +11,7 @@ export default class SettingsUserInfoComponent extends Component {
   // =services
 
   @service session;
+  @service intl;
 
   /**
    * Returns the username of the current user
@@ -44,14 +45,8 @@ export default class SettingsUserInfoComponent extends Component {
         authenticated: { authenticator },
       },
     } = this.session;
-    const formattedAuthenticator = authenticator.split(':')[1];
-    if (
-      formattedAuthenticator === 'oidc' ||
-      formattedAuthenticator === 'ldap'
-    ) {
-      return formattedAuthenticator.toUpperCase();
-    }
-    return formattedAuthenticator;
+    const formattedAuthenticatorType = authenticator.split(':')[1];
+    return this.intl.t(`resources.account.types.${formattedAuthenticatorType}`);
   }
 
   // =actions
