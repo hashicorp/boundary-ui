@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
 const { readFile } = require('fs/promises');

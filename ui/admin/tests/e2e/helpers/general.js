@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 exports.authenticatedState = './tests/e2e/artifacts/authenticated-state.json';
 
 /**
