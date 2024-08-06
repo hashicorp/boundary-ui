@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { nanoid } = require('nanoid');

@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: MPL-2.0
  */
 
-/* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
 const { test } = require('@playwright/test');
 
