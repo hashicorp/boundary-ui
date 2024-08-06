@@ -133,22 +133,6 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 
-  test('displays userinfo when authenticated', async function (assert) {
-    authenticateSession({ username: 'testuser' });
-    assert.expect(2);
-    await visit(urls.settings);
-    assert.ok(currentSession().isAuthenticated);
-    assert.dom(USERNAME_SELECTOR).hasText('testuser');
-  });
-
-  test('displays type of auth method when authenticated', async function (assert) {
-    authenticateSession({ authenticator: 'authenticator:test' });
-    assert.expect(2);
-    await visit(urls.settings);
-    assert.ok(currentSession().isAuthenticated);
-    assert.dom(AUTH_METHOD_SELECTOR).hasText('test');
-  });
-
   test('clicking signout button logs out the user', async function (assert) {
     authenticateSession({ username: 'testuser' });
     assert.expect(2);

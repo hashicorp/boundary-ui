@@ -41,6 +41,7 @@
               @color='neutral'
             />
           {{/if}}
+
         </Hds::Text::Body>
       </div>
     </div>
@@ -52,5 +53,24 @@
         {{/if}}
       </Hds::Alert>
     {{/if}}
+
+    <Hds::Form::Select::Field
+      name='theme'
+      @width='30%'
+      {{on 'change' @toggle}}
+      as |F|
+    >
+      <F.Label>{{t 'titles.color-theme'}}</F.Label>
+      <F.Options>
+        {{#each this.themes as |theme|}}
+          <option
+            value={{theme.value}}
+            selected={{eq this.session.data.theme theme.value}}
+          >
+            {{t (concat 'themes.' theme.label)}}
+          </option>
+        {{/each}}
+      </F.Options>
+    </Hds::Form::Select::Field>
   </:body>
 </SettingsCard>
