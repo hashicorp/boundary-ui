@@ -137,7 +137,6 @@ module('Acceptance | projects | settings | index', function (hooks) {
     authenticateSession({ username: 'testuser' });
     assert.expect(2);
     await visit(urls.settings);
-    console.log('currentSession', currentSession());
     assert.ok(currentSession().isAuthenticated);
     await click(SIGNOUT_SELECTOR);
     assert.notOk(currentSession().isAuthenticated);

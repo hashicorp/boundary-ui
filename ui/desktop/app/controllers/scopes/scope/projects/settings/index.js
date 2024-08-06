@@ -16,7 +16,6 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
    */
   @action
   toggleTheme({ target: { value: theme } }) {
-    console.log('toggleTheme', theme);
     return this.application.toggleTheme(theme);
   }
 }
