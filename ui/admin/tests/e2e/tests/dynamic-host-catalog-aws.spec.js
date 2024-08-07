@@ -5,12 +5,12 @@
 
 const { test, expect } = require('@playwright/test');
 const { nanoid } = require('nanoid');
-import { execSync } from 'child_process';
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const HostCatalogsPage = require('../pages/host-catalogs');
 const OrgsPage = require('../pages/orgs');
@@ -205,10 +205,9 @@ test.describe('AWS', async () => {
       );
 
       if (orgName) {
-        const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-        const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-        if (org) {
-          await deleteOrgCli(org.id);
+        const orgId = await getOrgIdFromNameCli(orgName);
+        if (orgId) {
+          await deleteScopeCli(orgId);
         }
       }
     }

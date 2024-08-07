@@ -4,14 +4,14 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 const { nanoid } = require('nanoid');
 
 const { checkEnv } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const AuthMethodsPage = require('../pages/auth-methods');
 const OrgsPage = require('../pages/orgs');
@@ -294,10 +294,9 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }

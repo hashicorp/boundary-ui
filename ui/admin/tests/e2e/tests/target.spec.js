@@ -4,14 +4,16 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectToTarget,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const HostCatalogsPage = require('../pages/host-catalogs');
 const OrgsPage = require('../pages/orgs');
@@ -36,7 +38,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     const orgsPage = new OrgsPage(page);
@@ -87,19 +89,11 @@ test('Verify session created to target with host, then cancel the session @ce @a
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
     connect = await connectToTarget(
-      target.id,
+      targetId,
       process.env.E2E_SSH_USER,
       process.env.E2E_SSH_KEY_PATH,
     );
@@ -111,8 +105,8 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -125,7 +119,7 @@ test('Verify session created to target with address, then cancel the session @ce
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     const orgsPage = new OrgsPage(page);
@@ -144,19 +138,11 @@ test('Verify session created to target with address, then cancel the session @ce
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
     connect = await connectToTarget(
-      target.id,
+      targetId,
       process.env.E2E_SSH_USER,
       process.env.E2E_SSH_KEY_PATH,
     );
@@ -168,8 +154,8 @@ test('Verify session created to target with address, then cancel the session @ce
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -216,10 +202,9 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name === orgName)[0];
-    if (org) {
-      await deleteOrgCli(org.id);
+    const orgId = await getOrgIdFromNameCli(orgName);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
   }
 });
