@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-exports.authenticatedState = './tests/e2e/artifacts/authenticated-state.json';
+exports.authenticatedState = './tests/e2e/artifacts/authenticated-state.json'; // !! move this somewhere else
 
 /**
  * Checks that the provided environment variables are set

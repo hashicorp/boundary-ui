@@ -4,13 +4,13 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
 const OrgsPage = require('../pages/orgs');
@@ -110,10 +110,9 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }

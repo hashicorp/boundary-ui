@@ -1,0 +1,34 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+const { execSync } = require('child_process');
+
+/**
+ * Creates a new username-password credential
+ * @param {string} credentialStoreId ID of the credential store that the credential will be created for.
+ * @returns {Promise<string>} new credential's ID
+ */
+export async function createUsernamePasswordCredentialCli(credentialStoreId) {
+  let usernamePasswordCredential;
+  const login = 'test-login';
+  try {
+    usernamePasswordCredential = JSON.parse(
+      execSync(
+        `boundary credentials create username-password \
+        -name ${login} \
+        -credential-store-id ${credentialStoreId} \
+        -username ${login} \
+        -password env://CREDENTIALS_PASSWORD \
+        -format json`,
+        {
+          env: { ...process.env, CREDENTIALS_PASSWORD: 'credentials-password' },
+        },
+      ),
+    ).item;
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return usernamePasswordCredential.id;
+}

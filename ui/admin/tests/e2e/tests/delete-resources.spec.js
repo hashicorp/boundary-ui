@@ -27,9 +27,9 @@ const {
   createTcpTarget,
   createVaultCredentialStoreCli,
   createUsernamePasswordCredentialCli,
-  deleteOrgCli,
+  deleteScopeCli,
 } = require('../helpers/boundary-cli');
-const { checkVaultCli } = require('../helpers/vault-cli');
+const { checkVaultCli, getVaultToken } = require('../helpers/vault-cli');
 const AuthMethodsPage = require('../pages/auth-methods');
 const BaseResourcePage = require('../pages/base-resource');
 const WorkersPage = require('../pages/workers');
@@ -91,11 +91,14 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     let staticHostSetId = await createHostSetCli(staticHostCatalogId);
     let staticCredentialStoreId =
       await createStaticCredentialStoreCli(projectId);
+    const vaultToken = await getVaultToken(
+      boundaryPolicyName,
+      secretPolicyName,
+    );
     let vaultCredentialStoreId = await createVaultCredentialStoreCli(
       projectId,
       process.env.E2E_VAULT_ADDR,
-      secretPolicyName,
-      boundaryPolicyName,
+      vaultToken,
     );
     let usernamePasswordCredentialId =
       await createUsernamePasswordCredentialCli(staticCredentialStoreId);
@@ -197,7 +200,7 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
   } finally {
     // Delete org in case the test failed before deleting the org using UI
     if (orgId && orgDeleted === false) {
-      await deleteOrgCli(orgId);
+      await deleteScopeCli(orgId);
     }
   }
 });

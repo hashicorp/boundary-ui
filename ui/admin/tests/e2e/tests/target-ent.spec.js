@@ -4,7 +4,6 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
@@ -12,7 +11,10 @@ const {
   checkBoundaryCli,
   connectToTarget,
   connectSshToTarget,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
 const HostCatalogsPage = require('../pages/host-catalogs');
@@ -38,39 +40,30 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     const orgsPage = new OrgsPage(page);
     const orgName = await orgsPage.createOrg();
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createTcpTargetWithAddressEnt(
+      process.env.E2E_TARGET_ADDRESS,
+      process.env.E2E_TARGET_PORT,
+    );
+
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
-    const projectsPage = new ProjectsPage(page);
-    const projectName = await projectsPage.createProject();
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-
-    const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTcpTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
     connect = await connectToTarget(
-      target.id,
+      targetId,
       process.env.E2E_SSH_USER,
       process.env.E2E_SSH_KEY_PATH,
     );
@@ -82,8 +75,8 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -96,37 +89,18 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     const orgsPage = new OrgsPage(page);
     const orgName = await orgsPage.createOrg();
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-
     const targetsPage = new TargetsPage(page);
     const targetName = await targetsPage.createSshTargetWithAddressEnt(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
     const credentialName =
@@ -139,7 +113,16 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       credentialName,
     );
 
-    connect = await connectSshToTarget(target.id);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    connect = await connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -148,8 +131,8 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -160,7 +143,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
 
 test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     const orgsPage = new OrgsPage(page);
@@ -224,17 +207,10 @@ test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-    connect = await connectSshToTarget(target.id);
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    connect = await connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -243,8 +219,8 @@ test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {

@@ -11,8 +11,12 @@ const { readFile } = require('fs/promises');
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
+  authorizeSessionByTargetIdCli,
   checkBoundaryCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
@@ -52,7 +56,7 @@ test.beforeEach(async ({ page }) => {
 test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
 }) => {
-  let org;
+  let orgId;
   try {
     execSync(
       `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
@@ -82,32 +86,13 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
 
     const orgsPage = new OrgsPage(page);
     const orgName = await orgsPage.createOrg();
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
-
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
-    const projects = JSON.parse(
-      execSync(`boundary scopes list -format json -scope-id ${org.id}`),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-
     const targetsPage = new TargetsPage(page);
     const targetName = await targetsPage.createTargetWithAddress(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
-    const targets = JSON.parse(
-      execSync(`boundary targets list -format json -scope-id ${project.id}`),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
-
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createVaultCredentialStore(
       process.env.E2E_VAULT_ADDR,
@@ -137,11 +122,16 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialLibraryName,
     );
 
-    const session = JSON.parse(
-      execSync(
-        `boundary targets authorize-session -id ${target.id} -format json`,
-      ),
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    const session = await authorizeSessionByTargetIdCli(targetId);
     const retrievedUser =
       session.item.credentials[0].secret.decoded.data.username;
     const retrievedKey =
@@ -156,8 +146,8 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       throw new Error('Stored Key does not match');
     }
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
   }
 });

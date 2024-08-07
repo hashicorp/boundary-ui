@@ -11,7 +11,10 @@ const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectSshToTarget,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
@@ -51,7 +54,7 @@ test.beforeEach(async () => {
 
 test('SSH Certificate Injection @ent @docker', async ({ page }) => {
   await page.goto('/');
-  let org;
+  let orgId;
   let connect;
   try {
     // Set up vault
@@ -94,22 +97,10 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     // Create org
     const orgsPage = new OrgsPage(page);
     const orgName = await orgsPage.createOrg();
-    await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
     // Create project
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
     // Create target
     const targetsPage = new TargetsPage(page);
@@ -117,10 +108,6 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + project.id),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
     // Create credentials
     const credentialStoresPage = new CredentialStoresPage(page);
@@ -139,7 +126,16 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     );
 
     // Connect to target
-    connect = await connectSshToTarget(target.id);
+    await authenticateBoundaryCli(
+      process.env.BOUNDARY_ADDR,
+      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    connect = await connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -148,8 +144,8 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
       .getByRole('button', { name: 'Cancel' })
       .click();
   } finally {
-    if (org) {
-      await deleteOrgCli(org.id);
+    if (orgId) {
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {

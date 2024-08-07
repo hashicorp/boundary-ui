@@ -1,0 +1,30 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+const { execSync } = require('child_process');
+const { nanoid } = require('nanoid');
+
+/**
+ * Creates a new group
+ * @param {string} scopeId ID of the scope under which the group will be created.
+ * @returns {Promise<string>} new group's ID
+ */
+export async function createGroupCli(scopeId) {
+  const groupName = 'group-' + nanoid();
+  let group;
+  try {
+    group = JSON.parse(
+      execSync(
+        `boundary groups create \
+        -scope-id ${scopeId} \
+        -name ${groupName} \
+        -format json`,
+      ),
+    ).item;
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+  return group.id;
+}
