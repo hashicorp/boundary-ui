@@ -135,7 +135,8 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   // =actions
 
   /**
-   * Stores the role model in the transition data property so that the application level hook can check for dirty attributes and trigger the confirm service.
+   * Stores the role model in the transition data property so that the application level hook
+   * can check for dirty attributes and trigger the confirm service.
    * @param {object} transition
    */
   @action
