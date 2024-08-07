@@ -66,7 +66,6 @@
     "eslint-plugin-ember": "^11.11.1",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-qunit": "^8.0.1",
-    "js-bexpr": "hashicorp/js-bexpr#6565e4cda1cb2f1601825fa8ad2b6ef2782d0567",
     "loader.js": "^4.7.0",
     "miragejs": "^0.1.48",
     "prettier": "^3.0.0",

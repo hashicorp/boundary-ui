@@ -4299,7 +4299,6 @@ __metadata:
     eslint-plugin-ember: "npm:^11.11.1"
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
-    js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     lodash: "npm:^4.17.21"
     postcss: "npm:^8.4.31"
@@ -4643,7 +4642,6 @@ __metadata:
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
     has: "npm:^1.0.4"
-    js-bexpr: "hashicorp/js-bexpr#6565e4cda1cb2f1601825fa8ad2b6ef2782d0567"
     loader.js: "npm:^4.7.0"
     miragejs: "npm:^0.1.48"
     prettier: "npm:^3.0.0"
@@ -7794,7 +7792,6 @@ __metadata:
     filesize: "npm:^10.0.7"
     intl-messageformat: "npm:^10.5.14"
     intl-unofficial-duration-unit-format: "npm:^3.1.0"
-    js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.19.4"
@@ -8506,7 +8503,6 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2"
     ember-qunit: "npm:^6.2.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -8518,7 +8514,6 @@ __metadata:
     eslint-plugin-ember: "npm:^11.11.1"
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
-    js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     lodash: "npm:^4.17.21"
     playwright: "npm:^1.43.0"
@@ -9093,7 +9088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.26.8, ember-cli-babel@npm:^7.7.3":
+"ember-cli-babel@npm:^7.0.0, ember-cli-babel@npm:^7.1.0, ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.20.5, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.23.1, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.7.3":
   version: 7.26.11
   resolution: "ember-cli-babel@npm:7.26.11"
   dependencies:
@@ -10159,16 +10154,6 @@ __metadata:
   dependencies:
     ember-cli-babel: "npm:^7.26.6"
   checksum: 10c0/8adaa1ce276e4d6e0ecf4b7481bc8b073c1916b472e10266d914978f7c6f2189c9c0a1bf435b43a0e1aad4924dcd0713574a6880e9b5d078d423a36eb9b12b1b
-  languageName: node
-  linkType: hard
-
-"ember-pollster@https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2":
-  version: 0.0.1-beta.2
-  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=f80834d184048a6a9c7c46f52fcf80553c61e5e2"
-  dependencies:
-    ember-cli-babel: "npm:^7.26.8"
-    ember-cli-htmlbars: "npm:^6.0.1"
-  checksum: 10c0/7bf40a13aa1151a27345303513b96e59d91dc5df5e3dab1b86a3dacdab0b7557cd8ad6346dadea91e7e22e86b0cddc213b255c12f06007125279d12d8ca58c78
   languageName: node
   linkType: hard
 
@@ -12013,13 +11998,6 @@ __metadata:
   version: 1.0.2
   resolution: "for-in@npm:1.0.2"
   checksum: 10c0/42bb609d564b1dc340e1996868b67961257fd03a48d7fdafd4f5119530b87f962be6b4d5b7e3a3fc84c9854d149494b1d358e0b0ce9837e64c4c6603a49451d6
-  languageName: node
-  linkType: hard
-
-"foreach@npm:^2.0.4":
-  version: 2.0.6
-  resolution: "foreach@npm:2.0.6"
-  checksum: 10c0/dc79f83997ac986dadbc95b4035ce8b86699fb654eb85446b0ad779fe69d567fc9894075e460243ca8bc20adb8fd178ad203aef66dc3c620ac78b18a4cb7059c
   languageName: node
   linkType: hard
 
@@ -14933,24 +14911,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-bexpr@hashicorp/js-bexpr#6565e4cda1cb2f1601825fa8ad2b6ef2782d0567":
-  version: 0.0.0
-  resolution: "js-bexpr@https://github.com/hashicorp/js-bexpr.git#commit=6565e4cda1cb2f1601825fa8ad2b6ef2782d0567"
-  dependencies:
-    json-pointer: "npm:^0.6.1"
-  checksum: 10c0/519b0de5eb9c580e9115c78f36f6fbf0a8c2fb741125dcaf675a494afdb409ff60b220ba60d3b3b9559d6f24a3fb75b64028aad7e99b9165262c86c5ebf15ceb
-  languageName: node
-  linkType: hard
-
-"js-bexpr@hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1":
-  version: 0.0.0
-  resolution: "js-bexpr@https://github.com/hashicorp/js-bexpr.git#commit=9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
-  dependencies:
-    json-pointer: "npm:^0.6.1"
-  checksum: 10c0/236e8afb15bb84d71ee1a603cc3c7255bf887898790a3896ff89582e519d11be8ea58f1708c2c013b549a2131652fb054dc69356518c6e65f49cfe3ca3e783ab
-  languageName: node
-  linkType: hard
-
 "js-string-escape@npm:^1.0.1":
   version: 1.0.1
   resolution: "js-string-escape@npm:1.0.1"
@@ -15087,15 +15047,6 @@ __metadata:
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
   checksum: 10c0/140932564c8f0b88455432e0f33c4cb4086b8868e37524e07e723f4eaedb9425bdc2bafd71bd1d9765bd15fd1e2d126972bc83990f55c467168c228c24d665f3
-  languageName: node
-  linkType: hard
-
-"json-pointer@npm:^0.6.1":
-  version: 0.6.2
-  resolution: "json-pointer@npm:0.6.2"
-  dependencies:
-    foreach: "npm:^2.0.4"
-  checksum: 10c0/47f6103032c0340b3392cb650e0ec817f785eccb553407da13fae85bc535483c9b359d7e756de4ed73130172c28d2b02f8beb53a700a98b12e72c7bf70e734b7
   languageName: node
   linkType: hard
 
