@@ -44,14 +44,21 @@ export default class ApplicationRoute extends Route {
       const fromName = transition?.from?.name;
       const toName = transition?.to?.name;
       const maybeModel = transition?.from?.attributes;
-      if (fromName !== toName && maybeModel?.hasDirtyAttributes) {
+      const dataModel = transition?.data?.model;
+      if (
+        fromName !== toName &&
+        (maybeModel?.hasDirtyAttributes || dataModel?.hasDirtyAttributes)
+      ) {
         transition.abort();
         try {
           await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
             title: 'titles.abandon-confirm',
             confirm: 'actions.discard',
           });
-          maybeModel?.rollbackAttributes();
+          const dirtyModel = maybeModel?.hasDirtyAttributes
+            ? maybeModel
+            : dataModel;
+          dirtyModel?.rollbackAttributes();
           transition.retry();
         } catch (e) {
           // if user denies, do nothing

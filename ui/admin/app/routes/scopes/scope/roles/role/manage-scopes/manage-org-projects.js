@@ -56,7 +56,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       totalItems,
     );
 
-    const remainingProjectIDs = await this.getSelectedProjects(role, org_id);
+    const remainingProjectIDs = await this.getRemainingProjects(role, org_id);
 
     return {
       role,
@@ -99,12 +99,12 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   }
 
   /**
-   * Extract project type grant scope ids that belong to this org scope.
+   * Extract project type grant scope ids that don't belong to this org scope.
    * @param {RoleModel} role
    * @param {string} org_id
    * @returns {Promise<[string]>} remainingProjectIDs
    */
-  async getSelectedProjects(role, org_id) {
+  async getRemainingProjects(role, org_id) {
     let selectedProjectIDs = role.grantScopeProjectIDs;
     let remainingProjectIDs = [];
     if (role.scope.isGlobal && selectedProjectIDs.length) {
@@ -128,25 +128,12 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   // =actions
 
   /**
-   * Triggers confirm pop-up only when user has made changes and is trying to navigate away from current route.
+   * Stores the role model in the transition data property so that the application level hook can check for dirty attributes and trigger the confirm service.
    * @param {object} transition
    */
   @action
   async willTransition(transition) {
-    const { from, to } = transition;
-    const { role } = from.attributes;
-    if (from.name !== to.name && role.hasDirtyAttributes) {
-      transition.abort();
-      try {
-        await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
-          title: 'titles.abandon-confirm',
-          confirm: 'actions.discard',
-        });
-        role.rollbackAttributes();
-        transition.retry();
-      } catch (e) {
-        // if user denies, do nothing
-      }
-    }
+    const { role } = transition.from.attributes;
+    transition.data = { model: role };
   }
 }

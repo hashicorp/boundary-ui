@@ -135,25 +135,12 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   // =actions
 
   /**
-   * Triggers confirm pop-up only when user has made changes and is trying to navigate away from current route.
+   * Stores the role model in the transition data property so that the application level hook can check for dirty attributes and trigger the confirm service.
    * @param {object} transition
    */
   @action
   async willTransition(transition) {
-    const { from, to } = transition;
-    const { role } = from.attributes;
-    if (from.name !== to.name && role.hasDirtyAttributes) {
-      transition.abort();
-      try {
-        await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
-          title: 'titles.abandon-confirm',
-          confirm: 'actions.discard',
-        });
-        role.rollbackAttributes();
-        transition.retry();
-      } catch (e) {
-        // if user denies, do nothing
-      }
-    }
+    const { role } = transition.from.attributes;
+    transition.data = { model: role };
   }
 }
