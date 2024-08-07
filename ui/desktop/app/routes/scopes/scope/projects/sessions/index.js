@@ -105,10 +105,10 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const totalItems = sessions.meta?.totalItems;
 
     // Query all sessions and all targets for defining filtering values if entering route for the first time
-    if (!this.allSessions) {
+    if (!this.allSessions?.length) {
       await this.getAllSessions(orgScope, scopes, orgFilter);
     }
-    if (!this.allTargets) {
+    if (!this.allTargets?.length) {
       await this.getAllTargets(orgScope, orgFilter);
     }
 
