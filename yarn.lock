@@ -2640,20 +2640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hashicorp/ember-asciinema-player@https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a":
-  version: 0.0.0
-  resolution: "@hashicorp/ember-asciinema-player@https://github.com/hashicorp/ember-asciinema-player.git#commit=e047a096039cff70234c232efe75dcad74c6358a"
-  dependencies:
-    asciinema-player: "npm:^3.4.0"
-    ember-auto-import: "npm:^2.5.0"
-    ember-cli-babel: "npm:^7.26.11"
-    ember-cli-htmlbars: "npm:^6.1.1"
-  peerDependencies:
-    ember-source: ^3.28.0 || ^4.0.0
-  checksum: 10c0/037fc44f0072d21ff776956a38828f8cff741c5b079099561d178ac5dc9f3a8c18e217da1d240622411b6670acdb8ca610af2b99c541f12910b371c50535efb6
-  languageName: node
-  linkType: hard
-
 "@hashicorp/ember-flight-icons@npm:^5.1.2":
   version: 5.1.2
   resolution: "@hashicorp/ember-flight-icons@npm:5.1.2"
@@ -4277,7 +4263,6 @@ __metadata:
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
-    "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a"
     "@playwright/test": "npm:^1.43.0"
     babel-loader: "npm:^8.2.5"
     broccoli-asset-rev: "npm:^3.0.0"
@@ -4845,16 +4830,6 @@ __metadata:
   version: 2.0.6
   resolution: "asap@npm:2.0.6"
   checksum: 10c0/c6d5e39fe1f15e4b87677460bd66b66050cd14c772269cee6688824c1410a08ab20254bb6784f9afb75af9144a9f9a7692d49547f4d19d715aeb7c0318f3136d
-  languageName: node
-  linkType: hard
-
-"asciinema-player@npm:^3.4.0":
-  version: 3.8.0
-  resolution: "asciinema-player@npm:3.8.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.21.0"
-    solid-js: "npm:^1.3.0"
-  checksum: 10c0/35b0141aebdfa9ac82b11ef47af9a2be7d8dcd18a0196aced9c1fecaa5a781e7179257fa68ee942dc8d1f801b660e97ca3a5347329382584f15015da1e3461a8
   languageName: node
   linkType: hard
 
@@ -8130,13 +8105,6 @@ __metadata:
   dependencies:
     cssom: "npm:~0.3.6"
   checksum: 10c0/863400da2a458f73272b9a55ba7ff05de40d850f22eb4f37311abebd7eff801cf1cd2fb04c4c92b8c3daed83fe766e52e4112afb7bc88d86c63a9c2256a7d178
-  languageName: node
-  linkType: hard
-
-"csstype@npm:^3.1.0":
-  version: 3.1.3
-  resolution: "csstype@npm:3.1.3"
-  checksum: 10c0/80c089d6f7e0c5b2bd83cf0539ab41474198579584fa10d86d0cafe0642202343cbc119e076a0b1aece191989477081415d66c9fefbf3c957fc2fc4b7009f248
   languageName: node
   linkType: hard
 
@@ -20179,22 +20147,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"seroval-plugins@npm:^1.0.3":
-  version: 1.1.0
-  resolution: "seroval-plugins@npm:1.1.0"
-  peerDependencies:
-    seroval: ^1.0
-  checksum: 10c0/bdbf2f9720d6a5b7a50f1f4cc6abd6be60ed8ddef1c8969763f280deda7772eb0735a31a42ffce7d8e0203d14546c96894b5fbc90ccdf292c51ef233ca3ccc29
-  languageName: node
-  linkType: hard
-
-"seroval@npm:^1.0.4":
-  version: 1.1.0
-  resolution: "seroval@npm:1.1.0"
-  checksum: 10c0/2d80188b6121b1b526a437422424af341018eefcdf9307ed588ae06c6ca2c78e908828c21d25cf04ef00d3eee1d87f47776385d8874ea15e6aec22cebceaec95
-  languageName: node
-  linkType: hard
-
 "serve-static@npm:1.15.0":
   version: 1.15.0
   resolution: "serve-static@npm:1.15.0"
@@ -20610,17 +20562,6 @@ __metadata:
     ip-address: "npm:^9.0.5"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/d54a52bf9325165770b674a67241143a3d8b4e4c8884560c4e0e078aace2a728dffc7f70150660f51b85797c4e1a3b82f9b7aa25e0a0ceae1a243365da5c51a7
-  languageName: node
-  linkType: hard
-
-"solid-js@npm:^1.3.0":
-  version: 1.8.18
-  resolution: "solid-js@npm:1.8.18"
-  dependencies:
-    csstype: "npm:^3.1.0"
-    seroval: "npm:^1.0.4"
-    seroval-plugins: "npm:^1.0.3"
-  checksum: 10c0/6e31d9e09c2531446739d13cb14cbac6e9a8a09a574ed524d92c602c1ea61626b2d6d1f052a0e0d2b1b36a939be9a1aa08056e30e9b37317780e5d7ba9eaddda
   languageName: node
   linkType: hard
 
