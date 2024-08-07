@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -14,15 +14,11 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
-const {
-  createOrg,
-  createProject,
-  createSshTargetWithAddressEnt,
-  createVaultCredentialStore,
-  createVaultSshCertificateCredentialLibrary,
-  addInjectedCredentialsToTarget,
-  waitForSessionToBeVisible,
-} = require('../helpers/boundary-ui');
+const CredentialStoresPage = require('../pages/credential-stores');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const SessionsPage = require('../pages/sessions');
+const TargetsPage = require('../pages/targets');
 
 const sshPolicyName = 'ssh-policy';
 const boundaryPolicyName = 'boundary-controller';
@@ -96,7 +92,8 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     const clientToken = vaultToken.auth.client_token;
 
     // Create org
-    const orgName = await createOrg(page);
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -107,15 +104,16 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
     // Create project
-    const projectName = await createProject(page);
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
     const projects = JSON.parse(
       execSync('boundary scopes list -format json -scope-id ' + org.id),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
     // Create target
-    const targetName = await createSshTargetWithAddressEnt(
-      page,
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
@@ -125,26 +123,25 @@ test('SSH Certificate Injection @ent @docker', async ({ page }) => {
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
     // Create credentials
-    await createVaultCredentialStore(
-      page,
+    const credentialStoresPage = new CredentialStoresPage(page);
+    await credentialStoresPage.createVaultCredentialStore(
       process.env.E2E_VAULT_ADDR,
       clientToken,
     );
     const credentialLibraryName =
-      await createVaultSshCertificateCredentialLibrary(
-        page,
+      await credentialStoresPage.createVaultSshCertificateCredentialLibrary(
         `${secretsPath}/issue/${secretName}`,
         process.env.E2E_SSH_USER,
       );
-    await addInjectedCredentialsToTarget(
-      page,
+    await targetsPage.addInjectedCredentialsToTarget(
       targetName,
       credentialLibraryName,
     );
 
     // Connect to target
     connect = await connectSshToTarget(target.id);
-    await waitForSessionToBeVisible(page, targetName);
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')

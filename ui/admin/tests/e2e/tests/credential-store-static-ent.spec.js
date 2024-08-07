@@ -3,25 +3,19 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  addBrokeredCredentialsToTarget,
-  addInjectedCredentialsToTarget,
-  createOrg,
-  createProject,
-  createSshTargetWithAddressEnt,
-  createStaticCredentialKeyPair,
-  createStaticCredentialStore,
-  createStaticCredentialUsernamePassword,
-} = require('../helpers/boundary-ui');
+const CredentialStoresPage = require('../pages/credential-stores');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -41,28 +35,36 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
   try {
     await page.goto('/');
 
-    orgName = await createOrg(page);
-    await createProject(page);
-    const targetName = await createSshTargetWithAddressEnt(
-      page,
+    const orgsPage = new OrgsPage(page);
+    orgName = await orgsPage.createOrg();
+    const projectsPage = new ProjectsPage(page);
+    await projectsPage.createProject();
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
-    await createStaticCredentialStore(page);
+    const credentialStoresPage = new CredentialStoresPage(page);
+    await credentialStoresPage.createStaticCredentialStore();
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        process.env.E2E_SSH_USER,
+        process.env.E2E_SSH_KEY_PATH,
+      );
+    const credentialName2 =
+      await credentialStoresPage.createStaticCredentialUsernamePassword(
+        process.env.E2E_SSH_USER,
+        'testPassword',
+      );
 
-    const credentialName = await createStaticCredentialKeyPair(
-      page,
-      process.env.E2E_SSH_USER,
-      process.env.E2E_SSH_KEY_PATH,
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
     );
-    const credentialName2 = await createStaticCredentialUsernamePassword(
-      page,
-      process.env.E2E_SSH_USER,
-      'testPassword',
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName2,
     );
-
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName);
-    await addBrokeredCredentialsToTarget(page, targetName, credentialName2);
 
     // Remove a credential from the target
     await page
@@ -78,8 +80,14 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    await addInjectedCredentialsToTarget(page, targetName, credentialName);
-    await addInjectedCredentialsToTarget(page, targetName, credentialName2);
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName2,
+    );
 
     // Remove a credential from the target
     await page

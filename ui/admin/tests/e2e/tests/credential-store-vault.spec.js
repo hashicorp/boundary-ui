@@ -3,10 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 const { nanoid } = require('nanoid');
+const { readFile } = require('fs/promises');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -14,14 +15,10 @@ const {
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
 const { checkVaultCli } = require('../helpers/vault-cli');
-const {
-  createOrg,
-  createProject,
-  createVaultCredentialStore,
-  createTargetWithAddress,
-  addBrokeredCredentialsToTarget,
-} = require('../helpers/boundary-ui');
-const { readFile } = require('fs/promises');
+const CredentialStoresPage = require('../pages/credential-stores');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const TargetsPage = require('../pages/targets');
 
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
@@ -83,7 +80,8 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
     const clientToken = vaultToken.auth.client_token;
 
-    const orgName = await createOrg(page);
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
@@ -93,14 +91,15 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const orgs = JSON.parse(execSync('boundary scopes list -format json'));
     org = orgs.items.filter((obj) => obj.name == orgName)[0];
 
-    const projectName = await createProject(page);
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
     const projects = JSON.parse(
       execSync(`boundary scopes list -format json -scope-id ${org.id}`),
     );
     const project = projects.items.filter((obj) => obj.name == projectName)[0];
 
-    const targetName = await createTargetWithAddress(
-      page,
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createTargetWithAddress(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
@@ -109,8 +108,8 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
     const target = targets.items.filter((obj) => obj.name == targetName)[0];
 
-    await createVaultCredentialStore(
-      page,
+    const credentialStoresPage = new CredentialStoresPage(page);
+    await credentialStoresPage.createVaultCredentialStore(
       process.env.E2E_VAULT_ADDR,
       clientToken,
     );
@@ -133,8 +132,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    await addBrokeredCredentialsToTarget(
-      page,
+    await targetsPage.addBrokeredCredentialsToTarget(
       targetName,
       credentialLibraryName,
     );

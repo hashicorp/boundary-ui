@@ -1,11 +1,11 @@
 /**
  * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: MPL-2.0
+ * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { expect } = require('@playwright/test');
 const { test } = require('@playwright/test');
+
 const { authenticatedState } = require('../helpers/general');
 
 test.use({ storageState: authenticatedState });
