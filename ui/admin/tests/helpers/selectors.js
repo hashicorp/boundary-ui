@@ -10,7 +10,7 @@ export const EDIT_BTN = '.rose-form-actions [type=button]';
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
 
-export const TABLE_ROW_RESOURCE_LINK = 'tbody tr:first-child a';
+export const TABLE_FIRST_ROW_RESOURCE_LINK = 'tbody tr:first-child a';
 
 export const RESOURCE_NOT_FOUND_SUBTITLE = '.rose-message-subtitle';
 export const RESOURCE_NOT_FOUND_VALUE = 'Error 404';
