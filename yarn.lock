@@ -8517,7 +8517,7 @@ __metadata:
     eslint-plugin-ember: "npm:^11.11.1"
     eslint-plugin-n: "npm:^16.3.1"
     eslint-plugin-qunit: "npm:^8.0.1"
-    js-bexpr: "git@github.com:hashicorp/js-bexpr.git"
+    js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     lodash: "npm:^4.17.21"
     playwright: "npm:^1.43.0"
@@ -14919,15 +14919,6 @@ __metadata:
   bin:
     jiti: bin/jiti.js
   checksum: 10c0/05b9ed58cd30d0c3ccd3c98209339e74f50abd9a17e716f65db46b6a35812103f6bde6e134be7124d01745586bca8cc5dae1d0d952267c3ebe55171949c32e56
-  languageName: node
-  linkType: hard
-
-"js-bexpr@git@github.com:hashicorp/js-bexpr.git":
-  version: 0.0.0
-  resolution: "js-bexpr@git@github.com:hashicorp/js-bexpr.git#commit=6565e4cda1cb2f1601825fa8ad2b6ef2782d0567"
-  dependencies:
-    json-pointer: "npm:^0.6.1"
-  checksum: 10c0/519b0de5eb9c580e9115c78f36f6fbf0a8c2fb741125dcaf675a494afdb409ff60b220ba60d3b3b9559d6f24a3fb75b64028aad7e99b9165262c86c5ebf15ceb
   languageName: node
   linkType: hard
 
