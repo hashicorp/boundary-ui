@@ -7,7 +7,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeAuthenticateMethodOidcController extends Controller {
-  @controller('scopes/scope/authenticate/method/index') method;
+  @controller('scopes/scope/authenticate/method/index') authMethod;
 
   // =services
 

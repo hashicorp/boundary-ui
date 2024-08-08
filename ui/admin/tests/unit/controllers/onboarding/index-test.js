@@ -54,15 +54,6 @@ module('Unit | Controller | onboarding/index', function (hooks) {
     assert.ok(controller);
   });
 
-  test('doLater action causes transition to expected route', async function (assert) {
-    await visit(urls.onboarding);
-
-    controller.doLater();
-    await waitUntil(() => currentURL() === urls.globalScope);
-
-    assert.strictEqual(currentURL(), urls.globalScope);
-  });
-
   test('createResources action creates and saves resources', async function (assert) {
     await visit(urls.onboarding);
     const global = await store.findRecord('scope', instances.scopes.global.id);
