@@ -12,8 +12,8 @@
       <p>{{t 'onboarding.add-target.descriptions.setup-first-target'}}</p>
       <Form::Onboarding
         @model={{@model}}
-        @submit={{route-action 'createResources'}}
-        @cancel={{route-action 'doLater'}}
+        @submit={{fn this.createResources @model}}
+        @cancel={{this.doLater}}
       />
     </:body>
   </Rose::Frame>

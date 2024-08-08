@@ -5,6 +5,6 @@
 
 <Form::Authenticate
   @model={{@model}}
-  @submit={{route-action 'authenticate'}}
+  @submit={{fn this.authenticate @model}}
   @disabled={{(is-loading)}}
 />

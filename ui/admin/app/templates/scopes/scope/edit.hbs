@@ -64,7 +64,7 @@
         <dropdown.button
           @style='danger'
           @disabled={{@model.canSave}}
-          {{on 'click' (route-action 'delete' @model)}}
+          {{on 'click' (fn this.scopes.delete @model)}}
         >
           {{#if @model.isOrg}}
             {{t 'resources.org.actions.delete'}}
@@ -82,8 +82,8 @@
         {{#if (can 'read model' @model)}}
           <Form::Scope
             @model={{@model}}
-            @submit={{route-action 'save' @model}}
-            @cancel={{route-action 'cancel' @model}}
+            @submit={{fn this.scopes.save @model}}
+            @cancel={{fn this.scopes.cancel @model}}
           />
         {{else}}
           <Rose::Layout::Centered>
@@ -176,7 +176,7 @@
                         @color='critical'
                         {{on
                           'click'
-                          (route-action 'detachStoragePolicy' @model)
+                          (fn this.scopes.detachStoragePolicy @model)
                         }}
                       />
                     </Hds::Dropdown>

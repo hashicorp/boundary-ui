@@ -6,21 +6,13 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
-import { action } from '@ember/object';
-import { next } from '@ember/runloop';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
 
 export default class ScopesScopeRoute extends Route {
   // =services
 
   @service store;
-  @service intl;
-  @service session;
   @service scope;
-  @service router;
 
   // =methods
 
@@ -104,53 +96,5 @@ export default class ScopesScopeRoute extends Route {
   setControllerProperties(scopes) {
     /* eslint-disable-next-line ember/no-controller-access-in-routes */
     this.controller.setProperties({ scopes });
-  }
-
-  // =actions
-
-  /**
-   * Rollback changes on scope.
-   * @param {Model} scope
-   */
-  @action
-  cancel(scope) {
-    const { isNew } = scope;
-    next(() => {
-      scope.rollbackAttributes();
-      if (isNew) this.router.transitionTo('scopes.scope');
-    });
-  }
-
-  /**
-   * Handle save scope.
-   * @param {Model} scope
-   * @param {Event} e
-   */
-  @action
-  @loading
-  @notifyError(({ message }) => message)
-  @notifySuccess(({ isNew }) =>
-    isNew ? 'notifications.create-success' : 'notifications.save-success',
-  )
-  async save(scope) {
-    const { isNew } = scope;
-    await scope.save();
-    await this.router.transitionTo('scopes.scope.edit', scope);
-    if (isNew) this.refresh();
-  }
-
-  /**
-   * Deletes the scope and redirects to index.
-   * @param {Model} scope
-   */
-  @action
-  @loading
-  @confirm('questions.delete-confirm')
-  @notifyError(({ message }) => message, { catch: true })
-  @notifySuccess('notifications.delete-success')
-  async delete(scope) {
-    const { scopeID } = scope;
-    await scope.destroyRecord();
-    this.router.replaceWith('scopes.scope.scopes', scopeID);
   }
 }
