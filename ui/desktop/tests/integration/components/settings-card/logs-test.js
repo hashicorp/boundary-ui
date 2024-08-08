@@ -1,26 +1,49 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'desktop/tests/helpers';
+import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | settings-card/logs', function (hooks) {
   setupRenderingTest(hooks);
+  setupIntl(hooks);
 
-  test('it renders', async function (assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  const SELECTED_OPTION = 'select option:checked';
+  const COPY_BUTTON_TEXT = '.hds-copy-snippet__text';
 
-    await render(hbs`<SettingsCard::Logs />`);
+  test('it renders and selects log levels correctly', async function (assert) {
+    const logPath = '/tmp/test.log';
+    this.set('model', {
+      logLevel: 'info',
+      logPath,
+    });
 
-    assert.dom(this.element).hasText('');
+    await render(hbs`<SettingsCard::Logs @model={{this.model}} />`);
 
-    // Template block usage:
-    await render(hbs`
-      <SettingsCard::Logs>
-        template block text
-      </SettingsCard::Logs>
-    `);
+    assert.dom(SELECTED_OPTION).hasText('Info');
+    assert.dom(COPY_BUTTON_TEXT).hasText(logPath);
 
-    assert.dom(this.element).hasText('template block text');
+    this.set('model', {
+      logLevel: 'error',
+      logPath,
+    });
+    assert.dom(SELECTED_OPTION).hasText('Error');
+
+    this.set('model', {
+      logLevel: 'warn',
+      logPath,
+    });
+    assert.dom(SELECTED_OPTION).hasText('Warn');
+
+    this.set('model', {
+      logLevel: 'debug',
+      logPath,
+    });
+    assert.dom(SELECTED_OPTION).hasText('Debug');
   });
 });
