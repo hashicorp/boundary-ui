@@ -11,10 +11,14 @@ const {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectSshToTarget,
-  deleteOrgCli,
+  deleteScopeCli,
   waitForSessionRecordingCli,
   deleteStorageBucketCli,
   deletePolicyCli,
+  getOrgIdFromNameCli,
+  getPolicyIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
 const OrgsPage = require('../pages/orgs');
@@ -46,31 +50,24 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
   await page.goto('/');
 
   let orgId;
-  let storagePolicy;
+  let policyName;
   let storageBucket;
   let connect;
   try {
-    // Create org
-    const orgsPage = new OrgsPage(page);
-    const orgName = await orgsPage.createOrg();
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,
       process.env.E2E_PASSWORD_AUTH_METHOD_ID,
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-    const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-    orgId = org.id;
+
+    // Create org
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
 
     // Create project
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
-    const projects = JSON.parse(
-      execSync('boundary scopes list -format json -scope-id ' + org.id),
-    );
-    const project = projects.items.filter((obj) => obj.name == projectName)[0];
-    const projectId = project.id;
 
     // Create storage bucket
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
@@ -105,10 +102,6 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
       `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
     );
 
-    const targets = JSON.parse(
-      execSync('boundary targets list -format json -scope-id ' + projectId),
-    );
-    const target = targets.items.filter((obj) => obj.name == targetName)[0];
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
     const credentialName =
@@ -131,11 +124,14 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText(orgName),
     ).toBeVisible();
     const storagePoliciesPage = new StoragePoliciesPage(page);
-    const policyName = await storagePoliciesPage.createStoragePolicy();
+    policyName = await storagePoliciesPage.createStoragePolicy();
     await orgsPage.attachStoragePolicy(policyName);
 
     // Establish connection to target and cancel it
-    connect = await connectSshToTarget(target.id);
+    orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    connect = await connectSshToTarget(targetId);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
     const sessionsPage = new SessionsPage(page);
@@ -188,12 +184,6 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
     // Edit storage policy: do not protect from deletion
-    const storagePolicies = JSON.parse(
-      execSync('boundary policies list -format json -scope-id ' + orgId),
-    );
-    storagePolicy = storagePolicies.items.filter(
-      (obj) => obj.name == policyName,
-    )[0];
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
     await page.getByRole('link', { name: orgName }).click();
@@ -262,14 +252,15 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
-    if (storagePolicy) {
-      await deletePolicyCli(storagePolicy.id);
+    if (policyName) {
+      const storagePolicyId = await getPolicyIdFromNameCli(orgId, policyName);
+      await deletePolicyCli(storagePolicyId);
     }
     if (storageBucket) {
       await deleteStorageBucketCli(storageBucket.id);
     }
     if (orgId) {
-      await deleteOrgCli(orgId);
+      await deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {

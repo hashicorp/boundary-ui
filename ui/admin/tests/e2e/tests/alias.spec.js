@@ -4,16 +4,18 @@
  */
 
 const { test, expect } = require('@playwright/test');
-import { execSync } from 'child_process';
 import { customAlphabet } from 'nanoid';
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
-  authorizeAlias,
+  authorizeSessionByAliasCli,
   checkBoundaryCli,
   deleteAliasCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const AliasesPage = require('../pages/aliases');
 const OrgsPage = require('../pages/orgs');
@@ -72,7 +74,7 @@ test.describe('Aliases', async () => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      await authorizeAlias(alias);
+      await authorizeSessionByAliasCli(alias);
 
       // Clear destination from alias
       await page.getByRole('link', { name: alias }).click();
@@ -91,10 +93,9 @@ test.describe('Aliases', async () => {
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
       if (orgName) {
-        const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-        const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-        if (org) {
-          await deleteOrgCli(org.id);
+        const orgId = await getOrgIdFromNameCli(orgName);
+        if (orgId) {
+          await deleteScopeCli(orgId);
         }
       }
       if (alias) {
@@ -130,7 +131,7 @@ test.describe('Aliases', async () => {
       );
 
       // Connect to target using alias
-      await authorizeAlias(alias);
+      await authorizeSessionByAliasCli(alias);
     } finally {
       await authenticateBoundaryCli(
         process.env.BOUNDARY_ADDR,
@@ -138,12 +139,10 @@ test.describe('Aliases', async () => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-
       if (orgName) {
-        const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-        const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-        if (org) {
-          await deleteOrgCli(org.id);
+        const orgId = await getOrgIdFromNameCli(orgName);
+        if (orgId) {
+          await deleteScopeCli(orgId);
         }
         if (alias) {
           await deleteAliasCli(alias);
@@ -155,7 +154,7 @@ test.describe('Aliases', async () => {
   test('Set up alias from aliases page @ce @aws @docker', async ({ page }) => {
     await page.goto('/');
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
-    let org;
+    let orgId;
     let alias;
     try {
       const orgsPage = new OrgsPage(page);
@@ -175,24 +174,14 @@ test.describe('Aliases', async () => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      const projects = JSON.parse(
-        execSync('boundary scopes list -format json -scope-id ' + org.id),
-      );
-      const project = projects.items.filter(
-        (obj) => obj.name == projectName,
-      )[0];
-      const targets = JSON.parse(
-        execSync('boundary targets list -format json -scope-id ' + project.id),
-      );
-      const target = targets.items.filter((obj) => obj.name == targetName)[0];
+      orgId = await getOrgIdFromNameCli(orgName);
+      const projectId = await getProjectIdFromNameCli(orgId, projectName);
+      const targetId = await getTargetIdFromNameCli(projectId, targetName);
 
       alias = 'example.alias.' + nanoid();
       const aliasesPage = new AliasesPage(page);
-      await aliasesPage.createAliasForTarget(alias, target.id);
-      await authorizeAlias(alias);
+      await aliasesPage.createAliasForTarget(alias, targetId);
+      await authorizeSessionByAliasCli(alias);
     } finally {
       await authenticateBoundaryCli(
         process.env.BOUNDARY_ADDR,
@@ -200,9 +189,8 @@ test.describe('Aliases', async () => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-
-      if (org) {
-        await deleteOrgCli(org.id);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
       if (alias) {
         await deleteAliasCli(alias);

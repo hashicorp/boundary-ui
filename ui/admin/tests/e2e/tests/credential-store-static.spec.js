@@ -4,16 +4,18 @@
  */
 
 const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
 const { readFile } = require('fs/promises');
 const { nanoid } = require('nanoid');
 
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
+  authorizeSessionByTargetIdCli,
   checkBoundaryCli,
-  deleteOrgCli,
-  getSessionCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
+  getProjectIdFromNameCli,
+  getTargetIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const CredentialStoresPage = require('../pages/credential-stores');
 const OrgsPage = require('../pages/orgs');
@@ -75,7 +77,10 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const session = await getSessionCli(orgName, projectName, targetName);
+    const orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    const session = await authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedKey = session.item.credentials[0].credential.private_key;
 
@@ -95,10 +100,9 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }
@@ -127,7 +131,10 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const session = await getSessionCli(orgName, projectName, targetName);
+    const orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    const session = await authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
 
@@ -141,10 +148,9 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }
@@ -190,7 +196,10 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
       process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
       process.env.E2E_PASSWORD_ADMIN_PASSWORD,
     );
-    const session = await getSessionCli(orgName, projectName, targetName);
+    const orgId = await getOrgIdFromNameCli(orgName);
+    const projectId = await getProjectIdFromNameCli(orgId, projectName);
+    const targetId = await getTargetIdFromNameCli(projectId, targetName);
+    const session = await authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
     const retrievedId = session.item.credentials[0].credential.id;
@@ -206,10 +215,9 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }
@@ -260,10 +268,9 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
         process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
         process.env.E2E_PASSWORD_ADMIN_PASSWORD,
       );
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }

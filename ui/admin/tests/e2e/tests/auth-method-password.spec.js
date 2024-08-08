@@ -9,7 +9,8 @@ const { execSync } = require('child_process');
 const {
   authenticateBoundaryCli,
   checkBoundaryCli,
-  deleteOrgCli,
+  deleteScopeCli,
+  getOrgIdFromNameCli,
 } = require('../helpers/boundary-cli');
 const AuthMethodsPage = require('../pages/auth-methods');
 const OrgsPage = require('../pages/orgs');
@@ -162,10 +163,9 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     }
 
     if (orgName) {
-      const orgs = JSON.parse(execSync('boundary scopes list -format json'));
-      const org = orgs.items.filter((obj) => obj.name == orgName)[0];
-      if (org) {
-        await deleteOrgCli(org.id);
+      const orgId = await getOrgIdFromNameCli(orgName);
+      if (orgId) {
+        await deleteScopeCli(orgId);
       }
     }
   }
