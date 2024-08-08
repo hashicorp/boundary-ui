@@ -16,23 +16,21 @@
     {{/if}}
   </:state>
   <:body>
-    <div class='app-information'>
-      <div>
-        <Hds::Text::Display>
-          {{t 'resources.auth-method.title'}}
-        </Hds::Text::Display>
-        <Hds::Text::Body @tag='p' @weight='medium' data-test-auth-method>
-          {{this.authMethod}}
-        </Hds::Text::Body>
-      </div>
-      <div>
-        <Hds::Text::Display>
-          {{t 'form.username.label'}}
-        </Hds::Text::Display>
-        <Hds::Text::Body @tag='p' @weight='medium' data-test-username>
-          {{this.userInfo}}
-        </Hds::Text::Body>
-      </div>
+    <div>
+      <Hds::Text::Display>
+        {{t 'resources.auth-method.title'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium' data-test-auth-method>
+        {{this.authMethod}}
+      </Hds::Text::Body>
+    </div>
+    <div>
+      <Hds::Text::Display>
+        {{t 'form.username.label'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium' data-test-username>
+        {{this.userInfo}}
+      </Hds::Text::Body>
     </div>
   </:body>
 
