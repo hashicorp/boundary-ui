@@ -43,22 +43,16 @@ export default class ApplicationRoute extends Route {
     this.router.on('routeWillChange', async (transition) => {
       const fromName = transition?.from?.name;
       const toName = transition?.to?.name;
-      const maybeModel = transition?.from?.attributes;
-      const dataModel = transition?.data?.model;
-      if (
-        fromName !== toName &&
-        (maybeModel?.hasDirtyAttributes || dataModel?.hasDirtyAttributes)
-      ) {
+      const maybeModel =
+        transition?.data?.model ?? transition?.from?.attributes;
+      if (fromName !== toName && maybeModel?.hasDirtyAttributes) {
         transition.abort();
         try {
           await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {
             title: 'titles.abandon-confirm',
             confirm: 'actions.discard',
           });
-          const dirtyModel = maybeModel?.hasDirtyAttributes
-            ? maybeModel
-            : dataModel;
-          dirtyModel?.rollbackAttributes();
+          maybeModel?.rollbackAttributes();
           transition.retry();
         } catch (e) {
           // if user denies, do nothing
