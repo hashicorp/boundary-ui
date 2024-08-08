@@ -33,7 +33,7 @@
       @pageSize={{this.pageSize}}
       @handleSearchInput={{this.handleSearchInput}}
       @submit={{fn this.setGrantScopes @model.role}}
-      @cancel={{this.cancel}}
+      @cancel={{fn this.cancel @model.role}}
     />
   </page.body>
 

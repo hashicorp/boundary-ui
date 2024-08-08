@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { visit, currentURL, waitUntil } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 module(
   'Unit | Controller | scopes/scope/roles/role/manage-scopes/index',
@@ -59,17 +60,23 @@ module(
 
       assert.deepEqual(role.grant_scope_ids, []);
 
-      await controller.setGrantScopes(role, ['this']);
+      role.grant_scope_ids = [GRANT_SCOPE_THIS];
+      await controller.setGrantScopes(role);
 
-      assert.deepEqual(role.grant_scope_ids, ['this']);
+      assert.deepEqual(role.grant_scope_ids, [GRANT_SCOPE_THIS]);
     });
 
     test('cancel action causes transition to expected route', async function (assert) {
       await visit(urls.manageScopes);
+      const role = await store.findRecord('role', instances.role.id);
 
-      controller.cancel();
+      assert.deepEqual(role.grant_scope_ids, []);
+
+      role.grant_scope_ids = [GRANT_SCOPE_THIS];
+      controller.cancel(role);
       await waitUntil(() => currentURL() === urls.scopes);
 
+      assert.deepEqual(role.grant_scope_ids, []);
       assert.strictEqual(currentURL(), urls.scopes);
     });
   },

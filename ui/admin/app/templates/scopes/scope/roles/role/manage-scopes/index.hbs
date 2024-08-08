@@ -22,7 +22,7 @@
       @model={{@model}}
       @showCheckIcon={{this.showCheckIcon}}
       @submit={{fn this.setGrantScopes @model}}
-      @cancel={{this.cancel}}
+      @cancel={{fn this.cancel @model}}
     />
   </page.body>
 
