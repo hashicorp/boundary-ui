@@ -69,7 +69,7 @@
                     @iconPosition='trailing'
                     @text={{t
                       'resources.role.scope.actions.view-projects'
-                      selected=projectTotals.selected
+                      selected=projectTotals.selected.length
                       total=projectTotals.total
                     }}
                     @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
@@ -127,4 +127,32 @@
       />
     </A.Footer>
   </Hds::ApplicationState>
+{{/if}}
+
+{{#if this.showRemoveOrgModal}}
+  <Hds::Modal
+    @onClose={{this.toggleRemoveOrgModal}}
+    data-test-manage-scopes-remove-org-modal
+    as |M|
+  >
+    <M.Header>{{t 'resources.role.scope.remove-org.title'}}</M.Header>
+    <M.Body>
+      <Hds::Text::Body @tag='p' @color='primary'>
+        {{t 'resources.role.scope.remove-org.description'}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{t 'resources.role.scope.actions.remove-org-and-projects'}}
+          {{on 'click' this.removeProjects}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'resources.role.scope.actions.remove-org-only'}}
+          {{on 'click' F.close}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
 {{/if}}
