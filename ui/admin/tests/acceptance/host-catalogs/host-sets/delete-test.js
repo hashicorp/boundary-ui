@@ -22,6 +22,10 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   setupMirage(hooks);
 
   let getHostSetCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] ul li button';
 
   const instances = {
     scopes: {
@@ -80,7 +84,8 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   test('can delete host', async function (assert) {
     const count = getHostSetCount();
     await visit(urls.hostSet);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostSetCount(), count - 1);
   });
 
@@ -90,7 +95,8 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getHostSetCount();
     await visit(urls.hostSet);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostSetCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -99,6 +105,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.hostSet);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     assert.notOk(
       find('.rose-layout-page-actions .rose-dropdown-button-danger'),
     );
@@ -110,7 +117,8 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getHostSetCount();
     await visit(urls.hostSet);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostSetCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -128,7 +136,8 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
       );
     });
     await visit(urls.hostSet);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });
