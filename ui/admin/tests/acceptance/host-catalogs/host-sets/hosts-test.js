@@ -31,7 +31,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-dropdown-host-sets] div:first-child button';
   const CREATE_AND_ADD_HOSTS_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] div ul li a';
+    '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
   const ADD_EXISTING_HOSTS_SELECTOR =
     '[data-test-manage-dropdown-host-sets] div ul li:nth-child(2) a';
 
