@@ -81,7 +81,7 @@ module('Acceptance | accounts | delete', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.account);
-    assert.notOk(find(MANAGE_DROPDOWN_SELECTOR), find(DELETE_ACTION_SELECTOR));
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('errors are displayed when delete on account fails', async function (assert) {
