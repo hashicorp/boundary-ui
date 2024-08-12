@@ -54,7 +54,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN, 'Click save');
 
@@ -71,7 +71,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN, 'Click cancel');
 
@@ -89,7 +89,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isEnabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isEnabled();
@@ -118,7 +118,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await click(selectors.FIELD_ACCESS_KEY_EDIT_BTN);
     await click(selectors.FIELD_SECRET_KEY_EDIT_BTN);
 
@@ -164,7 +164,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     });
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Activate edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(selectors.FIELD_WORKER_FILTER, 'random string');
     await click(commonSelectors.SAVE_BTN);
 
@@ -185,7 +185,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
     assert.dom(selectors.FIELD_BUCKET_PREFIX).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
@@ -204,7 +204,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
