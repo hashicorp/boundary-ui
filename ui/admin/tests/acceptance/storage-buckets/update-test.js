@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -55,7 +56,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(`[href="${urls.storageBucket}"]`);
     await click(selectors.EDIT_BTN, 'Click edit mode');
     await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(`[href="${urls.storageBucket}"]`).isVisible();
     assert.dom(selectors.FIELD_NAME).hasValue(selectors.FIELD_NAME_VALUE);
@@ -104,7 +105,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
@@ -127,7 +128,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(selectors.FIELD_ACCESS_KEY_EDIT_BTN, 'Click cancel button');
     await click(selectors.FIELD_SECRET_KEY_EDIT_BTN, 'Click cancel button');
 
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
@@ -165,7 +166,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(`[href="${urls.storageBucket}"]`);
     await click(selectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(selectors.FIELD_WORKER_FILTER, 'random string');
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.TOAST).hasText('The request was invalid.');
     assert

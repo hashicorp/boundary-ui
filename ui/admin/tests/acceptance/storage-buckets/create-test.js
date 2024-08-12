@@ -11,6 +11,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -62,7 +63,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.dom(selectors.FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
     assert.dom(selectors.FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: selectors.FIELD_NAME_VALUE,
     });
@@ -85,7 +86,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     assert.dom(selectors.FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
     assert.dom(selectors.FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: selectors.FIELD_NAME_VALUE,
     });
@@ -117,7 +118,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     );
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     // Assertions
     const storageBucket = this.server.schema.storageBuckets.findBy({
@@ -150,7 +151,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
 
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: selectors.FIELD_NAME_VALUE,
     });
@@ -175,7 +176,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: selectors.FIELD_NAME_VALUE,
@@ -208,7 +209,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     // Retrieve recently created SB
     const storageBucket = await this.server.schema.storageBuckets.findBy({
@@ -263,7 +264,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
     assert.dom(selectors.TOAST).hasText('The request was invalid.');
