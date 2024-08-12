@@ -73,7 +73,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(`[href="${urls.storageBucket}"]`);
     await click(selectors.EDIT_BTN, 'Click edit mode');
     await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
-    await click(selectors.CANCEL_BTN, 'Click cancel');
+    await click(commonSelectors.CANCEL_BTN, 'Click cancel');
 
     assert.dom(selectors.FIELD_NAME).hasValue(`${name}`);
     assert.strictEqual(instances.storageBucket.name, name);

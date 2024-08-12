@@ -235,7 +235,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
 
-    await click(selectors.CANCEL_BTN);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.storageBuckets);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount);

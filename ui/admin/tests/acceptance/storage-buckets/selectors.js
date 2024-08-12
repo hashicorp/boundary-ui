@@ -4,7 +4,6 @@
  */
 
 // START TODO: Remove common selectors from storage-bucket specific selectors
-export const CANCEL_BTN = '.rose-form-actions [type=button]';
 export const EDIT_BTN = '.rose-form-actions [type=button]';
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
