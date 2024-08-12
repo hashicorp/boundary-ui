@@ -20,6 +20,11 @@ module('Acceptance | accounts | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-account-auth-methods] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-account-auth-methods] ul li button';
+
   const instances = {
     scopes: {
       global: null,
@@ -67,7 +72,8 @@ module('Acceptance | accounts | delete', function (hooks) {
   test('can delete an account', async function (assert) {
     const accountsCount = this.server.db.accounts.length;
     await visit(urls.account);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(this.server.db.accounts.length, accountsCount - 1);
   });
 
@@ -75,9 +81,7 @@ module('Acceptance | accounts | delete', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.account);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('errors are displayed when delete on account fails', async function (assert) {
@@ -93,7 +97,8 @@ module('Acceptance | accounts | delete', function (hooks) {
       );
     });
     await visit(urls.account);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
     assert.strictEqual(
       find('.rose-notification-body').textContent.trim(),
