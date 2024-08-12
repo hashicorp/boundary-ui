@@ -55,14 +55,16 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(`[href="${urls.storageBucket}"]`);
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(`[href="${urls.storageBucket}"]`).isVisible();
-    assert.dom(selectors.FIELD_NAME).hasValue(selectors.FIELD_NAME_VALUE);
+    assert
+      .dom(commonSelectors.FIELD_NAME)
+      .hasValue(commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(
       instances.storageBucket.name,
-      selectors.FIELD_NAME_VALUE,
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -72,10 +74,10 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(`[href="${urls.storageBucket}"]`);
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN, 'Click cancel');
 
-    assert.dom(selectors.FIELD_NAME).hasValue(`${name}`);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(`${name}`);
     assert.strictEqual(instances.storageBucket.name, name);
   });
 
