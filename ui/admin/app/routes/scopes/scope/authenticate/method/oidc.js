@@ -7,11 +7,11 @@ import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import runEvery from 'ember-pollster/decorators/route/run-every';
+// import runEvery from 'ember-pollster/decorators/route/run-every';
 import { notifyError } from 'core/decorators/notify';
-import config from '../../../../../config/environment';
+// import config from '../../../../../config/environment';
 
-const POLL_TIMEOUT_SECONDS = config.oidcPollingTimeoutSeconds;
+// const POLL_TIMEOUT_SECONDS = config.oidcPollingTimeoutSeconds;
 
 export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   // =services
@@ -33,10 +33,10 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     return oidc.attemptFetchToken({ scope, authMethod });
   }
 
-  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
-  poller() {
-    this.refresh();
-  }
+  // @runEvery(POLL_TIMEOUT_SECONDS * 1000)
+  // poller() {
+  //   this.refresh();
+  // }
 
   /**
    * When this route is deactivated (exited), stop polling for changes and close
