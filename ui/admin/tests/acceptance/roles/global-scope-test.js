@@ -62,6 +62,11 @@ module('Acceptance | roles | global-scope', function (hooks) {
     '.rose-dialog-footer .rose-button-primary';
   const DISCARD_CHANGES_CANCEL_BUTTON =
     '.rose-dialog-footer .rose-button-secondary';
+  const REMOVE_ORG_MODAL = '[data-test-manage-scopes-remove-org-modal]';
+  const REMOVE_ORG_PROJECTS_BUTTON =
+    '[data-test-manage-scopes-remove-org-modal] .hds-button--color-primary';
+  const REMOVE_ORG_ONLY_BUTTON =
+    '[data-test-manage-scopes-remove-org-modal] .hds-button--color-secondary';
 
   const instances = {
     scopes: {
@@ -507,6 +512,72 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(DISCARD_CHANGES_CANCEL_BUTTON);
 
     assert.strictEqual(currentURL(), urls.manageCustomScopes);
+  });
+
+  test('user can choose to only deselect org using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL).isVisible();
+
+    await click(REMOVE_ORG_ONLY_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
+  });
+
+  test('user can choose to deselect org and projects using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL).isVisible();
+
+    await click(REMOVE_ORG_PROJECTS_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+  });
+
+  test('user cannot trigger modal when deselecting an org with no projects selected on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [instances.scopes.org.id] });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL).doesNotExist();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
   });
 
   test('user can search for a specific org scope by id on manage custom scopes page', async function (assert) {
