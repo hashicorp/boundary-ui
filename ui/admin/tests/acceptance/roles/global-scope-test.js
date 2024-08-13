@@ -577,7 +577,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exist({ count: 0 });
   });
 
   test('user can search for a specific org scope by id on manage custom scopes page', async function (assert) {
