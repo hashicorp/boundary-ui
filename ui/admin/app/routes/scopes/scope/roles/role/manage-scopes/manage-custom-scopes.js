@@ -6,8 +6,9 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 import { TrackedObject } from 'tracked-built-ins';
+import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
+
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute extends Route {
   // =attributes
 
