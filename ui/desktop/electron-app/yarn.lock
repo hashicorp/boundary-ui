@@ -3267,7 +3267,7 @@ __metadata:
   resolution: "node-pty@npm:1.0.0"
   dependencies:
     nan: "npm:^2.17.0"
-    node-gyp: "npm:latest"
+    node-gyp: "npm:^9.0.0"
   checksum: 10/f1803531bfee71fdc8fb97fc544364e64de6bad91d6221b79b6a8e3518032768bff8738960d15f29e5a14aa16b9eb550e1a26ba1ad8c66f86424b9f56fd0ccad
   languageName: node
   linkType: hard
