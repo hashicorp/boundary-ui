@@ -1854,7 +1854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/rebuild@npm:^3.2.10":
+"@electron/rebuild@npm:^3.2.10, @electron/rebuild@npm:^3.6.0":
   version: 3.6.0
   resolution: "@electron/rebuild@npm:3.6.0"
   dependencies:
@@ -8501,6 +8501,7 @@ __metadata:
     "@babel/core": "npm:^7.21.0"
     "@babel/eslint-parser": "npm:^7.21.3"
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
+    "@electron/rebuild": "npm:^3.6.0"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^3.0.1"
