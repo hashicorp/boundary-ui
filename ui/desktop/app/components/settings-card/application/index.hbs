@@ -25,7 +25,7 @@
       <Hds::Text::Display>
         {{t 'settings.cache-daemon'}}
       </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @weight='medium'>
+      <Hds::Text::Body @tag='p' @weight='medium' data-test-cache-version>
         {{#if @model.formattedCacheVersion}}
           {{@model.formattedCacheVersion}}
           <Hds::Badge
@@ -43,12 +43,19 @@
 
       </Hds::Text::Body>
     </div>
-    {{#if @model.error}}
+    {{#if @model.cacheDaemonErrors}}
       <Hds::Alert @type='inline' @color='warning' as |A|>
         <A.Title>{{t 'errors.settings-cache.title'}}</A.Title>
-        {{#if @model.error.message}}
-          <A.Description>{{@model.error.message}}</A.Description>
-        {{/if}}
+        <A.Description>
+          {{#each @model.cacheDaemonErrors as |error|}}
+            <Hds::Text::Body @tag='p'>
+              {{#if error.name}}
+                <strong>{{error.name}}: </strong>
+              {{/if}}
+              {{error.message}}
+            </Hds::Text::Body>
+          {{/each}}
+        </A.Description>
       </Hds::Alert>
     {{/if}}
 
