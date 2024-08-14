@@ -5,7 +5,7 @@
 
 import { test } from '@playwright/test';
 
-import { authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,

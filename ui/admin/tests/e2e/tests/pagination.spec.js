@@ -6,7 +6,7 @@
 import { test, expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import { authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
 
 test.use({ storageState: authenticatedState });
 

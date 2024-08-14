@@ -8,7 +8,8 @@ import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
 import { readFile } from 'fs/promises';
 
-import { checkEnv, authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
+import { checkEnv } from '../helpers/general';
 import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,

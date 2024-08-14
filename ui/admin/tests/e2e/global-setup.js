@@ -4,7 +4,7 @@
  */
 
 import { chromium } from '@playwright/test';
-import { checkEnv, authenticatedState } from './helpers/general';
+import { checkEnv } from './helpers/general';
 
 async function globalSetup() {
   await checkEnv([
@@ -40,3 +40,6 @@ async function globalSetup() {
 }
 
 export default globalSetup;
+
+export const authenticatedState =
+  './tests/e2e/artifacts/authenticated-state.json';

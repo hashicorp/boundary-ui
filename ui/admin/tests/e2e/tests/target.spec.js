@@ -5,7 +5,8 @@
 
 import { test, expect } from '@playwright/test';
 
-import { checkEnv, authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
+import { checkEnv } from '../helpers/general';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,

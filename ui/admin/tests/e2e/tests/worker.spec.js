@@ -5,7 +5,7 @@
 
 import { test, expect } from '@playwright/test';
 
-import { authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
 
 test.use({ storageState: authenticatedState });
 

@@ -6,7 +6,8 @@
 import { test, expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
-import { checkEnv, authenticatedState } from '../helpers/general';
+import { authenticatedState } from '../global-setup';
+import { checkEnv } from '../helpers/general';
 import {
   authenticateBoundaryCli,
   authorizeSessionByAliasCli,

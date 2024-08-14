@@ -5,7 +5,7 @@
 
 import { test, expect } from '@playwright/test';
 
-const { authenticatedState } = require('../helpers/general');
+import { authenticatedState } from '../global-setup';
 const {
   authenticateBoundaryCli,
   deletePolicyCli,
