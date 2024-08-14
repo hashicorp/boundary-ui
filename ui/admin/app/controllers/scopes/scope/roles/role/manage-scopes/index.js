@@ -23,22 +23,23 @@ export default class ScopesScopeRolesRoleManageScopesIndexController extends Con
   /**
    * Save grant scope IDs to current role via the API.
    * @param {RoleModel} role
-   * @param {[string]} grantScopeIDs
    */
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('resources.role.scope.messages.manage-scopes.success')
-  async setGrantScopes(role, grantScopeIDs) {
-    await role.setGrantScopes(grantScopeIDs);
+  async setGrantScopes(role) {
+    await role.setGrantScopes(role.grant_scope_ids);
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 
   /**
    * Redirect to role scopes as if nothing ever happened.
+   * @param {RoleModel} role
    */
   @action
-  cancel() {
+  cancel(role) {
+    role.rollbackAttributes();
     this.router.replaceWith('scopes.scope.roles.role.scopes');
   }
 }

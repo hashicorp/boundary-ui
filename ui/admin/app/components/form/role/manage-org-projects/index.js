@@ -5,20 +5,13 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 export default class FormRoleManageOrgProjectsIndexComponent extends Component {
   // =attributes
 
-  @tracked selectedItems = [...this.args.model.selectedProjectIDs];
-
-  get allGrantScopes() {
-    return [
-      ...this.args.model.role.grantScopeKeywords,
-      ...this.args.model.role.grantScopeOrgIDs,
-      ...this.args.model.remainingProjectIDs,
-      ...this.selectedItems,
-    ];
+  get selectedProjectsCount() {
+    const { role, remainingProjectIDs } = this.args.model;
+    return role.grantScopeProjectIDs.length - remainingProjectIDs.length;
   }
 
   // =actions
@@ -29,16 +22,16 @@ export default class FormRoleManageOrgProjectsIndexComponent extends Component {
    */
   @action
   selectionChange({ selectableRowsStates }) {
+    const { role } = this.args.model;
     selectableRowsStates.forEach((row) => {
       const { isSelected, selectionKey: key } = row;
-      const includesId = this.selectedItems.includes(key);
-      if (isSelected) {
-        if (!includesId) this.selectedItems = [...this.selectedItems, key];
-      } else {
-        if (includesId)
-          this.selectedItems = this.selectedItems.filter(
-            (item) => item !== key,
-          );
+      const includesId = role.grant_scope_ids.includes(key);
+      if (isSelected && !includesId) {
+        role.grant_scope_ids = [...role.grant_scope_ids, key];
+      } else if (!isSelected && includesId) {
+        role.grant_scope_ids = role.grant_scope_ids.filter(
+          (item) => item !== key,
+        );
       }
     });
   }

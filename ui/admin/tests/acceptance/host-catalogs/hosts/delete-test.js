@@ -22,6 +22,10 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   setupMirage(hooks);
 
   let getHostCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-hosts-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-hosts-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -80,7 +84,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   test('can delete host', async function (assert) {
     const count = getHostCount();
     await visit(urls.host);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostCount(), count - 1);
   });
 
@@ -99,7 +104,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getHostCount();
     await visit(urls.host);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -110,7 +116,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getHostCount();
     await visit(urls.host);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getHostCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -128,7 +135,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
       );
     });
     await visit(urls.host);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

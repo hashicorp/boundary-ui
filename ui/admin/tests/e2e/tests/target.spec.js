@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable no-undef */
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
+
 const { checkEnv, authenticatedState } = require('../helpers/general');
 const {
   authenticateBoundaryCli,
@@ -13,18 +13,11 @@ const {
   connectToTarget,
   deleteOrgCli,
 } = require('../helpers/boundary-cli');
-const {
-  createOrg,
-  createProject,
-  createHostCatalog,
-  createHostSet,
-  createHostInHostSet,
-  createTarget,
-  createTargetWithAddress,
-  waitForSessionToBeVisible,
-  addHostSourceToTarget,
-  addEgressWorkerFilterToTarget,
-} = require('../helpers/boundary-ui');
+const HostCatalogsPage = require('../pages/host-catalogs');
+const OrgsPage = require('../pages/orgs');
+const ProjectsPage = require('../pages/projects');
+const SessionsPage = require('../pages/sessions');
+const TargetsPage = require('../pages/targets');
 
 test.use({ storageState: authenticatedState });
 
@@ -46,13 +39,16 @@ test('Verify session created to target with host, then cancel the session @ce @a
   let org;
   let connect;
   try {
-    const orgName = await createOrg(page);
-    const projectName = await createProject(page);
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
 
     // Create host set
-    const hostCatalogName = await createHostCatalog(page);
-    const hostSetName = await createHostSet(page);
-    await createHostInHostSet(page, process.env.E2E_TARGET_ADDRESS);
+    const hostCatalogsPage = new HostCatalogsPage(page);
+    const hostCatalogName = await hostCatalogsPage.createHostCatalog();
+    const hostSetName = await hostCatalogsPage.createHostSet();
+    await hostCatalogsPage.createHostInHostSet(process.env.E2E_TARGET_ADDRESS);
 
     // Create another host set
     await page
@@ -60,14 +56,17 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .getByRole('link', { name: 'Host Catalogs' })
       .click();
     await page.getByRole('link', { name: hostCatalogName }).click();
-    const hostSetName2 = await createHostSet(page);
+    const hostSetName2 = await hostCatalogsPage.createHostSet();
 
     // Create target
-    const targetName = await createTarget(page, process.env.E2E_TARGET_PORT);
-    await addHostSourceToTarget(page, hostSetName);
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createTarget(
+      process.env.E2E_TARGET_PORT,
+    );
+    await targetsPage.addHostSourceToTarget(hostSetName);
 
     // Add/Remove another host source
-    await addHostSourceToTarget(page, hostSetName2);
+    await targetsPage.addHostSourceToTarget(hostSetName2);
     await page
       .getByRole('link', { name: hostSetName2 })
       .locator('..')
@@ -104,7 +103,8 @@ test('Verify session created to target with host, then cancel the session @ce @a
       process.env.E2E_SSH_USER,
       process.env.E2E_SSH_KEY_PATH,
     );
-    await waitForSessionToBeVisible(page, targetName);
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')
@@ -128,10 +128,12 @@ test('Verify session created to target with address, then cancel the session @ce
   let org;
   let connect;
   try {
-    const orgName = await createOrg(page);
-    const projectName = await createProject(page);
-    const targetName = await createTargetWithAddress(
-      page,
+    const orgsPage = new OrgsPage(page);
+    const orgName = await orgsPage.createOrg();
+    const projectsPage = new ProjectsPage(page);
+    const projectName = await projectsPage.createProject();
+    const targetsPage = new TargetsPage(page);
+    const targetName = await targetsPage.createTargetWithAddress(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
@@ -158,7 +160,8 @@ test('Verify session created to target with address, then cancel the session @ce
       process.env.E2E_SSH_USER,
       process.env.E2E_SSH_KEY_PATH,
     );
-    await waitForSessionToBeVisible(page, targetName);
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
       .getByRole('cell', { name: targetName })
       .locator('..')
@@ -179,10 +182,12 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
   await page.goto('/');
   let orgName;
   try {
-    orgName = await createOrg(page);
-    await createProject(page);
-    await createTargetWithAddress(
-      page,
+    const orgsPage = new OrgsPage(page);
+    orgName = await orgsPage.createOrg();
+    const projectsPage = new ProjectsPage(page);
+    await projectsPage.createProject();
+    const targetsPage = new TargetsPage(page);
+    await targetsPage.createTargetWithAddress(
       process.env.E2E_TARGET_ADDRESS,
       process.env.E2E_TARGET_PORT,
     );
@@ -203,7 +208,7 @@ test('Verify TCP target is updated @ce @aws @docker', async ({ page }) => {
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
-    await addEgressWorkerFilterToTarget(page, '"dev" in "/tags/type"');
+    await targetsPage.addEgressWorkerFilterToTarget('"dev" in "/tags/type"');
   } finally {
     await authenticateBoundaryCli(
       process.env.BOUNDARY_ADDR,

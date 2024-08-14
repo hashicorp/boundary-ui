@@ -28,6 +28,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupMirage(hooks);
 
   let getHostSetHostCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div:first-child button';
+  const CREATE_AND_ADD_HOSTS_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
+  const ADD_EXISTING_HOSTS_SELECTOR =
+    '[data-test-manage-dropdown-host-sets] div ul li:nth-child(2) a';
 
   const instances = {
     scopes: {
@@ -141,6 +147,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   test('can navigate to add hosts with proper authorization', async function (assert) {
     await visit(urls.hostSet);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     assert.ok(find(`[href="${urls.addHosts}"]`));
   });
 
@@ -157,7 +164,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a:nth-child(2)');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_EXISTING_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
     await click('tbody label');
@@ -175,7 +183,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await click('[data-test-host-set-hosts-dropdown-toggle]');
     await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert.strictEqual(findAll('tbody tr').length, count - 1);
-    await click('.rose-layout-page-actions a:nth-child(2)');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(ADD_EXISTING_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.addHosts);
     await click('tbody .hds-table__tr .hds-form-label');
     await click('form [type="button"]');
@@ -213,7 +222,8 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSet);
     assert.strictEqual(findAll('tbody tr').length, 0);
-    await click('.rose-layout-page-actions a:nth-child(1)');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(CREATE_AND_ADD_HOSTS_SELECTOR);
     assert.strictEqual(currentURL(), urls.createAndAddHost);
     await fillIn('[name="name"]', 'Test Name');
     await fillIn('[name="description"]', 'description');

@@ -100,7 +100,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       scope_id: 'global',
       force_refresh: true,
     });
-    const allTargetsPromise = !this.allTargets
+    const allTargetsPromise = !this.allTargets?.length
       ? this.makeAllTargetsQuery(orgScope, orgFilter)
       : Promise.resolve();
 
@@ -126,7 +126,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     );
 
     const allTargets = await allTargetsPromise;
-    if (!this.allTargets) {
+    if (!this.allTargets?.length) {
       // Filter out targets to which users do not have the connect ability
       this.allTargets = allTargets.filter((target) =>
         target.authorized_actions.includes('authorize-session'),
