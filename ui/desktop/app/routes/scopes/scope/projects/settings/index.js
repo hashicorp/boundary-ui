@@ -13,28 +13,34 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
     let cacheDaemonStatus,
       formattedCacheVersion,
       formattedCliVersion,
-      formattedDesktopVersion;
+      formattedDesktopVersion,
+      error;
+
     const { versionNumber: cliVersion } =
       await this.ipc.invoke('getCliVersion');
     formattedCliVersion = `v${cliVersion}`;
+
     const { desktopVersion } = await this.ipc.invoke('getDesktopVersion');
     formattedDesktopVersion = `v${desktopVersion}`;
+
     try {
       cacheDaemonStatus = await this.ipc.invoke('cacheDaemonStatus');
     } catch (e) {
-      return {
-        formattedCliVersion,
-        formattedCacheVersion,
-        formattedDesktopVersion,
-        error: e,
-      };
+      error = e;
     }
-    const { version } = cacheDaemonStatus;
-    formattedCacheVersion = version.match(/v\d+\.\d+\.\d+/)?.[0];
+    const { version } = cacheDaemonStatus ?? {};
+    formattedCacheVersion = version?.match(/v\d+\.\d+\.\d+/)?.[0];
+
+    const logLevel = await this.ipc.invoke('getLogLevel');
+    const logPath = await this.ipc.invoke('getLogPath');
+
     return {
+      error,
       formattedCliVersion,
       formattedCacheVersion,
       formattedDesktopVersion,
+      logLevel,
+      logPath,
     };
   }
 }
