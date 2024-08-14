@@ -3,19 +3,19 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { test, expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   deleteScopeCli,
   getOrgIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const HostCatalogsPage = require('../pages/host-catalogs');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { HostCatalogsPage } from '../pages/host-catalogs';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { TargetsPage } from '../pages/targets';
 
 test.use({ storageState: authenticatedState });
 

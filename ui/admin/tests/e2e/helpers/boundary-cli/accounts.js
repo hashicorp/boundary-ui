@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
 
 /**
  * Creates a new password account

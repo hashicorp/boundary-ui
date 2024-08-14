@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test } = require('@playwright/test');
-const { execSync } = require('child_process');
+import { test } from '@playwright/test';
+import { execSync } from 'child_process';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectSshToTarget,
@@ -15,13 +15,13 @@ const {
   getOrgIdFromNameCli,
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const { checkVaultCli } = require('../helpers/vault-cli');
-const CredentialStoresPage = require('../pages/credential-stores');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const SessionsPage = require('../pages/sessions');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { checkVaultCli } from '../helpers/vault-cli';
+import { CredentialStoresPage } from '../pages/credential-stores';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { SessionsPage } from '../pages/sessions';
+import { TargetsPage } from '../pages/targets';
 
 const sshPolicyName = 'ssh-policy';
 const boundaryPolicyName = 'boundary-controller';

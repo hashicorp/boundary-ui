@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
 
-const BasePage = require('./base');
+import { BasePage } from './base';
 
-class SessionsPage extends BasePage {
+export class SessionsPage extends BasePage {
   /**
    * Waits for the session to appear and be in Active state.
    * @param {string} targetName Name of the target associated with the session
@@ -56,5 +56,3 @@ class SessionsPage extends BasePage {
     }
   }
 }
-
-module.exports = SessionsPage;

@@ -3,13 +3,14 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-exports.authenticatedState = './tests/e2e/artifacts/authenticated-state.json'; // !! move this somewhere else
+export const authenticatedState =
+  './tests/e2e/artifacts/authenticated-state.json'; // !! move this somewhere else
 
 /**
  * Checks that the provided environment variables are set
  * @param {string[]} envs List of environment variables
  */
-exports.checkEnv = async (envs) => {
+export async function checkEnv(envs) {
   let missing = [];
   for (let env in envs) {
     if (!process.env[envs[env]]) {
@@ -20,4 +21,4 @@ exports.checkEnv = async (envs) => {
   if (missing.length > 0) {
     throw new Error('Missing Environment Variables -- ' + missing);
   }
-};
+}

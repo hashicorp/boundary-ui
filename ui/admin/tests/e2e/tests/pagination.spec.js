@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
 import { authenticatedState } from '../helpers/general';

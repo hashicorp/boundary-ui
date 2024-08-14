@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class OrgsPage extends BaseResourcePage {
+export class OrgsPage extends BaseResourcePage {
   /**
    * Creates a new organization
    * @returns Name of the organization
@@ -52,5 +52,3 @@ class OrgsPage extends BaseResourcePage {
     ).toBeVisible();
   }
 }
-
-module.exports = OrgsPage;

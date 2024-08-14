@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   authorizeSessionByAliasCli,
   checkBoundaryCli,
@@ -16,11 +16,11 @@ const {
   getOrgIdFromNameCli,
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const AliasesPage = require('../pages/aliases');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { AliasesPage } from '../pages/aliases';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { TargetsPage } from '../pages/targets';
 
 test.use({ storageState: authenticatedState });
 

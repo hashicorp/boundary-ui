@@ -3,67 +3,27 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
 
-export { createPasswordAccountCli } from './boundary-cli/accounts';
-
-export { deleteAliasCli } from './boundary-cli/aliases';
-
-export { createPasswordAuthMethodCli } from './boundary-cli/auth-methods';
-
-export { authenticateBoundaryCli } from './boundary-cli/authenticate';
-
-export { connectSshToTarget, connectToTarget } from './boundary-cli/connect';
-
-export {
-  createStaticCredentialStoreCli,
-  createVaultCredentialStoreCli,
-} from './boundary-cli/credential-stores';
-
-export { createUsernamePasswordCredentialCli } from './boundary-cli/credentials';
-
-export { createGroupCli } from './boundary-cli/groups';
-
-export {
-  createStaticHostCatalogCli,
-  createDynamicAwsHostCatalogCli,
-} from './boundary-cli/host-catalogs';
-
-export { createHostSetCli } from './boundary-cli/host-sets';
-
-export { createStaticHostCli } from './boundary-cli/hosts';
-
-export {
-  deletePolicyCli,
-  getPolicyIdFromNameCli,
-} from './boundary-cli/policies';
-
-export { createRoleCli } from './boundary-cli/roles';
-
-export {
-  createOrgCli,
-  createProjectCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  makeAuthMethodPrimaryCli,
-} from './boundary-cli/scopes';
-
-export { waitForSessionRecordingCli } from './boundary-cli/session-recordings';
-
-export { deleteStorageBucketCli } from './boundary-cli/storage-buckets';
-
-export {
-  authorizeSessionByAliasCli,
-  authorizeSessionByTargetIdCli,
-  createSshTargetCli,
-  createTcpTarget,
-  getTargetIdFromNameCli,
-} from './boundary-cli/targets';
-
-export { createUserCli } from './boundary-cli/users';
-
-export { createControllerLedWorkerCli } from './boundary-cli/workers';
+export * from './boundary-cli/accounts.js';
+export * from './boundary-cli/aliases';
+export * from './boundary-cli/auth-methods';
+export * from './boundary-cli/authenticate';
+export * from './boundary-cli/connect';
+export * from './boundary-cli/credential-stores';
+export * from './boundary-cli/credentials';
+export * from './boundary-cli/groups';
+export * from './boundary-cli/host-catalogs';
+export * from './boundary-cli/host-sets';
+export * from './boundary-cli/hosts';
+export * from './boundary-cli/policies';
+export * from './boundary-cli/roles';
+export * from './boundary-cli/scopes';
+export * from './boundary-cli/session-recordings';
+export * from './boundary-cli/storage-buckets';
+export * from './boundary-cli/targets';
+export * from './boundary-cli/users';
+export * from './boundary-cli/workers';
 
 /**
  * Checks that the boundary cli is available

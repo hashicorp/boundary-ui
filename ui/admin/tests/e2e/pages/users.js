@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class UsersPage extends BaseResourcePage {
+export class UsersPage extends BaseResourcePage {
   /**
    * Creates a new user.
    * @returns Name of the user
@@ -58,5 +58,3 @@ class UsersPage extends BaseResourcePage {
     await this.dismissSuccessAlert();
   }
 }
-
-module.exports = UsersPage;

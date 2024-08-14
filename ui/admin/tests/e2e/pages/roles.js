@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class RolesPage extends BaseResourcePage {
+export class RolesPage extends BaseResourcePage {
   /**
    * Creates a new role. Assumes you have selected the desired scope.
    */
@@ -72,5 +72,3 @@ class RolesPage extends BaseResourcePage {
     ).toHaveValue(grants);
   }
 }
-
-module.exports = RolesPage;

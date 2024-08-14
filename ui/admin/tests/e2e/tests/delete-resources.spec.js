@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test } = require('@playwright/test');
-const { execSync } = require('child_process');
+import { test } from '@playwright/test';
+import { execSync } from 'node:child_process';
 
-const { authenticatedState, checkEnv } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   createOrgCli,
@@ -28,11 +28,11 @@ const {
   createVaultCredentialStoreCli,
   createUsernamePasswordCredentialCli,
   deleteScopeCli,
-} = require('../helpers/boundary-cli');
-const { checkVaultCli, getVaultToken } = require('../helpers/vault-cli');
-const AuthMethodsPage = require('../pages/auth-methods');
-const BaseResourcePage = require('../pages/base-resource');
-const WorkersPage = require('../pages/workers');
+} from '../helpers/boundary-cli';
+import { checkVaultCli, getVaultToken } from '../helpers/vault-cli';
+import { AuthMethodsPage } from '../pages/auth-methods';
+import { BaseResourcePage } from '../pages/base-resource';
+import { WorkersPage } from '../pages/workers';
 
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';

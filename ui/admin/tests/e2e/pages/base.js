@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
+import { expect } from '@playwright/test';
 
-class BasePage {
+export class BasePage {
   constructor(page) {
     this.page = page;
   }
@@ -17,5 +17,3 @@ class BasePage {
     await this.page.getByRole('button', { name: 'Dismiss' }).click();
   }
 }
-
-module.exports = BasePage;

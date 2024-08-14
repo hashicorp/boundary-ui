@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
-const config = {
+export default defineConfig({
   globalSetup: require.resolve('./global-setup'),
   outputDir: './artifacts/test-failures',
   timeout: 90000, // Each test is given 90s to complete
@@ -34,6 +34,4 @@ const config = {
       use: { ...devices['Desktop Safari'] },
     },
   ],
-};
-
-module.exports = config;
+});

@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
+import { test, expect } from '@playwright/test';
+import { execSync } from 'node:child_process';
 
-const {
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteScopeCli,
   getOrgIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const AuthMethodsPage = require('../pages/auth-methods');
-const OrgsPage = require('../pages/orgs');
-const UsersPage = require('../pages/users');
+} from '../helpers/boundary-cli';
+import { AuthMethodsPage } from '../pages/auth-methods';
+import { OrgsPage } from '../pages/orgs';
+import { UsersPage } from '../pages/users';
 
 test.beforeAll(async () => {
   await checkBoundaryCli();

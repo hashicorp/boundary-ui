@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectToTarget,
@@ -15,13 +15,13 @@ const {
   getOrgIdFromNameCli,
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const CredentialStoresPage = require('../pages/credential-stores');
-const HostCatalogsPage = require('../pages/host-catalogs');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const SessionsPage = require('../pages/sessions');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { CredentialStoresPage } from '../pages/credential-stores';
+import { HostCatalogsPage } from '../pages/host-catalogs';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { SessionsPage } from '../pages/sessions';
+import { TargetsPage } from '../pages/targets';
 
 test.use({ storageState: authenticatedState });
 

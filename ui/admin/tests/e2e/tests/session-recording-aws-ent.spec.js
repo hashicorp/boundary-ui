@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
+import { test, expect } from '@playwright/test';
+import { execSync } from 'child_process';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   connectSshToTarget,
@@ -19,14 +19,14 @@ const {
   getPolicyIdFromNameCli,
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const CredentialStoresPage = require('../pages/credential-stores');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const SessionsPage = require('../pages/sessions');
-const StorageBucketsPage = require('../pages/storage-buckets');
-const StoragePoliciesPage = require('../pages/storage-policies');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { CredentialStoresPage } from '../pages/credential-stores';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { SessionsPage } from '../pages/sessions';
+import { StorageBucketsPage } from '../pages/storage-buckets';
+import { StoragePoliciesPage } from '../pages/storage-policies';
+import { TargetsPage } from '../pages/targets';
 
 test.use({ storageState: authenticatedState });
 

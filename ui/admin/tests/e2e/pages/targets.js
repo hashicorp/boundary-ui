@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class TargetsPage extends BaseResourcePage {
+export class TargetsPage extends BaseResourcePage {
   /**
    * Creates a new target. Assumes you have selected the desired project.
    * @param {string} port Port of the target
@@ -442,5 +442,3 @@ class TargetsPage extends BaseResourcePage {
     ).toBeVisible();
   }
 }
-
-module.exports = TargetsPage;

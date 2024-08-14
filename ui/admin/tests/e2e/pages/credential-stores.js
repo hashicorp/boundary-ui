@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
-const { readFile } = require('fs/promises');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
+import { readFile } from 'fs/promises';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class CredentialStoresPage extends BaseResourcePage {
+export class CredentialStoresPage extends BaseResourcePage {
   /**
    * Creates a static credential store. Assumes you have selected the desired project.
    * @returns Name of the credential store
@@ -258,5 +258,3 @@ class CredentialStoresPage extends BaseResourcePage {
     return credentialLibraryName;
   }
 }
-
-module.exports = CredentialStoresPage;

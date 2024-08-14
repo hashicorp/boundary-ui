@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { execSync } = require('child_process');
-const { nanoid } = require('nanoid');
+import { execSync } from 'node:child_process';
+import { nanoid } from 'nanoid';
 
 /**
  * Creates a new static host set

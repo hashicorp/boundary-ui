@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class AliasesPage extends BaseResourcePage {
+export class AliasesPage extends BaseResourcePage {
   /**
    * Creates an alias
    * @param {string} alias Value of the alias
@@ -55,5 +55,3 @@ class AliasesPage extends BaseResourcePage {
     return aliasName;
   }
 }
-
-module.exports = AliasesPage;

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { exec } = require('child_process');
+import { exec } from 'node:child_process';
 
 /**
  * Connects to the specified target

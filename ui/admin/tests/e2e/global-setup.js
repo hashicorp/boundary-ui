@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { chromium } = require('@playwright/test');
-const { checkEnv, authenticatedState } = require('./helpers/general');
+import { chromium } from '@playwright/test';
+import { checkEnv, authenticatedState } from './helpers/general';
 
-module.exports = async () => {
+async function globalSetup() {
   await checkEnv([
     'BOUNDARY_ADDR',
     'E2E_PASSWORD_ADMIN_LOGIN_NAME',
@@ -37,4 +37,6 @@ module.exports = async () => {
   process.env.E2E_TOKEN = state.authenticated.token;
 
   await browser.close();
-};
+}
+
+export default globalSetup;

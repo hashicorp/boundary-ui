@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { test } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
-const { authenticatedState } = require('../helpers/general');
+import { authenticatedState } from '../helpers/general';
 
 test.use({ storageState: authenticatedState });
 

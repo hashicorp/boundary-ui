@@ -3,15 +3,16 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 const { authenticatedState } = require('../helpers/general');
 const {
+  authenticateBoundaryCli,
   deletePolicyCli,
   getPolicyIdFromNameCli,
 } = require('../helpers/boundary-cli');
-const OrgsPage = require('../pages/orgs');
-const StoragePoliciesPage = require('../pages/storage-policies');
+import { OrgsPage } from '../pages/orgs';
+import { StoragePoliciesPage } from '../pages/storage-policies';
 
 test.use({ storageState: authenticatedState });
 
@@ -44,6 +45,12 @@ test('Global Settings @ent @aws @docker', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
   } finally {
     if (policyName) {
+      await authenticateBoundaryCli(
+        process.env.BOUNDARY_ADDR,
+        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
+        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      );
       const storagePolicyId = await getPolicyIdFromNameCli(
         'global',
         policyName,

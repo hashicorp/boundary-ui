@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class AuthMethodsPage extends BaseResourcePage {
+export class AuthMethodsPage extends BaseResourcePage {
   /**
    * Creates a new Password Auth Method. Assumes you have selected the desired scope.
    * @returns Name of the auth method
@@ -98,5 +98,3 @@ class AuthMethodsPage extends BaseResourcePage {
     await this.dismissSuccessAlert();
   }
 }
-
-module.exports = AuthMethodsPage;

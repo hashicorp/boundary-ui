@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class StoragePoliciesPage extends BaseResourcePage {
+export class StoragePoliciesPage extends BaseResourcePage {
   /**
    * Creates a Storage Policy. Assumes you have selected the desired scope.
    * @returns Name of the Storage Policy
@@ -52,5 +52,3 @@ class StoragePoliciesPage extends BaseResourcePage {
     return storagePolicyName;
   }
 }
-
-module.exports = StoragePoliciesPage;

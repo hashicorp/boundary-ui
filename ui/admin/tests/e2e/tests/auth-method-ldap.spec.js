@@ -3,20 +3,20 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { test, expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const { checkEnv } = require('../helpers/general');
-const {
+import { checkEnv } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteScopeCli,
   getOrgIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const AuthMethodsPage = require('../pages/auth-methods');
-const OrgsPage = require('../pages/orgs');
-const RolesPage = require('../pages/roles');
-const UsersPage = require('../pages/users');
+} from '../helpers/boundary-cli';
+import { AuthMethodsPage } from '../pages/auth-methods';
+import { OrgsPage } from '../pages/orgs';
+import { RolesPage } from '../pages/roles';
+import { UsersPage } from '../pages/users';
 
 test.beforeAll(async () => {
   await checkEnv([

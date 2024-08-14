@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test, expect } = require('@playwright/test');
-const { execSync } = require('child_process');
-const { nanoid } = require('nanoid');
-const { readFile } = require('fs/promises');
+import { test, expect } from '@playwright/test';
+import { execSync } from 'child_process';
+import { nanoid } from 'nanoid';
+import { readFile } from 'fs/promises';
 
-const { checkEnv, authenticatedState } = require('../helpers/general');
-const {
+import { checkEnv, authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,
   checkBoundaryCli,
@@ -17,12 +17,12 @@ const {
   getOrgIdFromNameCli,
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const { checkVaultCli } = require('../helpers/vault-cli');
-const CredentialStoresPage = require('../pages/credential-stores');
-const OrgsPage = require('../pages/orgs');
-const ProjectsPage = require('../pages/projects');
-const TargetsPage = require('../pages/targets');
+} from '../helpers/boundary-cli';
+import { checkVaultCli } from '../helpers/vault-cli';
+import { CredentialStoresPage } from '../pages/credential-stores';
+import { OrgsPage } from '../pages/orgs';
+import { ProjectsPage } from '../pages/projects';
+import { TargetsPage } from '../pages/targets';
 
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';

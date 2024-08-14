@@ -3,18 +3,18 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test } = require('@playwright/test');
+import { test } from '@playwright/test';
 
-const { authenticatedState } = require('../helpers/general');
-const {
+import { authenticatedState } from '../helpers/general';
+import {
   authenticateBoundaryCli,
   checkBoundaryCli,
   deleteScopeCli,
   getOrgIdFromNameCli,
-} = require('../helpers/boundary-cli');
-const GroupsPage = require('../pages/groups');
-const OrgsPage = require('../pages/orgs');
-const RolesPage = require('../pages/roles');
+} from '../helpers/boundary-cli';
+import { GroupsPage } from '../pages/groups';
+import { OrgsPage } from '../pages/orgs';
+import { RolesPage } from '../pages/roles';
 
 test.use({ storageState: authenticatedState });
 

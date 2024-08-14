@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { expect } = require('@playwright/test');
-const { nanoid } = require('nanoid');
+import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
-const BaseResourcePage = require('./base-resource');
+import { BaseResourcePage } from './base-resource';
 
-class HostCatalogsPage extends BaseResourcePage {
+export class HostCatalogsPage extends BaseResourcePage {
   /**
    * Creates a new host catalog. Assumes you have selected the desired project.
    * @returns Name of the host catalog
@@ -106,5 +106,3 @@ class HostCatalogsPage extends BaseResourcePage {
     return hostName;
   }
 }
-
-module.exports = HostCatalogsPage;

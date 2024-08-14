@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const BasePage = require('./base');
+import { BasePage } from './base';
 
-class BaseResourcePage extends BasePage {
+export class BaseResourcePage extends BasePage {
   async deleteResource() {
     await this.page.getByText('Manage').click();
     await this.page.getByRole('button', { name: 'Delete' }).click();
@@ -13,5 +13,3 @@ class BaseResourcePage extends BasePage {
     await this.dismissSuccessAlert();
   }
 }
-
-module.exports = BaseResourcePage;
