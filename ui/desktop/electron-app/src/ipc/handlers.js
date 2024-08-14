@@ -17,6 +17,7 @@ const which = require('which');
 const cacheDaemonManager = require('../services/cache-daemon-manager');
 const clientAgentDaemonManager = require('../services/client-agent-daemon-manager');
 const { releaseVersion } = require('../../config/config.js');
+const store = require('../services/electron-store-manager');
 
 /**
  * Returns the current runtime clusterUrl, which is used by the main thread to
@@ -211,16 +212,41 @@ handle('getDesktopVersion', async () => ({ desktopVersion: releaseVersion }));
 handle('cacheDaemonStatus', async () => await cacheDaemonManager.status());
 
 /**
+ * Returns the current log level
+ */
+handle('getLogLevel', () => store.get('logLevel'));
+
+/**
+ * Sets the log level
+ */
+handle('setLogLevel', (logLevel) => store.set('logLevel', logLevel));
+
+/**
+ * Returns the path to the log file
+ */
+handle('getLogPath', () => {
+  switch (os.platform()) {
+    case 'win32':
+      return `${
+        process.env.USERPROFILE ?? '%USERPROFILE%'
+      }\\AppData\\Roaming\\Boundary\\logs\\desktop-client.log`;
+    case 'darwin':
+      return '~/Library/Logs/Boundary/desktop-client.log';
+    case 'linux':
+      return '~/.config/Boundary/logs/desktop-client.log';
+  }
+});
+
+/**
  * Handler to help create terminal windows. We don't use the helper `handle` method
  * as we need access to the event and don't need to be using `ipcMain.handle`.
  */
 ipcMain.on('createTerminal', (event, payload) => {
   const { id, cols, rows } = payload;
   const { sender } = event;
-  const terminalShell =
-    os.platform() === 'win32'
-      ? 'powershell.exe'
-      : process.env.SHELL || '/bin/bash';
+  const terminalShell = isWindows()
+    ? 'powershell.exe'
+    : process.env.SHELL || '/bin/bash';
   const ptyProcess = pty.spawn(terminalShell, [], {
     name: 'xterm-color',
     cols,
