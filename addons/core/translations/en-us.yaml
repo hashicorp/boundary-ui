@@ -44,11 +44,6 @@ titles:
   not-set: Not set
   year: '{numberOfYears, plural, =1 {# year} other {# years}}'
   days: '{days, plural, =1 {# day} other {# days}}'
-  application: Application
-  cli: CLI
-  cache-daemon: Cache Daemon
-  client: Client
-  color-theme: Color Theme
 descriptions:
   empty-set: There are no items to display yet.  You may be able to add items or try back later.
   cluster-url-initialization: To get started, please enter your cluster URL
@@ -110,3 +105,18 @@ unsupported-controller:
     releases-page: Go to releases page
     change-cluster-url: Change cluster URL
   error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page
+settings:
+  application: Application
+  cli: CLI
+  cache-daemon: Cache Daemon
+  client: Client
+  color-theme: Color Theme
+  logs:
+    title: Logs
+    logging-level: Logging level
+    log-location: Log location
+    levels:
+      error: Error
+      warn: Warn
+      info: Info
+      debug: Debug
