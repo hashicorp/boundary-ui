@@ -17,6 +17,10 @@ const data = {
   },
 };
 
+const USERNAME = '[data-test-username]';
+const AUTH_METHOD_TYPE = '[data-test-auth-method]';
+const AUTHENTICATION_BADGE = '.hds-badge__text';
+
 module('Integration | Component | settings-card/user', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks);
@@ -32,9 +36,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
 
     await render(hbs`<SettingsCard::User />`);
 
-    assert.dom('.hds-badge__text').hasText('Authenticated');
-    assert.dom('[data-test-auth-method]').hasText('Password');
-    assert.dom('[data-test-username]').hasText('admin');
+    assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
+    assert.dom(AUTH_METHOD_TYPE).hasText('Password');
+    assert.dom(USERNAME).hasText('admin');
   });
 
   test('it renders OIDC correctly', async function (assert) {
@@ -50,9 +54,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
 
     await render(hbs`<SettingsCard::User />`);
 
-    assert.dom('.hds-badge__text').hasText('Authenticated');
-    assert.dom('[data-test-auth-method]').hasText('OIDC');
-    assert.dom('[data-test-username]').hasText('admin');
+    assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
+    assert.dom(AUTH_METHOD_TYPE).hasText('OIDC');
+    assert.dom(USERNAME).hasText('admin');
   });
 
   test('it renders LDAP correctly', async function (assert) {
@@ -68,8 +72,8 @@ module('Integration | Component | settings-card/user', function (hooks) {
 
     await render(hbs`<SettingsCard::User />`);
 
-    assert.dom('.hds-badge__text').hasText('Authenticated');
-    assert.dom('[data-test-auth-method]').hasText('LDAP');
-    assert.dom('[data-test-username]').hasText('admin');
+    assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
+    assert.dom(AUTH_METHOD_TYPE).hasText('LDAP');
+    assert.dom(USERNAME).hasText('admin');
   });
 });

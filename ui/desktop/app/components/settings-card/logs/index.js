@@ -14,24 +14,7 @@ export default class SettingsCardLogsComponent extends Component {
   // =attributes
 
   get logLevels() {
-    return [
-      {
-        label: 'error',
-        value: 'error',
-      },
-      {
-        label: 'warn',
-        value: 'warn',
-      },
-      {
-        label: 'info',
-        value: 'info',
-      },
-      {
-        label: 'debug',
-        value: 'debug',
-      },
-    ];
+    return ['error', 'warn', 'info', 'debug'];
   }
 
   // =methods

@@ -14,11 +14,8 @@
       <F.Label>{{t 'settings.logs.logging-level'}}</F.Label>
       <F.Options>
         {{#each this.logLevels as |level|}}
-          <option
-            value={{level.value}}
-            selected={{eq @model.logLevel level.value}}
-          >
-            {{t (concat 'settings.logs.levels.' level.label)}}
+          <option value={{level}} selected={{eq @model.logLevel level}}>
+            {{t (concat 'settings.logs.levels.' level)}}
           </option>
         {{/each}}
       </F.Options>
