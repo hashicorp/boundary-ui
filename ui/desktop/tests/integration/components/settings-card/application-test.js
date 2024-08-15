@@ -20,10 +20,9 @@ module('Integration | Component | settings-card/application', function (hooks) {
 
   test('it renders', async function (assert) {
     this.set('model', {
-      cacheDaemonErrors: [],
-      formattedDesktopVersion: 'v2.0.0',
-      formattedCliVersion: 'v3.0.0',
-      formattedCacheVersion: 'v4.0.0',
+      cacheDaemonStatus: { version: 'v4.0.0', errors: [] },
+      desktopVersion: 'v2.0.0',
+      cliVersion: 'v3.0.0',
     });
     this.set('toggleTheme', () => {});
 
@@ -38,19 +37,21 @@ module('Integration | Component | settings-card/application', function (hooks) {
 
   test('it renders errors', async function (assert) {
     this.set('model', {
-      cacheDaemonErrors: [
-        {
-          message: `this is a resolvable alias error`,
-          name: 'resolvable-alias',
-        },
-        {
-          message: `this is a target error`,
-          name: 'target',
-        },
-      ],
-      formattedDesktopVersion: 'v2.0.0',
-      formattedCliVersion: 'v3.0.0',
-      formattedCacheVersion: 'v4.0.0',
+      cacheDaemonStatus: {
+        version: 'v4.0.0',
+        errors: [
+          {
+            message: `this is a resolvable alias error`,
+            name: 'resolvable-alias',
+          },
+          {
+            message: `this is a target error`,
+            name: 'target',
+          },
+        ],
+      },
+      desktopVersion: 'v2.0.0',
+      cliVersion: 'v3.0.0',
     });
     this.set('toggleTheme', () => {});
 
@@ -67,10 +68,9 @@ module('Integration | Component | settings-card/application', function (hooks) {
 
   test('it indicates when cache daemon is running', async function (assert) {
     this.set('model', {
-      cacheDaemonErrors: [],
-      formattedDesktopVersion: 'v2.0.0',
-      formattedCliVersion: 'v3.0.0',
-      formattedCacheVersion: 'v4.0.0',
+      cacheDaemonStatus: { version: 'v4.0.0', errors: [] },
+      desktopVersion: 'v2.0.0',
+      cliVersion: 'v3.0.0',
     });
     this.set('toggleTheme', () => {});
 
@@ -81,10 +81,9 @@ module('Integration | Component | settings-card/application', function (hooks) {
     assert.dom(CACHE_DAEMON_VERSION).hasText('v4.0.0 Running');
 
     this.set('model', {
-      cacheDaemonErrors: [],
-      formattedDesktopVersion: 'v2.0.0',
-      formattedCliVersion: 'v3.0.0',
-      formattedCacheVersion: '',
+      cacheDaemonStatus: { version: '', errors: [] },
+      desktopVersion: 'v2.0.0',
+      cliVersion: 'v3.0.0',
     });
     assert.dom(CACHE_DAEMON_VERSION).hasText('Not Running');
   });

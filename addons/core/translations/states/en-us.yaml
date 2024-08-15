@@ -17,6 +17,7 @@ failed: Failed
 installed: Installed
 not-running: Not Running
 running: Running
+paused: Paused
 authenticated: Authenticated
 unauthenticated: Unauthenticated
 loading:

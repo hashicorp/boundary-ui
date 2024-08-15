@@ -99,10 +99,11 @@ module.exports = {
    * Spawn a child process and return a promise.
    * Resolves on any output from stdout or stderr.
    * @param command
+   * @param options
    */
-  spawn(command) {
+  spawn(command, options) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command);
+      const childProcess = spawn(path(), command, options);
       childProcess.stdout.on('data', (data) => {
         resolve({ childProcess, stdout: data.toString() });
       });
