@@ -33,7 +33,7 @@
     "pretest": "yarn clean:coverage",
     "test": "concurrently \"npm:test:*\" --names \"test:\"",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
-    "e2e": "yarn playwright test --config ./tests/e2e/playwright.config.js",
+    "e2e": "yarn playwright test --config ./tests/e2e/playwright.config.ts",
     "e2e:ce:aws": "yarn run e2e --grep \"(?=.*@ce)(?=.*@aws)\"",
     "e2e:ce:docker": "yarn run e2e --grep \"(?=.*@ce)(?=.*@docker)\"",
     "e2e:ent:aws": "yarn run e2e --grep \"(?=.*@ent)(?=.*@aws)\"",
