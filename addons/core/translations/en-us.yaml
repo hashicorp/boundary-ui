@@ -114,7 +114,7 @@ settings:
   provider: Provider
   url: URL
   hcp: HashiCorp Cloud Platform
-  self-managed: Self Managed
+  self-managed: Self-managed
   connected: Connected
   server:
     title: Server
