@@ -5,7 +5,7 @@
 
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
-import DurationUnitFormat from 'intl-unofficial-duration-unit-format';
+import { DurationUnitFormat } from 'intl-unofficial-duration-unit-format';
 
 export default class extends Helper {
   // =services

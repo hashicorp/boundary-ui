@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-// import { makeEvaluator } from 'js-bexpr';
+import { makeEvaluator } from 'js-bexpr';
 import { underscore } from '@ember/string';
 
 /**
@@ -26,11 +26,11 @@ const quickSerialize = (item) => {
  */
 export default (expression) => {
   if (expression) {
-    //const evaluator = makeEvaluator(expression);
+    const evaluator = makeEvaluator(expression);
     // Since API query selectors begin with `/item`, the instance is wrapped.
     return (record) => {
       const item = quickSerialize(record);
-      return item;
+      return evaluator({ item });
     };
   } else {
     // If no expression was passed, always return true,
