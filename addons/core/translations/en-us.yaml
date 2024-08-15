@@ -111,6 +111,11 @@ settings:
   cache-daemon: Cache Daemon
   client: Client
   color-theme: Color Theme
+  server: Server
+  provider: Provider
+  url: URL
+  hcp: HashiCorp Cloud Platform
+  self-managed: Self Managed
   logs:
     title: Logs
     logging-level: Logging level

@@ -48,6 +48,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
 
     const logLevel = await this.ipc.invoke('getLogLevel');
     const logPath = await this.ipc.invoke('getLogPath');
+    const serverInformation = await this.ipc.invoke('getClusterUrl');
 
     return {
       cacheDaemonErrors,
@@ -56,6 +57,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
       formattedDesktopVersion,
       logLevel,
       logPath,
+      serverInformation,
     };
   }
 }
