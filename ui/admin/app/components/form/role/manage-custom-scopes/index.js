@@ -39,17 +39,7 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
       let selectedOrg;
       const includesId = role.grant_scope_ids.includes(orgId);
       const selected = projectTotals[orgId]?.selected;
-      const remaining = projectTotals[orgId]?.remaining;
-      const total = projectTotals[orgId]?.total;
       if (add && !includesId) {
-        if (remaining) {
-          role.grant_scope_ids = [...role.grant_scope_ids, ...remaining];
-          projectTotals[orgId] = {
-            selected: [...selected, ...remaining],
-            total,
-            remaining: [],
-          };
-        }
         role.grant_scope_ids = [...role.grant_scope_ids, orgId];
       } else if (remove && includesId) {
         if (selected?.length) {
@@ -91,15 +81,11 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
       : [this.selectedOrg];
     const { role, projectTotals } = this.args.model;
     selectedOrgs.forEach((orgId) => {
-      const { selected, total, remaining } = projectTotals[orgId];
+      const { selected, total } = projectTotals[orgId];
       role.grant_scope_ids = role.grant_scope_ids.filter(
         (item) => !selected.includes(item),
       );
-      projectTotals[orgId] = {
-        selected: [],
-        total,
-        remaining: [...selected, ...remaining],
-      };
+      projectTotals[orgId] = { selected: [], total };
     });
     if (toggleRemoveAllModal) {
       this.toggleRemoveAllModal();

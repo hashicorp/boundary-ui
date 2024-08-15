@@ -94,12 +94,10 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
     const projectTotals = new TrackedObject({});
     projects.forEach(({ id, scope }) => {
       if (!projectTotals[scope.id]) {
-        projectTotals[scope.id] = { selected: [], total: 0, remaining: [] };
+        projectTotals[scope.id] = { selected: [], total: 0 };
       }
       if (projectIDs.includes(id)) {
         projectTotals[scope.id].selected.push(id);
-      } else {
-        projectTotals[scope.id].remaining.push(id);
       }
       projectTotals[scope.id].total++;
     });

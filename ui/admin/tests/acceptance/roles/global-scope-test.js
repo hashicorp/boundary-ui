@@ -423,7 +423,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 2 });
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 1 });
   });
 
   test('user can cancel custom scopes to add on manage custom scopes page', async function (assert) {
