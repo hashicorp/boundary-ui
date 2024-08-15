@@ -3,9 +3,19 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<SettingsCard @header={{t 'settings.server'}} @icon='cloud'>
+<SettingsCard
+  @header={{t 'settings.server.title'}}
+  @icon='cloud'
+  @description={{t 'settings.server.description'}}
+>
   <:state>
-    {{! TODO: connected }}
+    {{#if @model.serverInformation}}
+      <Hds::Badge
+        @text={{t 'settings.connected'}}
+        @icon='check'
+        @color='success'
+      />
+    {{/if}}
   </:state>
   <:body>
     <div>

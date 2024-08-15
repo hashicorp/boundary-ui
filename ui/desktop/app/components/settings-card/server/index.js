@@ -18,9 +18,9 @@ export default class SettingsCardServerComponent extends Component {
   get providerName() {
     const regex = /hashicorp\.cloud/;
     if (this.args.model.serverInformation?.match(regex)) {
-      return this.intl.t('hcp');
+      return this.intl.t('settings.hcp');
     } else {
-      return this.intl.t('self-managed');
+      return this.intl.t('settings.self-managed');
     }
   }
 }
