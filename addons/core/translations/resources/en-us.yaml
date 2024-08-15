@@ -617,6 +617,8 @@ role:
       apply: Apply changes to org
       remove-org-and-projects: Remove org and projects
       remove-org-only: Remove just the org
+      remove-orgs-and-projects: Remove orgs and projects
+      remove-orgs-only: Remove just the orgs
     form:
       this:
         label: Add this scope
@@ -630,8 +632,11 @@ role:
         label: Add all descendants
         help: Add all of the orgs and the projects in the orgs that are underneath this scope.
     remove-org:
-      title: Remove projects under this org?
-      description: Do you want to remove the projects under this org from this role? Or do you just want to remove the org from this role?
+      title: Remove this org?
+      description: You're about to remove {orgDisplayName}. Do you want to remove the projects under {orgDisplayName} as well? Or do you just want to remove {orgDisplayName} from this project?
+    remove-all-orgs:
+      title: Remove all selected orgs?
+      description: You're about to remove all the selected orgs. Do you want to remove the projects under these orgs as well? Or do you just want to remove just the orgs?
 target:
   title: Target
   title_plural: Targets

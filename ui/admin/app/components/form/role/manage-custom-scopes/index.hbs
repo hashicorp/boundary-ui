@@ -129,7 +129,7 @@
   </Hds::ApplicationState>
 {{/if}}
 
-{{#if this.showRemoveOrgModal}}
+{{#if this.selectedOrg}}
   <Hds::Modal
     @onClose={{this.toggleRemoveOrgModal}}
     data-test-manage-scopes-remove-org-modal
@@ -138,18 +138,49 @@
     <M.Header>{{t 'resources.role.scope.remove-org.title'}}</M.Header>
     <M.Body>
       <Hds::Text::Body @tag='p' @color='primary'>
-        {{t 'resources.role.scope.remove-org.description'}}
+        {{t
+          'resources.role.scope.remove-org.description'
+          orgDisplayName=this.orgDisplayName
+        }}
       </Hds::Text::Body>
     </M.Body>
     <M.Footer as |F|>
       <Hds::ButtonSet>
         <Hds::Button
           @text={{t 'resources.role.scope.actions.remove-org-and-projects'}}
-          {{on 'click' this.removeProjects}}
+          {{on 'click' (fn this.removeProjects false)}}
         />
         <Hds::Button
           @color='secondary'
           @text={{t 'resources.role.scope.actions.remove-org-only'}}
+          {{on 'click' F.close}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
+
+{{#if this.selectedOrgs}}
+  <Hds::Modal
+    @onClose={{this.toggleRemoveAllModal}}
+    data-test-manage-scopes-remove-all-orgs-modal
+    as |M|
+  >
+    <M.Header>{{t 'resources.role.scope.remove-all-orgs.title'}}</M.Header>
+    <M.Body>
+      <Hds::Text::Body @tag='p' @color='primary'>
+        {{t 'resources.role.scope.remove-all-orgs.description'}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{t 'resources.role.scope.actions.remove-orgs-and-projects'}}
+          {{on 'click' (fn this.removeProjects true)}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'resources.role.scope.actions.remove-orgs-only'}}
           {{on 'click' F.close}}
         />
       </Hds::ButtonSet>

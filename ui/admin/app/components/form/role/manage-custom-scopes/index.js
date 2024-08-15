@@ -10,52 +10,117 @@ import { tracked } from '@glimmer/tracking';
 export default class FormRoleManageCustomScopesIndexComponent extends Component {
   // =attributes
 
-  @tracked showRemoveOrgModal = false;
-  @tracked selectedOrg;
+  @tracked selectedOrgs = [];
+  @tracked selectedOrg = '';
+
+  /**
+   * Returns the display name of the selectedOrg.
+   * @type {string}
+   */
+  get orgDisplayName() {
+    const org = this.args.model.orgScopes.find(
+      ({ id }) => id === this.selectedOrg,
+    );
+    return org.displayName;
+  }
 
   // =actions
 
   /**
    * Handles the selection changes for the paginated table.
    * @param {object} selectableRowsStates
+   * @param {object} selectionKey
    */
   @action
   selectionChange({ selectableRowsStates, selectionKey }) {
     const { role, projectTotals } = this.args.model;
-    selectableRowsStates.forEach((row) => {
-      const { isSelected, selectionKey: key } = row;
-      const includesId = role.grant_scope_ids.includes(key);
-      if (isSelected && !includesId) {
-        // Add the org id if it was selected and it doesn't exist as a grant scope.
-        role.grant_scope_ids = [...role.grant_scope_ids, key];
-      } else if (!isSelected && includesId) {
-        // Remove org id if it was deselected and it does exist as a grant scope.
-        role.grant_scope_ids = role.grant_scope_ids.filter(
-          (item) => item !== key,
-        );
-        // If the org id was deselected and has selected projects then trigger the modal.
-        const selected = projectTotals[key]?.selected;
-        if (selectionKey === key && selected?.length) {
-          this.showRemoveOrgModal = true;
-          this.selectedOrg = key;
+
+    const addOrRemoveValues = (add, remove, orgId) => {
+      let selectedOrg;
+      const includesId = role.grant_scope_ids.includes(orgId);
+      const selected = projectTotals[orgId]?.selected;
+      const remaining = projectTotals[orgId]?.remaining;
+      const total = projectTotals[orgId]?.total;
+      if (add && !includesId) {
+        if (remaining) {
+          role.grant_scope_ids = [...role.grant_scope_ids, ...remaining];
+          projectTotals[orgId] = {
+            selected: [...selected, ...remaining],
+            total,
+            remaining: [],
+          };
         }
+        role.grant_scope_ids = [...role.grant_scope_ids, orgId];
+      } else if (remove && includesId) {
+        if (selected?.length) {
+          selectedOrg = orgId;
+        }
+        role.grant_scope_ids = role.grant_scope_ids.filter(
+          (item) => item !== orgId,
+        );
       }
-    });
+      return selectedOrg;
+    };
+
+    if (selectionKey === 'all') {
+      const selectedOrgs = [];
+      selectableRowsStates.forEach(({ selectionKey, isSelected }) => {
+        const selectedOrg = addOrRemoveValues(
+          isSelected,
+          !isSelected,
+          selectionKey,
+        );
+        if (selectedOrg) {
+          selectedOrgs.push(selectedOrg);
+        }
+      });
+      this.selectedOrgs = selectedOrgs;
+    } else {
+      this.selectedOrg = addOrRemoveValues(true, true, selectionKey);
+    }
   }
 
+  /**
+   * Removes projects from an org that was deselected and toggles the correct modal off.
+   * @param {boolean} toggleRemoveAllModal
+   */
   @action
-  removeProjects() {
+  removeProjects(toggleRemoveAllModal) {
+    const selectedOrgs = toggleRemoveAllModal
+      ? this.selectedOrgs
+      : [this.selectedOrg];
     const { role, projectTotals } = this.args.model;
-    const { selected: projectIds, total } = projectTotals[this.selectedOrg];
-    role.grant_scope_ids = role.grant_scope_ids.filter(
-      (item) => !projectIds.includes(item),
-    );
-    projectTotals[this.selectedOrg] = { selected: [], total };
-    this.showRemoveOrgModal = false;
+    selectedOrgs.forEach((orgId) => {
+      const { selected, total, remaining } = projectTotals[orgId];
+      role.grant_scope_ids = role.grant_scope_ids.filter(
+        (item) => !selected.includes(item),
+      );
+      projectTotals[orgId] = {
+        selected: [],
+        total,
+        remaining: [...selected, ...remaining],
+      };
+    });
+    if (toggleRemoveAllModal) {
+      this.toggleRemoveAllModal();
+    } else {
+      this.toggleRemoveOrgModal();
+    }
   }
 
+  /**
+   * Toggles the modal to remove an org and projects off.
+   */
   @action
   toggleRemoveOrgModal() {
-    this.showRemoveOrgModal = false;
+    this.selectedOrg = [];
+  }
+
+  /**
+   * Toggles the modal to remove orgs and projects off.
+   */
+  @action
+  toggleRemoveAllModal() {
+    this.selectedOrgs = [];
   }
 }
