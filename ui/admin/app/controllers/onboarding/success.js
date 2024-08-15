@@ -1,0 +1,29 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+import Controller from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
+
+export default class OnboardingSuccessController extends Controller {
+  // =services
+
+  @service router;
+
+  // =actions
+
+  /**
+   * Redirect user to target created during onboarding.
+   * @param {object} model
+   */
+  @action
+  showTargetList(model) {
+    const {
+      project: { id: scopeID },
+      target: { id: targetID },
+    } = model;
+    this.router.transitionTo('scopes.scope.targets.target', scopeID, targetID);
+  }
+}

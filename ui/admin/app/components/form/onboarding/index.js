@@ -9,12 +9,26 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormOnboardingComponent extends Component {
   // =properties
+
   @tracked targetAddress;
   @tracked targetAddressInvalid = false;
   @tracked targetPort;
   @tracked targetPortInvalid = false;
 
+  /**
+   * Returns true if any of the resources that are being created are still saving.
+   * @type {boolean}
+   */
+  get isSaving() {
+    const { org, project, target, role } = this.args.model;
+    return org.isSaving || project.isSaving || target.isSaving || role.isSaving;
+  }
+
   // =actions
+
+  /**
+   * Passes in target address and port to submit function for further proccessing.
+   */
   @action
   submit() {
     // Check targetAddress and targetPort are valid before submit
