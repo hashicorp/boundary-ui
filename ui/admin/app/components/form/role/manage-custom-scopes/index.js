@@ -99,7 +99,7 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
    */
   @action
   toggleRemoveOrgModal() {
-    this.selectedOrg = [];
+    this.selectedOrg = '';
   }
 
   /**
