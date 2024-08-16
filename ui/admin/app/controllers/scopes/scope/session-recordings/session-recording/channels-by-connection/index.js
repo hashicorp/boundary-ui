@@ -23,7 +23,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
 
   /**
    * Returns true if the session recording has started
-   * but has not started any connections
+   * but has not started any connections.
    * @type {boolean}
    */
   get isSessionInprogressWithNoConnections() {
@@ -35,7 +35,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
 
   /**
    * Returns true if the session recording state is unknown
-   * and has no connections
+   * and has no connections.
    * @type {boolean}
    */
   get isSessionUnknownWithNoConnections() {
@@ -48,7 +48,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   // =actions
 
   /**
-   * Reapplies storage policy dates to session recording
+   * Reapplies storage policy dates to session recording.
    * @param {SessionRecordingModel}
    */
   @action
@@ -77,8 +77,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   @confirm('resources.session-recording.questions.delete')
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
-  async delete(recording) {
-    await recording.destroyRecord();
+  async delete(sessionRecording) {
+    await sessionRecording.destroyRecord();
     await this.router.replaceWith('scopes.scope.session-recordings');
     this.router.refresh();
   }
