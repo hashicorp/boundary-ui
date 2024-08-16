@@ -112,7 +112,6 @@ settings:
   client: Client
   color-theme: Color Theme
   provider: Provider
-  url: URL
   hcp: HashiCorp Cloud Platform
   self-managed: Self-managed
   connected: Connected
