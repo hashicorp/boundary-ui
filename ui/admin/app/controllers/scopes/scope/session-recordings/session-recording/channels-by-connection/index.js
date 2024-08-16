@@ -69,7 +69,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   }
 
   /**
-   * Deletes the session recording
+   * Deletes the session recording.
    * @param {SessionRecording} recording
    */
   @action
