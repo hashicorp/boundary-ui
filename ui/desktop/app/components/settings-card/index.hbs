@@ -23,6 +23,12 @@
 
   </div>
 
+  {{#if @description}}
+    <Hds::Text::Body @tag='p' @color='faint'>
+      {{@description}}
+    </Hds::Text::Body>
+  {{/if}}
+
   {{! this yields the body from consumer }}
   {{#if (has-block 'body')}}
     <div class='content'>

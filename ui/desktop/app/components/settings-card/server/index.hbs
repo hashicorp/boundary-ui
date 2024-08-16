@@ -3,7 +3,11 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<SettingsCard @header={{t 'settings.server.title'}} @icon='cloud'>
+<SettingsCard
+  @header={{t 'settings.server.title'}}
+  @icon='cloud'
+  @description={{t 'settings.server.description'}}
+>
   <:state>
     {{#if @model.serverInformation}}
       <Hds::Badge
@@ -14,9 +18,6 @@
     {{/if}}
   </:state>
   <:body>
-    <Hds::Text::Body @tag='p' @color='faint'>
-      {{t 'settings.server.description'}}
-    </Hds::Text::Body>
     <div>
       <Hds::Text::Display>
         {{t 'settings.provider'}}

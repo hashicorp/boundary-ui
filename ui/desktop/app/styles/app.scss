@@ -674,6 +674,10 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     display: flex;
     align-items: center;
     gap: 1rem;
+
+    ~ * {
+      padding-left: 2.8rem;
+    }
   }
 
   .action {
@@ -684,7 +688,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin: 0.5rem 0 1rem 2.8rem;
+    margin: 1rem 0;
 
     > div {
       flex-basis: 30%;
