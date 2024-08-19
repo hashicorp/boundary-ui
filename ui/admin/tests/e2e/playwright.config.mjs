@@ -7,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 export default defineConfig({
-  globalSetup: require.resolve('./global-setup'),
+  globalSetup: './global-setup',
   outputDir: './artifacts/test-failures',
   timeout: 90000, // Each test is given 90s to complete
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
