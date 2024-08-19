@@ -3,14 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-// START TODO: Remove common selectors from storage-bucket specific selectors
-export const SAVE_BTN = '[type=submit]';
-export const CANCEL_BTN = '.rose-form-actions [type=button]';
-export const EDIT_BTN = '.rose-form-actions [type=button]';
-export const FIELD_NAME = '[name=name]';
-export const FIELD_NAME_VALUE = 'Random name';
-// END TODO: Remove common selectors from storage-bucket specific selectors
-
 export const FIELD_SCOPE = '[name=scope]';
 export const FIELD_PLUGIN_TYPE = '[name=plugin_type]';
 export const FIELD_PLUGIN_TYPE_MINIO = '[value=minio]'; // Provider

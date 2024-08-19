@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -53,15 +54,17 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(`[href="${urls.storageBucket}"]`).isVisible();
-    assert.dom(selectors.FIELD_NAME).hasValue(selectors.FIELD_NAME_VALUE);
+    assert
+      .dom(commonSelectors.FIELD_NAME)
+      .hasValue(commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(
       instances.storageBucket.name,
-      selectors.FIELD_NAME_VALUE,
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -70,11 +73,11 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
-    await click(selectors.CANCEL_BTN, 'Click cancel');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN, 'Click cancel');
 
-    assert.dom(selectors.FIELD_NAME).hasValue(`${name}`);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(`${name}`);
     assert.strictEqual(instances.storageBucket.name, name);
   });
 
@@ -88,7 +91,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isEnabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isEnabled();
@@ -104,7 +107,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
 
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
@@ -117,7 +120,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await click(selectors.FIELD_ACCESS_KEY_EDIT_BTN);
     await click(selectors.FIELD_SECRET_KEY_EDIT_BTN);
 
@@ -127,7 +130,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(selectors.FIELD_ACCESS_KEY_EDIT_BTN, 'Click cancel button');
     await click(selectors.FIELD_SECRET_KEY_EDIT_BTN, 'Click cancel button');
 
-    await click(selectors.SAVE_BTN, 'Click save');
+    await click(commonSelectors.SAVE_BTN, 'Click save');
 
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).isDisabled();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).isDisabled();
@@ -163,9 +166,9 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     });
 
     await click(`[href="${urls.storageBucket}"]`);
-    await click(selectors.EDIT_BTN, 'Activate edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(selectors.FIELD_WORKER_FILTER, 'random string');
-    await click(selectors.SAVE_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.TOAST).hasText('The request was invalid.');
     assert
@@ -184,7 +187,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
     assert.dom(selectors.FIELD_BUCKET_PREFIX).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
@@ -203,7 +206,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
 
-    await click(selectors.EDIT_BTN, 'Click edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();

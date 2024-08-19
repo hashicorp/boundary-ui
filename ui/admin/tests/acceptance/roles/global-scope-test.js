@@ -62,6 +62,11 @@ module('Acceptance | roles | global-scope', function (hooks) {
     '.rose-dialog-footer .rose-button-primary';
   const DISCARD_CHANGES_CANCEL_BUTTON =
     '.rose-dialog-footer .rose-button-secondary';
+  const REMOVE_ORG_MODAL = (name) =>
+    `[data-test-manage-scopes-remove-${name}-modal]`;
+  const REMOVE_ORG_PROJECTS_BUTTON = '.hds-modal .hds-button--color-primary';
+  const REMOVE_ORG_ONLY_BUTTON = '.hds-modal .hds-button--color-secondary';
+  const TABLE_ALL_CHECKBOX = 'thead tr [type="checkbox"]';
 
   const instances = {
     scopes: {
@@ -394,7 +399,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
 
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
@@ -418,7 +423,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 1 });
   });
 
   test('user can cancel custom scopes to add on manage custom scopes page', async function (assert) {
@@ -427,7 +432,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
 
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
@@ -447,7 +452,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(CANCEL_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
   });
 
   test('shows error message on custom scope save on manage custom scopes page', async function (assert) {
@@ -509,6 +514,147 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.strictEqual(currentURL(), urls.manageCustomScopes);
   });
 
+  test('user can choose to only deselect an org using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL('org')).isVisible();
+
+    await click(REMOVE_ORG_ONLY_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 1 });
+  });
+
+  test('user can choose to deselect an org and projects using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL('org')).isVisible();
+
+    await click(REMOVE_ORG_PROJECTS_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
+  });
+
+  test('user cannot trigger modal when deselecting an org with no projects selected on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [instances.scopes.org.id] });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
+
+    assert.dom(REMOVE_ORG_MODAL('org')).doesNotExist();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
+  });
+
+  test('user can choose to only deselect all orgs using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    // Click once to select all
+    await click(TABLE_ALL_CHECKBOX);
+    // Click once more to deselect all
+    await click(TABLE_ALL_CHECKBOX);
+
+    assert.dom(REMOVE_ORG_MODAL('all-orgs')).isVisible();
+
+    await click(REMOVE_ORG_ONLY_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 1 });
+  });
+
+  test('user can choose to deselect all orgs and projects using modal on manage custom scopes page', async function (assert) {
+    instances.role.update({
+      grant_scope_ids: [instances.scopes.org.id, instances.scopes.project.id],
+    });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    // Click once to select all
+    await click(TABLE_ALL_CHECKBOX);
+    // Click once more to deselect all
+    await click(TABLE_ALL_CHECKBOX);
+
+    assert.dom(REMOVE_ORG_MODAL('all-orgs')).isVisible();
+
+    await click(REMOVE_ORG_PROJECTS_BUTTON);
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
+  });
+
+  test('user cannot trigger modal when deselecting all orgs with no projects selected on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [instances.scopes.org.id] });
+    await visit(urls.manageScopes);
+
+    await click(`[href="${urls.manageCustomScopes}"]`);
+    // Click once to select all
+    await click(TABLE_ALL_CHECKBOX);
+    // Click once more to deselect all
+    await click(TABLE_ALL_CHECKBOX);
+
+    assert.dom(REMOVE_ORG_MODAL('all-orgs')).doesNotExist();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+
+    await click(SAVE_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
+  });
+
   test('user can search for a specific org scope by id on manage custom scopes page', async function (assert) {
     const anotherOrg = this.server.create('scope', {
       type: 'org',
@@ -564,7 +710,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
 
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
@@ -596,7 +742,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 1 });
   });
 
   test('user can cancel custom scopes to add on manage org projects page', async function (assert) {
@@ -605,7 +751,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(`[href="${urls.roleScopes}"]`);
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
 
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MANAGE_SCOPES_SELECTOR);
@@ -635,7 +781,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(CANCEL_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(TABLE_ROW_SELECTOR).exists({ count: 0 });
   });
 
   test('shows error message on custom scope save on manage org projects page', async function (assert) {
