@@ -111,6 +111,13 @@ settings:
   cache-daemon: Cache Daemon
   client: Client
   color-theme: Color Theme
+  provider: Provider
+  hcp: HashiCorp Cloud Platform
+  self-managed: Self-managed
+  connected: Connected
+  server:
+    title: Server
+    description: Boundary connects you to targets using this server managed by your organization.
   logs:
     title: Logs
     logging-level: Logging level
