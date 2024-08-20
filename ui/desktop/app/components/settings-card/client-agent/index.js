@@ -13,6 +13,7 @@ export default class SettingsCardClientAgentComponent extends Component {
   // =services
   @service ipc;
   @service router;
+  @service loading;
 
   // =attributes
 
@@ -35,21 +36,33 @@ export default class SettingsCardClientAgentComponent extends Component {
     );
   }
 
-  // =actions
-
-  @action
-  @loading
-  @notifyError(({ message }) => message)
-  async pauseClientAgent() {
-    await this.ipc.invoke('pauseClientAgent');
-    await this.router.refresh();
+  /**
+   * Return the button icon based on the current state of the client agent
+   * @return {string}
+   */
+  get buttonIcon() {
+    if (this.loading.isLoading) {
+      return 'loading';
+    } else {
+      return this.isClientAgentStatusRunning ? 'pause' : 'play';
+    }
   }
 
+  // =actions
+
+  /**
+   * Changes the state of the client agent based on the current state.
+   * @return {Promise<void>}
+   */
   @action
   @loading
   @notifyError(({ message }) => message)
-  async resumeClientAgent() {
-    await this.ipc.invoke('resumeClientAgent');
+  async changeClientAgentState() {
+    if (this.isClientAgentStatusRunning) {
+      await this.ipc.invoke('pauseClientAgent');
+    } else {
+      await this.ipc.invoke('resumeClientAgent');
+    }
     await this.router.refresh();
   }
 }

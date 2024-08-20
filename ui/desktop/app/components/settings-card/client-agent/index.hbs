@@ -48,25 +48,16 @@
 
     </:body>
     <:action>
-      {{#if this.isClientAgentStatusRunning}}
-        <Hds::Button
-          @text={{t 'actions.pause'}}
-          @color='secondary'
-          @icon={{if (is-loading) 'loading' 'pause'}}
-          @size='medium'
-          disabled={{(is-loading)}}
-          {{on 'click' this.pauseClientAgent}}
-        />
-      {{else}}
-        <Hds::Button
-          @text={{t 'actions.resume'}}
-          @color='secondary'
-          @icon={{if (is-loading) 'loading' 'play'}}
-          @size='medium'
-          disabled={{(is-loading)}}
-          {{on 'click' this.resumeClientAgent}}
-        />
-      {{/if}}
+      <Hds::Button
+        @text={{t
+          (if this.isClientAgentStatusRunning 'actions.pause' 'actions.resume')
+        }}
+        @color='secondary'
+        @icon={{this.buttonIcon}}
+        @size='medium'
+        disabled={{(is-loading)}}
+        {{on 'click' this.changeClientAgentState}}
+      />
     </:action>
   </SettingsCard>
 {{/if}}
