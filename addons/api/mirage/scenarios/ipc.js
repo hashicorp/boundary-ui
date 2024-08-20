@@ -199,18 +199,18 @@ export default function initializeMockIPC(server, config) {
     getDesktopVersion() {
       return { desktopVersion: '1.0.0' };
     }
-
     getLogLevel() {
-      return 'debug';
+      return 'info';
     }
-
-    setLogLevel() {
-      return 'warn';
-    }
-
     getLogPath() {
       return '~/.config/Boundary/logs/desktop-client.log';
     }
+    setLogLevel() {}
+    clientAgentStatus() {
+      return { version: '0.0.1-dev', status: 'running' };
+    }
+    pauseClientAgent() {}
+    resumeClientAgent() {}
   }
 
   /**

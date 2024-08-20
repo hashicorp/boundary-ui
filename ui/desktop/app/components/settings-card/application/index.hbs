@@ -10,7 +10,7 @@
         {{t 'settings.client'}}
       </Hds::Text::Display>
       <Hds::Text::Body @tag='p' @weight='medium'>
-        {{@model.formattedDesktopVersion}}
+        {{@model.desktopVersion}}
       </Hds::Text::Body>
     </div>
     <div>
@@ -18,7 +18,7 @@
         {{t 'settings.cli'}}
       </Hds::Text::Display>
       <Hds::Text::Body @tag='p' @weight='medium'>
-        {{@model.formattedCliVersion}}
+        {{@model.cliVersion}}
       </Hds::Text::Body>
     </div>
     <div>
@@ -26,8 +26,8 @@
         {{t 'settings.cache-daemon'}}
       </Hds::Text::Display>
       <Hds::Text::Body @tag='p' @weight='medium' data-test-cache-version>
-        {{#if @model.formattedCacheVersion}}
-          {{@model.formattedCacheVersion}}
+        {{#if @model.cacheDaemonStatus.version}}
+          {{@model.cacheDaemonStatus.version}}
           <Hds::Badge
             @text={{t 'states.running'}}
             @icon='running'
@@ -43,11 +43,11 @@
 
       </Hds::Text::Body>
     </div>
-    {{#if @model.cacheDaemonErrors}}
+    {{#if @model.cacheDaemonStatus.errors}}
       <Hds::Alert @type='inline' @color='warning' as |A|>
-        <A.Title>{{t 'errors.settings-cache.title'}}</A.Title>
+        <A.Title>{{t 'settings.alerts.cache-daemon'}}</A.Title>
         <A.Description>
-          {{#each @model.cacheDaemonErrors as |error|}}
+          {{#each @model.cacheDaemonStatus.errors as |error|}}
             <Hds::Text::Body @tag='p'>
               {{#if error.name}}
                 <strong>{{error.name}}: </strong>

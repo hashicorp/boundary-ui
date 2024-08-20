@@ -14,26 +14,38 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
 
   // =methods
   async model() {
-    let cacheDaemonStatus,
-      formattedCacheVersion,
-      formattedCliVersion,
-      formattedDesktopVersion,
-      cacheDaemonErrors = [];
-
     const { versionNumber: cliVersion } =
       await this.ipc.invoke('getCliVersion');
-    formattedCliVersion = `v${cliVersion}`;
 
     const { desktopVersion } = await this.ipc.invoke('getDesktopVersion');
-    formattedDesktopVersion = `v${desktopVersion}`;
+    const cacheDaemonStatus = await this.getCacheStatus();
+    const clientAgentStatus = await this.getClientAgentStatus();
 
+    const logLevel = await this.ipc.invoke('getLogLevel');
+    const logPath = await this.ipc.invoke('getLogPath');
+    const serverInformation = this.clusterUrl.rendererClusterUrl;
+
+    return {
+      desktopVersion: `v${desktopVersion}`,
+      cliVersion: `v${cliVersion}`,
+      cacheDaemonStatus,
+      clientAgentStatus,
+      logLevel,
+      logPath,
+      serverInformation,
+    };
+  }
+
+  async getCacheStatus() {
+    let cacheDaemonStatus;
+    let cacheDaemonStatusError = [];
     try {
       cacheDaemonStatus = await this.ipc.invoke('cacheDaemonStatus');
     } catch (e) {
-      cacheDaemonErrors.push(e);
+      cacheDaemonStatusError.push(e);
     }
     const { version, users } = cacheDaemonStatus ?? {};
-    formattedCacheVersion = version?.match(/v\d+\.\d+\.\d+/)?.[0];
+    const cacheVersion = version?.match(/v\d+\.\d+\.\d+/)?.[0];
 
     // Grab the errors from each resource
     const userId = this.session.data.authenticated.user_id;
@@ -45,20 +57,24 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
           message: resource.last_error.error,
           name: resource.name,
         })) ?? [];
-    cacheDaemonErrors = [...cacheDaemonErrors, ...resourceErrors];
 
-    const logLevel = await this.ipc.invoke('getLogLevel');
-    const logPath = await this.ipc.invoke('getLogPath');
-    const serverInformation = this.clusterUrl.rendererClusterUrl;
+    const errors = [...cacheDaemonStatusError, ...resourceErrors];
+    return { version: cacheVersion, errors };
+  }
 
-    return {
-      cacheDaemonErrors,
-      formattedCliVersion,
-      formattedCacheVersion,
-      formattedDesktopVersion,
-      logLevel,
-      logPath,
-      serverInformation,
-    };
+  async getClientAgentStatus() {
+    let clientAgentStatus;
+    let clientAgentStatusError = [];
+    try {
+      clientAgentStatus = await this.ipc.invoke('clientAgentStatus');
+    } catch (e) {
+      clientAgentStatusError.push(e);
+    }
+
+    const { version, status, errors: errorMessages } = clientAgentStatus ?? {};
+    const statusErrors = errorMessages?.map((message) => ({ message })) ?? [];
+
+    const errors = [...clientAgentStatusError, ...statusErrors];
+    return { version: `v${version}`, status, errors };
   }
 }

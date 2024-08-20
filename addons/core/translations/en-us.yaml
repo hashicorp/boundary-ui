@@ -109,7 +109,11 @@ settings:
   application: Application
   cli: CLI
   cache-daemon: Cache Daemon
+  client-agent:
+    title: Boundary Client Agent
+    description: Required to use Transparent Sessions
   client: Client
+  version: Version
   color-theme: Color Theme
   provider: Provider
   hcp: HashiCorp Cloud Platform
@@ -127,3 +131,6 @@ settings:
       warn: Warn
       info: Info
       debug: Debug
+  alerts:
+    cache-daemon: There may be a problem with the cache daemon
+    client-agent: There may be a problem with the client agent

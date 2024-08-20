@@ -64,6 +64,8 @@ export default class ScopesScopeProjectsRoute extends Route {
       );
       if (isClientAgentRunning) {
         this.job.start();
+      } else {
+        this.job.stop();
       }
     }
 
