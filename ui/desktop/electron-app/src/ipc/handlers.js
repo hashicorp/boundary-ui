@@ -198,6 +198,21 @@ handle('isClientAgentRunning', async () => {
 });
 
 /**
+ * Returns the client agent's status
+ */
+handle('clientAgentStatus', async () => clientAgentDaemonManager.status());
+
+/**
+ * Pauses the client agent
+ */
+handle('pauseClientAgent', async () => clientAgentDaemonManager.pause());
+
+/**
+ * Resumes the client agent
+ */
+handle('resumeClientAgent', async () => clientAgentDaemonManager.resume());
+
+/**
  * Gets boundary cli version
  */
 handle('getCliVersion', async () => boundaryCli.version());
@@ -210,7 +225,7 @@ handle('getDesktopVersion', async () => ({ desktopVersion: releaseVersion }));
 /**
  * Returns the Cache daemon status
  */
-handle('cacheDaemonStatus', async () => await cacheDaemonManager.status());
+handle('cacheDaemonStatus', async () => cacheDaemonManager.status());
 
 /**
  * Returns the current log level
