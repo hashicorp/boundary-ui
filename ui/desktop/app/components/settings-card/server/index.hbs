@@ -8,15 +8,6 @@
   @icon='cloud'
   @description={{t 'settings.server.description'}}
 >
-  <:state>
-    {{#if @model.serverInformation}}
-      <Hds::Badge
-        @text={{t 'settings.connected'}}
-        @icon='check'
-        @color='success'
-      />
-    {{/if}}
-  </:state>
   <:body>
     <div>
       <Hds::Text::Display>
