@@ -4,7 +4,6 @@
 }}
 
 <Hds::Card::Container @level='mid' @hasBorder={{true}}>
-
   <div class='header-and-icon'>
     <Hds::IconTile @icon={{@icon}} @size='small' />
     <Hds::Text::Display @tag='h4'>
@@ -20,11 +19,10 @@
         {{yield to='action'}}
       </div>
     {{/if}}
-
   </div>
 
   {{#if @description}}
-    <Hds::Text::Body @tag='p' @color='faint'>
+    <Hds::Text::Body @tag='p' @color='faint' @size='100'>
       {{@description}}
     </Hds::Text::Body>
   {{/if}}
@@ -35,5 +33,4 @@
       {{yield to='body'}}
     </div>
   {{/if}}
-
 </Hds::Card::Container>

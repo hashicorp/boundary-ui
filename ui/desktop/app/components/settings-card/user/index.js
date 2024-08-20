@@ -13,6 +13,7 @@ export default class SettingsUserInfoComponent extends Component {
   @service session;
   @service intl;
 
+  // =attributes
   /**
    * Returns the username of the current user
    * @type {string}
