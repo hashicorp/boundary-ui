@@ -19,7 +19,6 @@
     "start": "ember serve",
     "test": "ember exam --test-port 0 --split=4 --parallel=1 --random",
     "test:ember-compatibility": "ember try:each",
-    "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
@@ -29,9 +28,9 @@
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-mirage": "^3.0.3",
-    "miragejs": "^0.1.48",
     "ember-data": "~4.12.0",
     "ember-fetch": "^8.1.1",
+    "miragejs": "^0.1.48",
     "tracked-built-ins": "^3.1.1"
   },
   "devDependencies": {
