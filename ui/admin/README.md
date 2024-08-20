@@ -1,6 +1,6 @@
 # Admin UI
 
-The admin UI for Boundary.
+The Admin UI for Boundary.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -39,8 +39,8 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
-| build:development | Builds the UI in development mode. |
-| build | Builds the UI for production. |
+| build:development | Builds the Admin UI in development mode. |
+| build | Builds the Admin UI for production. |
 | lint | Runs all lint commands. |
 | lint:hbs | Lints `hbs` template files. |
 | lint:js | Lints `js` files. |
