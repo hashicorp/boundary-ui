@@ -62,24 +62,6 @@ export default class ApplicationRoute extends Route {
   // =actions
 
   /**
-   * Delegates invalidation to the session service.
-   */
-  @action
-  invalidateSession() {
-    this.session.invalidate();
-  }
-
-  /**
-   * Disconnects from clusterUrl and invalidates session, thereby resetting
-   * the client and reloading to the onboarding clusterUrl screen.
-   */
-  @action
-  disconnect() {
-    this.clusterUrl.resetClusterUrl();
-    this.invalidateSession();
-  }
-
-  /**
    * Invalidates the session if a 401 error occurs and returns false to
    * prevent further error handling.
    * Returns true in all other cases, allowing error handling to occur (such
@@ -120,20 +102,5 @@ export default class ApplicationRoute extends Route {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
-  }
-
-  @action
-  minimize() {
-    this.ipc.invoke('minimizeWindow');
-  }
-
-  @action
-  toggleFullScreen() {
-    this.ipc.invoke('toggleFullscreenWindow');
-  }
-
-  @action
-  close() {
-    this.ipc.invoke('closeWindow');
   }
 }
