@@ -13,11 +13,21 @@ export default class SettingsCardLogsComponent extends Component {
 
   // =attributes
 
+  /**
+   * Returns the list of available log levels
+   * @return {string[]}
+   */
   get logLevels() {
     return ['error', 'warn', 'info', 'debug'];
   }
 
   // =methods
+
+  /**
+   * Sets the log level to the selected value
+   * @param value
+   * @return {Promise<void>}
+   */
   @action
   async selectLogLevel({ target: { value } }) {
     await this.ipc.invoke('setLogLevel', value);
