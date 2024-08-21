@@ -2,37 +2,26 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown data-test-manage-credential-stores as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'create model' @model collection='credential-libraries')}}
-
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
-      @model={{@model}}
-    >
-      {{t 'resources.credential-library.actions.create'}}
-    </dropdown.link>
+      @text={{t 'resources.credential-library.actions.create'}}
+    />
   {{/if}}
   {{#if (can 'create model' @model collection='credentials')}}
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.credential-stores.credential-store.credentials.new'
-      @model={{@model}}
-    >
-      {{t 'resources.credential.actions.create'}}
-    </dropdown.link>
+      @text={{t 'resources.credential.actions.create'}}
+    />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
-      {{on 'click' @delete}}
-    >
-      {{t 'resources.credential-store.actions.delete'}}
-    </dropdown.button>
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.credential-store.actions.delete'}}
+      @color='critical'
+      {{on 'click' (fn @delete @model)}}
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>

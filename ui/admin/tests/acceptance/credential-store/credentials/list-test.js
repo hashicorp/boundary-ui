@@ -13,6 +13,11 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-credential-stores] div:first-child button';
+  const ADD_ACTION_SELECTOR =
+    '[data-test-manage-credential-stores] ul li:first-child a';
+
   const instances = {
     scopes: {
       org: null,
@@ -107,8 +112,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       ['create'];
     await visit(urls.staticCredentialStore);
     assert.dom(`[href="${urls.credentials}"]`).isVisible();
-    assert
-      .dom(`.rose-layout-page-actions [href="${urls.newCredential}"]`)
-      .isVisible();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).containsElement(ADD_ACTION_SELECTOR);
   });
 });
