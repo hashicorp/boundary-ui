@@ -22,7 +22,6 @@ export default class ApplicationController extends Controller {
    */
   @action
   invalidateSession() {
-    console.log('TEST');
     this.session.invalidate();
   }
 
