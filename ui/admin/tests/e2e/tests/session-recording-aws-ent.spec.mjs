@@ -24,6 +24,7 @@ import {
 import { CredentialStoresPage } from '../pages/credential-stores.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { ProjectsPage } from '../pages/projects.mjs';
+import { SessionRecordingsPage } from '../pages/session-recordings.mjs';
 import { SessionsPage } from '../pages/sessions.mjs';
 import { StorageBucketsPage } from '../pages/storage-buckets.mjs';
 import { StoragePoliciesPage } from '../pages/storage-policies.mjs';
@@ -208,7 +209,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     // temporary workaround.
     await page.reload();
 
-    // Re-apply storage policy to the session recording
+    // Re-apply storage policy to the session recording and delete
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
     await page
       .getByRole('link', { name: 'Session Recordings', exact: true })
@@ -217,21 +218,9 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
       .getByRole('row', { name: targetName })
       .getByRole('link', { name: 'View' })
       .click();
-    await page.getByText('Manage').click();
-    await page.getByRole('button', { name: 'Re-apply storage policy' }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
-
-    // Delete session recording
-    await page.getByText('Manage').click();
-    await page.getByRole('button', { name: 'Delete recording' }).click();
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
+    const sessionRecordingsPage = new SessionRecordingsPage(page);
+    await sessionRecordingsPage.reapplyStoragePolicy();
+    await sessionRecordingsPage.deleteResource();
 
     // Detach storage bucket from target
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
@@ -240,15 +229,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({ page }) => {
     await page.getByRole('link', { name: projectName }).click();
     await page.getByRole('link', { name: 'Targets', exact: true }).click();
     await page.getByRole('link', { name: targetName }).click();
-    await page
-      .getByRole('link', { name: 'Session Recording settings' })
-      .click();
-    await page.getByLabel('Record sessions for this target').uncheck();
-    await page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
+    await targetsPage.detachStorageBucket();
   } finally {
     if (policyName) {
       const storagePolicyId = await getPolicyIdFromNameCli(orgId, policyName);
