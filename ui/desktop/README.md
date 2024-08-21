@@ -83,18 +83,12 @@ To run as a desktop app:
 
 - `yarn start:desktop`
 
-The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
-build. CLI version is defined in `electron-app/config/cli.js`.
+The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set environment variable `CLI_SETUP` to true. Example: `CLI_SETUP=true yarn start:desktop`.
+CLI version is defined in `electron-app/config.cli.js`.
 
 ### Developing Using Non-Release Versions of Boundary
 
-You can also develop using a non-release version of Boundary - bypassing the
-above CLI download behavior - by manually placing the version of Boundary that
-you want to develop with in the `electron-app/cli/` directly (you may need to
-create the directory).
-
-After doing this, run yarn with `BYPASS_CLI_SETUP=true`; example:
-`BYPASS_CLI_SETUP=true yarn start:desktop`.
+To develop using a non-release version of Boundary, download the Boundary CLI version you want to use and extract it at `electron-app/cli` folder. You may need to create the directory or to cleaning it up beforehand.
 
 ### Environment Variables (DEV)
 
@@ -106,7 +100,7 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
-| `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
+| `CLI_SETUP` | Enable download and extraction of CLI. For development use only. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 | `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
