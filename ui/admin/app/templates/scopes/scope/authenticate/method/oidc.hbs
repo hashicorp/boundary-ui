@@ -12,7 +12,7 @@
     <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
     <p>
       {{t 'resources.auth-method.questions.no-see-window'}}
-      <a href='#' role='button' {{on 'click' (route-action 'authenticate')}}>
+      <a href='#' role='button' {{on 'click' this.authMethod.authenticate}}>
         {{t 'actions.retry'}}
       </a>
     </p>

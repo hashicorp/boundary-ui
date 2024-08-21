@@ -98,7 +98,7 @@ List of available project commands.  `yarn run <command-name>`
 
 | Command             | Description |
 |---------------------|---|
-| build               | Builds Admin UI. |
+| build               | Builds Admin UI for production. |
 | test                | Runs tests in CI mode. |
 | lint                | Runs ember-template-lint on all of the hbs, js, and sass files. |
 | compliance:audit    | Checks for issues using `yarn audit` with moderate and above criticality.|
@@ -119,9 +119,9 @@ of README.
 
 ### Building Admin UI for Production
 
-See ui/admin/README.md Building for Production for more information on how to
-build the Admin UI.  Be sure to set build-related environment variables as
-necessary for your target environment, as described in the Admin UI readme.
+See [Admin UI README](ui/admin/README.md#building-for-production) for more information on how to
+build the Admin UI for production.  Be sure to set build-related environment variables as
+necessary for your target environment, as described in the [Environment Variables](ui/admin/README.md#environment-variables) section of README.
 
 To quickly produce a production build of Admin UI, run from this folder:
 
@@ -174,8 +174,9 @@ EXE archived desktop UI is available at asset location under `zip` folder.
 
 This describes how to connect local Boundary UI to your local instance of Boundary.
 
-This assumes you already have up and running a Boundary dev instance in your local environment with a listener `127.0.0.1:9200` (default behaviour). [Learn how to start a local Boundary dev instance](https://learn.hashicorp.com/tutorials/boundary/getting-started-dev?in=boundary/getting-started#start-a-dev-environment).
-#### For admin
+This assumes you already have up and running a Boundary dev instance in your local environment with a listener `127.0.0.1:9200` (default behaviour). [Learn how to start a local Boundary dev instance](https://developer.hashicorp.com/boundary/tutorials/get-started-community/community-get-started-dev)
+
+#### For Admin
 
 This assumes you are within `boundary-ui/ui/admin`.
 
@@ -185,7 +186,7 @@ Following terminal instructions, open in your browser: `http://localhost:4200/`.
 
 Once you open the UI you will see the login screen, authenticate using generated admin login name and password.
 
-#### For desktop
+#### For Desktop
 
 This assumes you are within `boundary-ui/ui/desktop`.
 

@@ -4,6 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute extends Route {
@@ -25,12 +26,14 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   // =services
 
   @service store;
+  @service intl;
+  @service confirm;
 
   // =methods
 
   /**
    * Loads projects for current org scope.
-   * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, selectedProjectIDs: [string], remainingProjectIDs: [string]}> }
+   * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, remainingProjectIDs: [string]}> }
    */
   async model({ org_id, search, page, pageSize }) {
     const role = this.modelFor('scopes.scope.roles.role');
@@ -53,8 +56,7 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       totalItems,
     );
 
-    const { selectedProjectIDs, remainingProjectIDs } =
-      await this.getSelectedProjects(role, org_id);
+    const remainingProjectIDs = await this.getRemainingProjects(role, org_id);
 
     return {
       role,
@@ -62,7 +64,6 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
       projectScopes,
       totalItems,
       totalItemsCount,
-      selectedProjectIDs,
       remainingProjectIDs,
     };
   }
@@ -98,12 +99,12 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
   }
 
   /**
-   * Extract project type grant scope ids that belong to this org scope.
+   * Extract project type grant scope ids that don't belong to this org scope.
    * @param {RoleModel} role
    * @param {string} org_id
-   * @returns {object}
+   * @returns {Promise<[string]>} remainingProjectIDs
    */
-  async getSelectedProjects(role, org_id) {
+  async getRemainingProjects(role, org_id) {
     let selectedProjectIDs = role.grantScopeProjectIDs;
     let remainingProjectIDs = [];
     if (role.scope.isGlobal && selectedProjectIDs.length) {
@@ -115,15 +116,25 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
         { scope_id: 'global', query: { filters: { id } } },
         options,
       );
-      selectedProjectIDs = projects.reduce((selectedIDs, project) => {
-        if (project.scope.id === org_id) {
-          selectedIDs.push(project.id);
-        } else {
+      projects.forEach((project) => {
+        if (project.scope.id !== org_id) {
           remainingProjectIDs.push(project.id);
         }
-        return selectedIDs;
-      }, []);
+      });
     }
-    return { selectedProjectIDs, remainingProjectIDs };
+    return remainingProjectIDs;
+  }
+
+  // =actions
+
+  /**
+   * Stores the role model in the transition data property so that the application level hook
+   * can check for dirty attributes and trigger the confirm service.
+   * @param {object} transition
+   */
+  @action
+  async willTransition(transition) {
+    const { role } = transition.from.attributes;
+    transition.data = { model: role };
   }
 }

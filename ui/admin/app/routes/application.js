@@ -43,7 +43,8 @@ export default class ApplicationRoute extends Route {
     this.router.on('routeWillChange', async (transition) => {
       const fromName = transition?.from?.name;
       const toName = transition?.to?.name;
-      const maybeModel = transition?.from?.attributes;
+      const maybeModel =
+        transition?.data?.model ?? transition?.from?.attributes;
       if (fromName !== toName && maybeModel?.hasDirtyAttributes) {
         transition.abort();
         try {

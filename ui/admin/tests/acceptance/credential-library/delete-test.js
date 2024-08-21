@@ -17,6 +17,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   setupMirage(hooks);
 
   let getCredentialLibraryCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-credential-library-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-credential-library-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -75,7 +79,8 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   test('can delete resource', async function (assert) {
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getCredentialLibraryCount(), count - 1);
   });
 
@@ -96,7 +101,8 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getCredentialLibraryCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -107,7 +113,8 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getCredentialLibraryCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -125,7 +132,8 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
       );
     });
     await visit(urls.credentialLibrary);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

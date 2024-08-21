@@ -6,7 +6,7 @@
 {{#if @model.totalItemsCount}}
   <Rose::Form
     class='full-width role-manage-custom-scopes-form'
-    @onSubmit={{fn @submit this.allGrantScopes}}
+    @onSubmit={{@submit}}
     @cancel={{@cancel}}
     @disabled={{@model.role.isSaving}}
     as |form|
@@ -21,12 +21,12 @@
       />
     </Hds::SegmentedGroup>
     {{#if @model.orgScopes}}
-      {{#if this.selectedItems.length}}
+      {{#if @model.role.grantScopeOrgIDs.length}}
         <div class='table-selected-items-text'>
           <Hds::Text::Body @tag='p' @color='faint'>
             {{t
               'resources.role.scope.titles.selected'
-              items=this.selectedItems.length
+              items=@model.role.grantScopeOrgIDs.length
               total=@model.totalItemsCount
             }}
           </Hds::Text::Body>
@@ -46,7 +46,7 @@
         <:body as |B|>
           <B.Tr
             @selectionKey={{B.data.id}}
-            @isSelected={{includes B.data.id this.selectedItems}}
+            @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}}
             @selectionAriaLabelSuffix='row {{B.data.id}}'
             data-test-org-scopes-table-row={{B.data.id}}
           >
@@ -69,7 +69,7 @@
                     @iconPosition='trailing'
                     @text={{t
                       'resources.role.scope.actions.view-projects'
-                      selected=projectTotals.selected
+                      selected=projectTotals.selected.length
                       total=projectTotals.total
                     }}
                     @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
@@ -127,4 +127,63 @@
       />
     </A.Footer>
   </Hds::ApplicationState>
+{{/if}}
+
+{{#if this.selectedOrg}}
+  <Hds::Modal
+    @onClose={{this.toggleRemoveOrgModal}}
+    data-test-manage-scopes-remove-org-modal
+    as |M|
+  >
+    <M.Header>{{t 'resources.role.scope.remove-org.title'}}</M.Header>
+    <M.Body>
+      <Hds::Text::Body @tag='p' @color='primary'>
+        {{t
+          'resources.role.scope.remove-org.description'
+          orgDisplayName=this.orgDisplayName
+        }}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{t 'resources.role.scope.actions.remove-org-and-projects'}}
+          {{on 'click' (fn this.removeProjects false)}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'resources.role.scope.actions.remove-org-only'}}
+          {{on 'click' F.close}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
+
+{{#if this.selectedOrgs}}
+  <Hds::Modal
+    @onClose={{this.toggleRemoveAllModal}}
+    data-test-manage-scopes-remove-all-orgs-modal
+    as |M|
+  >
+    <M.Header>{{t 'resources.role.scope.remove-all-orgs.title'}}</M.Header>
+    <M.Body>
+      <Hds::Text::Body @tag='p' @color='primary'>
+        {{t 'resources.role.scope.remove-all-orgs.description'}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer as |F|>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{t 'resources.role.scope.actions.remove-orgs-and-projects'}}
+          {{on 'click' (fn this.removeProjects true)}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'resources.role.scope.actions.remove-orgs-only'}}
+          {{on 'click' F.close}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
 {{/if}}

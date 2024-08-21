@@ -4,7 +4,9 @@
  */
 
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { TrackedObject } from 'tracked-built-ins';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute extends Route {
@@ -26,6 +28,8 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   // =services
 
   @service store;
+  @service intl;
+  @service confirm;
 
   // =methods
 
@@ -85,13 +89,15 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       options,
     );
 
-    const projectTotals = {};
+    // We want this object to be tracked so that changes to this object
+    // cause the "Projects selected" column to re-render with updates.
+    const projectTotals = new TrackedObject({});
     projects.forEach(({ id, scope }) => {
       if (!projectTotals[scope.id]) {
-        projectTotals[scope.id] = { selected: 0, total: 0 };
+        projectTotals[scope.id] = { selected: [], total: 0 };
       }
       if (projectIDs.includes(id)) {
-        projectTotals[scope.id].selected++;
+        projectTotals[scope.id].selected.push(id);
       }
       projectTotals[scope.id].total++;
     });
@@ -127,5 +133,18 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       options,
     );
     return scopes.meta?.totalItems;
+  }
+
+  // =actions
+
+  /**
+   * Stores the role model in the transition data property so that the application level hook
+   * can check for dirty attributes and trigger the confirm service.
+   * @param {object} transition
+   */
+  @action
+  async willTransition(transition) {
+    const { role } = transition.from.attributes;
+    transition.data = { model: role };
   }
 }

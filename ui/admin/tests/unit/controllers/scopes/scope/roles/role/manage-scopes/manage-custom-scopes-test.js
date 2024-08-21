@@ -75,16 +75,22 @@ module(
 
       assert.deepEqual(role.grant_scope_ids, []);
 
-      await controller.setGrantScopes(role, [instances.scopes.org.id]);
+      role.grant_scope_ids = [instances.scopes.org.id];
+      await controller.setGrantScopes(role);
 
       assert.deepEqual(role.grant_scope_ids, [instances.scopes.org.id]);
     });
 
-    test('cancel action causes transition to expected route', async function (assert) {
+    test('cancel action rolls back changes causes transition to expected route', async function (assert) {
       await visit(urls.manageCustomScopes);
+      const role = await store.findRecord('role', instances.role.id);
 
-      await controller.cancel();
+      assert.deepEqual(role.grant_scope_ids, []);
 
+      role.grant_scope_ids = [instances.scopes.org.id];
+      await controller.cancel(role);
+
+      assert.deepEqual(role.grant_scope_ids, []);
       assert.strictEqual(currentURL(), urls.manageScopes);
     });
   },

@@ -6,10 +6,6 @@
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
-import { confirm } from 'core/decorators/confirm';
-import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesRoute extends Route {
   // =services
@@ -40,20 +36,5 @@ export default class ScopesRoute extends Route {
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
       .catch(() => A([]));
-  }
-
-  /**
-   * Deletes the scope and redirects to index.
-   * @param {Model} scope
-   */
-  @action
-  @loading
-  @confirm('resources.policy.questions.detach')
-  @notifyError(({ message }) => message)
-  @notifySuccess('resources.policy.messages.detach')
-  async detachStoragePolicy(scope) {
-    const { storage_policy_id } = scope;
-    scope.storage_policy_id = '';
-    await scope.detachStoragePolicy(storage_policy_id);
   }
 }
