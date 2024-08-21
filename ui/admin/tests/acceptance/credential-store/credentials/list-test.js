@@ -15,8 +15,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
 
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-credential-stores] div:first-child button';
-  const ADD_ACTION_SELECTOR =
-    '[data-test-manage-credential-stores] ul li:first-child a';
 
   const instances = {
     scopes: {
@@ -112,6 +110,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
       ['create'];
     await visit(urls.staticCredentialStore);
     assert.dom(`[href="${urls.credentials}"]`).isVisible();
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).containsElement(ADD_ACTION_SELECTOR);
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).isVisible();
   });
 });

@@ -102,10 +102,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.vaultCredentialStore);
-    assert
-      .dom(MANAGE_DROPDOWN_SELECTOR)
-      .containsElement(DELETE_ACTION_SELECTOR)
-      .doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('cannot delete a static credential store without proper authorization', async function (assert) {
@@ -114,10 +111,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.staticCredentialStore);
-    assert
-      .dom(MANAGE_DROPDOWN_SELECTOR)
-      .containsElement(DELETE_ACTION_SELECTOR)
-      .doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('can accept delete static credential store via dialog', async function (assert) {
