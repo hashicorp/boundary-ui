@@ -5,20 +5,20 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import WindowMockIPC from '../../helpers/window-mock-ipc';
 
 module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
-  setupMirage(hooks);
 
   let controller;
   let session;
   let clusterUrl;
+  let mockIPC;
 
-  const setDefaultClusterUrl = () => {
-    const windowOrigin = window.location.origin;
-    clusterUrl.rendererClusterUrl = windowOrigin;
+  const setupMockIpc = (test) => {
+    test.owner.register('service:browser/window', WindowMockIPC);
+    mockIPC = test.owner.lookup('service:browser/window').mockIPC;
   };
 
   hooks.beforeEach(async function () {
@@ -26,7 +26,7 @@ module('Unit | Controller | application', function (hooks) {
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
-    setDefaultClusterUrl();
+    setupMockIpc(this);
   });
 
   test('it exists', function (assert) {
@@ -45,12 +45,17 @@ module('Unit | Controller | application', function (hooks) {
   });
 
   test('disconnect action de-authenticates a user and resets cluster url', async function (assert) {
+    const url = 'http://localhost:9200';
+    await clusterUrl.setClusterUrl(url);
+
     assert.true(session.isAuthenticated);
-    assert.ok(clusterUrl.rendererClusterUrl);
+    assert.strictEqual(clusterUrl.rendererClusterUrl, url);
+    assert.strictEqual(mockIPC.clusterUrl, url);
 
     await controller.disconnect();
 
     assert.false(session.isAuthenticated);
     assert.notOk(clusterUrl.rendererClusterUrl);
+    assert.notOk(mockIPC.clusterUrl);
   });
 });
