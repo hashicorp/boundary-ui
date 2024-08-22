@@ -22,6 +22,10 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getHostCatalogCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -70,7 +74,8 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
     await visit(urls.hostCatalogs);
     await click(`[href="${urls.hostCatalog}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
   });
@@ -84,9 +89,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
     await click(`[href="${urls.hostCatalog}"]`);
 
-    assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-      .doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('can accept delete host catalog via dialog', async function (assert) {
@@ -96,7 +99,8 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await visit(urls.hostCatalogs);
 
     await click(`[href="${urls.hostCatalog}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
     assert.dom('.rose-notification-body').hasText('Deleted successfully.');
@@ -111,7 +115,8 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await visit(urls.hostCatalogs);
 
     await click(`[href="${urls.hostCatalog}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-secondary');
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount);
@@ -133,7 +138,8 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     });
 
     await click(`[href="${urls.hostCatalog}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.dom('.rose-notification-body').hasText('Oops.');
   });
