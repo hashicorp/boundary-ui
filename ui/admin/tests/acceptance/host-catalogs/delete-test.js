@@ -88,6 +88,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
       );
 
     await click(`[href="${urls.hostCatalog}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
