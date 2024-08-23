@@ -615,6 +615,10 @@ role:
         help: Customize which scopes are associated with this role.
       view-projects: '{selected}/{total} total projects'
       apply: Apply changes to org
+      remove-org-and-projects: Remove org and projects
+      remove-org-only: Remove just the org
+      remove-orgs-and-projects: Remove orgs and projects
+      remove-orgs-only: Remove just the orgs
     form:
       this:
         label: Add this scope
@@ -627,6 +631,12 @@ role:
       descendants:
         label: Add all descendants
         help: Add all of the orgs and the projects in the orgs that are underneath this scope.
+    remove-org:
+      title: Remove this org?
+      description: You're about to remove {orgDisplayName}. Do you want to remove the projects under {orgDisplayName} as well? Or do you just want to remove {orgDisplayName} from this project?
+    remove-all-orgs:
+      title: Remove all selected orgs?
+      description: You're about to remove all the selected orgs. Do you want to remove the projects under these orgs as well? Or do you just want to remove just the orgs?
 target:
   title: Target
   title_plural: Targets

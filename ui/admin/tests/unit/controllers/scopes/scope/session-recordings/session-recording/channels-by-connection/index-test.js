@@ -4,7 +4,9 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'admin/tests/helpers';
+import { setupTest } from 'ember-qunit';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   STATE_SESSION_RECORDING_AVAILABLE,
   STATE_SESSION_RECORDING_STARTED,
@@ -15,13 +17,36 @@ module(
   'Unit | Controller | scopes/scope/session-recordings/session-recording/channels-by-connection/index',
   function (hooks) {
     setupTest(hooks);
+    setupMirage(hooks);
 
-    test('isSessionInprogressWithNoConnections returns true if session has started with no connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
+    let store;
+    let controller;
+    let getSessionRecordingCount;
+
+    const instances = {
+      scopes: {
+        global: null,
+      },
+      sessionRecording: null,
+    };
+
+    hooks.beforeEach(function () {
+      authenticateSession({});
+      store = this.owner.lookup('service:store');
+      controller = this.owner.lookup(
         'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
       );
 
+      instances.scopes.global = this.server.create('scope', { id: 'global' });
+      instances.sessionRecording = this.server.create('session-recording', {
+        scope: instances.scopes.global,
+      });
+
+      getSessionRecordingCount = () =>
+        this.server.schema.sessionRecordings.all().models.length;
+    });
+
+    test('isSessionInprogressWithNoConnections returns true if session has started with no connections', function (assert) {
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_STARTED,
         connection_recordings: [],
@@ -32,11 +57,6 @@ module(
     });
 
     test('isSessionInprogressWithNoConnections returns false if session has started and has connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
-      );
-
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_STARTED,
         connection_recordings: [store.createRecord('connection-recording')],
@@ -47,11 +67,6 @@ module(
     });
 
     test('isSessionInprogressWithNoConnections returns false if session is complete and has connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
-      );
-
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_AVAILABLE,
         connection_recordings: [store.createRecord('connection-recording')],
@@ -62,11 +77,6 @@ module(
     });
 
     test('isSessionUnknownWithNoConnections returns true if session is unknown with no connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
-      );
-
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_UNKNOWN,
         connection_recordings: [],
@@ -77,11 +87,6 @@ module(
     });
 
     test('isSessionUnknownWithNoConnections returns false if session is unknown and has connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
-      );
-
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_UNKNOWN,
         connection_recordings: [store.createRecord('connection-recording')],
@@ -92,11 +97,6 @@ module(
     });
 
     test('isSessionUnknownWithNoConnections returns false if session is complete and has connections', function (assert) {
-      const store = this.owner.lookup('service:store');
-      const controller = this.owner.lookup(
-        'controller:scopes/scope/session-recordings/session-recording/channels-by-connection/index',
-      );
-
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_AVAILABLE,
         connection_recordings: [store.createRecord('connection-recording')],
@@ -104,6 +104,30 @@ module(
       controller.set('model', { sessionRecording });
 
       assert.false(controller.isSessionUnknownWithNoConnections);
+    });
+
+    test('delete action destroys specified model', async function (assert) {
+      const sessionRecording = await store.findRecord(
+        'session-recording',
+        instances.sessionRecording.id,
+      );
+      const sessionRecordingCount = getSessionRecordingCount();
+
+      await controller.delete(sessionRecording);
+
+      assert.strictEqual(getSessionRecordingCount(), sessionRecordingCount - 1);
+    });
+
+    test('reapplyStoragePolicy action applies storage policy to session recording', async function (assert) {
+      const sessionRecording = await store.findRecord(
+        'session-recording',
+        instances.sessionRecording.id,
+      );
+      const deleteAfter = sessionRecording.delete_after;
+
+      await controller.reapplyStoragePolicy(sessionRecording);
+
+      assert.notEqual(sessionRecording.delete_after, deleteAfter);
     });
   },
 );

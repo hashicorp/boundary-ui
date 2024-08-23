@@ -20,6 +20,11 @@ module(
     let getUsernameKeyPairCredentialCount;
     let getJSONCredentialCount;
 
+    const MANAGE_DROPDOWN_SELECTOR =
+      '[data-test-manage-credentials-dropdown] div:first-child button';
+    const DELETE_ACTION_SELECTOR =
+      '[data-test-manage-credentials-dropdown] ul li button';
+
     const instances = {
       scopes: {
         org: null,
@@ -94,7 +99,8 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -106,7 +112,8 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -117,7 +124,8 @@ module(
     test('can delete JSON credential', async function (assert) {
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
@@ -131,9 +139,7 @@ module(
         );
       await visit(urls.usernamePasswordCredential);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert
-        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-        .doesNotExist();
+      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernamePasswordCredentialCount,
@@ -149,9 +155,7 @@ module(
         );
       await visit(urls.usernameKeyPairCredential);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert
-        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-        .doesNotExist();
+      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernameKeyPairCredentialCount,
@@ -166,9 +170,7 @@ module(
         );
       await visit(urls.jsonCredential);
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert
-        .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-        .doesNotExist();
+      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
@@ -178,7 +180,8 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-primary');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
@@ -193,7 +196,8 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-primary');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
@@ -207,7 +211,8 @@ module(
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-primary');
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
@@ -219,7 +224,8 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-secondary');
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
@@ -234,7 +240,8 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-secondary');
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
@@ -248,7 +255,8 @@ module(
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       await click('.rose-dialog footer .rose-button-secondary');
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
@@ -267,7 +275,8 @@ module(
         );
       });
       await visit(urls.usernamePasswordCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
 
@@ -284,7 +293,8 @@ module(
         );
       });
       await visit(urls.usernameKeyPairCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
 
@@ -301,7 +311,8 @@ module(
         );
       });
       await visit(urls.jsonCredential);
-      await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+      await click(MANAGE_DROPDOWN_SELECTOR);
+      await click(DELETE_ACTION_SELECTOR);
       assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
     });
   },
