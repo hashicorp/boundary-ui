@@ -180,6 +180,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(`[href="${urls.authMethod}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
+    await click(DIALOG_DELETE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.authMethods);
     assert.strictEqual(getAuthMethodCount(), authMethodCount - 1);

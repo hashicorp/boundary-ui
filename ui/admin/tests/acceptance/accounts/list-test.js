@@ -18,6 +18,11 @@ module('Acceptance | accounts | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div:first-child button';
+  const CREATE_ACCOUNT_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] ul li:nth-child(2) a';
+
   const instances = {
     scopes: {
       global: null,
@@ -89,6 +94,7 @@ module('Acceptance | accounts | list', function (hooks) {
     instances.authMethod.authorized_collection_actions.accounts = ['create'];
     await visit(urls.authMethod);
     assert.ok(find(`[href="${urls.accounts}"]`));
-    assert.ok(find(`.rose-layout-page-actions [href="${urls.newAccount}"]`));
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(CREATE_ACCOUNT_SELECTOR).hasAttribute('href', urls.newAccount);
   });
 });
