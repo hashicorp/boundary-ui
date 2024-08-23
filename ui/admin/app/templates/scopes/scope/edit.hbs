@@ -56,21 +56,19 @@
 
   {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
     <page.actions>
-      <Hds::Dropdown data-test-manage-projects as |dd|>
+      <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
         <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-        {{#if @model.isOrg}}
-          <dd.Interactive
-            @color='critical'
-            @text={{t 'resources.org.actions.delete'}}
-            {{on 'click' (fn this.scopes.delete @model)}}
-          />
-        {{else}}
-          <dd.Interactive
-            @color='critical'
-            @text={{t 'resources.project.actions.delete'}}
-            {{on 'click' (fn this.scopes.delete @model)}}
-          />
-        {{/if}}
+        <dd.Interactive
+          @color='critical'
+          @text={{t
+            (if
+              @model.isOrg
+              'resources.org.actions.delete'
+              'resources.project.actions.delete'
+            )
+          }}
+          {{on 'click' (fn this.scopes.delete @model)}}
+        />
       </Hds::Dropdown>
     </page.actions>
   {{/if}}
