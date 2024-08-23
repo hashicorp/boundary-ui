@@ -6,6 +6,8 @@
 import { chromium } from '@playwright/test';
 import { checkEnv } from './helpers/general.mjs';
 
+import { LoginPage } from './pages/login.mjs';
+
 async function globalSetup() {
   await checkEnv([
     'BOUNDARY_ADDR',
@@ -18,15 +20,12 @@ async function globalSetup() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(process.env.BOUNDARY_ADDR);
-  await page
-    .getByLabel('Login Name')
-    .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-  await page
-    .getByLabel('Password', { exact: true })
-    .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await page.getByRole('navigation', { name: 'General' }).waitFor();
-  await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).waitFor();
+
+  const loginPage = new LoginPage(page);
+  await loginPage.login(
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
   const storageState = await page
     .context()
     .storageState({ path: authenticatedState });
