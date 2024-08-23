@@ -63,10 +63,7 @@ export class RolesPage extends BaseResourcePage {
     await this.page.getByRole('textbox', { name: 'New Grant' }).fill(grants);
     await this.page.getByRole('button', { name: 'Add', exact: true }).click();
     await this.page.getByRole('button', { name: 'Save', exact: true }).click();
-    await expect(
-      this.page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await this.page.getByRole('button', { name: 'Dismiss' }).click();
+    await this.dismissSuccessAlert();
     await expect(
       this.page.getByRole('textbox', { name: 'Grant', exact: true }),
     ).toHaveValue(grants);

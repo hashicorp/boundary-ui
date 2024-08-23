@@ -14,6 +14,7 @@ import {
   getOrgIdFromNameCli,
 } from '../helpers/boundary-cli.mjs';
 import { AuthMethodsPage } from '../pages/auth-methods.mjs';
+import { LoginPage } from '../pages/login.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { RolesPage } from '../pages/roles.mjs';
 import { UsersPage } from '../pages/users.mjs';
@@ -37,19 +38,11 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
   let orgName;
   try {
     // Log in
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    const loginPage = new LoginPage(page);
+    await loginPage.login(
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -178,49 +171,28 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     const authMethodsPage = new AuthMethodsPage(page);
     await authMethodsPage.createPasswordAuthMethod();
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using ldap account
+    await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: ldapAuthMethodName }).click();
-    await page.getByLabel('Login Name').fill(process.env.E2E_LDAP_USER_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_LDAP_USER_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(process.env.E2E_LDAP_USER_NAME)).toBeEnabled();
+    await loginPage.login(
+      process.env.E2E_LDAP_USER_NAME,
+      process.env.E2E_LDAP_USER_PASSWORD,
+    );
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByText('Projects'),
     ).toBeVisible();
 
-    // Log out
-    await page.getByText(process.env.E2E_LDAP_USER_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log back in as an admin
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    await loginPage.logout(process.env.E2E_LDAP_USER_NAME);
+    await loginPage.login(
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();

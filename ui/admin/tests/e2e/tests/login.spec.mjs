@@ -5,43 +5,35 @@
 
 import { test, expect } from '@playwright/test';
 
+import { LoginPage } from '../pages/login.mjs';
+
 test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
   page,
 }) => {
   await page.goto('/');
 
   // Log in
-  await page
-    .getByLabel('Login Name')
-    .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-  await page
-    .getByLabel('Password', { exact: true })
-    .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
-  await expect(
-    page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-  ).toBeEnabled();
+  const loginPage = new LoginPage(page);
+  await loginPage.login(
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
   await expect(
     page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
   ).toBeVisible();
 
   // Log out
-  await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-  await page.getByRole('button', { name: 'Sign Out' }).click();
-  await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
+  await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
   await page.reload();
 
   // Log back in
-  await page
-    .getByLabel('Login Name')
-    .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-  await page
-    .getByLabel('Password', { exact: true })
-    .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-  await page.getByRole('button', { name: 'Sign In' }).click();
-  await expect(page.getByRole('navigation', { name: 'General' })).toBeVisible();
+  await loginPage.login(
+    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+  );
+  await expect(
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
+  ).toBeVisible();
 });
 
 test.describe('Failure Cases', async () => {
