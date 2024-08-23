@@ -25,7 +25,10 @@ const isTesting = environmentConfig.environment === 'test';
 export default function (mirageConfig) {
   let finalConfig = {
     ...mirageConfig,
-    models: { ...discoverEmberDataModels(), ...mirageConfig.models },
+    models: {
+      ...discoverEmberDataModels(mirageConfig.store),
+      ...mirageConfig.models,
+    },
     serializers: applyEmberDataSerializers(mirageConfig.serializers),
     routes,
   };
