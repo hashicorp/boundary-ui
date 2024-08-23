@@ -70,18 +70,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
 
     // Add/Remove another host source
     await targetsPage.addHostSourceToTarget(hostSetName2);
-    await page
-      .getByRole('link', { name: hostSetName2 })
-      .locator('..')
-      .locator('..')
-      .getByRole('button', { name: 'Manage' })
-      .click();
-    await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
+    await targetsPage.removeHostSourceFromTarget(hostSetName2);
 
     // Connect to target
     await authenticateBoundaryCli(
