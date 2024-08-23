@@ -4,9 +4,13 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { nanoid } from 'nanoid';
 
 import { authenticatedState } from '../global-setup.mjs';
+import {
+  createOrgHttp,
+  createProjectHttp,
+  createTargetHttp,
+} from '../helpers/boundary-http.mjs';
 
 test.use({ storageState: authenticatedState });
 
@@ -16,38 +20,15 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
 }) => {
   let org;
   try {
-    const newOrg = await request.post(`/v1/scopes`, {
-      data: {
-        name: 'Org ' + nanoid(),
-        scope_id: 'global',
-      },
-    });
-    org = await newOrg.json();
-
-    const newProject = await request.post(`/v1/scopes`, {
-      data: {
-        name: 'Project ' + nanoid(),
-        scope_id: org.id,
-      },
-    });
-    const project = await newProject.json();
+    org = await createOrgHttp(request);
+    const project = await createProjectHttp(request, org.id);
 
     // Create targets
     let targets = [];
     const targetCount = 15;
     for (let i = 0; i < targetCount; i++) {
-      const newTarget = await request.post(`/v1/targets`, {
-        data: {
-          name: 'Target ' + nanoid(),
-          scope_id: project.id,
-          type: 'tcp',
-          attributes: {
-            default_port: 22,
-          },
-        },
-      });
-
-      targets.push(await newTarget.json());
+      const target = await createTargetHttp(request, project.id, 'tcp', 22);
+      targets.push(target);
     }
 
     // Navigate to targets page

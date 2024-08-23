@@ -13,6 +13,7 @@ import {
   getOrgIdFromNameCli,
 } from '../helpers/boundary-cli.mjs';
 import { AuthMethodsPage } from '../pages/auth-methods.mjs';
+import { LoginPage } from '../pages/login.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { UsersPage } from '../pages/users.mjs';
 
@@ -28,19 +29,11 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
   let authMethodName;
   try {
     // Log in
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    const loginPage = new LoginPage(page);
+    await loginPage.login(
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -60,41 +53,25 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await usersPage.createUser();
     await usersPage.addAccountToUser(username);
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using new account
+    await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: authMethodName }).click();
-    await page.getByLabel('Login Name').fill(username);
-    await page.getByLabel('Password', { exact: true }).fill(password);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(username)).toBeEnabled();
+
+    await loginPage.login(username, password);
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByText('Projects'),
     ).toBeVisible();
 
-    // Log out
-    await page.getByText(username).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log back in as admin
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    await loginPage.logout(username);
+    await loginPage.login(
+      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
+      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+    );
 
     // Set a new password on the account
     await page
@@ -115,22 +92,13 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     const newPassword = 'new-password';
     await authMethodsPage.setPasswordToAccount(newPassword);
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using new password
+    await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: authMethodName }).click();
-    await page.getByLabel('Login Name').fill(username);
-    await page.getByLabel('Password', { exact: true }).fill(newPassword);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(username)).toBeEnabled();
+    await loginPage.login(username, newPassword);
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
