@@ -25,9 +25,10 @@ module('Acceptance | scopes | read', function (hooks) {
   let featureEdition;
 
   const FORM_SELECTOR = 'main .rose-form';
-  const FORM_ACTIONS_SELECTOR = '.rose-form-actions';
-  const DELETE_DROPDOWN_SELECTOR =
-    '.rose-layout-page-actions .rose-dropdown-button-danger';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-projects-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-projects-dropdown] ul li button';
   const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';
 
   const instances = {
@@ -69,8 +70,7 @@ module('Acceptance | scopes | read', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.dom(FORM_SELECTOR).exists();
-    assert.dom(FORM_ACTIONS_SELECTOR).exists();
-    assert.dom(DELETE_DROPDOWN_SELECTOR).exists();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
@@ -83,8 +83,8 @@ module('Acceptance | scopes | read', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
     assert.dom(FORM_SELECTOR).exists();
-    assert.dom(FORM_ACTIONS_SELECTOR).doesNotExist();
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('user cannot visit global scope settings when feature flag is not enabled', async function (assert) {
