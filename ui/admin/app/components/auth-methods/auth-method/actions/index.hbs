@@ -40,55 +40,42 @@
   </Rose::Dropdown>
 {{/if}}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown data-test-manage-auth-methods-dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if @model.isPrimary}}
-    <dropdown.button
-      @disabled={{@model.canSave}}
+    <dd.Interactive
+      @text={{t 'resources.auth-method.actions.remove-as-primary'}}
       {{on 'click' (fn @removeAsPrimary @model)}}
-    >
-      {{t 'resources.auth-method.actions.remove-as-primary'}}
-    </dropdown.button>
+    />
   {{else}}
-    <dropdown.button
-      @disabled={{@model.canSave}}
+    <dd.Interactive
+      @text={{t 'resources.auth-method.actions.make-primary'}}
       {{on 'click' (fn @makePrimary @model)}}
-    >
-      {{t 'resources.auth-method.actions.make-primary'}}
-    </dropdown.button>
+    />
   {{/if}}
   {{#if (can 'create model' @model collection='accounts')}}
-
-    <dropdown.link
+    <dd.Interactive
+      @text={{t 'resources.account.actions.create'}}
       @route='scopes.scope.auth-methods.auth-method.accounts.new'
       @model={{@model}}
-    >
-      {{t 'resources.account.actions.create'}}
-    </dropdown.link>
+    />
   {{/if}}
-
   {{#if (can 'create model' @model collection='managed-groups')}}
     {{#if (or @model.isOIDC @model.isLDAP)}}
-      <dropdown.link
+      <dd.Interactive
+        @text={{t 'resources.managed-group.actions.create'}}
         @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
         @model={{@model}}
-      >
-        {{t 'resources.managed-group.actions.create'}}
-      </dropdown.link>
+      />
     {{/if}}
   {{/if}}
 
   {{#if (can 'delete auth-method' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.auth-method.actions.delete'}}
+      @color='critical'
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.auth-method.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>
