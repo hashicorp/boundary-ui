@@ -18,6 +18,9 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
+
   const instances = {
     scopes: {
       global: null,
@@ -94,7 +97,9 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
       'create',
     ];
     await visit(urls.hostCatalog);
+
     assert.ok(find(`[href="${urls.hostSets}"]`));
-    assert.ok(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
+
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
   });
 });
