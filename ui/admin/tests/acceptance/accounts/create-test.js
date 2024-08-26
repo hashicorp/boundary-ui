@@ -20,6 +20,8 @@ module('Acceptance | accounts | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div:first-child button';
   const instances = {
     scopes: {
       global: null,
@@ -116,6 +118,7 @@ module('Acceptance | accounts | create', function (hooks) {
         'create',
       ),
     );
+    await click(MANAGE_DROPDOWN_SELECTOR);
     assert.ok(find(`[href="${urls.newAccount}"]`));
   });
 

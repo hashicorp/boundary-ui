@@ -26,11 +26,14 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   let featuresService;
   let getAuthMethodCount;
 
-  const DELETE_DROPDOWN_SELECTOR =
-    '.rose-layout-page-actions .rose-dropdown-button-danger';
   const DIALOG_DELETE_BTN_SELECTOR = '.rose-dialog .rose-button-primary';
   const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
+
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] ul li:last-child button';
 
   const instances = {
     scopes: {
@@ -78,7 +81,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getAuthMethodCount(), authMethodsCount - 1);
   });
@@ -89,7 +93,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getAuthMethodCount(), authMethodsCount - 1);
   });
@@ -109,7 +114,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
@@ -131,7 +137,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
@@ -145,8 +152,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('cannot delete an ldap auth method without proper authorization', async function (assert) {
@@ -158,8 +166,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('user can accept delete auth method via dialog', async function (assert) {
@@ -169,7 +178,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click(DIALOG_DELETE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.authMethods);
@@ -184,7 +194,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click(DIALOG_DELETE_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.authMethods);
@@ -198,7 +209,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click(DIALOG_CANCEL_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.authMethod);
@@ -213,7 +225,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click(DIALOG_CANCEL_BTN_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.ldapAuthMethod);
