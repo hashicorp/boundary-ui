@@ -83,12 +83,12 @@ To run as a desktop app:
 
 - `yarn start:desktop`
 
-The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set environment variable `CLI_SETUP` to true. Example: `CLI_SETUP=true yarn start:desktop`.
-CLI version is defined in `electron-app/config.cli.js`.
+The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `CLI_SETUP` to true. Example: `CLI_SETUP=true yarn start:desktop`.
+The CLI version is defined in `electron-app/config/cli/VERSION`.
 
 ### Developing Using Non-Release Versions of Boundary
 
-To develop using a non-release version of Boundary, download the Boundary CLI version you want to use and extract it at `electron-app/cli` folder. You may need to create the directory or to cleaning it up beforehand.
+To develop using a non-release version of Boundary, download the Boundary CLI version you want to use and extract it to the `electron-app/cli` folder. You may need to create the directory or clean it up beforehand.
 
 ### Environment Variables (DEV)
 
