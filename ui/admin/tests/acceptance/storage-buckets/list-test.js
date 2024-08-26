@@ -9,6 +9,8 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,12 +19,6 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
   let featuresService;
   let intl;
-
-  const STORAGE_BUCKET_TITLE = 'Storage Buckets';
-  const MESSAGE_DESCRIPTION_SELECTOR = '.rose-message-description';
-  const MESSAGE_LINK_SELECTOR = '.rose-message-body .hds-link-standalone';
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
   const instances = {
     scopes: {
@@ -67,15 +63,15 @@ module('Acceptance | storage-buckets | list', function (hooks) {
         'storage-buckets'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.storageBuckets)).exists();
 
     // Tests that correct message is displayed when no buckets exist
-    await click(`[href="${urls.storageBuckets}"]`);
+    await click(commonSelectors.HREF(urls.storageBuckets));
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.storage-bucket.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
@@ -98,18 +94,18 @@ module('Acceptance | storage-buckets | list', function (hooks) {
       ].includes('create'),
     );
     assert
-      .dom('[title="General"] a:nth-of-type(3)')
-      .doesNotIncludeText(STORAGE_BUCKET_TITLE);
+      .dom(commonSelectors.SIDEBAR_NAV_NTH_LINK(3))
+      .doesNotIncludeText(selectors.STORAGE_BUCKET_TITLE);
 
     // Tests that correct message is displayed when no buckets exist
     await visit(urls.storageBuckets);
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.neither-list-nor-create', {
-        resource: STORAGE_BUCKET_TITLE,
+        resource: selectors.STORAGE_BUCKET_TITLE,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -132,17 +128,17 @@ module('Acceptance | storage-buckets | list', function (hooks) {
         'storage-buckets'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.storageBuckets)).exists();
 
     // Tests that correct message is displayed when no buckets exist
-    await click(`[href="${urls.storageBuckets}"]`);
+    await click(commonSelectors.HREF(urls.storageBuckets));
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.create-but-not-list', {
-        resource: STORAGE_BUCKET_TITLE,
+        resource: selectors.STORAGE_BUCKET_TITLE,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
@@ -165,15 +161,15 @@ module('Acceptance | storage-buckets | list', function (hooks) {
         'storage-buckets'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.storageBuckets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.storageBuckets)).exists();
 
     // Tests that correct message is displayed when no buckets exist
-    await click(`[href="${urls.storageBuckets}"]`);
+    await click(commonSelectors.HREF(urls.storageBuckets));
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.storage-bucket.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('user cannot navigate to index when feature is disabled', async function (assert) {
@@ -181,8 +177,8 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     await visit(urls.globalScope);
     assert.false(featuresService.isEnabled('ssh-session-recording'));
     assert
-      .dom('[title="General"] a:nth-of-type(2)')
-      .doesNotIncludeText(STORAGE_BUCKET_TITLE);
+      .dom(commonSelectors.SIDEBAR_NAV_NTH_LINK(2))
+      .doesNotIncludeText(selectors.STORAGE_BUCKET_TITLE);
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
@@ -193,12 +189,12 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     });
     urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.storageBuckets));
+    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Edit');
-    await click(DROPDOWN_ITEM_SELECTOR);
+    assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).exists();
+    assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).hasText('Edit');
+    await click(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM);
     assert.strictEqual(currentURL(), urls.storageBucket);
   });
 });
