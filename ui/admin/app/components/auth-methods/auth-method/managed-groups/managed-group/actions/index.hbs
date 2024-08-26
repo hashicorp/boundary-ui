@@ -4,17 +4,12 @@
 }}
 
 {{#if (can 'delete model' @model)}}
-  <Rose::Dropdown
-    @text={{t 'actions.manage'}}
-    @dropdownRight={{true}}
-    as |dropdown|
-  >
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
+  <Hds::Dropdown data-test-managed-group-dropdown as |dd|>
+    <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+    <dd.Interactive
+      @text={{t 'resources.managed-group.actions.delete'}}
+      @color='critical'
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.managed-group.actions.delete'}}
-    </dropdown.button>
-  </Rose::Dropdown>
+    />
+  </Hds::Dropdown>
 {{/if}}
