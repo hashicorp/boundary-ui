@@ -20,6 +20,8 @@ module('Acceptance | managed-groups | list', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div button';
 
   const instances = {
     scopes: {
@@ -157,6 +159,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     assert.dom(`[href="${urls.managedGroups}"]`).exists();
     assert.dom(`[href="${urls.newManagedGroup}"]`).exists();
@@ -168,8 +171,8 @@ module('Acceptance | managed-groups | list', function (hooks) {
       'create',
     ];
     await visit(urls.authMethods);
-
     await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     assert.dom(`[href="${urls.ldapManagedGroups}"]`).exists();
     assert.dom(`[href="${urls.newLdapManagedGroup}"]`).exists();

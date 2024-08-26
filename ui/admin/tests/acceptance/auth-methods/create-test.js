@@ -32,8 +32,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const MAKE_PRIMARY_SELECTOR =
-    '.rose-layout-page-actions .rose-dropdown-content [type="button"]:first-child';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
@@ -48,6 +46,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
   const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
   const TOGGLE_SELECTOR = '[name="prompts"]';
+
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div:first-child button';
+  const MAKE_PRIMARY_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] ul li:first-child button';
+
   let getAuthMethodsCount;
   let featuresService;
 
@@ -333,6 +337,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MAKE_PRIMARY_SELECTOR);
 
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
@@ -360,6 +365,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is not yet set.',
     );
     await visit(urls.authMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MAKE_PRIMARY_SELECTOR);
     assert.dom(ERROR_MSG_SELECTOR).exists();
   });
@@ -375,6 +381,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MAKE_PRIMARY_SELECTOR);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
@@ -403,6 +410,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await visit(urls.authMethods);
 
     await click(`[href="${urls.authMethod}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(MAKE_PRIMARY_SELECTOR);
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');
