@@ -21,8 +21,10 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
   let getManagedGroupCount;
 
-  const DELETE_DROPDOWN_SELECTOR =
-    '.rose-layout-page-actions .rose-dropdown-button-danger';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-managed-group-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-managed-group-dropdown] ul li button';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
 
   const instances = {
@@ -89,7 +91,8 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await visit(urls.managedGroups);
 
     await click(`[href="${urls.managedGroup}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.managedGroups);
@@ -100,7 +103,8 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await visit(urls.ldapManagedGroups);
 
     await click(`[href="${urls.ldapManagedGroup}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.ldapManagedGroups);
@@ -115,7 +119,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(`[href="${urls.managedGroup}"]`);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('User cannot delete a ldap managed-group without proper authorization', async function (assert) {
@@ -127,7 +131,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(`[href="${urls.ldapManagedGroup}"]`);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('Errors are displayed when delete on managed group fails', async function (assert) {
@@ -145,7 +149,8 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await visit(urls.managedGroups);
 
     await click(`[href="${urls.managedGroup}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
@@ -167,7 +172,8 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await visit(urls.ldapManagedGroups);
 
     await click(`[href="${urls.ldapManagedGroup}"]`);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');

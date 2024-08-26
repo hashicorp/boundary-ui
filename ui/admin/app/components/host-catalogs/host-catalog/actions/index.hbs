@@ -3,35 +3,28 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dropdown
-  @text={{t 'actions.manage'}}
-  @dropdownRight={{true}}
-  as |dropdown|
->
+<Hds::Dropdown data-test-manage-host-catalogs-dropdown as |dd|>
+  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'create model' @model collection='hosts')}}
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
       @model={{@model}}
-    >
-      {{t 'resources.host.actions.create'}}
-    </dropdown.link>
+      @text={{t 'resources.host.actions.create'}}
+    />
   {{/if}}
   {{#if (can 'create model' @model collection='host-sets')}}
-    <dropdown.link
+    <dd.Interactive
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
       @model={{@model}}
-    >
-      {{t 'resources.host-set.actions.create'}}
-    </dropdown.link>
+      @text={{t 'resources.host-set.actions.create'}}
+    />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dropdown.separator />
-    <dropdown.button
-      @style='danger'
-      @disabled={{@model.canSave}}
+    <dd.Separator />
+    <dd.Interactive
+      @text={{t 'resources.host-catalog.actions.delete'}}
+      @color='critical'
       {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.host-catalog.actions.delete'}}
-    </dropdown.button>
+    />
   {{/if}}
-</Rose::Dropdown>
+</Hds::Dropdown>
