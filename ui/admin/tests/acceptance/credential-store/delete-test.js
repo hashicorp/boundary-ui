@@ -102,6 +102,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.vaultCredentialStore);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+
     assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
@@ -111,6 +113,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.staticCredentialStore);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+
     assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
