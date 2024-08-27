@@ -83,7 +83,7 @@ To run as a desktop app:
 
 - `yarn start:desktop`
 
-The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `CLI_SETUP` to true. Example: `CLI_SETUP=true yarn start:desktop`.
+The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `SETUP_CLI` to true. Example: `SETUP_CLI=true yarn start:desktop`.
 The CLI version is defined in `electron-app/config/cli/VERSION`.
 
 ### Developing Using Non-Release Versions of Boundary
@@ -100,7 +100,7 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
-| `CLI_SETUP` | Enable download and extraction of CLI. For development use only. |
+| `SETUP_CLI` | Enable download and extraction of CLI. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 | `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
@@ -144,7 +144,7 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `BOUNDARY_DESKTOP_SIGNING_IDENTITY` | | The name of the certificate to use when signing (e.g. Developer ID Application: \* (*)). |
-| `BYPASS_CLI_SETUP` | Set to `true` to launch without bootstrapping the CLI (see above). ||
+| `SETUP_CLI` | Enable download and extraction of CLI. |
 
 ### Running Tests
 
