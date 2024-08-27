@@ -9030,10 +9030,10 @@ ember-a11y-refocus@^3.0.2:
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.0.1"
 
-ember-a11y-testing@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/ember-a11y-testing/-/ember-a11y-testing-6.1.1.tgz#39328b90756a83ca9264106a6bbb7474927a7800"
-  integrity sha512-bDpw5+B2q++xwz5DWcbYB6dXp6nNe4jBwDkT6CqMESiVWWsSKPHs3ygt1Y89ESucesRIiv/49gNKMftZNsCpkw==
+ember-a11y-testing@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ember-a11y-testing/-/ember-a11y-testing-7.0.0.tgz#55a86386ee78973fce8e2b9691a38de93d91f0cc"
+  integrity sha512-rOAUQsLx+fl+U0MNLr0MlCQbZ8I7GMaNaRZhLsOOlQt9yTrX9U0G+OdcQFFRCJjJgM/vPiEkqBLQrGOkp0+d+w==
   dependencies:
     "@ember/test-waiters" "^2.4.3 || ^3.0.0"
     "@scalvert/ember-setup-middleware-reporter" "^0.1.1"
@@ -9045,7 +9045,7 @@ ember-a11y-testing@^6.1.1:
     ember-cli-typescript "^4.2.1"
     ember-cli-version-checker "^5.1.2"
     ember-destroyable-polyfill "^2.0.1"
-    fs-extra "^10.0.0"
+    fs-extra "^11.2.0"
     validate-peer-dependencies "^2.0.0"
 
 ember-arg-types@^1.0.0:
@@ -11812,6 +11812,15 @@ fs-extra@^11.1.0:
   version "11.1.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.1.1.tgz#da69f7c39f3b002378b0954bb6ae7efdc0876e2d"
   integrity sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
+fs-extra@^11.2.0:
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-11.2.0.tgz#e70e17dfad64232287d01929399e0ea7c86b0e5b"
+  integrity sha512-PmDi3uwK5nFuXh7XDTlVnS17xJS7vW36is2+w3xcv8SVxiB4NyATf4ctkVY5bkSjX0Y4nbvZCq1/EjtEyr9ktw==
   dependencies:
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
