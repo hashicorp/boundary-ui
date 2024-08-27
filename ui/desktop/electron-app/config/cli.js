@@ -95,7 +95,7 @@ const extract = async (artifactPath, destination) => {
 
 module.exports = {
   setup: async () => {
-    if (process.env.CLI_SETUP) {
+    if (process.env.CLI_SETUP === 'true') {
       try {
         const artifactVersion = await fs.promises.readFile(
           path.resolve(__dirname, 'cli', 'VERSION'),
