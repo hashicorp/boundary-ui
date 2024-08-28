@@ -95,20 +95,20 @@ const extract = async (artifactPath, destination) => {
 
 module.exports = {
   setup: async () => {
-    if (process.env.BYPASS_CLI_SETUP) {
+    if (process.env.SETUP_CLI === 'true') {
+      try {
+        const artifactVersion = await fs.promises.readFile(
+          path.resolve(__dirname, 'cli', 'VERSION'),
+          'utf8',
+        );
+        const artifactPath = await downloadArtifact(artifactVersion.trim());
+        await extract(artifactPath, artifactDestination);
+      } catch (e) {
+        console.error('ERROR: Failed setting up CLI.', e);
+        process.exit(1);
+      }
+    } else {
       console.warn('WARNING: Bypassing cli setup');
-      return;
-    }
-    try {
-      const artifactVersion = await fs.promises.readFile(
-        path.resolve(__dirname, 'cli', 'VERSION'),
-        'utf8',
-      );
-      const artifactPath = await downloadArtifact(artifactVersion.trim());
-      await extract(artifactPath, artifactDestination);
-    } catch (e) {
-      console.error('ERROR: Failed setting up CLI.', e);
-      process.exit(1);
     }
   },
 };
