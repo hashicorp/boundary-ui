@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -33,22 +33,26 @@ import { TargetsPage } from '../pages/targets.mjs';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_TARGET_ADDRESS',
-    'E2E_TARGET_PORT',
-    'E2E_BUCKET_NAME',
-    'E2E_BUCKET_ENDPOINT_URL',
-    'E2E_BUCKET_ACCESS_KEY_ID',
-    'E2E_BUCKET_SECRET_ACCESS_KEY',
-    'E2E_REGION',
-  ]);
-
   await checkBoundaryCli();
 });
 
-test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
+test('Session Recording Test (MinIO) @ent @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  bucketAccessKeyId,
+  bucketEndpointUrl,
+  bucketName,
+  bucketSecretAccessKey,
+  region,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
+  workerTagEgress,
+}) => {
   await page.goto('/');
 
   let orgId;
@@ -57,10 +61,10 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
   let connect;
   try {
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
 
     // Create org
@@ -76,12 +80,12 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     const storageBucketsPage = new StorageBucketsPage(page);
     const storageBucketName = await storageBucketsPage.createStorageBucketMinio(
       orgName,
-      process.env.E2E_BUCKET_ENDPOINT_URL,
-      process.env.E2E_BUCKET_NAME,
-      process.env.E2E_REGION,
-      process.env.E2E_BUCKET_ACCESS_KEY_ID,
-      process.env.E2E_BUCKET_SECRET_ACCESS_KEY,
-      `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
+      bucketEndpointUrl,
+      bucketName,
+      region,
+      bucketAccessKeyId,
+      bucketSecretAccessKey,
+      `"${workerTagEgress}" in "/tags/type"`,
     );
     const storageBuckets = JSON.parse(
       execSync('boundary storage-buckets list --recursive -format json'),
@@ -96,25 +100,15 @@ test('Session Recording Test (MinIO) @ent @docker', async ({ page }) => {
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: projectName }).click();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
     await targetsPage.addEgressWorkerFilterToTarget(
-      `"${process.env.E2E_WORKER_TAG_EGRESS}" in "/tags/type"`,
+      `"${workerTagEgress}" in "/tags/type"`,
     );
 
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
-    await targetsPage.addInjectedCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
     await page.getByRole('link', { name: targetName }).click();
     await targetsPage.enableSessionRecording(storageBucketName);
 

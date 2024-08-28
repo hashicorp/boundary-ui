@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.mjs';
 import {
@@ -16,7 +17,13 @@ import { StoragePoliciesPage } from '../pages/storage-policies.mjs';
 
 test.use({ storageState: authenticatedState });
 
-test('Global Settings @ent @aws @docker', async ({ page }) => {
+test('Global Settings @ent @aws @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+}) => {
   await page.goto('/');
   let policyName;
   try {
@@ -46,10 +53,10 @@ test('Global Settings @ent @aws @docker', async ({ page }) => {
   } finally {
     if (policyName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const storagePolicyId = await getPolicyIdFromNameCli(
         'global',
