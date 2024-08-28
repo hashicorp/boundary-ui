@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -27,18 +27,19 @@ import { TargetsPage } from '../pages/targets.mjs';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_TARGET_ADDRESS',
-    'E2E_TARGET_PORT',
-  ]);
-
   await checkBoundaryCli();
 });
 
 test('Verify session created for TCP target @ent @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
 }) => {
   await page.goto('/');
   let orgId;
@@ -49,25 +50,18 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTcpTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createTcpTargetWithAddressEnt(targetAddress, targetPort);
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
     const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectToTarget(
-      targetId,
-      process.env.E2E_SSH_USER,
-      process.env.E2E_SSH_KEY_PATH,
-    );
+    connect = await connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -88,6 +82,14 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
 
 test('Verify session created for SSH target @ent @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
 }) => {
   await page.goto('/');
   let orgId;
@@ -98,27 +100,18 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
     const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
-    await targetsPage.addInjectedCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+      await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -142,7 +135,17 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
   }
 });
 
-test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
+test('SSH target with host sources @ent @aws @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
+}) => {
   await page.goto('/');
   let orgId;
   let connect;
@@ -156,7 +159,7 @@ test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
     const hostCatalogsPage = new HostCatalogsPage(page);
     const hostCatalogName = await hostCatalogsPage.createHostCatalog();
     const hostSetName = await hostCatalogsPage.createHostSet();
-    await hostCatalogsPage.createHostInHostSet(process.env.E2E_TARGET_ADDRESS);
+    await hostCatalogsPage.createHostInHostSet(targetAddress);
 
     // Create another host set
     await page
@@ -168,9 +171,7 @@ test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
 
     // Create target
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetEnt(
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createSshTargetEnt(targetPort);
     await targetsPage.addHostSourceToTarget(hostSetName);
 
     // Add/Remove another host source
@@ -191,22 +192,15 @@ test('SSH target with host sources @ent @aws @docker', async ({ page }) => {
     // Create credentials and attach to target
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
-    await targetsPage.addInjectedCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
 
     // Connect to target
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);

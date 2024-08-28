@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -21,17 +21,20 @@ import { TargetsPage } from '../pages/targets.mjs';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_TARGET_ADDRESS',
-    'E2E_TARGET_PORT',
-  ]);
-
   await checkBoundaryCli();
 });
 
-test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
+test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
+}) => {
   let orgName;
   try {
     await page.goto('/');
@@ -41,20 +44,13 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
     const projectsPage = new ProjectsPage(page);
     await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
+    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
     const credentialName2 =
       await credentialStoresPage.createStaticCredentialUsernamePassword(
-        process.env.E2E_SSH_USER,
+        sshUser,
         'testPassword',
       );
 
@@ -106,10 +102,10 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({ page }) => {
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {
