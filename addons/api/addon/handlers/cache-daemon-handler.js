@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { generateMQLExpression } from '../utils/mql-query';
 import { paginateResults } from '../utils/paginate-results';
+import { underscore } from '@ember/string';
 
 /**
  * Not all types are yet supported by the cache daemon so we'll
@@ -94,12 +95,14 @@ export default class CacheDaemonHandler {
         const sessionData = this.session.data?.authenticated;
         const auth_token_id = sessionData?.id;
         const token = sessionData?.token;
+        const resourceName = resourceNames[type];
+
         remainingQuery = {
           ...remainingQuery,
           query: searchQuery,
           auth_token_id,
           token,
-          resource: resourceNames[type],
+          resource: resourceName,
         };
 
         let cacheDaemonResults = {};
@@ -130,7 +133,7 @@ export default class CacheDaemonHandler {
             }
           } else {
             __electronLog?.error(
-              'Failed to search cache daemon; falling back to search controller',
+              `Failed to search cache daemon for ${resourceName}. Error:`,
               e.message,
             );
 
@@ -138,10 +141,7 @@ export default class CacheDaemonHandler {
           }
         }
 
-        // Currently returns with a singular top level field with resource name
-        // e.g. { targets: [...] } or { sessions: [..] }
-        // So this just unwraps to the array, or undefined
-        const [results] = Object.values(cacheDaemonResults);
+        const results = cacheDaemonResults[underscore(resourceName)];
         const payload = { items: paginateResults(results, page, pageSize) };
 
         const schema = store.modelFor(type);
@@ -167,7 +167,15 @@ export default class CacheDaemonHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: results?.length ?? 0 };
+        // Also include whether the results are incomplete or is still refreshing
+        // as part of the response
+        records.meta = {
+          totalItems: results?.length ?? 0,
+          isLoadIncomplete: cacheDaemonResults.incomplete ?? false,
+          // Sometimes the refresh status returns an error status if it takes too long but it's still refreshing
+          isRefreshing: cacheDaemonResults.refresh_status !== 'not-refreshing',
+        };
+
         return records;
       }
       default:

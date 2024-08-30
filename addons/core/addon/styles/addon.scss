@@ -7,7 +7,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 1rem;
   gap: 0.5rem;
 
   .filter-tag {
@@ -27,16 +26,14 @@
     margin-top: 3rem;
   }
 
-  .hds-segmented-group {
+  > * {
     margin-bottom: 1rem;
+  }
 
+  .hds-segmented-group {
     .hds-dropdown-toggle-button__text {
       white-space: nowrap;
     }
-  }
-
-  .hds-table {
-    margin-bottom: 1rem;
   }
 
   .search-filtering-toolbar {

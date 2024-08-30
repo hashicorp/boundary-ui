@@ -44,7 +44,6 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   };
 
   allSessions;
-  allTargets;
 
   // =methods
 
@@ -65,7 +64,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   /**
    * Loads queried sessions, the total number of sessions, all sessions,
    * all targets and all projects for filtering options for the current user.
-   * @return {Promise<{sessions: [SessionModel], projects: [ScopeModel], allSessions: [SessionModel], allTargets: [TargetModel], totalItems: number}>}
+   * @return {Promise<{sessions: [SessionModel], projects: [ScopeModel], allSessions: [SessionModel], associatedTargets: [TargetModel], totalItems: number}>}
    */
   async model({ targets, status, scopes, page, pageSize }) {
     const projects = this.modelFor('scopes.scope.projects');
@@ -97,6 +96,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       page,
       pageSize,
       force_refresh: true,
+      max_result_set_size: -1,
     };
     if (orgScope.isOrg && scopes.length === 0) {
       queryOptions.filter = orgFilter;
@@ -104,34 +104,52 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const sessions = await this.store.query('session', queryOptions);
     const totalItems = sessions.meta?.totalItems;
 
-    // Query all sessions and all targets for defining filtering values if entering route for the first time
+    // Query all sessions and associated targets for defining filtering values if entering route for the first time
     if (!this.allSessions?.length) {
       await this.getAllSessions(orgScope, scopes, orgFilter);
     }
-    if (!this.allTargets?.length) {
-      await this.getAllTargets(orgScope, orgFilter);
-    }
+    const associatedTargets = await this.getAssociatedTargets(
+      orgScope,
+      orgFilter,
+    );
 
     return {
       sessions,
       projects,
       allSessions: this.allSessions,
-      allTargets: this.allTargets,
+      associatedTargets,
       totalItems,
       isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
     };
   }
 
-  async getAllTargets(orgScope, orgFilter) {
-    const allTargetsQuery = {
+  async getAssociatedTargets(orgScope) {
+    if (!this.allSessions) {
+      return [];
+    }
+
+    // TODO: Chunk requests in case there's a lot of sessions as cache daemon syntax can't take too many
+    const targetIds = [
+      ...new Set(this.allSessions.map((session) => session.target_id)),
+    ];
+
+    const associatedTargetsQuery = {
       scope_id: orgScope.id,
       recursive: true,
       force_refresh: true,
+      query: {
+        filters: {
+          id: {
+            logicalOperator: 'or',
+            values: targetIds.map((targetId) => ({
+              equals: targetId,
+            })),
+          },
+        },
+      },
     };
-    if (orgScope.isOrg) {
-      allTargetsQuery.filter = orgFilter;
-    }
-    this.allTargets = await this.store.query('target', allTargetsQuery, {
+
+    return this.store.query('target', associatedTargetsQuery, {
       pushToStore: false,
     });
   }
@@ -146,6 +164,7 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
         },
       },
       force_refresh: true,
+      max_result_set_size: -1,
     };
     if (orgScope.isOrg && scopes.length === 0) {
       allSessionsQuery.filter = orgFilter;
@@ -182,8 +201,8 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const orgScope = this.modelFor('scopes.scope');
     const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
 
-    await this.getAllTargets(orgScope, orgFilter);
     await this.getAllSessions(orgScope, [], orgFilter);
+    await this.getAssociatedTargets(orgScope);
 
     // Prime the store by searching for orgs only in case there are new org scopes;
     // otherwise we won't be able to correctly peek the org scopes for their display name in the UI.
