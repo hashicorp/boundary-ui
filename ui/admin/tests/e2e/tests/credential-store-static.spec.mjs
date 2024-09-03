@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,
@@ -26,13 +26,6 @@ import { TargetsPage } from '../pages/targets.mjs';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_TARGET_ADDRESS',
-    'E2E_TARGET_PORT',
-  ]);
-
   await checkBoundaryCli();
 });
 
@@ -40,7 +33,11 @@ let orgName;
 let projectName;
 let targetName;
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({
+  page,
+  targetAddress,
+  targetPort,
+}) => {
   await page.goto('/');
 
   const orgsPage = new OrgsPage(page);
@@ -48,35 +45,31 @@ test.beforeEach(async ({ page }) => {
   const projectsPage = new ProjectsPage(page);
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
-  targetName = await targetsPage.createTargetWithAddress(
-    process.env.E2E_TARGET_ADDRESS,
-    process.env.E2E_TARGET_PORT,
-  );
+  targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
   const credentialStoresPage = new CredentialStoresPage(page);
   await credentialStoresPage.createStaticCredentialStore();
 });
 
 test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
 }) => {
   try {
     const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
+    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     const orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -85,9 +78,9 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedKey = session.item.credentials[0].credential.private_key;
 
-    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
+    expect(retrievedUser).toBe(sshUser);
 
-    const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
     if (keyData != retrievedKey) {
@@ -96,10 +89,10 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {
@@ -111,26 +104,24 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
 
 test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser
 }) => {
   try {
     const testPassword = 'password';
     const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialUsernamePassword(
-        process.env.E2E_SSH_USER,
-        testPassword,
-      );
+    const credentialName = await credentialStoresPage.createStaticCredentialUsernamePassword(sshUser, testPassword);
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     const orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -139,15 +130,15 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
 
-    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
+    expect(retrievedUser).toBe(sshUser);
     expect(retrievedPassword).toBe(testPassword);
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {
@@ -157,7 +148,13 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
   }
 });
 
-test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
+test('Static Credential Store (JSON) @ce @aws @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+}) => {
   try {
     const credentialName = 'Credential ' + nanoid();
     await page.getByRole('link', { name: 'Credentials', exact: true }).click();
@@ -186,16 +183,13 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
     ).toBeVisible();
 
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     const orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -211,10 +205,10 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {
@@ -224,29 +218,28 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({ page }) => {
   }
 });
 
-test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
+test('Multiple Credential Stores (CE) @ce @aws @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+}) => {
   try {
     const credentialStoresPage = new CredentialStoresPage(page);
     const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        process.env.E2E_SSH_USER,
-        process.env.E2E_SSH_KEY_PATH,
-      );
+      await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
     const credentialName2 =
       await credentialStoresPage.createStaticCredentialUsernamePassword(
-        process.env.E2E_SSH_USER,
+        sshUser,
         'testPassword',
       );
 
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName2,
-    );
+    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
+    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName2);
 
     // Remove the host source from the target
     await page
@@ -264,10 +257,10 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({ page }) => {
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {
