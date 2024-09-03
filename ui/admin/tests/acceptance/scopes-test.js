@@ -92,7 +92,7 @@ module('Acceptance | scopes', function (hooks) {
     urls.project2ScopeEdit = `${urls.project2Scope}/edit`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({ isGlobal: true });
+    authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting global scope', async function (assert) {

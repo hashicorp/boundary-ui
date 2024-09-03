@@ -76,7 +76,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

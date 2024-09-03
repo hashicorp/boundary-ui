@@ -117,7 +117,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       this.server.schema.credentials.all().models.length;
     credentialSourceCount = getCredentialLibraryCount() + getCredentialCount();
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting target brokered credential sources', async function (assert) {

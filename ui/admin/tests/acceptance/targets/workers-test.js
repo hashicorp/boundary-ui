@@ -76,7 +76,7 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
     urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting target workers', async function (assert) {

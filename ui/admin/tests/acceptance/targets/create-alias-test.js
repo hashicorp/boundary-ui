@@ -77,7 +77,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias for a target of TCP type', async function (assert) {

@@ -79,7 +79,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     confirmService = this.owner.lookup('service:confirm');
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });

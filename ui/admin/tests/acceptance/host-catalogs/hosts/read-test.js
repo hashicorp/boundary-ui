@@ -68,7 +68,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting hosts', async function (assert) {

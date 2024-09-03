@@ -32,13 +32,14 @@ module('Acceptance | managed-groups | members', function (hooks) {
   const urls = {
     orgScope: null,
     authMethods: null,
+    authMethod: null,
     managedGroups: null,
     managedGroup: null,
     managedGroupMembers: null,
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

@@ -90,7 +90,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('clicking on manage should take you to manage page', async function (assert) {

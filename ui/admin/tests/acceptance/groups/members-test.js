@@ -37,11 +37,13 @@ module('Acceptance | groups | members', function (hooks) {
     addMembers: null,
   };
   let membersCount;
-  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-group-dropdown] div:first-child button"
-  const ADD_MEMBERS_ACTION_SELECTOR = "[data-test-manage-group-dropdown] ul li a"
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-group-dropdown] div:first-child button';
+  const ADD_MEMBERS_ACTION_SELECTOR =
+    '[data-test-manage-group-dropdown] ul li a';
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -114,7 +116,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('can navigate to add members with proper authorization', async function (assert) {
     await visit(urls.group);
     await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.dom(ADD_MEMBERS_ACTION_SELECTOR).isVisible()
+    assert.dom(ADD_MEMBERS_ACTION_SELECTOR).isVisible();
   });
 
   test('cannot navigate to add members without proper authorization', async function (assert) {

@@ -50,7 +50,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting a storage bucket', async function (assert) {
