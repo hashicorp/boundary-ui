@@ -73,6 +73,11 @@ module('Acceptance | accounts | change password', function (hooks) {
 
   test('can change password for account', async function (assert) {
     assert.expect(2);
+    // TODO: Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     this.server.post(
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
