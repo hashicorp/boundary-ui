@@ -52,7 +52,7 @@ module('Acceptance | policies | read', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting a policy', async function (assert) {

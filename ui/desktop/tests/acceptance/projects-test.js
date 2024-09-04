@@ -59,7 +59,7 @@ module('Acceptance | projects', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession();
+    authenticateSession({ username: 'admin' });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });

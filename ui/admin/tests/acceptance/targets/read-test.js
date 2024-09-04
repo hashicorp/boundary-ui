@@ -91,7 +91,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting ssh target', async function (assert) {

@@ -25,8 +25,10 @@ module('Acceptance | users | accounts', function (hooks) {
   let features;
 
   const ACCOUNTS_TYPE_SELECTOR = 'tbody tr .hds-badge__text';
-  const ADD_ACCOUNTS_ACTION_SELECTOR = "[data-test-manage-user-dropdown] ul li:first-child a"
-  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-user-dropdown] div:first-child button"
+  const ADD_ACCOUNTS_ACTION_SELECTOR =
+    '[data-test-manage-user-dropdown] ul li:first-child a';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-user-dropdown] div:first-child button';
   const ERROR_MSG_SELECTOR = '[role="alert"]';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
@@ -51,7 +53,7 @@ module('Acceptance | users | accounts', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -236,10 +238,9 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
 
     await click(`[href="${urls.accounts}"]`);
-    
+
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(ADD_ACCOUNTS_ACTION_SELECTOR);
-
 
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsAvailableCount });
   });
@@ -266,8 +267,8 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('select and cancel accounts to add', async function (assert) {
     await visit(urls.user);
-    await click(`[href="${urls.accounts}"]`)
-    
+    await click(`[href="${urls.accounts}"]`);
+
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
 
     await click(MANAGE_DROPDOWN_SELECTOR);
@@ -277,9 +278,9 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(CHECKBOX_SELECTOR);
     await click(CANCEL_BTN_SELECTOR);
-    
+
     assert.strictEqual(currentURL(), urls.accounts);
-    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount});
+    assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
   });
 
   test('shows error message on account add', async function (assert) {
