@@ -54,7 +54,7 @@ module('Acceptance | workers | read', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker', async function (assert) {

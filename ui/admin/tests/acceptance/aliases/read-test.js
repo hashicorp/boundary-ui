@@ -48,7 +48,7 @@ module('Acceptance | aliases | read', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.unknownAlias = `${urls.aliases}/foo`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting a alias', async function (assert) {

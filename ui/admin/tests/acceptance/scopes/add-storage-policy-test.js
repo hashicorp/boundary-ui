@@ -74,7 +74,7 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     urls.policy = `${urls.policies}/${policyOne.id}`;
     urls.addStoragePolicy = `${urls.orgScope}/add-storage-policy`;
     urls.newPolicy = `${urls.addStoragePolicy}/create`;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('cannot attach policy on a scope without proper authorization', async function (assert) {

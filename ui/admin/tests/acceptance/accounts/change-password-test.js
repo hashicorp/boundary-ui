@@ -48,6 +48,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     authenticateSession({
       account_id: instances.account.id,
+      username: 'admin',
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
@@ -55,8 +56,11 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('visiting account change password', async function (assert) {
-    await visit(urls.changePassword);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.changePassword}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.changePassword);
   });
 
@@ -123,11 +127,14 @@ module('Acceptance | accounts | change password', function (hooks) {
         },
       );
     });
-    await visit(urls.changePassword);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.changePassword}"]`);
     await fillIn('[name="currentPassword"]', 'current password');
     await fillIn('[name="newPassword"]', 'new password');
     await click('form [type="submit"]');
     await a11yAudit();
+
     assert.ok(find('[role="alert"]'));
   });
 

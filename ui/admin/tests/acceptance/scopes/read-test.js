@@ -58,7 +58,7 @@ module('Acceptance | scopes | read', function (hooks) {
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
-    authenticateSession({ isGlobal: true });
+    authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting org scope edit', async function (assert) {

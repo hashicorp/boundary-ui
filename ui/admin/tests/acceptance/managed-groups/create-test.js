@@ -53,7 +53,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

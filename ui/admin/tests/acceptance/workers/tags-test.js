@@ -73,7 +73,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
     urls.createTags = `${urls.worker}/create-tags`;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker tags', async function (assert) {
