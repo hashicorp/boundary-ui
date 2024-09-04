@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   authorizeSessionByAliasCli,
@@ -27,19 +27,20 @@ import { TargetsPage } from '../pages/targets.mjs';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_TARGET_ADDRESS',
-    'E2E_TARGET_PORT',
-  ]);
-
   await checkBoundaryCli();
 });
 
 test.describe('Aliases (Enterprise)', async () => {
   test('Set up alias from target details page @ent @aws @docker', async ({
     page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+    targetAddress,
+    targetPort,
   }) => {
     await page.goto('/');
     let orgName;
@@ -52,21 +53,11 @@ test.describe('Aliases (Enterprise)', async () => {
       await projectsPage.createProject();
 
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
-        process.env.E2E_TARGET_ADDRESS,
-        process.env.E2E_TARGET_PORT,
-      );
+      const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName =
-        await credentialStoresPage.createStaticCredentialKeyPair(
-          process.env.E2E_SSH_USER,
-          process.env.E2E_SSH_KEY_PATH,
-        );
-      await targetsPage.addInjectedCredentialsToTarget(
-        targetName,
-        credentialName,
-      );
+      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
 
       // Create alias for target
       await page
@@ -87,10 +78,10 @@ test.describe('Aliases (Enterprise)', async () => {
 
       // Connect to target using alias
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       await authorizeSessionByAliasCli(alias);
 
@@ -105,10 +96,10 @@ test.describe('Aliases (Enterprise)', async () => {
       await page.getByRole('button', { name: 'Dismiss' }).click();
     } finally {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       if (orgName) {
         const orgId = await getOrgIdFromNameCli(orgName);
@@ -124,6 +115,14 @@ test.describe('Aliases (Enterprise)', async () => {
 
   test('Set up alias from new target page @ent @aws @docker', async ({
     page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+    targetAddress,
+    targetPort,
   }) => {
     await page.goto('/');
     let orgName;
@@ -133,40 +132,29 @@ test.describe('Aliases (Enterprise)', async () => {
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const projectsPage = new ProjectsPage(page);
       await projectsPage.createProject();
       alias = 'example.alias.' + nanoid();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddressAndAlias(
-        process.env.E2E_TARGET_ADDRESS,
-        process.env.E2E_TARGET_PORT,
-        alias,
-      );
+      const targetName = await targetsPage.createTargetWithAddressAndAlias(targetAddress, targetPort, alias);
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName =
-        await credentialStoresPage.createStaticCredentialKeyPair(
-          process.env.E2E_SSH_USER,
-          process.env.E2E_SSH_KEY_PATH,
-        );
-      await targetsPage.addInjectedCredentialsToTarget(
-        targetName,
-        credentialName,
-      );
+      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
 
       // Connect to target using alias
       await authorizeSessionByAliasCli(alias);
     } finally {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
 
       if (orgName) {
@@ -181,7 +169,17 @@ test.describe('Aliases (Enterprise)', async () => {
     }
   });
 
-  test('Set up alias from aliases page @ent @aws @docker', async ({ page }) => {
+  test('Set up alias from aliases page @ent @aws @docker', async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+    targetAddress,
+    targetPort,
+  }) => {
     await page.goto('/');
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     let orgId;
@@ -192,28 +190,18 @@ test.describe('Aliases (Enterprise)', async () => {
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(
-        process.env.E2E_TARGET_ADDRESS,
-        process.env.E2E_TARGET_PORT,
-      );
+      const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName =
-        await credentialStoresPage.createStaticCredentialKeyPair(
-          process.env.E2E_SSH_USER,
-          process.env.E2E_SSH_KEY_PATH,
-        );
-      await targetsPage.addInjectedCredentialsToTarget(
-        targetName,
-        credentialName,
-      );
+      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
 
       // Create new alias from scope page
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       orgId = await getOrgIdFromNameCli(orgName);
       const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -225,10 +213,10 @@ test.describe('Aliases (Enterprise)', async () => {
       await authorizeSessionByAliasCli(alias);
     } finally {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
 
       if (orgId) {

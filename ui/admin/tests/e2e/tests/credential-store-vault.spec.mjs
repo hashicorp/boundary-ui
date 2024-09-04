@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
 import { readFile } from 'fs/promises';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,
@@ -33,15 +33,6 @@ const boundaryPolicyName = 'boundary-controller';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'VAULT_ADDR', // Address used by Vault CLI
-    'VAULT_TOKEN',
-    'E2E_VAULT_ADDR', // Address used by Boundary Server (could be different from VAULT_ADDR depending on network config (i.e. docker network))
-    'E2E_TARGET_ADDRESS',
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-  ]);
-
   await checkBoundaryCli();
   await checkVaultCli();
 });
@@ -56,6 +47,15 @@ test.beforeEach(async ({ page }) => {
 
 test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
+  vaultAddr,
 }) => {
   let orgId;
   try {
@@ -65,8 +65,8 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
       `vault kv put -mount ${secretsPath} ${secretName} ` +
-      ` username=${process.env.E2E_SSH_USER}` +
-      ` private_key=@${process.env.E2E_SSH_KEY_PATH}`,
+      ` username=${sshUser}` +
+      ` private_key=@${sshKeyPath}`,
     );
     execSync(
       `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
@@ -90,15 +90,9 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTargetWithAddress(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
     const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(
-      process.env.E2E_VAULT_ADDR,
-      clientToken,
-    );
+    await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
 
     const credentialLibraryName = 'Credential Library ' + nanoid();
     await page.getByRole('link', { name: 'Credential Libraries' }).click();
@@ -124,10 +118,10 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     );
 
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
@@ -138,9 +132,9 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const retrievedKey =
       session.item.credentials[0].secret.decoded.data.private_key;
 
-    expect(retrievedUser).toBe(process.env.E2E_SSH_USER);
+    expect(retrievedUser).toBe(sshUser);
 
-    const keyData = await readFile(process.env.E2E_SSH_KEY_PATH, {
+    const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
     if (keyData != retrievedKey) {
