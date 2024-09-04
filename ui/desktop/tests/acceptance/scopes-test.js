@@ -157,9 +157,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting global scope', async function (assert) {
-    // TODO: Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
+    // TODO: address issue with ICU-15021
     const session = this.owner.lookup('service:session');
     session.set('data.theme', 'light');
     assert.expect(1);
@@ -175,9 +173,7 @@ module('Acceptance | scopes', function (hooks) {
   // In order to resolve this, we might hoist authentication routes up from
   // under scopes.
   test('visiting global scope is not successful when the global scope cannot be fetched', async function (assert) {
-    // TODO: Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
+    // TODO: address issue with ICU-15021
     const session = this.owner.lookup('service:session');
     session.set('data.theme', 'light');
     assert.expect(1);
@@ -194,9 +190,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting org scope', async function (assert) {
-    // TODO: Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
+    // TODO: address issue with ICU-15021
     const session = this.owner.lookup('service:session');
     session.set('data.theme', 'light');
     assert.expect(1);
