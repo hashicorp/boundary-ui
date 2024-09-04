@@ -60,7 +60,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting host catalogs', async function (assert) {

@@ -116,7 +116,7 @@ module(
       credentialSourceCount =
         getCredentialLibraryCount() + getCredentialCount();
 
-      authenticateSession({});
+      authenticateSession({ username: 'admin' });
     });
 
     test('visiting target injected application credential sources', async function (assert) {

@@ -56,7 +56,7 @@ module('Acceptance | policies | create', function (hooks) {
     getPolicyCount = () => this.server.schema.policies.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new policy with global scope', async function (assert) {

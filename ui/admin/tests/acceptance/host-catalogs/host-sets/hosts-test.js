@@ -87,10 +87,10 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     urls.hostSetHosts = `${urls.hostSet}/hosts`;
     urls.addHosts = `${urls.hostSet}/add-hosts`;
     urls.createAndAddHost = `${urls.hostSet}/create-and-add-host`;
-    // Generate resource couner
+    // Generate resource counter
     getHostSetHostCount = () =>
       this.server.schema.hostSets.all().models[0].hosts.length;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting host set hosts', async function (assert) {

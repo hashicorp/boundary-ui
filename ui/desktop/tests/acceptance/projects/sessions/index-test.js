@@ -79,7 +79,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       scope: instances.scopes.global,
     });
 
-    authenticateSession({ user_id: instances.user.id });
+    authenticateSession({ user_id: instances.user.id, username: 'admin' });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', {
