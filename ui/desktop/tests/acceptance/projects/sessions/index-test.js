@@ -371,14 +371,14 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       'sessions',
       'sessions',
       'targets',
-      'aliases',
-      'targets',
       'sessions',
       'targets',
+      'aliases',
       {
         resource: 'sessions',
         func: () => [instances.session2],
       },
+      'targets',
     );
     await visit(urls.globalSessions);
 
