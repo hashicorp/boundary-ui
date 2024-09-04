@@ -20,5 +20,4 @@ export const PAGE_MESSAGE_LINK = '.rose-message-body .hds-link-standalone';
 
 export const HREF = (url) => `[href="${url}"]`;
 
-export const SIDEBAR_NAV_NTH_LINK = (i) =>
-  `[title="General"] a:nth-of-type(${i})`;
+export const SIDEBAR_NAV_LINK = (url) => `[title="General"] a[href="${url}"]`;

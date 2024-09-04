@@ -94,8 +94,8 @@ module('Acceptance | storage-buckets | list', function (hooks) {
       ].includes('create'),
     );
     assert
-      .dom(commonSelectors.SIDEBAR_NAV_NTH_LINK(3))
-      .doesNotIncludeText(selectors.STORAGE_BUCKET_TITLE);
+      .dom(commonSelectors.SIDEBAR_NAV_LINK(urls.storageBuckets))
+      .doesNotExist();
 
     // Tests that correct message is displayed when no buckets exist
     await visit(urls.storageBuckets);
@@ -177,8 +177,8 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     await visit(urls.globalScope);
     assert.false(featuresService.isEnabled('ssh-session-recording'));
     assert
-      .dom(commonSelectors.SIDEBAR_NAV_NTH_LINK(2))
-      .doesNotIncludeText(selectors.STORAGE_BUCKET_TITLE);
+      .dom(commonSelectors.SIDEBAR_NAV_LINK(urls.storageBuckets))
+      .doesNotExist();
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
