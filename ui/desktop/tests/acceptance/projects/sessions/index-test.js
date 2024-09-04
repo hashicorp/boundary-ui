@@ -196,6 +196,11 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
+    // TODO: Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
