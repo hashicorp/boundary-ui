@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.mjs';
 import {
@@ -24,6 +25,10 @@ test.beforeAll(async () => {
 
 test('Verify a new role can be created and associated with a group @ce @ent @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
 }) => {
   await page.goto('/');
   let orgName;
@@ -39,10 +44,10 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
     await rolesPage.addGrantsToRole('ids=*;type=*;actions=read,list');
   } finally {
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     const orgId = await getOrgIdFromNameCli(orgName);
     if (orgId) {

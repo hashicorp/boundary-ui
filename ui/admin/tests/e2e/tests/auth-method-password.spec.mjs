@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { execSync } from 'node:child_process';
 
 import {
@@ -23,6 +24,10 @@ test.beforeAll(async () => {
 
 test('Verify new auth-method can be created and assigned to users @ce @ent @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
 }) => {
   await page.goto('/');
   let orgName;
@@ -30,10 +35,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
   try {
     // Log in
     const loginPage = new LoginPage(page);
-    await loginPage.login(
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
+    await loginPage.login(adminLoginName, adminPassword);
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -54,7 +56,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await usersPage.addAccountToUser(username);
 
     // Log in using new account
-    await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await loginPage.logout(adminLoginName);
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: authMethodName }).click();
@@ -68,10 +70,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
 
     // Log back in as admin
     await loginPage.logout(username);
-    await loginPage.login(
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    );
+    await loginPage.login(adminLoginName, adminPassword);
 
     // Set a new password on the account
     await page
@@ -93,7 +92,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await authMethodsPage.setPasswordToAccount(newPassword);
 
     // Log in using new password
-    await loginPage.logout(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
+    await loginPage.logout(adminLoginName);
 
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
@@ -106,10 +105,10 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     ).toBeVisible();
   } finally {
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
 
     // There is an issue with deleting an org that has an auth method unless you
