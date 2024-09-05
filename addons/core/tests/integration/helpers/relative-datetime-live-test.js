@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | relative-datetime-live', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   let now;
 

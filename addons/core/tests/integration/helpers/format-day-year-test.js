@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | format-day-year', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders correctly when it is 1 year', async function (assert) {
     this.set('inputValue', 365);

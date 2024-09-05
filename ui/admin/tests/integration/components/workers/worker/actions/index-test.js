@@ -13,7 +13,7 @@ module(
   'Integration | Component | workers/worker/actions/index',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     test('it renders', async function (assert) {
       this.set('model', {

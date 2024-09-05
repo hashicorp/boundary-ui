@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | form/target/worker-filter', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders correct content when egress_worker_filter is passed in', async function (assert) {
     this.onInput = () => {};

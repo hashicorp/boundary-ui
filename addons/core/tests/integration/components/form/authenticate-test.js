@@ -16,7 +16,7 @@ import {
 
 module('Integration | Component | form | authenticate', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it shows login name and password when LDAP is selected from the list', async function (assert) {
     const store = this.owner.lookup('service:store');

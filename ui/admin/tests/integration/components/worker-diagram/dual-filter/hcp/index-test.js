@@ -13,7 +13,7 @@ module(
   'Integration | Component | worker-diagram | dual-filter | hcp',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     let featuresService;
     const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';

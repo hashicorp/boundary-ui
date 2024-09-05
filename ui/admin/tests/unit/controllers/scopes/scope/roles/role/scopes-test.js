@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { visit, waitUntil } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   GRANT_SCOPE_THIS,
@@ -20,6 +21,7 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let controller;
 

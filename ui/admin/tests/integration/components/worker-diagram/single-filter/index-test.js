@@ -13,7 +13,7 @@ module(
   'Integration | Component | worker-diagram/single-filter',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     test('it renders the correct diagram when egress filter is false', async function (assert) {
       await render(

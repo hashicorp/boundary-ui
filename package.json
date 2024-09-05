@@ -71,7 +71,8 @@
     "**/ember-cli/**/ansi-html": "^0.0.9",
     "**/ember-cli/testem/fireworm/async": "^2.6.4",
     "**/desktop/@doyensec/electronegativity/winston/async": "^2.6.4",
-    "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0"
+    "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0",
+    "braces": "^3.0.3"
   },
   "config": {
     "commitizen": {

@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | format-time-duration', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('It renders in human-readable duration strings given different durations in milliseconds', async function (assert) {
     // Set mock input (in milliseconds) durations
