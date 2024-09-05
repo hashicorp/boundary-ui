@@ -5,15 +5,16 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
 const STATUS_BADGE = '.hds-badge';
 const ACTION_BUTTON = 'button';
+const REVEAL_BUTTON = '.hds-reveal button';
 const CARD_CONTAINER = 'hds-card__container';
-const ERROR_MESSAGES = '.hds-alert__description > p';
-const LAST_ERROR_MESSAGE = '.hds-alert__description > p:last-child';
+const ERROR_MESSAGES = '.hds-reveal__content > p';
+const LAST_ERROR_MESSAGE = '.hds-reveal__content > p:last-child';
 
 module(
   'Integration | Component | settings-card/client-agent',
@@ -76,6 +77,10 @@ module(
       });
 
       await render(hbs`<SettingsCard::ClientAgent @model={{this.model}}/>`);
+
+      assert.dom(ERROR_MESSAGES).doesNotExist();
+
+      await click(REVEAL_BUTTON);
 
       assert.dom(ERROR_MESSAGES).isVisible({ count: 3 });
       assert.dom(LAST_ERROR_MESSAGE).hasText('big oof');

@@ -5,14 +5,15 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
 const CACHE_DAEMON_VERSION = '[data-test-cache-version]';
-const ERROR_MESSAGES = '.hds-alert__description > p';
-const FIRST_ERROR_MESSAGE = '.hds-alert__description > p:first-child';
-const LAST_ERROR_MESSAGE = '.hds-alert__description > p:last-child';
+const ERROR_MESSAGES = '.hds-reveal__content > p';
+const REVEAL_BUTTON = '.hds-reveal button';
+const FIRST_ERROR_MESSAGE = '.hds-reveal__content > p:first-child';
+const LAST_ERROR_MESSAGE = '.hds-reveal__content > p:last-child';
 
 module('Integration | Component | settings-card/application', function (hooks) {
   setupRenderingTest(hooks);
@@ -58,6 +59,10 @@ module('Integration | Component | settings-card/application', function (hooks) {
     await render(
       hbs`<SettingsCard::Application @model={{this.model}} @toggle={{this.toggleTheme}}/>`,
     );
+
+    assert.dom(ERROR_MESSAGES).doesNotExist();
+
+    await click(REVEAL_BUTTON);
 
     assert.dom(ERROR_MESSAGES).isVisible({ count: 2 });
     assert
