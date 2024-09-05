@@ -13,8 +13,8 @@ const STATUS_BADGE = '.hds-badge';
 const ACTION_BUTTON = 'button';
 const REVEAL_BUTTON = '.hds-reveal button';
 const CARD_CONTAINER = 'hds-card__container';
-const ERROR_MESSAGES = '.hds-alert__description > p';
-const LAST_ERROR_MESSAGE = '.hds-alert__description > p:last-child';
+const ERROR_MESSAGES = '.hds-reveal__content > p';
+const LAST_ERROR_MESSAGE = '.hds-reveal__content > p:last-child';
 
 module(
   'Integration | Component | settings-card/client-agent',
