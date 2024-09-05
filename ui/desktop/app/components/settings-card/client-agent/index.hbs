@@ -34,16 +34,21 @@
         </Hds::Text::Body>
       </div>
       {{#if @model.clientAgentStatus.errors}}
-        <Hds::Alert @type='inline' @color='warning' as |A|>
-          <A.Title>{{t 'settings.alerts.client-agent'}}</A.Title>
-          <A.Description>
-            {{#each @model.clientAgentStatus.errors as |error|}}
-              <Hds::Text::Body @tag='p'>
-                {{error.message}}
-              </Hds::Text::Body>
-            {{/each}}
-          </A.Description>
-        </Hds::Alert>
+        <Hds::Reveal
+          @text={{t 'actions.show-errors'}}
+          @textWhenOpen={{t 'actions.hide-errors'}}
+        >
+          <Hds::Alert @type='inline' @color='warning' as |A|>
+            <A.Title>{{t 'settings.alerts.client-agent'}}</A.Title>
+            <A.Description>
+              {{#each @model.clientAgentStatus.errors as |error|}}
+                <Hds::Text::Body @tag='p'>
+                  {{error.message}}
+                </Hds::Text::Body>
+              {{/each}}
+            </A.Description>
+          </Hds::Alert>
+        </Hds::Reveal>
       {{/if}}
 
     </:body>
