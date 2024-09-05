@@ -47,14 +47,19 @@
       <Hds::Alert @type='inline' @color='warning' as |A|>
         <A.Title>{{t 'settings.alerts.cache-daemon'}}</A.Title>
         <A.Description>
-          {{#each @model.cacheDaemonStatus.errors as |error|}}
-            <Hds::Text::Body @tag='p'>
-              {{#if error.name}}
-                <strong>{{error.name}}: </strong>
-              {{/if}}
-              {{error.message}}
-            </Hds::Text::Body>
-          {{/each}}
+          <Hds::Reveal
+            @text={{t 'actions.show-errors'}}
+            @textWhenOpen={{t 'actions.hide-errors'}}
+          >
+            {{#each @model.cacheDaemonStatus.errors as |error|}}
+              <Hds::Text::Body @tag='p'>
+                {{#if error.name}}
+                  <strong>{{error.name}}: </strong>
+                {{/if}}
+                {{error.message}}
+              </Hds::Text::Body>
+            {{/each}}
+          </Hds::Reveal>
         </A.Description>
       </Hds::Alert>
     {{/if}}

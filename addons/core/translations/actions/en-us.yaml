@@ -62,3 +62,5 @@ yes: Yes
 no: No
 narrow-results: Narrow results
 overflow-options: Overflow Options
+show-errors: Show Errors
+hide-errors: Hide Errors
