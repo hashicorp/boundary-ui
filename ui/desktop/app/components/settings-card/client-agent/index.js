@@ -63,6 +63,6 @@ export default class SettingsCardClientAgentComponent extends Component {
     } else {
       await this.ipc.invoke('resumeClientAgent');
     }
-    await this.router.refresh();
+    await this.router.refresh('scopes.scope.projects.settings');
   }
 }
