@@ -58,7 +58,8 @@ module('Acceptance | workers | read', function (hooks) {
   });
 
   test('visiting worker', async function (assert) {
-    // TODO: Failing due to a11y violation while in dark mode.
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
     // Investigating issue with styles not properly
     // being applied during test.
     const session = this.owner.lookup('service:session');
