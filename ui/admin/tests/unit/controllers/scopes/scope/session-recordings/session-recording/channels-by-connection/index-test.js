@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   STATE_SESSION_RECORDING_AVAILABLE,
@@ -18,6 +19,7 @@ module(
   function (hooks) {
     setupTest(hooks);
     setupMirage(hooks);
+    setupIntl(hooks, 'en-us');
 
     let store;
     let controller;

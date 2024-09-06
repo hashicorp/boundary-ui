@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | worker-diagram/index', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   let featuresService;
   const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';

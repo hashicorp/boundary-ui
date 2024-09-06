@@ -11,7 +11,7 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | workers/worker/nav/index', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders', async function (assert) {
     await render(hbs`
