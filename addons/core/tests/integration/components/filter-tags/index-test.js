@@ -11,7 +11,7 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | filter-tags/index', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders', async function (assert) {
     this.set('filter', {

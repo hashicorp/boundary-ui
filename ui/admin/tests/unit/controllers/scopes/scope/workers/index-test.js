@@ -7,11 +7,13 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
+  setupIntl(hooks, 'en-us');
 
   let store;
   let controller;

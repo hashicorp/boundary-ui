@@ -13,7 +13,7 @@ module(
   'Integration | Component | form/worker/create-tags/index',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     const SAVE_BUTTON_SELECTOR = '[type="submit"]';
     const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
