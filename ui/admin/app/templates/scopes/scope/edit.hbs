@@ -56,23 +56,20 @@
 
   {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
     <page.actions>
-      <Rose::Dropdown
-        @text={{t 'actions.manage'}}
-        @dropdownRight={{true}}
-        as |dropdown|
-      >
-        <dropdown.button
-          @style='danger'
-          @disabled={{@model.canSave}}
+      <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
+        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+        <dd.Interactive
+          @color='critical'
+          @text={{t
+            (if
+              @model.isOrg
+              'resources.org.actions.delete'
+              'resources.project.actions.delete'
+            )
+          }}
           {{on 'click' (fn this.scopes.delete @model)}}
-        >
-          {{#if @model.isOrg}}
-            {{t 'resources.org.actions.delete'}}
-          {{else}}
-            {{t 'resources.project.actions.delete'}}
-          {{/if}}
-        </dropdown.button>
-      </Rose::Dropdown>
+        />
+      </Hds::Dropdown>
     </page.actions>
   {{/if}}
 

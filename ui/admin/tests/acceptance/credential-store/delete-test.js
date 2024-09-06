@@ -20,6 +20,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
 
   let getStaticCredentialStoresCount;
   let getVaultCredentialStoresCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-credential-stores-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-credential-stores-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -79,14 +83,16 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   test('can delete credential store of type vault', async function (assert) {
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getVaultCredentialStoresCount(), count - 1);
   });
 
   test('can delete credential store of type static', async function (assert) {
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getStaticCredentialStoresCount(), count - 1);
   });
 
@@ -96,9 +102,9 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.vaultCredentialStore);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+    await click(MANAGE_DROPDOWN_SELECTOR);
+
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('cannot delete a static credential store without proper authorization', async function (assert) {
@@ -107,9 +113,9 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.staticCredentialStore);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+    await click(MANAGE_DROPDOWN_SELECTOR);
+
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('can accept delete static credential store via dialog', async function (assert) {
@@ -118,7 +124,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getStaticCredentialStoresCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -129,7 +136,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getVaultCredentialStoresCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -140,7 +148,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getStaticCredentialStoresCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -151,7 +160,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.strictEqual(getVaultCredentialStoresCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -169,7 +179,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       );
     });
     await visit(urls.staticCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 
@@ -186,7 +197,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       );
     });
     await visit(urls.vaultCredentialStore);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
   });
 });

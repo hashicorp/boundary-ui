@@ -103,7 +103,7 @@ module('Acceptance | sessions | list', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `${urls.projectScope}/sessions`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting sessions', async function (assert) {

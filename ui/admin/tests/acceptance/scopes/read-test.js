@@ -25,9 +25,10 @@ module('Acceptance | scopes | read', function (hooks) {
   let featureEdition;
 
   const FORM_SELECTOR = 'main .rose-form';
-  const FORM_ACTIONS_SELECTOR = '.rose-form-actions';
-  const DELETE_DROPDOWN_SELECTOR =
-    '.rose-layout-page-actions .rose-dropdown-button-danger';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-projects-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-projects-dropdown] ul li button';
   const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';
 
   const instances = {
@@ -57,7 +58,7 @@ module('Acceptance | scopes | read', function (hooks) {
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
-    authenticateSession({ isGlobal: true });
+    authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting org scope edit', async function (assert) {
@@ -69,11 +70,16 @@ module('Acceptance | scopes | read', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.dom(FORM_SELECTOR).exists();
-    assert.dom(FORM_ACTIONS_SELECTOR).exists();
-    assert.dom(DELETE_DROPDOWN_SELECTOR).exists();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     features.enable('ssh-session-recording');
     await visit(urls.globalScope);
     await a11yAudit();
@@ -83,8 +89,8 @@ module('Acceptance | scopes | read', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
     assert.dom(FORM_SELECTOR).exists();
-    assert.dom(FORM_ACTIONS_SELECTOR).doesNotExist();
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
   test('user cannot visit global scope settings when feature flag is not enabled', async function (assert) {

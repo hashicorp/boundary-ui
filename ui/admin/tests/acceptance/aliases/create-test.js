@@ -50,7 +50,7 @@ module('Acceptance | aliases | create', function (hooks) {
     getAliasCount = () => this.server.schema.aliases.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias with host and target info', async function (assert) {

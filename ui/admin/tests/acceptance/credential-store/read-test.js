@@ -66,7 +66,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 
