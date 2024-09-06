@@ -7,6 +7,7 @@ import sinon from 'sinon';
 import { typeOf } from '@ember/utils';
 import { resourceNames } from 'api/handlers/cache-daemon-handler';
 import { singularize } from 'ember-inflector';
+import { underscore } from '@ember/string';
 
 /**
  * This test helper can be used to help setup your sinon stubs in your tests.
@@ -69,16 +70,18 @@ export default function setupStubs(hooks) {
           .withArgs('searchCacheDaemon')
           .onCall(i)
           .returns({
-            [resourceName]: models.map((model) => {
-              // Use internal serializer to serialize the model correctly
-              // according to our mirage serializers
-              const modelData =
-                this.server.serializerOrRegistry.serialize(model);
+            [underscore(resourceNames[singularize(resourceName)])]: models.map(
+              (model) => {
+                // Use internal serializer to serialize the model correctly
+                // according to our mirage serializers
+                const modelData =
+                  this.server.serializerOrRegistry.serialize(model);
 
-              // Serialize the data properly to standard JSON as that is what
-              // we're expecting from the cache daemon response
-              return JSON.parse(JSON.stringify(modelData));
-            }),
+                // Serialize the data properly to standard JSON as that is what
+                // we're expecting from the cache daemon response
+                return JSON.parse(JSON.stringify(modelData));
+              },
+            ),
           });
       });
     };
