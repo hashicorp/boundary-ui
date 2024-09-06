@@ -8,9 +8,10 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import {
   STATUS_SESSION_ACTIVE,
-  STATUS_SESSION_PENDING,
   STATUS_SESSION_CANCELING,
+  STATUS_SESSION_PENDING,
 } from 'api/models/session';
+import chunk from 'lodash/chunk';
 
 export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
   // =services
@@ -128,30 +129,38 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
       return [];
     }
 
-    // TODO: Chunk requests in case there's a lot of sessions as cache daemon syntax can't take too many
-    const targetIds = [
+    const uniqueTargetIds = [
       ...new Set(this.allSessions.map((session) => session.target_id)),
     ];
+    // Chunk target IDs in case there's a lot of sessions as cache daemon syntax can't take too many
+    const chunkedTargetIds = chunk(uniqueTargetIds, 50);
 
-    const associatedTargetsQuery = {
-      scope_id: orgScope.id,
-      recursive: true,
-      force_refresh: true,
-      query: {
-        filters: {
-          id: {
-            logicalOperator: 'or',
-            values: targetIds.map((targetId) => ({
-              equals: targetId,
-            })),
+    const associatedTargetsPromises = chunkedTargetIds.map((targetIds) =>
+      this.store.query(
+        'target',
+        {
+          scope_id: orgScope.id,
+          recursive: true,
+          force_refresh: true,
+          query: {
+            filters: {
+              id: {
+                logicalOperator: 'or',
+                values: targetIds.map((targetId) => ({
+                  equals: targetId,
+                })),
+              },
+            },
           },
         },
-      },
-    };
+        {
+          pushToStore: false,
+        },
+      ),
+    );
 
-    return this.store.query('target', associatedTargetsQuery, {
-      pushToStore: false,
-    });
+    const targetsArray = await Promise.all(associatedTargetsPromises);
+    return targetsArray.flat();
   }
 
   async getAllSessions(orgScope, scopes, orgFilter) {
