@@ -18,3 +18,6 @@ loading:
   title: Loading all items...
   description: All of your {resource} are still loading. Please wait while we finish loading everything on screen.
   generic-description: All of your resources are still loading. Please wait while we finish loading everything on screen.
+incomplete-loading:
+  limit: We've reached the result limit. Please narrow down your search or filters if the result you're looking for is not shown.
+  refreshing: We're still currently loading the results. Please wait a moment before refreshing again.
