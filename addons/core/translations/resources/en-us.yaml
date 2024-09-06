@@ -883,7 +883,7 @@ credential-library:
       help: The body of the HTTP request the library sends to Vault when requesting credentials. Only allowed when HTTP method is set to POST.
     username:
       label: Username
-      help: The username to use when making an SSH connection. This can be templated to use the requesting user's name. This will be included in the valid_principles when making the request to Vault.
+      help: The username to use when making an SSH connection. This can be templated to use the requesting user's name. This will be included in the valid_principals when making the request to Vault.
     key_type:
       label: Key Type
       help: Specifies the desired key type to use when generating a private key.
