@@ -143,7 +143,7 @@ module('Acceptance | scopes', function (hooks) {
     setDefaultClusterUrl(this);
 
     this.ipcStub.withArgs('isCacheDaemonRunning').returns(true);
-    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
   });
 
   test('visiting index', async function (assert) {
@@ -213,8 +213,6 @@ module('Acceptance | scopes', function (hooks) {
   test('can navigate among org scopes via header navigation', async function (assert) {
     assert.expect(3);
     this.stubCacheDaemonSearch(
-      'aliases',
-      'targets',
       'sessions',
       'targets',
       'aliases',
@@ -226,6 +224,7 @@ module('Acceptance | scopes', function (hooks) {
       'aliases',
       'sessions',
       'targets',
+      'aliases',
     );
     await visit(urls.targets);
 
@@ -264,7 +263,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.expect(1);
     this.server.db.targets.remove();
     this.server.db.sessions.remove();
-    this.stubCacheDaemonSearch('aliases', 'targets', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
 
     await visit(urls.targets);
 

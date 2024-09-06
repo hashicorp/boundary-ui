@@ -60,7 +60,7 @@ const unixSocketRequest = (options, reqBody) =>
         if (statusCode < 200 || statusCode >= 400) {
           reject({
             statusCode,
-            message: parsedResponse?.api_error ?? parsedResponse?.error,
+            message: parsedResponse?.message ?? parsedResponse?.error,
           });
         }
 
