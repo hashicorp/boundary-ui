@@ -55,19 +55,6 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   }
 
   /**
-   * Returns targets that are associated will all sessions the user has access to
-   * @returns {[TargetModel]}
-   */
-  get availableTargets() {
-    const uniqueSessionTargetIds = new Set(
-      this.model.allSessions.map((session) => session.target_id),
-    );
-    return this.model.allTargets.filter((target) =>
-      uniqueSessionTargetIds.has(target.id),
-    );
-  }
-
-  /**
    * Returns all status types for sessions
    * @returns {[object]}
    */
@@ -98,7 +85,7 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   get filters() {
     return {
       allFilters: {
-        targets: this.availableTargets,
+        targets: this.model.associatedTargets,
         status: this.sessionStatusOptions,
         scopes: this.availableScopes,
       },

@@ -3,119 +3,118 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{#if (or @model.sessions @model.allSessions)}}
-  {{#if @model.isCacheDaemonRunning}}
-    <div class='search-filtering-toolbar'>
-      <Hds::SegmentedGroup as |S|>
-        <S.Generic>
-          <Dropdown
-            name='target'
-            @toggleText={{t 'resources.target.title'}}
-            @itemOptions={{this.availableTargets}}
-            @checkedItems={{this.targets}}
-            @applyFilter={{fn this.applyFilter 'targets'}}
-            @isSearchable={{true}}
-            @listPosition='bottom-left'
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            name='status'
-            @toggleText={{t 'form.status.label'}}
-            @itemOptions={{this.sessionStatusOptions}}
-            @checkedItems={{this.status}}
-            @applyFilter={{fn this.applyFilter 'status'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            name='scope'
-            @toggleText={{t 'resources.scope.title'}}
-            @itemOptions={{this.availableScopes}}
-            @checkedItems={{this.scopes}}
-            @applyFilter={{fn this.applyFilter 'scopes'}}
-            @isSearchable={{true}}
-            as |FD selectItem itemOptions|
-          >
-            {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
-              {{#each orgs as |org|}}
-                <FD.Generic>
-                  <FlightIcon @name='org' />
-                  {{org.key.displayName}}
-                </FD.Generic>
-                {{#each org.items as |project|}}
-                  <FD.Checkbox
-                    @value={{project.id}}
-                    checked={{includes project.id this.scopes}}
-                    {{on 'change' selectItem}}
-                  >
-                    {{project.displayName}}
-                  </FD.Checkbox>
-                {{/each}}
-              {{/each}}
-            {{/let}}
-          </Dropdown>
-        </S.Generic>
-      </Hds::SegmentedGroup>
-      <span>
-        <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
-      </span>
-    </div>
-
-    <FilterTags @filters={{this.filters}} />
-  {{/if}}
-  {{#if @model.sessions}}
-    <Hds::Table
-      @model={{this.sortedSessions}}
-      @columns={{array
-        (hash label=(t 'form.started.label'))
-        (hash label=(t 'form.session_id.label'))
-        (hash label=(t 'resources.target.title'))
-        (hash label=(t 'form.proxy_url.label'))
-        (hash label=(t 'form.status.label'))
-        (hash
-          label=(t 'titles.actions')
-          isVisuallyHidden=true
-          align='right'
-          width='60px'
-        )
-      }}
-      @valign='middle'
-    >
-      <:body as |B|>
-        <B.Tr>
-          <B.Td>
-            <time datetime={{format-date-iso B.data.created_time}}>
-              {{format-date-iso-human B.data.created_time}}
-            </time>
-          </B.Td>
-          <B.Td>
-            <div class='link-copy-button-container'>
-              {{#if B.data.isAvailable}}
-                <Hds::Link::Inline
-                  @route='scopes.scope.projects.sessions.session.index'
-                  @model={{B.data.id}}
-                  data-test-session-detail-link={{B.data.id}}
+{{#if @model.isCacheDaemonRunning}}
+  <div class='search-filtering-toolbar'>
+    <Hds::SegmentedGroup as |S|>
+      <S.Generic>
+        <Dropdown
+          name='target'
+          @toggleText={{t 'resources.target.title'}}
+          @itemOptions={{this.model.associatedTargets}}
+          @checkedItems={{this.targets}}
+          @applyFilter={{fn this.applyFilter 'targets'}}
+          @isSearchable={{true}}
+          @listPosition='bottom-left'
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          name='status'
+          @toggleText={{t 'form.status.label'}}
+          @itemOptions={{this.sessionStatusOptions}}
+          @checkedItems={{this.status}}
+          @applyFilter={{fn this.applyFilter 'status'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          name='scope'
+          @toggleText={{t 'resources.scope.title'}}
+          @itemOptions={{this.availableScopes}}
+          @checkedItems={{this.scopes}}
+          @applyFilter={{fn this.applyFilter 'scopes'}}
+          @isSearchable={{true}}
+          as |FD selectItem itemOptions|
+        >
+          {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+            {{#each orgs as |org|}}
+              <FD.Generic>
+                <FlightIcon @name='org' />
+                {{org.key.displayName}}
+              </FD.Generic>
+              {{#each org.items as |project|}}
+                <FD.Checkbox
+                  @value={{project.id}}
+                  checked={{includes project.id this.scopes}}
+                  {{on 'change' selectItem}}
                 >
-                  {{B.data.id}}
-                </Hds::Link::Inline>
-              {{else}}
-                <Hds::Text::Body data-test-session-id-copy={{B.data.id}}>
-                  {{B.data.id}}
-                </Hds::Text::Body>
-              {{/if}}
-              <Hds::Copy::Button
-                @text={{B.data.id}}
-                @isIconOnly={{true}}
-                @textToCopy={{B.data.id}}
-                data-test-session-id-copy={{B.data.id}}
-              />
-            </div>
-          </B.Td>
-          <B.Td>
-            {{B.data.target.displayName}}
-          </B.Td>
-          {{!
+                  {{project.displayName}}
+                </FD.Checkbox>
+              {{/each}}
+            {{/each}}
+          {{/let}}
+        </Dropdown>
+      </S.Generic>
+    </Hds::SegmentedGroup>
+    <span>
+      <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
+    </span>
+  </div>
+
+  <FilterTags @filters={{this.filters}} />
+{{/if}}
+{{#if @model.sessions}}
+  <Hds::Table
+    @model={{this.sortedSessions}}
+    @columns={{array
+      (hash label=(t 'form.started.label'))
+      (hash label=(t 'form.session_id.label'))
+      (hash label=(t 'resources.target.title'))
+      (hash label=(t 'form.proxy_url.label'))
+      (hash label=(t 'form.status.label'))
+      (hash
+        label=(t 'titles.actions')
+        isVisuallyHidden=true
+        align='right'
+        width='60px'
+      )
+    }}
+    @valign='middle'
+  >
+    <:body as |B|>
+      <B.Tr>
+        <B.Td>
+          <time datetime={{format-date-iso B.data.created_time}}>
+            {{format-date-iso-human B.data.created_time}}
+          </time>
+        </B.Td>
+        <B.Td>
+          <div class='link-copy-button-container'>
+            {{#if B.data.isAvailable}}
+              <Hds::Link::Inline
+                @route='scopes.scope.projects.sessions.session.index'
+                @model={{B.data.id}}
+                data-test-session-detail-link={{B.data.id}}
+              >
+                {{B.data.id}}
+              </Hds::Link::Inline>
+            {{else}}
+              <Hds::Text::Body data-test-session-id-copy={{B.data.id}}>
+                {{B.data.id}}
+              </Hds::Text::Body>
+            {{/if}}
+            <Hds::Copy::Button
+              @text={{B.data.id}}
+              @isIconOnly={{true}}
+              @textToCopy={{B.data.id}}
+              data-test-session-id-copy={{B.data.id}}
+            />
+          </div>
+        </B.Td>
+        <B.Td>
+          {{B.data.target.displayName}}
+        </B.Td>
+        {{!
 					  Two if's here because:
 					  1) Local proxy info is only relevant if the session is
 						  active or pending (aka isAvailable).  Once the session
@@ -126,50 +125,49 @@
 						  from other devices (or even another tab), in which case we
 						  won't have the local proxy info available here.
 					}}
-          <B.Td>
-            {{#if B.data.isAvailable}}
-              {{#if B.data.proxy}}
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.proxy}}
-                  @color='secondary'
-                />
-              {{/if}}
-            {{/if}}
-          </B.Td>
-          <B.Td>
-            <SessionStatus @model={{B.data}} />
-          </B.Td>
-          <B.Td @align='right' width='60px'>
-            {{#if (can 'cancel session' B.data)}}
-              <Hds::Button
-                @text={{t 'actions.cancel'}}
-                @icon='x'
-                @isIconOnly={{true}}
+        <B.Td>
+          {{#if B.data.isAvailable}}
+            {{#if B.data.proxy}}
+              <Hds::Copy::Snippet
+                @textToCopy={{B.data.proxy}}
                 @color='secondary'
-                {{on 'click' (route-action 'cancelSession' B.data)}}
-                data-test-session-cancel-button={{B.data.id}}
               />
             {{/if}}
-          </B.Td>
-        </B.Tr>
-      </:body>
-    </Hds::Table>
-    <Rose::Pagination
-      @totalItems={{@model.totalItems}}
-      @currentPage={{this.page}}
-      @currentPageSize={{this.pageSize}}
+          {{/if}}
+        </B.Td>
+        <B.Td>
+          <SessionStatus @model={{B.data}} />
+        </B.Td>
+        <B.Td @align='right' width='60px'>
+          {{#if (can 'cancel session' B.data)}}
+            <Hds::Button
+              @text={{t 'actions.cancel'}}
+              @icon='x'
+              @isIconOnly={{true}}
+              @color='secondary'
+              {{on 'click' (route-action 'cancelSession' B.data)}}
+              data-test-session-cancel-button={{B.data.id}}
+            />
+          {{/if}}
+        </B.Td>
+      </B.Tr>
+    </:body>
+  </Hds::Table>
+  <Rose::Pagination
+    @totalItems={{@model.totalItems}}
+    @currentPage={{this.page}}
+    @currentPageSize={{this.pageSize}}
+  />
+{{else if @model.allSessions}}
+  <Hds::ApplicationState data-test-no-session-results as |A|>
+    <A.Header @title={{t 'titles.no-results-found'}} />
+    <A.Body
+      @text={{t
+        'descriptions.no-filter-results'
+        resource=(t 'resources.session.title_plural')
+      }}
     />
-  {{else}}
-    <Hds::ApplicationState data-test-no-session-results as |A|>
-      <A.Header @title={{t 'titles.no-results-found'}} />
-      <A.Body
-        @text={{t
-          'descriptions.no-filter-results'
-          resource=(t 'resources.session.title_plural')
-        }}
-      />
-    </Hds::ApplicationState>
-  {{/if}}
+  </Hds::ApplicationState>
 {{else}}
   <Hds::ApplicationState data-test-no-sessions as |A|>
     <A.Header @title={{t 'resources.session.messages.none-friendly.title'}} />

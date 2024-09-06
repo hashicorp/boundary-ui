@@ -3,191 +3,199 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{#if this.showFilters}}
-  {{#if @model.isCacheDaemonRunning}}
-    <div class='search-filtering-toolbar'>
-      <Hds::SegmentedGroup as |S|>
-        <S.TextInput
-          @value={{this.search}}
-          @type='search'
-          placeholder={{t 'actions.search'}}
-          aria-label={{t 'actions.search'}}
-          {{on 'input' this.handleSearchInput}}
-        />
-        <S.Generic>
-          <Dropdown
-            name='active-sessions'
-            @toggleText={{t 'resources.target.titles.active-sessions'}}
-            @itemOptions={{this.availableSessionOptions}}
-            @checkedItems={{this.availableSessions}}
-            @applyFilter={{fn this.applyFilter 'availableSessions'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            name='type'
-            @toggleText={{t 'form.type.label'}}
-            @itemOptions={{this.targetTypeOptions}}
-            @checkedItems={{this.types}}
-            @applyFilter={{fn this.applyFilter 'types'}}
-          />
-        </S.Generic>
-        <S.Generic>
-          <Dropdown
-            name='scope'
-            @toggleText={{t 'resources.scope.title'}}
-            @itemOptions={{this.availableScopes}}
-            @checkedItems={{this.scopes}}
-            @applyFilter={{fn this.applyFilter 'scopes'}}
-            @isSearchable={{true}}
-            as |FD selectItem itemOptions|
-          >
-            {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
-              {{#each orgs as |org|}}
-                <FD.Generic>
-                  <FlightIcon @name='org' />
-                  {{org.key.displayName}}
-                </FD.Generic>
-                {{#each org.items as |project|}}
-                  <FD.Checkbox
-                    @value={{project.id}}
-                    data-test-checkbox={{project.name}}
-                    checked={{includes project.id this.scopes}}
-                    {{on 'change' selectItem}}
-                  >
-                    {{project.displayName}}
-                  </FD.Checkbox>
-                {{/each}}
-              {{/each}}
-            {{/let}}
-          </Dropdown>
-        </S.Generic>
-      </Hds::SegmentedGroup>
-      <span>
-        <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
-      </span>
-    </div>
-    <FilterTags @filters={{this.filters}} />
-  {{/if}}
-
-  {{#if @model.targets}}
-    <Hds::Table
-      @model={{@model.targets}}
-      @columns={{array
-        (hash label=(t 'form.name.label'))
-        (hash label=(t 'resources.alias.title_plural'))
-        (hash label=(t 'resources.target.titles.active-sessions'))
-        (hash label=(t 'form.type.label'))
-        (hash label=(t 'resources.project.title'))
-        (hash label=(t 'titles.actions') isVisuallyHidden=true align='right')
-      }}
-      @valign='middle'
-    >
-      <:body as |B|>
-        <B.Tr>
-          <B.Td>
-            <span class='hds-font-weight-semibold'>
-              {{#if (can 'read model' B.data)}}
-                <LinkTo
-                  data-test-visit-target={{B.data.id}}
-                  @route='scopes.scope.projects.targets.target'
-                  @model={{B.data.id}}
-                  @query={{hash isConnecting=false}}
-                >
-                  {{B.data.displayName}}
-                </LinkTo>
-              {{else}}
-                {{B.data.displayName}}
-              {{/if}}
-              {{#if B.data.description}}
-                <p>{{B.data.description}}</p>
-              {{/if}}
-            </span>
-          </B.Td>
-          <B.Td data-test-target-aliases={{B.data.id}}>
-            {{truncate-list 'actions.more' B.data.associatedAliases}}
-          </B.Td>
-          <B.Td>
-            {{#if B.data.isActive}}
-              <Hds::Button
-                data-test-targets-sessions-flyout-button={{B.data.id}}
-                @text={{t 'actions.yes'}}
-                @color='tertiary'
-                @icon='info'
-                {{on 'click' (fn this.selectTarget B.data)}}
-              />
-            {{/if}}
-          </B.Td>
-          <B.Td>
-            {{#if B.data.type}}
-              <Hds::Badge
-                @text={{t (concat 'resources.target.types.' B.data.type)}}
-              />
-            {{/if}}
-          </B.Td>
-          <B.Td>
-            <div>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.project.id}}
-                @color='secondary'
-                data-test-target-project-id={{B.data.project.id}}
-              />
-            </div>
-            {{#if B.data.project.name}}
-              <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
-            {{/if}}
-          </B.Td>
-          <B.Td @align='right'>
-            <div {{style display='inline-block'}}>
-              {{#if (can 'connect target' B.data)}}
-                {{#if (can 'read target' B.data)}}
-                  <Hds::Button
-                    data-test-targets-connect-button={{B.data.id}}
-                    @text={{t 'resources.session.actions.connect'}}
-                    @color='secondary'
-                    @route='scopes.scope.projects.targets.target'
-                    @model={{B.data.id}}
-                    @query={{hash isConnecting=true}}
-                  />
-                {{else}}
-                  <Hds::Button
-                    data-test-targets-connect-button={{B.data.id}}
-                    @text={{t 'resources.session.actions.connect'}}
-                    @color='secondary'
-                    {{on 'click' (fn this.quickConnect B.data)}}
-                  />
-                {{/if}}
-              {{/if}}
-            </div>
-          </B.Td>
-        </B.Tr>
-      </:body>
-    </Hds::Table>
-    <Rose::Pagination
-      @totalItems={{@model.totalItems}}
-      @currentPage={{this.page}}
-      @currentPageSize={{this.pageSize}}
-    />
-
-  {{/if}}
-  {{#if this.noResults}}
-    <Hds::ApplicationState data-test-no-target-results as |A|>
-      <A.Header @title={{t 'titles.no-results-found'}} />
-      <A.Body
-        @text={{t
-          (if
-            this.search
-            'descriptions.no-search-results'
-            'descriptions.no-filter-results'
-          )
-          query=this.search
-          resource=(t 'resources.target.title_plural')
-        }}
+{{#if @model.isCacheDaemonRunning}}
+  <div class='search-filtering-toolbar'>
+    <Hds::SegmentedGroup as |S|>
+      <S.TextInput
+        @value={{this.search}}
+        @type='search'
+        placeholder={{t 'actions.search'}}
+        aria-label={{t 'actions.search'}}
+        {{on 'input' this.handleSearchInput}}
       />
-    </Hds::ApplicationState>
+      <S.Generic>
+        <Dropdown
+          name='active-sessions'
+          @toggleText={{t 'resources.target.titles.active-sessions'}}
+          @itemOptions={{this.availableSessionOptions}}
+          @checkedItems={{this.availableSessions}}
+          @applyFilter={{fn this.applyFilter 'availableSessions'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          name='type'
+          @toggleText={{t 'form.type.label'}}
+          @itemOptions={{this.targetTypeOptions}}
+          @checkedItems={{this.types}}
+          @applyFilter={{fn this.applyFilter 'types'}}
+        />
+      </S.Generic>
+      <S.Generic>
+        <Dropdown
+          name='scope'
+          @toggleText={{t 'resources.scope.title'}}
+          @itemOptions={{this.availableScopes}}
+          @checkedItems={{this.scopes}}
+          @applyFilter={{fn this.applyFilter 'scopes'}}
+          @isSearchable={{true}}
+          as |FD selectItem itemOptions|
+        >
+          {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
+            {{#each orgs as |org|}}
+              <FD.Generic>
+                <FlightIcon @name='org' />
+                {{org.key.displayName}}
+              </FD.Generic>
+              {{#each org.items as |project|}}
+                <FD.Checkbox
+                  @value={{project.id}}
+                  data-test-checkbox={{project.name}}
+                  checked={{includes project.id this.scopes}}
+                  {{on 'change' selectItem}}
+                >
+                  {{project.displayName}}
+                </FD.Checkbox>
+              {{/each}}
+            {{/each}}
+          {{/let}}
+        </Dropdown>
+      </S.Generic>
+    </Hds::SegmentedGroup>
+    <span>
+      <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
+    </span>
+  </div>
+  <FilterTags @filters={{this.filters}} />
+  {{#if @model.isLoadIncomplete}}
+    <Hds::Alert @color='warning' @type='compact' as |A|>
+      <A.Description>{{t 'states.incomplete-loading.limit'}}</A.Description>
+    </Hds::Alert>
+  {{/if}}
+  {{#if @model.isRefreshing}}
+    <Hds::Alert @color='warning' @type='compact' as |A|>
+      <A.Description>{{t
+          'states.incomplete-loading.refreshing'
+        }}</A.Description>
+    </Hds::Alert>
   {{/if}}
 {{/if}}
-{{#if this.noTargets}}
+
+{{#if @model.targets}}
+  <Hds::Table
+    @model={{@model.targets}}
+    @columns={{array
+      (hash label=(t 'form.name.label'))
+      (hash label=(t 'resources.alias.title_plural'))
+      (hash label=(t 'resources.target.titles.active-sessions'))
+      (hash label=(t 'form.type.label'))
+      (hash label=(t 'resources.project.title'))
+      (hash label=(t 'titles.actions') isVisuallyHidden=true align='right')
+    }}
+    @valign='middle'
+  >
+    <:body as |B|>
+      <B.Tr>
+        <B.Td>
+          <span class='hds-font-weight-semibold'>
+            {{#if (can 'read model' B.data)}}
+              <LinkTo
+                data-test-visit-target={{B.data.id}}
+                @route='scopes.scope.projects.targets.target'
+                @model={{B.data.id}}
+                @query={{hash isConnecting=false}}
+              >
+                {{B.data.displayName}}
+              </LinkTo>
+            {{else}}
+              {{B.data.displayName}}
+            {{/if}}
+            {{#if B.data.description}}
+              <p>{{B.data.description}}</p>
+            {{/if}}
+          </span>
+        </B.Td>
+        <B.Td data-test-target-aliases={{B.data.id}}>
+          {{truncate-list 'actions.more' B.data.associatedAliases}}
+        </B.Td>
+        <B.Td>
+          {{#if B.data.isActive}}
+            <Hds::Button
+              data-test-targets-sessions-flyout-button={{B.data.id}}
+              @text={{t 'actions.yes'}}
+              @color='tertiary'
+              @icon='info'
+              {{on 'click' (fn this.selectTarget B.data)}}
+            />
+          {{/if}}
+        </B.Td>
+        <B.Td>
+          {{#if B.data.type}}
+            <Hds::Badge
+              @text={{t (concat 'resources.target.types.' B.data.type)}}
+            />
+          {{/if}}
+        </B.Td>
+        <B.Td>
+          <div>
+            <Hds::Copy::Snippet
+              @textToCopy={{B.data.project.id}}
+              @color='secondary'
+              data-test-target-project-id={{B.data.project.id}}
+            />
+          </div>
+          {{#if B.data.project.name}}
+            <Hds::Badge @color='neutral' @text={{B.data.project.name}} />
+          {{/if}}
+        </B.Td>
+        <B.Td @align='right'>
+          <div {{style display='inline-block'}}>
+            {{#if (can 'connect target' B.data)}}
+              {{#if (can 'read target' B.data)}}
+                <Hds::Button
+                  data-test-targets-connect-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  @route='scopes.scope.projects.targets.target'
+                  @model={{B.data.id}}
+                  @query={{hash isConnecting=true}}
+                />
+              {{else}}
+                <Hds::Button
+                  data-test-targets-connect-button={{B.data.id}}
+                  @text={{t 'resources.session.actions.connect'}}
+                  @color='secondary'
+                  {{on 'click' (fn this.quickConnect B.data)}}
+                />
+              {{/if}}
+            {{/if}}
+          </div>
+        </B.Td>
+      </B.Tr>
+    </:body>
+  </Hds::Table>
+  <Rose::Pagination
+    @totalItems={{@model.totalItems}}
+    @currentPage={{this.page}}
+    @currentPageSize={{this.pageSize}}
+  />
+{{/if}}
+{{#if this.noResults}}
+  <Hds::ApplicationState data-test-no-target-results as |A|>
+    <A.Header @title={{t 'titles.no-results-found'}} />
+    <A.Body
+      @text={{t
+        (if
+          this.search
+          'descriptions.no-search-results'
+          'descriptions.no-filter-results'
+        )
+        query=this.search
+        resource=(t 'resources.target.title_plural')
+      }}
+    />
+  </Hds::ApplicationState>
+{{else if this.noTargets}}
   <Hds::ApplicationState data-test-no-targets as |A|>
     <A.Header @title={{t 'resources.target.messages.none.title'}} />
     <A.Body @text={{t 'resources.target.messages.none.description'}} />

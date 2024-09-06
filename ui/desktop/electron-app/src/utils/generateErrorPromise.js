@@ -12,7 +12,7 @@ const generateErrorPromise = async (stderr) => {
   if (parsedResponse?.status_code) {
     return Promise.reject({
       statusCode: parsedResponse?.status_code,
-      message: parsedResponse?.api_error,
+      ...parsedResponse?.api_error,
     });
   }
 

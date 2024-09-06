@@ -49,15 +49,6 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
 
   // =methods
 
-  get showFilters() {
-    return (
-      this.model.allTargets.length ||
-      this.types.length ||
-      this.search ||
-      this.availableSessions.length
-    );
-  }
-
   /**
    * Returns true if model is empty but we have a search term or filters
    * @returns {boolean}
@@ -85,13 +76,8 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * @returns {[ScopeModel]}
    */
   get availableScopes() {
-    const uniqueTargetScopeIds = new Set(
-      this.model.allTargets.map((target) => target.scope.id),
-    );
-
-    return this.model.projects.filter((project) =>
-      uniqueTargetScopeIds.has(project.id),
-    );
+    // TODO: Make use of implicit scopes or when scopes are added to cache daemon
+    return this.model.projects;
   }
 
   get availableSessionOptions() {
