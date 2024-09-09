@@ -52,9 +52,9 @@ class CacheDaemonManager {
     this.#cacheDaemonProcess = childProcess;
 
     // If we get a null/undefined, err on safe side and don't stop daemon when
-    // we close the desktop client as the absence of the "daemon is already running"
+    // we close the desktop client as the absence of the "cache is already running"
     // message doesn't necessarily guarantee it's running (but it likely should be)
-    if (stderr && !stderr.includes('The daemon is already running')) {
+    if (stderr && !stderr.includes('The cache is already running')) {
       this.#isCacheDaemonAlreadyRunning = false;
       log.info('Cache daemon started, status from daemon:\n', stderr);
     } else {
