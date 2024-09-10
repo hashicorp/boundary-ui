@@ -63,7 +63,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('can navigate to resource', async function (assert) {

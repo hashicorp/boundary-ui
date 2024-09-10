@@ -30,18 +30,19 @@ module('Acceptance | accounts | delete', function (hooks) {
       global: null,
       org: null,
     },
-    authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
     authMethods: null,
+    authMethod: null,
     accounts: null,
     account: null,
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

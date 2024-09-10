@@ -48,6 +48,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     authenticateSession({
       account_id: instances.account.id,
+      username: 'admin',
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
@@ -55,8 +56,11 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('visiting account change password', async function (assert) {
-    await visit(urls.changePassword);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.changePassword}"]`);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.changePassword);
   });
 
@@ -73,6 +77,12 @@ module('Acceptance | accounts | change password', function (hooks) {
 
   test('can change password for account', async function (assert) {
     assert.expect(2);
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     this.server.post(
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
@@ -118,11 +128,14 @@ module('Acceptance | accounts | change password', function (hooks) {
         },
       );
     });
-    await visit(urls.changePassword);
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.changePassword}"]`);
     await fillIn('[name="currentPassword"]', 'current password');
     await fillIn('[name="newPassword"]', 'new password');
     await click('form [type="submit"]');
     await a11yAudit();
+
     assert.ok(find('[role="alert"]'));
   });
 

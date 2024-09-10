@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -14,42 +14,35 @@ import {
   getOrgIdFromNameCli,
 } from '../helpers/boundary-cli.mjs';
 import { AuthMethodsPage } from '../pages/auth-methods.mjs';
+import { LoginPage } from '../pages/login.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { RolesPage } from '../pages/roles.mjs';
 import { UsersPage } from '../pages/users.mjs';
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_LDAP_ADDR',
-    'E2E_LDAP_DOMAIN_DN',
-    'E2E_LDAP_ADMIN_DN',
-    'E2E_LDAP_ADMIN_PASSWORD',
-    'E2E_LDAP_USER_NAME',
-    'E2E_LDAP_USER_PASSWORD',
-    'E2E_LDAP_GROUP_NAME',
-  ]);
-
   await checkBoundaryCli();
 });
 
-test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
+test('Set up LDAP auth method @ce @ent @docker', async ({
+  page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  ldapAddr,
+  ldapAdminDn,
+  ldapAdminPassword,
+  ldapDomainDn,
+  ldapGroupName,
+  ldapUserName,
+  ldapUserPassword,
+}) => {
   await page.goto('/');
   let orgName;
   try {
     // Log in
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    const loginPage = new LoginPage(page);
+    await loginPage.login(adminLoginName, adminPassword);
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -67,15 +60,15 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     const ldapAuthMethodName = 'LDAP ' + nanoid();
     await page.getByLabel('Name').fill(ldapAuthMethodName);
     await page.getByLabel('Description').fill('LDAP Auth Method');
-    await page.getByLabel('Address').fill(process.env.E2E_LDAP_ADDR);
-    await page.getByLabel('Bind DN').fill(process.env.E2E_LDAP_ADMIN_DN);
+    await page.getByLabel('Address').fill(ldapAddr);
+    await page.getByLabel('Bind DN').fill(ldapAdminDn);
     await page
       .getByLabel('Bind Password')
-      .fill(process.env.E2E_LDAP_ADMIN_PASSWORD);
+      .fill(ldapAdminPassword);
     await page.getByRole('switch', { name: 'Discover DN' }).click();
-    await page.getByLabel('User DN').fill(process.env.E2E_LDAP_DOMAIN_DN);
+    await page.getByLabel('User DN').fill(ldapDomainDn);
     await page.getByLabel('User Attribute').fill('uid');
-    await page.getByLabel('Group DN').fill(process.env.E2E_LDAP_DOMAIN_DN);
+    await page.getByLabel('Group DN').fill(ldapDomainDn);
     await page.getByRole('switch', { name: 'Enable Groups' }).click();
 
     await page
@@ -135,7 +128,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
       .getByLabel('Name (Optional)', { exact: true })
       .fill(ldapAccountName);
     await page.getByLabel('Description').fill('This is an automated test');
-    await page.getByLabel('Login Name').fill(process.env.E2E_LDAP_USER_NAME);
+    await page.getByLabel('Login Name').fill(ldapUserName);
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
@@ -154,7 +147,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     await page.getByLabel('Description').fill('This is an automated test');
     await page
       .getByRole('textbox', { name: 'Value' })
-      .fill(process.env.E2E_LDAP_GROUP_NAME);
+      .fill(ldapGroupName);
     await page.getByRole('button', { name: 'Add' }).click();
 
     await page.getByRole('button', { name: 'Save' }).click();
@@ -171,56 +164,29 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
     // Create a user and attach LDAP account to it
     const usersPage = new UsersPage(page);
     const userName = await usersPage.createUser();
-    await usersPage.addAccountToUser(process.env.E2E_LDAP_USER_NAME);
+    await usersPage.addAccountToUser(ldapUserName);
 
     // Create a second auth method so that there's multiple auth methods on the
     // login screen
     const authMethodsPage = new AuthMethodsPage(page);
     await authMethodsPage.createPasswordAuthMethod();
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using ldap account
+    await loginPage.logout(adminLoginName);
+
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: ldapAuthMethodName }).click();
-    await page.getByLabel('Login Name').fill(process.env.E2E_LDAP_USER_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_LDAP_USER_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(process.env.E2E_LDAP_USER_NAME)).toBeEnabled();
+    await loginPage.login(ldapUserName, ldapUserPassword);
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByText('Projects'),
     ).toBeVisible();
 
-    // Log out
-    await page.getByText(process.env.E2E_LDAP_USER_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log back in as an admin
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    await loginPage.logout(ldapUserName);
+    await loginPage.login(adminLoginName, adminPassword);
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -260,7 +226,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
         .getByRole('cell')
         .nth(fullNameIndex)
         .innerText(),
-    ).toBe(process.env.E2E_LDAP_USER_NAME);
+    ).toBe(ldapUserName);
     expect(
       await page
         .getByRole('cell', { name: ldapAccountName })
@@ -268,7 +234,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
         .getByRole('cell')
         .nth(emailIndex)
         .innerText(),
-    ).toBe(process.env.E2E_LDAP_USER_NAME + '@mail.com');
+    ).toBe(ldapUserName + '@mail.com');
 
     // View the User account and verify attributes
     await page
@@ -285,14 +251,14 @@ test('Set up LDAP auth method @ce @ent @docker', async ({ page }) => {
         .getByRole('cell')
         .nth(0) // Name field
         .innerText(),
-    ).toContain(process.env.E2E_LDAP_USER_NAME + '@mail.com');
+    ).toContain(ldapUserName + '@mail.com');
   } finally {
     if (orgName) {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
       const orgId = await getOrgIdFromNameCli(orgName);
       if (orgId) {

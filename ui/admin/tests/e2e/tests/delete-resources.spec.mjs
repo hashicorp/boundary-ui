@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
 import { execSync } from 'node:child_process';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -41,33 +40,31 @@ const boundaryPolicyName = 'boundary-controller';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'VAULT_ADDR',
-    'VAULT_TOKEN',
-    'E2E_VAULT_ADDR',
-    'E2E_TARGET_ADDRESS',
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-    'E2E_AWS_ACCESS_KEY_ID',
-    'E2E_AWS_SECRET_ACCESS_KEY',
-  ]);
   await checkBoundaryCli();
   await checkVaultCli();
 });
 
-test.beforeEach(async () => {
+test.beforeEach(async ({
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+}) => {
   execSync(`vault policy delete ${secretPolicyName}`);
   execSync(`vault policy delete ${boundaryPolicyName}`);
   await authenticateBoundaryCli(
-    process.env.BOUNDARY_ADDR,
-    process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-    process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-    process.env.E2E_PASSWORD_ADMIN_PASSWORD,
-    process.env.E2E_AWS_REGION,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
   );
 });
 
-test('Verify resources can be deleted @ce @aws', async ({ page }) => {
+test('Verify resources can be deleted @ce @aws', async ({
+  page,
+  awsRegion,
+  vaultAddr,
+}) => {
   let orgId;
   let orgDeleted = false;
   try {
@@ -84,23 +81,12 @@ test('Verify resources can be deleted @ce @aws', async ({ page }) => {
     let groupId = await createGroupCli(orgId);
     let userId = await createUserCli(orgId);
     let staticHostCatalogId = await createStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
-      projectId,
-      process.env.E2E_AWS_REGION,
-    );
+    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(projectId, awsRegion);
     let staticHostId = await createStaticHostCli(staticHostCatalogId);
     let staticHostSetId = await createHostSetCli(staticHostCatalogId);
-    let staticCredentialStoreId =
-      await createStaticCredentialStoreCli(projectId);
-    const vaultToken = await getVaultToken(
-      boundaryPolicyName,
-      secretPolicyName,
-    );
-    let vaultCredentialStoreId = await createVaultCredentialStoreCli(
-      projectId,
-      process.env.E2E_VAULT_ADDR,
-      vaultToken,
-    );
+    let staticCredentialStoreId = await createStaticCredentialStoreCli(projectId);
+    const vaultToken = await getVaultToken(boundaryPolicyName, secretPolicyName);
+    let vaultCredentialStoreId = await createVaultCredentialStoreCli(projectId, vaultAddr, vaultToken);
     let usernamePasswordCredentialId =
       await createUsernamePasswordCredentialCli(staticCredentialStoreId);
     let tcpTargetId = await createTcpTarget(projectId);

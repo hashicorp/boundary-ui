@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { execSync } from 'node:child_process';
 
 import {
@@ -13,6 +14,7 @@ import {
   getOrgIdFromNameCli,
 } from '../helpers/boundary-cli.mjs';
 import { AuthMethodsPage } from '../pages/auth-methods.mjs';
+import { LoginPage } from '../pages/login.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { UsersPage } from '../pages/users.mjs';
 
@@ -22,25 +24,18 @@ test.beforeAll(async () => {
 
 test('Verify new auth-method can be created and assigned to users @ce @ent @aws @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
 }) => {
   await page.goto('/');
   let orgName;
   let authMethodName;
   try {
     // Log in
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(
-      page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME),
-    ).toBeEnabled();
+    const loginPage = new LoginPage(page);
+    await loginPage.login(adminLoginName, adminPassword);
     await expect(
       page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
     ).toBeVisible();
@@ -60,41 +55,22 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     await usersPage.createUser();
     await usersPage.addAccountToUser(username);
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using new account
+    await loginPage.logout(adminLoginName);
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: authMethodName }).click();
-    await page.getByLabel('Login Name').fill(username);
-    await page.getByLabel('Password', { exact: true }).fill(password);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(username)).toBeEnabled();
+
+    await loginPage.login(username, password);
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
         .getByText('Projects'),
     ).toBeVisible();
 
-    // Log out
-    await page.getByText(username).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log back in as admin
-    await page
-      .getByLabel('Login Name')
-      .fill(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME);
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(process.env.E2E_PASSWORD_ADMIN_PASSWORD);
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    await loginPage.logout(username);
+    await loginPage.login(adminLoginName, adminPassword);
 
     // Set a new password on the account
     await page
@@ -115,22 +91,13 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     const newPassword = 'new-password';
     await authMethodsPage.setPasswordToAccount(newPassword);
 
-    // Log out
-    await page.getByText(process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME).click();
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-
     // Log in using new password
+    await loginPage.logout(adminLoginName);
+
     await page.getByText('Choose a different scope').click();
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: authMethodName }).click();
-    await page.getByLabel('Login Name').fill(username);
-    await page.getByLabel('Password', { exact: true }).fill(newPassword);
-    await page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(
-      page.getByRole('navigation', { name: 'General' }),
-    ).toBeVisible();
-    await expect(page.getByText(username)).toBeEnabled();
+    await loginPage.login(username, newPassword);
     await expect(
       page
         .getByRole('navigation', { name: 'breadcrumbs' })
@@ -138,10 +105,10 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     ).toBeVisible();
   } finally {
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
 
     // There is an issue with deleting an org that has an auth method unless you

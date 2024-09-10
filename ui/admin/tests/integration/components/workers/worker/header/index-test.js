@@ -13,7 +13,7 @@ module(
   'Integration | Component | workers/worker/header/index',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     test('it renders with the id of the model passed in', async function (assert) {
       this.set('model', { id: 'w_123' });

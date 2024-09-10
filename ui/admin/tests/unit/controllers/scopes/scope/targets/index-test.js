@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { waitUntil, visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
@@ -15,6 +16,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let store;
   let controller;

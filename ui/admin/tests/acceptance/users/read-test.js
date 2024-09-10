@@ -47,7 +47,7 @@ module('Acceptance | users | read', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting users', async function (assert) {

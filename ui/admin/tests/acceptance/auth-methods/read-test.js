@@ -49,7 +49,7 @@ module('Acceptance | auth-methods | read', function (hooks) {
 
   hooks.beforeEach(function () {
     // Setup Mirage mock resources for this test
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

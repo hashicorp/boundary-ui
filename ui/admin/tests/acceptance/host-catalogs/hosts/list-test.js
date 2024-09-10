@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import {
@@ -17,6 +17,11 @@ import {
 module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
+  const NEW_HOST_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] div ul li a';
 
   const instances = {
     scopes: {
@@ -76,6 +81,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
         'list',
       ),
     );
+    assert.dom(MANAGE_DROPDOWN_SELECTOR);
     assert.ok(find(`[href="${urls.hosts}"]`));
   });
 
@@ -94,6 +100,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
     await visit(urls.hostCatalog);
     assert.ok(find(`[href="${urls.hosts}"]`));
-    assert.ok(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(NEW_HOST_SELECTOR).hasAttribute('href', urls.newHost);
   });
 });

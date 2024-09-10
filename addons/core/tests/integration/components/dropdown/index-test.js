@@ -11,7 +11,7 @@ import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | dropdown/index', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   const firstItem = {
     id: '1',

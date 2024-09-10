@@ -76,7 +76,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
   test('visiting credential libraries', async function (assert) {

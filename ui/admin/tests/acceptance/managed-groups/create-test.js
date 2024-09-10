@@ -30,6 +30,8 @@ module('Acceptance | managed-groups | create', function (hooks) {
   const DESC_INPUT_SELECTOR = '[name="description"]';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-methods-dropdown] div button';
 
   const instances = {
     scopes: {
@@ -51,7 +53,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -85,8 +87,9 @@ module('Acceptance | managed-groups | create', function (hooks) {
     const managedGroupsCount = getManagedGroupCount();
     const name = 'Managed group name';
     await visit(urls.authMethod);
-
+    await click(MANAGE_DROPDOWN_SELECTOR);
     await click(`[href="${urls.newManagedGroup}"]`);
+
     await fillIn(NAME_INPUT_SELECTOR, name);
     await fillIn(DESC_INPUT_SELECTOR, 'description');
     await click(SAVE_BTN_SELECTOR);
@@ -101,6 +104,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     const managedGroupsCount = getManagedGroupCount();
     const name = 'Managed group name';
     await visit(urls.ldapAuthMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     await click(`[href="${urls.newLdapManagedGroup}"]`);
     await fillIn(NAME_INPUT_SELECTOR, name);
@@ -154,6 +158,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('User can cancel a new managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     await click(`[href="${urls.newManagedGroup}"]`);
     await fillIn(NAME_INPUT_SELECTOR, 'Managed group name');
@@ -166,6 +171,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('User can cancel a new ldap managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     await click(`[href="${urls.newLdapManagedGroup}"]`);
     await fillIn(NAME_INPUT_SELECTOR, 'Managed group name');
@@ -196,6 +202,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.authMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     await click(`[href="${urls.newManagedGroup}"]`);
     await fillIn(NAME_INPUT_SELECTOR, 'new managed group');
@@ -227,6 +234,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.ldapAuthMethod);
+    await click(MANAGE_DROPDOWN_SELECTOR);
 
     await click(`[href="${urls.newLdapManagedGroup}"]`);
     await fillIn(NAME_INPUT_SELECTOR, 'new managed group');
