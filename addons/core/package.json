@@ -31,6 +31,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@formatjs/intl-durationformat": "^0.2.4",
     "api": "*",
     "auth": "*",
     "ember-auto-import": "^2.6.3",
