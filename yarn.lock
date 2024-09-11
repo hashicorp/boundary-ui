@@ -12366,11 +12366,6 @@ intl-messageformat@10.5.14, intl-messageformat@^10.5.14:
     "@formatjs/icu-messageformat-parser" "2.7.8"
     tslib "^2.4.0"
 
-intl-unofficial-duration-unit-format@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/intl-unofficial-duration-unit-format/-/intl-unofficial-duration-unit-format-3.1.0.tgz#994feefc8d903d9e5044dc7e4e1d38ebad59394b"
-  integrity sha512-yjvUDwV63zSGkbeUqpDRJmOgMQoJA8OFhNeo+1KY20q+lFCtcvRWszJNsq/ssrUJRy8g+Mt3BYNfwFvRRSAkow==
-
 invert-kv@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-3.0.1.tgz#a93c7a3d4386a1dc8325b97da9bb1620c0282523"
