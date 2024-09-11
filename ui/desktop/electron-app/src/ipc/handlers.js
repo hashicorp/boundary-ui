@@ -46,7 +46,8 @@ handle('resetClusterUrl', async () => runtimeSettings.resetClusterUrl());
 handle('openExternal', async (href) => {
   const isSecure = href.startsWith('https://');
   const isLocalhost =
-    href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
+    href.startsWith('http://localhost:') ||
+    href.startsWith('http://127.0.0.1:');
   if (isSecure || isLocalhost || isDev) {
     /**
      * Launch browser to display documentation and to support arbitrary OIDC flows
