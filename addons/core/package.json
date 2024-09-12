@@ -92,7 +92,7 @@
     "lodash": "^4.17.21"
   },
   "engines": {
-    "node": "20.* || 21.*"
+    "node": "20.* || 22.*"
   },
   "ember": {
     "edition": "octane"
