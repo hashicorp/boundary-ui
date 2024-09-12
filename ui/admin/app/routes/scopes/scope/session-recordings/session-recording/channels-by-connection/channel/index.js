@@ -25,13 +25,12 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       try {
         asciicast = await channelRecording.getAsciicast();
       } catch (e) {
-        // Alert user of any error messages.
-        e.errors?.forEach((error) => {
-          this.flashMessages.danger(error.detail, {
-            notificationType: 'error',
-            sticky: true,
-            dismiss: (flash) => flash.destroyMessage(),
-          });
+        // Alert user of error occurred during download.
+        const error = e.errors[0];
+        this.flashMessages.danger(error.detail, {
+          notificationType: 'error',
+          sticky: true,
+          dismiss: (flash) => flash.destroyMessage(),
         });
       }
     }
