@@ -32,6 +32,17 @@ module('Integration | Helper | time-remaining', function (hooks) {
     );
   });
 
+  test('it calculates the correct time remaining with more than a week', async function (assert) {
+    this.set('expirationTime', new Date(Date.now() + 1001 * 60 * 60 * 24 * 8));
+
+    await render(hbs`{{time-remaining this.expirationTime}}`);
+
+    assert.strictEqual(
+      this.element.textContent.trim(),
+      '1 wk, 1 day, 0:11:31 remaining',
+    );
+  });
+
   test('it handles negative time remaining', async function (assert) {
     this.set('expirationTime', new Date(Date.now() - 1000 * 60 * 60 * 24));
 

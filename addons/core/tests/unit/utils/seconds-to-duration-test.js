@@ -66,4 +66,14 @@ module('Unit | Utility | seconds-to-duration', function () {
     assert.strictEqual(result.days, 2);
     assert.strictEqual(result.weeks, 1);
   });
+
+  test('it handles negative values', function (assert) {
+    const result = secondsToDuration(-800000);
+
+    assert.strictEqual(result.seconds, 0);
+    assert.strictEqual(result.minutes, 0);
+    assert.strictEqual(result.hours, 0);
+    assert.strictEqual(result.days, 0);
+    assert.strictEqual(result.weeks, 0);
+  });
 });
