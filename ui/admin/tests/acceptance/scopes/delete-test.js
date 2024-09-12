@@ -22,6 +22,10 @@ module('Acceptance | scopes | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getScopeCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-projects-dropdown] div:first-child button';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-projects-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -64,7 +68,8 @@ module('Acceptance | scopes | delete', function (hooks) {
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
   });
@@ -80,9 +85,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(`[href="${urls.orgScopeEdit}"]`);
 
     assert.false(instances.scopes.org.authorized_actions.includes('delete'));
-    assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-      .doesNotExist();
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
   });
 
   test('can accept delete scope via dialog', async function (assert) {
@@ -92,7 +95,8 @@ module('Acceptance | scopes | delete', function (hooks) {
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
@@ -106,7 +110,8 @@ module('Acceptance | scopes | delete', function (hooks) {
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-secondary');
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
@@ -128,7 +133,8 @@ module('Acceptance | scopes | delete', function (hooks) {
     });
 
     await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('.rose-layout-page-actions .rose-dropdown-button-danger');
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
 
     assert.dom('.rose-notification-body').hasText('Oops.');
   });

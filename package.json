@@ -49,10 +49,8 @@
     "lint-staged": "^13.0.2"
   },
   "resolutions": {
-    "request": "^2.88.0",
     "loader-utils": "^2.0.4",
     "**/ember-electron/**/minimatch": "^3.0.5",
-    "**/babel-core/json5": "^2.2.2",
     "**/react-syntax-highlighter/refractor/prismjs": "^1.27.0",
     "**/nomnom/underscore": "^1.12.1",
     "**/remark-parse/trim": "^1.0.1",
@@ -72,7 +70,8 @@
     "**/ember-cli/**/ansi-html": "^0.0.9",
     "**/ember-cli/testem/fireworm/async": "^2.6.4",
     "**/desktop/@doyensec/electronegativity/winston/async": "^2.6.4",
-    "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0"
+    "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0",
+    "micromatch": "^4.0.8"
   },
   "config": {
     "commitizen": {

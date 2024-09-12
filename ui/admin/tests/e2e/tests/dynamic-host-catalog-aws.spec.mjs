@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, expect } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   deleteScopeCli,
@@ -20,17 +20,6 @@ import { TargetsPage } from '../pages/targets.mjs';
 
 test.use({ storageState: authenticatedState });
 
-test.beforeAll(async () => {
-  await checkEnv([
-    'E2E_AWS_ACCESS_KEY_ID',
-    'E2E_AWS_SECRET_ACCESS_KEY',
-    'E2E_AWS_HOST_SET_FILTER',
-    'E2E_AWS_HOST_SET_IPS',
-    'E2E_AWS_REGION',
-    'E2E_TARGET_PORT',
-  ]);
-});
-
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
@@ -38,6 +27,16 @@ test.beforeEach(async ({ page }) => {
 test.describe('AWS', async () => {
   test('Create an AWS Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
     page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    awsAccessKeyId,
+    awsHostSetFilter,
+    awsHostSetIps,
+    awsRegion,
+    awsSecretAccessKey,
+    targetPort,
   }) => {
     let orgName;
     try {
@@ -63,13 +62,13 @@ test.describe('AWS', async () => {
         .getByRole('group', { name: 'Provider' })
         .getByLabel('AWS')
         .click();
-      await page.getByLabel('AWS Region').fill(process.env.E2E_AWS_REGION);
+      await page.getByLabel('AWS Region').fill(awsRegion);
       await page
         .getByLabel('Access Key ID')
-        .fill(process.env.E2E_AWS_ACCESS_KEY_ID);
+        .fill(awsAccessKeyId);
       await page
         .getByLabel('Secret Access Key')
-        .fill(process.env.E2E_AWS_SECRET_ACCESS_KEY);
+        .fill(awsSecretAccessKey);
       await page
         .getByLabel('Disable credential rotation')
         .click({ force: true });
@@ -93,7 +92,7 @@ test.describe('AWS', async () => {
       await page
         .getByRole('group', { name: 'Filter' })
         .getByRole('textbox')
-        .fill(process.env.E2E_AWS_HOST_SET_FILTER);
+        .fill(awsHostSetFilter);
       await page
         .getByRole('group', { name: 'Filter' })
         .getByRole('button', { name: 'Add' })
@@ -119,7 +118,7 @@ test.describe('AWS', async () => {
       // Check number of hosts in host set
       let i = 0;
       let rowCount = 0;
-      let expectedHosts = JSON.parse(process.env.E2E_AWS_HOST_SET_IPS);
+      let expectedHosts = JSON.parse(awsHostSetIps);
       do {
         i = i + 1;
         // Getting the number of rows in the second rowgroup (the first rowgroup is the header row)
@@ -165,9 +164,7 @@ test.describe('AWS', async () => {
 
       // Create a target and add DHC host set as a host source
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(
-        process.env.E2E_TARGET_PORT,
-      );
+      const targetName = await targetsPage.createTarget(targetPort);
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add another host source
@@ -199,10 +196,10 @@ test.describe('AWS', async () => {
       await targetsPage.addHostSourceToTarget(newHostSetName);
     } finally {
       await authenticateBoundaryCli(
-        process.env.BOUNDARY_ADDR,
-        process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-        process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-        process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
       );
 
       if (orgName) {

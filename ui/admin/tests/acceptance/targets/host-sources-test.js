@@ -88,7 +88,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     // Generate resource counter
     getTargetHostSetCount = () =>
       this.server.schema.targets.first().hostSets.models.length;
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('visiting target host sources', async function (assert) {

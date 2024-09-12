@@ -276,6 +276,18 @@ export class TargetsPage extends BaseResourcePage {
     ).toBeVisible();
   }
 
+  async removeHostSourceFromTarget(hostSourceName) {
+    await this.page
+      .getByRole('link', { name: hostSourceName })
+      .locator('..')
+      .locator('..')
+      .getByRole('button', { name: 'Manage' })
+      .click();
+    await this.page.getByRole('button', { name: 'Remove' }).click();
+    await this.page.getByRole('button', { name: 'OK', exact: true }).click();
+    await this.dismissSuccessAlert();
+  }
+
   /**
    * Adds an egress worker filter to a target. Assume you have selected the desired target.
    * @param {string} filter Egress worker filter to be added to the target
@@ -440,5 +452,17 @@ export class TargetsPage extends BaseResourcePage {
     await expect(
       this.page.getByRole('listitem').getByText(storageBucketName),
     ).toBeVisible();
+  }
+
+  /**
+   * Detaches storage bucket from target. Assumes you have selected the desired target.
+   */
+  async detachStorageBucket() {
+    await this.page
+      .getByRole('link', { name: 'Session Recording settings' })
+      .click();
+    await this.page.getByLabel('Record sessions for this target').uncheck();
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
   }
 }

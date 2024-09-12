@@ -16,7 +16,7 @@ import {
 
 module('Integration | Component | session-recording/status', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   const BADGE_ICON_SELECTOR = '.hds-badge__icon svg';
   const BADGE_TEXT_SELECTOR = '.hds-badge__text';

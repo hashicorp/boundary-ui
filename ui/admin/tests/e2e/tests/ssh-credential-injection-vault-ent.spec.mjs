@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '@playwright/test';
+import { test } from '../playwright.config.mjs'
+import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
 import { authenticatedState } from '../global-setup.mjs';
-import { checkEnv } from '../helpers/general.mjs';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
@@ -32,15 +32,6 @@ const boundaryPolicyName = 'boundary-controller';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkEnv([
-    'VAULT_ADDR', // Address used by Vault CLI
-    'VAULT_TOKEN',
-    'E2E_VAULT_ADDR', // Address used by Boundary Server (could be different from VAULT_ADDR depending on network config (i.e. docker network))
-    'E2E_TARGET_ADDRESS',
-    'E2E_SSH_USER',
-    'E2E_SSH_KEY_PATH',
-  ]);
-
   await checkBoundaryCli();
   await checkVaultCli();
 });
@@ -55,6 +46,15 @@ test.beforeEach(async ({ page }) => {
 
 test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
   page,
+  baseURL,
+  adminAuthMethodId,
+  adminLoginName,
+  adminPassword,
+  sshUser,
+  sshKeyPath,
+  targetAddress,
+  targetPort,
+  vaultAddr,
 }) => {
   let orgId;
   let connect;
@@ -66,8 +66,8 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
       `vault kv put -mount ${secretsPath} ${secretName} ` +
-      ` username=${process.env.E2E_SSH_USER}` +
-      ` private_key=@${process.env.E2E_SSH_KEY_PATH}`,
+      ` username=${sshUser}` +
+      ` private_key=@${sshKeyPath}`,
     );
     execSync(
       `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
@@ -96,33 +96,24 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
 
     // Create target
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(
-      process.env.E2E_TARGET_ADDRESS,
-      process.env.E2E_TARGET_PORT,
-    );
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
 
     // Create credentials
     const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(
-      process.env.E2E_VAULT_ADDR,
-      clientToken,
-    );
+    await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
     const credentialLibraryName =
       await credentialStoresPage.createVaultGenericCredentialLibrary(
         `${secretsPath}/data/${secretName}`,
         'SSH Private Key',
       );
-    await targetsPage.addInjectedCredentialsToTarget(
-      targetName,
-      credentialLibraryName,
-    );
+    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialLibraryName);
 
     // Connect to target
     await authenticateBoundaryCli(
-      process.env.BOUNDARY_ADDR,
-      process.env.E2E_PASSWORD_AUTH_METHOD_ID,
-      process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
-      process.env.E2E_PASSWORD_ADMIN_PASSWORD,
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
     );
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);

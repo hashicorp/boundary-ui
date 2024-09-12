@@ -20,6 +20,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupMirage(hooks);
 
   let getHostCount;
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
 
   const instances = {
     scopes: {
@@ -101,7 +103,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.ok(find(`[href="${urls.newHost}"]`));
+    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {

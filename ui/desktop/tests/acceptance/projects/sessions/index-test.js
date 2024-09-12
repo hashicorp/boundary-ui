@@ -79,7 +79,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       scope: instances.scopes.global,
     });
 
-    authenticateSession({ user_id: instances.user.id });
+    authenticateSession({ user_id: instances.user.id, username: 'admin' });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', {
@@ -196,6 +196,12 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);

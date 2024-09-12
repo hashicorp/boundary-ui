@@ -79,7 +79,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   };
 
   hooks.beforeEach(function () {
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
     confirmService = this.owner.lookup('service:confirm');
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -107,6 +107,12 @@ module('Acceptance | roles | org-scope', function (hooks) {
   });
 
   test('visiting role scopes', async function (assert) {
+    // TODO: address issue with ICU-15021
+    // Failing due to a11y violation while in dark mode.
+    // Investigating issue with styles not properly
+    // being applied during test.
+    const session = this.owner.lookup('service:session');
+    session.set('data.theme', 'light');
     await visit(urls.role);
 
     await click(`[href="${urls.roleScopes}"]`);

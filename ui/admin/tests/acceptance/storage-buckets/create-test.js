@@ -47,7 +47,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new storage bucket aws plugin type with global scope', async function (assert) {

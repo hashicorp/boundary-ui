@@ -91,7 +91,7 @@ module(
       urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
       urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 
-      authenticateSession({});
+      authenticateSession({ username: 'admin' });
     });
 
     test('cannot enable session recording for a target without proper authorization', async function (assert) {

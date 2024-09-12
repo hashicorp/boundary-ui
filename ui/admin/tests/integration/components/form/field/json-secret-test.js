@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | form/field/json-secret', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   hooks.beforeEach(function () {
     this.model = {
