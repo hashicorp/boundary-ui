@@ -14,12 +14,12 @@ module.exports = {
    * if not, so we assume boundary is available within user $PATH.
    */
   path: () => {
-    const binName = isWindows() ? 'boundary.exe' : 'boundary';
+    const binaryName = isWindows() ? 'boundary.exe' : 'boundary';
     const builtInCliPath = isDev
-      ? path.resolve(__dirname, '..', '..', 'cli', binName)
-      : path.resolve(process.resourcesPath, 'cli', binName);
+      ? path.resolve(__dirname, '..', '..', 'cli', binaryName)
+      : path.resolve(process.resourcesPath, 'cli', binaryName);
     const isBuiltInCli = existsSync(builtInCliPath);
 
-    return isBuiltInCli ? builtInCliPath : binName;
+    return isBuiltInCli ? builtInCliPath : binaryName;
   },
 };
