@@ -5,7 +5,8 @@
 
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
-import DurationUnitFormat from 'intl-unofficial-duration-unit-format';
+import { DurationFormat } from '@formatjs/intl-durationformat';
+import { secondsToDuration } from 'core/utils/seconds-to-duration';
 
 export default class extends Helper {
   // =services
@@ -19,12 +20,10 @@ export default class extends Helper {
    */
   compute([durationInMs]) {
     const durationInSeconds = durationInMs / 1000;
-    const durationFormat = new DurationUnitFormat(this.intl.primaryLocale, {
+    const durationFormat = new DurationFormat(this.intl.primaryLocale, {
       style: 'narrow',
-      format: '{days} {hours} {minutes} {seconds}',
-      round: true,
     });
 
-    return durationFormat.format(durationInSeconds);
+    return durationFormat.format(secondsToDuration(durationInSeconds));
   }
 }
