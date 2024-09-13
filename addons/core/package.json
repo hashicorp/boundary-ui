@@ -31,6 +31,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@formatjs/intl-durationformat": "^0.2.4",
     "api": "*",
     "auth": "*",
     "ember-auto-import": "^2.6.3",
@@ -43,7 +44,6 @@
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
     "filesize": "^10.0.7",
-    "intl-unofficial-duration-unit-format": "^3.1.0",
     "sass": "^1.69.5"
   },
   "devDependencies": {
@@ -85,7 +85,7 @@
     "qunit-dom": "^2.0.0",
     "rose": "*",
     "sinon": "^18.0.0",
-    "webpack": "^5.78.0"
+    "webpack": "^5.94.0"
   },
   "peerDependencies": {
     "ember-source": "^4.0.0",

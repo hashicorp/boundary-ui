@@ -64,7 +64,7 @@
     "prettier": "^3.0.0",
     "qunit": "^2.19.4",
     "qunit-dom": "^2.0.0",
-    "webpack": "^5.78.0"
+    "webpack": "^5.94.0"
   },
   "engines": {
     "node": "18.* || 20.*"
