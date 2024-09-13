@@ -85,7 +85,7 @@
     "qunit-dom": "^2.0.0",
     "rose": "*",
     "sinon": "^18.0.0",
-    "webpack": "^5.78.0"
+    "webpack": "^5.94.0"
   },
   "peerDependencies": {
     "ember-source": "^4.0.0",
