@@ -386,7 +386,7 @@ session-recording:
         title: Channel Playback
       error:
         title: Playback error
-        description: This likely means the connected storage bucket is misconfigured or the file was deleted.
+        description: This may mean the connected storage bucket is misconfigured, the file was deleted, or integrity validation failed.
         link: Retrieving lost session recordings
       not-supported:
         title: Playback is not supported for this channel
