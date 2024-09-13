@@ -31,6 +31,7 @@
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
+    "@formatjs/intl-durationformat": "^0.2.4",
     "api": "*",
     "auth": "*",
     "ember-auto-import": "^2.6.3",
@@ -39,11 +40,10 @@
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-sass": "^11.0.1",
     "ember-feature-flags": "^6.0.0",
-    "ember-intl": "^6.0.0-beta.6",
+    "ember-intl": "^7.0.5",
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
     "filesize": "^10.0.7",
-    "intl-unofficial-duration-unit-format": "^3.1.0",
     "sass": "^1.69.5"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "concurrently": "^8.0.1",
     "doctoc": "^2.2.0",
     "ember-cli": "^4.12.2",
-    "ember-cli-dependency-checker": "^3.3.1",
+    "ember-cli-dependency-checker": "^3.3.2",
     "ember-cli-inject-live-reload": "^2.1.0",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",

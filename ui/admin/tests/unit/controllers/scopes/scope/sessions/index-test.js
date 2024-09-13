@@ -5,10 +5,12 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'admin/tests/helpers';
+import { setupIntl } from 'ember-intl/test-support';
 import { waitUntil } from '@ember/test-helpers';
 
 module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
   setupTest(hooks);
+  setupIntl(hooks, 'en-us');
 
   const session = {
     id: 's_123',
