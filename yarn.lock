@@ -3981,6 +3981,15 @@
     "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
+"@formatjs/intl-durationformat@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-durationformat/-/intl-durationformat-0.2.4.tgz#ac3c46a0b104ca8635afc9bf5aa8be2274ecd200"
+  integrity sha512-wtmC8eZeIkyQ8fVWdarAjNbqOkAq0wQ7GBoG6aBIK0+O9wU5gq9l0jOpKYymdQq4Hz3lZKpgXgXcZm+Z40w4Rw==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.0.0"
+    "@formatjs/intl-localematcher" "0.5.4"
+    tslib "^2.4.0"
+
 "@formatjs/intl-listformat@7.5.7":
   version "7.5.7"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-listformat/-/intl-listformat-7.5.7.tgz#125e05105fabd1ae5f11881d6ab74484f2098ee4"
@@ -12145,11 +12154,6 @@ intl-messageformat@10.5.14, intl-messageformat@^10.5.14:
     "@formatjs/fast-memoize" "2.2.0"
     "@formatjs/icu-messageformat-parser" "2.7.8"
     tslib "^2.4.0"
-
-intl-unofficial-duration-unit-format@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/intl-unofficial-duration-unit-format/-/intl-unofficial-duration-unit-format-3.1.0.tgz#994feefc8d903d9e5044dc7e4e1d38ebad59394b"
-  integrity sha512-yjvUDwV63zSGkbeUqpDRJmOgMQoJA8OFhNeo+1KY20q+lFCtcvRWszJNsq/ssrUJRy8g+Mt3BYNfwFvRRSAkow==
 
 invert-kv@^3.0.0:
   version "3.0.1"
