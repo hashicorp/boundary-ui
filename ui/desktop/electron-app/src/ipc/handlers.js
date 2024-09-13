@@ -44,9 +44,10 @@ handle('resetClusterUrl', async () => runtimeSettings.resetClusterUrl());
  * testing workflows).  Insecure URLs are allowed in dev mode.
  */
 handle('openExternal', async (href) => {
+  const localhostRegex = /^http:\/\/(localhost|127\.0\.0\.1):\d{1,5}(?:\/|$)/i;
+  const isLocalhost = localhostRegex.test(href);
   const isSecure = href.startsWith('https://');
-  const isLocalhost =
-    href.startsWith('http://localhost') || href.startsWith('http://127.0.0.1');
+
   if (isSecure || isLocalhost || isDev) {
     /**
      * Launch browser to display documentation and to support arbitrary OIDC flows
