@@ -4,6 +4,13 @@ const { isMac } = require('../src/helpers/platform.js');
 const fs = require('fs');
 const path = require('path');
 
+// When SETUP_CLI=false we do not download the CLI. If there is no cli directory present
+// we will not copy the CLI to the output binary.app
+let extraResource = [];
+if (fs.existsSync('./cli')) {
+  extraResource = ['./cli'];
+}
+
 module.exports = {
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
@@ -39,7 +46,7 @@ module.exports = {
         done();
       },
     ],
-    extraResource: ['./cli'],
+    extraResource,
   },
   makers: [
     {
