@@ -6,15 +6,20 @@
 const path = require('path');
 const { isWindows } = require('../helpers/platform.js');
 const isDev = require('electron-is-dev');
+const { existsSync } = require('node:fs');
 
 module.exports = {
-  // Returns boundary cli path
+  /**
+   * Returns Boundary CLI path if the CLI is built in or the Boundary binary name
+   * if not, so we assume boundary is available within user $PATH.
+   */
   path: () => {
-    const name = isWindows() ? 'boundary.exe' : 'boundary';
+    const binaryName = isWindows() ? 'boundary.exe' : 'boundary';
+    const builtInCliPath = isDev
+      ? path.resolve(__dirname, '..', '..', 'cli', binaryName)
+      : path.resolve(process.resourcesPath, 'cli', binaryName);
+    const isBuiltInCli = existsSync(builtInCliPath);
 
-    // The CLI will be located in a different location once packaged up in an ASAR
-    return isDev
-      ? path.resolve(__dirname, '..', '..', 'cli', name)
-      : path.resolve(process.resourcesPath, 'cli', name);
+    return isBuiltInCli ? builtInCliPath : binaryName;
   },
 };
