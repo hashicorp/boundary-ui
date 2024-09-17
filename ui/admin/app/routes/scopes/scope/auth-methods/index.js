@@ -79,6 +79,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
       totalItems = authMethods.meta?.totalItems;
       authMethodsExist = await this.getAuthMethodsExist(scope_id, totalItems);
     }
+    console.log({ authMethods, authMethodsExist, totalItems });
 
     return { authMethods, authMethodsExist, totalItems };
   }

@@ -9,7 +9,11 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import { authenticateSession } from 'ember-simple-auth/test-support';
+import {
+  currentSession,
+  authenticateSession,
+} from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_LDAP,
   TYPE_AUTH_METHOD_OIDC,
@@ -70,6 +74,49 @@ module('Acceptance | auth-methods | read', function (hooks) {
     urls.globalAuthMethods = `${urls.globalScope}/auth-methods`;
     urls.passwordAuthMethodOrg = `${urls.orgAuthMethods}/${instances.passwordAuthMethodOrg.id}`;
     urls.oidcAuthMethodGlobal = `${urls.globalAuthMethods}/${instances.oidcAuthMethodGlobal.id}`;
+  });
+
+  module('a11yAudit', function () {
+    test.each('auth-methods', ['light', 'dark'], async function (assert, data) {
+      assert.expect(0);
+      currentSession().set('data.theme', data);
+      await visit(urls.orgAuthMethods);
+      // open new dropdown
+      await click('.rose-layout-page-actions button');
+      await a11yAudit();
+      // open dropdown at last row
+      await click('td:last-child button');
+      await a11yAudit();
+      // open primary filter
+      await click('.hds-segmented-group div[name="primary"] div button');
+      await a11yAudit();
+      // check 'yes'
+      await click(
+        '.hds-segmented-group div[name="primary"] div:last-child input',
+      );
+      await a11yAudit();
+    });
+
+    test('API error', async function (assert) {
+      assert.expect(0);
+      this.server.get('/auth-methods', () => {
+        return new Response(
+          418,
+          {},
+          {
+            status: 418,
+            code: "I'm a teapot",
+            message: 'Ope, sorry about that!',
+          },
+        );
+      });
+
+      await visit(urls.globalAuthMethods);
+      await a11yAudit();
+
+      currentSession().set('data.theme', 'dark');
+      await a11yAudit();
+    });
   });
 
   test('visiting auth methods in org scope', async function (assert) {
