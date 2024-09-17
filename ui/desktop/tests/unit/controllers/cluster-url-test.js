@@ -6,10 +6,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIntl } from 'ember-intl/test-support';
 import WindowMockIPC from '../../helpers/window-mock-ipc';
 
 module('Unit | Controller | cluster-url', function (hooks) {
   setupTest(hooks);
+  setupIntl(hooks, 'en-us');
 
   let controller;
   let clusterUrl;
