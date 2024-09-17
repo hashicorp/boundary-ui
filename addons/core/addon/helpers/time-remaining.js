@@ -5,7 +5,8 @@
 
 import Helper from '@ember/component/helper';
 import { inject as service } from '@ember/service';
-import DurationUnitFormat from 'intl-unofficial-duration-unit-format';
+import { DurationFormat } from '@formatjs/intl-durationformat';
+import { secondsToDuration } from 'core/utils/seconds-to-duration';
 
 export default class extends Helper {
   // =services
@@ -29,14 +30,13 @@ export default class extends Helper {
       difference > 0 ? Math.floor(difference / 1000) : 0;
 
     // Format the duration
-    const duration = new DurationUnitFormat(this.intl.primaryLocale, {
-      style: 'timer',
-      format: `{hours}:{minutes}:{seconds} ${this.intl.t(
-        'resources.session.remaining',
-      )}`,
+    const duration = new DurationFormat(this.intl.primaryLocale, {
+      style: 'digital',
     });
+    const formattedTime = duration.format(
+      secondsToDuration(differenceInSeconds),
+    );
 
-    // Return the formatted duration
-    return duration.format(differenceInSeconds);
+    return `${formattedTime} ${this.intl.t('resources.session.remaining')}`;
   }
 }

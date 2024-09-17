@@ -5,6 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { setupIntl } from 'ember-intl/test-support';
 import { waitUntil } from '@ember/test-helpers';
 import {
   TYPE_CREDENTIAL_STORE_STATIC,
@@ -15,6 +16,7 @@ module(
   'Unit | Controller | scopes/scope/credential-stores/index',
   function (hooks) {
     setupTest(hooks);
+    setupIntl(hooks, 'en-us');
 
     let controller;
 

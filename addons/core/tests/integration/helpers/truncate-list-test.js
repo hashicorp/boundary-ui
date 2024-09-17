@@ -22,7 +22,7 @@ const listWithOneItem = [{ key: 1, value: 'boundary' }];
 const limit = 3;
 module('Integration | Helper | truncate-list', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders correctly when there is list with more than the limit specificed', async function (assert) {
     this.set('inputValue', list);

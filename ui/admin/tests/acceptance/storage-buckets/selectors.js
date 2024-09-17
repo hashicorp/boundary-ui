@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+export const STORAGE_BUCKET_TITLE = 'Storage Buckets';
 export const FIELD_SCOPE = '[name=scope]';
 export const FIELD_PLUGIN_TYPE = '[name=plugin_type]';
 export const FIELD_PLUGIN_TYPE_MINIO = '[value=minio]'; // Provider
@@ -30,3 +31,8 @@ export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFULL_VALUE = 'Saved successfully.';
+
+export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
+  'tbody tr:first-child td:last-child button';
+export const TABLE_FIRST_ROW_ACTION_FIRST_ITEM =
+  'tbody tr:first-child td:last-child ul li:first-child a';

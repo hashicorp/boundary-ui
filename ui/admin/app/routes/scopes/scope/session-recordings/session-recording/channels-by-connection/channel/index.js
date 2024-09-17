@@ -9,6 +9,7 @@ import { inject as service } from '@ember/service';
 export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConnectionChannelIndexRoute extends Route {
   // =services
   @service can;
+  @service flashMessages;
 
   // =methods
   /**
@@ -24,7 +25,13 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
       try {
         asciicast = await channelRecording.getAsciicast();
       } catch (e) {
-        // no op
+        // Alert user of error occurred during download.
+        const error = e.errors[0];
+        this.flashMessages.danger(error.detail, {
+          notificationType: 'error',
+          sticky: true,
+          dismiss: (flash) => flash.destroyMessage(),
+        });
       }
     }
 

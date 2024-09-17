@@ -11,7 +11,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 module('Integration | Component | hidden-secret', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
   setupMirage(hooks);
 
   const HIDDEN_SECRET_TOGGLE = '.hidden-secret > button:first-child';

@@ -16,7 +16,7 @@ module(
   function (hooks) {
     setupRenderingTest(hooks);
     setupBrowserFakes(hooks, { window: true });
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     hooks.beforeEach(function () {
       const featuresService = this.owner.lookup('service:features');

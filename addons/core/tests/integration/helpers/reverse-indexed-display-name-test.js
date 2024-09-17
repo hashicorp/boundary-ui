@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Helper | reverse-indexed-display-name', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders the resource name with its position in parent array reversed', async function (assert) {
     this.set('array', ['Boundary', 'is', 'cool!']);
