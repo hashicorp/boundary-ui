@@ -132,9 +132,10 @@ module(
 
       // if there was an error player will not render
       assert.dom('.session-recording-player').doesNotExist();
+      assert.dom('.hds-application-state__title').hasText('Playback error');
       assert
-        .dom('.hds-application-state__title')
-        .hasText("We can't play back this channel because the file is missing");
+        .dom('.rose-notification-body')
+        .includesText('rpc error: code = Unknown');
     });
 
     test('user can navigate back to session recording screen', async function (assert) {
@@ -146,7 +147,7 @@ module(
       assert.strictEqual(currentURL(), urls.sessionRecording);
     });
 
-    test('users can navigate to channel recording and incorrect url autocorrects', async function (assert) {
+    test('users can navigate to channel recording and incorrect url auto corrects', async function (assert) {
       featuresService.enable('ssh-session-recording');
       const sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
