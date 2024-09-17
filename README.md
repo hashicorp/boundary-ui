@@ -121,7 +121,7 @@ of README.
 
 See [Admin UI README](ui/admin/README.md#building-for-production) for more information on how to
 build the Admin UI for production.  Be sure to set build-related environment variables as
-necessary for your target environment, as described in the [Environment Variables](ui/admin/README.md#environment-variables) section of README.
+necessary for your target environment, as described in the [Environment Variables](ui/admin/README.md#environment-variables) section of README. Also the build requires a umask of 0022 or 0002 or directory permissions may cause problems.
 
 To quickly produce a production build of Admin UI, run from this folder:
 
