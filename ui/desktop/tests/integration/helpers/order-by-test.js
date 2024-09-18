@@ -26,7 +26,7 @@ module('Integration | Helper | order-by', function (hooks) {
       </ul>
     `);
 
-    assert.strictEqual(findAll('li').length, 3);
+    assert.dom('li').exists({ count: 3 });
     assert.strictEqual(
       this.element.textContent.replace(/\s+/g, ' ').trim(),
       'none username password',
