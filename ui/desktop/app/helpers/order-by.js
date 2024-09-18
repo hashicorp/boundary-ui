@@ -7,9 +7,9 @@ import { helper } from '@ember/component/helper';
 
 /**
  * This helper accepts an array of objects and orders them by a specified key.
- * @param {object[]} arr - The array of objects to be sorted
- * @param {string} keyToShowFirst - The key to be shown first in the sorting order
- * @returns {object[]} - The sorted array of objects
+ * @param {object[]} arr - The array of objects to be ordered
+ * @param {string} keyToShowFirst - The key to be shown first in the order
+ * @returns {object[]} - New order of array of objects
  */
 
 export default helper(function orderBy([arr, keyToShowFirst]) {
