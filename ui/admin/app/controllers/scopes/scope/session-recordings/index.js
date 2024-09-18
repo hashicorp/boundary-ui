@@ -4,8 +4,16 @@
  */
 
 import Controller from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
+  // =attributes
+
+  queryParams = ['page', 'pageSize'];
+
+  @tracked page = 1;
+  @tracked pageSize = 10;
+
   /**
    * Returns true if any session recordings exist
    * @type {boolean}
