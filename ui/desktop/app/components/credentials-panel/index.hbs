@@ -33,6 +33,7 @@
         as |CB|
       >
         <CB.Title>
+
           {{#if credential.source.name}}
             {{credential.source.name}}
           {{else}}
@@ -61,7 +62,7 @@
 
       <ul class='credential-secret'>
         {{#if credential.secrets}}
-          {{#each credential.secrets as |secret|}}
+          {{#each (order-by credential.secrets 'username') as |secret|}}
             <li class='secret-container'>
               <span class='secret-key'>{{secret.key}}</span>
               <HiddenSecret @secret={{secret.value}} />
