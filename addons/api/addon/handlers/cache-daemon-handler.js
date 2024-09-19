@@ -173,7 +173,8 @@ export default class CacheDaemonHandler {
           totalItems: results?.length ?? 0,
           isLoadIncomplete: cacheDaemonResults.incomplete ?? false,
           // Sometimes the refresh status returns an error status if it takes too long but it's still refreshing
-          isRefreshing: cacheDaemonResults.refresh_status !== 'not-refreshing',
+          isCacheRefreshing:
+            cacheDaemonResults.refresh_status !== 'not-refreshing',
         };
 
         return records;
