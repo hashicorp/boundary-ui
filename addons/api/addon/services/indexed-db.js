@@ -29,6 +29,8 @@ export const modelIndexes = {
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id, attributes.plugin.name',
   'auth-method':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
+  'session-recording':
+    '&id, attributes.created_time, attributes.type, attributes.state, attributes.start_time, attributes.end_time, attributes.duration, attributes.scope.scope_id, attributes.create_time_values.user, attributes.create_time_values.host, attributes.create_time_values.target',
 };
 
 export const formatDbName = (userId, clusterUrl) =>

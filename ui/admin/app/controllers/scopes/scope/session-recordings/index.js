@@ -5,28 +5,29 @@
 
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { debounce } from 'core/decorators/debounce';
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
   // =attributes
 
-  queryParams = ['page', 'pageSize'];
+  queryParams = ['search', 'page', 'pageSize'];
 
+  @tracked search = '';
   @tracked page = 1;
   @tracked pageSize = 10;
 
-  /**
-   * Returns true if any session recordings exist
-   * @type {boolean}
-   */
-  get hasSessionRecordings() {
-    return !!this.model?.sessionRecordings?.length;
-  }
+  // =actions
 
   /**
-   * Returns true if any storage buckets exist
-   * @type {boolean}
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
    */
-  get hasSessionRecordingsConfigured() {
-    return !!this.model?.storageBuckets?.length;
+  @action
+  @debounce(250)
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
   }
 }
