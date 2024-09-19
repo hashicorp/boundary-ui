@@ -5,8 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
-import { loading } from 'ember-loading';
 import config from '../config/environment';
 
 export default class ClusterUrlRoute extends Route {
@@ -47,37 +45,13 @@ export default class ClusterUrlRoute extends Route {
     super.setupController(...arguments);
     let clusterUrl = this.clusterUrl.rendererClusterUrl;
     // If clusterUrl is unset and this is a development environment,
-    // autoset the clusterUrl field of the UI for better DX.
+    // auto-set the clusterUrl field of the UI for better DX.
     // The controller URL is almost always the same as the current window when
     // using mocks, and this makes development more rapid since developers
     // do not need to fill a clusterUrl on every session.
     if (!clusterUrl && config.autoOrigin) {
       clusterUrl = this.window.location.origin;
     }
-    controller.setProperties({ clusterUrl: clusterUrl });
-  }
-
-  /**
-   * Points the API to the specified clusterUrl.  When the main process receives
-   * the clusterUrl, it is expected that the renderer will be restarted.
-   * @param {string} clusterUrl
-   */
-  @action
-  @loading
-  async setClusterUrl(clusterUrl) {
-    try {
-      await this.clusterUrl.setClusterUrl(clusterUrl);
-      this.router.replaceWith('index');
-    } catch (e) {
-      // If scopes do not load, we assume this is not a Boundary API
-      const errorMessage = this.intl.t(
-        'errors.cluster-url-verification-failed.description',
-      );
-      this.flashMessages.danger(errorMessage, {
-        notificationType: 'error',
-        sticky: true,
-        dismiss: (flash) => flash.destroyMessage(),
-      });
-    }
+    controller.setProperties({ clusterUrl });
   }
 }
