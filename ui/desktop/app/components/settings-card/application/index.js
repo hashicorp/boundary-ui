@@ -4,6 +4,7 @@
  */
 
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 
 const THEMES = [
   {
@@ -21,6 +22,9 @@ const THEMES = [
 ];
 
 export default class SettingsApplicationComponent extends Component {
+  // =services
+  @service session;
+
   /**
    * Returns available themes
    */

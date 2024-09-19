@@ -11,7 +11,7 @@ import { setupIntl } from 'ember-intl/test-support';
 
 module('Integration | Component | settings-card/logs', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   const SELECTED_OPTION = 'select option:checked';
   const COPY_BUTTON_TEXT = '.hds-copy-snippet__text';

@@ -14,7 +14,7 @@ const SERVER_URL = '[data-test-server-url]';
 
 module('Integration | Component | settings-card/server', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = 'hashicorp.cloud';
