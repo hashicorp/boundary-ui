@@ -18,9 +18,11 @@ module('Integration | Helper | order-by', function (hooks) {
       { key: 'none', value: 3 },
     ]);
 
+    this.set('customOrder', ['username', 'none', 'password']);
+
     await render(hbs`
       <ul>
-        {{#each (order-by this.inputValue 'none') as |secret|}}
+        {{#each (order-by this.inputValue this.customOrder) as |secret|}}
           <li>{{secret.key}}</li>
         {{/each}}
       </ul>
@@ -29,7 +31,7 @@ module('Integration | Helper | order-by', function (hooks) {
     assert.dom('li').exists({ count: 3 });
     assert.strictEqual(
       this.element.textContent.replace(/\s+/g, ' ').trim(),
-      'none username password',
+      'username none password',
     );
   });
 });
