@@ -95,6 +95,9 @@ module('Acceptance | auth-methods | read', function (hooks) {
         '.hds-segmented-group div[name="primary"] div:last-child input',
       );
       await a11yAudit();
+
+      // audit other changes like having a filter selected
+      // and a "no results" message
     });
 
     test('API error', async function (assert) {
@@ -119,14 +122,34 @@ module('Acceptance | auth-methods | read', function (hooks) {
     });
   });
 
-  test('visiting auth methods in org scope', async function (assert) {
-    await visit(urls.orgScope);
+  test.each(
+    'visiting auth methods in org scope',
+    ['light', 'dark'],
+    async function (assert, data) {
+      currentSession().set('data.theme', data);
+      await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgAuthMethods}"]`);
-    await a11yAudit();
+      await click(`[href="${urls.orgAuthMethods}"]`);
 
-    assert.strictEqual(currentURL(), urls.orgAuthMethods);
-  });
+      await click('.rose-layout-page-actions button');
+      await a11yAudit();
+      // open dropdown at last row
+      await click('td:last-child button');
+      await a11yAudit();
+      // open primary filter
+      await click('.hds-segmented-group div[name="primary"] div button');
+      await a11yAudit();
+      // check 'yes'
+      await click(
+        '.hds-segmented-group div[name="primary"] div:last-child input',
+      );
+      await a11yAudit();
+      // audit other changes like having a filter selected
+      // and a "no results" message
+
+      assert.strictEqual(currentURL(), urls.orgAuthMethods);
+    },
+  );
 
   test('visiting auth methods in global scope', async function (assert) {
     await visit(urls.globalScope);
