@@ -12,6 +12,7 @@ const { autoUpdater, dialog, app } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
 const log = require('electron-log/main');
+const boundaryCli = require('../cli/index.js');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -159,6 +160,9 @@ const displayDownloadPrompt = (latestVersion, url) => {
  **/
 module.exports = {
   run: async ({ suppressNoUpdatePrompt } = {}) => {
+    console.log('CARLOS!!');
+    console.log(boundaryCli.exists());
+    boundaryCli.carlosTest();
     /**
      * Ignore app updater prompts.
      */
