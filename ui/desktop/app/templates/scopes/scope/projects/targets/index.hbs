@@ -62,23 +62,21 @@
         </Dropdown>
       </S.Generic>
     </Hds::SegmentedGroup>
-    <span>
+    {{#if @model.isCacheRefreshing}}
+      <ToolbarRefresher @onClick={{route-action 'refreshAll'}}>
+        <Hds::TooltipButton
+          @text={{t 'states.incomplete-loading.refreshing.tooltip'}}
+        >
+          <Hds::Text::Body @tag='p' @color='faint'>
+            {{t 'states.incomplete-loading.refreshing.description'}}
+          </Hds::Text::Body>
+        </Hds::TooltipButton>
+      </ToolbarRefresher>
+    {{else}}
       <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
-    </span>
+    {{/if}}
   </div>
   <FilterTags @filters={{this.filters}} />
-  {{#if @model.isLoadIncomplete}}
-    <Hds::Alert @color='warning' @type='compact' as |A|>
-      <A.Description>{{t 'states.incomplete-loading.limit'}}</A.Description>
-    </Hds::Alert>
-  {{/if}}
-  {{#if @model.isRefreshing}}
-    <Hds::Alert @color='warning' @type='compact' as |A|>
-      <A.Description>{{t
-          'states.incomplete-loading.refreshing'
-        }}</A.Description>
-    </Hds::Alert>
-  {{/if}}
 {{/if}}
 
 {{#if @model.targets}}
@@ -174,6 +172,14 @@
       </B.Tr>
     </:body>
   </Hds::Table>
+  {{#if @model.isLoadIncomplete}}
+    <Hds::Alert @type='compact' as |A|>
+      <A.Description>{{t
+          'states.incomplete-loading.limit'
+          resultCount=@model.totalItems
+        }}</A.Description>
+    </Hds::Alert>
+  {{/if}}
   <Rose::Pagination
     @totalItems={{@model.totalItems}}
     @currentPage={{this.page}}

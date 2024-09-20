@@ -56,9 +56,7 @@
         </Dropdown>
       </S.Generic>
     </Hds::SegmentedGroup>
-    <span>
-      <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
-    </span>
+    <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
   </div>
 
   <FilterTags @filters={{this.filters}} />

@@ -78,7 +78,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel] }> }
    * @return {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel],
-   * isCacheDaemonRunning: boolean, isLoadIncomplete: boolean, isRefreshing: boolean}>}
+   * isCacheDaemonRunning: boolean, isLoadIncomplete: boolean, isCacheRefreshing: boolean}>}
    */
   async model({ search, scopes, availableSessions, types, page, pageSize }) {
     const isCacheRunningPromise = this.ipc.invoke('isCacheDaemonRunning');
@@ -113,7 +113,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       query.filter = orgFilter;
     }
     let targets = await this.store.query('target', query);
-    const { totalItems, isLoadIncomplete, isRefreshing } = targets.meta;
+    const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
     // Filter out targets to which users do not have the connect ability
     targets = targets.filter((target) =>
       this.can.can('connect target', target),
@@ -148,7 +148,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       projects,
       totalItems,
       isLoadIncomplete,
-      isRefreshing,
+      isCacheRefreshing,
       isCacheDaemonRunning: await isCacheRunningPromise,
     };
   }
