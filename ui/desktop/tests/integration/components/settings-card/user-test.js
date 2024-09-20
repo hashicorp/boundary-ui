@@ -23,7 +23,7 @@ const AUTHENTICATION_BADGE = '.hds-badge__text';
 
 module('Integration | Component | settings-card/user', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   test('it renders password correctly', async function (assert) {
     this.owner.register(

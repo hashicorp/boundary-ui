@@ -17,7 +17,7 @@ const LAST_ERROR_MESSAGE = '.hds-reveal__content > p:last-child';
 
 module('Integration | Component | settings-card/application', function (hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'en-us');
 
   let model;
 

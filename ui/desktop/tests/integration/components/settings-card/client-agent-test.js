@@ -20,7 +20,7 @@ module(
   'Integration | Component | settings-card/client-agent',
   function (hooks) {
     setupRenderingTest(hooks);
-    setupIntl(hooks);
+    setupIntl(hooks, 'en-us');
 
     test('it renders running badge and pause button', async function (assert) {
       this.set('model', {
