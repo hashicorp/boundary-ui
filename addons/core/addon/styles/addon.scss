@@ -39,18 +39,6 @@
   .search-filtering-toolbar {
     display: flex;
 
-    // TODO: Remove these copied styles by migrating to HDS for the toolbar refresher component.
-    //  The original styles assumed we were using the old toolbar component under a "rose-toolbar" class.
-    .rose-button-inline-link-action {
-      font-size: 0.8125rem;
-      line-height: 1.8461538462;
-      font-weight: 600;
-      color: var(--stark);
-      display: inline-block;
-      vertical-align: middle;
-      padding: 0.375rem 1rem;
-    }
-
     > :last-child {
       margin-left: auto;
     }
@@ -62,5 +50,17 @@
   .copyable-content a,
   button {
     color: var(--token-color-foreground-primary);
+  }
+}
+
+.toolbar-refresher {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  gap: 1rem;
+
+  > .hds-text {
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
