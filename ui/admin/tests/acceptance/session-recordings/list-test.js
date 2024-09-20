@@ -4,11 +4,19 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  waitUntil,
+  findAll,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,6 +27,8 @@ module('Acceptance | session recordings | list', function (hooks) {
 
   // Selectors
   const SESSION_RECORDING_TITLE = 'Session Recordings';
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
+  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-recording-results]';
 
   // Instances
   const instances = {
@@ -26,7 +36,10 @@ module('Acceptance | session recordings | list', function (hooks) {
       global: null,
       org: null,
     },
+    target: null,
+    user: null,
     sessionRecording: null,
+    sessionRecording2: null,
   };
 
   // Urls
@@ -34,6 +47,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     globalScope: null,
     sessionRecordings: null,
     sessionRecording: null,
+    sessionRecording2: null,
   };
 
   hooks.beforeEach(function () {
@@ -42,17 +56,28 @@ module('Acceptance | session recordings | list', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    instances.scopes.targetModel = this.server.create('target', {
+    instances.target = this.server.create('target', {
       scope: instances.scopes.global,
     });
+    instances.user = this.server.create('user');
     instances.sessionRecording = this.server.create('session-recording', {
+      scope: instances.scopes.global,
       create_time_values: {
-        target: instances.scopes.targetModel.attrs,
+        target: instances.target.attrs,
+        user: instances.user.attrs,
+      },
+    });
+    instances.sessionRecording2 = this.server.create('session-recording', {
+      scope: instances.scopes.global,
+      create_time_values: {
+        target: instances.target.attrs,
+        user: instances.user.attrs,
       },
     });
     urls.globalScope = `/scopes/global`;
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
-    urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}`;
+    urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
+    urls.sessionRecording2 = `${urls.sessionRecordings}/${instances.sessionRecording2.id}/channels-by-connection`;
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-session-recording');
@@ -90,5 +115,34 @@ module('Acceptance | session recordings | list', function (hooks) {
     );
     assert.dom('[title="General"]').doesNotIncludeText(SESSION_RECORDING_TITLE);
     assert.dom(`[href="${urls.sessionRecordings}"]`).doesNotExist();
+  });
+
+  test('user can search for a session recording by id', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, instances.sessionRecording.id);
+    await waitUntil(
+      () => findAll(commonSelectors.HREF(urls.sessionRecording2)).length === 0,
+    );
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).doesNotExist();
+  });
+
+  test('user can search for a session recording by id and get no results', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, 'sr_404');
+    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).doesNotExist();
+    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });
