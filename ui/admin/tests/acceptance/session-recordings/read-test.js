@@ -9,10 +9,12 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 module('Acceptance | session-recordings | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
 
@@ -28,6 +30,8 @@ module('Acceptance | session-recordings | read', function (hooks) {
       global: null,
       org: null,
     },
+    target: null,
+    user: null,
     sessionRecording: null,
   };
   // Urls
@@ -47,10 +51,12 @@ module('Acceptance | session-recordings | read', function (hooks) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.global,
     });
+    instances.user = this.server.create('user');
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
       create_time_values: {
         target: instances.target.attrs,
+        user: instances.user.attrs,
       },
     });
     instances.connectionRecording = this.server.create('connection-recording', {

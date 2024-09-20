@@ -11,6 +11,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   @service store;
   @service can;
   @service router;
+  @service flashMessages;
+  @service intl;
 
   // =methods
   /**
@@ -35,19 +37,30 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   }
 
   /**
-   * Redirects to route with correct session-recording id if incorrect.
+   * Redirects to route with correct session-recording id if incorrect. If
+   * the channelRecording is undefined we redirect the user back to
+   * the session recordings list page.
    * @param {channelRecording: Object, sessionRecording: Object, storageBucket: Object} model
    */
   redirect(model) {
     const { channelRecording, sessionRecording } = model;
-    const session_recording_id =
-      channelRecording.connection_recording.session_recording.id;
-    if (session_recording_id !== sessionRecording.id) {
-      this.router.replaceWith(
-        'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
-        session_recording_id,
-        channelRecording.id,
-      );
+    if (channelRecording) {
+      const session_recording_id =
+        channelRecording.connection_recording.session_recording.id;
+      if (session_recording_id !== sessionRecording.id) {
+        this.router.replaceWith(
+          'scopes.scope.session-recordings.session-recording.channels-by-connection.channel',
+          session_recording_id,
+          channelRecording.id,
+        );
+      }
+    } else {
+      this.flashMessages.danger(this.intl.t('errors.404.title'), {
+        notificationType: 'error',
+        sticky: true,
+        dismiss: (flash) => flash.destroyMessage(),
+      });
+      this.router.transitionTo('scopes.scope.session-recordings');
     }
   }
 }
