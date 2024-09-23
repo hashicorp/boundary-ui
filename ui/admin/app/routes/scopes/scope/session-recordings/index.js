@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =services
@@ -19,6 +20,10 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    users: {
+      refreshModel: true,
+      replace: true,
+    },
     page: {
       refreshModel: true,
     },
@@ -27,20 +32,26 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     },
   };
 
+  allSessionRecordings;
+
   /**
    * Load all session recordings.
    * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], sessionRecordingsExist: boolean, storageBucketsExist: boolean }>}
    */
-  async model({ search, page, pageSize }) {
+  async model({ search, users, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-    };
     let sessionRecordings;
     let totalItems = 0;
     let sessionRecordingsExist = false;
     let storageBucketsExist = false;
+    const filters = {
+      scope_id: [{ equals: scope_id }],
+      'create_time_values.user.id': [],
+    };
+    users.forEach((user) => {
+      filters['create_time_values.user.id'].push({ equals: user });
+    });
 
     if (
       this.can.can('list scope', scope, {
@@ -59,41 +70,37 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         queryOptions,
       );
       totalItems = sessionRecordings.meta?.totalItems;
-      sessionRecordingsExist = await this.getSessionRecordingsExist(
-        scope_id,
-        totalItems,
-      );
+      // Query all session reocordings for filtering values if entering route for the first time
+      if (!this.allSessionRecordings) {
+        await this.getAllSessionRecordings(scope_id);
+      }
+      sessionRecordingsExist = !!this.allSessionRecordings.length;
+
       storageBucketsExist = await this.getStorageBucketsExist(scope_id);
 
       return {
         sessionRecordings,
         sessionRecordingsExist,
+        allSessionRecordings: this.allSessionRecordings,
         totalItems,
         storageBucketsExist,
       };
     }
   }
 
-  async getSessionRecordingsExist(scope_id, totalItems) {
-    if (totalItems > 0) {
-      return true;
-    }
+  async getAllSessionRecordings(scope_id) {
     const options = { pushToStore: false, peekIndexedDB: true };
-    const sessionRecording = await this.store.query(
+    this.allSessionRecordings = await this.store.query(
       'session-recording',
       {
-        scope_id,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],
           },
         },
-        page: 1,
-        pageSize: 1,
       },
       options,
     );
-    return sessionRecording.length > 0;
   }
 
   /**
@@ -109,10 +116,24 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         scope_id,
         recursive: true,
       });
-      return storageBuckets.length > 0;
+      return !!storageBuckets.length;
     } catch (e) {
       // no op
       return false;
     }
+  }
+
+  // =actions
+
+  /**
+   * refreshes all session recording route data.
+   */
+  @action
+  async refreshAll() {
+    const scope = this.modelFor('scopes.scope');
+
+    await this.getAllSessionRecordings(scope.id);
+
+    return super.refresh(...arguments);
   }
 }

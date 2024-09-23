@@ -29,6 +29,10 @@ module('Acceptance | session recordings | list', function (hooks) {
   const SESSION_RECORDING_TITLE = 'Session Recordings';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-recording-results]';
+  const FILTER_TOGGLE_SELECTOR = (name) =>
+    `[data-test-session-recordings-bar] div[name="${name}"] button`;
+  const FILTER_APPLY_BUTTON = (name) =>
+    `[data-test-session-recordings-bar] div[name="${name}"] div div:last-child button[type="button"]`;
 
   // Instances
   const instances = {
@@ -38,6 +42,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     },
     target: null,
     user: null,
+    user2: null,
     sessionRecording: null,
     sessionRecording2: null,
   };
@@ -60,6 +65,7 @@ module('Acceptance | session recordings | list', function (hooks) {
       scope: instances.scopes.global,
     });
     instances.user = this.server.create('user');
+    instances.user2 = this.server.create('user');
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
       create_time_values: {
@@ -71,7 +77,7 @@ module('Acceptance | session recordings | list', function (hooks) {
       scope: instances.scopes.global,
       create_time_values: {
         target: instances.target.attrs,
-        user: instances.user.attrs,
+        user: instances.user2.attrs,
       },
     });
     urls.globalScope = `/scopes/global`;
@@ -144,5 +150,17 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.sessionRecording)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.sessionRecording2)).doesNotExist();
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('user can filter session recordings by user', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+
+    await click(FILTER_TOGGLE_SELECTOR('user'));
+    await click(`input[value="${instances.user.id}"]`);
+    await click(FILTER_APPLY_BUTTON('user'));
+
+    assert.dom('tbody tr').exists({ count: 1 });
   });
 });
