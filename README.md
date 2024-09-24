@@ -144,9 +144,9 @@ Assets are saved to `ui/admin/dist/`.
 
 ### Building Desktop UI for Production
 
-See ui/desktop/README.md Building for Production for more information on how to
+See [Desktop UI README](ui/desktop/README.md#building-for-production) for more information on how to
 build the Desktop UI.  Be sure to set build-related environment variables as
-necessary for your target environment, as described in the Desktop UI readme.
+necessary for your target environment, as described in the [Environment Variables](ui/desktop/README.md#environment-variables-prod) section of README.
 
 To quickly produce a production build of Desktop UI, run from this folder:
 
