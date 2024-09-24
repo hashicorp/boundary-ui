@@ -6,12 +6,14 @@
 import { test } from '../playwright.config.mjs'
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
+import { nanoid } from 'nanoid';
+import { readFile } from 'fs/promises';
 
 import { authenticatedState } from '../global-setup.mjs';
 import {
   authenticateBoundaryCli,
+  authorizeSessionByTargetIdCli,
   checkBoundaryCli,
-  connectSshToTarget,
   deleteScopeCli,
   getOrgIdFromNameCli,
   getProjectIdFromNameCli,
@@ -21,15 +23,12 @@ import { checkVaultCli } from '../helpers/vault-cli.mjs';
 import { CredentialStoresPage } from '../pages/credential-stores.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { ProjectsPage } from '../pages/projects.mjs';
-import { SessionsPage } from '../pages/sessions.mjs';
 import { TargetsPage } from '../pages/targets.mjs';
 
-const sshPolicyName = 'ssh-policy';
-const boundaryPolicyName = 'boundary-controller';
-// This must match the secret path in ssh-policy.hcl
 const secretsPath = 'e2e_secrets';
-// This must match the secret name in ssh-policy.hcl
-const secretName = 'boundary-client';
+const secretName = 'cred';
+const secretPolicyName = 'kv-policy';
+const boundaryPolicyName = 'boundary-controller';
 
 test.use({ storageState: authenticatedState });
 
@@ -38,56 +37,46 @@ test.beforeAll(async () => {
   await checkVaultCli();
 });
 
-test.beforeEach(async () => {
+test.beforeEach(async ({ page }) => {
+  execSync(`vault policy delete ${secretPolicyName}`);
+  execSync(`vault policy delete ${boundaryPolicyName}`);
   execSync(`vault secrets disable ${secretsPath}`);
+
+  await page.goto('/');
 });
 
-test('SSH Certificate Injection @ent @docker', async ({
+test('Vault Credential Store (User & Key Pair) @ent @aws @docker', async ({
   page,
   baseURL,
   adminAuthMethodId,
   adminLoginName,
   adminPassword,
   sshUser,
-  sshCaKey,
-  sshCaKeyPublic,
+  sshKeyPath,
   targetAddress,
   targetPort,
   vaultAddr,
 }) => {
-  await page.goto('/');
   let orgId;
-  let connect;
   try {
-    // Set up vault
     execSync(
       `vault policy write ${boundaryPolicyName} ./tests/e2e/tests/fixtures/boundary-controller-policy.hcl`,
     );
-    execSync(`vault secrets enable -path=${secretsPath} ssh`);
+    execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
-      `vault policy write ${sshPolicyName} ./tests/e2e/tests/fixtures/ssh-policy.hcl`,
+      `vault kv put -mount ${secretsPath} ${secretName} ` +
+      ` username=${sshUser}` +
+      ` private_key=@${sshKeyPath}`,
     );
     execSync(
-      `vault write ${secretsPath}/roles/${secretName} @./tests/e2e/tests/fixtures/ssh-certificate-injection-role.json`,
+      `vault policy write ${secretPolicyName} ./tests/e2e/tests/fixtures/kv-policy.hcl`,
     );
-
-    const private_key = atob(sshCaKey);
-    const public_key = atob(sshCaKeyPublic);
-
-    execSync(
-      `vault write ${secretsPath}/config/ca` +
-      ` private_key="${private_key}"` +
-      ` public_key="${public_key}"` +
-      ` generate_signing_key=false`,
-      ` format=json`,
-    );
-
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
         ` -no-default-policy=true` +
         ` -policy=${boundaryPolicyName}` +
-        ` -policy=${sshPolicyName}` +
+        ` -policy=${secretPolicyName}` +
         ` -orphan=true` +
         ` -period=20m` +
         ` -renewable=true` +
@@ -96,32 +85,23 @@ test('SSH Certificate Injection @ent @docker', async ({
     );
     const clientToken = vaultToken.auth.client_token;
 
-    // Create org
     const orgsPage = new OrgsPage(page);
     const orgName = await orgsPage.createOrg();
-
-    // Create project
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
-
-    // Create target
     const targetsPage = new TargetsPage(page);
     const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
-
-    // Create credentials
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
-    const credentialLibraryName =
-      await credentialStoresPage.createVaultSshCertificateCredentialLibraryEnt(
-        `${secretsPath}/issue/${secretName}`,
-        sshUser,
-      );
+    const credentialLibraryName = await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
+      `${secretsPath}/data/${secretName}`,
+      'SSH Private Key',
+    )
     await targetsPage.addInjectedCredentialsToTarget(
       targetName,
       credentialLibraryName,
     );
 
-    // Connect to target
     await authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
@@ -131,25 +111,10 @@ test('SSH Certificate Injection @ent @docker', async ({
     orgId = await getOrgIdFromNameCli(orgName);
     const projectId = await getProjectIdFromNameCli(orgId, projectName);
     const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
-    const sessionsPage = new SessionsPage(page);
-    await sessionsPage.waitForSessionToBeVisible(targetName);
-    await page
-      .getByRole('cell', { name: targetName })
-      .locator('..')
-      .getByRole('button', { name: 'Cancel' })
-      .click();
+    await authorizeSessionByTargetIdCli(targetId);
   } finally {
     if (orgId) {
       await deleteScopeCli(orgId);
     }
-    // End `boundary connect` process
-    if (connect) {
-      connect.kill('SIGTERM');
-    }
-
-    execSync(`vault secrets disable ${secretsPath}`);
-    execSync(`vault policy delete ${sshPolicyName}`);
-    execSync(`vault policy delete ${boundaryPolicyName}`);
   }
 });

@@ -102,7 +102,7 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
     const credentialLibraryName =
-      await credentialStoresPage.createVaultGenericCredentialLibrary(
+      await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
         `${secretsPath}/data/${secretName}`,
         'SSH Private Key',
       );

@@ -187,10 +187,11 @@ export class CredentialStoresPage extends BaseResourcePage {
    * Creates a vault-generic credential library. Assumes you have selected
    * the desired credential store.
    * @param {string} vaultPath path to secret in vault
-   * @param {string} credentialType type of credential for credential injection
+   * @param {string} credentialType type of credential for credential injection.
+   * Can be set to null if injection is not used
    * @returns Name of the credential library
    */
-  async createVaultGenericCredentialLibrary(vaultPath, credentialType) {
+  async createVaultGenericCredentialLibraryEnt(vaultPath, credentialType) {
     const credentialLibraryName = 'Credential Library ' + nanoid();
     await this.page.getByRole('link', { name: 'Credential Libraries' }).click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -205,9 +206,12 @@ export class CredentialStoresPage extends BaseResourcePage {
       .getByLabel('Generic Secrets')
       .click();
     await this.page.getByLabel('Vault Path').fill(vaultPath);
-    await this.page
-      .getByRole('combobox', { name: 'Credential Type' })
-      .selectOption(credentialType);
+
+    if (credentialType) {
+      await this.page
+        .getByRole('combobox', { name: 'Credential Type' })
+        .selectOption(credentialType);
+    }
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();
@@ -222,7 +226,7 @@ export class CredentialStoresPage extends BaseResourcePage {
    * @param {string} username username for the credential
    * @returns Name of the credential library
    */
-  async createVaultSshCertificateCredentialLibrary(vaultPath, username) {
+  async createVaultSshCertificateCredentialLibraryEnt(vaultPath, username) {
     const credentialLibraryName = 'Credential Library ' + nanoid();
 
     await this.page.getByRole('link', { name: 'Credential Libraries' }).click();
