@@ -33,10 +33,10 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @param {AliasModel} alias
    */
   @action
-  async cancel(alias) {
+  cancel(alias) {
     const { isNew } = alias;
     alias.rollbackAttributes();
-    if (isNew) await this.router.transitionTo('scopes.scope.aliases');
+    if (isNew) this.router.transitionTo('scopes.scope.aliases');
   }
 
   /**
