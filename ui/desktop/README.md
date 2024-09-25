@@ -108,8 +108,8 @@ These environment variables may be used to customized the build.
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables-prod). To build this UI for
-production, run the following commands from this folder:
+for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in. 
+To build this UI for production, run the following commands from this folder:
 
 ```bash
 yarn install

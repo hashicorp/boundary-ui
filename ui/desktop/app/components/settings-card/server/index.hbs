@@ -1,0 +1,32 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<SettingsCard
+  @header={{t 'settings.server.title'}}
+  @icon='cloud'
+  @description={{t 'settings.server.description'}}
+>
+  <:body>
+    <div>
+      <Hds::Text::Display>
+        {{t 'settings.provider'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium' data-test-server-name>
+        {{this.providerName}}
+      </Hds::Text::Body>
+    </div>
+    <div class='large-column'>
+      <Hds::Text::Display>
+        {{t 'form.cluster-url.label'}}
+      </Hds::Text::Display>
+      <Hds::Copy::Snippet
+        data-test-server-url
+        @textToCopy={{@model.serverInformation}}
+        @isFullWidth={{true}}
+      />
+    </div>
+  </:body>
+
+</SettingsCard>

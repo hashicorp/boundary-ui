@@ -662,3 +662,44 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
   gap: 0.5rem;
   width: inherit;
 }
+
+// Settings
+.settings-card {
+  .hds-card__container {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .header-and-icon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    ~ * {
+      padding-left: 2.8rem;
+    }
+  }
+
+  .action {
+    margin-left: auto;
+  }
+
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+
+    > div {
+      flex-basis: 30%;
+    }
+
+    .large-column {
+      flex-grow: 1;
+    }
+
+    .hds-alert {
+      flex-basis: 100%;
+    }
+  }
+}
