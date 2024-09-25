@@ -186,7 +186,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
 
   test('visiting empty sessions', async function (assert) {
     this.server.db.sessions.remove();
-    this.stubCacheDaemonSearch('sessions', 'sessions', 'targets');
+    this.stubCacheDaemonSearch('sessions', 'sessions');
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
@@ -371,14 +371,14 @@ module('Acceptance | projects | sessions | index', function (hooks) {
       'sessions',
       'sessions',
       'targets',
-      'aliases',
-      'targets',
       'sessions',
       'targets',
+      'aliases',
       {
         resource: 'sessions',
         func: () => [instances.session2],
       },
+      'targets',
     );
     await visit(urls.globalSessions);
 

@@ -49,8 +49,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     },
   };
 
-  allTargets;
-
   // =methods
 
   /**
@@ -79,8 +77,12 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * projects for filtering options.
    *
    * @returns {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel], allTargets: [TargetModel] }> }
+   * @return {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel],
+   * isCacheDaemonRunning: boolean, isLoadIncomplete: boolean, isCacheRefreshing: boolean}>}
    */
   async model({ search, scopes, availableSessions, types, page, pageSize }) {
+    const isCacheRunningPromise = this.ipc.invoke('isCacheDaemonRunning');
+
     const orgScope = this.modelFor('scopes.scope');
     const projects = this.modelFor('scopes.scope.projects');
 
@@ -96,15 +98,7 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       filters.type.push({ equals: type });
     });
 
-    const aliasPromise = this.store.query('alias', {
-      scope_id: 'global',
-      force_refresh: true,
-    });
-    const allTargetsPromise = !this.allTargets?.length
-      ? this.makeAllTargetsQuery(orgScope, orgFilter)
-      : Promise.resolve();
-
-    const sessions = await this.makeSessionQuery(orgScope, scopes, orgFilter);
+    const sessions = await this.getSessions(orgScope, scopes, orgFilter);
     this.addActiveSessionFilters(filters, availableSessions, sessions);
 
     const query = {
@@ -119,20 +113,28 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
       query.filter = orgFilter;
     }
     let targets = await this.store.query('target', query);
-    const totalItems = targets.meta?.totalItems;
+    const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
     // Filter out targets to which users do not have the connect ability
     targets = targets.filter((target) =>
       this.can.can('connect target', target),
     );
 
-    const allTargets = await allTargetsPromise;
-    if (!this.allTargets?.length) {
-      // Filter out targets to which users do not have the connect ability
-      this.allTargets = allTargets.filter((target) =>
-        target.authorized_actions.includes('authorize-session'),
-      );
-    }
+    const aliasPromise = this.store.query('alias', {
+      scope_id: 'global',
+      force_refresh: true,
+      query: {
+        filters: {
+          destination_id: {
+            logicalOperator: 'or',
+            values: targets.map((target) => ({
+              equals: target.id,
+            })),
+          },
+        },
+      },
+    });
 
+    // Load the aliases for the targets on the current page
     try {
       await aliasPromise;
     } catch (e) {
@@ -144,13 +146,14 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
     return {
       targets,
       projects,
-      allTargets: this.allTargets,
       totalItems,
-      isCacheDaemonRunning: await this.ipc.invoke('isCacheDaemonRunning'),
+      isLoadIncomplete,
+      isCacheRefreshing,
+      isCacheDaemonRunning: await isCacheRunningPromise,
     };
   }
 
-  async makeSessionQuery(orgScope, scopes, orgFilter) {
+  async getSessions(orgScope, scopes, orgFilter) {
     // Retrieve all sessions so that the session and activeSessions getters
     // in the target model always retrieve the most up-to-date sessions.
     const sessionQuery = {
@@ -166,32 +169,12 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
         },
       },
       force_refresh: true,
+      max_result_set_size: -1,
     };
     if (orgScope.isOrg && scopes.length === 0) {
       sessionQuery.filter = orgFilter;
     }
     return this.store.query('session', sessionQuery);
-  }
-
-  /**
-   * Get all the targets but only load them once when entering the route. Ideally we would lazy load it when needed
-   * but this can be revisited in the future.
-   * @param orgScope
-   * @param orgFilter
-   * @returns {Promise<void>}
-   */
-  async makeAllTargetsQuery(orgScope, orgFilter) {
-    // Query all targets for defining filtering values if entering route for first time
-    const query = {
-      scope_id: orgScope.id,
-      recursive: true,
-      force_refresh: true,
-    };
-    if (orgScope.isOrg) {
-      query.filter = orgFilter;
-    }
-    const options = { pushToStore: false };
-    return this.store.query('target', query, options);
   }
 
   /**
@@ -255,14 +238,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
 
   @action
   async refreshAll() {
-    const orgScope = this.modelFor('scopes.scope');
-    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
-    const allTargets = await this.makeAllTargetsQuery(orgScope, orgFilter);
-    // Filter out targets to which users do not have the connect ability
-    this.allTargets = allTargets.filter((target) =>
-      target.authorized_actions.includes('authorize-session'),
-    );
-
     // Prime the store by searching for only orgs in case there are new org scopes;
     // otherwise we won't be able to correctly peek the org scopes for their display name in the UI.
     await this.store.query('scope', {});
