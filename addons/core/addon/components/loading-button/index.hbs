@@ -3,17 +3,10 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Button
-  ...attributes
-  @style='inline-link-action'
-  @iconLeft={{if
-    this.isLoading
-    'flight-icons/svg/loading-16'
-    'flight-icons/svg/reload-16'
-  }}
-  class={{if this.isLoading 'loading-button is-loading' 'loading-button'}}
+<Hds::Button
+  @text={{t 'actions.refresh'}}
+  @color='secondary'
+  @icon={{if this.isLoading 'loading' 'reload'}}
   @disabled={{this.isLoading}}
   {{on 'click' this.toggleRefresh}}
->
-  {{yield}}
-</Rose::Button>
+/>
