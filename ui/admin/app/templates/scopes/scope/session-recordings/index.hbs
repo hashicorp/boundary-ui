@@ -48,6 +48,27 @@
                 {{/each}}
               </Dropdown>
             </S.Generic>
+            <S.Generic>
+              <Dropdown
+                name='target'
+                @toggleText={{t 'resources.target.title'}}
+                @itemOptions={{this.targetOptions}}
+                @checkedItems={{this.targets}}
+                @applyFilter={{fn this.applyFilter 'targets'}}
+                @isSearchable={{true}}
+                as |FD selectItem itemOptions|
+              >
+                {{#each itemOptions as |itemOption|}}
+                  <FD.Checkbox
+                    @value={{itemOption.id}}
+                    checked={{includes itemOption.id this.targets}}
+                    {{on 'change' selectItem}}
+                  >
+                    {{itemOption.name}}
+                  </FD.Checkbox>
+                {{/each}}
+              </Dropdown>
+            </S.Generic>
           {{/if}}
         </Hds::SegmentedGroup>
         <span>

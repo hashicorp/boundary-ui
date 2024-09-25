@@ -11,10 +11,17 @@ import { debounce } from 'core/decorators/debounce';
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
   // =attributes
 
-  queryParams = ['search', { users: { type: 'array' } }, 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    { users: { type: 'array' } },
+    { targets: { type: 'array' } },
+    'page',
+    'pageSize',
+  ];
 
   @tracked search = '';
   @tracked users = [];
+  @tracked targets = [];
   @tracked page = 1;
   @tracked pageSize = 10;
 
@@ -26,9 +33,11 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     return {
       allFilters: {
         users: this.userOptions,
+        targets: this.targetOptions,
       },
       selectedFilters: {
         users: this.users,
+        targets: this.targets,
       },
     };
   }
@@ -43,6 +52,26 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
       ({
         create_time_values: {
           user: { id, name },
+        },
+      }) => {
+        if (!uniqueMap.has(id)) {
+          uniqueMap.set(id, { id, name });
+        }
+      },
+    );
+    return Array.from(uniqueMap.values());
+  }
+
+  /**
+   * Returns all targets for session recordings
+   * @returns {[object]}
+   */
+  get targetOptions() {
+    const uniqueMap = new Map();
+    this.model.allSessionRecordings.forEach(
+      ({
+        create_time_values: {
+          target: { id, name },
         },
       }) => {
         if (!uniqueMap.has(id)) {

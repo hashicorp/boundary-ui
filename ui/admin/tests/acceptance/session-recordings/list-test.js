@@ -41,6 +41,7 @@ module('Acceptance | session recordings | list', function (hooks) {
       org: null,
     },
     target: null,
+    target2: null,
     user: null,
     user2: null,
     sessionRecording: null,
@@ -64,6 +65,9 @@ module('Acceptance | session recordings | list', function (hooks) {
     instances.target = this.server.create('target', {
       scope: instances.scopes.global,
     });
+    instances.target2 = this.server.create('target', {
+      scope: instances.scopes.global,
+    });
     instances.user = this.server.create('user');
     instances.user2 = this.server.create('user');
     instances.sessionRecording = this.server.create('session-recording', {
@@ -76,7 +80,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     instances.sessionRecording2 = this.server.create('session-recording', {
       scope: instances.scopes.global,
       create_time_values: {
-        target: instances.target.attrs,
+        target: instances.target2.attrs,
         user: instances.user2.attrs,
       },
     });
@@ -160,6 +164,18 @@ module('Acceptance | session recordings | list', function (hooks) {
     await click(FILTER_TOGGLE_SELECTOR('user'));
     await click(`input[value="${instances.user.id}"]`);
     await click(FILTER_APPLY_BUTTON('user'));
+
+    assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('user can filter session recordings by target', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+
+    await click(FILTER_TOGGLE_SELECTOR('target'));
+    await click(`input[value="${instances.target.id}"]`);
+    await click(FILTER_APPLY_BUTTON('target'));
 
     assert.dom('tbody tr').exists({ count: 1 });
   });
