@@ -4,7 +4,6 @@
 }}
 
 <Rose::Layout::Page as |page|>
-
   <page.breadcrumbs>
     <Breadcrumbs::Container />
   </page.breadcrumbs>
@@ -36,7 +35,9 @@
       <bc.Sidebar>
         {{#if @model.aliases}}
           <div class='target-sidebar-aliases'>
-            <h3>{{t 'resources.alias.title_plural'}}</h3>
+            <h3>
+              {{t 'resources.alias.title_plural'}}
+            </h3>
             <p class='description'>
               {{t 'resources.alias.form.sidebar.help'}}
             </p>
@@ -92,7 +93,9 @@
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
             <div class='target-sidebar-aliases'>
-              <h3>{{t 'resources.alias.title_plural'}}</h3>
+              <h3>
+                {{t 'resources.alias.title_plural'}}
+              </h3>
               <p class='description'>
                 {{t 'resources.alias.form.sidebar.help'}}
               </p>
@@ -108,31 +111,47 @@
         {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-            <h3>{{t 'resources.target.form.sidebar.label'}}</h3>
+            <h3>
+              {{t 'resources.target.form.sidebar.label'}}
+            </h3>
             <p class='description'>
               {{t 'resources.target.form.sidebar.help'}}
             </p>
             {{#if @model.enable_session_recording}}
-              <LinkListPanel as |P|>
-                <P.Item
-                  @icon='cloud-upload'
-                  @color='boundary'
-                  @text={{this.storage_bucket_name}}
-                  @route='scopes.scope.storage-buckets.storage-bucket'
-                  @model={{@model.storage_bucket_id}}
-                >
-                  <Hds::Badge
-                    @text={{t 'resources.storage-bucket.types.aws_s3'}}
-                    @icon='aws'
-                  />
-                </P.Item>
-              </LinkListPanel>
-              <Hds::Link::Standalone
-                @icon='arrow-right'
-                @iconPosition='trailing'
-                @text={{t 'resources.target.form.sidebar.link'}}
-                @route='scopes.scope.targets.target.enable-session-recording'
-              />
+              {{#unless this.storage_bucket.isUnknown}}
+                <LinkListPanel as |P|>
+                  <P.Item
+                    @icon='cloud-upload'
+                    @color='boundary'
+                    @text={{this.storage_bucket.name}}
+                    @route='scopes.scope.storage-buckets.storage-bucket'
+                    @model={{@model.storage_bucket_id}}
+                  >
+                    <Hds::Badge
+                      @text={{t
+                        (concat
+                          'resources.storage-bucket.plugin-types.'
+                          this.storage_bucket.plugin_name
+                        )
+                      }}
+                      @icon={{this.storage_bucket.icon}}
+                    />
+                  </P.Item>
+                </LinkListPanel>
+                <Hds::Link::Standalone
+                  @icon='arrow-right'
+                  @iconPosition='trailing'
+                  @text={{t 'resources.target.form.sidebar.link'}}
+                  @route='scopes.scope.targets.target.enable-session-recording'
+                />
+              {{/unless}}
+              {{#if this.storage_bucket.isUnknown}}
+                <LinkListPanel as |P|>
+                  <P.Item @color='boundary' @text={{this.storage_bucket.name}}>
+                    {{t 'resources.storage-bucket.plugin-types.unknown'}}
+                  </P.Item>
+                </LinkListPanel>
+              {{/if}}
             {{else}}
               <Hds::Button
                 @text={{t 'resources.target.actions.enable-recording'}}
