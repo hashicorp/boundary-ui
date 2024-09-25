@@ -10,18 +10,6 @@ module.exports = {
   // Check boundary cli existence
   exists: () => Boolean(path()),
 
-  carlosTest: () => {
-    try {
-      const command = ['-v'];
-      const { stdout } = spawnSync(command);
-
-      console.log('Here it comes stdout:');
-      console.log(stdout);
-    } catch (error) {
-      console.log('Erro was catched: ', error);
-    }
-  },
-
   // Returns JSON-formatted version information from the CLI
   version: () => {
     const command = ['-v'];

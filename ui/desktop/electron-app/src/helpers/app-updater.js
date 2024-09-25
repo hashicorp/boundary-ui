@@ -160,9 +160,6 @@ const displayDownloadPrompt = (latestVersion, url) => {
  **/
 module.exports = {
   run: async ({ suppressNoUpdatePrompt } = {}) => {
-    console.log('CARLOS!!');
-    console.log(boundaryCli.exists());
-    boundaryCli.carlosTest();
     /**
      * Ignore app updater prompts.
      */
