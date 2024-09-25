@@ -75,7 +75,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
   }
 
   /**
-   * Sets aliasesExist to true if there exists any aliases.
+   * Sets aliasesExist to true if there any aliases.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
