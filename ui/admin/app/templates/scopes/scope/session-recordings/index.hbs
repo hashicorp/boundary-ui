@@ -31,7 +31,7 @@
               <Dropdown
                 name='user'
                 @toggleText={{t 'resources.user.title'}}
-                @itemOptions={{this.userOptions}}
+                @itemOptions={{this.filterOptions 'user'}}
                 @checkedItems={{this.users}}
                 @applyFilter={{fn this.applyFilter 'users'}}
                 @isSearchable={{true}}
@@ -52,7 +52,7 @@
               <Dropdown
                 name='target'
                 @toggleText={{t 'resources.target.title'}}
-                @itemOptions={{this.targetOptions}}
+                @itemOptions={{this.filterOptions 'target'}}
                 @checkedItems={{this.targets}}
                 @applyFilter={{fn this.applyFilter 'targets'}}
                 @isSearchable={{true}}

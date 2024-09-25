@@ -32,8 +32,8 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   get filters() {
     return {
       allFilters: {
-        users: this.userOptions,
-        targets: this.targetOptions,
+        users: this.filterOptions('user'),
+        targets: this.filterOptions('target'),
       },
       selectedFilters: {
         users: this.users,
@@ -43,35 +43,17 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   }
 
   /**
-   * Returns all users for session recordings
+   * Returns all filter options for key for session recordings
+   * @param {string} key
    * @returns {[object]}
    */
-  get userOptions() {
+  @action
+  filterOptions(key) {
     const uniqueMap = new Map();
     this.model.allSessionRecordings.forEach(
       ({
         create_time_values: {
-          user: { id, name },
-        },
-      }) => {
-        if (!uniqueMap.has(id)) {
-          uniqueMap.set(id, { id, name });
-        }
-      },
-    );
-    return Array.from(uniqueMap.values());
-  }
-
-  /**
-   * Returns all targets for session recordings
-   * @returns {[object]}
-   */
-  get targetOptions() {
-    const uniqueMap = new Map();
-    this.model.allSessionRecordings.forEach(
-      ({
-        create_time_values: {
-          target: { id, name },
+          [key]: { id, name },
         },
       }) => {
         if (!uniqueMap.has(id)) {
