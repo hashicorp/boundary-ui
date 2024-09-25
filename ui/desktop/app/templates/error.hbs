@@ -12,7 +12,7 @@
   </Rose::Layout::Centered>
 
   <Rose::Layout::Centered>
-    <Rose::Button @style='primary' {{on 'click' (route-action 'disconnect')}}>
+    <Rose::Button @style='primary' {{on 'click' this.appUtilities.disconnect}}>
       {{t 'actions.disconnect'}}
     </Rose::Button>
   </Rose::Layout::Centered>

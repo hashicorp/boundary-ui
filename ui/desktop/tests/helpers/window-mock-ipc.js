@@ -21,7 +21,9 @@ class MockIPC {
     return this.clusterUrl;
   }
 
-  resetClusterUrl() {}
+  resetClusterUrl() {
+    this.clusterUrl = null;
+  }
   hasMacOSChrome() {}
   showWindowActions() {}
   addTokenToDaemons() {}
@@ -40,7 +42,7 @@ class MockIPC {
  * to support the IPC mechanism.
  *
  * This mock is necessary to guarantee synchronous and deterministic
- * operation.  The window's own API is evented and asychronous, which
+ * operation.  The window's own API is evented and asynchronous, which
  * cannot be relied on for testing purposes.
  *
  * @todo refactor mock postMessage and MessageChannel for reusability
