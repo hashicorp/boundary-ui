@@ -30,7 +30,7 @@ export const modelIndexes = {
   'auth-method':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
   'session-recording':
-    '&id, attributes.created_time, attributes.type, attributes.state, attributes.start_time, attributes.end_time, attributes.duration, attributes.scope.scope_id, attributes.create_time_values.user.id, attributes.create_time_values.user.name, attributes.create_time_values.host.id, attributes.create_time_values.target.id, attributes.create_time_values.target.name',
+    '&id, attributes.created_time, attributes.type, attributes.state, attributes.start_time, attributes.end_time, attributes.duration, attributes.scope.scope_id, attributes.create_time_values.user.id, attributes.create_time_values.user.name, attributes.create_time_values.target.id, attributes.create_time_values.target.name, attributes.create_time_values.target.scope.id, attributes.create_time_values.target.scope.name',
 };
 
 export const formatDbName = (userId, clusterUrl) =>
