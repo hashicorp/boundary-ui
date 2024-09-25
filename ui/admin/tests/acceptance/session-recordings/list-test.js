@@ -39,6 +39,8 @@ module('Acceptance | session recordings | list', function (hooks) {
     scopes: {
       global: null,
       org: null,
+      project: null,
+      project2: null,
     },
     target: null,
     target2: null,
@@ -62,25 +64,49 @@ module('Acceptance | session recordings | list', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
+    instances.scopes.project = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
+    instances.scopes.project2 = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
     instances.target = this.server.create('target', {
-      scope: instances.scopes.global,
+      scope: instances.scopes.project,
     });
     instances.target2 = this.server.create('target', {
-      scope: instances.scopes.global,
+      scope: instances.scopes.project2,
     });
     instances.user = this.server.create('user');
     instances.user2 = this.server.create('user');
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
       create_time_values: {
-        target: instances.target.attrs,
+        target: {
+          id: instances.target.id,
+          name: instances.target.name,
+          scope: {
+            id: instances.scopes.project.id,
+            name: instances.scopes.project.name,
+            parent_scope_id: instances.scopes.org.id,
+          },
+        },
         user: instances.user.attrs,
       },
     });
     instances.sessionRecording2 = this.server.create('session-recording', {
       scope: instances.scopes.global,
       create_time_values: {
-        target: instances.target2.attrs,
+        target: {
+          id: instances.target2.id,
+          name: instances.target2.name,
+          scope: {
+            id: instances.scopes.project2.id,
+            name: instances.scopes.project2.name,
+            parent_scope_id: instances.scopes.org.id,
+          },
+        },
         user: instances.user2.attrs,
       },
     });
@@ -168,7 +194,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     assert.dom('tbody tr').exists({ count: 1 });
   });
 
-  test('user can filter session recordings by target', async function (assert) {
+  test('user can filter session recordings by scope', async function (assert) {
     await visit(urls.sessionRecordings);
 
     assert.dom('tbody tr').exists({ count: 2 });
@@ -176,6 +202,18 @@ module('Acceptance | session recordings | list', function (hooks) {
     await click(FILTER_TOGGLE_SELECTOR('target'));
     await click(`input[value="${instances.target.id}"]`);
     await click(FILTER_APPLY_BUTTON('target'));
+
+    assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('user can filter session recordings by target', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+
+    await click(FILTER_TOGGLE_SELECTOR('scope'));
+    await click(`input[value="${instances.target.scope.id}"]`);
+    await click(FILTER_APPLY_BUTTON('scope'));
 
     assert.dom('tbody tr').exists({ count: 1 });
   });

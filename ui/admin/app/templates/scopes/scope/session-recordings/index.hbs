@@ -50,6 +50,36 @@
             </S.Generic>
             <S.Generic>
               <Dropdown
+                name='scope'
+                @toggleText={{t 'resources.scope.title'}}
+                @itemOptions={{this.projectScopes}}
+                @checkedItems={{this.scopes}}
+                @applyFilter={{fn this.applyFilter 'scopes'}}
+                @isSearchable={{true}}
+                as |FD selectItem itemOptions|
+              >
+                {{#each-in
+                  (group-by 'parent_scope_id' itemOptions)
+                  as |orgId items|
+                }}
+                  <FD.Generic>
+                    <FlightIcon @name='org' />
+                    {{this.orgName orgId}}
+                  </FD.Generic>
+                  {{#each items as |project|}}
+                    <FD.Checkbox
+                      @value={{project.id}}
+                      checked={{includes project.id this.scopes}}
+                      {{on 'change' selectItem}}
+                    >
+                      {{project.name}}
+                    </FD.Checkbox>
+                  {{/each}}
+                {{/each-in}}
+              </Dropdown>
+            </S.Generic>
+            <S.Generic>
+              <Dropdown
                 name='target'
                 @toggleText={{t 'resources.target.title'}}
                 @itemOptions={{this.filterOptions 'target'}}
