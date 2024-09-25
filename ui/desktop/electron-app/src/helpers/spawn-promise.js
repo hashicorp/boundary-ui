@@ -102,28 +102,39 @@ module.exports = {
    * @param options
    */
   spawn(command, options) {
-    return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command, options);
-      childProcess.stdout.on('data', (data) => {
-        resolve({ childProcess, stdout: data.toString() });
-      });
-      childProcess.stderr.on('data', (data) => {
-        resolve({ childProcess, stderr: data.toString() });
-      });
-      childProcess.on('error', (err) => reject(err));
+    try {
+      return new Promise((resolve, reject) => {
+        const childProcess = spawn(path(), command, options);
+        childProcess.stdout.on('data', (data) => {
+          resolve({ childProcess, stdout: data.toString() });
+        });
+        childProcess.stderr.on('data', (data) => {
+          resolve({ childProcess, stderr: data.toString() });
+        });
+        // childProcess.on('error', (err) => reject(err));
 
-      // In case the process has no stdio and didn't error out, resolve a
-      // promise once the child process closes so we're not waiting forever.
-      // Windows doesn't seem to return any error nor any output from stderr when
-      // a timeout occurs so this guarantees we return a response to the caller.
-      // Otherwise this should not get hit as we should be returning a response
-      // from one of the handlers above.
-      childProcess.on('close', () =>
-        resolve({
-          childProcess,
-          stderr: JSON.stringify({ error: 'Process was closed.' }),
-        }),
-      );
-    });
+        childProcess.on('error', (error) => {
+          console.log('Error catch at spawn -> error listener');
+          console.log('Error: ', error);
+          reject(err);
+        });
+
+        // In case the process has no stdio and didn't error out, resolve a
+        // promise once the child process closes so we're not waiting forever.
+        // Windows doesn't seem to return any error nor any output from stderr when
+        // a timeout occurs so this guarantees we return a response to the caller.
+        // Otherwise this should not get hit as we should be returning a response
+        // from one of the handlers above.
+        childProcess.on('close', () =>
+          resolve({
+            childProcess,
+            stderr: JSON.stringify({ error: 'Process was closed.' }),
+          }),
+        );
+      });
+    } catch (error) {
+      console.log('Error catch at spawn -> try/catch');
+      console.log('Error: ', error);
+    }
   },
 };
