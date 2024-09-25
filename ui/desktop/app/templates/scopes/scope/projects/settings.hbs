@@ -1,0 +1,17 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Layout::Page class='settings-card' as |page|>
+  <page.header>
+    <h2>
+      {{t 'titles.settings'}}
+      {{! TODO: Add a link to the settings documentation }}
+      {{! <DocLink @doc='setting' @iconSize='large' /> }}
+    </h2>
+  </page.header>
+  <page.body>
+    {{outlet}}
+  </page.body>
+</Rose::Layout::Page>

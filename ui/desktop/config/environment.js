@@ -60,9 +60,7 @@ module.exports = function (environment) {
       timeout: 4000,
     },
 
-    featureFlags: {
-      'client-agent': false,
-    },
+    featureFlags: {},
   };
 
   if (environment === 'development') {
@@ -80,9 +78,6 @@ module.exports = function (environment) {
     ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
       ? JSON.parse(process.env.ENABLE_MIRAGE)
       : true;
-
-    // Enable features in development
-    ENV.featureFlags['client-agent'] = true;
   }
 
   if (environment === 'test') {

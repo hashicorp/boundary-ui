@@ -28,6 +28,7 @@ const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
 const sessionManager = require('./services/session-manager.js');
 const cacheDaemonManager = require('./services/cache-daemon-manager');
+const store = require('./services/electron-store-manager');
 
 const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
@@ -61,7 +62,7 @@ fixPath();
 // Setup logger
 log.initialize();
 log.transports.console.level = false;
-log.transports.file.level = process.env.BOUNDARY_DESKTOP_LOG_LEVEL ?? 'info';
+log.transports.file.level = store.get('logLevel');
 log.transports.file.format =
   '[{y}-{m}-{d}T{h}:{i}:{s}.{ms}{z}] [{level}] {text}';
 log.transports.file.fileName = 'desktop-client.log';

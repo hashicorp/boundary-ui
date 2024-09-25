@@ -1,0 +1,33 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<SettingsCard @header={{t 'settings.logs.title'}} @icon='logs'>
+  <:body>
+    <Hds::Form::Select::Field
+      name='log_level'
+      @width='100%'
+      {{on 'change' this.selectLogLevel}}
+      as |F|
+    >
+      <F.Label>{{t 'settings.logs.logging-level'}}</F.Label>
+      <F.Options>
+        {{#each this.logLevels as |level|}}
+          <option value={{level}} selected={{eq @model.logLevel level}}>
+            {{t (concat 'settings.logs.levels.' level)}}
+          </option>
+        {{/each}}
+      </F.Options>
+    </Hds::Form::Select::Field>
+    <div class='large-column'>
+      <Hds::Text::Display>
+        {{t 'settings.logs.log-location'}}
+      </Hds::Text::Display>
+      <Hds::Copy::Snippet
+        @textToCopy={{@model.logPath}}
+        @isFullWidth={{true}}
+      />
+    </div>
+  </:body>
+</SettingsCard>
