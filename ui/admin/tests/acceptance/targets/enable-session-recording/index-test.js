@@ -17,7 +17,7 @@ module(
   function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
-
+    let intl;
     let featuresService;
     let storageBucketOne;
     let storageBucketTwo;
@@ -27,6 +27,7 @@ module(
     const DROPDOWN_SELECTOR = '[name=storage_bucket_id]';
     const LINK_LIST_SELECTOR = '.link-list-item > a';
     const LINK_LIST_SELECTOR_ITEM_TEXT = '.link-list-item__text';
+    const BADGE_TEXT_SELECTOR = '.target-sidebar .hds-badge__text';
     const TOGGLE_SELECTOR = '[name=target-enable-session-recording]';
     const LINK_TO_NEW_STORAGE_BUCKET =
       '.enable-session-recording-toggle .hds-link-standalone';
@@ -90,6 +91,8 @@ module(
       urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
       urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
       urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
+
+      intl = this.owner.lookup('service:intl');
 
       authenticateSession({ username: 'admin' });
     });
@@ -196,6 +199,12 @@ module(
       await click(SAVE_BTN_SELECTOR);
 
       assert.strictEqual(currentURL(), urls.target);
+      assert.strictEqual(
+        find(BADGE_TEXT_SELECTOR).textContent.trim(),
+        intl.t(
+          `resources.storage-bucket.plugin-types.${storageBucketTwo.plugin.name}`,
+        ),
+      );
 
       assert.strictEqual(
         find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
@@ -219,6 +228,12 @@ module(
 
       await click(CANCEL_BTN_SELECTOR);
       assert.strictEqual(currentURL(), urls.target);
+      assert.strictEqual(
+        find(BADGE_TEXT_SELECTOR).textContent.trim(),
+        intl.t(
+          `resources.storage-bucket.plugin-types.${storageBucketOne.plugin.name}`,
+        ),
+      );
 
       assert.strictEqual(
         find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
