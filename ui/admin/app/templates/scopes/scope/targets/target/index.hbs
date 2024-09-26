@@ -118,9 +118,9 @@
               {{t 'resources.target.form.sidebar.help'}}
             </p>
             {{#if @model.enable_session_recording}}
-              {{#if this.storage_bucket.isUnknown}}
+              {{#if this.storageBucket.isUnknown}}
                 <LinkListPanel as |P|>
-                  <P.Item @color='boundary' @text={{this.storage_bucket.name}}>
+                  <P.Item @color='boundary' @text={{this.storageBucket.name}}>
                     {{t 'resources.storage-bucket.plugin-types.unknown'}}
                   </P.Item>
                 </LinkListPanel>
@@ -129,7 +129,7 @@
                   <P.Item
                     @icon='cloud-upload'
                     @color='boundary'
-                    @text={{this.storage_bucket.name}}
+                    @text={{this.storageBucket.name}}
                     @route='scopes.scope.storage-buckets.storage-bucket'
                     @model={{@model.storage_bucket_id}}
                   >
@@ -137,10 +137,10 @@
                       @text={{t
                         (concat
                           'resources.storage-bucket.plugin-types.'
-                          this.storage_bucket.plugin_name
+                          this.storageBucket.pluginName
                         )
                       }}
-                      @icon={{this.storage_bucket.icon}}
+                      @icon={{this.storageBucket.icon}}
                     />
                   </P.Item>
                 </LinkListPanel>

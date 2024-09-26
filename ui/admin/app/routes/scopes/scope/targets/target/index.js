@@ -31,7 +31,7 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
       );
       const {
         displayName: name,
-        plugin: { name: plugin_name },
+        plugin: { name: pluginName },
         isAWS,
         isMinIO,
         isUnknown,
@@ -42,7 +42,7 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
       } else if (isMinIO) {
         icon = 'cloud-upload';
       }
-      controller.set('storage_bucket', { name, plugin_name, icon, isUnknown });
+      controller.set('storageBucket', { name, pluginName, icon, isUnknown });
     }
   }
 }
