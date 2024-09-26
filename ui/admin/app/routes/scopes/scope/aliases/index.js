@@ -41,7 +41,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     const { id: scope_id } = scope;
 
     let aliases;
-    let aliasesExist;
+    let doAliasesExist = false;
     let totalItems = 0;
 
     if (
@@ -63,24 +63,26 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           hash({
             alias,
             target: alias.destination_id
-              ? this.store.findRecord('target', alias.destination_id)
+              ? this.store.findRecord('target', alias.destination_id, {
+                  backgroundReload: false,
+                })
               : null,
           }),
         ),
       );
-      aliasesExist = await this.getAliasesExist(scope_id, totalItems);
+      doAliasesExist = await this.getDoAliasesExist(scope_id, totalItems);
     }
 
-    return { aliases, aliasesExist, totalItems };
+    return { aliases, doAliasesExist, totalItems };
   }
 
   /**
-   * Sets aliasesExist to true if there exists any aliases.
+   * Sets doAliasesExist to true if there exists any aliases.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getAliasesExist(scope_id, totalItems) {
+  async getDoAliasesExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

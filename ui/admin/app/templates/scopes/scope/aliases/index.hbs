@@ -18,15 +18,17 @@
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='aliases')}}
-      <Hds::Button
-        @route='scopes.scope.aliases.new'
-        @text={{t 'resources.alias.titles.new'}}
-      />
+      {{#if @model.doAliasesExist}}
+        <Hds::Button
+          @route='scopes.scope.aliases.new'
+          @text={{t 'resources.alias.titles.new'}}
+        />
+      {{/if}}
     {{/if}}
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.aliasesExist}}
+    {{#if @model.doAliasesExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
