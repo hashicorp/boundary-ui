@@ -48,15 +48,15 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
 
   /**
    * Load all session recordings.
-   * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], sessionRecordingsExist: boolean, storageBucketsExist: boolean }>}
+   * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], doSessionRecordingsExist: boolean, doStorageBucketsExist: boolean }>}
    */
   async model({ search, times, users, scopes, targets, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     let sessionRecordings;
     let totalItems = 0;
-    let sessionRecordingsExist = false;
-    let storageBucketsExist = false;
+    let doSessionRecordingsExist = false;
+    let doStorageBucketsExist = false;
     const filters = {
       scope_id: [{ equals: scope_id }],
       created_time: [],
@@ -98,16 +98,16 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       if (!this.allSessionRecordings) {
         await this.getAllSessionRecordings(scope_id);
       }
-      sessionRecordingsExist = !!this.allSessionRecordings.length;
+      doSessionRecordingsExist = !!this.allSessionRecordings.length;
 
-      storageBucketsExist = await this.getStorageBucketsExist(scope_id);
+      doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
 
       return {
         sessionRecordings,
-        sessionRecordingsExist,
+        doSessionRecordingsExist: doSessionRecordingsExist,
         allSessionRecordings: this.allSessionRecordings,
         totalItems,
-        storageBucketsExist,
+        doStorageBucketsExist: doStorageBucketsExist,
       };
     }
   }
@@ -132,7 +132,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    * @param {string} scope_id
    * @returns {Promise<boolean>}
    */
-  async getStorageBucketsExist(scope_id) {
+  async getDoStorageBucketsExist(scope_id) {
     // Storage buckets could fail for a number of reasons, including that
     // the user isn't authorized to access them.
     try {

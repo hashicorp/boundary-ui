@@ -16,7 +16,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if @model.sessionRecordingsExist}}
+    {{#if @model.doSessionRecordingsExist}}
       <div class='search-filtering-toolbar'>
         <Hds::SegmentedGroup data-test-session-recordings-bar as |S|>
           <S.TextInput
@@ -233,13 +233,13 @@
         <A.Body
           @text={{t
             (if
-              @model.storageBucketsExist
+              @model.doStorageBucketsExist
               'resources.session-recording.messages.none.description'
               'resources.session-recording.messages.none.no-storage-bucket-description'
             )
           }}
         />
-        {{#unless @model.storageBucketsExist}}
+        {{#unless @model.doStorageBucketsExist}}
           <A.Footer as |F|>
             <F.LinkStandalone
               @icon='plus-circle'

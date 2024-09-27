@@ -76,10 +76,10 @@ module(
       });
       model = {
         sessionRecordings: [instances.sessionRecording],
-        sessionRecordingsExist: true,
+        doSessionRecordingsExist: true,
         allSessionRecordings: [instances.sessionRecording],
         totalItems: 1,
-        storageBucketsExist: true,
+        doStorageBucketsExist: true,
       };
       controller.set('model', model);
     });
