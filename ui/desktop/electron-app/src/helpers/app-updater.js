@@ -164,6 +164,7 @@ module.exports = {
      * Ignore app updater prompts.
      */
     if (process.env.BYPASS_APP_UPDATER) return;
+    if (boundaryCli.isBuiltInCli()) return;
 
     /**
      * Disable app updater check for linux as update is unsupported.

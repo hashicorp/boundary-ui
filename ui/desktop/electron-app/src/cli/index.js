@@ -5,10 +5,26 @@
 
 const { spawnSync } = require('../helpers/spawn-promise.js');
 const { path } = require('./path.js');
+const pathPosix = require('path');
+const pathWin = require('path/win32');
+const { isWindows } = require('../helpers/platform.js');
 
 module.exports = {
   // Check boundary cli existence
   exists: () => Boolean(path()),
+
+  // Return true if the CLI in usage is the built in. False if relies on system CLI.
+  isBuiltInCli: () => {
+    const pathToParse = path();
+    const pathParsed = isWindows()
+      ? pathWin.parse(pathToParse)
+      : pathPosix.parse(pathToParse);
+
+    if (pathParsed.dir === '' && pathParsed.root === '') {
+      return false;
+    }
+    return true;
+  },
 
   // Returns JSON-formatted version information from the CLI
   version: () => {
