@@ -11,9 +11,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
   // =services
 
   @service store;
-  @service session;
   @service can;
-  @service router;
 
   // =attributes
 
