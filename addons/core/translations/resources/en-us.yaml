@@ -357,6 +357,12 @@ session-recording:
   duration: '{time} duration'
   questions:
     delete: Are you sure you want to delete this recording?
+  filters:
+    time:
+      title: Time
+      today: Today
+      last-three-days: Last 3 days
+      last-seven-days: Last 7 days
   connection:
     title: Connection
     title_index: Connection {index}

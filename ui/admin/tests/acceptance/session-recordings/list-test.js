@@ -17,6 +17,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -33,6 +34,8 @@ module('Acceptance | session recordings | list', function (hooks) {
     `[data-test-session-recordings-bar] div[name="${name}"] button`;
   const FILTER_APPLY_BUTTON = (name) =>
     `[data-test-session-recordings-bar] div[name="${name}"] div div:last-child button[type="button"]`;
+  const LAST_3_DAYS_OPTION =
+    '[data-test-session-recordings-bar] div[name="time"] li:nth-child(2) button';
 
   // Instances
   const instances = {
@@ -97,6 +100,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     });
     instances.sessionRecording2 = this.server.create('session-recording', {
       scope: instances.scopes.global,
+      created_time: faker.date.past(),
       create_time_values: {
         target: {
           id: instances.target2.id,
@@ -214,6 +218,17 @@ module('Acceptance | session recordings | list', function (hooks) {
     await click(FILTER_TOGGLE_SELECTOR('scope'));
     await click(`input[value="${instances.target.scope.id}"]`);
     await click(FILTER_APPLY_BUTTON('scope'));
+
+    assert.dom('tbody tr').exists({ count: 1 });
+  });
+
+  test('user can filter session recordings by time', async function (assert) {
+    await visit(urls.sessionRecordings);
+
+    assert.dom('tbody tr').exists({ count: 2 });
+
+    await click(FILTER_TOGGLE_SELECTOR('time'));
+    await click(LAST_3_DAYS_OPTION);
 
     assert.dom('tbody tr').exists({ count: 1 });
   });

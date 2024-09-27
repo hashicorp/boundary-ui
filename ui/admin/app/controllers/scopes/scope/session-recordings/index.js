@@ -13,11 +13,13 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   // =services
 
   @service store;
+  @service intl;
 
   // =attributes
 
   queryParams = [
     'search',
+    { times: { type: 'array' } },
     { users: { type: 'array' } },
     { scopes: { type: 'array' } },
     { targets: { type: 'array' } },
@@ -26,6 +28,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   ];
 
   @tracked search = '';
+  @tracked times = [];
   @tracked users = [];
   @tracked scopes = [];
   @tracked targets = [];
@@ -39,16 +42,50 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   get filters() {
     return {
       allFilters: {
+        times: this.timeOptions,
         users: this.filterOptions('user'),
         scopes: this.projectScopes,
         targets: this.filterOptions('target'),
       },
       selectedFilters: {
+        times: this.times,
         users: this.users,
         scopes: this.scopes,
         targets: this.targets,
       },
     };
+  }
+
+  /**
+   * Returns array of time options for time filter
+   * @returns {[object]}
+   */
+  get timeOptions() {
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const threeDaysPast = new Date(midnight);
+    threeDaysPast.setDate(midnight.getDate() - 3);
+    const sevenDaysPast = new Date(midnight);
+    sevenDaysPast.setDate(midnight.getDate() - 7);
+
+    return [
+      {
+        id: midnight.toISOString(),
+        name: this.intl.t('resources.session-recording.filters.time.today'),
+      },
+      {
+        id: threeDaysPast.toISOString(),
+        name: this.intl.t(
+          'resources.session-recording.filters.time.last-three-days',
+        ),
+      },
+      {
+        id: sevenDaysPast.toISOString(),
+        name: this.intl.t(
+          'resources.session-recording.filters.time.last-seven-days',
+        ),
+      },
+    ];
   }
 
   /**
@@ -74,6 +111,8 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     );
     return Array.from(uniqueMap.values());
   }
+
+  // =actions
 
   /**
    * Looks up org by ID and returns the org name
@@ -108,8 +147,6 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     return Array.from(uniqueMap.values());
   }
 
-  // =actions
-
   /**
    * Handles input on each keystroke and the search queryParam
    * @param {object} event
@@ -131,6 +168,18 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   applyFilter(paramKey, selectedItems) {
     this[paramKey] = [...selectedItems];
     this.page = 1;
+  }
+
+  /**
+   * Sets the time filter, sets the page to 1, and closes the filter dropdown
+   * @param {string} timeId
+   * @param {func} onClose
+   */
+  @action
+  changeTimeFilter(timeId, onClose) {
+    this.times = [timeId];
+    this.page = 1;
+    onClose();
   }
 
   /**

@@ -26,80 +26,92 @@
             aria-label={{t 'actions.search-session-recording'}}
             {{on 'input' this.handleSearchInput}}
           />
-          {{#if @model.allSessionRecordings}}
-            <S.Generic>
-              <Dropdown
-                name='user'
-                @toggleText={{t 'resources.user.title'}}
-                @itemOptions={{this.filterOptions 'user'}}
-                @checkedItems={{this.users}}
-                @applyFilter={{fn this.applyFilter 'users'}}
-                @isSearchable={{true}}
-                as |FD selectItem itemOptions|
+          <S.Dropdown name='time' as |D|>
+            <D.ToggleButton
+              @text={{t 'resources.session-recording.filters.time.title'}}
+              @color='secondary'
+            />
+            {{#each this.timeOptions as |time|}}
+              <D.Checkmark
+                @selected={{includes time.id this.times}}
+                {{on 'click' (fn this.changeTimeFilter time.id D.close)}}
               >
-                {{#each itemOptions as |itemOption|}}
+                {{time.name}}
+              </D.Checkmark>
+            {{/each}}
+          </S.Dropdown>
+          <S.Generic>
+            <Dropdown
+              name='user'
+              @toggleText={{t 'resources.user.title'}}
+              @itemOptions={{this.filterOptions 'user'}}
+              @checkedItems={{this.users}}
+              @applyFilter={{fn this.applyFilter 'users'}}
+              @isSearchable={{true}}
+              as |FD selectItem itemOptions|
+            >
+              {{#each itemOptions as |itemOption|}}
+                <FD.Checkbox
+                  @value={{itemOption.id}}
+                  checked={{includes itemOption.id this.users}}
+                  {{on 'change' selectItem}}
+                >
+                  {{itemOption.name}}
+                </FD.Checkbox>
+              {{/each}}
+            </Dropdown>
+          </S.Generic>
+          <S.Generic>
+            <Dropdown
+              name='scope'
+              @toggleText={{t 'resources.scope.title'}}
+              @itemOptions={{this.projectScopes}}
+              @checkedItems={{this.scopes}}
+              @applyFilter={{fn this.applyFilter 'scopes'}}
+              @isSearchable={{true}}
+              as |FD selectItem itemOptions|
+            >
+              {{#each-in
+                (group-by 'parent_scope_id' itemOptions)
+                as |orgId items|
+              }}
+                <FD.Generic>
+                  <FlightIcon @name='org' />
+                  {{this.orgName orgId}}
+                </FD.Generic>
+                {{#each items as |project|}}
                   <FD.Checkbox
-                    @value={{itemOption.id}}
-                    checked={{includes itemOption.id this.users}}
+                    @value={{project.id}}
+                    checked={{includes project.id this.scopes}}
                     {{on 'change' selectItem}}
                   >
-                    {{itemOption.name}}
+                    {{project.name}}
                   </FD.Checkbox>
                 {{/each}}
-              </Dropdown>
-            </S.Generic>
-            <S.Generic>
-              <Dropdown
-                name='scope'
-                @toggleText={{t 'resources.scope.title'}}
-                @itemOptions={{this.projectScopes}}
-                @checkedItems={{this.scopes}}
-                @applyFilter={{fn this.applyFilter 'scopes'}}
-                @isSearchable={{true}}
-                as |FD selectItem itemOptions|
-              >
-                {{#each-in
-                  (group-by 'parent_scope_id' itemOptions)
-                  as |orgId items|
-                }}
-                  <FD.Generic>
-                    <FlightIcon @name='org' />
-                    {{this.orgName orgId}}
-                  </FD.Generic>
-                  {{#each items as |project|}}
-                    <FD.Checkbox
-                      @value={{project.id}}
-                      checked={{includes project.id this.scopes}}
-                      {{on 'change' selectItem}}
-                    >
-                      {{project.name}}
-                    </FD.Checkbox>
-                  {{/each}}
-                {{/each-in}}
-              </Dropdown>
-            </S.Generic>
-            <S.Generic>
-              <Dropdown
-                name='target'
-                @toggleText={{t 'resources.target.title'}}
-                @itemOptions={{this.filterOptions 'target'}}
-                @checkedItems={{this.targets}}
-                @applyFilter={{fn this.applyFilter 'targets'}}
-                @isSearchable={{true}}
-                as |FD selectItem itemOptions|
-              >
-                {{#each itemOptions as |itemOption|}}
-                  <FD.Checkbox
-                    @value={{itemOption.id}}
-                    checked={{includes itemOption.id this.targets}}
-                    {{on 'change' selectItem}}
-                  >
-                    {{itemOption.name}}
-                  </FD.Checkbox>
-                {{/each}}
-              </Dropdown>
-            </S.Generic>
-          {{/if}}
+              {{/each-in}}
+            </Dropdown>
+          </S.Generic>
+          <S.Generic>
+            <Dropdown
+              name='target'
+              @toggleText={{t 'resources.target.title'}}
+              @itemOptions={{this.filterOptions 'target'}}
+              @checkedItems={{this.targets}}
+              @applyFilter={{fn this.applyFilter 'targets'}}
+              @isSearchable={{true}}
+              as |FD selectItem itemOptions|
+            >
+              {{#each itemOptions as |itemOption|}}
+                <FD.Checkbox
+                  @value={{itemOption.id}}
+                  checked={{includes itemOption.id this.targets}}
+                  {{on 'change' selectItem}}
+                >
+                  {{itemOption.name}}
+                </FD.Checkbox>
+              {{/each}}
+            </Dropdown>
+          </S.Generic>
         </Hds::SegmentedGroup>
         <span>
           <ToolbarRefresher @onClick={{this.refresh}} />

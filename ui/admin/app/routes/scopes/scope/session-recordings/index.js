@@ -20,6 +20,10 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       refreshModel: true,
       replace: true,
     },
+    times: {
+      refreshModel: true,
+      replace: true,
+    },
     users: {
       refreshModel: true,
       replace: true,
@@ -46,7 +50,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    * Load all session recordings.
    * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], sessionRecordingsExist: boolean, storageBucketsExist: boolean }>}
    */
-  async model({ search, users, scopes, targets, page, pageSize }) {
+  async model({ search, times, users, scopes, targets, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     let sessionRecordings;
@@ -55,10 +59,14 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     let storageBucketsExist = false;
     const filters = {
       scope_id: [{ equals: scope_id }],
+      created_time: [],
       'create_time_values.user.id': [],
       'create_time_values.target.scope.id': [],
       'create_time_values.target.id': [],
     };
+    times.forEach((time) => {
+      filters.created_time.push({ gte: new Date(time) });
+    });
     users.forEach((user) => {
       filters['create_time_values.user.id'].push({ equals: user });
     });
