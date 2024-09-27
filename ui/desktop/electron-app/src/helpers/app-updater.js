@@ -164,13 +164,17 @@ module.exports = {
      * Ignore app updater prompts.
      */
     if (process.env.BYPASS_APP_UPDATER) return;
-    if (boundaryCli.isBuiltInCli()) return;
 
     /**
      * Disable app updater check for linux as update is unsupported.
      * TODO: Enable for windows pending feature dev. Windows is supported.
      */
     if (isWindows() || isLinux()) return;
+
+    /**
+     * Skip the app updater if we are NOT using the built in CLI
+     */
+    if (!boundaryCli.isBuiltInCli()) return;
 
     let latestVersion;
     if (debug) {
