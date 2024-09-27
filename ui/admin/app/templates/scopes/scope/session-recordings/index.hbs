@@ -214,7 +214,11 @@
           <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
-              'descriptions.no-search-results'
+              (if
+                this.search
+                'descriptions.no-search-results'
+                'descriptions.no-filter-results'
+              )
               query=this.search
               resource=(t 'resources.session-recording.title_plural')
             }}
