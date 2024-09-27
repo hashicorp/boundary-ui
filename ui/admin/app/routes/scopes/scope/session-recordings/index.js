@@ -84,6 +84,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     ) {
       const queryOptions = {
         scope_id,
+        recursive: true,
         query: { search, filters },
         page,
         pageSize,
@@ -98,7 +99,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       if (!this.allSessionRecordings) {
         await this.getAllSessionRecordings(scope_id);
       }
-      doSessionRecordingsExist = !!this.allSessionRecordings.length;
+      doSessionRecordingsExist = Boolean(this.allSessionRecordings.length);
 
       doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
 
@@ -117,6 +118,8 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     this.allSessionRecordings = await this.store.query(
       'session-recording',
       {
+        scope_id,
+        recursive: true,
         query: {
           filters: {
             scope_id: [{ equals: scope_id }],
@@ -140,7 +143,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         scope_id,
         recursive: true,
       });
-      return !!storageBuckets.length;
+      return Boolean(storageBuckets.length);
     } catch (e) {
       // no op
       return false;
