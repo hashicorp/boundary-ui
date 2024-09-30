@@ -58,7 +58,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     let doSessionRecordingsExist = false;
     let doStorageBucketsExist = false;
     const filters = {
-      scope_id: [{ equals: scope_id }],
       created_time: [],
       'create_time_values.user.id': [],
       'create_time_values.target.scope.id': [],
@@ -100,7 +99,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         await this.getAllSessionRecordings(scope_id);
       }
       doSessionRecordingsExist = Boolean(this.allSessionRecordings.length);
-
       doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
 
       return {
@@ -120,11 +118,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       {
         scope_id,
         recursive: true,
-        query: {
-          filters: {
-            scope_id: [{ equals: scope_id }],
-          },
-        },
       },
       options,
     );
