@@ -35,7 +35,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
 
   /**
    * Loads queried credential-stores and the number of credential-stores under current scope.
-   * @returns {Promise<{totalItems: number, credentialStores: [CredentialStoreModel], credentialStoresExist: boolean }> }
+   * @returns {Promise<{totalItems: number, credentialStores: [CredentialStoreModel], doCredentialStoresExist: boolean }> }
    */
   async model({ search, types, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -51,7 +51,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
 
     let credentialStores;
     let totalItems = 0;
-    let credentialStoresExist = false;
+    let doCredentialStoresExist = false;
     if (
       this.can.can('list model', scope, {
         collection: 'credential-stores',
@@ -64,22 +64,21 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
         pageSize,
       });
       totalItems = credentialStores.meta?.totalItems;
-      credentialStoresExist = await this.getCredentialStoresExist(
+      doCredentialStoresExist = await this.getDoCredentialStoresExist(
         scope_id,
         totalItems,
       );
     }
-
-    return { credentialStores, credentialStoresExist, totalItems };
+    return { credentialStores, doCredentialStoresExist, totalItems };
   }
 
   /**
-   * Sets credentialStoresExist to true if there exists any credential-stores.
+   * Sets doCredentialStoresExist to true if there exists any credential-stores.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getCredentialStoresExist(scope_id, totalItems) {
+  async getDoCredentialStoresExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

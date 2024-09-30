@@ -14,14 +14,14 @@
       {{t 'resources.role.title_plural'}}
       <DocLink @doc='role' @iconSize='large' />
     </h2>
-    {{#if @model.rolesExist}}
+    {{#if @model.doRolesExist}}
       <p>{{t 'resources.role.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='roles')}}
-      {{#if @model.rolesExist}}
+      {{#if @model.doRolesExist}}
         <Hds::Button
           @route='scopes.scope.roles.new'
           @text={{t 'resources.role.titles.new'}}
@@ -31,7 +31,7 @@
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.rolesExist}}
+    {{#if @model.doRolesExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}

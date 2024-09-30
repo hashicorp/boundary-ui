@@ -31,7 +31,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
 
   /**
    * Loads queried users and the number of users under current scope.
-   * @returns {Promise<{totalItems: number, users: [UserModel], usersExist: boolean }> }
+   * @returns {Promise<{totalItems: number, users: [UserModel], doUsersExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -43,7 +43,7 @@ export default class ScopesScopeUsersIndexRoute extends Route {
 
     let users;
     let totalItems = 0;
-    let usersExist = false;
+    let doUsersExist = false;
     if (this.can.can('list model', scope, { collection: 'users' })) {
       users = await this.store.query('user', {
         scope_id,
@@ -52,19 +52,19 @@ export default class ScopesScopeUsersIndexRoute extends Route {
         pageSize,
       });
       totalItems = users.meta?.totalItems;
-      usersExist = await this.getUsersExist(scope_id, totalItems);
+      doUsersExist = await this.getDoUsersExist(scope_id, totalItems);
     }
 
-    return { users, usersExist, totalItems };
+    return { users, doUsersExist, totalItems };
   }
 
   /**
-   * Sets usersExist to true if there exists any users.
+   * Sets doUsersExist to true if there exists any users.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getUsersExist(scope_id, totalItems) {
+  async getDoUsersExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

@@ -29,6 +29,8 @@ export const modelIndexes = {
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id, attributes.plugin.name',
   'auth-method':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
+  alias:
+    '&id, attributes.created_time, attributes.type, attributes.value, attributes.name, attributes.description, attributes.destination_id, attributes.scope.scope_id',
 };
 
 export const formatDbName = (userId, clusterUrl) =>
