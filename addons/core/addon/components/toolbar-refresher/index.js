@@ -15,7 +15,7 @@ export default class ToolbarRefresherComponent extends Component {
   // =methods
 
   /**
-   * Executes the click handler argument and trackes the time it completed.
+   * Executes the click handler argument and tracks the time it completed.
    */
   @action
   async onClick() {

@@ -29,8 +29,20 @@ export default class ScopesScopeTargetsTargetIndexRoute extends Route {
         'storage-bucket',
         storage_bucket_id,
       );
-      const storage_bucket_name = storageBucket.displayName;
-      controller.set('storage_bucket_name', storage_bucket_name);
+      const {
+        displayName: name,
+        plugin: { name: pluginName },
+        isAWS,
+        isMinIO,
+        isUnknown,
+      } = storageBucket;
+      let icon;
+      if (isAWS) {
+        icon = 'aws';
+      } else if (isMinIO) {
+        icon = 'cloud-upload';
+      }
+      controller.set('storageBucket', { name, pluginName, icon, isUnknown });
     }
   }
 }

@@ -34,6 +34,27 @@ class MockIPC {
   isClientAgentRunning() {
     return false;
   }
+  cacheDaemonStatus() {
+    return { version: 'Boundary v1.0.0' };
+  }
+  getCliVersion() {
+    return { versionNumber: '1.0.0' };
+  }
+  getDesktopVersion() {
+    return { desktopVersion: '1.0.0' };
+  }
+  getLogLevel() {
+    return 'info';
+  }
+  getLogPath() {
+    return '~/.config/Boundary/logs/desktop-client.log';
+  }
+  setLogLevel() {}
+  clientAgentStatus() {
+    return { version: '0.0.1-dev', status: 'running' };
+  }
+  pauseClientAgent() {}
+  resumeClientAgent() {}
 }
 
 /**
