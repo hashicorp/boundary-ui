@@ -122,7 +122,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   @action
   orgName(orgID) {
     const org = this.store.peekRecord('scope', orgID);
-    return org.name;
+    return org.displayName;
   }
 
   /**

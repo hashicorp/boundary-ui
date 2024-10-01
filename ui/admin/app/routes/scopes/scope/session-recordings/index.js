@@ -94,7 +94,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         queryOptions,
       );
       totalItems = sessionRecordings.meta?.totalItems;
-      // Query all session reocordings for filtering values if entering route for the first time
+      // Query all session recordings for filtering values if entering route for the first time
       if (!this.allSessionRecordings) {
         await this.getAllSessionRecordings(scope_id);
       }
@@ -111,6 +111,10 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     }
   }
 
+  /**
+   * Sets allSessionRecordings to all session recordings for filters
+   * @param {string} scope_id
+   */
   async getAllSessionRecordings(scope_id) {
     const options = { pushToStore: false, peekIndexedDB: true };
     this.allSessionRecordings = await this.store.query(
