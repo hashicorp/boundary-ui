@@ -532,14 +532,8 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
   });
 
   test('it filters on date type fields and returns results', async function (assert) {
-    const pastDate = faker.date.between({
-      from: '2024-09-19T00:00:00.000Z',
-      to: '2024-09-20T00:00:00.000Z',
-    });
-    const createdTime = faker.date.between({
-      from: '2024-09-23T00:00:00.000Z',
-      to: '2024-09-24T00:00:00.000Z',
-    });
+    const pastDate = new Date('2024-09-19T10:00:00.000Z');
+    const createdTime = new Date('2024-09-23T10:00:00.000Z');
     this.server.create('session-recording', {
       created_time: createdTime,
     });
@@ -553,6 +547,40 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     );
 
     assert.strictEqual(result.length, 1);
+  });
+
+  test('it filters on date type fields and returns results - from and to', async function (assert) {
+    const from = new Date('2024-09-19T10:00:00.000Z');
+    const to = new Date('2024-09-25T10:00:00.000Z');
+    const createdTime = new Date('2024-09-23T10:00:00.000Z');
+    const createdTime2 = new Date('2024-09-28T10:00:00.000Z');
+    this.server.create('session-recording', {
+      created_time: createdTime,
+    });
+    this.server.create('session-recording', {
+      created_time: createdTime2,
+    });
+    await seedIndexDb('session-recording', store, indexedDb, this.server);
+    const query = {
+      filters: {
+        created_time: {
+          logicalOperator: 'and',
+          values: [{ gte: from }, { lte: to }],
+        },
+      },
+    };
+
+    const result = await queryIndexedDb(
+      indexedDb.db,
+      'session-recording',
+      query,
+    );
+
+    assert.strictEqual(result.length, 1);
+    assert.strictEqual(
+      result[0].attributes.created_time.toISOString(),
+      createdTime.toISOString(),
+    );
   });
 
   test('it filters on date type fields and returns no results', async function (assert) {
