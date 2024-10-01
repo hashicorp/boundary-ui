@@ -439,6 +439,7 @@ storage-bucket:
   plugin-types:
     aws: Amazon S3
     minio: MinIO
+    unknown: Unknown
   form:
     scope:
       label: Scope

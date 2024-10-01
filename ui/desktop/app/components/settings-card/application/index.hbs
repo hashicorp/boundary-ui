@@ -1,0 +1,86 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<SettingsCard @header={{t 'settings.application'}} @icon='boundary'>
+  <:body>
+    <div>
+      <Hds::Text::Display>
+        {{t 'settings.client'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium'>
+        {{@model.desktopVersion}}
+      </Hds::Text::Body>
+    </div>
+    <div>
+      <Hds::Text::Display>
+        {{t 'settings.cli'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium'>
+        {{@model.cliVersion}}
+      </Hds::Text::Body>
+    </div>
+    <div>
+      <Hds::Text::Display>
+        {{t 'settings.cache-daemon'}}
+      </Hds::Text::Display>
+      <Hds::Text::Body @tag='p' @weight='medium' data-test-cache-version>
+        {{#if @model.cacheDaemonStatus.version}}
+          {{@model.cacheDaemonStatus.version}}
+          <Hds::Badge
+            @text={{t 'states.running'}}
+            @icon='running'
+            @color='success'
+          />
+        {{else}}
+          <Hds::Badge
+            @text={{t 'states.not-running'}}
+            @icon='stop-circle'
+            @color='neutral'
+          />
+        {{/if}}
+
+      </Hds::Text::Body>
+    </div>
+    {{#if @model.cacheDaemonStatus.errors}}
+      <Hds::Alert @type='inline' @color='warning' as |A|>
+        <A.Title>{{t 'settings.alerts.cache-daemon'}}</A.Title>
+        <A.Description>
+          <Hds::Reveal
+            @text={{t 'actions.show-errors'}}
+            @textWhenOpen={{t 'actions.hide-errors'}}
+          >
+            {{#each @model.cacheDaemonStatus.errors as |error|}}
+              <Hds::Text::Body @tag='p'>
+                {{#if error.name}}
+                  <strong>{{error.name}}: </strong>
+                {{/if}}
+                {{error.message}}
+              </Hds::Text::Body>
+            {{/each}}
+          </Hds::Reveal>
+        </A.Description>
+      </Hds::Alert>
+    {{/if}}
+
+    <Hds::Form::Select::Field
+      name='theme'
+      @width='100%'
+      {{on 'change' @toggle}}
+      as |F|
+    >
+      <F.Label>{{t 'settings.color-theme'}}</F.Label>
+      <F.Options>
+        {{#each this.themes as |theme|}}
+          <option
+            value={{theme.value}}
+            selected={{eq this.session.data.theme theme.value}}
+          >
+            {{t (concat 'themes.' theme.label)}}
+          </option>
+        {{/each}}
+      </F.Options>
+    </Hds::Form::Select::Field>
+  </:body>
+</SettingsCard>

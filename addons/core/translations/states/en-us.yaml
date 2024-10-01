@@ -14,7 +14,18 @@ active-public: Public
 recording: Recording
 completed: Completed
 failed: Failed
+installed: Installed
+not-running: Not Running
+running: Running
+paused: Paused
+authenticated: Authenticated
+unauthenticated: Unauthenticated
 loading:
   title: Loading all items...
   description: All of your {resource} are still loading. Please wait while we finish loading everything on screen.
   generic-description: All of your resources are still loading. Please wait while we finish loading everything on screen.
+incomplete-loading:
+  limit: Loaded the first {resultCount} results. Please narrow down your search or filters if the result you're looking for is not shown.
+  refreshing:
+    description: Updating cache...
+    tooltip: Some items may not appear until the cache is finished updating
