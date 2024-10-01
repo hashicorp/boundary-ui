@@ -19,7 +19,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
 
   queryParams = [
     'search',
-    { times: { type: 'array' } },
+    'time',
     { users: { type: 'array' } },
     { scopes: { type: 'array' } },
     { targets: { type: 'array' } },
@@ -28,7 +28,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   ];
 
   @tracked search = '';
-  @tracked times = [];
+  @tracked time = null;
   @tracked users = [];
   @tracked scopes = [];
   @tracked targets = [];
@@ -42,13 +42,13 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   get filters() {
     return {
       allFilters: {
-        times: this.timeOptions,
+        time: this.timeOptions,
         users: this.filterOptions('user'),
         scopes: this.projectScopes,
         targets: this.filterOptions('target'),
       },
       selectedFilters: {
-        times: this.times,
+        time: [this.time],
         users: this.users,
         scopes: this.scopes,
         targets: this.targets,
@@ -172,12 +172,12 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
 
   /**
    * Sets the time filter, sets the page to 1, and closes the filter dropdown
-   * @param {string} timeId
+   * @param {object} timeId
    * @param {func} onClose
    */
   @action
   changeTimeFilter(timeId, onClose) {
-    this.times = [timeId];
+    this.time = timeId;
     this.page = 1;
     onClose();
   }

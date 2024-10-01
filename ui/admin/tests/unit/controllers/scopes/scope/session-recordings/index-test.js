@@ -90,7 +90,7 @@ module(
 
     test('filters returns expected entries', function (assert) {
       assert.deepEqual(controller.filters.allFilters, {
-        times: [
+        time: [
           {
             id: midnight.toISOString(),
             name: 'Today',
@@ -115,7 +115,7 @@ module(
         targets: [{ id: instances.target.id, name: instances.target.name }],
       });
       assert.deepEqual(controller.filters.selectedFilters, {
-        times: [],
+        time: [null],
         users: [],
         scopes: [],
         targets: [],
@@ -172,7 +172,7 @@ module(
       controller.changeTimeFilter(midnight.toISOString(), this.onClose);
 
       assert.strictEqual(controller.page, 1);
-      assert.deepEqual(controller.times, [midnight.toISOString()]);
+      assert.deepEqual(controller.time, midnight.toISOString());
     });
 
     test('refresh action calls refreshAll', async function (assert) {
