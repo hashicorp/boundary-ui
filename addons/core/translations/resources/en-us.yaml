@@ -360,7 +360,7 @@ session-recording:
   filters:
     time:
       title: Time
-      today: Today
+      last-twenty-four-hours: Last 24 hours
       last-three-days: Last 3 days
       last-seven-days: Last 7 days
   connection:

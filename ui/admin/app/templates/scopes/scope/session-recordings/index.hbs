@@ -33,7 +33,7 @@
             />
             {{#each this.timeOptions as |time|}}
               <D.Checkmark
-                @selected={{includes time.id this.times}}
+                @selected={{eq time.id this.time}}
                 {{on 'click' (fn this.changeTimeFilter time.id D.close)}}
               >
                 {{time.name}}

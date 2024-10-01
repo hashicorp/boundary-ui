@@ -8,6 +8,7 @@ import { setupTest } from 'ember-qunit';
 import { waitUntil } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
+import sinon from 'sinon';
 
 module(
   'Unit | Controller | scopes/scope/session-recordings/index',
@@ -18,12 +19,8 @@ module(
 
     let controller;
     let model;
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const threeDaysPast = new Date(midnight);
-    threeDaysPast.setDate(midnight.getDate() - 3);
-    const sevenDaysPast = new Date(midnight);
-    sevenDaysPast.setDate(midnight.getDate() - 7);
+    const originalDateNow = Date.now;
+    let last24Hours, last3Days, last7Days;
 
     const instances = {
       scopes: {
@@ -38,6 +35,15 @@ module(
     };
 
     hooks.beforeEach(function () {
+      const timeStamp = 1726760348000; // Thursday, September 19, 2024 3:39:08 PM (GMT)
+      sinon.stub(Date, 'now').returns(timeStamp);
+      const now = new Date();
+      last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      last3Days = new Date(now);
+      last3Days.setDate(now.getDate() - 3);
+      last7Days = new Date(now);
+      last7Days.setDate(now.getDate() - 7);
+
       controller = this.owner.lookup(
         'controller:scopes/scope/session-recordings/index',
       );
@@ -84,6 +90,10 @@ module(
       controller.set('model', model);
     });
 
+    hooks.afterEach(function () {
+      Date.now = originalDateNow;
+    });
+
     test('it exists', function (assert) {
       assert.ok(controller);
     });
@@ -92,15 +102,15 @@ module(
       assert.deepEqual(controller.filters.allFilters, {
         time: [
           {
-            id: midnight.toISOString(),
-            name: 'Today',
+            id: last24Hours.toISOString(),
+            name: 'Last 24 hours',
           },
           {
-            id: threeDaysPast.toISOString(),
+            id: last3Days.toISOString(),
             name: 'Last 3 days',
           },
           {
-            id: sevenDaysPast.toISOString(),
+            id: last7Days.toISOString(),
             name: 'Last 7 days',
           },
         ],
@@ -125,15 +135,15 @@ module(
     test('timeOptions returns expected filter options', function (assert) {
       assert.deepEqual(controller.timeOptions, [
         {
-          id: midnight.toISOString(),
-          name: 'Today',
+          id: last24Hours.toISOString(),
+          name: 'Last 24 hours',
         },
         {
-          id: threeDaysPast.toISOString(),
+          id: last3Days.toISOString(),
           name: 'Last 3 days',
         },
         {
-          id: sevenDaysPast.toISOString(),
+          id: last7Days.toISOString(),
           name: 'Last 7 days',
         },
       ]);
@@ -150,6 +160,9 @@ module(
     });
 
     test('handleSearchInput action sets expected values correctly', async function (assert) {
+      // Date.now mock in beforeEach is causing waitUntil to fail so I set it
+      // back to the originalDateNow before running this test
+      Date.now = originalDateNow;
       const searchValue = 'test';
       controller.handleSearchInput({ target: { value: searchValue } });
       await waitUntil(() => controller.search === searchValue);
@@ -169,10 +182,10 @@ module(
     test('changeTimeFilter action sets the time filter', function (assert) {
       assert.expect(3);
       this.onClose = () => assert.ok(true, 'onClose was called');
-      controller.changeTimeFilter(midnight.toISOString(), this.onClose);
+      controller.changeTimeFilter(last24Hours.toISOString(), this.onClose);
 
       assert.strictEqual(controller.page, 1);
-      assert.deepEqual(controller.time, midnight.toISOString());
+      assert.deepEqual(controller.time, last24Hours.toISOString());
     });
 
     test('refresh action calls refreshAll', async function (assert) {

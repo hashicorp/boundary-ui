@@ -27,6 +27,8 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     'pageSize',
   ];
 
+  now = new Date();
+
   @tracked search = '';
   @tracked time = null;
   @tracked users = [];
@@ -61,26 +63,27 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    * @returns {[object]}
    */
   get timeOptions() {
-    const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const threeDaysPast = new Date(midnight);
-    threeDaysPast.setDate(midnight.getDate() - 3);
-    const sevenDaysPast = new Date(midnight);
-    sevenDaysPast.setDate(midnight.getDate() - 7);
+    const last24Hours = new Date(this.now.getTime() - 24 * 60 * 60 * 1000);
+    const last3Days = new Date(this.now);
+    last3Days.setDate(this.now.getDate() - 3);
+    const last7Days = new Date(this.now);
+    last7Days.setDate(this.now.getDate() - 7);
 
     return [
       {
-        id: midnight.toISOString(),
-        name: this.intl.t('resources.session-recording.filters.time.today'),
+        id: last24Hours.toISOString(),
+        name: this.intl.t(
+          'resources.session-recording.filters.time.last-twenty-four-hours',
+        ),
       },
       {
-        id: threeDaysPast.toISOString(),
+        id: last3Days.toISOString(),
         name: this.intl.t(
           'resources.session-recording.filters.time.last-three-days',
         ),
       },
       {
-        id: sevenDaysPast.toISOString(),
+        id: last7Days.toISOString(),
         name: this.intl.t(
           'resources.session-recording.filters.time.last-seven-days',
         ),
