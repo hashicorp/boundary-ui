@@ -133,7 +133,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 
-  test('clicking signout button logs out the user', async function (assert) {
+  test('clicking sign-out button logs out the user', async function (assert) {
     authenticateSession({ username: 'testuser' });
     assert.expect(2);
     await visit(urls.settings);
