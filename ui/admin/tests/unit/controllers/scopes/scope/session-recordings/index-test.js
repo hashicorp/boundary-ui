@@ -19,7 +19,7 @@ module(
 
     let controller;
     let model;
-    const originalDateNow = Date.now;
+    let date;
     let last24Hours, last3Days, last7Days;
 
     const instances = {
@@ -35,8 +35,7 @@ module(
     };
 
     hooks.beforeEach(function () {
-      const timeStamp = 1726760348000; // Thursday, September 19, 2024 3:39:08 PM (GMT)
-      sinon.stub(Date, 'now').returns(timeStamp);
+      date = sinon.useFakeTimers(new Date(2024, 9, 19).getTime());
       const now = new Date();
       last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       last3Days = new Date(now);
@@ -91,7 +90,7 @@ module(
     });
 
     hooks.afterEach(function () {
-      Date.now = originalDateNow;
+      date.restore();
     });
 
     test('it exists', function (assert) {
@@ -160,9 +159,9 @@ module(
     });
 
     test('handleSearchInput action sets expected values correctly', async function (assert) {
-      // Date.now mock in beforeEach is causing waitUntil to fail so I set it
-      // back to the originalDateNow before running this test
-      Date.now = originalDateNow;
+      // Date mock in beforeEach is causing waitUntil to fail so I restore it
+      // back before running this test
+      date.restore();
       const searchValue = 'test';
       controller.handleSearchInput({ target: { value: searchValue } });
       await waitUntil(() => controller.search === searchValue);
