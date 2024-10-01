@@ -6,14 +6,25 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { loading } from 'ember-loading';
+import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { confirm } from 'core/decorators/confirm';
 
 export default class ScopesScopeAliasesIndexController extends Controller {
   // =services
+
   @service can;
   @service router;
+
+  // =attributes
+
+  queryParams = ['search', 'page', 'pageSize'];
+
+  @tracked search;
+  @tracked page = 1;
+  @tracked pageSize = 10;
 
   // =actions
 
@@ -22,10 +33,10 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @param {AliasModel} alias
    */
   @action
-  async cancel(alias) {
+  cancel(alias) {
     const { isNew } = alias;
     alias.rollbackAttributes();
-    if (isNew) await this.router.transitionTo('scopes.scope.aliases');
+    if (isNew) this.router.transitionTo('scopes.scope.aliases');
   }
 
   /**
@@ -49,7 +60,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   }
 
   /**
-   * Remove destaination_id from alias
+   * Remove destination_id from alias
    * @param {AliasModel} alias
    */
   @action
@@ -76,5 +87,17 @@ export default class ScopesScopeAliasesIndexController extends Controller {
     await alias.destroyRecord();
     await this.router.replaceWith('scopes.scope.aliases');
     await this.router.refresh();
+  }
+
+  /**
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
+   */
+  @action
+  @debounce(250)
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
   }
 }

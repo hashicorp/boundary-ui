@@ -14,14 +14,14 @@
       {{t 'resources.user.title_plural'}}
       <DocLink @doc='user' @iconSize='large' />
     </h2>
-    {{#if @model.usersExist}}
+    {{#if @model.doUsersExist}}
       <p>{{t 'resources.user.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='users')}}
-      {{#if @model.usersExist}}
+      {{#if @model.doUsersExist}}
         <Hds::Button
           @route='scopes.scope.users.new'
           @text={{t 'resources.user.titles.new'}}
@@ -31,7 +31,7 @@
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.usersExist}}
+    {{#if @model.doUsersExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}

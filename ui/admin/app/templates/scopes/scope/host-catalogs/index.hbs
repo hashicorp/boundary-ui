@@ -14,14 +14,14 @@
       {{t 'resources.host-catalog.title_plural'}}
       <DocLink @doc='host-catalog' @iconSize='large' />
     </h2>
-    {{#if @model.hostCatalogsExist}}
+    {{#if @model.doHostCatalogsExist}}
       <p>{{t 'resources.host-catalog.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='host-catalogs')}}
-      {{#if @model.hostCatalogsExist}}
+      {{#if @model.doHostCatalogsExist}}
         <Hds::Button
           @route='scopes.scope.host-catalogs.new'
           @text={{t 'resources.host-catalog.titles.new'}}
@@ -31,7 +31,7 @@
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.hostCatalogsExist}}
+    {{#if @model.doHostCatalogsExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
