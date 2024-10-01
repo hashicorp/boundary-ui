@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { pluralize } from 'ember-inflector';
 import { camelize } from '@ember/string';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { faker } from '@faker-js/faker';
 
 const seedIndexDb = async (resource, store, indexedDb, server) => {
   const resourceData =
@@ -526,6 +527,54 @@ module('Unit | Utility | indexed-db-query', function (hooks) {
     const query = { filters: { is_primary: [{ equals: 'false' }] } };
 
     const result = await queryIndexedDb(indexedDb.db, 'auth-method', query);
+
+    assert.strictEqual(result.length, 0);
+  });
+
+  test('it filters on date type fields and returns results', async function (assert) {
+    const pastDate = faker.date.between({
+      from: '2024-09-19T00:00:00.000Z',
+      to: '2024-09-20T00:00:00.000Z',
+    });
+    const createdTime = faker.date.between({
+      from: '2024-09-23T00:00:00.000Z',
+      to: '2024-09-24T00:00:00.000Z',
+    });
+    this.server.create('session-recording', {
+      created_time: createdTime,
+    });
+    await seedIndexDb('session-recording', store, indexedDb, this.server);
+    const query = { filters: { created_time: [{ gte: pastDate }] } };
+
+    const result = await queryIndexedDb(
+      indexedDb.db,
+      'session-recording',
+      query,
+    );
+
+    assert.strictEqual(result.length, 1);
+  });
+
+  test('it filters on date type fields and returns no results', async function (assert) {
+    const createdTime = faker.date.between({
+      from: '2024-09-19T00:00:00.000Z',
+      to: '2024-09-20T00:00:00.000Z',
+    });
+    const pastDate = faker.date.between({
+      from: '2024-09-23T00:00:00.000Z',
+      to: '2024-09-24T00:00:00.000Z',
+    });
+    this.server.create('session-recording', {
+      created_time: createdTime,
+    });
+    await seedIndexDb('session-recording', store, indexedDb, this.server);
+    const query = { filters: { created_time: [{ gte: pastDate }] } };
+
+    const result = await queryIndexedDb(
+      indexedDb.db,
+      'session-recording',
+      query,
+    );
 
     assert.strictEqual(result.length, 0);
   });
