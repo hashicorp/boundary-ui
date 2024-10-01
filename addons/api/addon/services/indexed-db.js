@@ -29,6 +29,8 @@ export const modelIndexes = {
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.scope.scope_id, attributes.plugin.name',
   'auth-method':
     '&id, attributes.created_time, attributes.type, attributes.name, attributes.description, attributes.is_primary, attributes.scope.scope_id',
+  'session-recording':
+    '&id, attributes.created_time, attributes.type, attributes.state, attributes.start_time, attributes.end_time, attributes.duration, attributes.scope.scope_id, attributes.create_time_values.user.id, attributes.create_time_values.user.name, attributes.create_time_values.target.id, attributes.create_time_values.target.name, attributes.create_time_values.target.scope.id, attributes.create_time_values.target.scope.name',
   alias:
     '&id, attributes.created_time, attributes.type, attributes.value, attributes.name, attributes.description, attributes.destination_id, attributes.scope.scope_id',
 };
@@ -111,7 +113,7 @@ export default class IndexedDbService extends Service {
     }
 
     this.#db = new Dexie(dbName);
-    this.#db.version(1).stores(modelIndexes);
+    this.#db.version(2).stores(modelIndexes);
   }
 
   /**
