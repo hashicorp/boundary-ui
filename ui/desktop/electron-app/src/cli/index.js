@@ -5,9 +5,6 @@
 
 const { spawnSync } = require('../helpers/spawn-promise.js');
 const { path, isBuiltInCli } = require('./path.js');
-const pathPosix = require('path');
-const pathWin = require('path/win32');
-const { isWindows } = require('../helpers/platform.js');
 
 module.exports = {
   // Check boundary cli existence
