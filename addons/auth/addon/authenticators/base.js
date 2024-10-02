@@ -5,7 +5,7 @@
 
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
-import fetch from 'fetch';
+import { waitForPromise } from '@ember/test-waiters';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -58,10 +58,14 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async validateToken(token, tokenID) {
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
-    const response = await fetch(tokenValidationURL, {
-      method: 'get',
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
+    // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
+    const response = await waitForPromise(
+      fetch(tokenValidationURL, {
+        method: 'get',
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    );
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     if (response.status === 401 || response.status === 404) return reject();
@@ -103,7 +107,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   }
 
   /**
-   * Posts to the `deauthEntpoint` on a best-effort basis and then returns.
+   * Posts to the `deauthEndpoint` on a best-effort basis and then returns.
    * Deauthentication with the server is not guaranteed and request failures
    * are ignored.
    *
@@ -113,12 +117,14 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   async invalidate(options) {
     const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
-    await fetch(deauthEndpointURL, {
-      method: 'delete',
-      headers: { Authorization: `Bearer ${token}` },
-    }).catch(() => {
-      /* no op */
-    });
+    await waitForPromise(
+      fetch(deauthEndpointURL, {
+        method: 'delete',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {
+        /* no op */
+      }),
+    );
     return super.invalidate(...arguments);
   }
 }

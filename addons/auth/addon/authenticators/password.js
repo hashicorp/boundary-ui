@@ -5,7 +5,7 @@
 
 import BaseAuthenticator from './base';
 import { resolve, reject } from 'rsvp';
-import fetch from 'fetch';
+import { waitForPromise } from '@ember/test-waiters';
 
 /**
  *
@@ -66,7 +66,11 @@ export default class PasswordAuthenticator extends BaseAuthenticator {
       attributes: { login_name, password },
     });
     const authEndpointURL = this.buildAuthEndpointURL(options);
-    const response = await fetch(authEndpointURL, { method: 'post', body });
+    // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
+    // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
+    const response = await waitForPromise(
+      fetch(authEndpointURL, { method: 'post', body }),
+    );
     const json = await response.json();
     return response.status < 400
       ? resolve(this.normalizeData(json, login_name))

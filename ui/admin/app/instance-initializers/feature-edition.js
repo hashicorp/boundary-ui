@@ -3,8 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import fetch from 'fetch';
-
 async function autoInitializeFeatureEdition(owner) {
   const service = owner.lookup('service:feature-edition');
   const adapter = owner.lookup('adapter:application');
