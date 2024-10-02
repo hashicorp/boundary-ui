@@ -174,7 +174,7 @@ module.exports = {
     /**
      * Skip the app updater if we are NOT using the built in CLI
      */
-    if (!boundaryCli.isBuiltInCli()) return;
+    if (!boundaryCli.isBuiltInCli) return;
 
     let latestVersion;
     if (debug) {
