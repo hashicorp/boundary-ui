@@ -87,6 +87,9 @@ test.describe('Aliases (Enterprise)', async () => {
 
       // Clear destination from alias
       await page.getByRole('link', { name: alias }).click();
+      await expect(
+        page.getByRole('heading', { name: 'Alias' }),
+      ).toBeVisible();
       await page.getByRole('button', { name: 'Manage' }).click();
       await page.getByText('Clear', { exact: true }).click();
       await page.getByText('OK', { exact: true }).click();
