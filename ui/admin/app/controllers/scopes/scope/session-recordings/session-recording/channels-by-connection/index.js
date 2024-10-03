@@ -62,7 +62,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
     try {
       await sessionRecording.reapplyStoragePolicy();
     } catch (e) {
-      await this.router.replaceWith('scopes.scope.session-recordings');
+      this.router.replaceWith('scopes.scope.session-recordings');
       this.router.refresh();
       throw new Error(e);
     }
@@ -79,7 +79,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   @notifySuccess('notifications.delete-success')
   async delete(sessionRecording) {
     await sessionRecording.destroyRecord();
-    await this.router.replaceWith('scopes.scope.session-recordings');
+    this.router.replaceWith('scopes.scope.session-recordings');
     this.router.refresh();
   }
 }

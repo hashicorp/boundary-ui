@@ -96,7 +96,10 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       if (!this.allSessionRecordings) {
         await this.getAllSessionRecordings(scope_id);
       }
-      doSessionRecordingsExist = Boolean(this.allSessionRecordings.length);
+      doSessionRecordingsExist = await this.getDoSessionRecordingsExist(
+        scope_id,
+        totalItems,
+      );
       doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
 
       return {
@@ -123,6 +126,31 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       },
       options,
     );
+  }
+
+  /**
+   * Sets doSessionRecordingsExist to true if there are any session recordings.
+   * @param {string} scope_id
+   * @param {number} totalItems
+   * @returns {Promise<boolean>}
+   */
+  async getDoSessionRecordingsExist(scope_id, totalItems) {
+    if (totalItems > 0) {
+      return true;
+    }
+    const options = { pushToStore: false, peekIndexedDB: true };
+    const sessionRecordings = await this.store.query(
+      'session-recording',
+      {
+        scope_id,
+        query: { filters: { scope_id: [{ equals: scope_id }] } },
+        page: 1,
+        pageSize: 1,
+        recursive: true,
+      },
+      options,
+    );
+    return sessionRecordings.length > 0;
   }
 
   /**
