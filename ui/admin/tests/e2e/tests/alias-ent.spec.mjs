@@ -87,9 +87,12 @@ test.describe('Aliases (Enterprise)', async () => {
 
       // Clear destination from alias
       await page.getByRole('link', { name: alias }).click();
+      // Note: On the Target details page, there is a section with the header
+      // "Aliases". The extra check here is to ensure that we are on the Alias
+      // details page and not the Target details page.
       await expect(
         page.getByRole('heading', { name: 'Alias' }),
-      ).toBeVisible();
+      ).not.toHaveText('Aliases');
       await page.getByRole('button', { name: 'Manage' }).click();
       await page.getByText('Clear', { exact: true }).click();
       await page.getByText('OK', { exact: true }).click();
