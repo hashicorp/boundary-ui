@@ -16,13 +16,13 @@ const builtInCliPath = isDev
 // Return true if the CLI in usage is the built in. False if relies on system CLI.
 const isBuiltInCli = existsSync(builtInCliPath);
 
+/**
+ * Returns Boundary CLI path if the CLI is built in or the Boundary binary name
+ * if not, so we assume boundary is available within user $PATH.
+ */
+const pathBoundary = isBuiltInCli ? builtInCliPath : binaryName;
+
 module.exports = {
-  /**
-   * Returns Boundary CLI path if the CLI is built in or the Boundary binary name
-   * if not, so we assume boundary is available within user $PATH.
-   */
-  path: () => {
-    return isBuiltInCli ? builtInCliPath : binaryName;
-  },
+  path: pathBoundary,
   isBuiltInCli,
 };

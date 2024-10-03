@@ -8,7 +8,7 @@ const { path, isBuiltInCli } = require('./path.js');
 
 module.exports = {
   // Check boundary cli existence
-  exists: () => Boolean(path()),
+  exists: () => Boolean(path),
 
   isBuiltInCli,
 
