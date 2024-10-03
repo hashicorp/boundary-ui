@@ -171,6 +171,11 @@ module.exports = {
      */
     if (isWindows() || isLinux()) return;
 
+    /**
+     * Skip the app updater if we are NOT using the built in CLI
+     */
+    if (!boundaryCli.isBuiltInCli) return;
+
     let latestVersion;
     if (debug) {
       latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
