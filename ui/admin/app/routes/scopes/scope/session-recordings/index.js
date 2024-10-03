@@ -143,7 +143,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       'session-recording',
       {
         scope_id,
-        query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
         recursive: true,

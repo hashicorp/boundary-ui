@@ -454,7 +454,6 @@ storage-bucket:
       help_org: This storage bucket will be available for use with targets within this org.
     provider:
       label: Provider
-      help: Boundary currently only supports Amazon S3 storage.
     endpoint_url:
       label: Endpoint URL
       help: Cannot be changed later.
