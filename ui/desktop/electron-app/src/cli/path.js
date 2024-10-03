@@ -8,7 +8,6 @@ const { isWindows } = require('../helpers/platform.js');
 const isDev = require('electron-is-dev');
 const { existsSync } = require('node:fs');
 const which = require('which');
-const log = require('electron-log/main');
 
 const binaryName = isWindows() ? 'boundary.exe' : 'boundary';
 const builtInCliPath = isDev
@@ -26,12 +25,10 @@ const isBuiltInCli = existsSync(builtInCliPath);
 const pathBoundary = isBuiltInCli
   ? builtInCliPath
   : isWindows()
-    ? which.sync(binaryName, { nothrow: true, all: true })
+  ? which
+      .sync(binaryName, { nothrow: true, all: true })
       .filter((binary) => !binary.startsWith(process.cwd()))[0]
-    : binaryName;
-
-log.info('pathBoundary', pathBoundary)
-console.log(pathBoundary)
+  : binaryName;
 
 module.exports = {
   path: pathBoundary,
