@@ -20,11 +20,14 @@ const isBuiltInCli = existsSync(builtInCliPath);
 /**
  * Returns Boundary CLI path if the CLI is built in or the Boundary binary name
  * if not, so we assume boundary is available within user $PATH.
- * For Windows, we filter out the path that is within the current working directory.
  */
 const pathBoundary = isBuiltInCli
   ? builtInCliPath
-  : isWindows()
+  : // On Windows, we need to filter out the path that is within the current working directory.
+  // This is necessary because the spawn methods may not always find the correct binary path.
+  // The `which` module returns an array of all available paths for the 'boundary' binary.
+  // We then filter out the path that is within the current working directory.
+  isWindows()
   ? which
       .sync(binaryName, { nothrow: true, all: true })
       .filter((binary) => !binary.startsWith(process.cwd()))[0]
