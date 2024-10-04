@@ -32,7 +32,7 @@ module.exports = {
    */
   spawnAsyncJSONPromise(command, token) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command, {
+      const childProcess = spawn(path, command, {
         env: {
           ...process.env,
           BOUNDARY_TOKEN: token,
@@ -77,7 +77,7 @@ module.exports = {
    * @param {object} envVars
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
   spawnSync(args, envVars = {}) {
-    const childProcess = spawnSync(path(), args, {
+    const childProcess = spawnSync(path, args, {
       // Some of our outputs (namely cache daemon searching) can be very large.
       // This an undocumented hack to allow for an unlimited buffer size which
       // could change at any time. If it does, we should just set an arbitrarily
@@ -103,7 +103,7 @@ module.exports = {
    */
   spawn(command, options) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command, options);
+      const childProcess = spawn(path, command, options);
       childProcess.stdout.on('data', (data) => {
         resolve({ childProcess, stdout: data.toString() });
       });
