@@ -454,7 +454,6 @@ storage-bucket:
       help_org: This storage bucket will be available for use with targets within this org.
     provider:
       label: Provider
-      help: Boundary currently only supports Amazon S3 storage.
     endpoint_url:
       label: Endpoint URL
       help: Cannot be changed later.
@@ -706,7 +705,7 @@ target:
       help: The local proxy port on which to listen by default when a session is started on a client.
     sidebar:
       label: Session Recording
-      help: Record SSH sessions on this target and save them to an Amazon S3 bucket.
+      help: Record SSH sessions on this target and save them to a storage bucket.
       link: Session Recording settings
   questions:
     delete-host-sources:
