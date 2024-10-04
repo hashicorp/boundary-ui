@@ -357,6 +357,12 @@ session-recording:
   duration: '{time} duration'
   questions:
     delete: Are you sure you want to delete this recording?
+  filters:
+    time:
+      title: Time
+      last-twenty-four-hours: Last 24 hours
+      last-three-days: Last 3 days
+      last-seven-days: Last 7 days
   connection:
     title: Connection
     title_index: Connection {index}
@@ -439,6 +445,7 @@ storage-bucket:
   plugin-types:
     aws: Amazon S3
     minio: MinIO
+    unknown: Unknown
   form:
     scope:
       label: Scope

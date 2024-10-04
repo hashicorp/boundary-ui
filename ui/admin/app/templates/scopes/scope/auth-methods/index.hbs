@@ -42,7 +42,7 @@
   </page.actions>
 
   <page.body class='search-filtering'>
-    {{#if @model.authMethodsExist}}
+    {{#if @model.doAuthMethodsExist}}
       {{#unless this.hasPrimaryAuthMethod}}
         <Hds::Alert
           class='auth-methods-list-alert'

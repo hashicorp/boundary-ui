@@ -31,14 +31,14 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
 
   /**
    * Loads queried groups and the number of groups under current scope.
-   * @returns {Promise<{totalItems: number, groups: [GroupModel], groupsExist: boolean }> }
+   * @returns {Promise<{totalItems: number, groups: [GroupModel], doGroupsExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
     let groups = [];
     let totalItems = 0;
-    let groupsExist = false;
+    let doGroupsExist = false;
     const filters = { scope_id: [{ equals: scope_id }] };
 
     if (this.can.can('list model', scope, { collection: 'groups' })) {
@@ -49,18 +49,19 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
         pageSize,
       });
       totalItems = groups.meta?.totalItems;
-      groupsExist = await this.getGroupsExist(scope_id, totalItems);
+      doGroupsExist = await this.getDoGroupsExist(scope_id, totalItems);
     }
 
-    return { groups, groupsExist, totalItems };
+    return { groups, doGroupsExist, totalItems };
   }
 
   /**
-   * Sets groupsExist to true if there exists any groups.
+   * Sets doGroupsExist to true if there exists any groups.
    * @param {string} scope_id
    * @param {number} totalItems
+   * @returns {Promise<boolean>}
    */
-  async getGroupsExist(scope_id, totalItems) {
+  async getDoGroupsExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

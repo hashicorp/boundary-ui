@@ -45,7 +45,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   /**
    * Loads queried targets, the number of targets under current scope, and
    * active sessions filtering options.
-   * @returns {Promise<{totalItems: number, targets: [TargetModel], targetsExist: boolean }> }
+   * @returns {Promise<{totalItems: number, targets: [TargetModel], doTargetsExist: boolean }> }
    */
   async model({ search, availableSessions, types, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -78,7 +78,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     let targets;
     let totalItems = 0;
-    let targetsExist = false;
+    let doTargetsExist = false;
     if (this.can.can('list model', scope, { collection: 'targets' })) {
       targets = await this.store.query('target', {
         scope_id,
@@ -87,19 +87,19 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         pageSize,
       });
       totalItems = targets.meta?.totalItems;
-      targetsExist = await this.getTargetsExist(scope_id, totalItems);
+      doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
     }
 
-    return { targets, targetsExist, totalItems };
+    return { targets, doTargetsExist, totalItems };
   }
 
   /**
-   * Sets targetsExist to true if there exists any targets.
+   * Sets doTargetsExist to true if there exists any targets.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getTargetsExist(scope_id, totalItems) {
+  async getDoTargetsExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

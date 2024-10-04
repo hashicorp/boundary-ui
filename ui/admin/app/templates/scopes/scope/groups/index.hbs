@@ -14,14 +14,14 @@
       {{t 'resources.group.title_plural'}}
       <DocLink @doc='group' @iconSize='large' />
     </h2>
-    {{#if @model.groupsExist}}
+    {{#if @model.doGroupsExist}}
       <p>{{t 'resources.group.description'}}</p>
     {{/if}}
   </page.header>
 
   <page.actions>
     {{#if (can 'create model' this.scope collection='groups')}}
-      {{#if @model.groupsExist}}
+      {{#if @model.doGroupsExist}}
         <Hds::Button
           @route='scopes.scope.groups.new'
           @text={{t 'resources.group.titles.new'}}
@@ -32,7 +32,7 @@
 
   <page.body class='search-filtering'>
 
-    {{#if @model.groupsExist}}
+    {{#if @model.doGroupsExist}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
           @value={{this.search}}
