@@ -38,6 +38,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'AWS',
       description: 'this is a Aws plugin host-catalog',
       disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
       // these are AWS fields and should be included
       region: 'spain',
       access_key_id: 'foobars',
@@ -53,6 +54,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'AWS',
       description: 'this is a Aws plugin host-catalog',
       type: 'plugin',
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: true,
         region: 'spain',
@@ -75,6 +77,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       region: 'spain',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
+      worker_filter: 'workerfilter',
       // these are Azure fields and should be excluded
       tenant_id: 'a1b2c3',
       client_id: 'a1b2c3',
@@ -113,6 +116,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
           plugin: {
             name: 'aws',
           },
+          worker_filter: 'workerfilter',
           region: 'andorra',
         },
       },
@@ -122,6 +126,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       type: 'plugin',
       name: 'aws',
       description: 'test description',
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: false,
         region: 'andorra',

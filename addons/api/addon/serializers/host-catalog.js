@@ -45,7 +45,6 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
       isPlugin &&
       json &&
       options?.for &&
-      options.for !== compositeType &&
       !options.for.includes(compositeType)
     ) {
       if (!fieldsByType[compositeType].includes(key)) {
@@ -66,7 +65,6 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
         delete json.secrets[key];
       }
     }
-
     return value;
   }
 
