@@ -225,6 +225,9 @@ host-catalog:
     azure_client_id:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
+    worker_filter:
+      label: Worker Filter
+      help: Insert a worker filter in order to route requests to the correct worker. Learn more.
 host-set:
   title: Host Set
   title_plural: Host Sets

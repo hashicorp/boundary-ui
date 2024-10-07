@@ -11,6 +11,7 @@ const fieldsByType = {
     'region',
     'access_key_id',
     'secret_access_key',
+    'worker_filter',
   ],
   azure: [
     'disable_credential_rotation',
@@ -38,19 +39,34 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const value = super.serializeAttribute(...arguments);
     const { isPlugin, compositeType } = snapshot.record;
     const { options } = attribute;
-    // Nested conditionals for readability
-    // This deletes any fields that don't belong to the record type
-    if (isPlugin && options.isNestedAttribute && json.attributes) {
-      // The key must be included in the fieldsByType list above
-      if (!fieldsByType[compositeType].includes(key))
-        delete json.attributes[key];
-    }
-    // This deletes any fields that don't belong to the record type
-    if (isPlugin && options.isNestedSecret && json.secrets) {
-      if (!fieldsByType[compositeType].includes(key)) delete json.secrets[key];
+
+    // Delete any fields that don't belong to the compositeType
+    if (
+      isPlugin &&
+      json &&
+      options?.for &&
+      options.for !== compositeType &&
+      !options.for.includes(compositeType)
+    ) {
+      if (!fieldsByType[compositeType].includes(key)) {
+        delete json[key];
+      }
     }
 
-    // new one for isNestedSecret
+    // Delete any nested attribute fields that don't belong to the record type
+    if (isPlugin && options.isNestedAttribute && json.attributes) {
+      if (!fieldsByType[compositeType].includes(key)) {
+        delete json.attributes[key];
+      }
+    }
+
+    // Delete any secret fields that don't belong to the record type
+    if (isPlugin && options.isNestedSecret && json.secrets) {
+      if (!fieldsByType[compositeType].includes(key)) {
+        delete json.secrets[key];
+      }
+    }
+
     return value;
   }
 

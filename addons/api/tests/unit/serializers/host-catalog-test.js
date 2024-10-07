@@ -215,6 +215,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
         name: 'aws',
         description: 'aws host catalog',
       },
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: false,
         region: 'Illinois',
@@ -238,6 +239,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
           type: 'plugin',
           description: 'Test description',
           authorized_actions: ['no-op'],
+          worker_filter: 'workerfilter',
           plugin: {
             id: 'plugin-id-5',
             name: 'aws',

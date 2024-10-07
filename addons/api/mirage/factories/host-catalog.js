@@ -38,6 +38,12 @@ export default factory.extend({
     };
   },
 
+  worker_filter: function () {
+    if (this.type === 'plugin' && this.plugin?.name === 'aws') {
+      return `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
+    }
+  },
+
   plugin: function (i) {
     if (this.type === 'plugin') {
       return {
