@@ -34,6 +34,7 @@ const menu = require('./config/menu.js');
 const appUpdater = require('./helpers/app-updater.js');
 const { isMac, isLinux, isWindows } = require('./helpers/platform.js');
 const fixPath = require('./utils/fixPath');
+const isLocalhost = require('./utils/isLocalhost');
 const config = require('../config/config.js');
 const { version } = require('./cli/index.js');
 const isDev = require('electron-is-dev');
@@ -160,6 +161,7 @@ const createWindow = (partition, closeWindowCB) => {
   // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (
+      isLocalhost(url) ||
       url.startsWith('https://developer.hashicorp.com/') ||
       url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
     ) {
@@ -262,7 +264,7 @@ app.on('ready', async () => {
   appUpdater.run({ suppressNoUpdatePrompt: true });
 
   /**
-   * Need for Mac OS behaviour of closing the window but not the app.
+   * Need for Mac OS behavior of closing the window but not the app.
    * This allows to reopen the window if the user clicks Boundary icon in the dock
    * while the app is not close.
    * More info: https://www.electronjs.org/docs/latest/tutorial/quick-start#open-a-window-if-none-are-open-macos
