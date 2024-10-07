@@ -168,7 +168,9 @@
     </F.Label>
     <F.HelperText>
       {{t 'resources.host-catalog.form.worker_filter.help'}}
-      {{! TODO: Add link to documentation }}
+      <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
     </F.HelperText>
     {{#if @model.errors.worker_filter}}
       <F.Error as |E|>
