@@ -45,11 +45,10 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
       isPlugin &&
       json &&
       options?.for &&
-      !options.for.includes(compositeType)
+      !options.for.includes(compositeType) &&
+      !fieldsByType[compositeType].includes(key)
     ) {
-      if (!fieldsByType[compositeType].includes(key)) {
-        delete json[key];
-      }
+      delete json[key];
     }
 
     // Delete any nested attribute fields that don't belong to the record type
