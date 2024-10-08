@@ -4,10 +4,11 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, waitFor, fillIn } from '@ember/test-helpers';
+import { visit, click, waitFor, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
   // These are left here intentionally for future reference.
@@ -47,6 +48,8 @@ module('Acceptance | auth-methods | list', function (hooks) {
     globalScope: null,
     orgScope: null,
     authMethods: null,
+    orgAuthMethods: null,
+    globalAuthMethods: null,
     passwordAuthMethod: null,
     oidcAuthMethod: null,
   };
@@ -69,13 +72,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
     });
-    urls.globalScope = `/scopes/global/scopes`;
+    urls.globalScope = `/scopes/global`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
+    urls.globalAuthMethods = `${urls.globalScope}/auth-methods`;
+    urls.orgAuthMethods = `${urls.orgScope}/auth-methods`;
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
 
-    authenticateSession({});
+    authenticateSession({ username: 'admin' });
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {
@@ -114,6 +119,24 @@ module('Acceptance | auth-methods | list', function (hooks) {
     await click(`[href="${urls.orgScope}"]`);
 
     assert.dom(`[href="${urls.authMethods}"]`).exists();
+  });
+
+  test('visiting auth methods in org scope', async function (assert) {
+    await visit(urls.orgScope);
+
+    await click(`[href="${urls.orgAuthMethods}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.orgAuthMethods);
+  });
+
+  test('visiting auth methods in global scope', async function (assert) {
+    await visit(urls.globalScope);
+
+    await click(`[href="${urls.globalAuthMethods}"]`);
+    await a11yAudit();
+
+    assert.strictEqual(currentURL(), urls.globalAuthMethods);
   });
 
   test('user can search for a specifc auth-method by id', async function (assert) {

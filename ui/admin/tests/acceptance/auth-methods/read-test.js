@@ -72,24 +72,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
     urls.oidcAuthMethodGlobal = `${urls.globalAuthMethods}/${instances.oidcAuthMethodGlobal.id}`;
   });
 
-  test('visiting auth methods in org scope', async function (assert) {
-    await visit(urls.orgScope);
-
-    await click(`[href="${urls.orgAuthMethods}"]`);
-    await a11yAudit();
-
-    assert.strictEqual(currentURL(), urls.orgAuthMethods);
-  });
-
-  test('visiting auth methods in global scope', async function (assert) {
-    await visit(urls.globalScope);
-
-    await click(`[href="${urls.globalAuthMethods}"]`);
-    await a11yAudit();
-
-    assert.strictEqual(currentURL(), urls.globalAuthMethods);
-  });
-
   test('can navigate to an auth method form in org scope', async function (assert) {
     await visit(urls.orgScope);
 
