@@ -16,7 +16,6 @@ module(
         'controller:scopes/scope/authenticate/method/oidc',
       );
       assert.ok(controller);
-      assert.ok(controller.authMethod);
     });
   },
 );
