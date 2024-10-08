@@ -10,11 +10,10 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
+  currentSession,
   authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
@@ -83,6 +82,66 @@ module('Acceptance | auth-methods | list', function (hooks) {
     authenticateSession({ username: 'admin' });
   });
 
+  module('a11yAudit', function () {
+    test.each('auth-methods', ['light', 'dark'], async function (assert, data) {
+      assert.expect(0);
+      currentSession().set('data.theme', data);
+      await visit(urls.authMethods);
+
+      // open new dropdown
+      await click('.rose-layout-page-actions button');
+      await a11yAudit();
+
+      // open dropdown at last row
+      await click('td:last-child button');
+      await a11yAudit();
+
+      // open primary filter
+      await click('.hds-segmented-group div[name="primary"] div button');
+      await a11yAudit();
+
+      // check 'yes'
+      await click(
+        '.hds-segmented-group div[name="primary"] div:last-child input',
+      );
+      await a11yAudit();
+
+      // filter selected
+      await click(FILTER_DROPDOWN_SELECTOR('type'));
+      await click(`input[value="${TYPE_AUTH_METHOD_PASSWORD}"]`);
+      await click(FILTER_APPLY_BUTTON_SELECTOR);
+      await a11yAudit();
+
+      // "no results" message
+      await fillIn(
+        SEARCH_INPUT_SELECTOR,
+        'fake auth method that does not exist',
+      );
+      await a11yAudit();
+    });
+
+    test('API error', async function (assert) {
+      assert.expect(0);
+      this.server.get('/auth-methods', () => {
+        return new Response(
+          418,
+          {},
+          {
+            status: 418,
+            code: "I'm a teapot",
+            message: 'Ope, sorry about that!',
+          },
+        );
+      });
+
+      await visit(urls.globalAuthMethods);
+      await a11yAudit();
+
+      currentSession().set('data.theme', 'dark');
+      await a11yAudit();
+    });
+  });
+
   test('users can navigate to auth methods with proper authorization', async function (assert) {
     await visit(urls.globalScope);
 
@@ -125,7 +184,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
     await visit(urls.orgScope);
 
     await click(`[href="${urls.orgAuthMethods}"]`);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgAuthMethods);
   });
@@ -134,7 +192,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
     await visit(urls.globalScope);
 
     await click(`[href="${urls.globalAuthMethods}"]`);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalAuthMethods);
   });
@@ -162,7 +219,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
     assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake target that does not exist');
+    await fillIn(SEARCH_INPUT_SELECTOR, 'fake auth method that does not exist');
     await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
 
     assert.dom(`[href="${urls.passwordAuthMethod}"]`).doesNotExist();
