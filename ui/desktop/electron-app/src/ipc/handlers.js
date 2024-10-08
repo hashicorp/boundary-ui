@@ -10,6 +10,7 @@ const boundaryCli = require('../cli/index.js');
 const sessionManager = require('../services/session-manager.js');
 const runtimeSettings = require('../services/runtime-settings.js');
 const sanitizer = require('../utils/sanitizer.js');
+const isLocalhost = require('../utils/isLocalhost');
 const { isLinux, isMac, isWindows } = require('../helpers/platform.js');
 const os = require('node:os');
 const pty = require('node-pty');
@@ -46,11 +47,9 @@ handle('resetClusterUrl', async () => runtimeSettings.resetClusterUrl());
  * testing workflows).  Insecure URLs are allowed in dev mode.
  */
 handle('openExternal', async (href) => {
-  const localhostRegex = /^http:\/\/(localhost|127\.0\.0\.1):\d{1,5}(?:\/|$)/i;
-  const isLocalhost = localhostRegex.test(href);
   const isSecure = href.startsWith('https://');
 
-  if (isSecure || isLocalhost || isDev) {
+  if (isSecure || isLocalhost(href) || isDev) {
     /**
      * Launch browser to display documentation and to support arbitrary OIDC flows
      * using openExternal. The protocol is validated (see above).
