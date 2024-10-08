@@ -66,6 +66,13 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // AWS specific
 
   @attr('string', {
+    for: 'plugin',
+    description:
+      'An expression used to filter the workers that have network access to a service that is hosting the external object store.',
+  })
+  worker_filter;
+
+  @attr('string', {
     isNestedAttribute: true,
     description: '',
   })
