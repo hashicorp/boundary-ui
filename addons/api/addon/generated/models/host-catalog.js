@@ -66,7 +66,6 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // AWS specific
 
   @attr('string', {
-    for: 'plugin',
     description:
       'An expression used to filter the workers that have network access to a service that is hosting the external object store.',
   })
@@ -78,6 +77,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   region;
 
+  // AWS static credentials
   @attr('string', {
     isNestedSecret: true,
     description: '',
@@ -89,6 +89,31 @@ export default class GeneratedHostCatalogModel extends BaseModel {
     description: '',
   })
   secret_access_key;
+
+  // AWS dynamic credentials
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The role ARN to use.',
+  })
+  role_arn;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The role external ID to use.',
+  })
+  role_external_id;
+
+  @attr('string', {
+    isNestedAttribute: true,
+    description: 'The role session to use.',
+  })
+  role_session_name;
+
+  @attr('object-as-array', {
+    isNestedAttribute: true,
+    description: 'The role tags to use.',
+  })
+  role_tags;
 
   // Azure specific
 

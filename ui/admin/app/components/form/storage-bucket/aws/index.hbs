@@ -424,7 +424,7 @@
           {{t 'resources.storage-bucket.form.role_tags.label'}}
         </F.Legend>
         <F.HelperText>
-          {{t 'resources.storage-bucket.form.role_tags.label'}}
+          {{t 'resources.storage-bucket.form.role_tags.help'}}
         </F.HelperText>
 
         {{#if @model.errors.role_tags}}
@@ -436,11 +436,18 @@
         {{/if}}
       </:fieldset>
       <:field as |F|>
-        <F.TextInput
+        <F.KeyValue
           @name='role_tags'
           @options={{@model.role_tags}}
           @model={{@model}}
-        />
+        >
+          <:key as |K|>
+            <K.text />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
   {{/if}}
