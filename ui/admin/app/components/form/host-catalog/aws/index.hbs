@@ -19,12 +19,18 @@
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
-    <F.Label>{{t 'form.name.label'}}</F.Label>
-    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+    <F.Label>
+      {{t 'form.name.label'}}
+    </F.Label>
+    <F.HelperText>
+      {{t 'form.name.help'}}
+    </F.HelperText>
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message>
+            {{error.message}}
+          </E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
@@ -38,21 +44,28 @@
     disabled={{form.disabled}}
     as |F|
   >
-    <F.Label>{{t 'form.description.label'}}</F.Label>
-    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+    <F.Label>
+      {{t 'form.description.label'}}
+    </F.Label>
+    <F.HelperText>
+      {{t 'form.description.help'}}
+    </F.HelperText>
     {{#if @model.errors.description}}
       <F.Error as |E|>
         {{#each @model.errors.description as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message>
+            {{error.message}}
+          </E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
   </Hds::Form::Textarea::Field>
 
   {{#if @model.isNew}}
-
     <Hds::Form::RadioCard::Group @name='type' as |G|>
-      <G.Legend>{{t 'form.type.label'}}</G.Legend>
+      <G.Legend>
+        {{t 'form.type.label'}}
+      </G.Legend>
       {{#each this.hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
           @value={{hostCatalogType}}
@@ -61,19 +74,25 @@
           {{on 'input' (fn @changeType hostCatalogType)}}
           as |R|
         >
-          <R.Label>{{t
-              (concat 'resources.host-catalog.types.' hostCatalogType)
-            }}</R.Label>
-          <R.Description>{{t
-              (concat 'resources.host-catalog.help.' hostCatalogType)
-            }}</R.Description>
+          <R.Label>
+            {{t (concat 'resources.host-catalog.types.' hostCatalogType)}}
+          </R.Label>
+          <R.Description>
+            {{t (concat 'resources.host-catalog.help.' hostCatalogType)}}
+          </R.Description>
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
     <Hds::Form::RadioCard::Group @name='plugin_type' @alignment='center' as |G|>
-      <G.Legend>{{t 'titles.provider'}}</G.Legend>
-      <G.Legend>{{t 'titles.choose-a-provider'}}</G.Legend>
-      <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
+      <G.Legend>
+        {{t 'titles.provider'}}
+      </G.Legend>
+      <G.Legend>
+        {{t 'titles.choose-a-provider'}}
+      </G.Legend>
+      <G.HelperText>
+        {{t 'descriptions.choose-a-provider'}}
+      </G.HelperText>
 
       {{#each-in this.mapResourceTypeWithIcon as |pluginType icon|}}
         <G.RadioCard
@@ -83,11 +102,10 @@
           {{on 'input' (fn @changeType pluginType)}}
           as |R|
         >
-          <R.Label>{{t
-              (concat 'resources.host-catalog.types.' pluginType)
-            }}</R.Label>
+          <R.Label>
+            {{t (concat 'resources.host-catalog.types.' pluginType)}}
+          </R.Label>
           <R.Icon @name={{icon}} />
-
         </G.RadioCard>
       {{/each-in}}
     </Hds::Form::RadioCard::Group>
@@ -98,8 +116,11 @@
       readonly={{true}}
       as |F|
     >
-      <F.Label>{{t 'titles.provider'}}</F.Label>
-      <F.HelperText>{{t 'descriptions.provider'}}
+      <F.Label>
+        {{t 'titles.provider'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'descriptions.provider'}}
       </F.HelperText>
     </InfoField>
   {{/if}}
@@ -112,7 +133,9 @@
     {{on 'input' (set-from-event @model 'region')}}
     as |F|
   >
-    <F.Label>{{t 'resources.host-catalog.form.aws_region.label'}}</F.Label>
+    <F.Label>
+      {{t 'resources.host-catalog.form.aws_region.label'}}
+    </F.Label>
     <F.HelperText>
       {{t 'resources.host-catalog.form.aws_region.help'}}
       <Hds::Link::Inline @href={{doc-url 'host-catalog.aws.region'}}>
@@ -121,39 +144,218 @@
     </F.HelperText>
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::TextInput::Field
-    name='access_key_id'
-    @value={{@model.access_key_id}}
-    @isRequired={{true}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'access_key_id')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.access_key_id.label'}}</F.Label>
-    <F.HelperText>
-      {{t 'form.access_key_id.help'}}
-      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-  </Hds::Form::TextInput::Field>
+  {{#if @model.isNew}}
+    <Hds::Form::Radio::Group @layout='vertical' @name='credential_type' as |G|>
+      <G.Legend>
+        {{t 'resources.host-catalog.types.credential.label'}}
+      </G.Legend>
+      <G.HelperText>
+        {{t 'resources.host-catalog.types.credential.help'}}
+      </G.HelperText>
 
-  <Hds::Form::TextInput::Field
-    name='secret_access_key'
-    @value={{@model.secret_access_key}}
-    @isRequired={{true}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'secret_access_key')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.secret_access_key.label'}}</F.Label>
-    <F.HelperText>
-      {{t 'form.secret_access_key.help'}}
-      <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-  </Hds::Form::TextInput::Field>
+      {{#each this.credentials as |credentialType|}}
+        <G.RadioField
+          name={{credentialType}}
+          @value={{credentialType}}
+          checked={{eq credentialType this.selectedCredentialType}}
+          disabled={{form.disabled}}
+          {{on 'input' (fn this.updateCredentialTypeSelection credentialType)}}
+          as |F|
+        >
+          <F.Label>
+            {{t
+              (concat
+                'resources.host-catalog.types.credential.'
+                credentialType
+                '.label'
+              )
+            }}
+          </F.Label>
+          <F.HelperText>
+            {{t
+              (concat
+                'resources.host-catalog.types.credential.'
+                credentialType
+                '.help'
+              )
+            }}
+          </F.HelperText>
+        </G.RadioField>
+      {{/each}}
+    </Hds::Form::Radio::Group>
+  {{else}}
+    <Hds::Form::Fieldset @layout='horizontal' as |F|>
+      <F.Legend>
+        {{t 'resources.host-catalog.types.credential.label'}}
+      </F.Legend>
+      <F.Control>
+        <Hds::Badge
+          @text={{t
+            (concat
+              'resources.host-catalog.types.credential.'
+              this.selectedCredentialType
+              '.edit'
+            )
+          }}
+        />
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/if}}
+  {{#unless this.showDynamicCredentials}}
+    <Hds::Form::TextInput::Field
+      name='access_key_id'
+      @value={{@model.access_key_id}}
+      @isRequired={{true}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'access_key_id')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.access_key_id.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'form.access_key_id.help'}}
+        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
+
+    <Hds::Form::TextInput::Field
+      name='secret_access_key'
+      @value={{@model.secret_access_key}}
+      @isRequired={{true}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'secret_access_key')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.secret_access_key.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'form.secret_access_key.help'}}
+        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
+  {{/unless}}
+
+  {{#if this.showDynamicCredentials}}
+    {{! role_arn }}
+    <Hds::Form::TextInput::Field
+      name='role_arn'
+      @isRequired={{true}}
+      @value={{@model.role_arn}}
+      @isInvalid={{@model.errors.role_arn}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'role_arn')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.storage-bucket.form.role_arn.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_arn.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_arn}}
+        <F.Error as |E|>
+          {{#each @model.errors.role_arn as |error|}}
+            <E.Message>
+              {{error.message}}
+            </E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    {{! role_external_id }}
+    <Hds::Form::TextInput::Field
+      name='role_external_id'
+      @isOptional={{true}}
+      @value={{@model.role_external_id}}
+      @isInvalid={{@model.errors.role_external_id}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'role_external_id')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.storage-bucket.form.role_external_id.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_external_id.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_external_id}}
+        <F.Error as |E|>
+          {{#each @model.errors.role_external_id as |error|}}
+            <E.Message>
+              {{error.message}}
+            </E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    {{! role_session_name }}
+    <Hds::Form::TextInput::Field
+      name='role_session_name'
+      @isOptional={{true}}
+      @value={{@model.role_session_name}}
+      @isInvalid={{@model.errors.role_session_name}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'role_session_name')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.storage-bucket.form.role_session_name.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.storage-bucket.form.role_session_name.help'}}
+      </F.HelperText>
+      {{#if @model.errors.role_session_name}}
+        <F.Error as |E|>
+          {{#each @model.errors.role_session_name as |error|}}
+            <E.Message>
+              {{error.message}}
+            </E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::TextInput::Field>
+
+    {{! role_tags }}
+    <Form::Field::ListWrapper
+      @layout='horizontal'
+      @isOptional={{true}}
+      @disabled={{form.disabled}}
+    >
+      <:fieldset as |F|>
+        <F.Legend>
+          {{t 'resources.storage-bucket.form.role_tags.label'}}
+        </F.Legend>
+        <F.HelperText>
+          {{t 'resources.storage-bucket.form.role_tags.help'}}
+        </F.HelperText>
+
+        {{#if @model.errors.role_tags}}
+          <F.Error as |E|>
+            {{#each @model.errors.role_tags as |error|}}
+              <E.Message>
+                {{error.message}}
+              </E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </:fieldset>
+      <:field as |F|>
+        <F.TextInput
+          @name='role_tags'
+          @options={{@model.role_tags}}
+          @model={{@model}}
+        />
+      </:field>
+    </Form::Field::ListWrapper>
+  {{/if}}
 
   <Hds::Form::Textarea::Field
     name='worker_filter'
@@ -175,7 +377,9 @@
     {{#if @model.errors.worker_filter}}
       <F.Error as |E|>
         {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message>
+            {{error.message}}
+          </E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
@@ -188,7 +392,9 @@
     {{on 'change' (fn this.toggleDisableCredentialRotation @model)}}
     as |F|
   >
-    <F.Label>{{t 'form.disable_credential_rotation.label'}}</F.Label>
+    <F.Label>
+      {{t 'form.disable_credential_rotation.label'}}
+    </F.Label>
   </Hds::Form::Checkbox::Field>
 
   &nbsp;

@@ -218,6 +218,17 @@ host-catalog:
     aws: AWS
     azure: Azure
     plugin: Dynamic
+    credential:
+      label: Credential type
+      help: Select the credential type that you want to use.
+      static:
+        edit: Static credentials
+        label: Use an access key (Static credentials)
+        help: Use an access key that you have generated in AWS to use with this AWS Host Catalog.
+      dynamic:
+        edit: Dynamic credentials
+        label: Use Assume Role (Dynamic credentials)
+        help: Specify an Assume Role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
       label: AWS Region

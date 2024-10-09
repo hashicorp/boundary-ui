@@ -4,30 +4,42 @@
  */
 
 import ApplicationSerializer from './application';
+import { TYPE_HOST_CATALOG_PLUGIN_AZURE } from '../models/host-catalog';
 
-const fieldsByType = {
-  aws: [
-    'disable_credential_rotation',
-    'region',
+const azureFields = [
+  'disable_credential_rotation',
+  'tenant_id',
+  'client_id',
+  'subscription_id',
+  'secret_id',
+  'secret_value',
+];
+
+const AWSfieldsWithCredentialType = {
+  static: [
     'access_key_id',
     'secret_access_key',
+    'region',
+    'disable_credential_rotation',
     'worker_filter',
   ],
-  azure: [
+  dynamic: [
+    'role_arn',
+    'role_external_id',
+    'role_session_name',
+    'role_tags',
+    'region',
     'disable_credential_rotation',
-    'tenant_id',
-    'client_id',
-    'subscription_id',
-    'secret_id',
-    'secret_value',
+    'worker_filter',
   ],
 };
 
 export default class HostCatalogSerializer extends ApplicationSerializer {
-  // =methods
   serialize(snapshot) {
+    const { compositeType } = snapshot.record;
     const serialized = super.serialize(...arguments);
-    switch (snapshot.record.compositeType) {
+
+    switch (compositeType) {
       case 'static':
         return this.serializeStatic(...arguments);
       default:
@@ -37,40 +49,43 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key, attribute) {
     const value = super.serializeAttribute(...arguments);
-    const { isPlugin, compositeType } = snapshot.record;
+    const { isPlugin, compositeType, credentialType } = snapshot.record;
     const { options } = attribute;
 
-    // Delete any fields that don't belong to the compositeType
-    if (
-      isPlugin &&
-      json &&
-      options?.for &&
-      !options.for.includes(compositeType)
-    ) {
-      if (!fieldsByType[compositeType].includes(key)) {
+    const fields =
+      compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE
+        ? azureFields
+        : AWSfieldsWithCredentialType[credentialType];
+
+    if (isPlugin && json && options?.for) {
+      // Delete any fields that don't belong to the compositeType
+      if (!fields.includes(key)) {
         delete json[key];
       }
     }
 
     // Delete any nested attribute fields that don't belong to the record type
-    if (isPlugin && options.isNestedAttribute && json.attributes) {
-      if (!fieldsByType[compositeType].includes(key)) {
+    if (options.isNestedAttribute && json.attributes) {
+      if (!fields.includes(key)) {
         delete json.attributes[key];
       }
     }
 
     // Delete any secret fields that don't belong to the record type
-    if (isPlugin && options.isNestedSecret && json.secrets) {
-      if (!fieldsByType[compositeType].includes(key)) {
+    if (options.isNestedSecret && json.secrets) {
+      if (!fields.includes(key)) {
         delete json.secrets[key];
+        if (json['secrets'] && Object.keys(json.secrets).length === 0) {
+          delete json.secrets;
+        }
       }
     }
+
     return value;
   }
 
   serializeStatic() {
     const serialized = super.serialize(...arguments);
-    // Delete unnecessary fields for static host-catalog
     delete serialized.attributes;
     delete serialized.secrets;
     return serialized;
