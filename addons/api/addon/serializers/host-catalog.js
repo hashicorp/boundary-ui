@@ -86,6 +86,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
   serializeStatic() {
     const serialized = super.serialize(...arguments);
+    // Delete unnecessary fields for static host-catalog
     delete serialized.attributes;
     delete serialized.secrets;
     return serialized;
