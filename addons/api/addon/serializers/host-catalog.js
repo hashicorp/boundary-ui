@@ -9,6 +9,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
 } from '../models/host-catalog';
 
+// These fields are Azure specific
 const azureFields = [
   'disable_credential_rotation',
   'tenant_id',
@@ -18,6 +19,7 @@ const azureFields = [
   'secret_value',
 ];
 
+// These fields are AWS specific, AWS provider now has two credentialTypes: static and dynamic [not to be confused with static and dynamic host-catalogs]
 const AWSfieldsWithCredentialType = {
   static: [
     'access_key_id',
