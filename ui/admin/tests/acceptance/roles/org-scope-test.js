@@ -46,7 +46,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
   const TOAST_SELECTOR = '[role="alert"]';
-  const SEARCH_INPUT_SELECTOR = '[type="search"]';
+  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
   const NO_SCOPES_MSG_LINK_SELECTOR =
