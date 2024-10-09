@@ -19,8 +19,8 @@ export const TYPES_HOST_CATALOG_PLUGIN = [
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
 ];
 
-export const TYPE_CREDENTIAL_STATIC = 'static';
-export const TYPE_CREDENTIAL_DYNAMIC = 'dynamic';
+export const TYPE_CREDENTIAL_STATIC = 'static-credential';
+export const TYPE_CREDENTIAL_DYNAMIC = 'dynamic-credential';
 
 export const TYPES_CREDENTIALS = Object.freeze([
   TYPE_CREDENTIAL_STATIC,

@@ -21,14 +21,14 @@ const azureFields = [
 
 // These fields are AWS specific, AWS provider now has two credentialTypes: static and dynamic [not to be confused with static and dynamic host-catalogs]
 const AWSfieldsWithCredentialType = {
-  static: [
+  'static-credential': [
     'access_key_id',
     'secret_access_key',
     'region',
     'disable_credential_rotation',
     'worker_filter',
   ],
-  dynamic: [
+  'dynamic-credential': [
     'role_arn',
     'role_external_id',
     'role_session_name',
@@ -60,7 +60,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key, attribute) {
     const value = super.serializeAttribute(...arguments);
-    const { compositeType, credentialType } = snapshot.record;
+    const { compositeType, credentialType, isPlugin } = snapshot.record;
     const { options } = attribute;
 
     const fields =
@@ -69,14 +69,14 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
         : AWSfieldsWithCredentialType[credentialType];
 
     // Delete any nested attribute fields that don't belong to the record type
-    if (options.isNestedAttribute && json.attributes) {
+    if (isPlugin && options.isNestedAttribute && json.attributes) {
       if (!fields.includes(key)) {
         delete json.attributes[key];
       }
     }
 
     // Delete any secret fields that don't belong to the record type
-    if (options.isNestedSecret && json.secrets) {
+    if (isPlugin && options.isNestedSecret && json.secrets) {
       if (!fields.includes(key)) {
         delete json.secrets[key];
         if (json['secrets'] && Object.keys(json.secrets).length === 0) {
