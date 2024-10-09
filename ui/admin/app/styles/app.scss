@@ -1032,13 +1032,19 @@
 }
 
 .role-manage-custom-scopes-form {
+  .hds-application-state {
+    margin-top: 3rem;
+  }
+
   .table-selected-items-text {
     display: flex;
     justify-content: end;
+    height: 1rem;
   }
 
   .hds-table {
     margin-top: 0.5rem;
+    margin-bottom: 1rem;
   }
 
   .hds-pagination {
