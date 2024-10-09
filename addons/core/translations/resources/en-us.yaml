@@ -222,12 +222,12 @@ host-catalog:
       label: Credential type
       help: Select the credential type that you want to use.
       static-credential:
-        edit: Static credentials
-        label: Use an access key (Static credentials)
+        edit: Static Credentials
+        label: Use an access key (Static Credentials)
         help: Use an access key that you have generated in AWS to use with this AWS Host Catalog.
       dynamic-credential:
-        edit: Dynamic credentials
-        label: Use Assume Role (Dynamic credentials)
+        edit: Dynamic Credentials
+        label: Use Assume Role (Dynamic Credentials)
         help: Specify an Assume Role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
