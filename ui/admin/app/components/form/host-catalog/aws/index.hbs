@@ -201,45 +201,6 @@
       </F.Control>
     </Hds::Form::Fieldset>
   {{/if}}
-  {{#unless this.showDynamicCredentials}}
-    <Hds::Form::TextInput::Field
-      name='access_key_id'
-      @value={{@model.access_key_id}}
-      @isRequired={{true}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'access_key_id')}}
-      as |F|
-    >
-      <F.Label>
-        {{t 'form.access_key_id.label'}}
-      </F.Label>
-      <F.HelperText>
-        {{t 'form.access_key_id.help'}}
-        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
-      </F.HelperText>
-    </Hds::Form::TextInput::Field>
-
-    <Hds::Form::TextInput::Field
-      name='secret_access_key'
-      @value={{@model.secret_access_key}}
-      @isRequired={{true}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'secret_access_key')}}
-      as |F|
-    >
-      <F.Label>
-        {{t 'form.secret_access_key.label'}}
-      </F.Label>
-      <F.HelperText>
-        {{t 'form.secret_access_key.help'}}
-        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
-      </F.HelperText>
-    </Hds::Form::TextInput::Field>
-  {{/unless}}
 
   {{#if this.showDynamicCredentials}}
     {{! role_arn }}
@@ -362,6 +323,45 @@
         </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
+
+  {{else}}
+    <Hds::Form::TextInput::Field
+      name='access_key_id'
+      @value={{@model.access_key_id}}
+      @isRequired={{true}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'access_key_id')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.access_key_id.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'form.access_key_id.help'}}
+        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
+
+    <Hds::Form::TextInput::Field
+      name='secret_access_key'
+      @value={{@model.secret_access_key}}
+      @isRequired={{true}}
+      disabled={{form.disabled}}
+      {{on 'input' (set-from-event @model 'secret_access_key')}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.secret_access_key.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'form.secret_access_key.help'}}
+        <Hds::Link::Inline @href={{doc-url 'host-catalog.aws'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+    </Hds::Form::TextInput::Field>
   {{/if}}
 
   <Hds::Form::Textarea::Field
