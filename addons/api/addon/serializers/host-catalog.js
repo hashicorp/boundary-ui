@@ -4,7 +4,10 @@
  */
 
 import ApplicationSerializer from './application';
-import { TYPE_HOST_CATALOG_PLUGIN_AZURE } from '../models/host-catalog';
+import {
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+} from '../models/host-catalog';
 
 const azureFields = [
   'disable_credential_rotation',
@@ -39,6 +42,12 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const { compositeType } = snapshot.record;
     const serialized = super.serialize(...arguments);
 
+    // This is a hack to remove the worker_filter field from the serialized data if the compositeType is not AWS
+    // Ideally we should refactor the model to include the compositeType using `for` attribute
+    if (compositeType !== TYPE_HOST_CATALOG_PLUGIN_AWS) {
+      delete serialized.worker_filter;
+    }
+
     switch (compositeType) {
       case 'static':
         return this.serializeStatic(...arguments);
@@ -49,20 +58,13 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key, attribute) {
     const value = super.serializeAttribute(...arguments);
-    const { isPlugin, compositeType, credentialType } = snapshot.record;
+    const { compositeType, credentialType } = snapshot.record;
     const { options } = attribute;
 
     const fields =
       compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE
         ? azureFields
         : AWSfieldsWithCredentialType[credentialType];
-
-    if (isPlugin && json && options?.for) {
-      // Delete any fields that don't belong to the compositeType
-      if (!fields.includes(key)) {
-        delete json[key];
-      }
-    }
 
     // Delete any nested attribute fields that don't belong to the record type
     if (options.isNestedAttribute && json.attributes) {
@@ -80,7 +82,6 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
         }
       }
     }
-
     return value;
   }
 
@@ -89,6 +90,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     // Delete unnecessary fields for static host-catalog
     delete serialized.attributes;
     delete serialized.secrets;
+    delete serialized.worker_filter;
     return serialized;
   }
 }

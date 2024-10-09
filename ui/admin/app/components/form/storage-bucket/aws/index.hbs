@@ -436,11 +436,18 @@
         {{/if}}
       </:fieldset>
       <:field as |F|>
-        <F.TextInput
+        <F.KeyValue
           @name='role_tags'
           @options={{@model.role_tags}}
           @model={{@model}}
-        />
+        >
+          <:key as |K|>
+            <K.text />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
   {{/if}}

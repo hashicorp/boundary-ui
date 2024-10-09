@@ -348,11 +348,18 @@
         {{/if}}
       </:fieldset>
       <:field as |F|>
-        <F.TextInput
+        <F.KeyValue
           @name='role_tags'
           @options={{@model.role_tags}}
           @model={{@model}}
-        />
+        >
+          <:key as |K|>
+            <K.text />
+          </:key>
+          <:value as |V|>
+            <V.text />
+          </:value>
+        </F.KeyValue>
       </:field>
     </Form::Field::ListWrapper>
   {{/if}}
@@ -380,32 +387,6 @@
           <E.Message>
             {{error.message}}
           </E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Textarea::Field>
-
-  <Hds::Form::Textarea::Field
-    name='worker_filter'
-    @value={{@model.worker_filter}}
-    @isOptional={{true}}
-    @isInvalid={{@model.errors.worker_filter}}
-    disabled={{form.disabled}}
-    as |F|
-  >
-    <F.Label>
-      {{t 'resources.host-catalog.form.worker_filter.label'}}
-    </F.Label>
-    <F.HelperText>
-      {{t 'resources.host-catalog.form.worker_filter.help'}}
-      <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-    {{#if @model.errors.worker_filter}}
-      <F.Error as |E|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
