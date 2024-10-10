@@ -481,7 +481,7 @@ storage-bucket:
       help: The base path where session recordings will be stored.
     role_arn:
       label: Role ARN
-      help: The ARN (Assume Role Name) used by this instance that the worker runs on.
+      help: The ARN (Amazon Resource Name) used by this instance that the worker runs on.
     role_external_id:
       label: Role external ID
       help: Used to provide access to this account if you have this configured.
