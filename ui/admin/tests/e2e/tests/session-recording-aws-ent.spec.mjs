@@ -98,9 +98,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
     await page.getByRole('link', { name: projectName }).click();
     const targetsPage = new TargetsPage(page);
     const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
-    await targetsPage.addEgressWorkerFilterToTarget(
-      `"${workerTagEgress}" in "/tags/type"`,
-    );
+    await targetsPage.addEgressWorkerFilterToTarget(`"${workerTagEgress}" in "/tags/type"`);
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
     const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);

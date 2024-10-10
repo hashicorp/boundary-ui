@@ -101,9 +101,8 @@ test('Session Recording Test (MinIO) @ent @docker', async ({
     await page.getByRole('link', { name: projectName }).click();
     const targetsPage = new TargetsPage(page);
     const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
-    await targetsPage.addEgressWorkerFilterToTarget(
-      `"${workerTagEgress}" in "/tags/type"`,
-    );
+    await targetsPage.addIngressWorkerFilterToTarget(`"${workerTagEgress}" in "/tags/type"`);
+    await targetsPage.addEgressWorkerFilterToTarget(`"${workerTagEgress}" in "/tags/type"`);
 
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();

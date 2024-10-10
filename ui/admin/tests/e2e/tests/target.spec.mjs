@@ -16,6 +16,7 @@ import {
   getProjectIdFromNameCli,
   getTargetIdFromNameCli,
 } from '../helpers/boundary-cli.mjs';
+import { BasePage } from '../pages/base.mjs';
 import { HostCatalogsPage } from '../pages/host-catalogs.mjs';
 import { OrgsPage } from '../pages/orgs.mjs';
 import { ProjectsPage } from '../pages/projects.mjs';
@@ -186,6 +187,33 @@ test('Verify TCP target is updated @ce @aws @docker', async ({
     await page.getByRole('button', { name: 'Dismiss' }).click();
 
     await targetsPage.addEgressWorkerFilterToTarget('"dev" in "/tags/type"');
+
+    // Edit a worker filter
+    await page.getByRole('link', { name: 'Workers', exact: true }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Workers'),
+    ).toBeVisible();
+    await page
+      .getByText('Egress workers')
+      .locator('..')
+      .getByRole('link', { name: 'Edit worker filter' })
+      .click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Edit Egress Worker Filter'),
+    ).toBeVisible();
+    await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
+
+    await page.getByRole('textbox').click({ force: true });
+    await page.keyboard.press("Meta+A");
+    await page.keyboard.press('Backspace');
+    await page.getByRole('textbox').fill('"prod" in "/tags/type"');
+    await page.getByRole('button', { name: 'Save' }).click();
+    const basePage = new BasePage(page);
+    await basePage.dismissSuccessAlert();
   } finally {
     await authenticateBoundaryCli(
       baseURL,
