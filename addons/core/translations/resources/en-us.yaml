@@ -213,7 +213,7 @@ host-catalog:
     static: Provide a list of hosts and host sets with static addresses
     plugin: Automate discovery of target hosts and services on Azure or AWS
     role_arn: The ARN (Amazon Resource Name) used by this instance.
-    disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials
+    disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials.
   types:
     static: Static
     unknown: Plugin
