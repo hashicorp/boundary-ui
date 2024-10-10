@@ -136,27 +136,21 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     const chunkedTargetIds = chunk(uniqueTargetIds, 50);
 
     const associatedTargetsPromises = chunkedTargetIds.map((targetIds) =>
-      this.store.query(
-        'target',
-        {
-          scope_id: orgScope.id,
-          recursive: true,
-          force_refresh: true,
-          query: {
-            filters: {
-              id: {
-                logicalOperator: 'or',
-                values: targetIds.map((targetId) => ({
-                  equals: targetId,
-                })),
-              },
+      this.store.query('target', {
+        scope_id: orgScope.id,
+        recursive: true,
+        force_refresh: true,
+        query: {
+          filters: {
+            id: {
+              logicalOperator: 'or',
+              values: targetIds.map((targetId) => ({
+                equals: targetId,
+              })),
             },
           },
         },
-        {
-          pushToStore: false,
-        },
-      ),
+      }),
     );
 
     const targetsArray = await Promise.all(associatedTargetsPromises);
