@@ -145,7 +145,12 @@
   </Hds::Form::TextInput::Field>
 
   {{#if @model.isNew}}
-    <Hds::Form::Radio::Group @layout='vertical' @name='credential_type' as |G|>
+    <Hds::Form::Radio::Group
+      class='dynamic-credential-selection'
+      @layout='vertical'
+      @name='credential_type'
+      as |G|
+    >
       <G.Legend>
         {{t 'resources.host-catalog.types.credential.label'}}
       </G.Legend>
@@ -366,6 +371,7 @@
 
   {{#if (feature-flag 'dynamic-credentials-worker-filter')}}
     <Hds::Form::Textarea::Field
+      data-test-dynamic-credential-worker-filter
       name='worker_filter'
       @value={{@model.worker_filter}}
       @isOptional={{true}}

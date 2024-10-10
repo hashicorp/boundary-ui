@@ -1073,3 +1073,9 @@
     gap: 1.5rem;
   }
 }
+
+.dynamic-credential-selection {
+  .hds-form-group__control-field {
+    margin-bottom: 0;
+  }
+}
