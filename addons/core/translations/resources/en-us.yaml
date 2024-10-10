@@ -230,7 +230,7 @@ host-catalog:
       dynamic-credential:
         edit: Dynamic Credentials
         label: Use Assume Role (Dynamic Credentials)
-        help: Specify a Role used to generate credentials to use with this AWS Host Catalog.
+        help: Specify a role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
       label: AWS Region
