@@ -212,6 +212,8 @@ host-catalog:
   help:
     static: Provide a list of hosts and host sets with static addresses
     plugin: Automate discovery of target hosts and services on Azure or AWS
+    role_arn: The ARN (Amazon Resource Name) used by this instance.
+    disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials.
   types:
     static: Static
     unknown: Plugin
@@ -228,7 +230,7 @@ host-catalog:
       dynamic-credential:
         edit: Dynamic Credentials
         label: Use Assume Role (Dynamic Credentials)
-        help: Specify an Assume Role used to generate credentials to use with this AWS Host Catalog.
+        help: Specify a role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
       label: AWS Region
@@ -479,7 +481,7 @@ storage-bucket:
       help: The base path where session recordings will be stored.
     role_arn:
       label: Role ARN
-      help: The ARN (Assume Role Name) used by this instance that the worker runs on.
+      help: The ARN (Amazon Resource Name) used by this instance that the worker runs on.
     role_external_id:
       label: Role external ID
       help: Used to provide access to this account if you have this configured.

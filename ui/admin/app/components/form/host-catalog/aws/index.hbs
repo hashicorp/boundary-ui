@@ -145,7 +145,12 @@
   </Hds::Form::TextInput::Field>
 
   {{#if @model.isNew}}
-    <Hds::Form::Radio::Group @layout='vertical' @name='credential_type' as |G|>
+    <Hds::Form::Radio::Group
+      class='dynamic-credential-selection'
+      @layout='vertical'
+      @name='credential_type'
+      as |G|
+    >
       <G.Legend>
         {{t 'resources.host-catalog.types.credential.label'}}
       </G.Legend>
@@ -217,7 +222,7 @@
         {{t 'resources.storage-bucket.form.role_arn.label'}}
       </F.Label>
       <F.HelperText>
-        {{t 'resources.storage-bucket.form.role_arn.help'}}
+        {{t 'resources.host-catalog.help.role_arn'}}
       </F.HelperText>
       {{#if @model.errors.role_arn}}
         <F.Error as |E|>
@@ -364,46 +369,64 @@
     </Hds::Form::TextInput::Field>
   {{/if}}
 
-  <Hds::Form::Textarea::Field
-    name='worker_filter'
-    @value={{@model.worker_filter}}
-    @isOptional={{true}}
-    @isInvalid={{@model.errors.worker_filter}}
-    disabled={{form.disabled}}
-    as |F|
-  >
-    <F.Label>
-      {{t 'resources.host-catalog.form.worker_filter.label'}}
-    </F.Label>
-    <F.HelperText>
-      {{t 'resources.host-catalog.form.worker_filter.help'}}
-      <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-    {{#if @model.errors.worker_filter}}
-      <F.Error as |E|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>
-            {{error.message}}
-          </E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Textarea::Field>
+  {{#if (feature-flag 'dynamic-credentials-worker-filter')}}
+    <Hds::Form::Textarea::Field
+      data-test-dynamic-credential-worker-filter
+      name='worker_filter'
+      @value={{@model.worker_filter}}
+      @isOptional={{true}}
+      @isInvalid={{@model.errors.worker_filter}}
+      disabled={{form.disabled}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.host-catalog.form.worker_filter.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.host-catalog.form.worker_filter.help'}}
+        <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+      {{#if @model.errors.worker_filter}}
+        <F.Error as |E|>
+          {{#each @model.errors.worker_filter as |error|}}
+            <E.Message>
+              {{error.message}}
+            </E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::Textarea::Field>
+  {{/if}}
 
-  <Hds::Form::Checkbox::Field
-    name='disable_credential_rotation'
-    checked={{@model.disable_credential_rotation}}
-    disabled={{form.disabled}}
-    {{on 'change' (fn this.toggleDisableCredentialRotation @model)}}
-    as |F|
-  >
-    <F.Label>
-      {{t 'form.disable_credential_rotation.label'}}
-    </F.Label>
-  </Hds::Form::Checkbox::Field>
-
+  {{#if this.showDynamicCredentials}}
+    <Hds::Form::Checkbox::Field
+      name='disable_credential_rotation'
+      checked={{true}}
+      disabled={{true}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.disable_credential_rotation.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.host-catalog.help.disable_credential_rotation'}}
+      </F.HelperText>
+    </Hds::Form::Checkbox::Field>
+  {{else}}
+    <Hds::Form::Checkbox::Field
+      name='disable_credential_rotation'
+      checked={{@model.disable_credential_rotation}}
+      disabled={{form.disabled}}
+      {{on 'change' (fn this.toggleDisableCredentialRotation @model)}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'form.disable_credential_rotation.label'}}
+      </F.Label>
+    </Hds::Form::Checkbox::Field>
+  {{/if}}
   &nbsp;
 
   {{#if (can 'save model' @model)}}

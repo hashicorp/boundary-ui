@@ -7,6 +7,7 @@ import ApplicationSerializer from './application';
 import {
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_CREDENTIAL_DYNAMIC,
 } from '../models/host-catalog';
 
 // These fields are Azure specific
@@ -41,13 +42,18 @@ const AWSfieldsWithCredentialType = {
 
 export default class HostCatalogSerializer extends ApplicationSerializer {
   serialize(snapshot) {
-    const { compositeType } = snapshot.record;
+    const { compositeType, credentialType } = snapshot.record;
     const serialized = super.serialize(...arguments);
 
     // This is a hack to remove the worker_filter field from the serialized data if the compositeType is not AWS
     // Ideally we should refactor the model to include the compositeType using `for` attribute
     if (compositeType !== TYPE_HOST_CATALOG_PLUGIN_AWS) {
       delete serialized.worker_filter;
+    }
+
+    // By default, disable credential rotation for dynamic credentials
+    if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
+      serialized.attributes.disable_credential_rotation = true;
     }
 
     switch (compositeType) {
