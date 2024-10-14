@@ -99,4 +99,14 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
     if (type === 'plugin') type = 'aws';
     this.router.replaceWith({ queryParams: { type } });
   }
+
+  /**
+   * Updates credential type
+   * @param {model} hostcatalog
+   * @param {string} credentialType
+   */
+  @action
+  changeCredentialType(hostCatalog, credentialType) {
+    hostCatalog.credentialType = credentialType;
+  }
 }

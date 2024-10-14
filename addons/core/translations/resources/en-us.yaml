@@ -212,12 +212,25 @@ host-catalog:
   help:
     static: Provide a list of hosts and host sets with static addresses
     plugin: Automate discovery of target hosts and services on Azure or AWS
+    role_arn: The ARN (Amazon Resource Name) used by this instance.
+    disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials.
   types:
     static: Static
     unknown: Plugin
     aws: AWS
     azure: Azure
     plugin: Dynamic
+    credential:
+      label: Credential type
+      help: Select the credential type that you want to use.
+      static-credential:
+        edit: Static Credentials
+        label: Use an access key (Static Credentials)
+        help: Use an access key that you have generated in AWS to use with this AWS Host Catalog.
+      dynamic-credential:
+        edit: Dynamic Credentials
+        label: Use Assume Role (Dynamic Credentials)
+        help: Specify a role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
       label: AWS Region
@@ -225,6 +238,9 @@ host-catalog:
     azure_client_id:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
+    worker_filter:
+      label: Worker Filter
+      help: Insert a worker filter in order to route requests to the correct worker.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -465,7 +481,7 @@ storage-bucket:
       help: The base path where session recordings will be stored.
     role_arn:
       label: Role ARN
-      help: The ARN (Assume Role Name) used by this instance that the worker runs on.
+      help: The ARN (Amazon Resource Name) used by this instance that the worker runs on.
     role_external_id:
       label: Role external ID
       help: Used to provide access to this account if you have this configured.
