@@ -24,6 +24,6 @@ To learn more how to use a translation on the templates checkout [the `t` helper
 
 ### A11y Auditing
 
-We use `a11yAudit()` in our acceptance tests to verify that we have no a11y violations in our app. Every route needs to be audited along with each change on the DOM. For example, we should audit the listing of auth methods and audit when we filter auth methods. As well as any dropdowns or modals that may show up on the page.
+We use `a11yAudit()` in our acceptance tests to verify that we have no a11y violations in our app, for both light and dark theme. Every route needs to be audited along with each change on the DOM. If a user can take an action that causes the UI to change within the scope of that route, we should audit that change. For example, we should audit the listing of auth methods, audit when we filter auth methods, and when any dropdowns or modals show up on the page.
 
-Admin UI and Desktop both have light and dark color themes that each need to be audited. To address this effectively, we use `test.each()` to loop over a11y test. Once for light theme and again for dark theme. See [auth-methods list](https://github.com/hashicorp/boundary-ui/blob/main/ui/admin/tests/acceptance/auth-methods/list-test.js) for how these tests should be structured.
+Since the Admin UI and Desktop both have light and dark color themes we must audit both. To address this effectively, we use `test.each()` to loop over a11y test. Once for light theme and again for dark theme. See [auth-methods list](https://github.com/hashicorp/boundary-ui/blob/main/ui/admin/tests/acceptance/auth-methods/list-test.js) for how these tests should be structured.
