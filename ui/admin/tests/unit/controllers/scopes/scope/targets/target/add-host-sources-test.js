@@ -25,6 +25,7 @@ module(
         project: null,
       },
       target: null,
+      hostCatalog: null,
       hostSet: null,
     };
 
@@ -53,8 +54,12 @@ module(
       instances.target = this.server.create('target', {
         scope: instances.scopes.project,
       });
+      instances.hostCatalog = this.server.create('host-catalog', {
+        scope: instances.scopes.project,
+      });
       instances.hostSet = this.server.create('host-set', {
         scope: instances.scopes.project,
+        hostCatalog: instances.hostCatalog,
       });
 
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -75,7 +80,10 @@ module(
       await controller.save(target, [instances.hostSet.id]);
 
       assert.deepEqual(target.host_sources, [
-        { host_source_id: instances.hostSet.id },
+        {
+          host_catalog_id: instances.hostCatalog.id,
+          host_source_id: instances.hostSet.id,
+        },
       ]);
     });
 
