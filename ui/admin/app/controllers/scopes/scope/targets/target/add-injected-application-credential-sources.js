@@ -60,6 +60,7 @@ export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSou
     this.router.replaceWith(
       'scopes.scope.targets.target.injected-application-credential-sources',
     );
+    this.router.refresh('scopes.scope.targets.target');
   }
 
   /**

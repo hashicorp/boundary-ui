@@ -328,6 +328,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   async saveWorkerFilter(target) {
     await target.save();
     await this.router.replaceWith('scopes.scope.targets.target.workers');
+    await this.router.refresh('scopes.scope.targets.target');
   }
 
   /**
