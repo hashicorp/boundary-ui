@@ -14,7 +14,7 @@
     "build": "yarn build:production && yarn build:desktop",
     "build:production": "cross-env EMBER_CLI_ELECTRON=true ember build --environment=production",
     "build:development": "ember build",
-    "prebuild:desktop": "shx rm -rf electron-app/ember-dist && shx cp -r dist/ electron-app/ember-dist/ && shx rm -rf electron-app/out",
+    "prebuild:desktop": "shx rm -rf electron-app/ember-dist electron-app/out && shx cp -r dist/ electron-app/ember-dist/",
     "build:desktop": "yarn build:desktop:install && yarn --cwd electron-app make",
     "build:desktop:debianOnMacOS": "yarn build:desktop:install && BUILD_DEBIAN=true yarn --cwd electron-app make --platform linux --arch x64",
     "build:desktop:install": "yarn install --cwd electron-app",
