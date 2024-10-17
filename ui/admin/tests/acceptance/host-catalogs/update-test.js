@@ -92,8 +92,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
       find(CREDENTIAL_TYPE_SELECTOR).value,
       'static-credential',
     );
-
     await click('[value=dynamic-credential]', 'Dynamic Credential');
+    await fillIn('[name=role_arn]', 'arn:aws:iam');
 
     await click(SAVE_BUTTON_SELECTOR);
     // Check if the host catalog is updated
