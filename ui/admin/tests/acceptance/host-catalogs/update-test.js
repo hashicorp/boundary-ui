@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -15,6 +15,10 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import {
+  TYPE_HOST_CATALOG_DYNAMIC,
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+} from 'api/models/host-catalog';
 
 module('Acceptance | host-catalogs | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -35,6 +39,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
+    AWSHostCatalogWithStaticCredential: null,
   };
 
   const NAME_INPUT_SELECTOR = '[name="name"]';
@@ -44,6 +49,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   const MODAL_DISCARD_BUTTON_SELECTOR =
     '.rose-dialog-footer button:first-child';
   const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
+  const CREDENTIAL_TYPE_SELECTOR =
+    '.dynamic-credential-selection input:checked';
 
   hooks.beforeEach(function () {
     // Generate resources
@@ -59,13 +66,41 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+    instances.AWSHostCatalogWithStaticCredential = this.server.create(
+      'host-catalog',
+      {
+        scope: instances.scopes.project,
+        type: TYPE_HOST_CATALOG_DYNAMIC,
+        plugin: { name: TYPE_HOST_CATALOG_PLUGIN_AWS },
+        credentialType: 'static-credential',
+      },
+    );
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
+    urls.AWSHostCatalogWithStaticCredential = `${urls.hostCatalogs}/${instances.AWSHostCatalogWithStaticCredential.id}`;
     authenticateSession({});
+  });
+
+  test('can update static AWS credentials to Dynamic AWS credentials', async function (assert) {
+    await visit(urls.AWSHostCatalogWithStaticCredential);
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    assert.strictEqual(
+      find(CREDENTIAL_TYPE_SELECTOR).value,
+      'static-credential',
+    );
+    await click('[value=dynamic-credential]', 'Dynamic Credential');
+    await fillIn('[name=role_arn]', 'arn:aws:iam');
+
+    await click(SAVE_BUTTON_SELECTOR);
+    // Check if the host catalog is updated
+    assert.strictEqual(
+      find(CREDENTIAL_TYPE_SELECTOR).value,
+      'dynamic-credential',
+    );
   });
 
   test('can save changes to existing host catalog', async function (assert) {

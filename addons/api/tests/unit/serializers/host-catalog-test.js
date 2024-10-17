@@ -45,14 +45,9 @@ module('Unit | Serializer | host catalog', function (hooks) {
       description: 'this is a Aws plugin host-catalog',
       disable_credential_rotation: true,
       worker_filter: 'workerfilter',
-      // these are AWS fields and should be included
       region: 'west',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
-      // these are Azure fields and should be excluded
-      tenant_id: 'a1b2c3',
-      client_id: 'a1b2c3',
-      subscription_id: 'a1b2c3',
       secret_id: 'a1b2c3',
       secret_value: 'a1b2c3',
       role_arn: 'test',
@@ -71,6 +66,10 @@ module('Unit | Serializer | host catalog', function (hooks) {
       attributes: {
         disable_credential_rotation: true,
         region: 'west',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
       },
       secrets: {
         access_key_id: 'foobars',
@@ -152,6 +151,10 @@ module('Unit | Serializer | host catalog', function (hooks) {
       attributes: {
         disable_credential_rotation: true,
         region: 'spain',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
       },
       secrets: {
         access_key_id: 'foobars',
@@ -225,6 +228,10 @@ module('Unit | Serializer | host catalog', function (hooks) {
       attributes: {
         disable_credential_rotation: false,
         region: 'andorra',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
       },
     };
     assert.deepEqual(record.serialize(), expectedResult);
