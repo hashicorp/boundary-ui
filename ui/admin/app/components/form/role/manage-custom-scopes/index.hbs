@@ -21,8 +21,8 @@
       />
     </Hds::SegmentedGroup>
     {{#if @model.orgScopes}}
-      {{#if @model.role.grantScopeOrgIDs.length}}
-        <div class='table-selected-items-text'>
+      <div class='table-selected-items-text'>
+        {{#if @model.role.grantScopeOrgIDs.length}}
           <Hds::Text::Body @tag='p' @color='faint'>
             {{t
               'resources.role.scope.titles.selected'
@@ -30,8 +30,8 @@
               total=@model.totalItemsCount
             }}
           </Hds::Text::Body>
-        </div>
-      {{/if}}
+        {{/if}}
+      </div>
       <Hds::Table
         @columns={{array
           (hash label=(t 'resources.role.scope.title'))

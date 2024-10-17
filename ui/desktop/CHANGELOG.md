@@ -2,6 +2,23 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.2.0 [CLI 0.18.0] (2024.10.14)
+
+### New
+
+- Upgrade CLI to v0.18.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2516))
+- Added support for notifications with transparent sessions ([PR](https://github.com/hashicorp/boundary-ui/pull/2336))
+- Added a user settings page for configuration options ([PR](https://github.com/hashicorp/boundary-ui/pull/2499))
+- Changed the limit of shown results to 250 and an indicator when cache daemon is loading ([PR](https://github.com/hashicorp/boundary-ui/pull/2500))
+- Show username credentials before passwords ([PR](https://github.com/hashicorp/boundary-ui/pull/2494))
+
+### Bug Fixes
+
+- Fix cache daemon getting terminated when started before desktop client ([PR](https://github.com/hashicorp/boundary-ui/pull/2480))
+- Fix issue where intel macs weren't getting auto-update prompt ([PR](https://github.com/hashicorp/boundary-ui/pull/2419))
+- Fix retrying a failed OIDC authentication not working ([PR](https://github.com/hashicorp/boundary-ui/pull/2512))
+
+
 ## V2.1.0 [CLI 0.17.0] (2024.07.31)
 
 ### New

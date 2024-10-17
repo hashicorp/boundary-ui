@@ -676,7 +676,6 @@
     .hds-table__th {
       height: auto;
       line-height: 1;
-      border-bottom: unset;
     }
   }
 
@@ -1035,6 +1034,7 @@
   .table-selected-items-text {
     display: flex;
     justify-content: end;
+    height: 1rem;
   }
 
   .hds-table {
@@ -1070,5 +1070,11 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+}
+
+.dynamic-credential-selection {
+  .hds-form-group__control-field {
+    margin-bottom: 0;
   }
 }

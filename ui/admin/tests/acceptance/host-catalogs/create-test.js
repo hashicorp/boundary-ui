@@ -21,6 +21,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  let featuresService;
   let getHostCatalogCount;
 
   const NAME_INPUT_SELECTOR = '[name="name"]';
@@ -84,6 +85,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     urls.newStaticHostCatalog = `${urls.newHostCatalog}?type=static`;
     urls.newAWSDynamicHostCatalog = `${urls.newHostCatalog}?type=aws`;
     urls.newAzureDynamicHostCatalog = `${urls.newHostCatalog}?type=azure`;
+    featuresService = this.owner.lookup('service:features');
+
     // Generate resource counter
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
@@ -194,6 +197,17 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     await click(SAVE_BUTTON_SELECTOR);
     assert.dom(ALERT_TEXT_SELECTOR).includesText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
+  });
+
+  test('users should not see worker filter field in community edition', async function (assert) {
+    await visit(urls.newAWSDynamicHostCatalog);
+    assert.dom('[data-test-dynamic-credential-worker-filter]').doesNotExist();
+  });
+
+  test('users should see worker filter field in enterprise edition', async function (assert) {
+    featuresService.enable('dynamic-credentials-worker-filter');
+    await visit(urls.newAWSDynamicHostCatalog);
+    assert.dom('[data-test-dynamic-credential-worker-filter]').exists();
   });
 
   test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
