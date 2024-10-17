@@ -40,6 +40,11 @@ const boundaryPolicyName = 'boundary-controller';
 
 test.use({ storageState: authenticatedState });
 
+// Setting the test timeout to 120s
+// This test can often exceed the globally defined timeout due to the number of
+// network calls.
+test.setTimeout(180000);
+
 test.beforeAll(async () => {
   await checkBoundaryCli();
   await checkVaultCli();
