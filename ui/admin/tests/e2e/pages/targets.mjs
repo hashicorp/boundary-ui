@@ -289,6 +289,35 @@ export class TargetsPage extends BaseResourcePage {
   }
 
   /**
+   * Adds an ingress worker filter to a target. Assume you have selected the desired target.
+   * @param {string} filter Ingress worker filter to be added to the target
+   */
+  async addIngressWorkerFilterToTarget(filter) {
+    await this.page.getByRole('link', { name: 'Workers', exact: true }).click();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Workers'),
+    ).toBeVisible();
+
+    await this.page
+      .getByText('Ingress workers')
+      .locator('..')
+      .getByRole('link', { name: 'Edit worker filter' })
+      .click();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Edit Ingress Worker Filter'),
+    ).toBeVisible();
+
+    await this.page.getByRole('textbox').fill(filter);
+
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+  }
+
+  /**
    * Adds an egress worker filter to a target. Assume you have selected the desired target.
    * @param {string} filter Egress worker filter to be added to the target
    */
