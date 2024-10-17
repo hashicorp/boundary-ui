@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -16,6 +16,8 @@ import {
   // currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | change password', function (hooks) {
   setupApplicationTest(hooks);
@@ -58,7 +60,7 @@ module('Acceptance | accounts | change password', function (hooks) {
   test('visiting account change password', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.changePassword}"]`);
+    await click(commonSelectors.HREF(urls.changePassword));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.changePassword);
@@ -67,11 +69,10 @@ module('Acceptance | accounts | change password', function (hooks) {
   test('visiting account change password from header', async function (assert) {
     await visit(urls.orgScope);
     // Open header utilities dropdown
-    await click('.rose-header-utilities .rose-dropdown summary');
+    await click(selectors.APP_HEADER_DROPDOWN);
     // Find first element in dropdown - should be change password link
-    await click(
-      '.rose-header-utilities .rose-dropdown .rose-dropdown-content a',
-    );
+    await click(commonSelectors.HREF(urls.changePassword));
+
     assert.strictEqual(currentURL(), urls.changePassword);
   });
 
@@ -102,17 +103,33 @@ module('Acceptance | accounts | change password', function (hooks) {
       },
     );
     await visit(urls.changePassword);
-    await fillIn('[name="currentPassword"]', 'current password');
-    await fillIn('[name="newPassword"]', 'new password');
-    await click('form [type="submit"]:not(:disabled)');
+
+    await fillIn(
+      selectors.FIELD_CURRENT_PASSWORD,
+      selectors.FIELD_CURRENT_PASSWORD_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_NEW_PASSWORD,
+      selectors.FIELD_NEW_PASSWORD_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
     await a11yAudit();
   });
 
   test('can cancel password change', async function (assert) {
     await visit(urls.changePassword);
-    await fillIn('[name="currentPassword"]', 'current password');
-    await fillIn('[name="newPassword"]', 'new password');
-    await click('.hds-button--color-secondary');
+
+    await fillIn(
+      selectors.FIELD_CURRENT_PASSWORD,
+      selectors.FIELD_CURRENT_PASSWORD_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_NEW_PASSWORD,
+      selectors.FIELD_NEW_PASSWORD_VALUE,
+    );
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.notEqual(currentURL(), urls.changePassword);
   });
 
@@ -130,18 +147,26 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.changePassword}"]`);
-    await fillIn('[name="currentPassword"]', 'current password');
-    await fillIn('[name="newPassword"]', 'new password');
-    await click('form [type="submit"]');
+    await click(commonSelectors.HREF(urls.changePassword));
+    await fillIn(
+      selectors.FIELD_CURRENT_PASSWORD,
+      selectors.FIELD_CURRENT_PASSWORD_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_NEW_PASSWORD,
+      selectors.FIELD_NEW_PASSWORD_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
-    assert.ok(find('[role="alert"]'));
+    assert.dom(commonSelectors.ALERT_TOAST).isVisible();
   });
 
   test('cannot change password when not authenticated', async function (assert) {
     invalidateSession();
+
     await visit(urls.changePassword);
+
     assert.notEqual(currentURL(), urls.changePassword);
   });
 });
