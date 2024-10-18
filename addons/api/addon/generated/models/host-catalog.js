@@ -97,12 +97,14 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   // AWS dynamic credentials
   @attr('string', {
+    for: 'plugin',
     isNestedAttribute: true,
     description: 'The role ARN to use.',
   })
   role_arn;
 
   @attr('string', {
+    for: 'plugin',
     isNestedAttribute: true,
     description: 'The role external ID to use.',
   })

@@ -75,21 +75,14 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
     // Delete any nested attribute fields that don't belong to the record's compositeType
     if (isPlugin && options.isNestedAttribute && json.attributes) {
-      // If compositeType is AWS, delete azure fields from the json
+      // If compositeType is AWS, delete azure fields from the json, and set the rest that don't belong to respective compositeType to null
       if (compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS) {
-        if (
-          !AWSfieldsWithCredentialType[credentialType].includes(key) &&
-          azureFields.includes(key)
-        ) {
-          delete json.attributes[key];
-        }
-
-        // If compositeType is AWS, nullify AWS fields that don't belong to the credentialType(static-credential or dynamic-credential)
-        if (
-          !AWSfieldsWithCredentialType[credentialType].includes(key) &&
-          !azureFields.includes(key)
-        ) {
-          json.attributes[key] = null;
+        if (!AWSfieldsWithCredentialType[credentialType].includes(key)) {
+          if (azureFields.includes(key)) {
+            delete json.attributes[key];
+          } else {
+            json.attributes[key] = null;
+          }
         }
       }
 
@@ -122,4 +115,16 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
     return serialized;
   }
+
+  // normalize(typeClass, hash, ...rest) {
+  //   const normalizedHash = structuredClone(hash);
+  //   const normalized = super.normalize(typeClass, normalizedHash, ...rest);
+
+  //   if (!normalized.data.attributes.role_arn) {
+  //     hostCatalog.credentialType = TYPE_STATIC_CREDENTIAL;
+  //   }
+  //   normalized.data.attributes.access_key_id = null;
+  //   normalized.data.attributes.secret_access_key = null;
+  //   return normalized;
+  // }
 }
