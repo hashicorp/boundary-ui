@@ -115,16 +115,4 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
     return serialized;
   }
-
-  // normalize(typeClass, hash, ...rest) {
-  //   const normalizedHash = structuredClone(hash);
-  //   const normalized = super.normalize(typeClass, normalizedHash, ...rest);
-
-  //   if (!normalized.data.attributes.role_arn) {
-  //     hostCatalog.credentialType = TYPE_STATIC_CREDENTIAL;
-  //   }
-  //   normalized.data.attributes.access_key_id = null;
-  //   normalized.data.attributes.secret_access_key = null;
-  //   return normalized;
-  // }
 }
