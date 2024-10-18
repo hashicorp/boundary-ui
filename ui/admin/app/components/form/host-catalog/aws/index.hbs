@@ -144,74 +144,51 @@
     </F.HelperText>
   </Hds::Form::TextInput::Field>
 
-  {{#if @model.isNew}}
-    <Hds::Form::Radio::Group
-      class='dynamic-credential-selection'
-      @layout='vertical'
-      @name='credential_type'
-      as |G|
-    >
-      <G.Legend>
-        {{t 'resources.host-catalog.types.credential.label'}}
-      </G.Legend>
-      <G.HelperText>
-        {{t 'resources.host-catalog.types.credential.help'}}
-      </G.HelperText>
+  <Hds::Form::Radio::Group
+    class='dynamic-credential-selection'
+    @layout='vertical'
+    @name='credential_type'
+    as |G|
+  >
+    <G.Legend>
+      {{t 'resources.host-catalog.types.credential.label'}}
+    </G.Legend>
+    <G.HelperText>
+      {{t 'resources.host-catalog.types.credential.help'}}
+    </G.HelperText>
 
-      {{#each this.credentials as |credentialType|}}
-        <G.RadioField
-          name={{credentialType}}
-          @value={{credentialType}}
-          checked={{eq credentialType this.selectedCredentialType}}
-          disabled={{form.disabled}}
-          {{on 'input' (fn this.updateCredentialTypeSelection credentialType)}}
-          as |F|
-        >
-          <F.Label>
-            {{t
-              (concat
-                'resources.host-catalog.types.credential.'
-                credentialType
-                '.label'
-              )
-            }}
-          </F.Label>
-          <F.HelperText>
-            {{t
-              (concat
-                'resources.host-catalog.types.credential.'
-                credentialType
-                '.help'
-              )
-            }}
-          </F.HelperText>
-        </G.RadioField>
-      {{/each}}
-    </Hds::Form::Radio::Group>
-  {{else}}
-    <Hds::Form::Fieldset @layout='horizontal' as |F|>
-      <F.Legend>
-        {{t 'resources.host-catalog.types.credential.label'}}
-      </F.Legend>
-      <F.Control>
-        <Hds::Badge
-          @text={{t
+    {{#each this.credentials as |credentialType|}}
+      <G.RadioField
+        name={{credentialType}}
+        @value={{credentialType}}
+        checked={{eq credentialType this.selectedCredentialType}}
+        disabled={{form.disabled}}
+        {{on 'input' (fn this.updateCredentialTypeSelection credentialType)}}
+        as |F|
+      >
+        <F.Label>
+          {{t
             (concat
-              'resources.host-catalog.types.credential.'
-              this.selectedCredentialType
-              '.edit'
+              'resources.host-catalog.types.credential.' credentialType '.label'
             )
           }}
-        />
-      </F.Control>
-    </Hds::Form::Fieldset>
-  {{/if}}
+        </F.Label>
+        <F.HelperText>
+          {{t
+            (concat
+              'resources.host-catalog.types.credential.' credentialType '.help'
+            )
+          }}
+        </F.HelperText>
+      </G.RadioField>
+    {{/each}}
+  </Hds::Form::Radio::Group>
 
   {{#if this.showDynamicCredentials}}
     {{! role_arn }}
     <Hds::Form::TextInput::Field
       name='role_arn'
-      @isRequired={{true}}
+      @isOptional={{true}}
       @value={{@model.role_arn}}
       @isInvalid={{@model.errors.role_arn}}
       disabled={{form.disabled}}
@@ -333,7 +310,7 @@
     <Hds::Form::TextInput::Field
       name='access_key_id'
       @value={{@model.access_key_id}}
-      @isRequired={{true}}
+      @isOptional={{true}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'access_key_id')}}
       as |F|
@@ -352,7 +329,7 @@
     <Hds::Form::TextInput::Field
       name='secret_access_key'
       @value={{@model.secret_access_key}}
-      @isRequired={{true}}
+      @isOptional={{true}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'secret_access_key')}}
       as |F|
