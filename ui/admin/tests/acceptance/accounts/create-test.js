@@ -15,13 +15,13 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-methods-dropdown] div:first-child button';
   const instances = {
     scopes: {
       global: null,
@@ -64,9 +64,9 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   hooks.afterEach(async function () {
-    const notification = find('.rose-notification');
+    const notification = find(commonSelectors.ALERT_TOAST);
     if (notification) {
-      await click('.rose-notification-dismiss');
+      await click(commonSelectors.ALERT_TOAST_DISMISS);
     }
   });
 
@@ -77,23 +77,36 @@ module('Acceptance | accounts | create', function (hooks) {
   });
 
   test('can create a new account', async function (assert) {
-    const accountsCount = this.server.db.accounts.length;
+    const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="login_name"]', 'username');
-    await fillIn('[name="password"]', 'password');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.accounts.length, accountsCount + 1);
+
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(
+      selectors.FIELD_DESCRIPTION,
+      selectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_LOGIN_NAME, selectors.FIELD_LOGIN_NAME_VALUE);
+    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(
+      this.server.schema.accounts.all().models.length,
+      accountsCount + 1,
+    );
   });
 
   test('can create a new LDAP account', async function (assert) {
-    const accountsCount = this.server.db.accounts.length;
+    const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="login_name"]', 'username');
-    await click('form [type="submit"]:not(:disabled)');
+
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(
+      selectors.FIELD_DESCRIPTION,
+      selectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_LOGIN_NAME, selectors.FIELD_LOGIN_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(
       this.server.schema.accounts.all().models.length,
       accountsCount + 1,
@@ -103,52 +116,70 @@ module('Acceptance | accounts | create', function (hooks) {
   test('Users cannot create a new account without proper authorization', async function (assert) {
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.authMethod);
+
+    await click(selectors.MANAGE_DROPDOWN);
+
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
         'create',
       ),
     );
-    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newAccount}"]`));
+    assert.dom(commonSelectors.HREF(urls.newAccount)).doesNotExist();
   });
 
   test('Users can navigate to new account route with proper authorization', async function (assert) {
     await visit(urls.accounts);
+
+    await click(selectors.MANAGE_DROPDOWN);
+
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
         'create',
       ),
     );
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.ok(find(`[href="${urls.newAccount}"]`));
+    assert.dom(commonSelectors.HREF(urls.newAccount)).isVisible();
   });
 
   test('Users cannot navigate to new account route without proper authorization', async function (assert) {
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.accounts);
+
+    await click(selectors.MANAGE_DROPDOWN);
+
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
         'create',
       ),
     );
-    assert.notOk(find(`[href="${urls.newAccount}"]`));
+    assert.dom(commonSelectors.HREF(urls.newAccount)).doesNotExist();
   });
 
   test('can cancel a new account creation', async function (assert) {
-    const accountsCount = this.server.db.accounts.length;
+    const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await click('.rose-form-actions [type="button"]');
+
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.accounts);
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    assert.strictEqual(
+      this.server.schema.accounts.all().models.length,
+      accountsCount,
+    );
   });
 
   test('can cancel a new LDAP account creation', async function (assert) {
-    const accountsCount = this.server.db.accounts.length;
+    const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'Account name');
-    await click('.rose-form-actions [type="button"]');
+
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.accounts);
-    assert.strictEqual(this.server.db.accounts.length, accountsCount);
+    assert.strictEqual(
+      this.server.schema.accounts.all().models.length,
+      accountsCount,
+    );
   });
 
   test('saving a new account with invalid fields displays error messages', async function (assert) {
@@ -172,19 +203,15 @@ module('Acceptance | accounts | create', function (hooks) {
       );
     });
     await visit(urls.newAccount);
-    await fillIn('[name="name"]', 'new account');
-    await click('form [type="submit"]');
+
+    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.',
-    );
-    assert.strictEqual(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.',
-    );
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new account route without proper authorization', async function (assert) {
