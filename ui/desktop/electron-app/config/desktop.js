@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { isLinux } = require('../src/helpers/platform.js');
+const { isLinux, isWindows } = require('../src/helpers/platform.js');
 
 // Create config
 const createConfig = () => {
@@ -24,6 +24,7 @@ const createConfig = () => {
   console.log('FIRST: The releaseVersion: ', config.releaseVersion);
 
   if (!config.releaseVersion) config.releaseVersion = '0.0.0';
+  if (!config.releaseVersion && isWindows()) config.releaseVersion = '0.0.0.0';
 
   console.log('SECOND: The releaseVersion: ', config.releaseVersion);
   return config;
