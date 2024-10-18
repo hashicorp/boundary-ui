@@ -188,7 +188,7 @@
     {{! role_arn }}
     <Hds::Form::TextInput::Field
       name='role_arn'
-      @isRequired={{true}}
+      @isOptional={{true}}
       @value={{@model.role_arn}}
       @isInvalid={{@model.errors.role_arn}}
       disabled={{form.disabled}}
@@ -310,7 +310,7 @@
     <Hds::Form::TextInput::Field
       name='access_key_id'
       @value={{@model.access_key_id}}
-      @isRequired={{true}}
+      @isOptional={{true}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'access_key_id')}}
       as |F|
@@ -329,7 +329,7 @@
     <Hds::Form::TextInput::Field
       name='secret_access_key'
       @value={{@model.secret_access_key}}
-      @isRequired={{true}}
+      @isOptional={{true}}
       disabled={{form.disabled}}
       {{on 'input' (set-from-event @model 'secret_access_key')}}
       as |F|
