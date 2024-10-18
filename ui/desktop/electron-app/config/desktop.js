@@ -18,9 +18,14 @@ const createConfig = () => {
     config.productName = 'boundary-desktop';
   }
 
-  if (isLinux() || process.env.BUILD_DEBIAN) config.executableName = 'boundary-desktop';
+  if (isLinux() || process.env.BUILD_DEBIAN)
+    config.executableName = 'boundary-desktop';
+
+  console.log('FIRST: The releaseVersion: ', config.releaseVersion);
 
   if (!config.releaseVersion) config.releaseVersion = '0.0.0';
+
+  console.log('SECOND: The releaseVersion: ', config.releaseVersion);
   return config;
 };
 
