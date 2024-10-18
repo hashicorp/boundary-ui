@@ -23,8 +23,8 @@ const createConfig = () => {
 
   console.log('FIRST: The releaseVersion: ', config.releaseVersion);
 
-  if (!config.releaseVersion) config.releaseVersion = '0.0.0';
   if (!config.releaseVersion && isWindows()) config.releaseVersion = '0.0.0.0';
+  if (!config.releaseVersion) config.releaseVersion = '0.0.0';
 
   console.log('SECOND: The releaseVersion: ', config.releaseVersion);
   return config;
