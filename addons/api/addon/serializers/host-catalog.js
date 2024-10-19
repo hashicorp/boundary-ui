@@ -68,15 +68,29 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const value = super.serializeAttribute(...arguments);
     const { compositeType, credentialType, isPlugin } = snapshot.record;
     const { options } = attribute;
-
     const fields =
       compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE
         ? azureFields
         : AWSfieldsWithCredentialType[credentialType];
 
-    // Delete any nested attribute fields that don't belong to the record type
+    // Delete any nested attribute fields that don't belong to the record's compositeType
     if (isPlugin && options.isNestedAttribute && json.attributes) {
-      if (!fields.includes(key)) {
+      // If compositeType is AWS, delete azure fields from the json, and set the rest that don't belong to respective compositeType to null
+      if (compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS) {
+        if (!AWSfieldsWithCredentialType[credentialType].includes(key)) {
+          if (azureFields.includes(key)) {
+            delete json.attributes[key];
+          } else {
+            json.attributes[key] = null;
+          }
+        }
+      }
+
+      // If compositeType is Azure, delete AWS fields from the json
+      if (
+        compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE &&
+        !azureFields.includes(key)
+      ) {
         delete json.attributes[key];
       }
     }
@@ -98,7 +112,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     // Delete unnecessary fields for static host-catalog
     delete serialized.attributes;
     delete serialized.secrets;
-    delete serialized.worker_filter;
+
     return serialized;
   }
 }
