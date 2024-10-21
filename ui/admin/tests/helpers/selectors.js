@@ -11,6 +11,9 @@ export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
 export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
 
+export const FIELD_DESCRIPTION = '[name=description]';
+export const FIELD_DESCRIPTION_VALUE = 'description';
+
 export const TABLE_FIRST_ROW_RESOURCE_LINK = 'tbody tr:first-child a';
 
 export const RESOURCE_NOT_FOUND_SUBTITLE = '.rose-message-subtitle';

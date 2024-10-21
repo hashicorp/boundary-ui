@@ -80,10 +80,10 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_LOGIN_NAME, selectors.FIELD_LOGIN_NAME_VALUE);
     await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
@@ -99,10 +99,10 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_LOGIN_NAME, selectors.FIELD_LOGIN_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
@@ -158,7 +158,7 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.accounts);
@@ -172,7 +172,7 @@ module('Acceptance | accounts | create', function (hooks) {
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.newAccount);
 
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.accounts);
@@ -204,7 +204,7 @@ module('Acceptance | accounts | create', function (hooks) {
     });
     await visit(urls.newAccount);
 
-    await fillIn(selectors.FIELD_NAME, selectors.FIELD_NAME_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
     await a11yAudit();

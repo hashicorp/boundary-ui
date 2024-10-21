@@ -17,12 +17,6 @@ export const FIELD_CURRENT_PASSWORD_VALUE = 'current password';
 export const FIELD_NEW_PASSWORD = '[name=newPassword]';
 export const FIELD_NEW_PASSWORD_VALUE = 'new password';
 
-export const FIELD_NAME = '[name=name]';
-export const FIELD_NAME_VALUE = 'account name';
-
-export const FIELD_DESCRIPTION = '[name=description]';
-export const FIELD_DESCRIPTION_VALUE = 'description';
-
 export const FIELD_LOGIN_NAME = '[name=login_name]';
 export const FIELD_LOGIN_NAME_VALUE = 'username';
 
