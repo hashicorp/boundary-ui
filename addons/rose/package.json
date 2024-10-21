@@ -92,7 +92,7 @@
     "qunit-dom": "^2.0.0",
     "react": "^16",
     "react-dom": "^16",
-    "react-syntax-highlighter": "^15.5.0",
+    "react-syntax-highlighter": "^15.6.1",
     "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
