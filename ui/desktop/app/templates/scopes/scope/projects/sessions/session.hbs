@@ -25,7 +25,7 @@
         @text={{t 'resources.session.actions.end'}}
         @icon='x'
         @color='secondary'
-        {{on 'click' (route-action 'cancelSession' @model)}}
+        {{on 'click' (fn this.sessions.cancelSession @model)}}
       />
     {{/if}}
 
