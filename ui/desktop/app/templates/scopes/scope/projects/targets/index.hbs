@@ -63,7 +63,7 @@
       </S.Generic>
     </Hds::SegmentedGroup>
     {{#if @model.isCacheRefreshing}}
-      <ToolbarRefresher @onClick={{route-action 'refreshAll'}}>
+      <ToolbarRefresher @onClick={{this.refresh}}>
         <Hds::TooltipButton
           @text={{t 'states.incomplete-loading.refreshing.tooltip'}}
         >
@@ -73,7 +73,7 @@
         </Hds::TooltipButton>
       </ToolbarRefresher>
     {{else}}
-      <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
+      <ToolbarRefresher @onClick={{this.refresh}} />
     {{/if}}
   </div>
   <FilterTags @filters={{this.filters}} />
