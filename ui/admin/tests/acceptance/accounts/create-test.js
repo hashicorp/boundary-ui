@@ -117,7 +117,7 @@ module('Acceptance | accounts | create', function (hooks) {
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.authMethod);
 
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
@@ -130,7 +130,7 @@ module('Acceptance | accounts | create', function (hooks) {
   test('Users can navigate to new account route with proper authorization', async function (assert) {
     await visit(urls.accounts);
 
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     assert.ok(
       instances.authMethod.authorized_collection_actions.accounts.includes(
@@ -144,7 +144,7 @@ module('Acceptance | accounts | create', function (hooks) {
     instances.authMethod.authorized_collection_actions.accounts = [];
     await visit(urls.accounts);
 
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     assert.notOk(
       instances.authMethod.authorized_collection_actions.accounts.includes(
