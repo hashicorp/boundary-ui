@@ -5757,15 +5757,13 @@ babel-loader@^8.0.6:
     make-dir "^3.1.0"
     schema-utils "^2.6.5"
 
-babel-loader@^8.2.5:
-  version "8.2.5"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.5.tgz#d45f585e654d5a5d90f5350a779d7647c5ed512e"
-  integrity sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==
+babel-loader@^9.2.1:
+  version "9.2.1"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-9.2.1.tgz#04c7835db16c246dd19ba0914418f3937797587b"
+  integrity sha512-fqe8naHt46e0yIdkjUZYqddSXfej3AHajX+CSO5X7oy0EmPc6o5Xh+RClNoHjnieWz9AW4kZxW9yyFMhVB1QLA==
   dependencies:
-    find-cache-dir "^3.3.1"
-    loader-utils "^2.0.0"
-    make-dir "^3.1.0"
-    schema-utils "^2.6.5"
+    find-cache-dir "^4.0.0"
+    schema-utils "^4.0.0"
 
 babel-plugin-debug-macros@^0.2.0:
   version "0.2.0"
@@ -6090,6 +6088,13 @@ basic-auth@~2.0.1:
   integrity sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==
   dependencies:
     safe-buffer "5.1.2"
+
+better-path-resolve@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/better-path-resolve/-/better-path-resolve-1.0.0.tgz#13a35a1104cdd48a7b74bf8758f96a1ee613f99d"
+  integrity sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==
+  dependencies:
+    is-windows "^1.0.0"
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -7358,6 +7363,11 @@ common-ancestor-path@^1.0.1:
   resolved "https://registry.yarnpkg.com/common-ancestor-path/-/common-ancestor-path-1.0.1.tgz#4f7d2d1394d91b7abdf51871c62f71eadb0182a7"
   integrity sha512-L3sHRo1pXXEqX8VU28kfgUY+YGsk09hPqZiZmLacNib6XNTCM8ubYeT7ryXQw8asB1sKgcU5lkB7ONug08aB8w==
 
+common-path-prefix@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/common-path-prefix/-/common-path-prefix-3.0.0.tgz#7d007a7e07c58c4b4d5f433131a19141b29f11e0"
+  integrity sha512-QE33hToZseCH3jS0qN96O/bSh3kaw/h+Tq7ngyY9eWDUnTlTNUyqfqvCXioLe5Na5jFsL78ra/wuBU4iuEgd4w==
+
 common-tags@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/common-tags/-/common-tags-1.8.0.tgz#8e3153e542d4a39e9b10554434afaaf98956a937"
@@ -8212,10 +8222,10 @@ ember-assign-helper@^0.5.0:
   dependencies:
     "@embroider/addon-shim" "^1.8.7"
 
-ember-auto-import@^2.2.3, ember-auto-import@^2.2.4, ember-auto-import@^2.4.1, ember-auto-import@^2.4.2, ember-auto-import@^2.5.0, ember-auto-import@^2.6.0, ember-auto-import@^2.6.1, ember-auto-import@^2.6.3, ember-auto-import@^2.7.4:
-  version "2.7.4"
-  resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-2.7.4.tgz#ca99570eb3d6165968df797a4750aa58073852b5"
-  integrity sha512-6CdXSegJJc8nwwK7+1lIcBUnMVrJRNd4ZdMgcKbCAwPvcGxMgRVBddSzrX/+q/UuflvTEO26Dk1g7Z6KHMXUhw==
+ember-auto-import@^2.2.3, ember-auto-import@^2.2.4, ember-auto-import@^2.4.1, ember-auto-import@^2.4.2, ember-auto-import@^2.5.0, ember-auto-import@^2.6.0, ember-auto-import@^2.6.1, ember-auto-import@^2.6.3, ember-auto-import@^2.7.4, ember-auto-import@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/ember-auto-import/-/ember-auto-import-2.8.1.tgz#03977e87ce178e6f9e4f89809185ff8f0fee9fcb"
+  integrity sha512-R5RpJmhycU6YKryzsIL/wP42r0e2PPfLRsFECoGvb1st2eEnU1Q7XyLVC1txd/XvURfu7x3Z7hKtZtYUxy61oQ==
   dependencies:
     "@babel/core" "^7.16.7"
     "@babel/plugin-proposal-class-properties" "^7.16.7"
@@ -8240,11 +8250,13 @@ ember-auto-import@^2.2.3, ember-auto-import@^2.2.4, ember-auto-import@^2.4.1, em
     fs-extra "^10.0.0"
     fs-tree-diff "^2.0.0"
     handlebars "^4.3.1"
+    is-subdir "^1.2.0"
     js-string-escape "^1.0.1"
     lodash "^4.17.19"
     mini-css-extract-plugin "^2.5.2"
     minimatch "^3.0.0"
     parse5 "^6.0.1"
+    pkg-entry-points "^1.1.0"
     resolve "^1.20.0"
     resolve-package-path "^4.0.3"
     semver "^7.3.4"
@@ -10588,6 +10600,14 @@ find-cache-dir@^3.3.1:
     make-dir "^3.0.2"
     pkg-dir "^4.1.0"
 
+find-cache-dir@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-4.0.0.tgz#a30ee0448f81a3990708f6453633c733e2f6eec2"
+  integrity sha512-9ZonPT4ZAK4a+1pUPVPZJapbi7O5qbbJPdYw/NOQWZZbVLdDTYM3A4R9z/DpAM08IDaFGsvPgiGZ82WEwUDWjg==
+  dependencies:
+    common-path-prefix "^3.0.0"
+    pkg-dir "^7.0.0"
+
 find-index@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/find-index/-/find-index-1.1.1.tgz#4b221f8d46b7f8bea33d8faed953f3ca7a081cbc"
@@ -12192,6 +12212,13 @@ is-string@^1.0.5, is-string@^1.0.6, is-string@^1.0.7:
   dependencies:
     has-tostringtag "^1.0.0"
 
+is-subdir@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/is-subdir/-/is-subdir-1.2.0.tgz#b791cd28fab5202e91a08280d51d9d7254fd20d4"
+  integrity sha512-2AT6j+gXe/1ueqbW6fLZJiIw3F8iXGJtt0yDrZaBhAZEG1raiTxKWU+IPqMCzQAXOUCKdA4UDMgacKH25XG2Cw==
+  dependencies:
+    better-path-resolve "1.0.0"
+
 is-symbol@^1.0.2, is-symbol@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/is-symbol/-/is-symbol-1.0.4.tgz#a6dac93b635b063ca6872236de88910a57af139c"
@@ -12228,7 +12255,7 @@ is-weakref@^1.0.1:
   dependencies:
     call-bind "^1.0.2"
 
-is-windows@^1.0.1:
+is-windows@^1.0.0, is-windows@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/is-windows/-/is-windows-1.0.2.tgz#d1850eb9791ecd18e6182ce12a30f396634bb19d"
   integrity sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==
@@ -13851,12 +13878,19 @@ mini-css-extract-plugin@^2.5.2:
   dependencies:
     schema-utils "^4.0.0"
 
-"minimatch@2 || 3", minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.2, minimatch@^5.0.1:
+"minimatch@2 || 3", minimatch@^3.0.0, minimatch@^3.0.2, minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
   integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
   dependencies:
     brace-expansion "^1.1.7"
+
+minimatch@^5.0.1:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-5.1.6.tgz#1cfcb8cf5522ea69952cd2af95ae09477f122a96"
+  integrity sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==
+  dependencies:
+    brace-expansion "^2.0.1"
 
 minimatch@^7.4.3:
   version "7.4.6"
@@ -14885,6 +14919,18 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+pkg-dir@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/pkg-dir/-/pkg-dir-7.0.0.tgz#8f0c08d6df4476756c5ff29b3282d0bab7517d11"
+  integrity sha512-Ie9z/WINcxxLp27BKOCHGde4ITq9UklYKDzVo1nhk5sqGEXU3FpkwP5GM2voTGJkGd9B3Otl+Q4uwSOeSUtOBA==
+  dependencies:
+    find-up "^6.3.0"
+
+pkg-entry-points@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pkg-entry-points/-/pkg-entry-points-1.1.0.tgz#f38e6fe0770ee7ace5a6c1eecad14fd4bedb8c0d"
+  integrity sha512-9vL2T/he5Kb97GVY+V3Ih4jCC1lF3PQGIDUJIUqKM4Q6twmhrUSAa0OFj+kb8IEs4wYzEgB6kcc4oYy21kZnQw==
 
 pkg-up@^2.0.0:
   version "2.0.0"
