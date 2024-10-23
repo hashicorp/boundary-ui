@@ -56,7 +56,6 @@
     "**/remark-parse/trim": "^1.0.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
     "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
-    "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
     "**/bower-config/minimist": "^1.2.6",
     "**/commitizen/minimist": "^1.2.6",
     "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
