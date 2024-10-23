@@ -6,10 +6,12 @@
 export const APP_HEADER_DROPDOWN =
   '.rose-header-utilities details:first-child summary';
 
-export const MANAGE_DROPDOWN =
+export const MANAGE_DROPDOWN_AUTH_METHOD =
   '[data-test-manage-auth-methods-dropdown] button';
-export const MANAGE_DROPDOWN_NEW_ACCOUNT = (url) =>
-  `[data-test-manage-auth-methods-dropdown] a[href="${url}"]`;
+export const MANAGE_DROPDOWN_ACCOUNT =
+  '[data-test-manage-account-auth-methods] button';
+export const MANAGE_DROPDOWN_DELETE_ACCOUNT =
+  '[data-test-manage-account-auth-methods] ul li button';
 
 export const FIELD_CURRENT_PASSWORD = '[name=currentPassword]';
 export const FIELD_CURRENT_PASSWORD_VALUE = 'current password';
