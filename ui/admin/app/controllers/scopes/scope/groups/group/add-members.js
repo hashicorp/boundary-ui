@@ -57,4 +57,22 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
   async cancel() {
     await this.router.replaceWith('scopes.scope.groups.group.members');
   }
+
+  /**
+   * Calls filterBy action located in the route.
+   * @param {string} field
+   * @param {[ScopeModel]} value
+   */
+  @action
+  callFilterBy(field, value) {
+    this.send('filterBy', field, value);
+  }
+
+  /**
+   * Calls clearAllFilters action located in the route.
+   */
+  @action
+  callClearAllFilters() {
+    this.send('clearAllFilters');
+  }
 }
