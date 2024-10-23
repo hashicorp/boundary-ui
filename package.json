@@ -64,7 +64,6 @@
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
     "**/jsprim/json-schema": "^0.4.0",
-    "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
     "**/ember-cli-mirage/@embroider/macros": "^1.0.0",
     "**/ember-electron/**/got": "^11.8.6",
     "**/ember-cli/**/ansi-html": "^0.0.9",
