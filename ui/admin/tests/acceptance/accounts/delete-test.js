@@ -15,15 +15,12 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-account-auth-methods] div:first-child button';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-account-auth-methods] ul li button';
 
   const instances = {
     scopes: {
@@ -64,25 +61,32 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   hooks.afterEach(async function () {
-    const notification = find('.rose-notification');
+    const notification = find(commonSelectors.ALERT_TOAST);
     if (notification) {
-      await click('.rose-notification-dismiss');
+      await click(commonSelectors.ALERT_TOAST_DISMISS);
     }
   });
 
   test('can delete an account', async function (assert) {
-    const accountsCount = this.server.db.accounts.length;
+    const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.account);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert.strictEqual(this.server.db.accounts.length, accountsCount - 1);
+
+    await click(selectors.MANAGE_DROPDOWN_ACCOUNT);
+    await click(selectors.MANAGE_DROPDOWN_DELETE_ACCOUNT);
+
+    assert.strictEqual(
+      this.server.schema.accounts.all().models.length,
+      accountsCount - 1,
+    );
   });
 
   test('cannot delete an account without proper authorization', async function (assert) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'delete');
+
     await visit(urls.account);
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+
+    assert.dom(selectors.MANAGE_DROPDOWN_ACCOUNT).doesNotExist();
   });
 
   test('errors are displayed when delete on account fails', async function (assert) {
@@ -98,13 +102,11 @@ module('Acceptance | accounts | delete', function (hooks) {
       );
     });
     await visit(urls.account);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_ACCOUNT);
+    await click(selectors.MANAGE_DROPDOWN_DELETE_ACCOUNT);
+
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.',
-    );
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
