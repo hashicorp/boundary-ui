@@ -56,7 +56,7 @@
         </Dropdown>
       </S.Generic>
     </Hds::SegmentedGroup>
-    <ToolbarRefresher @onClick={{route-action 'refreshAll'}} />
+    <ToolbarRefresher @onClick={{this.refresh}} />
   </div>
 
   <FilterTags @filters={{this.filters}} />
@@ -143,7 +143,7 @@
               @icon='x'
               @isIconOnly={{true}}
               @color='secondary'
-              {{on 'click' (route-action 'cancelSession' B.data)}}
+              {{on 'click' (fn this.cancelSession B.data)}}
               data-test-session-cancel-button={{B.data.id}}
             />
           {{/if}}

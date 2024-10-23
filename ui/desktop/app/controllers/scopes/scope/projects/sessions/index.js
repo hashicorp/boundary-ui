@@ -7,6 +7,8 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { loading } from 'ember-loading';
+import { notifySuccess, notifyError } from 'core/decorators/notify';
 import orderBy from 'lodash/orderBy';
 import {
   STATUS_SESSION_ACTIVE,
@@ -19,6 +21,11 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   // =services
 
   @service intl;
+  @service store;
+  @service ipc;
+  @service session;
+  @service router;
+  @service can;
 
   // =attributes
 
@@ -107,5 +114,43 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
   applyFilter(filter, selectedItems) {
     this[filter] = [...selectedItems];
     this.page = 1;
+  }
+
+  // =actions
+
+  /**
+   * Cancels the specified session and notifies user of success or error.
+   * @param {SessionModel}
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.canceled-success')
+  async cancelSession(session) {
+    let updatedSession = session;
+    // fetch session from API to verify we have most up to date record
+    if (this.can.can('read session', session)) {
+      updatedSession = await this.store.findRecord('session', session.id, {
+        reload: true,
+      });
+    }
+
+    await updatedSession.cancelSession();
+
+    await this.ipc.invoke('stop', { session_id: session.id });
+    if (
+      this.router.currentRoute.name ===
+      'scopes.scope.projects.sessions.session.index'
+    ) {
+      this.router.replaceWith('scopes.scope.projects.targets.index');
+    }
+  }
+
+  /**
+   * Refreshes the all data for the current page.
+   */
+  @action
+  refresh() {
+    this.send('refreshAll');
   }
 }
