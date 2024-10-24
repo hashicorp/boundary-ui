@@ -38,8 +38,7 @@
     "test:ui-desktop": "yarn --cwd ui/desktop test",
     "compliance:licenses": "license-checker --onlyAllow 'Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;BUSL-1.1;Public Domain;Python-2.0;Unicode-TOU;Unlicense;WTFPL' --excludePackages 'boundary-ui;admin@0.0.0;desktop@0.0.0;base64-js@0.0.2;cycle@1.0.3;cldr-core@43.1.0;make-plural@7.2.0;@hashicorp/ember-asciinema-player@0.0.0;path-scurry@1.10.1'",
     "doc:toc": "doctoc README.md",
-    "prepare": "husky install",
-    "postinstall": "patch-package"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.1.0",
@@ -47,15 +46,12 @@
     "git-cz": "^4.9.0",
     "husky": "^8.0.0",
     "license-checker": "^25.0.1",
-    "lint-staged": "^13.0.2",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0"
+    "lint-staged": "^13.0.2"
   },
   "resolutions": {
     "**/nomnom/underscore": "^1.12.1",
     "**/react-dev-utils/browserslist": "^4.16.5",
     "**/pretty-bytes/meow/trim-newlines": "^3.0.1",
-    "**/ember-cli/**/clean-css-promise/clean-css": "^4.1.11",
     "**/bower-config/minimist": "^1.2.6",
     "**/commitizen/minimist": "^1.2.6",
     "**/ember-intl/broccoli-merge-files/fast-glob/glob-parent": "^5.1.2",
@@ -63,12 +59,10 @@
     "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
     "**/snapdragon/base/cache-base/**/set-value": "^4.0.1",
     "**/jsprim/json-schema": "^0.4.0",
-    "**/ember-cli/markdown-it-terminal/markdown-it": "^12.3.2",
     "**/ember-cli-mirage/@embroider/macros": "^1.0.0",
     "**/ember-electron/**/got": "^11.8.6",
     "**/ember-cli/**/ansi-html": "^0.0.9",
     "**/ember-cli/testem/fireworm/async": "^2.6.4",
-    "**/desktop/@doyensec/electronegativity/winston/async": "^2.6.4",
     "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0",
     "micromatch": "^4.0.8"
   },
