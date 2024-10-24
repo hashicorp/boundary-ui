@@ -109,6 +109,7 @@ exports.electronTest = test.extend({
         env: {
           NODE_ENV: 'test',
           BYPASS_APP_UPDATER: true,
+          ...process.env,
         },
         ...options,
       });
