@@ -40,7 +40,7 @@
   </Rose::Dropdown>
 {{/if}}
 
-<Hds::Dropdown data-test-manage-auth-methods-dropdown as |dd|>
+<Hds::Dropdown data-test-manage-auth-method as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if @model.isPrimary}}
     <dd.Interactive

@@ -31,9 +31,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-methods-dropdown] div:first-child button';
+    '[data-test-manage-auth-method] div:first-child button';
   const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-auth-methods-dropdown] ul li:last-child button';
+    '[data-test-manage-auth-method] ul li:last-child button';
 
   const instances = {
     scopes: {
