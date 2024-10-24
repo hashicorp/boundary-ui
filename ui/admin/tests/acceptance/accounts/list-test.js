@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import {
@@ -25,12 +25,12 @@ module('Acceptance | accounts | list', function (hooks) {
       global: null,
       org: null,
     },
-    authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
-    authMethods: null,
+    authMethod: null,
     accounts: null,
     newAccount: null,
     account: null,
@@ -52,18 +52,10 @@ module('Acceptance | accounts | list', function (hooks) {
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
-    urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
+    urls.authMethod = `${urls.orgScope}/auth-methods/${instances.authMethod.id}`;
     urls.accounts = `${urls.authMethod}/accounts`;
     urls.newAccount = `${urls.accounts}/new`;
     urls.account = `${urls.accounts}/${instances.account.id}`;
-  });
-
-  hooks.afterEach(async function () {
-    const notification = find(commonSelectors.ALERT_TOAST);
-    if (notification) {
-      await click(commonSelectors.ALERT_TOAST_DISMISS);
-    }
   });
 
   test('Users can navigate to accounts with proper authorization', async function (assert) {
