@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "dexie": "^3.2.4",
-    "ember-auto-import": "^2.6.3",
+    "ember-auto-import": "^2.8.1",
     "ember-can": "^4.2.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",

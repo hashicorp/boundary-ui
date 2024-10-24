@@ -34,7 +34,7 @@
     "@formatjs/intl-durationformat": "^0.2.4",
     "api": "*",
     "auth": "*",
-    "ember-auto-import": "^2.6.3",
+    "ember-auto-import": "^2.8.1",
     "ember-browser-services": "^4.0.3",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",
