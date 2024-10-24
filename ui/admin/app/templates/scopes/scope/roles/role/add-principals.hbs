@@ -43,7 +43,7 @@
                   @name={{filter.name}}
                   @items={{this.flatSortedScopes}}
                   @selectedItems={{filter.selectedValue}}
-                  @onChange={{route-action 'filterBy' filter.name}}
+                  @onChange={{fn this.callFilterBy filter.name}}
                   as |group|
                 >
                   <li
@@ -72,7 +72,7 @@
               <Rose::Button
                 @style='inline-link-action'
                 @iconLeft='flight-icons/svg/x-16'
-                {{on 'click' (route-action 'clearAllFilters')}}
+                {{on 'click' this.callClearAllFilters}}
               >{{t 'actions.clear-all-filters'}}
               </Rose::Button>
             {{/if}}

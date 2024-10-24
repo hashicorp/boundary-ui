@@ -55,8 +55,8 @@
                       @name={{key}}
                       @items={{tags}}
                       @selectedItems={{filter.selectedValue}}
-                      @onChange={{route-action 'filterBy' filter.name}}
-                      @itemEqualityFunc={{route-action 'isEqual'}}
+                      @onChange={{fn this.callFilterBy filter.name}}
+                      @itemEqualityFunc={{this.isEqual}}
                       as |group|
                     >
                       <dropdown.item class='indent-label-1'>
@@ -78,7 +78,7 @@
               <Rose::Button
                 @style='inline-link-action'
                 @iconLeft='flight-icons/svg/x-16'
-                {{on 'click' (route-action 'clearAllFilters')}}
+                {{on 'click' this.callClearAllFilters}}
               >{{t 'actions.clear-all-filters'}}
               </Rose::Button>
             {{/if}}
@@ -86,7 +86,7 @@
         </toolbar.primary>
 
         <toolbar.secondary>
-          <ToolbarRefresher @onClick={{route-action 'refresh'}} />
+          <ToolbarRefresher @onClick={{this.refresh}} />
         </toolbar.secondary>
 
       </Rose::Toolbar>

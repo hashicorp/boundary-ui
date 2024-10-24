@@ -56,4 +56,22 @@ export default class ScopesScopeRolesRoleAddPrincipalsController extends Control
   cancel() {
     this.router.replaceWith('scopes.scope.roles.role.principals');
   }
+
+  /**
+   * Calls filterBy action located in the route.
+   * @param {string} field
+   * @param {[ScopeModel]} value
+   */
+  @action
+  callFilterBy(field, value) {
+    this.send('filterBy', field, value);
+  }
+
+  /**
+   * Calls clearAllFilters action located in the route.
+   */
+  @action
+  callClearAllFilters() {
+    this.send('clearAllFilters');
+  }
 }

@@ -98,11 +98,6 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     this.refresh();
   }
 
-  @action
-  isEqual(firstTag, secondTag) {
-    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
-  }
-
   setupController(controller) {
     const scope = this.modelFor('scopes.scope');
     super.setupController(...arguments);

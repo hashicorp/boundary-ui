@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class ScopesScopeWorkersRoute extends Route {
   // =services
@@ -34,13 +33,5 @@ export default class ScopesScopeWorkersRoute extends Route {
     if (this.can.can('list worker', scope, { collection: 'workers' })) {
       return this.store.query('worker', { scope_id });
     }
-  }
-
-  /**
-   * Refreshes worker data.
-   */
-  @action
-  refresh() {
-    return super.refresh(...arguments);
   }
 }

@@ -39,6 +39,7 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
+      config_tags: { type: ['dev'] },
     });
 
     urls.globalScope = `/scopes/global`;
@@ -80,5 +81,32 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     await controller.delete(worker);
 
     assert.strictEqual(getWorkerCount(), workerCount - 1);
+  });
+
+  test('callFilterBy action adds expected property values to route', async function (assert) {
+    const route = this.owner.lookup('route:scopes/scope/workers/index');
+    await visit(urls.workers);
+    const tag = { key: 'type', value: 'dev', type: 'config' };
+
+    assert.notOk(route.tags);
+
+    controller.callFilterBy('tags', [tag]);
+
+    assert.deepEqual(route.tags, [tag]);
+  });
+
+  test('callClearAllFilters action removes all filter values from route', async function (assert) {
+    const route = this.owner.lookup('route:scopes/scope/workers/index');
+    await visit(urls.workers);
+    const tag = { key: 'type', value: 'dev', type: 'config' };
+    controller.callFilterBy('tags', [tag]);
+
+    assert.deepEqual(route.tags, [
+      { key: 'type', value: 'dev', type: 'config' },
+    ]);
+
+    controller.callClearAllFilters();
+
+    assert.deepEqual(route.tags, []);
   });
 });
