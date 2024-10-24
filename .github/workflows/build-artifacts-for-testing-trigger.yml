@@ -23,11 +23,11 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo "Triggering Build Artifacts for Testing using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
-      - name: Trigger Build Artifacts for Testing in boundary-ui-releases
+      - name: Trigger Build Artifacts for Testing in boundary-desktop-releases
         run: |
           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
           gh workflow run build-artifacts-for-testing.yml \
-          --repo hashicorp/boundary-ui-releases \
+          --repo hashicorp/boundary-desktop-releases \
           --ref main \
           -f TAG="${{ inputs.branch }}" \
           -f PRODUCT_VERSION="${{ inputs.product_version }}" \
