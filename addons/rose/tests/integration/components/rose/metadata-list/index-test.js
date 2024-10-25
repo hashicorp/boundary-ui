@@ -60,7 +60,7 @@ module('Integration | Component | rose/metadata-list', function (hooks) {
       </Rose::MetadataList>
     `);
 
-    assert.dom('.flight-icon').isNotVisible();
+    assert.dom('.hds-icon').isNotVisible();
     assert.dom('li.rose-metadata-list-item').hasText('Sample text 3');
   });
 });

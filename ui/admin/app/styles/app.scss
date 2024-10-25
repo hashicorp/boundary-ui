@@ -368,7 +368,7 @@
   }
 
   &.has-icon {
-    .flight-icon {
+    .hds-icon {
       position: absolute;
       transform: translateY(sizing.rems(xl) - sizing.rems(xs));
     }
@@ -663,7 +663,7 @@
     margin-bottom: 0.25rem;
   }
 
-  .flight-icon-arrow-right {
+  .hds-icon-arrow-right {
     color: var(--token-color-foreground-faint);
   }
 }
@@ -913,7 +913,7 @@
 .session-recording-status-badge {
   /* stylelint-disable selector-class-pattern */
   div.hds-badge__icon {
-    svg.flight-icon-circle-dot {
+    svg.hds-icon-circle-dot {
       color: var(--token-color-palette-red-200);
     }
   }

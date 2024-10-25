@@ -5,7 +5,7 @@
 
 <div class='info-field{{if @icon " has-icon"}}'>
   {{#if @icon}}
-    <FlightIcon @name={{@icon}} @size='24' />
+    <Hds::Icon @name={{@icon}} @size='24' @isInline={{true}} />
   {{/if}}
   <Hds::Form::TextInput::Field
     @value={{@value}}

@@ -76,7 +76,7 @@
                 as |orgId items|
               }}
                 <FD.Generic>
-                  <FlightIcon @name='org' />
+                  <Hds::Icon @name='org' @isInline={{true}} />
                   {{this.orgName orgId}}
                 </FD.Generic>
                 {{#each items as |project|}}
@@ -155,7 +155,7 @@
                 <div
                   class='session-recording-list-cell-item hds-font-weight-semibold'
                 >
-                  <span><FlightIcon @name='user' /></span>
+                  <span><Hds::Icon @name='user' @isInline={{true}} /></span>
                   <span>{{B.data.userDisplayName}}</span>
                 </div>
               </B.Td>
@@ -165,7 +165,7 @@
                   class='session-recording-list-cell-item target-column hds-font-weight-semibold'
                 >
                   <span>
-                    <FlightIcon @name='target' />
+                    <Hds::Icon @name='target' @isInline={{true}} />
                     {{B.data.create_time_values.target.name}}
                   </span>
                   <span>
@@ -182,7 +182,7 @@
                   <div
                     class='session-recording-list-cell-item hds-foreground-faint'
                   >
-                    <span><FlightIcon @name='clock' /></span>
+                    <span><Hds::Icon @name='clock' @isInline={{true}} /></span>
                     <span>
                       {{format-time-duration B.data.duration}}
                     </span>

@@ -8,7 +8,7 @@
   @model={{@model.sessionRecording.id}}
 >
   <div class='session-recording-player-loading'>
-    <FlightIcon @name='loading' @size='24' />
+    <Hds::Icon @name='loading' @size='24' @isInline={{true}} />
     <span>{{t 'resources.session-recording.channel.player.loading'}}</span>
   </div>
 </SessionRecording::Player>
