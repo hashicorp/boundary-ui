@@ -13,11 +13,7 @@
       {{! We have created }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <FlightIcon
-            @name='check-circle'
-            @size='24'
-            class='hds-foreground-success'
-          />
+          <Hds::Icon @name='check-circle' @size='24' class='hds-foreground-success' @isInline={{true}} />
           <h3>{{t 'onboarding.success.titles.creation-success'}}</h3>
         </span>
         <p>{{t 'onboarding.success.descriptions.role'}}</p>
@@ -26,7 +22,7 @@
       {{! Download Desktop client }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <FlightIcon @name='boundary-color' @size='24' />
+          <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
           <h3>{{t 'onboarding.success.titles.desktop'}}</h3>
         </span>
         <p>{{t 'onboarding.success.descriptions.download'}}</p>
