@@ -39,6 +39,15 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     return `${tag.key} = ${tag.value}`;
   }
 
+  /**
+   * Determine equality between two tags based on both key and value.
+   * @param {object} firstTag
+   * @param {object} secondTag
+   */
+  isEqual(firstTag, secondTag) {
+    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
+  }
+
   // =actions
 
   /**
@@ -95,5 +104,31 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     await worker.destroyRecord();
     await this.router.replaceWith('scopes.scope.workers');
     await this.router.refresh();
+  }
+
+  /**
+   * Calls filterBy action located in the route.
+   * @param {string} field
+   * @param {[object]} value
+   */
+  @action
+  callFilterBy(field, value) {
+    this.send('filterBy', field, value);
+  }
+
+  /**
+   * Calls clearAllFilters action located in the route.
+   */
+  @action
+  callClearAllFilters() {
+    this.send('clearAllFilters');
+  }
+
+  /**
+   * Refreshes worker data.
+   */
+  @action
+  refresh() {
+    this.router.refresh('scopes.scope.workers');
   }
 }
