@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find, fillIn } from '@ember/test-helpers';
+import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -15,6 +15,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,12 +26,12 @@ module('Acceptance | accounts | update', function (hooks) {
       global: null,
       org: null,
     },
-    authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
-    authMethods: null,
+    authMethod: null,
     accounts: null,
     account: null,
   };
@@ -51,33 +52,32 @@ module('Acceptance | accounts | update', function (hooks) {
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
-    urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
+    urls.authMethod = `${urls.orgScope}/auth-methods/${instances.authMethod.id}`;
     urls.accounts = `${urls.authMethod}/accounts`;
     urls.account = `${urls.accounts}/${instances.account.id}`;
   });
 
-  hooks.afterEach(async function () {
-    const notification = find('.rose-notification');
-    if (notification) {
-      await click('.rose-notification-dismiss');
-    }
-  });
-
   test('can update resource and save changes', async function (assert) {
     await visit(urls.account);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
-    await click('form [type="submit"]:not(:disabled)');
-    assert.strictEqual(this.server.db.accounts[0].name, 'update name');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(
+      this.server.schema.accounts.all().models[0].name,
+      'updated name',
+    );
   });
 
   test('can update resource and save LDAP account changes', async function (assert) {
     await visit(urls.account);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'updated name');
-    await fillIn('[name="description"]', 'updated desc');
-    await click('form [type="submit"]:not(:disabled)');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await fillIn(commonSelectors.FIELD_DESCRIPTION, 'updated desc');
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].name,
       'updated name',
@@ -92,15 +92,25 @@ module('Acceptance | accounts | update', function (hooks) {
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.account);
-    assert.notOk(find('form [type="button"]'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can update an account and cancel changes', async function (assert) {
     await visit(urls.account);
+
     await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'update name');
+    await fillIn('[name="name"]', 'updated name');
     await click('form button:not([type="submit"])');
-    assert.notEqual(this.server.db.accounts[0].name, 'update name');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(
+      this.server.schema.accounts.all().models[0].name,
+      'updated name',
+    );
   });
 
   test('errors are displayed when save on account fails', async function (assert) {
@@ -116,15 +126,13 @@ module('Acceptance | accounts | update', function (hooks) {
       );
     });
     await visit(urls.account);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'save account');
-    await click('form [type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await click(commonSelectors.SAVE_BTN);
+
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.',
-    );
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('saving an existing account with invalid fields displays error messages', async function (assert) {
@@ -148,19 +156,15 @@ module('Acceptance | accounts | update', function (hooks) {
       );
     });
     await visit(urls.account);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'existing account');
-    await click('form [type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, 'existing account');
+    await click(commonSelectors.SAVE_BTN);
+
     await a11yAudit();
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.',
-    );
-    assert.strictEqual(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.',
-    );
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 });
