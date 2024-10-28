@@ -21,7 +21,7 @@
         @text={{t 'resources.session.actions.connect'}}
         @icon='entry-point'
         @iconPosition='trailing'
-        {{on 'click' (route-action 'preConnect' @model this.toggleModal)}}
+        {{on 'click' (fn this.preConnect @model)}}
       />
     {{/if}}
   </page.actions>
@@ -31,7 +31,7 @@
       <Target::HostModal
         @showModal={{this.isConnecting}}
         @toggleModal={{this.toggleModal}}
-        @connect={{route-action 'hostConnect'}}
+        @connect={{this.hostConnect}}
         @hosts={{@model.hosts}}
         @target={{@model.target}}
       />
