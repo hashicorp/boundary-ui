@@ -11,18 +11,6 @@ if (fs.existsSync('./cli')) {
   extraResource = ['./cli'];
 }
 
-// const version = "1.2.3-beta.test.node.pty"
-
-// const newArray = version.split('.');
-
-// const newVersion = newArray.slice(0,3);
-
-// const newValue = version.split('.').slice(0,3);
-
-// console.log(newValue.join('.'))
-
-// console.log(newValue);
-
 module.exports = {
   packagerConfig: {
     ignore: ['/ember-test(/|$)', '/tests(/|$)'],
