@@ -18,7 +18,6 @@ module.exports = {
         'is-loading',
       ],
     },
-    'no-route-action': false,
   },
   overrides: [
     {
