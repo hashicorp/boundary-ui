@@ -32,7 +32,6 @@ module.exports = {
    */
   contentFor(type, config) {
     return this.findOwnAddonByName('@hashicorp/design-system-components')
-      .findOwnAddonByName('@hashicorp/ember-flight-icons')
       .contentFor(type, config);
   },
 
@@ -45,8 +44,6 @@ module.exports = {
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
     const hdsPath =
       '../../node_modules/@hashicorp/design-system-components/dist/styles';
-    const iconsPath =
-      '../../node_modules/@hashicorp/ember-flight-icons/dist/styles';
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -56,7 +53,6 @@ module.exports = {
     // Include the addon styles
     app.options.sassOptions.includePaths.push(tokensPath);
     app.options.sassOptions.includePaths.push(hdsPath);
-    app.options.sassOptions.includePaths.push(iconsPath);
   },
 
   /**
