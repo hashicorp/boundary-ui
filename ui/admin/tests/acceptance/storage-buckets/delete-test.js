@@ -62,17 +62,18 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     features.enable('ssh-session-recording');
   });
 
-  skip('user can delete a storage bucket', async function (assert) {
-    const storageBucketCount = getStorageBucketCount();
-    await visit(urls.globalScope);
+  'user can delete a storage bucket',
+    async function (assert) {
+      const storageBucketCount = getStorageBucketCount();
+      await visit(urls.globalScope);
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+      await click(`[href="${urls.storageBuckets}"]`);
+      await click(DROPDOWN_BUTTON_SELECTOR);
+      await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert.strictEqual(currentURL(), urls.storageBuckets);
-    assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
-  });
+      assert.strictEqual(currentURL(), urls.storageBuckets);
+      assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
+    };
 
   skip('user can accept delete storage bucket via dialog', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
@@ -95,68 +96,71 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
   });
 
-  skip('user can cancel delete storage bucket via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    const storageBucketCount = getStorageBucketCount();
-    await visit(urls.globalScope);
+  'user can cancel delete storage bucket via dialog',
+    async function (assert) {
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const storageBucketCount = getStorageBucketCount();
+      await visit(urls.globalScope);
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+      await click(`[href="${urls.storageBuckets}"]`);
+      await click(DROPDOWN_BUTTON_SELECTOR);
+      await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert
-      .dom(DIALOG_TITLE_SELECTOR)
-      .hasText(
-        intl.t(
-          'resources.storage-bucket.questions.delete-storage-bucket.title',
-        ),
-      );
-    assert
-      .dom(DIALOG_MESSAGE_SELECTOR)
-      .hasText(
-        intl.t(
-          'resources.storage-bucket.questions.delete-storage-bucket.message',
-        ),
-      );
+      assert
+        .dom(DIALOG_TITLE_SELECTOR)
+        .hasText(
+          intl.t(
+            'resources.storage-bucket.questions.delete-storage-bucket.title',
+          ),
+        );
+      assert
+        .dom(DIALOG_MESSAGE_SELECTOR)
+        .hasText(
+          intl.t(
+            'resources.storage-bucket.questions.delete-storage-bucket.message',
+          ),
+        );
 
-    await click(DIALOG_CANCEL_BTN_SELECTOR);
+      await click(DIALOG_CANCEL_BTN_SELECTOR);
 
-    assert.strictEqual(currentURL(), urls.storageBuckets);
-    assert.strictEqual(getStorageBucketCount(), storageBucketCount);
-  });
+      assert.strictEqual(currentURL(), urls.storageBuckets);
+      assert.strictEqual(getStorageBucketCount(), storageBucketCount);
+    };
 
-  skip('user cannot delete storage bucket without proper authorization', async function (assert) {
-    await visit(urls.globalScope);
-    instances.storageBucket.authorized_actions =
-      instances.storageBucket.authorized_actions.filter(
-        (item) => item !== 'delete',
-      );
+  'user cannot delete storage bucket without proper authorization',
+    async function (assert) {
+      await visit(urls.globalScope);
+      instances.storageBucket.authorized_actions =
+        instances.storageBucket.authorized_actions.filter(
+          (item) => item !== 'delete',
+        );
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+      await click(`[href="${urls.storageBuckets}"]`);
+      await click(DROPDOWN_BUTTON_SELECTOR);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
-  });
+      assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    };
 
-  skip('deleting a storage bucket which errors displays error messages', async function (assert) {
-    await visit(urls.globalScope);
-    this.server.del('/storage-buckets/:id', () => {
-      return new Response(
-        490,
-        {},
-        {
-          status: 490,
-          code: 'error',
-          message: 'Oops.',
-        },
-      );
-    });
+  'deleting a storage bucket which errors displays error messages',
+    async function (assert) {
+      await visit(urls.globalScope);
+      this.server.del('/storage-buckets/:id', () => {
+        return new Response(
+          490,
+          {},
+          {
+            status: 490,
+            code: 'error',
+            message: 'Oops.',
+          },
+        );
+      });
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+      await click(`[href="${urls.storageBuckets}"]`);
+      await click(DROPDOWN_BUTTON_SELECTOR);
+      await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert.dom(NOTIFICATION_MSG_SELECTOR).hasText('Oops.');
-  });
+      assert.dom(NOTIFICATION_MSG_SELECTOR).hasText('Oops.');
+    };
 });

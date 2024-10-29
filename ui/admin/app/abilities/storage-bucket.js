@@ -36,9 +36,8 @@ export default class OverrideStorageBucketAbility extends StorageBucketAbility {
    * For now a storage bucket cannot be deleted.
    */
   get canDelete() {
-    return false;
-    // return this.features.isEnabled('ssh-session-recording')
-    //   ? super.canDelete
-    //   : false;
+    return this.features.isEnabled('ssh-session-recording')
+      ? super.canDelete
+      : false;
   }
 }
