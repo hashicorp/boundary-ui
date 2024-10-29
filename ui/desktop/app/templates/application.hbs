@@ -26,21 +26,21 @@
             @style='warning'
             class='button-window-close'
             title={{t 'actions.close'}}
-            {{on 'click' (route-action 'close')}}
+            {{on 'click' this.close}}
           />
           <Rose::Button
             @iconOnly='flight-icons/svg/square-16'
             @style='secondary'
             class='button-window-fullscreen'
             title={{t 'actions.fullscreen'}}
-            {{on 'click' (route-action 'toggleFullScreen')}}
+            {{on 'click' this.toggleFullScreen}}
           />
           <Rose::Button
             @iconOnly='flight-icons/svg/minus-16'
             @style='secondary'
             class='button-window-minimize'
             title={{t 'actions.minimize'}}
-            {{on 'click' (route-action 'minimize')}}
+            {{on 'click' this.minimize}}
           />
         {{/if}}
 
@@ -50,44 +50,9 @@
             @icon='flight-icons/svg/user-circle-16'
             as |dropdown|
           >
-            <dropdown.button {{on 'click' (route-action 'invalidateSession')}}>
+            <dropdown.button {{on 'click' this.invalidateSession}}>
               {{t 'actions.deauthenticate'}}
             </dropdown.button>
-
-            <dropdown.separator />
-
-            <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
-              <Rose::Form as |form|>
-                <form.radioGroup
-                  @name='theme'
-                  @selectedValue={{or
-                    this.session.data.theme
-                    'system-default-theme'
-                  }}
-                  @changed={{route-action 'toggleTheme'}}
-                  as |radioGroup|
-                >
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.system'}}
-                      @value='system-default-theme'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.light'}}
-                      @value='light'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.dark'}}
-                      @value='dark'
-                    />
-                  </dropdown.item>
-                </form.radioGroup>
-              </Rose::Form>
-            </dropdown.section>
           </utilities.dropdown>
         {{/if}}
 

@@ -112,7 +112,7 @@ test('SSH Certificate Injection @ent @docker', async ({
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
     const credentialLibraryName =
-      await credentialStoresPage.createVaultSshCertificateCredentialLibrary(
+      await credentialStoresPage.createVaultSshCertificateCredentialLibraryEnt(
         `${secretsPath}/issue/${secretName}`,
         sshUser,
       );

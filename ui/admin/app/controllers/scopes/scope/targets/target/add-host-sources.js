@@ -23,6 +23,7 @@ export default class ScopesScopeTargetsTargetAddHostSourcesController extends Co
   async save(target, hostSetIDs) {
     await target.addHostSources(hostSetIDs);
     this.router.replaceWith('scopes.scope.targets.target.host-sources');
+    this.router.refresh('scopes.scope.targets.target');
   }
 
   /**

@@ -212,12 +212,25 @@ host-catalog:
   help:
     static: Provide a list of hosts and host sets with static addresses
     plugin: Automate discovery of target hosts and services on Azure or AWS
+    role_arn: The ARN (Amazon Resource Name) used by this instance.
+    disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials.
   types:
     static: Static
     unknown: Plugin
     aws: AWS
     azure: Azure
     plugin: Dynamic
+    credential:
+      label: Credential type
+      help: Select the credential type that you want to use.
+      static-credential:
+        edit: Static Credentials
+        label: Use an access key (Static Credentials)
+        help: Use an access key that you have generated in AWS to use with this AWS Host Catalog.
+      dynamic-credential:
+        edit: Dynamic Credentials
+        label: Use Assume Role (Dynamic Credentials)
+        help: Specify a role used to generate credentials to use with this AWS Host Catalog.
   form:
     aws_region:
       label: AWS Region
@@ -225,6 +238,9 @@ host-catalog:
     azure_client_id:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
+    worker_filter:
+      label: Worker Filter
+      help: Insert a worker filter in order to route requests to the correct worker.
 host-set:
   title: Host Set
   title_plural: Host Sets
@@ -357,6 +373,12 @@ session-recording:
   duration: '{time} duration'
   questions:
     delete: Are you sure you want to delete this recording?
+  filters:
+    time:
+      title: Time
+      last-twenty-four-hours: Last 24 hours
+      last-three-days: Last 3 days
+      last-seven-days: Last 7 days
   connection:
     title: Connection
     title_index: Connection {index}
@@ -384,9 +406,9 @@ session-recording:
     messages:
       none:
         title: Channel Playback
-      missing:
-        title: We can't play back this channel because the file is missing
-        description: This likely means the connected storage bucket is misconfigured or the file was deleted.
+      error:
+        title: Playback error
+        description: This may mean the connected storage bucket is misconfigured, the file was deleted, or integrity validation failed.
         link: Retrieving lost session recordings
       not-supported:
         title: Playback is not supported for this channel
@@ -439,6 +461,7 @@ storage-bucket:
   plugin-types:
     aws: Amazon S3
     minio: MinIO
+    unknown: Unknown
   form:
     scope:
       label: Scope
@@ -447,7 +470,6 @@ storage-bucket:
       help_org: This storage bucket will be available for use with targets within this org.
     provider:
       label: Provider
-      help: Boundary currently only supports Amazon S3 storage.
     endpoint_url:
       label: Endpoint URL
       help: Cannot be changed later.
@@ -459,7 +481,7 @@ storage-bucket:
       help: The base path where session recordings will be stored.
     role_arn:
       label: Role ARN
-      help: The ARN (Assume Role Name) used by this instance that the worker runs on.
+      help: The ARN (Amazon Resource Name) used by this instance that the worker runs on.
     role_external_id:
       label: Role external ID
       help: Used to provide access to this account if you have this configured.
@@ -699,7 +721,7 @@ target:
       help: The local proxy port on which to listen by default when a session is started on a client.
     sidebar:
       label: Session Recording
-      help: Record SSH sessions on this target and save them to an Amazon S3 bucket.
+      help: Record SSH sessions on this target and save them to a storage bucket.
       link: Session Recording settings
   questions:
     delete-host-sources:

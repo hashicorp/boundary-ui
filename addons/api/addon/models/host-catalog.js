@@ -19,9 +19,25 @@ export const TYPES_HOST_CATALOG_PLUGIN = [
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
 ];
 
+export const TYPE_CREDENTIAL_STATIC = 'static-credential';
+export const TYPE_CREDENTIAL_DYNAMIC = 'dynamic-credential';
+
+export const TYPES_CREDENTIALS = Object.freeze([
+  TYPE_CREDENTIAL_STATIC,
+  TYPE_CREDENTIAL_DYNAMIC,
+]);
+
+const DYNAMIC_CREDENTIAL_FIELDS = [
+  'role_arn',
+  'role_external_id',
+  'role_session_name',
+  'role_tags',
+];
+
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
 
+  #credentialType;
   /**
    * True if the host catalog is static.
    * @type {boolean}
@@ -36,6 +52,29 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    */
   get isPlugin() {
     return this.type === 'plugin';
+  }
+
+  /**
+   * Gets a value from credentialType
+   * @type {string}
+   */
+  get credentialType() {
+    if (!this.#credentialType) {
+      if (DYNAMIC_CREDENTIAL_FIELDS.some((field) => this[field])) {
+        this.#credentialType = TYPE_CREDENTIAL_DYNAMIC;
+      } else {
+        this.#credentialType = TYPE_CREDENTIAL_STATIC;
+      }
+    }
+    return this.#credentialType;
+  }
+
+  /**
+   * Sets a value to credentialType
+   * @type {string}
+   */
+  set credentialType(type) {
+    this.#credentialType = type;
   }
 
   /**

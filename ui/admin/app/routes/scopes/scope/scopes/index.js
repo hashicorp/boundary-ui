@@ -31,7 +31,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{totalItems: number, currentScope: ScopeModel, subScopes: [ScopeModel], scopesExist: boolean }> }
+   * @returns {Promise<{totalItems: number, currentScope: ScopeModel, subScopes: [ScopeModel], doScopesExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const currentScope = this.modelFor('scopes.scope');
@@ -47,23 +47,23 @@ export default class ScopesScopeScopesIndexRoute extends Route {
       pageSize,
     });
     const totalItems = subScopes.meta?.totalItems;
-    const scopesExist = await this.getScopesExist(scope_id, totalItems);
+    const doScopesExist = await this.getDoScopesExist(scope_id, totalItems);
 
     return {
       currentScope,
       subScopes,
-      scopesExist,
+      doScopesExist,
       totalItems,
     };
   }
 
   /**
-   * Sets scopesExist to true if there exists any scopes.
+   * Sets doScopesExist to true if there exists any scopes.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getScopesExist(scope_id, totalItems) {
+  async getDoScopesExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

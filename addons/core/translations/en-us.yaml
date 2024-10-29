@@ -105,3 +105,31 @@ unsupported-controller:
     releases-page: Go to releases page
     change-cluster-url: Change cluster URL
   error: Unable to download supported version of desktop app. You’ll need to download version 1.7.1 from the releases page
+settings:
+  application: Application
+  cli: CLI
+  cache-daemon: Cache Daemon
+  client-agent:
+    title: Boundary Client Agent
+    description: Required to use Transparent Sessions
+  client: Client
+  version: Version
+  color-theme: Color Theme
+  provider: Provider
+  hcp: HashiCorp Cloud Platform
+  self-managed: Self-managed
+  server:
+    title: Server
+    description: Boundary connects you to targets using this server managed by your organization.
+  logs:
+    title: Logs
+    logging-level: Logging level
+    log-location: Log location
+    levels:
+      error: Error
+      warn: Warn
+      info: Info
+      debug: Debug
+  alerts:
+    cache-daemon: There may be a problem with the cache daemon
+    client-agent: There may be a problem with the client agent

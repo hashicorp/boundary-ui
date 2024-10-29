@@ -5,6 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import {
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_CREDENTIAL_STATIC,
+  TYPE_CREDENTIAL_DYNAMIC,
+} from 'api/models/host-catalog';
 
 module('Unit | Serializer | host catalog', function (hooks) {
   setupTest(hooks);
@@ -31,13 +36,102 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new aws plugin as expected, ignoring azure fields', async function (assert) {
+  test('it serializes a new aws static plugin as expected', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
-      compositeType: 'aws',
+      compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
+      credentialType: TYPE_CREDENTIAL_STATIC,
       name: 'AWS',
       description: 'this is a Aws plugin host-catalog',
       disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
+      region: 'west',
+      access_key_id: 'foobars',
+      secret_access_key: 'testing',
+      secret_id: 'a1b2c3',
+      secret_value: 'a1b2c3',
+      role_arn: 'test',
+      role_external_id: 'test',
+      role_session_name: 'test',
+      role_tags: [
+        { key: 'Project', value: 'Automation' },
+        { key: 'foo', value: 'bar' },
+      ],
+    });
+    const expectedResult = {
+      name: 'AWS',
+      description: 'this is a Aws plugin host-catalog',
+      type: 'plugin',
+      worker_filter: 'workerfilter',
+      attributes: {
+        disable_credential_rotation: true,
+        region: 'west',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
+      },
+      secrets: {
+        access_key_id: 'foobars',
+        secret_access_key: 'testing',
+      },
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
+
+  test('it serializes a new aws dynamic plugin as expected', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('host-catalog', {
+      compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
+      name: 'AWS',
+      credentialType: TYPE_CREDENTIAL_DYNAMIC,
+      description: 'this is a Aws plugin host-catalog',
+      disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
+      // these are AWS fields and should be included
+      region: 'west',
+      access_key_id: 'foobars',
+      secret_access_key: 'testing',
+      // these are Azure fields and should be excluded
+      tenant_id: 'a1b2c3',
+      client_id: 'a1b2c3',
+      subscription_id: 'a1b2c3',
+      secret_id: 'a1b2c3',
+      secret_value: 'a1b2c3',
+      role_arn: 'test',
+      role_external_id: 'test',
+      role_session_name: 'test',
+      role_tags: [
+        { key: 'Project', value: 'Automation' },
+        { key: 'foo', value: 'bar' },
+      ],
+    });
+    const expectedResult = {
+      name: 'AWS',
+      description: 'this is a Aws plugin host-catalog',
+      type: 'plugin',
+      worker_filter: 'workerfilter',
+      attributes: {
+        disable_credential_rotation: true,
+        region: 'west',
+        role_external_id: 'test',
+        role_session_name: 'test',
+        role_arn: 'test',
+        role_tags: { Project: 'Automation', foo: 'bar' },
+      },
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
+
+  test('it serializes a new aws static plugin as expected, ignoring azure fields', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('host-catalog', {
+      compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
+      name: 'AWS',
+      credentialType: TYPE_CREDENTIAL_STATIC,
+      description: 'this is a Aws plugin host-catalog',
+      disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
       // these are AWS fields and should be included
       region: 'spain',
       access_key_id: 'foobars',
@@ -53,9 +147,14 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'AWS',
       description: 'this is a Aws plugin host-catalog',
       type: 'plugin',
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: true,
         region: 'spain',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
       },
       secrets: {
         access_key_id: 'foobars',
@@ -75,6 +174,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       region: 'spain',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
+      worker_filter: 'workerfilter',
       // these are Azure fields and should be excluded
       tenant_id: 'a1b2c3',
       client_id: 'a1b2c3',
@@ -106,6 +206,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       data: {
         id: '1',
         type: 'host-catalog',
+        credentialType: 'static',
         attributes: {
           type: 'plugin',
           name: 'aws',
@@ -113,6 +214,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
           plugin: {
             name: 'aws',
           },
+          worker_filter: 'workerfilter',
           region: 'andorra',
         },
       },
@@ -122,9 +224,14 @@ module('Unit | Serializer | host catalog', function (hooks) {
       type: 'plugin',
       name: 'aws',
       description: 'test description',
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: false,
         region: 'andorra',
+        role_arn: null,
+        role_external_id: null,
+        role_session_name: null,
+        role_tags: null,
       },
     };
     assert.deepEqual(record.serialize(), expectedResult);
@@ -215,6 +322,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
         name: 'aws',
         description: 'aws host catalog',
       },
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: false,
         region: 'Illinois',
@@ -238,6 +346,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
           type: 'plugin',
           description: 'Test description',
           authorized_actions: ['no-op'],
+          worker_filter: 'workerfilter',
           plugin: {
             id: 'plugin-id-5',
             name: 'aws',

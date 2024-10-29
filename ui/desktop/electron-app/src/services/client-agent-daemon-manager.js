@@ -15,7 +15,11 @@ class ClientAgentDaemonManager {
    */
   async status() {
     const clientAgentStatusCommand = ['client-agent', 'status', '-format=json'];
-    const { stdout, stderr } = spawnSync(clientAgentStatusCommand);
+    // The status command can take a while to execute if it's not running as it
+    // retries multiple times so we should set a timeout to not wait too long
+    const { stderr, stdout } = await spawn(clientAgentStatusCommand, {
+      timeout: 500,
+    });
 
     let parsedResponse = jsonify(stdout);
     if (parsedResponse?.status_code === 200) {
@@ -45,6 +49,46 @@ class ClientAgentDaemonManager {
     }
 
     log.warn('Client Agent Sessions:', stderr);
+    return generateErrorPromise(stderr);
+  }
+
+  /**
+   * Pauses the client agent daemon.
+   * @return {Promise<*>}
+   */
+  async pause() {
+    const clientAgentPauseCommand = ['client-agent', 'pause', '-format=json'];
+    // We use spawn here as pausing can take a while to execute and using spawnSync
+    // can cause the app to completely freeze and be unresponsive during that time
+    const { stderr, stdout } = await spawn(clientAgentPauseCommand, {
+      timeout: 10000,
+    });
+
+    let parsedResponse = jsonify(stdout);
+    if (parsedResponse?.status_code === 200) {
+      return parsedResponse.item;
+    }
+
+    log.warn('Client Agent Pause:', stderr);
+    return generateErrorPromise(stderr);
+  }
+
+  /**
+   * Resumes the client agent daemon.
+   * @return {Promise<*>}
+   */
+  async resume() {
+    const clientAgentResumeCommand = ['client-agent', 'resume', '-format=json'];
+    const { stderr, stdout } = await spawn(clientAgentResumeCommand, {
+      timeout: 10000,
+    });
+
+    let parsedResponse = jsonify(stdout);
+    if (parsedResponse?.status_code === 200) {
+      return parsedResponse.item;
+    }
+
+    log.warn('Client Agent Resume:', stderr);
     return generateErrorPromise(stderr);
   }
 }

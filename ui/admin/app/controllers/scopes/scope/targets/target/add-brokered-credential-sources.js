@@ -61,6 +61,7 @@ export default class ScopesScopeTargetsTargetAddBrokeredCredentialSourcesControl
     this.router.replaceWith(
       'scopes.scope.targets.target.brokered-credential-sources',
     );
+    this.router.refresh('scopes.scope.targets.target');
   }
 
   /**

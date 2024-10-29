@@ -32,7 +32,7 @@ module.exports = {
    */
   spawnAsyncJSONPromise(command, token) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command, {
+      const childProcess = spawn(path, command, {
         env: {
           ...process.env,
           BOUNDARY_TOKEN: token,
@@ -77,7 +77,7 @@ module.exports = {
    * @param {object} envVars
    * @returns {{stdout: string | undefined, stderr: string | undefined}}   */
   spawnSync(args, envVars = {}) {
-    const childProcess = spawnSync(path(), args, {
+    const childProcess = spawnSync(path, args, {
       // Some of our outputs (namely cache daemon searching) can be very large.
       // This an undocumented hack to allow for an unlimited buffer size which
       // could change at any time. If it does, we should just set an arbitrarily
@@ -90,19 +90,20 @@ module.exports = {
       },
     });
 
-    const { stdout, stderr } = childProcess;
+    const { stdout, stderr, error } = childProcess;
 
-    return { stdout: stdout?.toString(), stderr: stderr?.toString() };
+    return { stdout: stdout?.toString(), stderr: stderr?.toString(), error };
   },
 
   /**
    * Spawn a child process and return a promise.
    * Resolves on any output from stdout or stderr.
    * @param command
+   * @param options
    */
-  spawn(command) {
+  spawn(command, options) {
     return new Promise((resolve, reject) => {
-      const childProcess = spawn(path(), command);
+      const childProcess = spawn(path, command, options);
       childProcess.stdout.on('data', (data) => {
         resolve({ childProcess, stdout: data.toString() });
       });
@@ -110,6 +111,19 @@ module.exports = {
         resolve({ childProcess, stderr: data.toString() });
       });
       childProcess.on('error', (err) => reject(err));
+
+      // In case the process has no stdio and didn't error out, resolve a
+      // promise once the child process closes so we're not waiting forever.
+      // Windows doesn't seem to return any error nor any output from stderr when
+      // a timeout occurs so this guarantees we return a response to the caller.
+      // Otherwise this should not get hit as we should be returning a response
+      // from one of the handlers above.
+      childProcess.on('close', () =>
+        resolve({
+          childProcess,
+          stderr: JSON.stringify({ error: 'Process was closed.' }),
+        }),
+      );
     });
   },
 };

@@ -4,11 +4,13 @@
  */
 
 const { spawnSync } = require('../helpers/spawn-promise.js');
-const { path } = require('./path.js');
+const { path, isBuiltInCli } = require('./path.js');
 
 module.exports = {
   // Check boundary cli existence
-  exists: () => Boolean(path()),
+  exists: () => Boolean(path),
+
+  isBuiltInCli,
 
   // Returns JSON-formatted version information from the CLI
   version: () => {

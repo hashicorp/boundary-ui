@@ -31,7 +31,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
   /**
    * Loads all host catalogs under the current scope.
-   * @returns {Promise<{hostCatalogsExist: boolean, totalItems: number, hostCatalogs: [HostCatalogModel]}>}
+   * @returns {Promise<{doHostCatalogsExist: boolean, totalItems: number, hostCatalogs: [HostCatalogModel]}>}
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -45,7 +45,7 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
     let hostCatalogs;
     let totalItems = 0;
-    let hostCatalogsExist = false;
+    let doHostCatalogsExist = false;
     if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
       hostCatalogs = await this.store.query('host-catalog', {
         scope_id,
@@ -54,19 +54,22 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
         pageSize,
       });
       totalItems = hostCatalogs.meta?.totalItems;
-      hostCatalogsExist = await this.getHostCatalogsExist(scope_id, totalItems);
+      doHostCatalogsExist = await this.getDoHostCatalogsExist(
+        scope_id,
+        totalItems,
+      );
     }
 
-    return { hostCatalogs, totalItems, hostCatalogsExist };
+    return { hostCatalogs, totalItems, doHostCatalogsExist };
   }
 
   /**
    * Returns true if any host catalogs exist.
    * @param {string} scope_id
    * @param {number} totalItems
-   * @returns {boolean}
+   * @returns {Promise<boolean>}
    */
-  async getHostCatalogsExist(scope_id, totalItems) {
+  async getDoHostCatalogsExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

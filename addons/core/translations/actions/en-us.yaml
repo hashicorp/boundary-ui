@@ -22,6 +22,8 @@ back: Back
 view: View
 retry: Retry
 play: Play
+pause: Pause
+resume: Resume
 get-topic-help: Get help for this topic
 copy-to-clipboard: Copy to Clipboard
 copy-error-detail-to-clipboard: Copy error detail to clipboard
@@ -60,3 +62,5 @@ yes: Yes
 no: No
 narrow-results: Narrow results
 overflow-options: Overflow Options
+show-errors: Show Errors
+hide-errors: Hide Errors

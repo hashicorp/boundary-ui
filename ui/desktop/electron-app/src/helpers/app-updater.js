@@ -12,6 +12,7 @@ const { autoUpdater, dialog, app } = require('electron');
 const { isWindows, isLinux } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
 const log = require('electron-log/main');
+const boundaryCli = require('../cli/index.js');
 
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
@@ -169,6 +170,11 @@ module.exports = {
      * TODO: Enable for windows pending feature dev. Windows is supported.
      */
     if (isWindows() || isLinux()) return;
+
+    /**
+     * Skip the app updater if we are NOT using the built in CLI
+     */
+    if (!boundaryCli.isBuiltInCli) return;
 
     let latestVersion;
     if (debug) {

@@ -42,8 +42,8 @@ export class AuthMethodsPage extends BaseResourcePage {
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })
       .click();
-    await this.page.getByRole('button', { name: 'Manage' }).click();
-    await this.page.getByText('Make Primary', { exact: true }).click();
+    await this.page.getByLabel('Manage').click();
+    await this.page.getByRole('button', { name: 'Make Primary' }).click();
     await this.page.getByText('OK', { exact: true }).click();
     await this.dismissSuccessAlert();
   }
@@ -52,7 +52,7 @@ export class AuthMethodsPage extends BaseResourcePage {
    * Removes auth method as primary. Assume you have selected the desired auth method.
    */
   async removeAuthMethodAsPrimary() {
-    await this.page.getByTitle('Manage').click();
+    await this.page.getByRole('button', { name: 'Manage' }).click();
     await this.page.getByRole('button', { name: 'Remove as primary' }).click();
     await this.page.getByText('OK', { exact: true }).click();
     await this.dismissSuccessAlert();

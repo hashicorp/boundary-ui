@@ -83,18 +83,12 @@ To run as a desktop app:
 
 - `yarn start:desktop`
 
-The Boundary CLI is downloaded and extracted to `electron-app/cli/` folder as part of
-build. CLI version is defined in `electron-app/config/cli.js`.
+The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `SETUP_CLI` to true. Example: `SETUP_CLI=true yarn start:desktop`.
+The CLI version is defined in `electron-app/config/cli/VERSION`.
 
 ### Developing Using Non-Release Versions of Boundary
 
-You can also develop using a non-release version of Boundary - bypassing the
-above CLI download behavior - by manually placing the version of Boundary that
-you want to develop with in the `electron-app/cli/` directly (you may need to
-create the directory).
-
-After doing this, run yarn with `BYPASS_CLI_SETUP=true`; example:
-`BYPASS_CLI_SETUP=true yarn start:desktop`.
+To develop using a non-release version of Boundary, download the Boundary CLI version you want to use and extract it to the `electron-app/cli` folder. You may need to create the directory or clean it up beforehand.
 
 ### Environment Variables (DEV)
 
@@ -106,7 +100,7 @@ These environment variables may be used to customized the build.
 | `APP_UPDATER_CURRENT_VERSION` | Version of client. |
 | `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
 | `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
-| `BYPASS_CLI_SETUP` | Disable download and extraction of cli. For development use only. |
+| `SETUP_CLI` | Enable download and extraction of CLI. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 | `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
@@ -114,8 +108,8 @@ These environment variables may be used to customized the build.
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables-prod). To build this UI for
-production, run the following commands from this folder:
+for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in. 
+To build this UI for production, run the following commands from this folder:
 
 ```bash
 yarn install
@@ -150,7 +144,7 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `BOUNDARY_DESKTOP_SIGNING_IDENTITY` | | The name of the certificate to use when signing (e.g. Developer ID Application: \* (*)). |
-| `BYPASS_CLI_SETUP` | Set to `true` to launch without bootstrapping the CLI (see above). ||
+| `SETUP_CLI` | Enable download and extraction of CLI. |
 
 ### Running Tests
 

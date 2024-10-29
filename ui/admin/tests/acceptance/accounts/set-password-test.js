@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -15,6 +15,8 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | set password', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,13 +27,13 @@ module('Acceptance | accounts | set password', function (hooks) {
       global: null,
       org: null,
     },
-    authMethods: null,
+    authMethod: null,
     account: null,
   };
   const urls = {
     orgScope: null,
-    authMethods: null,
-    accounts: null,
+    authMethod: null,
+    account: null,
     setPassword: null,
   };
 
@@ -51,24 +53,22 @@ module('Acceptance | accounts | set password', function (hooks) {
     });
     // Generate route URLs for resources
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
-    urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
-    urls.accounts = `${urls.authMethod}/accounts`;
-    urls.account = `${urls.accounts}/${instances.account.id}`;
+    urls.authMethod = `${urls.orgScope}/auth-methods/${instances.authMethod.id}`;
+    urls.account = `${urls.authMethod}/accounts/${instances.account.id}`;
     urls.setPassword = `${urls.account}/set-password`;
   });
 
   test('visiting account set password', async function (assert) {
     await visit(urls.setPassword);
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.setPassword);
   });
 
   test('can navigate to route with proper authorization', async function (assert) {
     await visit(urls.account);
-    assert.ok(
-      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`),
-    );
+
+    assert.dom(commonSelectors.HREF(urls.setPassword)).isVisible();
   });
 
   test('cannot navigate to route without proper authorization', async function (assert) {
@@ -76,10 +76,10 @@ module('Acceptance | accounts | set password', function (hooks) {
       (item) => item !== 'set-password',
     );
     instances.account.update({ authorized_actions });
+
     await visit(urls.account);
-    assert.notOk(
-      find(`.rose-layout-page-navigation [href="${urls.setPassword}"]`),
-    );
+
+    assert.dom(commonSelectors.HREF(urls.setPassword)).doesNotExist();
   });
 
   test('can set a new password for account', async function (assert) {
@@ -97,20 +97,21 @@ module('Acceptance | accounts | set password', function (hooks) {
         return { id };
       },
     );
+
     await visit(urls.setPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form [type="submit"]:not(:disabled)');
+
+    await fillIn(selectors.FIELD_PASSWORD, 'update password');
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
   });
 
-  // NOTE: since set password is a tabbed route with easy navigation away
-  // from the form, and the form does not directly operate on a model instance,
-  // a "cancel" flow doesn't make much sense.  Disabling for now.
-  test.skip('can cancel setting new password', async function (assert) {
+  test('can cancel setting new password by navigating away', async function (assert) {
     await visit(urls.setPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form button:not([type="submit"])');
-    assert.notOk(find('[name="password"]').textContent.trim());
+
+    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await click(commonSelectors.HREF(urls.account));
+
+    assert.strictEqual(currentURL(), urls.account);
   });
 
   test('errors are displayed when setting password fails', async function (assert) {
@@ -125,10 +126,12 @@ module('Acceptance | accounts | set password', function (hooks) {
         },
       );
     });
+
     await visit(urls.setPassword);
-    await fillIn('[name="password"]', 'update password');
-    await click('form [type="submit"]');
+    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST).isVisible();
     await a11yAudit();
-    assert.ok(find('[role="alert"]'));
   });
 });

@@ -61,14 +61,14 @@
     "@glimmer/tracking": "^1.1.2",
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
     "@playwright/test": "^1.43.0",
-    "babel-loader": "^8.2.5",
+    "babel-loader": "^9.2.1",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.0.1",
     "core": "*",
     "doctoc": "^2.2.0",
     "ember-a11y-testing": "^7.0.0",
-    "ember-auto-import": "^2.6.3",
-    "ember-cli": "^4.12.2",
+    "ember-auto-import": "^2.8.1",
+    "ember-cli": "^5.12.0",
     "ember-cli-app-version": "^6.0.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-code-coverage": "^1.0.3",
@@ -107,7 +107,7 @@
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
     "tracked-built-ins": "^3.1.1",
-    "webpack": "^5.78.0"
+    "webpack": "^5.94.0"
   },
   "engines": {
     "node": "20.* || 22.*"

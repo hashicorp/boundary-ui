@@ -31,7 +31,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
   /**
    * Loads queried roles and the number of roles under current scope.
-   * @returns {Promise<{totalItems: number, roles: [RoleModel], rolesExist: boolean }> }
+   * @returns {Promise<{totalItems: number, roles: [RoleModel], doRolesExist: boolean }> }
    */
   async model({ search, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -42,7 +42,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
     let roles;
     let totalItems = 0;
-    let rolesExist = false;
+    let doRolesExist = false;
     if (this.can.can('list model', scope, { collection: 'roles' })) {
       roles = await this.store.query('role', {
         scope_id,
@@ -51,19 +51,19 @@ export default class ScopesScopeRolesIndexRoute extends Route {
         pageSize,
       });
       totalItems = roles.meta?.totalItems;
-      rolesExist = await this.getRolesExist(scope_id, totalItems);
+      doRolesExist = await this.getDoRolesExist(scope_id, totalItems);
     }
 
-    return { roles, rolesExist, totalItems };
+    return { roles, doRolesExist, totalItems };
   }
 
   /**
-   * Sets rolesExist to true if there exists any roles.
+   * Sets doRolesExist to true if there exists any roles.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getRolesExist(scope_id, totalItems) {
+  async getDoRolesExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }

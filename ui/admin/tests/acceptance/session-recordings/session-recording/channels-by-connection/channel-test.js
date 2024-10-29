@@ -9,24 +9,30 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 module(
   'Acceptance | session-recordings | session-recording | channels-by-connection | channel',
   function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
+    setupIndexedDb(hooks);
 
     let featuresService;
     let getRecordingCount;
 
     const DELETE_DROPDOWN_SELECTOR = '[data-test-manage-dropdown-delete]';
     const DROPDOWN_SELECTOR = '[data-test-manage-dropdown]';
+    const ERROR_MSG_SELECTOR = '.rose-notification-body';
+
     // Instances
     const instances = {
       scopes: {
         global: null,
         org: null,
       },
+      target: null,
+      user: null,
       sessionRecording: null,
       connectionRecording: null,
       channelRecording: null,
@@ -46,13 +52,15 @@ module(
         type: 'org',
         scope: { id: 'global', type: 'global' },
       });
-      instances.scopes.targetModel = this.server.create('target', {
+      instances.target = this.server.create('target', {
         scope: instances.scopes.global,
       });
+      instances.user = this.server.create('user');
       instances.sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
         create_time_values: {
-          target: instances.scopes.targetModel.attrs,
+          target: instances.target.attrs,
+          user: instances.user.attrs,
         },
       });
       instances.connectionRecording = this.server.create(
@@ -132,9 +140,10 @@ module(
 
       // if there was an error player will not render
       assert.dom('.session-recording-player').doesNotExist();
+      assert.dom('.hds-application-state__title').hasText('Playback error');
       assert
-        .dom('.hds-application-state__title')
-        .hasText("We can't play back this channel because the file is missing");
+        .dom('.rose-notification-body')
+        .includesText('rpc error: code = Unknown');
     });
 
     test('user can navigate back to session recording screen', async function (assert) {
@@ -146,17 +155,35 @@ module(
       assert.strictEqual(currentURL(), urls.sessionRecording);
     });
 
-    test('users can navigate to channel recording and incorrect url autocorrects', async function (assert) {
+    test('users can navigate to channel recording and incorrect url auto corrects', async function (assert) {
       featuresService.enable('ssh-session-recording');
       const sessionRecording = this.server.create('session-recording', {
         scope: instances.scopes.global,
       });
       const incorrectUrl = `${urls.sessionRecordings}/${sessionRecording.id}/channels-by-connection/${instances.channelRecording.id}`;
+      await visit(urls.sessionRecording);
 
       await visit(incorrectUrl);
 
       assert.notEqual(currentURL(), incorrectUrl);
       assert.strictEqual(currentURL(), urls.channelRecording);
+    });
+
+    test('users are redirected to session-recordings list with incorrect url', async function (assert) {
+      featuresService.enable('ssh-session-recording');
+      const sessionRecording = this.server.create('session-recording', {
+        scope: instances.scopes.global,
+        create_time_values: {
+          target: instances.target.attrs,
+          user: instances.user.attrs,
+        },
+      });
+      const incorrectUrl = `${urls.sessionRecordings}/${sessionRecording.id}/channels-by-connection/${instances.channelRecording.id}`;
+
+      await visit(incorrectUrl);
+
+      assert.strictEqual(currentURL(), urls.sessionRecordings);
+      assert.dom(ERROR_MSG_SELECTOR).hasText('Resource not found');
     });
 
     test('user cannot view manage dropdown without proper authorization', async function (assert) {

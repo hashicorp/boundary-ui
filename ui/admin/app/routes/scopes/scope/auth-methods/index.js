@@ -40,7 +40,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
 
   /**
    * Loads queried auth-methods and the number of auth-methods under current scope.
-   * @returns {Promise<{totalItems: number, authMethods: [AuthMethodModel], authMethodsExist: boolean }> }
+   * @returns {Promise<{totalItems: number, authMethods: [AuthMethodModel], doAuthMethodsExist: boolean }> }
    */
   async model({ search, types, primary, page, pageSize }) {
     const scope = this.modelFor('scopes.scope');
@@ -62,7 +62,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
 
     let authMethods;
     let totalItems = 0;
-    let authMethodsExist = false;
+    let doAuthMethodsExist = false;
     if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
       // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
       const options = { storeToken: false };
@@ -77,19 +77,22 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
         options,
       );
       totalItems = authMethods.meta?.totalItems;
-      authMethodsExist = await this.getAuthMethodsExist(scope_id, totalItems);
+      doAuthMethodsExist = await this.getDoAuthMethodsExist(
+        scope_id,
+        totalItems,
+      );
     }
 
-    return { authMethods, authMethodsExist, totalItems };
+    return { authMethods, doAuthMethodsExist, totalItems };
   }
 
   /**
-   * Sets authMethodsExist to true if there exists any auth methods.
+   * Sets doAuthMethodsExist to true if there exists any auth methods.
    * @param {string} scope_id
    * @param {number} totalItems
    * @returns {Promise<boolean>}
    */
-  async getAuthMethodsExist(scope_id, totalItems) {
+  async getDoAuthMethodsExist(scope_id, totalItems) {
     if (totalItems > 0) {
       return true;
     }
