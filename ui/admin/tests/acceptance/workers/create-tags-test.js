@@ -17,7 +17,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const MANAGE_DROPDOWN_TOGGLE =
-    '[data-test-manage-worker-dropdown] div button';
+    '[data-test-manage-worker-dropdown] buttonfirst-child';
   const CREATE_TAGS_BUTTON_SELECTOR =
     '[data-test-manage-worker-dropdown] div:first-child a';
   const KEY_INPUT_SELECTOR = '[name="api_tags"] tr td:first-child input';

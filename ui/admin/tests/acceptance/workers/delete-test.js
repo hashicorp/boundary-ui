@@ -22,7 +22,7 @@ module('Acceptance | workers | delete', function (hooks) {
   setupMirage(hooks);
 
   const MANAGE_DROPDOWN_TOGGLE =
-    '[data-test-manage-worker-dropdown] div button';
+    '[data-test-manage-worker-dropdown] button:first-child';
   const REMOVE_WORKER_BUTTON =
     '[data-test-manage-worker-dropdown] div:nth-child(2) button';
   let getWorkerCount;
