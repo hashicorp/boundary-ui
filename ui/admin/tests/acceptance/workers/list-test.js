@@ -16,7 +16,7 @@ import {
 } from 'ember-simple-auth/test-support';
 
 const WORKERS_FLYOUT = '[data-test-worker-tags-flyout]';
-const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] button:first-child';
+const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] div button';
 const WORKERS_FLYOUT_TABLE_BODY = '[data-test-worker-tags-flyout] tbody';
 const WORKERS_FLYOUT_TABLE_ROWS = '[data-test-worker-tags-flyout] tbody tr';
 const WORKERS_FLYOUT_VIEW_MORE_TAGS =
