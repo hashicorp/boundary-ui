@@ -20,7 +20,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-auth-method] div button';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {
