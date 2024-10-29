@@ -5,7 +5,7 @@
 
 // TODO: Un-skip tests once delete storage bucket action is enabled.
 
-import { module, skip } from 'qunit';
+import { module } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -75,26 +75,27 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
       assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
     };
 
-  skip('user can accept delete storage bucket via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    const storageBucketCount = getStorageBucketCount();
-    await visit(urls.globalScope);
+  'user can accept delete storage bucket via dialog',
+    async function (assert) {
+      const confirmService = this.owner.lookup('service:confirm');
+      confirmService.enabled = true;
+      const storageBucketCount = getStorageBucketCount();
+      await visit(urls.globalScope);
 
-    await click(`[href="${urls.storageBuckets}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+      await click(`[href="${urls.storageBuckets}"]`);
+      await click(DROPDOWN_BUTTON_SELECTOR);
+      await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert
-      .dom(DIALOG_DELETE_BTN_SELECTOR)
-      .hasText(intl.t('resources.storage-bucket.actions.delete'));
+      assert
+        .dom(DIALOG_DELETE_BTN_SELECTOR)
+        .hasText(intl.t('resources.storage-bucket.actions.delete'));
 
-    await click(DIALOG_DELETE_BTN_SELECTOR);
+      await click(DIALOG_DELETE_BTN_SELECTOR);
 
-    assert.dom(NOTIFICATION_MSG_SELECTOR).hasText(NOTIFICATION_MSG_TEXT);
-    assert.strictEqual(currentURL(), urls.storageBuckets);
-    assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
-  });
+      assert.dom(NOTIFICATION_MSG_SELECTOR).hasText(NOTIFICATION_MSG_TEXT);
+      assert.strictEqual(currentURL(), urls.storageBuckets);
+      assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
+    };
 
   'user can cancel delete storage bucket via dialog',
     async function (assert) {
