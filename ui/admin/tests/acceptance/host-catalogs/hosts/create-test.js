@@ -8,12 +8,9 @@ import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,8 +78,14 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   test('can create new host', async function (assert) {
     const count = getHostCount();
     await visit(urls.newHost);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_ADDRESS, selectors.FIELD_ADDRESS_VALUE);
+    await click(commonSelectors.SAVE_BTN);
     assert.strictEqual(getHostCount(), count + 1);
   });
 
