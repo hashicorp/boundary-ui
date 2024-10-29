@@ -14,7 +14,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
   setupMirage(hooks);
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] div:first-child button';
+    '[data-test-manage-credential-stores-dropdown] button:first-child';
 
   const ADD_CREDENTIALS_SELECTOR =
     '[data-test-manage-credential-stores-dropdown] div ul li a';

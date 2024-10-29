@@ -26,7 +26,7 @@ module('Acceptance | scopes | read', function (hooks) {
 
   const FORM_SELECTOR = 'main .rose-form';
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-projects-dropdown] div:first-child button';
+    '[data-test-manage-projects-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-projects-dropdown] ul li button';
   const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';

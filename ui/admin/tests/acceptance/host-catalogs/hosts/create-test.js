@@ -21,7 +21,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
 
   let getHostCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
+    '[data-test-manage-host-catalogs-dropdown] button:first-child';
 
   const instances = {
     scopes: {

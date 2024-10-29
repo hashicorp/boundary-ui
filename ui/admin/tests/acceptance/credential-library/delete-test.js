@@ -18,7 +18,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
 
   let getCredentialLibraryCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-library-dropdown] div:first-child button';
+    '[data-test-manage-credential-library-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-credential-library-dropdown] ul li button';
 

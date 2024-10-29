@@ -19,7 +19,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   setupMirage(hooks);
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
+    '[data-test-manage-host-catalogs-dropdown] button:first-child';
   const NEW_HOST_SELECTOR =
     '[data-test-manage-host-catalogs-dropdown] div ul li a';
 

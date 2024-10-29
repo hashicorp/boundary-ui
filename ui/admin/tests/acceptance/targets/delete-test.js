@@ -23,7 +23,7 @@ module('Acceptance | targets | delete', function (hooks) {
 
   let getTargetCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-targets-dropdown] div:first-child button';
+    '[data-test-manage-targets-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-targets-dropdown] ul li button';
 
