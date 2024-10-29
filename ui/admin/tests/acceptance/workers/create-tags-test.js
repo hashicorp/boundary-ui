@@ -19,7 +19,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   const MANAGE_DROPDOWN_TOGGLE =
     '[data-test-manage-worker-dropdown] button:first-child';
   const CREATE_TAGS_BUTTON_SELECTOR =
-    '[data-test-manage-worker-dropdown] div:first-child a';
+    '[data-test-manage-worker-dropdown] ul a:first-child';
   const KEY_INPUT_SELECTOR = '[name="api_tags"] tr td:first-child input';
   const VALUE_INPUT_SELECTOR = '[name="api_tags"] tr td:nth-child(2) input';
   const ADD_INPUT_SELECTOR = '[name="api_tags"] tr td:last-child button';
