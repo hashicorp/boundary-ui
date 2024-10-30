@@ -64,7 +64,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   test('user can delete a storage bucket', async function (assert) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.globalScope);
-
+    assert.true(instances.storageBucket.authorized_actions.includes('delete'));
     await click(`[href="${urls.storageBuckets}"]`);
     await click(DROPDOWN_BUTTON_SELECTOR);
     await click(DELETE_DROPDOWN_SELECTOR);
