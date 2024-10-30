@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -17,8 +17,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupMirage(hooks);
 
   let getHostCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] div:first-child button';
 
   const instances = {
     scopes: {
@@ -97,7 +95,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHost}"]`));
+
+    assert.dom(commonSelectors.HREF(urls.newHost)).doesNotExist();
   });
   test('Users can navigate to new host route with proper authorization', async function (assert) {
     await visit(urls.hosts);
@@ -106,7 +105,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
+    assert.dom(selectors.MANAGE_DROPDOWN).exists();
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
@@ -117,14 +116,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.notOk(find(`[href="${urls.newHost}"]`));
+    assert.dom(commonSelectors.HREF(urls.newHost)).doesNotExist();
   });
 
   test('can cancel create new host', async function (assert) {
     const count = getHostCount();
     await visit(urls.newHost);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hosts);
     assert.strictEqual(getHostCount(), count);
   });
@@ -150,15 +150,13 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       );
     });
     await visit(urls.newHost);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-    );
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+    await click(commonSelectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {
