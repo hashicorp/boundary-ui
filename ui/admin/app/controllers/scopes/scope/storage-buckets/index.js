@@ -47,6 +47,8 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
   @notifySuccess('notifications.delete-success')
   async delete(storageBucket) {
     await storageBucket.destroyRecord();
+    await this.router.replaceWith('scopes.scope.storage-buckets');
+    await this.router.refresh();
   }
 
   /**
