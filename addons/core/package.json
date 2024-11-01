@@ -40,7 +40,7 @@
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-sass": "^11.0.1",
     "ember-feature-flags": "^6.0.0",
-    "ember-intl": "^7.0.5",
+    "ember-intl": "^7.0.7",
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
     "filesize": "^10.0.7",
