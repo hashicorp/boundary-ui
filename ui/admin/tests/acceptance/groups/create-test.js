@@ -12,7 +12,6 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
 
 module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -62,7 +61,6 @@ module('Acceptance | groups | create', function (hooks) {
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
     await visit(urls.groups);
-    await click(selectors.MANAGE_DROPDOWN);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
@@ -74,7 +72,6 @@ module('Acceptance | groups | create', function (hooks) {
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
     instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.groups);
-    await click(selectors.MANAGE_DROPDOWN);
     assert.notOk(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
@@ -87,7 +84,7 @@ module('Acceptance | groups | create', function (hooks) {
     const groupsCount = this.server.schema.groups.all().models.length;
     await visit(urls.newGroup);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await click(commonSelectors.SAVE_BTN);
+    await click(commonSelectors.CANCEL_BTN);
     assert.strictEqual(currentURL(), urls.groups);
     assert.strictEqual(
       this.server.schema.groups.all().models.length,
