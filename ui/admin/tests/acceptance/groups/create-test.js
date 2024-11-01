@@ -4,17 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -52,40 +50,49 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('can create new group', async function (assert) {
-    const groupsCount = this.server.db.groups.length;
+    const groupsCount = this.server.schema.groups.all().models.length;
     await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('[type="submit"]');
-    assert.strictEqual(this.server.db.groups.length, groupsCount + 1);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+    assert.strictEqual(
+      this.server.schema.groups.all().models.length,
+      groupsCount + 1,
+    );
   });
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
     await visit(urls.groups);
+    await click(selectors.MANAGE_DROPDOWN);
     assert.ok(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
       ),
     );
-    assert.ok(find(`[href="${urls.newGroup}"]`));
+    assert.dom(commonSelectors.HREF(urls.newGroup)).isVisible();
   });
 
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
     instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.groups);
-    assert.false(
+    await click(selectors.MANAGE_DROPDOWN);
+    assert.notOk(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
       ),
     );
-    assert.notOk(find(`[href="${urls.newGroup}"]`));
+    assert.dom(commonSelectors.HREF(urls.newGroup)).doesNotExist();
   });
+
   test('can cancel new group creation', async function (assert) {
-    const groupsCount = this.server.db.groups.length;
+    const groupsCount = this.server.schema.groups.all().models.length;
     await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('.rose-form-actions [type="button"]');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
     assert.strictEqual(currentURL(), urls.groups);
-    assert.strictEqual(this.server.db.groups.length, groupsCount);
+    assert.strictEqual(
+      this.server.schema.groups.all().models.length,
+      groupsCount,
+    );
   });
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
@@ -109,18 +116,12 @@ module('Acceptance | groups | create', function (hooks) {
       );
     });
     await visit(urls.newGroup);
-    await fillIn('[name="name"]', 'group name');
-    await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.',
-    );
-    assert.strictEqual(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.',
-    );
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new group route without proper authorization', async function (assert) {
@@ -131,7 +132,7 @@ module('Acceptance | groups | create', function (hooks) {
 
     await visit(urls.newGroup);
 
-    assert.false(
+    assert.notOk(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
       ),
