@@ -21,32 +21,14 @@ module.exports = {
     // end of babel-config
   },
   plugins: ['ember'],
-  extends: ['eslint:recommended', 'plugin:ember/recommended', 'prettier'],
+  extends: ['eslint:recommended', 'prettier'],
   env: {
     browser: true,
-  },
-  rules: {
-    'ember/no-get': 'off',
-    'ember/no-get-with-default': 'off',
-    'ember/no-computed-properties-in-native-classes': 'off',
-    'ember/no-assignment-of-untracked-properties-used-in-tracking-contexts':
-      'off',
   },
   overrides: [
     // node files
     {
-      files: [
-        './.eslintrc.js',
-        './.prettierrc.js',
-        './.stylelintrc.js',
-        './.template-lintrc.js',
-        './ember-cli-build.js',
-        './testem.js',
-        './blueprints/*/index.js',
-        './config/**/*.js',
-        './lib/*/index.js',
-        './server/**/*.js',
-      ],
+      files: ['./.eslintrc.js', './.prettierrc.js'],
       parserOptions: {
         sourceType: 'script',
       },
@@ -57,11 +39,17 @@ module.exports = {
       extends: ['plugin:n/recommended'],
     },
     {
-      // Test files:
-      files: ['tests/**/*-test.{js,ts}'],
-      extends: ['plugin:qunit/recommended'],
+      // e2e files
+      files: ['admin/**', 'desktop/**', 'helpers/**'],
+      env: {
+        node: true,
+      },
+      extends: ['eslint:recommended', 'prettier'],
       rules: {
-        'qunit/require-expect': [2, 'except-simple'],
+        'no-empty-pattern': [
+          'error',
+          { allowObjectPatternsAsParameters: true },
+        ],
       },
     },
   ],

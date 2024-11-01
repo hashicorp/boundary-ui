@@ -1,0 +1,41 @@
+{
+  "name": "e2e-tests",
+  "version": "0.0.0",
+  "description": "End to end tests for boundary UI",
+  "author": "HashiCorp",
+  "license": "BUSL-1.1",
+  "private": true,
+  "scripts": {
+    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
+    "format": "concurrently \"npm:format:*\" --names \"format:\"",
+    "format:js": "prettier --write './**/*.{js,mjs}'",
+    "e2e:admin": "yarn playwright test --config ./admin/playwright.config.mjs",
+    "e2e:admin:ce:aws": "yarn run e2e:admin --grep \"(?=.*@ce)(?=.*@aws)\"",
+    "e2e:admin:ce:docker": "yarn run e2e:admin --grep \"(?=.*@ce)(?=.*@docker)\"",
+    "e2e:admin:ent:aws": "yarn run e2e:admin --grep \"(?=.*@ent)(?=.*@aws)\"",
+    "e2e:admin:ent:docker": "yarn run e2e:admin --grep \"(?=.*@ent)(?=.*@docker)\"",
+    "e2e:admin:dev:chrome": "yarn run e2e:admin --project=chromium --headed",
+    "e2e:admin:dev:firefox": "yarn run e2e:admin --project=firefox --headed",
+    "e2e:admin:dev:safari": "yarn run e2e:admin --project=webkit --headed",
+    "e2e:desktop": "yarn workspace desktop build && yarn run e2e:desktop:dev",
+    "e2e:desktop:dev": "npx playwright test --config ./desktop/playwright.config.js --reporter=html"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-n": "^16.3.1",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": "18.* || 20.*"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.{js,scss,yaml}": "prettier --write"
+  }
+}
