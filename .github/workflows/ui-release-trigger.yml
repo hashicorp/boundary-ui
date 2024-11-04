@@ -1,4 +1,4 @@
-name: "Trigger Boundary UI release"
+name: "Trigger Boundary Desktop release"
 
 on:
   push:
@@ -13,10 +13,10 @@ jobs:
       - name: Release description
         run: |
           echo "Triggering release with a TAG ${GITHUB_REF#refs/tags/}"
-      - name: Trigger Release workflow in boundary-ui-releases
+      - name: Trigger Release workflow in boundary-desktop-releases
         run: |
           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
           gh workflow run release.yml \
-          --repo hashicorp/boundary-ui-releases \
+          --repo hashicorp/boundary-desktop-releases \
           --ref main \
           -f TAG="${GITHUB_REF#refs/tags/}"
