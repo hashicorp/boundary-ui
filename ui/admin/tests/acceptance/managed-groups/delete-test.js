@@ -22,7 +22,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   let getManagedGroupCount;
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-managed-group-dropdown] div:first-child button';
+    '[data-test-managed-group-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-managed-group-dropdown] ul li button';
   const ERROR_MSG_SELECTOR = '.rose-notification-body';

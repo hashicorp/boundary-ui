@@ -23,7 +23,7 @@ module('Acceptance | users | delete', function (hooks) {
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-user-dropdown] ul li button';
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-user-dropdown] div:first-child button';
+    '[data-test-manage-user-dropdown] button:first-child';
   const instances = {
     scopes: {
       global: null,

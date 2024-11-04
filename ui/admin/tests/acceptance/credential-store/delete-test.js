@@ -21,7 +21,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   let getStaticCredentialStoresCount;
   let getVaultCredentialStoresCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] div:first-child button';
+    '[data-test-manage-credential-stores-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-credential-stores-dropdown] ul li button';
 

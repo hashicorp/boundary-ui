@@ -48,7 +48,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const TOGGLE_SELECTOR = '[name="prompts"]';
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] div:first-child button';
+    '[data-test-manage-auth-method] button:first-child';
   const MAKE_PRIMARY_SELECTOR =
     '[data-test-manage-auth-method] ul li:first-child button';
 

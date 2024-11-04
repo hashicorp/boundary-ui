@@ -21,7 +21,7 @@ module(
     let getJSONCredentialCount;
 
     const MANAGE_DROPDOWN_SELECTOR =
-      '[data-test-manage-credentials-dropdown] div:first-child button';
+      '[data-test-manage-credentials-dropdown] button:first-child';
     const DELETE_ACTION_SELECTOR =
       '[data-test-manage-credentials-dropdown] ul li button';
 
