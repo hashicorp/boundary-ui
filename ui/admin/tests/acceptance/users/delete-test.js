@@ -20,8 +20,10 @@ module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-  const DELETE_ACTION_SELECTOR = "[data-test-manage-user-dropdown] ul li button"
-  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-user-dropdown] button:first-child"
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-user-dropdown] ul li button';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-user-dropdown] button:first-child';
   const instances = {
     scopes: {
       global: null,
