@@ -28,7 +28,7 @@ module('Acceptance | users | accounts', function (hooks) {
   const ADD_ACCOUNTS_ACTION_SELECTOR =
     '[data-test-manage-user-dropdown] ul li:first-child a';
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-user-dropdown] div:first-child button';
+    '[data-test-manage-user-dropdown] button:first-child';
   const ERROR_MSG_SELECTOR = '[role="alert"]';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';

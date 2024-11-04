@@ -20,7 +20,8 @@ module('Acceptance | roles | delete', function (hooks) {
   setupMirage(hooks);
 
   const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
-  const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item--color-critical button'
+  const DELETE_DROPDOWN_SELECTOR =
+    '.hds-dropdown-list-item--color-critical button';
 
   const instances = {
     scopes: {

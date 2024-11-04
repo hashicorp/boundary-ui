@@ -16,6 +16,19 @@
     <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
+  {{#if (can 'delete storage-bucket' @model)}}
+    <page.actions>
+      <Hds::Dropdown as |dd|>
+        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+        <dd.Interactive
+          @text={{t 'actions.delete'}}
+          @color='critical'
+          {{on 'click' (fn this.storageBuckets.delete @model)}}
+        />
+      </Hds::Dropdown>
+    </page.actions>
+  {{/if}}
+
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
       <nav.link @route='scopes.scope.storage-buckets.storage-bucket.index'>
