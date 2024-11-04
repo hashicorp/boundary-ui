@@ -31,8 +31,9 @@ module.exports = {
    * that injects the sprite into the DOM
    */
   contentFor(type, config) {
-    return this.findOwnAddonByName('@hashicorp/design-system-components')
-      .contentFor(type, config);
+    return this.findOwnAddonByName(
+      '@hashicorp/design-system-components',
+    ).contentFor(type, config);
   },
 
   /**

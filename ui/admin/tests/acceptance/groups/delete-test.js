@@ -19,8 +19,10 @@ module('Acceptance | groups | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR = "[data-test-manage-group-dropdown] button:first-child"
-  const DELETE_ACTION_SELECTOR = "[data-test-manage-group-dropdown] ul li button"
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-group-dropdown] button:first-child';
+  const DELETE_ACTION_SELECTOR =
+    '[data-test-manage-group-dropdown] ul li button';
 
   const instances = {
     scopes: {

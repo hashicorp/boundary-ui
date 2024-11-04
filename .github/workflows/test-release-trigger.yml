@@ -1,4 +1,4 @@
-name: "Trigger Test Boundary UI release"
+name: "Trigger Test Boundary Desktop release"
 
 on:
   workflow_dispatch:
@@ -15,11 +15,11 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo "Triggering Test release using BRANCH and TEST_TAG ${{ github.event.inputs.branch }}"
-      - name: Trigger Release workflow in boundary-ui-releases
+      - name: Trigger Release workflow in boundary-desktop-releases
         run: |
           export GITHUB_TOKEN="${{ secrets.ELEVATED_GITHUB_TOKEN }}"
           gh workflow run release.yml \
-          --repo hashicorp/boundary-ui-releases \
+          --repo hashicorp/boundary-desktop-releases \
           --ref main \
           -f TAG="${{ github.event.inputs.branch }}"
 
