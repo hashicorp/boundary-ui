@@ -22,7 +22,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
   let getTargetHostSetCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-targets-dropdown] div:first-child button';
+    '[data-test-manage-targets-dropdown] button:first-child';
   const ADD_HOSTSOURCE_SELECTOR = '[data-test-manage-targets-dropdown] ul li a';
 
   const instances = {

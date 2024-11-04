@@ -23,7 +23,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
 
   let getHostCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-hosts-dropdown] div:first-child button';
+    '[data-test-manage-hosts-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-hosts-dropdown] ul li button';
 

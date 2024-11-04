@@ -29,7 +29,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   let getHostSetHostCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] div:first-child button';
+    '[data-test-manage-dropdown-host-sets] button:first-child';
   const CREATE_AND_ADD_HOSTS_SELECTOR =
     '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
   const ADD_EXISTING_HOSTS_SELECTOR =
