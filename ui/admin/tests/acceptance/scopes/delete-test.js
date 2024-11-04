@@ -23,7 +23,7 @@ module('Acceptance | scopes | delete', function (hooks) {
 
   let getScopeCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-projects-dropdown] div:first-child button';
+    '[data-test-manage-projects-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-projects-dropdown] ul li button';
 
