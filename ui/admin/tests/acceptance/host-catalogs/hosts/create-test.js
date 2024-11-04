@@ -17,8 +17,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupMirage(hooks);
 
   let getHostCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] button:first-child';
 
   const instances = {
     scopes: {
