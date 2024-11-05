@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { isLinux } = require('../src/helpers/platform.js');
 
+/** Always returns a valid semVer. Composed of Major.Minor.Path and all valid integers
+ * Otherwise we run into this issue: https://github.com/electron/packager/issues/1714#issuecomment-2091266284
+ */
 const returnSemVerFromReleaseVersion = (releaseVersion) => {
   let [major, minor, patch] = releaseVersion.split('.').slice(0, 3);
 
@@ -9,8 +12,8 @@ const returnSemVerFromReleaseVersion = (releaseVersion) => {
   if (!parseInt(major)) {
     major = major.replace('v', '');
   }
-
-  return major.concat('.', minor, '.', parseInt(patch));
+  // parseInt the patch to eliminate any text after the version integer.
+  return `${major}.${minor}.${parseInt(patch)}`;
 };
 
 // Create config
@@ -32,9 +35,7 @@ const createConfig = () => {
   if (isLinux() || process.env.BUILD_DEBIAN)
     config.executableName = 'boundary-desktop';
 
-  /** Always returns a valid semVer. Composed of Major.Minor.Path and all valid integers
-   * Otherwise we run into this issue: https://github.com/electron/packager/issues/1714#issuecomment-2091266284
-   */
+  // Take a valid release version in semVer format.
   if (!config.releaseVersion) {
     config.releaseVersion = '0.0.0';
   } else {
