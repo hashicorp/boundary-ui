@@ -38,7 +38,7 @@ module('Acceptance | groups | members', function (hooks) {
   };
   let membersCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-group-dropdown] div:first-child button';
+    '[data-test-manage-group-dropdown] button:first-child';
   const ADD_MEMBERS_ACTION_SELECTOR =
     '[data-test-manage-group-dropdown] ul li a';
 
