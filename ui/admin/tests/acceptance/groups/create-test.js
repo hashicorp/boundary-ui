@@ -17,6 +17,7 @@ module('Acceptance | groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  let groupsCount;
 
   const instances = {
     scopes: {
@@ -46,21 +47,23 @@ module('Acceptance | groups | create', function (hooks) {
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
+
+    groupsCount = () => this.server.schema.groups.all().models.length;
   });
 
   test('can create new group', async function (assert) {
-    const groupsCount = this.server.schema.groups.all().models.length;
+    const count = groupsCount();
     await visit(urls.newGroup);
+
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    assert.strictEqual(
-      this.server.schema.groups.all().models.length,
-      groupsCount + 1,
-    );
+
+    assert.strictEqual(groupsCount(), count + 1);
   });
 
   test('can navigate to new groups route with proper authorization', async function (assert) {
     await visit(urls.groups);
+
     assert.ok(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
@@ -72,6 +75,7 @@ module('Acceptance | groups | create', function (hooks) {
   test('cannot navigate to new groups route without proper authorization', async function (assert) {
     instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.groups);
+
     assert.notOk(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'create',
@@ -81,15 +85,14 @@ module('Acceptance | groups | create', function (hooks) {
   });
 
   test('can cancel new group creation', async function (assert) {
-    const groupsCount = this.server.schema.groups.all().models.length;
+    const count = groupsCount();
     await visit(urls.newGroup);
+
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.groups);
-    assert.strictEqual(
-      this.server.schema.groups.all().models.length,
-      groupsCount,
-    );
+    assert.strictEqual(groupsCount(), count);
   });
 
   test('saving a new group with invalid fields displays error messages', async function (assert) {
@@ -113,8 +116,15 @@ module('Acceptance | groups | create', function (hooks) {
       );
     });
     await visit(urls.newGroup);
+
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+
     await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
