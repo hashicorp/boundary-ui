@@ -8,12 +8,8 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -76,9 +72,8 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.hosts);
 
-    await click(`[href="${urls.host}"]`);
+    await click(commonSelectors.HREF(urls.host));
     await a11yAudit();
-
     assert.strictEqual(currentURL(), urls.host);
   });
 
@@ -87,26 +82,28 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.hosts}"]`);
-
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    await click(commonSelectors.HREF(urls.hosts));
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {
     await visit(urls.unknownHost);
     await a11yAudit();
 
-    assert.dom('.rose-message-subtitle').hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for hosts', async function (assert) {
     await visit(urls.hosts);
 
-    await click(`[href="${urls.host}"]`);
-
+    await click(commonSelectors.HREF(urls.host));
     assert
       .dom(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/hosts"]`,
+        commonSelectors.HREF(
+          'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/hosts',
+        ),
       )
       .exists();
   });
