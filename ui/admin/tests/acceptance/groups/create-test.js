@@ -56,6 +56,11 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(groupsCount(), count + 1);
@@ -89,10 +94,6 @@ module('Acceptance | groups | create', function (hooks) {
     await visit(urls.newGroup);
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await fillIn(
-      commonSelectors.FIELD_DESCRIPTION,
-      commonSelectors.FIELD_DESCRIPTION_VALUE,
-    );
 
     await click(commonSelectors.CANCEL_BTN);
 
