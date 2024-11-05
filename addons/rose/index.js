@@ -27,13 +27,13 @@ module.exports = {
 
   /**
    * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
-   * this is neeeded to reach down into @hashicorp/ember-flight-icons' contentFor hook to run the logic
+   * this is neeeded to reach down into @hashicorp/design-system-components' contentFor hook to run the logic
    * that injects the sprite into the DOM
    */
   contentFor(type, config) {
-    return this.findOwnAddonByName('@hashicorp/design-system-components')
-      .findOwnAddonByName('@hashicorp/ember-flight-icons')
-      .contentFor(type, config);
+    return this.findOwnAddonByName(
+      '@hashicorp/design-system-components',
+    ).contentFor(type, config);
   },
 
   /**
@@ -45,8 +45,6 @@ module.exports = {
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
     const hdsPath =
       '../../node_modules/@hashicorp/design-system-components/dist/styles';
-    const iconsPath =
-      '../../node_modules/@hashicorp/ember-flight-icons/dist/styles';
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -56,7 +54,6 @@ module.exports = {
     // Include the addon styles
     app.options.sassOptions.includePaths.push(tokensPath);
     app.options.sassOptions.includePaths.push(hdsPath);
-    app.options.sassOptions.includePaths.push(iconsPath);
   },
 
   /**
