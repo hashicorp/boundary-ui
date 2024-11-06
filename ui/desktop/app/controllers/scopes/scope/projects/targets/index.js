@@ -304,4 +304,12 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
     await this.ipc.invoke('stop', { session_id: session.id });
     this.router.refresh();
   }
+
+  /**
+   * Refreshes the all data for the current page.
+   */
+  @action
+  refresh() {
+    this.send('refreshAll');
+  }
 }

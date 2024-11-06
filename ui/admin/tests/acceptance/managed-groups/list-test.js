@@ -21,7 +21,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
 
   let featuresService;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-methods-dropdown] div button';
+    '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {

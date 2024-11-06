@@ -31,7 +31,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   const ERROR_MSG_SELECTOR = '.rose-notification-body';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-methods-dropdown] div button';
+    '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {

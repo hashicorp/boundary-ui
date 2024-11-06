@@ -27,6 +27,13 @@ export const TYPES_CREDENTIALS = Object.freeze([
   TYPE_CREDENTIAL_DYNAMIC,
 ]);
 
+const DYNAMIC_CREDENTIAL_FIELDS = [
+  'role_arn',
+  'role_external_id',
+  'role_session_name',
+  'role_tags',
+];
+
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
 
@@ -53,7 +60,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    */
   get credentialType() {
     if (!this.#credentialType) {
-      if (this.role_arn) {
+      if (DYNAMIC_CREDENTIAL_FIELDS.some((field) => this[field])) {
         this.#credentialType = TYPE_CREDENTIAL_DYNAMIC;
       } else {
         this.#credentialType = TYPE_CREDENTIAL_STATIC;
