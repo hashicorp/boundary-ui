@@ -104,7 +104,9 @@ module('Acceptance | groups | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.group2)).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.group1.id);
-    await waitUntil(() => findAll(`[href="${urls.group2}"]`).length === 0);
+    await waitUntil(
+      () => findAll(commonSelectors.HREF(urls.group2)).length === 0,
+    );
 
     assert.dom(commonSelectors.HREF(urls.group1)).exists();
     assert.dom(commonSelectors.HREF(urls.group2)).doesNotExist();
