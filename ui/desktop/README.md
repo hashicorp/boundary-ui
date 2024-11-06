@@ -51,7 +51,6 @@ List of available project commands.  `yarn run <command-name>`
 | ------- | ----------- |
 | build | Builds the UI for production. |
 | build:development | Builds the UI in development mode. |
-| build:desktop:debianOnMacOS | Builds debian based linux artifacts on MacOS. |
 | lint | Runs all lint commands. |
 | lint:fix | Runs all automatic linting fixes. |
 | lint:hbs | Lints `hbs` template files. |
@@ -127,14 +126,6 @@ Similar to running in development, you can also use `BYPASS_CLI_SETUP=true` to
 bypass the download of the CLI, which can be useful for pre-release testing. See
 [Developing Using Non-Release Versions of
 Boundary](#developing-using-non-release-versions-of-boundary) for more details.
-
-To build debian based linux artifacts on MacOS, additional [MacOS tools](https://www.electronforge.io/config/makers/deb) need to be installed before running the following commands from this folder.
-
-```bash
-yarn install
-yarn build:production # Build assets
-yarn build:desktop:debianOnMacOS # Build app
-```
 
 #### Environment Variables (PROD)
 
