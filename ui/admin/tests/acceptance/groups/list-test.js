@@ -14,6 +14,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | groups | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -71,41 +72,42 @@ module('Acceptance | groups | list', function (hooks) {
       ),
     );
 
-    assert.dom(`[href="${urls.groups}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(urls.groups)).isVisible();
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     instances.scopes.org.authorized_collection_actions.groups = [];
     await visit(urls.orgScope);
+
     assert.notOk(
       instances.scopes.org.authorized_collection_actions.groups.includes(
         'list',
       ),
     );
 
-    assert.dom(`[href="${urls.groups}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.groups)).doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {
     instances.scopes.org.authorized_collection_actions.groups = ['create'];
     await visit(urls.orgScope);
 
-    assert.dom(`[href="${urls.groups}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(urls.groups)).isVisible();
   });
 
   test('user can search for a specific group by id', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.groups}"]`);
+    await click(commonSelectors.HREF(urls.groups));
 
-    assert.dom(`[href="${urls.group1}"]`).exists();
-    assert.dom(`[href="${urls.group2}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.group1)).exists();
+    assert.dom(commonSelectors.HREF(urls.group2)).exists();
 
     await fillIn(SEARCH_INPUT_SELECTOR, instances.group1.id);
     await waitUntil(() => findAll(`[href="${urls.group2}"]`).length === 0);
 
-    assert.dom(`[href="${urls.group1}"]`).exists();
-    assert.dom(`[href="${urls.group2}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.group1)).exists();
+    assert.dom(commonSelectors.HREF(urls.group2)).doesNotExist();
   });
 
   test('user can search for groups and get no results', async function (assert) {
@@ -119,8 +121,8 @@ module('Acceptance | groups | list', function (hooks) {
     await fillIn(SEARCH_INPUT_SELECTOR, 'fake group that does not exist');
     await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
 
-    assert.dom(`[href="${urls.group1}"]`).doesNotExist();
-    assert.dom(`[href="${urls.group2}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.group1)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.group2)).doesNotExist();
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
 });
