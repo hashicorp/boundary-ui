@@ -89,7 +89,7 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.0",
     "qunit": "^2.19.4",
-    "qunit-dom": "^2.0.0",
+    "qunit-dom": "^3.2.1",
     "react": "^16",
     "react-dom": "^16",
     "react-syntax-highlighter": "^15.6.1",
