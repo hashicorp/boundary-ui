@@ -18,6 +18,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
@@ -98,7 +99,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     await visit(urls.newCredentialLibrary);
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await select('[name="credential_type"]', 'ssh_private_key');
+    await select(selectors.FIELD_CRED_TYPE, selectors.FIELD_CRED_TYPE_VALUE);
     await select(
       '[name="credential_mapping_overrides"] tbody td:nth-of-type(1) select',
       'private_key_attribute',
@@ -118,7 +119,10 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       credentialLibrary.name,
       commonSelectors.FIELD_NAME_VALUE,
     );
-    assert.strictEqual(credentialLibrary.credentialType, 'ssh_private_key');
+    assert.strictEqual(
+      credentialLibrary.credentialType,
+      selectors.FIELD_CRED_TYPE_VALUE,
+    );
     assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
       private_key_attribute: 'key',
     });
