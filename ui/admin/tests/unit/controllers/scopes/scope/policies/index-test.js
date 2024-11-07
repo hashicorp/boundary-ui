@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIntl } from 'ember-intl/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -14,6 +15,7 @@ module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let store;
   let controller;
@@ -27,7 +29,6 @@ module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     policies: null,
   };
 
@@ -41,8 +42,7 @@ module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
       scopeId: 'global',
     });
 
-    urls.globalScope = `/scopes/global`;
-    urls.policies = `${urls.globalScope}/policies`;
+    urls.policies = '/scopes/global/policies';
 
     getPolicyCount = () => this.server.schema.policies.all().models.length;
   });
@@ -77,7 +77,6 @@ module('Unit | Controller | scopes/scope/policies/index', function (hooks) {
   });
 
   test('delete action destroys specified model', async function (assert) {
-    await visit(urls.globalScope);
     const policy = await store.findRecord('policy', instances.policy.id);
     const policyCount = getPolicyCount();
 

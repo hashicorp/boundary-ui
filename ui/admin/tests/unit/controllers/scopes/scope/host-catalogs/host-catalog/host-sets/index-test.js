@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIntl } from 'ember-intl/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -16,6 +17,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
     setupIndexedDb(hooks);
+    setupIntl(hooks, 'en-us');
 
     let store;
     let controller;
@@ -52,23 +54,20 @@ module(
         scope: { id: instances.scopes.org.id, type: 'org' },
       });
       instances.hostCatalog = this.server.create('host-catalog', {
-        scopeId: instances.scopes.project.id,
         scope: instances.scopes.project,
       });
       instances.hostSet = this.server.create('host-set', {
-        scopeId: instances.scopes.project.id,
         hostCatalog: instances.hostCatalog,
       });
-      urls.globalScope = `/scopes/global`;
-      urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.hostSets = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets`;
+
+      urls.hostSets = `/scopes/${instances.scopes.project.id}/host-catalogs/${instances.hostCatalog.id}/host-sets`;
 
       getHostSetCount = () => this.server.schema.hostSets.all().models.length;
     });
 
     test('it exists', function (assert) {
       assert.ok(controller);
+      assert.ok(controller.hostCatalogs);
     });
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
@@ -94,7 +93,6 @@ module(
     });
 
     test('delete action destroys specified model', async function (assert) {
-      await visit(urls.projectScope);
       const hostSet = await store.findRecord('host-set', instances.hostSet.id);
       const hostSetCount = getHostSetCount();
 
