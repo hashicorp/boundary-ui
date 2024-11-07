@@ -35,12 +35,6 @@ const downloadArtifact = (version) => {
     archivePlatform.arch = arch;
   }
 
-  // Set cli artifact to linux-amd64 when building debian artifacts on macOS
-  if (process.env.BUILD_DEBIAN) {
-    archivePlatform.name = 'linux';
-    archivePlatform.arch = 'amd64';
-  }
-
   console.log(
     `Download cli for platform: ${archivePlatform.name} arch: ${archivePlatform.arch}`,
   );

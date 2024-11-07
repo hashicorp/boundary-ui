@@ -83,12 +83,7 @@ module.exports = {
       console.log(`[package] Release version: ${config.releaseVersion}`);
 
       // Check for MacOS signing identity.
-      // Ignore signing identity warning for debian builds made on MacOS
-      if (
-        isMac() &&
-        !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY &&
-        !process.env.BUILD_DEBIAN
-      )
+      if (isMac() && !process.env.BOUNDARY_DESKTOP_SIGNING_IDENTITY)
         console.warn(
           '[package] WARNING: Could not find signing identity. Proceeding without signing.',
         );
