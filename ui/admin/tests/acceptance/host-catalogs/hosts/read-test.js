@@ -74,6 +74,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.host));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.host);
   });
 
@@ -83,6 +84,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
       instances.host.authorized_actions.filter((item) => item !== 'read');
 
     await click(commonSelectors.HREF(urls.hosts));
+
     assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
   });
 
