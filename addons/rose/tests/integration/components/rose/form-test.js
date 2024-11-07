@@ -103,7 +103,7 @@ module('Integration | Component | rose/form', function (hooks) {
         @showEditToggle={{true}}
         as |form|
       >
-        <form.input @label="Label" @value="value" />
+        <form.input @value="value" />
         <form.actions
           @submitText="Save"
           @cancelText="Cancel"
