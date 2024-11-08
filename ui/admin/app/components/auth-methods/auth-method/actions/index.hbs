@@ -4,78 +4,64 @@
 }}
 
 {{#if (or @model.isOIDC @model.isLDAP)}}
-  <Rose::Dropdown
-    @text={{t (concat 'states.' @model.state)}}
-    @icon={{if
-      @model.isInactive
-      'flight-icons/svg/x-circle-16'
-      (if
-        @model.isPrivate
-        'flight-icons/svg/lock-16'
-        'flight-icons/svg/check-circle-16'
-      )
-    }}
-    @dropdownRight={{true}}
-    as |dropdown|
-  >
-    <dropdown.section @title={{t 'actions.change-state'}}>
-      <Rose::Form as |form|>
-        <form.radioGroup
-          @name='theme'
-          @selectedValue={{@model.state}}
-          @changed={{fn @changeState @model}}
-          as |radioGroup|
-        >
-          {{#each @model.options.state as |state|}}
-            <dropdown.item>
-              <radioGroup.radio
-                @label={{t (concat 'states.' state)}}
-                @value={{state}}
-              />
-            </dropdown.item>
-          {{/each}}
-        </form.radioGroup>
-      </Rose::Form>
-    </dropdown.section>
-  </Rose::Dropdown>
+  <Hds::Dropdown class='change-state' data-test-change-state as |dd|>
+    <dd.ToggleButton
+      @text={{t (concat 'states.' @model.state)}}
+      @color='secondary'
+      @icon={{if
+        @model.isInactive
+        'x-circle'
+        (if @model.isPrivate 'lock' 'check-circle')
+      }}
+    />
+
+    {{#each @model.options.state as |state|}}
+      <dd.Radio
+        checked={{eq @model.state state}}
+        @value={{state}}
+        {{on 'click' (fn @changeState @model state)}}
+      >
+        {{t (concat 'states.' state)}}
+      </dd.Radio>
+    {{/each}}
+  </Hds::Dropdown>
+
 {{/if}}
 
 <Hds::Dropdown data-test-manage-auth-method as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if @model.isPrimary}}
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.remove-as-primary'}}
-      {{on 'click' (fn @removeAsPrimary @model)}}
-    />
+    <dd.Interactive {{on 'click' (fn @removeAsPrimary @model)}}>
+      {{t 'resources.auth-method.actions.remove-as-primary'}}
+    </dd.Interactive>
   {{else}}
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.make-primary'}}
-      {{on 'click' (fn @makePrimary @model)}}
-    />
+    <dd.Interactive {{on 'click' (fn @makePrimary @model)}}>
+      {{t 'resources.auth-method.actions.make-primary'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='accounts')}}
     <dd.Interactive
-      @text={{t 'resources.account.actions.create'}}
       @route='scopes.scope.auth-methods.auth-method.accounts.new'
       @model={{@model}}
-    />
+    >
+      {{t 'resources.account.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='managed-groups')}}
     {{#if (or @model.isOIDC @model.isLDAP)}}
       <dd.Interactive
-        @text={{t 'resources.managed-group.actions.create'}}
         @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
         @model={{@model}}
-      />
+      >
+        {{t 'resources.managed-group.actions.create'}}
+      </dd.Interactive>
     {{/if}}
   {{/if}}
 
   {{#if (can 'delete auth-method' @model)}}
     <dd.Separator />
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+      {{t 'resources.auth-method.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

@@ -9484,13 +9484,6 @@ ember-qunit@^8.1.0:
     ember-cli-test-loader "^3.1.0"
     qunit-theme-ember "^1.0.0"
 
-"ember-radio-button@github:yapplabs/ember-radio-button.git#b2ab65f":
-  version "0.0.0"
-  resolved "https://codeload.github.com/yapplabs/ember-radio-button/tar.gz/b2ab65f81cae3b0f087cc99b8c01172b754cb181"
-  dependencies:
-    ember-cli-babel "^7.26.3"
-    ember-cli-htmlbars "^5.7.1"
-
 ember-resolver@^10.0.0:
   version "10.1.1"
   resolved "https://registry.yarnpkg.com/ember-resolver/-/ember-resolver-10.1.1.tgz#1106a2386337b13a9ee509a9ad2a18b53a728ab3"

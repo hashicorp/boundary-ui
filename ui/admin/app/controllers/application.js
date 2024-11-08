@@ -8,6 +8,21 @@ import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 
+const THEMES = [
+  {
+    label: 'system',
+    value: 'system-default-theme',
+  },
+  {
+    label: 'light',
+    value: 'light',
+  },
+  {
+    label: 'dark',
+    value: 'dark',
+  },
+];
+
 export default class ApplicationController extends Controller {
   // =services
 
@@ -15,6 +30,13 @@ export default class ApplicationController extends Controller {
   @service features;
   @service featureEdition;
   @service flashMessages;
+
+  /**
+   * Returns available themes
+   */
+  get themes() {
+    return THEMES;
+  }
 
   // =actions
 

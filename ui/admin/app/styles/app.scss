@@ -1078,3 +1078,14 @@
     margin-bottom: 0;
   }
 }
+
+.change-state {
+  margin-right: 1rem;
+}
+
+.theme-selector {
+  min-width: 20rem;
+  .hds-form-group__control-field {
+    padding: 0.25rem 0.75rem;
+  }
+}

@@ -72,19 +72,12 @@ module('Integration | Component | rose/form', function (hooks) {
         </Hds::Form::Select::Field>
 
         <form.checkbox @label="Checkbox" @name="checkbox-field" />
-        <form.radioGroup @name="radio-group-field" @selectedValue="green" as |radioGroup|>
-          <radioGroup.radio
-            @label="Red"
-            @value="red"
-          />
-        </form.radioGroup>
       </Rose::Form>
     `);
     assert.ok(find('[name="input-field"]'));
     assert.ok(find('[name="textarea-field"]'));
     assert.ok(find('[name="select-field"]'));
     assert.ok(find('[name="checkbox-field"]'));
-    assert.ok(find('[name="radio-group-field"]'));
   });
 
   test('it supports an editability toggle when @showEditToggle is true', async function (assert) {
