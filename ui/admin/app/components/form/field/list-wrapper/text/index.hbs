@@ -1,0 +1,53 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Hds::Table class='list-wrapper-field' name={{@name}}>
+  <:body as |B|>
+    {{! New option }}
+    <B.Tr>
+      <B.Td>
+        <p>{{@newItemLabel}}</p>
+      </B.Td>
+      <B.Td>
+        <Hds::Form::TextInput::Field
+          {{!-- @value={{option.value}} --}}
+          @type='text'
+          disabled={{@disabled}}
+          {{!-- aria-label={{t 'titles.value'}} --}}
+          {{!-- {{on 'input' (set-from-event option 'value')}} --}}
+        />
+      </B.Td>
+      <B.Td>
+        <Hds::Button
+          @text={{t 'actions.add'}}
+          disabled={{@disabled}}
+          @color='secondary'
+        />
+      </B.Td>
+    </B.Tr>
+    {{! List of options }}
+    {{!-- {{#each @options as |option index|}} --}}
+    {{#each @options as |option|}}
+      <B.Tr>
+        <B.Td>
+          {{! This could be option.key or a prop such as @labelForOptions }}
+          <p>{{option.key}}</p>
+        </B.Td>
+        <B.Td>
+          <Hds::Form::TextInput::Field @type='text' @value={{option.value}} />
+        </B.Td>
+        <B.Td>
+          <Hds::Button
+            type='button'
+            @text={{t 'actions.add'}}
+            @color='secondary'
+            @isIconOnly={{true}}
+            @icon='trash'
+          />
+        </B.Td>
+      </B.Tr>
+    {{/each}}
+  </:body>
+</Hds::Table>

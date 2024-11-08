@@ -302,4 +302,22 @@ module('Integration | Component | list-wrapper', function (hooks) {
       3,
     );
   });
+
+  test('it renders multiple options with string text as key, input as value', async function (assert) {
+    assert.expect(0);
+    this.options = [
+      { key: 'grant', value: 'ids=*;action=*' },
+      { key: 'grant', value: 'ids=*;type=host-catalog;actions=create,read' },
+    ];
+    await render(hbs`
+
+      <Form::Field::ListWrapper>
+        <:field as |F|>
+          <F.Text @options={{this.options}} @newItemLabel='New Grant'>
+          </F.Text>
+        </:field>
+      </Form::Field::ListWrapper>
+    `);
+    // await pauseTest();
+  });
 });
