@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test } = require('../fixtures/baseTest');
-const LoginPage = require('../pages/loginPage');
-const { expect } = require('@playwright/test');
+import { expect, test } from "../fixtures/baseTest.mjs";
+import LoginPage from "../pages/loginPage.mjs";
 
 test.describe('user/password authentication tests', async () => {
   test('Authenticates and signs out', async ({

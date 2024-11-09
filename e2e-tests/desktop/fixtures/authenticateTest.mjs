@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { electronTest } = require('../fixtures/electronTest');
-const LoginPage = require('../pages/loginPage');
+import { electronTest } from './electronTest.mjs';
+import LoginPage from '../pages/loginPage.mjs';
 
-exports.authenticateTest = electronTest.extend({
+export const authenticateTest = electronTest.extend({
   // TODO: Should we put these in a config file?
   clusterUrl: ({}, use) => {
     use(process.env.BOUNDARY_ADDR ?? 'http://localhost:9200');

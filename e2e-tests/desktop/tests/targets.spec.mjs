@@ -3,8 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-const { test } = require('../fixtures/baseTest');
-const { expect } = require('@playwright/test');
+import { expect, test } from '../fixtures/baseTest.mjs';
 
 test.describe('Targets test', async () => {
   test('Connects to a target and ends session', async ({ authedPage }) => {

@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-/* eslint-disable ember/avoid-leaking-state-in-ember-objects */
-const { test } = require('@playwright/test');
-const path = require('path');
-const fs = require('fs');
+import { test } from '@playwright/test';
+import path from 'path';
+import fs from 'fs';
 
 /**
  * Get the path to the Boundary Desktop executable
@@ -70,7 +69,7 @@ const getExecutablePath = (buildDirectory = 'out') => {
   }
 };
 
-exports.electronTest = test.extend({
+export const electronTest = test.extend({
   // The screenshot/trace config option from playwright doesn't quite work since we use electron
   // so we'll manually take a screenshot/trace and attach it to the test report if the test fails.
   saveTestFailureInfo: [

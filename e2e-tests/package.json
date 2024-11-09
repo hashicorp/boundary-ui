@@ -21,7 +21,7 @@
     "e2e:admin:dev:firefox": "yarn run e2e:admin --project=firefox --headed",
     "e2e:admin:dev:safari": "yarn run e2e:admin --project=webkit --headed",
     "e2e:desktop": "yarn workspace desktop build && yarn run e2e:desktop:dev",
-    "e2e:desktop:dev": "npx playwright test --config ./desktop/playwright.config.js --reporter=html"
+    "e2e:desktop:dev": "npx playwright test --config desktop/playwright.config.mjs --reporter=html"
   },
   "devDependencies": {
     "@playwright/test": "^1.43.0",

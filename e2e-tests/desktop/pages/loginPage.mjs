@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-class LoginPage {
+export default class LoginPage {
   constructor(page) {
     this.page = page;
   }
@@ -30,5 +30,3 @@ class LoginPage {
 
   // Can't login with OIDC as we can't control the external browser that is opened
 }
-
-module.exports = LoginPage;
