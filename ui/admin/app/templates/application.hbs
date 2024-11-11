@@ -36,7 +36,7 @@
             <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
               <Hds::Form::Radio::Group
                 @name='theme'
-                class='theme-selector'
+                class='dropdown-radio-btn'
                 as |G|
               >
                 {{#each this.themes as |theme|}}
@@ -67,7 +67,7 @@
               <dropdown.section @title={{t 'actions.toggle-feature-edition'}}>
                 <Hds::Form::Radio::Group
                   @name='edition'
-                  class='theme-selector'
+                  class='dropdown-radio-btn'
                   as |G|
                 >
                   {{#each this.featureEdition.editions as |edition|}}
