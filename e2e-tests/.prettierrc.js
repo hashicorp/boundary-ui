@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-module.exports = {
+export default {
   singleQuote: true,
   printWidth: 80,
 };
