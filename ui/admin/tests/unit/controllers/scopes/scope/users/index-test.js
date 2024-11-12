@@ -30,7 +30,6 @@ module('Unit | Controller | scopes/scope/users/index', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     users: null,
   };
 
@@ -47,8 +46,7 @@ module('Unit | Controller | scopes/scope/users/index', function (hooks) {
       scope: instances.scopes.global,
     });
 
-    urls.globalScope = `/scopes/global`;
-    urls.users = `${urls.globalScope}/users`;
+    urls.users = '/scopes/global/users';
 
     getUserCount = () => this.server.schema.users.all().models.length;
   });

@@ -14,5 +14,6 @@ module('Unit | Controller | scopes/scope/roles/role/index', function (hooks) {
       'controller:scopes/scope/roles/role/index',
     );
     assert.ok(controller);
+    assert.ok(controller.roles);
   });
 });

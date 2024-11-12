@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/targets/target/workers',
       );
       assert.ok(controller);
+      assert.ok(controller.targets);
     });
   },
 );

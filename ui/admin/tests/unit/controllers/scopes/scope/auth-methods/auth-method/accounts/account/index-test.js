@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/auth-methods/auth-method/accounts/account/index',
       );
       assert.ok(controller);
+      assert.ok(controller.accounts);
     });
   },
 );

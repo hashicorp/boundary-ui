@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'admin/tests/helpers';
+import { setupTest } from 'ember-qunit';
 
 module(
   'Unit | Controller | scopes/scope/host-catalogs/host-catalog/host-sets/new',
@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/host-catalogs/host-catalog/host-sets/new',
       );
       assert.ok(controller);
+      assert.ok(controller.hostSets);
     });
   },
 );

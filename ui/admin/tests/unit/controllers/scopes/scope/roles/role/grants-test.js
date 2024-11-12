@@ -24,7 +24,6 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     grants: null,
   };
 
@@ -35,15 +34,15 @@ module('Unit | Controller | scopes/scope/roles/role/grants', function (hooks) {
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.role = this.server.create('role', {
-      scopeId: 'global',
+      scope: instances.scopes.global,
     });
 
-    urls.globalScope = `/scopes/global`;
-    urls.grants = `${urls.globalScope}/roles/${instances.role.id}/grants`;
+    urls.grants = `/scopes/global/roles/${instances.role.id}/grants`;
   });
 
   test('it exists', function (assert) {
     assert.ok(controller);
+    assert.ok(controller.roles);
   });
 
   test('cancel action rolls-back changes on the specified model', async function (assert) {

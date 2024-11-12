@@ -14,5 +14,6 @@ module('Unit | Controller | scopes/scope/users/user/index', function (hooks) {
       'controller:scopes/scope/users/user/index',
     );
     assert.ok(controller);
+    assert.ok(controller.users);
   });
 });

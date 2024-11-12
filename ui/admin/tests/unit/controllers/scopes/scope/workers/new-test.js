@@ -24,7 +24,6 @@ module('Unit | Controller | scopes/scope/workers/new', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     workers: null,
   };
 
@@ -38,8 +37,7 @@ module('Unit | Controller | scopes/scope/workers/new', function (hooks) {
       scope: instances.scopes.global,
     });
 
-    urls.globalScope = `/scopes/global`;
-    urls.workers = `${urls.globalScope}/workers`;
+    urls.workers = '/scopes/global/workers';
   });
 
   test('it exists', function (assert) {

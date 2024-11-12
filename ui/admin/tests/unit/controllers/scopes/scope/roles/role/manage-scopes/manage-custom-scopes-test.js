@@ -58,6 +58,7 @@ module(
 
     test('it exists', function (assert) {
       assert.ok(controller);
+      assert.ok(controller.manageScopes);
     });
 
     test('handleSearchInput action sets expected values correctly', async function (assert) {

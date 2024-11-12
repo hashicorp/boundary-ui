@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'admin/tests/helpers';
+import { setupTest } from 'ember-qunit';
 
 module('Unit | Controller | scopes/scope/groups/group/index', function (hooks) {
   setupTest(hooks);
@@ -14,5 +14,6 @@ module('Unit | Controller | scopes/scope/groups/group/index', function (hooks) {
       'controller:scopes/scope/groups/group/index',
     );
     assert.ok(controller);
+    assert.ok(controller.groups);
   });
 });

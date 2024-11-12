@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/credential-stores/credential-store/credentials/new',
       );
       assert.ok(controller);
+      assert.ok(controller.credentials);
     });
   },
 );

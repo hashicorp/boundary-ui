@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/targets/target/edit-ingress-worker-filter',
       );
       assert.ok(controller);
+      assert.ok(controller.targets);
     });
   },
 );

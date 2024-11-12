@@ -5,6 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { setupIntl } from 'ember-intl/test-support';
 import { waitUntil, visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -16,6 +17,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
     setupIndexedDb(hooks);
+    setupIntl(hooks, 'en-us');
 
     let store;
     let controller;
@@ -51,13 +53,10 @@ module(
         scope: { id: instances.scopes.org.id, type: 'org' },
       });
       instances.hostCatalog = this.server.create('host-catalog', {
-        scopeId: instances.scopes.project.id,
         scope: instances.scopes.project,
       });
-      urls.globalScope = `/scopes/global`;
-      urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
+
+      urls.hostCatalogs = `scopes/${instances.scopes.project.id}/host-catalogs`;
 
       getHostCatalogCount = () =>
         this.server.schema.hostCatalogs.all().models.length;
@@ -105,7 +104,6 @@ module(
     });
 
     test('delete action destroys specified model', async function (assert) {
-      await visit(urls.projectScope);
       const hostCatalog = await store.findRecord(
         'host-catalog',
         instances.hostCatalog.id,

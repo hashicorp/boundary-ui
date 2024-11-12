@@ -44,6 +44,14 @@ module('Unit | Controller | application', function (hooks) {
     assert.false(session.isAuthenticated);
   });
 
+  test('toggleTheme action sets theme to specified value', function (assert) {
+    assert.notOk(session.data.theme);
+
+    controller.toggleTheme('light');
+
+    assert.strictEqual(session.data.theme, 'light');
+  });
+
   test('disconnect action de-authenticates a user and resets cluster url', async function (assert) {
     const url = 'http://localhost:9200';
     await clusterUrl.setClusterUrl(url);

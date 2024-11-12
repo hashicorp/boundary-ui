@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/policies/policy/index',
       );
       assert.ok(controller);
+      assert.ok(controller.policies);
     });
   },
 );

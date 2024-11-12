@@ -30,7 +30,7 @@ module(
     };
 
     const urls = {
-      createAndAddhost: null,
+      createAndAddHost: null,
     };
 
     hooks.beforeEach(function () {
@@ -64,7 +64,7 @@ module(
       urls.globalScope = `/scopes/global`;
       urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
       urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.createAndAddhost = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}/create-and-add-host`;
+      urls.createAndAddHost = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}/create-and-add-host`;
     });
 
     test('it exists', function (assert) {
@@ -72,7 +72,7 @@ module(
     });
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
-      await visit(urls.createAndAddhost);
+      await visit(urls.createAndAddHost);
       const host = await store.findRecord('host', instances.host.id);
       host.name = 'test';
 
@@ -84,7 +84,7 @@ module(
     });
 
     test('save action saves host and adds to the specified host-set', async function (assert) {
-      await visit(urls.createAndAddhost);
+      await visit(urls.createAndAddHost);
       const hostSet = await store.findRecord('host-set', instances.hostSet.id);
       const host = await store.findRecord('host', instances.host.id);
       host.name = 'test';

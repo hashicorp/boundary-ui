@@ -14,5 +14,6 @@ module('Unit | Controller | scopes/scope/auth-methods/new', function (hooks) {
       'controller:scopes/scope/auth-methods/new',
     );
     assert.ok(controller);
+    assert.ok(controller.authMethods);
   });
 });

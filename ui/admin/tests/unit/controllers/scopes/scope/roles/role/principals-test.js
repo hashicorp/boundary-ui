@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/roles/role/principals',
       );
       assert.ok(controller);
+      assert.ok(controller.roles);
     });
   },
 );

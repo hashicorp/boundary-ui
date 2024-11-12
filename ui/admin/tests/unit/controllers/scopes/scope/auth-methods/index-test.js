@@ -43,7 +43,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
 
     instances.scope.global = this.server.create('scope', { id: 'global' });
     instances.authMethod = this.server.create('auth-method', {
-      scopeId: 'global',
+      scope: instances.scope.global,
     });
 
     getAuthMethodCount = () =>

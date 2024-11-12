@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'admin/tests/helpers';
+import { setupTest } from 'ember-qunit';
 
 module(
   'Unit | Controller | scopes/scope/aliases/alias/index',
@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/aliases/alias/index',
       );
       assert.ok(controller);
+      assert.ok(controller.aliases);
     });
   },
 );
