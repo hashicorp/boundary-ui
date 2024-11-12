@@ -5,23 +5,104 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { waitUntil } from '@ember/test-helpers';
+import { waitUntil, visit } from '@ember/test-helpers';
+import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Unit | Controller | scopes/scope/groups/index', function (hooks) {
   setupTest(hooks);
+  setupMirage(hooks);
+  setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
+
+  let store;
+  let controller;
+  let getGroupCount;
+
+  const instances = {
+    scopes: {
+      global: null,
+    },
+    group: null,
+    user: null,
+  };
+
+  const urls = {
+    groups: null,
+  };
+
+  hooks.beforeEach(function () {
+    authenticateSession({});
+    store = this.owner.lookup('service:store');
+    controller = this.owner.lookup('controller:scopes/scope/groups/index');
+
+    instances.scopes.global = this.server.create('scope', { id: 'global' });
+    instances.group = this.server.create('group', {
+      scope: instances.scopes.global,
+    });
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
+
+    urls.groups = '/scopes/global/groups';
+
+    getGroupCount = () => this.server.schema.groups.all().models.length;
+  });
 
   test('it exists', function (assert) {
-    let controller = this.owner.lookup('controller:scopes/scope/groups/index');
     assert.ok(controller);
   });
 
   test('handleSearchInput action sets expected values correctly', async function (assert) {
-    let controller = this.owner.lookup('controller:scopes/scope/targets/index');
     const searchValue = 'group';
     controller.handleSearchInput({ target: { value: searchValue } });
     await waitUntil(() => controller.search === searchValue);
 
     assert.strictEqual(controller.page, 1);
     assert.strictEqual(controller.search, searchValue);
+  });
+
+  test('cancel action rolls-back changes on the specified model', async function (assert) {
+    await visit(urls.groups);
+    const group = await store.findRecord('group', instances.group.id);
+    group.name = 'test';
+
+    assert.strictEqual(group.name, 'test');
+
+    await controller.cancel(group);
+
+    assert.notEqual(group.name, 'test');
+  });
+
+  test('save action saves changes on the specified model', async function (assert) {
+    await visit(urls.groups);
+    const group = await store.findRecord('group', instances.group.id);
+    group.name = 'test';
+
+    await controller.save(group);
+
+    assert.strictEqual(group.name, 'test');
+  });
+
+  test('delete action destroys specified model', async function (assert) {
+    const group = await store.findRecord('group', instances.group.id);
+    const groupCount = getGroupCount();
+
+    await controller.delete(group);
+
+    assert.strictEqual(getGroupCount(), groupCount - 1);
+  });
+
+  test('removeMember action removes member from group', async function (assert) {
+    instances.group.update({ memberIds: [instances.user.id] });
+    const group = await store.findRecord('group', instances.group.id);
+
+    assert.deepEqual(group.member_ids, [instances.user.id]);
+
+    await controller.removeMember(group, instances.user);
+
+    assert.deepEqual(group.member_ids, []);
   });
 });

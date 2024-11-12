@@ -50,21 +50,18 @@ module(
         scope: { id: instances.scopes.org.id, type: 'org' },
       });
       instances.hostCatalog = this.server.create('host-catalog', {
-        scopeId: instances.scopes.project.id,
         scope: instances.scopes.project,
       });
       instances.hostSet = this.server.create('host-set', {
-        scopeId: instances.scopes.project.id,
+        scope: instances.scopes.project,
         hostCatalog: instances.hostCatalog,
       });
       instances.host = this.server.create('host', {
-        scopeId: instances.scopes.project.id,
+        scope: instances.scopes.project,
         hostCatalog: instances.hostCatalog,
       });
-      urls.globalScope = `/scopes/global`;
-      urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.addHosts = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}/add-hosts`;
+
+      urls.addHosts = `/scopes/${instances.scopes.project.id}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostSet.id}/add-hosts`;
     });
 
     test('it exists', function (assert) {
