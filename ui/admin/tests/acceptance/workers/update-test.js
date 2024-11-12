@@ -86,11 +86,9 @@ module('Acceptance | workers | update', function (hooks) {
     await click('.rose-form-actions [type="button"]', 'Click edit mode');
     await fillIn('[name="name"]', 'Worker Name');
     await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'The request was invalid.',
-      'Displays primary error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.strictEqual(
       find('[data-test-error-message-name]').textContent.trim(),
       'Name is required',

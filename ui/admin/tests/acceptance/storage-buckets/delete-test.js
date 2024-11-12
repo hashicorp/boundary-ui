@@ -25,7 +25,8 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
   const DIALOG_MESSAGE_SELECTOR = '.rose-dialog-body';
   const DIALOG_TITLE_SELECTOR = '.rose-dialog-header';
-  const NOTIFICATION_MSG_SELECTOR = '.rose-notification-body';
+  const NOTIFICATION_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const NOTIFICATION_MSG_TEXT = 'Deleted successfully.';
 
   const instances = {

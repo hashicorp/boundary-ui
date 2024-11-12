@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -110,6 +110,8 @@ module('Acceptance | workers | delete', function (hooks) {
     await visit(urls.worker);
     await click(MANAGE_DROPDOWN_TOGGLE);
     await click(REMOVE_WORKER_BUTTON);
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

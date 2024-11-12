@@ -7,10 +7,12 @@
 
 <main>
   <Rose::Layout::Centered>
-    <Rose::Notification @style='error' @heading={{t 'auth.titles.flow-error'}}>
-      {{t 'auth.descriptions.flow-error'}}
-      <br />
-      <Hds::Copy::Snippet @textToCopy={{@model}} @color='secondary' />
-    </Rose::Notification>
+    <Hds::Alert @type='page' @color='critical' as |A|>
+      <A.Title>{{t 'auth.titles.flow-error'}}</A.Title>
+      <A.Description>
+        {{t 'auth.descriptions.flow-error'}}
+        <Hds::Copy::Snippet @textToCopy={{@model}} @color='secondary' />
+      </A.Description>
+    </Hds::Alert>
   </Rose::Layout::Centered>
 </main>

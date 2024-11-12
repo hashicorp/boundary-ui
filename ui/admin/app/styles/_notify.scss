@@ -6,60 +6,55 @@
 // This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
 @-webkit-keyframes ember-notify-show {
   from {
-    left: -310px;
+    right: -310px;
   }
 
   to {
-    left: 0;
+    right: 0;
   }
 }
 @keyframes ember-notify-show {
   from {
-    left: -310px;
+    right: -310px;
   }
 
   to {
-    left: 0;
+    right: 0;
   }
 }
 @-webkit-keyframes ember-notify-hide {
   from {
-    left: 0;
+    right: 0;
   }
 
   to {
-    left: -310px;
+    right: -310px;
   }
 }
 @keyframes ember-notify-hide {
   from {
-    left: 0;
+    right: 0;
   }
 
   to {
-    left: -310px;
+    right: -310px;
   }
 }
 
 .ember-notify-cn {
   bottom: 0;
-  left: 0;
-  max-width: 300px;
+  right: 0;
   position: fixed;
   z-index: 5000;
+  margin-bottom: 16px;
 }
 
 .ember-notify {
   box-sizing: border-box;
   display: block;
-  margin: 10px;
+  margin: 16px 24px;
   position: relative;
-  width: 300px;
-
-  .close {
-    cursor: pointer;
-    float: right;
-  }
+  width: 360px;
 }
 
 .ember-notify-show {
@@ -87,14 +82,7 @@
 }
 
 @media only screen and (width <= 680px) {
-  .ember-notify-cn {
-    box-sizing: border-box;
-    padding-left: 20px;
-    width: 100%;
-  }
-
   .ember-notify {
-    float: right;
     width: 100%;
   }
 }

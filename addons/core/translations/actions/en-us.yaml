@@ -8,7 +8,7 @@ delete: Delete
 remove: Remove
 discard: Discard
 disconnect: Disconnect
-dismiss: Dismiss
+dismiss: Dismiss #delete this perhaps
 save: Save
 submit: Submit
 manage: Manage

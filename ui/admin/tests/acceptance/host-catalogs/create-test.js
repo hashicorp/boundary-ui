@@ -29,7 +29,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   const TYPE_INPUT_SELECTOR = '[name="type"]';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const ALERT_TEXT_SELECTOR = '[role="alert"]';
+  const ALERT_TEXT_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
 
   const instances = {
     scopes: {

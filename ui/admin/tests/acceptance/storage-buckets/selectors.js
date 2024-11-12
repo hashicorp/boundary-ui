@@ -29,8 +29,7 @@ export const FIELD_SECRET_KEY_EDIT_BTN =
   '[data-test-secret-access-key] [type=button]';
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
-export const TOAST = '[role=alert] div';
-export const TOAST_SUCCESSFULL_VALUE = 'Saved successfully.';
+export const TOAST_SUCCESSFUL_VALUE = 'Saved successfully.';
 
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';

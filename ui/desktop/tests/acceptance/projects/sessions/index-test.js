@@ -333,7 +333,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
-    assert.dom('[role="alert"].is-success').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-success')
+      .isVisible();
   });
 
   test('cancelling a session keeps you on the sessions list screen', async function (assert) {
@@ -353,7 +355,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
-    assert.dom('[role="alert"].is-error').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
@@ -363,7 +367,9 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
-    assert.dom('[role="alert"].is-error').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
   });
 
   test('user can change org scope and only sessions for that org will be displayed', async function (assert) {

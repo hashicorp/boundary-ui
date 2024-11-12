@@ -139,7 +139,9 @@ module('Acceptance | roles | grants', function (hooks) {
     );
     await fillIn(`${grantsForm} [name="grant"]`, 'ids=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('create a grant', async function (assert) {
@@ -192,7 +194,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await fillIn(`${newGrantForm} [name="grant"]`, 'ids=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find('[role="alert"]'));
+    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
   });
 
   test('delete a grant', async function (assert) {
@@ -235,6 +237,6 @@ module('Acceptance | roles | grants', function (hooks) {
     );
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find('[role="alert"]'));
+    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
   });
 });

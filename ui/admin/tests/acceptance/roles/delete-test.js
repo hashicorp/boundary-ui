@@ -96,10 +96,8 @@ module('Acceptance | roles | delete', function (hooks) {
     await visit(urls.role);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_DROPDOWN_SELECTOR);
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

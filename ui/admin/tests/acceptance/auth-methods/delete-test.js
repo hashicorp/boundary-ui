@@ -28,7 +28,8 @@ module('Acceptance | auth-methods | delete', function (hooks) {
 
   const DIALOG_DELETE_BTN_SELECTOR = '.rose-dialog .rose-button-primary';
   const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
-  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
 
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-auth-method] button:first-child';
