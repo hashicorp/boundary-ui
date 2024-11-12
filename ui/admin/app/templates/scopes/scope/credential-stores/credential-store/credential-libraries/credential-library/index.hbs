@@ -34,11 +34,7 @@
         <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
   
-        <dd.Interactive
-          @text={{t 'resources.credential-library.actions.delete'}}
-          @color='critical'
-          {{on 'click' (fn this.credentialLibraries.delete @model)}}
-        />
+        <dd.Interactive @color='critical' {{on 'click' (fn this.credentialLibraries.delete @model)}}>{{t 'resources.credential-library.actions.delete'}}</dd.Interactive>
       </Hds::Dropdown>
     {{/if}}
   </page.actions>

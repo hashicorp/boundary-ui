@@ -6,10 +6,6 @@
 {{#if (can 'delete account' @model)}}
   <Hds::Dropdown data-test-manage-account-auth-method as |dd|>
     <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-    <dd.Interactive
-      @text={{t 'resources.account.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>{{t 'resources.account.actions.delete'}}</dd.Interactive>
   </Hds::Dropdown>
 {{/if}}

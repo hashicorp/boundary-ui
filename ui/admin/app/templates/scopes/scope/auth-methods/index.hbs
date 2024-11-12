@@ -20,16 +20,8 @@
     {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
       <Hds::Dropdown data-test-new-dropdown as |dd|>
         <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
-        <dd.Interactive
-          @text={{t 'resources.auth-method.types.password'}}
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='password'}}
-        />
-        <dd.Interactive
-          @text={{t 'resources.auth-method.types.oidc'}}
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='oidc'}}
-        />
+        <dd.Interactive @route='scopes.scope.auth-methods.new' @query={{hash type='password'}}>{{t 'resources.auth-method.types.password'}}</dd.Interactive>
+        <dd.Interactive @route='scopes.scope.auth-methods.new' @query={{hash type='oidc'}}>{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
         {{#if (feature-flag 'ldap-auth-methods')}}
           <dd.Interactive
             @text={{t 'resources.auth-method.types.ldap'}}
