@@ -60,7 +60,7 @@
         @color='secondary'
         @icon={{this.buttonIcon}}
         @size='medium'
-        disabled={{(is-loading)}}
+        disabled={{is-loading}}
         {{on 'click' this.changeClientAgentState}}
       />
     </:action>

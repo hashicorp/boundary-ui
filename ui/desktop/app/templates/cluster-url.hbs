@@ -12,7 +12,7 @@
       class='full-width'
       @onSubmit={{fn this.setClusterUrl this.clusterUrl}}
       @cancel={{false}}
-      @disabled={{(is-loading)}}
+      @disabled={{is-loading}}
       as |form|
     >
       <Hds::Form::TextInput::Field

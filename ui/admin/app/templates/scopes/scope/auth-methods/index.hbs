@@ -30,10 +30,11 @@
         >{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
         {{#if (feature-flag 'ldap-auth-methods')}}
           <dd.Interactive
-            @text={{t 'resources.auth-method.types.ldap'}}
             @route='scopes.scope.auth-methods.new'
             @query={{hash type='ldap'}}
-          />
+          >
+            {{t 'resources.auth-method.types.ldap'}}
+          </dd.Interactive>
         {{/if}}
       </Hds::Dropdown>
     {{/if}}
@@ -148,18 +149,18 @@
                     />
                     {{#unless B.data.isPrimary}}
                       <dd.Interactive
-                        @text={{t 'resources.auth-method.actions.make-primary'}}
                         data-test-make-primary-action
                         {{on 'click' (fn this.makePrimary B.data)}}
-                      />
+                      >
+                        {{t 'resources.auth-method.actions.make-primary'}}
+                      </dd.Interactive>
                     {{/unless}}
                     {{#if B.data.isPrimary}}
                       <dd.Interactive
-                        @text={{t
-                          'resources.auth-method.actions.remove-as-primary'
-                        }}
                         {{on 'click' (fn this.removeAsPrimary B.data)}}
-                      />
+                      >
+                        {{t 'resources.auth-method.actions.remove-as-primary'}}
+                      </dd.Interactive>
                     {{/if}}
                   </Hds::Dropdown>
                 {{/if}}

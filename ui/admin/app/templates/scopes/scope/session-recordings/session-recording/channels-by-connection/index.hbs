@@ -31,9 +31,10 @@
           <dd.Interactive
             data-test-manage-dropdown-delete
             @color='critical'
-            @text={{t 'resources.policy.actions.delete_recording'}}
             {{on 'click' (fn this.delete @model.sessionRecording)}}
-          />
+          >
+            {{t 'resources.policy.actions.delete_recording'}}
+          </dd.Interactive>
         {{/if}}
       </Hds::Dropdown>
     {{/if}}
