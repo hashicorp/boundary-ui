@@ -23,7 +23,9 @@
           @color='secondary'
         />
 
-        <dd.Interactive {{on 'click' (fn this.reapplyStoragePolicy @model.sessionRecording)}}>{{t 'resources.policy.actions.update'}}</dd.Interactive>
+        <dd.Interactive
+          {{on 'click' (fn this.reapplyStoragePolicy @model.sessionRecording)}}
+        >{{t 'resources.policy.actions.update'}}</dd.Interactive>
         {{#if (can 'delete session-recording' @model.sessionRecording)}}
           <dd.Separator />
           <dd.Interactive

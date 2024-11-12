@@ -72,10 +72,14 @@
                       @icon='more-horizontal'
                       @hasChevron={{false}}
                     />
-                    <dd.Interactive data-test-host-set-hosts-dropdown-remove-host @color='critical' {{on
+                    <dd.Interactive
+                      data-test-host-set-hosts-dropdown-remove-host
+                      @color='critical'
+                      {{on
                         'click'
                         (fn this.hostSets.removeHost @model.hostSet B.data)
-                      }}>{{t 'actions.remove'}}</dd.Interactive>
+                      }}
+                    >{{t 'actions.remove'}}</dd.Interactive>
                   </Hds::Dropdown>
                 {{/if}}
               </B.Td>

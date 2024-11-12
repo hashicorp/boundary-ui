@@ -81,10 +81,13 @@
                     @text={{t 'actions.manage'}}
                     @hasChevron={{false}}
                   />
-                  <dd.Interactive @color='critical' {{on
+                  <dd.Interactive
+                    @color='critical'
+                    {{on
                       'click'
                       (fn this.roles.removePrincipal @model.role B.data)
-                    }}>{{t 'actions.remove'}}</dd.Interactive>
+                    }}
+                  >{{t 'actions.remove'}}</dd.Interactive>
                 </Hds::Dropdown>
               {{/if}}
             </B.Td>

@@ -20,7 +20,10 @@
     <page.actions>
       <Hds::Dropdown as |dd|>
         <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-        <dd.Interactive @color='critical' {{on 'click' (fn this.storageBuckets.delete @model)}}>{{t 'actions.delete'}}</dd.Interactive>
+        <dd.Interactive
+          @color='critical'
+          {{on 'click' (fn this.storageBuckets.delete @model)}}
+        >{{t 'actions.delete'}}</dd.Interactive>
       </Hds::Dropdown>
     </page.actions>
   {{/if}}
