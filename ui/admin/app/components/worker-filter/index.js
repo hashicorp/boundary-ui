@@ -5,8 +5,13 @@
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class WorkerFilterComponent extends Component {
+  // =attributes
+
+  @tracked showFilterGenerator;
+
   // =actions
 
   /**
@@ -18,5 +23,13 @@ export default class WorkerFilterComponent extends Component {
   @action
   setWorkerFilter(model, filter, value) {
     model[filter] = value;
+  }
+
+  /**
+   * Toggles showFilterGenerator attribute to true or false.
+   */
+  @action
+  toggleFilterGenerator() {
+    this.showFilterGenerator = !this.showFilterGenerator;
   }
 }

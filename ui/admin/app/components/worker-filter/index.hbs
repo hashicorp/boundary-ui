@@ -34,6 +34,47 @@
     {{/if}}
   </Hds::Form::Field>
 
+  <Hds::Separator />
+
+  <Hds::Form::Toggle::Field
+    name='show_filter_generator'
+    {{on 'change' this.toggleFilterGenerator}}
+    as |F|
+  >
+    <F.Label>{{t 'worker-filter-generator.toggle.title'}}</F.Label>
+    <F.HelperText>{{t
+        'worker-filter-generator.toggle.description'
+      }}</F.HelperText>
+  </Hds::Form::Toggle::Field>
+
+  <Hds::Separator />
+
+  {{#if this.showFilterGenerator}}
+    <Hds::Form::Radio::Group @name='filter_generator' as |G|>
+      <G.Legend>{{t
+          'worker-filter-generator.filter-generator.title'
+        }}</G.Legend>
+      <G.HelperText>
+        {{t 'worker-filter-generator.filter-generator.description'}}
+        <br />
+        <Hds::Link::Inline
+          @href={{doc-url 'worker-filters-format'}}
+          @color='secondary'
+        >
+          {{t 'worker-filter-generator.filter-generator.link'}}
+        </Hds::Link::Inline>
+      </G.HelperText>
+      <G.RadioField as |F|>
+        <F.Label>{{t
+            'worker-filter-generator.filter-generator.tag.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'worker-filter-generator.filter-generator.tag.helper'
+          }}</F.HelperText>
+      </G.RadioField>
+    </Hds::Form::Radio::Group>
+  {{/if}}
+
   <form.actions
     @submitText={{t 'actions.save'}}
     @cancelText={{t 'actions.cancel'}}
