@@ -141,3 +141,6 @@ worker-filter-generator:
     title: Filter generator
     description: Choose what you want to format into a filter.
     link: Learn more about formatting a worker filter.
+    tag:
+      label: Tag
+      helper: Format a worker tag
