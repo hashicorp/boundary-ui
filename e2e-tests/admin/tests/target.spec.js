@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.js';
@@ -121,7 +121,10 @@ test('Verify session created to target with address, then cancel the session @ce
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+    const targetName = await targetsPage.createTargetWithAddress(
+      targetAddress,
+      targetPort,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -208,7 +211,7 @@ test('Verify TCP target is updated @ce @aws @docker', async ({
     await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
     await page.getByRole('textbox').click({ force: true });
-    await page.keyboard.press("Meta+A");
+    await page.keyboard.press('Meta+A');
     await page.keyboard.press('Backspace');
     await page.getByRole('textbox').fill('"prod" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();

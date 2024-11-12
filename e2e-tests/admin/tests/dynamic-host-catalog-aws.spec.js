@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
@@ -63,12 +63,8 @@ test.describe('AWS', async () => {
         .getByLabel('AWS')
         .click();
       await page.getByLabel('AWS Region').fill(awsRegion);
-      await page
-        .getByLabel('Access Key ID')
-        .fill(awsAccessKeyId);
-      await page
-        .getByLabel('Secret Access Key')
-        .fill(awsSecretAccessKey);
+      await page.getByLabel('Access Key ID').fill(awsAccessKeyId);
+      await page.getByLabel('Secret Access Key').fill(awsSecretAccessKey);
       await page
         .getByLabel('Disable credential rotation')
         .click({ force: true });

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { execSync } from 'node:child_process';
 
 import { authenticatedState } from '../global-setup.js';
@@ -49,21 +49,18 @@ test.beforeAll(async () => {
   await checkVaultCli();
 });
 
-test.beforeEach(async ({
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-}) => {
-  execSync(`vault policy delete ${secretPolicyName}`);
-  execSync(`vault policy delete ${boundaryPolicyName}`);
-  await authenticateBoundaryCli(
-    baseURL,
-    adminAuthMethodId,
-    adminLoginName,
-    adminPassword,
-  );
-});
+test.beforeEach(
+  async ({ baseURL, adminAuthMethodId, adminLoginName, adminPassword }) => {
+    execSync(`vault policy delete ${secretPolicyName}`);
+    execSync(`vault policy delete ${boundaryPolicyName}`);
+    await authenticateBoundaryCli(
+      baseURL,
+      adminAuthMethodId,
+      adminLoginName,
+      adminPassword,
+    );
+  },
+);
 
 test('Verify resources can be deleted @ce @aws', async ({
   page,
@@ -86,12 +83,23 @@ test('Verify resources can be deleted @ce @aws', async ({
     let groupId = await createGroupCli(orgId);
     let userId = await createUserCli(orgId);
     let staticHostCatalogId = await createStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(projectId, awsRegion);
+    let dynamicAwsHostCatalogId = await createDynamicAwsHostCatalogCli(
+      projectId,
+      awsRegion,
+    );
     let staticHostId = await createStaticHostCli(staticHostCatalogId);
     let staticHostSetId = await createHostSetCli(staticHostCatalogId);
-    let staticCredentialStoreId = await createStaticCredentialStoreCli(projectId);
-    const vaultToken = await getVaultToken(boundaryPolicyName, secretPolicyName);
-    let vaultCredentialStoreId = await createVaultCredentialStoreCli(projectId, vaultAddr, vaultToken);
+    let staticCredentialStoreId =
+      await createStaticCredentialStoreCli(projectId);
+    const vaultToken = await getVaultToken(
+      boundaryPolicyName,
+      secretPolicyName,
+    );
+    let vaultCredentialStoreId = await createVaultCredentialStoreCli(
+      projectId,
+      vaultAddr,
+      vaultToken,
+    );
     let usernamePasswordCredentialId =
       await createUsernamePasswordCredentialCli(staticCredentialStoreId);
     let tcpTargetId = await createTcpTarget(projectId);

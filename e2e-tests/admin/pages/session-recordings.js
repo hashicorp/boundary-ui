@@ -18,7 +18,9 @@ export class SessionRecordingsPage extends BaseResourcePage {
    */
   async reapplyStoragePolicy() {
     await this.page.getByText('Manage').click();
-    await this.page.getByRole('button', { name: 'Re-apply storage policy' }).click();
+    await this.page
+      .getByRole('button', { name: 'Re-apply storage policy' })
+      .click();
     await this.dismissSuccessAlert();
   }
 }

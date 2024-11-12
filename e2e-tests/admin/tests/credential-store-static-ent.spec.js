@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.js';
@@ -44,10 +44,17 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
     const credentialName2 =
       await credentialStoresPage.createStaticCredentialUsernamePassword(
         sshUser,

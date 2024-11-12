@@ -37,7 +37,8 @@ export class WorkersPage extends BaseResourcePage {
    * @param {string} newValue New value for API tag
    */
   async editTag(origKey, newKey, newValue) {
-    await this.page.getByRole('table')
+    await this.page
+      .getByRole('table')
       .getByRole('cell', { name: origKey })
       .locator('..')
       .getByRole('cell', { name: 'Overflow Options' })
@@ -56,7 +57,8 @@ export class WorkersPage extends BaseResourcePage {
    * @param {string} key API tag key
    */
   async removeTag(key) {
-    await this.page.getByRole('table')
+    await this.page
+      .getByRole('table')
       .getByRole('cell', { name: key })
       .locator('..')
       .getByRole('cell', { name: 'Overflow Options' })

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
@@ -62,9 +62,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     await page.getByLabel('Description').fill('LDAP Auth Method');
     await page.getByLabel('Address').fill(ldapAddr);
     await page.getByLabel('Bind DN').fill(ldapAdminDn);
-    await page
-      .getByLabel('Bind Password')
-      .fill(ldapAdminPassword);
+    await page.getByLabel('Bind Password').fill(ldapAdminPassword);
     await page.getByRole('switch', { name: 'Discover DN' }).click();
     await page.getByLabel('User DN').fill(ldapDomainDn);
     await page.getByLabel('User Attribute').fill('uid');
@@ -145,9 +143,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     const ldapManagedGroupName = 'LDAP Managed Group ' + nanoid();
     await page.getByLabel('Name (Optional)').fill(ldapManagedGroupName);
     await page.getByLabel('Description').fill('This is an automated test');
-    await page
-      .getByRole('textbox', { name: 'Value' })
-      .fill(ldapGroupName);
+    await page.getByRole('textbox', { name: 'Value' }).fill(ldapGroupName);
     await page.getByRole('button', { name: 'Add' }).click();
 
     await page.getByRole('button', { name: 'Save' }).click();

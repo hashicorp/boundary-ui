@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
@@ -33,11 +33,7 @@ let orgName;
 let projectName;
 let targetName;
 
-test.beforeEach(async ({
-  page,
-  targetAddress,
-  targetPort,
-}) => {
+test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   await page.goto('/');
 
   const orgsPage = new OrgsPage(page);
@@ -45,7 +41,10 @@ test.beforeEach(async ({
   const projectsPage = new ProjectsPage(page);
   projectName = await projectsPage.createProject();
   const targetsPage = new TargetsPage(page);
-  targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+  targetName = await targetsPage.createTargetWithAddress(
+    targetAddress,
+    targetPort,
+  );
   const credentialStoresPage = new CredentialStoresPage(page);
   await credentialStoresPage.createStaticCredentialStore();
 });
@@ -61,9 +60,16 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
 }) => {
   try {
     const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -108,14 +114,21 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
   adminAuthMethodId,
   adminLoginName,
   adminPassword,
-  sshUser
+  sshUser,
 }) => {
   try {
     const testPassword = 'password';
     const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName = await credentialStoresPage.createStaticCredentialUsernamePassword(sshUser, testPassword);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialUsernamePassword(
+        sshUser,
+        testPassword,
+      );
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -183,7 +196,10 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({
     ).toBeVisible();
 
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -230,7 +246,10 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({
   try {
     const credentialStoresPage = new CredentialStoresPage(page);
     const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
     const credentialName2 =
       await credentialStoresPage.createStaticCredentialUsernamePassword(
         sshUser,
@@ -238,8 +257,14 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({
       );
 
     const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName);
-    await targetsPage.addBrokeredCredentialsToTarget(targetName, credentialName2);
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
+    await targetsPage.addBrokeredCredentialsToTarget(
+      targetName,
+      credentialName2,
+    );
 
     // Remove the host source from the target
     await page

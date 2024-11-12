@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
@@ -100,14 +100,28 @@ test('Session Recording Test (MinIO) @ent @docker', async ({
     await page.getByRole('link', { name: orgName }).click();
     await page.getByRole('link', { name: projectName }).click();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
-    await targetsPage.addIngressWorkerFilterToTarget(`"${workerTagEgress}" in "/tags/type"`);
-    await targetsPage.addEgressWorkerFilterToTarget(`"${workerTagEgress}" in "/tags/type"`);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
+    await targetsPage.addIngressWorkerFilterToTarget(
+      `"${workerTagEgress}" in "/tags/type"`,
+    );
+    await targetsPage.addEgressWorkerFilterToTarget(
+      `"${workerTagEgress}" in "/tags/type"`,
+    );
 
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
     await page.getByRole('link', { name: targetName }).click();
     await targetsPage.enableSessionRecording(storageBucketName);
 
