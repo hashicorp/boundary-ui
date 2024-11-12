@@ -58,6 +58,7 @@ module(
 
     test('it exists', function (assert) {
       assert.ok(controller);
+      assert.ok(controller.targets);
     });
 
     test('cancel action rolls-back changes on the specified model', async function (assert) {
