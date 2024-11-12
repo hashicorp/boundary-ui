@@ -14,12 +14,11 @@ module('Integration | Component | worker-filter/index', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   test('it renders correct content when egress_worker_filter is passed in', async function (assert) {
-    this.onInput = () => {};
     this.submit = () => {};
     this.cancel = () => {};
     this.model = { egress_worker_filter: 'egress filter' };
     await render(
-      hbs`<WorkerFilter @name='egress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+      hbs`<WorkerFilter @name='egress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
     );
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
@@ -29,12 +28,11 @@ module('Integration | Component | worker-filter/index', function (hooks) {
   });
 
   test('it renders correct content when ingress_worker_filter is passed in', async function (assert) {
-    this.onInput = () => {};
     this.submit = () => {};
     this.cancel = () => {};
     this.model = { ingress_worker_filter: 'ingress filter' };
     await render(
-      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
     );
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
