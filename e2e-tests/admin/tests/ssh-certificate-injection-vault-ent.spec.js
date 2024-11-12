@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
@@ -76,22 +76,22 @@ test('SSH Certificate Injection @ent @docker', async ({
 
     execSync(
       `vault write ${secretsPath}/config/ca` +
-      ` private_key="${private_key}"` +
-      ` public_key="${public_key}"` +
-      ` generate_signing_key=false`,
+        ` private_key="${private_key}"` +
+        ` public_key="${public_key}"` +
+        ` generate_signing_key=false`,
       ` format=json`,
     );
 
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
-        ` -no-default-policy=true` +
-        ` -policy=${boundaryPolicyName}` +
-        ` -policy=${sshPolicyName}` +
-        ` -orphan=true` +
-        ` -period=20m` +
-        ` -renewable=true` +
-        ` -format=json`,
+          ` -no-default-policy=true` +
+          ` -policy=${boundaryPolicyName}` +
+          ` -policy=${sshPolicyName}` +
+          ` -orphan=true` +
+          ` -period=20m` +
+          ` -renewable=true` +
+          ` -format=json`,
       ),
     );
     const clientToken = vaultToken.auth.client_token;
@@ -106,11 +106,17 @@ test('SSH Certificate Injection @ent @docker', async ({
 
     // Create target
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
 
     // Create credentials
     const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
+    await credentialStoresPage.createVaultCredentialStore(
+      vaultAddr,
+      clientToken,
+    );
     const credentialLibraryName =
       await credentialStoresPage.createVaultSshCertificateCredentialLibraryEnt(
         `${secretsPath}/issue/${secretName}`,

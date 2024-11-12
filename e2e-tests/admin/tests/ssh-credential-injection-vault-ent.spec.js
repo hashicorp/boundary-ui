@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
@@ -66,8 +66,8 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
       `vault kv put -mount ${secretsPath} ${secretName} ` +
-      ` username=${sshUser}` +
-      ` private_key=@${sshKeyPath}`,
+        ` username=${sshUser}` +
+        ` private_key=@${sshKeyPath}`,
     );
     execSync(
       `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
@@ -75,13 +75,13 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
-        ` -no-default-policy=true` +
-        ` -policy=${boundaryPolicyName}` +
-        ` -policy=${secretPolicyName}` +
-        ` -orphan=true` +
-        ` -period=20m` +
-        ` -renewable=true` +
-        ` -format=json`,
+          ` -no-default-policy=true` +
+          ` -policy=${boundaryPolicyName}` +
+          ` -policy=${secretPolicyName}` +
+          ` -orphan=true` +
+          ` -period=20m` +
+          ` -renewable=true` +
+          ` -format=json`,
       ),
     );
     const clientToken = vaultToken.auth.client_token;
@@ -96,17 +96,26 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
 
     // Create target
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
 
     // Create credentials
     const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
+    await credentialStoresPage.createVaultCredentialStore(
+      vaultAddr,
+      clientToken,
+    );
     const credentialLibraryName =
       await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
         `${secretsPath}/data/${secretName}`,
         'SSH Private Key',
       );
-    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialLibraryName);
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialLibraryName,
+    );
 
     // Connect to target
     await authenticateBoundaryCli(

@@ -17,8 +17,10 @@ export class LoginPage extends BaseResourcePage {
     await this.page.getByLabel('Login Name').fill(loginName);
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Sign In' }).click();
-    await expect(this.page.getByRole('navigation', { name: 'General' })).toBeVisible();
-    await expect(this.page.getByText(loginName),).toBeEnabled();
+    await expect(
+      this.page.getByRole('navigation', { name: 'General' }),
+    ).toBeVisible();
+    await expect(this.page.getByText(loginName)).toBeEnabled();
   }
 
   /**
@@ -28,6 +30,8 @@ export class LoginPage extends BaseResourcePage {
   async logout(loginName) {
     await this.page.getByText(loginName).click();
     await this.page.getByRole('button', { name: 'Sign Out' }).click();
-    await expect(this.page.getByRole('button', { name: 'Sign In' })).toBeVisible();
+    await expect(
+      this.page.getByRole('button', { name: 'Sign In' }),
+    ).toBeVisible();
   }
 }

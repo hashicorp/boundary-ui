@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
@@ -78,9 +78,9 @@ test.describe('Aliases', async () => {
       // Note: On the Target details page, there is a section with the header
       // "Aliases". The extra check here is to ensure that we are on the Alias
       // details page and not the Target details page.
-      await expect(
-        page.getByRole('heading', { name: 'Alias' }),
-      ).not.toHaveText('Aliases');
+      await expect(page.getByRole('heading', { name: 'Alias' })).not.toHaveText(
+        'Aliases',
+      );
       await page.getByRole('button', { name: 'Manage' }).click();
       await page.getByText('Clear', { exact: true }).click();
       await page.getByText('OK', { exact: true }).click();
@@ -133,7 +133,11 @@ test.describe('Aliases', async () => {
       await projectsPage.createProject();
       alias = 'example.alias.' + nanoid();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddressAndAlias(targetAddress, targetPort, alias);
+      await targetsPage.createTargetWithAddressAndAlias(
+        targetAddress,
+        targetPort,
+        alias,
+      );
 
       // Connect to target using alias
       await authorizeSessionByAliasCli(alias);
@@ -175,7 +179,10 @@ test.describe('Aliases', async () => {
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+      const targetName = await targetsPage.createTargetWithAddress(
+        targetAddress,
+        targetPort,
+      );
 
       // Create new alias from scope page
       await authenticateBoundaryCli(

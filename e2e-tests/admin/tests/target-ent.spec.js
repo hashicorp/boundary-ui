@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 
 import { authenticatedState } from '../global-setup.js';
@@ -50,7 +50,10 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTcpTargetWithAddressEnt(targetAddress, targetPort);
+    const targetName = await targetsPage.createTcpTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -100,12 +103,21 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+    const targetName = await targetsPage.createSshTargetWithAddressEnt(
+      targetAddress,
+      targetPort,
+    );
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
     const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     await authenticateBoundaryCli(
       baseURL,
@@ -192,8 +204,15 @@ test('SSH target with host sources @ent @aws @docker', async ({
     // Create credentials and attach to target
     const credentialStoresPage = new CredentialStoresPage(page);
     await credentialStoresPage.createStaticCredentialStore();
-    const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-    await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+    const credentialName =
+      await credentialStoresPage.createStaticCredentialKeyPair(
+        sshUser,
+        sshKeyPath,
+      );
+    await targetsPage.addInjectedCredentialsToTarget(
+      targetName,
+      credentialName,
+    );
 
     // Connect to target
     await authenticateBoundaryCli(
