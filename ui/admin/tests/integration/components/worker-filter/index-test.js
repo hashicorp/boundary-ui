@@ -9,7 +9,7 @@ import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
-module('Integration | Component | form/target/worker-filter', function (hooks) {
+module('Integration | Component | worker-filter/index', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
@@ -19,7 +19,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
     this.cancel = () => {};
     this.model = { egress_worker_filter: 'egress filter' };
     await render(
-      hbs`<Form::Target::WorkerFilter @name='egress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
+      hbs`<WorkerFilter @name='egress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}} />`,
     );
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
@@ -34,7 +34,7 @@ module('Integration | Component | form/target/worker-filter', function (hooks) {
     this.cancel = () => {};
     this.model = { ingress_worker_filter: 'ingress filter' };
     await render(
-      hbs`<Form::Target::WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @onInput={{this.onInput}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
     );
 
     assert.dom('[data-test-code-editor-field-editor]').isVisible();
