@@ -4,7 +4,7 @@
  */
 
 export default function mapTypeToColor(flashMsgType) {
-  // Maps the flash message type parameter to the correct hds alert color.
+  // Maps the flash message type parameter to the correct hds color.
   let color = 'neutral';
   switch (flashMsgType) {
     case 'error':
