@@ -6,12 +6,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
-export default class FormTargetWorkerFilterIndexComponent extends Component {
+export default class WorkerFilterComponent extends Component {
   // =actions
 
   /**
-   * Sets the target model filter to the passed in value.
-   * @param {TargetModel} model
+   * Sets the model filter to the passed in value.
+   * @param {Model} model
    * @param {string} filter
    * @param {string} value
    */
