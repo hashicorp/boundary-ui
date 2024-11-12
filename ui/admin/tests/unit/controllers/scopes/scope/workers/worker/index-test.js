@@ -7,16 +7,16 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 module(
-  'Unit | Controller | scopes/scope/targets/target/edit-ingress-worker-filter',
+  'Unit | Controller | scopes/scope/workers/worker/index',
   function (hooks) {
     setupTest(hooks);
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'controller:scopes/scope/targets/target/edit-ingress-worker-filter',
+        'controller:scopes/scope/workers/worker/index',
       );
       assert.ok(controller);
-      assert.ok(controller.targets);
+      assert.ok(controller.workers);
     });
   },
 );

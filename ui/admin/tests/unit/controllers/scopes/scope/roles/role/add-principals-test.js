@@ -29,7 +29,6 @@ module(
     };
 
     const urls = {
-      globalScope: null,
       addPrincipals: null,
     };
 
@@ -56,8 +55,7 @@ module(
         scopeId: 'global',
       });
 
-      urls.globalScope = `/scopes/global`;
-      urls.addPrincipals = `${urls.globalScope}/roles/${instances.role.id}/add-principals`;
+      urls.addPrincipals = `/scopes/global/roles/${instances.role.id}/add-principals`;
     });
 
     test('it exists', function (assert) {
