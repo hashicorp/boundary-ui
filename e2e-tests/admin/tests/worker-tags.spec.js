@@ -37,9 +37,9 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Worker') {
+    if (header === 'Worker') {
       workerListWorkerIndex = i;
-    } else if (header == 'Tags') {
+    } else if (header === 'Tags') {
       workerListTagIndex = i;
     }
   }
@@ -58,7 +58,6 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('table')
     .getByRole('columnheader')
     .count();
-  let dialogTagIndex;
   let dialogTypeIndex;
   for (let i = 0; i < dialogHeadersCount; i++) {
     const header = await page
@@ -67,9 +66,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Tag') {
-      dialogTagIndex = i;
-    } else if (header == 'Type') {
+    if (header === 'Type') {
       dialogTypeIndex = i;
     }
   }
@@ -142,8 +139,6 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('table')
     .getByRole('columnheader')
     .count();
-  let workerDetailsKeyIndex;
-  let workerDetailsValueIndex;
   let workerDetailsTypeIndex;
   for (let i = 0; i < workerDetailsHeadersCount; i++) {
     const header = await page
@@ -151,11 +146,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Key') {
-      workerDetailsKeyIndex = i;
-    } else if (header == 'Value') {
-      workerDetailsValueIndex = i;
-    } else if (header == 'Type') {
+    if (header === 'Type') {
       workerDetailsTypeIndex = i;
     }
   }
