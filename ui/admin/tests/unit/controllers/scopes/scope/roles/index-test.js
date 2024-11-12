@@ -41,10 +41,10 @@ module('Unit | Controller | scopes/scope/roles/index', function (hooks) {
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.role = this.server.create('role', {
-      scopeId: 'global',
+      scope: instances.scopes.global,
     });
     instances.user = this.server.create('user', {
-      scopeId: 'global',
+      scope: instances.scopes.global,
     });
 
     urls.globalScope = `/scopes/global`;

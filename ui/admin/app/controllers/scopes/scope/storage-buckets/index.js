@@ -12,6 +12,7 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeStorageBucketsIndexController extends Controller {
   // =services
+
   @service router;
 
   // =actions
@@ -63,7 +64,7 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
   }
 
   /**
-   * Updates credentil type
+   * Updates credential type
    * @param {object} storageBucket
    * @param {string} credentialType
    */
@@ -74,7 +75,7 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
 
   /**
    * Changes the plugin type.
-   * @param {*} pluginType
+   * @param {string} pluginType
    */
   @action
   async changePluginType(pluginType) {
