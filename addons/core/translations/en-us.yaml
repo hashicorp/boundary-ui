@@ -133,3 +133,14 @@ settings:
   alerts:
     cache-daemon: There may be a problem with the cache daemon
     client-agent: There may be a problem with the client agent
+worker-filter-generator:
+  toggle:
+    title: Show filter generator
+    description: The generator will automatically generate a pre-formatted filter for you. You can copy the result to the editor above.
+  filter-generator:
+    title: Filter generator
+    description: Choose what you want to format into a filter.
+    link: Learn more about formatting a worker filter.
+    tag:
+      label: Tag
+      helper: Format a worker tag
