@@ -1078,3 +1078,17 @@
     margin-bottom: 0;
   }
 }
+
+// worker filter generator
+.formatted-results {
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.generated-results-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: flex-start;
+}

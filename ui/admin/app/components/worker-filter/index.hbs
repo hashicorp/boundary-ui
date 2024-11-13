@@ -64,7 +64,10 @@
           {{t 'worker-filter-generator.filter-generator.link'}}
         </Hds::Link::Inline>
       </G.HelperText>
-      <G.RadioField as |F|>
+      <G.RadioField
+        checked={{eq this.filterGeneratorType this.generatorTagType}}
+        as |F|
+      >
         <F.Label>{{t
             'worker-filter-generator.filter-generator.tag.label'
           }}</F.Label>
@@ -73,6 +76,63 @@
           }}</F.HelperText>
       </G.RadioField>
     </Hds::Form::Radio::Group>
+
+    {{#if (eq this.filterGeneratorType this.generatorTagType)}}
+      <Hds::Form::Fieldset class='input-values' as |F|>
+        <F.Legend>{{t
+            'worker-filter-generator.filter-generator.input-values.title'
+          }}</F.Legend>
+        <F.HelperText>{{t
+            'worker-filter-generator.filter-generator.input-values.description'
+          }}</F.HelperText>
+        <F.Control>
+          <Hds::Form::TextInput::Field
+            @value={{this.tagKey}}
+            name='tag_key'
+            @width='320px'
+            {{on 'input' (set-from-event this 'tagKey')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.key.label'}}</F.Label>
+          </Hds::Form::TextInput::Field>
+        </F.Control>
+        <F.Control>
+          <Hds::Form::TextInput::Field
+            @value={{this.tagValue}}
+            name='tag_value'
+            @width='320px'
+            {{on 'input' (set-from-event this 'tagValue')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.value.label'}}</F.Label>
+          </Hds::Form::TextInput::Field>
+        </F.Control>
+      </Hds::Form::Fieldset>
+    {{/if}}
+
+    <Hds::Form::Fieldset class='formatted-results' @layout='vertical' as |F|>
+      <F.Legend>{{t
+          'worker-filter-generator.filter-generator.formatted-result.title'
+        }}</F.Legend>
+      <F.HelperText>{{t
+          'worker-filter-generator.filter-generator.formatted-result.description'
+        }}</F.HelperText>
+      <F.Control>
+        <Hds::Text::Body @tag='p' @weight='semibold'>{{t
+            'worker-filter-generator.filter-generator.formatted-result.label'
+          }}</Hds::Text::Body>
+        <div class='generated-results-container'>
+          <Hds::Form::TextInput::Base
+            readonly
+            id='generatedValue'
+            name='generated_value'
+            @value={{this.generatedResult}}
+            @width='320px'
+          />
+          <Hds::Copy::Button @text='Copy' @targetToCopy='#generatedValue' />
+        </div>
+      </F.Control>
+    </Hds::Form::Fieldset>
   {{/if}}
 
   <form.actions
