@@ -12,7 +12,7 @@ export default class WorkerFilterComponent extends Component {
 
   generatorTagType = 'tag';
   generatorNameType = 'name';
-  @tracked showFilterGenerator = true;
+  @tracked showFilterGenerator;
   @tracked filterGeneratorType = this.generatorTagType;
   @tracked tagKey = '';
   @tracked tagValue = '';
