@@ -53,7 +53,11 @@
               <Hds::Link::Standalone
                 @icon='edit'
                 @text={{t
-                  'resources.target.workers.actions.edit-worker-filter'
+                  (if
+                    @model.ingress_worker_filter
+                    'resources.target.workers.actions.edit-worker-filter'
+                    'resources.target.workers.actions.add-worker-filter'
+                  )
                 }}
                 @route='scopes.scope.targets.target.edit-ingress-worker-filter'
               />
@@ -102,7 +106,13 @@
               }}</span>
             <Hds::Link::Standalone
               @icon='edit'
-              @text={{t 'resources.target.workers.actions.edit-worker-filter'}}
+              @text={{t
+                (if
+                  @model.egress_worker_filter
+                  'resources.target.workers.actions.edit-worker-filter'
+                  'resources.target.workers.actions.add-worker-filter'
+                )
+              }}
               @route='scopes.scope.targets.target.edit-egress-worker-filter'
             />
           </div>
