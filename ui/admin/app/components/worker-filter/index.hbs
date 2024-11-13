@@ -66,7 +66,7 @@
       </G.HelperText>
       <G.RadioField
         @value={{this.generatorTagType}}
-        checked={{eq this.filterGeneratorType this.generatorTagType}}
+        checked={{eq this.selectedGeneratorType this.generatorTagType}}
         as |F|
       >
         <F.Label>{{t
@@ -78,7 +78,7 @@
       </G.RadioField>
     </Hds::Form::Radio::Group>
 
-    {{#if (eq this.filterGeneratorType this.generatorTagType)}}
+    {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
       <Hds::Form::Fieldset class='input-values' as |F|>
         <F.Legend>{{t
             'worker-filter-generator.filter-generator.input-values.title'
