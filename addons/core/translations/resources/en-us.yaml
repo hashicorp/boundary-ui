@@ -819,6 +819,7 @@ target:
       ingress-workers: Ingress workers
     actions:
       edit-worker-filter: Edit worker filter
+      add-worker-filter: Add worker filter
 credential-store:
   title: Credential Store
   title_plural: Credential Stores
