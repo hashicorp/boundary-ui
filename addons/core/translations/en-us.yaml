@@ -141,6 +141,13 @@ worker-filter-generator:
     title: Filter generator
     description: Choose what you want to format into a filter.
     link: Learn more about formatting a worker filter.
+    input-values:
+      title: Input values
+      description: Next, input what you want to format.
+    formatted-result:
+      title: Formatted result
+      description: Copy and paste this into the editor above.
+      label: Generated result
     tag:
       label: Tag
       helper: Format a worker tag
