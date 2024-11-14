@@ -157,3 +157,4 @@ worker-filter-generator:
     operator:
       matches: matches
       includes: includes
+      default: --Select an option--

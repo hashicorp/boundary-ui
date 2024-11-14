@@ -117,12 +117,17 @@
           <Hds::Form::Select::Field
             name='name_operator'
             @value={{this.operator}}
+            @width='320px'
             {{on 'change' (set-from-event this 'operator')}}
             as |F|
           >
             <F.Label>{{t 'form.operator.label'}}</F.Label>
             <F.Options>
-              <option value='' />
+              <option value=''>
+                {{t
+                  'worker-filter-generator.filter-generator.operator.default'
+                }}
+              </option>
               {{#each this.operatorOptions as |operator|}}
                 <option
                   value={{operator}}
