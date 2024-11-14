@@ -13,7 +13,7 @@ export default class WorkerFilterComponent extends Component {
   generatorTagType = 'tag';
   generatorNameType = 'name';
   operatorOptions = ['==', 'matches', 'includes'];
-  @tracked showFilterGenerator = true;
+  @tracked showFilterGenerator;
   @tracked selectedGeneratorType = this.generatorTagType;
   @tracked key = '';
   @tracked value = '';

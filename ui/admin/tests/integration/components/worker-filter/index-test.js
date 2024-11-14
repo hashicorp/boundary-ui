@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, fillIn } from '@ember/test-helpers';
+import { render, click, fillIn, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -68,6 +68,7 @@ module('Integration | Component | worker-filter/index', function (hooks) {
 
     assert.dom('[name="tag_key"]').isVisible();
     assert.dom('[name="tag_value"]').isVisible();
+    assert.dom('[name="name_operator"]').isNotVisible();
   });
 
   test('filter generator tag type generates correctly formatted filter', async function (assert) {
@@ -83,5 +84,57 @@ module('Integration | Component | worker-filter/index', function (hooks) {
     await fillIn('[name="tag_value"]', 'val1');
 
     assert.dom('[name="generated_value"]').hasValue('"val1" in "/tags/key1"');
+  });
+
+  test('filter generator name type shows operator and value fields', async function (assert) {
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
+    await render(
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+    );
+
+    await click('[name="show_filter_generator"]');
+    await click('[value="name"]');
+
+    assert.dom('[name="name_operator"]').isVisible();
+    assert.dom('[name="tag_value"]').isVisible();
+    assert.dom('[name="tag_key"]').isNotVisible();
+  });
+
+  test('filter generator name type generates correctly formatted filter', async function (assert) {
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
+    await render(
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+    );
+
+    await click('[name="show_filter_generator"]');
+    await click('[value="name"]');
+    await fillIn('[name="tag_value"]', 'val1');
+    await select('[name="name_operator"]', '==');
+
+    assert.dom('[name="generated_value"]').hasValue('"/name" == "val1"');
+  });
+
+  test('generated result is cleared when switching filter types', async function (assert) {
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
+    await render(
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+    );
+
+    await click('[name="show_filter_generator"]');
+    await click('[value="name"]');
+    await fillIn('[name="tag_value"]', 'val1');
+    await select('[name="name_operator"]', '==');
+
+    assert.dom('[name="generated_value"]').hasValue('"/name" == "val1"');
+
+    await click('[value="tag"]');
+
+    assert.dom('[name="generated_value"]').hasNoValue();
   });
 });
