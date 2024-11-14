@@ -56,7 +56,8 @@ export default class WorkerFilterComponent extends Component {
   }
 
   /**
-   * Clears out key, value, and operator and
+   * Clears out key, value, and operator.
+   * Sets selectedGeneratorType to a value.
    * @param {object} event
    */
   @action
