@@ -50,7 +50,12 @@
   <Hds::Separator />
 
   {{#if this.showFilterGenerator}}
-    <Hds::Form::Radio::Group @name='filter_generator' as |G|>
+    <Hds::Form::Radio::Group
+      class='filter-generator-selection'
+      @name='filter_generator'
+      {{on 'change' this.setGeneratorType}}
+      as |G|
+    >
       <G.Legend>{{t
           'worker-filter-generator.filter-generator.title'
         }}</G.Legend>
@@ -76,40 +81,81 @@
             'worker-filter-generator.filter-generator.tag.helper'
           }}</F.HelperText>
       </G.RadioField>
+      <G.RadioField
+        @value={{this.generatorNameType}}
+        checked={{eq this.selectedGeneratorType this.generatorNameType}}
+        as |F|
+      >
+        <F.Label>{{t
+            'worker-filter-generator.filter-generator.name.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'worker-filter-generator.filter-generator.name.helper'
+          }}</F.HelperText>
+      </G.RadioField>
     </Hds::Form::Radio::Group>
 
-    {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
-      <Hds::Form::Fieldset class='input-values' as |F|>
-        <F.Legend>{{t
-            'worker-filter-generator.filter-generator.input-values.title'
-          }}</F.Legend>
-        <F.HelperText>{{t
-            'worker-filter-generator.filter-generator.input-values.description'
-          }}</F.HelperText>
-        <F.Control>
+    <Hds::Form::Fieldset class='input-values' as |F|>
+      <F.Legend>{{t
+          'worker-filter-generator.filter-generator.input-values.title'
+        }}</F.Legend>
+      <F.HelperText>{{t
+          'worker-filter-generator.filter-generator.input-values.description'
+        }}</F.HelperText>
+      <F.Control>
+        {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
           <Hds::Form::TextInput::Field
-            @value={{this.tagKey}}
+            @value={{this.key}}
             name='tag_key'
             @width='320px'
-            {{on 'input' (set-from-event this 'tagKey')}}
+            {{on 'input' (set-from-event this 'key')}}
             as |F|
           >
             <F.Label>{{t 'form.key.label'}}</F.Label>
           </Hds::Form::TextInput::Field>
-        </F.Control>
-        <F.Control>
-          <Hds::Form::TextInput::Field
-            @value={{this.tagValue}}
-            name='tag_value'
-            @width='320px'
-            {{on 'input' (set-from-event this 'tagValue')}}
+        {{else}}
+          <Hds::Form::Select::Field
+            name='name_operator'
+            @value={{this.operator}}
+            {{on 'change' (set-from-event this 'operator')}}
             as |F|
           >
-            <F.Label>{{t 'form.value.label'}}</F.Label>
-          </Hds::Form::TextInput::Field>
-        </F.Control>
-      </Hds::Form::Fieldset>
-    {{/if}}
+            <F.Label>{{t 'form.operator.label'}}</F.Label>
+            <F.Options>
+              <option value='' />
+              {{#each this.operatorOptions as |operator|}}
+                <option
+                  value={{operator}}
+                  selected={{eq operator this.operator}}
+                >
+                  {{#if (eq operator '==')}}
+                    {{operator}}
+                  {{else}}
+                    {{t
+                      (concat
+                        'worker-filter-generator.filter-generator.operator.'
+                        operator
+                      )
+                    }}
+                  {{/if}}
+                </option>
+              {{/each}}
+            </F.Options>
+          </Hds::Form::Select::Field>
+        {{/if}}
+      </F.Control>
+      <F.Control>
+        <Hds::Form::TextInput::Field
+          @value={{this.value}}
+          name='tag_value'
+          @width='320px'
+          {{on 'input' (set-from-event this 'value')}}
+          as |F|
+        >
+          <F.Label>{{t 'form.value.label'}}</F.Label>
+        </Hds::Form::TextInput::Field>
+      </F.Control>
+    </Hds::Form::Fieldset>
 
     <Hds::Form::Fieldset class='formatted-results' @layout='vertical' as |F|>
       <F.Legend>{{t

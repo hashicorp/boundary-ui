@@ -1080,6 +1080,12 @@
 }
 
 // worker filter generator
+.filter-generator-selection {
+  .hds-form-group__control-field {
+    margin-bottom: 0;
+  }
+}
+
 .formatted-results {
   p {
     margin-bottom: 0.5rem;

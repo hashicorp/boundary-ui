@@ -12,19 +12,26 @@ export default class WorkerFilterComponent extends Component {
 
   generatorTagType = 'tag';
   generatorNameType = 'name';
-  @tracked showFilterGenerator;
+  operatorOptions = ['==', 'matches', 'includes'];
+  @tracked showFilterGenerator = true;
   @tracked selectedGeneratorType = this.generatorTagType;
-  @tracked tagKey = '';
-  @tracked tagValue = '';
+  @tracked key = '';
+  @tracked value = '';
+  @tracked operator = '';
 
   /**
    * @return {string}
    */
   get generatedResult() {
-    let keyValue = this.tagKey ? `"/tags/${this.tagKey}"` : '';
-    let tagValue = this.tagValue ? `"${this.tagValue}"` : '';
-
-    return keyValue || tagValue ? `${tagValue} in ${keyValue}` : '';
+    let valueResult = this.value ? `"${this.value}"` : '';
+    if (this.selectedGeneratorType === 'tag') {
+      let keyResult = this.key ? `"/tags/${this.key}"` : '';
+      return keyResult || valueResult ? `${valueResult} in ${keyResult}` : '';
+    } else {
+      return valueResult || this.operator
+        ? `"/name" ${this.operator} ${valueResult}`
+        : '';
+    }
   }
 
   // =actions
@@ -46,5 +53,17 @@ export default class WorkerFilterComponent extends Component {
   @action
   toggleFilterGenerator() {
     this.showFilterGenerator = !this.showFilterGenerator;
+  }
+
+  /**
+   * Clears out key, value, and operator and
+   * @param {object} event
+   */
+  @action
+  setGeneratorType(event) {
+    this.key = '';
+    this.value = '';
+    this.operator = '';
+    this.selectedGeneratorType = event.target.value;
   }
 }
