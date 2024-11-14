@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import { render, click, fillIn } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -54,5 +54,34 @@ module('Integration | Component | worker-filter/index', function (hooks) {
     await click('[name="show_filter_generator"]');
 
     assert.dom('[name="filter_generator"]').isVisible();
+  });
+
+  test('filter generator tag type shows key and value input boxes', async function (assert) {
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
+    await render(
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+    );
+    await click('[name="show_filter_generator"]');
+    await click('[value="tag"]');
+
+    assert.dom('[name="tag_key"]').isVisible();
+    assert.dom('[name="tag_value"]').isVisible();
+  });
+
+  test('filter generator tag type generates correctly formatted filter', async function (assert) {
+    this.submit = () => {};
+    this.cancel = () => {};
+    this.model = { ingress_worker_filter: 'ingress filter' };
+    await render(
+      hbs`<WorkerFilter @name='ingress_worker_filter' @model={{this.model}} @submit={{this.submit}} @cancel={{this.cancel}}/>`,
+    );
+    await click('[name="show_filter_generator"]');
+    await click('[value="tag"]');
+    await fillIn('[name="tag_key"]', 'key1');
+    await fillIn('[name="tag_value"]', 'val1');
+
+    assert.dom('[name="generated_value"]').hasValue('"val1" in "/tags/key1"');
   });
 });

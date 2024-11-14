@@ -10,7 +10,22 @@ import { tracked } from '@glimmer/tracking';
 export default class WorkerFilterComponent extends Component {
   // =attributes
 
+  generatorTagType = 'tag';
+  generatorNameType = 'name';
   @tracked showFilterGenerator;
+  @tracked selectedGeneratorType = this.generatorTagType;
+  @tracked tagKey = '';
+  @tracked tagValue = '';
+
+  /**
+   * @return {string}
+   */
+  get generatedResult() {
+    let keyValue = this.tagKey ? `"/tags/${this.tagKey}"` : '';
+    let tagValue = this.tagValue ? `"${this.tagValue}"` : '';
+
+    return keyValue || tagValue ? `${tagValue} in ${keyValue}` : '';
+  }
 
   // =actions
 
