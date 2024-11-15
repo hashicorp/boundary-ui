@@ -1,18 +1,13 @@
-/**
- * Copyright (c) HashiCorp, Inc.
- * SPDX-License-Identifier: BUSL-1.1
- */
-
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
-export default class WorkerFilterComponent extends Component {
+export default class WorkerFilterGeneratorIndexComponent extends Component {
   // =attributes
 
   generatorTagType = 'tag';
   generatorNameType = 'name';
-  operatorOptions = ['==', 'matches', 'includes'];
+  operatorOptions = ['==', 'matches', 'contains'];
   @tracked showFilterGenerator;
   @tracked selectedGeneratorType = this.generatorTagType;
   @tracked key = '';
