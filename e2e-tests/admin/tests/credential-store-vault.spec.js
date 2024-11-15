@@ -143,7 +143,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
-    if (keyData != retrievedKey) {
+    if (keyData !== retrievedKey) {
       throw new Error('Stored Key does not match');
     }
   } finally {
