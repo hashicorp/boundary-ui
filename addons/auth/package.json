@@ -23,7 +23,7 @@
   "dependencies": {
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",
-    "ember-simple-auth": "^4.2.2"
+    "ember-simple-auth": "^6.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
