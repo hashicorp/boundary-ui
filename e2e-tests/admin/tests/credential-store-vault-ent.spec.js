@@ -4,10 +4,7 @@
  */
 
 import { test } from '../playwright.config.js';
-import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
-import { nanoid } from 'nanoid';
-import { readFile } from 'fs/promises';
 
 import { authenticatedState } from '../global-setup.js';
 import {
