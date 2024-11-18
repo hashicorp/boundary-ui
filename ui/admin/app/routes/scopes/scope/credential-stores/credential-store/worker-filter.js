@@ -1,0 +1,33 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
+
+export default class ScopesScopeCredentialStoresCredentialStoreWorkerFilterRoute extends Route {
+  // =services
+
+  @service can;
+  @service router;
+  @service store;
+
+  /**
+   * Loads all credential libraries under the current credential store.
+   * @return {Promise{[CredentialLibraryModel]}}
+   */
+  model() {
+    const credentialStore = this.modelFor(
+      'scopes.scope.credential-stores.credential-store',
+    );
+    const { id: credential_store_id } = credentialStore;
+    if (
+      this.can.can('list model', credentialStore, {
+        collection: 'credential-libraries',
+      })
+    ) {
+      return this.store.query('credential-library', { credential_store_id });
+    }
+  }
+}

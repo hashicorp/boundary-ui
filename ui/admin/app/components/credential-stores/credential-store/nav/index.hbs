@@ -15,6 +15,13 @@
         {{t 'resources.credential-library.title_plural'}}
       </nav.link>
     {{/if}}
+    {{#if (feature-flag 'vault-worker-filter')}}
+      <nav.link
+        @route='scopes.scope.credential-stores.credential-store.worker-filter'
+      >
+        {{t 'resources.credential-store.titles.worker-filter'}}
+      </nav.link>
+    {{/if}}
   {{else}}
     {{#if (can 'navigate model' @model collection='credentials')}}
       <nav.link
