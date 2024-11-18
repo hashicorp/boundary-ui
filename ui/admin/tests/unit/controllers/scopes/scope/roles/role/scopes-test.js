@@ -33,7 +33,6 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     scopes: null,
   };
 
@@ -46,8 +45,7 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
       scopeId: 'global',
     });
 
-    urls.globalScope = `/scopes/global`;
-    urls.scopes = `${urls.globalScope}/roles/${instances.role.id}/scopes`;
+    urls.scopes = `/scopes/global/roles/${instances.role.id}/scopes`;
   });
 
   test('it exists', function (assert) {

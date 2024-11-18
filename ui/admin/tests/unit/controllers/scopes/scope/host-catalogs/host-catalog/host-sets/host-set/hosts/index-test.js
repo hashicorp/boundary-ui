@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/host-catalogs/host-catalog/host-sets/host-set/hosts/index',
       );
       assert.ok(controller);
+      assert.ok(controller.hostSets);
     });
   },
 );
