@@ -156,5 +156,5 @@ worker-filter-generator:
       helper: Format a worker name
     operator:
       matches: matches
-      includes: includes
+      contains: contains
       default: --Select an option--
