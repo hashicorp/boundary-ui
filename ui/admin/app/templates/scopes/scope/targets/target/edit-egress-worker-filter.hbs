@@ -25,7 +25,7 @@
   </page.header>
 
   <page.body class='target-workers'>
-    <WorkerFilter
+    <Form::WorkerFilter
       @name='egress_worker_filter'
       @model={{@model}}
       @submit={{fn this.targets.saveWorkerFilter @model}}
