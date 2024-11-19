@@ -827,15 +827,15 @@ credential-store:
   messages:
     welcome:
       title: Welcome to Credential Stores
-    no-filters:
-      title: No worker filters added
-      description: You haven't added any worker filters yet
+    no-filter:
+      title: No worker filter added
+      description: You haven't added a worker filter yet
   titles:
     new: New Credential Store
     worker-filter: Worker Filter
   actions:
     delete: Delete Credential Store
-    add: Add worker filters
+    add: Add worker filter
   types:
     vault: Vault
     static: Static
