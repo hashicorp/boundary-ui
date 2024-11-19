@@ -13,7 +13,7 @@ module(
 
     test('it exists', function (assert) {
       let controller = this.owner.lookup(
-        'scopes/scope/credential-stores/credential-store/worker-filter',
+        'controller:scopes/scope/credential-stores/credential-store/worker-filter',
       );
       assert.ok(controller);
       assert.ok(controller.credentialStores);
