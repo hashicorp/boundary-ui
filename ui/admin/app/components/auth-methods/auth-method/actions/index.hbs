@@ -5,6 +5,7 @@
 
 {{#if (or @model.isOIDC @model.isLDAP)}}
   <Hds::Dropdown class='change-state' data-test-change-state as |dd|>
+    <dd.Title @text={{t 'actions.change-state'}} />
     <dd.ToggleButton
       @text={{t (concat 'states.' @model.state)}}
       @color='secondary'
@@ -19,7 +20,7 @@
       <dd.Radio
         checked={{eq @model.state state}}
         @value={{state}}
-        {{on 'click' (fn @changeState @model state)}}
+        {{on 'change' (fn @changeState @model state)}}
       >
         {{t (concat 'states.' state)}}
       </dd.Radio>
