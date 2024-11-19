@@ -16,11 +16,13 @@ export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_FIRST_ROW_RESOURCE_LINK = 'tbody tr:first-child a';
 
-export const RESOURCE_NOT_FOUND_SUBTITLE = '.rose-message-subtitle';
-export const RESOURCE_NOT_FOUND_VALUE = 'Error 404';
+export const RESOURCE_NOT_FOUND_SUBTITLE =
+  '[data-test-error-application-state] .hds-application-state__error-code';
+export const RESOURCE_NOT_FOUND_VALUE = 'ERROR 404';
 
-export const PAGE_MESSAGE_DESCRIPTION = '.rose-message-description';
-export const PAGE_MESSAGE_LINK = '.rose-message-body .hds-link-standalone';
+export const PAGE_MESSAGE_DESCRIPTION = '.hds-application-state__body-text';
+export const PAGE_MESSAGE_LINK =
+  '.hds-application-state__footer .hds-link-standalone';
 
 export const HREF = (url) => `[href="${url}"]`;
 

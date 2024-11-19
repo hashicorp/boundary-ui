@@ -128,14 +128,14 @@
 
     {{#unless @model.hosts}}
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.host-set.host.messages.none.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.host-set.host.messages.none.description'}}
-          </message.description>
-        </Rose::Message>
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t 'resources.host-set.host.messages.none.title'}}
+          />
+          <A.Body
+            @text={{t 'resources.host-set.host.messages.none.description'}}
+          />
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
     {{/unless}}
   </page.body>

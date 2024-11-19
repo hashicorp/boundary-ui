@@ -7,6 +7,9 @@
 
 <Rose::Layout::Centered>
   {{#each @model.errors as |error|}}
-    <Error::Message @status={{error.status}} />
+    <Error::Message
+      @status={{error.status}}
+      @docLink={{doc-url 'support-page'}}
+    />
   {{/each}}
 </Rose::Layout::Centered>

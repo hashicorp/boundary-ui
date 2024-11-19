@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-libraries | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -100,10 +101,12 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   test('visiting an unknown credential library displays 404 message', async function (assert) {
     await visit(urls.unknownCredentialLibrary);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
-  test('users can navigate to credential library and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to credential library and incorrect url auto-corrects', async function (assert) {
     const credentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
     });

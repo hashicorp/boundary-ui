@@ -163,7 +163,8 @@ const createWindow = (partition, closeWindowCB) => {
     if (
       isLocalhost(url) ||
       url.startsWith('https://developer.hashicorp.com/') ||
-      url.startsWith('https://releases.hashicorp.com/boundary-desktop/')
+      url.startsWith('https://releases.hashicorp.com/boundary-desktop/') ||
+      url.startsWith('https://support.hashicorp.com/hc/en-us')
     ) {
       shell.openExternal(url);
     }
