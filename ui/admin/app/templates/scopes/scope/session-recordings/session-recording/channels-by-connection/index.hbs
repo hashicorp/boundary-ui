@@ -24,17 +24,17 @@
         />
 
         <dd.Interactive
-          @text={{t 'resources.policy.actions.update'}}
           {{on 'click' (fn this.reapplyStoragePolicy @model.sessionRecording)}}
-        />
+        >{{t 'resources.policy.actions.update'}}</dd.Interactive>
         {{#if (can 'delete session-recording' @model.sessionRecording)}}
           <dd.Separator />
           <dd.Interactive
             data-test-manage-dropdown-delete
             @color='critical'
-            @text={{t 'resources.policy.actions.delete_recording'}}
             {{on 'click' (fn this.delete @model.sessionRecording)}}
-          />
+          >
+            {{t 'resources.policy.actions.delete_recording'}}
+          </dd.Interactive>
         {{/if}}
       </Hds::Dropdown>
     {{/if}}

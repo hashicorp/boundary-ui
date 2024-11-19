@@ -7,21 +7,21 @@
   {{#if (can 'create model' @model collection='credential-libraries')}}
     <dd.Interactive
       @route='scopes.scope.credential-stores.credential-store.credential-libraries.new'
-      @text={{t 'resources.credential-library.actions.create'}}
-    />
+    >
+      {{t 'resources.credential-library.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='credentials')}}
     <dd.Interactive
       @route='scopes.scope.credential-stores.credential-store.credentials.new'
-      @text={{t 'resources.credential.actions.create'}}
-    />
+    >
+      {{t 'resources.credential.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
-    <dd.Interactive
-      @text={{t 'resources.credential-store.actions.delete'}}
-      @color='critical'
-      {{on 'click' @delete}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' @delete}}>
+      {{t 'resources.credential-store.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>
