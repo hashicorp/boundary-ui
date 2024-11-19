@@ -77,12 +77,11 @@
                   />
                   <dd.Interactive
                     @color='critical'
-                    @text={{t 'actions.remove'}}
                     {{on
                       'click'
                       (fn this.targets.removeHostSource @model B.data.model)
                     }}
-                  />
+                  >{{t 'actions.remove'}}</dd.Interactive>
                 </Hds::Dropdown>
               {{/if}}
             </B.Td>

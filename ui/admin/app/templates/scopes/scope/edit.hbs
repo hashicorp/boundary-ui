@@ -60,15 +60,14 @@
         <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
         <dd.Interactive
           @color='critical'
-          @text={{t
+          {{on 'click' (fn this.scopes.delete @model)}}
+        >{{t
             (if
               @model.isOrg
               'resources.org.actions.delete'
               'resources.project.actions.delete'
             )
-          }}
-          {{on 'click' (fn this.scopes.delete @model)}}
-        />
+          }}</dd.Interactive>
       </Hds::Dropdown>
     </page.actions>
   {{/if}}
@@ -163,17 +162,15 @@
                       <dd.Interactive
                         @route='scopes.scope.policies.policy'
                         @model={{this.storage_policy.id}}
-                        @text={{t 'actions.view'}}
-                      />
+                      >{{t 'actions.view'}}</dd.Interactive>
                       <dd.Separator />
                       <dd.Interactive
-                        @text={{t 'resources.policy.actions.detach'}}
                         @color='critical'
                         {{on
                           'click'
                           (fn this.scopes.detachStoragePolicy @model)
                         }}
-                      />
+                      >{{t 'resources.policy.actions.detach'}}</dd.Interactive>
                     </Hds::Dropdown>
                   </P.Item>
                 {{/if}}

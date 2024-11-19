@@ -9,22 +9,22 @@
     <dd.Interactive
       @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
       @model={{@model}}
-      @text={{t 'resources.host.actions.create'}}
-    />
+    >
+      {{t 'resources.host.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='host-sets')}}
     <dd.Interactive
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
       @model={{@model}}
-      @text={{t 'resources.host-set.actions.create'}}
-    />
+    >
+      {{t 'resources.host-set.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
-    <dd.Interactive
-      @text={{t 'resources.host-catalog.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+      {{t 'resources.host-catalog.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

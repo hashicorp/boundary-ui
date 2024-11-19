@@ -22,13 +22,14 @@
     "admin:dev:firefox": "yarn run admin --project=firefox --headed",
     "admin:dev:safari": "yarn run admin --project=webkit --headed",
     "desktop": "yarn workspace desktop build && yarn run desktop:dev",
-    "desktop:dev": "npx playwright test --config desktop/playwright.config.js --reporter=html"
+    "desktop:dev": "yarn playwright test --config desktop/playwright.config.js --reporter=html"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.21.3",
     "@playwright/test": "^1.43.0",
     "concurrently": "^9.1.0",
+    "dotenv": "^16.4.5",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-n": "^16.3.1",

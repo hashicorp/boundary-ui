@@ -8,20 +8,20 @@
 
   {{#if (can 'addHosts hostSet' @model)}}
     <dd.Interactive
-      @text={{t 'resources.host-set.actions.create-and-add-host'}}
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'
-    />
+    >
+      {{t 'resources.host-set.actions.create-and-add-host'}}
+    </dd.Interactive>
     <dd.Interactive
-      @text={{t 'resources.host-set.actions.add-hosts'}}
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
-    />
+    >
+      {{t 'resources.host-set.actions.add-hosts'}}
+    </dd.Interactive>
     <dd.Separator />
   {{/if}}
   {{#if (can 'delete model' @model)}}
-    <dd.Interactive
-      @text={{t 'resources.host-set.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+      {{t 'resources.host-set.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

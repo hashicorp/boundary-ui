@@ -37,17 +37,19 @@
           <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
           {{#if (and perms.canUpdate @model.destination_id)}}
             <dd.Interactive
-              @text={{t 'actions.clear'}}
               @color='action'
               {{on 'click' (fn this.aliases.clearAlias @model)}}
-            />
+            >
+              {{t 'actions.clear'}}
+            </dd.Interactive>
           {{/if}}
           {{#if perms.canDelete}}
             <dd.Interactive
               @color='critical'
-              @text={{t 'actions.delete'}}
               {{on 'click' (fn this.aliases.deleteAlias @model)}}
-            />
+            >
+              {{t 'actions.delete'}}
+            </dd.Interactive>
           {{/if}}
         </Hds::Dropdown>
 
