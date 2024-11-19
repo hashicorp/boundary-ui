@@ -43,39 +43,37 @@
 <Hds::Dropdown data-test-manage-auth-method as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if @model.isPrimary}}
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.remove-as-primary'}}
-      {{on 'click' (fn @removeAsPrimary @model)}}
-    />
+    <dd.Interactive {{on 'click' (fn @removeAsPrimary @model)}}>
+      {{t 'resources.auth-method.actions.remove-as-primary'}}
+    </dd.Interactive>
   {{else}}
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.make-primary'}}
-      {{on 'click' (fn @makePrimary @model)}}
-    />
+    <dd.Interactive {{on 'click' (fn @makePrimary @model)}}>
+      {{t 'resources.auth-method.actions.make-primary'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='accounts')}}
     <dd.Interactive
-      @text={{t 'resources.account.actions.create'}}
       @route='scopes.scope.auth-methods.auth-method.accounts.new'
       @model={{@model}}
-    />
+    >
+      {{t 'resources.account.actions.create'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'create model' @model collection='managed-groups')}}
     {{#if (or @model.isOIDC @model.isLDAP)}}
       <dd.Interactive
-        @text={{t 'resources.managed-group.actions.create'}}
         @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
         @model={{@model}}
-      />
+      >
+        {{t 'resources.managed-group.actions.create'}}
+      </dd.Interactive>
     {{/if}}
   {{/if}}
 
   {{#if (can 'delete auth-method' @model)}}
     <dd.Separator />
-    <dd.Interactive
-      @text={{t 'resources.auth-method.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+      {{t 'resources.auth-method.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

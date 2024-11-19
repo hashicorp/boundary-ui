@@ -7,25 +7,28 @@
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'addPrincipals role' @model)}}
     <dd.Interactive
-      @text={{t 'resources.role.principal.actions.add-principals'}}
       @route='scopes.scope.roles.role.add-principals'
       data-test-manage-dropdown-principals
-    />
+    >
+      {{t 'resources.role.principal.actions.add-principals'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'setGrantScopes role' @model)}}
     <dd.Interactive
-      @text={{t 'resources.role.scope.actions.manage-scopes'}}
       @route='scopes.scope.roles.role.manage-scopes'
       data-test-manage-dropdown-scopes
-    />
+    >
+      {{t 'resources.role.scope.actions.manage-scopes'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
     <dd.Interactive
-      @text={{t 'resources.role.actions.delete'}}
       @color='critical'
       @disabled={{@model.canSave}}
       {{on 'click' (fn @delete @model)}}
-    />
+    >
+      {{t 'resources.role.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>
