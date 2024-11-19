@@ -6,18 +6,18 @@
 <Hds::Dropdown data-test-manage-group-dropdown as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'addMembers group' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.groups.group.add-members'
-      @text={{t 'resources.group.actions.add-members'}}
-    />
+    <dd.Interactive @route='scopes.scope.groups.group.add-members'>
+      {{t 'resources.group.actions.add-members'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
     <dd.Interactive
       @color='critical'
       @disabled={{@model.canSave}}
-      @text={{t 'resources.group.actions.delete'}}
       {{on 'click' @delete}}
-    />
+    >
+      {{t 'resources.group.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

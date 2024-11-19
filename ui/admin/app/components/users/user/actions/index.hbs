@@ -6,10 +6,9 @@
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
   {{#if (can 'addAccounts user' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.users.user.add-accounts'
-      @text={{t 'resources.user.actions.add-accounts'}}
-    />
+    <dd.Interactive @route='scopes.scope.users.user.add-accounts'>
+      {{t 'resources.user.actions.add-accounts'}}
+    </dd.Interactive>
   {{/if}}
 
   {{#if (can 'delete model' @model)}}
@@ -17,8 +16,9 @@
     <dd.Interactive
       @color='critical'
       @disabled={{@model.canSave}}
-      @text={{t 'resources.user.actions.delete'}}
       {{on 'click' (fn @delete @model)}}
-    />
+    >
+      {{t 'resources.user.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 </Hds::Dropdown>

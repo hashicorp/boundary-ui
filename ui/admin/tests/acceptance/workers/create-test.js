@@ -46,7 +46,7 @@ module('Acceptance | workers | create', function (hooks) {
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
-    const labels = findAll('label.hds-form-label');
+    const labels = findAll('.worker-create-section label.hds-form-label');
     assert.dom(labels[0]).hasText('Boundary Cluster ID (Optional)');
     assert.dom(labels[2]).doesNotIncludeText('Initial Upstreams');
   });
@@ -54,7 +54,7 @@ module('Acceptance | workers | create', function (hooks) {
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
     const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
-    const labels = findAll('label.hds-form-label');
+    const labels = findAll('.worker-create-section label.hds-form-label');
     assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
     assert.dom(labels[2]).hasText('Initial Upstreams (Optional)');
