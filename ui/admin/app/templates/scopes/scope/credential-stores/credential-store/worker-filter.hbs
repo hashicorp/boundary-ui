@@ -1,4 +1,46 @@
-{{! page-title will need updating to Worker Filter }}
 {{page-title (t 'resources.credential-store.titles.worker-filter')}}
 
-{{outlet}}
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <CredentialStores::CredentialStore::Header @model={{@model}} />
+  </page.header>
+
+  <page.navigation>
+    <CredentialStores::CredentialStore::Nav @model={{@model}} />
+  </page.navigation>
+
+  <page.actions>
+    <CredentialStores::CredentialStore::Actions
+      @model={{@model}}
+      @delete={{fn this.credentialStores.delete @model}}
+    />
+  </page.actions>
+
+  <page.body>
+    <Rose::Layout::Centered>
+      <Hds::ApplicationState as |A|>
+        <A.Header
+          @title={{t 'resources.credential-store.messages.no-filters.title'}}
+        />
+        <A.Body
+          @text={{t
+            'resources.credential-store.messages.no-filters.description'
+          }}
+        />
+        <A.Footer as |F|>
+          <F.LinkStandalone
+            @icon='plus'
+            @iconPosition='leading'
+            @color='primary'
+            @text={{t 'resources.credential-store.actions.add'}}
+            @route='scopes.scope.credential-stores.credential-store.index'
+          />
+        </A.Footer>
+      </Hds::ApplicationState>
+    </Rose::Layout::Centered>
+  </page.body>
+</Rose::Layout::Page>
