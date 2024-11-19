@@ -22,7 +22,8 @@ module('Acceptance | policies | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const RETAIN_FOR_TEXT_INPUT = '[data-input="retain_for"]';
-  const ALERT_TEXT_SELECTOR = '[role="alert"] div';
+  const ALERT_TEXT_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const DELETE_AFTER_TEXT_INPUT = '[data-input="delete_after"]';

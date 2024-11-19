@@ -27,7 +27,8 @@ module('Acceptance | targets | create-alias', function (hooks) {
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const ALIAS_FIELD_SELECTOR = '[name="value"]';
   const DEST_FIELD_SELECTOR = '[name="destination_id"]';
-  const ALERT_TEXT_SELECTOR = '[role="alert"] div';
+  const ALERT_TEXT_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const ALIAS_VALUE_TEXT = 'www.target1.com';

@@ -131,10 +131,9 @@ module('Acceptance | credential-stores | create', function (hooks) {
     });
     await visit(urls.newCredentialStore);
     await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.ok(
       find('[data-test-error-message-name]').textContent.trim(),
       'Name is required.',

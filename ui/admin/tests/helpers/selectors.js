@@ -28,6 +28,8 @@ export const HREF = (url) => `[href="${url}"]`;
 
 export const SIDEBAR_NAV_LINK = (url) => `[title="General"] a[href="${url}"]`;
 
-export const ALERT_TOAST = '[role="alert"]';
-export const ALERT_TOAST_BODY = '.rose-notification-body';
-export const ALERT_TOAST_DISMISS = '.rose-notification-dismiss';
+export const ALERT_TOAST = '[data-test-toast-notification]';
+export const ALERT_TOAST_BODY =
+  '[data-test-toast-notification] .hds-alert__description';
+export const ALERT_TOAST_DISMISS =
+  '[data-test-toast-notification] .hds-dismiss-button';

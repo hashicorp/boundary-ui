@@ -167,7 +167,9 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     await click('[type="submit"]');
 
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 

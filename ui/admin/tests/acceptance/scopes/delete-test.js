@@ -136,6 +136,8 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
 
-    assert.dom('.rose-notification-body').hasText('Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

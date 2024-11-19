@@ -156,7 +156,9 @@ module('Acceptance | clusterUrl', function (hooks) {
     await visit(urls.clusterUrl);
     await fillIn('[name="host"]', currentOrigin);
     await click('[type="submit"]');
-    assert.ok(find('.rose-notification.is-error'));
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
   });
 
   test('clusterUrl set automatically when autoOrigin is true', async function (assert) {

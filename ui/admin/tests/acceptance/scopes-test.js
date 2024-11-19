@@ -217,7 +217,9 @@ module('Acceptance | scopes', function (hooks) {
     await click(`[href="${urls.newOrgScope}"]`);
     await click(SAVE_BUTTON_SELECTOR);
 
-    assert.dom('.rose-notification-body').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 });

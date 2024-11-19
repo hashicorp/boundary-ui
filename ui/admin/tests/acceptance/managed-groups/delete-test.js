@@ -25,7 +25,8 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     '[data-test-managed-group-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-managed-group-dropdown] ul li button';
-  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
 
   const instances = {
     scopes: {

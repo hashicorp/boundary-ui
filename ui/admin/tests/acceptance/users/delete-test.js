@@ -88,7 +88,9 @@ module('Acceptance | users | delete', function (hooks) {
     await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
-    assert.dom('.rose-notification-body').hasText('Deleted successfully.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Deleted successfully.');
     assert.strictEqual(this.server.db.users.length, usersCount - 1);
     assert.strictEqual(currentURL(), urls.users);
   });
@@ -125,6 +127,8 @@ module('Acceptance | users | delete', function (hooks) {
     await click(`[href="${urls.user}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.dom('.rose-notification-body').hasText('Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

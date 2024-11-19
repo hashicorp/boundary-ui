@@ -130,7 +130,9 @@ module('Acceptance | roles | create', function (hooks) {
     await fillIn('[name="name"]', 'new target');
     await click('form [type="submit"]');
     await a11yAudit();
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.ok(find('.hds-form-error__message'));
   });
 

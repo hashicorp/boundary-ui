@@ -9,7 +9,6 @@ import {
   currentURL,
   fillIn,
   click,
-  find,
   findAll,
   getRootElement,
 } from '@ember/test-helpers';
@@ -268,7 +267,9 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
     await fillIn('[name="identification"]', 'error');
     await click('[type="submit"]');
-    assert.ok(find('.rose-notification.is-error'));
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
     assert.notOk(currentSession().isAuthenticated);
   });
 
