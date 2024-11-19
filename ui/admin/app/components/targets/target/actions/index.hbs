@@ -6,35 +6,34 @@
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
   {{#if (can 'addHostSources target' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.targets.target.add-host-sources'
-      @text={{t 'resources.target.actions.add-host-sources'}}
-    />
+    <dd.Interactive @route='scopes.scope.targets.target.add-host-sources'>
+      {{t 'resources.target.actions.add-host-sources'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'addBrokeredCredentialSources target' @model)}}
     <dd.Interactive
       @route='scopes.scope.targets.target.add-brokered-credential-sources'
-      @text={{t 'resources.target.actions.add-brokered-credential-sources'}}
       data-test-add-brokered-cred-sources-action
-    />
+    >
+      {{t 'resources.target.actions.add-brokered-credential-sources'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
     <dd.Interactive
       @route='scopes.scope.targets.target.add-injected-application-credential-sources'
-      @text={{t
+      data-test-add-injected-cred-sources-action
+    >
+      {{t
         'resources.target.actions.add-injected-application-credential-sources'
       }}
-      data-test-add-injected-cred-sources-action
-    />
+    </dd.Interactive>
   {{/if}}
 
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
-    <dd.Interactive
-      @text={{t 'resources.target.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+      {{t 'resources.target.actions.delete'}}
+    </dd.Interactive>
   {{/if}}
 
 </Hds::Dropdown>
