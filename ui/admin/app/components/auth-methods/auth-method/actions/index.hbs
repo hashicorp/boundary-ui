@@ -4,40 +4,29 @@
 }}
 
 {{#if (or @model.isOIDC @model.isLDAP)}}
-  <Rose::Dropdown
-    @text={{t (concat 'states.' @model.state)}}
-    @icon={{if
-      @model.isInactive
-      'flight-icons/svg/x-circle-16'
-      (if
-        @model.isPrivate
-        'flight-icons/svg/lock-16'
-        'flight-icons/svg/check-circle-16'
-      )
-    }}
-    @dropdownRight={{true}}
-    as |dropdown|
-  >
-    <dropdown.section @title={{t 'actions.change-state'}}>
-      <Rose::Form as |form|>
-        <form.radioGroup
-          @name='theme'
-          @selectedValue={{@model.state}}
-          @changed={{fn @changeState @model}}
-          as |radioGroup|
-        >
-          {{#each @model.options.state as |state|}}
-            <dropdown.item>
-              <radioGroup.radio
-                @label={{t (concat 'states.' state)}}
-                @value={{state}}
-              />
-            </dropdown.item>
-          {{/each}}
-        </form.radioGroup>
-      </Rose::Form>
-    </dropdown.section>
-  </Rose::Dropdown>
+  <Hds::Dropdown class='change-state' data-test-change-state as |dd|>
+    <dd.Title @text={{t 'actions.change-state'}} />
+    <dd.ToggleButton
+      @text={{t (concat 'states.' @model.state)}}
+      @color='secondary'
+      @icon={{if
+        @model.isInactive
+        'x-circle'
+        (if @model.isPrivate 'lock' 'check-circle')
+      }}
+    />
+
+    {{#each @model.options.state as |state|}}
+      <dd.Radio
+        checked={{eq @model.state state}}
+        @value={{state}}
+        {{on 'change' (fn @changeState @model state)}}
+      >
+        {{t (concat 'states.' state)}}
+      </dd.Radio>
+    {{/each}}
+  </Hds::Dropdown>
+
 {{/if}}
 
 <Hds::Dropdown data-test-manage-auth-method as |dd|>
