@@ -109,18 +109,20 @@
                       <dd.Interactive
                         @route='scopes.scope.storage-buckets.storage-bucket'
                         @model={{B.data.id}}
-                        @text={{t 'actions.edit'}}
-                      />
+                      >
+                        {{t 'actions.edit'}}
+                      </dd.Interactive>
                     {{/if}}
                     {{#if (and perms.canRead perms.canDelete)}}
                       <dd.Separator />
                     {{/if}}
                     {{#if perms.canDelete}}
                       <dd.Interactive
-                        @text={{t 'resources.storage-bucket.actions.delete'}}
                         @color='critical'
                         {{on 'click' (fn this.delete B.data)}}
-                      />
+                      >
+                        {{t 'resources.storage-bucket.actions.delete'}}
+                      </dd.Interactive>
                     {{/if}}
                   </Hds::Dropdown>
                 {{/if}}

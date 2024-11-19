@@ -40,5 +40,4 @@ async function globalSetup() {
 
 export default globalSetup;
 
-export const authenticatedState =
-  './admin/artifacts/authenticated-state.json';
+export const authenticatedState = './admin/artifacts/authenticated-state.json';

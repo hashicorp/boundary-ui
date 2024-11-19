@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 
 import { LoginPage } from '../pages/login.js';
@@ -42,16 +42,12 @@ test.describe('Failure Cases', async () => {
     page,
     adminLoginName,
   }) => {
-    await page
-      .getByLabel('Login Name')
-      .fill(adminLoginName);
+    await page.getByLabel('Login Name').fill(adminLoginName);
     await page.getByLabel('Password', { exact: true }).fill('badpassword');
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-    await expect(
-      page.getByText(adminLoginName),
-    ).toBeHidden();
+    await expect(page.getByText(adminLoginName)).toBeHidden();
   });
 
   test('Log in with only username @ce @ent @aws @docker', async ({
@@ -62,9 +58,7 @@ test.describe('Failure Cases', async () => {
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-    await expect(
-      page.getByText(adminLoginName),
-    ).toBeHidden();
+    await expect(page.getByText(adminLoginName)).toBeHidden();
   });
 
   test('Log in with only password @ce @ent @aws @docker', async ({
@@ -72,14 +66,10 @@ test.describe('Failure Cases', async () => {
     adminLoginName,
     adminPassword,
   }) => {
-    await page
-      .getByLabel('Password', { exact: true })
-      .fill(adminPassword);
+    await page.getByLabel('Password', { exact: true }).fill(adminPassword);
     await page.getByRole('button', { name: 'Sign In' }).click();
     await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-    await expect(
-      page.getByText(adminLoginName),
-    ).toBeHidden();
+    await expect(page.getByText(adminLoginName)).toBeHidden();
   });
 });

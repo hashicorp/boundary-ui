@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
@@ -53,11 +53,21 @@ test.describe('Aliases (Enterprise)', async () => {
       await projectsPage.createProject();
 
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+      const targetName = await targetsPage.createSshTargetWithAddressEnt(
+        targetAddress,
+        targetPort,
+      );
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      await targetsPage.addInjectedCredentialsToTarget(
+        targetName,
+        credentialName,
+      );
 
       // Create alias for target
       await page
@@ -90,9 +100,9 @@ test.describe('Aliases (Enterprise)', async () => {
       // Note: On the Target details page, there is a section with the header
       // "Aliases". The extra check here is to ensure that we are on the Alias
       // details page and not the Target details page.
-      await expect(
-        page.getByRole('heading', { name: 'Alias' }),
-      ).not.toHaveText('Aliases');
+      await expect(page.getByRole('heading', { name: 'Alias' })).not.toHaveText(
+        'Aliases',
+      );
       await page.getByRole('button', { name: 'Manage' }).click();
       await page.getByText('Clear', { exact: true }).click();
       await page.getByText('OK', { exact: true }).click();
@@ -147,11 +157,22 @@ test.describe('Aliases (Enterprise)', async () => {
       await projectsPage.createProject();
       alias = 'example.alias.' + nanoid();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTargetWithAddressAndAlias(targetAddress, targetPort, alias);
+      const targetName = await targetsPage.createTargetWithAddressAndAlias(
+        targetAddress,
+        targetPort,
+        alias,
+      );
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      await targetsPage.addInjectedCredentialsToTarget(
+        targetName,
+        credentialName,
+      );
 
       // Connect to target using alias
       await authorizeSessionByAliasCli(alias);
@@ -196,11 +217,21 @@ test.describe('Aliases (Enterprise)', async () => {
       const projectsPage = new ProjectsPage(page);
       const projectName = await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createSshTargetWithAddressEnt(targetAddress, targetPort);
+      const targetName = await targetsPage.createSshTargetWithAddressEnt(
+        targetAddress,
+        targetPort,
+      );
       const credentialStoresPage = new CredentialStoresPage(page);
       await credentialStoresPage.createStaticCredentialStore();
-      const credentialName = await credentialStoresPage.createStaticCredentialKeyPair(sshUser, sshKeyPath);
-      await targetsPage.addInjectedCredentialsToTarget(targetName, credentialName);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      await targetsPage.addInjectedCredentialsToTarget(
+        targetName,
+        credentialName,
+      );
 
       // Create new alias from scope page
       await authenticateBoundaryCli(

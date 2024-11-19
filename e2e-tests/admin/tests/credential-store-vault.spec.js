@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
@@ -65,8 +65,8 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
       `vault kv put -mount ${secretsPath} ${secretName} ` +
-      ` username=${sshUser}` +
-      ` private_key=@${sshKeyPath}`,
+        ` username=${sshUser}` +
+        ` private_key=@${sshKeyPath}`,
     );
     execSync(
       `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
@@ -74,13 +74,13 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
-        ` -no-default-policy=true` +
-        ` -policy=${boundaryPolicyName}` +
-        ` -policy=${secretPolicyName}` +
-        ` -orphan=true` +
-        ` -period=20m` +
-        ` -renewable=true` +
-        ` -format=json`,
+          ` -no-default-policy=true` +
+          ` -policy=${boundaryPolicyName}` +
+          ` -policy=${secretPolicyName}` +
+          ` -orphan=true` +
+          ` -period=20m` +
+          ` -renewable=true` +
+          ` -format=json`,
       ),
     );
     const clientToken = vaultToken.auth.client_token;
@@ -90,9 +90,15 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const projectsPage = new ProjectsPage(page);
     const projectName = await projectsPage.createProject();
     const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+    const targetName = await targetsPage.createTargetWithAddress(
+      targetAddress,
+      targetPort,
+    );
     const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(vaultAddr, clientToken);
+    await credentialStoresPage.createVaultCredentialStore(
+      vaultAddr,
+      clientToken,
+    );
 
     const credentialLibraryName = 'Credential Library ' + nanoid();
     await page.getByRole('link', { name: 'Credential Libraries' }).click();
@@ -137,7 +143,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
-    if (keyData != retrievedKey) {
+    if (keyData !== retrievedKey) {
       throw new Error('Stored Key does not match');
     }
   } finally {

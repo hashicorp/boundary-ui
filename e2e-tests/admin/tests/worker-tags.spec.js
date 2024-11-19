@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js'
+import { test } from '../playwright.config.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
@@ -21,9 +21,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('link', { name: 'Workers' })
     .click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByText('Workers'),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Workers'),
   ).toBeVisible();
 
   // View tags from worker list page
@@ -39,9 +37,9 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Worker') {
+    if (header === 'Worker') {
       workerListWorkerIndex = i;
-    } else if (header == 'Tags') {
+    } else if (header === 'Tags') {
       workerListTagIndex = i;
     }
   }
@@ -60,7 +58,6 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('table')
     .getByRole('columnheader')
     .count();
-  let dialogTagIndex;
   let dialogTypeIndex;
   for (let i = 0; i < dialogHeadersCount; i++) {
     const header = await page
@@ -69,9 +66,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Tag') {
-      dialogTagIndex = i;
-    } else if (header == 'Type') {
+    if (header === 'Type') {
       dialogTypeIndex = i;
     }
   }
@@ -82,9 +77,12 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('row')
       .nth(1)
       .getByRole('cell')
-      .nth(dialogTypeIndex)
-  ).toHaveText('config')
-  await page.getByRole('dialog').getByRole('button', { name: 'Dismiss' }).click();
+      .nth(dialogTypeIndex),
+  ).toHaveText('config');
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Dismiss' })
+    .click();
 
   // Go to worker details and create a new tag
   await page
@@ -106,9 +104,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('link', { name: 'Workers' })
     .click();
   await expect(
-    page
-      .getByRole('navigation', { name: 'breadcrumbs' })
-      .getByText('Workers'),
+    page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Workers'),
   ).toBeVisible();
   await page
     .getByRole('table')
@@ -122,9 +118,12 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     page
       .getByRole('dialog')
       .getByRole('table')
-      .getByRole('cell', { name: tagKey + " = " + tagValue })
+      .getByRole('cell', { name: tagKey + ' = ' + tagValue }),
   ).toBeVisible();
-  await page.getByRole('dialog').getByRole('button', { name: 'Dismiss' }).click();
+  await page
+    .getByRole('dialog')
+    .getByRole('button', { name: 'Dismiss' })
+    .click();
 
   // Go to worker details page
   await page
@@ -140,8 +139,6 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
     .getByRole('table')
     .getByRole('columnheader')
     .count();
-  let workerDetailsKeyIndex;
-  let workerDetailsValueIndex;
   let workerDetailsTypeIndex;
   for (let i = 0; i < workerDetailsHeadersCount; i++) {
     const header = await page
@@ -149,11 +146,7 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('columnheader')
       .nth(i)
       .innerText();
-    if (header == 'Key') {
-      workerDetailsKeyIndex = i;
-    } else if (header == 'Value') {
-      workerDetailsValueIndex = i;
-    } else if (header == 'Type') {
+    if (header === 'Type') {
       workerDetailsTypeIndex = i;
     }
   }
@@ -165,14 +158,14 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('row')
       .nth(1)
       .getByRole('cell')
-      .nth(workerDetailsTypeIndex)
+      .nth(workerDetailsTypeIndex),
   ).toHaveText('config');
   await expect(
     page
       .getByRole('table')
       .getByRole('cell', { name: tagKey })
       .locator('..')
-      .getByRole('cell', { name: tagValue })
+      .getByRole('cell', { name: tagValue }),
   ).toBeVisible();
 
   // Edit the tag
@@ -184,14 +177,12 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
       .getByRole('table')
       .getByRole('cell', { name: newTagKey })
       .locator('..')
-      .getByRole('cell', { name: newTagValue })
+      .getByRole('cell', { name: newTagValue }),
   ).toBeVisible();
 
   // Delete the tag
   await workersPage.removeTag(newTagKey);
   await expect(
-    page
-      .getByRole('table')
-      .getByRole('cell', { name: newTagKey })
+    page.getByRole('table').getByRole('cell', { name: newTagKey }),
   ).not.toBeVisible();
 });
