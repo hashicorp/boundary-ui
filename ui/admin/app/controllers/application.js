@@ -33,6 +33,7 @@ export default class ApplicationController extends Controller {
 
   /**
    * Returns available themes
+   * @type {array}
    */
   get themes() {
     return THEMES;
