@@ -234,7 +234,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('.rose-notification-body')
+        .dom('[data-test-toast-notification] .hds-alert__description')
         .hasText('Error in provided request.');
       assert
         .dom('[data-test-error-message-password]')
@@ -269,7 +269,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('.rose-notification-body')
+        .dom('[data-test-toast-notification] .hds-alert__description')
         .hasText('Error in provided request.');
       assert
         .dom('[data-test-error-message-private-key]')
@@ -304,7 +304,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('.rose-notification-body')
+        .dom('[data-test-toast-notification] .hds-alert__description')
         .hasText('Error in provided request.');
     });
 

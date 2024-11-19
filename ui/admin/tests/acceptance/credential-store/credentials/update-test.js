@@ -232,10 +232,9 @@ module(
       await click('form [type="button"]', 'Activate edit mode');
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
-      assert.ok(
-        find('[role="alert"]').textContent.trim(),
-        'Error in provided request.',
-      );
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',
@@ -267,10 +266,9 @@ module(
       await click('form [type="button"]', 'Activate edit mode');
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
-      assert.ok(
-        find('[role="alert"]').textContent.trim(),
-        'Error in provided request.',
-      );
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',
@@ -302,10 +300,9 @@ module(
       await click('form [type="button"]', 'Activate edit mode');
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
-      assert.ok(
-        find('[role="alert"]').textContent.trim(),
-        'Error in provided request.',
-      );
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),
         'Name is required.',

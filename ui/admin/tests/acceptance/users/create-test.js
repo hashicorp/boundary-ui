@@ -139,7 +139,9 @@ module('Acceptance | users | create', function (hooks) {
     await click('[type="submit"]');
 
     assert.strictEqual(getUsersCount(), usersCount);
-    assert.dom('.rose-notification-body').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 

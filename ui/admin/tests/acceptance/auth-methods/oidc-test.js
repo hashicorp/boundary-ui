@@ -151,10 +151,8 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
       authMethod.attributes.state,
       'Auth method state is not be updated.',
     );
-    assert.ok(
-      find('.rose-notification-body').textContent.trim(),
-      'Sorry!',
-      'Displays error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Sorry!');
   });
 });

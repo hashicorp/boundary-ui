@@ -127,7 +127,9 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
 
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 

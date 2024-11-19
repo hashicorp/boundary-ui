@@ -23,7 +23,8 @@ module(
 
     const DELETE_DROPDOWN_SELECTOR = '[data-test-manage-dropdown-delete]';
     const DROPDOWN_SELECTOR = '[data-test-manage-dropdown]';
-    const ERROR_MSG_SELECTOR = '.rose-notification-body';
+    const ERROR_MSG_SELECTOR =
+      '[data-test-toast-notification] .hds-alert__description';
 
     // Instances
     const instances = {
@@ -141,9 +142,7 @@ module(
       // if there was an error player will not render
       assert.dom('.session-recording-player').doesNotExist();
       assert.dom('.hds-application-state__title').hasText('Playback error');
-      assert
-        .dom('.rose-notification-body')
-        .includesText('rpc error: code = Unknown');
+      assert.dom(ERROR_MSG_SELECTOR).includesText('rpc error: code = Unknown');
     });
 
     test('user can navigate back to session recording screen', async function (assert) {

@@ -134,6 +134,8 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     await visit(urls.credentialLibrary);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

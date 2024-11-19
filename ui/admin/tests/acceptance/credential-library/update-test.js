@@ -160,10 +160,9 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await click(BUTTON_SELECTOR, 'Activate edit mode');
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     await click(SAVE_BTN_SELECTOR);
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.ok(
       find(FIELD_ERROR_TEXT_SELECTOR).textContent.trim(),
       'Name is required.',

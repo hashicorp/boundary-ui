@@ -116,7 +116,9 @@ module('Acceptance | users | update', function (hooks) {
     await fillIn('[name="name"]', 'User name');
     await click('[type="submit"]');
 
-    assert.dom('.rose-notification-body').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 

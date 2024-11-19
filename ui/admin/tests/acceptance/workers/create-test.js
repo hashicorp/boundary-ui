@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  fillIn,
-  click,
-  find,
-  findAll,
-  currentURL,
-} from '@ember/test-helpers';
+import { visit, fillIn, click, findAll, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -137,11 +130,9 @@ module('Acceptance | workers | create', function (hooks) {
     await visit(newWorkerURL);
     await fillIn('[name="worker_auth_registration_request"]', 'token');
     await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'rpc error: code = Unknown',
-      'Displays primary error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('rpc error: code = Unknown');
   });
 
   test('users cannot directly navigate to new worker route without proper authorization', async function (assert) {

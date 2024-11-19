@@ -85,10 +85,8 @@ module('Acceptance | groups | delete', function (hooks) {
     await visit(urls.group);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'Oops.',
-      'Displays primary error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

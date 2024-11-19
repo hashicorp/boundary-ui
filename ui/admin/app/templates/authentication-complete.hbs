@@ -7,11 +7,9 @@
 
 <main>
   <Rose::Layout::Centered>
-    <Rose::Notification
-      @style='success'
-      @heading={{t 'auth.titles.flow-success'}}
-    >
-      {{t 'auth.descriptions.flow-success'}}
-    </Rose::Notification>
+    <Hds::Alert @type='page' @color='success' as |A|>
+      <A.Title>{{t 'auth.titles.flow-success'}}</A.Title>
+      <A.Description>{{t 'auth.descriptions.flow-success'}}</A.Description>
+    </Hds::Alert>
   </Rose::Layout::Centered>
 </main>

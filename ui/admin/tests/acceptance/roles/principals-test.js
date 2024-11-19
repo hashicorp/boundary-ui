@@ -105,7 +105,9 @@ module('Acceptance | roles | principals', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('cannot navigate to add principals without proper authorization', async function (assert) {
@@ -166,6 +168,6 @@ module('Acceptance | roles | principals', function (hooks) {
     await visit(urls.addPrincipals);
     await click('tbody label');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
   });
 });

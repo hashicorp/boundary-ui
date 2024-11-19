@@ -170,7 +170,9 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await fillIn(selectors.FIELD_WORKER_FILTER, 'random string');
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(selectors.TOAST).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert
       .dom(selectors.FIELD_BUCKET_NAME_ERROR)
       .hasText('This is a required field.');

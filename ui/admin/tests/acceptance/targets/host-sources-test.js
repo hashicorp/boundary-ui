@@ -167,7 +167,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody tr .hds-dropdown-list-item button');
 
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('select and save host sets to add', async function (assert) {
@@ -251,7 +253,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount);
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('saving host source with address brings up confirmation modal and removes address', async function (assert) {
