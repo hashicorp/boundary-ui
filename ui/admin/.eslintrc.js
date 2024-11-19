@@ -64,19 +64,5 @@ module.exports = {
         'qunit/require-expect': [2, 'except-simple'],
       },
     },
-    {
-      // e2e files
-      files: ['tests/e2e/**'],
-      env: {
-        node: true,
-      },
-      extends: ['eslint:recommended', 'prettier'],
-      rules: {
-        'no-empty-pattern': [
-          'error',
-          { allowObjectPatternsAsParameters: true },
-        ],
-      },
-    },
   ],
 };

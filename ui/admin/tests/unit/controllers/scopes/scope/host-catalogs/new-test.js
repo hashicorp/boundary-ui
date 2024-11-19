@@ -14,5 +14,6 @@ module('Unit | Controller | scopes/scope/host-catalogs/new', function (hooks) {
       'controller:scopes/scope/host-catalogs/new',
     );
     assert.ok(controller);
+    assert.ok(controller.hostCatalogs);
   });
 });

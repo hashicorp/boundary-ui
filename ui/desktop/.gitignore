@@ -23,10 +23,6 @@
 # Vagrant
 .vagrant/
 
-# End 2 end test artifacts
-/playwright-report
-/tests/e2e/artifacts
-
 # ember-try
 /.node_modules.ember-try/
 /bower.json.ember-try
