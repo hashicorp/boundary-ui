@@ -298,7 +298,9 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await click('tbody tr:last-child label');
     await click('tbody tr:first-child label');
     await click('form [type="submit"]');
-    assert.dom('[role="alert"]').isVisible();
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .isVisible();
   });
 
   test('can remove a vault type credential library', async function (assert) {
@@ -367,7 +369,9 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, count);
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
-    assert.dom('[role="alert"]').isVisible();
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .isVisible();
   });
 
   test('removing a target credential which errors displays error messages', async function (assert) {
@@ -391,6 +395,8 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, count);
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
-    assert.dom('[role="alert"]').isVisible();
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .isVisible();
   });
 });

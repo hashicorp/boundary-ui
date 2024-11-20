@@ -34,36 +34,22 @@
             <dropdown.separator />
 
             <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
-              <Rose::Form as |form|>
-                <form.radioGroup
-                  @name='theme'
-                  @selectedValue={{or
-                    this.session.data.theme
-                    'system-default-theme'
-                  }}
-                  @changed={{this.toggleTheme}}
-                  as |radioGroup|
-                >
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.system'}}
-                      @value='system-default-theme'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.light'}}
-                      @value='light'
-                    />
-                  </dropdown.item>
-                  <dropdown.item>
-                    <radioGroup.radio
-                      @label={{t 'themes.dark'}}
-                      @value='dark'
-                    />
-                  </dropdown.item>
-                </form.radioGroup>
-              </Rose::Form>
+              <Hds::Form::Radio::Group
+                @name='theme'
+                class='dropdown-radio-btn'
+                as |G|
+              >
+                {{#each this.themes as |theme|}}
+                  <G.RadioField
+                    @value={{theme.value}}
+                    checked={{eq this.session.data.theme theme.value}}
+                    {{on 'change' (fn this.toggleTheme theme.value)}}
+                    as |F|
+                  >
+                    <F.Label>{{t (concat 'themes.' theme.label)}}</F.Label>
+                  </G.RadioField>
+                {{/each}}
+              </Hds::Form::Radio::Group>
             </dropdown.section>
 
           </utilities.dropdown>
@@ -79,23 +65,23 @@
               as |dropdown|
             >
               <dropdown.section @title={{t 'actions.toggle-feature-edition'}}>
-                <Rose::Form as |form|>
-                  <form.radioGroup
-                    @name='edition'
-                    @selectedValue={{this.featureEdition.edition}}
-                    @changed={{this.toggleEdition}}
-                    as |radioGroup|
-                  >
-                    {{#each this.featureEdition.editions as |edition|}}
-                      <dropdown.item>
-                        <radioGroup.radio
-                          @label={{edition}}
-                          @value={{edition}}
-                        />
-                      </dropdown.item>
-                    {{/each}}
-                  </form.radioGroup>
-                </Rose::Form>
+                <Hds::Form::Radio::Group
+                  @name='edition'
+                  class='dropdown-radio-btn'
+                  as |G|
+                >
+                  {{#each this.featureEdition.editions as |edition|}}
+                    <G.RadioField
+                      @value={{edition}}
+                      checked={{eq this.featureEdition.edition edition}}
+                      {{on 'change' (fn this.toggleEdition edition)}}
+                      as |F|
+                    >
+                      <F.Label>{{edition}}</F.Label>
+                    </G.RadioField>
+                  {{/each}}
+                </Hds::Form::Radio::Group>
+
               </dropdown.section>
               <dropdown.separator />
               <dropdown.section @title={{t 'actions.toggle-licensed-features'}}>
@@ -128,21 +114,18 @@
 </Rose::Layout::Global>
 
 {{#if this.flashMessages.queue}}
-  <div class='ember-notify-cn ember-notify-default'>
+  <div class='ember-notify-cn'>
     {{#each this.flashMessages.queue as |flash|}}
-      <div
-        class='ember-notify-show callout
-          {{flash.notificationType}}
-          ember-view ember-notify clearfix'
-      >
-        <Rose::Notification
-          @style={{flash.notificationType}}
-          @heading={{t (concat 'states.' flash.notificationType)}}
-          @dismiss={{fn flash.dismiss flash}}
-          @dismissText={{t 'actions.dismiss'}}
+      <div class='ember-notify-show ember-notify'>
+        <Hds::Toast
+          @color={{map-type-to-color flash.notificationType}}
+          @onDismiss={{fn flash.dismiss flash}}
+          data-test-toast-notification
+          as |T|
         >
-          {{flash.message}}
-        </Rose::Notification>
+          <T.Title>{{t (concat 'states.' flash.notificationType)}}</T.Title>
+          <T.Description>{{flash.message}}</T.Description>
+        </Hds::Toast>
       </div>
     {{/each}}
   </div>

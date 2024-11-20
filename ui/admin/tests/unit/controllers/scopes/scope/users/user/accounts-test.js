@@ -16,6 +16,7 @@ module(
         'controller:scopes/scope/users/user/accounts',
       );
       assert.ok(controller);
+      assert.ok(controller.users);
     });
   },
 );

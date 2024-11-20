@@ -91,7 +91,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
       name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.dom(selectors.TOAST).hasText(selectors.TOAST_SUCCESSFULL_VALUE);
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText(selectors.TOAST_SUCCESSFUL_VALUE);
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(storageBucket.scopeId, instances.scopes.org.id);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
@@ -124,7 +126,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucket = this.server.schema.storageBuckets.findBy({
       name: commonSelectors.FIELD_NAME_VALUE,
     });
-    assert.dom(selectors.TOAST).hasText(selectors.TOAST_SUCCESSFULL_VALUE);
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText(selectors.TOAST_SUCCESSFUL_VALUE);
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(
       storageBucket.attributes.endpoint_url,
@@ -267,7 +271,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
-    assert.dom(selectors.TOAST).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert
       .dom(selectors.FIELD_BUCKET_NAME_ERROR)
       .hasText('This is a required field.');

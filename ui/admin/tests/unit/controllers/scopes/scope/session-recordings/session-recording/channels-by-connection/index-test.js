@@ -48,6 +48,10 @@ module(
         this.server.schema.sessionRecordings.all().models.length;
     });
 
+    test('it exists', function (assert) {
+      assert.ok(controller);
+    });
+
     test('isSessionInprogressWithNoConnections returns true if session has started with no connections', function (assert) {
       const sessionRecording = store.createRecord('session-recording', {
         state: STATE_SESSION_RECORDING_STARTED,

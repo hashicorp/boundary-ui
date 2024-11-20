@@ -4,20 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  click,
-  fillIn,
-  currentURL,
-  find,
-  select,
-} from '@ember/test-helpers';
+import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -79,12 +74,16 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
+
   test('visiting credential libraries', async function (assert) {
     await visit(urls.credentialLibraries);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentialLibraries);
+
     await visit(urls.credentialLibrary);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
@@ -92,27 +91,28 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
 
-    await fillIn('[name="name"]', 'random string');
-    await select('[name="credential_type"]', 'ssh_private_key');
-
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await select(selectors.FIELD_CRED_TYPE, selectors.FIELD_CRED_TYPE_VALUE);
     await select(
-      '[name="credential_mapping_overrides"] tbody td:nth-of-type(1) select',
-      'private_key_attribute',
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_VALUE,
     );
-    await fillIn(
-      '[name="credential_mapping_overrides"] tbody td:nth-of-type(2) input',
-      'key',
-    );
-    await click('[name="credential_mapping_overrides"] button');
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
+    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
-    await click('[type="submit"]');
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
-
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
-      name: 'random string',
+      name: commonSelectors.FIELD_NAME_VALUE,
     });
-    assert.strictEqual(credentialLibrary.name, 'random string');
-    assert.strictEqual(credentialLibrary.credentialType, 'ssh_private_key');
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.credentialType,
+      selectors.FIELD_CRED_TYPE_VALUE,
+    );
     assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
       private_key_attribute: 'key',
     });
@@ -122,34 +122,27 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     featuresService.enable('ssh-target');
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
-    await click('[value="vault-ssh-certificate"]');
-    await fillIn('[name="name"]', 'name');
-    await fillIn('[name="description"]', 'description');
-    await fillIn('[name="vault_path"]', 'path');
-    await fillIn('[name="username"]', 'username');
-    await select('[name="key_type"]', 'rsa');
-    await fillIn('[name="key_bits"]', 100);
-    await fillIn('[name="ttl"]', 'ttl');
-    await fillIn('[name="key_id"]', 'key_id');
+
+    await click(selectors.TYPE_VAULT_SSH_CERT);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      '[name="critical_options"] tbody td:nth-of-type(1) input',
-      'co_key',
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
-    await fillIn(
-      '[name="critical_options"] tbody td:nth-of-type(2) input',
-      'co_value',
-    );
-    await click('[name="critical_options"] button');
-    await fillIn(
-      '[name="extensions"] tbody td:nth-of-type(1) input',
-      'ext_key',
-    );
-    await fillIn(
-      '[name="extensions"] tbody td:nth-of-type(2) input',
-      'ext_value',
-    );
-    await click('[name="extensions"] button');
-    await click('[type="submit"]');
+    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
+    await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_VALUE);
+    await fillIn(selectors.FIELD_KEY_TYPE, selectors.FIELD_KEY_TYPE_VALUE);
+    await fillIn(selectors.FIELD_KEY_BITS, selectors.FIELD_KEY_BITS_VALUE);
+    await fillIn(selectors.FIELD_TTL, selectors.FIELD_TTL_VALUE);
+    await fillIn(selectors.FIELD_KEY_ID, selectors.FIELD_KEY_ID_VALUE);
+    await fillIn(selectors.FIELD_CRIT_OPTS_KEY, 'co_key');
+    await fillIn(selectors.FIELD_CRIT_OPTS_VALUE, 'co_value');
+    await click(selectors.FIELD_CRIT_OPTS_BTN);
+    await fillIn(selectors.FIELD_EXT_KEY, 'ext_key');
+    await fillIn(selectors.FIELD_EXT_VALUE, 'ext_value');
+    await click(selectors.FIELD_EXT_BTN);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getCredentialLibraryCount(), count + 1);
     assert.strictEqual(
       this.server.schema.credentialLibraries.where({
@@ -160,14 +153,38 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     const credentialLibrary = this.server.schema.credentialLibraries.findBy({
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
-    assert.strictEqual(credentialLibrary.name, 'name');
-    assert.strictEqual(credentialLibrary.description, 'description');
-    assert.strictEqual(credentialLibrary.attributes.path, 'path');
-    assert.strictEqual(credentialLibrary.attributes.username, 'username');
-    assert.strictEqual(credentialLibrary.attributes.key_type, 'rsa');
-    assert.strictEqual(credentialLibrary.attributes.key_bits, 100);
-    assert.strictEqual(credentialLibrary.attributes.ttl, 'ttl');
-    assert.strictEqual(credentialLibrary.attributes.key_id, 'key_id');
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.path,
+      selectors.FIELD_VAULT_PATH_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.username,
+      selectors.FIELD_USERNAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.key_type,
+      selectors.FIELD_KEY_TYPE_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.key_bits,
+      selectors.FIELD_KEY_BITS_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.ttl,
+      selectors.FIELD_TTL_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.key_id,
+      selectors.FIELD_KEY_ID_VALUE,
+    );
     assert.deepEqual(credentialLibrary.attributes.critical_options, {
       co_key: 'co_value',
     });
@@ -179,13 +196,18 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
     featuresService.enable('ssh-target');
     await visit(urls.newCredentialLibrary);
-    await click('[value="vault-ssh-certificate"]');
-    await select('[name="key_type"]', 'ed25519');
-    assert.dom('[name="key_bits"]').doesNotExist();
-    await select('[name="key_type"]', 'ecdsa');
-    assert.dom('[name="key_bits"]').isVisible();
-    await select('[name="key_type"]', 'rsa');
-    assert.dom('[name="key_bits"]').isVisible();
+    await click(selectors.TYPE_VAULT_SSH_CERT);
+    await select(selectors.FIELD_KEY_TYPE, 'ed25519');
+
+    assert.dom(selectors.FIELD_KEY_BITS).doesNotExist();
+
+    await select(selectors.FIELD_KEY_TYPE, 'ecdsa');
+
+    assert.dom(selectors.FIELD_KEY_BITS).isVisible();
+
+    await select(selectors.FIELD_KEY_TYPE, 'rsa');
+
+    assert.dom(selectors.FIELD_KEY_BITS).isVisible();
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
@@ -193,19 +215,22 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       'credential-libraries'
     ] = [];
     await visit(urls.credentialLibraries);
+
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
       ].includes('create'),
     );
-    assert.notOk(find(`[href="${urls.newCredentialLibrary}"]`));
+    assert.dom(commonSelectors.HREF(urls.newCredentialLibrary)).doesNotExist();
   });
 
   test('can cancel create a new credential library', async function (assert) {
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.credentialLibraries);
     assert.strictEqual(getCredentialLibraryCount(), count);
   });
@@ -230,22 +255,21 @@ module('Acceptance | credential-libraries | create', function (hooks) {
         },
       );
     });
+
     await visit(urls.newCredentialLibrary);
-    await click('[type="submit"]');
-    assert.ok(
-      find('[role="alert"]').textContent.trim(),
-      'The request was invalid.',
-    );
-    assert.ok(
-      find('.hds-form-error__message').textContent.trim(),
-      'Name is required.',
-    );
+    await click(commonSelectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid');
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
     await visit(urls.newCredentialLibrary);
+
     assert.false(featuresService.isEnabled('ssh-target'));
-    assert.dom('[value="vault-ssh-certificate"]').doesNotExist();
+    assert.dom(selectors.TYPE_VAULT_SSH_CERT).doesNotExist();
   });
 
   test('users cannot directly navigate to new credential library route without proper authorization', async function (assert) {

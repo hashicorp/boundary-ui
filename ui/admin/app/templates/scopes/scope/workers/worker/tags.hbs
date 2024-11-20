@@ -87,16 +87,18 @@
                       />
                       {{#if perms.canEdit}}
                         <dd.Interactive
-                          @text={{t 'resources.worker.tags.edit.title'}}
                           {{on 'click' (fn this.toggleEditModal B.data)}}
-                        />
+                        >
+                          {{t 'resources.worker.tags.edit.title'}}
+                        </dd.Interactive>
                       {{/if}}
                       {{#if perms.canRemove}}
                         <dd.Interactive
-                          @text={{t 'resources.worker.tags.actions.remove'}}
                           @color='critical'
                           {{on 'click' (fn this.toggleRemoveModal B.data)}}
-                        />
+                        >
+                          {{t 'resources.worker.tags.actions.remove'}}
+                        </dd.Interactive>
                       {{/if}}
                     </Hds::Dropdown>
                   {{/if}}

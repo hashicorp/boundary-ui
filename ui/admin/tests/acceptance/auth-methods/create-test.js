@@ -32,7 +32,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
   const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';

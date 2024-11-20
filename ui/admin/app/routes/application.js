@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { A } from '@ember/array';
@@ -65,7 +64,9 @@ export default class ApplicationRoute extends Route {
     this.intl.setLocale(['en-us']);
     await this.session.setup();
     const theme = this.session.get('data.theme');
-    this.toggleTheme(theme);
+    /* eslint-disable-next-line ember/no-controller-access-in-routes */
+    const controller = this.controllerFor(this.routeName);
+    controller.toggleTheme(theme);
 
     // Setup the DB from a successful authentication restoration
     if (this.session.isAuthenticated) {
@@ -74,32 +75,6 @@ export default class ApplicationRoute extends Route {
       if (userId && hostUrl) {
         this.indexedDb.setup(formatDbName(userId, hostUrl));
       }
-    }
-  }
-
-  /**
-   * Applies the specified color theme to the root ember element.
-   * @param {string} theme - "light", "dark", or nullish (system default)
-   */
-  @action
-  toggleTheme(theme) {
-    const rootElementSelector = getOwner(this).rootElement;
-    const rootEl = getOwner(this)
-      .lookup('service:-document')
-      .querySelector(rootElementSelector);
-    this.session.set('data.theme', theme);
-    switch (theme) {
-      case 'light':
-        rootEl.classList.add('rose-theme-light');
-        rootEl.classList.remove('rose-theme-dark');
-        break;
-      case 'dark':
-        rootEl.classList.add('rose-theme-dark');
-        rootEl.classList.remove('rose-theme-light');
-        break;
-      default:
-        rootEl.classList.remove('rose-theme-dark');
-        rootEl.classList.remove('rose-theme-light');
     }
   }
 

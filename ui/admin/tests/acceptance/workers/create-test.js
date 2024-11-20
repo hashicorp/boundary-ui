@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  fillIn,
-  click,
-  find,
-  findAll,
-  currentURL,
-} from '@ember/test-helpers';
+import { visit, fillIn, click, findAll, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -53,7 +46,7 @@ module('Acceptance | workers | create', function (hooks) {
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
-    const labels = findAll('label.hds-form-label');
+    const labels = findAll('.worker-create-section label.hds-form-label');
     assert.dom(labels[0]).hasText('Boundary Cluster ID (Optional)');
     assert.dom(labels[2]).doesNotIncludeText('Initial Upstreams');
   });
@@ -61,7 +54,7 @@ module('Acceptance | workers | create', function (hooks) {
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
     const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
-    const labels = findAll('label.hds-form-label');
+    const labels = findAll('.worker-create-section label.hds-form-label');
     assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
     assert.dom(labels[2]).hasText('Initial Upstreams (Optional)');
@@ -137,11 +130,9 @@ module('Acceptance | workers | create', function (hooks) {
     await visit(newWorkerURL);
     await fillIn('[name="worker_auth_registration_request"]', 'token');
     await click('[type="submit"]');
-    assert.strictEqual(
-      find('.rose-notification-body').textContent.trim(),
-      'rpc error: code = Unknown',
-      'Displays primary error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('rpc error: code = Unknown');
   });
 
   test('users cannot directly navigate to new worker route without proper authorization', async function (assert) {

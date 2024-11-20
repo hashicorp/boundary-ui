@@ -169,7 +169,9 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
-    assert.dom('[role="alert"] .rose-notification-header').hasText('Success');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__title')
+      .hasText('Success');
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
@@ -179,7 +181,9 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(`[href="${urls.sessions}"]`);
     await click('tbody tr:first-child td:last-child button');
 
-    assert.dom('[role="alert"] .rose-notification-header').hasText('Error');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__title')
+      .hasText('Error');
   });
 
   test('users can link to docs page for sessions', async function (assert) {

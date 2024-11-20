@@ -6,10 +6,8 @@
 {{#if (can 'delete model' @model)}}
   <Hds::Dropdown data-test-managed-group-dropdown as |dd|>
     <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-    <dd.Interactive
-      @text={{t 'resources.managed-group.actions.delete'}}
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    />
+    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>{{t
+        'resources.managed-group.actions.delete'
+      }}</dd.Interactive>
   </Hds::Dropdown>
 {{/if}}

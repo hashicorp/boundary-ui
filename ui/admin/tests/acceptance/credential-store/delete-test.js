@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -181,7 +181,9 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     await visit(urls.staticCredentialStore);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 
   test('deleting a vault credential store which errors displays error messages', async function (assert) {
@@ -199,6 +201,8 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     await visit(urls.vaultCredentialStore);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

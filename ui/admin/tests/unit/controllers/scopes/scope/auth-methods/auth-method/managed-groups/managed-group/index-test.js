@@ -16,6 +16,8 @@ module(
         'controller:scopes/scope/auth-methods/auth-method/managed-groups/managed-group/index',
       );
       assert.ok(controller);
+      assert.ok(controller.authMethods);
+      assert.ok(controller.managedGroups);
     });
   },
 );

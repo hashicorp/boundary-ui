@@ -75,12 +75,11 @@
                   />
                   <dd.Interactive
                     @color='critical'
-                    @text={{t 'actions.remove'}}
                     {{on
                       'click'
                       (fn this.groups.removeMember @model.group B.data)
                     }}
-                  />
+                  >{{t 'actions.remove'}}</dd.Interactive>
                 </Hds::Dropdown>
               {{/if}}
             </B.Td>

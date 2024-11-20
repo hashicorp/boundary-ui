@@ -137,6 +137,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     await visit(urls.host);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

@@ -217,7 +217,9 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');
 
-    assert.dom('[role="alert"].is-success').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-success')
+      .isVisible();
   });
 
   test('cancelling a session takes you to the targets list screen', async function (assert) {
@@ -236,7 +238,9 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');
 
-    assert.dom('[role="alert"].is-error').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
@@ -246,6 +250,8 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await visit(urls.session);
     await click('[data-test-session-detail-cancel-button]');
 
-    assert.dom('[role="alert"].is-error').isVisible();
+    assert
+      .dom('[data-test-toast-notification].hds-alert--color-critical')
+      .isVisible();
   });
 });

@@ -121,23 +121,26 @@
                         <dd.Interactive
                           @route='scopes.scope.aliases.alias'
                           @model={{B.data.alias.id}}
-                          @text={{t 'actions.edit'}}
-                        />
+                        >
+                          {{t 'actions.edit'}}
+                        </dd.Interactive>
                         {{#if B.data.alias.destination_id}}
                           <dd.Interactive
-                            @text={{t 'actions.clear'}}
                             @color='action'
                             {{on 'click' (fn this.clearAlias B.data.alias)}}
-                          />
+                          >
+                            {{t 'actions.clear'}}
+                          </dd.Interactive>
                         {{/if}}
                       {{/if}}
 
                       {{#if perms.canDelete}}
                         <dd.Interactive
                           @color='critical'
-                          @text={{t 'actions.delete'}}
                           {{on 'click' (fn this.deleteAlias B.data.alias)}}
-                        />
+                        >
+                          {{t 'actions.delete'}}
+                        </dd.Interactive>
                       {{/if}}
                     </Hds::Dropdown>
 
