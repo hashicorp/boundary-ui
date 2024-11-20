@@ -8,6 +8,13 @@
     {{t 'titles.details'}}
   </nav.link>
   {{#if @model.isVault}}
+    {{#if (feature-flag 'vault-worker-filter')}}
+      <nav.link
+        @route='scopes.scope.credential-stores.credential-store.worker-filter'
+      >
+        {{t 'resources.credential-store.titles.worker-filter'}}
+      </nav.link>
+    {{/if}}
     {{#if (can 'navigate model' @model collection='credential-libraries')}}
       <nav.link
         @route='scopes.scope.credential-stores.credential-store.credential-libraries'
