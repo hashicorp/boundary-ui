@@ -19,7 +19,7 @@
     </Rose::CodeEditor>
   </F.Control>
   {{#if (get @model.errors @name)}}
-    <F.Error as |E|>
+    <F.Error data-test-worker-filter-error as |E|>
       {{#each (get @model.errors @name) as |error|}}
         <E.Message>{{error.message}}</E.Message>
       {{/each}}
