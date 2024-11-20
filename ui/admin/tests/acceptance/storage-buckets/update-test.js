@@ -218,7 +218,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
   });
 
-  test('user sees an editabled code editor while updating and readonly code block before/after', async function (assert) {
+  test('user sees an editable code editor while updating and readonly code block before/after', async function (assert) {
     await visit(urls.storageBuckets);
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
