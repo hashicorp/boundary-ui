@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test, authenticatedState } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
-import { authenticatedState } from '../../global-setup.js';
 import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,

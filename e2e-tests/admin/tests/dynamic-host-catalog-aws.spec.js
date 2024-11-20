@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import { authenticatedState } from '../../global-setup.js';
 import {
   authenticateBoundaryCli,
   deleteScopeCli,
