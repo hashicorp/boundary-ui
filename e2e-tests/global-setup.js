@@ -4,9 +4,9 @@
  */
 
 import { chromium } from '@playwright/test';
-import { checkEnv } from '../helpers/general.js';
+import { checkEnv } from './helpers/general.js';
 
-import { LoginPage } from './pages/login.js';
+import { LoginPage } from './admin/pages/login.js';
 
 async function globalSetup() {
   await checkEnv([

@@ -8,7 +8,7 @@ import { expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 
-import { authenticatedState } from '../global-setup.js';
+import { authenticatedState } from '../../global-setup.js';
 import {
   authenticateBoundaryCli,
   authorizeSessionByTargetIdCli,

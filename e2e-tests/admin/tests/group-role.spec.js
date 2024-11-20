@@ -5,7 +5,7 @@
 
 import { test } from '../playwright.config.js';
 
-import { authenticatedState } from '../global-setup.js';
+import { authenticatedState } from '../../global-setup.js';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,

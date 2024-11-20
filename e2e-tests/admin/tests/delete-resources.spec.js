@@ -6,7 +6,7 @@
 import { test } from '../playwright.config.js';
 import { execSync } from 'node:child_process';
 
-import { authenticatedState } from '../global-setup.js';
+import { authenticatedState } from '../../global-setup.js';
 import {
   authenticateBoundaryCli,
   checkBoundaryCli,
