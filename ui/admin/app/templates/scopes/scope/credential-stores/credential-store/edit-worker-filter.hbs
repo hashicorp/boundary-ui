@@ -1,0 +1,30 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title (t 'resources.credential-store.titles.edit-worker-filter.title')}}
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <CredentialStores::CredentialStore::Header::EditWorkerFilter />
+  </page.header>
+
+  <page.body>
+    <Hds::CodeBlock
+      @language='bash'
+      @value='Use this editor to build or edit a worker filter'
+      @highlightLines={{'2, 4'}}
+      @hasCopyButton={{true}}
+      as |CB|
+    >
+      <CB.Title>
+        {{t 'resources.credential-store.titles.worker-filter'}}
+      </CB.Title>
+    </Hds::CodeBlock>
+  </page.body>
+</Rose::Layout::Page>

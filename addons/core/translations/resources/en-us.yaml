@@ -833,6 +833,9 @@ credential-store:
   titles:
     new: New Credential Store
     worker-filter: Worker Filter
+    edit-worker-filter:
+      title: Edit Worker Filter
+      description: Specify workers that have access to the credential store
   actions:
     delete: Delete Credential Store
     add: Add worker filter
