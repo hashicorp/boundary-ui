@@ -22,12 +22,13 @@ module('Acceptance | storage-buckets | update', function (hooks) {
       global: null,
     },
     storageBucket: null,
+    storageBucketMinio: null,
   };
 
   const urls = {
-    globalScope: null,
     storageBuckets: null,
     storageBucket: null,
+    storageBucketMinio: null,
   };
 
   hooks.beforeEach(async function () {
@@ -39,8 +40,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
       scope: instances.scopes.global,
       plugin: { name: 'minio' },
     });
-    urls.globalScope = `/scopes/global`;
-    urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
+    urls.storageBuckets = `/scopes/global/storage-buckets`;
     urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
     urls.storageBucketMinio = `${urls.storageBuckets}/${instances.storageBucketMinio.id}`;
 
@@ -51,7 +51,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('can save changes to an existing storage-bucket', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN, 'Click save');
@@ -70,7 +70,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     const name = instances.storageBucket.name;
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN, 'Click cancel');
@@ -82,7 +82,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('can save changes to access key fields', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
     assert.dom(selectors.FIELD_ACCESS_KEY_EDIT_BTN).exists();
     assert.dom(selectors.FIELD_SECRET_KEY_EDIT_BTN).exists();
 
@@ -117,7 +117,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('can cancel changes to access key fields', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
     await click(selectors.FIELD_ACCESS_KEY_EDIT_BTN);
     await click(selectors.FIELD_SECRET_KEY_EDIT_BTN);
@@ -185,7 +185,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('user cannot edit scope, provider, bucket name, bucket prefix and region fields in a Amazon S3 storage bucket form', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucket}"]`);
+    await click(commonSelectors.HREF(urls.storageBucket));
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
     assert.dom(selectors.FIELD_BUCKET_PREFIX).isDisabled();
@@ -205,7 +205,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
   test('user cannot edit scope, provider, endpoint_url, bucket name or region fields in a MinIO storage bucket', async function (assert) {
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.storageBucketMinio}"]`);
+    await click(commonSelectors.HREF(urls.storageBucketMinio));
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
 
@@ -216,5 +216,18 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_ENDPOINT_URL).isNotDisabled();
     assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
     assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
+  });
+
+  test('user sees an editable code editor while updating and readonly code block before/after', async function (assert) {
+    await visit(urls.storageBuckets);
+    await click(commonSelectors.HREF(urls.storageBucketMinio));
+
+    assert.dom(selectors.READONLY_WORKER_FILTER).isVisible();
+    assert.dom(selectors.EDITOR_WORKER_FILTER).doesNotExist();
+
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+
+    assert.dom(selectors.EDITOR_WORKER_FILTER).isVisible();
+    assert.dom(selectors.READONLY_WORKER_FILTER).doesNotExist();
   });
 });
