@@ -74,6 +74,9 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(storageBucket.scopeId, 'global');
+    assert
+      .dom(selectors.READONLY_WORKER_FILTER)
+      .hasText(selectors.EDITOR_WORKER_FILTER_VALUE);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
