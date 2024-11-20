@@ -1058,6 +1058,12 @@
 }
 
 // worker filter generator
+.show-filter-generator {
+  .hds-form-field--layout-flag {
+    margin-bottom: 0;
+  }
+}
+
 .filter-generator-selection {
   .hds-form-group__control-field {
     margin-bottom: 0;
@@ -1075,4 +1081,11 @@
   flex-direction: row;
   gap: 0.5rem;
   align-items: flex-start;
+}
+
+// storage buckets
+.storage-bucket-worker-filter {
+  .hds-form-field--layout-flag {
+    margin-bottom: 0;
+  }
 }

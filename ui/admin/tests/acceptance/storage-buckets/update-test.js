@@ -165,7 +165,10 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(`[href="${urls.storageBucket}"]`);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
-    await fillIn(selectors.FIELD_WORKER_FILTER, 'random string');
+    await fillIn(
+      selectors.EDITOR_WORKER_FILTER,
+      selectors.EDITOR_WORKER_FILTER_VALUE,
+    );
     await click(commonSelectors.SAVE_BTN);
 
     assert
