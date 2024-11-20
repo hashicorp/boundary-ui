@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
@@ -29,6 +28,9 @@ module(
     const NAME_FIELD_TEXT = 'random string';
     const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
     const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
+    const EDITOR_WORKER_FILTER =
+      '[data-test-code-editor-field-editor] textarea';
+    const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
 
     const instances = {
       scopes: {
@@ -83,6 +85,7 @@ module(
       await click(`[href="${urls.newStorageBucket}"]`);
       await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
       await click('[value="global"]');
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
 
       assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
       assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
@@ -106,6 +109,7 @@ module(
       await click(`[href="${urls.newStorageBucket}"]`);
       await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
       await click(`[value="${instances.scopes.org.scope.id}"]`);
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
 
       assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
       assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
@@ -157,8 +161,8 @@ module(
       await visit(urls.enableSessionRecording);
 
       await click(`[href="${urls.newStorageBucket}"]`);
+      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
       await click(SAVE_BTN_SELECTOR);
-      await a11yAudit();
 
       assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
       assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');

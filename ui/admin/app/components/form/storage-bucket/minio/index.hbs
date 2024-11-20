@@ -311,30 +311,33 @@
   {{/if}}
 
   {{! worker_filter }}
-  <Hds::Form::TextInput::Field
-    name='worker_filter'
+  <Hds::Form::Fieldset
+    class='storage-bucket-worker-filter'
     @isRequired={{true}}
-    @value={{@model.worker_filter}}
-    @isInvalid={{@model.errors.worker_filter}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'worker_filter')}}
     as |F|
   >
-    <F.Label>{{t 'resources.storage-bucket.form.worker_filter.label'}}</F.Label>
+    <F.Legend>{{t
+        'resources.storage-bucket.form.worker_filter.label'
+      }}</F.Legend>
     <F.HelperText>
       {{t 'resources.storage-bucket.form.worker_filter.help'}}
       <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
         {{t 'actions.learn-more'}}
       </Hds::Link::Inline>
     </F.HelperText>
-    {{#if @model.errors.worker_filter}}
-      <F.Error data-test-worker-filter-error as |E|>
-        {{#each @model.errors.worker_filter as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
+    <F.Control>
+      {{#if form.disabled}}
+        <Hds::CodeBlock
+          @language='bash'
+          @value={{@model.worker_filter}}
+          @hasCopyButton={{true}}
+          data-test-worker-filter
+        />
+      {{else}}
+        <WorkerFilterGenerator @model={{@model}} @name='worker_filter' />
+      {{/if}}
+    </F.Control>
+  </Hds::Form::Fieldset>
 
   {{! disable_credential_rotation }}
   <Hds::Form::Checkbox::Field
