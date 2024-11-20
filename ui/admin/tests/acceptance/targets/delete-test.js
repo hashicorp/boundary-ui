@@ -23,7 +23,7 @@ module('Acceptance | targets | delete', function (hooks) {
 
   let getTargetCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-targets-dropdown] div:first-child button';
+    '[data-test-manage-targets-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-manage-targets-dropdown] ul li button';
 
@@ -89,7 +89,9 @@ module('Acceptance | targets | delete', function (hooks) {
     await click(DELETE_ACTION_SELECTOR);
     await click('.rose-dialog .rose-button-primary');
 
-    assert.dom('.rose-notification-body').hasText('Deleted successfully.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Deleted successfully.');
     assert.strictEqual(getTargetCount(), targetCount - 1);
     assert.strictEqual(currentURL(), urls.targets);
   });
@@ -139,6 +141,8 @@ module('Acceptance | targets | delete', function (hooks) {
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
 
-    assert.dom('.rose-notification-body').hasText('Oops.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Oops.');
   });
 });

@@ -25,6 +25,11 @@ import {
 
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
+const CHANGE_STATE_SELECTOR = '[data-test-change-state] button:first-child';
+const CHANGE_STATE_INPUT_CHECKED = '[data-test-change-state] input:checked';
+
+const CHANGE_STATE_INPUT_SELECTOR = '[data-test-change-state]';
+
 module('Acceptance | auth-methods | oidc', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -67,9 +72,9 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
 
   test('can view oidc state', async function (assert) {
     await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
+    await click(CHANGE_STATE_SELECTOR);
     assert.strictEqual(
-      find('.rose-dropdown[open] input:checked').value,
+      find(CHANGE_STATE_INPUT_CHECKED).value,
       instances.authMethod.attributes.state,
     );
   });
@@ -77,29 +82,45 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
   test('can update oidc state', async function (assert) {
     const updateValue = 'inactive';
     await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
-    await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+    await click(CHANGE_STATE_SELECTOR);
+    await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
+    const authMethod = this.server.schema.authMethods.findBy({
+      id: instances.authMethod.id,
+    });
+
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   test('can update oidc state to active-private', async function (assert) {
     const updateValue = 'active-private';
     await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
-    await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+    await click(CHANGE_STATE_SELECTOR);
+    await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
+    const authMethod = this.server.schema.authMethods.findBy({
+      id: instances.authMethod.id,
+    });
+    assert.strictEqual(
+      find(CHANGE_STATE_INPUT_CHECKED).value,
+      instances.authMethod.attributes.state,
+    );
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   test('can update oidc state to active-public', async function (assert) {
-    // Update default 'active-public' state to inactive
     instances.authMethod.attributes.state = 'inactive';
     const updateValue = 'active-public';
     await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
-    await click(`.rose-dropdown[open] input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+    await click(CHANGE_STATE_SELECTOR);
+    await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
+    const authMethod = this.server.schema.authMethods.findBy({
+      id: instances.authMethod.id,
+    });
+
+    assert.strictEqual(
+      find(CHANGE_STATE_INPUT_CHECKED).value,
+      instances.authMethod.attributes.state,
+    );
+
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
@@ -130,10 +151,8 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
       authMethod.attributes.state,
       'Auth method state is not be updated.',
     );
-    assert.ok(
-      find('.rose-notification-body').textContent.trim(),
-      'Sorry!',
-      'Displays error message.',
-    );
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('Sorry!');
   });
 });

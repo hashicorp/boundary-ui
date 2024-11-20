@@ -17,7 +17,7 @@ module.exports = {
     // This is often limited by the DOM and we want to order our declarations by our own standard
     'no-descending-specificity': null,
     // As a team we want to stick to using kebab-case as our keyframe name pattern, but there are some exceptions
-    // in which we use keyframes from addons like ember-botify, HDS or other in which they use other naming style.
+    // in which we use keyframes from addons like ember-notify, HDS or other in which they use other naming style.
     // This regex checks for these patterns and won't fail.
     'keyframes-name-pattern': [
       '(hds-)|(ember-notify-)|(^gradient)|(^fadeBackground)',

@@ -29,7 +29,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   let getHostSetHostCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] div:first-child button';
+    '[data-test-manage-dropdown-host-sets] button:first-child';
   const CREATE_AND_ADD_HOSTS_SELECTOR =
     '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
   const ADD_EXISTING_HOSTS_SELECTOR =
@@ -136,7 +136,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
     await click('[data-test-host-set-hosts-dropdown-toggle]');
     await click('[data-test-host-set-hosts-dropdown-remove-host]');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('visiting add hosts', async function (assert) {
@@ -209,7 +211,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await visit(urls.addHosts);
     await click('tbody .hds-table__tr .hds-form-label');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('visiting host creation from a host set', async function (assert) {
@@ -255,7 +259,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await visit(urls.createAndAddHost);
     await fillIn('[name="name"]', 'New Host');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('shows error message on host addition to host set error', async function (assert) {
@@ -275,7 +281,9 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await visit(urls.createAndAddHost);
     await fillIn('[name="name"]', 'New Host');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('users can navigate to host and incorrect url autocorrects', async function (assert) {

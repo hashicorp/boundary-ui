@@ -39,7 +39,7 @@
           {{#let (group-by itemOptions 'scopeModel') as |orgs|}}
             {{#each orgs as |org|}}
               <FD.Generic>
-                <FlightIcon @name='org' />
+                <Hds::Icon @name='org' @isInline={{true}} />
                 {{org.key.displayName}}
               </FD.Generic>
               {{#each org.items as |project|}}

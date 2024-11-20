@@ -24,7 +24,8 @@ module(
     const SAVE_BTN_SELECTOR = '[type="submit"]';
     const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
     const NAME_FIELD_SELECTOR = '[name="name"]';
-    const ALERT_TEXT_SELECTOR = '[role="alert"] div';
+    const ALERT_TEXT_SELECTOR =
+      '[data-test-toast-notification] .hds-alert__description';
     const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
     const NAME_FIELD_TEXT = 'random string';
     const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';

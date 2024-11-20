@@ -48,7 +48,8 @@ module('Acceptance | roles | global-scope', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
-  const TOAST_SELECTOR = '[role="alert"]';
+  const TOAST_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';

@@ -281,7 +281,9 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.newTCPTarget);
     await click(SAVE_BTN_SELECTOR);
 
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 
@@ -308,7 +310,9 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.newSSHTarget);
     await click(SAVE_BTN_SELECTOR);
 
-    assert.dom('[role="alert"] div').hasText('The request was invalid.');
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 

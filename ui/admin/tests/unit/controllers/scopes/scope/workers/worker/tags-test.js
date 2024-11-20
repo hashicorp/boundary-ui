@@ -52,6 +52,7 @@ module(
 
     test('it exists', function (assert) {
       assert.ok(controller);
+      assert.ok(controller.workers);
     });
 
     test('tagDisplayName returns the display name of the tag', function (assert) {

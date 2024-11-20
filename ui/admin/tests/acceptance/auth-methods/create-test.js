@@ -32,7 +32,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
   const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';
@@ -48,7 +49,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
   const TOGGLE_SELECTOR = '[name="prompts"]';
 
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] div:first-child button';
+    '[data-test-manage-auth-method] button:first-child';
   const MAKE_PRIMARY_SELECTOR =
     '[data-test-manage-auth-method] ul li:first-child button';
 

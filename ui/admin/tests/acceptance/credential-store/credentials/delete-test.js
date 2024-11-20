@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL, visit, find } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
 
 module(
@@ -21,7 +21,7 @@ module(
     let getJSONCredentialCount;
 
     const MANAGE_DROPDOWN_SELECTOR =
-      '[data-test-manage-credentials-dropdown] div:first-child button';
+      '[data-test-manage-credentials-dropdown] button:first-child';
     const DELETE_ACTION_SELECTOR =
       '[data-test-manage-credentials-dropdown] ul li button';
 
@@ -277,7 +277,9 @@ module(
       await visit(urls.usernamePasswordCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Oops.');
     });
 
     test('deleting a username & key pair credential which errors displays error message', async function (assert) {
@@ -295,7 +297,9 @@ module(
       await visit(urls.usernameKeyPairCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Oops.');
     });
 
     test('deleting a JSON credential which errors displays error message', async function (assert) {
@@ -313,7 +317,9 @@ module(
       await visit(urls.jsonCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert.ok(find('[role="alert"]').textContent.trim(), 'Oops.');
+      assert
+        .dom('[data-test-toast-notification] .hds-alert__description')
+        .hasText('Oops.');
     });
   },
 );

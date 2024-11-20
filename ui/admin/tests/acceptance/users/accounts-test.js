@@ -28,8 +28,9 @@ module('Acceptance | users | accounts', function (hooks) {
   const ADD_ACCOUNTS_ACTION_SELECTOR =
     '[data-test-manage-user-dropdown] ul li:first-child a';
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-user-dropdown] div:first-child button';
-  const ERROR_MSG_SELECTOR = '[role="alert"]';
+    '[data-test-manage-user-dropdown] button:first-child';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';

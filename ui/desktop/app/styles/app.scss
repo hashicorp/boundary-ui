@@ -278,46 +278,6 @@
   text-align: center;
 }
 
-// Dialog Detail
-// These styles are a Work In Progress. Expect changes (lots of them)
-.rose-dialog,
-.dialog-detail {
-  z-index: 6000;
-}
-
-.dialog-detail {
-  .rose-notification {
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    box-shadow: none;
-    margin-bottom: 0;
-  }
-
-  .rose-dialog-body {
-    > :first-child {
-      margin-top: 0;
-      padding-top: 0;
-    }
-  }
-
-  .rose-dialog-footer {
-    align-items: center;
-
-    div:nth-child(1) {
-      display: flex;
-      justify-content: flex-start;
-      width: 50%;
-    }
-
-    div:nth-child(2) {
-      display: flex;
-      justify-content: flex-end;
-      width: 50%;
-    }
-  }
-}
-
 // Overlay above everything - including notifications
 .rose-dialog-modal-overlay {
   z-index: 5500;
@@ -503,7 +463,7 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     text-transform: capitalize;
   }
 
-  .flight-icon {
+  .hds-icon {
     flex-shrink: 0;
   }
 }

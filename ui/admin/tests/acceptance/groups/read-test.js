@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find } from '@ember/test-helpers';
+import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -14,6 +14,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | groups | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -50,6 +51,7 @@ module('Acceptance | groups | read', function (hooks) {
 
   test('visiting a group', async function (assert) {
     await visit(urls.newGroup);
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.newGroup);
   });
@@ -58,7 +60,8 @@ module('Acceptance | groups | read', function (hooks) {
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.group);
-    assert.notOk(find('main tbody .rose-table-header-cell:nth-child(1) a'));
+
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
   });
 
   test('users can navigate to group and incorrect url autocorrects', async function (assert) {

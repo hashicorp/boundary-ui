@@ -38,7 +38,7 @@ module('Acceptance | groups | members', function (hooks) {
   };
   let membersCount;
   const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-group-dropdown] div:first-child button';
+    '[data-test-manage-group-dropdown] button:first-child';
   const ADD_MEMBERS_ACTION_SELECTOR =
     '[data-test-manage-group-dropdown] ul li a';
 
@@ -104,7 +104,9 @@ module('Acceptance | groups | members', function (hooks) {
     assert.strictEqual(findAll('tbody tr').length, membersCount);
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 
   test('visiting member selection', async function (assert) {
@@ -176,6 +178,8 @@ module('Acceptance | groups | members', function (hooks) {
     await visit(urls.addMembers);
     await click('tbody label');
     await click('form [type="submit"]');
-    assert.ok(find('[role="alert"]'));
+    assert
+      .dom('[data-test-toast-notification] .hds-alert__description')
+      .hasText('The request was invalid.');
   });
 });

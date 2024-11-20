@@ -28,9 +28,11 @@ module('Acceptance | managed-groups | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const ERROR_MSG_SELECTOR = '.rose-notification-body';
+  const ERROR_MSG_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-auth-method] div button';
+  const MANAGE_DROPDOWN_SELECTOR =
+    '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {

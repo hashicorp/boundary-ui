@@ -26,7 +26,8 @@ module('Acceptance | aliases | create', function (hooks) {
   const DESTINATION_ID_SELECTOR = '[name="destination_id"]';
   const HOST_ID_SELECTOR = '[name="authorize_session_arguments"]';
 
-  const ALERT_TEXT_SELECTOR = '[role="alert"] div';
+  const ALERT_TEXT_SELECTOR =
+    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
 
