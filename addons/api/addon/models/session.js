@@ -89,8 +89,10 @@ class SessionCredential {
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
   extractSecrets(secretJSON) {
-    // if decoded has an object called data and if that has username and password,
-    // then we need to return that as key and value
+    // If `decoded` contains a `data` object and if that object has a `username` and `password`,
+    // then we need to return those as key-value pairs
+    // TODO: will there be other labels besides `username` and `password`?
+
     const secretObj = secretJSON.data ? secretJSON.data : secretJSON;
     return Object.entries(secretObj).map(
       ([key, value]) => new SessionCredential.SecretItem(key, value),
