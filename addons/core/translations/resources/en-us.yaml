@@ -827,20 +827,25 @@ credential-store:
   messages:
     welcome:
       title: Welcome to Credential Stores
-    no-filter:
-      title: No worker filter added
-      description: You haven't added a worker filter yet
   titles:
     new: New Credential Store
-    worker-filter: Worker Filter
-    edit-worker-filter:
-      title: Edit Worker Filter
-      description: Specify workers that have access to the credential store
-    formatted-worker-filter:
-      description: The worker filter format for this credential store
+  worker-filter:
+    messages:
+      no-filter:
+        title: No worker filter added
+        description: You haven't added a worker filter yet
+      formatted-worker-filter:
+        description: The worker filter format for this credential store
+    titles:
+      worker-filter:
+        title: Worker Filter
+      edit-worker-filter:
+        title: Edit Worker Filter
+        description: Specify workers that have access to the credential store
   actions:
-    delete: Delete Credential Store
     add: Add worker filter
+    delete: Delete Credential Store
+    edit: Edit Worker Filter
   types:
     vault: Vault
     static: Static

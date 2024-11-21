@@ -3,7 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.credential-store.titles.worker-filter')}}
+{{page-title
+  (t 'resources.credential-store.worker-filter.titles.worker-filter.title')
+}}
 
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
@@ -34,11 +36,13 @@
         as |CB|
       >
         <CB.Title>
-          {{t 'resources.credential-store.titles.worker-filter'}}
+          {{t
+            'resources.credential-store.worker-filter.titles.worker-filter.title'
+          }}
         </CB.Title>
         <CB.Description>
           {{t
-            'resources.credential-store.titles.formatted-worker-filter.description'
+            'resources.credential-store.worker-filter.messages.formatted-worker-filter.description'
           }}
         </CB.Description>
       </Hds::CodeBlock>
@@ -46,11 +50,13 @@
       <Rose::Layout::Centered>
         <Hds::ApplicationState as |A|>
           <A.Header
-            @title={{t 'resources.credential-store.messages.no-filter.title'}}
+            @title={{t
+              'resources.credential-store.worker-filter.messages.no-filter.title'
+            }}
           />
           <A.Body
             @text={{t
-              'resources.credential-store.messages.no-filter.description'
+              'resources.credential-store.worker-filter.messages.no-filter.description'
             }}
           />
           <A.Footer as |F|>

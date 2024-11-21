@@ -141,9 +141,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
     await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.worker-filter',
     );
-    await this.router.refresh(
-      'scopes.scope.credential-stores.credential-store.worker-filter',
-    );
   }
 
   /**
@@ -155,9 +152,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
   async cancelWorkerFilter(credentialStore) {
     credentialStore.rollbackAttributes();
     await this.router.replaceWith(
-      'scopes.scope.credential-stores.credential-store.worker-filter',
-    );
-    await this.router.refresh(
       'scopes.scope.credential-stores.credential-store.worker-filter',
     );
   }
