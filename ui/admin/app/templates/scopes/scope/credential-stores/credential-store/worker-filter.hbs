@@ -27,23 +27,31 @@
 
   <page.body>
     <Rose::Layout::Centered>
-      <Hds::ApplicationState as |A|>
-        <A.Header
-          @title={{t 'resources.credential-store.messages.no-filter.title'}}
+      {{#if @model.woker_filter}}
+        <Hds::CodeBlock
+          @language='bash'
+          @value={{@model.worker_filter}}
+          @hasCopyButton={{true}}
         />
-        <A.Body
-          @text={{t
-            'resources.credential-store.messages.no-filter.description'
-          }}
-        />
-        <A.Footer as |F|>
-          <F.LinkStandalone
-            @icon='plus-circle'
-            @text={{t 'resources.credential-store.actions.add'}}
-            @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
+      {{else}}
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t 'resources.credential-store.messages.no-filter.title'}}
           />
-        </A.Footer>
-      </Hds::ApplicationState>
+          <A.Body
+            @text={{t
+              'resources.credential-store.messages.no-filter.description'
+            }}
+          />
+          <A.Footer as |F|>
+            <F.LinkStandalone
+              @icon='plus-circle'
+              @text={{t 'resources.credential-store.actions.add'}}
+              @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
+            />
+          </A.Footer>
+        </Hds::ApplicationState>
+      {{/if}}
     </Rose::Layout::Centered>
   </page.body>
 </Rose::Layout::Page>

@@ -15,16 +15,11 @@
   </page.header>
 
   <page.body>
-    <Hds::CodeBlock
-      @language='bash'
-      @value='Use this editor to build or edit a worker filter'
-      @highlightLines={{'2, 4'}}
-      @hasCopyButton={{true}}
-      as |CB|
-    >
-      <CB.Title>
-        {{t 'resources.credential-store.titles.worker-filter'}}
-      </CB.Title>
-    </Hds::CodeBlock>
+    <Form::WorkerFilter
+      @name='worker_filter'
+      @model={{@model}}
+      {{!-- @submit={{fn this.targets.saveWorkerFilter @model}} --}}
+      @cancel={{fn this.credentialStores.cancelWorkerFilter @model}}
+    />
   </page.body>
 </Rose::Layout::Page>
