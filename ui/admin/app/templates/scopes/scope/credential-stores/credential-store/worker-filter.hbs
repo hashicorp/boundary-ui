@@ -27,12 +27,24 @@
 
   <page.body>
     <Rose::Layout::Centered>
-      {{#if @model.woker_filter}}
-        <Hds::CodeBlock
-          @language='bash'
-          @value={{@model.worker_filter}}
-          @hasCopyButton={{true}}
-        />
+      {{#if @model.worker_filter}}
+        <div class='formatted-worker-filter'>
+          <Hds::CodeBlock
+            @language='bash'
+            @value={{@model.worker_filter}}
+            @hasCopyButton={{true}}
+            as |CB|
+          >
+            <CB.Title>
+              {{t 'resources.credential-store.titles.worker-filter'}}
+            </CB.Title>
+            <CB.Description>
+              {{t
+                'resources.credential-store.titles.formatted-worker-filter.description'
+              }}
+            </CB.Description>
+          </Hds::CodeBlock>
+        </div>
       {{else}}
         <Hds::ApplicationState as |A|>
           <A.Header

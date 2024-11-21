@@ -138,6 +138,7 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
   @notifySuccess('notifications.add-success')
   async saveWorkerFilter(credentialStore) {
     await credentialStore.save();
+    console.log('inside save fn', credentialStore);
     await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.worker-filter',
     );
