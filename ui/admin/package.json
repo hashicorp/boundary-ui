@@ -94,7 +94,7 @@
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "rose": "*",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
