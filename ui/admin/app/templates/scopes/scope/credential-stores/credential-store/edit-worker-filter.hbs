@@ -18,7 +18,7 @@
     <Form::WorkerFilter
       @name='worker_filter'
       @model={{@model}}
-      {{!-- @submit={{fn this.targets.saveWorkerFilter @model}} --}}
+      @submit={{fn this.credentialStores.saveWorkerFilter @model}}
       @cancel={{fn this.credentialStores.cancelWorkerFilter @model}}
     />
   </page.body>
