@@ -75,14 +75,26 @@ class SessionCredential {
   get secrets() {
     if (this.#payloadSecret?.decoded) {
       const secretJSON = this.#payloadSecret.decoded;
-      return Object.keys(secretJSON).map(
-        (key) => new SessionCredential.SecretItem(key, secretJSON[key]),
-      );
+      return this.extractSecrets(secretJSON);
     } else {
       // decode from base64
       const decodedString = atob(this.#payloadSecret.raw);
       return [new SessionCredential.SecretItem('secret', decodedString)];
     }
+  }
+
+  /**
+   * Extracts secrets from the payload secret JSON object.
+   * @param {object} secretJSON - The payload secret JSON object.
+   * @returns {SessionCredential.SecretItem[]} - The array of secret items.
+   */
+  extractSecrets(secretJSON) {
+    // if decoded has an object called data and if that has username and password,
+    // then we need to return that as key and value
+    const secretObj = secretJSON.data ? secretJSON.data : secretJSON;
+    return Object.entries(secretObj).map(
+      ([key, value]) => new SessionCredential.SecretItem(key, value),
+    );
   }
 
   // =methods

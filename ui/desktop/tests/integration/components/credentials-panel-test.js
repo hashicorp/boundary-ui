@@ -40,6 +40,21 @@ module('Integration | Component | credentials-panel', function (hooks) {
     ],
   };
 
+  const vaultCredentials = {
+    source: {
+      id: 'clvlt_4cvscMTl0N',
+      name: 'Credential Library 2',
+      description: 'Source Description',
+      type: 'vault',
+    },
+    secrets: [
+      {
+        key: 'username',
+        value: 'password',
+      },
+    ],
+  };
+
   test('it renders', async function (assert) {
     assert.expect(1);
     this.set('credentials', [credential]);
@@ -49,6 +64,17 @@ module('Integration | Component | credentials-panel', function (hooks) {
     `);
 
     assert.dom('.credential-name').hasText('Credential Library 1');
+  });
+
+  test('it correctly shows parsed secret from vault', async function (assert) {
+    this.set('credentials', [vaultCredentials]);
+
+    await render(hbs`
+      <CredentialsPanel @credentials={{this.credentials}} />
+    `);
+    assert.dom('.credential-name').hasText('Credential Library 2');
+    assert.dom('.secret-container').isVisible();
+    assert.dom('.secret-key').hasText('username');
   });
 
   test('it shows code editor when toggle clicked', async function (assert) {
