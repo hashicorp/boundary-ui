@@ -26,26 +26,24 @@
   </page.actions>
 
   <page.body>
-    <Rose::Layout::Centered>
-      {{#if @model.worker_filter}}
-        <div class='formatted-worker-filter'>
-          <Hds::CodeBlock
-            @language='bash'
-            @value={{@model.worker_filter}}
-            @hasCopyButton={{true}}
-            as |CB|
-          >
-            <CB.Title>
-              {{t 'resources.credential-store.titles.worker-filter'}}
-            </CB.Title>
-            <CB.Description>
-              {{t
-                'resources.credential-store.titles.formatted-worker-filter.description'
-              }}
-            </CB.Description>
-          </Hds::CodeBlock>
-        </div>
-      {{else}}
+    {{#if @model.worker_filter}}
+      <Hds::CodeBlock
+        @language='bash'
+        @value={{@model.worker_filter}}
+        @hasCopyButton={{true}}
+        as |CB|
+      >
+        <CB.Title>
+          {{t 'resources.credential-store.titles.worker-filter'}}
+        </CB.Title>
+        <CB.Description>
+          {{t
+            'resources.credential-store.titles.formatted-worker-filter.description'
+          }}
+        </CB.Description>
+      </Hds::CodeBlock>
+    {{else}}
+      <Rose::Layout::Centered>
         <Hds::ApplicationState as |A|>
           <A.Header
             @title={{t 'resources.credential-store.messages.no-filter.title'}}
@@ -63,7 +61,7 @@
             />
           </A.Footer>
         </Hds::ApplicationState>
-      {{/if}}
-    </Rose::Layout::Centered>
+      </Rose::Layout::Centered>
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>
