@@ -8,12 +8,7 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 const WORKERS_FLYOUT = '[data-test-worker-tags-flyout]';
 const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] div button';

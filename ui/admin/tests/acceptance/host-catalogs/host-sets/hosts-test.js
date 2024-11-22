@@ -16,12 +16,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);

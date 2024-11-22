@@ -12,8 +12,6 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
-  // These are left here intentionally for future reference.
-  // currentSession,
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
