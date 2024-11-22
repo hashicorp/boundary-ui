@@ -131,7 +131,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    * Save worker filter
    * @param {CredentialStoreModel} credentialStore
    */
-
   @action
   @loading
   @notifyError(({ message }) => message, { catch: true })
@@ -147,7 +146,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    * Cancel adding or editing a worker filter
    * @param {CredentialStoreModel} credentialStore
    */
-
   @action
   async cancelWorkerFilter(credentialStore) {
     credentialStore.rollbackAttributes();
