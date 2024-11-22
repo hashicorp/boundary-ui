@@ -8,6 +8,7 @@ import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
+import { flattenObject } from '../utils/flatten-nested-object';
 
 export const STATUS_SESSION_ACTIVE = 'active';
 export const STATUS_SESSION_PENDING = 'pending';
@@ -91,9 +92,9 @@ export class SessionCredential {
   extractSecrets(secretJSON) {
     // If `decoded` contains a `data` object and if that object's value is not empty,
     // we display its contents in a key/value format.
-    return Object.entries(secretJSON?.data || secretJSON)
-      .filter(([, value]) => value)
-      .map(([key, value]) => new SessionCredential.SecretItem(key, value));
+    return Object.entries(flattenObject(secretJSON)).map(
+      ([key, value]) => new SessionCredential.SecretItem(key, value),
+    );
   }
 
   // =methods

@@ -31,6 +31,7 @@ module('Unit | Model | session', function (hooks) {
       username: 'user',
       password: 'pass',
     };
+
     const formattedDataSecrets = sessionCredential.extractSecrets(plainSecrets);
     assert.deepEqual(formattedDataSecrets, [
       new SessionCredential.SecretItem('username', 'user'),
@@ -44,9 +45,10 @@ module('Unit | Model | session', function (hooks) {
 
     const formattedDecodedSecrets =
       sessionCredential.extractSecrets(dataSecrets);
+
     assert.deepEqual(formattedDecodedSecrets, [
-      new SessionCredential.SecretItem('username', 'user'),
-      new SessionCredential.SecretItem('email', 'test.com'),
+      new SessionCredential.SecretItem('data.username', 'user'),
+      new SessionCredential.SecretItem('data.email', 'test.com'),
     ]);
   });
 
