@@ -8315,14 +8315,6 @@ ember-auto-import@2.8.1, ember-auto-import@^2.2.3, ember-auto-import@^2.2.4, emb
     typescript-memoize "^1.0.0-alpha.3"
     walk-sync "^3.0.0"
 
-ember-autofocus-modifier@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/ember-autofocus-modifier/-/ember-autofocus-modifier-4.0.1.tgz#3ebfed826b2544831fd1e4b77540142cd4d3ac2b"
-  integrity sha512-WhRXG3JvrwNW7O/CFgduJ9V7zqD2QI2K89BYLD8Ai18D3nLJfKDdAkizYb+noIfHone6ttZ/PxNmW8+KdfapNg==
-  dependencies:
-    ember-cli-babel "^7.26.6"
-    ember-modifier "^3.2.7"
-
 ember-browser-services@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/ember-browser-services/-/ember-browser-services-4.0.3.tgz#c32b4127c2868a5668c4bfe8d8413885a613ec8c"
