@@ -838,7 +838,7 @@ credential-store:
         description: You haven't added a worker filter yet
       edit:
         title: Edit Worker Filter
-        description: The worker filter format for this credential store.
+        description: Specify workers that have access to the credential store.
   actions:
     add: Add Worker Filter
     delete: Delete Credential Store

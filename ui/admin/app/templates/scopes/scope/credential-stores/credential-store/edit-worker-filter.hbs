@@ -22,6 +22,7 @@
 
   <page.body>
     <Form::WorkerFilter
+      data-test-edit-worker-filter
       @name='worker_filter'
       @model={{@model}}
       @submit={{fn this.credentialStores.saveWorkerFilter @model}}
