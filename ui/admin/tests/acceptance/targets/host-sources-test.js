@@ -15,6 +15,7 @@ import {
   //currentSession,
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
@@ -85,9 +86,10 @@ module('Acceptance | targets | host-sources', function (hooks) {
     urls.targetHostSources = `${urls.target}/host-sources`;
     urls.targetAddHostSources = `${urls.target}/add-host-sources`;
     urls.hostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostCatalog.hostSetIds[0]}`;
-    // Generate resource counter
-    getTargetHostSetCount = () =>
-      this.server.schema.targets.first().hostSets.models.length;
+    urls.unknownHostSet =
+      // Generate resource counter
+      getTargetHostSetCount = () =>
+        this.server.schema.targets.first().hostSets.models.length;
     authenticateSession({ username: 'admin' });
   });
 
@@ -119,7 +121,13 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click(`[href="${urls.targetHostSources}"]`);
 
-    assert.dom('.rose-table-body tr:first-child a').doesNotExist();
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          instances.hostCatalogPlugin.hostSets[0],
+        ),
+      )
+      .doesNotExist();
   });
 
   test('can remove a host set', async function (assert) {

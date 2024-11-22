@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | credentials | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -117,7 +118,13 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read',
       );
     await visit(urls.credentials);
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernameKeyPairCredential))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
+      .doesNotExist();
   });
 
   test('cannot navigate to a username & key pair credential form without proper authorization', async function (assert) {
@@ -126,7 +133,13 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read',
       );
     await visit(urls.credentials);
-    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
+
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernameKeyPairCredential))
+      .doesNotExist();
   });
 
   test('cannot navigate to a JSON credential form without proper authorization', async function (assert) {
@@ -135,13 +148,25 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
         (item) => item != 'read',
       );
     await visit(urls.credentials);
-    assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
+
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.jsonCredential))
+      .doesNotExist();
   });
 
   test('cannot navigate to a JSON credential form when feature not enabled', async function (assert) {
     await visit(urls.credentials);
+
     assert.false(featuresService.isEnabled('json-credentials'));
-    assert.dom('.rose-table-body  tr:nth-child(3) a').doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.usernamePasswordCredential))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.jsonCredential))
+      .doesNotExist();
   });
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
@@ -159,7 +184,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     );
   });
 
-  test('users can navigate to credential and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to credential and incorrect url auto-corrects', async function (assert) {
     const credentialStore = this.server.create('credential-store', {
       scope: instances.scopes.project,
     });

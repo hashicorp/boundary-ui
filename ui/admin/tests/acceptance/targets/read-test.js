@@ -16,6 +16,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -125,8 +126,10 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget))
+      .doesNotExist();
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
@@ -137,8 +140,10 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget))
+      .doesNotExist();
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
@@ -160,7 +165,7 @@ module('Acceptance | targets | read', function (hooks) {
       .exists();
   });
 
-  test('users can navigate to target and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to target and incorrect url auto-corrects', async function (assert) {
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/targets/${instances.sshTarget.id}`;
 
     await visit(incorrectUrl);

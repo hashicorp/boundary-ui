@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   authenticateSession,
@@ -19,6 +20,7 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 module('Acceptance | groups | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
@@ -59,12 +61,12 @@ module('Acceptance | groups | read', function (hooks) {
   test('cannot navigate to a group form without proper authorization', async function (assert) {
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'read');
-    await visit(urls.group);
+    await visit(urls.groups);
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.group)).doesNotExist();
   });
 
-  test('users can navigate to group and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to group and incorrect url auto-corrects', async function (assert) {
     const orgScope = this.server.create('scope', {
       type: 'org',
       scope: { id: 'global', type: 'global' },

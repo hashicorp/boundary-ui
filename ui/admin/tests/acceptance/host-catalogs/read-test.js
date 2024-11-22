@@ -15,6 +15,7 @@ import {
   //invalidateSession,
 } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -83,7 +84,9 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.hostCatalog))
+      .doesNotExist();
   });
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
