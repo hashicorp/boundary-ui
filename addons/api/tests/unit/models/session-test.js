@@ -5,6 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { SessionCredential } from 'api/models/session';
 
 module('Unit | Model | session', function (hooks) {
   setupTest(hooks);
@@ -14,6 +15,39 @@ module('Unit | Model | session', function (hooks) {
     let model = store.createRecord('session', {});
     assert.ok(model);
     assert.notOk(model.isAvailable);
+  });
+
+  test('`extractSecrets` method should return an array of secret items', function (assert) {
+    const sessionCredential = new SessionCredential({
+      credential_source: {
+        id: '123',
+        name: 'Test Source',
+        description: 'Test Description',
+        type: 'Test Type',
+      },
+    });
+
+    const plainSecrets = {
+      username: 'user',
+      password: 'pass',
+    };
+    const formattedDataSecrets = sessionCredential.extractSecrets(plainSecrets);
+    assert.deepEqual(formattedDataSecrets, [
+      new SessionCredential.SecretItem('username', 'user'),
+      new SessionCredential.SecretItem('password', 'pass'),
+    ]);
+
+    // check for nested data, empty values should be filtered out
+    const dataSecrets = {
+      data: { username: 'user', password: '', email: 'test.com' },
+    };
+
+    const formattedDecodedSecrets =
+      sessionCredential.extractSecrets(dataSecrets);
+    assert.deepEqual(formattedDecodedSecrets, [
+      new SessionCredential.SecretItem('username', 'user'),
+      new SessionCredential.SecretItem('email', 'test.com'),
+    ]);
   });
 
   test('it allows cancellation of an active session', function (assert) {

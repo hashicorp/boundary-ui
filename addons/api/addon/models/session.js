@@ -23,7 +23,7 @@ export const statusTypes = [
 /**
  *
  */
-class SessionCredential {
+export class SessionCredential {
   // =classes
 
   /**
@@ -89,14 +89,11 @@ class SessionCredential {
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
   extractSecrets(secretJSON) {
-    // If `decoded` contains a `data` object and if that object has a `username` and `password`,
-    // then we need to return those as key-value pairs
-    // TODO: will there be other labels besides `username` and `password`?
-
-    const secretObj = secretJSON.data ? secretJSON.data : secretJSON;
-    return Object.entries(secretObj).map(
-      ([key, value]) => new SessionCredential.SecretItem(key, value),
-    );
+    // If `decoded` contains a `data` object and if that object's value is not empty,
+    // we display its contents in a key/value format.
+    return Object.entries(secretJSON?.data || secretJSON)
+      .filter(([, value]) => value)
+      .map(([key, value]) => new SessionCredential.SecretItem(key, value));
   }
 
   // =methods
