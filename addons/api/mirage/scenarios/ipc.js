@@ -97,6 +97,9 @@ export default function initializeMockIPC(server, config) {
                 data: {
                   password: '123',
                   username: 'test',
+                  email: {
+                    address: 'test.com',
+                  },
                 },
                 metadata: {
                   created_time: '2024-04-12T18:38:36.226715555Z',

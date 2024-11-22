@@ -47,8 +47,8 @@ module('Unit | Model | session', function (hooks) {
       sessionCredential.extractSecrets(nestedSecrets);
 
     assert.deepEqual(formattedNestedSecrets, [
-      new SessionCredential.SecretItem('data.username', 'user'),
-      new SessionCredential.SecretItem('data.email', 'test.com'),
+      new SessionCredential.SecretItem('username', 'user'),
+      new SessionCredential.SecretItem('email', 'test.com'),
     ]);
   });
 
