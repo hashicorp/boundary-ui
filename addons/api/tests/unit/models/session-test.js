@@ -27,26 +27,26 @@ module('Unit | Model | session', function (hooks) {
       },
     });
 
-    const plainSecrets = {
+    const secrets = {
       username: 'user',
       password: 'pass',
     };
 
-    const formattedDataSecrets = sessionCredential.extractSecrets(plainSecrets);
-    assert.deepEqual(formattedDataSecrets, [
+    const formattedSecretes = sessionCredential.extractSecrets(secrets);
+    assert.deepEqual(formattedSecretes, [
       new SessionCredential.SecretItem('username', 'user'),
       new SessionCredential.SecretItem('password', 'pass'),
     ]);
 
     // check for nested data, empty values should be filtered out
-    const dataSecrets = {
+    const nestedSecrets = {
       data: { username: 'user', password: '', email: 'test.com' },
     };
 
-    const formattedDecodedSecrets =
-      sessionCredential.extractSecrets(dataSecrets);
+    const formattedNestedSecrets =
+      sessionCredential.extractSecrets(nestedSecrets);
 
-    assert.deepEqual(formattedDecodedSecrets, [
+    assert.deepEqual(formattedNestedSecrets, [
       new SessionCredential.SecretItem('data.username', 'user'),
       new SessionCredential.SecretItem('data.email', 'test.com'),
     ]);
