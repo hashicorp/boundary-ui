@@ -76,7 +76,7 @@ export class SessionCredential {
   get secrets() {
     if (this.#payloadSecret?.decoded) {
       const secretJSON = this.#payloadSecret.decoded;
-      return this.extractSecrets(secretJSON);
+      return this.extractSecrets(secretJSON, this.source.type);
     } else {
       // decode from base64
       const decodedString = atob(this.#payloadSecret.raw);
@@ -86,13 +86,17 @@ export class SessionCredential {
 
   /**
    * Extracts secrets from the payload secret JSON object.
+   * We only need to flatten the object if the type is vault-generic
+   * or vault-ssh-certificate and we only need the data object.
    * @param {object} secretJSON - The payload secret JSON object.
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
-  extractSecrets(secretJSON) {
-    // If `decoded` contains a `data` object and if that object's value is not empty,
-    // we display its contents in a key/value format.
-    return Object.entries(flattenObject(secretJSON)).map(
+  extractSecrets(secretJSON, type) {
+    const source =
+      type.includes('vault') && secretJSON?.data
+        ? flattenObject(secretJSON?.data)
+        : secretJSON;
+    return Object.entries(source).map(
       ([key, value]) => new SessionCredential.SecretItem(key, value),
     );
   }

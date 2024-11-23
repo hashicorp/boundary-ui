@@ -32,7 +32,10 @@ module('Unit | Model | session', function (hooks) {
       password: 'pass',
     };
 
-    const formattedSecretes = sessionCredential.extractSecrets(secrets);
+    const formattedSecretes = sessionCredential.extractSecrets(
+      secrets,
+      'vault-generic',
+    );
     assert.deepEqual(formattedSecretes, [
       new SessionCredential.SecretItem('username', 'user'),
       new SessionCredential.SecretItem('password', 'pass'),
@@ -43,8 +46,10 @@ module('Unit | Model | session', function (hooks) {
       data: { username: 'user', password: '', email: 'test.com' },
     };
 
-    const formattedNestedSecrets =
-      sessionCredential.extractSecrets(nestedSecrets);
+    const formattedNestedSecrets = sessionCredential.extractSecrets(
+      nestedSecrets,
+      'vault-generic',
+    );
 
     assert.deepEqual(formattedNestedSecrets, [
       new SessionCredential.SecretItem('username', 'user'),
