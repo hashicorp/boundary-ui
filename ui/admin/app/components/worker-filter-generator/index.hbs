@@ -6,7 +6,9 @@
 <Hds::Form::Field as |F|>
   <F.Control>
     <Rose::CodeEditor as |c|>
-      <c.toolbar @copyText={{get @model @name}} />
+      {{#unless @hideToolbar}}
+        <c.toolbar @copyText={{get @model @name}} />
+      {{/unless}}
       <c.fieldEditor
         @onInput={{fn this.setWorkerFilter @model @name}}
         @value={{or (get @model @name) ''}}

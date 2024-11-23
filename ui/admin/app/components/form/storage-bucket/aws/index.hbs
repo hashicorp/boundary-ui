@@ -476,7 +476,11 @@
           data-test-worker-filter
         />
       {{else}}
-        <WorkerFilterGenerator @model={{@model}} @name='worker_filter' />
+        <WorkerFilterGenerator
+          @model={{@model}}
+          @name='worker_filter'
+          @hideToolbar={{true}}
+        />
       {{/if}}
     </F.Control>
   </Hds::Form::Fieldset>
