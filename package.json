@@ -47,7 +47,7 @@
     "git-cz": "^4.9.0",
     "husky": "^9.1.6",
     "license-checker": "^25.0.1",
-    "lint-staged": "^13.0.2"
+    "lint-staged": "^15.2.10"
   },
   "resolutions": {
     "**/nomnom/underscore": "^1.12.1",
