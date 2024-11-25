@@ -16,6 +16,13 @@
       @text={{t 'resources.credential.actions.create'}}
     />
   {{/if}}
+  {{#if (and (feature-flag 'vault-worker-filter') @model.isVault)}}
+    <dd.Separator />
+    <dd.Interactive
+      @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
+      @text={{t 'resources.credential-store.actions.edit'}}
+    />
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
     <dd.Interactive
