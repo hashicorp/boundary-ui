@@ -3,7 +3,11 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.credential-store.titles.worker-filter')}}
+{{page-title (t 'resources.credential-store.worker-filter.title')}}
+<Breadcrumbs::Item
+  @text={{t 'resources.credential-store.worker-filter.title'}}
+  @route='scopes.scope.credential-stores.credential-store.worker-filter'
+/>
 
 <Rose::Layout::Page as |page|>
   <page.breadcrumbs>
@@ -26,24 +30,42 @@
   </page.actions>
 
   <page.body>
-    <Rose::Layout::Centered>
-      <Hds::ApplicationState as |A|>
-        <A.Header
-          @title={{t 'resources.credential-store.messages.no-filter.title'}}
-        />
-        <A.Body
-          @text={{t
-            'resources.credential-store.messages.no-filter.description'
-          }}
-        />
-        <A.Footer as |F|>
-          <F.LinkStandalone
-            @icon='plus-circle'
-            @text={{t 'resources.credential-store.actions.add'}}
-            @route='scopes.scope.credential-stores.credential-store.index'
+    {{#if @model.worker_filter}}
+      <Hds::CodeBlock
+        @language='bash'
+        @value={{@model.worker_filter}}
+        @hasCopyButton={{true}}
+        as |CB|
+      >
+        <CB.Title>
+          {{t 'resources.credential-store.worker-filter.title'}}
+        </CB.Title>
+        <CB.Description>
+          {{t 'resources.credential-store.worker-filter.description'}}
+        </CB.Description>
+      </Hds::CodeBlock>
+    {{else}}
+      <Rose::Layout::Centered>
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t
+              'resources.credential-store.worker-filter.messages.none.title'
+            }}
           />
-        </A.Footer>
-      </Hds::ApplicationState>
-    </Rose::Layout::Centered>
+          <A.Body
+            @text={{t
+              'resources.credential-store.worker-filter.messages.none.description'
+            }}
+          />
+          <A.Footer as |F|>
+            <F.LinkStandalone
+              @icon='plus-circle'
+              @text={{t 'resources.credential-store.actions.add'}}
+              @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
+            />
+          </A.Footer>
+        </Hds::ApplicationState>
+      </Rose::Layout::Centered>
+    {{/if}}
   </page.body>
 </Rose::Layout::Page>
