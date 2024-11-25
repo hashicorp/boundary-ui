@@ -88,11 +88,15 @@
     </G.RadioField>
   </Hds::Form::Radio::Group>
 
-  <Hds::Form::Fieldset class='input-values' as |F|>
-    <F.Legend>{{t
+  <Hds::Form::Fieldset
+    aria-labelledby='input-values-label input-values-help'
+    class='input-values'
+    as |F|
+  >
+    <F.Legend id='input-values-label'>{{t
         'worker-filter-generator.filter-generator.input-values.title'
       }}</F.Legend>
-    <F.HelperText>{{t
+    <F.HelperText id='input-values-help'>{{t
         'worker-filter-generator.filter-generator.input-values.description'
       }}</F.HelperText>
     <F.Control>
@@ -150,11 +154,16 @@
     </F.Control>
   </Hds::Form::Fieldset>
 
-  <Hds::Form::Fieldset class='formatted-results' @layout='vertical' as |F|>
-    <F.Legend>{{t
+  <Hds::Form::Fieldset
+    aria-labelledby='formatted-results-label formatted-results-help'
+    class='formatted-results'
+    @layout='vertical'
+    as |F|
+  >
+    <F.Legend id='formatted-results-label'>{{t
         'worker-filter-generator.filter-generator.formatted-result.title'
       }}</F.Legend>
-    <F.HelperText>{{t
+    <F.HelperText id='formatted-results-help'>{{t
         'worker-filter-generator.filter-generator.formatted-result.description'
       }}</F.HelperText>
     <F.Control>

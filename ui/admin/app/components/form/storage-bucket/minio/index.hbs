@@ -312,14 +312,15 @@
 
   {{! worker_filter }}
   <Hds::Form::Fieldset
+    aria-labelledby='worker-filter-label worker-filter-help'
     class='storage-bucket-worker-filter'
     @isRequired={{true}}
     as |F|
   >
-    <F.Legend>{{t
+    <F.Legend id='worker-filter-label'>{{t
         'resources.storage-bucket.form.worker_filter.label'
       }}</F.Legend>
-    <F.HelperText>
+    <F.HelperText id='worker-filter-help'>
       {{t 'resources.storage-bucket.form.worker_filter.help'}}
       <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
         {{t 'actions.learn-more'}}
