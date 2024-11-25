@@ -19,7 +19,7 @@
   {{#if (feature-flag 'vault-worker-filter')}}
     <dd.Separator />
     <dd.Interactive
-      @route='scopes.scope.credential-stores.credential-store.index'
+      @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
       @text={{t 'resources.credential-store.actions.edit'}}
     />
   {{/if}}
