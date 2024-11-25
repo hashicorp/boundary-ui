@@ -16,6 +16,13 @@
       @text={{t 'resources.credential.actions.create'}}
     />
   {{/if}}
+  {{#if (feature-flag 'vault-worker-filter')}}
+    <dd.Separator />
+    <dd.Interactive
+      @route='scopes.scope.credential-stores.credential-store.index'
+      @text={{t 'resources.credential-store.actions.edit'}}
+    />
+  {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
     <dd.Interactive
@@ -24,4 +31,5 @@
       {{on 'click' @delete}}
     />
   {{/if}}
+  {{!-- {{/if}} --}}
 </Hds::Dropdown>

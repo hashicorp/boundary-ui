@@ -842,6 +842,7 @@ credential-store:
   actions:
     add: Add Worker Filter
     delete: Delete Credential Store
+    edit: Edit Worker Filter
   types:
     vault: Vault
     static: Static
