@@ -6,10 +6,15 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { generateComponentID } from 'rose/utilities/component-auto-id';
 
 export default class WorkerFilterGeneratorIndexComponent extends Component {
   // =attributes
 
+  inputValuesLabelId = generateComponentID();
+  inputValuesHelpId = generateComponentID();
+  formattedResultLabelId = generateComponentID();
+  formattedResultHelpId = generateComponentID();
   generatorTagType = 'tag';
   generatorNameType = 'name';
   operatorOptions = ['==', 'matches', 'contains'];

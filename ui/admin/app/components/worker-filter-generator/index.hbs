@@ -89,14 +89,15 @@
   </Hds::Form::Radio::Group>
 
   <Hds::Form::Fieldset
-    aria-labelledby='input-values-label input-values-help'
+    aria-labelledby={{this.inputValuesLabelId}}
+    aria-describedby={{this.inputValuesHelpId}}
     class='input-values'
     as |F|
   >
-    <F.Legend id='input-values-label'>{{t
+    <F.Legend id={{this.inputValuesLabelId}}>{{t
         'worker-filter-generator.filter-generator.input-values.title'
       }}</F.Legend>
-    <F.HelperText id='input-values-help'>{{t
+    <F.HelperText id={{this.inputValuesHelpId}}>{{t
         'worker-filter-generator.filter-generator.input-values.description'
       }}</F.HelperText>
     <F.Control>
@@ -155,15 +156,16 @@
   </Hds::Form::Fieldset>
 
   <Hds::Form::Fieldset
-    aria-labelledby='formatted-results-label formatted-results-help'
+    aria-labelledby={{this.formattedResultLabelId}}
+    aria-describedby={{this.formattedResultHelpId}}
     class='formatted-results'
     @layout='vertical'
     as |F|
   >
-    <F.Legend id='formatted-results-label'>{{t
+    <F.Legend id={{this.formattedResultLabelId}}>{{t
         'worker-filter-generator.filter-generator.formatted-result.title'
       }}</F.Legend>
-    <F.HelperText id='formatted-results-help'>{{t
+    <F.HelperText id={{this.formattedResultHelpId}}>{{t
         'worker-filter-generator.filter-generator.formatted-result.description'
       }}</F.HelperText>
     <F.Control>
