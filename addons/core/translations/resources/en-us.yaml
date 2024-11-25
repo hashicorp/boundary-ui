@@ -835,7 +835,7 @@ credential-store:
     messages:
       none:
         title: No worker filter added
-        description: You haven't added a worker filter yet
+        description: You haven't added a worker filter yet.
       edit:
         title: Edit Worker Filter
         description: Specify workers that have access to the credential store.
