@@ -43,7 +43,7 @@
   "dependencies": {
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
-    "uuid": "^9.0.0",
+    "uuid": "^11.0.3",
     "@xterm/xterm": "^5.5.0",
     "@xterm/addon-canvas": "^0.7.0",
     "@xterm/addon-fit": "^0.10.0"
