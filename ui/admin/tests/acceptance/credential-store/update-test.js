@@ -344,7 +344,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     );
   });
 
-  test('when work filters codeblock is empty, save btn reroutes to empty state template', async function (assert) {
+  test('when work filters code editor is empty, save btn reroutes to empty state template', async function (assert) {
     instances.vaultCredentialStore.update({
       attributes: { worker_filter: null },
     });
@@ -361,5 +361,19 @@ module('Acceptance | credential-stores | update', function (hooks) {
       .hasText(
         `No worker filter added You haven't added a worker filter yet. Add Worker Filter`,
       );
+  });
+
+  test('when code editor has worker filter, save btn reroutes and displays readonly code block', async function (assert) {
+    instances.vaultCredentialStore.update({
+      attributes: { worker_filter: '"bar" in "/tags/foo"' },
+    });
+
+    await visit(urls.vaultCredentialStore);
+    await visit(urls.workerFilter);
+
+    console.log(instances.vaultCredentialStore);
+
+    assert.dom('.hds-code-block__code').exists();
+    assert.dom('.hds-code-block__code').includesText('"bar" in "/tags/foo"');
   });
 });
