@@ -106,7 +106,7 @@
     "rose": "*",
     "sass": "^1.69.5",
     "shx": "^0.3.4",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard": "^32.0.0",
