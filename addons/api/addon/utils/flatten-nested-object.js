@@ -7,6 +7,7 @@
  * Flattens a nested object into a single-level object.
  * @param obj
  * @param result
+ * @param parentPath
  * @returns {Object}
  */
 
