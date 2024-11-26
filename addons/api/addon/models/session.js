@@ -93,7 +93,6 @@ export class SessionCredential {
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
   extractSecrets(secretJSON, type) {
-    console.log(secretJSON);
     const source =
       TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data
         ? flattenObject(secretJSON?.data)
