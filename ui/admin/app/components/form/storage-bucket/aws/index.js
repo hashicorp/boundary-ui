@@ -10,13 +10,10 @@ import {
   TYPE_CREDENTIAL_DYNAMIC,
 } from 'api/models/storage-bucket';
 import { tracked } from '@glimmer/tracking';
-import { generateComponentID } from 'rose/utilities/component-auto-id';
 
 export default class FormStorageBucketAwsIndexComponent extends Component {
   // =attributes
 
-  workerFilterLabelId = generateComponentID();
-  workerFilterHelpId = generateComponentID();
   @tracked selectedCredentialType = this.args.model.credentialType;
   @tracked showDynamicCredentials =
     this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;

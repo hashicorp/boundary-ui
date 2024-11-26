@@ -88,100 +88,109 @@
     </G.RadioField>
   </Hds::Form::Radio::Group>
 
-  <Hds::Form::Fieldset
-    aria-labelledby={{this.inputValuesLabelId}}
-    aria-describedby={{this.inputValuesHelpId}}
-    class='input-values'
-    as |F|
-  >
-    <F.Legend id={{this.inputValuesLabelId}}>{{t
-        'worker-filter-generator.filter-generator.input-values.title'
-      }}</F.Legend>
-    <F.HelperText id={{this.inputValuesHelpId}}>{{t
-        'worker-filter-generator.filter-generator.input-values.description'
-      }}</F.HelperText>
-    <F.Control>
-      {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
-        <Hds::Form::TextInput::Field
-          @value={{this.key}}
-          name='tag_key'
-          @width='320px'
-          {{on 'input' (set-from-event this 'key')}}
-          as |F|
-        >
-          <F.Label>{{t 'form.key.label'}}</F.Label>
-        </Hds::Form::TextInput::Field>
-      {{else}}
-        <Hds::Form::Select::Field
-          name='name_operator'
-          @value={{this.operator}}
-          @width='320px'
-          {{on 'change' (set-from-event this 'operator')}}
-          as |F|
-        >
-          <F.Label>{{t 'form.operator.label'}}</F.Label>
-          <F.Options>
-            <option value=''>
-              {{t 'worker-filter-generator.filter-generator.operator.default'}}
-            </option>
-            {{#each this.operatorOptions as |operator|}}
-              <option value={{operator}} selected={{eq operator this.operator}}>
-                {{#if (eq operator '==')}}
-                  {{operator}}
-                {{else}}
-                  {{t
-                    (concat
-                      'worker-filter-generator.filter-generator.operator.'
-                      operator
-                    )
-                  }}
-                {{/if}}
+  {{#let (unique-id) (unique-id) as |labelId helpId|}}
+    <Hds::Form::Fieldset
+      aria-labelledby={{labelId}}
+      aria-describedby={{helpId}}
+      class='input-values'
+      as |F|
+    >
+      <F.Legend id={{labelId}}>{{t
+          'worker-filter-generator.filter-generator.input-values.title'
+        }}</F.Legend>
+      <F.HelperText id={{helpId}}>{{t
+          'worker-filter-generator.filter-generator.input-values.description'
+        }}</F.HelperText>
+      <F.Control>
+        {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
+          <Hds::Form::TextInput::Field
+            @value={{this.key}}
+            name='tag_key'
+            @width='320px'
+            {{on 'input' (set-from-event this 'key')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.key.label'}}</F.Label>
+          </Hds::Form::TextInput::Field>
+        {{else}}
+          <Hds::Form::Select::Field
+            name='name_operator'
+            @value={{this.operator}}
+            @width='320px'
+            {{on 'change' (set-from-event this 'operator')}}
+            as |F|
+          >
+            <F.Label>{{t 'form.operator.label'}}</F.Label>
+            <F.Options>
+              <option value=''>
+                {{t
+                  'worker-filter-generator.filter-generator.operator.default'
+                }}
               </option>
-            {{/each}}
-          </F.Options>
-        </Hds::Form::Select::Field>
-      {{/if}}
-    </F.Control>
-    <F.Control>
-      <Hds::Form::TextInput::Field
-        @value={{this.value}}
-        name='tag_value'
-        @width='320px'
-        {{on 'input' (set-from-event this 'value')}}
-        as |F|
-      >
-        <F.Label>{{t 'form.value.label'}}</F.Label>
-      </Hds::Form::TextInput::Field>
-    </F.Control>
-  </Hds::Form::Fieldset>
-
-  <Hds::Form::Fieldset
-    aria-labelledby={{this.formattedResultLabelId}}
-    aria-describedby={{this.formattedResultHelpId}}
-    class='formatted-results'
-    @layout='vertical'
-    as |F|
-  >
-    <F.Legend id={{this.formattedResultLabelId}}>{{t
-        'worker-filter-generator.filter-generator.formatted-result.title'
-      }}</F.Legend>
-    <F.HelperText id={{this.formattedResultHelpId}}>{{t
-        'worker-filter-generator.filter-generator.formatted-result.description'
-      }}</F.HelperText>
-    <F.Control>
-      <Hds::Text::Body @tag='p' @weight='semibold'>{{t
-          'worker-filter-generator.filter-generator.formatted-result.label'
-        }}</Hds::Text::Body>
-      <div class='generated-results-container'>
-        <Hds::Form::TextInput::Base
-          readonly
-          id='generated-value'
-          name='generated_value'
-          @value={{this.generatedResult}}
+              {{#each this.operatorOptions as |operator|}}
+                <option
+                  value={{operator}}
+                  selected={{eq operator this.operator}}
+                >
+                  {{#if (eq operator '==')}}
+                    {{operator}}
+                  {{else}}
+                    {{t
+                      (concat
+                        'worker-filter-generator.filter-generator.operator.'
+                        operator
+                      )
+                    }}
+                  {{/if}}
+                </option>
+              {{/each}}
+            </F.Options>
+          </Hds::Form::Select::Field>
+        {{/if}}
+      </F.Control>
+      <F.Control>
+        <Hds::Form::TextInput::Field
+          @value={{this.value}}
+          name='tag_value'
           @width='320px'
-        />
-        <Hds::Copy::Button @text='Copy' @targetToCopy='#generated-value' />
-      </div>
-    </F.Control>
-  </Hds::Form::Fieldset>
+          {{on 'input' (set-from-event this 'value')}}
+          as |F|
+        >
+          <F.Label>{{t 'form.value.label'}}</F.Label>
+        </Hds::Form::TextInput::Field>
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/let}}
+
+  {{#let (unique-id) (unique-id) as |labelId helpId|}}
+    <Hds::Form::Fieldset
+      aria-labelledby={{labelId}}
+      aria-describedby={{helpId}}
+      class='formatted-results'
+      @layout='vertical'
+      as |F|
+    >
+      <F.Legend id={{labelId}}>{{t
+          'worker-filter-generator.filter-generator.formatted-result.title'
+        }}</F.Legend>
+      <F.HelperText id={{helpId}}>{{t
+          'worker-filter-generator.filter-generator.formatted-result.description'
+        }}</F.HelperText>
+      <F.Control>
+        <Hds::Text::Body @tag='p' @weight='semibold'>{{t
+            'worker-filter-generator.filter-generator.formatted-result.label'
+          }}</Hds::Text::Body>
+        <div class='generated-results-container'>
+          <Hds::Form::TextInput::Base
+            readonly
+            id='generated-value'
+            name='generated_value'
+            @value={{this.generatedResult}}
+            @width='320px'
+          />
+          <Hds::Copy::Button @text='Copy' @targetToCopy='#generated-value' />
+        </div>
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/let}}
 {{/if}}
