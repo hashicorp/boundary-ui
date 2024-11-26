@@ -363,7 +363,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
       );
   });
 
-  test('when code editor has worker filter, save btn reroutes and displays readonly code block', async function (assert) {
+  test('when worker filter exists, readonly code block displays the filter text', async function (assert) {
     instances.vaultCredentialStore.update({
       attributes: { worker_filter: '"bar" in "/tags/foo"' },
     });
