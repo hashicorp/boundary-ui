@@ -10,12 +10,13 @@ module('Unit | Utility | flatten-nested-object', function () {
   test('it flattens a nested object to single level object', function (assert) {
     const input = {
       a: 1,
-      b: { c: 2, d: 3 },
+      b: { c: 2, d: 3, e: { f: { g: { h: 10 } } } },
     };
     const expected = {
       a: 1,
       'b.c': 2,
       'b.d': 3,
+      'b.e.f.g.h': 10,
     };
     assert.deepEqual(flattenObject(input), expected);
   });
@@ -24,6 +25,9 @@ module('Unit | Utility | flatten-nested-object', function () {
     const inputOne = {
       a: null,
       b: { c: 2 },
+      d: {
+        e: { f: { g: { h: '' } } },
+      },
     };
     const inputTwo = {
       d: { e: null },

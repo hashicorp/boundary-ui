@@ -2,6 +2,7 @@
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
  */
+import { typeOf } from '@ember/utils';
 
 /**
  * Flattens a nested object into a single-level object.
@@ -14,7 +15,7 @@
 export const flattenObject = (obj, result = {}, parentKey = '') => {
   for (const key in obj) {
     // Check if the value is an object and it is not null
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
+    if (typeOf(obj[key]) === 'object' && obj[key] !== null) {
       // Recursively flatten the object
       flattenObject(obj[key], result, `${parentKey}${key}.`);
     } else if (obj[key]) {

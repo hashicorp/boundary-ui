@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { flattenObject } from '../utils/flatten-nested-object';
+import { TYPES_CREDENTIAL_LIBRARY } from 'api/models/credential-library';
 
 export const STATUS_SESSION_ACTIVE = 'active';
 export const STATUS_SESSION_PENDING = 'pending';
@@ -92,8 +93,9 @@ export class SessionCredential {
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
   extractSecrets(secretJSON, type) {
+    console.log(secretJSON);
     const source =
-      type.includes('vault') && secretJSON?.data
+      TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data
         ? flattenObject(secretJSON?.data)
         : secretJSON;
     return Object.entries(source).map(
