@@ -17,7 +17,6 @@ module('Unit | Utility | flatten-nested-object', function () {
       'b.c': 2,
       'b.d': 3,
     };
-    console.log(flattenObject(input), 'INPUT', expected);
     assert.deepEqual(flattenObject(input), expected);
   });
 
