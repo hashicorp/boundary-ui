@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { SessionCredential } from 'api/models/session';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
 module('Unit | Model | session', function (hooks) {
   setupTest(hooks);
@@ -34,7 +35,7 @@ module('Unit | Model | session', function (hooks) {
 
     const formattedSecretes = sessionCredential.extractSecrets(
       secrets,
-      'vault-generic',
+      TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
     );
     assert.deepEqual(formattedSecretes, [
       new SessionCredential.SecretItem('username', 'user'),
@@ -48,7 +49,7 @@ module('Unit | Model | session', function (hooks) {
 
     const formattedNestedSecrets = sessionCredential.extractSecrets(
       nestedSecrets,
-      'vault-generic',
+      TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
     );
 
     assert.deepEqual(formattedNestedSecrets, [
