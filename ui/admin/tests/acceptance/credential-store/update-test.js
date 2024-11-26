@@ -356,5 +356,10 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click('.rose-form-actions [type="submit"]');
 
     assert.dom('.hds-application-state').exists();
+    assert
+      .dom('.hds-application-state')
+      .hasText(
+        `No worker filter added You haven't added a worker filter yet. Add Worker Filter`,
+      );
   });
 });
