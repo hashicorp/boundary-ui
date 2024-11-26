@@ -7,6 +7,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "doc:toc": "doctoc README.md",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
