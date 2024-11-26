@@ -32,6 +32,7 @@
   <page.body>
     {{#if @model.worker_filter}}
       <Hds::CodeBlock
+        data-test-formatted-worker-filter
         @language='bash'
         @value={{@model.worker_filter}}
         @hasCopyButton={{true}}
@@ -46,7 +47,7 @@
       </Hds::CodeBlock>
     {{else}}
       <Rose::Layout::Centered>
-        <Hds::ApplicationState as |A|>
+        <Hds::ApplicationState data-test-worker-filter-empty-state as |A|>
           <A.Header
             @title={{t
               'resources.credential-store.worker-filter.messages.none.title'
