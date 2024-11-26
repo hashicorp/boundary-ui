@@ -33,6 +33,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-n": "^16.3.1",
+    "nanoid": "^5.0.8",
     "prettier": "^3.0.0"
   },
   "engines": {

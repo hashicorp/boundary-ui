@@ -3,11 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { chromium } from '@playwright/test';
+import { chromium, test as baseTest } from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
 
 import { LoginPage } from './admin/pages/login.js';
-import { test as baseTest } from 'playwright/types/test';
 
 async function globalSetup() {
   await checkEnv([
