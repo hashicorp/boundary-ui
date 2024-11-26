@@ -15,10 +15,12 @@
       @disabled={{(is-loading)}}
       as |form|
     >
+
+      {{! template-lint-disable no-autofocus-attribute  }}
       <Hds::Form::TextInput::Field
         name='host'
         @value={{this.clusterUrl}}
-        {{autofocus}}
+        autofocus
         {{on 'input' (set-from-event this 'clusterUrl')}}
         as |F|
       >
