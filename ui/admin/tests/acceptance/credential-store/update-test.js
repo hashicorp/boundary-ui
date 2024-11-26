@@ -4,12 +4,21 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  find,
+  click,
+  fillIn,
+  currentRouteName,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -59,7 +68,12 @@ module('Acceptance | credential-stores | update', function (hooks) {
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
+    urls.workerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/worker-filter`;
     authenticateSession({});
+
+    // Enable feature flag
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.enable('vault-worker-filter');
   });
 
   test('can save changes to existing static credential store', async function (assert) {
@@ -296,5 +310,51 @@ module('Acceptance | credential-stores | update', function (hooks) {
         'random string',
       );
     }
+  });
+
+  test('vault credential store displays worker filter tab', async function (assert) {
+    await visit(urls.vaultCredentialStore);
+
+    assert.dom(commonSelectors.HREF(urls.workerFilter)).exists();
+  });
+
+  test('worker filter tab routes to correct url', async function (assert) {
+    await visit(urls.vaultCredentialStore);
+    await visit(urls.workerFilter);
+
+    assert.strictEqual(
+      currentRouteName(),
+      'scopes.scope.credential-stores.credential-store.worker-filter',
+    );
+  });
+
+  test('manage actions dropdown displays edit option and routes to correct url', async function (assert) {
+    instances.vaultCredentialStore.update({
+      attributes: { worker_filter: null },
+    });
+    await visit(urls.vaultCredentialStore);
+    await visit(urls.workerFilter);
+
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.EDIT_ACTION_SELECTOR);
+
+    assert.strictEqual(
+      currentRouteName(),
+      'scopes.scope.credential-stores.credential-store.edit-worker-filter',
+    );
+  });
+
+  test('when work filters codeblock is empty, save btn reroutes to empty state template', async function (assert) {
+    instances.vaultCredentialStore.update({
+      attributes: { worker_filter: null },
+    });
+    await visit(urls.vaultCredentialStore);
+    await visit(urls.workerFilter);
+
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.EDIT_ACTION_SELECTOR);
+    await click('.rose-form-actions [type="submit"]');
+
+    assert.dom('.hds-application-state').exists();
   });
 });
