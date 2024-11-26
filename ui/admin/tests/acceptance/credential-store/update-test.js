@@ -371,8 +371,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await visit(urls.vaultCredentialStore);
     await visit(urls.workerFilter);
 
-    console.log(instances.vaultCredentialStore);
-
     assert.dom('.hds-code-block__code').exists();
     assert.dom('.hds-code-block__code').includesText('"bar" in "/tags/foo"');
   });
