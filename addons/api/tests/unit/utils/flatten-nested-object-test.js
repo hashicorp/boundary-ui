@@ -21,13 +21,19 @@ module('Unit | Utility | flatten-nested-object', function () {
   });
 
   test('removes keys with null/empty values', function (assert) {
-    const input = {
+    const inputOne = {
       a: null,
       b: { c: 2 },
     };
-    const expected = {
+    const inputTwo = {
+      d: { e: null },
+    };
+    const expectedResultOne = {
       'b.c': 2,
     };
-    assert.deepEqual(flattenObject(input), expected);
+    const expectedResultTwo = {};
+
+    assert.deepEqual(flattenObject(inputOne), expectedResultOne);
+    assert.deepEqual(flattenObject(inputTwo), expectedResultTwo);
   });
 });
