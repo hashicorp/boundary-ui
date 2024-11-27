@@ -102,7 +102,7 @@ module.exports = function (environment) {
         'target.enable-session-recording':
           '/docs/configuration/session-recording/enable-session-recording',
         'worker-filters-format':
-          '/docs/concepts/filtering/worker-tags#worker-filtering',
+          '/docs/concepts/filtering/worker-tags#filter-examples',
         user: '/docs/concepts/domain-model/users',
         downloads: '/install',
         'getting-started.desktop':

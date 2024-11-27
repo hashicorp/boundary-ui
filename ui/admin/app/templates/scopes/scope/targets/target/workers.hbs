@@ -51,7 +51,7 @@
                   'resources.target.workers.accordion-label.ingress-workers'
                 }}</span>
               <Hds::Link::Standalone
-                @icon='edit'
+                @icon={{if @model.ingress_worker_filter 'edit' 'plus-circle'}}
                 @text={{t
                   (if
                     @model.ingress_worker_filter
