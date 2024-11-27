@@ -12,8 +12,10 @@
 >
   <WorkerFilterGenerator @model={{@model}} @name={{@name}} />
 
-  <form.actions
-    @submitText={{t 'actions.save'}}
-    @cancelText={{t 'actions.cancel'}}
-  />
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
 </Rose::Form>
