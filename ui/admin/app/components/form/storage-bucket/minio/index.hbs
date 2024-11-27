@@ -315,33 +315,41 @@
   {{/if}}
 
   {{! worker_filter }}
-  <Hds::Form::Fieldset
-    class='storage-bucket-worker-filter'
-    @isRequired={{true}}
-    as |F|
-  >
-    <F.Legend>{{t
-        'resources.storage-bucket.form.worker_filter.label'
-      }}</F.Legend>
-    <F.HelperText>
-      {{t 'resources.storage-bucket.form.worker_filter.help'}}
-      <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
-        {{t 'actions.learn-more'}}
-      </Hds::Link::Inline>
-    </F.HelperText>
-    <F.Control>
-      {{#if form.disabled}}
-        <Hds::CodeBlock
-          @language='bash'
-          @value={{@model.worker_filter}}
-          @hasCopyButton={{true}}
-          data-test-worker-filter
-        />
-      {{else}}
-        <WorkerFilterGenerator @model={{@model}} @name='worker_filter' />
-      {{/if}}
-    </F.Control>
-  </Hds::Form::Fieldset>
+  {{#let (unique-id) (unique-id) as |labelId helpId|}}
+    <Hds::Form::Fieldset
+      aria-labelledby={{labelId}}
+      aria-describedby={{helpId}}
+      class='storage-bucket-worker-filter'
+      @isRequired={{true}}
+      as |F|
+    >
+      <F.Legend id={{labelId}}>{{t
+          'resources.storage-bucket.form.worker_filter.label'
+        }}</F.Legend>
+      <F.HelperText {{helpId}}>
+        {{t 'resources.storage-bucket.form.worker_filter.help'}}
+        <Hds::Link::Inline @href={{doc-url 'storage-bucket.worker-filter'}}>
+          {{t 'actions.learn-more'}}
+        </Hds::Link::Inline>
+      </F.HelperText>
+      <F.Control>
+        {{#if form.disabled}}
+          <Hds::CodeBlock
+            @language='bash'
+            @value={{@model.worker_filter}}
+            @hasCopyButton={{true}}
+            data-test-worker-filter
+          />
+        {{else}}
+          <WorkerFilterGenerator
+            @model={{@model}}
+            @name='worker_filter'
+            @hideToolbar={{true}}
+          />
+        {{/if}}
+      </F.Control>
+    </Hds::Form::Fieldset>
+  {{/let}}
 
   {{! disable_credential_rotation }}
   <Hds::Form::Checkbox::Field
