@@ -10,6 +10,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -59,7 +61,13 @@ module('Acceptance | credential-stores | update', function (hooks) {
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
+    urls.workerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/worker-filter`;
+    urls.editWorkerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/edit-worker-filter`;
     authenticateSession({});
+
+    // Enable feature flag
+    const featuresService = this.owner.lookup('service:features');
+    featuresService.enable('vault-worker-filter');
   });
 
   test('can save changes to existing static credential store', async function (assert) {
@@ -296,5 +304,64 @@ module('Acceptance | credential-stores | update', function (hooks) {
         'random string',
       );
     }
+  });
+
+  test('visiting static credential store does not show worker filter tab', async function (assert) {
+    await visit(urls.staticCredentialStore);
+
+    assert.dom(commonSelectors.HREF(urls.workerFilter)).doesNotExist();
+  });
+
+  test('user can click vault credential store worker filter tab and be rerouted to correct url', async function (assert) {
+    await visit(urls.vaultCredentialStore);
+
+    assert.dom(commonSelectors.HREF(urls.workerFilter)).exists();
+
+    await click(commonSelectors.HREF(urls.workerFilter));
+
+    assert.strictEqual(currentURL(), urls.workerFilter);
+  });
+
+  test('manage actions dropdown displays edit option and routes to correct url', async function (assert) {
+    await visit(urls.vaultCredentialStore);
+
+    await click(commonSelectors.HREF(urls.workerFilter));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.EDIT_ACTION);
+
+    assert.strictEqual(currentURL(), urls.editWorkerFilter);
+  });
+
+  test('when work filters code editor is empty, save btn reroutes to empty state template', async function (assert) {
+    instances.vaultCredentialStore.update({
+      attributes: { worker_filter: null },
+    });
+    await visit(urls.vaultCredentialStore);
+
+    await click(commonSelectors.HREF(urls.workerFilter));
+
+    assert.dom('.hds-application-state').exists();
+    assert
+      .dom('.hds-application-state')
+      .hasText(
+        `No worker filter added You haven't added a worker filter yet. Add Worker Filter`,
+      );
+  });
+
+  test('when worker filter exists, readonly code block displays the filter text', async function (assert) {
+    instances.vaultCredentialStore.update({
+      attributes: { worker_filter: null },
+    });
+
+    await visit(urls.vaultCredentialStore);
+
+    await click(commonSelectors.HREF(urls.workerFilter));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.EDIT_ACTION);
+    await fillIn(selectors.CODE_EDITOR_BODY, '"bar" in "/tags/foo"');
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(selectors.CODE_BLOCK_BODY).exists();
+    assert.dom(selectors.CODE_BLOCK_BODY).includesText('"bar" in "/tags/foo"');
   });
 });
