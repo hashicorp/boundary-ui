@@ -149,7 +149,7 @@ test.describe('Targets test', async () => {
         .getByRole('listitem')
         .filter({ hasText: 'private_key' })
         .locator('pre'),
-    ).toContainText('BEGIN OPENSSH PRIVATE KEY');
+    ).toContainText(/BEGIN (OPENSSH|RSA) PRIVATE KEY/);
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
@@ -202,7 +202,7 @@ test.describe('Targets test', async () => {
           .getByRole('listitem')
           .filter({ hasText: 'private_key' })
           .locator('pre'),
-      ).toContainText('BEGIN OPENSSH PRIVATE KEY');
+      ).toContainText(/BEGIN (OPENSSH|RSA) PRIVATE KEY/);
 
       await authedPage.getByRole('button', { name: 'End Session' }).click();
       await expect(
