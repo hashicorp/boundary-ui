@@ -4,14 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  find,
-  click,
-  fillIn,
-  currentRouteName,
-} from '@ember/test-helpers';
+import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -69,6 +62,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.workerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/worker-filter`;
+    urls.editWorkerFilter = `${urls.credentialStores}/${instances.vaultCredentialStore.id}/edit-worker-filter`;
     authenticateSession({});
 
     // Enable feature flag
@@ -312,36 +306,30 @@ module('Acceptance | credential-stores | update', function (hooks) {
     }
   });
 
-  test('vault credential store displays worker filter tab', async function (assert) {
+  test('visiting static credential store does not show worker filter tab', async function (assert) {
+    await visit(urls.staticCredentialStore);
+
+    assert.dom(commonSelectors.HREF(urls.workerFilter)).doesNotExist();
+  });
+
+  test('user can click vault credential store worker filter tab and be rerouted to correct url', async function (assert) {
     await visit(urls.vaultCredentialStore);
 
     assert.dom(commonSelectors.HREF(urls.workerFilter)).exists();
-  });
 
-  test('worker filter tab routes to correct url', async function (assert) {
-    await visit(urls.vaultCredentialStore);
-    await visit(urls.workerFilter);
+    await click(commonSelectors.HREF(urls.workerFilter));
 
-    assert.strictEqual(
-      currentRouteName(),
-      'scopes.scope.credential-stores.credential-store.worker-filter',
-    );
+    assert.strictEqual(currentURL(), urls.workerFilter);
   });
 
   test('manage actions dropdown displays edit option and routes to correct url', async function (assert) {
-    instances.vaultCredentialStore.update({
-      attributes: { worker_filter: null },
-    });
     await visit(urls.vaultCredentialStore);
-    await visit(urls.workerFilter);
 
+    await click(commonSelectors.HREF(urls.workerFilter));
     await click(selectors.MANAGE_DROPDOWN_SELECTOR);
     await click(selectors.EDIT_ACTION_SELECTOR);
 
-    assert.strictEqual(
-      currentRouteName(),
-      'scopes.scope.credential-stores.credential-store.edit-worker-filter',
-    );
+    assert.strictEqual(currentURL(), urls.editWorkerFilter);
   });
 
   test('when work filters code editor is empty, save btn reroutes to empty state template', async function (assert) {
@@ -349,11 +337,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
       attributes: { worker_filter: null },
     });
     await visit(urls.vaultCredentialStore);
-    await visit(urls.workerFilter);
 
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    await click(selectors.EDIT_ACTION_SELECTOR);
-    await click('.rose-form-actions [type="submit"]');
+    await click(commonSelectors.HREF(urls.workerFilter));
 
     assert.dom('.hds-application-state').exists();
     assert
@@ -365,11 +350,19 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
   test('when worker filter exists, readonly code block displays the filter text', async function (assert) {
     instances.vaultCredentialStore.update({
-      attributes: { worker_filter: '"bar" in "/tags/foo"' },
+      attributes: { worker_filter: null },
     });
 
     await visit(urls.vaultCredentialStore);
-    await visit(urls.workerFilter);
+
+    await click(commonSelectors.HREF(urls.workerFilter));
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.EDIT_ACTION_SELECTOR);
+    await fillIn(
+      '[data-test-code-editor-field-editor] textarea',
+      '"bar" in "/tags/foo"',
+    );
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom('.hds-code-block__code').exists();
     assert.dom('.hds-code-block__code').includesText('"bar" in "/tags/foo"');
