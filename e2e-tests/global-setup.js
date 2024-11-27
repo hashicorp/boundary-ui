@@ -5,7 +5,6 @@
 
 import { chromium, test as baseTest } from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
-
 import { LoginPage } from './admin/pages/login.js';
 
 async function globalSetup() {
@@ -15,7 +14,10 @@ async function globalSetup() {
     'E2E_PASSWORD_ADMIN_PASSWORD',
     'E2E_PASSWORD_AUTH_METHOD_ID',
   ]);
+  await authenticateToBoundary();
+}
 
+const authenticateToBoundary = async () => {
   // Log in and save the authenticated state to reuse in tests
   const browser = await chromium.launch();
   const page = await browser.newPage();
@@ -36,12 +38,13 @@ async function globalSetup() {
   process.env.E2E_TOKEN = state.authenticated.token;
 
   await browser.close();
-}
+};
 
 export default globalSetup;
 
 export const authenticatedState = './admin/artifacts/authenticated-state.json';
 
+// Centralized location for environment variables used in tests
 export const test = baseTest.extend({
   adminAuthMethodId: process.env.E2E_PASSWORD_AUTH_METHOD_ID,
   adminLoginName: process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
