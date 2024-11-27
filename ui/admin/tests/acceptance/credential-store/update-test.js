@@ -326,8 +326,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await visit(urls.vaultCredentialStore);
 
     await click(commonSelectors.HREF(urls.workerFilter));
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    await click(selectors.EDIT_ACTION_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.EDIT_ACTION);
 
     assert.strictEqual(currentURL(), urls.editWorkerFilter);
   });
@@ -356,15 +356,12 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await visit(urls.vaultCredentialStore);
 
     await click(commonSelectors.HREF(urls.workerFilter));
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    await click(selectors.EDIT_ACTION_SELECTOR);
-    await fillIn(
-      '[data-test-code-editor-field-editor] textarea',
-      '"bar" in "/tags/foo"',
-    );
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.EDIT_ACTION);
+    await fillIn(selectors.CODE_EDITOR_BODY, '"bar" in "/tags/foo"');
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom('.hds-code-block__code').exists();
-    assert.dom('.hds-code-block__code').includesText('"bar" in "/tags/foo"');
+    assert.dom(selectors.CODE_BLOCK_BODY).exists();
+    assert.dom(selectors.CODE_BLOCK_BODY).includesText('"bar" in "/tags/foo"');
   });
 });
