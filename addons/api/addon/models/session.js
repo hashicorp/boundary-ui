@@ -8,6 +8,8 @@ import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
+import { flattenObject } from '../utils/flatten-nested-object';
+import { TYPES_CREDENTIAL_LIBRARY } from 'api/models/credential-library';
 
 export const STATUS_SESSION_ACTIVE = 'active';
 export const STATUS_SESSION_PENDING = 'pending';
@@ -23,7 +25,7 @@ export const statusTypes = [
 /**
  *
  */
-class SessionCredential {
+export class SessionCredential {
   // =classes
 
   /**
@@ -75,14 +77,29 @@ class SessionCredential {
   get secrets() {
     if (this.#payloadSecret?.decoded) {
       const secretJSON = this.#payloadSecret.decoded;
-      return Object.keys(secretJSON).map(
-        (key) => new SessionCredential.SecretItem(key, secretJSON[key]),
-      );
+      return this.extractSecrets(secretJSON, this.source.type);
     } else {
       // decode from base64
       const decodedString = atob(this.#payloadSecret.raw);
       return [new SessionCredential.SecretItem('secret', decodedString)];
     }
+  }
+
+  /**
+   * Extracts secrets from the payload secret JSON object.
+   * We only need to flatten the object if the type is vault-generic
+   * or vault-ssh-certificate and we only need the data object.
+   * @param {object} secretJSON - The payload secret JSON object.
+   * @returns {SessionCredential.SecretItem[]} - The array of secret items.
+   */
+  extractSecrets(secretJSON, type) {
+    const source =
+      TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data
+        ? flattenObject(secretJSON?.data)
+        : secretJSON;
+    return Object.entries(source).map(
+      ([key, value]) => new SessionCredential.SecretItem(key, value),
+    );
   }
 
   // =methods
