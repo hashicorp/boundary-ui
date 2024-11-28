@@ -24,8 +24,8 @@ module('Acceptance | index', function (hooks) {
     clusterUrl: null,
   };
 
-  hooks.beforeEach(function () {
-    invalidateSession();
+  hooks.beforeEach(async function () {
+    await invalidateSession();
 
     urls.clusterUrl = '/cluster-url';
 
