@@ -193,7 +193,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('401 responses result in deauthentication', async function (assert) {
     assert.expect(3);
-    authenticateSession({
+    await authenticateSession({
       scope: {
         id: instances.scopes.global.id,
         type: instances.scopes.global.type,
