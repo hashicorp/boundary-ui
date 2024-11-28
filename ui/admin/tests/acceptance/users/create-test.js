@@ -33,7 +33,7 @@ module('Acceptance | users | create', function (hooks) {
     newUser: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -49,7 +49,7 @@ module('Acceptance | users | create', function (hooks) {
     getUsersCount = () => {
       return this.server.schema.users.all().models.length;
     };
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new users', async function (assert) {

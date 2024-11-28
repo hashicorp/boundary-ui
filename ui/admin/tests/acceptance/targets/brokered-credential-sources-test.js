@@ -49,7 +49,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     brokeredCredentialSources: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -117,7 +117,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       this.server.schema.credentials.all().models.length;
     credentialSourceCount = getCredentialLibraryCount() + getCredentialCount();
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target brokered credential sources', async function (assert) {

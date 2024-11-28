@@ -30,7 +30,7 @@ module('Acceptance | scopes | update', function (hooks) {
     projectScope: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -50,7 +50,7 @@ module('Acceptance | scopes | update', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    authenticateSession({ isGlobal: true });
+    await authenticateSession({ isGlobal: true });
   });
 
   test('can save changes to existing scope', async function (assert) {

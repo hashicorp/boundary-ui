@@ -38,7 +38,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     newCredential: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -73,7 +73,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.credentials = `${urls.staticCredentialStore}/credentials`;
     urls.newCredential = `${urls.staticCredentialStore}/credentials/new`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {

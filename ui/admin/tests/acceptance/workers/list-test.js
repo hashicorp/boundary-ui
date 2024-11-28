@@ -44,7 +44,7 @@ module('Acceptance | workers | list', function (hooks) {
     workerTags: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
@@ -56,7 +56,7 @@ module('Acceptance | workers | list', function (hooks) {
     urls.workers = `/scopes/global/workers`;
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.workerTags = `${urls.worker}/tags`;
-    authenticateSession({});
+    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 

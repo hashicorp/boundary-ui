@@ -46,9 +46,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     ldapAuthMethod: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Setup Mirage mock resources for this test
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

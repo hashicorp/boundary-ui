@@ -52,7 +52,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -85,7 +85,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     // Generate resource counter
     getHostSetHostCount = () =>
       this.server.schema.hostSets.all().models[0].hosts.length;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host set hosts', async function (assert) {

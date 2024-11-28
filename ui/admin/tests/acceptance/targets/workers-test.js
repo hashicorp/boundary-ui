@@ -49,7 +49,7 @@ module('Acceptance | targets | workers', function (hooks) {
     targetEditIngressFilter: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
@@ -76,7 +76,7 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
     urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target workers', async function (assert) {

@@ -235,7 +235,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('visiting any authentication parent route while already authenticated with an org redirects to projects', async function (assert) {
-    authenticateSession({ scope });
+    await authenticateSession({ scope });
     await visit(indexURL);
     assert.strictEqual(currentURL(), projectsURL);
     await visit(scopesURL);
@@ -250,7 +250,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('visiting index or scopes routes while already authenticated with global redirects to orgs', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
     await visit(indexURL);
@@ -316,7 +316,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('401 responses result in deauthentication', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
     await visit(orgsURL);
@@ -333,7 +333,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('color theme is applied from session data', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
     // system default

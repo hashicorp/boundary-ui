@@ -38,7 +38,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     unknownCredential: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -76,7 +76,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

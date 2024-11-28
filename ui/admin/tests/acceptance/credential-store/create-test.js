@@ -36,7 +36,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     newCredentialStore: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,7 +64,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
       return this.server.schema.credentialStores.where({ type: 'vault' }).models
         .length;
     };
-    authenticateSession({});
+    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 

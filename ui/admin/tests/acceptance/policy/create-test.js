@@ -45,7 +45,7 @@ module('Acceptance | policies | create', function (hooks) {
     newPolicy: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -57,7 +57,7 @@ module('Acceptance | policies | create', function (hooks) {
     getPolicyCount = () => this.server.schema.policies.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new policy with global scope', async function (assert) {

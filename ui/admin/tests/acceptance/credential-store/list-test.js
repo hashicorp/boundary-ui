@@ -44,7 +44,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     vaultCredentialStore: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -70,7 +70,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
 
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('static-credentials');
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to credential-stores with proper authorization', async function (assert) {

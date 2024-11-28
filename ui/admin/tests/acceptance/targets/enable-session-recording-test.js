@@ -53,7 +53,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
     newStorageBucket: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -89,7 +89,7 @@ module('Acceptance | targets | enable session recording', function (hooks) {
     urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
     urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('cannot enable session recording for a target without proper authorization', async function (assert) {

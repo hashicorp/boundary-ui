@@ -46,7 +46,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     oidcAuthMethod: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
@@ -70,7 +70,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {

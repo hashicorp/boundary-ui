@@ -33,7 +33,7 @@ module('Acceptance | users | delete', function (hooks) {
     user: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -46,7 +46,7 @@ module('Acceptance | users | delete', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete a user', async function (assert) {

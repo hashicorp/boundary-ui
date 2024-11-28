@@ -32,7 +32,7 @@ module('Acceptance | workers | read', function (hooks) {
     worker: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     //Generate the resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -49,7 +49,7 @@ module('Acceptance | workers | read', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker', async function (assert) {

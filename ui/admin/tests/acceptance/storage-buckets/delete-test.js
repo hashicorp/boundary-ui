@@ -42,7 +42,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     storageBuckets: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -56,7 +56,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     getStorageBucketCount = () =>
       this.server.schema.storageBuckets.all().models.length;
 
-    authenticateSession({});
+    await authenticateSession({});
     intl = this.owner.lookup('service:intl');
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');

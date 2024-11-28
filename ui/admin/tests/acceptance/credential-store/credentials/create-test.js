@@ -40,7 +40,7 @@ module(
       newCredential: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       featuresService = this.owner.lookup('service:features');
       instances.scopes.org = this.server.create('scope', {
@@ -77,7 +77,7 @@ module(
       getJsonCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'json' }).length;
       };
-      authenticateSession({});
+      await authenticateSession({});
     });
 
     test('users can create a new username & password credential', async function (assert) {

@@ -38,7 +38,7 @@ module('Acceptance | targets | delete', function (hooks) {
     newTarget: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -60,7 +60,7 @@ module('Acceptance | targets | delete', function (hooks) {
     urls.newTarget = `${urls.targets}/new`;
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete target', async function (assert) {

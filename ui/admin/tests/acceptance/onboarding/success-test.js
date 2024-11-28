@@ -13,8 +13,8 @@ module('Acceptance | onboarding | success', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
   });
 
   const urls = {

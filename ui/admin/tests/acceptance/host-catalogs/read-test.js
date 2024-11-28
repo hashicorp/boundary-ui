@@ -33,7 +33,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     hostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -55,7 +55,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host catalogs', async function (assert) {
