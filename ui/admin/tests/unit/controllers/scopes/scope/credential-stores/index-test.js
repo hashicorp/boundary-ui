@@ -40,8 +40,8 @@ module(
       credentialStores: null,
     };
 
-    hooks.beforeEach(function () {
-      authenticateSession({});
+    hooks.beforeEach(async function () {
+      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/credential-stores/index',
       );

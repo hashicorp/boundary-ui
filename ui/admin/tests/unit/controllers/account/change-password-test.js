@@ -30,7 +30,7 @@ module('Unit | Controller | account/change-password', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:account/change-password');
     store = this.owner.lookup('service:store');
 
