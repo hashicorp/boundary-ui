@@ -161,7 +161,7 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('cannot change password when not authenticated', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
 
     await visit(urls.changePassword);
 

@@ -66,8 +66,8 @@ module('Acceptance | authentication', function (hooks) {
   let sessionsURL;
   let targetsURL;
 
-  hooks.beforeEach(function () {
-    invalidateSession();
+  hooks.beforeEach(async function () {
+    await invalidateSession();
     indexURL = '/';
     globalScope = this.server.create('scope', { id: 'global' });
     orgScope1 = this.server.create(
