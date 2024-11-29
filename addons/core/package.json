@@ -44,6 +44,7 @@
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
     "filesize": "^10.0.7",
+    "lodash": "^4.17.21",
     "sass": "^1.69.5"
   },
   "devDependencies": {
@@ -80,7 +81,6 @@
     "eslint-plugin-qunit": "^8.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
-    "lodash": "^4.17.21",
     "prettier": "^3.0.0",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
