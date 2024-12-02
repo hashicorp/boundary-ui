@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "ember-named-blocks-polyfill": "^0.2.5",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
