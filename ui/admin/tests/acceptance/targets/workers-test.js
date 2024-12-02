@@ -218,7 +218,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(CANCEL_BUTTON_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.notEqual(instances.target.inress_worker_filter, ingressWorkerFilter);
+    assert.notEqual(
+      instances.target.ingress_worker_filter,
+      ingressWorkerFilter,
+    );
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);
