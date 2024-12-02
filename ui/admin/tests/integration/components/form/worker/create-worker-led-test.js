@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import { v1 } from 'ember-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
 
@@ -25,7 +25,7 @@ module(
 
     test('it correctly populates the cluster id for an hcp dev cluster', async function (assert) {
       const windowService = this.owner.lookup('service:browser/window');
-      const guid = v1();
+      const guid = uuidv4();
       this.model = {};
       this.submit = () => {};
       this.cancel = () => {};
@@ -41,7 +41,7 @@ module(
 
     test('it correctly populates the cluster id for an hcp int cluster', async function (assert) {
       const windowService = this.owner.lookup('service:browser/window');
-      const guid = v1();
+      const guid = uuidv4();
       this.model = {};
       this.submit = () => {};
       this.cancel = () => {};
@@ -57,7 +57,7 @@ module(
 
     test('it correctly populates the cluster id for an hcp prod cluster', async function (assert) {
       const windowService = this.owner.lookup('service:browser/window');
-      const guid = v1();
+      const guid = uuidv4();
       this.model = {};
       this.submit = () => {};
       this.cancel = () => {};
