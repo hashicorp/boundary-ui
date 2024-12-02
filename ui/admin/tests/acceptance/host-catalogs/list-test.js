@@ -15,6 +15,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
 } from 'api/models/host-catalog';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -35,6 +36,8 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     orgScope: null,
     projectScope: null,
     hostCatalogs: null,
+    awsHostCatalog: null,
+    azureHostCatalog: null,
     staticHostCatalog: null,
   };
 
@@ -138,7 +141,10 @@ module('Acceptance | host-catalogs | list', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    assert.dom('.hds-application-state__body-text').isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticHostCatalog))
+      .doesNotExist();
   });
 
   test('user can navigate to index with only list action', async function (assert) {

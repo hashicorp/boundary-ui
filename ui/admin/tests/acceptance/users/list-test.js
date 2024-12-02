@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -110,7 +111,8 @@ module('Acceptance | users | list', function (hooks) {
 
     await click(`[href="${urls.users}"]`);
 
-    assert.dom(`.rose-table [href="${urls.user1}"]`).doesNotExist();
+    assert.dom('.hds-application-state__body-text').isVisible();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.user1)).doesNotExist();
   });
 
   test('user can navigate to users tab with only list action', async function (assert) {
