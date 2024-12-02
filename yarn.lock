@@ -9509,14 +9509,6 @@ ember-truth-helpers@^4.0.3:
     "@embroider/addon-shim" "^1.8.6"
     ember-functions-as-helper-polyfill "^2.1.2"
 
-ember-uuid@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ember-uuid/-/ember-uuid-2.1.0.tgz#a65d030534d47ced1ea22be9b7d3821eff71f99c"
-  integrity sha512-oiUNIBPCyJtzkcRUAi3qCRwU+yq5r9gzlPLKRG1pQ2WA209lphmZQRR+TyaeNwOijs9bjttzFV6YOyaTO40B/A==
-  dependencies:
-    ember-cli-babel "^7.11.1"
-    ember-cli-htmlbars "^4.0.0"
-
 ember-window-mock@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/ember-window-mock/-/ember-window-mock-0.8.1.tgz#1fc5db20b3d9fc3592d4ef6f83d6b5a629c79174"
