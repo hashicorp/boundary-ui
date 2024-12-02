@@ -56,12 +56,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
 
   let originalUncaughtException = QUnit.onUncaughtException;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.user = this.server.create('user', {
       scope: instances.scopes.global,
     });
 
-    authenticateSession({ user_id: instances.user.id, username: 'admin' });
+    await authenticateSession({
+      user_id: instances.user.id,
+      username: 'admin',
+    });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
