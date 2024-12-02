@@ -30,7 +30,6 @@ module('Unit | Initializer | deprecations', function (hooks) {
     run(this.application, 'destroy');
   });
 
-  // TODO: Replace this with your real tests.
   test('it works', async function (assert) {
     await this.application.boot();
 

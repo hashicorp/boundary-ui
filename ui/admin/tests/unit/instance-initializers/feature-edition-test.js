@@ -30,12 +30,12 @@ module('Unit | Instance Initializer | feature-edition', function (hooks) {
 
     this.instance = this.application.buildInstance();
   });
+
   hooks.afterEach(function () {
     run(this.instance, 'destroy');
     run(this.application, 'destroy');
   });
 
-  // TODO: Replace this with your real tests.
   test('it works', async function (assert) {
     await this.instance.boot();
 
