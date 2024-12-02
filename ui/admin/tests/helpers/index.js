@@ -25,8 +25,8 @@ function setupApplicationTest(hooks, options) {
   // For example, if you need an authenticated session for each
   // application test, you could do:
   //
-  hooks.beforeEach(function () {
-    authenticateSession();
+  hooks.beforeEach(async function () {
+    await authenticateSession();
     currentSession().set('data.theme', 'light');
   });
   //
