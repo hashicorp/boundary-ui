@@ -58,8 +58,8 @@ module('Acceptance | projects', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
