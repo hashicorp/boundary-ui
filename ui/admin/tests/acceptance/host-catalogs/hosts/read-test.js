@@ -85,7 +85,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.hosts));
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.host)).doesNotExist();
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {

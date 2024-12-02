@@ -88,38 +88,6 @@
       }
     }
   }
-
-  .rose-form-fieldset {
-    .rose-table {
-      .rose-form-label {
-        left: -9999px;
-        position: absolute;
-        top: -9999px;
-      }
-    }
-  }
-}
-
-.rose-table {
-  p {
-    margin-bottom: 0;
-  }
-
-  .rose-table-header-cell {
-    p {
-      color: var(--ui-gray-subtler-1);
-      font-weight: normal;
-    }
-  }
-
-  .rose-form-checkbox {
-    margin-bottom: 0;
-
-    .rose-form-checkbox-label-text {
-      color: var(--stark);
-      text-decoration: underline;
-    }
-  }
 }
 
 .rose-header {
