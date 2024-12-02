@@ -166,7 +166,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     this.stubCacheDaemonSearch();
 
     await visit(urls.sessions);

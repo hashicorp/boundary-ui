@@ -102,7 +102,7 @@ module('Acceptance | projects', function (hooks) {
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     assert.expect(2);
     await visit(urls.projects);
     await a11yAudit();

@@ -64,12 +64,12 @@ module('Acceptance | authentication', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.user = this.server.create('user', {
       scope: instances.scopes.global,
     });
 
-    invalidateSession();
+    await invalidateSession();
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
