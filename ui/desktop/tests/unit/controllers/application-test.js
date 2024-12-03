@@ -22,7 +22,7 @@ module('Unit | Controller | application', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
