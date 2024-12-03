@@ -12,7 +12,7 @@ import {
   fillIn,
   waitUntil,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -47,7 +47,7 @@ module(
       jsonCredential: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
@@ -87,7 +87,7 @@ module(
       urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
 
       featuresService = this.owner.lookup('service:features');
-      authenticateSession({});
+      await authenticateSession({});
     });
 
     test('can save changes to existing username & password credential', async function (assert) {

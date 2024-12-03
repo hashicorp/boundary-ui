@@ -12,7 +12,7 @@ import {
   fillIn,
   find,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -64,7 +64,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     createTags: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
       scope: instances.scopes.global,
@@ -73,7 +73,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
     urls.createTags = `${urls.worker}/create-tags`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker tags', async function (assert) {

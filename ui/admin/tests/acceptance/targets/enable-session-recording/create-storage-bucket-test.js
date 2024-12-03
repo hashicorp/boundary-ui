@@ -47,7 +47,7 @@ module(
       newStorageBucket: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
@@ -74,7 +74,7 @@ module(
 
       features = this.owner.lookup('service:features');
       features.enable('ssh-session-recording');
-      authenticateSession({ username: 'admin' });
+      await authenticateSession({ username: 'admin' });
     });
 
     test('users can create a new storage bucket with global scope', async function (assert) {

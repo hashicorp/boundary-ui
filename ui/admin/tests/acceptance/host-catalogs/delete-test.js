@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -38,7 +38,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     hostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -61,7 +61,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     // Generate resource counter
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete host catalog', async function (assert) {

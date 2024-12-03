@@ -58,8 +58,8 @@ module('Acceptance | projects', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -102,7 +102,7 @@ module('Acceptance | projects', function (hooks) {
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     assert.expect(2);
     await visit(urls.projects);
     await a11yAudit();

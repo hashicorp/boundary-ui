@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -15,6 +15,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
 } from 'api/models/host-catalog';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -35,13 +36,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     orgScope: null,
     projectScope: null,
     hostCatalogs: null,
+    awsHostCatalog: null,
+    azureHostCatalog: null,
     staticHostCatalog: null,
   };
 
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-host-catalog-results]';
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -73,7 +76,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     urls.awsHostCatalog = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}`;
     urls.azureHostCatalog = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {
@@ -138,7 +141,10 @@ module('Acceptance | host-catalogs | list', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    assert.dom('.hds-application-state__body-text').isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticHostCatalog))
+      .doesNotExist();
   });
 
   test('user can navigate to index with only list action', async function (assert) {

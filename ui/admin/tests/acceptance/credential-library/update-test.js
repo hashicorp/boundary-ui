@@ -12,7 +12,7 @@ import {
   find,
   select,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
@@ -53,7 +53,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     unknownCredentialLibrary: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -81,7 +81,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('cannot update resource without proper authorization', async function (assert) {

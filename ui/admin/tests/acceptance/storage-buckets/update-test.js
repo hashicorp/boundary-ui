@@ -5,10 +5,9 @@
 
 import { module, test } from 'qunit';
 import { visit, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -31,7 +30,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     storageBucket: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.storageBucket = this.server.create('storage-bucket', {
       scope: instances.scopes.global,
@@ -47,7 +46,6 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
   });
 
   test('can save changes to an existing storage-bucket', async function (assert) {

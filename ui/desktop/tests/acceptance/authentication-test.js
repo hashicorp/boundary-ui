@@ -64,12 +64,12 @@ module('Acceptance | authentication', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.user = this.server.create('user', {
       scope: instances.scopes.global,
     });
 
-    invalidateSession();
+    await invalidateSession();
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -193,7 +193,7 @@ module('Acceptance | authentication', function (hooks) {
 
   test('401 responses result in deauthentication', async function (assert) {
     assert.expect(3);
-    authenticateSession({
+    await authenticateSession({
       scope: {
         id: instances.scopes.global.id,
         type: instances.scopes.global.type,

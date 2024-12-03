@@ -5,11 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -33,7 +34,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     hostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -55,7 +56,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.unknownHostCatalog = `${urls.hostCatalogs}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host catalogs', async function (assert) {
@@ -78,7 +79,9 @@ module('Acceptance | host-catalogs | read', function (hooks) {
 
     await click(`[href="${urls.hostCatalogs}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.hostCatalog))
+      .doesNotExist();
   });
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {

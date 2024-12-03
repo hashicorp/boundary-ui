@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, find, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -26,7 +26,7 @@ module('Acceptance | workers | update', function (hooks) {
     worker: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     //Generate the resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
@@ -36,7 +36,7 @@ module('Acceptance | workers | update', function (hooks) {
     urls.globalScope = '/scopes/global';
     urls.workers = `${urls.globalScope}/workers`;
     (urls.worker = `${urls.workers}/${instances.worker.id}`),
-      authenticateSession({});
+      await authenticateSession({});
   });
 
   test('can save changes to an existing worker', async function (assert) {

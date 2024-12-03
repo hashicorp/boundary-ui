@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { visit, fillIn, click, currentURL } from '@ember/test-helpers';
@@ -19,8 +19,8 @@ module('Acceptance | onboarding', function (hooks) {
     orgs: '/scopes/global/scopes',
   };
 
-  hooks.beforeEach(() => {
-    authenticateSession({});
+  hooks.beforeEach(async () => {
+    await authenticateSession({});
   });
 
   test('show targetAddress and targetPort fields', async function (assert) {

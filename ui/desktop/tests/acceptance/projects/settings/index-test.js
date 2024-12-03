@@ -63,8 +63,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession();
+  hooks.beforeEach(async function () {
+    await authenticateSession();
     // Generate scopes
     instances.scopes.global = this.server.create('scope', {
       id: 'global',
@@ -134,7 +134,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('clicking sign-out button logs out the user', async function (assert) {
-    authenticateSession({ username: 'testuser' });
+    await authenticateSession({ username: 'testuser' });
     assert.expect(2);
     await visit(urls.settings);
     assert.ok(currentSession().isAuthenticated);

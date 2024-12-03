@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, find, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -39,7 +39,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -67,7 +67,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
-    authenticateSession({});
+    await authenticateSession({});
   });
   test('Users can navigate to hosts with proper authorization', async function (assert) {
     await visit(urls.hostCatalog);

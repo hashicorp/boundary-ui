@@ -31,8 +31,8 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     workers: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/workers/index');
 
