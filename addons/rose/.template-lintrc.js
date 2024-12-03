@@ -10,11 +10,7 @@ module.exports = {
   extends: ['recommended', 'ember-template-lint-plugin-prettier:recommended'],
   overrides: [
     {
-      files: [
-        'addon/components/rose/anonymous/index.hbs',
-        'addon/components/rose/table/row/cell/index.hbs',
-        'addon/components/rose/anonymous/index.hbs',
-      ],
+      files: ['addon/components/rose/anonymous/index.hbs'],
       rules: {
         'no-yield-only': false,
       },

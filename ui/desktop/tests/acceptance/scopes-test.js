@@ -80,8 +80,8 @@ module('Acceptance | scopes', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
@@ -239,7 +239,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     assert.expect(2);
     this.stubCacheDaemonSearch();
 
@@ -363,7 +363,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('pagination is not supported - navigate to cluster url page', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     this.stubCacheDaemonSearch();
     this.ipcStub.withArgs('checkOS').returns({
       isWindows: true,

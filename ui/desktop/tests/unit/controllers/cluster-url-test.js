@@ -23,7 +23,7 @@ module('Unit | Controller | cluster-url', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:cluster-url');
     clusterUrl = this.owner.lookup('service:cluster-url');
     setupMockIpc(this);
