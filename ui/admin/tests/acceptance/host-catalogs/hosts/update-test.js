@@ -35,7 +35,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,7 +64,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can save changes to existing host', async function (assert) {

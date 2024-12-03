@@ -35,7 +35,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup(
       'controller:scopes/scope/auth-methods/index',

@@ -69,8 +69,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
     authMethod: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     instances.orgScope = this.server.create(
       'scope',
       {

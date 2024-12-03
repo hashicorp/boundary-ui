@@ -33,7 +33,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      authenticateSession({});
+      await authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/roles/role/manage-scopes/index',

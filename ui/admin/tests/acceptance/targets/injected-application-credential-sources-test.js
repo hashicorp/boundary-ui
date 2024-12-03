@@ -49,7 +49,7 @@ module(
       injectedApplicationCredentialSources: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
@@ -116,7 +116,7 @@ module(
       credentialSourceCount =
         getCredentialLibraryCount() + getCredentialCount();
 
-      authenticateSession({ username: 'admin' });
+      await authenticateSession({ username: 'admin' });
     });
 
     test('visiting target injected application credential sources', async function (assert) {

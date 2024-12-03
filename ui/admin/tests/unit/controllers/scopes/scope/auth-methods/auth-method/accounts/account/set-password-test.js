@@ -33,7 +33,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      authenticateSession({});
+      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/auth-methods/auth-method/accounts/account/set-password',
       );

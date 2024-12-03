@@ -49,7 +49,7 @@ module('Acceptance | targets | create', function (hooks) {
     newSSHTarget: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -79,7 +79,7 @@ module('Acceptance | targets | create', function (hooks) {
       this.server.schema.targets.where({ type: TYPE_TARGET_SSH }).models.length;
     getTCPTargetCount = () =>
       this.server.schema.targets.where({ type: TYPE_TARGET_TCP }).models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {

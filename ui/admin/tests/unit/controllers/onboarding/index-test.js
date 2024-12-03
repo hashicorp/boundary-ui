@@ -36,7 +36,7 @@ module('Unit | Controller | onboarding/index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:onboarding/index');
 

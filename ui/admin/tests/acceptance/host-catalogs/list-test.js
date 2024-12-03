@@ -44,7 +44,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-host-catalog-results]';
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -76,7 +76,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     urls.awsHostCatalog = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}`;
     urls.azureHostCatalog = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {

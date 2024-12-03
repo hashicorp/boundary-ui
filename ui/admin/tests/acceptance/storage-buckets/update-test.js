@@ -30,7 +30,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     storageBucket: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.storageBucket = this.server.create('storage-bucket', {
       scope: instances.scopes.global,

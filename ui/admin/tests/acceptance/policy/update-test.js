@@ -43,7 +43,7 @@ module('Acceptance | policies | update', function (hooks) {
     policy: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
 
     instances.policy = this.server.create('policy', {
@@ -56,7 +56,7 @@ module('Acceptance | policies | update', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can update forever select option to a custom input', async function (assert) {

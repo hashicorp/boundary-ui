@@ -53,7 +53,7 @@ module('Acceptance | targets | list', function (hooks) {
     sshTarget: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -85,7 +85,7 @@ module('Acceptance | targets | list', function (hooks) {
 
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {

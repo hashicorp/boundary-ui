@@ -39,7 +39,7 @@ module('Acceptance | scopes | read', function (hooks) {
     orgScopeEdit: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -53,7 +53,7 @@ module('Acceptance | scopes | read', function (hooks) {
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     features = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
-    authenticateSession({ isGlobal: true, username: 'admin' });
+    await authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting org scope edit', async function (assert) {

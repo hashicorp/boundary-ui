@@ -31,7 +31,7 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     credentialLibraries: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -56,7 +56,7 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('Users can navigate to credential libraries with proper authorization', async function (assert) {

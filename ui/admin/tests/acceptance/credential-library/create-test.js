@@ -40,7 +40,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     newCredentialLibrary: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -71,7 +71,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

@@ -39,7 +39,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     unknownCredentialStore: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -67,7 +67,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

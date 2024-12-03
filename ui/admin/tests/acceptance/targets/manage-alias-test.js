@@ -45,7 +45,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     aliases: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -90,7 +90,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('clicking on manage should take you to manage page', async function (assert) {

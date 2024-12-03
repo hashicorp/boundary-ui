@@ -42,7 +42,7 @@ module('Acceptance | session-recordings | read', function (hooks) {
     channelRecording: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -69,7 +69,7 @@ module('Acceptance | session-recordings | read', function (hooks) {
     urls.sessionRecordings = `${urls.globalScope}/session-recordings`;
     urls.sessionRecording = `${urls.sessionRecordings}/${instances.sessionRecording.id}/channels-by-connection`;
     urls.channelRecording = `${urls.sessionRecording}/${instances.channelRecording.id}`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 

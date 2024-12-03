@@ -35,7 +35,7 @@ module('Acceptance | scopes | list', function (hooks) {
     orgScope: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org1 = this.server.create('scope', {
       type: 'org',
@@ -55,7 +55,7 @@ module('Acceptance | scopes | list', function (hooks) {
     });
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org1.id}/scopes`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('user can search for a specifc org scope by id', async function (assert) {

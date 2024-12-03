@@ -47,7 +47,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     newAzureDynamicHostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.orgScope = this.server.create(
@@ -87,7 +87,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('Users can create new static host catalogs', async function (assert) {

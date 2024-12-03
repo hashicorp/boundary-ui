@@ -49,7 +49,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     newHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -79,7 +79,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     urls.newHostSet = `${urls.hostSets}/new`;
     // Generate resource couner
     getHostSetCount = () => this.server.schema.hostSets.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new host sets', async function (assert) {
