@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -47,7 +47,7 @@ module('Acceptance | targets | read', function (hooks) {
     aliases: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -87,7 +87,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting ssh target', async function (assert) {
@@ -121,8 +121,10 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget))
+      .doesNotExist();
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
@@ -133,8 +135,10 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget))
+      .doesNotExist();
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
@@ -158,7 +162,7 @@ module('Acceptance | targets | read', function (hooks) {
       .exists();
   });
 
-  test('users can navigate to target and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to target and incorrect url auto-corrects', async function (assert) {
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/targets/${instances.sshTarget.id}`;
 
     await visit(incorrectUrl);

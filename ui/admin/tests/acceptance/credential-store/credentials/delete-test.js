@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit } from '@ember/test-helpers';
@@ -42,7 +42,7 @@ module(
       jsonCredential: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
@@ -92,7 +92,7 @@ module(
       getJSONCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'json' }).length;
       };
-      authenticateSession({});
+      await authenticateSession({});
     });
 
     test('can delete username & password credential', async function (assert) {

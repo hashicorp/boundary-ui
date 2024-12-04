@@ -5,6 +5,8 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { SessionCredential } from 'api/models/session';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
 module('Unit | Model | session', function (hooks) {
   setupTest(hooks);
@@ -14,6 +16,46 @@ module('Unit | Model | session', function (hooks) {
     let model = store.createRecord('session', {});
     assert.ok(model);
     assert.notOk(model.isAvailable);
+  });
+
+  test('`extractSecrets` method should return an array of secret items', function (assert) {
+    const sessionCredential = new SessionCredential({
+      credential_source: {
+        id: '123',
+        name: 'Test Source',
+        description: 'Test Description',
+        type: 'Test Type',
+      },
+    });
+
+    const secrets = {
+      username: 'user',
+      password: 'pass',
+    };
+
+    const formattedSecretes = sessionCredential.extractSecrets(
+      secrets,
+      TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+    );
+    assert.deepEqual(formattedSecretes, [
+      new SessionCredential.SecretItem('username', 'user'),
+      new SessionCredential.SecretItem('password', 'pass'),
+    ]);
+
+    // check for nested data, empty values should be filtered out
+    const nestedSecrets = {
+      data: { username: 'user', password: '', email: 'test.com' },
+    };
+
+    const formattedNestedSecrets = sessionCredential.extractSecrets(
+      nestedSecrets,
+      TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+    );
+
+    assert.deepEqual(formattedNestedSecrets, [
+      new SessionCredential.SecretItem('username', 'user'),
+      new SessionCredential.SecretItem('email', 'test.com'),
+    ]);
   });
 
   test('it allows cancellation of an active session', function (assert) {

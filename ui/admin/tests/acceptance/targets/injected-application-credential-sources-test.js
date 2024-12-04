@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, findAll, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -49,7 +49,7 @@ module(
       injectedApplicationCredentialSources: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
@@ -116,7 +116,7 @@ module(
       credentialSourceCount =
         getCredentialLibraryCount() + getCredentialCount();
 
-      authenticateSession({ username: 'admin' });
+      await authenticateSession({ username: 'admin' });
     });
 
     test('visiting target injected application credential sources', async function (assert) {

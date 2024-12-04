@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -39,7 +39,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     unknownCredentialStore: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -67,7 +67,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.unknownCredentialStore = `${urls.credentialStores}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 
@@ -102,8 +102,12 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(`[href="${urls.credentialStores}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultCredentialStore))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticCredentialStore))
+      .doesNotExist();
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
@@ -116,8 +120,12 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(`[href="${urls.credentialStores}"]`);
 
-    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticCredentialStore))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultCredentialStore))
+      .doesNotExist();
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
@@ -141,7 +149,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
       .exists();
   });
 
-  test('users can navigate to credential store and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to credential store and incorrect url auto-corrects', async function (assert) {
     const projectScope = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },

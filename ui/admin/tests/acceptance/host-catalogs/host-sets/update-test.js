@@ -12,7 +12,7 @@ import {
   click,
   fillIn,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -62,7 +62,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     azureHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -119,7 +119,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     urls.awshostSet = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}/host-sets/${instances.awsHostSet.id}`;
     urls.azureHostSet = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}/host-sets/${instances.azureHostSet.id}`;
     // Generate resource couner
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {

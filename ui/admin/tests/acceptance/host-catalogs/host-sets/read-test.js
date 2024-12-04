@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -36,7 +36,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     unknownHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,7 +64,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host sets', async function (assert) {
@@ -85,7 +85,9 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
 
     await click(`[href="${urls.hostSets}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.hostSet))
+      .doesNotExist();
   });
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
@@ -109,7 +111,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
       .exists();
   });
 
-  test('users can navigate to host set and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to host set and incorrect url auto-corrects', async function (assert) {
     const hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'static',

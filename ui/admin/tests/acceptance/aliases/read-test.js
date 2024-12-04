@@ -34,7 +34,7 @@ module('Acceptance | aliases | read', function (hooks) {
     unknownAlias: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -48,7 +48,7 @@ module('Acceptance | aliases | read', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     urls.unknownAlias = `${urls.aliases}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting a alias', async function (assert) {

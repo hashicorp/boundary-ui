@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -34,9 +34,10 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     credentialLibraries: null,
     newCredentialLibrary: null,
     unknownCredentialLibrary: null,
+    vaultSshCredentialLibrary: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,13 +65,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('can navigate to resource', async function (assert) {
     await visit(urls.credentialLibraries);
-    await click('.hds-table .hds-table__tbody .hds-table__tr a');
+
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
 
@@ -80,7 +83,10 @@ module('Acceptance | credential-libraries | read', function (hooks) {
         (item) => item !== 'read',
       );
     await visit(urls.credentialLibraries);
-    assert.notOk(find('main tbody .rose-table-header-cell a'));
+
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary))
+      .doesNotExist();
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
@@ -89,13 +95,17 @@ module('Acceptance | credential-libraries | read', function (hooks) {
       credentialStore: instances.credentialStore,
       type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
     });
-    await visit(
-      `${urls.credentialLibraries}/${instances.credentialLibrary.id}`,
-    );
+    urls.vaultSshCredentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     await visit(urls.credentialLibraries);
     const featuresService = this.owner.lookup('service:features');
+
     assert.false(featuresService.isEnabled('ssh-target'));
-    assert.dom('.rose-table-body tr:nth-of-type(2) a').doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultSshCredentialLibrary))
+      .doesNotExist();
   });
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {

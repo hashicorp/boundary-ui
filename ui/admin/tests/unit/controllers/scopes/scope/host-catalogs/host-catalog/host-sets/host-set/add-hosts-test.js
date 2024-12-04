@@ -33,8 +33,8 @@ module(
       addHosts: null,
     };
 
-    hooks.beforeEach(function () {
-      authenticateSession({});
+    hooks.beforeEach(async function () {
+      await authenticateSession({});
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/host-catalogs/host-catalog/host-sets/host-set/add-hosts',

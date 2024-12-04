@@ -12,7 +12,7 @@ import {
   waitUntil,
   focus,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -49,7 +49,7 @@ module('Acceptance | roles | list', function (hooks) {
     role2: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -66,7 +66,7 @@ module('Acceptance | roles | list', function (hooks) {
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role1 = `${urls.roles}/${instances.role1.id}`;
     urls.role2 = `${urls.roles}/${instances.role2.id}`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to roles with proper authorization', async function (assert) {

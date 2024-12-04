@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -49,7 +49,7 @@ module('Acceptance | targets | workers', function (hooks) {
     targetEditIngressFilter: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
@@ -76,7 +76,7 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
     urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target workers', async function (assert) {
@@ -218,7 +218,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(CANCEL_BUTTON_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.notEqual(instances.target.inress_worker_filter, ingressWorkerFilter);
+    assert.notEqual(
+      instances.target.ingress_worker_filter,
+      ingressWorkerFilter,
+    );
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);

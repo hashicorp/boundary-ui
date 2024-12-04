@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, waitFor, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -46,7 +46,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     oidcAuthMethod: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
@@ -70,7 +70,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {

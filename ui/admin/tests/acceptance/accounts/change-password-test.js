@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -34,7 +34,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     changePassword: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -46,7 +46,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     instances.account = this.server.create('account', {
       scope: instances.scopes.org,
     });
-    authenticateSession({
+    await authenticateSession({
       account_id: instances.account.id,
       username: 'admin',
     });
@@ -161,7 +161,7 @@ module('Acceptance | accounts | change password', function (hooks) {
   });
 
   test('cannot change password when not authenticated', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
 
     await visit(urls.changePassword);
 
