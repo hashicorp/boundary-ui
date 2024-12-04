@@ -251,18 +251,14 @@ export class TargetsPage extends BaseResourcePage {
     ).toBeVisible();
 
     const emptyLinkIsVisible = await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Add Host Sources', exact: true })
       .isVisible();
-    if (emptyLinkIsVisible) {
-      await this.page
-        .getByRole('article')
-        .getByRole('link', { name: 'Add Host Sources', exact: true })
-        .click();
-    } else {
+    if (!emptyLinkIsVisible) {
       await this.page.getByText('Manage').click();
-      await this.page.getByRole('link', { name: 'Add Host Sources' }).click();
     }
+    await this.page
+      .getByRole('link', { name: 'Add Host Sources', exact: true })
+      .click();
 
     await this.page
       .getByRole('cell', { name: hostSourceName })
@@ -370,21 +366,15 @@ export class TargetsPage extends BaseResourcePage {
     ).toBeVisible();
 
     const addBrokeredCredentialsButtonIsVisible = await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
       .isVisible();
 
-    if (addBrokeredCredentialsButtonIsVisible) {
-      await this.page
-        .getByRole('article')
-        .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
-        .click();
-    } else {
+    if (!addBrokeredCredentialsButtonIsVisible) {
       await this.page.getByText('Manage').click();
-      await this.page
-        .getByRole('link', { name: 'Add Brokered Credentials' })
-        .click();
     }
+    await this.page
+      .getByRole('link', { name: 'Add Brokered Credentials', exact: true })
+      .click();
 
     await this.page
       .getByRole('cell', { name: credentialName })
