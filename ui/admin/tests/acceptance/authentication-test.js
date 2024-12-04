@@ -12,7 +12,7 @@ import {
   findAll,
   getRootElement,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
@@ -66,8 +66,8 @@ module('Acceptance | authentication', function (hooks) {
   let sessionsURL;
   let targetsURL;
 
-  hooks.beforeEach(function () {
-    invalidateSession();
+  hooks.beforeEach(async function () {
+    await invalidateSession();
     indexURL = '/';
     globalScope = this.server.create('scope', { id: 'global' });
     orgScope1 = this.server.create(
@@ -235,7 +235,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('visiting any authentication parent route while already authenticated with an org redirects to projects', async function (assert) {
-    authenticateSession({ scope });
+    await authenticateSession({ scope });
     await visit(indexURL);
     assert.strictEqual(currentURL(), projectsURL);
     await visit(scopesURL);
@@ -250,7 +250,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('visiting index or scopes routes while already authenticated with global redirects to orgs', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
     await visit(indexURL);
@@ -316,7 +316,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('401 responses result in deauthentication', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
     await visit(orgsURL);
@@ -333,26 +333,36 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('color theme is applied from session data', async function (assert) {
-    authenticateSession({
+    await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
-    // system default
     await visit(orgsURL);
-    assert.notOk(currentSession().get('data.theme'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
-    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
-    // toggle light mode
-    await click('[name="theme"][value="light"]');
+
+    // light mode
     assert.strictEqual(currentSession().get('data.theme'), 'light');
     assert.ok(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+
+    // toggle system default
+    await click('[name="theme"][value="system-default-theme"]');
+
+    assert.strictEqual(
+      currentSession().get('data.theme'),
+      'system-default-theme',
+    );
+    assert.notOk(getRootElement().classList.contains('rose-theme-light'));
+    assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+
     // toggle dark mode
     await click('[name="theme"][value="dark"]');
+
     assert.strictEqual(currentSession().get('data.theme'), 'dark');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+
     // toggle system default
     await click('[name="theme"][value="system-default-theme"]');
+
     assert.strictEqual(
       currentSession().get('data.theme'),
       'system-default-theme',

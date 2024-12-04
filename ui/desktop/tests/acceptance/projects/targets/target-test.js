@@ -61,8 +61,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession();
+  hooks.beforeEach(async function () {
+    await authenticateSession();
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 

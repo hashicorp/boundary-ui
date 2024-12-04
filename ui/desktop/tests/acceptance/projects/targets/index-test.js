@@ -82,8 +82,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     clusterUrl.rendererClusterUrl = windowOrigin;
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     // bypass mirage config that expects recursive to be passed in as queryParam
     this.server.get('/targets', ({ targets }) => targets.all());
 
@@ -165,7 +165,7 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
-    invalidateSession();
+    await invalidateSession();
     this.stubCacheDaemonSearch();
     await visit(urls.targets);
     await a11yAudit();

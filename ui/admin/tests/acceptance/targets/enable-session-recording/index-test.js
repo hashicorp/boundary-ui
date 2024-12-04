@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, find, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -56,7 +56,7 @@ module(
       newStorageBucket: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       featuresService = this.owner.lookup('service:features');
       // Generate resources
       instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -94,7 +94,7 @@ module(
 
       intl = this.owner.lookup('service:intl');
 
-      authenticateSession({ username: 'admin' });
+      await authenticateSession({ username: 'admin' });
     });
 
     test('cannot enable session recording for a target without proper authorization', async function (assert) {

@@ -20,7 +20,6 @@
     "build:ui:admin:enterprise": "yarn --cwd ui/admin build:enterprise",
     "build:ui:admin:hcp": "yarn --cwd ui/admin build:hcp",
     "build:ui:desktop": "yarn --cwd ui/desktop build",
-    "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn build:ui:desktop:app",
     "build:ui:desktop:production": "yarn --cwd ui/desktop build:production",
     "build:ui:desktop:app": "yarn --cwd ui/desktop build:desktop",
     "lint": "concurrently \"yarn:lint:*\" --names \"lint:\"",

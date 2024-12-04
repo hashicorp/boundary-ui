@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
@@ -33,7 +33,7 @@ module('Acceptance | users | create', function (hooks) {
     newUser: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -49,7 +49,7 @@ module('Acceptance | users | create', function (hooks) {
     getUsersCount = () => {
       return this.server.schema.users.all().models.length;
     };
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new users', async function (assert) {

@@ -43,7 +43,7 @@ module('Acceptance | aliases | create', function (hooks) {
     newAlias: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     urls.globalScope = `/scopes/global`;
     urls.aliases = `${urls.globalScope}/aliases`;
@@ -51,7 +51,7 @@ module('Acceptance | aliases | create', function (hooks) {
     getAliasCount = () => this.server.schema.aliases.all().models.length;
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias with host and target info', async function (assert) {

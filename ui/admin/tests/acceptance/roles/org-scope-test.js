@@ -12,7 +12,7 @@ import {
   fillIn,
   waitUntil,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -79,8 +79,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
     manageOrgProjects: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     confirmService = this.owner.lookup('service:confirm');
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });

@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
@@ -30,7 +30,7 @@ module('Acceptance | scopes | update', function (hooks) {
     projectScope: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -50,7 +50,7 @@ module('Acceptance | scopes | update', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    authenticateSession({ isGlobal: true });
+    await authenticateSession({ isGlobal: true });
   });
 
   test('can save changes to existing scope', async function (assert) {

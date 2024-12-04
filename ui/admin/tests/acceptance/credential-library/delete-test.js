@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
@@ -42,7 +42,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     unknownCredentialLibrary: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -73,7 +73,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete resource', async function (assert) {

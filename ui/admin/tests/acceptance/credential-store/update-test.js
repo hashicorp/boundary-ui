@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -33,7 +33,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     vaultCredentialStore: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -59,7 +59,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can save changes to existing static credential store', async function (assert) {

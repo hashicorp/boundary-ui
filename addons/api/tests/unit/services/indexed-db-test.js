@@ -12,7 +12,6 @@ class SessionService extends Service {}
 module('Unit | Service | indexed-db', function (hooks) {
   setupTest(hooks);
 
-  // TODO: Replace this with your real tests.
   test('it exists', function (assert) {
     this.owner.register('service:session', SessionService);
 

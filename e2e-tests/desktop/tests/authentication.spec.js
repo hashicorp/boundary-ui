@@ -44,7 +44,8 @@ test.describe('user/password authentication tests', async () => {
   });
 });
 
-test.describe('LDAP authentication tests', async () => {
+// Setup an LDAP server for these tests
+test.fixme('LDAP authentication tests', async () => {
   test('Authenticates and signs out', async ({
     electronPage,
     clusterUrl,

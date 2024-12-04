@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -39,7 +39,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -70,7 +70,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
     getHostCount = () => this.server.schema.hosts.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new host', async function (assert) {

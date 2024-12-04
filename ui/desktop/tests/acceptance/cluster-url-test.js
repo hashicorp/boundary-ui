@@ -63,8 +63,8 @@ module('Acceptance | clusterUrl', function (hooks) {
     mockIPC = test.owner.lookup('service:browser/window').mockIPC;
   };
 
-  hooks.beforeEach(function () {
-    invalidateSession();
+  hooks.beforeEach(async function () {
+    await invalidateSession();
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
