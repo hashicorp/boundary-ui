@@ -24,13 +24,11 @@ module.exports = function (environment) {
 
   // Unsafe policy is necessary in development and test environments, but should
   // not be used in production.
-  if (environment === 'development' || environment === 'test') {
+  if (environment === 'development') {
     policy['script-src'].push("'unsafe-eval'");
     policy['style-src'].push("'unsafe-inline'");
     if (API_HOST) policy['connect-src'].push(API_HOST);
   }
-
-  console.log('TESTING env: ', environment);
 
   //enable csp meta tag only in dev env
   return {

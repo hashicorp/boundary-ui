@@ -417,27 +417,21 @@ export class TargetsPage extends BaseResourcePage {
     ).toBeVisible();
 
     const addInjectedCredentialsButtonIsVisible = await this.page
-      .getByRole('article')
       .getByRole('link', {
         name: 'Add Injected Application Credentials',
         exact: true,
       })
       .isVisible();
 
-    if (addInjectedCredentialsButtonIsVisible) {
-      await this.page
-        .getByRole('article')
-        .getByRole('link', {
-          name: 'Add Injected Application Credentials',
-          exact: true,
-        })
-        .click();
-    } else {
+    if (!addInjectedCredentialsButtonIsVisible) {
       await this.page.getByText('Manage').click();
-      await this.page
-        .getByRole('link', { name: 'Add Injected Application' })
-        .click();
     }
+    await this.page
+      .getByRole('link', {
+        name: 'Add Injected Application Credentials',
+        exact: true,
+      })
+      .click();
 
     await this.page
       .getByRole('cell', { name: credentialName })
