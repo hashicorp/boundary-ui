@@ -15,7 +15,7 @@ export default factory.extend({
   authorized_actions() {
     const authorizedActions = ['no-op', 'read', 'update'];
 
-    // Storage policies can only be attatched to global and org scopes.
+    // Storage policies can only be attached to global and org scopes.
     if (this.type === 'global' || this.type === 'org') {
       authorizedActions.push('attach-storage-policy', 'detach-storage-policy');
     }

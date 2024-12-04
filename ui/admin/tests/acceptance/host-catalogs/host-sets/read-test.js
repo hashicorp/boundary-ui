@@ -94,7 +94,9 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     await visit(urls.unknownHostSet);
     await a11yAudit();
 
-    assert.dom('.rose-message-subtitle').hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for host sets', async function (assert) {

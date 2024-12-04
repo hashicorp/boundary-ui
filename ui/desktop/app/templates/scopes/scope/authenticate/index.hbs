@@ -5,14 +5,12 @@
 
 {{#unless @model}}
   <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.auth-method.messages.none.title'}}
-      @icon='flight-icons/svg/alert-circle-16'
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.auth-method.messages.none.description'}}
-      </message.description>
-    </Rose::Message>
+    <Hds::ApplicationState as |A|>
+      <A.Header
+        @icon='alert-circle'
+        @title={{t 'resources.auth-method.messages.none.title'}}
+      />
+      <A.Body @text={{t 'resources.auth-method.messages.none.description'}} />
+    </Hds::ApplicationState>
   </Rose::Layout::Centered>
 {{/unless}}
