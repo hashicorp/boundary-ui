@@ -10,6 +10,7 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { flattenObject } from '../utils/flatten-nested-object';
 import { TYPES_CREDENTIAL_LIBRARY } from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_JSON } from 'api/models/credential';
 
 export const STATUS_SESSION_ACTIVE = 'active';
 export const STATUS_SESSION_PENDING = 'pending';
@@ -96,11 +97,13 @@ export class SessionCredential {
    * We only need to flatten the object if the type is vault-generic
    * or vault-ssh-certificate and we only need the data object.
    * @param {object} secretJSON - The payload secret JSON object.
+   * @param {string} type - The credential source type.
+   * @param {string} credentialType - The credential type.
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
   extractSecrets(secretJSON, type, credentialType) {
     let source;
-    if (credentialType === 'json') {
+    if (credentialType === TYPE_CREDENTIAL_JSON) {
       source = flattenObject(secretJSON);
     } else if (TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data) {
       source = flattenObject(secretJSON.data);
