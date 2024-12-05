@@ -6,6 +6,7 @@
 import { test } from '@playwright/test';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 /**
  * Get the path to the Boundary Desktop executable
@@ -13,7 +14,12 @@ import fs from 'fs';
  * @return {string}
  */
 const getExecutablePath = (buildDirectory = 'out') => {
-  const rootDir = path.resolve('../ui/desktop/electron-app');
+  // Using process.cwd() can change depending on where you run the tests so we use the current file location
+  // __dirname isn't available in ES modules so we need to indirectly get the directory
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const rootDir = path.resolve(__dirname, '../../../ui/desktop/electron-app');
+
   // directory where the builds are stored
   const outDir = path.resolve(rootDir, buildDirectory);
   // list of files in the out directory
