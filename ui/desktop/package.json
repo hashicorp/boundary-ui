@@ -60,7 +60,6 @@
     "@faker-js/faker": "^8.0.2",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@playwright/test": "^1.43.0",
     "babel-loader": "^9.2.1",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",

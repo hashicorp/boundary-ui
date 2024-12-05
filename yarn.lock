@@ -4735,12 +4735,12 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@playwright/test@^1.43.0":
-  version "1.43.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.43.1.tgz#16728a59eb8ce0f60472f98d8886d6cab0fa3e42"
-  integrity sha512-HgtQzFgNEEo4TE22K/X7sYTYNqEMMTZmFS8kTq6m8hXj+m1D8TgwgIbumHddJa9h4yl4GkKb8/bgAl2+g7eDgA==
+"@playwright/test@^1.49.0":
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.49.0.tgz#74227385b58317ee076b86b56d0e1e1b25cff01e"
+  integrity sha512-DMulbwQURa8rNIQrf94+jPJQ4FmOVdpE5ZppRNvWVjvhC+6sOeo28r8MgIpQRYouXRtt/FCCXU7zn20jnHR4Qw==
   dependencies:
-    playwright "1.43.1"
+    playwright "1.49.0"
 
 "@pnpm/constants@7.1.1":
   version "7.1.1"
@@ -14924,7 +14924,21 @@ playwright-core@1.43.1:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.43.1.tgz#0eafef9994c69c02a1a3825a4343e56c99c03b02"
   integrity sha512-EI36Mto2Vrx6VF7rm708qSnesVQKbxEWvPrfA1IPY6HgczBplDx7ENtx+K2n4kJ41sLLkuGfmb0ZLSSXlDhqPg==
 
-playwright@1.43.1, playwright@^1.43.0:
+playwright-core@1.49.0:
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.49.0.tgz#8e69ffed3f41855b854982f3632f2922c890afcb"
+  integrity sha512-R+3KKTQF3npy5GTiKH/T+kdhoJfJojjHESR1YEWhYuEKRVfVaxH3+4+GvXE5xyCngCxhxnykk0Vlah9v8fs3jA==
+
+playwright@1.49.0:
+  version "1.49.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.49.0.tgz#df6b9e05423377a99658202844a294a8afb95d0a"
+  integrity sha512-eKpmys0UFDnfNb3vfsf8Vx2LEOtflgRebl0Im2eQQnYMA4Aqd+Zw8bEOB+7ZKvN76901mRnqdsiOGKxzVTbi7A==
+  dependencies:
+    playwright-core "1.49.0"
+  optionalDependencies:
+    fsevents "2.3.2"
+
+playwright@^1.43.0:
   version "1.43.1"
   resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.43.1.tgz#8ad08984ac66c9ef3d0db035be54dd7ec9f1c7d9"
   integrity sha512-V7SoH0ai2kNt1Md9E3Gwas5B9m8KR2GVvwZnAI6Pg0m3sh7UvgiYhRrhsziCmqMJNouPckiOhk8T+9bSAK0VIA==
