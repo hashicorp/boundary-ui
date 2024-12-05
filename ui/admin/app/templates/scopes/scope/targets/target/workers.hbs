@@ -105,7 +105,7 @@
                 'resources.target.workers.accordion-label.egress-workers'
               }}</span>
             <Hds::Link::Standalone
-              @icon='edit'
+              @icon={{if @model.egress_worker_filter 'edit' 'plus-circle'}}
               @text={{t
                 (if
                   @model.egress_worker_filter
