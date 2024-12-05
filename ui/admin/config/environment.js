@@ -131,6 +131,7 @@ module.exports = function (environment) {
         'storage-policy.update':
           '/docs/configuration/session-recording/update-storage-policy',
         alias: '/docs/concepts/aliases',
+        'support-page': 'https://support.hashicorp.com/hc/en-us',
       },
     },
 

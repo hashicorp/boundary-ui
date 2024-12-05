@@ -21,32 +21,13 @@
   </page.header>
 
   <page.body>
-    {{#if @model.accounts}}
-      <Form::User::AddAccounts
-        @model={{@model.user}}
-        @authMethods={{@model.authMethods}}
-        @accounts={{@model.accounts}}
-        @submit={{fn this.addAccounts @model.user}}
-        @cancel={{this.cancel}}
-      />
-    {{/if}}
-
-    {{#unless @model.accounts}}
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.user.messages.no-accounts.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.user.messages.no-accounts.description'}}
-          </message.description>
-          <message.link @route='scopes.scope.users.user.accounts'>
-            <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-            {{t 'actions.back'}}
-          </message.link>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-    {{/unless}}
+    <Form::User::AddAccounts
+      @model={{@model.user}}
+      @authMethods={{@model.authMethods}}
+      @accounts={{@model.accounts}}
+      @submit={{fn this.addAccounts @model.user}}
+      @cancel={{this.cancel}}
+    />
   </page.body>
 
 </Rose::Layout::Page>

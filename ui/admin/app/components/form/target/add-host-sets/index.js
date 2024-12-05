@@ -4,7 +4,7 @@
  */
 
 import Component from '@glimmer/component';
-import { computed, action } from '@ember/object';
+import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { loading } from 'ember-loading';
@@ -25,11 +25,10 @@ export default class FormTargetAddHostSetsComponent extends Component {
   selectedHostSetIDs = A();
 
   /**
-   * Checks for unassigned hostsets.
+   * Checks for unassigned host-sets.
    * @param {[HostSetModel]} filteredHostSets
    * @type {boolean}
    */
-  @computed('filteredHostSets.length')
   get hasAvailableHostSets() {
     return this.filteredHostSets.length > 0;
   }
@@ -38,7 +37,6 @@ export default class FormTargetAddHostSetsComponent extends Component {
    * Host sets not already added to the target.
    * @type {[HostSetModel]}
    */
-  @computed('args.{hostSets.[],model.host_sources.[]}')
   get filteredHostSets() {
     // Get IDs for host sets already added to the current target
     const alreadyAddedHostSetIDs = this.args.model.host_sources.map(
