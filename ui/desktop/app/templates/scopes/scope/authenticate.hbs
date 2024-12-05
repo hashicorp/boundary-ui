@@ -49,16 +49,15 @@
     {{/if}}
     {{#unless @model.authMethods}}
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.auth-method.messages.none.title'}}
-          @icon='flight-icons/svg/alert-circle-16'
-          data-test-no-auth-methods
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.auth-method.messages.none.description'}}
-          </message.description>
-        </Rose::Message>
+        <Hds::ApplicationState data-test-no-auth-methods as |A|>
+          <A.Header
+            @icon='alert-circle'
+            @title={{t 'resources.auth-method.messages.none.title'}}
+          />
+          <A.Body
+            @text={{t 'resources.auth-method.messages.none.description'}}
+          />
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
     {{/unless}}
     <p class='change-origin'>

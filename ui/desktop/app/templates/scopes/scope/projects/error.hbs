@@ -9,7 +9,10 @@
 {{#if @model.errors}}
   <Rose::Layout::Centered>
     {{#each @model.errors as |error|}}
-      <Error::Message @status={{error.status}} />
+      <Error::Message
+        @status={{error.status}}
+        @docLink={{doc-url 'support-page'}}
+      />
     {{/each}}
   </Rose::Layout::Centered>
 {{/if}}
@@ -17,7 +20,7 @@
 {{! But a disconnected state doesn't get normalized errors }}
 {{#unless @model.errors}}
   <Rose::Layout::Centered>
-    <Error::Message />
+    <Error::Message @docLink={{doc-url 'support-page'}} />
   </Rose::Layout::Centered>
 
   <Rose::Layout::Centered>

@@ -53,17 +53,16 @@
 
 {{#unless this.hasAvailableAccounts}}
   <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.user.messages.no-accounts.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.user.messages.no-accounts.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.users.user.accounts'>
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
+    <Hds::ApplicationState as |A|>
+      <A.Header @title={{t 'resources.user.messages.no-accounts.title'}} />
+      <A.Body @text={{t 'resources.user.messages.no-accounts.description'}} />
+      <A.Footer as |F|>
+        <F.LinkStandalone
+          @icon='arrow-left'
+          @text={{t 'actions.back'}}
+          @route='scopes.scope.users.user.accounts'
+        />
+      </A.Footer>
+    </Hds::ApplicationState>
   </Rose::Layout::Centered>
 {{/unless}}
