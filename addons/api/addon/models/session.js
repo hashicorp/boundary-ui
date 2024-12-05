@@ -94,8 +94,7 @@ export class SessionCredential {
 
   /**
    * Extracts secrets from the payload secret JSON object.
-   * We only need to flatten the object if the type is vault-generic
-   * or vault-ssh-certificate and we only need the data object.
+   * We only need to flatten the object if the type is vault or if its a json type credential.
    * @param {object} secretJSON - The payload secret JSON object.
    * @param {string} type - The credential source type.
    * @param {string} credentialType - The credential type.
