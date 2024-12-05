@@ -89,12 +89,14 @@ export default function initializeMockIPC(server, config) {
               name: 'Credential Library 0',
               description: 'Source Description',
               credential_store_id: 'csvlt_Q1HFGt7Jpm',
-              type: 'vault',
+              type: 'vault-generic',
             },
             secret: {
               raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ',
               decoded: {
                 data: {
+                  backslash: 'password\\withslash\\',
+                  backslash1: 'password\\fwithslash\\f',
                   password: '123',
                   username: 'test',
                   email: {
@@ -127,6 +129,7 @@ export default function initializeMockIPC(server, config) {
                 nested_secret: {
                   session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
                   complex_nest: {
+                    blackslash: 'password\\withslash\\',
                     hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
                   },
                 },

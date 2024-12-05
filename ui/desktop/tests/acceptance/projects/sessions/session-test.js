@@ -148,11 +148,71 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     await click(TARGET_CONNECT_BUTTON);
 
     assert.strictEqual(currentURL(), urls.session);
-    assert.dom('credential-panel-header').doesNotExist();
-    assert.dom('credential-panel-body').doesNotExist();
+    assert.dom('.credential-panel-header').doesNotExist();
+    assert.dom('.credential-panel-body').doesNotExist();
     assert
       .dom('[data-test-no-credentials]')
       .hasText(`Connected You can now access ${instances.target.name}`);
+  });
+
+  test('visiting session with credentials', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+      credentials: [
+        {
+          credential_source: {
+            id: 'clvlt_4cvscMTl0N',
+            name: 'Credential Library 0',
+            description: 'Source Description',
+            credential_store_id: 'csvlt_Q1HFGt7Jpm',
+            type: 'vault-generic',
+          },
+          secret: {
+            raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ',
+            decoded: {
+              data: {
+                backslash: 'password\\withslash\\',
+                backslash1: 'password\\fwithslash\\f',
+                password: '123',
+                username: 'test',
+                email: {
+                  address: 'test.com',
+                },
+              },
+              metadata: {
+                created_time: '2024-04-12T18:38:36.226715555Z',
+                custom_metadata: null,
+                deletion_time: '',
+                destroyed: false,
+                version: 8,
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    await visit(urls.target);
+    await click(TARGET_CONNECT_BUTTON);
+    assert.strictEqual(currentURL(), urls.session);
+
+    assert.dom('.credential-panel-header').exists();
+    assert.dom('.credential-panel-body').exists();
+    assert.dom('.credential-secret').exists();
+
+    assert
+      .dom('.secret-container:nth-of-type(1)')
+      .hasText('username ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+
+    await click('.secret-container:nth-of-type(1) .hds-icon');
+
+    assert
+      .dom('.secret-container:nth-of-type(1) .secret-content')
+      .hasText('test');
   });
 
   test('visiting a session that does not have permissions to read a host', async function (assert) {
