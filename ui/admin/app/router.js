@@ -150,6 +150,8 @@ Router.map(function () {
                 function () {},
               );
             });
+            this.route('worker-filter');
+            this.route('edit-worker-filter');
           },
         );
         this.route('new');
