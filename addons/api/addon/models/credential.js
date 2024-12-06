@@ -8,7 +8,16 @@ import GeneratedCredentialModel from '../generated/models/credential';
 /**
  * Supported Credential types.
  */
-export const types = ['username_password', 'ssh_private_key', 'json'];
+
+export const TYPE_CREDENTIAL_USERNAME_PASSWORD = 'username_password';
+export const TYPE_CREDENTIAL_SSH_PRIVATE_KEY = 'ssh_private_key';
+export const TYPE_CREDENTIAL_JSON = 'json';
+
+export const TYPES_CREDENTIAL = Object.freeze([
+  TYPE_CREDENTIAL_USERNAME_PASSWORD,
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_JSON,
+]);
 
 export default class CredentialModel extends GeneratedCredentialModel {
   // =attributes
@@ -28,7 +37,7 @@ export default class CredentialModel extends GeneratedCredentialModel {
    * @type {boolean}
    */
   get isJSON() {
-    return this.type === 'json';
+    return this.type === TYPE_CREDENTIAL_JSON;
   }
 
   /**
@@ -36,6 +45,6 @@ export default class CredentialModel extends GeneratedCredentialModel {
    * @type {boolean}
    */
   get isUnknown() {
-    return !types.includes(this.type);
+    return !TYPES_CREDENTIAL.includes(this.type);
   }
 }
