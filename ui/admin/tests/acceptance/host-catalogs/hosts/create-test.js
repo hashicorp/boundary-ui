@@ -129,6 +129,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     assert.strictEqual(getHostCount(), count);
   });
 
+  // TODO: the field should change to address and not name. Name is optional for host but address
+  // is required, so to make the test realistic we should be testing address
   test('saving a new host with invalid fields displays error messages', async function (assert) {
     this.server.post('/hosts', () => {
       return new Response(
