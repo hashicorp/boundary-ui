@@ -4,7 +4,7 @@
  */
 
 import { expect, test } from '../fixtures/baseTest.js';
-import * as boundaryHttp from '../../helpers/boundary-http';
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 
 let org;
 let targetWithHost;
@@ -138,7 +138,7 @@ test.describe('Sessions tests', async () => {
 
 test.describe('Filtering sessions tests', async () => {
   test.beforeEach(async ({ authedPage }) => {
-    // Connect to three targets, first one is active
+    // Connect to three targets
     await authedPage
       .getByRole('row', { name: sshTarget.name })
       .getByRole('link', { name: 'Connect' })
