@@ -12,8 +12,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`<Rose::Form::Input @value="Text" @label="Label" />`);
-    assert.strictEqual(await find('label').textContent.trim(), 'Label');
+    await render(hbs`<Rose::Form::Input @value="Text" />`);
     assert.strictEqual(await find('input').value, 'Text');
   });
 
@@ -84,7 +83,6 @@ module('Integration | Component | rose/form/input', function (hooks) {
   test('it supports a fully contextual usage', async function (assert) {
     await render(hbs`
       <Rose::Form::Input @value="Text" @error={{true}} @contextual={{true}} as |field|>
-        <field.label>Label</field.label>
         <field.helperText>Help</field.helperText>
         <field.field />
         <field.errors as |errors|>
@@ -96,7 +94,6 @@ module('Integration | Component | rose/form/input', function (hooks) {
       find('.rose-form-input'),
       'The form field wrapper element is not present in contextual mode',
     );
-    assert.ok(find('.rose-form-label.error'));
     assert.ok(find('.rose-form-helper-text.error'));
     assert.ok(find('.rose-form-input-field.error'));
     assert.ok(find('.rose-form-error-message'));
