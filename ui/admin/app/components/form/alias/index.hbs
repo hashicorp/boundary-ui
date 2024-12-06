@@ -56,7 +56,11 @@
       {{t 'resources.alias.description'}}
     </F.HelperText>
     <F.Control>
-      <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+      <Hds::Form::RadioCard::Group
+        @name={{t 'form.type.label'}}
+        @alignment='center'
+        as |G|
+      >
         <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
         <G.RadioCard @maxWidth='15rem' @checked='true' @disabled='true' as |R|>
           <R.Label>{{t 'resources.alias.form.type.label'}}</R.Label>
