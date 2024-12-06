@@ -6,6 +6,13 @@
 import { chromium, test as baseTest } from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
 import { LoginPage } from './admin/pages/login.js';
+import path from 'path';
+import dotenv from 'dotenv';
+
+const __dirname = import.meta.dirname;
+
+// Import environment variables from .env file if available
+dotenv.config({ path: path.resolve(__dirname, './.env') });
 
 async function globalSetup() {
   await checkEnv([
@@ -42,7 +49,10 @@ const authenticateToBoundary = async () => {
 
 export default globalSetup;
 
-export const authenticatedState = './admin/artifacts/authenticated-state.json';
+export const authenticatedState = path.resolve(
+  __dirname,
+  './.auth/authenticated-state.json',
+);
 
 // Centralized location for environment variables used in tests
 export const test = baseTest.extend({

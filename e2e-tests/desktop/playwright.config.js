@@ -11,7 +11,6 @@ export default defineConfig({
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
   use: {
     baseURL: process.env.BOUNDARY_ADDR,
-    storageState: './admin/artifacts/authenticated-state.json',
     extraHTTPHeaders: {
       // This token is set in global-setup.js
       Authorization: `Bearer ${process.env.E2E_TOKEN}`,
