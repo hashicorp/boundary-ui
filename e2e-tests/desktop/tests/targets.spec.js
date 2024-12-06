@@ -4,7 +4,7 @@
  */
 
 import { expect, test } from '../fixtures/baseTest.js';
-import * as boundaryHttp from '../../helpers/boundary-http';
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 
 const hostName = 'Host name for test';
 let org;

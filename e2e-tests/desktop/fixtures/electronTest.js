@@ -16,6 +16,7 @@ import { fileURLToPath } from 'url';
 const getExecutablePath = (buildDirectory = 'out') => {
   // Using process.cwd() can change depending on where you run the tests so we use the current file location
   // __dirname isn't available in ES modules so we need to indirectly get the directory
+  // TODO: Switch to `import.meta.dirname` when we switch to Node.js 20+
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const rootDir = path.resolve(__dirname, '../../../ui/desktop/electron-app');
