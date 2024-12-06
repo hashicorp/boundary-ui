@@ -6,14 +6,12 @@
 import { chromium, test as baseTest } from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
 import { LoginPage } from './admin/pages/login.js';
-import { fileURLToPath } from 'url';
 import path from 'path';
+import dotenv from 'dotenv';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = import.meta.dirname;
 
 // Import environment variables from .env file if available
-import dotenv from 'dotenv';
 dotenv.config({ path: path.resolve(__dirname, './.env') });
 
 async function globalSetup() {
