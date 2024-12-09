@@ -126,4 +126,31 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
     this[paramKey] = [...selectedItems];
     this.page = 1;
   }
+
+  /**
+   * Save worker filter
+   * @param {CredentialStoreModel} credentialStore
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async saveWorkerFilter(credentialStore) {
+    await credentialStore.save();
+    await this.router.replaceWith(
+      'scopes.scope.credential-stores.credential-store.worker-filter',
+    );
+  }
+
+  /**
+   * Cancel adding or editing a worker filter
+   * @param {CredentialStoreModel} credentialStore
+   */
+  @action
+  async cancelWorkerFilter(credentialStore) {
+    credentialStore.rollbackAttributes();
+    await this.router.replaceWith(
+      'scopes.scope.credential-stores.credential-store.worker-filter',
+    );
+  }
 }
