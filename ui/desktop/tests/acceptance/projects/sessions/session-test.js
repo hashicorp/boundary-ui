@@ -155,7 +155,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .hasText(`Connected You can now access ${instances.target.name}`);
   });
 
-  test('visiting session with credentials', async function (assert) {
+  test('visiting session with vault type credentials', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -213,6 +213,68 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert
       .dom('.secret-container:nth-of-type(1) .secret-content')
       .hasText('test');
+  });
+
+  test('visiting session with static type credentials', async function (assert) {
+    this.ipcStub.withArgs('cliExists').returns(true);
+    this.ipcStub.withArgs('connect').returns({
+      session_id: instances.session.id,
+      address: 'a_123',
+      port: 'p_123',
+      protocol: 'tcp',
+      credentials: [
+        {
+          credential_source: {
+            id: 'credjson_7cKBbBEkC3',
+            credential_store_id: 'csst_yzlsot2pum',
+            type: 'static',
+            credential_type: 'json',
+          },
+          secret: {
+            raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ==',
+            decoded: {
+              secret_key: 'QWERTYUIOP',
+              secret_access_key: 'QWERT.YUIOP234567890',
+              nested_secret: {
+                session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
+                complex_nest: {
+                  blackslash: 'password\\withslash\\',
+                  hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
+                },
+              },
+            },
+          },
+          credential: {
+            secret_key: 'QWERTYUIOP',
+            secret_access_key: 'QWERT.YUIOP234567890',
+            nested_secret: {
+              session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
+              complex_nest: {
+                hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    await visit(urls.target);
+    await click(TARGET_CONNECT_BUTTON);
+    assert.strictEqual(currentURL(), urls.session);
+
+    assert.dom('.credential-panel-header').exists();
+    assert.dom('.credential-panel-body').exists();
+    assert.dom('.credential-secret').exists();
+
+    assert
+      .dom('.secret-container:nth-of-type(1)')
+      .hasText('secret_key ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+
+    await click('.secret-container:nth-of-type(1) .hds-icon');
+
+    assert
+      .dom('.secret-container:nth-of-type(1) .secret-content')
+      .hasText('QWERTYUIOP');
   });
 
   test('visiting a session that does not have permissions to read a host', async function (assert) {
