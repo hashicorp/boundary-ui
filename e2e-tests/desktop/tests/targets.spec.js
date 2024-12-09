@@ -4,7 +4,7 @@
  */
 
 import { expect, test } from '../fixtures/baseTest.js';
-import * as boundaryHttp from '../../helpers/boundary-http';
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 
 const hostName = 'Host name for test';
 let org;
@@ -13,7 +13,7 @@ let targetWithTwoHosts;
 let sshTarget;
 let credential;
 
-test.beforeAll(
+test.beforeEach(
   async ({ request, targetAddress, targetPort, sshUser, sshKeyPath }) => {
     org = await boundaryHttp.createOrg(request);
     const project = await boundaryHttp.createProject(request, org.id);
@@ -108,20 +108,20 @@ test.beforeAll(
   },
 );
 
-test.afterAll(async ({ request }) => {
+test.afterEach(async ({ request }) => {
   if (org) {
     await boundaryHttp.deleteOrg(request, org.id);
   }
 });
 
-test.describe('Targets test', async () => {
+test.describe('Targets tests', async () => {
   test('Connects to a tcp target with one host', async ({ authedPage }) => {
     await authedPage.getByRole('link', { name: targetWithHost.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
 
-    await expect(authedPage).toHaveURL(
-      /.*\/scopes\/global\/projects\/sessions/,
-    );
+    await expect(
+      authedPage.getByRole('heading', { name: 'Sessions' }),
+    ).toBeVisible();
 
     await expect(authedPage.getByText(credential.name)).toBeVisible();
     await expect(authedPage.getByText('username')).toBeVisible();
@@ -153,9 +153,9 @@ test.describe('Targets test', async () => {
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
-    await expect(authedPage).toHaveURL(
-      /.*\/scopes\/global\/projects\/targets$/,
-    );
+    await expect(
+      authedPage.getByRole('heading', { name: 'Targets' }),
+    ).toBeVisible();
   });
 
   [{ host: 'Quick Connect' }, { host: hostName }].forEach(({ host }) => {
@@ -167,14 +167,15 @@ test.describe('Targets test', async () => {
         .click();
       await authedPage.getByRole('button', { name: 'Connect' }).click();
 
-      await expect(authedPage).toHaveURL(
-        /.*\/scopes\/global\/projects\/targets/,
-      );
+      await expect(
+        authedPage.getByRole('heading', { name: 'Choose a Host' }),
+      ).toBeVisible();
+
       await authedPage.getByRole('button', { name: host }).click();
 
-      await expect(authedPage).toHaveURL(
-        /.*\/scopes\/global\/projects\/sessions/,
-      );
+      await expect(
+        authedPage.getByRole('heading', { name: 'Sessions' }),
+      ).toBeVisible();
 
       await expect(authedPage.getByText(credential.name)).toBeVisible();
       await expect(authedPage.getByText('username')).toBeVisible();
@@ -218,9 +219,9 @@ test.describe('Targets test', async () => {
     await authedPage.getByRole('link', { name: sshTarget.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
 
-    await expect(authedPage).toHaveURL(
-      /.*\/scopes\/global\/projects\/sessions/,
-    );
+    await expect(
+      authedPage.getByRole('heading', { name: 'Sessions' }),
+    ).toBeVisible();
 
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
     // TODO: Research a better way to test canvas elements for the shell,
@@ -228,16 +229,20 @@ test.describe('Targets test', async () => {
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
-    await expect(authedPage).toHaveURL(
-      /.*\/scopes\/global\/projects\/targets$/,
-    );
+
+    await expect(
+      authedPage.getByRole('heading', { name: 'Targets' }),
+    ).toBeVisible();
   });
 
   test('Searches targets correctly', async ({ authedPage }) => {
     await authedPage.getByLabel('Search').fill(targetWithHost.name);
 
-    // One row is the header
-    await expect(authedPage.getByRole('row')).toHaveCount(2);
+    await expect(
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(1);
     await expect(
       authedPage.getByRole('link', { name: targetWithHost.name }),
     ).toBeVisible();
