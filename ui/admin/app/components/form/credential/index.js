@@ -5,7 +5,7 @@
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { types } from 'api/models/credential';
+import { TYPES_CREDENTIAL } from 'api/models/credential';
 
 export default class FormCredentialComponent extends Component {
   // =services
@@ -18,7 +18,7 @@ export default class FormCredentialComponent extends Component {
    */
   get credentialTypes() {
     return this.features.isEnabled('json-credentials')
-      ? types
-      : types.filter((type) => type !== 'json');
+      ? TYPES_CREDENTIAL
+      : TYPES_CREDENTIAL.filter((type) => type !== 'json');
   }
 }
