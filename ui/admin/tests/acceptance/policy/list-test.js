@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | policies | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,8 +20,6 @@ module('Acceptance | policies | list', function (hooks) {
   let intl;
 
   const STORAGE_POLICY_TITLE = 'Storage Policies';
-  const MESSAGE_DESCRIPTION_SELECTOR = '.rose-message-description';
-  const MESSAGE_LINK_SELECTOR = '.rose-message-body .hds-link-standalone';
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
   const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
@@ -72,9 +71,9 @@ module('Acceptance | policies | list', function (hooks) {
     await click(`[href="${urls.policies}"]`);
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.policy.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
@@ -100,12 +99,12 @@ module('Acceptance | policies | list', function (hooks) {
 
     await visit(urls.policies);
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.neither-list-nor-create', {
         resource: STORAGE_POLICY_TITLE,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -132,12 +131,12 @@ module('Acceptance | policies | list', function (hooks) {
 
     await click(`[href="${urls.policies}"]`);
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.create-but-not-list', {
         resource: STORAGE_POLICY_TITLE,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
@@ -165,9 +164,9 @@ module('Acceptance | policies | list', function (hooks) {
     await click(`[href="${urls.policies}"]`);
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.policy.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('user cannot navigate to index when feature is disabled', async function (assert) {

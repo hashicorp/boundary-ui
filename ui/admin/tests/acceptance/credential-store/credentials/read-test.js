@@ -172,7 +172,9 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('visiting an unknown credential displays 404 message', async function (assert) {
     await visit(urls.unknownCredential);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('Users can link to docs page for credential', async function (assert) {

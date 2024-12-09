@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, findAll, click, currentURL } from '@ember/test-helpers';
+import { visit, findAll, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -167,7 +167,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-    assert.dom('.rose-message-title').doesNotExist();
+    assert.dom('.hds-application-state__title').doesNotExist();
   });
 
   test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
@@ -176,15 +176,14 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.addBrokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, getCredentialLibraryCount());
-    assert.dom('.rose-message-title').doesNotExist();
+    assert.dom('.hds-application-state__title').doesNotExist();
   });
 
   test('displays no brokered credential sources message when none available', async function (assert) {
     await visit(urls.addBrokeredCredentialSources);
-    assert.strictEqual(
-      find('.rose-message-title').textContent.trim(),
-      'No Brokered Credential Sources Available',
-    );
+    assert
+      .dom('.hds-application-state__title')
+      .hasText('No Brokered Credential Sources Available');
   });
 
   test('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
@@ -193,7 +192,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     });
     await visit(urls.brokeredCredentialSources);
     // Click on the rose message link
-    await click(find('.rose-message > .rose-message-body > a'));
+    await click('.hds-application-state__footer .hds-link-standalone');
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
