@@ -8,3 +8,4 @@ export const MANAGE_DROPDOWN =
 
 export const FIELD_ADDRESS = '[name=address]';
 export const FIELD_ADDRESS_VALUE = 'New address';
+export const FIELD_ADDRESS_ERROR = '[data-test-error-message-address]';
