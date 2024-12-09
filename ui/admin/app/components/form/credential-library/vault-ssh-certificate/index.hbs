@@ -54,7 +54,11 @@
   </Hds::Form::Textarea::Field>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group
+      @name={{t 'form.type.label'}}
+      @alignment='center'
+      as |G|
+    >
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.types as |type|}}
         <G.RadioCard

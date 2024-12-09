@@ -14,7 +14,7 @@ export const FIELD_BUCKET_NAME_VALUE = 'Test Bucket name';
 export const FIELD_BUCKET_NAME_ERROR = '[data-test-bucket-name-error]';
 export const FIELD_BUCKET_PREFIX = '[name=bucket_prefix]';
 export const FIELD_REGION = '[name=region]';
-export const GROUP_CREDENTIAL_TYPE = '[name=credential_type]';
+export const GROUP_CREDENTIAL_TYPE = '[name=Type]';
 export const FIELD_STATIC_CREDENTIAL = '[value=static]';
 export const FIELD_DYNAMIC_CREDENTIAL = '[value=dynamic]';
 export const FIELD_ROLE_ARN = '[name=role_arn]';
