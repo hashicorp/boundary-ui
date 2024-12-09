@@ -42,10 +42,5 @@ $xxxxs: sizing.rems(xxxxs); // 1
     $body-padding: $l;
 
     padding: $body-padding;
-
-    > .rose-separator {
-      margin-left: -$body-padding;
-      margin-right: -$body-padding;
-    }
   }
 }
