@@ -6,7 +6,7 @@
 /* global QUnit */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -205,17 +205,23 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.dom('.secret-container:nth-of-type(1)').includesText('backslash');
     await click('.secret-container:nth-of-type(1) .hds-icon');
     const expectedOutput = String.raw`password\with\tslash`;
-    assert
-      .dom('.secret-container:nth-of-type(1) .secret-content')
-      .hasText(expectedOutput);
-
+    assert.strictEqual(
+      find(
+        '.secret-container:nth-of-type(1) .secret-content',
+      ).textContent.trim(),
+      expectedOutput,
+    );
     assert
       .dom('.secret-container:nth-of-type(2)')
       .includesText('email.address');
     await click('.secret-container:nth-of-type(2) .hds-icon');
-    assert
-      .dom('.secret-container:nth-of-type(2) .secret-content')
-      .hasText('test.com');
+
+    assert.strictEqual(
+      find(
+        '.secret-container:nth-of-type(2) .secret-content',
+      ).textContent.trim(),
+      'test.com',
+    );
   });
 
   test('visiting session with static type credentials should display nested data in a key/value format without escape characters', async function (assert) {
@@ -261,9 +267,12 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .dom('.secret-container:nth-of-type(1)')
       .includesText('nested_secret.complex_nest.blackslash');
     await click('.secret-container:nth-of-type(1) .hds-icon');
-    assert
-      .dom('.secret-container:nth-of-type(1) .secret-content')
-      .hasText(expectedOutput);
+    assert.strictEqual(
+      find(
+        '.secret-container:nth-of-type(1) .secret-content',
+      ).textContent.trim(),
+      expectedOutput,
+    );
   });
 
   test('visiting a session that does not have permissions to read a host', async function (assert) {
