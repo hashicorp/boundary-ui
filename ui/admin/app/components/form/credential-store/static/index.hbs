@@ -54,11 +54,14 @@
   {{#if (feature-flag 'static-credentials')}}
     {{#if @model.isNew}}
 
-      <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+      <Hds::Form::RadioCard::Group
+        @name={{t 'form.type.label'}}
+        @alignment='center'
+        as |G|
+      >
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
         {{#each-in this.mapResourceTypeWithIcon as |credentialStoreType icon|}}
           <G.RadioCard
-            @name={{credentialStoreType}}
             @value={{credentialStoreType}}
             @checked={{eq credentialStoreType @model.type}}
             @maxWidth='20rem'

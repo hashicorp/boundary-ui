@@ -21,7 +21,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const DESCRIPTION_INPUT_SELECTOR = '[name="description"]';
-  const TYPE_INPUT_SELECTOR = '[name="type"]';
+  const TYPE_INPUT_SELECTOR = '[name="Type"]';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const ALERT_TEXT_SELECTOR =

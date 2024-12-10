@@ -18,6 +18,8 @@ description:
 type:
   label: Type
   help: The type of the resource, to help differentiate schemas
+plugin_type:
+  label: plugin_type
 login_name:
   label: Login Name
   help: The account login name
