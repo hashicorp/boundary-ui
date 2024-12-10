@@ -3,9 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.target.workers.title')}}
+{{page-title (t 'titles.workers')}}
 <Breadcrumbs::Item
-  @text={{t 'resources.target.workers.title'}}
+  @text={{t 'titles.workers'}}
   @route='scopes.scope.targets.target.workers'
 />
 
@@ -55,8 +55,8 @@
                 @text={{t
                   (if
                     @model.ingress_worker_filter
-                    'resources.target.workers.actions.edit-worker-filter'
-                    'resources.target.workers.actions.add-worker-filter'
+                    'actions.edit-worker-filter'
+                    'actions.add-worker-filter'
                   )
                 }}
                 @route='scopes.scope.targets.target.edit-ingress-worker-filter'
@@ -72,18 +72,14 @@
                 @value={{@model.ingress_worker_filter}}
                 as |CB|
               >
-                <CB.Title>{{t
-                    'resources.target.workers.worker-filter.title'
-                  }}</CB.Title>
+                <CB.Title>{{t 'form.worker_filter.label'}}</CB.Title>
                 <CB.Description>{{t
                     'resources.target.workers.worker-filter.description'
                   }}</CB.Description>
               </Hds::CodeBlock>
             {{else}}
               <Hds::ApplicationState as |A|>
-                <A.Header
-                  @title={{t 'resources.target.workers.messages.none.title'}}
-                />
+                <A.Header @title={{t 'titles.no-worker-filter'}} />
                 <A.Body
                   @text={{t
                     'resources.target.workers.messages.none.description'
@@ -110,8 +106,8 @@
               @text={{t
                 (if
                   @model.egress_worker_filter
-                  'resources.target.workers.actions.edit-worker-filter'
-                  'resources.target.workers.actions.add-worker-filter'
+                  'actions.edit-worker-filter'
+                  'actions.add-worker-filter'
                 )
               }}
               @route='scopes.scope.targets.target.edit-egress-worker-filter'
@@ -127,18 +123,14 @@
               @value={{@model.egress_worker_filter}}
               as |CB|
             >
-              <CB.Title>{{t
-                  'resources.target.workers.worker-filter.title'
-                }}</CB.Title>
+              <CB.Title>{{t 'form.worker_filter.label'}}</CB.Title>
               <CB.Description>{{t
                   'resources.target.workers.worker-filter.description'
                 }}</CB.Description>
             </Hds::CodeBlock>
           {{else}}
             <Hds::ApplicationState as |A|>
-              <A.Header
-                @title={{t 'resources.target.workers.messages.none.title'}}
-              />
+              <A.Header @title={{t 'titles.no-worker-filter'}} />
               <A.Body
                 @text={{t
                   'resources.target.workers.messages.none.description'
