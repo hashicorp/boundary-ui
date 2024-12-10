@@ -2,3 +2,5 @@
 admin/artifacts
 desktop/artifacts
 playwright-report
+
+.auth
