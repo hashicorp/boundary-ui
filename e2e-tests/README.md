@@ -97,6 +97,19 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 
 More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
+> [!TIP]
+> To run e2e tests against a local branch for Admin UI, update the UI commit in boundary so it gets picked up when enos builds the binary
+
+By default, enos will build the version of the UI that is specified in the `VERSION` commit for `boundary`. To use a specific branch, update the version first before running the scenario.
+
+In the `boundary` or `boundary-enterprise` repository:
+```bash
+UI_COMMITISH=<commit sha> make update-ui-version
+
+# Alternatively if you want to just be able to run the same command for the most recent commit
+UI_COMMITISH=$(git -C <boundary-ui(-enterprise) repo path> rev-parse HEAD) make update-ui-version
+```
+
 ## Run tests:
 
 Before running the e2e test locally, we need to launch an Enos Scenario. Make sure you followed all the steps within the [Getting started section](#getting-started).
