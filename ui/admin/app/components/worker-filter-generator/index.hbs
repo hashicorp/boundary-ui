@@ -181,12 +181,16 @@
         <div class='generated-results-container'>
           <Hds::Form::TextInput::Base
             readonly
-            id='generated-value'
             name='generated_value'
             @value={{this.generatedResult}}
             @width='320px'
           />
-          <Hds::Copy::Button @text='Copy' @targetToCopy='#generated-value' />
+          {{#if this.generatedResult}}
+            <Hds::Copy::Button
+              @text='Copy'
+              @textToCopy={{this.generatedResult}}
+            />
+          {{/if}}
         </div>
       </F.Control>
     </Hds::Form::Fieldset>
