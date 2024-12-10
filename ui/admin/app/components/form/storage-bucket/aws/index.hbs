@@ -115,7 +115,11 @@
   {{/if}}
 
   {{! Provider / plugin.name }}
-  <Hds::Form::RadioCard::Group @name='plugin_type' @alignment='center' as |G|>
+  <Hds::Form::RadioCard::Group
+    @name={{t 'form.plugin_type.label'}}
+    @alignment='center'
+    as |G|
+  >
     <G.Legend>{{t 'titles.provider'}}</G.Legend>
     <G.HelperText>{{t 'descriptions.choose-a-provider'}}</G.HelperText>
 
@@ -212,11 +216,10 @@
   </Hds::Form::TextInput::Field>
 
   {{! credential_type }}
-  <Hds::Form::RadioCard::Group name='credential_type' as |G|>
+  <Hds::Form::RadioCard::Group @name={{t 'form.type.label'}} as |G|>
     <G.Legend>{{t 'resources.storage-bucket.types.credential'}}</G.Legend>
     {{#each this.credentials as |credentialType|}}
       <G.RadioCard
-        @name={{credentialType}}
         @value={{credentialType}}
         @checked={{eq credentialType this.selectedCredentialType}}
         @disabled={{form.disabled}}

@@ -85,7 +85,7 @@ module('Acceptance | targets | create', function (hooks) {
   test('defaults to type `ssh` when no query param provided', async function (assert) {
     featuresService.enable('ssh-target');
     await visit(urls.newTarget);
-    assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
+    assert.strictEqual(find('[name="Type"]:checked').value, TYPE_TARGET_SSH);
   });
 
   test('can create a type `ssh` target', async function (assert) {
