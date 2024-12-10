@@ -155,7 +155,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
       .hasText(`Connected You can now access ${instances.target.name}`);
   });
 
-  test('visiting session with vault type credentials', async function (assert) {
+  test('visiting session with vault type credentials should display nested data in a key/value format without escape characters', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -176,9 +176,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
             decoded: {
               data: {
                 backslash: 'password\\withslash\\',
-                backslash1: 'password\\fwithslash\\f',
-                password: '123',
-                username: 'test',
                 email: {
                   address: 'test.com',
                 },
@@ -204,18 +201,26 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.dom('.credential-panel-body').exists();
     assert.dom('.credential-secret').exists();
 
+    // Check if nested data is displayed in a key/value format without escape characters
     assert
       .dom('.secret-container:nth-of-type(1)')
-      .hasText('username ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
-
+      .hasText('backslash ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
     await click('.secret-container:nth-of-type(1) .hds-icon');
-
+    const expectedOutput = String.raw`password\withslash\ `;
     assert
       .dom('.secret-container:nth-of-type(1) .secret-content')
-      .hasText('test');
+      .hasText(expectedOutput);
+
+    assert
+      .dom('.secret-container:nth-of-type(2)')
+      .hasText('email.address ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+    await click('.secret-container:nth-of-type(2) .hds-icon');
+    assert
+      .dom('.secret-container:nth-of-type(2) .secret-content')
+      .hasText('test.com');
   });
 
-  test('visiting session with static type credentials', async function (assert) {
+  test('visiting session with static type credentials should display nested data in a key/value format without escape characters', async function (assert) {
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -233,24 +238,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
           secret: {
             raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ==',
             decoded: {
-              secret_key: 'QWERTYUIOP',
-              secret_access_key: 'QWERT.YUIOP234567890',
               nested_secret: {
-                session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
                 complex_nest: {
                   blackslash: 'password\\withslash\\',
-                  hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
                 },
-              },
-            },
-          },
-          credential: {
-            secret_key: 'QWERTYUIOP',
-            secret_access_key: 'QWERT.YUIOP234567890',
-            nested_secret: {
-              session_token: 'ZXCVBNMLKJHGFDSAQWERTYUIOP0987654321',
-              complex_nest: {
-                hash: 'qazxswedcvfrtgbnjhyujm.1234567890',
               },
             },
           },
@@ -266,15 +257,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.dom('.credential-panel-body').exists();
     assert.dom('.credential-secret').exists();
 
+    // Check if nested data is displayed in a key/value format without escape characters
+    const expectedOutput = String.raw`password\withslash\ `;
     assert
       .dom('.secret-container:nth-of-type(1)')
-      .hasText('secret_key ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
-
+      .hasText('nested_secret.complex_nest.blackslash ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
     await click('.secret-container:nth-of-type(1) .hds-icon');
-
     assert
       .dom('.secret-container:nth-of-type(1) .secret-content')
-      .hasText('QWERTYUIOP');
+      .hasText(expectedOutput);
   });
 
   test('visiting a session that does not have permissions to read a host', async function (assert) {
