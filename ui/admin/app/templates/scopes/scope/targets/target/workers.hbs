@@ -66,6 +66,7 @@
           <:content>
             {{#if @model.ingress_worker_filter}}
               <Hds::CodeBlock
+                @maxHeight='300px'
                 @language='bash'
                 @hasCopyButton={{true}}
                 @value={{@model.ingress_worker_filter}}
@@ -120,6 +121,7 @@
         <:content>
           {{#if @model.egress_worker_filter}}
             <Hds::CodeBlock
+              @maxHeight='300px'
               @language='bash'
               @hasCopyButton={{true}}
               @value={{@model.egress_worker_filter}}
