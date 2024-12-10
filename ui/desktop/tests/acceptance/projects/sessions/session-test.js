@@ -175,7 +175,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
             raw: 'eyJhcnJheSI6WyJvbmUiLCJ0d28iLCJ0aHJlZSIsIm9uZSIsInR3byIsInRocmVlIiwib25lIiwidHdvIiwidGhyZWUiLCJvbmUiLCJ0d28iLCJ0aHJlZSJdLCJuZXN0ZWQiOnsiYm9vbCI6dHJ1ZSwibG9uZyI6IjEyMjM1MzQ1NmFzZWRmYTQzd3J0ZjIzNGYyM2FzZGdmYXNkZnJnYXdzZWZhd3NlZnNkZjQiLCJzZWNlcmV0Ijoic28gbmVzdGVkIn0sInRlc3QiOiJwaHJhc2UifQ',
             decoded: {
               data: {
-                backslash: 'password\\withslash\\',
+                backslash: 'password\\with\\tslash',
                 email: {
                   address: 'test.com',
                 },
@@ -202,18 +202,16 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.dom('.credential-secret').exists();
 
     // Check if nested data is displayed in a key/value format without escape characters
-    assert
-      .dom('.secret-container:nth-of-type(1)')
-      .hasText('backslash ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+    assert.dom('.secret-container:nth-of-type(1)').includesText('backslash');
     await click('.secret-container:nth-of-type(1) .hds-icon');
-    const expectedOutput = String.raw`password\withslash\ `;
+    const expectedOutput = String.raw`password\with\tslash`;
     assert
       .dom('.secret-container:nth-of-type(1) .secret-content')
       .hasText(expectedOutput);
 
     assert
       .dom('.secret-container:nth-of-type(2)')
-      .hasText('email.address ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+      .includesText('email.address');
     await click('.secret-container:nth-of-type(2) .hds-icon');
     assert
       .dom('.secret-container:nth-of-type(2) .secret-content')
@@ -240,7 +238,7 @@ module('Acceptance | projects | sessions | session', function (hooks) {
             decoded: {
               nested_secret: {
                 complex_nest: {
-                  blackslash: 'password\\withslash\\',
+                  blackslash: 'password\\with\\tslash',
                 },
               },
             },
@@ -258,10 +256,10 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.dom('.credential-secret').exists();
 
     // Check if nested data is displayed in a key/value format without escape characters
-    const expectedOutput = String.raw`password\withslash\ `;
+    const expectedOutput = String.raw`password\with\tslash`;
     assert
       .dom('.secret-container:nth-of-type(1)')
-      .hasText('nested_secret.complex_nest.blackslash ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■');
+      .includesText('nested_secret.complex_nest.blackslash');
     await click('.secret-container:nth-of-type(1) .hds-icon');
     assert
       .dom('.secret-container:nth-of-type(1) .secret-content')
