@@ -14,6 +14,7 @@ module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let intl;
   let featuresService;
   let featureEdition;
 
@@ -52,6 +53,7 @@ module('Acceptance | targets | workers', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    intl = this.owner.lookup('service:intl');
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
@@ -258,10 +260,10 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert
       .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
-      .hasText('Add worker filter');
+      .hasText(intl.t('actions.add-worker-filter'));
     assert
       .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
-      .hasText('Add worker filter');
+      .hasText(intl.t('actions.add-worker-filter'));
   });
 
   test('user will see "Edit worker filter" if filter is set', async function (assert) {
@@ -272,10 +274,10 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert
       .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
-      .hasText('Edit worker filter');
+      .hasText(intl.t('actions.edit-worker-filter'));
     assert
       .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
-      .hasText('Edit worker filter');
+      .hasText(intl.t('actions.edit-worker-filter'));
   });
 
   test('user can cancel changes to egress worker filter in a target', async function (assert) {

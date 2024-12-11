@@ -183,3 +183,5 @@ created:
 other_fields:
   label: Other Fields
   help: This information is provided by the server and cannot be edited in Boundary
+worker_filter:
+  label: Worker Filter
