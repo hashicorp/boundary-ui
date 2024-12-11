@@ -148,9 +148,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
     // There are 2 credential types
-    assert
-      .dom(`${selectors.GROUP_CREDENTIAL_TYPE} .hds-form-radio-card`)
-      .exists({ count: 2 });
+    assert.dom(selectors.GROUP_CREDENTIAL_TYPE).exists({ count: 2 });
 
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
@@ -172,9 +170,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    assert
-      .dom(`${selectors.GROUP_CREDENTIAL_TYPE} .hds-form-radio-card`)
-      .exists({ count: 2 });
+    assert.dom(selectors.GROUP_CREDENTIAL_TYPE).exists({ count: 2 });
 
     await click(selectors.FIELD_STATIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);

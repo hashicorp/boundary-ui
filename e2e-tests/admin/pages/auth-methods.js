@@ -70,7 +70,6 @@ export class AuthMethodsPage extends BaseResourcePage {
 
     await this.page.getByRole('link', { name: 'Accounts' }).click();
     await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Create Account', exact: true })
       .click();
     await this.page.getByLabel('Name (Optional)').fill(accountName);
