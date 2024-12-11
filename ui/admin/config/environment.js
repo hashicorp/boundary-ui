@@ -101,8 +101,8 @@ module.exports = function (environment) {
         'target.add-host-sources': '/docs/concepts/domain-model/host-sets',
         'target.enable-session-recording':
           '/docs/configuration/session-recording/enable-session-recording',
-        'target.worker-filters':
-          '/docs/concepts/filtering/worker-tags#worker-filtering',
+        'worker-filters-format':
+          '/docs/concepts/filtering/worker-tags#filter-examples',
         user: '/docs/concepts/domain-model/users',
         downloads: '/install',
         'getting-started.desktop':
