@@ -1,0 +1,37 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+{{page-title
+  (t 'resources.credential-store.worker-filter.messages.edit.title')
+}}
+<Breadcrumbs::Item
+  @text={{t 'resources.credential-store.worker-filter.messages.edit.title'}}
+  @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
+/>
+
+<Rose::Layout::Page as |page|>
+  <page.breadcrumbs>
+    <Breadcrumbs::Container />
+  </page.breadcrumbs>
+
+  <page.header>
+    <Hds::Text::Display @tag='h2' @size='300' class='h2'>
+      {{t 'resources.credential-store.worker-filter.messages.edit.title'}}
+      <DocLink @doc='worker-filters-format' @iconSize='large' />
+    </Hds::Text::Display>
+    <Hds::Text::Body @tag='p' @size='300'>
+      {{t 'resources.credential-store.worker-filter.messages.edit.description'}}
+    </Hds::Text::Body>
+  </page.header>
+
+  <page.body>
+    <Form::WorkerFilter
+      @name='worker_filter'
+      @model={{@model}}
+      @submit={{fn this.credentialStores.saveWorkerFilter @model}}
+      @cancel={{fn this.credentialStores.cancelWorkerFilter @model}}
+    />
+  </page.body>
+</Rose::Layout::Page>

@@ -51,9 +51,13 @@
                   'resources.target.workers.accordion-label.ingress-workers'
                 }}</span>
               <Hds::Link::Standalone
-                @icon='edit'
+                @icon={{if @model.ingress_worker_filter 'edit' 'plus-circle'}}
                 @text={{t
-                  'resources.target.workers.actions.edit-worker-filter'
+                  (if
+                    @model.ingress_worker_filter
+                    'resources.target.workers.actions.edit-worker-filter'
+                    'resources.target.workers.actions.add-worker-filter'
+                  )
                 }}
                 @route='scopes.scope.targets.target.edit-ingress-worker-filter'
               />
@@ -62,6 +66,7 @@
           <:content>
             {{#if @model.ingress_worker_filter}}
               <Hds::CodeBlock
+                @maxHeight='300px'
                 @language='bash'
                 @hasCopyButton={{true}}
                 @value={{@model.ingress_worker_filter}}
@@ -101,8 +106,14 @@
                 'resources.target.workers.accordion-label.egress-workers'
               }}</span>
             <Hds::Link::Standalone
-              @icon='edit'
-              @text={{t 'resources.target.workers.actions.edit-worker-filter'}}
+              @icon={{if @model.egress_worker_filter 'edit' 'plus-circle'}}
+              @text={{t
+                (if
+                  @model.egress_worker_filter
+                  'resources.target.workers.actions.edit-worker-filter'
+                  'resources.target.workers.actions.add-worker-filter'
+                )
+              }}
               @route='scopes.scope.targets.target.edit-egress-worker-filter'
             />
           </div>
@@ -110,6 +121,7 @@
         <:content>
           {{#if @model.egress_worker_filter}}
             <Hds::CodeBlock
+              @maxHeight='300px'
               @language='bash'
               @hasCopyButton={{true}}
               @value={{@model.egress_worker_filter}}
