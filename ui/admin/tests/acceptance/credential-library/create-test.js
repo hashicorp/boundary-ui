@@ -247,8 +247,8 @@ module('Acceptance | credential-libraries | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'path',
+                description: 'Vault path is required',
               },
             ],
           },
@@ -262,7 +262,9 @@ module('Acceptance | credential-libraries | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid');
-    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert
+      .dom(selectors.FIELD_VAULT_PATH_ERROR)
+      .hasText('Vault path is required');
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {

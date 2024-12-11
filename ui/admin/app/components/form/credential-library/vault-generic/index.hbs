@@ -24,7 +24,7 @@
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message data-test-error-message-name>
+          <E.Message>
             {{error.message}}
           </E.Message>
         {{/each}}
@@ -107,7 +107,9 @@
     {{#if @model.errors.path}}
       <F.Error as |E|>
         {{#each @model.errors.path as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message
+            data-test-error-message-vault-path
+          >{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
