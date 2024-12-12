@@ -10,6 +10,7 @@ import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { flattenObject } from '../utils/flatten-nested-object';
 import { TYPES_CREDENTIAL_LIBRARY } from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_JSON } from 'api/models/credential';
 
 export const STATUS_SESSION_ACTIVE = 'active';
 export const STATUS_SESSION_PENDING = 'pending';
@@ -36,12 +37,14 @@ export class SessionCredential {
     name;
     description;
     type;
+    credentialtype;
 
-    constructor(id, name, description, type) {
+    constructor(id, name, description, type, credentialtype) {
       this.id = id;
       this.name = name;
       this.description = description;
       this.type = type;
+      this.credentialType = credentialtype;
     }
   };
 
@@ -77,7 +80,11 @@ export class SessionCredential {
   get secrets() {
     if (this.#payloadSecret?.decoded) {
       const secretJSON = this.#payloadSecret.decoded;
-      return this.extractSecrets(secretJSON, this.source.type);
+      return this.extractSecrets(
+        secretJSON,
+        this.source.type,
+        this.source.credentialType,
+      );
     } else {
       // decode from base64
       const decodedString = atob(this.#payloadSecret.raw);
@@ -87,16 +94,22 @@ export class SessionCredential {
 
   /**
    * Extracts secrets from the payload secret JSON object.
-   * We only need to flatten the object if the type is vault-generic
-   * or vault-ssh-certificate and we only need the data object.
+   * We only need to flatten the object if the type is vault or if its a json type credential.
    * @param {object} secretJSON - The payload secret JSON object.
+   * @param {string} type - The credential source type.
+   * @param {string} credentialType - The credential type.
    * @returns {SessionCredential.SecretItem[]} - The array of secret items.
    */
-  extractSecrets(secretJSON, type) {
-    const source =
-      TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data
-        ? flattenObject(secretJSON?.data)
-        : secretJSON;
+  extractSecrets(secretJSON, type, credentialType) {
+    let source;
+    if (credentialType === TYPE_CREDENTIAL_JSON) {
+      source = flattenObject(secretJSON);
+    } else if (TYPES_CREDENTIAL_LIBRARY.includes(type) && secretJSON?.data) {
+      source = flattenObject(secretJSON.data);
+    } else {
+      source = secretJSON;
+    }
+
     return Object.entries(source).map(
       ([key, value]) => new SessionCredential.SecretItem(key, value),
     );
@@ -105,8 +118,15 @@ export class SessionCredential {
   // =methods
 
   constructor(cred) {
-    const { id, name, description, type } = cred.credential_source;
-    this.source = new SessionCredential.Source(id, name, description, type);
+    const { id, name, description, type, credential_type } =
+      cred.credential_source;
+    this.source = new SessionCredential.Source(
+      id,
+      name,
+      description,
+      type,
+      credential_type,
+    );
     this.#payloadSecret = cred.secret;
     this.rawCredential = cred;
   }
