@@ -39,3 +39,7 @@ export const DIALOG_UNSAVED_CHANGES_DISCARD =
   '.rose-dialog-footer button:first-child';
 export const DIALOG_UNSAVED_CHANGES_CANCEL =
   '.rose-dialog-footer button:last-child';
+
+export const MODAL_WARNING = '[data-test-modal]';
+export const MODAL_WARNING_CONFIRM_BTN = '[data-test-modal-confirm-btn]';
+export const MODAL_WARNING_CANCEL_BTN = '[data-test-modal-cancel-btn]';

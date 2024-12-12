@@ -284,8 +284,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody label');
     await click('form [type="submit"]');
 
-    assert.dom('.rose-dialog').isVisible();
-    await click('.rose-dialog-footer .rose-button-primary', 'Remove resources');
+    assert.dom(commonSelectors.MODAL_WARNING).exists;
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
@@ -319,12 +319,10 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click('tbody label');
     await click('form [type="submit"]');
+    // await this.pauseTest();
 
-    assert.dom('.rose-dialog').isVisible();
-    await click(
-      '.rose-dialog-footer .rose-button-secondary',
-      'Remove resources',
-    );
+    assert.dom(commonSelectors.MODAL_WARNING).exists;
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
