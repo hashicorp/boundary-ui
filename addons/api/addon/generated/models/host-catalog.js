@@ -55,10 +55,11 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   plugin;
 
-  // AWS & Azure
+  // AWS, Azure & GCP
 
   @attr('boolean', {
     for: 'plugin',
+    compositeType: ['aws', 'azure', 'gcp'],
     isNestedAttribute: true,
     description: '',
   })
@@ -68,6 +69,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'aws',
     description:
       'An expression used to filter the workers that have network access to a service that is hosting the external object store.',
   })
@@ -75,6 +77,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'aws',
     isNestedAttribute: true,
     description: '',
   })
@@ -83,6 +86,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // AWS static credentials
   @attr('string', {
     for: 'plugin',
+    credentialType: 'static-credential',
+    compositeType: 'aws',
     isNestedSecret: true,
     description: '',
   })
@@ -90,6 +95,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    credentialType: 'static-credential',
+    compositeType: 'aws',
     isNestedSecret: true,
     description: '',
   })
@@ -98,6 +105,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // AWS dynamic credentials
   @attr('string', {
     for: 'plugin',
+    credentialType: 'dynamic-credential',
+    compositeType: 'aws',
     isNestedAttribute: true,
     description: 'The role ARN to use.',
   })
@@ -105,6 +114,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    credentialType: 'dynamic-credential',
+    compositeType: 'aws',
     isNestedAttribute: true,
     description: 'The role external ID to use.',
   })
@@ -112,6 +123,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    credentialType: 'dynamic-credential',
+    compositeType: 'aws',
     isNestedAttribute: true,
     description: 'The role session to use.',
   })
@@ -119,6 +132,8 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('object-as-array', {
     for: 'plugin',
+    credentialType: 'dynamic-credential',
+    compositeType: 'aws',
     isNestedAttribute: true,
     description: 'The role tags to use.',
   })
@@ -128,6 +143,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'azure',
     isNestedAttribute: true,
     description: '',
   })
@@ -135,6 +151,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'azure',
     isNestedAttribute: true,
     description: '',
   })
@@ -142,6 +159,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'azure',
     isNestedAttribute: true,
     description: '',
   })
@@ -149,6 +167,7 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'azure',
     isNestedSecret: true,
     description: '',
   })
@@ -156,8 +175,62 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   @attr('string', {
     for: 'plugin',
+    compositeType: 'azure',
     isNestedSecret: true,
     description: '',
   })
   secret_value;
+
+  // GCP specific
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    isNestedAttribute: true,
+    description: 'The project ID associated with the service account.',
+  })
+  project_id;
+
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    isNestedAttribute: true,
+    description: 'The deployment area within a region.',
+  })
+  zone;
+
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    isNestedAttribute: true,
+    description:
+      'The email address associated with the service account. The email address used to uniquely identify the service account. It is required for authentication and authorization.',
+  })
+  client_email;
+
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    isNestedAttribute: true,
+    description:
+      'The unique identifier for the service account that will be impersonated.',
+  })
+  target_service_account_id;
+
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    description:
+      'The ID of the private key used to sign the JWT and authentication.',
+    isNestedSecret: true,
+  })
+  private_key_id;
+
+  @attr('string', {
+    for: 'plugin',
+    compositeType: 'gcp',
+    description:
+      'The private key used to sign the JWT and obtain a OAuth 2.0 access token.',
+    isNestedSecret: true,
+  })
+  private_key;
 }
