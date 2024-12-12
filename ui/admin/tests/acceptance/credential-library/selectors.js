@@ -8,6 +8,7 @@ export const FIELD_CRED_TYPE_VALUE = 'ssh_private_key';
 
 export const FIELD_VAULT_PATH = '[name=vault_path]';
 export const FIELD_VAULT_PATH_VALUE = 'path';
+export const FIELD_VAULT_PATH_ERROR = '[data-test-error-message-vault-path]';
 
 export const FIELD_USERNAME = '[name=username]';
 export const FIELD_USERNAME_VALUE = 'username';
