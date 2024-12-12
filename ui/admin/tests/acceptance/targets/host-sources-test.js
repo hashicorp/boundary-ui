@@ -284,7 +284,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody label');
     await click('form [type="submit"]');
 
-    assert.dom(commonSelectors.MODAL_WARNING).exists;
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
@@ -319,9 +319,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click('tbody label');
     await click('form [type="submit"]');
-    // await this.pauseTest();
 
-    assert.dom(commonSelectors.MODAL_WARNING).exists;
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(
