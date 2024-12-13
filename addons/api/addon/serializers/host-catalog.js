@@ -66,6 +66,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
   }
 
   // This handles nested attributes for plugins by comparing the composite types first and then the credential types
+  // NOTE: we will need to set the credential types to null as that's how the API expects it
   _handleNestedAttributes(json, key, options, compositeType, credentialType) {
     const {
       compositeType: validCompositeTypes,
