@@ -10,12 +10,10 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
   serialize(snapshot) {
     const { credentialType } = snapshot.record;
     const serialized = super.serialize(...arguments);
-
     // By default, disable credential rotation for dynamic credentials
     if (credentialType === TYPE_CREDENTIAL_DYNAMIC) {
       serialized.attributes.disable_credential_rotation = true;
     }
-
     return serialized;
   }
 
@@ -24,50 +22,94 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const { compositeType, credentialType, isPlugin } = snapshot.record;
     const { options } = attribute;
 
-    if (
-      options?.compositeType &&
-      !options.compositeType.includes(compositeType)
-    ) {
-      delete json[key];
-      if (json['attributes'] && Object.keys(json.attributes).length === 0) {
-        delete json.attributes;
-      }
+    // Remove invalid fields based on composite type
+    if (options?.compositeType) {
+      this._removeInvalidFields(
+        json,
+        key,
+        options.compositeType,
+        compositeType,
+      );
     }
 
-    // Delete any nested attribute fields that don't belong to the record's compositeType or credential Type
-    if (isPlugin && options.isNestedAttribute && json.attributes) {
-      if (
-        options?.compositeType &&
-        !options.compositeType.includes(compositeType)
-      ) {
-        delete json.attributes[key];
-      } else if (
-        options?.credentialType &&
-        options.credentialType !== credentialType
-      ) {
-        json.attributes[key] = null;
+    // Handle nested attributes and secrets for plugins
+    if (isPlugin) {
+      if (options?.isNestedAttribute && json.attributes) {
+        this._handleNestedAttributes(
+          json,
+          key,
+          options,
+          compositeType,
+          credentialType,
+        );
+      }
+      if (options?.isNestedSecret && json.secrets) {
+        this._handleNestedSecrets(
+          json,
+          key,
+          options,
+          compositeType,
+          credentialType,
+        );
       }
     }
-    // Delete any secret fields that don't belong to the composite or credential type
-    if (isPlugin && options.isNestedSecret && json.secrets) {
-      if (
-        options?.compositeType &&
-        !options.compositeType.includes(compositeType)
-      ) {
-        delete json.secrets[key];
-      }
-
-      if (
-        options?.credentialType &&
-        options.credentialType !== credentialType
-      ) {
-        delete json.secrets[key];
-      }
-
-      if (json['secrets'] && Object.keys(json.secrets).length === 0) {
-        delete json.secrets;
-      }
-    }
+    // Clean up empty attributes and secrets
+    this._cleanUpEmptyObjects(json);
     return value;
+  }
+
+  // This removes invalid fields based on composite type
+  _removeInvalidFields(json, key, validCompositeTypes, compositeType) {
+    if (!validCompositeTypes.includes(compositeType)) {
+      delete json[key];
+    }
+  }
+
+  // This handles nested attributes for plugins by comparing the composite types first and then the credential types
+  _handleNestedAttributes(json, key, options, compositeType, credentialType) {
+    const {
+      compositeType: validCompositeTypes,
+      credentialType: validCredentialType,
+    } = options;
+    if (validCompositeTypes && !validCompositeTypes.includes(compositeType)) {
+      delete json.attributes[key];
+    } else if (validCredentialType && validCredentialType !== credentialType) {
+      json.attributes[key] = null;
+    }
+  }
+
+  // This handles nested secret fields for plugins for composite types and credential types
+  _handleNestedSecrets(json, key, options, compositeType, credentialType) {
+    const {
+      compositeType: validCompositeTypes,
+      credentialType: validCredentialType,
+    } = options;
+    this._removeSecrets(
+      json.secrets,
+      key,
+      validCompositeTypes && !validCompositeTypes.includes(compositeType),
+    );
+    this._removeSecrets(
+      json.secrets,
+      key,
+      validCredentialType && validCredentialType !== credentialType,
+    );
+  }
+
+  // This removes secrets based on a condition
+  _removeSecrets(json, key, condition) {
+    if (condition) {
+      delete json?.[key];
+    }
+  }
+
+  // Delete empty secrets/attributes
+  _cleanUpEmptyObjects(json) {
+    if (json.secrets && Object.keys(json.secrets).length === 0) {
+      delete json.secrets;
+    }
+    if (json.attributes && Object.keys(json.attributes).length === 0) {
+      delete json.attributes;
+    }
   }
 }

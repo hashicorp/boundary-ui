@@ -107,7 +107,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
   }
 
   /**
-   * True if host catalog plugin type is Azure.
+   * True if host catalog plugin type is GCP.
    * @type {boolean}
    */
   get isGCP() {
