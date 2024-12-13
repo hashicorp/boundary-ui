@@ -105,7 +105,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.dom(selectors.MANAGE_DROPDOWN).exists();
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).exists();
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
