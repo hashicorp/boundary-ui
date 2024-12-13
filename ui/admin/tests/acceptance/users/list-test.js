@@ -36,7 +36,7 @@ module('Acceptance | users | list', function (hooks) {
     user2: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -53,7 +53,7 @@ module('Acceptance | users | list', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user1 = `${urls.users}/${instances.user1.id}`;
     urls.user2 = `${urls.users}/${instances.user2.id}`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to users with proper authorization', async function (assert) {

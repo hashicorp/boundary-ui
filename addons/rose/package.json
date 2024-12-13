@@ -96,9 +96,6 @@
     "stylelint-config-standard-scss": "^11.0.0",
     "webpack": "^5.94.0"
   },
-  "peerDependencies": {
-    "ember-source": "^4.0.0"
-  },
   "engines": {
     "node": "18.* || 20.*"
   },

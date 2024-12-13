@@ -53,6 +53,7 @@ module.exports = function (environment) {
           '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
         sessions:
           '/tutorials/oss-getting-started/oss-getting-started-desktop-app#connect',
+        'support-page': 'https://support.hashicorp.com/hc/en-us',
       },
     },
 

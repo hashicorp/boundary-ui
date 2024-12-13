@@ -36,7 +36,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     unknownHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,7 +64,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting host sets', async function (assert) {
@@ -94,7 +94,9 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     await visit(urls.unknownHostSet);
     await a11yAudit();
 
-    assert.dom('.rose-message-subtitle').hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for host sets', async function (assert) {

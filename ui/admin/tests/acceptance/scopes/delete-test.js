@@ -37,7 +37,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     projectScopeEdit: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -55,7 +55,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({ isGlobal: true });
+    await authenticateSession({ isGlobal: true });
   });
 
   test('can delete scope', async function (assert) {

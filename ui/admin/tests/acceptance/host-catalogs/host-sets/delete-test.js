@@ -43,7 +43,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     newHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -73,7 +73,7 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     urls.newHostSet = `${urls.hostSets}/new`;
     // Generate resource couner
     getHostSetCount = () => this.server.schema.hostSets.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete host', async function (assert) {

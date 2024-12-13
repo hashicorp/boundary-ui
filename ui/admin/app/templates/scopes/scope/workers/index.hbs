@@ -11,7 +11,7 @@
 
   <page.header>
     <h2>
-      {{t 'resources.worker.title_plural'}}
+      {{t 'titles.workers'}}
       <DocLink @doc='worker' @iconSize='large' />
     </h2>
   </page.header>
@@ -200,39 +200,39 @@
       {{/if}}
     {{else}}
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.worker.messages.welcome.title'}}
-          as |message|
-        >
-          <message.description>
-            {{#if (can 'list worker' this.scope collection='workers')}}
-              {{! can list (at least):  show default welcome message}}
-              {{t 'resources.worker.description'}}
-            {{else if
-              (can 'create worker led worker' this.scope collection='workers')
+        <Hds::ApplicationState as |A|>
+          <A.Header @title={{t 'resources.worker.messages.welcome.title'}} />
+          <A.Body
+            {{! can list (at least):  show default welcome message}}
+            {{! can create (only):  show create-but-not-list welcome message}}
+            {{! can neither list nor create:  show neither-list-nor-create welcome message}}
+            @text={{t
+              (if
+                (can 'list worker' this.scope collection='workers')
+                'resources.worker.description'
+                (if
+                  (can
+                    'create worker led worker' this.scope collection='workers'
+                  )
+                  'descriptions.create-but-not-list'
+                  'descriptions.neither-list-nor-create'
+                )
+              )
+              resource=(t 'titles.workers')
             }}
-              {{! can create (only):  show create-but-not-list welcome message}}
-              {{t
-                'descriptions.create-but-not-list'
-                resource=(t 'resources.worker.title_plural')
-              }}
-            {{else}}
-              {{! can neither list nor create }}
-              {{t
-                'descriptions.neither-list-nor-create'
-                resource=(t 'resources.worker.title_plural')
-              }}
-            {{/if}}
-          </message.description>
+          />
           {{#if
             (can 'create worker led worker' this.scope collection='workers')
           }}
-            <message.link @route='scopes.scope.workers.new'>
-              <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-              {{t 'titles.new'}}
-            </message.link>
+            <A.Footer as |F|>
+              <F.LinkStandalone
+                @icon='plus-circle'
+                @text={{t 'titles.new'}}
+                @route='scopes.scope.workers.new'
+              />
+            </A.Footer>
           {{/if}}
-        </Rose::Message>
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
     {{/if}}
 

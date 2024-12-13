@@ -32,8 +32,8 @@ module('Acceptance | roles | create', function (hooks) {
     orgScope: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     instances.scopes.org = this.server.create(
       'scope',
       {

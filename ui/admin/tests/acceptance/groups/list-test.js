@@ -35,7 +35,7 @@ module('Acceptance | groups | list', function (hooks) {
     group2: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
@@ -56,7 +56,7 @@ module('Acceptance | groups | list', function (hooks) {
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group1 = `${urls.groups}/${instances.group1.id}`;
     urls.group2 = `${urls.groups}/${instances.group2.id}`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can navigate to groups with proper authorization', async function (assert) {

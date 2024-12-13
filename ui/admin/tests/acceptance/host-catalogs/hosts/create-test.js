@@ -39,7 +39,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -70,7 +70,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
     getHostCount = () => this.server.schema.hosts.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new host', async function (assert) {
@@ -141,8 +141,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'address',
+                description: 'Address is required.',
               },
             ],
           },
@@ -156,7 +156,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
 
-    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_ADDRESS_ERROR).hasText('Address is required.');
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {

@@ -3,9 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title (t 'resources.target.workers.title')}}
+{{page-title (t 'titles.workers')}}
 <Breadcrumbs::Item
-  @text={{t 'resources.target.workers.title'}}
+  @text={{t 'titles.workers'}}
   @route='scopes.scope.targets.target.workers'
 />
 
@@ -51,9 +51,13 @@
                   'resources.target.workers.accordion-label.ingress-workers'
                 }}</span>
               <Hds::Link::Standalone
-                @icon='edit'
+                @icon={{if @model.ingress_worker_filter 'edit' 'plus-circle'}}
                 @text={{t
-                  'resources.target.workers.actions.edit-worker-filter'
+                  (if
+                    @model.ingress_worker_filter
+                    'actions.edit-worker-filter'
+                    'actions.add-worker-filter'
+                  )
                 }}
                 @route='scopes.scope.targets.target.edit-ingress-worker-filter'
               />
@@ -62,23 +66,20 @@
           <:content>
             {{#if @model.ingress_worker_filter}}
               <Hds::CodeBlock
+                @maxHeight='300px'
                 @language='bash'
                 @hasCopyButton={{true}}
                 @value={{@model.ingress_worker_filter}}
                 as |CB|
               >
-                <CB.Title>{{t
-                    'resources.target.workers.worker-filter.title'
-                  }}</CB.Title>
+                <CB.Title>{{t 'form.worker_filter.label'}}</CB.Title>
                 <CB.Description>{{t
                     'resources.target.workers.worker-filter.description'
                   }}</CB.Description>
               </Hds::CodeBlock>
             {{else}}
               <Hds::ApplicationState as |A|>
-                <A.Header
-                  @title={{t 'resources.target.workers.messages.none.title'}}
-                />
+                <A.Header @title={{t 'titles.no-worker-filter'}} />
                 <A.Body
                   @text={{t
                     'resources.target.workers.messages.none.description'
@@ -101,8 +102,14 @@
                 'resources.target.workers.accordion-label.egress-workers'
               }}</span>
             <Hds::Link::Standalone
-              @icon='edit'
-              @text={{t 'resources.target.workers.actions.edit-worker-filter'}}
+              @icon={{if @model.egress_worker_filter 'edit' 'plus-circle'}}
+              @text={{t
+                (if
+                  @model.egress_worker_filter
+                  'actions.edit-worker-filter'
+                  'actions.add-worker-filter'
+                )
+              }}
               @route='scopes.scope.targets.target.edit-egress-worker-filter'
             />
           </div>
@@ -110,23 +117,20 @@
         <:content>
           {{#if @model.egress_worker_filter}}
             <Hds::CodeBlock
+              @maxHeight='300px'
               @language='bash'
               @hasCopyButton={{true}}
               @value={{@model.egress_worker_filter}}
               as |CB|
             >
-              <CB.Title>{{t
-                  'resources.target.workers.worker-filter.title'
-                }}</CB.Title>
+              <CB.Title>{{t 'form.worker_filter.label'}}</CB.Title>
               <CB.Description>{{t
                   'resources.target.workers.worker-filter.description'
                 }}</CB.Description>
             </Hds::CodeBlock>
           {{else}}
             <Hds::ApplicationState as |A|>
-              <A.Header
-                @title={{t 'resources.target.workers.messages.none.title'}}
-              />
+              <A.Header @title={{t 'titles.no-worker-filter'}} />
               <A.Body
                 @text={{t
                   'resources.target.workers.messages.none.description'

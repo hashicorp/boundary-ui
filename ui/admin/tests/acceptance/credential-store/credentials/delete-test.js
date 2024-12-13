@@ -42,7 +42,7 @@ module(
       jsonCredential: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
@@ -92,7 +92,7 @@ module(
       getJSONCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'json' }).length;
       };
-      authenticateSession({});
+      await authenticateSession({});
     });
 
     test('can delete username & password credential', async function (assert) {

@@ -47,7 +47,7 @@ module(
       channelRecording: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
         type: 'org',
@@ -81,7 +81,7 @@ module(
         this.server.schema.sessionRecordings.all().models.length;
 
       featuresService = this.owner.lookup('service:features');
-      authenticateSession({});
+      await authenticateSession({});
     });
 
     test('user can navigate to a channel', async function (assert) {

@@ -19,8 +19,8 @@ module('Acceptance | onboarding', function (hooks) {
     orgs: '/scopes/global/scopes',
   };
 
-  hooks.beforeEach(() => {
-    authenticateSession({});
+  hooks.beforeEach(async () => {
+    await authenticateSession({});
   });
 
   test('show targetAddress and targetPort fields', async function (assert) {

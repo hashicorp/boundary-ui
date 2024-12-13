@@ -47,7 +47,7 @@ module('Acceptance | targets | read', function (hooks) {
     aliases: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -87,7 +87,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting ssh target', async function (assert) {
@@ -145,7 +145,9 @@ module('Acceptance | targets | read', function (hooks) {
     await visit(urls.unknownTarget);
     await a11yAudit();
 
-    assert.dom('.rose-message-subtitle').hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for target', async function (assert) {

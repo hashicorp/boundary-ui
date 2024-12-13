@@ -31,7 +31,7 @@ module('Acceptance | users | read', function (hooks) {
     user: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -43,7 +43,7 @@ module('Acceptance | users | read', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting users', async function (assert) {

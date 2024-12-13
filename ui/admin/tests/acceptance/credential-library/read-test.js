@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -37,7 +37,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     vaultSshCredentialLibrary: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -65,7 +65,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('can navigate to resource', async function (assert) {
@@ -111,7 +111,9 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   test('visiting an unknown credential library displays 404 message', async function (assert) {
     await visit(urls.unknownCredentialLibrary);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can navigate to credential library and incorrect url auto-corrects', async function (assert) {

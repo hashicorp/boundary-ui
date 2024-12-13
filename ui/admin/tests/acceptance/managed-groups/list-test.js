@@ -43,8 +43,8 @@ module('Acceptance | managed-groups | list', function (hooks) {
     newLdapManagedGroup: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

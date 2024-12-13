@@ -19,14 +19,14 @@ module('Acceptance | workers | create', function (hooks) {
   let newWorkerURL;
   let getWorkersCount;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     globalScope = this.server.create('scope', { id: 'global' });
 
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
     getWorkersCount = () => this.server.schema.workers.all().length;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new workers', async function (assert) {

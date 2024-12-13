@@ -52,7 +52,7 @@ module('Acceptance | scopes', function (hooks) {
     project2ScopeEdit: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -87,7 +87,7 @@ module('Acceptance | scopes', function (hooks) {
     urls.project2ScopeEdit = `${urls.project2Scope}/edit`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({ isGlobal: true, username: 'admin' });
+    await authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting global scope', async function (assert) {

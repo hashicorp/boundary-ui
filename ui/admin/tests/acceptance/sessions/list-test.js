@@ -51,7 +51,7 @@ module('Acceptance | sessions | list', function (hooks) {
     sessions: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.admin = this.server.create('user', {
       scopeId: 'global',
@@ -98,7 +98,7 @@ module('Acceptance | sessions | list', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.sessions = `${urls.projectScope}/sessions`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting sessions', async function (assert) {

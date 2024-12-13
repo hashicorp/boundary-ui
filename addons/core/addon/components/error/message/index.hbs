@@ -3,16 +3,21 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Message
-  @title={{t (concat 'errors.' this.messageCode '.title')}}
-  @subtitle={{concat (t 'errors.generic.title') ' ' @status}}
-  @icon={{this.icon}}
-  as |message|
->
-  <message.description>
-    {{t (concat 'errors.' this.messageCode '.description')}}
-  </message.description>
-  {{#if this.helpRoute}}
-    <message.link @route={{this.helpRoute}}>{{t 'actions.help'}}</message.link>
+<Hds::ApplicationState data-test-error-application-state as |A|>
+  <A.Header
+    @title={{t (concat 'errors.' this.messageCode '.title')}}
+    @icon={{this.icon}}
+    @errorCode={{@status}}
+  />
+  <A.Body @text={{t (concat 'errors.' this.messageCode '.description')}} />
+  {{#if @docLink}}
+    <A.Footer as |F|>
+      <F.LinkStandalone
+        @icon='help'
+        @text={{t 'actions.help'}}
+        @href={{@docLink}}
+        @iconPosition='trailing'
+      />
+    </A.Footer>
   {{/if}}
-</Rose::Message>
+</Hds::ApplicationState>

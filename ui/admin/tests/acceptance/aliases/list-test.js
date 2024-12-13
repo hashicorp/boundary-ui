@@ -44,7 +44,7 @@ module('Acceptance | aliases | list', function (hooks) {
     aliasWithTarget: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -71,7 +71,7 @@ module('Acceptance | aliases | list', function (hooks) {
     urls.aliasWithTarget = `${urls.aliases}/${instances.aliasWithTarget.id}`;
     intl = this.owner.lookup('service:intl');
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to aliases with proper authorization', async function (assert) {

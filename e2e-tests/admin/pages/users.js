@@ -43,7 +43,6 @@ export class UsersPage extends BaseResourcePage {
       .getByRole('link', { name: 'Accounts', exact: true })
       .click();
     await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Add Accounts', exact: true })
       .click();
     await this.page

@@ -16,11 +16,13 @@ export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 
-export const RESOURCE_NOT_FOUND_SUBTITLE = '.rose-message-subtitle';
-export const RESOURCE_NOT_FOUND_VALUE = 'Error 404';
+export const RESOURCE_NOT_FOUND_SUBTITLE =
+  '[data-test-error-application-state] .hds-application-state__error-code';
+export const RESOURCE_NOT_FOUND_VALUE = 'ERROR 404';
 
-export const PAGE_MESSAGE_DESCRIPTION = '.rose-message-description';
-export const PAGE_MESSAGE_LINK = '.rose-message-body .hds-link-standalone';
+export const PAGE_MESSAGE_DESCRIPTION = '.hds-application-state__body-text';
+export const PAGE_MESSAGE_LINK =
+  '.hds-application-state__footer .hds-link-standalone';
 
 export const HREF = (url) => `[href="${url}"]`;
 
@@ -31,3 +33,9 @@ export const ALERT_TOAST_BODY =
   '[data-test-toast-notification] .hds-alert__description';
 export const ALERT_TOAST_DISMISS =
   '[data-test-toast-notification] .hds-dismiss-button';
+
+export const DIALOG_UNSAVED_CHANGES = '.rose-dialog';
+export const DIALOG_UNSAVED_CHANGES_DISCARD =
+  '.rose-dialog-footer button:first-child';
+export const DIALOG_UNSAVED_CHANGES_CANCEL =
+  '.rose-dialog-footer button:last-child';

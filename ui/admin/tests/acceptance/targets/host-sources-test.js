@@ -41,7 +41,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     targetAddHostSources: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -85,7 +85,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
       // Generate resource counter
       getTargetHostSetCount = () =>
         this.server.schema.targets.first().hostSets.models.length;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target host sources', async function (assert) {

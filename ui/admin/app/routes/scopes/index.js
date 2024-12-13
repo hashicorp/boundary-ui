@@ -16,7 +16,7 @@ export default class ScopesIndexRoute extends Route {
   // =methods
 
   /**
-   * If authenticated, redirects to the scope route of the authenticted scope.
+   * If authenticated, redirects to the scope route of the authenticated scope.
    * If unauthenticated, redirects to the first scope that was loaded (if any).
    * @param {[ScopeModel]} model
    * @param {?ScopeModel} model[0]

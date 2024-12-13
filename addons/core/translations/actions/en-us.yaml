@@ -15,7 +15,7 @@ confirm: Confirm
 done: Done
 ok: OK
 deny: Deny
-help: Need help?
+help: Need help
 next: Next
 back: Back
 view: View
@@ -63,3 +63,5 @@ narrow-results: Narrow results
 overflow-options: Overflow Options
 show-errors: Show Errors
 hide-errors: Hide Errors
+edit-worker-filter: Edit Worker Filter
+add-worker-filter: Add Worker Filter

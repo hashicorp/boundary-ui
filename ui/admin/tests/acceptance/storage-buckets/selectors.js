@@ -14,7 +14,7 @@ export const FIELD_BUCKET_NAME_VALUE = 'Test Bucket name';
 export const FIELD_BUCKET_NAME_ERROR = '[data-test-bucket-name-error]';
 export const FIELD_BUCKET_PREFIX = '[name=bucket_prefix]';
 export const FIELD_REGION = '[name=region]';
-export const GROUP_CREDENTIAL_TYPE = '[name=credential_type]';
+export const GROUP_CREDENTIAL_TYPE = '[name=Type]';
 export const FIELD_STATIC_CREDENTIAL = '[value=static]';
 export const FIELD_DYNAMIC_CREDENTIAL = '[value=dynamic]';
 export const FIELD_ROLE_ARN = '[name=role_arn]';
@@ -29,6 +29,11 @@ export const FIELD_SECRET_KEY_EDIT_BTN =
   '[data-test-secret-access-key] [type=button]';
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
+export const READONLY_WORKER_FILTER = '[data-test-worker-filter]';
+export const EDITOR_WORKER_FILTER =
+  '[data-test-code-editor-field-editor] textarea';
+export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFUL_VALUE = 'Saved successfully.';
 
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =

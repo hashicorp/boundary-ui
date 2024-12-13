@@ -6290,14 +6290,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.43.0":
-  version: 1.43.1
-  resolution: "@playwright/test@npm:1.43.1"
+"@playwright/test@npm:^1.49.0":
+  version: 1.49.1
+  resolution: "@playwright/test@npm:1.49.1"
   dependencies:
-    playwright: "npm:1.43.1"
+    playwright: "npm:1.49.1"
   bin:
     playwright: cli.js
-  checksum: 10c0/6f1398c3c66657729a14d7c2d239e2f678c37610c3163b4ad1f028cbb6b88fc845cd9033a25d35436fa86d3dfcc57ecb49028c09f7aea1389c4257e4ac9124cd
+  checksum: 10c0/2fca0bb7b334f7a23c7c5dfa5dbe37b47794c56f39b747c8d74a2f95c339e7902a296f2f1dd32c47bdd723cfa92cee05219f1a5876725dc89a1871b9137a286d
   languageName: node
   linkType: hard
 
@@ -7171,7 +7171,6 @@ __metadata:
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a"
-    "@playwright/test": "npm:^1.43.0"
     babel-loader: "npm:^9.2.1"
     broccoli-asset-rev: "npm:^3.0.0"
     core: "npm:*"
@@ -7540,8 +7539,6 @@ __metadata:
     qunit-dom: "npm:^3.2.1"
     tracked-built-ins: "npm:^3.1.1"
     webpack: "npm:^5.94.0"
-  peerDependencies:
-    ember-source: ">4.0.0"
   languageName: unknown
   linkType: soft
 
@@ -10151,6 +10148,7 @@ __metadata:
     filesize: "npm:^10.0.7"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
+    lodash: "npm:^4.17.21"
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
@@ -10158,9 +10156,6 @@ __metadata:
     sass: "npm:^1.69.5"
     sinon: "npm:^19.0.2"
     webpack: "npm:^5.94.0"
-  peerDependencies:
-    ember-source: ^4.0.0
-    lodash: ^4.17.21
   languageName: unknown
   linkType: soft
 
@@ -10669,7 +10664,6 @@ __metadata:
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
-    "@playwright/test": "npm:^1.43.0"
     "@xterm/addon-canvas": "npm:^0.7.0"
     "@xterm/addon-fit": "npm:^0.10.0"
     "@xterm/xterm": "npm:^5.5.0"
@@ -10712,7 +10706,6 @@ __metadata:
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     lodash: "npm:^4.17.21"
-    playwright: "npm:^1.43.0"
     postcss: "npm:^8.4.31"
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
@@ -10968,12 +10961,13 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@babel/eslint-parser": "npm:^7.21.3"
-    "@playwright/test": "npm:^1.43.0"
+    "@playwright/test": "npm:^1.49.0"
     concurrently: "npm:^9.1.0"
     dotenv: "npm:^16.4.5"
     eslint: "npm:^8.54.0"
     eslint-config-prettier: "npm:^9.0.0"
     eslint-plugin-n: "npm:^16.3.1"
+    nanoid: "npm:^5.0.9"
     prettier: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
@@ -18365,6 +18359,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.0.9":
+  version: 5.0.9
+  resolution: "nanoid@npm:5.0.9"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/a2d9710525d4998a8a1610bbe6eb9a92c254ebab7c567c1ab429046fe7eed9c4df3508b59fb44c58ffdc98edb28dd6f953715c14b64ea0a3a2ce37420cdfeefd
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -19445,27 +19448,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.43.1":
-  version: 1.43.1
-  resolution: "playwright-core@npm:1.43.1"
+"playwright-core@npm:1.49.1":
+  version: 1.49.1
+  resolution: "playwright-core@npm:1.49.1"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/e99f087c5f2b9ab6c379945311ea6e9e90c33cefecd8f950a0716e498dfdded738d6738266af307806d7730eacda8410c7563030690b9acf80c0b268781470b6
+  checksum: 10c0/990b619c75715cd98b2c10c1180a126e3a454b247063b8352bc67792fe01183ec07f31d30c8714c3768cefed12886d1d64ac06da701f2baafc2cad9b439e3919
   languageName: node
   linkType: hard
 
-"playwright@npm:1.43.1, playwright@npm:^1.43.0":
-  version: 1.43.1
-  resolution: "playwright@npm:1.43.1"
+"playwright@npm:1.49.1":
+  version: 1.49.1
+  resolution: "playwright@npm:1.49.1"
   dependencies:
     fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.43.1"
+    playwright-core: "npm:1.49.1"
   dependenciesMeta:
     fsevents:
       optional: true
   bin:
     playwright: cli.js
-  checksum: 10c0/7edc1e12b8f3b791c7e8d1f9c595be35c6eaf8100f9550d5e35e979aca0bc229734e65f200f2a02dc7e21630cc40c171d7b25f5f6ccf628c79e4a2d4690909ab
+  checksum: 10c0/2368762c898920d4a0a5788b153dead45f9c36c3f5cf4d2af5228d0b8ea65823e3bbe998877950a2b9bb23a211e4633996f854c6188769dc81a25543ac818ab5
   languageName: node
   linkType: hard
 
@@ -20950,8 +20953,6 @@ __metadata:
     stylelint-config-standard-scss: "npm:^11.0.0"
     uuid: "npm:^11.0.3"
     webpack: "npm:^5.94.0"
-  peerDependencies:
-    ember-source: ^4.0.0
   languageName: unknown
   linkType: soft
 

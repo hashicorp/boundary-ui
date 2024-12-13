@@ -39,7 +39,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     unknownCredential: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -77,7 +77,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     urls.usernameKeyPairCredential = `${urls.credentials}/${instances.usernameKeyPairCredential.id}`;
     urls.jsonCredential = `${urls.credentials}/${instances.jsonCredential.id}`;
     urls.unknownCredential = `${urls.credentials}/foo`;
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
     featuresService = this.owner.lookup('service:features');
   });
 
@@ -172,7 +172,9 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('visiting an unknown credential displays 404 message', async function (assert) {
     await visit(urls.unknownCredential);
     await a11yAudit();
-    assert.ok(find('.rose-message-subtitle').textContent.trim(), 'Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('Users can link to docs page for credential', async function (assert) {

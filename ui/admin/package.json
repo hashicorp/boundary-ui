@@ -10,7 +10,7 @@
     "test": "tests"
   },
   "scripts": {
-    "doc:toc": "doctoc README.md tests/e2e/README.md",
+    "doc:toc": "doctoc README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
     "build:oss": "EDITION=oss ember build --environment=production",
@@ -53,7 +53,6 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
-    "@playwright/test": "^1.43.0",
     "babel-loader": "^9.2.1",
     "broccoli-asset-rev": "^3.0.0",
     "core": "*",

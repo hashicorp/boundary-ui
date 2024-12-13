@@ -5,3 +5,8 @@
 
 export * from './boundary-http/scopes.js';
 export * from './boundary-http/targets.js';
+export * from './boundary-http/host-catalogs.js';
+export * from './boundary-http/host-sets.js';
+export * from './boundary-http/hosts.js';
+export * from './boundary-http/credential-stores.js';
+export * from './boundary-http/credentials.js';

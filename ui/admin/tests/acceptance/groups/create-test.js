@@ -31,8 +31,8 @@ module('Acceptance | groups | create', function (hooks) {
     newGroup: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     instances.scopes.org = this.server.create(
       'scope',
       {

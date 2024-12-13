@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | policies | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,7 +19,6 @@ module('Acceptance | policies | read', function (hooks) {
 
   let features;
 
-  const MESSAGE_SELECTOR = '.rose-message-subtitle';
   const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
 
   const instances = {
@@ -36,7 +36,7 @@ module('Acceptance | policies | read', function (hooks) {
     unknownPolicy: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -52,7 +52,7 @@ module('Acceptance | policies | read', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting a policy', async function (assert) {
@@ -81,6 +81,8 @@ module('Acceptance | policies | read', function (hooks) {
     await visit(urls.unknownPolicy);
     await a11yAudit();
 
-    assert.dom(MESSAGE_SELECTOR).hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 });
