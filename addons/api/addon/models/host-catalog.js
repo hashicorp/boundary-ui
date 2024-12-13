@@ -14,9 +14,11 @@ export const TYPES_HOST_CATALOG = Object.freeze([
 
 export const TYPE_HOST_CATALOG_PLUGIN_AWS = 'aws';
 export const TYPE_HOST_CATALOG_PLUGIN_AZURE = 'azure';
+export const TYPE_HOST_CATALOG_PLUGIN_GCP = 'gcp';
 export const TYPES_HOST_CATALOG_PLUGIN = [
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
 ];
 
 export const TYPE_CREDENTIAL_STATIC = 'static-credential';
@@ -27,12 +29,13 @@ export const TYPES_CREDENTIALS = Object.freeze([
   TYPE_CREDENTIAL_DYNAMIC,
 ]);
 
-const DYNAMIC_CREDENTIAL_FIELDS = [
+export const DYNAMIC_CREDENTIAL_FIELDS = [
   'role_arn',
   'role_external_id',
   'role_session_name',
   'role_tags',
 ];
+export const STATIC_CREDENTIAL_FIELDS = ['access_key_id, secret_access_key'];
 
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
@@ -101,6 +104,14 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    */
   get isAzure() {
     return this.compositeType === 'azure';
+  }
+
+  /**
+   * True if host catalog plugin type is GCP.
+   * @type {boolean}
+   */
+  get isGCP() {
+    return this.compositeType === 'gcp';
   }
 
   /**

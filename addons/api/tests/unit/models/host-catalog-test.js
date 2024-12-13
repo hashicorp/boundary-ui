@@ -81,6 +81,19 @@ module('Unit | Model | host catalog', function (hooks) {
     assert.false(modelRandom.isAzure);
   });
 
+  test('it has isGCP property and return the expected values', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const modelGCP = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'gcp' },
+    });
+    const modelRandom = store.createRecord('host-catalog', {
+      plugin: { name: 'random' },
+    });
+    assert.true(modelGCP.isGCP);
+    assert.false(modelRandom.isGCP);
+  });
+
   test('get compositeType returns expected values', async function (assert) {
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('host-catalog', {
@@ -94,8 +107,13 @@ module('Unit | Model | host catalog', function (hooks) {
       type: 'plugin',
       plugin: { name: 'no-such-type' },
     });
+    const modelD = store.createRecord('host-catalog', {
+      type: 'plugin',
+      plugin: { name: 'gcp' },
+    });
     assert.strictEqual(modelA.compositeType, 'static');
     assert.strictEqual(modelB.compositeType, 'aws');
+    assert.strictEqual(modelD.compositeType, 'gcp');
     assert.strictEqual(modelC.compositeType, 'unknown');
   });
 
@@ -107,8 +125,12 @@ module('Unit | Model | host catalog', function (hooks) {
     const modelStatic = store.createRecord('host-catalog', {
       compositeType: 'static',
     });
+    const modelGCP = store.createRecord('host-catalog', {
+      compositeType: 'gcp',
+    });
     assert.strictEqual(modelPlugin.type, 'plugin');
     assert.strictEqual(modelPlugin.plugin.name, 'aws');
     assert.strictEqual(modelStatic.type, 'static');
+    assert.strictEqual(modelGCP.plugin.name, 'gcp');
   });
 });
