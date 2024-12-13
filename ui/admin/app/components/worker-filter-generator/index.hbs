@@ -51,15 +51,15 @@
     {{on 'change' this.setGeneratorType}}
     as |G|
   >
-    <G.Legend>{{t 'worker-filter-generator.filter-generator.title'}}</G.Legend>
+    <G.Legend>{{t 'worker-filter-generator.title'}}</G.Legend>
     <G.HelperText>
-      {{t 'worker-filter-generator.filter-generator.description'}}
+      {{t 'worker-filter-generator.description'}}
       <br />
       <Hds::Link::Inline
         @href={{doc-url 'worker-filters-format'}}
         @color='secondary'
       >
-        {{t 'worker-filter-generator.filter-generator.link'}}
+        {{t 'worker-filter-generator.link'}}
       </Hds::Link::Inline>
     </G.HelperText>
     <G.RadioField
@@ -67,24 +67,16 @@
       checked={{eq this.selectedGeneratorType this.generatorTagType}}
       as |F|
     >
-      <F.Label>{{t
-          'worker-filter-generator.filter-generator.tag.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'worker-filter-generator.filter-generator.tag.helper'
-        }}</F.HelperText>
+      <F.Label>{{t 'worker-filter-generator.tag.label'}}</F.Label>
+      <F.HelperText>{{t 'worker-filter-generator.tag.helper'}}</F.HelperText>
     </G.RadioField>
     <G.RadioField
       @value={{this.generatorNameType}}
       checked={{eq this.selectedGeneratorType this.generatorNameType}}
       as |F|
     >
-      <F.Label>{{t
-          'worker-filter-generator.filter-generator.name.label'
-        }}</F.Label>
-      <F.HelperText>{{t
-          'worker-filter-generator.filter-generator.name.helper'
-        }}</F.HelperText>
+      <F.Label>{{t 'worker-filter-generator.name.label'}}</F.Label>
+      <F.HelperText>{{t 'worker-filter-generator.name.helper'}}</F.HelperText>
     </G.RadioField>
   </Hds::Form::Radio::Group>
 
@@ -96,10 +88,10 @@
       as |F|
     >
       <F.Legend id={{labelId}}>{{t
-          'worker-filter-generator.filter-generator.input-values.title'
+          'worker-filter-generator.input-values.title'
         }}</F.Legend>
       <F.HelperText id={{helpId}}>{{t
-          'worker-filter-generator.filter-generator.input-values.description'
+          'worker-filter-generator.input-values.description'
         }}</F.HelperText>
       <F.Control>
         {{#if (eq this.selectedGeneratorType this.generatorTagType)}}
@@ -133,12 +125,7 @@
                   {{#if (eq operator '==')}}
                     {{operator}}
                   {{else}}
-                    {{t
-                      (concat
-                        'worker-filter-generator.filter-generator.operator.'
-                        operator
-                      )
-                    }}
+                    {{t (concat 'worker-filter-generator.operator.' operator)}}
                   {{/if}}
                 </option>
               {{/each}}
@@ -169,14 +156,14 @@
       as |F|
     >
       <F.Legend id={{labelId}}>{{t
-          'worker-filter-generator.filter-generator.formatted-result.title'
+          'worker-filter-generator.formatted-result.title'
         }}</F.Legend>
       <F.HelperText id={{helpId}}>{{t
-          'worker-filter-generator.filter-generator.formatted-result.description'
+          'worker-filter-generator.formatted-result.description'
         }}</F.HelperText>
       <F.Control>
         <Hds::Text::Body @tag='p' @weight='semibold'>{{t
-            'worker-filter-generator.filter-generator.formatted-result.label'
+            'worker-filter-generator.formatted-result.label'
           }}</Hds::Text::Body>
         <div class='generated-results-container'>
           <Hds::Form::TextInput::Base

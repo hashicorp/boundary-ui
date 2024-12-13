@@ -3,11 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{page-title
-  (t 'resources.credential-store.worker-filter.messages.edit.title')
-}}
+{{page-title (t 'actions.edit-worker-filter')}}
 <Breadcrumbs::Item
-  @text={{t 'resources.credential-store.worker-filter.messages.edit.title'}}
+  @text={{t 'actions.edit-worker-filter'}}
   @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
 />
 
@@ -18,7 +16,7 @@
 
   <page.header>
     <Hds::Text::Display @tag='h2' @size='300' class='h2'>
-      {{t 'resources.credential-store.worker-filter.messages.edit.title'}}
+      {{t 'actions.edit-worker-filter'}}
       <DocLink @doc='worker-filters-format' @iconSize='large' />
     </Hds::Text::Display>
     <Hds::Text::Body @tag='p' @size='300'>
