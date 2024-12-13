@@ -118,18 +118,18 @@ test('SSH Certificate Injection @ent @docker', async ({
     );
 
     // Connect to target
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-    const projectId = await boundaryCli.getProjectIdFromNameCli(
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
       orgId,
       projectName,
     );
-    const targetId = await boundaryCli.getTargetIdFromNameCli(
+    const targetId = await boundaryCli.getTargetIdFromName(
       projectId,
       targetName,
     );
@@ -143,7 +143,7 @@ test('SSH Certificate Injection @ent @docker', async ({
       .click();
   } finally {
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {

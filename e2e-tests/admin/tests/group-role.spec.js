@@ -36,15 +36,15 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
     await rolesPage.addPrincipalToRole(groupName);
     await rolesPage.addGrantsToRole('ids=*;type=*;actions=read,list');
   } finally {
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const orgId = await boundaryCli.getOrgIdFromName(orgName);
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

@@ -47,17 +47,17 @@ test('Global Settings @ent @aws @docker', async ({
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
   } finally {
     if (policyName) {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const storagePolicyId = await boundaryCli.getPolicyIdFromNameCli(
+      const storagePolicyId = await boundaryCli.getPolicyIdFromName(
         'global',
         policyName,
       );
-      await boundaryCli.deletePolicyCli(storagePolicyId);
+      await boundaryCli.deletePolicy(storagePolicyId);
     }
   }
 });

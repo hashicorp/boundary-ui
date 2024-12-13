@@ -45,7 +45,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
   let storageBucket;
   let connect;
   try {
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
@@ -117,12 +117,12 @@ test('Session Recording Test (AWS) @ent @aws', async ({
     await orgsPage.attachStoragePolicy(policyName);
 
     // Establish connection to target and cancel it
-    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-    const projectId = await boundaryCli.getProjectIdFromNameCli(
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
       orgId,
       projectName,
     );
-    const targetId = await boundaryCli.getTargetIdFromNameCli(
+    const targetId = await boundaryCli.getTargetIdFromName(
       projectId,
       targetName,
     );
@@ -140,7 +140,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss', exact: true }).click();
-    await boundaryCli.waitForSessionRecordingCli(storageBucket.id);
+    await boundaryCli.waitForSessionRecording(storageBucket.id);
 
     // Play back session recording
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
@@ -228,17 +228,17 @@ test('Session Recording Test (AWS) @ent @aws', async ({
     await targetsPage.detachStorageBucket();
   } finally {
     if (policyName) {
-      const storagePolicyId = await boundaryCli.getPolicyIdFromNameCli(
+      const storagePolicyId = await boundaryCli.getPolicyIdFromName(
         orgId,
         policyName,
       );
-      await boundaryCli.deletePolicyCli(storagePolicyId);
+      await boundaryCli.deletePolicy(storagePolicyId);
     }
     if (storageBucket) {
-      await boundaryCli.deleteStorageBucketCli(storageBucket.id);
+      await boundaryCli.deleteStorageBucket(storageBucket.id);
     }
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {

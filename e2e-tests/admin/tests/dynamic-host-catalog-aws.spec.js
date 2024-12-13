@@ -186,7 +186,7 @@ test.describe('AWS', async () => {
       // Add the host source back
       await targetsPage.addHostSourceToTarget(newHostSetName);
     } finally {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -194,9 +194,9 @@ test.describe('AWS', async () => {
       );
 
       if (orgName) {
-        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await boundaryCli.deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
       }
     }

@@ -99,7 +99,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
         .getByText('Projects'),
     ).toBeVisible();
   } finally {
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
@@ -125,9 +125,9 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     }
 
     if (orgName) {
-      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await boundaryCli.deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

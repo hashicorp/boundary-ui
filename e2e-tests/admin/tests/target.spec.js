@@ -64,18 +64,18 @@ test('Verify session created to target with host, then cancel the session @ce @a
     await targetsPage.removeHostSourceFromTarget(hostSetName2);
 
     // Connect to target
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-    const projectId = await boundaryCli.getProjectIdFromNameCli(
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
       orgId,
       projectName,
     );
-    const targetId = await boundaryCli.getTargetIdFromNameCli(
+    const targetId = await boundaryCli.getTargetIdFromName(
       projectId,
       targetName,
     );
@@ -89,7 +89,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .click();
   } finally {
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -123,18 +123,18 @@ test('Verify session created to target with address, then cancel the session @ce
       targetPort,
     );
 
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-    const projectId = await boundaryCli.getProjectIdFromNameCli(
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
       orgId,
       projectName,
     );
-    const targetId = await boundaryCli.getTargetIdFromNameCli(
+    const targetId = await boundaryCli.getTargetIdFromName(
       projectId,
       targetName,
     );
@@ -148,7 +148,7 @@ test('Verify session created to target with address, then cancel the session @ce
       .click();
   } finally {
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -221,15 +221,15 @@ test('Verify TCP target is updated @ce @aws @docker', async ({
     const basePage = new BasePage(page);
     await basePage.dismissSuccessAlert();
   } finally {
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const orgId = await boundaryCli.getOrgIdFromName(orgName);
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

@@ -55,13 +55,13 @@ test.describe('Aliases', async () => {
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
       // Connect to target using alias
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      await boundaryCli.authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAlias(alias);
 
       // Clear destination from alias
       await page.getByRole('link', { name: alias }).click();
@@ -79,20 +79,20 @@ test.describe('Aliases', async () => {
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
     } finally {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgName) {
-        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await boundaryCli.deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
       }
       if (alias) {
-        await boundaryCli.deleteAliasCli(alias);
+        await boundaryCli.deleteAlias(alias);
       }
     }
   });
@@ -113,7 +113,7 @@ test.describe('Aliases', async () => {
     try {
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -130,21 +130,21 @@ test.describe('Aliases', async () => {
       );
 
       // Connect to target using alias
-      await boundaryCli.authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAlias(alias);
     } finally {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgName) {
-        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await boundaryCli.deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
         if (alias) {
-          await boundaryCli.deleteAliasCli(alias);
+          await boundaryCli.deleteAlias(alias);
         }
       }
     }
@@ -175,18 +175,18 @@ test.describe('Aliases', async () => {
       );
 
       // Create new alias from scope page
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-      const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId = await boundaryCli.getOrgIdFromName(orgName);
+      const projectId = await boundaryCli.getProjectIdFromName(
         orgId,
         projectName,
       );
-      const targetId = await boundaryCli.getTargetIdFromNameCli(
+      const targetId = await boundaryCli.getTargetIdFromName(
         projectId,
         targetName,
       );
@@ -194,19 +194,19 @@ test.describe('Aliases', async () => {
       alias = 'example.alias.' + nanoid();
       const aliasesPage = new AliasesPage(page);
       await aliasesPage.createAliasForTarget(alias, targetId);
-      await boundaryCli.authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAlias(alias);
     } finally {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgId) {
-        await boundaryCli.deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
       if (alias) {
-        await boundaryCli.deleteAliasCli(alias);
+        await boundaryCli.deleteAlias(alias);
       }
     }
   });

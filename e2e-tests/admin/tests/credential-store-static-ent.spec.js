@@ -102,15 +102,15 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
     if (orgName) {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await boundaryCli.deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

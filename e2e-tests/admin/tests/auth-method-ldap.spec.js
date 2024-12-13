@@ -245,15 +245,15 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toContain(ldapUserName + '@mail.com');
   } finally {
     if (orgName) {
-      await boundaryCli.authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await boundaryCli.deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

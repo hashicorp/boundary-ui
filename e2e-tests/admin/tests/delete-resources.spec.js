@@ -31,7 +31,7 @@ test.beforeEach(
   async ({ baseURL, adminAuthMethodId, adminLoginName, adminPassword }) => {
     execSync(`vault policy delete ${secretPolicyName}`);
     execSync(`vault policy delete ${boundaryPolicyName}`);
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
@@ -49,40 +49,39 @@ test('Verify resources can be deleted @ce @aws', async ({
   let orgDeleted = false;
   try {
     // Create boundary resources using CLI
-    orgId = await boundaryCli.createOrgCli();
-    let projectId = await boundaryCli.createProjectCli(orgId);
-    let workerId = await boundaryCli.createControllerLedWorkerCli();
-    let authMethodId = await boundaryCli.createPasswordAuthMethodCli(orgId);
-    await boundaryCli.makeAuthMethodPrimaryCli(orgId, authMethodId);
+    orgId = await boundaryCli.createOrg();
+    let projectId = await boundaryCli.createProject(orgId);
+    let workerId = await boundaryCli.createControllerLedWorker();
+    let authMethodId = await boundaryCli.createPasswordAuthMethod(orgId);
+    await boundaryCli.makeAuthMethodPrimary(orgId, authMethodId);
     let passwordAccountId =
-      await boundaryCli.createPasswordAccountCli(authMethodId);
-    let projectScopeRoleId = await boundaryCli.createRoleCli(projectId);
-    let orgScopeRoleId = await boundaryCli.createRoleCli(orgId);
-    let globalScopeRoleId = await boundaryCli.createRoleCli('global');
-    let groupId = await boundaryCli.createGroupCli(orgId);
-    let userId = await boundaryCli.createUserCli(orgId);
+      await boundaryCli.createPasswordAccount(authMethodId);
+    let projectScopeRoleId = await boundaryCli.createRole(projectId);
+    let orgScopeRoleId = await boundaryCli.createRole(orgId);
+    let globalScopeRoleId = await boundaryCli.createRole('global');
+    let groupId = await boundaryCli.createGroup(orgId);
+    let userId = await boundaryCli.createUser(orgId);
     let staticHostCatalogId =
-      await boundaryCli.createStaticHostCatalogCli(projectId);
-    let dynamicAwsHostCatalogId =
-      await boundaryCli.createDynamicAwsHostCatalogCli(projectId, awsRegion);
-    let staticHostId =
-      await boundaryCli.createStaticHostCli(staticHostCatalogId);
-    let staticHostSetId =
-      await boundaryCli.createHostSetCli(staticHostCatalogId);
+      await boundaryCli.createStaticHostCatalog(projectId);
+    let dynamicAwsHostCatalogId = await boundaryCli.createDynamicAwsHostCatalog(
+      projectId,
+      awsRegion,
+    );
+    let staticHostId = await boundaryCli.createStaticHost(staticHostCatalogId);
+    let staticHostSetId = await boundaryCli.createHostSet(staticHostCatalogId);
     let staticCredentialStoreId =
-      await boundaryCli.createStaticCredentialStoreCli(projectId);
+      await boundaryCli.createStaticCredentialStore(projectId);
     const vaultToken = await vaultCli.getVaultToken(
       boundaryPolicyName,
       secretPolicyName,
     );
-    let vaultCredentialStoreId =
-      await boundaryCli.createVaultCredentialStoreCli(
-        projectId,
-        vaultAddr,
-        vaultToken,
-      );
+    let vaultCredentialStoreId = await boundaryCli.createVaultCredentialStore(
+      projectId,
+      vaultAddr,
+      vaultToken,
+    );
     let usernamePasswordCredentialId =
-      await boundaryCli.createUsernamePasswordCredentialCli(
+      await boundaryCli.createUsernamePasswordCredential(
         staticCredentialStoreId,
       );
     let tcpTargetId = await boundaryCli.createTcpTarget(projectId);
@@ -183,7 +182,7 @@ test('Verify resources can be deleted @ce @aws', async ({
   } finally {
     // Delete org in case the test failed before deleting the org using UI
     if (orgId && orgDeleted === false) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

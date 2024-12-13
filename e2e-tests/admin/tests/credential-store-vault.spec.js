@@ -114,22 +114,22 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialLibraryName,
     );
 
-    await boundaryCli.authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
-    const projectId = await boundaryCli.getProjectIdFromNameCli(
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
       orgId,
       projectName,
     );
-    const targetId = await boundaryCli.getTargetIdFromNameCli(
+    const targetId = await boundaryCli.getTargetIdFromName(
       projectId,
       targetName,
     );
-    const session = await boundaryCli.authorizeSessionByTargetIdCli(targetId);
+    const session = await boundaryCli.authorizeSessionByTargetId(targetId);
     const retrievedUser =
       session.item.credentials[0].secret.decoded.data.username;
     const retrievedKey =
@@ -145,7 +145,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     }
   } finally {
     if (orgId) {
-      await boundaryCli.deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });
