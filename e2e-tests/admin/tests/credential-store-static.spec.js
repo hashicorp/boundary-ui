@@ -8,15 +8,7 @@ import { expect } from '@playwright/test';
 import { readFile } from 'fs/promises';
 import { nanoid } from 'nanoid';
 
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByTargetIdCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -25,7 +17,7 @@ import { TargetsPage } from '../pages/targets.js';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 let orgName;
@@ -70,16 +62,22 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    const session = await authorizeSessionByTargetIdCli(targetId);
+    const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    const session = await boundaryCli.authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedKey = session.item.credentials[0].credential.private_key;
 
@@ -93,15 +91,15 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
     }
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
     }
   }
@@ -129,16 +127,22 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
       credentialName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    const session = await authorizeSessionByTargetIdCli(targetId);
+    const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    const session = await boundaryCli.authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
 
@@ -146,15 +150,15 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
     expect(retrievedPassword).toBe(testPassword);
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
     }
   }
@@ -200,16 +204,22 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({
       credentialName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    const session = await authorizeSessionByTargetIdCli(targetId);
+    const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    const session = await boundaryCli.authorizeSessionByTargetIdCli(targetId);
     const retrievedUser = session.item.credentials[0].credential.username;
     const retrievedPassword = session.item.credentials[0].credential.password;
     const retrievedId = session.item.credentials[0].credential.id;
@@ -219,15 +229,15 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({
     expect(retrievedId).toBe(testId);
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
     }
   }
@@ -280,15 +290,15 @@ test('Multiple Credential Stores (CE) @ce @aws @docker', async ({
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
     }
   }

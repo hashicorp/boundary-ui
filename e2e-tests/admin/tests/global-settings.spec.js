@@ -6,11 +6,7 @@
 import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
-import {
-  authenticateBoundaryCli,
-  deletePolicyCli,
-  getPolicyIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { OrgsPage } from '../pages/orgs.js';
 import { StoragePoliciesPage } from '../pages/storage-policies.js';
 
@@ -51,17 +47,17 @@ test('Global Settings @ent @aws @docker', async ({
     await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
   } finally {
     if (policyName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const storagePolicyId = await getPolicyIdFromNameCli(
+      const storagePolicyId = await boundaryCli.getPolicyIdFromNameCli(
         'global',
         policyName,
       );
-      await deletePolicyCli(storagePolicyId);
+      await boundaryCli.deletePolicyCli(storagePolicyId);
     }
   }
 });

@@ -7,11 +7,7 @@ import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import {
-  authenticateBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -190,7 +186,7 @@ test.describe('AWS', async () => {
       // Add the host source back
       await targetsPage.addHostSourceToTarget(newHostSetName);
     } finally {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -198,9 +194,9 @@ test.describe('AWS', async () => {
       );
 
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScopeCli(orgId);
         }
       }
     }

@@ -7,12 +7,7 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -20,7 +15,7 @@ import { RolesPage } from '../pages/roles.js';
 import { UsersPage } from '../pages/users.js';
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Set up LDAP auth method @ce @ent @docker', async ({
@@ -250,15 +245,15 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toContain(ldapUserName + '@mail.com');
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
     }
   }

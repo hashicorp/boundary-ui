@@ -9,16 +9,8 @@ import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
 import { readFile } from 'fs/promises';
 
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByTargetIdCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
-import { checkVaultCli } from '../../helpers/vault-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -32,8 +24,8 @@ const boundaryPolicyName = 'boundary-controller';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
-  await checkVaultCli();
+  await boundaryCli.checkBoundaryCli();
+  await vaultCli.checkVaultCli();
 });
 
 test.beforeEach(async ({ page }) => {
@@ -122,16 +114,22 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialLibraryName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    const session = await authorizeSessionByTargetIdCli(targetId);
+    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    const session = await boundaryCli.authorizeSessionByTargetIdCli(targetId);
     const retrievedUser =
       session.item.credentials[0].secret.decoded.data.username;
     const retrievedKey =
@@ -147,7 +145,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
     }
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScopeCli(orgId);
     }
   }
 });

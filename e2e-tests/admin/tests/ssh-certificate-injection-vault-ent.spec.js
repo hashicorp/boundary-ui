@@ -6,16 +6,8 @@
 import { test, authenticatedState } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  connectSshToTarget,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
-import { checkVaultCli } from '../../helpers/vault-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -32,8 +24,8 @@ const secretName = 'boundary-client';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
-  await checkVaultCli();
+  await boundaryCli.checkBoundaryCli();
+  await vaultCli.checkVaultCli();
 });
 
 test.beforeEach(async () => {
@@ -126,16 +118,22 @@ test('SSH Certificate Injection @ent @docker', async ({
     );
 
     // Connect to target
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
+    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -145,7 +143,7 @@ test('SSH Certificate Injection @ent @docker', async ({
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {

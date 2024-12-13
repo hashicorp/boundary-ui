@@ -7,16 +7,7 @@ import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByAliasCli,
-  checkBoundaryCli,
-  deleteAliasCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { AliasesPage } from '../pages/aliases.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -26,7 +17,7 @@ import { TargetsPage } from '../pages/targets.js';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test.describe('Aliases (Enterprise)', async () => {
@@ -86,13 +77,13 @@ test.describe('Aliases (Enterprise)', async () => {
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
       // Connect to target using alias
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      await authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAliasCli(alias);
 
       // Clear destination from alias
       await page.getByRole('link', { name: alias }).click();
@@ -110,20 +101,20 @@ test.describe('Aliases (Enterprise)', async () => {
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
     } finally {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScopeCli(orgId);
         }
       }
       if (alias) {
-        await deleteAliasCli(alias);
+        await boundaryCli.deleteAliasCli(alias);
       }
     }
   });
@@ -146,7 +137,7 @@ test.describe('Aliases (Enterprise)', async () => {
     try {
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -174,9 +165,9 @@ test.describe('Aliases (Enterprise)', async () => {
       );
 
       // Connect to target using alias
-      await authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAliasCli(alias);
     } finally {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -184,12 +175,12 @@ test.describe('Aliases (Enterprise)', async () => {
       );
 
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScopeCli(orgId);
         }
         if (alias) {
-          await deleteAliasCli(alias);
+          await boundaryCli.deleteAliasCli(alias);
         }
       }
     }
@@ -233,22 +224,28 @@ test.describe('Aliases (Enterprise)', async () => {
       );
 
       // Create new alias from scope page
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      orgId = await getOrgIdFromNameCli(orgName);
-      const projectId = await getProjectIdFromNameCli(orgId, projectName);
-      const targetId = await getTargetIdFromNameCli(projectId, targetName);
+      orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+      const projectId = await boundaryCli.getProjectIdFromNameCli(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromNameCli(
+        projectId,
+        targetName,
+      );
 
       alias = 'example.alias.' + nanoid();
       const aliasesPage = new AliasesPage(page);
       await aliasesPage.createAliasForTarget(alias, targetId);
-      await authorizeSessionByAliasCli(alias);
+      await boundaryCli.authorizeSessionByAliasCli(alias);
     } finally {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundaryCli(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -256,10 +253,10 @@ test.describe('Aliases (Enterprise)', async () => {
       );
 
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScopeCli(orgId);
       }
       if (alias) {
-        await deleteAliasCli(alias);
+        await boundaryCli.deleteAliasCli(alias);
       }
     }
   });

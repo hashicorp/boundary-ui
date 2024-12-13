@@ -6,16 +6,7 @@
 import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  connectToTarget,
-  connectSshToTarget,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -26,7 +17,7 @@ import { TargetsPage } from '../pages/targets.js';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Verify session created for TCP target @ent @aws @docker', async ({
@@ -54,16 +45,22 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
       targetPort,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectToTarget(targetId, sshUser, sshKeyPath);
+    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -73,7 +70,7 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -118,16 +115,22 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       credentialName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
+    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -137,7 +140,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -214,16 +217,22 @@ test('SSH target with host sources @ent @aws @docker', async ({
     );
 
     // Connect to target
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundaryCli(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
+    orgId = await boundaryCli.getOrgIdFromNameCli(orgName);
+    const projectId = await boundaryCli.getProjectIdFromNameCli(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromNameCli(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -233,7 +242,7 @@ test('SSH target with host sources @ent @aws @docker', async ({
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScopeCli(orgId);
     }
     // End `boundary connect` process
     if (connect) {
