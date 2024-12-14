@@ -100,3 +100,7 @@ ember-test/
 
 # Autoupdate
 nextVersion/
+
+#yarn 
+.yarn/*
+!.yarn/releases
