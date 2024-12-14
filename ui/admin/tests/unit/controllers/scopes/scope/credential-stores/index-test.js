@@ -23,6 +23,7 @@ module(
     setupIndexedDb(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
     let controller;
     let store;
     let getCredentialStoreCount;
@@ -42,6 +43,7 @@ module(
 
     hooks.beforeEach(async function () {
       await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
       controller = this.owner.lookup(
         'controller:scopes/scope/credential-stores/index',
       );
@@ -137,6 +139,43 @@ module(
 
       assert.strictEqual(controller.page, 1);
       assert.deepEqual(controller.types, selectedItems);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.credentialStores);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.credential-store.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.scopes.project.authorized_collection_actions[
+        'credential-stores'
+      ] = ['create'];
+      await visit(urls.credentialStores);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.credential-store.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.scopes.project.authorized_collection_actions[
+        'credential-stores'
+      ] = [];
+      await visit(urls.credentialStores);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.credential-store.title_plural'),
+        }),
+      );
     });
   },
 );

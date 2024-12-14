@@ -16,8 +16,9 @@ import { TYPE_STATIC_CREDENTIAL } from 'api/models/host-catalog';
 export default class ScopesScopeHostCatalogsIndexController extends Controller {
   // =services
 
-  @service router;
   @service can;
+  @service intl;
+  @service router;
 
   // =attributes
 
@@ -26,6 +27,30 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    let description;
+    if (
+      this.can.can('list model', this.scope, { collection: 'host-catalogs' })
+    ) {
+      description = 'resources.host-catalog.description';
+    } else if (
+      this.can.can('create model', this.scope, { collection: 'host-catalogs' })
+    ) {
+      description = 'descriptions.create-but-not-list';
+    } else {
+      description = 'descriptions.neither-list-nor-create';
+    }
+    return this.intl.t(description, {
+      resource: this.intl.t('resources.host-catalog.title_plural'),
+    });
+  }
 
   // =actions
 

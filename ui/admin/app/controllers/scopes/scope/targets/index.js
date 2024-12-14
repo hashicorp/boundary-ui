@@ -72,6 +72,28 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     }));
   }
 
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    let description;
+    if (this.can.can('list model', this.scope, { collection: 'targets' })) {
+      description = 'resources.target.description';
+    } else if (
+      this.can.can('create model', this.scope, { collection: 'targets' })
+    ) {
+      description = 'descriptions.create-but-not-list';
+    } else {
+      description = 'descriptions.neither-list-nor-create';
+    }
+    return this.intl.t(description, {
+      resource: this.intl.t('resources.target.title_plural'),
+    });
+  }
+
   // =actions
 
   /**

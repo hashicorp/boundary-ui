@@ -23,6 +23,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
+  let intl;
   let store;
   let controller;
   let getAuthMethodCount;
@@ -34,8 +35,13 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     authMethod: null,
   };
 
+  const urls = {
+    authMethods: null,
+  };
+
   hooks.beforeEach(async function () {
     await authenticateSession({});
+    intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup(
       'controller:scopes/scope/auth-methods/index',
@@ -45,6 +51,8 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scope.global,
     });
+
+    urls.authMethods = '/scopes/global/auth-methods';
 
     getAuthMethodCount = () =>
       this.server.schema.authMethods.all().models.length;
@@ -92,7 +100,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('cancel action rolls-back changes on the specified model', async function (assert) {
-    await visit('/scopes/global/auth-methods');
+    await visit(urls.authMethods);
     const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
@@ -107,7 +115,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('save action saves changes on the specified model', async function (assert) {
-    await visit('/scopes/global/auth-methods');
+    await visit(urls.authMethods);
     const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
@@ -133,7 +141,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('makePrimary action updates scope with auth-method id', async function (assert) {
-    await visit('/scopes/global/auth-methods');
+    await visit(urls.authMethods);
     const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
@@ -146,7 +154,7 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
   });
 
   test('removeAsPrimary action updates scope with null as auth-method id', async function (assert) {
-    await visit('/scopes/global/auth-methods');
+    await visit(urls.authMethods);
     const authMethod = await store.findRecord(
       'auth-method',
       instances.authMethod.id,
@@ -229,5 +237,40 @@ module('Unit | Controller | scopes/scope/auth-methods/index', function (hooks) {
     await controller.changeState(authMethod, 'public');
 
     assert.strictEqual(authMethod.state, 'public');
+  });
+
+  test('messageDescription returns correct translation with list authorization', async function (assert) {
+    await visit(urls.authMethods);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('resources.auth-method.description'),
+    );
+  });
+
+  test('messageDescription returns correct translation with create authorization', async function (assert) {
+    instances.scope.global.authorized_collection_actions['auth-methods'] = [
+      'create',
+    ];
+    await visit(urls.authMethods);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.create-but-not-list', {
+        resource: intl.t('resources.auth-method.title_plural'),
+      }),
+    );
+  });
+
+  test('messageDescription returns correct translation with no authorization', async function (assert) {
+    instances.scope.global.authorized_collection_actions['auth-methods'] = [];
+    await visit(urls.authMethods);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.neither-list-nor-create', {
+        resource: intl.t('resources.auth-method.title_plural'),
+      }),
+    );
   });
 });

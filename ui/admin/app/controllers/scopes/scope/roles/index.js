@@ -17,6 +17,7 @@ export default class ScopesScopeRolesIndexController extends Controller {
   // =services
 
   @service can;
+  @service intl;
   @service router;
 
   // =attributes
@@ -28,6 +29,28 @@ export default class ScopesScopeRolesIndexController extends Controller {
   @tracked pageSize = 10;
 
   grantScopeThis = GRANT_SCOPE_THIS;
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    let description;
+    if (this.can.can('list model', this.scope, { collection: 'roles' })) {
+      description = 'resources.role.description';
+    } else if (
+      this.can.can('create model', this.scope, { collection: 'roles' })
+    ) {
+      description = 'descriptions.create-but-not-list';
+    } else {
+      description = 'descriptions.neither-list-nor-create';
+    }
+    return this.intl.t(description, {
+      resource: this.intl.t('resources.role.title_plural'),
+    });
+  }
 
   // =actions
 

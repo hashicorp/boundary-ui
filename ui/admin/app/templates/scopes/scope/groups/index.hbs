@@ -98,23 +98,7 @@
     {{else}}
       <Hds::ApplicationState as |A|>
         <A.Header @title={{t 'resources.group.messages.welcome.title'}} />
-        <A.Body
-          {{! can list (at least):  show default welcome message}}
-          {{! can create (only):  show create-but-not-list welcome message}}
-          {{! can neither list nor create:  show neither-list-nor-create welcome message}}
-          @text={{t
-            (if
-              (can 'list model' this.scope collection='groups')
-              'resources.group.description'
-              (if
-                (can 'create model' this.scope collection='groups')
-                'descriptions.create-but-not-list'
-                'descriptions.neither-list-nor-create'
-              )
-            )
-            resource=(t 'resources.group.title_plural')
-          }}
-        />
+        <A.Body @text={{this.messageDescription}} />
         {{#if (can 'create model' this.scope collection='groups')}}
           <A.Footer as |F|>
             <F.LinkStandalone

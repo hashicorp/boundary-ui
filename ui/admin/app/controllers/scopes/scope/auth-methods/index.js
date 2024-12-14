@@ -72,6 +72,34 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     };
   }
 
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    let description;
+    if (
+      this.can.can('list model', this.scopeModel, {
+        collection: 'auth-methods',
+      })
+    ) {
+      description = 'resources.auth-method.description';
+    } else if (
+      this.can.can('create model', this.scopeModel, {
+        collection: 'auth-methods',
+      })
+    ) {
+      description = 'descriptions.create-but-not-list';
+    } else {
+      description = 'descriptions.neither-list-nor-create';
+    }
+    return this.intl.t(description, {
+      resource: this.intl.t('resources.auth-method.title_plural'),
+    });
+  }
+
   // =actions
 
   /**
