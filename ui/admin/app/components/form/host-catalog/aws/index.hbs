@@ -360,9 +360,7 @@
       disabled={{form.disabled}}
       as |F|
     >
-      <F.Label>
-        {{t 'resources.host-catalog.form.worker_filter.label'}}
-      </F.Label>
+      <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
       <F.HelperText>
         {{t 'resources.host-catalog.form.worker_filter.help'}}
         <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>

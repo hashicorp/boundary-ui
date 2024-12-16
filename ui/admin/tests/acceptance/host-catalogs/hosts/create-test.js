@@ -105,7 +105,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
         'create',
       ),
     );
-    assert.dom(selectors.MANAGE_DROPDOWN).exists();
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).exists();
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
@@ -129,8 +129,6 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     assert.strictEqual(getHostCount(), count);
   });
 
-  // TODO: the field should change to address and not name. Name is optional for host but address
-  // is required, so to make the test realistic we should be testing address
   test('saving a new host with invalid fields displays error messages', async function (assert) {
     this.server.post('/hosts', () => {
       return new Response(
@@ -143,8 +141,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'address',
+                description: 'Address is required.',
               },
             ],
           },
@@ -158,7 +156,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
 
-    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_ADDRESS_ERROR).hasText('Address is required.');
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {

@@ -136,6 +136,8 @@ key:
   label: Key
 value:
   label: Value
+operator:
+  label: Operator
 callback_url:
   label: Callback URL
   help: The URL to which the third-party provider sends the authentication response.  Paste this into the provider configuration.
@@ -181,3 +183,5 @@ created:
 other_fields:
   label: Other Fields
   help: This information is provided by the server and cannot be edited in Boundary
+worker_filter:
+  label: Worker Filter
