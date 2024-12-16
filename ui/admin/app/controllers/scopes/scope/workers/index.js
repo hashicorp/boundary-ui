@@ -42,7 +42,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
       description = 'descriptions.neither-list-nor-create';
     }
     return this.intl.t(description, {
-      resource: this.intl.t('resources.worker.title_plural'),
+      resource: this.intl.t('titles.workers'),
     });
   }
 

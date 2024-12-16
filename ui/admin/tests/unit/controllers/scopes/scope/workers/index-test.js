@@ -130,7 +130,7 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     assert.strictEqual(
       controller.messageDescription,
       intl.t('descriptions.create-but-not-list', {
-        resource: intl.t('resources.worker.title_plural'),
+        resource: intl.t('titles.workers'),
       }),
     );
   });
@@ -142,7 +142,7 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     assert.strictEqual(
       controller.messageDescription,
       intl.t('descriptions.neither-list-nor-create', {
-        resource: intl.t('resources.worker.title_plural'),
+        resource: intl.t('titles.workers'),
       }),
     );
   });
