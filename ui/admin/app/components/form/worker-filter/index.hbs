@@ -1,0 +1,21 @@
+{{!
+  Copyright (c) HashiCorp, Inc.
+  SPDX-License-Identifier: BUSL-1.1
+}}
+
+<Rose::Form
+  class='full-width'
+  @onSubmit={{@submit}}
+  @cancel={{@cancel}}
+  @disabled={{@model.isSaving}}
+  as |form|
+>
+  <WorkerFilterGenerator @model={{@model}} @name={{@name}} />
+
+  {{#if (can 'save model' @model)}}
+    <form.actions
+      @submitText={{t 'actions.save'}}
+      @cancelText={{t 'actions.cancel'}}
+    />
+  {{/if}}
+</Rose::Form>

@@ -53,7 +53,11 @@
   </Hds::Form::Textarea::Field>
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
-    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group
+      @name={{t 'form.type.label'}}
+      @alignment='center'
+      as |G|
+    >
       <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
       <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
       {{#each this.typeMetas as |type|}}

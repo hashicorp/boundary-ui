@@ -28,17 +28,17 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.21.3",
-    "@playwright/test": "^1.43.0",
+    "@playwright/test": "^1.49.0",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-n": "^16.3.1",
-    "nanoid": "^5.0.8",
+    "nanoid": "^5.0.9",
     "prettier": "^3.0.0"
   },
   "engines": {
-    "node": "18.* || 20.*"
+    "node": "20.* || 22.*"
   },
   "lint-staged": {
     "*.js": "eslint --fix",

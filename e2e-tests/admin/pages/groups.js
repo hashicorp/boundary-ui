@@ -39,7 +39,6 @@ export class GroupsPage extends BaseResourcePage {
   async addMemberToGroup(userName) {
     await this.page.getByRole('link', { name: 'Members', exact: true }).click();
     await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Add Members', exact: true })
       .click();
     await this.page.getByRole('checkbox', { name: userName }).click();

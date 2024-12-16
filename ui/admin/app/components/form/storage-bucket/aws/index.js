@@ -13,10 +13,11 @@ import { tracked } from '@glimmer/tracking';
 
 export default class FormStorageBucketAwsIndexComponent extends Component {
   // =attributes
-  @tracked selectedCredentialType = this.args.model.credentialType;
 
+  @tracked selectedCredentialType = this.args.model.credentialType;
   @tracked showDynamicCredentials =
     this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
+
   /**
    * returns an array of available credential types
    * @type {array}
@@ -28,7 +29,7 @@ export default class FormStorageBucketAwsIndexComponent extends Component {
   // =actions
   /**
    * Allows to update the credential type
-   * @param type {string}
+   * @param {string} type
    */
   @action
   updateCredentialTypeSelection(type) {

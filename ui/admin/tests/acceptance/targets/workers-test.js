@@ -14,9 +14,12 @@ module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let intl;
   let featuresService;
   let featureEdition;
 
+  const ACCORDION_DROPDOWN_TEXT_SELECTOR = (name) =>
+    `[data-test-target-${name}-workers-accordion-item] a`;
   const ACCORDION_DROPDOWN_SELECTOR = (name) =>
     `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
   const CODE_BLOCK_SELECTOR = (name) =>
@@ -50,6 +53,7 @@ module('Acceptance | targets | workers', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    intl = this.owner.lookup('service:intl');
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
@@ -242,6 +246,38 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('egress')).hasText(egressWorkerFilter);
+  });
+
+  test('user will see "Add worker filter" if no filter set', async function (assert) {
+    featuresService.enable('target-worker-filters-v2-ingress');
+    instances.target.update({
+      egress_worker_filter: '',
+      ingress_worker_filter: '',
+    });
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .hasText(intl.t('actions.add-worker-filter'));
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .hasText(intl.t('actions.add-worker-filter'));
+  });
+
+  test('user will see "Edit worker filter" if filter is set', async function (assert) {
+    featuresService.enable('target-worker-filters-v2-ingress');
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .hasText(intl.t('actions.edit-worker-filter'));
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .hasText(intl.t('actions.edit-worker-filter'));
   });
 
   test('user can cancel changes to egress worker filter in a target', async function (assert) {
