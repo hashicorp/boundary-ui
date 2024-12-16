@@ -4,23 +4,21 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-libraries | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getCredentialLibraryCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-library-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-credential-library-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -31,9 +29,6 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    orgScope: null,
-    projectScope: null,
     credentialStores: null,
     credentialStore: null,
     credentialLibrary: null,
@@ -61,10 +56,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
       credentialStore: instances.credentialStore,
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
+    urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
@@ -79,8 +71,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   test('can delete resource', async function (assert) {
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
     assert.strictEqual(getCredentialLibraryCount(), count - 1);
   });
 
@@ -89,10 +83,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'delete',
       );
+
     await visit(urls.credentialLibrary);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+
+    assert.dom(selectors.MANAGE_DROPDOWN_CRED_LIB).doesNotExist();
   });
 
   test('can accept delete credential library via dialog', async function (assert) {
@@ -101,8 +95,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
     assert.strictEqual(getCredentialLibraryCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -113,8 +109,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
     assert.strictEqual(getCredentialLibraryCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -132,10 +130,10 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
       );
     });
     await visit(urls.credentialLibrary);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
