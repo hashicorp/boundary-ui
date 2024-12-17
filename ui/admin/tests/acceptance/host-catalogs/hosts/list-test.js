@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -89,18 +89,5 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
       ),
     );
     assert.dom(commonSelectors.HREF(urls.hosts)).doesNotExist();
-  });
-
-  test('User can navigate to index with only create action', async function (assert) {
-    instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
-    await visit(urls.hostCatalog);
-
-    assert.dom(commonSelectors.HREF(urls.hosts)).exists();
-    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
-    assert
-      .dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST)
-      .hasAttribute('href', urls.newHost);
-    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST);
-    assert.strictEqual(currentURL(), urls.newHost);
   });
 });

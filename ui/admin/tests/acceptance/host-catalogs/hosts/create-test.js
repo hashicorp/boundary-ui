@@ -98,14 +98,22 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.newHost)).doesNotExist();
   });
+
   test('Users can navigate to new host route with proper authorization', async function (assert) {
     await visit(urls.hosts);
+
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'create',
       ),
     );
     assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).exists();
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    assert
+      .dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST)
+      .hasAttribute('href', urls.newHost);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST);
+    assert.strictEqual(currentURL(), urls.newHost);
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
