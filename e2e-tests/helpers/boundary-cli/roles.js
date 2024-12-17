@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} scopeId ID of the scope under which the role will be created.
  * @returns {Promise<string>} new role's ID
  */
-export async function createRoleCli(scopeId) {
+export async function createRole(scopeId) {
   const roleName = 'role-' + nanoid();
   let role;
   try {
