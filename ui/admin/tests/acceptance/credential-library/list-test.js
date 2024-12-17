@@ -4,10 +4,11 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-libraries | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,9 +23,6 @@ module('Acceptance | credential-libraries | list', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    orgScope: null,
-    projectScope: null,
     credentialStores: null,
     credentialStore: null,
     credentialLibrary: null,
@@ -49,44 +47,45 @@ module('Acceptance | credential-libraries | list', function (hooks) {
       credentialStore: instances.credentialStore,
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
+    urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
-    urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     await authenticateSession({});
   });
 
   test('Users can navigate to credential libraries with proper authorization', async function (assert) {
     await visit(urls.credentialStore);
+
     assert.ok(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
       ].includes('list'),
     );
-    assert.ok(find(`[href="${urls.credentialLibraries}"]`));
+    assert.dom(commonSelectors.HREF(urls.credentialLibraries)).isVisible();
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = [];
+
     await visit(urls.credentialStore);
+
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
         'credential-libraries'
       ].includes('list'),
     );
-    assert.notOk(find(`[href="${urls.credentialLibraries}"]`));
+    assert.dom(commonSelectors.HREF(urls.credentialLibraries)).doesNotExist();
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = ['create'];
+
     await visit(urls.credentialStore);
-    assert.ok(find(`[href="${urls.credentialLibraries}"]`));
+
+    assert.dom(commonSelectors.HREF(urls.credentialLibraries)).isVisible();
   });
 });
