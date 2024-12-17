@@ -6,16 +6,8 @@
 import { test, authenticatedState } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByTargetIdCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
-import { checkVaultCli } from '../../helpers/vault-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -29,8 +21,8 @@ const boundaryPolicyName = 'boundary-controller';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
-  await checkVaultCli();
+  await boundaryCli.checkBoundaryCli();
+  await vaultCli.checkVaultCli();
 });
 
 test.beforeEach(async ({ page }) => {
@@ -105,19 +97,25 @@ test('Vault Credential Store (User & Key Pair) @ent @aws @docker', async ({
       credentialLibraryName,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    await authorizeSessionByTargetIdCli(targetId);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    await boundaryCli.authorizeSessionByTargetId(targetId);
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

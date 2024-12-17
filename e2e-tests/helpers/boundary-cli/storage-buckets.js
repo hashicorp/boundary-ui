@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
  * Deletes the specified storage bucket
  * @param {string} storageBucketId ID of the storage bucket to be deleted
  */
-export async function deleteStorageBucketCli(storageBucketId) {
+export async function deleteStorageBucket(storageBucketId) {
   try {
     execSync('boundary storage-buckets delete -id=' + storageBucketId);
   } catch (e) {

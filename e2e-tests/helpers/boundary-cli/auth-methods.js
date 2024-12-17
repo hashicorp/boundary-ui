@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} scopeId ID of the scope under which the auth-method will be created.
  * @returns {Promise<string>} new auth-method's ID
  */
-export async function createPasswordAuthMethodCli(scopeId) {
+export async function createPasswordAuthMethod(scopeId) {
   const authMethodName = 'auth-method-' + nanoid();
   let newAuthMethod;
   try {
