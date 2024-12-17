@@ -28,23 +28,22 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (
-      this.can.can('list model', this.hostCatalog, { collection: 'host-sets' })
-    ) {
-      description = 'resources.host-set.description';
-    } else if (
-      this.can.can('create model', this.hostCatalog, {
-        collection: 'host-sets',
-      })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.host-set.title_plural'),
+    const canList = this.can.can('list model', this.hostCatalog, {
+      collection: 'host-sets',
     });
+    const canCreate = this.can.can('create model', this.hostCatalog, {
+      collection: 'host-sets',
+    });
+    const resource = this.intl.t('resources.host-set.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.host-set.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions

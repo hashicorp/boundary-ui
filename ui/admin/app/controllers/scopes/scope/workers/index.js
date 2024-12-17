@@ -29,21 +29,22 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (this.can.can('list worker', this.scope, { collection: 'workers' })) {
-      description = 'resources.worker.description';
-    } else if (
-      this.can.can('create worker led worker', this.scope, {
-        collection: 'workers',
-      })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('titles.workers'),
+    const canList = this.can.can('list worker', this.scope, {
+      collection: 'workers',
     });
+    const canCreate = this.can.can('create worker led worker', this.scope, {
+      collection: 'workers',
+    });
+    const resource = this.intl.t('titles.workers');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.worker.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   /**

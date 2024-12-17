@@ -34,19 +34,22 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (this.can.can('list model', this.scope, { collection: 'aliases' })) {
-      description = 'resources.alias.messages.none.description';
-    } else if (
-      this.can.can('create model', this.scope, { collection: 'aliases' })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.alias.title_plural'),
+    const canList = this.can.can('list model', this.scope, {
+      collection: 'aliases',
     });
+    const canCreate = this.can.can('create model', this.scope, {
+      collection: 'aliases',
+    });
+    const resource = this.intl.t('resources.alias.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.alias.messages.none.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions

@@ -50,25 +50,22 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (
-      this.can.can('list model', this.scope, {
-        collection: 'credential-stores',
-      })
-    ) {
-      description = 'resources.credential-store.description';
-    } else if (
-      this.can.can('create model', this.scope, {
-        collection: 'credential-stores',
-      })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.credential-store.title_plural'),
+    const canList = this.can.can('list model', this.scope, {
+      collection: 'credential-stores',
     });
+    const canCreate = this.can.can('create model', this.scope, {
+      collection: 'credential-stores',
+    });
+    const resource = this.intl.t('resources.credential-store.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.credential-store.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions

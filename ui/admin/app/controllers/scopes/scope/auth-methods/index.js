@@ -79,25 +79,22 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (
-      this.can.can('list model', this.scopeModel, {
-        collection: 'auth-methods',
-      })
-    ) {
-      description = 'resources.auth-method.description';
-    } else if (
-      this.can.can('create model', this.scopeModel, {
-        collection: 'auth-methods',
-      })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.auth-method.title_plural'),
+    const canList = this.can.can('list model', this.scopeModel, {
+      collection: 'auth-methods',
     });
+    const canCreate = this.can.can('create model', this.scopeModel, {
+      collection: 'auth-methods',
+    });
+    const resource = this.intl.t('resources.auth-method.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.auth-method.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions

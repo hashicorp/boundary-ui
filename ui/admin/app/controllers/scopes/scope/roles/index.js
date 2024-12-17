@@ -37,19 +37,22 @@ export default class ScopesScopeRolesIndexController extends Controller {
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (this.can.can('list model', this.scope, { collection: 'roles' })) {
-      description = 'resources.role.description';
-    } else if (
-      this.can.can('create model', this.scope, { collection: 'roles' })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.role.title_plural'),
+    const canList = this.can.can('list model', this.scope, {
+      collection: 'roles',
     });
+    const canCreate = this.can.can('create model', this.scope, {
+      collection: 'roles',
+    });
+    const resource = this.intl.t('resources.role.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.role.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions

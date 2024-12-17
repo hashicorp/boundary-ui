@@ -26,23 +26,22 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
    * @type {string}
    */
   get messageDescription() {
-    let description;
-    if (
-      this.can.can('list scope', this.scope, { collection: 'storage-buckets' })
-    ) {
-      description = 'resources.storage-bucket.messages.none.description';
-    } else if (
-      this.can.can('create scope', this.scope, {
-        collection: 'storage-buckets',
-      })
-    ) {
-      description = 'descriptions.create-but-not-list';
-    } else {
-      description = 'descriptions.neither-list-nor-create';
-    }
-    return this.intl.t(description, {
-      resource: this.intl.t('resources.storage-bucket.title_plural'),
+    const canList = this.can.can('list scope', this.scope, {
+      collection: 'storage-buckets',
     });
+    const canCreate = this.can.can('create scope', this.scope, {
+      collection: 'storage-buckets',
+    });
+    const resource = this.intl.t('resources.storage-bucket.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.storage-bucket.messages.none.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
   }
 
   // =actions
