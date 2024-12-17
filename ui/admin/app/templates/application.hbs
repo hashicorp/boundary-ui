@@ -137,7 +137,7 @@
       @dismissButtonText={{t 'actions.cancel'}}
       @modal={{true}}
       @dismiss={{deny}}
-      data-test-modal
+      dialog
     >
       {{if
         confirmation.options.title
@@ -151,7 +151,7 @@
       </Hds::Text::Body>
     </M.Body>
     <M.Footer>
-      <Hds::ButtonSet {{style width='15rem'}}>
+      <Hds::ButtonSet>
         <Hds::Button
           @text={{if
             confirmation.options.confirm
@@ -160,13 +160,11 @@
           }}
           @color='primary'
           {{on 'click' accept}}
-          data-test-modal-confirm-btn
         />
         <Hds::Button
           @text={{t 'actions.cancel'}}
           @color='secondary'
           {{on 'click' deny}}
-          data-test-modal-cancel-btn
         />
       </Hds::ButtonSet>
     </M.Footer>
