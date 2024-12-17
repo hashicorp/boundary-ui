@@ -102,8 +102,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await click(DROPDOWN_BUTTON_SELECTOR);
     await click(DELETE_DROPDOWN_SELECTOR);
 
-    // await this.pauseTest();
-
     assert
       .dom(commonSelectors.DIALOG_TITLE_SELECTOR)
       .hasText(
