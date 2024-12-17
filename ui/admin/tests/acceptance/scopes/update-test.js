@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | scopes | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -139,8 +140,8 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     await click(`[href="${urls.globalScope}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.notEqual(
@@ -160,8 +161,8 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     await click(`[href="${urls.globalScope}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.notEqual(
