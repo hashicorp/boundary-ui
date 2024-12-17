@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} scopeId ID of the scope under which the group will be created.
  * @returns {Promise<string>} new group's ID
  */
-export async function createGroupCli(scopeId) {
+export async function createGroup(scopeId) {
   const groupName = 'group-' + nanoid();
   let group;
   try {

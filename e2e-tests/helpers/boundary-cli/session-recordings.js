@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
  * @param {string} storageBucketId ID of storage bucket that the session recording is associated with
  * @returns An object representing a session recording
  */
-export async function waitForSessionRecordingCli(storageBucketId) {
+export async function waitForSessionRecording(storageBucketId) {
   let i = 0;
   let filteredSessionRecording = [];
   do {
