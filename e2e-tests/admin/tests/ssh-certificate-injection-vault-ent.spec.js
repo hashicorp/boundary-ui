@@ -61,8 +61,8 @@ test('SSH Certificate Injection @ent @docker', async ({
       `vault write ${secretsPath}/roles/${secretName} @./admin/tests/fixtures/ssh-certificate-injection-role.json`,
     );
 
-    const private_key = atob(sshCaKey);
-    const public_key = atob(sshCaKeyPublic);
+    const private_key = Buffer.from(sshCaKey, 'base64');
+    const public_key = Buffer.from(sshCaKeyPublic, 'base64');
 
     execSync(
       `vault write ${secretsPath}/config/ca` +
@@ -136,18 +136,14 @@ test('SSH Certificate Injection @ent @docker', async ({
     connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
-    await page
-      .getByRole('cell', { name: targetName })
-      .locator('..')
-      .getByRole('button', { name: 'Cancel' })
-      .click();
   } finally {
-    if (orgId) {
-      await boundaryCli.deleteScope(orgId);
-    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
+    }
+
+    if (orgId) {
+      await boundaryCli.deleteScope(orgId);
     }
 
     execSync(`vault secrets disable ${secretsPath}`);
