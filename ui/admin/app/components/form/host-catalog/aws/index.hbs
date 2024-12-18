@@ -15,7 +15,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -41,7 +41,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>
@@ -117,7 +117,6 @@
     <InfoField
       @value={{t 'resources.host-catalog.types.aws'}}
       @icon='aws-color'
-      readonly={{true}}
       as |F|
     >
       <F.Label>
@@ -133,7 +132,7 @@
     name='region'
     @value={{@model.region}}
     @isRequired={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'region')}}
     as |F|
   >
@@ -195,7 +194,7 @@
       @isOptional={{true}}
       @value={{@model.role_arn}}
       @isInvalid={{@model.errors.role_arn}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_arn')}}
       as |F|
     >
@@ -222,7 +221,7 @@
       @isOptional={{true}}
       @value={{@model.role_external_id}}
       @isInvalid={{@model.errors.role_external_id}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_external_id')}}
       as |F|
     >
@@ -249,7 +248,7 @@
       @isOptional={{true}}
       @value={{@model.role_session_name}}
       @isInvalid={{@model.errors.role_session_name}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_session_name')}}
       as |F|
     >
@@ -315,7 +314,7 @@
       name='access_key_id'
       @value={{@model.access_key_id}}
       @isOptional={{true}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'access_key_id')}}
       as |F|
     >
@@ -334,7 +333,7 @@
       name='secret_access_key'
       @value={{@model.secret_access_key}}
       @isOptional={{true}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'secret_access_key')}}
       as |F|
     >
@@ -357,7 +356,7 @@
       @value={{@model.worker_filter}}
       @isOptional={{true}}
       @isInvalid={{@model.errors.worker_filter}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       as |F|
     >
       <F.Label>{{t 'form.worker_filter.label'}}</F.Label>

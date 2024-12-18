@@ -17,7 +17,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @type='text'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -38,7 +38,7 @@
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -100,7 +100,6 @@
     <InfoField
       @value={{@model.scopeModel.displayName}}
       @icon={{if @model.scopeModel.isGlobal 'globe' 'org'}}
-      disabled={{form.disabled}}
       as |F|
     >
       <F.Label>{{t 'resources.storage-bucket.form.scope.label'}}</F.Label>
@@ -149,8 +148,7 @@
     @isRequired={{true}}
     @value={{@model.bucket_name}}
     @isInvalid={{@model.errors.bucket_name}}
-    disabled={{form.disabled}}
-    readOnly={{not @model.isNew}}
+    readOnly={{(or form.disabled (not @model.isNew))}}
     {{on 'input' (set-from-event @model 'bucket_name')}}
     as |F|
   >
@@ -173,8 +171,7 @@
     @isOptional={{true}}
     @value={{@model.bucket_prefix}}
     @isInvalid={{@model.errors.bucket_prefix}}
-    disabled={{form.disabled}}
-    readOnly={{not @model.isNew}}
+    readOnly={{(or form.disabled (not @model.isNew))}}
     {{on 'input' (set-from-event @model 'bucket_prefix')}}
     as |F|
   >
@@ -197,8 +194,7 @@
     @isRequired={{true}}
     @value={{@model.region}}
     @isInvalid={{@model.errors.region}}
-    disabled={{form.disabled}}
-    readOnly={{not @model.isNew}}
+    readOnly={{(or form.disabled (not @model.isNew))}}
     {{on 'input' (set-from-event @model 'region')}}
     as |F|
   >
@@ -275,7 +271,7 @@
         @isRequired={{true}}
         @value={{@model.secret_access_key}}
         @isInvalid={{@model.errors.secrets}}
-        disabled={{form.disabled}}
+        readonly={{form.disabled}}
         @hasVisibilityToggle={{false}}
         {{on 'input' (set-from-event @model 'secret_access_key')}}
         as |F|
@@ -349,7 +345,7 @@
       @isRequired={{true}}
       @value={{@model.role_arn}}
       @isInvalid={{@model.errors.role_arn}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_arn')}}
       as |F|
     >
@@ -372,7 +368,7 @@
       @isOptional={{true}}
       @value={{@model.role_external_id}}
       @isInvalid={{@model.errors.role_external_id}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_external_id')}}
       as |F|
     >
@@ -397,7 +393,7 @@
       @isOptional={{true}}
       @value={{@model.role_session_name}}
       @isInvalid={{@model.errors.role_session_name}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'role_session_name')}}
       as |F|
     >

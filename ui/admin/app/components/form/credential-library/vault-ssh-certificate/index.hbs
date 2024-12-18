@@ -17,7 +17,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -39,7 +39,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -95,7 +95,7 @@
     @isInvalid={{@model.errors.path}}
     @type='text'
     name='vault_path'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'path')}}
     as |F|
   >
@@ -122,7 +122,7 @@
     @isInvalid={{@model.errors.username}}
     @type='text'
     name='username'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'username')}}
     as |F|
   >
@@ -178,7 +178,7 @@
       @isInvalid={{@model.errors.key_bits}}
       @type='text'
       name='key_bits'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'key_bits')}}
       as |F|
     >
@@ -204,7 +204,7 @@
     @isInvalid={{@model.errors.ttl}}
     @type='text'
     name='ttl'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'ttl')}}
     as |F|
   >
@@ -227,7 +227,7 @@
     @isInvalid={{@model.errors.key_id}}
     @type='text'
     name='key_id'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'key_id')}}
     as |F|
   >
