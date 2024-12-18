@@ -14,6 +14,7 @@ import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 const secretsPath = 'e2e_secrets';
@@ -114,6 +115,7 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialLibraryName,
     );
 
+    // Verify correct credentials are returned after authorizing session
     await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
@@ -136,13 +138,13 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       session.item.credentials[0].secret.decoded.data.private_key;
 
     expect(retrievedUser).toBe(sshUser);
-
     const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
-    if (keyData !== retrievedKey) {
-      throw new Error('Stored Key does not match');
-    }
+    expect(retrievedKey).toBe(keyData);
+
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
     if (orgId) {
       await boundaryCli.deleteScope(orgId);

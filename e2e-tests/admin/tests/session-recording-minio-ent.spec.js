@@ -133,7 +133,7 @@ test('Session Recording Test (MinIO) @ent @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId);
+    connect = await boundaryCli.connectSshToTarget(targetId, true);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
     const sessionsPage = new SessionsPage(page);
@@ -234,6 +234,11 @@ test('Session Recording Test (MinIO) @ent @docker', async ({
     await page.getByRole('link', { name: targetName }).click();
     await targetsPage.detachStorageBucket();
   } finally {
+    // End `boundary connect` process
+    if (connect) {
+      connect.kill('SIGTERM');
+    }
+
     if (policyName) {
       const storagePolicyId = await boundaryCli.getPolicyIdFromName(
         orgId,
@@ -246,10 +251,6 @@ test('Session Recording Test (MinIO) @ent @docker', async ({
     }
     if (orgId) {
       await boundaryCli.deleteScope(orgId);
-    }
-    // End `boundary connect` process
-    if (connect) {
-      connect.kill('SIGTERM');
     }
   }
 });
