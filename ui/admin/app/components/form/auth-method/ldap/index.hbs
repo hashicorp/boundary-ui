@@ -16,7 +16,7 @@
     @type='text'
     @value={{@model.type}}
     name='type'
-    disabled={{true}}
+    readonly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.type.label'}}</F.Label>
@@ -27,7 +27,7 @@
     @value={{@model.name}}
     @type='text'
     name='name'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -39,7 +39,7 @@
     @isOptional={{true}}
     @value={{@model.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -61,7 +61,7 @@
     @isInvalid={{@model.errors.urls}}
     @type='url'
     name='urls'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' this.setUrls}}
     as |F|
   >
@@ -115,7 +115,7 @@
       @isInvalid={{@model.errors.client_certificate}}
       @type='password'
       name='client_certificate'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate')}}
       as |F|
@@ -141,7 +141,7 @@
       @isInvalid={{@model.errors.client_certificate_key}}
       @type='password'
       name='client_certificate_key'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'client_certificate_key')}}
       as |F|
@@ -228,7 +228,7 @@
     @value={{@model.bind_dn}}
     @type='text'
     name='bind_dn'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'bind_dn')}}
     as |F|
   >
@@ -242,7 +242,7 @@
       @value={{@model.bind_password}}
       @type='password'
       name='bind_password'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       @hasVisibilityToggle={{false}}
       {{on 'input' (set-from-event @model 'bind_password')}}
       as |F|
@@ -283,7 +283,7 @@
     @value={{@model.upn_domain}}
     @type='text'
     name='upn_domain'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'upn_domain')}}
     as |F|
   >
@@ -344,7 +344,7 @@
     @value={{@model.user_dn}}
     @type='text'
     name='user_dn'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'user_dn')}}
     as |F|
   >
@@ -357,7 +357,7 @@
     @value={{@model.user_attr}}
     @type='text'
     name='user_attr'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'user_attr')}}
     as |F|
   >
@@ -372,7 +372,7 @@
     @value={{@model.user_filter}}
     @type='text'
     name='user_filter'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'user_filter')}}
     as |F|
   >
@@ -437,7 +437,7 @@
     @isInvalid={{@model.errors.group_dn}}
     @type='text'
     name='group_dn'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'group_dn')}}
     as |F|
   >
@@ -459,7 +459,7 @@
     @value={{@model.group_attr}}
     @type='text'
     name='group_attr'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'group_attr')}}
     as |F|
   >
@@ -474,7 +474,7 @@
     @value={{@model.group_filter}}
     @type='text'
     name='group_filter'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'group_filter')}}
     as |F|
   >
@@ -515,7 +515,7 @@
     @value={{@model.maximum_page_size}}
     @type='text'
     name='maximum_page_size'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'maximum_page_size')}}
     as |F|
   >

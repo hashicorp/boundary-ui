@@ -13,7 +13,7 @@
     @value={{@value}}
     @type={{(or @type 'password')}}
     name={{@name}}
-    disabled={{or @isDisabled (not this.isEditing)}}
+    readonly={{or @isDisabled (not this.isEditing)}}
     @hasVisibilityToggle={{false}}
     as |F|
   >

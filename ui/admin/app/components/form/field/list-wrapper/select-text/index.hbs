@@ -41,7 +41,7 @@
               @value={{val}}
               @type='text'
               @width={{@width}}
-              disabled={{@disabled}}
+              readonly={{@disabled}}
               aria-labelledby={{valueHeaderID}}
               {{on 'change' (fn this.updateInput select)}}
             />
@@ -93,7 +93,7 @@
               @value={{this.newOptionValue}}
               @type='text'
               @width={{@width}}
-              disabled={{@disabled}}
+              readonly={{@disabled}}
               aria-labelledby={{valueHeaderID}}
               {{on 'input' (set-from-event this 'newOptionValue')}}
             />
