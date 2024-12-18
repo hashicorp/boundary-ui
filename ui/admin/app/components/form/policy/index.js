@@ -24,7 +24,7 @@ export default class FormPolicyComponent extends Component {
    * Returns retention policy options list
    * @type {array}
    */
-  get listRententionOptions() {
+  get listRetentionOptions() {
     return RETENTION_POLICY;
   }
 

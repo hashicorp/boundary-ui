@@ -17,7 +17,7 @@
     @type='password'
     name='currentPassword'
     autocomplete='current-password'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event this 'currentPassword')}}
     as |F|
   >
@@ -30,7 +30,7 @@
     @type='password'
     name='newPassword'
     autocomplete='new-password'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event this 'newPassword')}}
     as |F|
   >

@@ -57,7 +57,7 @@
         <S.TextInput
           name={{@customInputName}}
           @value={{@inputValue}}
-          disabled={{@disabled}}
+          readonly={{@disabled}}
           aria-label={{t 'resources.policy.title'}}
           data-input={{@customInputName}}
           {{on 'input' this.handleInputChange}}

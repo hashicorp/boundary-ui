@@ -13,7 +13,7 @@
           <Hds::Form::TextInput::Field
             @value={{option.value}}
             @type='text'
-            disabled={{@disabled}}
+            readonly={{@disabled}}
             aria-label={{t 'titles.value'}}
             {{on 'input' (set-from-event option 'value')}}
           />
@@ -41,7 +41,7 @@
         <Hds::Form::TextInput::Field
           @value={{this.newOptionValue}}
           @type='text'
-          disabled={{@disabled}}
+          readonly={{@disabled}}
           aria-label={{t 'titles.value'}}
           {{on 'input' (set-from-event this 'newOptionValue')}}
         />
