@@ -220,8 +220,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child', 'Click Discard');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
       assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
@@ -245,8 +245,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child', 'Click Discard');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
       assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
@@ -269,8 +269,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:last-child');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
       assert.strictEqual(currentURL(), urls.staticCredentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
@@ -293,8 +293,8 @@ module('Acceptance | credential-stores | update', function (hooks) {
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:last-child');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
       assert.strictEqual(currentURL(), urls.vaultCredentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]

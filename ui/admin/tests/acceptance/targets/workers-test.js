@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
@@ -28,10 +29,6 @@ module('Acceptance | targets | workers', function (hooks) {
     '[data-test-code-editor-field-editor] textarea';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const MODAL_DISCARD_BUTTON_SELECTOR =
-    '.rose-dialog-footer button:first-child';
-  const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
-  const CONFIRM_MODAL_SELECTOR = '.rose-dialog';
 
   const instances = {
     scopes: {
@@ -312,9 +309,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(
@@ -337,9 +334,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     assert.notEqual(
@@ -361,9 +358,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
@@ -382,9 +379,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);

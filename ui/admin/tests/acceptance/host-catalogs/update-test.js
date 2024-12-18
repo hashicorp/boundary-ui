@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_AWS,
@@ -41,9 +42,6 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   const EDIT_BUTTON_SELECTOR = 'form [type="button"]';
   const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const MODAL_DISCARD_BUTTON_SELECTOR =
-    '.rose-dialog-footer button:first-child';
-  const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
   const CREDENTIAL_TYPE_SELECTOR =
     '.dynamic-credential-selection input:checked';
 
@@ -178,8 +176,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.notEqual(
@@ -198,8 +196,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.notEqual(
