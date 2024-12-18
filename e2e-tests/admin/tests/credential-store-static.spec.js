@@ -12,6 +12,7 @@ import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 test.use({ storageState: authenticatedState });
@@ -86,9 +87,10 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
     const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
-    if (keyData != retrievedKey) {
-      throw new Error('Stored Key does not match');
-    }
+    expect(retrievedKey).toBe(keyData);
+
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
     if (orgName) {
       await boundaryCli.authenticateBoundary(
@@ -148,6 +150,9 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
 
     expect(retrievedUser).toBe(sshUser);
     expect(retrievedPassword).toBe(testPassword);
+
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
     if (orgName) {
       await boundaryCli.authenticateBoundary(
@@ -227,6 +232,9 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({
     expect(retrievedUser).toBe(testName);
     expect(retrievedPassword).toBe(testPassword);
     expect(retrievedId).toBe(testId);
+
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
     if (orgName) {
       await boundaryCli.authenticateBoundary(
