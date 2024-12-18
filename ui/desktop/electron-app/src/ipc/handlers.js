@@ -54,7 +54,7 @@ handle('openExternal', async (href) => {
      * Launch browser to display documentation and to support arbitrary OIDC flows
      * using openExternal. The protocol is validated (see above).
      */
-    shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
+    // await shell.openExternal(href); /* eng-disable OPEN_EXTERNAL_JS_CHECK */
   } else {
     throw new Error(
       `URLs may only be opened over HTTPS in an external browser.
