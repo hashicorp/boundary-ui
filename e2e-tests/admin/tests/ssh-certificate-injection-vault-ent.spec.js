@@ -136,18 +136,14 @@ test('SSH Certificate Injection @ent @docker', async ({
     connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
-    await page
-      .getByRole('cell', { name: targetName })
-      .locator('..')
-      .getByRole('button', { name: 'Cancel' })
-      .click();
   } finally {
-    if (orgId) {
-      await boundaryCli.deleteScope(orgId);
-    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
+    }
+
+    if (orgId) {
+      await boundaryCli.deleteScope(orgId);
     }
 
     execSync(`vault secrets disable ${secretsPath}`);
