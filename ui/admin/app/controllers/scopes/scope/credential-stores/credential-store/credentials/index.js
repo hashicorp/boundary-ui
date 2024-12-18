@@ -16,7 +16,35 @@ export default class ScopesScopeCredentialStoresCredentialStoreCredentialsIndexC
   // =services
 
   @service can;
+  @service intl;
   @service router;
+
+  // =attributes
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    const canList = this.can.can('list model', this.credentialStore, {
+      collection: 'credentials',
+    });
+    const canCreate = this.can.can('create model', this.credentialStore, {
+      collection: 'credentials',
+    });
+    const resource = this.intl.t('resources.credential.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.credential.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
+  }
 
   // =actions
 
