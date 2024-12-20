@@ -26,7 +26,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       bucket_name: 'bucketname',
       bucket_prefix: 'bucketprefix',
       worker_filter: 'workerfilter',
-      region: 'eu-west-1',
+      region: 'eu-west-1 ',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
       disable_credential_rotation: true,
@@ -117,7 +117,7 @@ module('Unit | Serializer | storage bucket', function (hooks) {
       access_key_id: '',
       secret_access_key: '',
       disable_credential_rotation: true,
-      role_arn: 'arn',
+      role_arn: 'arn ',
       role_external_id: 'Example987',
       role_session_name: 'my-session',
       role_tags: [
@@ -160,12 +160,12 @@ module('Unit | Serializer | storage bucket', function (hooks) {
           bucket_prefix: 'bucketprefix',
           worker_filter: 'workerfilter',
           plugin: { name: 'aws' },
-          region: 'eu-west-1',
+          region: ' eu-west-1 ',
           access_key_id: 'foobars',
           secret_access_key: 'testing',
           disable_credential_rotation: true,
           version: 1,
-          role_arn: 'role_arn_test',
+          role_arn: ' role_arn_test ',
           role_external_id: 'role_external_id_test',
           role_session_name: 'role_session_test',
           role_tags: [
@@ -358,47 +358,5 @@ module('Unit | Serializer | storage bucket', function (hooks) {
         relationships: {},
       },
     });
-  });
-
-  test('it trims whitespace on region and role_arn fields', async function (assert) {
-    const store = this.owner.lookup('service:store');
-    const record = store.createRecord('storage-bucket', {
-      compositeType: TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,
-      credentialType: TYPE_CREDENTIAL_DYNAMIC,
-      name: 'AWS',
-      description: 'this has an aws plugin',
-      bucket_name: 'bucketname',
-      bucket_prefix: 'bucketprefix',
-      worker_filter: 'workerfilter',
-      region: 'eu-west-1   ',
-      access_key_id: '',
-      secret_access_key: '',
-      disable_credential_rotation: true,
-      role_arn: ' arn  ',
-      role_external_id: 'Example987',
-      role_session_name: 'my-session',
-      role_tags: [
-        { key: 'Project', value: 'Automation' },
-        { key: 'foo', value: 'bar' },
-      ],
-    });
-    const expectedResult = {
-      name: 'AWS',
-      description: 'this has an aws plugin',
-      type: TYPE_STORAGE_BUCKET_PLUGIN,
-      bucket_name: 'bucketname',
-      bucket_prefix: 'bucketprefix',
-      worker_filter: 'workerfilter',
-      attributes: {
-        region: 'eu-west-1',
-        disable_credential_rotation: true,
-        role_arn: 'arn',
-        role_external_id: 'Example987',
-        role_session_name: 'my-session',
-        role_tags: { Project: 'Automation', foo: 'bar' },
-        secrets_hmac: null,
-      },
-    };
-    assert.deepEqual(record.serialize(), expectedResult);
   });
 });
