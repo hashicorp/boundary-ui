@@ -217,7 +217,9 @@ test.describe('Filtering sessions tests', () => {
       .first()
       .click();
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    await authedPage.waitForTimeout(3000);
+    await expect
+      .poll(async () => await authedPage.locator('.xterm-screen').screenshot())
+      .toMatchSnapshot('ssh-terminal.png', { maxDiffPixels: 5000 });
     await authedPage.getByRole('link', { name: 'Sessions' }).click();
 
     await authedPage.getByRole('button', { name: 'Clear Filters' }).click();

@@ -224,8 +224,12 @@ test.describe('Targets tests', () => {
     ).toBeVisible();
 
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    // TODO: Research a better way to test canvas elements for the shell,
-    //  would it be too brittle to assert a snapshot of an expected image?
+
+    // If regenerating a screenshot, add a timeout so it waits until the connection finishes
+    // await authedPage.waitForTimeout(3000);
+    await expect
+      .poll(async () => await authedPage.locator('.xterm-screen').screenshot())
+      .toMatchSnapshot('ssh-terminal.png', { maxDiffPixels: 5000 });
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
