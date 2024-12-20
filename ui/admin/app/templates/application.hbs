@@ -133,7 +133,7 @@
 
 <PendingConfirmations as |confirmation accept deny|>
   <Hds::Modal @color='warning' as |M|>
-    <M.Header @icon='alert-triangle'>
+    <M.Header @icon='alert-triangle' @onDismiss={{deny}}>
       {{if
         confirmation.options.title
         (t confirmation.options.title)
