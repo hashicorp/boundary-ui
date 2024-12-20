@@ -109,6 +109,13 @@ export default class ApplicationSerializer extends RESTSerializer {
         deleteKey(json);
       }
     }
+    if (
+      options.trimWhitespace &&
+      json.attributes[attribute?.name] &&
+      type === 'string'
+    ) {
+      json.attributes[attribute.name] = json.attributes[attribute.name].trim();
+    }
     return value;
   }
 

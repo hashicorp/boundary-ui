@@ -75,14 +75,6 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
 
     // This deletes any fields that don't belong to the record's credential type
     if (options.isNestedAttribute && json.attributes) {
-      if (json.attributes?.region) {
-        json.attributes.region = json.attributes.region.trim();
-      }
-
-      if (credentialType == 'dynamic' && json.attributes?.role_arn) {
-        json.attributes.role_arn = json.attributes.role_arn.trim();
-      }
-
       // The key must be included in the fieldsByType list above
       if (!fieldsByCredentialType[credentialType].includes(key))
         // API requires these fields to be null
