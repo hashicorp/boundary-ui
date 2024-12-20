@@ -6,12 +6,7 @@
 import { test, authenticatedState } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -20,7 +15,7 @@ import { TargetsPage } from '../pages/targets.js';
 test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({
@@ -107,15 +102,15 @@ test('Multiple Credential Stores (ENT) @ent @aws @docker', async ({
     await page.getByRole('button', { name: 'Dismiss' }).click();
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

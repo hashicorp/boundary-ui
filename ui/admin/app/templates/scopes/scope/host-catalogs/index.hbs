@@ -105,23 +105,7 @@
         <A.Header
           @title={{t 'resources.host-catalog.messages.welcome.title'}}
         />
-        <A.Body
-          {{! can list (at least):  show default welcome message}}
-          {{! can create (only):  show create-but-not-list welcome message}}
-          {{! can neither list nor create:  show neither-list-nor-create welcome message}}
-          @text={{t
-            (if
-              (can 'list model' this.scope collection='host-catalogs')
-              'resources.host-catalog.description'
-              (if
-                (can 'create model' this.scope collection='host-catalogs')
-                'descriptions.create-but-not-list'
-                'descriptions.neither-list-nor-create'
-              )
-            )
-            resource=(t 'resources.host-catalog.title_plural')
-          }}
-        />
+        <A.Body @text={{this.messageDescription}} />
         {{#if (can 'create model' this.scope collection='host-catalogs')}}
           <A.Footer as |F|>
             <F.LinkStandalone

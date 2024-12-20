@@ -36,7 +36,7 @@ export async function createTcpTarget(projectId) {
  * @param {string} projectId ID of the project under which the target will be created.
  * @returns {Promise<string>} new target's ID
  */
-export async function createSshTargetCli(projectId) {
+export async function createSshTarget(projectId) {
   const targetName = 'target-' + nanoid();
   const defaultPort = 22;
   let target;
@@ -61,7 +61,7 @@ export async function createSshTargetCli(projectId) {
  * @param {string} alias alias of the target to be connected to
  * @returns Session information
  */
-export async function authorizeSessionByAliasCli(alias) {
+export async function authorizeSessionByAlias(alias) {
   let session;
   try {
     session = JSON.parse(
@@ -78,7 +78,7 @@ export async function authorizeSessionByAliasCli(alias) {
  * @param {string} targetId Id of the target to be connected to
  * @returns Session information
  */
-export async function authorizeSessionByTargetIdCli(targetId) {
+export async function authorizeSessionByTargetId(targetId) {
   let session;
   try {
     session = JSON.parse(
@@ -98,7 +98,7 @@ export async function authorizeSessionByTargetIdCli(targetId) {
  * @param {string} targetName Name of the target
  * @returns {Promise<string>} ID of the target
  */
-export async function getTargetIdFromNameCli(projectId, targetName) {
+export async function getTargetIdFromName(projectId, targetName) {
   const targets = JSON.parse(
     execSync(`boundary targets list -scope-id ${projectId} -format json`),
   );

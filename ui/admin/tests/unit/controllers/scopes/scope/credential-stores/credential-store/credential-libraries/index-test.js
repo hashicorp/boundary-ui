@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIntl } from 'ember-intl/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { TYPE_CREDENTIAL_STORE_VAULT } from 'api/models/credential-store';
 
 module(
   'Unit | Controller | scopes/scope/credential-stores/credential-store/credential-libraries/index',
@@ -19,6 +20,7 @@ module(
     setupIndexedDb(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
     let store;
     let controller;
     let getCredentialLibraryCount;
@@ -39,6 +41,7 @@ module(
 
     hooks.beforeEach(async function () {
       await authenticateSession({});
+      intl = intl = this.owner.lookup('service:intl');
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/credential-stores/credential-store/credential-libraries/index',
@@ -54,6 +57,7 @@ module(
         scope: { id: instances.scopes.org.id, type: 'org' },
       });
       instances.credentialStore = this.server.create('credential-store', {
+        type: TYPE_CREDENTIAL_STORE_VAULT,
         scope: instances.scopes.project,
       });
       instances.credentialLibrary = this.server.create('credential-library', {
@@ -126,6 +130,43 @@ module(
       controller.edit(credentialLibrary);
 
       assert.true(credentialLibrary.hasDirtyAttributes);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.credentialLibraries);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.credential-library.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.credentialStore.authorized_collection_actions[
+        'credential-libraries'
+      ] = ['create'];
+      await visit(urls.credentialLibraries);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.credential-library.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.credentialStore.authorized_collection_actions[
+        'credential-libraries'
+      ] = [];
+      await visit(urls.credentialLibraries);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.credential-library.title_plural'),
+        }),
+      );
     });
   },
 );
