@@ -34,8 +34,10 @@ export const ALERT_TOAST_BODY =
 export const ALERT_TOAST_DISMISS =
   '[data-test-toast-notification] .hds-dismiss-button';
 
-export const DIALOG_UNSAVED_CHANGES = '.rose-dialog';
-export const DIALOG_UNSAVED_CHANGES_DISCARD =
-  '.rose-dialog-footer button:first-child';
-export const DIALOG_UNSAVED_CHANGES_CANCEL =
-  '.rose-dialog-footer button:last-child';
+export const MODAL_WARNING = 'dialog';
+export const MODAL_WARNING_CONFIRM_BTN =
+  'dialog .hds-modal__footer button:first-child';
+export const MODAL_WARNING_CANCEL_BTN =
+  'dialog .hds-modal__footer button:last-child';
+export const MODAL_WARNING_TITLE = '.hds-modal__header';
+export const MODAL_WARNING_MESSAGE = '.hds-modal__body';

@@ -17,6 +17,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
@@ -55,12 +56,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const BUTTON_ICON_SELECTOR =
     '.hds-button__icon [data-test-icon="check-circle"]';
   const PAGINATION_SELECTOR = '.hds-pagination';
-  const DISCARD_CHANGES_DIALOG = '.rose-dialog';
-  const DISCARD_CHANGES_DISCARD_BUTTON =
-    '.rose-dialog-footer .rose-button-primary';
-  const DISCARD_CHANGES_CANCEL_BUTTON =
-    '.rose-dialog-footer .rose-button-secondary';
-
   const instances = {
     scopes: {
       global: null,
@@ -327,9 +322,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
     await click(`[href="${urls.roles}"]`);
 
-    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(DISCARD_CHANGES_DISCARD_BUTTON);
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.roles);
   });
@@ -344,9 +339,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
     await click(`[href="${urls.roles}"]`);
 
-    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(DISCARD_CHANGES_CANCEL_BUTTON);
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
   });
@@ -456,9 +451,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
     );
     await click(`[href="${urls.roles}"]`);
 
-    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(DISCARD_CHANGES_DISCARD_BUTTON);
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.roles);
   });
@@ -474,9 +469,9 @@ module('Acceptance | roles | org-scope', function (hooks) {
     );
     await click(`[href="${urls.roles}"]`);
 
-    assert.dom(DISCARD_CHANGES_DIALOG).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(DISCARD_CHANGES_CANCEL_BUTTON);
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.manageOrgProjects);
   });

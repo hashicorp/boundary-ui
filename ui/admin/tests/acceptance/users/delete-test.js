@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,7 +82,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(`[href="${urls.user}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -99,7 +100,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(`[href="${urls.user}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(this.server.db.users.length, usersCount);
     assert.strictEqual(currentURL(), urls.user);

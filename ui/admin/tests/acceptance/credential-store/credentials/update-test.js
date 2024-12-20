@@ -16,6 +16,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | credential-stores | credentials | update',
@@ -322,11 +323,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click(
-          '.rose-dialog-footer button:first-of-type',
-          'Click Discard',
-        );
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
@@ -349,11 +347,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click(
-          '.rose-dialog-footer button:first-of-type',
-          'Click Discard',
-        );
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
@@ -376,11 +371,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click(
-          '.rose-dialog-footer button:first-of-type',
-          'Click Discard',
-        );
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
@@ -403,8 +395,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
         assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(
@@ -429,8 +421,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
         assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(
@@ -455,8 +447,8 @@ module(
       try {
         await visit(urls.credentials);
       } catch (e) {
-        assert.dom('.rose-dialog').isVisible();
-        await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+        assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+        await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.jsonCredential);
         assert.strictEqual(find('[name="name"]').value, mockInput);
         assert.strictEqual(

@@ -166,8 +166,8 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     try {
       await visit(urls.hosts);
     } catch (e) {
-      assert.dom(commonSelectors.DIALOG_UNSAVED_CHANGES).exists();
-      await click(commonSelectors.DIALOG_UNSAVED_CHANGES_DISCARD);
+      assert.dom(commonSelectors.MODAL_WARNING).exists();
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hosts);
       assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
       assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
@@ -195,8 +195,8 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     try {
       await visit(urls.hosts);
     } catch (e) {
-      assert.dom(commonSelectors.DIALOG_UNSAVED_CHANGES).exists();
-      await click(commonSelectors.DIALOG_UNSAVED_CHANGES_CANCEL);
+      assert.dom(commonSelectors.MODAL_WARNING).exists();
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.host);
       assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
