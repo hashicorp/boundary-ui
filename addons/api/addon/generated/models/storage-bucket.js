@@ -70,6 +70,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   @attr('string', {
     isNestedAttribute: true,
     description: 'The AWS region to use.',
+    trimWhitespace: true,
   })
   region;
 
@@ -109,6 +110,7 @@ export default class GeneratedStorageBucketModel extends BaseModel {
   @attr('string', {
     isNestedAttribute: true,
     description: 'The role ARN to use.',
+    trimWhitespace: true,
   })
   role_arn;
 
