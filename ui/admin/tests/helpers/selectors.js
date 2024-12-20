@@ -39,5 +39,5 @@ export const MODAL_WARNING_CONFIRM_BTN =
   'dialog .hds-modal__footer button:first-child';
 export const MODAL_WARNING_CANCEL_BTN =
   'dialog .hds-modal__footer button:last-child';
-export const DIALOG_TITLE_SELECTOR = '.hds-modal__header';
-export const DIALOG_MESSAGE_SELECTOR = '.hds-modal__body';
+export const MODAL_WARNING_TITLE = '.hds-modal__header';
+export const MODAL_WARNING_MESSAGE = '.hds-modal__body';

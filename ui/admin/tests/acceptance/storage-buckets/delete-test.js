@@ -103,14 +103,14 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await click(DELETE_DROPDOWN_SELECTOR);
 
     assert
-      .dom(commonSelectors.DIALOG_TITLE_SELECTOR)
+      .dom(commonSelectors.MODAL_WARNING_TITLE)
       .hasText(
         intl.t(
           'resources.storage-bucket.questions.delete-storage-bucket.title',
         ),
       );
     assert
-      .dom(commonSelectors.DIALOG_MESSAGE_SELECTOR)
+      .dom(commonSelectors.MODAL_WARNING_MESSAGE)
       .hasText(
         intl.t(
           'resources.storage-bucket.questions.delete-storage-bucket.message',
