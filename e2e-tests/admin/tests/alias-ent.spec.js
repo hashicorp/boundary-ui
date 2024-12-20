@@ -12,6 +12,7 @@ import { AliasesPage } from '../pages/aliases.js';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 test.use({ storageState: authenticatedState });
@@ -35,6 +36,7 @@ test.describe('Aliases (Enterprise)', async () => {
     await page.goto('/');
     let orgName;
     let alias;
+    let connect;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
       const orgsPage = new OrgsPage(page);
@@ -83,9 +85,16 @@ test.describe('Aliases (Enterprise)', async () => {
         adminLoginName,
         adminPassword,
       );
-      await boundaryCli.authorizeSessionByAlias(alias);
+      connect = await boundaryCli.connectSshToAlias(alias);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
 
       // Clear destination from alias
+      await page
+        .getByRole('navigation', { name: 'Resources' })
+        .getByRole('link', { name: 'Targets' })
+        .click();
+      await page.getByRole('link', { name: targetName }).click();
       await page.getByRole('link', { name: alias }).click();
       // Note: On the Target details page, there is a section with the header
       // "Aliases". The extra check here is to ensure that we are on the Alias
@@ -101,6 +110,9 @@ test.describe('Aliases (Enterprise)', async () => {
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
     } finally {
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
@@ -133,6 +145,7 @@ test.describe('Aliases (Enterprise)', async () => {
     await page.goto('/');
     let orgName;
     let alias;
+    let connect;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
       const orgsPage = new OrgsPage(page);
@@ -165,8 +178,13 @@ test.describe('Aliases (Enterprise)', async () => {
       );
 
       // Connect to target using alias
-      await boundaryCli.authorizeSessionByAlias(alias);
+      connect = await boundaryCli.connectSshToAlias(alias);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
     } finally {
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
@@ -201,6 +219,7 @@ test.describe('Aliases (Enterprise)', async () => {
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     let orgId;
     let alias;
+    let connect;
     try {
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
@@ -243,8 +262,19 @@ test.describe('Aliases (Enterprise)', async () => {
       alias = 'example.alias.' + nanoid();
       const aliasesPage = new AliasesPage(page);
       await aliasesPage.createAliasForTarget(alias, targetId);
-      await boundaryCli.authorizeSessionByAlias(alias);
+      connect = await boundaryCli.connectSshToAlias(alias);
+      await page
+        .getByRole('navigation', { name: 'General' })
+        .getByRole('link', { name: 'Orgs' })
+        .click();
+      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('link', { name: projectName }).click();
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
     } finally {
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
