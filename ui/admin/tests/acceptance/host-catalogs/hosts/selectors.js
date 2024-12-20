@@ -5,6 +5,8 @@
 
 export const MANAGE_DROPDOWN_HOST_CATALOG =
   '[data-test-manage-host-catalogs-dropdown] button:first-child';
+export const MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST =
+  '[data-test-manage-host-catalogs-dropdown] ul li:first-child a';
 export const MANAGE_DROPDOWN_HOST =
   '[data-test-manage-hosts-dropdown] button:first-child';
 export const MANAGE_DROPDOWN_HOST_DELETE =
