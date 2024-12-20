@@ -9,6 +9,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | credential-stores | credentials | delete',
@@ -182,7 +183,7 @@ module(
       await visit(urls.usernamePasswordCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-primary');
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -198,7 +199,7 @@ module(
       await visit(urls.usernameKeyPairCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-primary');
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -213,7 +214,7 @@ module(
       await visit(urls.jsonCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-primary');
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
@@ -226,7 +227,7 @@ module(
       await visit(urls.usernamePasswordCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-secondary');
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -242,7 +243,7 @@ module(
       await visit(urls.usernameKeyPairCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-secondary');
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -257,7 +258,7 @@ module(
       await visit(urls.jsonCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      await click('.rose-dialog footer .rose-button-secondary');
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });

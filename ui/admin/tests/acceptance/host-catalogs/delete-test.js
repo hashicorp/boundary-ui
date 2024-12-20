@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -97,7 +98,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await click(`[href="${urls.hostCatalog}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -115,7 +116,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await click(`[href="${urls.hostCatalog}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount);
     assert.strictEqual(currentURL(), urls.hostCatalog);

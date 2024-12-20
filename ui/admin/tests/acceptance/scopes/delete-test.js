@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | scopes | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -92,7 +93,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(`[href="${urls.orgScopeEdit}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
     assert.strictEqual(currentURL(), urls.globalScope);
@@ -107,7 +108,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(`[href="${urls.orgScopeEdit}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
