@@ -106,8 +106,8 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toBeVisible();
 
     // Change state to active-public
-    page.getByTitle('Inactive').click();
-    page.getByText('Public').click();
+    await page.getByTitle('Inactive').click();
+    await page.getByText('Public').click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
@@ -190,13 +190,62 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
       .click();
     await page.getByRole('link', { name: ldapAuthMethodName }).click();
     await page.getByRole('link', { name: 'Accounts' }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Accounts'),
+    ).toBeVisible();
 
-    const headersCount = await page
+    let headersCount = await page
       .getByRole('table')
       .getByRole('columnheader')
       .count();
     let fullNameIndex;
     let emailIndex;
+    for (let i = 0; i < headersCount; i++) {
+      const header = await page
+        .getByRole('table')
+        .getByRole('columnheader')
+        .nth(i)
+        .innerText();
+      if (header == 'Full Name') {
+        fullNameIndex = i;
+      } else if (header == 'Email') {
+        emailIndex = i;
+      }
+    }
+
+    expect(
+      await page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(fullNameIndex)
+        .innerText(),
+    ).toBe(ldapUserName);
+    expect(
+      await page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(emailIndex)
+        .innerText(),
+    ).toBe(ldapUserName + '@mail.com');
+
+    // View the Managed Group
+    await page.getByRole('link', { name: 'Managed Groups' }).click();
+    await page.getByRole('link', { name: ldapManagedGroupName }).click();
+    await page.getByRole('link', { name: 'Members' }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Members'),
+    ).toBeVisible();
+
+    headersCount = await page
+      .getByRole('table')
+      .getByRole('columnheader')
+      .count();
     for (let i = 0; i < headersCount; i++) {
       const header = await page
         .getByRole('table')
