@@ -210,16 +210,18 @@ test.describe('Filtering sessions tests', async () => {
     ).toBeVisible();
   });
 
-  test('Filters by status', async ({ authedPage }) => {
+  test('Filters by status', async ({ authedPage, tesseract, textToSearch }) => {
     await authedPage
       .getByRole('row', { name: sshTarget.name })
       .getByRole('link')
       .first()
       .click();
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    await expect
-      .poll(async () => await authedPage.locator('.xterm-screen').screenshot())
-      .toMatchSnapshot('ssh-terminal.png', { maxDiffPixels: 5000 });
+    await expect(async () => {
+      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const result = await tesseract.recognize(screenshot);
+      expect(result.data.text).toContain(textToSearch);
+    }).toPass();
     await authedPage.getByRole('link', { name: 'Sessions' }).click();
 
     await authedPage.getByRole('button', { name: 'Clear Filters' }).click();
