@@ -181,11 +181,16 @@ test.describe('Filtering sessions tests', async () => {
     await expect(
       authedPage.getByRole('button', { name: 'Clear Filters' }),
     ).toBeHidden();
-    for (const cancel of await authedPage.getByLabel('Cancel').all()) {
-      await cancel.click();
-    }
 
-    await expect(authedPage.getByLabel('Cancel')).toHaveCount(0);
+    await expect(async () => {
+      await authedPage.getByRole('button', { name: 'Refresh' }).click();
+      for (const cancel of await authedPage.getByLabel('Cancel').all()) {
+        await cancel.click();
+      }
+      await expect(
+        authedPage.getByRole('cell', { name: /(Pending|Active)/ }),
+      ).toHaveCount(0);
+    }).toPass();
   });
 
   test('Filters by target', async ({ authedPage }) => {
@@ -206,16 +211,18 @@ test.describe('Filtering sessions tests', async () => {
     ).toBeVisible();
   });
 
-  test('Filters by status', async ({ authedPage }) => {
+  test('Filters by status', async ({ authedPage, tesseract, textToSearch }) => {
     await authedPage
       .getByRole('row', { name: sshTarget.name })
       .getByRole('link')
       .first()
       .click();
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    await expect
-      .poll(async () => await authedPage.locator('.xterm-screen').screenshot())
-      .toMatchSnapshot('ssh-terminal.png', { maxDiffPixels: 5000 });
+    await expect(async () => {
+      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const result = await tesseract.recognize(screenshot);
+      expect(result.data.text).toContain(textToSearch);
+    }).toPass();
     await authedPage.getByRole('link', { name: 'Sessions' }).click();
 
     await authedPage.getByRole('button', { name: 'Clear Filters' }).click();
