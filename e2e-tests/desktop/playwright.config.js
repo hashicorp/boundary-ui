@@ -16,7 +16,6 @@ export default defineConfig({
       Authorization: `Bearer ${process.env.E2E_TOKEN}`,
     },
   },
-  snapshotPathTemplate: '{testDir}/snapshots/{arg}{ext}',
   expect: {
     timeout: 10000,
   },

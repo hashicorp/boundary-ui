@@ -5,6 +5,7 @@
 
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
+import { textToMatch } from '../fixtures/tesseractTest.js';
 
 const hostName = 'Host name for test';
 let org;
@@ -215,7 +216,7 @@ test.describe('Targets tests', () => {
     });
   });
 
-  test('Connects to an SSH target', async ({ authedPage }) => {
+  test('Connects to an SSH target', async ({ authedPage, tesseract }) => {
     await authedPage.getByRole('link', { name: sshTarget.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
 
@@ -225,11 +226,11 @@ test.describe('Targets tests', () => {
 
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
 
-    // If regenerating a screenshot, add a timeout so it waits until the connection finishes
-    // await authedPage.waitForTimeout(3000);
-    await expect
-      .poll(async () => await authedPage.locator('.xterm-screen').screenshot())
-      .toMatchSnapshot('ssh-terminal.png', { maxDiffPixels: 5000 });
+    await expect(async () => {
+      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const result = await tesseract.recognize(screenshot);
+      expect(result.data.text).toMatch(textToMatch);
+    }).toPass();
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
