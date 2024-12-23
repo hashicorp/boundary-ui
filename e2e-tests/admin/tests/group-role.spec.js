@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { GroupsPage } from '../pages/groups.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
