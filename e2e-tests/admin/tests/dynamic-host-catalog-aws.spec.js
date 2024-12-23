@@ -110,26 +110,20 @@ test.describe('AWS', async () => {
       ).toBeVisible();
 
       // Check number of hosts in host set
-      let i = 0;
-      let rowCount = 0;
-      let expectedHosts = JSON.parse(awsHostSetIps);
-      do {
-        i = i + 1;
-        // Getting the number of rows in the second rowgroup (the first rowgroup is the header row)
-        rowCount = await page
+      const expectedHosts = JSON.parse(awsHostSetIps);
+      await expect(async () => {
+        const rowCount = await page
           .getByRole('table')
-          .getByRole('rowgroup')
-          .nth(1)
           .getByRole('row')
+          .filter({ hasNot: page.getByRole('columnheader') })
           .count();
         await page.reload();
         await page
           .getByRole('navigation', { name: 'breadcrumbs' })
           .getByText(hostSetName)
           .waitFor();
-      } while (i < 5);
-
-      expect(rowCount).toBe(expectedHosts.length);
+        expect(rowCount).toBe(expectedHosts.length);
+      }).toPass();
 
       // Navigate to each host in the host set
       for (let i = 0; i < expectedHosts.length; i++) {
