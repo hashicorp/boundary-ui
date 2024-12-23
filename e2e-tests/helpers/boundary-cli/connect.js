@@ -37,6 +37,8 @@ export async function connectToTarget(
       }
     },
   );
+  // Wait for 2 seconds to allow for a connection to establish
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return connect;
 }
 
@@ -72,6 +74,8 @@ export async function connectToAlias(
       }
     },
   );
+  // Wait for 2 seconds to allow for a connection to establish
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return connect;
 }
 
@@ -97,6 +101,8 @@ export async function connectSshToTarget(targetId, ignoreErrors = false) {
       }
     },
   );
+  // Wait for 2 seconds to allow for a connection to establish
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return connect;
 }
 
@@ -121,5 +127,7 @@ export async function connectSshToAlias(alias) {
       }
     },
   );
+  // Wait for 2 seconds to allow for a connection to establish
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return connect;
 }
