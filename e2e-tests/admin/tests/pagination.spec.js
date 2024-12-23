@@ -3,12 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
 import * as boundaryHttp from '../../helpers/boundary-http.js';
-
-test.use({ storageState: authenticatedState });
 
 test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
   page,

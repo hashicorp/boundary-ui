@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
@@ -16,8 +16,6 @@ import { SessionsPage } from '../pages/sessions.js';
 import { StorageBucketsPage } from '../pages/storage-buckets.js';
 import { StoragePoliciesPage } from '../pages/storage-policies.js';
 import { TargetsPage } from '../pages/targets.js';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();

@@ -3,14 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { OrgsPage } from '../pages/orgs.js';
 import { StoragePoliciesPage } from '../pages/storage-policies.js';
-
-test.use({ storageState: authenticatedState });
 
 test('Global Settings @ent @aws @docker', async ({
   page,

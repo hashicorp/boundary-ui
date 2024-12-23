@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
@@ -21,8 +21,6 @@ const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
