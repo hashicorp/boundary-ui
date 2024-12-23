@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { execSync } from 'node:child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
@@ -14,8 +14,6 @@ import { WorkersPage } from '../pages/workers.js';
 
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
-
-test.use({ storageState: authenticatedState });
 
 // Setting the test timeout to 180s
 // This test can often exceed the globally defined timeout due to the number of

@@ -13,6 +13,9 @@ import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { UsersPage } from '../pages/users.js';
 
+// Reset storage state for this file to avoid being authenticated
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
 });

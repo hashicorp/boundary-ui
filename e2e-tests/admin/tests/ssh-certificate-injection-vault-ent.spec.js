@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
@@ -20,8 +20,6 @@ const boundaryPolicyName = 'boundary-controller';
 const secretsPath = 'e2e_secrets';
 // This must match the secret name in ssh-policy.hcl
 const secretName = 'boundary-client';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
