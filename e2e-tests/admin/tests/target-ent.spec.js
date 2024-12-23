@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
@@ -13,8 +13,6 @@ import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
 import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
@@ -60,7 +58,12 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
+    connect = await boundaryCli.connectToTarget(
+      targetId,
+      sshUser,
+      sshKeyPath,
+      true,
+    );
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -130,7 +133,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId);
+    connect = await boundaryCli.connectSshToTarget(targetId, true);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -232,7 +235,7 @@ test('SSH target with host sources @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId);
+    connect = await boundaryCli.connectSshToTarget(targetId, true);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
