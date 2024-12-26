@@ -97,13 +97,14 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     });
     // Fetch the endpoint and get the response JSON
     const response = await fetch(url, { method: 'post', body });
+    const json = await response.json();
     if (response.status === 202) {
       // The token isn't ready yet, keep trying.
       return false;
     } else if (response.status < 400) {
       // Response was successful, meaning a token was obtained.
       // Authenticate with the session service using the response JSON.
-      const json = await response.json();
+      // const json = await response.json();
       await this.session.authenticate('authenticator:oidc', json);
       return true;
     } else {

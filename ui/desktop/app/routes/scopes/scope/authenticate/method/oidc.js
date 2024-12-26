@@ -31,7 +31,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     return oidc.attemptFetchToken({ scope, authMethod });
   }
 
-  @runEvery(POLL_TIMEOUT_SECONDS * 10000000)
+  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
   poller() {
     this.refresh();
   }
