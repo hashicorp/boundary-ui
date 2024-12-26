@@ -5,7 +5,7 @@
 
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
-import { waitForPromise } from '@ember/test-waiters';
+// import { waitForPromise } from '@ember/test-waiters';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -119,14 +119,12 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   async invalidate(options) {
     const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
-    await waitForPromise(
-      fetch(deauthEndpointURL, {
-        method: 'delete',
-        headers: { Authorization: `Bearer ${token}` },
-      }).catch(() => {
-        /* no op */
-      }),
-    );
+    await fetch(deauthEndpointURL, {
+      method: 'delete',
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => {
+      /* no op */
+    });
     return super.invalidate(...arguments);
   }
 }
