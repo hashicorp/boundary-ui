@@ -6,6 +6,7 @@
 import RESTSerializer from '@ember-data/serializer/rest';
 import { underscore } from '@ember/string';
 import { get } from '@ember/object';
+import { typeOf } from '@ember/utils';
 
 /**
  * Manages serialization/normalization of data to/from the API.
@@ -42,7 +43,7 @@ export default class ApplicationSerializer extends RESTSerializer {
    */
   serializeAttribute(snapshot, json, key, attribute) {
     const { type, options } = attribute;
-    const { type: recordType } = snapshot.record;
+    const { type: recordType, compositeType } = snapshot.record;
     let value = super.serializeAttribute(...arguments);
     // Remove secret attributes that are null or empty
     if (options.isSecret) {
@@ -74,18 +75,33 @@ export default class ApplicationSerializer extends RESTSerializer {
       delete json[key];
     }
     // If an attribute has a `for` option, it must match the
-    // record's `type`, else the attribute is excluded
+    // record's `type`, otherwise the attribute is excluded
     // from serialization.
-    //note: This doesn't handle secrets yet, we can add support for them if needed.
-    if (
-      options?.for &&
-      options.for !== recordType &&
-      !options.for.includes(recordType)
-    ) {
-      if (options.isNestedAttribute) {
-        delete json?.attributes?.[key];
-      } else {
-        delete json[key];
+
+    if (options?.for) {
+      // Check the typeof the `for` option to determine if it is a plugin or not
+      const isPlugin =
+        typeOf(options.for) === 'object' && options.for.type === 'plugin';
+      const isNotPlugin = typeOf(options.for) === 'string';
+
+      // Helper function to handle deleting attribute and secret keys
+      const deleteKey = (json) => {
+        if (options.isNestedAttribute) {
+          delete json?.attributes?.[key];
+        } else if (options.isNestedSecret && json?.secrets?.[key]) {
+          delete json.secrets[key];
+        } else {
+          delete json[key];
+        }
+      };
+
+      // For plugins, the `for` option is an object with a `name` key
+      // For non-plugins, the `for` option is a string
+      if (
+        (isPlugin && !options.for.name.includes(compositeType)) ||
+        (isNotPlugin && !options.for.includes(recordType))
+      ) {
+        deleteKey(json);
       }
     }
     return value;
