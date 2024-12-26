@@ -60,12 +60,10 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
     // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
-    const response = await waitForPromise(
-      fetch(tokenValidationURL, {
-        method: 'get',
-        headers: { Authorization: `Bearer ${token}` },
-      }),
-    );
+    const response = await fetch(tokenValidationURL, {
+      method: 'get',
+      headers: { Authorization: `Bearer ${token}` },
+    });
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     if (response.status === 401 || response.status === 404) return reject();
