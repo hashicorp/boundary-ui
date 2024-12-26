@@ -26,6 +26,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
 
     // Remove attributes that are not applicable to the current credential type for the same plugin
     // For example, 'aws' dynamic plugin has two credential types: 'static' and 'dynamic'
+    // API expects the fields to be 'null' for the fields that are not from the current credential type (that's why we are not using the application serializer for this, where we delete attrs)
     if (
       isSamePluginName &&
       typeOf(options.for) === 'object' &&
