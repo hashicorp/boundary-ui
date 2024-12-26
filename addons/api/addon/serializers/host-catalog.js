@@ -24,7 +24,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     const { options } = attribute;
     const isSamePluginName = options?.for?.name?.includes(compositeType);
 
-    // Remove attributes that are not for the current credential type of the same plugin
+    // Remove attributes that are not applicable to the current credential type for the same plugin
     // For example, 'aws' dynamic plugin has two credential types: 'static' and 'dynamic'
     if (
       isSamePluginName &&
