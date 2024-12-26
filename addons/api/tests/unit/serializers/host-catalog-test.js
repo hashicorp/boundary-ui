@@ -33,6 +33,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'static',
       description: 'this is a static host-catalog',
       type: 'static',
+      attributes: {},
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
@@ -125,7 +126,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new aws dynamic plugin as expected', async function (assert) {
+  test('it serializes a new aws dynamic credential type plugin as expected', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
@@ -134,7 +135,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       description: 'this is a Aws plugin host-catalog',
       disable_credential_rotation: true,
       worker_filter: 'workerfilter',
-      // these are AWS fields and should be included
+      // these are static AWS fields and should be excluded
       region: 'west',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
@@ -165,11 +166,12 @@ module('Unit | Serializer | host catalog', function (hooks) {
         role_arn: 'test',
         role_tags: { Project: 'Automation', foo: 'bar' },
       },
+      secrets: {},
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new aws static plugin as expected, ignoring azure and GCP fields', async function (assert) {
+  test('it serializes a new aws static credential type plugin as expected, ignoring azure and GCP fields', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,

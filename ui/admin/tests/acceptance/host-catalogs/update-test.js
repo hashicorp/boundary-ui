@@ -83,6 +83,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   test('can update static AWS credentials to Dynamic AWS credentials', async function (assert) {
     await visit(urls.AWSHostCatalogWithStaticCredential);
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+
     assert.strictEqual(
       find(CREDENTIAL_TYPE_SELECTOR).value,
       'static-credential',
