@@ -5,6 +5,7 @@
 
 import ApplicationSerializer from './application';
 import { TYPE_CREDENTIAL_DYNAMIC } from '../models/host-catalog';
+import { typeOf } from '@ember/utils';
 
 export default class HostCatalogSerializer extends ApplicationSerializer {
   serialize(snapshot) {
@@ -43,64 +44,6 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
         delete json[key];
       }
     }
-    // Clean up empty attributes and secrets
-    this._cleanUpEmptyObjects(json);
     return value;
-  }
-
-  // This removes invalid fields based on composite type
-  _removeInvalidFields(json, key, validCompositeTypes, compositeType) {
-    if (!validCompositeTypes.includes(compositeType)) {
-      delete json[key];
-    }
-  }
-
-  // This handles nested attributes for plugins by comparing the composite types first and then the credential types
-  // NOTE: we will need to set the credential types to null as that's how the API expects it
-  _handleNestedAttributes(json, key, options, compositeType, credentialType) {
-    const {
-      compositeType: validCompositeTypes,
-      credentialType: validCredentialType,
-    } = options;
-    if (validCompositeTypes && !validCompositeTypes.includes(compositeType)) {
-      delete json.attributes[key];
-    } else if (validCredentialType && validCredentialType !== credentialType) {
-      json.attributes[key] = null;
-    }
-  }
-
-  // This handles nested secret fields for plugins for composite types and credential types
-  _handleNestedSecrets(json, key, options, compositeType, credentialType) {
-    const {
-      compositeType: validCompositeTypes,
-      credentialType: validCredentialType,
-    } = options;
-    this._removeSecrets(
-      json.secrets,
-      key,
-      validCompositeTypes && !validCompositeTypes.includes(compositeType),
-    );
-    this._removeSecrets(
-      json.secrets,
-      key,
-      validCredentialType && validCredentialType !== credentialType,
-    );
-  }
-
-  // This removes secrets based on a condition
-  _removeSecrets(json, key, condition) {
-    if (condition) {
-      delete json?.[key];
-    }
-  }
-
-  // Delete empty secrets/attributes
-  _cleanUpEmptyObjects(json) {
-    if (json.secrets && Object.keys(json.secrets).length === 0) {
-      delete json.secrets;
-    }
-    if (json.attributes && Object.keys(json.attributes).length === 0) {
-      delete json.attributes;
-    }
   }
 }
