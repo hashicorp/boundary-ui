@@ -6,10 +6,10 @@
 import BaseAuthenticator from './base';
 import { inject as service } from '@ember/service';
 import { reject } from 'rsvp';
-// import { waitForPromise } from '@ember/test-waiters';
+import { waitForPromise } from '@ember/test-waiters';
 
 /**
- * The OIDC base authenticator encapsulates the multistep OIDC flow.
+ * The OIDC base authenticator encapsulates the multi-step OIDC flow.
  *
  * 1. Start authentication flow:  this step is actually a combination of two
  *    sub steps:
@@ -49,7 +49,10 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     const body = JSON.stringify({ command: 'start' });
     // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
-    const response = await fetch(url, { method: 'post', body });
+    const response = await waitForPromise(fetch(url, { method: 'post', body }));
+
+    // Note: Always consume response object in order to avoid memory leaks.
+    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
     const json = await response.json();
     if (response.status < 400) {
       // Store meta about the pending OIDC flow
@@ -96,7 +99,7 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
       },
     });
     // Fetch the endpoint and get the response JSON
-    const response = await fetch(url, { method: 'post', body });
+    const response = await waitForPromise(fetch(url, { method: 'post', body }));
     const json = await response.json();
     if (response.status === 202) {
       // The token isn't ready yet, keep trying.

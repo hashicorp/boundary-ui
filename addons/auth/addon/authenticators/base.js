@@ -5,7 +5,7 @@
 
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
-// import { waitForPromise } from '@ember/test-waiters';
+import { waitForPromise } from '@ember/test-waiters';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -60,10 +60,16 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
     // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
-    const response = await fetch(tokenValidationURL, {
-      method: 'get',
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await waitForPromise(
+      fetch(tokenValidationURL, {
+        method: 'get',
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    );
+    console.log('TESTING VALIDATE TOKEN!!');
+    // Note: Always consume response object in order to avoid memory leaks.
+    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
+    await response.json();
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     if (response.status === 401 || response.status === 404) return reject();
@@ -119,12 +125,16 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   async invalidate(options) {
     const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
-    await fetch(deauthEndpointURL, {
-      method: 'delete',
-      headers: { Authorization: `Bearer ${token}` },
-    }).catch(() => {
-      /* no op */
-    });
+    const response = await waitForPromise(
+      fetch(deauthEndpointURL, {
+        method: 'delete',
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {
+        /* no op */
+      }),
+    );
+    await response.json();
+    console.log('TESTING LOGGING OUT (invalidate)');
     return super.invalidate(...arguments);
   }
 }
