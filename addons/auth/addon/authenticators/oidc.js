@@ -50,9 +50,6 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
     const response = await waitForPromise(fetch(url, { method: 'post', body }));
-
-    // Note: Always consume response object in order to avoid memory leaks.
-    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
     const json = await response.json();
     if (response.status < 400) {
       // Store meta about the pending OIDC flow
@@ -101,8 +98,10 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     // Fetch the endpoint and get the response JSON
     const response = await waitForPromise(fetch(url, { method: 'post', body }));
 
-    // Note: Always consume response object in order to avoid memory leaks.
+    // Note: Always consume response body in order to avoid memory leaks
     // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
+    // We do not use the undici package but the link informs us that garbage
+    // collection is undefined when response body is not consumed.
     const json = await response.json();
 
     if (response.status === 202) {
@@ -111,7 +110,6 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     } else if (response.status < 400) {
       // Response was successful, meaning a token was obtained.
       // Authenticate with the session service using the response JSON.
-      // const json = await response.json();
       await this.session.authenticate('authenticator:oidc', json);
       return true;
     } else {
