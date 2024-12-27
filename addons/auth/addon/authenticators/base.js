@@ -63,16 +63,15 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
     const response = await waitForPromise(
       fetch(tokenValidationURL, {
-        method: 'head',
+        method: 'get',
         headers: { Authorization: `Bearer ${token}` },
       }),
     );
-    // Note: HEAD request is made here to avoid dealing with a response body
+    // Note: Always consume response body in order to avoid memory leaks
     // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
     // We do not use the undici package but the link informs us that garbage
     // collection is undefined when response body is not consumed.
-
-    console.log('TESTING VALIDATE TOKEN!!', response);
+    await response.json();
 
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
