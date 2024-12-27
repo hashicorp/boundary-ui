@@ -30,12 +30,7 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
     // TODO: delegate this call from the session service so that we don't have
     // to look up the authenticator directly
     const json = await oidc.startAuthentication(options);
-    console.log('startOIDC -----------------------------');
-    console.log(json);
-
     await this.openExternalOIDCFlow(json.attributes.auth_url);
-    console.log('open external done!');
-    console.log('------------------------------------');
   }
 
   /**
@@ -80,7 +75,6 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
           authMethod,
         });
         this.router.transitionTo('scopes.scope.authenticate.method.oidc');
-        console.log('route transition called');
         break;
     }
   }

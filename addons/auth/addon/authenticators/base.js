@@ -105,10 +105,6 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     // The `attributes` field exists on the Go side for its convenience but is
     // unnecessary here.
     Object.assign(data, data.attributes);
-    console.log('NormalizeData function ---------------------');
-    console.log(data);
-    console.log(username);
-    console.log('---------------------------------------------');
     // Add booleans indicated the scope type
     data.isGlobal = data?.scope?.type === 'global';
     data.isOrg = data?.scope?.type === 'org';
@@ -127,7 +123,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
   async invalidate(options) {
     const { token } = options;
     const deauthEndpointURL = this.buildDeauthEndpointURL(options);
-    const response = await waitForPromise(
+    await waitForPromise(
       fetch(deauthEndpointURL, {
         method: 'delete',
         headers: { Authorization: `Bearer ${token}` },
@@ -135,10 +131,6 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
         /* no op */
       }),
     );
-    // await response.json();
-    const contentType = response.headers.get('content-type');
-    console.log('TESTING LOGGING OUT (invalidate)', response, contentType);
-
     return super.invalidate(...arguments);
   }
 }
