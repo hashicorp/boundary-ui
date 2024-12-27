@@ -100,7 +100,11 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     });
     // Fetch the endpoint and get the response JSON
     const response = await waitForPromise(fetch(url, { method: 'post', body }));
+
+    // Note: Always consume response object in order to avoid memory leaks.
+    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
     const json = await response.json();
+    console.log('attempt fetch token response: ', response);
     if (response.status === 202) {
       // The token isn't ready yet, keep trying.
       return false;

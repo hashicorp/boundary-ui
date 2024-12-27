@@ -66,10 +66,8 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
         headers: { Authorization: `Bearer ${token}` },
       }),
     );
-    console.log('TESTING VALIDATE TOKEN!!');
-    // Note: Always consume response object in order to avoid memory leaks.
-    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
-    await response.json();
+    console.log('TESTING VALIDATE TOKEN!!', response);
+
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     if (response.status === 401 || response.status === 404) return reject();
@@ -133,8 +131,8 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
         /* no op */
       }),
     );
-    await response.json();
-    console.log('TESTING LOGGING OUT (invalidate)');
+    // await response.json();
+    console.log('TESTING LOGGING OUT (invalidate)', response);
     return super.invalidate(...arguments);
   }
 }
