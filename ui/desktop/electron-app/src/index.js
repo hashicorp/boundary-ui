@@ -156,16 +156,10 @@ const createWindow = (partition, closeWindowCB) => {
   });
 
   // Opens external links in the host default browser.
-  // We allow developer.hashicorp.com domain to open on external window
-  // and releases.hashicorp.com domain to download the desktop app or
-  // link to the release page for the desktop app.
+  // We allow secure links and localhost to open an external window.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (
-      isLocalhost(url) ||
-      url.startsWith('https://developer.hashicorp.com/') ||
-      url.startsWith('https://releases.hashicorp.com/boundary-desktop/') ||
-      url.startsWith('https://support.hashicorp.com/hc/en-us')
-    ) {
+    const isSecure = url.startsWith('https://');
+    if (isSecure || isLocalhost(url)) {
       shell.openExternal(url);
     }
 
