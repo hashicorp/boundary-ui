@@ -117,24 +117,25 @@ test.describe('AWS', async () => {
           .getByRole('row')
           .filter({ hasNot: page.getByRole('columnheader') })
           .count();
-        await page.reload();
-        await page
-          .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByText(hostSetName)
-          .waitFor();
+
+        if (rowCount !== expectedHosts.length) {
+          await page.reload();
+          await page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText(hostSetName)
+            .waitFor();
+        }
         expect(rowCount).toBe(expectedHosts.length);
       }).toPass();
 
       // Navigate to each host in the host set
-      for (let i = 0; i < expectedHosts.length; i++) {
-        const host = page
-          .getByRole('table')
-          .getByRole('rowgroup')
-          .nth(1)
-          .getByRole('row')
-          .nth(i)
-          .getByRole('link');
-
+      for (const row of await page
+        .getByRole('table')
+        .getByRole('rowgroup')
+        .nth(1)
+        .getByRole('row')
+        .all()) {
+        const host = row.getByRole('link');
         let hostName = await host.innerText();
         await host.click();
         await expect(
