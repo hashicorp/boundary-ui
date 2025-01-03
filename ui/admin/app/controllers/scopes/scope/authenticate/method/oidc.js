@@ -3,21 +3,35 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ScopesScopeAuthenticateMethodOidcController extends Controller {
+  @controller('scopes/scope/authenticate/method/index') authenticateMethod;
+
   // =services
 
   @service session;
 
-  // =attributes
+  // =actions
 
   /**
-   * Authentication URL for the pending OIDC flow, if any.
-   * @type {?string}
+   * Retry by starting a new OIDC authentication flow.
+   * @param {object} e
    */
-  get authURL() {
-    return this.session.data.pending.oidc.attributes.auth_url;
+  @action
+  async retryAuthentication(e) {
+    // TODO: These event handlers can be removed when rose dialog gets
+    // refactored to use hds.
+    e.preventDefault();
+    e.stopPropagation();
+
+    const scope = this.authMethod.scope;
+    const authenticatorName = `authenticator:${this.authMethod.type}`;
+    await this.authenticateMethod.startOIDCAuthentication(authenticatorName, {
+      scope,
+      authMethod: this.authMethod,
+    });
   }
 }
