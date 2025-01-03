@@ -17,7 +17,6 @@ const remoteCommand =
 async function spawnConnection(command, args) {
   return new Promise((resolve, reject) => {
     const childProcess = spawn(command, args, {
-      detached: true,
       shell: true,
     });
     childProcess.stdout.on('data', (data) => {
@@ -26,7 +25,7 @@ async function spawnConnection(command, args) {
       }
     });
     childProcess.stderr.on('data', (data) => {
-      if (!data.toString().includes('Warning')) {
+      if (!data.toString().includes('Warning: Permanently added')) {
         reject(data.toString());
       }
     });
