@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import { TYPE_HOST_CATALOG_PLUGIN_GCP } from 'api/models/host-catalog';
 
 module('Unit | Serializer | application', function (hooks) {
   setupTest(hooks);
@@ -133,7 +134,7 @@ module('Unit | Serializer | application', function (hooks) {
     });
   });
 
-  test('it serializes attributes with `for` option containing array or string correctly', function (assert) {
+  test('it serializes attributes with `for` option containing array or string correctly for non plugins', function (assert) {
     let store = this.owner.lookup('service:store');
     let record = store.createRecord('auth-method', {
       type: TYPE_AUTH_METHOD_OIDC, //has both string and array `for` option
@@ -182,6 +183,53 @@ module('Unit | Serializer | application', function (hooks) {
         prompts: ['consent'],
       },
     });
+  });
+
+  test('it serializes attributes with `for` option containing array or string correctly for plugin types', function (assert) {
+    let store = this.owner.lookup('service:store');
+    let record = store.createRecord('host-catalog', {
+      compositeType: TYPE_HOST_CATALOG_PLUGIN_GCP,
+      name: 'GCP plugin',
+      description: 'this is a GCP plugin host-catalog',
+      disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
+      access_key_id: 'foobars',
+      secret_access_key: 'testing',
+      secret_id: 'a1b2c3',
+      secret_value: 'a1b2c3',
+      role_arn: 'test',
+      role_external_id: 'test',
+      role_session_name: 'test',
+      role_tags: [
+        { key: 'Project', value: 'Automation' },
+        { key: 'foo', value: 'bar' },
+      ],
+      project_id: 'project',
+      zone: 'zone',
+      client_email: 'email',
+      target_service_account_id: 'service-account',
+      private_key_id: 'key-id',
+      private_key: 'key',
+    });
+
+    let serializedRecord = record.serialize();
+    const expectedResult = {
+      name: 'GCP plugin',
+      description: 'this is a GCP plugin host-catalog',
+      type: 'plugin',
+      attributes: {
+        disable_credential_rotation: true,
+        project_id: 'project',
+        zone: 'zone',
+        target_service_account_id: 'service-account',
+        client_email: 'email',
+      },
+      secrets: {
+        private_key_id: 'key-id',
+        private_key: 'key',
+      },
+    };
+    assert.deepEqual(serializedRecord, expectedResult);
   });
 
   test('it normalizes array records from an `items` root key', function (assert) {

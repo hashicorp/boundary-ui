@@ -83,7 +83,7 @@ export default class GeneratedHostSetModel extends BaseModel {
   })
   preferred_endpoints;
 
-  // AWS specific
+  // AWS & GCP specific
   @attr('string-array', {
     isNestedAttribute: true,
     emptyArrayIfMissing: true,
