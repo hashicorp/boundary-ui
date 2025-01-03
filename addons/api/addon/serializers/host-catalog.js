@@ -5,7 +5,6 @@
 
 import ApplicationSerializer from './application';
 import { TYPE_CREDENTIAL_DYNAMIC } from '../models/host-catalog';
-import { typeOf } from '@ember/utils';
 
 export default class HostCatalogSerializer extends ApplicationSerializer {
   serialize(snapshot) {
@@ -29,7 +28,6 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     // API expects the fields to be 'null' for the fields that are not from the current credential type (that's why we are not using the application serializer for this, where we delete attrs)
     if (
       isSamePluginName &&
-      typeOf(options.for) === 'object' &&
       options.for.credentialType &&
       options.for.credentialType !== credentialType
     ) {
