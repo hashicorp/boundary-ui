@@ -58,12 +58,7 @@ test('Verify session created for TCP target @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectToTarget(
-      targetId,
-      sshUser,
-      sshKeyPath,
-      true,
-    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -133,7 +128,7 @@ test('Verify session created for SSH target @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId, true);
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -235,7 +230,7 @@ test('SSH target with host sources @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId, true);
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page

@@ -124,7 +124,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectSshToTarget(targetId, true);
+    connect = await boundaryCli.connectSshToTarget(targetId);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
     const sessionsPage = new SessionsPage(page);

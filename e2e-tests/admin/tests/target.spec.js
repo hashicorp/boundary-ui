@@ -77,12 +77,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectToTarget(
-      targetId,
-      sshUser,
-      sshKeyPath,
-      true,
-    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -141,12 +136,7 @@ test('Verify session created to target with address, then cancel the session @ce
       projectId,
       targetName,
     );
-    connect = await boundaryCli.connectToTarget(
-      targetId,
-      sshUser,
-      sshKeyPath,
-      true,
-    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
