@@ -12,7 +12,7 @@
   as |form|
 >
 
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
@@ -21,7 +21,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -41,7 +41,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -59,7 +59,7 @@
     @value={{@model.issuer}}
     @isInvalid={{@model.errors.issuer}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     name='issuer'
     {{on 'input' (set-from-event @model 'issuer')}}
     as |F|
@@ -99,7 +99,7 @@
     @value={{@model.client_id}}
     @isRequired={{true}}
     @isInvalid={{@model.errors.client_id}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_id')}}
     as |F|
   >
@@ -119,7 +119,7 @@
     @value={{@model.client_secret}}
     @isRequired={{true}}
     @isInvalid={{@model.errors.client_secret}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     @hasVisibilityToggle={{false}}
     @type='password'
     {{on 'input' (set-from-event @model 'client_secret')}}
@@ -139,7 +139,7 @@
   {{#unless @model.isNew}}
     <Hds::Form::TextInput::Field
       @value={{@model.client_secret_hmac}}
-      disabled={{true}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'form.client_secret_hmac.label'}}</F.Label>
@@ -243,7 +243,6 @@
         @model={{@model}}
       />
     </:field>
-
   </Form::Field::ListWrapper>
 
   {{! Account Claim Maps }}
@@ -268,6 +267,7 @@
         </F.Error>
       {{/if}}
     </:fieldset>
+
     <:field as |F|>
       <F.KeyValue
         @name='account_claim_maps'
@@ -317,7 +317,6 @@
         @model={{@model}}
       />
     </:field>
-
   </Form::Field::ListWrapper>
 
   <Hds::Form::TextInput::Field
@@ -325,7 +324,7 @@
     @value={{@model.max_age}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.max_age}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'max_age')}}
     as |F|
   >
@@ -345,7 +344,7 @@
     @value={{@model.api_url_prefix}}
     @isRequired={{true}}
     @isInvalid={{@model.errors.api_url_prefix}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'api_url_prefix')}}
     as |F|
   >
@@ -415,7 +414,7 @@
   {{#unless @model.isNew}}
     <Hds::Form::TextInput::Field
       @value={{@model.callback_url}}
-      disabled={{true}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'form.callback_url.label'}}</F.Label>

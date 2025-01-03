@@ -10,25 +10,24 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
   {{#unless @model.isNew}}
-
-    <InfoField @value={{@model.issuer}} readonly={{true}} as |F|>
+    <InfoField @value={{@model.issuer}} as |F|>
       <F.Label>{{t 'form.issuer.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.subject}} readonly={{true}} as |F|>
+    <InfoField @value={{@model.subject}} as |F|>
       <F.Label>{{t 'form.subject.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.email}} readonly={{true}} as |F|>
+    <InfoField @value={{@model.email}} as |F|>
       <F.Label>{{t 'form.email.label'}}</F.Label>
     </InfoField>
 
-    <InfoField @value={{@model.full_name}} readonly={{true}} as |F|>
+    <InfoField @value={{@model.full_name}} as |F|>
       <F.Label>{{t 'form.full_name.label'}}</F.Label>
     </InfoField>
   {{/unless}}
@@ -38,7 +37,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -58,7 +57,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -77,7 +76,7 @@
       name='issuer'
       @value={{@model.issuer}}
       @isInvalid={{@model.errors.issuer}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'issuer')}}
       as |F|
     >
@@ -95,7 +94,7 @@
       name='subject'
       @value={{@model.subject}}
       @isInvalid={{@model.errors.subject}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'subject')}}
       as |F|
     >

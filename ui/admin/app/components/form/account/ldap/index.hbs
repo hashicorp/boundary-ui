@@ -10,7 +10,7 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
@@ -19,7 +19,7 @@
     name='name'
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -39,7 +39,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -58,7 +58,7 @@
       name='login_name'
       @value={{@model.login_name}}
       @isInvalid={{@model.errors.login_name}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'login_name')}}
       as |F|
     >
@@ -115,7 +115,7 @@
           {{#each @model.member_of_groups as |group|}}
             <Hds::Form::TextInput::Field
               @value={{group.value}}
-              disabled={{true}}
+              readonly={{true}}
             />
           {{/each}}
         {{/if}}

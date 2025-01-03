@@ -11,7 +11,7 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
@@ -20,7 +20,7 @@
     name='name'
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -40,7 +40,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -74,7 +74,7 @@
                 <B.Td>
                   <Hds::Form::TextInput::Field
                     @value={{group.value}}
-                    disabled={{form.disabled}}
+                    readonly={{form.disabled}}
                     aria-labelledby={{valueHeaderID}}
                     {{on 'input' (set-from-event group 'value')}}
                   />
@@ -96,7 +96,7 @@
                 <Hds::Form::TextInput::Field
                   @value={{this.newGroup}}
                   @type='text'
-                  disabled={{form.disabled}}
+                  readonly={{form.disabled}}
                   aria-labelledby={{valueHeaderID}}
                   {{on 'input' (set-from-event this 'newGroup')}}
                 />

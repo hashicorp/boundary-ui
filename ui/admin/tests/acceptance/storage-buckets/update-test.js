@@ -187,8 +187,8 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBucket));
 
-    assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
-    assert.dom(selectors.FIELD_BUCKET_PREFIX).isDisabled();
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readOnly');
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
@@ -197,9 +197,9 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
     assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readOnly');
     assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
-    assert.dom(selectors.FIELD_BUCKET_NAME).isNotDisabled();
-    assert.dom(selectors.FIELD_BUCKET_PREFIX).isNotDisabled();
-    assert.dom(selectors.FIELD_REGION).isNotDisabled();
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_REGION).hasAttribute('readonly');
   });
 
   test('user cannot edit scope, provider, endpoint_url, bucket name or region fields in a MinIO storage bucket', async function (assert) {
@@ -207,13 +207,13 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
-    assert.dom(selectors.FIELD_BUCKET_NAME).isDisabled();
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
-    assert.dom(selectors.FIELD_ENDPOINT_URL).isNotDisabled();
+    assert.dom(selectors.FIELD_ENDPOINT_URL).hasAttribute('readonly');
     assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
     assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
   });

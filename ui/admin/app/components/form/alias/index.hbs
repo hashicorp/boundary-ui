@@ -15,7 +15,7 @@
     @isOptional={{true}}
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -29,12 +29,13 @@
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>
+
   <Hds::Form::Textarea::Field
     name='description'
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -76,7 +77,7 @@
     @isRequired={{true}}
     @value={{@model.value}}
     @isInvalid={{@model.errors.value}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'value')}}
     as |F|
   >
@@ -96,8 +97,7 @@
     @isOptional={{true}}
     @value={{@model.destination_id}}
     @isInvalid={{@model.errors.destination_id}}
-    readonly={{@hideTargetId}}
-    disabled={{form.disabled}}
+    readonly={{(or form.disabled @hideTargetId)}}
     {{on 'input' (set-from-event @model 'destination_id')}}
     as |F|
   >
@@ -119,7 +119,7 @@
     @isOptional={{true}}
     @value={{@model.authorize_session_arguments.host_id}}
     @isInvalid={{@model.errors.authorize_session_arguments.host_id}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' this.handleHostIdChange}}
     as |F|
   >
@@ -138,12 +138,7 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <InfoField
-    @value={{@model.scopeModel.displayName}}
-    @icon='globe'
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <InfoField @value={{@model.scopeModel.displayName}} @icon='globe' as |F|>
     <F.Label>{{t 'resources.scope.title'}}</F.Label>
   </InfoField>
 

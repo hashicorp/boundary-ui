@@ -17,7 +17,7 @@
     @value={{@model.name}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.name}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -37,7 +37,7 @@
     @value={{@model.description}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.description}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -51,16 +51,11 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <InfoField @value={{@model.type}} disabled={{form.disabled}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
-  <InfoField
-    @value={{t 'descriptions.provider'}}
-    @icon='aws-color'
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <InfoField @value={{t 'descriptions.provider'}} @icon='aws-color' as |F|>
     <F.Label>{{t 'titles.provider'}}</F.Label>
     <F.HelperText>
       {{t 'resources.host-catalog.types.aws'}}
@@ -132,7 +127,7 @@
     @value={{@model.sync_interval_seconds}}
     @isInvalid={{@model.errors.sync_interval_seconds}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'sync_interval_seconds')}}
     as |F|
   >

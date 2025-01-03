@@ -13,7 +13,7 @@
           <Hds::Form::Textarea::Field
             @value={{option.value}}
             @type='text'
-            disabled={{@disabled}}
+            readonly={{@disabled}}
             aria-label={{t 'titles.value'}}
           />
         </B.Td>
@@ -40,7 +40,7 @@
         <Hds::Form::Textarea::Field
           @value={{this.newOptionValue}}
           @type='text'
-          disabled={{@disabled}}
+          readonly={{@disabled}}
           aria-label={{t 'titles.value'}}
         />
       </B.Td>

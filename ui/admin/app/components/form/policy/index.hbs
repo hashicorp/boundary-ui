@@ -16,7 +16,7 @@
     @isInvalid={{@model.errors.name}}
     @type='text'
     name='name'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -30,12 +30,13 @@
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>
+
   <Hds::Form::Textarea::Field
     @isOptional={{true}}
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -54,7 +55,7 @@
     @name='retention_policy'
     @disabled={{form.disabled}}
     @model={{@model}}
-    @options={{this.listRententionOptions}}
+    @options={{this.listRetentionOptions}}
     @customInputName='retain_for'
     @inputValue={{@model.retain_for.days}}
     @selectedOption={{this.selectRetentionPolicyType}}
