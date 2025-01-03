@@ -216,21 +216,19 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     }
 
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(fullNameIndex)
-        .innerText(),
-    ).toBe(ldapUserName);
+        .nth(fullNameIndex),
+    ).toHaveText(ldapUserName);
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(emailIndex)
-        .innerText(),
-    ).toBe(ldapUserName + '@mail.com');
+        .nth(emailIndex),
+    ).toHaveText(ldapUserName + '@mail.com');
 
     // View the Managed Group
     await page.getByRole('link', { name: 'Managed Groups' }).click();
@@ -260,21 +258,19 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     }
 
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(fullNameIndex)
-        .innerText(),
-    ).toBe(ldapUserName);
+        .nth(fullNameIndex),
+    ).toHaveText(ldapUserName);
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(emailIndex)
-        .innerText(),
-    ).toBe(ldapUserName + '@mail.com');
+        .nth(emailIndex),
+    ).toHaveText(ldapUserName + '@mail.com');
 
     // View the User account and verify attributes
     await page

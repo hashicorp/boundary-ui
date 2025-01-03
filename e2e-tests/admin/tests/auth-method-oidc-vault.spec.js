@@ -172,21 +172,19 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
     }
 
     expect(
-      await page
+      page
         .getByRole('cell', { name: userName })
         .locator('..')
         .getByRole('cell')
-        .nth(fullNameIndex)
-        .innerText(),
-    ).toBe(userName);
+        .nth(fullNameIndex),
+    ).toHaveText(userName);
     expect(
-      await page
+      page
         .getByRole('cell', { name: userName })
         .locator('..')
         .getByRole('cell')
-        .nth(emailIndex)
-        .innerText(),
-    ).toBe(email);
+        .nth(emailIndex),
+    ).toHaveText(email);
 
     // View the OIDC Managed Group and verify member in managed group
     await page.getByRole('link', { name: 'Managed Groups' }).click();
@@ -216,21 +214,19 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
     }
 
     expect(
-      await page
+      page
         .getByRole('cell', { name: userName })
         .locator('..')
         .getByRole('cell')
-        .nth(fullNameIndex)
-        .innerText(),
-    ).toBe(userName);
+        .nth(fullNameIndex),
+    ).toHaveText(userName);
     expect(
-      await page
+      page
         .getByRole('cell', { name: userName })
         .locator('..')
         .getByRole('cell')
-        .nth(emailIndex)
-        .innerText(),
-    ).toBe(email);
+        .nth(emailIndex),
+    ).toHaveText(email);
 
     // View the User account and verify attributes
     await page
