@@ -141,7 +141,7 @@ export async function setupVaultOidc(
 
   const providerName = 'my-provider';
   execSync(
-    `vault write identity/oidc/provider/${providerName} allowed_client_ids=${clientId} scopes_supported=groups,user issuer=${vaultAddr}`,
+    `vault write identity/oidc/provider/${providerName} allowed_client_ids=${clientId} scopes_supported=groups,user issuer=${vaultAddr} &> /dev/null`,
   );
 
   const oidcConfig = JSON.parse(
