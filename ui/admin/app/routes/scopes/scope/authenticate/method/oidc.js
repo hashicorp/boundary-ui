@@ -33,6 +33,16 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     return oidc.attemptFetchToken({ scope, authMethod });
   }
 
+  /**
+   * Adds the auth-method to the controller context.
+   * @param {Controller} controller
+   */
+  setupController(controller) {
+    super.setupController(...arguments);
+    const authMethod = this.modelFor('scopes.scope.authenticate.method');
+    controller.authMethod = authMethod;
+  }
+
   @runEvery(POLL_TIMEOUT_SECONDS * 1000)
   poller() {
     this.refresh();
