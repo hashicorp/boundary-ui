@@ -166,7 +166,6 @@ module('Unit | Serializer | host catalog', function (hooks) {
         role_arn: 'test',
         role_tags: { Project: 'Automation', foo: 'bar' },
       },
-      secrets: {},
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
