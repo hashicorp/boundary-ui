@@ -91,6 +91,9 @@ export default class ApplicationSerializer extends RESTSerializer {
           delete json?.attributes?.[key];
         } else if (options.isNestedSecret && json?.secrets?.[key]) {
           delete json?.secrets?.[key];
+          if (Object.keys(json.secrets).length === 0) {
+            delete json.secrets;
+          }
         } else {
           delete json[key];
         }
