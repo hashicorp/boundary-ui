@@ -5,7 +5,6 @@
 
 import ApplicationSerializer from './application';
 import { TYPE_CREDENTIAL_DYNAMIC } from '../models/host-catalog';
-import { typeOf } from '@ember/utils';
 
 export default class HostCatalogSerializer extends ApplicationSerializer {
   serialize(snapshot) {
