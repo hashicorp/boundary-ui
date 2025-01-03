@@ -22,10 +22,9 @@ export default class ScopesScopeAuthenticateMethodOidcController extends Control
    */
   @action
   async retryAuthentication(e) {
-    // TODO: These event handlers can be removed when rose dialog gets
+    // TODO: This event handler can be removed when rose dialog gets
     // refactored to use hds.
     e.preventDefault();
-    e.stopPropagation();
 
     const scope = this.authMethod.scope;
     const authenticatorName = `authenticator:${this.authMethod.type}`;
