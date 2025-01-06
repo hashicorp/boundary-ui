@@ -187,16 +187,16 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBucket));
 
-    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
-    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readonly');
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
-    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
-    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readOnly');
-    assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_REGION).hasAttribute('readonly');
     assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
     assert.dom(selectors.FIELD_BUCKET_PREFIX).hasAttribute('readonly');
     assert.dom(selectors.FIELD_REGION).hasAttribute('readonly');
@@ -207,15 +207,15 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
-    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
     assert.dom(selectors.FIELD_SCOPE).doesNotExist();
     assert.dom(selectors.FIELD_PLUGIN_TYPE).isDisabled();
     assert.dom(selectors.FIELD_ENDPOINT_URL).hasAttribute('readonly');
-    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readOnly');
-    assert.dom(selectors.FIELD_REGION).hasAttribute('readOnly');
+    assert.dom(selectors.FIELD_BUCKET_NAME).hasAttribute('readonly');
+    assert.dom(selectors.FIELD_REGION).hasAttribute('readonly');
   });
 
   test('user sees an editable code editor while updating and readonly code block before/after', async function (assert) {

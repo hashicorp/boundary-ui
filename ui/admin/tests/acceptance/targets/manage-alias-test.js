@@ -139,7 +139,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
     await click(ITEM_SELECTOR);
 
-    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readonly');
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);
