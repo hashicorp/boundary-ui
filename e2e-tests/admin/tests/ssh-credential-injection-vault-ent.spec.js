@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
@@ -18,8 +18,6 @@ const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
@@ -126,18 +124,14 @@ test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
     connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
-    await page
-      .getByRole('cell', { name: targetName })
-      .locator('..')
-      .getByRole('button', { name: 'Cancel' })
-      .click();
   } finally {
-    if (orgId) {
-      await boundaryCli.deleteScope(orgId);
-    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
+    }
+
+    if (orgId) {
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });
