@@ -58,6 +58,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    */
   async validateToken(token, tokenID) {
     const tokenValidationURL = this.buildTokenValidationEndpointURL(tokenID);
+
     // Note: waitForPromise is needed to provide the necessary integration with @ember/test-helpers
     // visit https://www.npmjs.com/package/@ember/test-waiters for more info.
     const response = await waitForPromise(
@@ -66,6 +67,12 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
         headers: { Authorization: `Bearer ${token}` },
       }),
     );
+    // Note: Always consume response body in order to avoid memory leaks
+    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
+    // We do not use the undici package but the link informs us that garbage
+    // collection is undefined when response body is not consumed.
+    await response.json();
+
     // 401 and 404 responses mean the token is invalid, whereas other types of
     // error responses do not tell us about the validity of the token.
     if (response.status === 401 || response.status === 404) return reject();
