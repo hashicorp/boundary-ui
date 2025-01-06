@@ -47,7 +47,9 @@ test.describe('Scope tests', async () => {
     }
   });
 
-  test('Shows the filtered targets based on selected scope', async ({ authedPage }) => {
+  test('Shows the filtered targets based on selected scope', async ({
+    authedPage,
+  }) => {
     const headerNav = await authedPage.getByLabel('header-nav');
     await expect(headerNav).toBeVisible();
     await expect(headerNav).toContainText('Global');
