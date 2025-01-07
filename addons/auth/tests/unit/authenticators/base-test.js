@@ -52,7 +52,7 @@ module('Unit | Authenticator | base', function (hooks) {
     const authenticator = this.owner.lookup('authenticator:base');
     server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return [200];
+      return [200, {}, '{}'];
     });
     await authenticator.restore(mockData);
   });
@@ -64,7 +64,7 @@ module('Unit | Authenticator | base', function (hooks) {
     const authenticator = this.owner.lookup('authenticator:base');
     server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return [401];
+      return [401, {}, '{}'];
     });
     try {
       await authenticator.restore(mockData);
@@ -80,7 +80,7 @@ module('Unit | Authenticator | base', function (hooks) {
     const authenticator = this.owner.lookup('authenticator:base');
     server.get(authenticator.buildTokenValidationEndpointURL(id), () => {
       assert.ok(true, 'token validation was requested');
-      return [404];
+      return [404, {}, '{}'];
     });
     try {
       await authenticator.restore(mockData);

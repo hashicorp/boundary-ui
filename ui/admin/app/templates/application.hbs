@@ -132,33 +132,36 @@
 {{/if}}
 
 <PendingConfirmations as |confirmation accept deny|>
-  <Rose::Dialog
-    @heading={{if
-      confirmation.options.title
-      (t confirmation.options.title)
-      (t 'actions.confirm')
-    }}
-    @dismissButtonText={{t 'actions.cancel'}}
-    @icon='flight-icons/svg/alert-triangle-16'
-    @style='warning'
-    @modal={{true}}
-    @dismiss={{deny}}
-    as |dialog|
-  >
-    <dialog.body>
-      <p>{{confirmation.text}}</p>
-    </dialog.body>
-    <dialog.footer>
-      <Rose::Button @style='primary' {{on 'click' accept}}>
-        {{if
-          confirmation.options.confirm
-          (t confirmation.options.confirm)
-          (t 'actions.ok')
-        }}
-      </Rose::Button>
-      <Rose::Button @style='secondary' {{on 'click' deny}}>
-        {{t 'actions.cancel'}}
-      </Rose::Button>
-    </dialog.footer>
-  </Rose::Dialog>
+  <Hds::Modal @color='warning' as |M|>
+    <M.Header @icon='alert-triangle' @onDismiss={{deny}}>
+      {{if
+        confirmation.options.title
+        (t confirmation.options.title)
+        (t 'actions.confirm')
+      }}
+    </M.Header>
+    <M.Body>
+      <Hds::Text::Body @tag='p'>
+        {{confirmation.text}}
+      </Hds::Text::Body>
+    </M.Body>
+    <M.Footer>
+      <Hds::ButtonSet>
+        <Hds::Button
+          @text={{if
+            confirmation.options.confirm
+            (t confirmation.options.confirm)
+            (t 'actions.ok')
+          }}
+          @color='primary'
+          {{on 'click' accept}}
+        />
+        <Hds::Button
+          @text={{t 'actions.cancel'}}
+          @color='secondary'
+          {{on 'click' deny}}
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
 </PendingConfirmations>

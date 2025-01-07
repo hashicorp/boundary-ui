@@ -472,7 +472,7 @@
         </Hds::Link::Inline>
       </F.HelperText>
       <F.Control>
-        {{#if form.disabled}}
+        {{#if (and form.disabled (not @model.isSaving))}}
           <Hds::CodeBlock
             @language='bash'
             @value={{@model.worker_filter}}

@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe('AWS', async () => {
-  test('Create an AWS Dynamic Host Catalog and set up Host Sets @ce @aws', async ({
+  test('Create an AWS Dynamic Host Catalog and set up Host Sets @ent @aws', async ({
     page,
     baseURL,
     adminAuthMethodId,
@@ -153,7 +153,7 @@ test.describe('AWS', async () => {
 
       // Create a target and add DHC host set as a host source
       const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createTarget(targetPort);
+      const targetName = await targetsPage.createSshTargetEnt(targetPort);
       await targetsPage.addHostSourceToTarget(hostSetName);
 
       // Add another host source
@@ -189,7 +189,7 @@ test.describe('AWS', async () => {
           sshUser,
           sshKeyPath,
         );
-      await targetsPage.addBrokeredCredentialsToTarget(
+      await targetsPage.addInjectedCredentialsToTarget(
         targetName,
         credentialName,
       );

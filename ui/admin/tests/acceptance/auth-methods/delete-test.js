@@ -12,6 +12,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | auth-methods | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -21,8 +22,6 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   let featuresService;
   let getAuthMethodCount;
 
-  const DIALOG_DELETE_BTN_SELECTOR = '.rose-dialog .rose-button-primary';
-  const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
   const ERROR_MSG_SELECTOR =
     '[data-test-toast-notification] .hds-alert__description';
 
@@ -176,7 +175,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(`[href="${urls.authMethod}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click(DIALOG_DELETE_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethods);
     assert.strictEqual(getAuthMethodCount(), authMethodCount - 1);
@@ -192,7 +191,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(`[href="${urls.ldapAuthMethod}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click(DIALOG_DELETE_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethods);
     assert.strictEqual(getAuthMethodCount(), authMethodCount - 1);
@@ -207,7 +206,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(`[href="${urls.authMethod}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click(DIALOG_CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethod);
     assert.strictEqual(getAuthMethodCount(), authMethodCount);
@@ -223,7 +222,7 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(`[href="${urls.ldapAuthMethod}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click(DIALOG_CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.ldapAuthMethod);
     assert.strictEqual(getAuthMethodCount(), authMethodCount);

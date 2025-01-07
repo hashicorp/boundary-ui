@@ -14,7 +14,35 @@ export default class ScopesScopePoliciesIndexController extends Controller {
   // =services
 
   @service can;
+  @service intl;
   @service router;
+
+  // =attributes
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    const canList = this.can.can('list model', this.scope, {
+      collection: 'policies',
+    });
+    const canCreate = this.can.can('create model', this.scope, {
+      collection: 'policies',
+    });
+    const resource = this.intl.t('resources.policy.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.policy.messages.none.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
+  }
 
   // =actions
 
