@@ -68,7 +68,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isGCP() {
-    return this.compositeType === 'gcp';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_GCP;
   }
 
   /**
