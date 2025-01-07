@@ -73,13 +73,26 @@ npx playwright install # this installs the browsers used by Playwright
 
 ### Setup AWS:
 
-**Region awareness:** take note of the AWS region you are setting up because we will need it later to configure enos. [More information about AWS regions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
+**Region awareness:** take note of the AWS region you are setting up because we will need it later to configure enos. We recommend `us-east-1`. [More information about AWS regions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
 
 **SSH Key pair:**
 
 You need to provide an SSH Key pair for the EC2 instance. We recommend creating specific e2e SSH keys and not re-use existing ones. To differentiate them, we recommend adding `enos` to the name, i.e: `name_enos`.
 
-[How to create EC2 SSH key pair](https://docs.aws.amazon.com/ground-station/latest/ug/create-ec2-ssh-key-pair.html).
+[How to create EC2 SSH key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html).
+
+If you would like to do it through the command line:
+
+```bash
+doormat login
+source <(doormat aws export --account boundary_team_acctest_dev)
+# Feel free to use a custom name for your key pair if you don't want to use $USER, just make sure it follows the <name>_enos format so it can be identified. e.g. zed_enos
+ssh-keygen -N '' -t ed25519 -f ~/.ssh/"$USER"_enos
+aws ec2 import-key-pair \
+  --region us-east-1 \
+  --key-name "$USER"_enos \
+  --public-key-material fileb://~/.ssh/"$USER"_enos.pub
+```
 
 ### Setup Enos:
 
@@ -116,8 +129,8 @@ Before running the e2e test locally, we need to launch an Enos Scenario. Make su
 
 It is not necessary, but from this point we recommend having 2 terminals open.
 
-- Terminal 1: Will be use to run enos (Boundary).
-- Terminal 2: Will be use to run e2e UI tests (Boundary UI).
+- Terminal 1: Will be used to run enos (Boundary).
+- Terminal 2: Will be used to run e2e UI tests (Boundary UI).
 
 ### Launch Enos Scenario
 
@@ -128,7 +141,12 @@ Using Terminal 1:
 - `eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
 - `enos scenario launch e2e_ui_aws builder:local` or `enos scenario launch e2e_ui_aws_ent builder:local` if in enterprise.
   - Launches enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal. Check out more scenarios [here](https://github.com/hashicorp/boundary/tree/main/enos).
-- `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario.
+- `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario. 
+
+Alternatively, you can also redirect the output to an `.env` file that will get picked up by tests automatically which is useful if you're running tests in your IDE:
+```
+bash scripts/test_e2e_env.sh > (boundary-ui directory)/e2e-tests/.env
+```
 
 > [!IMPORTANT]
 > Be aware that once the scenario is launched you will create and run resources within AWS. After you are done using the scenario, [you should destroy it](#destroy-enos-scenario).
