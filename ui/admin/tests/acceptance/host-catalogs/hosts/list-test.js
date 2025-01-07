@@ -75,8 +75,9 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
         'list',
       ),
     );
-    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).exists();
-    assert.dom(commonSelectors.HREF(urls.hosts)).exists();
+
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).isVisible();
+    assert.dom(commonSelectors.HREF(urls.hosts)).isVisible();
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
@@ -95,7 +96,7 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
     await visit(urls.hostCatalog);
 
-    assert.dom(commonSelectors.HREF(urls.hosts)).exists();
+    assert.dom(commonSelectors.HREF(urls.hosts)).isVisible();
     await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
     await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST);
     assert.strictEqual(currentURL(), urls.newHost);
