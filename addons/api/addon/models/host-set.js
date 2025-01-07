@@ -64,6 +64,14 @@ export default class HostSetModel extends GeneratedHostSetModel {
   }
 
   /**
+   * True if host catalog plugin type is GCP.
+   * @type {boolean}
+   */
+  get isGCP() {
+    return this.compositeType === 'gcp';
+  }
+
+  /**
    * If a host-set is a plugin return its name,
    * otherwise returns the host-set type
    * @type {string}
