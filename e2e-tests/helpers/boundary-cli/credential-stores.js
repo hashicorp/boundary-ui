@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} projectId ID of the project under which the credential store will be created.
  * @returns {Promise<string>} new credential store's ID
  */
-export async function createStaticCredentialStoreCli(projectId) {
+export async function createStaticCredentialStore(projectId) {
   const credentialStoreName = 'static-credential-store-' + nanoid();
   let staticCredentialStore;
   try {
@@ -36,7 +36,7 @@ export async function createStaticCredentialStoreCli(projectId) {
  * @param {string} vaultToken Token for Boundary to authenticate with Vault
  * @returns {Promise<string>} new credential store's ID
  */
-export async function createVaultCredentialStoreCli(
+export async function createVaultCredentialStore(
   projectId,
   vaultAddr,
   vaultToken,

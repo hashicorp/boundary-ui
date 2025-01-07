@@ -9,6 +9,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | storage-buckets | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -21,10 +22,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
 
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
   const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item [type="button"]';
-  const DIALOG_DELETE_BTN_SELECTOR = '.rose-dialog .rose-button-primary';
-  const DIALOG_CANCEL_BTN_SELECTOR = '.rose-dialog .rose-button-secondary';
-  const DIALOG_MESSAGE_SELECTOR = '.rose-dialog-body';
-  const DIALOG_TITLE_SELECTOR = '.rose-dialog-header';
   const NOTIFICATION_MSG_SELECTOR =
     '[data-test-toast-notification] .hds-alert__description';
   const NOTIFICATION_MSG_TEXT = 'Deleted successfully.';
@@ -85,10 +82,10 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await click(DELETE_DROPDOWN_SELECTOR);
 
     assert
-      .dom(DIALOG_DELETE_BTN_SELECTOR)
+      .dom(commonSelectors.MODAL_WARNING_CONFIRM_BTN)
       .hasText(intl.t('resources.storage-bucket.actions.delete'));
 
-    await click(DIALOG_DELETE_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.dom(NOTIFICATION_MSG_SELECTOR).hasText(NOTIFICATION_MSG_TEXT);
     assert.strictEqual(currentURL(), urls.storageBuckets);
@@ -106,21 +103,21 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await click(DELETE_DROPDOWN_SELECTOR);
 
     assert
-      .dom(DIALOG_TITLE_SELECTOR)
+      .dom(commonSelectors.MODAL_WARNING_TITLE)
       .hasText(
         intl.t(
           'resources.storage-bucket.questions.delete-storage-bucket.title',
         ),
       );
     assert
-      .dom(DIALOG_MESSAGE_SELECTOR)
+      .dom(commonSelectors.MODAL_WARNING_MESSAGE)
       .hasText(
         intl.t(
           'resources.storage-bucket.questions.delete-storage-bucket.message',
         ),
       );
 
-    await click(DIALOG_CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.storageBuckets);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount);

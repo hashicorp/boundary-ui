@@ -12,7 +12,7 @@ import { execSync } from 'node:child_process';
  * @param {string} loginName Login name to be used for authentication
  * @param {string} password Password to be used for authentication
  */
-export async function authenticateBoundaryCli(
+export async function authenticateBoundary(
   addr,
   authMethodId,
   loginName,

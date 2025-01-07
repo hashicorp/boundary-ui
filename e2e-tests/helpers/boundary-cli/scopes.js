@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
  * Creates an org
  * @returns {Promise<string>} new org's id
  */
-export async function createOrgCli() {
+export async function createOrg() {
   const orgName = 'Org ' + nanoid();
   let newOrg;
   try {
@@ -33,7 +33,7 @@ export async function createOrgCli() {
  * @param {string} orgId ID of the organization under which the project will be created.
  * @returns {Promise<string>} new project's ID
  */
-export async function createProjectCli(orgId) {
+export async function createProject(orgId) {
   const projectName = 'Project ' + nanoid();
   let newProject;
   try {
@@ -55,7 +55,7 @@ export async function createProjectCli(orgId) {
  * Deletes the specified scope
  * @param {string} scopeId ID of the scope to be deleted
  */
-export async function deleteScopeCli(scopeId) {
+export async function deleteScope(scopeId) {
   try {
     execSync('boundary scopes delete -id=' + scopeId);
   } catch (e) {
@@ -68,7 +68,7 @@ export async function deleteScopeCli(scopeId) {
  * @param {string} orgName Name of the org
  * @returns {Promise<string>} ID of the org
  */
-export async function getOrgIdFromNameCli(orgName) {
+export async function getOrgIdFromName(orgName) {
   const orgs = JSON.parse(execSync('boundary scopes list -format json'));
   const org = orgs.items.filter((obj) => obj.name == orgName)[0];
   if (org) {
@@ -83,7 +83,7 @@ export async function getOrgIdFromNameCli(orgName) {
  * @param {string} projectName Name of the project
  * @returns {Promise<string>} ID of the project
  */
-export async function getProjectIdFromNameCli(orgId, projectName) {
+export async function getProjectIdFromName(orgId, projectName) {
   const projects = JSON.parse(
     execSync(`boundary scopes list -scope-id ${orgId} -format json`),
   );
@@ -99,7 +99,7 @@ export async function getProjectIdFromNameCli(orgId, projectName) {
  * @param {string} scopeId ID of the scope that the auth-method belongs to
  * @param {string} authMethodId ID of the auth method that will be made primary
  */
-export async function makeAuthMethodPrimaryCli(scopeId, authMethodId) {
+export async function makeAuthMethodPrimary(scopeId, authMethodId) {
   try {
     execSync(
       `boundary scopes update \

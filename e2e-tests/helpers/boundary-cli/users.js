@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} scopeId ID of the scope under which the user will be created.
  * @returns {Promise<string>} new user's ID
  */
-export async function createUserCli(scopeId) {
+export async function createUser(scopeId) {
   const userName = 'user-' + nanoid();
   let user;
   try {

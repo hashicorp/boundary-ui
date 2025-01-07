@@ -16,6 +16,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -307,8 +308,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     try {
       await visit(urls.hostSets);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hostSets);
       assert.notEqual(
         this.server.schema.hostSets.first().name,

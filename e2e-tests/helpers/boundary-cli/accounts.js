@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
  * @param {string} authMethodId ID of the auth-method that the new account will be created for.
  * @returns {Promise<string>} new account's ID
  */
-export async function createPasswordAccountCli(authMethodId) {
+export async function createPasswordAccount(authMethodId) {
   let passwordAccount;
   const login = 'test-login';
   try {

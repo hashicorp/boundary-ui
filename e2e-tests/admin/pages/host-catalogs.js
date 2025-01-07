@@ -37,7 +37,7 @@ export class HostCatalogsPage extends BaseResourcePage {
     await this.page.getByLabel('Name').fill(hostCatalogName);
     await this.page.getByLabel('Description').fill('This is an automated test');
     await this.page
-      .getByRole('group', { name: 'Type' })
+      .getByRole('group', { name: 'Type', exact: 'true' })
       .getByLabel('Static')
       .click();
     await this.page.getByRole('button', { name: 'Save' }).click();
