@@ -17,6 +17,7 @@ cluster-url:
 titles:
   home: Home
   iam: IAM
+  new: New
   resources: Resources
   details: Details
   general: General
