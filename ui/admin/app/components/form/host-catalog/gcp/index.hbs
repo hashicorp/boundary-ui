@@ -15,7 +15,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -35,7 +35,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -113,7 +113,7 @@
     @value={{@model.project_id}}
     @isInvalid={{@model.errors.project_id}}
     @isRequired={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'project_id')}}
     as |F|
   >
@@ -135,7 +135,7 @@
     @value={{@model.zone}}
     @isInvalid={{@model.errors.zone}}
     @isRequired={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'zone')}}
     as |F|
   >
@@ -154,8 +154,8 @@
     name='client_email'
     @value={{@model.client_email}}
     @isInvalid={{@model.errors.client_email}}
-    @isRequired={{true}}
-    disabled={{form.disabled}}
+    @isOptional={{true}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_email')}}
     as |F|
   >
@@ -177,7 +177,7 @@
     @value={{@model.target_service_account_id}}
     @isInvalid={{@model.errors.target_service_account_id}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'target_service_account_id')}}
     as |F|
   >
@@ -202,7 +202,7 @@
     @value={{@model.private_key_id}}
     @isInvalid={{@model.errors.private_key_id}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'private_key_id')}}
     as |F|
   >
@@ -219,14 +219,12 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::TextInput::Field
+  <Hds::Form::Textarea::Field
     name='private_key'
-    @type='password'
     @value={{@model.private_key}}
     @isInvalid={{@model.errors.private_key}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'private_key')}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.private_key.label'}}</F.Label>
@@ -240,11 +238,13 @@
         {{/each}}
       </F.Error>
     {{/if}}
-  </Hds::Form::TextInput::Field>
+  </Hds::Form::Textarea::Field>
 
   <Hds::Form::Checkbox::Field
     name='disable_credential_rotation'
     checked={{@model.disable_credential_rotation}}
+    readonly={{form.disabled}}
+    {{on 'change' (fn @toggleDisableCredentialRotation @model)}}
     as |F|
   >
     <F.Label>{{t 'form.disable_credential_rotation.label'}}</F.Label>

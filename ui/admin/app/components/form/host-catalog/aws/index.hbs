@@ -398,7 +398,7 @@
       name='disable_credential_rotation'
       checked={{@model.disable_credential_rotation}}
       disabled={{form.disabled}}
-      {{on 'change' (fn this.toggleDisableCredentialRotation @model)}}
+      {{on 'change' (fn @toggleDisableCredentialRotation @model)}}
       as |F|
     >
       <F.Label>
