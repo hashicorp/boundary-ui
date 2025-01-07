@@ -53,7 +53,7 @@
 
     <Hds::Form::RadioCard::Group @name={{t 'form.type.label'}} as |G|>
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
-      {{#each this.hostCatalogTypes as |hostCatalogType|}}
+      {{#each @hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
           @value={{hostCatalogType}}
           @maxWidth='20rem'
