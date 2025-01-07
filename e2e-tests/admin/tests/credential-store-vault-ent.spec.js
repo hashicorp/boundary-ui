@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
@@ -11,14 +11,13 @@ import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
@@ -46,6 +45,7 @@ test('Vault Credential Store (User & Key Pair) @ent @aws @docker', async ({
   vaultAddr,
 }) => {
   let orgId;
+  let connect;
   try {
     execSync(
       `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
@@ -97,6 +97,7 @@ test('Vault Credential Store (User & Key Pair) @ent @aws @docker', async ({
       credentialLibraryName,
     );
 
+    // Verify that session can be established
     await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
@@ -112,8 +113,14 @@ test('Vault Credential Store (User & Key Pair) @ent @aws @docker', async ({
       projectId,
       targetName,
     );
-    await boundaryCli.authorizeSessionByTargetId(targetId);
+    connect = await boundaryCli.connectSshToTarget(targetId);
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
+    if (connect) {
+      connect.kill('SIGTERM');
+    }
+
     if (orgId) {
       await boundaryCli.deleteScope(orgId);
     }
