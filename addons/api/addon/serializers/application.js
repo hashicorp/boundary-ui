@@ -80,11 +80,7 @@ export default class ApplicationSerializer extends RESTSerializer {
 
     if (options?.for) {
       // Check the typeof the `for` option to determine if it is a plugin or not
-      const isPlugin =
-        typeOf(options.for) === 'object' && options.for?.type === 'plugin';
-      const isNotPlugin =
-        typeOf(options.for) === 'string' || typeOf(options.for) === 'array';
-
+      const isPlugin = options.for?.type === 'plugin';
       // Helper function to handle deleting attribute and secret keys
       const deleteKey = (json) => {
         if (options.isNestedAttribute) {
@@ -100,11 +96,15 @@ export default class ApplicationSerializer extends RESTSerializer {
       };
 
       // For plugins, the `for` option is an object with a `name` key
-      // For non-plugins, the `for` option is a string or an array
+      // For non-plugins, the `for` option can be string or an array
       if (
         (isPlugin && !options.for?.name.includes(compositeType)) ||
-        (isNotPlugin && !options.for?.includes(recordType)) ||
-        (isNotPlugin && !options.for === recordType)
+        (!isPlugin &&
+          !options.for?.includes(recordType) &&
+          typeOf(options.for) === 'array') ||
+        (!isPlugin &&
+          options.for !== recordType &&
+          typeOf(options.for) === 'string')
       ) {
         deleteKey(json);
       }
