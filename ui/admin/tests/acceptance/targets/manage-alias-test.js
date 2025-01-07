@@ -128,7 +128,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     assert.dom(LINK_TO_NEW_ALIAS).exists;
   });
 
-  test('clicking on `delete alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar and deleted from aliases list', async function (assert) {
+  test('clicking on `delete alias` from the dropdown should remove the destination ID and alias should disappear from the target sidebar and deleted from aliases list', async function (assert) {
     const aliasCount = getAliasCount();
     aliasResourceOne.update({
       destination_id: instances.tcpTarget.id,
@@ -139,7 +139,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
 
     await click(ITEM_SELECTOR);
 
-    assert.dom(DEST_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readonly');
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);

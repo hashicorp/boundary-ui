@@ -10,7 +10,7 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-  <InfoField @value={{@model.type}} readonly={{true}} as |F|>
+  <InfoField @value={{@model.type}} as |F|>
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
@@ -19,7 +19,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -39,7 +39,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -58,7 +58,7 @@
     @value={{@model.filter_string}}
     @isInvalid={{@model.errors.filter_string}}
     @isRequired={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'filter_string')}}
     as |F|
   >

@@ -209,7 +209,7 @@
         @value={{this.generatedWorkerAuthToken}}
         @isRequired={{true}}
         @isInvalid={{@model.errors.worker_generated_auth_token}}
-        disabled={{form.disabled}}
+        readonly={{form.disabled}}
         {{on 'input' (set-from-event this 'generatedWorkerAuthToken')}}
         as |F|
       >

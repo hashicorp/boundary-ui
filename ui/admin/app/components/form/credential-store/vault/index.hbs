@@ -16,7 +16,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -38,7 +38,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -82,7 +82,6 @@
       <InfoField
         @value={{t (concat 'resources.credential-store.types.' @model.type)}}
         @icon='vault'
-        readonly={{true}}
         as |F|
       >
         <F.Label>{{t 'form.type.label'}}</F.Label>
@@ -98,7 +97,7 @@
     @value={{@model.address}}
     @isInvalid={{@model.errors.address}}
     @isRequired={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'address')}}
     as |F|
   >
@@ -121,7 +120,7 @@
       @value={{@model.token}}
       @isInvalid={{@model.errors.token}}
       @isRequired={{true}}
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'token')}}
       as |F|
     >
@@ -142,7 +141,7 @@
   {{#unless @model.isNew}}
     <Hds::Form::TextInput::Field
       @value={{@model.token_hmac}}
-      disabled={{true}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>
@@ -155,7 +154,7 @@
     @value={{@model.namespace}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.namespace}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'namespace')}}
     as |F|
   >
@@ -177,7 +176,7 @@
     @value={{@model.tls_server_name}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.tls_server_name}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'tls_server_name')}}
     as |F|
   >
@@ -226,7 +225,7 @@
     @value={{@model.client_certificate}}
     @isInvalid={{@model.errors.client_certificate}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t
@@ -249,7 +248,7 @@
     @value={{@model.client_certificate_key}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.client_certificate_key}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t
@@ -270,7 +269,7 @@
   {{#unless @model.isNew}}
     <Hds::Form::TextInput::Field
       @value={{@model.client_certificate_key_hmac}}
-      disabled={{true}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>
@@ -286,7 +285,7 @@
     @value={{@model.ca_cert}}
     @isOptional={{true}}
     @isInvalid={{@model.errors.ca_cert}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'resources.credential-store.form.ca_cert.label'}}</F.Label>

@@ -11,7 +11,7 @@
     @type='password'
     name='password'
     autocomplete='new-password'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event this 'password')}}
     as |F|
   >

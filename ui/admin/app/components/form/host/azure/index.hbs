@@ -14,7 +14,7 @@
   <Hds::Form::TextInput::Field
     @value={{@model.type}}
     name='type'
-    disabled={{true}}
+    readonly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.type.label'}}</F.Label>
@@ -25,7 +25,7 @@
       @value={{@model.external_name}}
       @isInvalid={{@model.errors.external_name}}
       name='external_name'
-      disabled={{true}}
+      readonly={{true}}
       as |F|
     >
       <F.Label>{{t 'form.external_name.label'}}</F.Label>
@@ -44,7 +44,7 @@
     @value={{@model.external_id}}
     @isInvalid={{@model.errors.external_id}}
     name='external_id'
-    disabled={{true}}
+    readonly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.external_id.label'}}</F.Label>
@@ -62,7 +62,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{true}}
+    readonly={{true}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -76,12 +76,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  <InfoField
-    @value={{t 'descriptions.provider'}}
-    @icon='azure-color'
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <InfoField @value={{t 'descriptions.provider'}} @icon='azure-color' as |F|>
     <F.Label>{{t 'titles.provider'}}</F.Label>
     <F.HelperText>
       {{t 'resources.host-catalog.types.azure'}}
@@ -95,7 +90,7 @@
       <F.Control>
         <Hds::Form::TextInput::Base
           @value={{ip_address}}
-          disabled={{true}}
+          readonly={{true}}
           @width='unset'
         />
       </F.Control>

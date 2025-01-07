@@ -18,7 +18,7 @@
     @isInvalid={{@model.errors.name}}
     @type='text'
     name='name'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -38,7 +38,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     name='description'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -96,7 +96,7 @@
       @isInvalid={{@model.errors.address}}
       @type='text'
       name='address'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       {{on 'input' (set-from-event @model 'address')}}
       as |F|
     >
@@ -121,7 +121,7 @@
     @isInvalid={{@model.errors.default_port}}
     @type='text'
     name='default_port'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     placeholder={{@defaultPort}}
     {{on 'input' (set-from-event @model 'default_port')}}
     as |F|
@@ -145,7 +145,7 @@
     @isInvalid={{@model.errors.default_client_port}}
     @type='text'
     name='default_client_port'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'default_client_port')}}
     as |F|
   >
@@ -168,7 +168,7 @@
     @isInvalid={{@model.errors.session_max_seconds}}
     @type='text'
     name='session_max_seconds'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'session_max_seconds')}}
     as |F|
   >
@@ -189,7 +189,7 @@
     @isInvalid={{@model.errors.session_connection_limit}}
     @type='text'
     name='session_connection_limit'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'session_connection_limit')}}
     as |F|
   >

@@ -15,7 +15,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -37,7 +37,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -53,7 +53,6 @@
 
   {{#if (feature-flag 'static-credentials')}}
     {{#if @model.isNew}}
-
       <Hds::Form::RadioCard::Group
         @name={{t 'form.type.label'}}
         @alignment='center'

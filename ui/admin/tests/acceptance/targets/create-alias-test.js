@@ -146,7 +146,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
     await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
-    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readOnly');
+    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readonly');
     await click(SAVE_BTN_SELECTOR);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,

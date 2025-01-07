@@ -15,7 +15,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -37,7 +37,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -94,7 +94,7 @@
     @isInvalid={{@model.errors.path}}
     @type='text'
     name='vault_path'
-    disabled={{form.disabled}}
+    readonly={{form.disabled}}
     {{on 'input' (set-from-event @model 'path')}}
     as |F|
   >
@@ -228,7 +228,7 @@
       @value={{@model.http_request_body}}
       @isInvalid={{@model.errors.http_request_body}}
       name='http_request_body'
-      disabled={{form.disabled}}
+      readonly={{form.disabled}}
       as |F|
     >
       <F.Label>{{t
