@@ -6,20 +6,12 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import {
-  TYPES_HOST_CATALOG,
-  TYPES_HOST_CATALOG_PLUGIN,
   TYPES_CREDENTIALS,
   TYPE_CREDENTIAL_DYNAMIC,
 } from 'api/models/host-catalog';
 import { tracked } from '@glimmer/tracking';
 
-//Note: this is a temporary solution till we have resource type helper in place
-const icons = ['aws-color', 'azure-color'];
-
 export default class FormHostCatalogAwsComponent extends Component {
-  // =properties
-  hostCatalogTypes = TYPES_HOST_CATALOG;
-
   // =attributes
   @tracked selectedCredentialType = this.args.model.credentialType;
 
@@ -34,16 +26,6 @@ export default class FormHostCatalogAwsComponent extends Component {
     return TYPES_CREDENTIALS;
   }
 
-  /**
-   * maps resource type with icon
-   * @type {object}
-   */
-  get mapResourceTypeWithIcon() {
-    return TYPES_HOST_CATALOG_PLUGIN.reduce(
-      (obj, plugin, i) => ({ ...obj, [plugin]: icons[i] }),
-      {},
-    );
-  }
   // =actions
 
   @action
