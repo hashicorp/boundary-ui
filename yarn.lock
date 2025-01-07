@@ -3199,6 +3199,14 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@babel/types@^7.12.13":
+  version "7.26.3"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.26.3.tgz#37e79830f04c2b5687acc77db97fbc75fb81f3c0"
+  integrity sha512-vN5p+1kl59GVKMvTHt55NzzmYVxprfJD+ql7U9NFIfKCBkYE55LYtS+WtPlaYOyzydrKI8Nezd+aZextrd+FMA==
+  dependencies:
+    "@babel/helper-string-parser" "^7.25.9"
+    "@babel/helper-validator-identifier" "^7.25.9"
+
 "@babel/types@^7.14.5", "@babel/types@^7.14.8", "@babel/types@^7.15.0", "@babel/types@^7.4.4", "@babel/types@^7.7.2":
   version "7.15.0"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.15.0.tgz#61af11f2286c4e9c69ca8deb5f4375a73c72dcbd"
@@ -3985,25 +3993,25 @@
   resolved "https://registry.yarnpkg.com/@faker-js/faker/-/faker-8.0.2.tgz#bab698c5d3da9c52744e966e0e3eedb6c8b05c37"
   integrity sha512-Uo3pGspElQW91PCvKSIAXoEgAUlRnH29sX2/p89kg7sP1m2PzCufHINd0FhTXQf6DYGiUlVncdSPa2F9wxed2A==
 
-"@floating-ui/core@^1.0.0":
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.2.tgz#d37f3e0ac1f1c756c7de45db13303a266226851a"
-  integrity sha512-+2XpQV9LLZeanU4ZevzRnGFg2neDeKHgFLjP6YLW+tly0IvrhqT4u8enLGjLH3qeh85g19xY5rsAusfwTdn5lg==
+"@floating-ui/core@^1.6.0":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.8.tgz#aa43561be075815879305965020f492cdb43da12"
+  integrity sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==
   dependencies:
-    "@floating-ui/utils" "^0.2.0"
+    "@floating-ui/utils" "^0.2.8"
 
-"@floating-ui/dom@^1.6.3":
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.5.tgz#323f065c003f1d3ecf0ff16d2c2c4d38979f4cb9"
-  integrity sha512-Nsdud2X65Dz+1RHjAIP0t8z5e2ff/IRbei6BqFrl1urT8sDVzM1HMQ+R0XcU5ceRfyO3I6ayeqIfh+6Wb8LGTw==
+"@floating-ui/dom@^1.6.12":
+  version "1.6.12"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.6.12.tgz#6333dcb5a8ead3b2bf82f33d6bc410e95f54e556"
+  integrity sha512-NP83c0HjokcGVEMeoStg317VD9W7eDlGK7457dMBANbKA6GJZdc7rjujdgqzTaz93jkGgc5P/jeWbaCHnMNc+w==
   dependencies:
-    "@floating-ui/core" "^1.0.0"
-    "@floating-ui/utils" "^0.2.0"
+    "@floating-ui/core" "^1.6.0"
+    "@floating-ui/utils" "^0.2.8"
 
-"@floating-ui/utils@^0.2.0":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.2.tgz#d8bae93ac8b815b2bd7a98078cf91e2724ef11e5"
-  integrity sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==
+"@floating-ui/utils@^0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.8.tgz#21a907684723bbbaa5f0974cf7730bd797eb8e62"
+  integrity sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==
 
 "@formatjs/ecma402-abstract@2.0.0":
   version "2.0.0"
@@ -4225,22 +4233,24 @@
   resolved "https://registry.yarnpkg.com/@handlebars/parser/-/parser-2.0.0.tgz#5e8b7298f31ff8f7b260e6b7363c7e9ceed7d9c5"
   integrity sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==
 
-"@hashicorp/design-system-components@^4.13.0":
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-4.13.1.tgz#18a12eb23e52a7676613f6bf39e4defdfd73182a"
-  integrity sha512-yEiQJxAs0zgt/dxM6ZYPcVJT0a3C2wrO+8iOxUd623jyDXlbyjD/vZSp7qOCvkomQkHvWgD/7clVdl75a5i3rQ==
+"@hashicorp/design-system-components@^4.15.0":
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-components/-/design-system-components-4.15.0.tgz#2fa125d33740a4965cf33346b290e85ce8f2e3d3"
+  integrity sha512-xIFiu6+SbgFamBPnJLdr0rxatlwDfxezjskR/0lo6g1508HJCFxFxO+YvRJgzAApznK2C0rzGWy3usacZd4gtg==
   dependencies:
     "@ember/render-modifiers" "^2.0.5"
     "@ember/string" "^3.1.1"
     "@ember/test-waiters" "^3.1.0"
     "@embroider/addon-shim" "^1.8.7"
-    "@floating-ui/dom" "^1.6.3"
-    "@hashicorp/design-system-tokens" "^2.2.1"
-    "@hashicorp/flight-icons" "^3.7.0"
+    "@floating-ui/dom" "^1.6.12"
+    "@hashicorp/design-system-tokens" "^2.2.2"
+    "@hashicorp/flight-icons" "^3.8.0"
+    clipboard-polyfill "^4.1.0"
     decorator-transforms "^1.1.0"
     ember-a11y-refocus "^4.1.3"
     ember-cli-sass "^11.0.1"
     ember-composable-helpers "^5.0.0"
+    ember-concurrency "^4.0.2"
     ember-element-helper "^0.8.5"
     ember-focus-trap "^1.1.0"
     ember-get-config "^2.1.1"
@@ -4249,14 +4259,15 @@
     ember-stargate "^0.4.3"
     ember-style-modifier "^4.4.0"
     ember-truth-helpers "^4.0.3"
+    luxon "^2.3.2 || ^3.4.2"
     prismjs "^1.29.0"
     sass "^1.69.5"
     tippy.js "^6.3.7"
 
-"@hashicorp/design-system-tokens@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-2.2.1.tgz#9112c4cf9099ef1706a6b4f83be400960b473e91"
-  integrity sha512-Pnbnk5jbOXmW82W0wimP0PdOWYAi7dYsC3TE88JbR+jHzpwUdyVGsqcYF7ClOl/C/KDbK60N0FEJbFdaFj6ZXQ==
+"@hashicorp/design-system-tokens@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@hashicorp/design-system-tokens/-/design-system-tokens-2.2.2.tgz#c991838e50b199539a3dd926f60e23c709f82403"
+  integrity sha512-talnAxnPe5YrmEzn31uWHb0v1pfShcEUzFc8u9O3o2JzvRnrHBVScmzbLdOJVdsrvlQ6jLLv3kdp7Oh8thYiMQ==
 
 "@hashicorp/ember-asciinema-player@https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a":
   version "0.0.0"
@@ -4267,10 +4278,10 @@
     ember-cli-babel "^7.26.11"
     ember-cli-htmlbars "^6.1.1"
 
-"@hashicorp/flight-icons@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-3.7.0.tgz#cc8e4fb7cc8ac585a4841f6d724217a054cfe959"
-  integrity sha512-oSnIjGqzXciibyQjgc45u4GUHBrIgyFSBCjxP4t0WXbJ578J3/DB6eyvWoMJ4r4GSf0MxUgOg0A/fJV/V4yEdA==
+"@hashicorp/flight-icons@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@hashicorp/flight-icons/-/flight-icons-3.8.0.tgz#779f6f9ebffb2a36975d58f06d5bd4c3bebdc8d2"
+  integrity sha512-ybfmnVpSWTyaRAXZz7AAlK2+1I/jYLFlE7OhE8WVumQvTCsQeo/px+pZ3pfScGvSiSfBQxgQz8wMR1RmSpNgcQ==
 
 "@humanwhocodes/config-array@^0.11.13":
   version "0.11.13"
@@ -7242,6 +7253,11 @@ cli-width@^4.1.0:
   resolved "https://registry.yarnpkg.com/cli-width/-/cli-width-4.1.0.tgz#42daac41d3c254ef38ad8ac037672130173691c5"
   integrity sha512-ouuZd4/dm2Sw5Gmqy6bGyNNNe1qt9RpmxveLSO7KcgsTnU7RXfsw+/bukWGo1abgBiMAic068rclZsO4IWmmxQ==
 
+clipboard-polyfill@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/clipboard-polyfill/-/clipboard-polyfill-4.1.1.tgz#eaf074f91c0a55aa4c12fcfd4862d2cfb9a0cab9"
+  integrity sha512-nbvNLrcX0zviek5QHLFRAaLrx8y/s8+RF2stH43tuS+kP5XlHMrcD0UGBWq43Hwp6WuuK7KefRMP56S45ibZkA==
+
 clipboard@^2.0.11:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.11.tgz#62180360b97dd668b6b3a84ec226975762a70be5"
@@ -7911,7 +7927,7 @@ decompress-response@^6.0.0:
   dependencies:
     mimic-response "^3.1.0"
 
-decorator-transforms@^1.1.0:
+decorator-transforms@^1.0.1, decorator-transforms@^1.1.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/decorator-transforms/-/decorator-transforms-1.2.1.tgz#d72e39b95c9e3d63465f82b148d021919e9d198f"
   integrity sha512-UUtmyfdlHvYoX3VSG1w5rbvBQ2r5TX1JsE4hmKU9snleFymadA3VACjl6SRfi9YgBCSjBbfQvR1bs9PRW9yBKw==
@@ -9015,6 +9031,16 @@ ember-concurrency@^2.0.3:
     ember-cli-htmlbars "^5.7.1"
     ember-compatibility-helpers "^1.2.0"
     ember-destroyable-polyfill "^2.0.2"
+
+ember-concurrency@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/ember-concurrency/-/ember-concurrency-4.0.2.tgz#fddf23ceaa25088e1221883622ddf8aac2b305d9"
+  integrity sha512-enmStRE8bHIeF/kPZoDZlzP9YINN7H8l3Myk1sVkqo235ph0Vjee37AGCw44eRq6cBRvcdQmb5K3pkzVY7A6WA==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.12.13"
+    "@babel/types" "^7.12.13"
+    "@embroider/addon-shim" "^1.8.7"
+    decorator-transforms "^1.0.1"
 
 ember-cookies@^1.0.0, ember-cookies@^1.2.0:
   version "1.2.0"
@@ -13394,6 +13420,11 @@ lru-cache@^7.5.1, lru-cache@^7.7.1:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.0.0.tgz#b9e2a6a72a129d81ab317202d93c7691df727e61"
   integrity sha512-svTf/fzsKHffP42sujkO/Rjs37BCIsQVRCeNYIm9WN8rgT7ffoUnRtZCqU+6BqcSBdv8gwJeTz8knJpgACeQMw==
+
+"luxon@^2.3.2 || ^3.4.2":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.5.0.tgz#6b6f65c5cd1d61d1fd19dbf07ee87a50bf4b8e20"
+  integrity sha512-rh+Zjr6DNfUYR3bPwJEnuwDdqMbxZW7LOQfUN4B54+Cl+0o5zaU9RJ6bcidfDtC1cWCZXQ+nvX8bf6bAji37QQ==
 
 magic-string@^0.25.7:
   version "0.25.7"
