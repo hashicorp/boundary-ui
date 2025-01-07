@@ -220,6 +220,7 @@ host-catalog:
     aws: AWS
     azure: Azure
     plugin: Dynamic
+    gcp: GCP
     credential:
       label: Credential type
       help: Select the credential type that you want to use.
@@ -240,6 +241,24 @@ host-catalog:
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
     worker_filter:
       help: Insert a worker filter in order to route requests to the correct worker.
+    project_id:
+      label: Project ID
+      help: Project ID of the instances you want to add to host catalog.
+    zone:
+      label: Zone
+      help: Zone of the instances you want to add to host catalog.
+    client_email:
+      label: Client Email
+      help: The email address used to uniquely identify the service account.
+    target_service_account_id:
+      label: Target Service Account ID
+      help: The unique identifier for the service account that will be impersonated. This is only used when authenticating with service account impersonation.
+    private_key_id:
+      label: Private Key ID
+      help: The unique identifier of private key.
+    private_key:
+      label: Private Key
+      help: The private key used to obtain a OAuth 2.0 access token.
 host-set:
   title: Host Set
   title_plural: Host Sets

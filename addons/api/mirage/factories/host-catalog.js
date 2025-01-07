@@ -12,7 +12,7 @@ import generateId from '../helpers/id';
 const types = ['static', 'plugin'];
 // Represents known plugin types, except "foobar" which models the possibility
 // of receiving an _unknown_ type, which the UI must handle gracefully.
-const pluginTypes = ['aws', 'azure', 'foobar'];
+const pluginTypes = ['gcp', 'aws', 'azure', 'foobar'];
 
 let pluginTypeCounter = 1;
 
@@ -70,6 +70,16 @@ export default factory.extend({
           client_id: faker.string.uuid(),
           subscription_id: faker.string.uuid(),
         };
+      case 'gcp':
+        return {
+          disable_credential_rotation: faker.datatype.boolean(),
+          project_id: faker.string.uuid(),
+          client_email: faker.internet.email(),
+          target_service_account_id: faker.string.uuid(),
+          zone: `us-${faker.location.cardinalDirection()}-${faker.number.int(
+            9,
+          )}`,
+        };
     }
   },
 
@@ -84,6 +94,11 @@ export default factory.extend({
         return {
           secret_id: faker.string.nanoid(),
           secret_value: faker.string.nanoid(),
+        };
+      case 'gcp':
+        return {
+          private_key: faker.string.nanoid(),
+          private_key_id: faker.string.nanoid(),
         };
     }
   },
