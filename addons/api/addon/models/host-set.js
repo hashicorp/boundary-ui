@@ -4,7 +4,12 @@
  */
 
 import GeneratedHostSetModel from '../generated/models/host-set';
-import { TYPES_HOST_CATALOG_PLUGIN } from './host-catalog';
+import {
+  TYPES_HOST_CATALOG_PLUGIN,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+} from './host-catalog';
 
 export default class HostSetModel extends GeneratedHostSetModel {
   // =attributes
@@ -40,14 +45,14 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS;
   }
 
   /**
    * Return if a host-set plugin is Azure or not.
    */
   get isAzure() {
-    return this.compositeType === 'azure';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE;
   }
 
   /**
@@ -55,7 +60,7 @@ export default class HostSetModel extends GeneratedHostSetModel {
    * @type {boolean}
    */
   get isGCP() {
-    return this.compositeType === 'gcp';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_GCP;
   }
 
   /**
