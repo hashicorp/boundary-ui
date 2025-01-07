@@ -55,10 +55,13 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   plugin;
 
-  // AWS & Azure
+  // AWS, Azure & GCP
 
   @attr('boolean', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: ['aws', 'azure', 'gcp'],
+    },
     isNestedAttribute: true,
     description: '',
   })
@@ -67,14 +70,20 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // AWS specific
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+    },
     description:
       'An expression used to filter the workers that have network access to a service that is hosting the external object store.',
   })
   worker_filter;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+    },
     isNestedAttribute: true,
     description: '',
   })
@@ -82,14 +91,22 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   // AWS static credentials
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'static-credential',
+    },
     isNestedSecret: true,
     description: '',
   })
   access_key_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'static-credential',
+    },
     isNestedSecret: true,
     description: '',
   })
@@ -97,28 +114,44 @@ export default class GeneratedHostCatalogModel extends BaseModel {
 
   // AWS dynamic credentials
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'dynamic-credential',
+    },
     isNestedAttribute: true,
     description: 'The role ARN to use.',
   })
   role_arn;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'dynamic-credential',
+    },
     isNestedAttribute: true,
     description: 'The role external ID to use.',
   })
   role_external_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'dynamic-credential',
+    },
     isNestedAttribute: true,
     description: 'The role session to use.',
   })
   role_session_name;
 
   @attr('object-as-array', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'aws',
+      credentialType: 'dynamic-credential',
+    },
     isNestedAttribute: true,
     description: 'The role tags to use.',
   })
@@ -127,37 +160,117 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   // Azure specific
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     isNestedAttribute: true,
     description: '',
   })
   tenant_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     isNestedAttribute: true,
     description: '',
   })
   client_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     isNestedAttribute: true,
     description: '',
   })
   subscription_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     isNestedSecret: true,
     description: '',
   })
   secret_id;
 
   @attr('string', {
-    for: 'plugin',
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     isNestedSecret: true,
     description: '',
   })
   secret_value;
+
+  // GCP specific
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    isNestedAttribute: true,
+    description: 'The project ID associated with the service account.',
+  })
+  project_id;
+
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    isNestedAttribute: true,
+    description: 'The deployment area within a region.',
+  })
+  zone;
+
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    isNestedAttribute: true,
+    description:
+      'The email address associated with the service account. The email address used to uniquely identify the service account. It is required for authentication and authorization.',
+  })
+  client_email;
+
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    isNestedAttribute: true,
+    description:
+      'The unique identifier for the service account that will be impersonated.',
+  })
+  target_service_account_id;
+
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    description:
+      'The ID of the private key used to sign the JWT and authentication.',
+    isNestedSecret: true,
+  })
+  private_key_id;
+
+  @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'gcp',
+    },
+    description:
+      'The private key used to sign the JWT and obtain a OAuth 2.0 access token.',
+    isNestedSecret: true,
+  })
+  private_key;
 }
