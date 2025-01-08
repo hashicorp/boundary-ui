@@ -95,7 +95,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAWS() {
-    return this.compositeType === 'aws';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_AWS;
   }
 
   /**
@@ -103,7 +103,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isAzure() {
-    return this.compositeType === 'azure';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_AZURE;
   }
 
   /**
@@ -111,7 +111,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {boolean}
    */
   get isGCP() {
-    return this.compositeType === 'gcp';
+    return this.compositeType === TYPE_HOST_CATALOG_PLUGIN_GCP;
   }
 
   /**

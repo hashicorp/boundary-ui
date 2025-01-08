@@ -26,13 +26,6 @@ export default class FormHostCatalogAwsComponent extends Component {
     return TYPES_CREDENTIALS;
   }
 
-  // =actions
-
-  @action
-  toggleDisableCredentialRotation(model) {
-    model.disable_credential_rotation = !model.disable_credential_rotation;
-  }
-
   /**
    * Allows to update the credential type
    * @param type {string}
