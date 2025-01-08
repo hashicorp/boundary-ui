@@ -57,6 +57,9 @@ descriptions:
   provider: This is the provider for this host catalog. The format of the host set filters are specific to each provider.
   no-search-results: Sorry, we weren't able to find any {resource} for "{query}".
   no-filter-results: Sorry, we weren’t able to find any {resource} within the filtered parameters.
+  and-more: ...and more
+  view-all-orgs: 'View all orgs ({total})'
+  view-all-projects: 'View all projects ({total})'
 questions:
   delete-confirm: Are you sure you want to delete this resource?
   remove-confirm: Are you sure you want to remove this association?
