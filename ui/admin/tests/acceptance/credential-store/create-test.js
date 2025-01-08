@@ -30,8 +30,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    projectScope: null,
     credentialStores: null,
     newCredentialStore: null,
   };
@@ -48,9 +46,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
+    urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.newCredentialStore = `${urls.credentialStores}/new`;
     // Generate resource counter
     getCredentialStoresCount = () => {
