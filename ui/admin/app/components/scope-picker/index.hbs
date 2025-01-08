@@ -38,17 +38,25 @@
       @route='scopes.scope'
       @model={{org.id}}
       @selected={{and (eq this.scope.org.id org.id) (not this.scope.project)}}
+      data-test-scope-picker-org-item
     >
       {{org.displayName}}
     </D.Checkmark>
   {{/each}}
 
   {{#if (gt this.scope.orgsList.length 5)}}
-    <D.Description @text={{t 'descriptions.and-more'}} />
+    <D.Description
+      @text={{t 'descriptions.and-more'}}
+      data-test-scope-picker-org-and-more-text
+    />
   {{/if}}
 
   {{#if this.scope.orgsList}}
-    <D.Interactive @route='scopes.scope.scopes' @model='global'>{{t
+    <D.Interactive
+      @route='scopes.scope.scopes'
+      @model='global'
+      data-test-scope-picker-org-count
+    >{{t
         'descriptions.view-all-orgs'
         total=this.scope.orgsList.length
       }}</D.Interactive>
@@ -65,19 +73,25 @@
         @model={{project.id}}
         @selected={{eq this.scope.project.id project.id}}
         class='indentation'
+        data-test-scope-picker-project-item
       >
         {{project.displayName}}
       </D.Checkmark>
     {{/each}}
 
     {{#if (gt this.scope.projectsList.length 5)}}
-      <D.Description @text={{t 'descriptions.and-more'}} class='indentation' />
+      <D.Description
+        @text={{t 'descriptions.and-more'}}
+        class='indentation'
+        data-test-scope-picker-project-and-more-text
+      />
     {{/if}}
 
     <D.Interactive
       @route='scopes.scope.scopes'
       @model={{this.scope.org.id}}
       class='indentation'
+      data-test-scope-picker-project-count
     >{{t
         'descriptions.view-all-projects'
         total=this.scope.projectsList.length

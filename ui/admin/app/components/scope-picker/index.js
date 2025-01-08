@@ -17,7 +17,8 @@ export default class ScopePickerIndexComponent extends Component {
   // =attributes
 
   /**
-   *
+   * Returns display name and icon for current scope.
+   * @type {object}
    */
   get currentScope() {
     if (this.scope.project) {
