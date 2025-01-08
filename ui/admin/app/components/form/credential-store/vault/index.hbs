@@ -109,7 +109,9 @@
     {{#if @model.errors.address}}
       <F.Error as |E|>
         {{#each @model.errors.address as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message
+            data-test-error-message-vault-address
+          >{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
