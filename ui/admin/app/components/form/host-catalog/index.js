@@ -4,6 +4,8 @@
  */
 
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+
 import {
   TYPES_HOST_CATALOG,
   TYPES_HOST_CATALOG_PLUGIN,
@@ -23,5 +25,12 @@ export default class FormHostCatalogIndexComponent extends Component {
       (obj, plugin, i) => ({ ...obj, [plugin]: icons[i] }),
       {},
     );
+  }
+
+  // =actions
+
+  @action
+  toggleDisableCredentialRotation(model) {
+    model.disable_credential_rotation = !model.disable_credential_rotation;
   }
 }
