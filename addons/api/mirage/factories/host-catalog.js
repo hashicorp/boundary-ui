@@ -8,11 +8,23 @@ import { trait } from 'miragejs';
 import permissions from '../helpers/permissions';
 import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
+import {
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_STATIC,
+  TYPE_HOST_CATALOG_DYNAMIC,
+  TYPES_HOST_CATALOG,
+} from 'api/models/host-catalog';
 
-const types = ['static', 'plugin'];
 // Represents known plugin types, except "foobar" which models the possibility
 // of receiving an _unknown_ type, which the UI must handle gracefully.
-const pluginTypes = ['gcp', 'aws', 'azure', 'foobar'];
+const pluginTypes = [
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  'foobar',
+];
 
 let pluginTypeCounter = 1;
 
@@ -20,7 +32,7 @@ export default factory.extend({
   id: () => generateId('hc_'),
 
   // Cycle through available types
-  type: (i) => types[i % types.length],
+  type: (i) => TYPES_HOST_CATALOG[i % TYPES_HOST_CATALOG.length],
 
   authorized_actions: () =>
     permissions.authorizedActionsFor('host-catalog') || [
@@ -30,7 +42,7 @@ export default factory.extend({
       'delete',
     ],
   authorized_collection_actions: function () {
-    const isStatic = this.type === 'static';
+    const isStatic = this.type === TYPE_HOST_CATALOG_STATIC;
     return {
       // only static catalogs allow host create at this time
       hosts: isStatic ? ['create', 'list'] : ['list'],
@@ -39,13 +51,16 @@ export default factory.extend({
   },
 
   worker_filter: function () {
-    if (this.type === 'plugin' && this.plugin?.name === 'aws') {
+    if (
+      this.type === TYPE_HOST_CATALOG_DYNAMIC &&
+      this.plugin?.name === TYPE_HOST_CATALOG_PLUGIN_AWS
+    ) {
       return `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
     }
   },
 
   plugin: function (i) {
-    if (this.type === 'plugin') {
+    if (this.type === TYPE_HOST_CATALOG_DYNAMIC) {
       return {
         id: `plugin-id-${i}`,
         name: pluginTypes[pluginTypeCounter++ % pluginTypes.length],
@@ -56,21 +71,21 @@ export default factory.extend({
 
   attributes() {
     switch (this.plugin?.name) {
-      case 'aws':
+      case TYPE_HOST_CATALOG_PLUGIN_AWS:
         return {
           disable_credential_rotation: faker.datatype.boolean(),
           region: `us-${faker.location.cardinalDirection()}-${faker.number.int(
             9,
           )}`,
         };
-      case 'azure':
+      case TYPE_HOST_CATALOG_PLUGIN_AZURE:
         return {
           disable_credential_rotation: faker.datatype.boolean(),
           tenant_id: faker.string.uuid(),
           client_id: faker.string.uuid(),
           subscription_id: faker.string.uuid(),
         };
-      case 'gcp':
+      case TYPE_HOST_CATALOG_PLUGIN_GCP:
         return {
           disable_credential_rotation: faker.datatype.boolean(),
           project_id: faker.string.uuid(),
@@ -85,17 +100,17 @@ export default factory.extend({
 
   secrets() {
     switch (this.plugin?.name) {
-      case 'aws':
+      case TYPE_HOST_CATALOG_PLUGIN_AWS:
         return {
           access_key_id: faker.string.nanoid(),
           secret_access_key: faker.string.nanoid(),
         };
-      case 'azure':
+      case TYPE_HOST_CATALOG_PLUGIN_AZURE:
         return {
           secret_id: faker.string.nanoid(),
           secret_value: faker.string.nanoid(),
         };
-      case 'gcp':
+      case TYPE_HOST_CATALOG_PLUGIN_GCP:
         return {
           private_key: faker.string.nanoid(),
           private_key_id: faker.string.nanoid(),
