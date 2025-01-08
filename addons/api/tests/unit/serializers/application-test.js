@@ -217,6 +217,7 @@ module('Unit | Serializer | application', function (hooks) {
       name: 'GCP plugin',
       description: 'this is a GCP plugin host-catalog',
       type: 'plugin',
+      worker_filter: 'workerfilter',
       attributes: {
         disable_credential_rotation: true,
         project_id: 'project',
