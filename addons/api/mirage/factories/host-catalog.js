@@ -76,9 +76,9 @@ export default factory.extend({
           project_id: faker.string.uuid(),
           client_email: faker.internet.email(),
           target_service_account_id: faker.string.uuid(),
-          zone: `us-${faker.location.cardinalDirection()}-${faker.number.int(
+          zone: `us-${faker.location.cardinalDirection()}${faker.number.int(
             9,
-          )}`,
+          )}-${faker.string.fromCharacters('abc')}`,
         };
     }
   },
