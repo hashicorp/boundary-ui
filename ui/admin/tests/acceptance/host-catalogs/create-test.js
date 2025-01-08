@@ -224,7 +224,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('users should see worker filter field in enterprise edition', async function (assert) {
-    featuresService.enable('dynamic-credentials-worker-filter');
+    featuresService.enable('host-catalog-worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
     assert.dom('[data-test-dynamic-credential-worker-filter]').exists();
   });
