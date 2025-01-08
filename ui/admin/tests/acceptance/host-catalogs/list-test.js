@@ -30,6 +30,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       project: null,
     },
     staticHostCatalog: null,
+    gcpHostCatalog: null,
   };
 
   const urls = {
@@ -228,15 +229,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     await visit(urls.projectScope);
 
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.gcpHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.staticHostCatalog}"]`).isVisible();
+    assert.dom(`[href="${urls.awsHostCatalog}"]`).isVisible();
+    assert.dom(`[href="${urls.azureHostCatalog}"]`).isVisible();
+    assert.dom(`[href="${urls.gcpHostCatalog}"]`).isVisible();
 
     await fillIn(SEARCH_INPUT_SELECTOR, TYPE_HOST_CATALOG_PLUGIN_GCP);
     await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
 
-    assert.dom(`[href="${urls.gcpHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.gcpHostCatalog}"]`).isVisible();
   });
 
   test('user can search for host catalogs and get no results', async function (assert) {

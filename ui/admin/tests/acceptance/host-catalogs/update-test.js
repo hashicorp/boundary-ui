@@ -29,6 +29,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
       project: null,
     },
     hostCatalog: null,
+    GCPHostCatalog: null,
   };
   const urls = {
     globalScope: null,
