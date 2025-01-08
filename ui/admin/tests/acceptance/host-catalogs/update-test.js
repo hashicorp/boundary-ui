@@ -14,6 +14,7 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 
 module('Acceptance | host-catalogs | update', function (hooks) {
@@ -36,10 +37,11 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     hostCatalogs: null,
     hostCatalog: null,
     AWSHostCatalogWithStaticCredential: null,
+    GCPHostCatalog: null,
   };
 
   const NAME_INPUT_SELECTOR = '[name="name"]';
-  const EDIT_BUTTON_SELECTOR = 'form [type="button"]';
+  const EDIT_BUTTON_SELECTOR = '.rose-form-actions [type=button]';
   const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const CREDENTIAL_TYPE_SELECTOR =
@@ -59,6 +61,12 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+    instances.GCPHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: TYPE_HOST_CATALOG_DYNAMIC,
+      plugin: { name: TYPE_HOST_CATALOG_PLUGIN_GCP },
+    });
+
     instances.AWSHostCatalogWithStaticCredential = this.server.create(
       'host-catalog',
       {
@@ -75,6 +83,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.AWSHostCatalogWithStaticCredential = `${urls.hostCatalogs}/${instances.AWSHostCatalogWithStaticCredential.id}`;
+    urls.GCPHostCatalog = `${urls.hostCatalogs}/${instances.GCPHostCatalog.id}`;
     await authenticateSession({});
   });
 
@@ -94,6 +103,19 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.strictEqual(
       find(CREDENTIAL_TYPE_SELECTOR).value,
       'dynamic-credential',
+    );
+  });
+
+  test('can update GCP host catalog', async function (assert) {
+    await visit(urls.GCPHostCatalog);
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn('[name=project_id]', 'project-id');
+    await click(SAVE_BUTTON_SELECTOR);
+
+    assert.strictEqual(
+      this.server.schema.hostCatalogs.where({ type: 'plugin' }).models[0]
+        .attributes.project_id,
+      'project-id',
     );
   });
 

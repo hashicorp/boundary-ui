@@ -14,6 +14,7 @@ import {
   TYPE_HOST_CATALOG_STATIC,
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -39,6 +40,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     awsHostCatalog: null,
     azureHostCatalog: null,
     staticHostCatalog: null,
+    gcpHostCatalog: null,
   };
 
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
@@ -68,6 +70,12 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       type: TYPE_HOST_CATALOG_DYNAMIC,
       plugin: { name: TYPE_HOST_CATALOG_PLUGIN_AZURE },
     });
+    instances.gcpHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: TYPE_HOST_CATALOG_DYNAMIC,
+      plugin: { name: TYPE_HOST_CATALOG_PLUGIN_GCP },
+    });
+
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
@@ -75,6 +83,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     urls.staticHostCatalog = `${urls.hostCatalogs}/${instances.staticHostCatalog.id}`;
     urls.awsHostCatalog = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}`;
     urls.azureHostCatalog = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}`;
+    urls.gcpHostCatalog = `${urls.hostCatalogs}/${instances.gcpHostCatalog.id}`;
 
     await authenticateSession({});
   });
@@ -213,6 +222,21 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
 
     assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+  });
+
+  test('user can search for gcp host catalog', async function (assert) {
+    await visit(urls.projectScope);
+
+    await click(`[href="${urls.hostCatalogs}"]`);
+    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.gcpHostCatalog}"]`).exists();
+
+    await fillIn(SEARCH_INPUT_SELECTOR, TYPE_HOST_CATALOG_PLUGIN_GCP);
+    await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
+
+    assert.dom(`[href="${urls.gcpHostCatalog}"]`).exists();
   });
 
   test('user can search for host catalogs and get no results', async function (assert) {
