@@ -45,6 +45,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     newStaticHostCatalog: null,
     newAWSDynamicHostCatalog: null,
     newAzureDynamicHostCatalog: null,
+    newGCPDynamicHostCatalog: null,
   };
 
   hooks.beforeEach(async function () {
@@ -81,6 +82,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     urls.newStaticHostCatalog = `${urls.newHostCatalog}?type=static`;
     urls.newAWSDynamicHostCatalog = `${urls.newHostCatalog}?type=aws`;
     urls.newAzureDynamicHostCatalog = `${urls.newHostCatalog}?type=azure`;
+    urls.newGCPDynamicHostCatalog = `${urls.newHostCatalog}?type=gcp`;
     featuresService = this.owner.lookup('service:features');
 
     // Generate resource counter
@@ -110,12 +112,24 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
 
-  test('Users can create new dynamic aws host catalogs with azure provider', async function (assert) {
+  test('Users can create new dynamic azure host catalogs with azure provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
     await fillIn(TYPE_INPUT_SELECTOR, 'azure');
+    await click(SAVE_BUTTON_SELECTOR);
+    assert.strictEqual(getHostCatalogCount(), count + 1);
+  });
+
+  test('Users can create new dynamic host catalogs with GCP provider ', async function (assert) {
+    const count = getHostCatalogCount();
+    await visit(urls.newGCPDynamicHostCatalog);
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
+    await fillIn('[name="zone"]', 'random string');
+    await fillIn('[name="project_id"]', 'random string');
+    await fillIn('[name="client_email"]', 'random string');
     await click(SAVE_BUTTON_SELECTOR);
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
@@ -132,6 +146,15 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   test('Users can cancel creation of new dynamic host catalogs with AWS provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
+    await fillIn(NAME_INPUT_SELECTOR, 'random string');
+    await click(CANCEL_BUTTON_SELECTOR);
+    assert.strictEqual(currentURL(), urls.hostCatalogs);
+    assert.strictEqual(getHostCatalogCount(), count);
+  });
+
+  test('Users can cancel creation of new dynamic host catalogs with GCP provider', async function (assert) {
+    const count = getHostCatalogCount();
+    await visit(urls.newGCPDynamicHostCatalog);
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     await click(CANCEL_BUTTON_SELECTOR);
     assert.strictEqual(currentURL(), urls.hostCatalogs);
