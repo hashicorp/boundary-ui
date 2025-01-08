@@ -10,6 +10,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,8 +24,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
     '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
   const NEW_DROPDOWN_SELECTOR =
     '[data-test-new-dropdown] .hds-dropdown-toggle-button';
-  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const URLS_INPUT_SELECTOR = '[name="urls"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
@@ -33,15 +33,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
 
   const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';
   const CERTIFICATES_INPUT_SELECTOR = '[name="certificates"] textarea';
-  const IDP_CERTS_INPUT_SELECTOR = '[name="idp_ca_certs"] textarea';
-  const IDP_CERTS_BTN_SELECTOR = '[name="idp_ca_certs"] button';
-
-  const ALLOWED_AUDIENCES_BTN_SELECTOR = '[name="allowed_audiences"] button';
-  const ALLOWED_AUDIENCES_INPUT_SELECTOR = '[name="allowed_audiences"] input';
-
-  const CLAIMS_SCOPES_BTN_SELECTOR = '[name="claims_scopes"] button';
-  const CLAIMS_SCOPES_INPUT_SELECTOR = '[name="claims_scopes"] input';
-  const TOGGLE_SELECTOR = '[name="prompts"]';
 
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-auth-method] button:first-child';
@@ -105,9 +96,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
     const count = getAuthMethodsCount();
 
     await visit(urls.newAuthMethod);
-    await fillIn(NAME_INPUT_SELECTOR, 'AuthMethod name');
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
     assert.strictEqual(getAuthMethodsCount(), count + 1);
   });
 
@@ -115,58 +109,98 @@ module('Acceptance | auth-methods | create', function (hooks) {
     const count = getAuthMethodsCount();
 
     await visit(`${urls.authMethods}/new?type=oidc`);
-    const name = 'oidc name';
-    await fillIn(NAME_INPUT_SELECTOR, name);
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await fillIn('[name="issuer"]', 'issuer');
-    await fillIn('[name="client_id"]', 'client_id');
-    await fillIn('[name="client_secret"]', 'client_secret');
-    await select('form fieldset:nth-of-type(1) select', 'RS384');
-    await click('[data-test-add-option-button]');
-    await fillIn(ALLOWED_AUDIENCES_INPUT_SELECTOR, 'allowed_audiences');
-    await click(ALLOWED_AUDIENCES_BTN_SELECTOR, 'allowed_audiences');
-    await fillIn(CLAIMS_SCOPES_INPUT_SELECTOR, 'claims_scopes');
-    await click(CLAIMS_SCOPES_BTN_SELECTOR, 'claims_scopes');
-
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      '[name="account_claim_maps"] tbody td:nth-of-type(1) input',
-      'from_claim',
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_ISSUER, selectors.FIELD_ISSUER_VALUE);
+    await fillIn(selectors.FIELD_CLIENT_ID, selectors.FIELD_CLIENT_ID_VALUE);
+    await fillIn(
+      selectors.FIELD_CLIENT_SECRET,
+      selectors.FIELD_CLIENT_SECRET_VALUE,
     );
     await select(
-      '[name="account_claim_maps"] tbody td:nth-of-type(2) select',
-      'email',
+      selectors.FIELD_SIGNING_ALGORITHMS,
+      selectors.FIELD_SIGNING_ALGORITHMS_VALUE,
     );
+    await click(selectors.FIELD_SIGNING_ALGORITHMS_ADD_BTN);
+    await fillIn(
+      selectors.FIELD_ALLOWED_AUDIENCES,
+      selectors.FIELD_ALLOWED_AUDIENCES_VALUE,
+    );
+    await click(selectors.FIELD_ALLOWED_AUDIENCES_ADD_BTN);
+    await fillIn(
+      selectors.FIELD_CLAIMS_SCOPES,
+      selectors.FIELD_CLAIMS_SCOPES_VALUE,
+    );
+    await click(selectors.FIELD_CLAIMS_SCOPES_ADD_BTN);
 
-    await click('[name="account_claim_maps"] button');
+    await fillIn(
+      selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM,
+      selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE,
+    );
+    await select(
+      selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM,
+      selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE,
+    );
+    await click(selectors.FIELD_ACCOUNT_CLAIM_MAPS_ADD_BTN);
 
-    await fillIn(IDP_CERTS_INPUT_SELECTOR, 'certificates');
-    await click(IDP_CERTS_BTN_SELECTOR);
-    await fillIn('[name="max_age"]', '5');
-    await fillIn('[name="api_url_prefix"]', 'api_url_prefix');
-    await click('[id="consent"]', 'consent');
+    await fillIn(selectors.FIELD_IDP_CERTS, selectors.FIELD_IDP_CERTS_VALUE);
+    await click(selectors.FIELD_IDP_CERTS_ADD_BTN);
+    await fillIn(selectors.FIELD_MAX_AGE, selectors.FIELD_MAX_AGE_VALUE);
+
+    await fillIn(
+      selectors.FIELD_API_URL_PREFIX,
+      selectors.FIELD_API_URL_PREFIX_VALUE,
+    );
+    await click(selectors.FIELD_PROMPTS_CONSENT);
 
     //If skip prompts toggle is clicked, then we hide the rest of the prompt options
-    await click(TOGGLE_SELECTOR);
-    assert.dom('[id="select_account"]').isNotVisible();
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.FIELD_PROMPTS);
+    assert.dom(selectors.FIELD_PROMPTS_SELECT_ACCOUNT).isNotVisible();
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getAuthMethodsCount(), count + 1);
-    const authMethod = this.server.schema.authMethods.findBy({ name });
-    assert.strictEqual(authMethod.name, name);
-    assert.strictEqual(authMethod.description, 'description');
-    assert.strictEqual(authMethod.attributes.issuer, 'issuer');
-    assert.strictEqual(authMethod.attributes.client_id, 'client_id');
-    assert.deepEqual(authMethod.attributes.signing_algorithms, ['RS384']);
+    const authMethod = this.server.schema.authMethods.findBy({
+      name: commonSelectors.FIELD_NAME_VALUE,
+    });
+    assert.strictEqual(authMethod.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.strictEqual(
+      authMethod.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.strictEqual(
+      authMethod.attributes.issuer,
+      selectors.FIELD_ISSUER_VALUE,
+    );
+    assert.strictEqual(
+      authMethod.attributes.client_id,
+      selectors.FIELD_CLIENT_ID_VALUE,
+    );
+    assert.deepEqual(authMethod.attributes.signing_algorithms, [
+      selectors.FIELD_SIGNING_ALGORITHMS_VALUE,
+    ]);
     assert.deepEqual(authMethod.attributes.allowed_audiences, [
-      'allowed_audiences',
+      selectors.FIELD_ALLOWED_AUDIENCES_VALUE,
     ]);
-    assert.deepEqual(authMethod.attributes.claims_scopes, ['claims_scopes']);
+    assert.deepEqual(authMethod.attributes.claims_scopes, [
+      selectors.FIELD_CLAIMS_SCOPES_VALUE,
+    ]);
     assert.deepEqual(authMethod.attributes.account_claim_maps, [
-      'from_claim=email',
+      `${selectors.FIELD_ACCOUNT_CLAIM_MAPS_FROM_CLAIM_VALUE}=${selectors.FIELD_ACCOUNT_CLAIM_MAPS_TO_CLAIM_VALUE}`,
     ]);
-    assert.deepEqual(authMethod.attributes.idp_ca_certs, ['certificates']);
-    assert.strictEqual(authMethod.attributes.max_age, 5);
-    assert.strictEqual(authMethod.attributes.api_url_prefix, 'api_url_prefix');
+    assert.deepEqual(authMethod.attributes.idp_ca_certs, [
+      selectors.FIELD_IDP_CERTS_VALUE,
+    ]);
+    assert.strictEqual(
+      authMethod.attributes.max_age,
+      parseInt(selectors.FIELD_MAX_AGE_VALUE),
+    );
+    assert.strictEqual(
+      authMethod.attributes.api_url_prefix,
+      selectors.FIELD_API_URL_PREFIX_VALUE,
+    );
     assert.deepEqual(authMethod.attributes.prompts, ['none']);
   });
 
@@ -203,7 +237,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await fillIn('[name="group_filter"]', 'group filter');
     await click('[name="enable_groups"]');
     await click('[name="use_token_groups"]');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getAuthMethodsCount(), authMethodsCount + 1);
     const ldapAuthMethod = this.server.schema.authMethods.findBy({ name });
@@ -319,7 +353,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await click(`[href="${urls.newAuthMethod}"]`);
     await fillIn(NAME_INPUT_SELECTOR, 'AuthMethod name');
     await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(getAuthMethodsCount(), count);
     assert.strictEqual(currentURL(), urls.authMethods);
@@ -464,7 +498,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     await click(NEW_DROPDOWN_SELECTOR);
     await click(`[href="${urls.newLdapAuthMethod}"]`);
     await fillIn(URLS_INPUT_SELECTOR, '');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
     assert
