@@ -88,7 +88,7 @@
     </F.HelperText>
   </InfoField>
 
-  <Hds::Form::Fieldset as |F|>
+  <Hds::Form::Fieldset class='container-inputs__margin-bottom' as |F|>
     <F.Legend>{{t 'form.ip_addresses.label'}}</F.Legend>
     <F.HelperText>{{t 'form.ip_addresses.help'}} </F.HelperText>
     {{#each @model.ip_addresses as |ip_address|}}
