@@ -26,6 +26,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const ALERT_TEXT_SELECTOR =
     '[data-test-toast-notification] .hds-alert__description';
+  const WORKER_FILTER_INPUT_SELECTOR = '[name=worker_filter]';
 
   const instances = {
     scopes: {
@@ -177,7 +178,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newHostCatalog}"]`).exists();
+    assert.dom(`[href="${urls.newHostCatalog}"]`).isVisible();
   });
 
   test('Users cannot navigate to new static host catalogs route without proper authorization', async function (assert) {
@@ -189,7 +190,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newStaticHostCatalog}"]`).doesNotExist();
+    assert.dom(`[href="${urls.newStaticHostCatalog}"]`).isNotVisible();
   });
 
   test('saving a new static host catalog with invalid fields displays error messages', async function (assert) {
@@ -218,15 +219,26 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
-  test('users should not see worker filter field in community edition', async function (assert) {
+  test('users should not see worker filter field in community edition when AWS host catalog is selected', async function (assert) {
     await visit(urls.newAWSDynamicHostCatalog);
-    assert.dom('[data-test-dynamic-credential-worker-filter]').doesNotExist();
+    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isNotVisible();
   });
 
-  test('users should see worker filter field in enterprise edition', async function (assert) {
-    featuresService.enable('dynamic-credentials-worker-filter');
+  test('users should not see worker filter field in community edition when GCP host catalog is selected', async function (assert) {
+    await visit(urls.newGCPDynamicHostCatalog);
+    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isNotVisible();
+  });
+
+  test('users should see worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
+    featuresService.enable('host-catalog-worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
-    assert.dom('[data-test-dynamic-credential-worker-filter]').exists();
+    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
+  });
+
+  test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {
+    featuresService.enable('host-catalog-worker-filter');
+    await visit(urls.newAWSDynamicHostCatalog);
+    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
   });
 
   test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
