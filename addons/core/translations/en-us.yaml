@@ -154,7 +154,7 @@ worker-filter-generator:
     helper: Format a worker tag
   name:
     label: Name
-    helper: Format a worker name
+    helper: Format a worker name using regex
   operator:
     matches: matches
     contains: contains
