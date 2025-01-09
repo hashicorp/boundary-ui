@@ -47,45 +47,12 @@ test.afterEach(async ({ request }) => {
 });
 
 test.describe('Scope tests', async () => {
-  async function assertSelectedHeaderNav(
-    headerNavLocator,
-    selectedScopeString,
-  ) {
-    const scopeStrings = ['Global', orgA.name, orgB.name];
-
-    if (
-      typeof selectedScopeString !== 'string' ||
-      !scopeStrings.includes(selectedScopeString)
-    ) {
-      throw new Error(
-        `Expected \`selectedScopeString\` argument to be a string and one of ${scopeStrings.join(
-          ', ',
-        )}.`,
-      );
-    }
-
-    const unselectedScopeStrings = scopeStrings.filter(
-      (scopeString) => scopeString !== selectedScopeString,
-    );
-    for (const unselectedScopeString of unselectedScopeStrings) {
-      // `toMatchAriaSnapshot` can be used to assert the text within a summary element,
-      // see: https://playwright.dev/docs/aria-snapshots#grouped-elements
-      await expect(headerNavLocator).not.toMatchAriaSnapshot(`
-        - group: ${unselectedScopeString}
-      `);
-    }
-
-    await expect(headerNavLocator).toMatchAriaSnapshot(`
-      - group: ${selectedScopeString}
-    `);
-  }
-
   test('Shows the filtered targets based on selected scope', async ({
     authedPage,
   }) => {
     const headerNavLocator = await authedPage.getByLabel('header-nav');
     await expect(headerNavLocator).toBeVisible();
-    await assertSelectedHeaderNav(headerNavLocator, 'Global');
+    await expect(headerNavLocator.locator('summary')).toHaveText('Global');
 
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),
@@ -100,7 +67,7 @@ test.describe('Scope tests', async () => {
     });
     await orgAHeaderNavLink.click();
 
-    await assertSelectedHeaderNav(headerNavLocator, orgA.name);
+    await expect(headerNavLocator.locator('summary')).toHaveText(orgA.name);
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),
     ).toBeVisible();
@@ -114,7 +81,7 @@ test.describe('Scope tests', async () => {
     });
     await orgBHeaderNavLink.click();
 
-    await assertSelectedHeaderNav(headerNavLocator, orgB.name);
+    await expect(headerNavLocator.locator('summary')).toHaveText(orgB.name);
     await expect(
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeVisible();
