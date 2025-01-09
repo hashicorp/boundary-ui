@@ -80,6 +80,7 @@ export default class GeneratedHostSetModel extends BaseModel {
 
   @attr('string-array', {
     emptyArrayIfMissing: true,
+    trimWhitespace: true,
   })
   preferred_endpoints;
 
