@@ -11,7 +11,6 @@
   @showEditToggle={{if @model.isNew false true}}
   as |form|
 >
-
   <Hds::Form::TextInput::Field
     name='name'
     @value={{@model.name}}
@@ -34,8 +33,8 @@
 
   <Hds::Form::Textarea::Field
     name='description'
-    @isOptional={{true}}
     @value={{@model.description}}
+    @isOptional={{true}}
     @isInvalid={{@model.errors.description}}
     disabled={{form.disabled}}
     as |F|
@@ -57,13 +56,13 @@
 
   <InfoField
     @value={{t 'descriptions.provider'}}
-    @icon='azure-color'
-    readonly={{true}}
+    @icon='gcp-color'
+    disabled={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'titles.provider'}}</F.Label>
     <F.HelperText>
-      {{t 'resources.host-catalog.types.azure'}}
+      {{t 'resources.host-catalog.types.gcp'}}
     </F.HelperText>
   </InfoField>
 
@@ -88,7 +87,6 @@
         </F.Error>
       {{/if}}
     </:fieldset>
-
     <:field as |F|>
       <F.TextInput
         @name='preferred_endpoints'
@@ -98,26 +96,35 @@
     </:field>
   </Form::Field::ListWrapper>
 
-  <Hds::Form::Textarea::Field
-    name='filter'
-    @value={{@model.filter_string}}
+  <Form::Field::ListWrapper
+    @layout='horizontal'
     @isOptional={{true}}
-    @isInvalid={{@model.errors.filter_string}}
-    disabled={{form.disabled}}
-    as |F|
+    @disabled={{form.disabled}}
   >
-    <F.Label>{{t 'resources.host-set.form.filter.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.host-set.form.filter.azure.help'
-      }}</F.HelperText>
-    {{#if @model.errors.filter_string}}
-      <F.Error as |E|>
-        {{#each @model.errors.filter_string as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Textarea::Field>
+    <:fieldset as |F|>
+      <F.Legend>
+        {{t 'resources.host-set.form.filter.label'}}
+      </F.Legend>
+      <F.HelperText>
+        {{t 'resources.host-set.form.filter.gcp.help'}}
+      </F.HelperText>
+
+      {{#if @model.errors.filters}}
+        <F.Error as |E|>
+          {{#each @model.errors.filters as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </:fieldset>
+    <:field as |F|>
+      <F.TextInput
+        @name='filters'
+        @options={{@model.filters}}
+        @model={{@model}}
+      />
+    </:field>
+  </Form::Field::ListWrapper>
 
   <Hds::Form::TextInput::Field
     name='sync_interval_seconds'

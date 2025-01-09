@@ -275,9 +275,11 @@ host-set:
     filter:
       label: Filter
       aws:
-        help: Create a filter to select resources using values such as tag name or tag value. The AWS filter format is tag:<tag-name>=<tag-value>. For example:tag:application=production
+        help: 'Create a filter to select resources using values such as tag name or tag value. The AWS filter format is tag:<tag-name>=<tag-value>. For example: tag:application=production'
       azure:
         help: Create a filter to select resources using values such as tag name or tag value. The Azure filter format is:tagName eq ‘<tag-name>’ and tagValue eq ‘<tag-value>'. For example:tagName eq 'application' and tagValue eq 'production'
+      gcp:
+        help: 'Create a filter to select resources using values such as label name or label value. The GCP filter format is labels.<label-name>=<label-value>. For example: labels.application=production'
     preferred_endpoints:
       label: Preferred Endpoints
       help: Preferred address at which the host should be accessed when multiple options are present, in cidr:<valid IPv4/6 CIDR> or dns:<globbed name> format.

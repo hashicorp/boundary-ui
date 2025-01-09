@@ -5,10 +5,6 @@
 
 import ApplicationSerializer from './application';
 
-const fieldByType = {
-  aws: ['preferred_endpoints', 'filters', 'sync_interval_seconds'],
-  azure: ['preferred_endpoints', 'filter_string', 'sync_interval_seconds'],
-};
 export default class HostSetSerializer extends ApplicationSerializer {
   // =properties
 
@@ -63,16 +59,8 @@ export default class HostSetSerializer extends ApplicationSerializer {
     return serialized;
   }
 
-  serializeAttribute(snapshot, json, key, attribute) {
+  serializeAttribute(snapshot, json, key) {
     const value = super.serializeAttribute(...arguments);
-    const { isPlugin, compositeType } = snapshot.record;
-    const { options } = attribute;
-
-    if (isPlugin && options.isNestedAttribute) {
-      if (!fieldByType[compositeType].includes(key)) {
-        delete json.attributes[key];
-      }
-    }
 
     if (key === 'filter_string') {
       const { filter_string } = json.attributes;

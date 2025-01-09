@@ -7,6 +7,11 @@ import factory from '../generated/factories/host-set';
 import permissions from '../helpers/permissions';
 import { faker } from '@faker-js/faker';
 import generateId from '../helpers/id';
+import {
+  TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_AZURE,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+} from 'api/models/host-catalog';
 
 export default factory.extend({
   id: () => generateId('hs_'),
@@ -42,22 +47,34 @@ export default factory.extend({
   },
 
   attributes() {
-    // AWS specific
-    if (this.plugin?.name === 'aws') {
-      const filtersAmount = faker.number.int({ min: 1, max: 5 });
-      let filters = [];
-      for (let i = 0; i < filtersAmount; ++i) {
-        filters.push(`${faker.word.words(1)}=${faker.word.words(1)}`);
+    switch (this.plugin?.name) {
+      // AWS specific
+      case TYPE_HOST_CATALOG_PLUGIN_AWS: {
+        const filtersAmount = faker.number.int({ min: 1, max: 5 });
+        let filters = [];
+        for (let i = 0; i < filtersAmount; ++i) {
+          filters.push(`${faker.word.words(1)}=${faker.word.words(1)}`);
+        }
+        return {
+          filters,
+        };
       }
-      return {
-        filters,
-      };
-    }
-    // Azure specific
-    if (this.plugin?.name === 'azure') {
-      return {
-        filter: `${faker.database.column()}=${faker.database.collation()}`,
-      };
+      // Azure specific
+      case TYPE_HOST_CATALOG_PLUGIN_AZURE:
+        return {
+          filter: `${faker.database.column()}=${faker.database.collation()}`,
+        };
+      // GCP specific
+      case TYPE_HOST_CATALOG_PLUGIN_GCP: {
+        const filtersAmount = faker.number.int({ min: 1, max: 5 });
+        let filters = [];
+        for (let i = 0; i < filtersAmount; ++i) {
+          filters.push(`label.${faker.word.words(1)}=${faker.word.words(1)}`);
+        }
+        return {
+          filters,
+        };
+      }
     }
   },
 });

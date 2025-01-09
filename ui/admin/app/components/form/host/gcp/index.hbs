@@ -78,13 +78,13 @@
 
   <InfoField
     @value={{t 'descriptions.provider'}}
-    @icon='aws-color'
+    @icon='gcp-color'
     disabled={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'titles.provider'}}</F.Label>
     <F.HelperText>
-      {{t 'resources.host-catalog.types.aws'}}
+      {{t 'resources.host-catalog.types.gcp'}}
     </F.HelperText>
   </InfoField>
 
@@ -95,20 +95,6 @@
       <F.Control>
         <Hds::Form::TextInput::Base
           @value={{ip_address}}
-          disabled={{true}}
-          @width='unset'
-        />
-      </F.Control>
-    {{/each}}
-  </Hds::Form::Fieldset>
-
-  <Hds::Form::Fieldset class='container-inputs__margin-bottom' as |F|>
-    <F.Legend>{{t 'form.dns_names.label'}}</F.Legend>
-    <F.HelperText>{{t 'form.dns_names.help'}} </F.HelperText>
-    {{#each @model.dns_names as |dns_name|}}
-      <F.Control>
-        <Hds::Form::TextInput::Base
-          @value={{dns_name}}
           disabled={{true}}
           @width='unset'
         />
