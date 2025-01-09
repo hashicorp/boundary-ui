@@ -53,6 +53,10 @@ module(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
 
+      assert.dom(FILTER_GENERATOR).isVisible();
+
+      await click(SHOW_FILTER_GENERATOR);
+
       assert.dom(FILTER_GENERATOR).isNotVisible();
 
       await click(SHOW_FILTER_GENERATOR);
@@ -65,7 +69,9 @@ module(
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
-      await click(SHOW_FILTER_GENERATOR);
+
+      assert.dom(FILTER_GENERATOR).isVisible();
+
       await click(TAG_TYPE_OPTION);
 
       assert.dom(TAG_KEY).isVisible();
@@ -78,7 +84,9 @@ module(
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
-      await click(SHOW_FILTER_GENERATOR);
+
+      assert.dom(FILTER_GENERATOR).isVisible();
+
       await click(TAG_TYPE_OPTION);
       await fillIn(TAG_KEY, 'key1');
       await fillIn(TAG_VALUE, 'val1');
@@ -92,7 +100,8 @@ module(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
 
-      await click(SHOW_FILTER_GENERATOR);
+      assert.dom(FILTER_GENERATOR).isVisible();
+
       await click(NAME_TYPE_OPTION);
 
       assert.dom(NAME_OPERATOR).isVisible();
@@ -106,7 +115,8 @@ module(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
 
-      await click(SHOW_FILTER_GENERATOR);
+      assert.dom(FILTER_GENERATOR).isVisible();
+
       await click(NAME_TYPE_OPTION);
       await fillIn(TAG_VALUE, 'val1');
       await select(NAME_OPERATOR, '==');
@@ -120,7 +130,8 @@ module(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
 
-      await click(SHOW_FILTER_GENERATOR);
+      assert.dom(FILTER_GENERATOR).isVisible();
+
       await click(NAME_TYPE_OPTION);
       await fillIn(TAG_VALUE, 'val1');
       await select(NAME_OPERATOR, '==');
