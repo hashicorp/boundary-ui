@@ -53,7 +53,8 @@ export default factory.extend({
   worker_filter: function () {
     if (
       this.type === TYPE_HOST_CATALOG_DYNAMIC &&
-      this.plugin?.name === TYPE_HOST_CATALOG_PLUGIN_AWS
+      this.plugin?.name === TYPE_HOST_CATALOG_PLUGIN_AWS &&
+      this.plugin?.name === TYPE_HOST_CATALOG_PLUGIN_GCP
     ) {
       return `"${faker.word.noun()}" in "${faker.system.directoryPath()}"`;
     }

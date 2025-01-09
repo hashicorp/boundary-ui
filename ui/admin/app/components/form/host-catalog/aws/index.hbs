@@ -352,7 +352,6 @@
 
   {{#if (feature-flag 'host-catalog-worker-filter')}}
     <Hds::Form::Textarea::Field
-      data-test-dynamic-credential-worker-filter
       name='worker_filter'
       @value={{@model.worker_filter}}
       @isOptional={{true}}

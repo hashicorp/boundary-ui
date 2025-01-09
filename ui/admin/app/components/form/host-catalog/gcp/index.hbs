@@ -15,7 +15,7 @@
     @value={{@model.name}}
     @isInvalid={{@model.errors.name}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'name')}}
     as |F|
   >
@@ -35,7 +35,7 @@
     @value={{@model.description}}
     @isInvalid={{@model.errors.description}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
@@ -99,7 +99,7 @@
     <InfoField
       @value={{t 'resources.host-catalog.types.gcp'}}
       @icon='gcp-color'
-      readonly={{true}}
+      disabled={{true}}
       as |F|
     >
       <F.Label>{{t 'titles.provider'}}</F.Label>
@@ -113,7 +113,7 @@
     @value={{@model.project_id}}
     @isInvalid={{@model.errors.project_id}}
     @isRequired={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'project_id')}}
     as |F|
   >
@@ -135,7 +135,7 @@
     @value={{@model.zone}}
     @isInvalid={{@model.errors.zone}}
     @isRequired={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'zone')}}
     as |F|
   >
@@ -155,7 +155,7 @@
     @value={{@model.client_email}}
     @isInvalid={{@model.errors.client_email}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'client_email')}}
     as |F|
   >
@@ -177,7 +177,7 @@
     @value={{@model.target_service_account_id}}
     @isInvalid={{@model.errors.target_service_account_id}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'target_service_account_id')}}
     as |F|
   >
@@ -202,7 +202,7 @@
     @value={{@model.private_key_id}}
     @isInvalid={{@model.errors.private_key_id}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'private_key_id')}}
     as |F|
   >
@@ -224,7 +224,7 @@
     @value={{@model.private_key}}
     @isInvalid={{@model.errors.private_key}}
     @isOptional={{true}}
-    readonly={{form.disabled}}
+    disabled={{form.disabled}}
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.private_key.label'}}</F.Label>
