@@ -18,24 +18,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const DROPDOWN_SELECTOR_ICON =
-    'tbody .hds-table__tr:nth-child(1) .hds-table__td:last-child .hds-dropdown-toggle-icon';
-  const DROPDOWN_SELECTOR_OPTION =
-    '.hds-dropdown__content .hds-dropdown-list-item [type=button]';
-  const NEW_DROPDOWN_SELECTOR =
-    '[data-test-new-dropdown] .hds-dropdown-toggle-button';
-  const NAME_INPUT_SELECTOR = '[name="name"]';
-  const URLS_INPUT_SELECTOR = '[name="urls"]';
-  const DESC_INPUT_SELECTOR = '[name="description"]';
-  const ERROR_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] button:first-child';
-  const MAKE_PRIMARY_SELECTOR =
-    '[data-test-manage-auth-method] ul li:first-child button';
-
   let getAuthMethodsCount;
   let featuresService;
 
@@ -334,7 +316,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     ];
 
     await visit(urls.orgScope);
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
@@ -342,23 +324,22 @@ module('Acceptance | auth-methods | create', function (hooks) {
       ),
     );
 
-    await click(NEW_DROPDOWN_SELECTOR);
-
-    assert.dom(`[href="${urls.newAuthMethod}"]`).exists();
+    await click(selectors.NEW_DROPDOWN);
+    assert.dom(commonSelectors.HREF(urls.newAuthMethod)).isVisible();
   });
 
   test('Users cannot navigate to new auth-methods route without proper authorization', async function (assert) {
     instances.orgScope.authorized_collection_actions['auth-methods'] = ['list'];
 
     await visit(urls.orgScope);
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
 
     assert.false(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
         'create',
       ),
     );
-    assert.dom(NEW_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(selectors.NEW_DROPDOWN).doesNotExist();
   });
 
   test('Users can navigate to new ldap auth-method route with proper authorization and feature flag enabled', async function (assert) {
@@ -369,7 +350,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     featuresService.enable('ldap-auth-methods');
 
     await visit(urls.orgScope);
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
@@ -377,9 +358,8 @@ module('Acceptance | auth-methods | create', function (hooks) {
       ),
     );
 
-    await click(NEW_DROPDOWN_SELECTOR);
-
-    assert.dom(`[href="${urls.newLdapAuthMethod}"]`).exists();
+    await click(selectors.NEW_DROPDOWN);
+    assert.dom(commonSelectors.HREF(urls.newLdapAuthMethod)).isVisible();
   });
 
   test('Users cannot navigate to new ldap auth-method route when feature flag disabled', async function (assert) {
@@ -389,7 +369,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     ];
 
     await visit(urls.orgScope);
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
 
     assert.true(
       instances.orgScope.authorized_collection_actions['auth-methods'].includes(
@@ -397,19 +377,21 @@ module('Acceptance | auth-methods | create', function (hooks) {
       ),
     );
 
-    await click(NEW_DROPDOWN_SELECTOR);
-
-    assert.dom(`[href="${urls.newLdapAuthMethod}"]`).doesNotExist();
+    await click(selectors.NEW_DROPDOWN);
+    assert.dom(commonSelectors.HREF(urls.newLdapAuthMethod)).doesNotExist();
   });
 
   test('can cancel new auth method creation', async function (assert) {
     const count = getAuthMethodsCount();
     await visit(urls.authMethods);
 
-    await click(NEW_DROPDOWN_SELECTOR);
-    await click(`[href="${urls.newAuthMethod}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'AuthMethod name');
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
+    await click(selectors.NEW_DROPDOWN);
+    await click(commonSelectors.HREF(urls.newAuthMethod));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(getAuthMethodsCount(), count);
@@ -423,9 +405,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MAKE_PRIMARY_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_MAKE_PRIMARY);
 
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.strictEqual(
@@ -451,10 +433,12 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.orgScope.primaryAuthMethodId,
       'Primary auth method is not yet set.',
     );
+
     await visit(urls.authMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MAKE_PRIMARY_SELECTOR);
-    assert.dom(ERROR_MSG_SELECTOR).exists();
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_MAKE_PRIMARY);
+
+    assert.dom(commonSelectors.ALERT_TOAST).isVisible();
   });
 
   test('user can remove as primary an auth method', async function (assert) {
@@ -467,9 +451,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MAKE_PRIMARY_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_MAKE_PRIMARY);
     const scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
   });
@@ -496,11 +480,11 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MAKE_PRIMARY_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_MAKE_PRIMARY);
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('Sorry!');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Sorry!');
   });
 
   test('user can make and remove primary auth methods from index', async function (assert) {
@@ -510,9 +494,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(DROPDOWN_SELECTOR_ICON);
-    assert.dom(DROPDOWN_SELECTOR_OPTION).exists();
-    await click(DROPDOWN_SELECTOR_OPTION);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).isVisible();
+    await click(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM);
 
     let scope = this.server.schema.scopes.find(instances.orgScope.id);
 
@@ -521,9 +505,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
       instances.authMethod.id,
       'Primary auth method is set.',
     );
-    await click(DROPDOWN_SELECTOR_ICON);
 
-    await click(DROPDOWN_SELECTOR_OPTION);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM);
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);
     assert.notOk(scope.primaryAuthMethodId, 'Primary auth method is unset.');
@@ -552,15 +536,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
     });
     await visit(urls.authMethods);
 
-    await click(NEW_DROPDOWN_SELECTOR);
-    await click(`[href="${urls.newLdapAuthMethod}"]`);
-    await fillIn(URLS_INPUT_SELECTOR, '');
+    await click(selectors.NEW_DROPDOWN);
+    await click(commonSelectors.HREF(urls.newLdapAuthMethod));
+    await fillIn(selectors.FIELD_URLS, '');
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
     assert
-      .dom(FIELD_ERROR_TEXT_SELECTOR)
-      .hasText('At least one URL is required.');
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+    assert.dom(selectors.FIELD_ERROR_).hasText('At least one URL is required.');
   });
 
   test('users cannot directly navigate to new auth method route without proper authorization', async function (assert) {
