@@ -258,7 +258,7 @@ host-catalog:
       help: The unique identifier of private key.
     private_key:
       label: Private Key
-      help: The private key used to obtain a OAuth 2.0 access token.
+      help: The private key used to obtain a OAuth 2.0 access token. Key must be PEM encoded.
 host-set:
   title: Host Set
   title_plural: Host Sets
