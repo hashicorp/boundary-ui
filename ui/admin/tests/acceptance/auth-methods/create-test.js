@@ -31,9 +31,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
     '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
-  const CERTIFICATES_BTN_SELECTOR = '[name="certificates"] button';
-  const CERTIFICATES_INPUT_SELECTOR = '[name="certificates"] textarea';
-
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-auth-method] button:first-child';
   const MAKE_PRIMARY_SELECTOR =
@@ -207,65 +204,125 @@ module('Acceptance | auth-methods | create', function (hooks) {
   test('Users can create a new ldap auth method', async function (assert) {
     featuresService.enable('ldap-auth-methods');
     const authMethodsCount = getAuthMethodsCount();
-    const name = 'ldap auth method';
     await visit(urls.authMethods);
 
-    await click(NEW_DROPDOWN_SELECTOR);
-    await click(`[href="${urls.newLdapAuthMethod}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, name);
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await fillIn('[name="urls"]', 'url1,url2');
-    await fillIn(CERTIFICATES_INPUT_SELECTOR, 'certificate');
-    await click(CERTIFICATES_BTN_SELECTOR);
-    await fillIn('[name="client_certificate"]', 'client cert');
-    await fillIn('[name="client_certificate_key"]', 'client cert key');
-    await click('[name="start_tls"]');
-    await click('[name="insecure_tls"]');
-    await fillIn('[name="bind_dn"]', 'bind dn');
-    await fillIn('[name="bind_password"]', 'password');
-    await fillIn('[name="upn_domain"]', 'upn domain');
-    await click('[name="discover_dn"]');
-    await click('[name="anon_group_search"]');
-    await fillIn('[name="user_dn"]', 'user dn');
-    await fillIn('[name="user_attr"]', 'user attr');
-    await fillIn('[name="user_filter"]', 'user filter');
-    await fillIn('[name="account_attribute_maps"] input', 'attribute');
-    await select('[name="account_attribute_maps"] select', 'email');
-    await click('[name="account_attribute_maps"] button');
-    await fillIn('[name="group_dn"]', 'group dn');
-    await fillIn('[name="group_attr"]', 'group attr');
-    await fillIn('[name="group_filter"]', 'group filter');
-    await click('[name="enable_groups"]');
-    await click('[name="use_token_groups"]');
+    await click(selectors.NEW_DROPDOWN);
+    await click(commonSelectors.HREF(urls.newLdapAuthMethod));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_URLS, selectors.FIELD_URLS_VALUE);
+    await fillIn(
+      selectors.FIELD_CERTIFICATES,
+      selectors.FIELD_CERTIFICATES_VALUE,
+    );
+    await click(selectors.FIELD_CERTIFICATES_ADD_BTN);
+    await fillIn(
+      selectors.FIELD_CLIENT_CERTIFICATE,
+      selectors.FIELD_CLIENT_CERTIFICATE_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_CLIENT_CERTIFICATE_KEY,
+      selectors.FIELD_CLIENT_CERTIFICATE_KEY_VALUE,
+    );
+    await click(selectors.FIELD_START_TLS);
+    await click(selectors.FIELD_INSECURE_TLS);
+    await fillIn(selectors.FIELD_BIND_DN, selectors.FIELD_BIND_DN_VALUE);
+    await fillIn(
+      selectors.FIELD_BIND_PASSWORD,
+      selectors.FIELD_BIND_PASSWORD_VALUE,
+    );
+    await fillIn(selectors.FIELD_UPN_DOMAIN, selectors.FIELD_UPN_DOMAIN_VALUE);
+    await click(selectors.FIELD_DISCOVER_DN);
+    await click(selectors.FIELD_ANON_GROUP_SEARCH);
+    await fillIn(selectors.FIELD_USER_DN, selectors.FIELD_USER_DN_VALUE);
+    await fillIn(selectors.FIELD_USER_ATTR, selectors.FIELD_USER_ATTR_VALUE);
+    await fillIn(
+      selectors.FIELD_USER_FILTER,
+      selectors.FIELD_USER_FILTER_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_FROM,
+      selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_FROM_VALUE,
+    );
+    await select(
+      selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO,
+      selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO_VALUE,
+    );
+    await click(selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_ADD_BTN);
+    await fillIn(selectors.FIELD_GROUP_DN, selectors.FIELD_GROUP_DN_VALUE);
+    await fillIn(selectors.FIELD_GROUP_ATTR, selectors.FIELD_GROUP_ATTR_VALUE);
+    await fillIn(
+      selectors.FIELD_GROUP_FILTER,
+      selectors.FIELD_GROUP_FILTER_VALUE,
+    );
+    await click(selectors.FIELD_ENABLE_GROUPS);
+    await click(selectors.FIELD_USE_TOKEN_GROUPS);
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getAuthMethodsCount(), authMethodsCount + 1);
-    const ldapAuthMethod = this.server.schema.authMethods.findBy({ name });
-    assert.strictEqual(ldapAuthMethod.name, name);
-    assert.strictEqual(ldapAuthMethod.description, 'description');
-    assert.deepEqual(ldapAuthMethod.attributes.urls, ['url1', 'url2']);
-    assert.deepEqual(ldapAuthMethod.attributes.certificates, ['certificate']);
+    const ldapAuthMethod = this.server.schema.authMethods.findBy({
+      name: commonSelectors.FIELD_NAME_VALUE,
+    });
+    assert.strictEqual(ldapAuthMethod.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.strictEqual(
+      ldapAuthMethod.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.deepEqual(
+      ldapAuthMethod.attributes.urls,
+      selectors.FIELD_URLS_VALUE.split(','),
+    );
+    assert.deepEqual(ldapAuthMethod.attributes.certificates, [
+      selectors.FIELD_CERTIFICATES_VALUE,
+    ]);
     assert.strictEqual(
       ldapAuthMethod.attributes.client_certificate,
-      'client cert',
+      selectors.FIELD_CLIENT_CERTIFICATE_VALUE,
     );
     assert.notOk(ldapAuthMethod.attributes.client_certificate_key);
     assert.true(ldapAuthMethod.attributes.start_tls);
     assert.true(ldapAuthMethod.attributes.insecure_tls);
-    assert.strictEqual(ldapAuthMethod.attributes.bind_dn, 'bind dn');
+    assert.strictEqual(
+      ldapAuthMethod.attributes.bind_dn,
+      selectors.FIELD_BIND_DN_VALUE,
+    );
     assert.notOk(ldapAuthMethod.attributes.bind_password);
-    assert.strictEqual(ldapAuthMethod.attributes.upn_domain, 'upn domain');
+    assert.strictEqual(
+      ldapAuthMethod.attributes.upn_domain,
+      selectors.FIELD_UPN_DOMAIN_VALUE,
+    );
     assert.true(ldapAuthMethod.attributes.discover_dn);
     assert.true(ldapAuthMethod.attributes.anon_group_search);
-    assert.strictEqual(ldapAuthMethod.attributes.user_dn, 'user dn');
-    assert.strictEqual(ldapAuthMethod.attributes.user_attr, 'user attr');
-    assert.strictEqual(ldapAuthMethod.attributes.user_filter, 'user filter');
+    assert.strictEqual(
+      ldapAuthMethod.attributes.user_dn,
+      selectors.FIELD_USER_DN_VALUE,
+    );
+    assert.strictEqual(
+      ldapAuthMethod.attributes.user_attr,
+      selectors.FIELD_USER_ATTR_VALUE,
+    );
+    assert.strictEqual(
+      ldapAuthMethod.attributes.user_filter,
+      selectors.FIELD_USER_FILTER_VALUE,
+    );
     assert.deepEqual(ldapAuthMethod.attributes.account_attribute_maps, [
-      'attribute=email',
+      `${selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_FROM_VALUE}=${selectors.FIELD_ACCOUNT_ATTRIBUTE_MAPS_TO_VALUE}`,
     ]);
-    assert.strictEqual(ldapAuthMethod.attributes.group_dn, 'group dn');
-    assert.strictEqual(ldapAuthMethod.attributes.group_attr, 'group attr');
-    assert.strictEqual(ldapAuthMethod.attributes.group_filter, 'group filter');
+    assert.strictEqual(
+      ldapAuthMethod.attributes.group_dn,
+      selectors.FIELD_GROUP_DN_VALUE,
+    );
+    assert.strictEqual(
+      ldapAuthMethod.attributes.group_attr,
+      selectors.FIELD_GROUP_ATTR_VALUE,
+    );
+    assert.strictEqual(
+      ldapAuthMethod.attributes.group_filter,
+      selectors.FIELD_GROUP_FILTER_VALUE,
+    );
     assert.true(ldapAuthMethod.attributes.enable_groups);
     assert.true(ldapAuthMethod.attributes.use_token_groups);
   });
