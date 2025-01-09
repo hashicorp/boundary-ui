@@ -67,17 +67,19 @@ export default class GeneratedHostCatalogModel extends BaseModel {
   })
   disable_credential_rotation;
 
-  // AWS specific
+  // AWS and GCP specific
 
   @attr('string', {
     for: {
       type: 'plugin',
-      name: 'aws',
+      name: ['aws', 'gcp'],
     },
     description:
       'An expression used to filter the workers that have network access to a service that is hosting the external object store.',
   })
   worker_filter;
+
+  // AWS specific
 
   @attr('string', {
     for: {
