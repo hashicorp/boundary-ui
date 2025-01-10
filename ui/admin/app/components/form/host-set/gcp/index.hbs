@@ -54,12 +54,7 @@
     <F.Label>{{t 'form.type.label'}}</F.Label>
   </InfoField>
 
-  <InfoField
-    @value={{t 'descriptions.provider'}}
-    @icon='gcp-color'
-    disabled={{form.disabled}}
-    as |F|
-  >
+  <InfoField @value={{t 'descriptions.provider'}} @icon='gcp-color' as |F|>
     <F.Label>{{t 'titles.provider'}}</F.Label>
     <F.HelperText>
       {{t 'resources.host-catalog.types.gcp'}}
