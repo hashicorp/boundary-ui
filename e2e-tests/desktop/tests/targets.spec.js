@@ -215,7 +215,11 @@ test.describe('Targets tests', async () => {
     });
   });
 
-  test('Connects to an SSH target', async ({ authedPage }) => {
+  test('Connects to an SSH target', async ({
+    authedPage,
+    tesseract,
+    textToSearch,
+  }) => {
     await authedPage.getByRole('link', { name: sshTarget.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
 
@@ -224,8 +228,12 @@ test.describe('Targets tests', async () => {
     ).toBeVisible();
 
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    // TODO: Research a better way to test canvas elements for the shell,
-    //  would it be too brittle to assert a snapshot of an expected image?
+
+    await expect(async () => {
+      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const result = await tesseract.recognize(screenshot);
+      expect(result.data.text).toContain(textToSearch);
+    }).toPass();
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
