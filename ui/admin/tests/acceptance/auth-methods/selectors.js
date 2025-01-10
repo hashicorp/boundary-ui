@@ -97,3 +97,7 @@ export const TABLE_ACTION_DROPDOWN = (authMethodId) =>
   `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:last-child .hds-dropdown button`;
 export const TABLE_ACTION_DROPDOWN_MAKE_PRIMARY = (authMethodId) =>
   `tbody tr[data-test-auth-methods-table-row="${authMethodId}"] td:last-child ul li:first-child button`;
+export const TABLE_ROW_TYPE = (authMethodId) =>
+  `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:nth-child(2)`;
+export const TABLE_ROW_NAME_LINK = (authMethodId) =>
+  `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:first-child a`;
