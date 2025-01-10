@@ -4,12 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -30,8 +32,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    projectScope: null,
     credentialStores: null,
     newCredentialStore: null,
   };
@@ -48,9 +48,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
       scope: { id: instances.scopes.org.id, type: 'org' },
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
+    urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.newCredentialStore = `${urls.credentialStores}/new`;
     // Generate resource counter
     getCredentialStoresCount = () => {
@@ -72,8 +70,10 @@ module('Acceptance | credential-stores | create', function (hooks) {
     featuresService.enable('static-credentials');
     const count = getStaticCredentialStoresCount();
     await visit(urls.newCredentialStore);
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getStaticCredentialStoresCount(), count + 1);
   });
 
@@ -81,17 +81,21 @@ module('Acceptance | credential-stores | create', function (hooks) {
     featuresService.enable('static-credentials');
     const count = getVaultCredentialStoresCount();
     await visit(urls.newCredentialStore);
-    await fillIn('[name="name"]', 'random string');
-    await click('[value="vault"]');
-    await click('[type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(selectors.TYPE_VAULT);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 
   test('Users can cancel create new credential stores', async function (assert) {
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.credentialStores);
     assert.strictEqual(getCredentialStoresCount(), count);
   });
@@ -101,15 +105,18 @@ module('Acceptance | credential-stores | create', function (hooks) {
       'credential-stores'
     ] = [];
     await visit(urls.credentialStores);
+
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
       ].includes('create'),
     );
-    assert.notOk(find(`[href="${urls.newCredentialStore}"]`));
+    assert.dom(commonSelectors.HREF(urls.newCredentialStore)).doesNotExist();
   });
 
-  test('saving a new credential store with invalid fields displays error messages', async function (assert) {
+  test('saving a new static credential store with invalid fields displays error messages', async function (assert) {
+    const errorMsg =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/credential-stores', () => {
       return new Response(
         400,
@@ -117,7 +124,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: errorMsg,
           details: {
             request_fields: [
               {
@@ -130,23 +137,55 @@ module('Acceptance | credential-stores | create', function (hooks) {
       );
     });
     await visit(urls.newCredentialStore);
-    await click('[type="submit"]');
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
+  });
+
+  test('saving a new vault credential store with invalid fields displays error messages', async function (assert) {
+    this.server.post('/credential-stores', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'attributes.address',
+                description:
+                  'Field required for creating a vault credential store.',
+              },
+            ],
+          },
+        },
+      );
+    });
+    await visit(urls.newCredentialStore);
+
+    await click(commonSelectors.SAVE_BTN);
+
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+    assert
+      .dom(selectors.FIELD_VAULT_ADDRESS_ERROR)
+      .hasText('Field required for creating a vault credential store.');
   });
 
   test('Users can link to docs page for new credential store', async function (assert) {
     await visit(urls.newCredentialStore);
-    assert.ok(
-      find(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores"]`,
-      ),
-    );
+
+    assert
+      .dom(
+        commonSelectors.HREF(
+          'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores',
+        ),
+      )
+      .isVisible();
   });
 
   test('users cannot directly navigate to new credential store route without proper authorization', async function (assert) {
