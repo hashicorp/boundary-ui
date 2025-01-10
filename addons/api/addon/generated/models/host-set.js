@@ -63,6 +63,10 @@ export default class GeneratedHostSetModel extends BaseModel {
   plugin;
 
   @attr('number', {
+    for: {
+      type: 'plugin',
+      name: ['aws', 'azure', 'gcp'],
+    },
     description:
       "The number of seconds between the time boundary syncs the hosts in this set using this host set's plugin. If not provided a system determined default is used",
   })
@@ -79,12 +83,20 @@ export default class GeneratedHostSetModel extends BaseModel {
   host_ids;
 
   @attr('string-array', {
+    for: {
+      type: 'plugin',
+      name: ['aws', 'azure', 'gcp'],
+    },
     emptyArrayIfMissing: true,
   })
   preferred_endpoints;
 
   // AWS & GCP specific
   @attr('string-array', {
+    for: {
+      type: 'plugin',
+      name: ['aws', 'gcp'],
+    },
     isNestedAttribute: true,
     emptyArrayIfMissing: true,
   })
@@ -92,6 +104,10 @@ export default class GeneratedHostSetModel extends BaseModel {
 
   // Azure specific, comes in from API as "filter". This is to avoid collisions with filter
   @attr('string', {
+    for: {
+      type: 'plugin',
+      name: 'azure',
+    },
     description: '',
     isNestedAttribute: true,
   })

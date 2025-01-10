@@ -247,6 +247,52 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
+  test('can save changes to an existing gcp host-set', async function (assert) {
+    await visit(urls.awshostSet);
+
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+
+    const name = 'gcp host set';
+    await fillIn('[name="name"]', name);
+
+    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
+
+    for (const element of endpointList) {
+      await click(element);
+    }
+
+    assert.strictEqual(
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
+      0,
+    );
+
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+
+    // Remove all the filters
+    const filterList = await Promise.all(
+      findAll(FILTER_REMOVE_BUTTON_SELECTOR),
+    );
+    for (const element of filterList) {
+      await click(element);
+    }
+
+    assert.strictEqual(findAll(FILTER_REMOVE_BUTTON_SELECTOR).length, 0);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'sample filters');
+    await click(FILTER_BUTTON_SELECTOR);
+
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+
+    await click(SUBMIT_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.awshostSet);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.strictEqual(hostSet.name, name);
+    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['sample filters']);
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'update');
