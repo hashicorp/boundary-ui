@@ -90,3 +90,10 @@ export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';
 export const TABLE_FIRST_ROW_ACTION_FIRST_ITEM =
   'tbody tr:first-child td:last-child ul li:first-child button';
+
+export const SEARCH_BAR_INPUT = '[type=search]';
+
+export const TABLE_ACTION_DROPDOWN = (authMethodId) =>
+  `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:last-child .hds-dropdown button`;
+export const TABLE_ACTION_DROPDOWN_MAKE_PRIMARY = (authMethodId) =>
+  `tbody tr[data-test-auth-methods-table-row="${authMethodId}"] td:last-child ul li:first-child button`;

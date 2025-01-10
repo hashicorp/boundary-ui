@@ -149,7 +149,6 @@
                     />
                     {{#unless B.data.isPrimary}}
                       <dd.Interactive
-                        data-test-make-primary-action
                         {{on 'click' (fn this.makePrimary B.data)}}
                       >
                         {{t 'resources.auth-method.actions.make-primary'}}
@@ -174,7 +173,7 @@
           @currentPageSize={{this.pageSize}}
         />
       {{else}}
-        <Hds::ApplicationState data-test-no-auth-method-results as |A|>
+        <Hds::ApplicationState as |A|>
           <A.Header @title={{t 'titles.no-results-found'}} />
           <A.Body
             @text={{t
