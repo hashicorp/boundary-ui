@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -27,8 +27,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    orgScope: null,
     projectScope: null,
     credentialStores: null,
     staticCredentialStore: null,
@@ -55,8 +53,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
       type: 'vault',
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
@@ -72,29 +68,35 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
   test('can save changes to existing static credential store', async function (assert) {
     assert.notEqual(instances.staticCredentialStore.name, 'random string');
+
     await visit(urls.staticCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
     assert.strictEqual(
       this.server.schema.credentialStores.where({ type: 'static' }).models[0]
         .name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
   test('can save changes to existing vault credential store', async function (assert) {
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+
     await visit(urls.vaultCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
     assert.strictEqual(
       this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
         .name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -103,8 +105,10 @@ module('Acceptance | credential-stores | update', function (hooks) {
       instances.staticCredentialStore.authorized_actions.filter(
         (item) => item !== 'update',
       );
+
     await visit(urls.staticCredentialStore);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('cannot make changes to an existing vault credential store without proper authorization', async function (assert) {
@@ -112,35 +116,47 @@ module('Acceptance | credential-stores | update', function (hooks) {
       instances.vaultCredentialStore.authorized_actions.filter(
         (item) => item !== 'update',
       );
+
     await visit(urls.vaultCredentialStore);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can cancel changes to existing static credential store', async function (assert) {
     await visit(urls.staticCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(instances.staticCredentialStore.name, 'random string');
-    assert.strictEqual(
-      find('[name="name"]').value,
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(
       instances.staticCredentialStore.name,
+      commonSelectors.FIELD_NAME_VALUE,
     );
+    assert
+      .dom(commonSelectors.FIELD_NAME)
+      .hasValue(instances.staticCredentialStore.name);
   });
 
   test('can cancel changes to existing vault credential store', async function (assert) {
     await visit(urls.vaultCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(instances.vaultCredentialStore.name, 'random string');
-    assert.strictEqual(
-      find('[name="name"]').value,
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(
       instances.vaultCredentialStore.name,
+      commonSelectors.FIELD_NAME_VALUE,
     );
+    assert
+      .dom(commonSelectors.FIELD_NAME)
+      .hasValue(instances.vaultCredentialStore.name);
   });
 
   test('saving an existing static credential store with invalid fields displays error messages', async function (assert) {
+    const errorMsg =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
         400,
@@ -148,32 +164,22 @@ module('Acceptance | credential-stores | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMsg,
         },
       );
     });
     await visit(urls.staticCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });
 
   test('saving an existing vault credential store with invalid fields displays error messages', async function (assert) {
+    const desc = 'Field required for creating a vault credential store.';
+    const msg = 'The request was invalid';
     this.server.patch('/credential-stores/:id', () => {
       return new Response(
         400,
@@ -181,12 +187,12 @@ module('Acceptance | credential-stores | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: msg,
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'attributes.address',
+                description: desc,
               },
             ],
           },
@@ -194,34 +200,39 @@ module('Acceptance | credential-stores | update', function (hooks) {
       );
     });
     await visit(urls.vaultCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(selectors.FIELD_VAULT_ADDRESS, 'random string');
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(msg);
+    assert.dom(selectors.FIELD_VAULT_ADDRESS_ERROR).hasText(desc);
   });
 
   test('can discard unsaved static credential store changes via dialog', async function (assert) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.staticCredentialStore.name, 'random string');
+
+    assert.notEqual(
+      instances.staticCredentialStore.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
 
     await visit(urls.staticCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find(commonSelectors.MODAL_WARNING));
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
+
       assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
@@ -238,15 +249,19 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
 
     await visit(urls.vaultCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find(commonSelectors.MODAL_WARNING));
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
+
       assert.strictEqual(currentURL(), urls.credentialStores);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
@@ -260,17 +275,23 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+
     assert.notEqual(instances.staticCredentialStore.name, 'random string');
+
     await visit(urls.staticCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find(commonSelectors.MODAL_WARNING));
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.staticCredentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'static' }).models[0]
@@ -284,17 +305,23 @@ module('Acceptance | credential-stores | update', function (hooks) {
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
+
     assert.notEqual(instances.vaultCredentialStore.name, 'random string');
+
     await visit(urls.vaultCredentialStore);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
 
     try {
       await visit(urls.credentialStores);
     } catch (e) {
-      assert.ok(find(commonSelectors.MODAL_WARNING));
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.vaultCredentialStore);
       assert.notEqual(
         this.server.schema.credentialStores.where({ type: 'vault' }).models[0]
@@ -313,7 +340,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
   test('user can click vault credential store worker filter tab and be rerouted to correct url', async function (assert) {
     await visit(urls.vaultCredentialStore);
 
-    assert.dom(commonSelectors.HREF(urls.workerFilter)).exists();
+    assert.dom(commonSelectors.HREF(urls.workerFilter)).isVisible();
 
     await click(commonSelectors.HREF(urls.workerFilter));
 
@@ -338,12 +365,10 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.workerFilter));
 
-    assert.dom('.hds-application-state').exists();
     assert
-      .dom('.hds-application-state')
-      .hasText(
-        `No worker filter added You haven't added a worker filter yet. Add Worker Filter`,
-      );
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
+      .hasText("You haven't added a worker filter yet.");
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).hasText('Add Worker Filter');
   });
 
   test('when worker filter exists, readonly code block displays the filter text', async function (assert) {

@@ -14,5 +14,6 @@ export const CODE_BLOCK_BODY = '.hds-code-block__code';
 
 export const TYPE_VAULT = '[value="vault"]';
 
+export const FIELD_VAULT_ADDRESS = '[name="address"]';
 export const FIELD_VAULT_ADDRESS_ERROR =
   '[data-test-error-message-vault-address]';

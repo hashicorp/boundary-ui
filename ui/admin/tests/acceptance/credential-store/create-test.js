@@ -125,14 +125,6 @@ module('Acceptance | credential-stores | create', function (hooks) {
           status: 400,
           code: 'invalid_argument',
           message: errorMsg,
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
         },
       );
     });
