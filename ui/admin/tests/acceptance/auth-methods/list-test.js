@@ -89,7 +89,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
         'auth-methods'
       ].includes('list'),
     );
-    assert.dom(commonSelectors.HREF(urls.authMethods)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.authMethods)).isNotVisible();
   });
 
   test('users can navigate to index with only create action', async function (assert) {
