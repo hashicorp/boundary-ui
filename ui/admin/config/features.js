@@ -28,7 +28,7 @@ const baseEdition = {
   'target-network-address': false,
   'vault-worker-filter': false,
   'ldap-auth-methods': false,
-  'dynamic-credentials-worker-filter': false,
+  'host-catalog-worker-filter': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};
@@ -44,7 +44,7 @@ featureEditions.enterprise = {
   ...featureEditions.oss,
   'target-worker-filters-v2-ingress': true,
   'vault-worker-filter': true,
-  'dynamic-credentials-worker-filter': true,
+  'host-catalog-worker-filter': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
