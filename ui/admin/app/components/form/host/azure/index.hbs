@@ -30,13 +30,6 @@
     >
       <F.Label>{{t 'form.external_name.label'}}</F.Label>
       <F.HelperText>{{t 'form.external_name.help'}}</F.HelperText>
-      {{#if @model.errors.external_name}}
-        <F.Error as |E|>
-          {{#each @model.errors.external_name as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
     </Hds::Form::TextInput::Field>
   {{/if}}
 
@@ -49,13 +42,6 @@
   >
     <F.Label>{{t 'form.external_id.label'}}</F.Label>
     <F.HelperText>{{t 'form.external_id.help'}}</F.HelperText>
-    {{#if @model.errors.external_id}}
-      <F.Error as |E|>
-        {{#each @model.errors.external_id as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
   </Hds::Form::TextInput::Field>
 
   <Hds::Form::Textarea::Field
@@ -67,13 +53,6 @@
   >
     <F.Label>{{t 'form.description.label'}}</F.Label>
     <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
-    {{#if @model.errors.description}}
-      <F.Error as |E|>
-        {{#each @model.errors.description as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
   </Hds::Form::Textarea::Field>
 
   <InfoField
@@ -88,7 +67,7 @@
     </F.HelperText>
   </InfoField>
 
-  <Hds::Form::Fieldset as |F|>
+  <Hds::Form::Fieldset class='container-inputs__margin-bottom' as |F|>
     <F.Legend>{{t 'form.ip_addresses.label'}}</F.Legend>
     <F.HelperText>{{t 'form.ip_addresses.help'}} </F.HelperText>
     {{#each @model.ip_addresses as |ip_address|}}

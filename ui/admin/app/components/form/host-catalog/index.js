@@ -4,15 +4,16 @@
  */
 
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+
 import {
   TYPES_HOST_CATALOG,
   TYPES_HOST_CATALOG_PLUGIN,
 } from 'api/models/host-catalog';
 
-//Note: this is a temporary solution till we have resource type helper in place
-const icons = ['aws-color', 'azure-color'];
+const icons = ['aws-color', 'azure-color', 'gcp-color'];
 
-export default class FormStaticHostCatalogAwsComponent extends Component {
+export default class FormHostCatalogIndexComponent extends Component {
   // =properties
   hostCatalogTypes = TYPES_HOST_CATALOG;
   /**
@@ -24,5 +25,12 @@ export default class FormStaticHostCatalogAwsComponent extends Component {
       (obj, plugin, i) => ({ ...obj, [plugin]: icons[i] }),
       {},
     );
+  }
+
+  // =actions
+
+  @action
+  toggleDisableCredentialRotation(model) {
+    model.disable_credential_rotation = !model.disable_credential_rotation;
   }
 }
