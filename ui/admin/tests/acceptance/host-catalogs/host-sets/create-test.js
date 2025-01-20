@@ -150,6 +150,37 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
+  test('can create new gcp host set', async function (assert) {
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'gcp',
+      },
+    });
+
+    const count = getHostSetCount();
+    await visit(
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
+    );
+    const name = 'gcp host set';
+    await fillIn(NAME_SELECTOR, name);
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'filter_test');
+    await click(FILTER_BUTTON_SELECTOR);
+
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+    await click(SUBMIT_BTN_SELECTOR);
+
+    assert.strictEqual(getHostSetCount(), count + 1);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter_test']);
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
   test('Users cannot create a new host set without proper authorization', async function (assert) {
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
