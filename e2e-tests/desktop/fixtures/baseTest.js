@@ -9,7 +9,8 @@ import { authenticateTest } from './authenticateTest.js';
 import { test as envTest } from '../../global-setup.js';
 import { tesseractTest } from './tesseractTest.js';
 
-// The last item in the list will override any previous ones in a fixture name collision
+// Note that if there are any fields that have name conflicts in the fixtures,
+// fixtures that appear later in this list will override any fields that appear earlier.
 export const test = mergeTests(
   envTest,
   authenticateTest,
