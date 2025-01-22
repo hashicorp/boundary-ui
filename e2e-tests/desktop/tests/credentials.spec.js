@@ -2,7 +2,7 @@
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
  */
-
+import path from 'path';
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { execSync } from 'child_process';
@@ -10,6 +10,7 @@ import * as vaultCli from '../../helpers/vault-cli';
 
 let org;
 let targetWithBrokeredVaultCredentials;
+let targetWithInjectedCredentials;
 let targetWithBrokeredStaticCredentials;
 let sshPrivateKeyCredential;
 let jsonCredential;
@@ -18,6 +19,15 @@ const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
 const secretsPath = 'e2e_secrets';
 const secretName = 'cred';
+const __dirname = import.meta.dirname;
+const boundaryControllerPath = path.resolve(
+  __dirname,
+  '../../admin/tests/fixtures/boundary-controller-policy.hcl',
+);
+const kvPolicyPath = path.resolve(
+  __dirname,
+  '../../admin/tests/fixtures/kv-policy.hcl',
+);
 
 test.beforeAll(async () => {
   await vaultCli.checkVaultCli();
@@ -85,7 +95,7 @@ test.beforeEach(
 
     // Create Vault token and apply policies
     execSync(
-      `vault policy write ${boundaryPolicyName} ./desktop/fixtures/boundary-controller-policy.hcl`,
+      `vault policy write ${boundaryPolicyName} ${boundaryControllerPath}`,
     );
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
@@ -96,9 +106,7 @@ test.beforeEach(
       },
     );
 
-    execSync(
-      `vault policy write ${secretPolicyName} ./desktop/fixtures/kv-policy.hcl`,
-    );
+    execSync(`vault policy write ${secretPolicyName} ${kvPolicyPath}`);
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
@@ -171,6 +179,23 @@ test.beforeEach(
         target: targetWithBrokeredStaticCredentials,
         credentialIds: [sshPrivateKeyCredential.id, jsonCredential.id],
       });
+
+    targetWithInjectedCredentials = await boundaryHttp.createTarget(request, {
+      scopeId: project.id,
+      type: 'ssh',
+      port: targetPort,
+    });
+    targetWithInjectedCredentials = await boundaryHttp.addHostSource(request, {
+      target: targetWithInjectedCredentials,
+      hostSourceIds: [hostSet.id],
+    });
+    targetWithInjectedCredentials = await boundaryHttp.addInjectedCredentials(
+      request,
+      {
+        target: targetWithInjectedCredentials,
+        credentialIds: [sshPrivateKeyCredential.id],
+      },
+    );
   },
 );
 
