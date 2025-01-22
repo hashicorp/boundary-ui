@@ -9,6 +9,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_AWS,
   TYPE_CREDENTIAL_STATIC,
   TYPE_CREDENTIAL_DYNAMIC,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 
 module('Unit | Serializer | host catalog', function (hooks) {
@@ -32,6 +33,53 @@ module('Unit | Serializer | host catalog', function (hooks) {
       name: 'static',
       description: 'this is a static host-catalog',
       type: 'static',
+      attributes: {},
+    };
+    assert.deepEqual(record.serialize(), expectedResult);
+  });
+
+  test('it serializes a new gcp plugin as expected', async function (assert) {
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('host-catalog', {
+      compositeType: TYPE_HOST_CATALOG_PLUGIN_GCP,
+      name: 'GCP',
+      description: 'this is a GCP plugin host-catalog',
+      disable_credential_rotation: true,
+      worker_filter: 'workerfilter',
+      access_key_id: 'foobars',
+      secret_access_key: 'testing',
+      secret_id: 'a1b2c3',
+      secret_value: 'a1b2c3',
+      role_arn: 'test',
+      role_external_id: 'test',
+      role_session_name: 'test',
+      role_tags: [
+        { key: 'Project', value: 'Automation' },
+        { key: 'foo', value: 'bar' },
+      ],
+      project_id: 'project',
+      zone: 'zone',
+      client_email: 'email',
+      target_service_account_id: 'service-account',
+      private_key_id: 'key-id',
+      private_key: 'key',
+    });
+    const expectedResult = {
+      name: 'GCP',
+      description: 'this is a GCP plugin host-catalog',
+      type: 'plugin',
+      worker_filter: 'workerfilter',
+      attributes: {
+        disable_credential_rotation: true,
+        project_id: 'project',
+        zone: 'zone',
+        target_service_account_id: 'service-account',
+        client_email: 'email',
+      },
+      secrets: {
+        private_key_id: 'key-id',
+        private_key: 'key',
+      },
     };
     assert.deepEqual(record.serialize(), expectedResult);
   });
@@ -79,7 +127,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new aws dynamic plugin as expected', async function (assert) {
+  test('it serializes a new aws dynamic credential type plugin as expected', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
@@ -88,7 +136,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
       description: 'this is a Aws plugin host-catalog',
       disable_credential_rotation: true,
       worker_filter: 'workerfilter',
-      // these are AWS fields and should be included
+      // these are static AWS fields and should be excluded
       region: 'west',
       access_key_id: 'foobars',
       secret_access_key: 'testing',
@@ -123,7 +171,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new aws static plugin as expected, ignoring azure fields', async function (assert) {
+  test('it serializes a new aws static credential type plugin as expected, ignoring azure and GCP fields', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: TYPE_HOST_CATALOG_PLUGIN_AWS,
@@ -142,6 +190,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
       subscription_id: 'a1b2c3',
       secret_id: 'a1b2c3',
       secret_value: 'a1b2c3',
+      project_id: 'project',
+      zone: 'zone',
     });
     const expectedResult = {
       name: 'AWS',
@@ -164,7 +214,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it serializes a new azure record as expected, ignoring aws fields', async function (assert) {
+  test('it serializes a new azure record as expected, ignoring aws and GCP fields', async function (assert) {
     const store = this.owner.lookup('service:store');
     const record = store.createRecord('host-catalog', {
       compositeType: 'azure',
@@ -181,6 +231,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
       subscription_id: 'a1b2c3',
       secret_id: 'a1b2c3',
       secret_value: 'a1b2c3',
+      project_id: 'project',
+      zone: 'zone',
     });
     const expectedResult = {
       name: 'Azure',
@@ -271,7 +323,7 @@ module('Unit | Serializer | host catalog', function (hooks) {
     assert.deepEqual(record.serialize(), expectedResult);
   });
 
-  test('it normalizes an static host catalog as expected', function (assert) {
+  test('it normalizes a static host catalog as expected', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('host-catalog');
     const hostCatalog = store.createRecord('host-catalog').constructor;
@@ -300,6 +352,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
           secret_access_key: null,
           secret_id: null,
           secret_value: null,
+          private_key_id: null,
+          private_key: null,
         },
         relationships: {},
       },
@@ -358,6 +412,8 @@ module('Unit | Serializer | host catalog', function (hooks) {
           secret_access_key: 'zq{2:IVc8@W^',
           secret_id: null,
           secret_value: null,
+          private_key_id: null,
+          private_key: null,
         },
         relationships: {},
       },
@@ -418,6 +474,70 @@ module('Unit | Serializer | host catalog', function (hooks) {
           subscription_id: 'subscription',
           access_key_id: null,
           secret_access_key: null,
+          private_key_id: null,
+          private_key: null,
+        },
+        relationships: {},
+      },
+      included: [],
+    });
+  });
+
+  test('it normalizes a GCP plugin type host catalog as expected', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-catalog');
+    const hostCatalog = store.createRecord('host-catalog').constructor;
+    const payload = {
+      id: '1',
+      name: 'Host catalog test',
+      description: 'Test description',
+      authorized_actions: ['no-op', 'read', 'update', 'delete'],
+      type: 'plugin',
+      plugin: {
+        id: 'plugin-id-7',
+        name: 'gcp',
+        description: 'gcp host catalog',
+      },
+      attributes: {
+        disable_credential_rotation: true,
+        project_id: 'project_id',
+        zone: 'zone',
+        target_service_account_id: 'target_service_account_id',
+      },
+      secrets: {
+        private_key_id: '0xF3B0a6f8',
+        private_key: 'zq{2:IVc8@W^',
+      },
+    };
+    const normalized = serializer.normalizeSingleResponse(
+      store,
+      hostCatalog,
+      payload,
+    );
+    assert.deepEqual(normalized, {
+      data: {
+        id: '1',
+        type: 'host-catalog',
+        attributes: {
+          name: 'Host catalog test',
+          type: 'plugin',
+          description: 'Test description',
+          authorized_actions: ['no-op', 'read', 'update', 'delete'],
+          plugin: {
+            id: 'plugin-id-7',
+            name: 'gcp',
+            description: 'gcp host catalog',
+          },
+          disable_credential_rotation: true,
+          private_key_id: '0xF3B0a6f8',
+          private_key: 'zq{2:IVc8@W^',
+          project_id: 'project_id',
+          zone: 'zone',
+          target_service_account_id: 'target_service_account_id',
+          access_key_id: null,
+          secret_access_key: null,
+          secret_id: null,
+          secret_value: null,
         },
         relationships: {},
       },
