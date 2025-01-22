@@ -85,7 +85,7 @@ test.beforeEach(
 
     // Create Vault token and apply policies
     execSync(
-      `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
+      `vault policy write ${boundaryPolicyName} ./desktop/fixtures/boundary-controller-policy.hcl`,
     );
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
     execSync(
@@ -97,7 +97,7 @@ test.beforeEach(
     );
 
     execSync(
-      `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
+      `vault policy write ${secretPolicyName} ./desktop/fixtures/kv-policy.hcl`,
     );
     const vaultToken = JSON.parse(
       execSync(
