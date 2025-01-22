@@ -41,7 +41,6 @@ export async function createStaticCredentialKeyPair(
 /**
  * Creates a new json credential
  * @param {import('@playwright/test').APIRequestContext} request
- * @param {string} projectId ID of the project where the credential store will be created
  * @param {string} credentialStoreId ID of the credential store where the credential will be created
  * @param {object} data JSON credential data
  * @returns {Promise<Serializable>}
