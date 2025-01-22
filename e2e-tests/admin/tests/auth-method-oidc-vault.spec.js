@@ -71,7 +71,7 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
     );
 
     // Change OIDC Auth Method state to active-public
-    await page.getByTitle('Inactive').click();
+    await page.getByRole('button', { name: 'Inactive' }).click();
     await page.getByText('Public').click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
