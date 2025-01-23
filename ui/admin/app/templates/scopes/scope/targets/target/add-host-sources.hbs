@@ -24,32 +24,13 @@
   </page.header>
 
   <page.body>
-    {{#if @model.hostSets}}
-      <Form::Target::AddHostSets
-        @model={{@model.target}}
-        @hostCatalogs={{@model.hostCatalogs}}
-        @hostSets={{@model.hostSets}}
-        @submit={{fn this.save @model.target}}
-        @cancel={{this.cancel}}
-      />
-    {{/if}}
-
-    {{#unless @model.hostSets}}
-      <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.target.host-source.messages.none.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.target.host-source.messages.none.description'}}
-          </message.description>
-          <message.link @route='scopes.scope.targets.target.host-sources'>
-            <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-            {{t 'actions.back'}}
-          </message.link>
-        </Rose::Message>
-      </Rose::Layout::Centered>
-    {{/unless}}
+    <Form::Target::AddHostSets
+      @model={{@model.target}}
+      @hostCatalogs={{@model.hostCatalogs}}
+      @hostSets={{@model.hostSets}}
+      @submit={{fn this.save @model.target}}
+      @cancel={{this.cancel}}
+    />
   </page.body>
 
 </Rose::Layout::Page>

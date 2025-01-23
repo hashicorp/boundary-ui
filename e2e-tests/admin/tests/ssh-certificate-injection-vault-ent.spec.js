@@ -3,20 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { execSync } from 'child_process';
 
-import { authenticatedState } from '../global-setup.js';
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  connectSshToTarget,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
-import { checkVaultCli } from '../../helpers/vault-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -30,11 +21,9 @@ const secretsPath = 'e2e_secrets';
 // This must match the secret name in ssh-policy.hcl
 const secretName = 'boundary-client';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
-  await checkVaultCli();
+  await boundaryCli.checkBoundaryCli();
+  await vaultCli.checkVaultCli();
 });
 
 test.beforeEach(async () => {
@@ -70,8 +59,8 @@ test('SSH Certificate Injection @ent @docker', async ({
       `vault write ${secretsPath}/roles/${secretName} @./admin/tests/fixtures/ssh-certificate-injection-role.json`,
     );
 
-    const private_key = atob(sshCaKey);
-    const public_key = atob(sshCaKeyPublic);
+    const private_key = Buffer.from(sshCaKey, 'base64');
+    const public_key = Buffer.from(sshCaKeyPublic, 'base64');
 
     execSync(
       `vault write ${secretsPath}/config/ca` +
@@ -127,30 +116,32 @@ test('SSH Certificate Injection @ent @docker', async ({
     );
 
     // Connect to target
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectSshToTarget(targetId);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
-    await page
-      .getByRole('cell', { name: targetName })
-      .locator('..')
-      .getByRole('button', { name: 'Cancel' })
-      .click();
   } finally {
-    if (orgId) {
-      await deleteScopeCli(orgId);
-    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
+    }
+
+    if (orgId) {
+      await boundaryCli.deleteScope(orgId);
     }
 
     execSync(`vault secrets disable ${secretsPath}`);

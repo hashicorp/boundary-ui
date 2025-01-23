@@ -5,15 +5,10 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | read', function (hooks) {
@@ -35,8 +30,8 @@ module('Acceptance | accounts | read', function (hooks) {
     account: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -58,7 +53,7 @@ module('Acceptance | accounts | read', function (hooks) {
 
   test('can navigate to an account form', async function (assert) {
     await visit(urls.accounts);
-    await click(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK);
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.account));
 
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.account);
@@ -69,10 +64,12 @@ module('Acceptance | accounts | read', function (hooks) {
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.account))
+      .doesNotExist();
   });
 
-  test('user can navigate to account and incorrect url autocorrects', async function (assert) {
+  test('user can navigate to account and incorrect url auto-corrects', async function (assert) {
     const authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
     });

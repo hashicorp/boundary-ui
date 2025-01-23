@@ -3,29 +3,24 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import { authenticatedState } from '../global-setup.js';
-import {
-  authenticateBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
-
-test.use({ storageState: authenticatedState });
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
 test.describe('AWS', async () => {
-  test('Create an AWS Dynamic Host Catalog and set up Host Sets @ce @ent @aws', async ({
+  test('Create an AWS Dynamic Host Catalog and set up Host Sets @ce @aws', async ({
     page,
     baseURL,
     adminAuthMethodId,
@@ -37,13 +32,16 @@ test.describe('AWS', async () => {
     awsRegion,
     awsSecretAccessKey,
     targetPort,
+    sshUser,
+    sshKeyPath,
   }) => {
     let orgName;
+    let connect;
     try {
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
       const projectsPage = new ProjectsPage(page);
-      await projectsPage.createProject();
+      const projectName = await projectsPage.createProject();
 
       // Create host catalog
       const hostCatalogName = 'Host Catalog ' + nanoid();
@@ -112,37 +110,32 @@ test.describe('AWS', async () => {
       ).toBeVisible();
 
       // Check number of hosts in host set
-      let i = 0;
-      let rowCount = 0;
-      let expectedHosts = JSON.parse(awsHostSetIps);
-      do {
-        i = i + 1;
-        // Getting the number of rows in the second rowgroup (the first rowgroup is the header row)
-        rowCount = await page
+      const expectedHosts = JSON.parse(awsHostSetIps);
+      await expect(async () => {
+        const rowCount = await page
           .getByRole('table')
-          .getByRole('rowgroup')
-          .nth(1)
           .getByRole('row')
+          .filter({ hasNot: page.getByRole('columnheader') })
           .count();
-        await page.reload();
-        await page
-          .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByText(hostSetName)
-          .waitFor();
-      } while (i < 5);
 
-      expect(rowCount).toBe(expectedHosts.length);
+        if (rowCount !== expectedHosts.length) {
+          await page.reload();
+          await page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText(hostSetName)
+            .waitFor();
+        }
+        expect(rowCount).toBe(expectedHosts.length);
+      }).toPass();
 
       // Navigate to each host in the host set
-      for (let i = 0; i < expectedHosts.length; i++) {
-        const host = await page
-          .getByRole('table')
-          .getByRole('rowgroup')
-          .nth(1)
-          .getByRole('row')
-          .nth(i)
-          .getByRole('link');
-
+      for (const row of await page
+        .getByRole('table')
+        .getByRole('rowgroup')
+        .nth(1)
+        .getByRole('row')
+        .all()) {
+        const host = row.getByRole('link');
         let hostName = await host.innerText();
         await host.click();
         await expect(
@@ -188,10 +181,44 @@ test.describe('AWS', async () => {
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
-      // Add the host source back
-      await targetsPage.addHostSourceToTarget(newHostSetName);
+      // Set up target credentials
+      const credentialStoresPage = new CredentialStoresPage(page);
+      await credentialStoresPage.createStaticCredentialStore();
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName,
+      );
+
+      // Connect to target
+      await boundaryCli.authenticateBoundary(
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
+      );
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
+      connect = await boundaryCli.connectSshToTarget(targetId);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
     } finally {
-      await authenticateBoundaryCli(
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
+
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -199,9 +226,9 @@ test.describe('AWS', async () => {
       );
 
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
       }
     }

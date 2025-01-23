@@ -3,12 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-
-import { authenticatedState } from '../global-setup.js';
-
-test.use({ storageState: authenticatedState });
 
 test('Create a worker (enterprise) @ent @docker @aws', async ({
   page,

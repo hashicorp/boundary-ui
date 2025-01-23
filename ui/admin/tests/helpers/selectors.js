@@ -14,13 +14,16 @@ export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
 export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
-export const TABLE_FIRST_ROW_RESOURCE_LINK = 'tbody tr:first-child a';
+export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 
-export const RESOURCE_NOT_FOUND_SUBTITLE = '.rose-message-subtitle';
-export const RESOURCE_NOT_FOUND_VALUE = 'Error 404';
+export const RESOURCE_NOT_FOUND_SUBTITLE =
+  '[data-test-error-application-state] .hds-application-state__error-code';
+export const RESOURCE_NOT_FOUND_VALUE = 'ERROR 404';
 
-export const PAGE_MESSAGE_DESCRIPTION = '.rose-message-description';
-export const PAGE_MESSAGE_LINK = '.rose-message-body .hds-link-standalone';
+export const PAGE_MESSAGE_HEADER = '.hds-application-state__header';
+export const PAGE_MESSAGE_DESCRIPTION = '.hds-application-state__body-text';
+export const PAGE_MESSAGE_LINK =
+  '.hds-application-state__footer .hds-link-standalone';
 
 export const HREF = (url) => `[href="${url}"]`;
 
@@ -31,3 +34,17 @@ export const ALERT_TOAST_BODY =
   '[data-test-toast-notification] .hds-alert__description';
 export const ALERT_TOAST_DISMISS =
   '[data-test-toast-notification] .hds-dismiss-button';
+
+export const MODAL_WARNING = 'dialog';
+export const MODAL_WARNING_CONFIRM_BTN =
+  'dialog .hds-modal__footer button:first-child';
+export const MODAL_WARNING_CANCEL_BTN =
+  'dialog .hds-modal__footer button:last-child';
+export const MODAL_WARNING_TITLE = '.hds-modal__header';
+export const MODAL_WARNING_MESSAGE = '.hds-modal__body';
+
+export const FILTER_DROPDOWN = (filterName) =>
+  `.search-filtering [name="${filterName}"] button`;
+export const FILTER_DROPDOWN_ITEM = (itemList) => `input[value="${itemList}"]`;
+export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
+  `.search-filtering [name="${filterName}"] .hds-dropdown__footer button`;

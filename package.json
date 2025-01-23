@@ -20,7 +20,6 @@
     "build:ui:admin:enterprise": "yarn --cwd ui/admin build:enterprise",
     "build:ui:admin:hcp": "yarn --cwd ui/admin build:hcp",
     "build:ui:desktop": "yarn --cwd ui/desktop build",
-    "build:ui:desktop:win": "docker-compose -f docker-compose-embedding.yml run build-desktop-production && yarn build:ui:desktop:app",
     "build:ui:desktop:production": "yarn --cwd ui/desktop build:production",
     "build:ui:desktop:app": "yarn --cwd ui/desktop build:desktop",
     "lint": "concurrently \"yarn:lint:*\" --names \"lint:\"",
@@ -47,7 +46,7 @@
     "git-cz": "^4.9.0",
     "husky": "^9.1.6",
     "license-checker": "^25.0.1",
-    "lint-staged": "^13.0.2"
+    "lint-staged": "^15.2.10"
   },
   "resolutions": {
     "**/nomnom/underscore": "^1.12.1",
@@ -64,5 +63,6 @@
   },
   "engines": {
     "node": "18.* || 20.*"
-  }
+  },
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

@@ -5,15 +5,10 @@
 
 import { module, test } from 'qunit';
 import { visit, fillIn, waitFor } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | scopes | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -40,7 +35,7 @@ module('Acceptance | scopes | list', function (hooks) {
     orgScope: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org1 = this.server.create('scope', {
       type: 'org',
@@ -60,7 +55,7 @@ module('Acceptance | scopes | list', function (hooks) {
     });
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org1.id}/scopes`;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('user can search for a specifc org scope by id', async function (assert) {

@@ -48,7 +48,7 @@ module('Acceptance | aliases | update', function (hooks) {
     target: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -66,7 +66,7 @@ module('Acceptance | aliases | update', function (hooks) {
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
     aliasCount = () => this.server.schema.aliases.all().models.length;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can update an exisiting alias', async function (assert) {

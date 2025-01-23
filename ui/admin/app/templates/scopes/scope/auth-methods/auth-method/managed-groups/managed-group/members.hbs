@@ -102,14 +102,14 @@
       {{/if}}
     {{else}}
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.managed-group.member.messages.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.managed-group.member.messages.description'}}
-          </message.description>
-        </Rose::Message>
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t 'resources.managed-group.member.messages.title'}}
+          />
+          <A.Body
+            @text={{t 'resources.managed-group.member.messages.description'}}
+          />
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
     {{/if}}
   </page.body>

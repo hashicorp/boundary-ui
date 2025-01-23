@@ -3,17 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
-import { authenticatedState } from '../global-setup.js';
-import {
-  createOrgHttp,
-  createProjectHttp,
-  createTargetHttp,
-} from '../../helpers/boundary-http.js';
-
-test.use({ storageState: authenticatedState });
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 
 test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
   page,
@@ -21,14 +14,18 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
 }) => {
   let org;
   try {
-    org = await createOrgHttp(request);
-    const project = await createProjectHttp(request, org.id);
+    org = await boundaryHttp.createOrg(request);
+    const project = await boundaryHttp.createProject(request, org.id);
 
     // Create targets
     let targets = [];
     const targetCount = 15;
     for (let i = 0; i < targetCount; i++) {
-      const target = await createTargetHttp(request, project.id, 'tcp', 22);
+      const target = await boundaryHttp.createTarget(request, {
+        scopeId: project.id,
+        type: 'tcp',
+        port: 22,
+      });
       targets.push(target);
     }
 

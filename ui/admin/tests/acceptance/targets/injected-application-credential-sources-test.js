@@ -4,8 +4,8 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, findAll, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { visit, findAll, click, currentURL } from '@ember/test-helpers';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -49,7 +49,7 @@ module(
       injectedApplicationCredentialSources: null,
     };
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
       // Generate resources
       instances.scopes.global = this.server.create('scope', { id: 'global' });
       instances.scopes.org = this.server.create('scope', {
@@ -116,7 +116,7 @@ module(
       credentialSourceCount =
         getCredentialLibraryCount() + getCredentialCount();
 
-      authenticateSession({ username: 'admin' });
+      await authenticateSession({ username: 'admin' });
     });
 
     test('visiting target injected application credential sources', async function (assert) {
@@ -163,7 +163,7 @@ module(
       });
       await visit(urls.addInjectedApplicationCredentialSources);
       assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      assert.dom('.rose-message-title').doesNotExist();
+      assert.dom('.hds-application-state__title').doesNotExist();
     });
 
     test('displays list of injected application credential sources with only credential libraries available', async function (assert) {
@@ -177,15 +177,14 @@ module(
         findAll('tbody tr').length,
         getCredentialLibraryCount(),
       );
-      assert.dom('.rose-message-title').doesNotExist();
+      assert.dom('.hds-application-state__title').doesNotExist();
     });
 
     test('displays no injected application credential sources message when none available', async function (assert) {
       await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(
-        find('.rose-message-title').textContent.trim(),
-        'No Injected Application Credential Sources Available',
-      );
+      assert
+        .dom('.hds-application-state__title')
+        .hasText('No Injected Application Credential Sources Available');
     });
 
     test('when no injected application credential sources available, button routes to add injected application credential sources', async function (assert) {
@@ -194,7 +193,7 @@ module(
       });
       await visit(urls.injectedApplicationCredentialSources);
       // Click on the rose message link
-      await click(find('.rose-message > .rose-message-body > a'));
+      await click('.hds-application-state__footer .hds-link-standalone');
       assert.strictEqual(
         currentURL(),
         urls.addInjectedApplicationCredentialSources,

@@ -5,17 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -57,7 +52,7 @@ module('Acceptance | scopes', function (hooks) {
     project2ScopeEdit: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -92,7 +87,7 @@ module('Acceptance | scopes', function (hooks) {
     urls.project2ScopeEdit = `${urls.project2Scope}/edit`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({ isGlobal: true, username: 'admin' });
+    await authenticateSession({ isGlobal: true, username: 'admin' });
   });
 
   test('visiting global scope', async function (assert) {

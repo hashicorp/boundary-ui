@@ -124,21 +124,6 @@
   }
 }
 
-.rose-table {
-  p {
-    margin-bottom: 0;
-  }
-
-  .rose-form-checkbox {
-    margin-bottom: 0;
-
-    .rose-form-checkbox-label-text {
-      color: var(--stark);
-      text-decoration: underline;
-    }
-  }
-}
-
 .rose-header {
   -webkit-app-region: drag;
   min-height: sizing.rems(l) * 2;
@@ -276,6 +261,11 @@
   color: var(--ui-border-starker-1);
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
+}
+
+// Rose dialog - positioned above modal overlay
+.rose-dialog {
+  z-index: 6000;
 }
 
 // Overlay above everything - including notifications

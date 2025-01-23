@@ -5,17 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | workers | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -39,7 +34,7 @@ module('Acceptance | workers | delete', function (hooks) {
     worker: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.worker = this.server.create('worker', {
@@ -52,7 +47,7 @@ module('Acceptance | workers | delete', function (hooks) {
 
     getWorkerCount = () => this.server.schema.workers.all().models.length;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete a worker', async function (assert) {

@@ -5,16 +5,16 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import {
+  TYPE_HOST_CATALOG_DYNAMIC,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
+} from 'api/models/host-catalog';
 
 module('Acceptance | host-catalogs | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -34,6 +34,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
       project: null,
     },
     hostCatalog: null,
+    gcpDynamicHostCatalog: null,
   };
   const urls = {
     globalScope: null,
@@ -41,9 +42,10 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     projectScope: null,
     hostCatalogs: null,
     hostCatalog: null,
+    gcpDynamicHostCatalog: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -57,16 +59,24 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+
+    instances.gcpDynamicHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: TYPE_HOST_CATALOG_DYNAMIC,
+      plugin: { name: TYPE_HOST_CATALOG_PLUGIN_GCP },
+    });
+
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
+    urls.gcpDynamicHostCatalog = `${urls.hostCatalogs}/${instances.gcpDynamicHostCatalog.id}`;
     // Generate resource counter
     getHostCatalogCount = () =>
       this.server.schema.hostCatalogs.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete host catalog', async function (assert) {
@@ -74,6 +84,18 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
     await visit(urls.hostCatalogs);
     await click(`[href="${urls.hostCatalog}"]`);
+    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(DELETE_ACTION_SELECTOR);
+
+    assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
+  });
+
+  test('can delete GCP host catalog', async function (assert) {
+    const hostCatalogCount = getHostCatalogCount();
+
+    await visit(urls.hostCatalogs);
+    await click(`[href="${urls.gcpDynamicHostCatalog}"]`);
+
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
 
@@ -102,7 +124,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await click(`[href="${urls.hostCatalog}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -120,7 +142,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     await click(`[href="${urls.hostCatalog}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount);
     assert.strictEqual(currentURL(), urls.hostCatalog);

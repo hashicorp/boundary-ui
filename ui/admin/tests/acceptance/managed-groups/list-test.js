@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -43,8 +43,8 @@ module('Acceptance | managed-groups | list', function (hooks) {
     newLdapManagedGroup: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

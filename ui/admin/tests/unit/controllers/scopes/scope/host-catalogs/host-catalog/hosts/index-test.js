@@ -16,6 +16,7 @@ module(
     setupTest(hooks);
     setupMirage(hooks);
 
+    let intl;
     let store;
     let controller;
     let getHostCount;
@@ -34,8 +35,9 @@ module(
       hosts: null,
     };
 
-    hooks.beforeEach(function () {
-      authenticateSession({});
+    hooks.beforeEach(async function () {
+      await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/host-catalogs/host-catalog/hosts/index',
@@ -102,6 +104,39 @@ module(
       await controller.delete(host);
 
       assert.strictEqual(getHostCount(), hostCount - 1);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.hosts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.host.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
+      await visit(urls.hosts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.host.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.hostCatalog.authorized_collection_actions.hosts = [];
+      await visit(urls.hosts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.host.title_plural'),
+        }),
+      );
     });
   },
 );

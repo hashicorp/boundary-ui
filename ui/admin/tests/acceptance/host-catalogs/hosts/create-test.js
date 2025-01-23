@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -39,7 +39,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -70,7 +70,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
     getHostCount = () => this.server.schema.hosts.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new host', async function (assert) {
@@ -98,14 +98,22 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
 
     assert.dom(commonSelectors.HREF(urls.newHost)).doesNotExist();
   });
+
   test('Users can navigate to new host route with proper authorization', async function (assert) {
     await visit(urls.hosts);
+
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'create',
       ),
     );
-    assert.dom(selectors.MANAGE_DROPDOWN).exists();
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).exists();
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    assert
+      .dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST)
+      .hasAttribute('href', urls.newHost);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST);
+    assert.strictEqual(currentURL(), urls.newHost);
   });
 
   test('Users cannot navigate to new host route without proper authorization', async function (assert) {
@@ -141,8 +149,8 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'address',
+                description: 'Address is required.',
               },
             ],
           },
@@ -156,7 +164,7 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
 
-    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_ADDRESS_ERROR).hasText('Address is required.');
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {

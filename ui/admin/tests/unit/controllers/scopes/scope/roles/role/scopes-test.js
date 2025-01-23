@@ -37,7 +37,7 @@ module('Unit | Controller | scopes/scope/roles/role/scopes', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:scopes/scope/roles/role/scopes');
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });

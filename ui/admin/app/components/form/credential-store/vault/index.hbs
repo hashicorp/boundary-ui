@@ -54,11 +54,14 @@
 
   {{#if (feature-flag 'static-credentials')}}
     {{#if @model.isNew}}
-      <Hds::Form::RadioCard::Group @alignment='center' as |G|>
+      <Hds::Form::RadioCard::Group
+        @name={{t 'form.type.label'}}
+        @alignment='center'
+        as |G|
+      >
         <G.Legend>{{t 'form.type.label'}}</G.Legend>
         {{#each-in this.mapResourceTypeWithIcon as |credentialStoreType icon|}}
           <G.RadioCard
-            @name={{credentialStoreType}}
             @value={{credentialStoreType}}
             @checked={{eq credentialStoreType @model.type}}
             @maxWidth='20rem'
@@ -106,40 +109,13 @@
     {{#if @model.errors.address}}
       <F.Error as |E|>
         {{#each @model.errors.address as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message
+            data-test-error-message-vault-address
+          >{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>
-
-  {{#if (feature-flag 'vault-worker-filter')}}
-    <Hds::Form::TextInput::Field
-      name='worker_filter'
-      @value={{@model.worker_filter}}
-      @isOptional={{true}}
-      @isInvalid={{@model.errors.worker_filter}}
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'worker_filter')}}
-      as |F|
-    >
-      <F.Label>
-        {{t 'resources.credential-store.form.worker_filter.label'}}
-      </F.Label>
-      <F.HelperText>
-        {{t 'resources.credential-store.form.worker_filter.help'}}
-        <Hds::Link::Inline @href={{doc-url 'worker-filters'}}>
-          {{t 'actions.learn-more'}}
-        </Hds::Link::Inline>
-      </F.HelperText>
-      {{#if @model.errors.worker_filter}}
-        <F.Error as |E|>
-          {{#each @model.errors.worker_filter as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
-  {{/if}}
 
   {{#if (or @model.isNew form.isEditable)}}
     <Hds::Form::TextInput::Field

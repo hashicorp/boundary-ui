@@ -3,26 +3,18 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 import { nanoid } from 'nanoid';
 import { readFile } from 'fs/promises';
 
-import { authenticatedState } from '../global-setup.js';
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByTargetIdCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
-import { checkVaultCli } from '../../helpers/vault-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
+import * as vaultCli from '../../helpers/vault-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
 const secretsPath = 'e2e_secrets';
@@ -30,11 +22,9 @@ const secretName = 'cred';
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
-  await checkVaultCli();
+  await boundaryCli.checkBoundaryCli();
+  await vaultCli.checkVaultCli();
 });
 
 test.beforeEach(async ({ page }) => {
@@ -123,32 +113,39 @@ test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
       credentialLibraryName,
     );
 
-    await authenticateBoundaryCli(
+    // Verify correct credentials are returned after authorizing session
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    const session = await authorizeSessionByTargetIdCli(targetId);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    const session = await boundaryCli.authorizeSessionByTargetId(targetId);
     const retrievedUser =
       session.item.credentials[0].secret.decoded.data.username;
     const retrievedKey =
       session.item.credentials[0].secret.decoded.data.private_key;
 
     expect(retrievedUser).toBe(sshUser);
-
     const keyData = await readFile(sshKeyPath, {
       encoding: 'utf-8',
     });
-    if (keyData !== retrievedKey) {
-      throw new Error('Stored Key does not match');
-    }
+    expect(retrievedKey).toBe(keyData);
+
+    const sessionsPage = new SessionsPage(page);
+    await sessionsPage.waitForSessionToBeVisible(targetName);
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

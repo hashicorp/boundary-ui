@@ -61,7 +61,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     sessionRecording2: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -122,7 +122,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-session-recording');
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {

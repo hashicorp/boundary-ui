@@ -19,6 +19,8 @@ module(
     setupIndexedDb(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
+    let features;
     let store;
     let controller;
     let getStorageBucketCount;
@@ -34,8 +36,10 @@ module(
       storageBuckets: null,
     };
 
-    hooks.beforeEach(function () {
-      authenticateSession({});
+    hooks.beforeEach(async function () {
+      await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
+      features = this.owner.lookup('service:features');
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/storage-buckets/index',
@@ -94,6 +98,44 @@ module(
       await controller.delete(storageBucket);
 
       assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      features.enable('ssh-session-recording');
+      await visit(urls.storageBuckets);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.storage-bucket.messages.none.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      features.enable('ssh-session-recording');
+      instances.scopes.global.authorized_collection_actions['storage-buckets'] =
+        ['create'];
+      await visit(urls.storageBuckets);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.storage-bucket.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      features.enable('ssh-session-recording');
+      instances.scopes.global.authorized_collection_actions['storage-buckets'] =
+        [];
+      await visit(urls.storageBuckets);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.storage-bucket.title_plural'),
+        }),
+      );
     });
   },
 );

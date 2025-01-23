@@ -34,7 +34,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
     unknownStorageBucket: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -50,7 +50,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     features = this.owner.lookup('service:features');
     features.enable('ssh-session-recording');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting a storage bucket', async function (assert) {
@@ -71,7 +71,9 @@ module('Acceptance | storage-buckets | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.storageBuckets));
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.storageBucket))
+      .doesNotExist();
   });
 
   test('visiting an unknown storage bucket displays 404 message', async function (assert) {
@@ -83,7 +85,7 @@ module('Acceptance | storage-buckets | read', function (hooks) {
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
-  test('users can navigate to storage bucket and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to storage bucket and incorrect url auto-corrects', async function (assert) {
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/storage-buckets/${instances.storageBucket.id}`;
 
     await visit(incorrectUrl);

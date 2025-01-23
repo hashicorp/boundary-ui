@@ -3,30 +3,19 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
-import { authenticatedState } from '../global-setup.js';
-import {
-  authenticateBoundaryCli,
-  authorizeSessionByAliasCli,
-  checkBoundaryCli,
-  deleteAliasCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { AliasesPage } from '../pages/aliases.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
+import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test.describe('Aliases', async () => {
@@ -38,10 +27,13 @@ test.describe('Aliases', async () => {
     adminPassword,
     targetAddress,
     targetPort,
+    sshUser,
+    sshKeyPath,
   }) => {
     await page.goto('/');
     let orgName;
     let alias;
+    let connect;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
       const orgsPage = new OrgsPage(page);
@@ -49,7 +41,10 @@ test.describe('Aliases', async () => {
       const projectsPage = new ProjectsPage(page);
       await projectsPage.createProject();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddress(targetAddress, targetPort);
+      const targetName = await targetsPage.createTargetWithAddress(
+        targetAddress,
+        targetPort,
+      );
 
       // Create alias for target
       const aliasName = 'Alias ' + nanoid();
@@ -65,15 +60,22 @@ test.describe('Aliases', async () => {
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
       // Connect to target using alias
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      await authorizeSessionByAliasCli(alias);
+      connect = await boundaryCli.connectToAlias(alias, sshUser, sshKeyPath);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
 
       // Clear destination from alias
+      await page
+        .getByRole('navigation', { name: 'Resources' })
+        .getByRole('link', { name: 'Targets' })
+        .click();
+      await page.getByRole('link', { name: targetName }).click();
       await page.getByRole('link', { name: alias }).click();
       // Note: On the Target details page, there is a section with the header
       // "Aliases". The extra check here is to ensure that we are on the Alias
@@ -89,20 +91,23 @@ test.describe('Aliases', async () => {
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
     } finally {
-      await authenticateBoundaryCli(
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
       }
       if (alias) {
-        await deleteAliasCli(alias);
+        await boundaryCli.deleteAlias(alias);
       }
     }
   });
@@ -115,15 +120,18 @@ test.describe('Aliases', async () => {
     adminPassword,
     targetAddress,
     targetPort,
+    sshUser,
+    sshKeyPath,
   }) => {
     await page.goto('/');
     let orgName;
     let alias;
+    let connect;
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     try {
       const orgsPage = new OrgsPage(page);
       orgName = await orgsPage.createOrg();
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
@@ -133,28 +141,33 @@ test.describe('Aliases', async () => {
       await projectsPage.createProject();
       alias = 'example.alias.' + nanoid();
       const targetsPage = new TargetsPage(page);
-      await targetsPage.createTargetWithAddressAndAlias(
+      const targetName = await targetsPage.createTargetWithAddressAndAlias(
         targetAddress,
         targetPort,
         alias,
       );
 
       // Connect to target using alias
-      await authorizeSessionByAliasCli(alias);
+      connect = await boundaryCli.connectToAlias(alias, sshUser, sshKeyPath);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
     } finally {
-      await authenticateBoundaryCli(
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgName) {
-        const orgId = await getOrgIdFromNameCli(orgName);
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
         if (orgId) {
-          await deleteScopeCli(orgId);
+          await boundaryCli.deleteScope(orgId);
         }
         if (alias) {
-          await deleteAliasCli(alias);
+          await boundaryCli.deleteAlias(alias);
         }
       }
     }
@@ -168,11 +181,14 @@ test.describe('Aliases', async () => {
     adminPassword,
     targetAddress,
     targetPort,
+    sshUser,
+    sshKeyPath,
   }) => {
     await page.goto('/');
     const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10);
     let orgId;
     let alias;
+    let connect;
     try {
       const orgsPage = new OrgsPage(page);
       const orgName = await orgsPage.createOrg();
@@ -185,32 +201,48 @@ test.describe('Aliases', async () => {
       );
 
       // Create new alias from scope page
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      orgId = await getOrgIdFromNameCli(orgName);
-      const projectId = await getProjectIdFromNameCli(orgId, projectName);
-      const targetId = await getTargetIdFromNameCli(projectId, targetName);
+      orgId = await boundaryCli.getOrgIdFromName(orgName);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
 
       alias = 'example.alias.' + nanoid();
       const aliasesPage = new AliasesPage(page);
       await aliasesPage.createAliasForTarget(alias, targetId);
-      await authorizeSessionByAliasCli(alias);
+      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
+      await page.getByRole('link', { name: orgName }).click();
+      await page.getByRole('link', { name: projectName }).click();
+
+      connect = await boundaryCli.connectToAlias(alias, sshUser, sshKeyPath);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
     } finally {
-      await authenticateBoundaryCli(
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
       if (alias) {
-        await deleteAliasCli(alias);
+        await boundaryCli.deleteAlias(alias);
       }
     }
   });

@@ -13,7 +13,36 @@ import { notifySuccess, notifyError } from 'core/decorators/notify';
 export default class ScopesScopeStorageBucketsIndexController extends Controller {
   // =services
 
+  @service can;
+  @service intl;
   @service router;
+
+  // =attributes
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    const canList = this.can.can('list scope', this.scope, {
+      collection: 'storage-buckets',
+    });
+    const canCreate = this.can.can('create scope', this.scope, {
+      collection: 'storage-buckets',
+    });
+    const resource = this.intl.t('resources.storage-bucket.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.storage-bucket.messages.none.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
+  }
 
   // =actions
 

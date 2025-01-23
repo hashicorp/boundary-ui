@@ -15,8 +15,37 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
 
   // =services
 
-  @service router;
   @service can;
+  @service intl;
+  @service router;
+  @service store;
+
+  // =attributes
+
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    const canList = this.can.can('list model', this.hostCatalog, {
+      collection: 'host-sets',
+    });
+    const canCreate = this.can.can('create model', this.hostCatalog, {
+      collection: 'host-sets',
+    });
+    const resource = this.intl.t('resources.host-set.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.host-set.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
+  }
 
   // =actions
 
@@ -46,8 +75,24 @@ export default class ScopesScopeHostCatalogsHostCatalogHostSetsIndexController e
     isNew ? 'notifications.create-success' : 'notifications.save-success',
   )
   async save(hostSet) {
+    // Fetch newest host set as updates to host set attributes cause an async db update which
+    // updates the version again and can cause a version mismatch if the host set is updated
+    // again and we haven't fetched the newest version.
+    if (this.can.can('read host-set', hostSet)) {
+      const newestHostSet = await this.store.findRecord(
+        'host-set',
+        hostSet.id,
+        {
+          reload: true,
+        },
+      );
+
+      hostSet.version = newestHostSet.version;
+    }
+
     await hostSet.save();
-    if (this.can.can('read model', hostSet)) {
+
+    if (this.can.can('read host-set', hostSet)) {
       await this.router.transitionTo(
         'scopes.scope.host-catalogs.host-catalog.host-sets.host-set',
         hostSet,

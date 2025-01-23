@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -36,7 +36,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     unknownHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -64,7 +64,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
     urls.host = `${urls.hosts}/${instances.host.id}`;
     urls.unknownHost = `${urls.hosts}/foo`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting hosts', async function (assert) {
@@ -85,7 +85,7 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.hosts));
 
-    assert.dom(commonSelectors.TABLE_FIRST_ROW_RESOURCE_LINK).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.host)).doesNotExist();
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {

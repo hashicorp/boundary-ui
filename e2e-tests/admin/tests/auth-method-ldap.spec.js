@@ -3,24 +3,22 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { nanoid } from 'nanoid';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
 import { UsersPage } from '../pages/users.js';
 
+// Reset storage state for this file to avoid being authenticated
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Set up LDAP auth method @ce @ent @docker', async ({
@@ -111,8 +109,8 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toBeVisible();
 
     // Change state to active-public
-    page.getByTitle('Inactive').click();
-    page.getByText('Public').click();
+    await page.getByTitle('Inactive').click();
+    await page.getByText('Public').click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
@@ -195,8 +193,13 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
       .click();
     await page.getByRole('link', { name: ldapAuthMethodName }).click();
     await page.getByRole('link', { name: 'Accounts' }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Accounts'),
+    ).toBeVisible();
 
-    const headersCount = await page
+    let headersCount = await page
       .getByRole('table')
       .getByRole('columnheader')
       .count();
@@ -216,21 +219,61 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     }
 
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(fullNameIndex)
-        .innerText(),
-    ).toBe(ldapUserName);
+        .nth(fullNameIndex),
+    ).toHaveText(ldapUserName);
     expect(
-      await page
+      page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
-        .nth(emailIndex)
-        .innerText(),
-    ).toBe(ldapUserName + '@mail.com');
+        .nth(emailIndex),
+    ).toHaveText(ldapUserName + '@mail.com');
+
+    // View the Managed Group
+    await page.getByRole('link', { name: 'Managed Groups' }).click();
+    await page.getByRole('link', { name: ldapManagedGroupName }).click();
+    await page.getByRole('link', { name: 'Members' }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Members'),
+    ).toBeVisible();
+
+    headersCount = await page
+      .getByRole('table')
+      .getByRole('columnheader')
+      .count();
+    for (let i = 0; i < headersCount; i++) {
+      const header = await page
+        .getByRole('table')
+        .getByRole('columnheader')
+        .nth(i)
+        .innerText();
+      if (header == 'Full Name') {
+        fullNameIndex = i;
+      } else if (header == 'Email') {
+        emailIndex = i;
+      }
+    }
+
+    expect(
+      page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(fullNameIndex),
+    ).toHaveText(ldapUserName);
+    expect(
+      page
+        .getByRole('cell', { name: ldapAccountName })
+        .locator('..')
+        .getByRole('cell')
+        .nth(emailIndex),
+    ).toHaveText(ldapUserName + '@mail.com');
 
     // View the User account and verify attributes
     await page
@@ -250,15 +293,15 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toContain(ldapUserName + '@mail.com');
   } finally {
     if (orgName) {
-      await authenticateBoundaryCli(
+      await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
       );
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

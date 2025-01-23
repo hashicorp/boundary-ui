@@ -33,7 +33,7 @@ module('Unit | Controller | onboarding/success', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:onboarding/success');
     store = this.owner.lookup('service:store');
 

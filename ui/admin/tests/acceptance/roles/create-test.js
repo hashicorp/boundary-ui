@@ -5,17 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | roles | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -37,8 +32,8 @@ module('Acceptance | roles | create', function (hooks) {
     orgScope: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     instances.scopes.org = this.server.create(
       'scope',
       {

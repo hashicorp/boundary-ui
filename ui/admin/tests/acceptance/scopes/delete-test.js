@@ -5,16 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | scopes | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -42,7 +38,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     projectScopeEdit: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -60,7 +56,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
-    authenticateSession({ isGlobal: true });
+    await authenticateSession({ isGlobal: true });
   });
 
   test('can delete scope', async function (assert) {
@@ -97,7 +93,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(`[href="${urls.orgScopeEdit}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
     assert.strictEqual(currentURL(), urls.globalScope);
@@ -112,7 +108,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(`[href="${urls.orgScopeEdit}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
     assert.strictEqual(currentURL(), urls.orgScopeEdit);

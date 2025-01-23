@@ -35,7 +35,7 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      authenticateSession({});
+      await authenticateSession({});
       controller = this.owner.lookup(
         'controller:scopes/scope/authenticate/method/index',
       );

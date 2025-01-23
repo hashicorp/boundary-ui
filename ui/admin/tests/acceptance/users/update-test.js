@@ -5,16 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -35,7 +31,7 @@ module('Acceptance | users | update', function (hooks) {
     user: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -48,7 +44,7 @@ module('Acceptance | users | update', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can save changes to an existing user', async function (assert) {
@@ -132,8 +128,8 @@ module('Acceptance | users | update', function (hooks) {
     await fillIn('[name="name"]', 'Unsaved user name');
     assert.strictEqual(currentURL(), urls.user);
     await click(`[href="${urls.users}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.users);
     assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
@@ -149,8 +145,8 @@ module('Acceptance | users | update', function (hooks) {
     await fillIn('[name="name"]', 'Unsaved user name');
     assert.strictEqual(currentURL(), urls.user);
     await click(`[href="${urls.users}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.user);
     assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');

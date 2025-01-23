@@ -50,7 +50,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
     target: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -78,7 +78,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     getAliasCount = () => this.server.schema.aliases.all().models.length;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('users can create a new alias for a target of TCP type', async function (assert) {

@@ -17,6 +17,7 @@ module('Unit | Controller | scopes/scope/aliases/index', function (hooks) {
   setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
+  let intl;
   let store;
   let controller;
   let getAliasCount;
@@ -33,8 +34,9 @@ module('Unit | Controller | scopes/scope/aliases/index', function (hooks) {
     aliases: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
+    intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/aliases/index');
 
@@ -102,5 +104,38 @@ module('Unit | Controller | scopes/scope/aliases/index', function (hooks) {
     await controller.clearAlias(alias);
 
     assert.notOk(alias.destination_id);
+  });
+
+  test('messageDescription returns correct translation with list authorization', async function (assert) {
+    await visit(urls.aliases);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('resources.alias.messages.none.description'),
+    );
+  });
+
+  test('messageDescription returns correct translation with create authorization', async function (assert) {
+    instances.scopes.global.authorized_collection_actions.aliases = ['create'];
+    await visit(urls.aliases);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.create-but-not-list', {
+        resource: intl.t('resources.alias.title_plural'),
+      }),
+    );
+  });
+
+  test('messageDescription returns correct translation with no authorization', async function (assert) {
+    instances.scopes.global.authorized_collection_actions.aliases = [];
+    await visit(urls.aliases);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.neither-list-nor-create', {
+        resource: intl.t('resources.alias.title_plural'),
+      }),
+    );
   });
 });

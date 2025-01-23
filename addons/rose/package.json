@@ -40,9 +40,9 @@
     "ember-composable-helpers": "^5.0.0",
     "ember-focus-trap": "^1.0.1",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "ember-uuid": "^2.1.0",
     "jsonlint": "^1.6.3",
-    "sass": "^1.69.5"
+    "sass": "^1.69.5",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -96,9 +96,6 @@
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
     "webpack": "^5.94.0"
-  },
-  "peerDependencies": {
-    "ember-source": "^4.0.0"
   },
   "engines": {
     "node": "18.* || 20.*"

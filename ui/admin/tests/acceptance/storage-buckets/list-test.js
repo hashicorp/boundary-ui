@@ -34,7 +34,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     storageBucket: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -45,7 +45,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
 
     intl = this.owner.lookup('service:intl');
 
-    authenticateSession({});
+    await authenticateSession({});
     featuresService = this.owner.lookup('service:features');
   });
 

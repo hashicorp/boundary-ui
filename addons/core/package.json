@@ -44,6 +44,7 @@
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^3.0.0",
     "filesize": "^10.0.7",
+    "lodash": "^4.17.21",
     "sass": "^1.69.5"
   },
   "devDependencies": {
@@ -84,12 +85,8 @@
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "rose": "*",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "webpack": "^5.94.0"
-  },
-  "peerDependencies": {
-    "ember-source": "^4.0.0",
-    "lodash": "^4.17.21"
   },
   "engines": {
     "node": "18.* || 20.*"

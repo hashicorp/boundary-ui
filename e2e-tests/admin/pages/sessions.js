@@ -17,15 +17,16 @@ export class SessionsPage extends BasePage {
       .getByRole('navigation', { name: 'Resources' })
       .getByRole('link', { name: 'Sessions' })
       .click();
-    await expect(
-      this.page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText('Sessions'),
-    ).toBeVisible();
     let i = 0;
     let sessionIsVisible = false;
     let sessionIsActive = false;
     do {
+      await expect(
+        this.page
+          .getByRole('navigation', { name: 'breadcrumbs' })
+          .getByText('Sessions'),
+      ).toBeVisible();
+
       i = i + 1;
       sessionIsVisible = await this.page
         .getByRole('cell', { name: targetName })

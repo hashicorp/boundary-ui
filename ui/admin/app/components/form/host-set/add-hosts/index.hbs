@@ -47,19 +47,20 @@
 
 {{#unless this.hasAvailableHosts}}
   <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.host-set.host.messages.add-none.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.host-set.host.messages.add-none.description'}}
-      </message.description>
-      <message.link
-        @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
-      >
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
+    <Hds::ApplicationState as |A|>
+      <A.Header
+        @title={{t 'resources.host-set.host.messages.add-none.title'}}
+      />
+      <A.Body
+        @text={{t 'resources.host-set.host.messages.add-none.description'}}
+      />
+      <A.Footer as |F|>
+        <F.LinkStandalone
+          @icon='arrow-left'
+          @text={{t 'actions.back'}}
+          @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.hosts'
+        />
+      </A.Footer>
+    </Hds::ApplicationState>
   </Rose::Layout::Centered>
 {{/unless}}

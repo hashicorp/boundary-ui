@@ -4,16 +4,13 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -40,7 +37,7 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -69,36 +66,51 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
     urls.unknownHost = `${urls.hosts}/foo`;
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can save changes to existing host', async function (assert) {
-    assert.notEqual(instances.host.name, 'random string');
+    assert.notEqual(instances.host.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.host);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
-    assert.strictEqual(currentURL(), urls.host);
-    assert.strictEqual(
-      this.server.schema.hosts.all().models[0].name,
-      'random string',
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
+    await click(commonSelectors.SAVE_BTN);
+
+    const { name, description } = this.server.schema.hosts.all().models[0];
+    assert.strictEqual(currentURL(), urls.host);
+    assert.strictEqual(name, commonSelectors.FIELD_NAME_VALUE);
+    assert.strictEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
   });
 
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.host);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can cancel changes to existing host', async function (assert) {
+    const { name, description } = instances.host;
     await visit(urls.host);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(instances.host.name, 'random string');
-    assert.strictEqual(find('[name="name"]').value, instances.host.name);
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
+    assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(name);
+    assert.dom(commonSelectors.FIELD_DESCRIPTION).hasValue(description);
   });
 
   test('saving an existing host with invalid fields displays error messages', async function (assert) {
@@ -113,8 +125,8 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'address',
+                description: 'Address is required.',
               },
             ],
           },
@@ -122,59 +134,73 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
       );
     });
     await visit(urls.host);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(selectors.FIELD_ADDRESS, '');
+    await click(commonSelectors.SAVE_BTN);
+
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+    assert.dom(selectors.FIELD_ADDRESS_ERROR).hasText('Address is required.');
   });
 
   test('can discard unsaved host changes via dialog', async function (assert) {
-    assert.expect(5);
+    assert.expect(7);
+    const { name, description } = this.server.schema.hosts.all().models[0];
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.host.name, 'random string');
+    assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
+    assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
     await visit(urls.host);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
     assert.strictEqual(currentURL(), urls.host);
+
+    // Wrap on a try/catch because transitioning while editing returns error
     try {
       await visit(urls.hosts);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
+      assert.dom(commonSelectors.MODAL_WARNING).exists();
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hosts);
-      assert.notEqual(
-        this.server.schema.hosts.all().models[0].name,
-        'random string',
-      );
+      assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
+      assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
     }
   });
 
   test('can cancel discard unsaved host changes via dialog', async function (assert) {
-    assert.expect(5);
+    assert.expect(7);
+    const { name, description } = this.server.schema.hosts.all().models[0];
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.host.name, 'random string');
+    assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
+    assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
     await visit(urls.host);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
     assert.strictEqual(currentURL(), urls.host);
+
+    // Wrap on a try/catch because transitioning while editing returns error
     try {
       await visit(urls.hosts);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:last-child');
+      assert.dom(commonSelectors.MODAL_WARNING).exists();
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.host);
-      assert.notEqual(
-        this.server.schema.hosts.all().models[0].name,
-        'random string',
-      );
+      assert.notEqual(name, commonSelectors.FIELD_NAME_VALUE);
+      assert.notEqual(description, commonSelectors.FIELD_DESCRIPTION_VALUE);
     }
   });
 });

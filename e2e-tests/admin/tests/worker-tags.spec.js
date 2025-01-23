@@ -3,14 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
-import { authenticatedState } from '../global-setup.js';
 import { WorkersPage } from '../pages/workers.js';
-
-test.use({ storageState: authenticatedState });
 
 test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
   const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 10);

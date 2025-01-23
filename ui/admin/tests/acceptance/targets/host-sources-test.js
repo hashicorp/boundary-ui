@@ -5,16 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
@@ -45,7 +41,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     targetAddHostSources: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -85,10 +81,11 @@ module('Acceptance | targets | host-sources', function (hooks) {
     urls.targetHostSources = `${urls.target}/host-sources`;
     urls.targetAddHostSources = `${urls.target}/add-host-sources`;
     urls.hostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostCatalog.hostSetIds[0]}`;
-    // Generate resource counter
-    getTargetHostSetCount = () =>
-      this.server.schema.targets.first().hostSets.models.length;
-    authenticateSession({ username: 'admin' });
+    urls.unknownHostSet =
+      // Generate resource counter
+      getTargetHostSetCount = () =>
+        this.server.schema.targets.first().hostSets.models.length;
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target host sources', async function (assert) {
@@ -119,7 +116,13 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click(`[href="${urls.targetHostSources}"]`);
 
-    assert.dom('.rose-table-body tr:first-child a').doesNotExist();
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          instances.hostCatalogPlugin.hostSets[0],
+        ),
+      )
+      .doesNotExist();
   });
 
   test('can remove a host set', async function (assert) {
@@ -281,8 +284,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody label');
     await click('form [type="submit"]');
 
-    assert.dom('.rose-dialog').isVisible();
-    await click('.rose-dialog-footer .rose-button-primary', 'Remove resources');
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
@@ -317,11 +320,8 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click('tbody label');
     await click('form [type="submit"]');
 
-    assert.dom('.rose-dialog').isVisible();
-    await click(
-      '.rose-dialog-footer .rose-button-secondary',
-      'Remove resources',
-    );
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
