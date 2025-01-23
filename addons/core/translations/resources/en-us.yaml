@@ -211,7 +211,7 @@ host-catalog:
     delete: Delete Host Catalog
   help:
     static: Provide a list of hosts and host sets with static addresses
-    plugin: Automate discovery of target hosts and services on Azure or AWS
+    plugin: Automate discovery of target hosts and services on Azure, AWS, or GCP
     role_arn: The ARN (Amazon Resource Name) used by this instance.
     disable_credential_rotation: Credential rotation is automatically disabled when you use dynamic credentials.
   types:
