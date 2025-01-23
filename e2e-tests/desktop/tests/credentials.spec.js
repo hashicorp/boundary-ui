@@ -101,17 +101,21 @@ test.beforeEach(
       boundaryPolicyName,
       boundaryControllerPath,
     ]);
-
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
-
-    execSync(
-      `vault kv put -mount ${secretsPath} ${secretName} ` +
-        ` password=${String.raw`pass\\word`}`,
+    spawnSync(
+      'vault',
+      [
+        'kv',
+        'put',
+        '-mount',
+        secretsPath,
+        secretName,
+        `password=${String.raw`pass\word`}`,
+      ],
       {
         encoding: 'utf-8',
       },
     );
-
     spawnSync('vault', ['policy', 'write', secretPolicyName, kvPolicyPath]);
     const vaultToken = JSON.parse(
       execSync(
