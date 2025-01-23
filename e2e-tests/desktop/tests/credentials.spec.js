@@ -300,5 +300,12 @@ test.describe('Credential Panel tests', async () => {
         .filter({ hasText: 'private_key' })
         .locator('pre'),
     ).toContainText(/BEGIN (OPENSSH|RSA) PRIVATE KEY/);
+
+    // End session as active sessions will show a popup when trying to close the DC
+    await authedPage.getByRole('button', { name: 'End Session' }).click();
+    await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
+    await expect(
+      authedPage.getByRole('heading', { name: 'Targets' }),
+    ).toBeVisible();
   });
 });
