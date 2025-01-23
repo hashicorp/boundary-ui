@@ -225,6 +225,7 @@ test.describe('Credential Panel tests', async () => {
         .locator('pre'),
     ).toHaveText(String.raw`pass\word`);
 
+    // End session as active sessions will show a popup when trying to close the DC
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
     await expect(
