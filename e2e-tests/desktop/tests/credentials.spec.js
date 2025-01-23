@@ -5,7 +5,7 @@
 import path from 'path';
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
-import { execSync } from 'child_process';
+import { spawnSync, execSync } from 'child_process';
 import * as vaultCli from '../../helpers/vault-cli';
 
 let org;
@@ -94,9 +94,14 @@ test.beforeEach(
     });
 
     // Create Vault token and apply policies
-    execSync(
-      `vault policy write ${boundaryPolicyName} ${boundaryControllerPath}`,
-    );
+
+    spawnSync('vault', [
+      'policy',
+      'write',
+      boundaryPolicyName,
+      boundaryControllerPath,
+    ]);
+
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
 
     execSync(
@@ -107,7 +112,7 @@ test.beforeEach(
       },
     );
 
-    execSync(`vault policy write ${secretPolicyName} ${kvPolicyPath}`);
+    spawnSync('vault', ['policy', 'write', secretPolicyName, kvPolicyPath]);
     const vaultToken = JSON.parse(
       execSync(
         `vault token create` +
@@ -187,7 +192,7 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Credential tests', async () => {
+test.describe('Credential Panel tests', async () => {
   test('Display Vault brokered Credentials and handle special characters', async ({
     authedPage,
   }) => {
