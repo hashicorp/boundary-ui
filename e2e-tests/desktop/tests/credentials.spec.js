@@ -42,13 +42,10 @@ test.beforeEach(
     sshUser,
     sshKeyPath,
     vaultAddr,
-    page,
   }) => {
     execSync(`vault policy delete ${secretPolicyName}`);
     execSync(`vault policy delete ${boundaryPolicyName}`);
     execSync(`vault secrets disable ${secretsPath}`);
-
-    await page.goto('/');
 
     org = await boundaryHttp.createOrg(request);
     const project = await boundaryHttp.createProject(request, org.id);
