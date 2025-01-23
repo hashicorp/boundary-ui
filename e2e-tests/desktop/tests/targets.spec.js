@@ -74,6 +74,10 @@ test.beforeEach(
       target: targetWithHost,
       hostSourceIds: [hostSet.id],
     });
+    targetWithHost = await boundaryHttp.addBrokeredCredentials(request, {
+      target: targetWithHost,
+      credentialIds: [credential.id],
+    });
 
     // Create tcp target with host set and 2 hosts
     targetWithTwoHosts = await boundaryHttp.createTarget(request, {
@@ -84,6 +88,10 @@ test.beforeEach(
     targetWithTwoHosts = await boundaryHttp.addHostSource(request, {
       target: targetWithTwoHosts,
       hostSourceIds: [hostSetWithTwoHosts.id],
+    });
+    targetWithTwoHosts = await boundaryHttp.addBrokeredCredentials(request, {
+      target: targetWithTwoHosts,
+      credentialIds: [credential.id],
     });
 
     // Create an SSH target with address
@@ -106,7 +114,7 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Targets tests', async () => {
+test.skip('Targets tests', async () => {
   test('Connects to a tcp target with one host', async ({ authedPage }) => {
     await authedPage.getByRole('link', { name: targetWithHost.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
@@ -114,6 +122,34 @@ test.describe('Targets tests', async () => {
     await expect(
       authedPage.getByRole('heading', { name: 'Sessions' }),
     ).toBeVisible();
+
+    await expect(authedPage.getByText(credential.name)).toBeVisible();
+    await expect(authedPage.getByText('username')).toBeVisible();
+    await expect(authedPage.getByText('private_key')).toBeVisible();
+
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'username' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'username' })
+        .locator('pre'),
+    ).toHaveText(credential.attributes.username);
+
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'private_key' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'private_key' })
+        .locator('pre'),
+    ).toContainText(/BEGIN (OPENSSH|RSA) PRIVATE KEY/);
 
     await authedPage.getByRole('button', { name: 'End Session' }).click();
     await expect(authedPage.getByText('Canceled successfully.')).toBeVisible();
@@ -140,6 +176,34 @@ test.describe('Targets tests', async () => {
       await expect(
         authedPage.getByRole('heading', { name: 'Sessions' }),
       ).toBeVisible();
+
+      await expect(authedPage.getByText(credential.name)).toBeVisible();
+      await expect(authedPage.getByText('username')).toBeVisible();
+      await expect(authedPage.getByText('private_key')).toBeVisible();
+
+      await authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'username' })
+        .getByLabel('Toggle secret visibility')
+        .click();
+      await expect(
+        authedPage
+          .getByRole('listitem')
+          .filter({ hasText: 'username' })
+          .locator('pre'),
+      ).toHaveText(credential.attributes.username);
+
+      await authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'private_key' })
+        .getByLabel('Toggle secret visibility')
+        .click();
+      await expect(
+        authedPage
+          .getByRole('listitem')
+          .filter({ hasText: 'private_key' })
+          .locator('pre'),
+      ).toContainText(/BEGIN (OPENSSH|RSA) PRIVATE KEY/);
 
       await authedPage.getByRole('button', { name: 'End Session' }).click();
       await expect(

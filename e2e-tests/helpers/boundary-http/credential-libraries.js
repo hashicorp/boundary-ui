@@ -13,7 +13,7 @@ import { checkResponse } from './responseHelper.js';
  * @param {string} vaultPath Path to secret in vault
  * @returns {Promise<Serializable>}
  */
-export async function createVaultCredentialGenericSecret(
+export async function createVaultGenericSecretsCredentialLibrary(
   request,
   { credentialStoreId, vaultPath },
 ) {

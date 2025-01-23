@@ -10,11 +10,12 @@ import * as vaultCli from '../../helpers/vault-cli';
 
 let org;
 let targetWithBrokeredVaultCredentials;
-let targetWithInjectedCredentials;
 let targetWithBrokeredStaticCredentials;
 let sshPrivateKeyCredential;
 let jsonCredential;
-let credentialLibrary;
+let vaultGenericCredentialLibrary;
+
+// config for vault setup
 const secretPolicyName = 'kv-policy';
 const boundaryPolicyName = 'boundary-controller';
 const secretsPath = 'e2e_secrets';
@@ -68,11 +69,13 @@ test.beforeEach(
       hostIds: [host.id],
     });
 
-    // Create a static credential store and key pair credential
+    // Create a static credential store
     const credentialStore = await boundaryHttp.createStaticCredentialStore(
       request,
       project.id,
     );
+
+    // Create a key pair credential
     sshPrivateKeyCredential = await boundaryHttp.createStaticCredentialKeyPair(
       request,
       {
@@ -82,13 +85,13 @@ test.beforeEach(
       },
     );
 
-    // Create a static credential store and json credential
+    // Create a json type credential
     jsonCredential = await boundaryHttp.createStaticCredentialJson(request, {
       credentialStoreId: credentialStore.id,
       data: {
         nested: {
-          key1: 'value1',
-          key2: 'value2',
+          key1: String.raw`val\bue1`,
+          key2: String.raw`val\tue2`,
         },
       },
     });
@@ -98,6 +101,7 @@ test.beforeEach(
       `vault policy write ${boundaryPolicyName} ${boundaryControllerPath}`,
     );
     execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
+
     execSync(
       `vault kv put -mount ${secretsPath} ${secretName} ` +
         ` password=${String.raw`pass\\word`}`,
@@ -128,13 +132,11 @@ test.beforeEach(
       vaultAddr,
       clientToken,
     );
-    credentialLibrary = await boundaryHttp.createVaultCredentialGenericSecret(
-      request,
-      {
+    vaultGenericCredentialLibrary =
+      await boundaryHttp.createVaultGenericSecretsCredentialLibrary(request, {
         credentialStoreId: vaultCredentialStore.id,
         vaultPath: `${secretsPath}/data/${secretName}`,
-      },
-    );
+      });
 
     // Create a tcp target with vault brokered credential Libraries
     targetWithBrokeredVaultCredentials = await boundaryHttp.createTarget(
@@ -155,7 +157,7 @@ test.beforeEach(
     targetWithBrokeredVaultCredentials =
       await boundaryHttp.addBrokeredCredentials(request, {
         target: targetWithBrokeredVaultCredentials,
-        credentialIds: [credentialLibrary.id],
+        credentialIds: [vaultGenericCredentialLibrary.id],
       });
 
     // Create a tcp target with static brokered credentials
@@ -179,23 +181,6 @@ test.beforeEach(
         target: targetWithBrokeredStaticCredentials,
         credentialIds: [sshPrivateKeyCredential.id, jsonCredential.id],
       });
-
-    targetWithInjectedCredentials = await boundaryHttp.createTarget(request, {
-      scopeId: project.id,
-      type: 'ssh',
-      port: targetPort,
-    });
-    targetWithInjectedCredentials = await boundaryHttp.addHostSource(request, {
-      target: targetWithInjectedCredentials,
-      hostSourceIds: [hostSet.id],
-    });
-    targetWithInjectedCredentials = await boundaryHttp.addInjectedCredentials(
-      request,
-      {
-        target: targetWithInjectedCredentials,
-        credentialIds: [sshPrivateKeyCredential.id],
-      },
-    );
   },
 );
 
@@ -206,7 +191,7 @@ test.afterEach(async ({ request }) => {
 });
 
 test.describe('Credential tests', async () => {
-  test('Vault brokered Credentials are displayed as expected', async ({
+  test('Display Vault brokered Credentials and handle special characters', async ({
     authedPage,
   }) => {
     await authedPage
@@ -217,7 +202,9 @@ test.describe('Credential tests', async () => {
       authedPage.getByRole('heading', { name: 'Sessions' }),
     ).toBeVisible();
 
-    await expect(authedPage.getByText(credentialLibrary.name)).toBeVisible();
+    await expect(
+      authedPage.getByText(vaultGenericCredentialLibrary.name),
+    ).toBeVisible();
     await expect(authedPage.getByText('password')).toBeVisible();
 
     await authedPage
@@ -239,7 +226,7 @@ test.describe('Credential tests', async () => {
     ).toBeVisible();
   });
 
-  test('Static JSON brokered Credentials are displayed as expected', async ({
+  test('Display JSON static credential in a key value format and handle special characters', async ({
     authedPage,
   }) => {
     await authedPage
@@ -265,7 +252,7 @@ test.describe('Credential tests', async () => {
         .getByRole('listitem')
         .filter({ hasText: 'nested.key1' })
         .locator('pre'),
-    ).toHaveText('value1');
+    ).toHaveText(String.raw`val\bue1`);
     await authedPage
       .getByRole('listitem')
       .filter({ hasText: 'nested.key2' })
@@ -276,7 +263,7 @@ test.describe('Credential tests', async () => {
         .getByRole('listitem')
         .filter({ hasText: 'nested.key2' })
         .locator('pre'),
-    ).toHaveText('value2');
+    ).toHaveText(String.raw`val\tue2`);
 
     // SSH private key credential
     await expect(
