@@ -89,6 +89,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
         'auth-methods'
       ].includes('list'),
     );
+
     assert.dom(commonSelectors.HREF(urls.authMethods)).isNotVisible();
   });
 
