@@ -54,17 +54,16 @@
 
 {{#unless this.availableUsers}}
   <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.group.messages.no-members.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.group.messages.no-members.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.groups.group.members'>
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
+    <Hds::ApplicationState as |A|>
+      <A.Header @title={{t 'resources.group.messages.no-members.title'}} />
+      <A.Body @text={{t 'resources.group.messages.no-members.description'}} />
+      <A.Footer as |F|>
+        <F.LinkStandalone
+          @icon='arrow-left'
+          @text={{t 'actions.back'}}
+          @route='scopes.scope.groups.group.members'
+        />
+      </A.Footer>
+    </Hds::ApplicationState>
   </Rose::Layout::Centered>
 {{/unless}}

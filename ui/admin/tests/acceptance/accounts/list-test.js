@@ -5,14 +5,9 @@
 
 import { module, test } from 'qunit';
 import { visit, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -36,8 +31,8 @@ module('Acceptance | accounts | list', function (hooks) {
     account: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

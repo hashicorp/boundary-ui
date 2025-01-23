@@ -12,15 +12,10 @@ import {
   fillIn,
   getContext,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
@@ -54,7 +49,7 @@ module('Acceptance | targets | create', function (hooks) {
     newSSHTarget: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -84,13 +79,13 @@ module('Acceptance | targets | create', function (hooks) {
       this.server.schema.targets.where({ type: TYPE_TARGET_SSH }).models.length;
     getTCPTargetCount = () =>
       this.server.schema.targets.where({ type: TYPE_TARGET_TCP }).models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {
     featuresService.enable('ssh-target');
     await visit(urls.newTarget);
-    assert.strictEqual(find('[name="type"]:checked').value, TYPE_TARGET_SSH);
+    assert.strictEqual(find('[name="Type"]:checked').value, TYPE_TARGET_SSH);
   });
 
   test('can create a type `ssh` target', async function (assert) {

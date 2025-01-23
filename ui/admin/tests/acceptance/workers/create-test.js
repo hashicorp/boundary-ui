@@ -5,15 +5,10 @@
 
 import { module, test } from 'qunit';
 import { visit, fillIn, click, findAll, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -24,14 +19,14 @@ module('Acceptance | workers | create', function (hooks) {
   let newWorkerURL;
   let getWorkersCount;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     globalScope = this.server.create('scope', { id: 'global' });
 
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
     getWorkersCount = () => this.server.schema.workers.all().length;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new workers', async function (assert) {

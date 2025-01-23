@@ -10,7 +10,7 @@
     "test": "tests"
   },
   "scripts": {
-    "doc:toc": "doctoc README.md tests/e2e/README.md",
+    "doc:toc": "doctoc README.md",
     "build:development": "ember build",
     "build": "ember build --environment=production",
     "build:oss": "EDITION=oss ember build --environment=production",
@@ -37,7 +37,8 @@
   },
   "dependencies": {
     "ember-named-blocks-polyfill": "^0.2.5",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -52,7 +53,6 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
-    "@playwright/test": "^1.43.0",
     "babel-loader": "^9.2.1",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",
@@ -61,7 +61,6 @@
     "ember-a11y-testing": "^7.0.0",
     "ember-auto-import": "^2.8.1",
     "ember-cli": "^5.12.0",
-    "ember-cli-app-version": "^6.0.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-code-coverage": "^1.0.3",
     "ember-cli-content-security-policy": "^2.0.3",
@@ -94,7 +93,7 @@
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "rose": "*",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "stylelint": "^15.10.1",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",

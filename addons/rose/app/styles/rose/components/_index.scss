@@ -3,23 +3,21 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+// This list is sorted in ascending order to improve readability
+
 @import 'button';
+@import 'card';
+@import 'cards';
+@import 'code-editor';
 @import 'dialog';
 @import 'dropdown';
 @import 'form';
 @import 'frame';
 @import 'header';
-@import 'layout';
 @import 'icon';
+@import 'layout';
 @import 'list';
-@import 'card';
-@import 'cards';
-@import 'page-header';
-@import 'separator';
-@import 'nav';
-@import 'table';
-@import 'message';
-@import 'link-button';
-@import 'toolbar';
-@import 'code-editor';
 @import 'metadata-list';
+@import 'nav';
+@import 'page-header';
+@import 'toolbar';

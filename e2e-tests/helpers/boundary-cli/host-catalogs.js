@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} projectId ID of the project under which the host catalog will be created.
  * @returns {Promise<string>} new host catalog's ID
  */
-export async function createStaticHostCatalogCli(projectId) {
+export async function createStaticHostCatalog(projectId) {
   const hostCatalogName = 'static-host-catalog-' + nanoid();
   let hostCatalog;
   try {
@@ -35,7 +35,7 @@ export async function createStaticHostCatalogCli(projectId) {
  * @param {string} region Name of the AWS region that the host catalog will be created for.
  * @returns {Promise<string>} new host catalog's ID
  */
-export async function createDynamicAwsHostCatalogCli(projectId, region) {
+export async function createDynamicAwsHostCatalog(projectId, region) {
   const hostCatalogName = 'dynamic-aws-host-catalog-' + nanoid();
   let hostCatalog;
   try {

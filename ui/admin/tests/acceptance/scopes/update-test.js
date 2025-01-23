@@ -5,16 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | scopes | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -35,7 +31,7 @@ module('Acceptance | scopes | update', function (hooks) {
     projectScope: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -55,7 +51,7 @@ module('Acceptance | scopes | update', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    authenticateSession({ isGlobal: true });
+    await authenticateSession({ isGlobal: true });
   });
 
   test('can save changes to existing scope', async function (assert) {
@@ -144,8 +140,8 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     await click(`[href="${urls.globalScope}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.notEqual(
@@ -165,8 +161,8 @@ module('Acceptance | scopes | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     await click(`[href="${urls.globalScope}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.notEqual(

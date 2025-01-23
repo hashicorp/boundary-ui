@@ -88,38 +88,6 @@
       }
     }
   }
-
-  .rose-form-fieldset {
-    .rose-table {
-      .rose-form-label {
-        left: -9999px;
-        position: absolute;
-        top: -9999px;
-      }
-    }
-  }
-}
-
-.rose-table {
-  p {
-    margin-bottom: 0;
-  }
-
-  .rose-table-header-cell {
-    p {
-      color: var(--ui-gray-subtler-1);
-      font-weight: normal;
-    }
-  }
-
-  .rose-form-checkbox {
-    margin-bottom: 0;
-
-    .rose-form-checkbox-label-text {
-      color: var(--stark);
-      text-decoration: underline;
-    }
-  }
 }
 
 .rose-header {
@@ -1086,5 +1054,32 @@
 .dropdown-radio-btn {
   .hds-form-group__control-field {
     padding: 0.25rem 0.75rem;
+  }
+}
+
+// worker filter generator
+.filter-generator-selection {
+  .hds-form-group__control-field {
+    margin-bottom: 0;
+  }
+}
+
+.formatted-results {
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.generated-results-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+// storage buckets
+.storage-bucket-worker-filter {
+  .hds-form-field--layout-flag {
+    margin-bottom: 0;
   }
 }

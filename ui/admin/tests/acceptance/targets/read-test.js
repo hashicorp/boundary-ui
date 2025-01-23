@@ -5,17 +5,13 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -51,7 +47,7 @@ module('Acceptance | targets | read', function (hooks) {
     aliases: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     featuresService = this.owner.lookup('service:features');
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -91,7 +87,7 @@ module('Acceptance | targets | read', function (hooks) {
 
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting ssh target', async function (assert) {
@@ -125,8 +121,10 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:first-child a').doesNotExist();
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget))
+      .doesNotExist();
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
@@ -137,15 +135,19 @@ module('Acceptance | targets | read', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-table-body  tr:nth-child(2) a').doesNotExist();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget)).isVisible();
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget))
+      .doesNotExist();
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
     await visit(urls.unknownTarget);
     await a11yAudit();
 
-    assert.dom('.rose-message-subtitle').hasText('Error 404');
+    assert
+      .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
+      .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
   });
 
   test('users can link to docs page for target', async function (assert) {
@@ -160,7 +162,7 @@ module('Acceptance | targets | read', function (hooks) {
       .exists();
   });
 
-  test('users can navigate to target and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to target and incorrect url auto-corrects', async function (assert) {
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/targets/${instances.sshTarget.id}`;
 
     await visit(incorrectUrl);

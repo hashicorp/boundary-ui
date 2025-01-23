@@ -5,16 +5,12 @@
 
 import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -38,7 +34,7 @@ module('Acceptance | users | delete', function (hooks) {
     user: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -51,7 +47,7 @@ module('Acceptance | users | delete', function (hooks) {
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete a user', async function (assert) {
@@ -86,7 +82,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(`[href="${urls.user}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-primary');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -104,7 +100,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(`[href="${urls.user}"]`);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    await click('.rose-dialog .rose-button-secondary');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(this.server.db.users.length, usersCount);
     assert.strictEqual(currentURL(), urls.user);

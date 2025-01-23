@@ -98,18 +98,21 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.role.principal.messages.welcome.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.role.principal.messages.welcome.description'}}
-          </message.description>
-          <message.link @route='scopes.scope.roles.role.add-principals'>
-            <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-            {{t 'resources.role.principal.actions.add-principals'}}
-          </message.link>
-        </Rose::Message>
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t 'resources.role.principal.messages.welcome.title'}}
+          />
+          <A.Body
+            @text={{t 'resources.role.principal.messages.welcome.description'}}
+          />
+          <A.Footer as |F|>
+            <F.LinkStandalone
+              @icon='plus-circle'
+              @text={{t 'resources.role.principal.actions.add-principals'}}
+              @route='scopes.scope.roles.role.add-principals'
+            />
+          </A.Footer>
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
 
     {{/if}}

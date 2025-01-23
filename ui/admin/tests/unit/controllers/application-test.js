@@ -16,7 +16,7 @@ module('Unit | Controller | application', function (hooks) {
   let session;
 
   hooks.beforeEach(async function () {
-    authenticateSession({});
+    await authenticateSession({});
     controller = this.owner.lookup('controller:application');
     featureEdition = this.owner.lookup('service:featureEdition');
     featuresService = this.owner.lookup('service:features');

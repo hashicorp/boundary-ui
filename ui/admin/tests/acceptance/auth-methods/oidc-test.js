@@ -4,24 +4,12 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  // fillIn,
-  find,
-  // findAll,
-} from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 //import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
@@ -47,8 +35,8 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     authMethod: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({ username: 'admin' });
+  hooks.beforeEach(async function () {
+    await authenticateSession({ username: 'admin' });
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
       type: 'org',

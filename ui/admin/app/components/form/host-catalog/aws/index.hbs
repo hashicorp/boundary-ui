@@ -62,11 +62,11 @@
   </Hds::Form::Textarea::Field>
 
   {{#if @model.isNew}}
-    <Hds::Form::RadioCard::Group @name='type' as |G|>
+    <Hds::Form::RadioCard::Group @name={{t 'form.type.label'}} as |G|>
       <G.Legend>
         {{t 'form.type.label'}}
       </G.Legend>
-      {{#each this.hostCatalogTypes as |hostCatalogType|}}
+      {{#each @hostCatalogTypes as |hostCatalogType|}}
         <G.RadioCard
           @value={{hostCatalogType}}
           @maxWidth='20rem'
@@ -83,7 +83,11 @@
         </G.RadioCard>
       {{/each}}
     </Hds::Form::RadioCard::Group>
-    <Hds::Form::RadioCard::Group @name='plugin_type' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group
+      @name={{t 'form.plugin_type.label'}}
+      @alignment='center'
+      as |G|
+    >
       <G.Legend>
         {{t 'titles.provider'}}
       </G.Legend>
@@ -94,7 +98,7 @@
         {{t 'descriptions.choose-a-provider'}}
       </G.HelperText>
 
-      {{#each-in this.mapResourceTypeWithIcon as |pluginType icon|}}
+      {{#each-in @mapResourceTypeWithIcon as |pluginType icon|}}
         <G.RadioCard
           @value={{pluginType}}
           @maxWidth='20rem'
@@ -346,9 +350,8 @@
     </Hds::Form::TextInput::Field>
   {{/if}}
 
-  {{#if (feature-flag 'dynamic-credentials-worker-filter')}}
+  {{#if (feature-flag 'host-catalog-worker-filter')}}
     <Hds::Form::Textarea::Field
-      data-test-dynamic-credential-worker-filter
       name='worker_filter'
       @value={{@model.worker_filter}}
       @isOptional={{true}}
@@ -356,9 +359,7 @@
       disabled={{form.disabled}}
       as |F|
     >
-      <F.Label>
-        {{t 'resources.host-catalog.form.worker_filter.label'}}
-      </F.Label>
+      <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
       <F.HelperText>
         {{t 'resources.host-catalog.form.worker_filter.help'}}
         <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>
@@ -396,7 +397,7 @@
       name='disable_credential_rotation'
       checked={{@model.disable_credential_rotation}}
       disabled={{form.disabled}}
-      {{on 'change' (fn this.toggleDisableCredentialRotation @model)}}
+      {{on 'change' (fn @toggleDisableCredentialRotation @model)}}
       as |F|
     >
       <F.Label>

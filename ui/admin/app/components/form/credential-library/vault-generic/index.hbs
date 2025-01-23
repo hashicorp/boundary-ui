@@ -24,7 +24,7 @@
     {{#if @model.errors.name}}
       <F.Error as |E|>
         {{#each @model.errors.name as |error|}}
-          <E.Message data-test-error-message-name>
+          <E.Message>
             {{error.message}}
           </E.Message>
         {{/each}}
@@ -52,7 +52,11 @@
   </Hds::Form::Textarea::Field>
 
   {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
-    <Hds::Form::RadioCard::Group @name='type' @alignment='center' as |G|>
+    <Hds::Form::RadioCard::Group
+      @name={{t 'form.type.label'}}
+      @alignment='center'
+      as |G|
+    >
       <G.Legend>{{t 'form.type.label'}}</G.Legend>
       {{#each this.types as |type|}}
         <G.RadioCard
@@ -103,7 +107,9 @@
     {{#if @model.errors.path}}
       <F.Error as |E|>
         {{#each @model.errors.path as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message
+            data-test-error-message-vault-path
+          >{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}

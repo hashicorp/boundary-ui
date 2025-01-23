@@ -13,7 +13,13 @@ import fs from 'fs';
  * @return {string}
  */
 const getExecutablePath = (buildDirectory = 'out') => {
-  const rootDir = path.resolve('../ui/desktop/electron-app');
+  // Using process.cwd() can change depending on where you run the tests so we use the current file location
+  // __dirname isn't available in ES modules so we need to indirectly get the directory
+  const rootDir = path.resolve(
+    import.meta.dirname,
+    '../../../ui/desktop/electron-app',
+  );
+
   // directory where the builds are stored
   const outDir = path.resolve(rootDir, buildDirectory);
   // list of files in the out directory

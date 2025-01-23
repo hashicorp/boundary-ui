@@ -4,28 +4,21 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { visit, click } from '@ember/test-helpers';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getHostCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-hosts-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-hosts-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -48,7 +41,7 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     newHost: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -78,14 +71,15 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     urls.newHost = `${urls.hosts}/new`;
     // Generate resource couner
     getHostCount = () => this.server.schema.hosts.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can delete host', async function (assert) {
     const count = getHostCount();
     await visit(urls.host);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_HOST);
+    await click(selectors.MANAGE_DROPDOWN_HOST_DELETE);
     assert.strictEqual(getHostCount(), count - 1);
   });
 
@@ -93,9 +87,8 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.host);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST).doesNotExist();
   });
 
   test('can accept delete host via dialog', async function (assert) {
@@ -104,8 +97,10 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getHostCount();
     await visit(urls.host);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_HOST);
+    await click(selectors.MANAGE_DROPDOWN_HOST_DELETE);
+
     assert.strictEqual(getHostCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -116,8 +111,10 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getHostCount();
     await visit(urls.host);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_HOST);
+    await click(selectors.MANAGE_DROPDOWN_HOST_DELETE);
+
     assert.strictEqual(getHostCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -135,10 +132,10 @@ module('Acceptance | host-catalogs | hosts | delete', function (hooks) {
       );
     });
     await visit(urls.host);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+
+    await click(selectors.MANAGE_DROPDOWN_HOST);
+    await click(selectors.MANAGE_DROPDOWN_HOST_DELETE);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });

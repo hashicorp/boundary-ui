@@ -18,6 +18,7 @@ module(
     setupMirage(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
     let controller;
     let store;
     let getManagedGroupCount;
@@ -35,7 +36,8 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      authenticateSession({});
+      await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
       controller = this.owner.lookup(
         'controller:scopes/scope/auth-methods/auth-method/managed-groups/index',
       );
@@ -116,6 +118,41 @@ module(
       controller.edit(managedGroup);
 
       assert.true(managedGroup.hasDirtyAttributes);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.managedGroups);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.managed-group.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.authMethod.authorized_collection_actions['managed-groups'] = [
+        'create',
+      ];
+      await visit(urls.managedGroups);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.managed-group.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.authMethod.authorized_collection_actions['managed-groups'] = [];
+      await visit(urls.managedGroups);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.managed-group.title_plural'),
+        }),
+      );
     });
   },
 );

@@ -17,6 +17,7 @@ module('Unit | Controller | scopes/scope/groups/index', function (hooks) {
   setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 
+  let intl;
   let store;
   let controller;
   let getGroupCount;
@@ -33,8 +34,9 @@ module('Unit | Controller | scopes/scope/groups/index', function (hooks) {
     groups: null,
   };
 
-  hooks.beforeEach(function () {
-    authenticateSession({});
+  hooks.beforeEach(async function () {
+    await authenticateSession({});
+    intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/groups/index');
 
@@ -104,5 +106,38 @@ module('Unit | Controller | scopes/scope/groups/index', function (hooks) {
     await controller.removeMember(group, instances.user);
 
     assert.deepEqual(group.member_ids, []);
+  });
+
+  test('messageDescription returns correct translation with list authorization', async function (assert) {
+    await visit(urls.groups);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('resources.group.description'),
+    );
+  });
+
+  test('messageDescription returns correct translation with create authorization', async function (assert) {
+    instances.scopes.global.authorized_collection_actions.groups = ['create'];
+    await visit(urls.groups);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.create-but-not-list', {
+        resource: intl.t('resources.group.title_plural'),
+      }),
+    );
+  });
+
+  test('messageDescription returns correct translation with no authorization', async function (assert) {
+    instances.scopes.global.authorized_collection_actions.groups = [];
+    await visit(urls.groups);
+
+    assert.strictEqual(
+      controller.messageDescription,
+      intl.t('descriptions.neither-list-nor-create', {
+        resource: intl.t('resources.group.title_plural'),
+      }),
+    );
   });
 });

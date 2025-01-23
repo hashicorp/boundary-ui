@@ -5,16 +5,11 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | workers | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -37,7 +32,7 @@ module('Acceptance | workers | read', function (hooks) {
     worker: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     //Generate the resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -54,7 +49,7 @@ module('Acceptance | workers | read', function (hooks) {
 
     featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow');
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting worker', async function (assert) {

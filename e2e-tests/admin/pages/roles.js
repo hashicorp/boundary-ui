@@ -41,7 +41,6 @@ export class RolesPage extends BaseResourcePage {
       .getByRole('link', { name: 'Principals', exact: true })
       .click();
     await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Add Principals', exact: true })
       .click();
     await this.page.getByRole('checkbox', { name: principalName }).click();

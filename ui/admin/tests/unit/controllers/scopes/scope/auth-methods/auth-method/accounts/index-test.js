@@ -18,6 +18,7 @@ module(
     setupMirage(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
     let controller;
     let store;
     let getAccountCount;
@@ -35,7 +36,8 @@ module(
     };
 
     hooks.beforeEach(async function () {
-      authenticateSession({});
+      await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
       controller = this.owner.lookup(
         'controller:scopes/scope/auth-methods/auth-method/accounts/index',
       );
@@ -93,6 +95,39 @@ module(
       await controller.delete(account);
 
       assert.strictEqual(getAccountCount(), accountCount - 1);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.accounts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.account.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.authMethod.authorized_collection_actions.accounts = ['create'];
+      await visit(urls.accounts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.account.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.authMethod.authorized_collection_actions.accounts = [];
+      await visit(urls.accounts);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.account.title_plural'),
+        }),
+      );
     });
   },
 );

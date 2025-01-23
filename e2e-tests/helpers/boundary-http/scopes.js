@@ -4,20 +4,33 @@
  */
 
 import { nanoid } from 'nanoid';
+import { checkResponse } from './responseHelper.js';
 
 /**
  * Creates a new org
  * @param {import('@playwright/test').APIRequestContext} request
  * @returns {Promise<Serializable>}
  */
-export async function createOrgHttp(request) {
-  const org = await request.post(`/v1/scopes`, {
+export async function createOrg(request) {
+  const response = await request.post(`/v1/scopes`, {
     data: {
-      name: 'Org ' + nanoid(),
+      name: `Org-${nanoid()}`,
       scope_id: 'global',
     },
   });
-  return await org.json();
+  return checkResponse(response);
+}
+
+/**
+ *
+ * @param {import('@playwright/test').APIRequestContext} request
+ * @param {string} orgId
+ * @returns {Promise<Serializable>}
+ */
+export async function deleteOrg(request, orgId) {
+  const response = await request.delete(`/v1/scopes/${orgId}`);
+
+  return checkResponse(response, true);
 }
 
 /**
@@ -26,12 +39,12 @@ export async function createOrgHttp(request) {
  * @param {string} scopeId ID of the scope where target will be created
  * @returns {Promise<Serializable>}
  */
-export async function createProjectHttp(request, scopeId) {
-  const project = await request.post(`/v1/scopes`, {
+export async function createProject(request, scopeId) {
+  const response = await request.post(`/v1/scopes`, {
     data: {
-      name: 'Project ' + nanoid(),
+      name: `Project-${nanoid()}`,
       scope_id: scopeId,
     },
   });
-  return await project.json();
+  return checkResponse(response);
 }

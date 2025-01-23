@@ -5,15 +5,10 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -54,7 +49,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     newHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -84,7 +79,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     urls.newHostSet = `${urls.hostSets}/new`;
     // Generate resource couner
     getHostSetCount = () => this.server.schema.hostSets.all().models.length;
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('can create new host sets', async function (assert) {
@@ -152,6 +147,37 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     const hostSet = this.server.schema.hostSets.findBy({ name });
     assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
     assert.deepEqual(hostSet.attributes.filter, 'filter');
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
+  test('can create new gcp host set', async function (assert) {
+    instances.hostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: 'plugin',
+      plugin: {
+        id: `plugin-id-1`,
+        name: 'gcp',
+      },
+    });
+
+    const count = getHostSetCount();
+    await visit(
+      `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
+    );
+    const name = 'gcp host set';
+    await fillIn(NAME_SELECTOR, name);
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'filter_test');
+    await click(FILTER_BUTTON_SELECTOR);
+
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+    await click(SUBMIT_BTN_SELECTOR);
+
+    assert.strictEqual(getHostSetCount(), count + 1);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.deepEqual(hostSet.preferredEndpoints, ['endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['filter_test']);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 

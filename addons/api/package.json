@@ -72,9 +72,6 @@
     "qunit-dom": "^3.2.1",
     "webpack": "^5.94.0"
   },
-  "peerDependencies": {
-    "ember-source": ">4.0.0"
-  },
   "engines": {
     "node": "20.* || 22.*"
   },

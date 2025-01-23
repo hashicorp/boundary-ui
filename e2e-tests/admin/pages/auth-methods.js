@@ -34,6 +34,97 @@ export class AuthMethodsPage extends BaseResourcePage {
   }
 
   /**
+   * Creates a new OIDC Auth Method. Assumes you have selected the desired scope.
+   * @param {string} issuer OIDC issuer
+   * @param {string} clientId OIDC client ID
+   * @param {string} clientSecret OIDC client secret
+   * @returns Name of the auth method
+   */
+  async createOidcAuthMethod(issuer, clientId, clientSecret, boundaryAddr) {
+    const authMethodName = 'Auth Method ' + nanoid();
+    await this.page
+      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('link', { name: 'Auth Methods' })
+      .click();
+    await this.page.getByRole('button', { name: 'New' }).click();
+    await this.page.getByRole('link', { name: 'OIDC' }).click();
+    await this.page.getByLabel('Name').fill(authMethodName);
+    await this.page.getByLabel('Description').fill('OIDC Auth Method');
+    await this.page.getByLabel('Issuer').fill(issuer);
+    await this.page.getByLabel('Client ID').fill(clientId);
+    await this.page.getByLabel('Client Secret').fill(clientSecret);
+    await this.page
+      .getByRole('group', { name: 'Signing Algorithms' })
+      .getByRole('combobox')
+      .selectOption('RS256');
+    await this.page
+      .getByRole('group', { name: 'Signing Algorithms' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+
+    await this.page
+      .getByRole('group', { name: 'Claims Scopes' })
+      .getByRole('textbox')
+      .last()
+      .fill('groups');
+    await this.page
+      .getByRole('group', { name: 'Claims Scopes' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+    await this.page
+      .getByRole('group', { name: 'Claims Scopes' })
+      .getByRole('textbox')
+      .last()
+      .fill('user');
+    await this.page
+      .getByRole('group', { name: 'Claims Scopes' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByLabel('From Claim')
+      .last()
+      .fill('username');
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByLabel('To Claim')
+      .last()
+      .selectOption('name');
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByLabel('From Claim')
+      .last()
+      .fill('email');
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByLabel('To Claim')
+      .last()
+      .selectOption('email');
+    await this.page
+      .getByRole('group', { name: 'Account Claim Maps' })
+      .getByRole('button', { name: 'Add' })
+      .click();
+
+    await this.page.getByLabel('Maximum Age').fill('20');
+    await this.page.getByLabel('API URL Prefix').fill(boundaryAddr);
+
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(authMethodName),
+    ).toBeVisible();
+
+    return authMethodName;
+  }
+
+  /**
    * Makes the first available auth method primary.
    * Assumes you have created new auth method.
    */
@@ -70,7 +161,6 @@ export class AuthMethodsPage extends BaseResourcePage {
 
     await this.page.getByRole('link', { name: 'Accounts' }).click();
     await this.page
-      .getByRole('article')
       .getByRole('link', { name: 'Create Account', exact: true })
       .click();
     await this.page.getByLabel('Name (Optional)').fill(accountName);

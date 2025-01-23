@@ -56,17 +56,18 @@
 
 {{#unless this.hasAvailablePrincipals}}
   <Rose::Layout::Centered>
-    <Rose::Message
-      @title={{t 'resources.role.principal.messages.none.title'}}
-      as |message|
-    >
-      <message.description>
-        {{t 'resources.role.principal.messages.none.description'}}
-      </message.description>
-      <message.link @route='scopes.scope.roles.role.principals'>
-        <Rose::Icon @name='flight-icons/svg/chevron-left-16' />
-        {{t 'actions.back'}}
-      </message.link>
-    </Rose::Message>
+    <Hds::ApplicationState as |A|>
+      <A.Header @title={{t 'resources.role.principal.messages.none.title'}} />
+      <A.Body
+        @text={{t 'resources.role.principal.messages.none.description'}}
+      />
+      <A.Footer as |F|>
+        <F.LinkStandalone
+          @icon='arrow-left'
+          @text={{t 'actions.back'}}
+          @route='scopes.scope.roles.role.principals'
+        />
+      </A.Footer>
+    </Hds::ApplicationState>
   </Rose::Layout::Centered>
 {{/unless}}

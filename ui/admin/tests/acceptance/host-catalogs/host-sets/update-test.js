@@ -12,15 +12,11 @@ import {
   click,
   fillIn,
 } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -67,7 +63,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     azureHostSet: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     // Generate resources
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -124,7 +120,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     urls.awshostSet = `${urls.hostCatalogs}/${instances.awsHostCatalog.id}/host-sets/${instances.awsHostSet.id}`;
     urls.azureHostSet = `${urls.hostCatalogs}/${instances.azureHostCatalog.id}/host-sets/${instances.azureHostSet.id}`;
     // Generate resource couner
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
@@ -251,6 +247,52 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
+  test('can save changes to an existing gcp host-set', async function (assert) {
+    await visit(urls.awshostSet);
+
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+
+    const name = 'gcp host set';
+    await fillIn('[name="name"]', name);
+
+    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
+
+    for (const element of endpointList) {
+      await click(element);
+    }
+
+    assert.strictEqual(
+      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
+      0,
+    );
+
+    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoint');
+    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+
+    // Remove all the filters
+    const filterList = await Promise.all(
+      findAll(FILTER_REMOVE_BUTTON_SELECTOR),
+    );
+    for (const element of filterList) {
+      await click(element);
+    }
+
+    assert.strictEqual(findAll(FILTER_REMOVE_BUTTON_SELECTOR).length, 0);
+    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'sample filters');
+    await click(FILTER_BUTTON_SELECTOR);
+
+    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
+
+    await click(SUBMIT_BTN_SELECTOR);
+
+    assert.strictEqual(currentURL(), urls.awshostSet);
+    const hostSet = this.server.schema.hostSets.findBy({ name });
+    assert.strictEqual(hostSet.name, name);
+    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoint']);
+    assert.deepEqual(hostSet.attributes.filters, ['sample filters']);
+    assert.deepEqual(hostSet.syncIntervalSeconds, 10);
+  });
+
   test('cannot make changes to an existing host without proper authorization', async function (assert) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'update');
@@ -312,8 +354,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     try {
       await visit(urls.hostSets);
     } catch (e) {
-      assert.ok(find('.rose-dialog'));
-      await click('.rose-dialog-footer button:first-child');
+      assert.ok(find(commonSelectors.MODAL_WARNING));
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hostSets);
       assert.notEqual(
         this.server.schema.hostSets.first().name,

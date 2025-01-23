@@ -83,11 +83,9 @@
           />
         {{else}}
           <Rose::Layout::Centered>
-            <Rose::Message as |message|>
-              <message.description>
-                {{t 'resources.scope.messages.cannot_read'}}
-              </message.description>
-            </Rose::Message>
+            <Hds::ApplicationState as |A|>
+              <A.Body @text={{t 'resources.scope.messages.cannot_read'}} />
+            </Hds::ApplicationState>
           </Rose::Layout::Centered>
         {{/if}}
       </bc.Body>

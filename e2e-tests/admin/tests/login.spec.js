@@ -3,10 +3,13 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../playwright.config.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
 import { LoginPage } from '../pages/login.js';
+
+// Reset storage state for this file to avoid being authenticated
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
   page,

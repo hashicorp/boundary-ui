@@ -5,18 +5,22 @@
 
 import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  let intl;
   let featuresService;
   let featureEdition;
 
+  const ACCORDION_DROPDOWN_TEXT_SELECTOR = (name) =>
+    `[data-test-target-${name}-workers-accordion-item] a`;
   const ACCORDION_DROPDOWN_SELECTOR = (name) =>
     `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
   const CODE_BLOCK_SELECTOR = (name) =>
@@ -25,10 +29,6 @@ module('Acceptance | targets | workers', function (hooks) {
     '[data-test-code-editor-field-editor] textarea';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const MODAL_DISCARD_BUTTON_SELECTOR =
-    '.rose-dialog-footer button:first-child';
-  const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
-  const CONFIRM_MODAL_SELECTOR = '.rose-dialog';
 
   const instances = {
     scopes: {
@@ -49,7 +49,8 @@ module('Acceptance | targets | workers', function (hooks) {
     targetEditIngressFilter: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
+    intl = this.owner.lookup('service:intl');
     featuresService = this.owner.lookup('service:features');
     featureEdition = this.owner.lookup('service:featureEdition');
 
@@ -76,7 +77,7 @@ module('Acceptance | targets | workers', function (hooks) {
     urls.targetEditEgressFilter = `${urls.target}/edit-egress-worker-filter`;
     urls.targetEditIngressFilter = `${urls.target}/edit-ingress-worker-filter`;
 
-    authenticateSession({ username: 'admin' });
+    await authenticateSession({ username: 'admin' });
   });
 
   test('visiting target workers', async function (assert) {
@@ -218,7 +219,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(CANCEL_BUTTON_SELECTOR);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.notEqual(instances.target.inress_worker_filter, ingressWorkerFilter);
+    assert.notEqual(
+      instances.target.ingress_worker_filter,
+      ingressWorkerFilter,
+    );
     assert
       .dom(CODE_BLOCK_SELECTOR('ingress'))
       .hasText(instances.target.ingress_worker_filter);
@@ -239,6 +243,38 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.dom(CODE_BLOCK_SELECTOR('egress')).hasText(egressWorkerFilter);
+  });
+
+  test('user will see "Add worker filter" if no filter set', async function (assert) {
+    featuresService.enable('target-worker-filters-v2-ingress');
+    instances.target.update({
+      egress_worker_filter: '',
+      ingress_worker_filter: '',
+    });
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .hasText(intl.t('actions.add-worker-filter'));
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .hasText(intl.t('actions.add-worker-filter'));
+  });
+
+  test('user will see "Edit worker filter" if filter is set', async function (assert) {
+    featuresService.enable('target-worker-filters-v2-ingress');
+    await visit(urls.target);
+
+    await click(`[href="${urls.targetWorkers}"]`);
+
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .hasText(intl.t('actions.edit-worker-filter'));
+    assert
+      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .hasText(intl.t('actions.edit-worker-filter'));
   });
 
   test('user can cancel changes to egress worker filter in a target', async function (assert) {
@@ -273,9 +309,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(
@@ -298,9 +334,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     assert.notEqual(
@@ -322,9 +358,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
@@ -343,9 +379,9 @@ module('Acceptance | targets | workers', function (hooks) {
     await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
     await click(`[href="${urls.target}"]`);
 
-    assert.dom(CONFIRM_MODAL_SELECTOR).isVisible();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
     assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);

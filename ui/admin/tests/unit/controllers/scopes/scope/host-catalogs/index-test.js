@@ -19,6 +19,7 @@ module(
     setupIndexedDb(hooks);
     setupIntl(hooks, 'en-us');
 
+    let intl;
     let store;
     let controller;
     let getHostCatalogCount;
@@ -36,8 +37,9 @@ module(
       hostCatalogs: null,
     };
 
-    hooks.beforeEach(function () {
-      authenticateSession({});
+    hooks.beforeEach(async function () {
+      await authenticateSession({});
+      intl = this.owner.lookup('service:intl');
       store = this.owner.lookup('service:store');
       controller = this.owner.lookup(
         'controller:scopes/scope/host-catalogs/index',
@@ -113,6 +115,41 @@ module(
       await controller.delete(hostCatalog);
 
       assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
+    });
+
+    test('messageDescription returns correct translation with list authorization', async function (assert) {
+      await visit(urls.hostCatalogs);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('resources.host-catalog.description'),
+      );
+    });
+
+    test('messageDescription returns correct translation with create authorization', async function (assert) {
+      instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+        ['create'];
+      await visit(urls.hostCatalogs);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.create-but-not-list', {
+          resource: intl.t('resources.host-catalog.title_plural'),
+        }),
+      );
+    });
+
+    test('messageDescription returns correct translation with no authorization', async function (assert) {
+      instances.scopes.project.authorized_collection_actions['host-catalogs'] =
+        [];
+      await visit(urls.hostCatalogs);
+
+      assert.strictEqual(
+        controller.messageDescription,
+        intl.t('descriptions.neither-list-nor-create', {
+          resource: intl.t('resources.host-catalog.title_plural'),
+        }),
+      );
     });
   },
 );

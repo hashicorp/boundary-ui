@@ -133,36 +133,21 @@
       </Hds::Table>
     {{else}}
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.storage-bucket.messages.none.title'}}
-          as |message|
-        >
-          <message.description>
-            {{#if (can 'list scope' this.scope collection='storage-buckets')}}
-              {{t 'resources.storage-bucket.messages.none.description'}}
-            {{else if
-              (can 'create scope' this.scope collection='storage-buckets')
-            }}
-              {{t
-                'descriptions.create-but-not-list'
-                resource=(t 'resources.storage-bucket.title_plural')
-              }}
-            {{else}}
-              {{t
-                'descriptions.neither-list-nor-create'
-                resource=(t 'resources.storage-bucket.title_plural')
-              }}
-            {{/if}}
-          </message.description>
+        <Hds::ApplicationState as |A|>
+          <A.Header
+            @title={{t 'resources.storage-bucket.messages.none.title'}}
+          />
+          <A.Body @text={{this.messageDescription}} />
           {{#if (can 'create scope' this.scope collection='storage-buckets')}}
-            <Hds::Link::Standalone
-              @icon='plus-circle'
-              @iconPosition='leading'
-              @route='scopes.scope.storage-buckets.new'
-              @text={{t 'resources.storage-bucket.messages.none.link'}}
-            />
+            <A.Footer as |F|>
+              <F.LinkStandalone
+                @icon='plus-circle'
+                @text={{t 'resources.storage-bucket.messages.none.link'}}
+                @route='scopes.scope.storage-buckets.new'
+              />
+            </A.Footer>
           {{/if}}
-        </Rose::Message>
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
     {{/if}}
   </page.body>

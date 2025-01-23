@@ -10,7 +10,7 @@ import { execSync } from 'node:child_process';
  * @param {string} credentialStoreId ID of the credential store that the credential will be created for.
  * @returns {Promise<string>} new credential's ID
  */
-export async function createUsernamePasswordCredentialCli(credentialStoreId) {
+export async function createUsernamePasswordCredential(credentialStoreId) {
   let usernamePasswordCredential;
   const login = 'test-login';
   try {

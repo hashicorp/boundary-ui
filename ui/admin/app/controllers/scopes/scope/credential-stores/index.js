@@ -43,6 +43,31 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
     };
   }
 
+  /**
+   * If can list (at least): return default welcome message.
+   * If can create (only): return create-but-not-list welcome message.
+   * If can neither list nor create: return neither-list-nor-create welcome message
+   * @type {string}
+   */
+  get messageDescription() {
+    const canList = this.can.can('list model', this.scope, {
+      collection: 'credential-stores',
+    });
+    const canCreate = this.can.can('create model', this.scope, {
+      collection: 'credential-stores',
+    });
+    const resource = this.intl.t('resources.credential-store.title_plural');
+    let description = 'descriptions.neither-list-nor-create';
+
+    if (canList) {
+      description = 'resources.credential-store.description';
+    } else if (canCreate) {
+      description = 'descriptions.create-but-not-list';
+    }
+
+    return this.intl.t(description, { resource });
+  }
+
   // =actions
 
   /**
@@ -125,5 +150,32 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
   applyFilter(paramKey, selectedItems) {
     this[paramKey] = [...selectedItems];
     this.page = 1;
+  }
+
+  /**
+   * Save worker filter
+   * @param {CredentialStoreModel} credentialStore
+   */
+  @action
+  @loading
+  @notifyError(({ message }) => message, { catch: true })
+  @notifySuccess('notifications.add-success')
+  async saveWorkerFilter(credentialStore) {
+    await credentialStore.save();
+    await this.router.replaceWith(
+      'scopes.scope.credential-stores.credential-store.worker-filter',
+    );
+  }
+
+  /**
+   * Cancel adding or editing a worker filter
+   * @param {CredentialStoreModel} credentialStore
+   */
+  @action
+  async cancelWorkerFilter(credentialStore) {
+    credentialStore.rollbackAttributes();
+    await this.router.replaceWith(
+      'scopes.scope.credential-stores.credential-store.worker-filter',
+    );
   }
 }

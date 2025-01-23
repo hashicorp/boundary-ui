@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
  * Deletes the specified policy
  * @param {string} policyId ID of the policy to be deleted
  */
-export async function deletePolicyCli(policyId) {
+export async function deletePolicy(policyId) {
   try {
     execSync('boundary policies delete -id=' + policyId);
   } catch (e) {
@@ -23,7 +23,7 @@ export async function deletePolicyCli(policyId) {
  * @param {string} policyName Name of the policy
  * @returns {Promise<string>} ID of the policy
  */
-export async function getPolicyIdFromNameCli(scopeId, policyName) {
+export async function getPolicyIdFromName(scopeId, policyName) {
   const policies = JSON.parse(
     execSync(`boundary policies list -scope-id ${scopeId} -format json`),
   );

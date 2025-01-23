@@ -90,18 +90,17 @@
     {{else}}
 
       <Rose::Layout::Centered>
-        <Rose::Message
-          @title={{t 'resources.group.messages.members.title'}}
-          as |message|
-        >
-          <message.description>
-            {{t 'resources.group.messages.members.description'}}
-          </message.description>
-          <message.link @route='scopes.scope.groups.group.add-members'>
-            <Rose::Icon @name='flight-icons/svg/plus-circle-16' />
-            {{t 'resources.group.actions.add-members'}}
-          </message.link>
-        </Rose::Message>
+        <Hds::ApplicationState as |A|>
+          <A.Header @title={{t 'resources.group.messages.members.title'}} />
+          <A.Body @text={{t 'resources.group.messages.members.description'}} />
+          <A.Footer as |F|>
+            <F.LinkStandalone
+              @icon='plus-circle'
+              @text={{t 'resources.group.actions.add-members'}}
+              @route='scopes.scope.groups.group.add-members'
+            />
+          </A.Footer>
+        </Hds::ApplicationState>
       </Rose::Layout::Centered>
 
     {{/if}}

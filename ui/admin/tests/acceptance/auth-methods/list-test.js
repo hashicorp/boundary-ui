@@ -5,34 +5,21 @@
 
 import { module, test } from 'qunit';
 import { visit, click, waitFor, fillIn } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import {
-  authenticateSession,
-  // These are left here intentionally for future reference.
-  //currentSession,
-  //invalidateSession,
-} from 'ember-simple-auth/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-auth-method-results]';
-  const FILTER_DROPDOWN_SELECTOR = (name) =>
-    `.search-filtering [name="${name}"] button`;
-  const FILTER_APPLY_BUTTON_SELECTOR =
-    '.search-filtering [data-test-dropdown-apply-button]';
-  const AUTH_ACTIONS_SELECTOR = (id) =>
-    `tbody [data-test-auth-methods-table-row="${id}"] .hds-table__td:last-child .hds-dropdown button`;
-  const MAKE_PRIMARY_ACTION_SELECTOR = '[data-test-make-primary-action]';
 
   const instances = {
     scopes: {
@@ -51,7 +38,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
     oidcAuthMethod: null,
   };
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create(
       'scope',
@@ -75,34 +62,34 @@ module('Acceptance | auth-methods | list', function (hooks) {
     urls.passwordAuthMethod = `${urls.authMethods}/${instances.passwordAuthMethod.id}`;
     urls.oidcAuthMethod = `${urls.authMethods}/${instances.oidcAuthMethod.id}`;
 
-    authenticateSession({});
+    await authenticateSession({});
   });
 
   test('users can navigate to auth methods with proper authorization', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
+    await click(commonSelectors.HREF(urls.orgScope));
 
     assert.true(
       instances.scopes.org.authorized_collection_actions[
         'auth-methods'
       ].includes('list'),
     );
-    assert.dom(`[href="${urls.authMethods}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.authMethods)).isVisible();
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
     instances.scopes.org.authorized_collection_actions['auth-methods'] = [];
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
+    await click(commonSelectors.HREF(urls.orgScope));
 
     assert.false(
       instances.scopes.org.authorized_collection_actions[
         'auth-methods'
       ].includes('list'),
     );
-    assert.dom(`[href="${urls.authMethods}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.authMethods)).isNotVisible();
   });
 
   test('users can navigate to index with only create action', async function (assert) {
@@ -111,73 +98,79 @@ module('Acceptance | auth-methods | list', function (hooks) {
     ];
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
-
-    assert.dom(`[href="${urls.authMethods}"]`).exists();
+    await click(commonSelectors.HREF(urls.orgScope));
+    assert.dom(commonSelectors.HREF(urls.authMethods)).isVisible();
   });
 
   test('user can search for a specifc auth-method by id', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isVisible();
 
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
+    await fillIn(selectors.SEARCH_BAR_INPUT, instances.passwordAuthMethod.id);
+    await waitFor(commonSelectors.HREF(urls.oidcAuthMethod), { count: 0 });
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.passwordAuthMethod.id);
-    await waitFor(`[href="${urls.oidcAuthMethod}"]`, { count: 0 });
-
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isNotVisible();
   });
 
   test('user can search for auth-methods and get no results', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isVisible();
 
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
+    await fillIn(selectors.SEARCH_BAR_INPUT, 'fake target that does not exist');
+    await waitFor(commonSelectors.PAGE_MESSAGE_HEADER, { count: 1 });
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake target that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
-
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).doesNotExist();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isNotVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isNotVisible();
+    assert
+      .dom(commonSelectors.PAGE_MESSAGE_HEADER)
+      .includesText('No results found');
   });
 
   test('user can filter for auth-methods by type', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isVisible();
 
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
+    await click(commonSelectors.FILTER_DROPDOWN('type'));
+    await click(
+      commonSelectors.FILTER_DROPDOWN_ITEM(TYPE_AUTH_METHOD_PASSWORD),
+    );
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('type'));
 
-    await click(FILTER_DROPDOWN_SELECTOR('type'));
-    await click(`input[value="${TYPE_AUTH_METHOD_PASSWORD}"]`);
-    await click(FILTER_APPLY_BUTTON_SELECTOR);
-
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isNotVisible();
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
   });
 
   test('user can filter for auth-methods by primary', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.authMethods}"]`);
+    await click(commonSelectors.HREF(urls.authMethods));
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isVisible();
 
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).exists();
+    await click(
+      selectors.TABLE_ACTION_DROPDOWN(instances.passwordAuthMethod.id),
+    );
+    await click(
+      selectors.TABLE_ACTION_DROPDOWN_MAKE_PRIMARY(
+        instances.passwordAuthMethod.id,
+      ),
+    );
 
-    await click(AUTH_ACTIONS_SELECTOR(instances.passwordAuthMethod.id));
-    await click(MAKE_PRIMARY_ACTION_SELECTOR);
-    await click(FILTER_DROPDOWN_SELECTOR('primary'));
-    await click(`input[value="true"]`);
-    await click(FILTER_APPLY_BUTTON_SELECTOR);
+    await click(commonSelectors.FILTER_DROPDOWN('primary'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM('true'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('primary'));
 
-    assert.dom(`[href="${urls.oidcAuthMethod}"]`).doesNotExist();
-    assert.dom(`[href="${urls.passwordAuthMethod}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isNotVisible();
+    assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
   });
 });
