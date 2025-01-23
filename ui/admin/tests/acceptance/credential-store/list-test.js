@@ -13,18 +13,13 @@ import {
   TYPE_CREDENTIAL_STORE_STATIC,
   TYPE_CREDENTIAL_STORE_VAULT,
 } from 'api/models/credential-store';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-credential-store-results]';
-  const FILTER_DROPDOWN_SELECTOR = (name) =>
-    `.search-filtering [name="${name}"] button`;
-  const FILTER_APPLY_BUTTON_SELECTOR =
-    '.search-filtering [data-test-dropdown-apply-button]';
 
   const instances = {
     scopes: {
@@ -76,14 +71,14 @@ module('Acceptance | credential-stores | list', function (hooks) {
   test('users can navigate to credential-stores with proper authorization', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions[
         'credential-stores'
       ].includes('list'),
     );
-    assert.dom(`[href="${urls.credentialStores}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.credentialStores)).isVisible();
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
@@ -92,7 +87,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
     ] = [];
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions[
@@ -104,7 +99,7 @@ module('Acceptance | credential-stores | list', function (hooks) {
         'credential-stores'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.credentialStores}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.credentialStores)).doesNotExist();
   });
 
   test('users can navigate to index with only create action', async function (assert) {
@@ -113,67 +108,79 @@ module('Acceptance | credential-stores | list', function (hooks) {
     ] = ['create'];
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
-    assert.dom(`[href="${urls.credentialStores}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.credentialStores)).isVisible();
   });
 
   test('users can link to docs page for credential stores', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
     assert
       .dom(
         `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores"]`,
       )
-      .exists();
+      .isVisible();
   });
 
   test('user can search for a specific credential-store by id', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.staticCredentialStore.id);
-    await waitFor(`[href="${urls.vaultCredentialStore}"]`, { count: 0 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      instances.staticCredentialStore.id,
+    );
+    await waitFor(commonSelectors.HREF(urls.vaultCredentialStore), {
+      count: 0,
+    });
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).doesNotExist();
   });
 
   test('user can search for credential-stores and get no results', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake cred store that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake cred store that does not exist',
+    );
+    await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).doesNotExist();
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
   test('user can filter for credential-stores by type', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).exists();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).isVisible();
 
-    await click(FILTER_DROPDOWN_SELECTOR('type'));
-    await click(`input[value="${TYPE_CREDENTIAL_STORE_VAULT}"]`);
-    await click(FILTER_APPLY_BUTTON_SELECTOR);
+    await click(commonSelectors.FILTER_DROPDOWN('type'));
 
-    assert.dom(`[href="${urls.staticCredentialStore}"]`).doesNotExist();
-    assert.dom(`[href="${urls.vaultCredentialStore}"]`).exists();
+    await click(
+      commonSelectors.FILTER_DROPDOWN_ITEM(TYPE_CREDENTIAL_STORE_VAULT),
+    );
+    await click(commonSelectors.DROPDOWN_FILTER_APPLY_BUTTON);
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('type'));
+
+    assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).isVisible();
   });
 });

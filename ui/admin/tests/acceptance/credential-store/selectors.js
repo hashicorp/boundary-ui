@@ -11,6 +11,9 @@ export const EDIT_WORKER_FILTER_ACTION =
 export const DELETE_ACTION =
   '[data-test-manage-credential-stores-dropdown] ul li:last-child button';
 
+// Search filtering selectors
+export const NO_RESULTS_MSG = '[data-test-no-credential-store-results]';
+
 export const CODE_EDITOR_BODY = '[data-test-code-editor-field-editor] textarea';
 export const CODE_BLOCK_BODY = '.hds-code-block__code';
 
