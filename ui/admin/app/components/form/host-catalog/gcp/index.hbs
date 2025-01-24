@@ -118,9 +118,11 @@
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.project_id.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.host-catalog.form.project_id.help'
-      }}</F.HelperText>
+    <F.HelperText>{{t 'resources.host-catalog.form.project_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.project_id}}
       <F.Error as |E|>
         {{#each @model.errors.project_id as |error|}}
@@ -140,7 +142,11 @@
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.zone.label'}}</F.Label>
-    <F.HelperText>{{t 'resources.host-catalog.form.zone.help'}}</F.HelperText>
+    <F.HelperText>{{t 'resources.host-catalog.form.zone.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.zone}}
       <F.Error as |E|>
         {{#each @model.errors.zone as |error|}}
@@ -160,9 +166,12 @@
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.client_email.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.host-catalog.form.client_email.help'
-      }}</F.HelperText>
+    <F.HelperText>
+      {{t 'resources.host-catalog.form.client_email.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.client_email}}
       <F.Error as |E|>
         {{#each @model.errors.client_email as |error|}}
@@ -186,7 +195,11 @@
       }}</F.Label>
     <F.HelperText>{{t
         'resources.host-catalog.form.target_service_account_id.help'
-      }}</F.HelperText>
+      }}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.target_service_account_id}}
       <F.Error as |E|>
         {{#each @model.errors.target_service_account_id as |error|}}
@@ -207,9 +220,11 @@
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.private_key_id.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.host-catalog.form.private_key_id.help'
-      }}</F.HelperText>
+    <F.HelperText>{{t 'resources.host-catalog.form.private_key_id.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.private_key_id}}
       <F.Error as |E|>
         {{#each @model.errors.private_key_id as |error|}}
@@ -228,9 +243,11 @@
     as |F|
   >
     <F.Label>{{t 'resources.host-catalog.form.private_key.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.host-catalog.form.private_key.help'
-      }}</F.HelperText>
+    <F.HelperText>{{t 'resources.host-catalog.form.private_key.help'}}
+      <Hds::Link::Inline @href={{doc-url 'host-catalog.gcp'}}>
+        {{t 'actions.learn-more'}}
+      </Hds::Link::Inline>
+    </F.HelperText>
     {{#if @model.errors.private_key}}
       <F.Error as |E|>
         {{#each @model.errors.private_key as |error|}}
