@@ -140,6 +140,11 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
 
     // View the OIDC account and verify account attributes
     await page.getByRole('link', { name: orgName }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(orgName),
+    ).toBeVisible();
     await page
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })
