@@ -454,7 +454,7 @@ module('Acceptance | auth-methods | update', function (hooks) {
   test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {
     featuresService.enable('ldap-auth-methods');
     const errorMessage = 'The request was invalid.';
-    const errorDescription = 'scheme in url "" is not either ldap or ldaps';
+    const errorDescription = 'URL field is required';
     this.server.patch('/auth-methods/:id', () => {
       return new Response(
         400,
