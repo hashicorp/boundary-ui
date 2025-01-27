@@ -15,18 +15,13 @@ import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_PASSWORD,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | auth-methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const AUTH_LINK_SELECTOR = (id) =>
-    `tbody [data-test-auth-methods-table-row="${id}"] a`;
-  const AUTH_TYPE_SELECTOR = (id) =>
-    `tbody [data-test-auth-methods-table-row="${id}"] .hds-table__td:nth-child(2)`;
-  const AUTH_ACTIONS_SELECTOR = (id) =>
-    `tbody [data-test-auth-methods-table-row="${id}"] .hds-table__td:last-child .hds-dropdown`;
 
   const instances = {
     scopes: {
@@ -75,7 +70,7 @@ module('Acceptance | auth-methods | read', function (hooks) {
   test('visiting auth methods in org scope', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.orgAuthMethods));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgAuthMethods);
@@ -84,7 +79,7 @@ module('Acceptance | auth-methods | read', function (hooks) {
   test('visiting auth methods in global scope', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.globalAuthMethods));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalAuthMethods);
@@ -93,16 +88,18 @@ module('Acceptance | auth-methods | read', function (hooks) {
   test('can navigate to an auth method form in org scope', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.orgAuthMethods));
 
     assert
-      .dom(AUTH_TYPE_SELECTOR(instances.passwordAuthMethodOrg.id))
+      .dom(selectors.TABLE_ROW_TYPE(instances.passwordAuthMethodOrg.id))
       .hasText('Password');
     assert
-      .dom(AUTH_ACTIONS_SELECTOR(instances.passwordAuthMethodOrg.id))
-      .exists();
+      .dom(selectors.TABLE_ACTION_DROPDOWN(instances.passwordAuthMethodOrg.id))
+      .isVisible();
 
-    await click(AUTH_LINK_SELECTOR(instances.passwordAuthMethodOrg.id));
+    await click(
+      selectors.TABLE_ROW_NAME_LINK(instances.passwordAuthMethodOrg.id),
+    );
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.passwordAuthMethodOrg);
@@ -111,16 +108,18 @@ module('Acceptance | auth-methods | read', function (hooks) {
   test('can navigate to an auth method form in global scope', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.globalAuthMethods));
 
     assert
-      .dom(AUTH_TYPE_SELECTOR(instances.oidcAuthMethodGlobal.id))
+      .dom(selectors.TABLE_ROW_TYPE(instances.oidcAuthMethodGlobal.id))
       .hasText('OIDC');
     assert
-      .dom(AUTH_ACTIONS_SELECTOR(instances.oidcAuthMethodGlobal.id))
-      .exists();
+      .dom(selectors.TABLE_ACTION_DROPDOWN(instances.oidcAuthMethodGlobal.id))
+      .isVisible();
 
-    await click(AUTH_LINK_SELECTOR(instances.oidcAuthMethodGlobal.id));
+    await click(
+      selectors.TABLE_ROW_NAME_LINK(instances.oidcAuthMethodGlobal.id),
+    );
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);
@@ -133,11 +132,11 @@ module('Acceptance | auth-methods | read', function (hooks) {
       );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.orgAuthMethods));
 
     assert
-      .dom(AUTH_LINK_SELECTOR(instances.passwordAuthMethodOrg.id))
-      .doesNotExist();
+      .dom(selectors.TABLE_ROW_NAME_LINK(instances.passwordAuthMethodOrg.id))
+      .isNotVisible();
   });
 
   test('cannot navigate to an auth method form without proper authorization in global scope', async function (assert) {
@@ -147,11 +146,11 @@ module('Acceptance | auth-methods | read', function (hooks) {
       );
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.globalAuthMethods));
 
     assert
-      .dom(AUTH_LINK_SELECTOR(instances.oidcAuthMethodGlobal.id))
-      .doesNotExist();
+      .dom(selectors.TABLE_ROW_NAME_LINK(instances.oidcAuthMethodGlobal.id))
+      .isNotVisible();
   });
 
   test('cannot navigate to an ldap auth method form in global scope', async function (assert) {
@@ -161,13 +160,17 @@ module('Acceptance | auth-methods | read', function (hooks) {
     });
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.globalAuthMethods));
 
-    assert.dom(AUTH_LINK_SELECTOR(instances.ldapAuthMethod.id)).doesNotExist();
-    assert.dom(AUTH_TYPE_SELECTOR(instances.ldapAuthMethod.id)).hasText('LDAP');
     assert
-      .dom(AUTH_ACTIONS_SELECTOR(instances.ldapAuthMethod.id))
+      .dom(selectors.TABLE_ROW_NAME_LINK(instances.ldapAuthMethod.id))
       .doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_TYPE(instances.ldapAuthMethod.id))
+      .hasText('LDAP');
+    assert
+      .dom(selectors.TABLE_ACTION_DROPDOWN(instances.ldapAuthMethod.id))
+      .isNotVisible();
   });
 
   test('cannot navigate to an ldap auth method form in org scope', async function (assert) {
@@ -177,13 +180,17 @@ module('Acceptance | auth-methods | read', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgAuthMethods}"]`);
+    await click(commonSelectors.HREF(urls.orgAuthMethods));
 
-    assert.dom(AUTH_LINK_SELECTOR(instances.ldapAuthMethod.id)).doesNotExist();
-    assert.dom(AUTH_TYPE_SELECTOR(instances.ldapAuthMethod.id)).hasText('LDAP');
     assert
-      .dom(AUTH_ACTIONS_SELECTOR(instances.ldapAuthMethod.id))
+      .dom(selectors.TABLE_ROW_NAME_LINK(instances.ldapAuthMethod.id))
       .doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_TYPE(instances.ldapAuthMethod.id))
+      .hasText('LDAP');
+    assert
+      .dom(selectors.TABLE_ACTION_DROPDOWN(instances.ldapAuthMethod.id))
+      .isNotVisible();
   });
 
   test('users can navigate to auth method and incorrect url autocorrects', async function (assert) {
