@@ -3,30 +3,33 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import GlobalPage from './globalPage.js';
+import { expect } from '../fixtures/baseTest.js';
+import BasePage from './basePage.js';
 
-export default class SessionPage {
-  constructor(page) {
-    this.page = page;
-  }
-
+export default class SessionPage extends BasePage {
   async cancelAllSessions() {
-    while (
-      (await this.page
-        .getByRole('row')
-        .filter({ hasNot: this.page.getByRole('columnheader') })
-        .getByLabel('Cancel')
-        .count()) > 0
-    ) {
-      await this.page
-        .getByRole('row')
-        .filter({ hasNot: this.page.getByRole('columnheader') })
-        .getByLabel('Cancel')
-        .first()
-        .click();
+    await expect
+      .poll(
+        async () => {
+          await this.page
+            .getByRole('row')
+            .filter({ hasNot: this.page.getByRole('columnheader') })
+            .getByLabel('Cancel')
+            .first()
+            .click();
 
-      const globalPage = new GlobalPage(this.page);
-      await globalPage.dismissSuccessAlert();
-    }
+          await this.dismissSuccessAlert();
+
+          return await this.page
+            .getByRole('row')
+            .filter({ hasNot: this.page.getByRole('columnheader') })
+            .getByLabel('Cancel')
+            .count();
+        },
+        {
+          message: 'Ensure all sessions are cancelled',
+        },
+      )
+      .toBe(0);
   }
 }

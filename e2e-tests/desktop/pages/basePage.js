@@ -5,7 +5,7 @@
 
 import { expect } from '../fixtures/baseTest.js';
 
-export default class GlobalPage {
+export default class BasePage {
   constructor(page) {
     this.page = page;
   }
