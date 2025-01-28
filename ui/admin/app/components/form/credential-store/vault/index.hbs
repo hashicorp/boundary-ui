@@ -121,6 +121,7 @@
   {{#if (and (feature-flag 'vault-worker-filter') @model.isNew)}}
     {{#let (unique-id) (unique-id) as |labelId helpId|}}
       <Hds::Form::Fieldset
+        @isOptional={{true}}
         aria-labelledby={{labelId}}
         aria-describedby={{helpId}}
         class='worker-filter-generator-form-layout'
