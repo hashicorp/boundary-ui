@@ -117,6 +117,33 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
+  {{! worker_filter }}
+  {{#if (and (feature-flag 'vault-worker-filter') @model.isNew)}}
+    {{#let (unique-id) (unique-id) as |labelId helpId|}}
+      <Hds::Form::Fieldset
+        aria-labelledby={{labelId}}
+        aria-describedby={{helpId}}
+        class='worker-filter-generator-form-layout'
+        as |F|
+      >
+        <F.Legend id={{labelId}}>{{t 'form.worker_filter.label'}}</F.Legend>
+        <F.HelperText id={{helpId}}>
+          {{t 'resources.credential-store.form.worker_filter.help'}}
+          <Hds::Link::Inline @href={{doc-url 'worker-filters'}}>
+            {{t 'actions.learn-more'}}
+          </Hds::Link::Inline>
+        </F.HelperText>
+        <F.Control>
+          <WorkerFilterGenerator
+            @model={{@model}}
+            @name='worker_filter'
+            @hideToolbar={{true}}
+          />
+        </F.Control>
+      </Hds::Form::Fieldset>
+    {{/let}}
+  {{/if}}
+
   {{#if (or @model.isNew form.isEditable)}}
     <Hds::Form::TextInput::Field
       name='token'
