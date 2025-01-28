@@ -235,7 +235,7 @@ host-catalog:
   form:
     aws_region:
       label: AWS Region
-      help: AWS region of the hosts to be added to the catalog.
+      help: AWS region of the hosts to be added to this AWS Host Catalog.
     azure_client_id:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
@@ -243,10 +243,10 @@ host-catalog:
       help: Insert a worker filter in order to route requests to the correct worker.
     project_id:
       label: Project ID
-      help: Project ID of the instances you want to add to host catalog.
+      help: Project ID of the instances you want to add to this GCP Host Catalog.
     zone:
       label: Zone
-      help: Zone of the instances you want to add to host catalog.
+      help: Zone of the instances you want to add to this GCP Host Catalog.
     client_email:
       label: Client Email
       help: The email address used to uniquely identify the service account.
