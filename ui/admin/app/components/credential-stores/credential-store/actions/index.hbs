@@ -21,8 +21,9 @@
   {{#if (and (feature-flag 'vault-worker-filter') @model.isVault)}}
     <dd.Interactive
       @route='scopes.scope.credential-stores.credential-store.edit-worker-filter'
-      @text={{t 'actions.edit-worker-filter'}}
-    />
+    >
+      {{t 'actions.edit-worker-filter'}}
+    </dd.Interactive>
   {{/if}}
   {{#if (can 'delete model' @model)}}
     <dd.Separator />

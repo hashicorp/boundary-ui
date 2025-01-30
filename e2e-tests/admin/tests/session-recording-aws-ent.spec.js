@@ -3,23 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'child_process';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  connectSshToTarget,
-  deleteScopeCli,
-  waitForSessionRecordingCli,
-  deleteStorageBucketCli,
-  deletePolicyCli,
-  getOrgIdFromNameCli,
-  getPolicyIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { ProjectsPage } from '../pages/projects.js';
@@ -29,10 +17,8 @@ import { StorageBucketsPage } from '../pages/storage-buckets.js';
 import { StoragePoliciesPage } from '../pages/storage-policies.js';
 import { TargetsPage } from '../pages/targets.js';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Session Recording Test (AWS) @ent @aws', async ({
@@ -57,7 +43,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
   let storageBucket;
   let connect;
   try {
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
@@ -129,10 +115,16 @@ test('Session Recording Test (AWS) @ent @aws', async ({
     await orgsPage.attachStoragePolicy(policyName);
 
     // Establish connection to target and cancel it
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectSshToTarget(targetId);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectSshToTarget(targetId);
     await page.getByRole('link', { name: 'Projects', exact: true }).click();
     await page.getByRole('link', { name: projectName }).click();
     const sessionsPage = new SessionsPage(page);
@@ -146,7 +138,7 @@ test('Session Recording Test (AWS) @ent @aws', async ({
       page.getByRole('alert').getByText('Success', { exact: true }),
     ).toBeVisible();
     await page.getByRole('button', { name: 'Dismiss', exact: true }).click();
-    await waitForSessionRecordingCli(storageBucket.id);
+    await boundaryCli.waitForSessionRecording(storageBucket.id);
 
     // Play back session recording
     await page.getByRole('link', { name: 'Orgs', exact: true }).click();
@@ -233,19 +225,23 @@ test('Session Recording Test (AWS) @ent @aws', async ({
     await page.getByRole('link', { name: targetName }).click();
     await targetsPage.detachStorageBucket();
   } finally {
-    if (policyName) {
-      const storagePolicyId = await getPolicyIdFromNameCli(orgId, policyName);
-      await deletePolicyCli(storagePolicyId);
-    }
-    if (storageBucket) {
-      await deleteStorageBucketCli(storageBucket.id);
-    }
-    if (orgId) {
-      await deleteScopeCli(orgId);
-    }
     // End `boundary connect` process
     if (connect) {
       connect.kill('SIGTERM');
+    }
+
+    if (policyName) {
+      const storagePolicyId = await boundaryCli.getPolicyIdFromName(
+        orgId,
+        policyName,
+      );
+      await boundaryCli.deletePolicy(storagePolicyId);
+    }
+    if (storageBucket) {
+      await boundaryCli.deleteStorageBucket(storageBucket.id);
+    }
+    if (orgId) {
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

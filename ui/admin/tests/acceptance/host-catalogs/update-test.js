@@ -10,9 +10,11 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_AWS,
+  TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 
 module('Acceptance | host-catalogs | update', function (hooks) {
@@ -27,6 +29,7 @@ module('Acceptance | host-catalogs | update', function (hooks) {
       project: null,
     },
     hostCatalog: null,
+    GCPHostCatalog: null,
   };
   const urls = {
     globalScope: null,
@@ -35,15 +38,13 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     hostCatalogs: null,
     hostCatalog: null,
     AWSHostCatalogWithStaticCredential: null,
+    GCPHostCatalog: null,
   };
 
   const NAME_INPUT_SELECTOR = '[name="name"]';
-  const EDIT_BUTTON_SELECTOR = 'form [type="button"]';
+  const EDIT_BUTTON_SELECTOR = '.rose-form-actions [type=button]';
   const SAVE_BUTTON_SELECTOR = '.rose-form-actions [type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const MODAL_DISCARD_BUTTON_SELECTOR =
-    '.rose-dialog-footer button:first-child';
-  const MODAL_CANCEL_BUTTON_SELECTOR = '.rose-dialog-footer button:last-child';
   const CREDENTIAL_TYPE_SELECTOR =
     '.dynamic-credential-selection input:checked';
 
@@ -61,6 +62,12 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     instances.hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
     });
+    instances.GCPHostCatalog = this.server.create('host-catalog', {
+      scope: instances.scopes.project,
+      type: TYPE_HOST_CATALOG_DYNAMIC,
+      plugin: { name: TYPE_HOST_CATALOG_PLUGIN_GCP },
+    });
+
     instances.AWSHostCatalogWithStaticCredential = this.server.create(
       'host-catalog',
       {
@@ -77,12 +84,14 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     urls.hostCatalogs = `${urls.projectScope}/host-catalogs`;
     urls.hostCatalog = `${urls.hostCatalogs}/${instances.hostCatalog.id}`;
     urls.AWSHostCatalogWithStaticCredential = `${urls.hostCatalogs}/${instances.AWSHostCatalogWithStaticCredential.id}`;
+    urls.GCPHostCatalog = `${urls.hostCatalogs}/${instances.GCPHostCatalog.id}`;
     await authenticateSession({});
   });
 
   test('can update static AWS credentials to Dynamic AWS credentials', async function (assert) {
     await visit(urls.AWSHostCatalogWithStaticCredential);
     await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+
     assert.strictEqual(
       find(CREDENTIAL_TYPE_SELECTOR).value,
       'static-credential',
@@ -95,6 +104,19 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     assert.strictEqual(
       find(CREDENTIAL_TYPE_SELECTOR).value,
       'dynamic-credential',
+    );
+  });
+
+  test('can update GCP host catalog', async function (assert) {
+    await visit(urls.GCPHostCatalog);
+    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await fillIn('[name=project_id]', 'project-id');
+    await click(SAVE_BUTTON_SELECTOR);
+
+    assert.strictEqual(
+      this.server.schema.hostCatalogs.where({ type: 'plugin' }).models[0]
+        .attributes.project_id,
+      'project-id',
     );
   });
 
@@ -178,8 +200,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click(MODAL_DISCARD_BUTTON_SELECTOR, 'Click Discard');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.notEqual(
@@ -198,8 +220,8 @@ module('Acceptance | host-catalogs | update', function (hooks) {
     await fillIn(NAME_INPUT_SELECTOR, 'random string');
     assert.strictEqual(currentURL(), urls.hostCatalog);
     await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click(MODAL_CANCEL_BUTTON_SELECTOR, 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
     assert.notEqual(

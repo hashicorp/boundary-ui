@@ -74,6 +74,7 @@ module.exports = function (environment) {
         'host-catalog': '/docs/concepts/domain-model/host-catalogs',
         'host-catalog.new': '/docs/common-workflows/manage-targets',
         'host-catalog.azure': '/docs/concepts/host-discovery/azure',
+        'host-catalog.gcp': '/docs/concepts/host-discovery/gcp',
         'host-catalog.aws': '/docs/concepts/host-discovery/aws',
         'host-catalog.aws.region':
           'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html',

@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
  * Deletes the specified alias
  * @param {string} aliasValue Value of the alias to be deleted
  */
-export async function deleteAliasCli(aliasValue) {
+export async function deleteAlias(aliasValue) {
   try {
     const aliases = JSON.parse(execSync('boundary aliases list -format json'));
     const alias = aliases.items.filter((obj) => obj.value == aliasValue)[0];

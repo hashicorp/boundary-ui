@@ -3,18 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  connectToTarget,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-  getProjectIdFromNameCli,
-  getTargetIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { BasePage } from '../pages/base.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
 import { OrgsPage } from '../pages/orgs.js';
@@ -22,10 +14,8 @@ import { ProjectsPage } from '../pages/projects.js';
 import { SessionsPage } from '../pages/sessions.js';
 import { TargetsPage } from '../pages/targets.js';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Verify session created to target with host, then cancel the session @ce @aws @docker', async ({
@@ -72,16 +62,22 @@ test('Verify session created to target with host, then cancel the session @ce @a
     await targetsPage.removeHostSourceFromTarget(hostSetName2);
 
     // Connect to target
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectToTarget(targetId, sshUser, sshKeyPath);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -91,7 +87,7 @@ test('Verify session created to target with host, then cancel the session @ce @a
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -125,16 +121,22 @@ test('Verify session created to target with address, then cancel the session @ce
       targetPort,
     );
 
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    orgId = await getOrgIdFromNameCli(orgName);
-    const projectId = await getProjectIdFromNameCli(orgId, projectName);
-    const targetId = await getTargetIdFromNameCli(projectId, targetName);
-    connect = await connectToTarget(targetId, sshUser, sshKeyPath);
+    orgId = await boundaryCli.getOrgIdFromName(orgName);
+    const projectId = await boundaryCli.getProjectIdFromName(
+      orgId,
+      projectName,
+    );
+    const targetId = await boundaryCli.getTargetIdFromName(
+      projectId,
+      targetName,
+    );
+    connect = await boundaryCli.connectToTarget(targetId, sshUser, sshKeyPath);
     const sessionsPage = new SessionsPage(page);
     await sessionsPage.waitForSessionToBeVisible(targetName);
     await page
@@ -144,7 +146,7 @@ test('Verify session created to target with address, then cancel the session @ce
       .click();
   } finally {
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
     // End `boundary connect` process
     if (connect) {
@@ -209,23 +211,23 @@ test('Verify TCP target is updated @ce @aws @docker', async ({
     ).toBeVisible();
     await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-    await page.getByRole('textbox').click({ force: true });
+    await page.locator('textarea').click({ force: true });
     await page.keyboard.press('Meta+A');
     await page.keyboard.press('Backspace');
-    await page.getByRole('textbox').fill('"prod" in "/tags/type"');
+    await page.locator('textarea').fill('"prod" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();
     const basePage = new BasePage(page);
     await basePage.dismissSuccessAlert();
   } finally {
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await getOrgIdFromNameCli(orgName);
+    const orgId = await boundaryCli.getOrgIdFromName(orgName);
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

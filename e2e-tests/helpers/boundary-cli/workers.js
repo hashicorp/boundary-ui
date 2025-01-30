@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
  * Creates a new controller-led worker
  * @returns {Promise<string>} new worker's ID
  */
-export async function createControllerLedWorkerCli() {
+export async function createControllerLedWorker() {
   const workerName = 'worker-' + nanoid();
   let newWorker;
   try {

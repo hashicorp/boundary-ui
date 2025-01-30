@@ -4,19 +4,16 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | hosts | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] button:first-child';
-  const NEW_HOST_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] div ul li a';
 
   const instances = {
     scopes: {
@@ -69,33 +66,39 @@ module('Acceptance | host-catalogs | hosts | list', function (hooks) {
     urls.newHost = `${urls.hosts}/new`;
     await authenticateSession({});
   });
+
   test('Users can navigate to hosts with proper authorization', async function (assert) {
     await visit(urls.hostCatalog);
+
     assert.ok(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'list',
       ),
     );
-    assert.dom(MANAGE_DROPDOWN_SELECTOR);
-    assert.ok(find(`[href="${urls.hosts}"]`));
+
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG).isVisible();
+    assert.dom(commonSelectors.HREF(urls.hosts)).isVisible();
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     instances.hostCatalog.authorized_collection_actions.hosts = [];
     await visit(urls.hostCatalog);
+
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions.hosts.includes(
         'list',
       ),
     );
-    assert.notOk(find(`[href="${urls.hosts}"]`));
+    assert.dom(commonSelectors.HREF(urls.hosts)).doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {
     instances.hostCatalog.authorized_collection_actions.hosts = ['create'];
     await visit(urls.hostCatalog);
-    assert.ok(find(`[href="${urls.hosts}"]`));
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.dom(NEW_HOST_SELECTOR).hasAttribute('href', urls.newHost);
+
+    assert.dom(commonSelectors.HREF(urls.hosts)).isVisible();
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_NEW_HOST);
+    assert.strictEqual(currentURL(), urls.newHost);
   });
 });

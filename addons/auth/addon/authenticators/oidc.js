@@ -9,7 +9,7 @@ import { reject } from 'rsvp';
 import { waitForPromise } from '@ember/test-waiters';
 
 /**
- * The OIDC base authenticator encapsulates the multistep OIDC flow.
+ * The OIDC base authenticator encapsulates the multi-step OIDC flow.
  *
  * 1. Start authentication flow:  this step is actually a combination of two
  *    sub steps:
@@ -97,13 +97,19 @@ export default class OIDCAuthenticator extends BaseAuthenticator {
     });
     // Fetch the endpoint and get the response JSON
     const response = await waitForPromise(fetch(url, { method: 'post', body }));
+
+    // Note: Always consume response body in order to avoid memory leaks
+    // visit https://undici.nodejs.org/#/?id=garbage-collection for more info.
+    // We do not use the undici package but the link informs us that garbage
+    // collection is undefined when response body is not consumed.
+    const json = await response.json();
+
     if (response.status === 202) {
       // The token isn't ready yet, keep trying.
       return false;
     } else if (response.status < 400) {
       // Response was successful, meaning a token was obtained.
       // Authenticate with the session service using the response JSON.
-      const json = await response.json();
       await this.session.authenticate('authenticator:oidc', json);
       return true;
     } else {

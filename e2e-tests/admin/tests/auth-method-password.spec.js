@@ -7,19 +7,17 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { execSync } from 'node:child_process';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { AuthMethodsPage } from '../pages/auth-methods.js';
 import { LoginPage } from '../pages/login.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { UsersPage } from '../pages/users.js';
 
+// Reset storage state for this file to avoid being authenticated
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Verify new auth-method can be created and assigned to users @ce @ent @aws @docker', async ({
@@ -104,7 +102,7 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
         .getByText('Projects'),
     ).toBeVisible();
   } finally {
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
@@ -130,9 +128,9 @@ test('Verify new auth-method can be created and assigned to users @ce @ent @aws 
     }
 
     if (orgName) {
-      const orgId = await getOrgIdFromNameCli(orgName);
+      const orgId = await boundaryCli.getOrgIdFromName(orgName);
       if (orgId) {
-        await deleteScopeCli(orgId);
+        await boundaryCli.deleteScope(orgId);
       }
     }
   }

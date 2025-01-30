@@ -20,6 +20,7 @@ export const RESOURCE_NOT_FOUND_SUBTITLE =
   '[data-test-error-application-state] .hds-application-state__error-code';
 export const RESOURCE_NOT_FOUND_VALUE = 'ERROR 404';
 
+export const PAGE_MESSAGE_HEADER = '.hds-application-state__header';
 export const PAGE_MESSAGE_DESCRIPTION = '.hds-application-state__body-text';
 export const PAGE_MESSAGE_LINK =
   '.hds-application-state__footer .hds-link-standalone';
@@ -34,8 +35,16 @@ export const ALERT_TOAST_BODY =
 export const ALERT_TOAST_DISMISS =
   '[data-test-toast-notification] .hds-dismiss-button';
 
-export const DIALOG_UNSAVED_CHANGES = '.rose-dialog';
-export const DIALOG_UNSAVED_CHANGES_DISCARD =
-  '.rose-dialog-footer button:first-child';
-export const DIALOG_UNSAVED_CHANGES_CANCEL =
-  '.rose-dialog-footer button:last-child';
+export const MODAL_WARNING = 'dialog';
+export const MODAL_WARNING_CONFIRM_BTN =
+  'dialog .hds-modal__footer button:first-child';
+export const MODAL_WARNING_CANCEL_BTN =
+  'dialog .hds-modal__footer button:last-child';
+export const MODAL_WARNING_TITLE = '.hds-modal__header';
+export const MODAL_WARNING_MESSAGE = '.hds-modal__body';
+
+export const FILTER_DROPDOWN = (filterName) =>
+  `.search-filtering [name="${filterName}"] button`;
+export const FILTER_DROPDOWN_ITEM = (itemList) => `input[value="${itemList}"]`;
+export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
+  `.search-filtering [name="${filterName}"] .hds-dropdown__footer button`;

@@ -10,7 +10,11 @@
   @disabled={{@model.isSaving}}
   as |form|
 >
-  <WorkerFilterGenerator @model={{@model}} @name={{@name}} />
+  <WorkerFilterGenerator
+    @model={{@model}}
+    @name={{@name}}
+    @showFilterGenerator={{true}}
+  />
 
   {{#if (can 'save model' @model)}}
     <form.actions

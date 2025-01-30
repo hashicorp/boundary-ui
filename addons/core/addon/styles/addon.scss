@@ -65,3 +65,10 @@
     overflow: hidden;
   }
 }
+
+// Utility classes
+.container-inputs__margin-bottom {
+  input:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+}

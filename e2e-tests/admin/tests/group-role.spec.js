@@ -3,22 +3,15 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test, authenticatedState } from '../../global-setup.js';
+import { test } from '../../global-setup.js';
 
-import {
-  authenticateBoundaryCli,
-  checkBoundaryCli,
-  deleteScopeCli,
-  getOrgIdFromNameCli,
-} from '../../helpers/boundary-cli.js';
+import * as boundaryCli from '../../helpers/boundary-cli';
 import { GroupsPage } from '../pages/groups.js';
 import { OrgsPage } from '../pages/orgs.js';
 import { RolesPage } from '../pages/roles.js';
 
-test.use({ storageState: authenticatedState });
-
 test.beforeAll(async () => {
-  await checkBoundaryCli();
+  await boundaryCli.checkBoundaryCli();
 });
 
 test('Verify a new role can be created and associated with a group @ce @ent @aws @docker', async ({
@@ -41,15 +34,15 @@ test('Verify a new role can be created and associated with a group @ce @ent @aws
     await rolesPage.addPrincipalToRole(groupName);
     await rolesPage.addGrantsToRole('ids=*;type=*;actions=read,list');
   } finally {
-    await authenticateBoundaryCli(
+    await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
     );
-    const orgId = await getOrgIdFromNameCli(orgName);
+    const orgId = await boundaryCli.getOrgIdFromName(orgName);
     if (orgId) {
-      await deleteScopeCli(orgId);
+      await boundaryCli.deleteScope(orgId);
     }
   }
 });

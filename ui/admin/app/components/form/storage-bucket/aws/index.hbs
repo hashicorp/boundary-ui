@@ -460,7 +460,7 @@
     <Hds::Form::Fieldset
       aria-labelledby={{labelId}}
       aria-describedby={{helpId}}
-      class='storage-bucket-worker-filter'
+      class='worker-filter-generator-form-layout'
       @isRequired={{true}}
       as |F|
     >
@@ -472,7 +472,7 @@
         </Hds::Link::Inline>
       </F.HelperText>
       <F.Control>
-        {{#if form.disabled}}
+        {{#if (and form.disabled (not @model.isSaving))}}
           <Hds::CodeBlock
             @language='bash'
             @value={{@model.worker_filter}}

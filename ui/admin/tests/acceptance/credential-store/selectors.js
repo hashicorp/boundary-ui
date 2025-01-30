@@ -11,3 +11,9 @@ export const EDIT_ACTION =
 
 export const CODE_EDITOR_BODY = '[data-test-code-editor-field-editor] textarea';
 export const CODE_BLOCK_BODY = '.hds-code-block__code';
+export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+
+export const TYPE_VAULT = '[value="vault"]';
+
+export const FIELD_VAULT_ADDRESS_ERROR =
+  '[data-test-error-message-vault-address]';

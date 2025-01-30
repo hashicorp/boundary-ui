@@ -299,7 +299,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page
       .getByText('Ingress workers')
       .locator('..')
-      .getByRole('link', { name: 'Edit worker filter' })
+      .getByRole('link', { name: 'Add worker filter' })
       .click();
     await expect(
       this.page
@@ -307,7 +307,7 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Ingress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.getByRole('textbox').fill(filter);
+    await this.page.locator('textarea').fill(filter);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();
@@ -328,7 +328,7 @@ export class TargetsPage extends BaseResourcePage {
     await this.page
       .getByText('Egress workers')
       .locator('..')
-      .getByRole('link', { name: 'Edit worker filter' })
+      .getByRole('link', { name: 'Add worker filter' })
       .click();
     await expect(
       this.page
@@ -336,7 +336,7 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Egress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.getByRole('textbox').fill(filter);
+    await this.page.locator('textarea').fill(filter);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();

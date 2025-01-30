@@ -46,3 +46,8 @@ export const FIELD_EXT_KEY =
 export const FIELD_EXT_VALUE =
   '[name="extensions"] tbody td:nth-of-type(2) input';
 export const FIELD_EXT_BTN = '[name="extensions"] button';
+
+export const MANAGE_DROPDOWN_CRED_LIB =
+  '[data-test-manage-credential-library-dropdown] button:first-child';
+export const MANAGE_DROPDOWN_CRED_LIB_DELETE =
+  '[data-test-manage-credential-library-dropdown] ul li button';

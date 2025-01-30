@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -135,9 +136,9 @@ module('Acceptance | targets | update', function (hooks) {
 
     await click(`[href="${urls.targets}"]`);
 
-    assert.dom('.rose-dialog').exists();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-    await click('.rose-dialog-footer button:first-child', 'Click Discard');
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
@@ -155,8 +156,8 @@ module('Acceptance | targets | update', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.target);
     await click(`[href="${urls.targets}"]`);
-    assert.dom('.rose-dialog').exists();
-    await click('.rose-dialog-footer button:last-child', 'Click Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(this.server.schema.targets.first().name, 'random string');
@@ -208,8 +209,8 @@ module('Acceptance | targets | update', function (hooks) {
     await fillIn('[name="address"]', '0.0.0.0');
     await click('[type="submit"]');
 
-    assert.dom('.rose-dialog').isVisible();
-    await click('.rose-dialog-footer .rose-button-primary', 'Remove resources');
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+    await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
@@ -253,8 +254,8 @@ module('Acceptance | targets | update', function (hooks) {
     await fillIn('[name="address"]', '0.0.0.0');
     await click('[type="submit"]');
 
-    assert.dom('.rose-dialog').isVisible();
-    await click('.rose-dialog-footer .rose-button-secondary', 'Cancel');
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+    await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,

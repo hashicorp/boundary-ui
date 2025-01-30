@@ -11,7 +11,7 @@ import { nanoid } from 'nanoid';
  * @param {string} hostCatalogId ID of the host catalog that the host will be created for.
  * @returns {Promise<string>} new host's ID
  */
-export async function createStaticHostCli(hostCatalogId) {
+export async function createStaticHost(hostCatalogId) {
   const hostName = 'static-host-' + nanoid();
   let host;
   try {

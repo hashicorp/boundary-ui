@@ -184,9 +184,9 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     try {
       await visit(urls.credentialLibraries);
     } catch (e) {
-      assert.dom(commonSelectors.DIALOG_UNSAVED_CHANGES).isVisible();
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-      await click(commonSelectors.DIALOG_UNSAVED_CHANGES_DISCARD);
+      await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
       assert.strictEqual(currentURL(), urls.credentialLibraries);
       assert.notEqual(
@@ -215,9 +215,9 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     try {
       await visit(urls.credentialLibraries);
     } catch {
-      assert.dom(commonSelectors.DIALOG_UNSAVED_CHANGES).isVisible();
+      assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
-      await click(commonSelectors.DIALOG_UNSAVED_CHANGES_CANCEL);
+      await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.credentialLibrary);
       assert.notEqual(
