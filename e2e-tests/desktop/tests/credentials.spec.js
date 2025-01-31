@@ -300,12 +300,12 @@ test.describe('Credential Panel tests', async () => {
         .filter({ hasText: 'nested.key2' })
         .locator('pre'),
     ).toHaveText(String.raw`val\tue2`);
-    // empty string and null should not be visible
-    expect(
+    // Empty string and null should not be visible
+    await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key3' }),
     ).not.toBeVisible();
 
-    expect(
+    await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key4' }),
     ).not.toBeVisible();
 
