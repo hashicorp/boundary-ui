@@ -89,6 +89,24 @@ module('Acceptance | credential-stores | create', function (hooks) {
     assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 
+  test('Users can create a new credential store of type vault with a worker filter', async function (assert) {
+    featuresService.enable('static-credentials');
+    featuresService.enable('vault-worker-filter');
+    const count = getVaultCredentialStoresCount();
+    await visit(urls.newCredentialStore);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(selectors.TYPE_VAULT);
+    await fillIn(
+      selectors.CODE_EDITOR_BODY,
+      selectors.EDITOR_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(selectors.CODE_BLOCK_BODY).doesNotExist();
+    assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
+  });
+
   test('Users can cancel create new credential stores', async function (assert) {
     const count = getCredentialStoresCount();
     await visit(urls.newCredentialStore);
