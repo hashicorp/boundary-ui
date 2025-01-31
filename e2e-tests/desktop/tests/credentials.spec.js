@@ -300,6 +300,48 @@ test.describe('Credential Panel tests', async () => {
         .filter({ hasText: 'nested.key2' })
         .locator('pre'),
     ).toHaveText(String.raw`val\tue2`);
+    // empty string and null should not be visible
+    expect(
+      authedPage.getByRole('listitem').filter({ hasText: 'nested.key3' }),
+    ).not.toBeVisible();
+
+    expect(
+      authedPage.getByRole('listitem').filter({ hasText: 'nested.key4' }),
+    ).not.toBeVisible();
+
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key5' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key5' })
+        .locator('pre'),
+    ).toHaveText('0');
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key6' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key6' })
+        .locator('pre'),
+    ).toHaveText('false');
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key7' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key7' })
+        .locator('pre'),
+    ).toHaveText('true');
 
     // SSH private key credential
     await expect(
