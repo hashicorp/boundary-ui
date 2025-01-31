@@ -23,3 +23,32 @@ export async function createStaticCredentialStore(request, projectId) {
 
   return checkResponse(response);
 }
+
+/**
+ * Creates a new vault credential store
+ * @param {import('@playwright/test').APIRequestContext} request
+ * @param {string} projectId ID of the project where the credential store will be created
+ * @param {string} vaultAddr Address of the vault server
+ * @param {string} vaultToken Token for the vault server
+ * @returns {Promise<Serializable>}
+ */
+export async function createVaultCredentialStore(
+  request,
+  projectId,
+  vaultAddr,
+  vaultToken,
+) {
+  const response = await request.post(`/v1/credential-stores`, {
+    data: {
+      name: `vault-credential-store-${nanoid()}`,
+      scope_id: projectId,
+      type: 'vault',
+      attributes: {
+        address: vaultAddr,
+        token: vaultToken,
+      },
+    },
+  });
+
+  return checkResponse(response);
+}

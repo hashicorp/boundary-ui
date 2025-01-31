@@ -28,12 +28,16 @@ module('Unit | Utility | flatten-nested-object', function () {
       d: {
         e: { f: { g: { h: '' } } },
       },
+      i: 0,
+      j: false,
     };
     const inputTwo = {
       d: { e: null },
     };
     const expectedResultOne = {
       'b.c': 2,
+      i: 0,
+      j: false,
     };
     const expectedResultTwo = {};
 
