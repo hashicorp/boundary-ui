@@ -71,7 +71,7 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   }
 
   /**
-   * Reapply policy dates via the `reapply-staorage-policy` method.
+   * Reapply policy dates via the `reapply-storage-policy` method.
    * @param {object} options
    * @param {object} options.adapterOptions
    * @return {Promise}
