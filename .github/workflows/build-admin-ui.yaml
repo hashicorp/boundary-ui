@@ -19,7 +19,7 @@ jobs:
           key: node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-
-      - uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
       - run: yarn install
@@ -37,17 +37,17 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
       - run: yarn run build:ui:admin:oss
       - name: Upload artifact admin-ui
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: admin-ui
           path: ./ui/admin/dist/
       - name: Upload artifact OSS admin UI
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: admin-ui-oss
           path: ./ui/admin/dist/
@@ -65,12 +65,12 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
       - run: yarn run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: admin-ui-ent
           path: ./ui/admin/dist/
@@ -88,12 +88,12 @@ jobs:
           restore-keys: |
             node-modules-
       - name: Build
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
       - run: yarn run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: admin-ui-hcp
           path: ./ui/admin/dist/
