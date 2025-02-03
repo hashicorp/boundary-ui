@@ -5,7 +5,7 @@
 
 import { expect, test } from '../fixtures/baseTest.js';
 
-test.describe('Settings Page tests', async () => {
+test.describe('Settings Page tests', () => {
   test.beforeEach(async ({ authedPage }) => {
     await authedPage.getByRole('link', { name: 'Settings' }).click();
   });

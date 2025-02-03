@@ -114,7 +114,7 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Targets tests', async () => {
+test.describe('Targets tests', () => {
   test('Connects to a tcp target with one host', async ({ authedPage }) => {
     await authedPage.getByRole('link', { name: targetWithHost.name }).click();
     await authedPage.getByRole('button', { name: 'Connect' }).click();
