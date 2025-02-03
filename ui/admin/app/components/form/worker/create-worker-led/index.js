@@ -38,7 +38,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =properties
   /**
-   * Returns directory creation text for `<Rose::CodeEditor>`.
+   * Returns directory creation text for `<Hds::CodeEditor>`.
    * @type {string}
    */
   get createConfigText() {
@@ -55,7 +55,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
   }
 
   /**
-   * Returns config creation text for `<Rose::CodeEditor>`. The user will see
+   * Returns config creation text for `<Hds::CodeEditor>`. The user will see
    * different outputs based on if they are using `hcp` or `oss` binaries.
    * @type {string}
    */
@@ -108,7 +108,7 @@ ${listenerText}
 
   /**
    * Returns boundary installation command and start worker server command
-   * for `<Rose::CodeEditor>`.
+   * for `<Hds::CodeEditor>`.
    * @type {string}
    */
   get installBoundaryText() {
@@ -127,33 +127,6 @@ unzip *.zip ;\\
     return this.features.isEnabled('byow-pki-hcp-cluster-id')
       ? hcpContent
       : ossContent;
-  }
-
-  /**
-   * Returns `shell` configuration object for `<Rose::CodeEditor>`.
-   * @type {Object}
-   */
-  get shellCodeEditor() {
-    return {
-      mode: 'shell',
-      readOnly: true,
-      lineNumbers: false,
-      cursorBlinkRate: -1,
-      styleActiveLine: false,
-    };
-  }
-
-  /**
-   * Returns `hcl` configuration object for `<Rose::CodeEditor>`.
-   * @type {Object}
-   */
-  get hclCodeEditor() {
-    return {
-      mode: 'hcl',
-      readOnly: true,
-      cursorBlinkRate: -1,
-      styleActiveLine: false,
-    };
   }
 
   //=methods
