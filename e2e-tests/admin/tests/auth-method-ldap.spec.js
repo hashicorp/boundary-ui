@@ -218,14 +218,14 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
       }
     }
 
-    expect(
+    await expect(
       page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
         .nth(fullNameIndex),
     ).toHaveText(ldapUserName);
-    expect(
+    await expect(
       page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
@@ -260,14 +260,14 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
       }
     }
 
-    expect(
+    await expect(
       page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
         .getByRole('cell')
         .nth(fullNameIndex),
     ).toHaveText(ldapUserName);
-    expect(
+    await expect(
       page
         .getByRole('cell', { name: ldapAccountName })
         .locator('..')
