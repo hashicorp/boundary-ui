@@ -6,32 +6,6 @@
 /* stylelint-disable selector-class-pattern */
 @use '../../variables/sizing';
 
-// Codemirror overrides
-.rose-codemirror-container {
-  width: 100%;
-}
-
-.CodeMirror {
-  max-width: 100%;
-  display: flex;
-  flex: 1;
-  font-family: ui-monospace, Menlo, monospace;
-}
-
-.rose-autosize {
-  .CodeMirror {
-    height: auto;
-  }
-}
-
-.CodeMirror-scroll {
-  width: 100%;
-}
-
-.CodeMirror-sizer {
-  border-right-width: 0 !important;
-}
-
 // Toolbar
 .rose-code-editor-toolbar {
   display: flex;
