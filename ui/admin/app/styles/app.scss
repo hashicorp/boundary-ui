@@ -279,18 +279,6 @@
   margin-bottom: sizing.rems(l);
   width: 100%;
 
-  .secret-editor-json {
-    .CodeMirror {
-      border-radius: sizing.rems(xxs);
-      height: var(--secret-editor-height);
-      display: block;
-    }
-
-    .CodeMirror-gutters {
-      background: var(--secret-editor-gutter);
-    }
-  }
-
   .secret-editor-skeleton-wrapper {
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor

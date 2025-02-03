@@ -566,12 +566,13 @@ module(
       await click(commonSelectors.EDIT_BTN);
 
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert.dom(selectors.REPLACE_SECRET_BTN).isVisible();
-
-      await click(selectors.REPLACE_SECRET_BTN);
-
-      assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
-      await waitUntil(() => assert.dom('.CodeMirror').isVisible());
+      assert.dom('.secret-editor-skeleton-message button').isVisible();
+      await click(
+        '.secret-editor-skeleton-message button',
+        'Enter editing mode',
+      );
+      assert.dom('.secret-editor-skeleton-message button').doesNotExist();
+      await waitUntil(() => assert.dom('.cm-editor').isVisible());
     });
   },
 );
