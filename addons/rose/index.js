@@ -12,10 +12,7 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    this.import('node_modules/codemirror/lib/codemirror.css');
-    this.import('node_modules/codemirror/theme/monokai.css');
-    this.import('node_modules/codemirror/addon/lint/lint.css');
-    this.import('node_modules/jsonlint/lib/jsonlint.js');
+    app.import('node_modules/jsonlint/lib/jsonlint.js');
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
