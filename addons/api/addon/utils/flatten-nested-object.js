@@ -18,8 +18,8 @@ export const flattenObject = (obj, result = {}, parentKey = '') => {
     if (typeOf(obj[key]) === 'object' && obj[key] !== null) {
       // Recursively flatten the object
       flattenObject(obj[key], result, `${parentKey}${key}.`);
-    } else if (obj[key]) {
-      // Only add to result if the value is not null
+    } else if (obj[key] !== null && obj[key] !== '') {
+      // Only add to result if the value is not null or an empty string
       result[`${parentKey}${key}`] = obj[key];
     }
   }

@@ -5,6 +5,7 @@
 
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
+import SessionPage from '../pages/sessionPage.js';
 
 let org;
 let targetWithHost;
@@ -122,10 +123,8 @@ test.describe('Sessions tests', async () => {
         .getByText('Pending'),
     ).toHaveCount(2);
 
-    // Cancel both sessions
-    for (const cancel of await authedPage.getByLabel('Cancel').all()) {
-      await cancel.click();
-    }
+    const sessionPage = new SessionPage(authedPage);
+    await sessionPage.cancelAllSessions();
 
     await expect(
       authedPage
@@ -181,11 +180,16 @@ test.describe('Filtering sessions tests', async () => {
     await expect(
       authedPage.getByRole('button', { name: 'Clear Filters' }),
     ).toBeHidden();
-    for (const cancel of await authedPage.getByLabel('Cancel').all()) {
-      await cancel.click();
-    }
 
-    await expect(authedPage.getByLabel('Cancel')).toHaveCount(0);
+    const sessionPage = new SessionPage(authedPage);
+    await sessionPage.cancelAllSessions();
+
+    await expect(
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') })
+        .getByLabel('Cancel'),
+    ).toHaveCount(0);
   });
 
   test('Filters by target', async ({ authedPage }) => {

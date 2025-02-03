@@ -16,6 +16,7 @@ export const NO_RESULTS_MSG = '[data-test-no-credential-store-results]';
 
 export const CODE_EDITOR_BODY = '[data-test-code-editor-field-editor] textarea';
 export const CODE_BLOCK_BODY = '.hds-code-block__code';
+export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
 
 export const TYPE_VAULT = '[value="vault"]';
 
