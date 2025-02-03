@@ -14,9 +14,6 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import('node_modules/codemirror/lib/codemirror.css');
-    app.import('node_modules/codemirror/theme/monokai.css');
-    app.import('node_modules/codemirror/addon/lint/lint.css');
     app.import('node_modules/jsonlint/lib/jsonlint.js');
 
     this.includeHDSStyles(app);
