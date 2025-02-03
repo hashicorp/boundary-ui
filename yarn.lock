@@ -11066,13 +11066,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror@npm:5.65.7":
-  version: 5.65.7
-  resolution: "codemirror@npm:5.65.7"
-  checksum: 10c0/0adb0ea5cc50094addc95f6864a41df989757c6d30e94dd3e9afe28d67598adf23540f0a6635464e290cc8d31b834ff54f32587243a023a5df7f55dd678708e5
-  languageName: node
-  linkType: hard
-
 "collect-v8-coverage@npm:^1.0.0":
   version: 1.0.1
   resolution: "collect-v8-coverage@npm:1.0.1"
@@ -22912,7 +22905,6 @@ __metadata:
     babel-plugin-ember-modules-api-polyfill: "npm:^2.12.0"
     babel-plugin-htmlbars-inline-precompile: "npm:3"
     broccoli-asset-rev: "npm:^3.0.0"
-    codemirror: "npm:5.65.7"
     concurrently: "npm:^9.1.0"
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.10.0"
