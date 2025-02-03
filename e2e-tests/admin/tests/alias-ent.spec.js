@@ -19,7 +19,7 @@ test.beforeAll(async () => {
   await boundaryCli.checkBoundaryCli();
 });
 
-test.describe('Aliases (Enterprise)', async () => {
+test.describe('Aliases (Enterprise)', () => {
   test('Set up alias from target details page @ent @aws @docker', async ({
     page,
     baseURL,
