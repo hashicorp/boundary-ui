@@ -494,7 +494,7 @@ module(
         'Enter editing mode',
       );
       assert.dom('.secret-editor-skeleton-message button').doesNotExist();
-      await waitUntil(() => assert.dom('.CodeMirror').isVisible());
+      await waitUntil(() => assert.dom('.cm-editor').isVisible());
     });
   },
 );
