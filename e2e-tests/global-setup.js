@@ -3,7 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { chromium, test as baseTest, mergeTests } from '@playwright/test';
+import {
+  chromium,
+  test as playwrightBaseTest,
+  mergeTests,
+} from '@playwright/test';
 import { checkEnv } from './helpers/general.js';
 import { LoginPage } from './admin/pages/login.js';
 import path from 'path';
@@ -56,7 +60,7 @@ export const authenticatedState = path.resolve(
 );
 
 // Centralized location for environment variables used in tests
-export const base = baseTest.extend({
+export const globalBaseTest = playwrightBaseTest.extend({
   adminAuthMethodId: process.env.E2E_PASSWORD_AUTH_METHOD_ID,
   adminLoginName: process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
   adminPassword: process.env.E2E_PASSWORD_ADMIN_PASSWORD,
@@ -88,4 +92,4 @@ export const base = baseTest.extend({
   workerTagEgress: process.env.E2E_WORKER_TAG_EGRESS,
 });
 
-export const test = mergeTests(baseTest, apiTest);
+export const test = mergeTests(globalBaseTest, apiTest);

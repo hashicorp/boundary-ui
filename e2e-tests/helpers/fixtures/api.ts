@@ -14,9 +14,12 @@ const ApiClasses = {
 export const apiTest = base.extend<ApiTestFixture>({
   boundaryApi: async ({}, use) => {
     const apis = {};
+
+    const openapiConfiguration = new Configuration({ basePath: process.env.BOUNDARY_ADDR ?? 'http://localhost:9200', headers: { Authorization: `Bearer ${process.env.E2E_TOKEN}` }})
+
     for (const domain in ApiClasses) {
       const DomainApiClass = ApiClasses[domain];
-      const api = new DomainApiClass();
+      const api = new DomainApiClass(openapiConfiguration);
       apis[domain] = api;
     }
 

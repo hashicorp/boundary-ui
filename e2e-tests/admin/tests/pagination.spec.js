@@ -5,12 +5,14 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
+import { nanoid } from 'nanoid';
 
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 
 test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
   page,
   request,
+  boundaryApi,
 }) => {
   let org;
   try {
@@ -21,11 +23,17 @@ test('Search and Pagination (Targets) @ce @ent @aws @docker', async ({
     let targets = [];
     const targetCount = 15;
     for (let i = 0; i < targetCount; i++) {
-      const target = await boundaryHttp.createTarget(request, {
-        scopeId: project.id,
-        type: 'tcp',
-        port: 22,
+      const target = await boundaryApi.target.targetServiceCreateTarget({
+        item: {
+          name: `Target-${nanoid()}`,
+          scopeId: project.id,
+          type: 'tcp',
+          attributes: {
+            default_port: 22,
+          },
+        },
       });
+      console.log({ target });
       targets.push(target);
     }
 
