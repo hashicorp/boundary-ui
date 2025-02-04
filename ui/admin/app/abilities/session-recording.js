@@ -32,10 +32,11 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
 
   /**
    * This override ensures that session recordings may be deleted only if the
-   * session-recording feature flag is enabled.
+   * session-recording feature flag is enabled and policy allows deletion.
    */
   get canDelete() {
-    return this.features.isEnabled('ssh-session-recording')
+    return this.features.isEnabled('ssh-session-recording') &&
+      !this.model.retainForever
       ? super.canDelete
       : false;
   }

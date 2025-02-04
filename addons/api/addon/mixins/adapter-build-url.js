@@ -6,7 +6,7 @@
 import Mixin from '@ember/object/mixin';
 
 /**
- * Overrides URL-building methods in an adpater for greater flexibility.
+ * Overrides URL-building methods in an adapter for greater flexibility.
  * Specifically enhances calls to `urlPrefix` with `modelName`, `id`, and
  * `snapshot`, which aren't normally passed.  And adds support for a
  * `urlSuffix` method, the return value of which is appended to the end of
@@ -22,7 +22,7 @@ export default Mixin.create({
 
   /**
    * This override behaves identically to the default method by default.
-   * It exists only to document the additional paramters to the method.
+   * It exists only to document the additional parameters to the method.
    * @override
    * @param {string} path
    * @param {string} parentURL
