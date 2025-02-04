@@ -23,11 +23,13 @@
     "admin:dev:firefox": "yarn run admin --project=firefox --headed",
     "admin:dev:safari": "yarn run admin --project=webkit --headed",
     "desktop": "yarn workspace desktop build && yarn run desktop:dev",
-    "desktop:dev": "yarn playwright test --config desktop/playwright.config.js --reporter=html"
+    "desktop:dev": "yarn playwright test --config desktop/playwright.config.js --reporter=html",
+    "generate:api-client": "scripts/generate-client.cjs"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.21.3",
+    "@openapitools/openapi-generator-cli": "^2.16.3",
     "@playwright/test": "^1.49.0",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
