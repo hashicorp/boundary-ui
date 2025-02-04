@@ -260,12 +260,7 @@
                       @model.sessionRecording.retain_until
                     }}
                   >
-                    {{#if
-                      (eq
-                        (format-date-iso @model.sessionRecording.retain_until)
-                        '9999-12-31T23:23:23.999Z'
-                      )
-                    }}
+                    {{#if @model.sessionRecording.retainForever}}
                       {{t 'resources.policy.titles.forever'}}
                     {{else}}
                       {{format-date-iso @model.sessionRecording.retain_until}}

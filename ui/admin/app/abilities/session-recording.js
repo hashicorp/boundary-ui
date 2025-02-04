@@ -35,9 +35,8 @@ export default class OverrideSessionRecordingAbility extends SessionRecordingAbi
    * session-recording feature flag is enabled and policy allows deletion.
    */
   get canDelete() {
-    const retainForever =
-      this.model.retain_until?.toISOString() === '9999-12-31T23:23:23.999Z';
-    return this.features.isEnabled('ssh-session-recording') && !retainForever
+    return this.features.isEnabled('ssh-session-recording') &&
+      !this.model.retainForever
       ? super.canDelete
       : false;
   }

@@ -71,6 +71,14 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
   }
 
   /**
+   * Returns true if retention of session-recording is forever.
+   * @type {boolean}
+   */
+  get retainForever() {
+    return this.retain_until?.toISOString() === '9999-12-31T23:23:23.999Z';
+  }
+
+  /**
    * Reapply policy dates via the `reapply-storage-policy` method.
    * @param {object} options
    * @param {object} options.adapterOptions
