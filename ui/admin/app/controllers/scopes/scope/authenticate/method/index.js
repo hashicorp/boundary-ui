@@ -47,7 +47,6 @@ export default class ScopesScopeAuthenticateMethodIndexController extends Contro
           requestCookies,
           { scope, authMethod },
         );
-        this.router.transitionTo('index');
         break;
       case TYPE_AUTH_METHOD_OIDC:
         await this.startOIDCAuthentication(authenticatorName, {

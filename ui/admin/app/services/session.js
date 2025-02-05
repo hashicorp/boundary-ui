@@ -6,6 +6,7 @@
 import BaseSessionService from 'ember-simple-auth/services/session';
 import { inject as service } from '@ember/service';
 import { formatDbName } from 'api/services/indexed-db';
+import { getOwner } from '@ember/application';
 
 export default class SessionService extends BaseSessionService {
   @service indexedDb;
@@ -15,13 +16,13 @@ export default class SessionService extends BaseSessionService {
    * Extend ember simple auth's handleAuthentication method
    * so we can hook in and setup the DB after a successful authentication
    */
-  handleAuthentication() {
-    super.handleAuthentication(...arguments);
-
+  async handleAuthentication() {
     const userId = this.data?.authenticated?.user_id;
     const hostUrl = this.window.location.host;
     if (userId && hostUrl) {
-      this.indexedDb.setup(formatDbName(userId, hostUrl));
+      await this.indexedDb.setup(formatDbName(userId, hostUrl));
     }
+
+    super.handleAuthentication(getOwner(this), "index");
   }
 }
