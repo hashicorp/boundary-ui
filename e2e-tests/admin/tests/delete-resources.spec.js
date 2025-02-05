@@ -27,8 +27,6 @@ test.beforeAll(async () => {
 
 test.beforeEach(
   async ({ baseURL, adminAuthMethodId, adminLoginName, adminPassword }) => {
-    execSync(`vault policy delete ${secretPolicyName}`);
-    execSync(`vault policy delete ${boundaryPolicyName}`);
     await boundaryCli.authenticateBoundary(
       baseURL,
       adminAuthMethodId,
@@ -37,6 +35,11 @@ test.beforeEach(
     );
   },
 );
+
+test.afterEach(() => {
+  execSync(`vault policy delete ${secretPolicyName}`);
+  execSync(`vault policy delete ${boundaryPolicyName}`);
+});
 
 test('Verify resources can be deleted @ce @aws', async ({
   page,
