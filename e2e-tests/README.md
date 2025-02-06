@@ -11,11 +11,16 @@
     - [Setup AWS:](#setup-aws)
     - [Setup Enos:](#setup-enos)
   - [Run tests:](#run-tests)
+    - [Choosing the Correct Enos Scenario](#choosing-the-correct-enos-scenario)
+      - [Admin](#admin)
+      - [Desktop](#desktop)
     - [Launch Enos Scenario](#launch-enos-scenario)
-    - [Admin](#admin)
-    - [Desktop](#desktop)
+      - [Admin](#admin-1)
+      - [Desktop](#desktop-1)
     - [Destroy Enos Scenario](#destroy-enos-scenario)
   - [Developing Tests](#developing-tests)
+    - [Test names and tagging](#test-names-and-tagging)
+    - [Selecting / Locating Elements](#selecting--locating-elements)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -107,6 +112,7 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 - `aws_ssh_private_key_path`: The path to the private key associated with your keypair.
 - `enos_user`: The user name to use for tagged resources in AWS.
 - `e2e_debug_no_run`: Make sure this is set to true.
+- `boundary_license_path` (enterprise only): Path to an enterprise license
 
 More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
@@ -124,15 +130,34 @@ UI_COMMITISH=$(git -C <boundary-ui(-enterprise) repo path> rev-parse HEAD) make 
 ```
 
 ## Run tests:
+Make sure you followed all the steps within the [Getting started section](#getting-started).
 
-Before running the e2e test locally, we need to launch an Enos Scenario. Make sure you followed all the steps within the [Getting started section](#getting-started).
+### Choosing the Correct Enos Scenario
+Before running e2e tests locally, we need to launch the correct Enos Scenario.
+
+#### Admin
+Tests names are tagged (eg: `@docker`) to show which enos scenarios are supported. Some tests will support multiple tags while others require a specific enos scenario in order to run successfully. Put another way, not all tests will run successfully under all enos scenarios. Either check the test name and its corresponding tags or use the `--list` flag for any playwright command to output tests covered:
+* `yarn admin:ce:aws --list`
+* `yarn admin:ce:docker --list`
+* `yarn admin:ent:aws --list`
+* `yarn admin:ent:docker --list`
+
+Corresponding Enos Scenario for Given Tags
+|               | `@aws`                     | `@docker`                     |
+| ------------- | -------------------------- | ----------------------------- |
+| `@ce`         | scenario: `e2e_ui_aws`     | scenario: `e2e_ui_docker`     |
+| `@enterprise` | scenario: `e2e_ui_aws_ent` | scenario: `e2e_ui_docker_ent` |
+
+#### Desktop
+
+Currently the desktop client e2e tests assumes using the an enterprise enos scenario, either: `e2e_ui_aws_ent` (with aws) or `e2e_ui_docker_ent`  (with docker)
+
+### Launch Enos Scenario
 
 It is not necessary, but from this point we recommend having 2 terminals open.
 
 - Terminal 1: Will be used to run enos (Boundary).
 - Terminal 2: Will be used to run e2e UI tests (Boundary UI).
-
-### Launch Enos Scenario
 
 Using Terminal 1:
 
@@ -149,9 +174,9 @@ bash scripts/test_e2e_env.sh > (boundary-ui directory)/e2e-tests/.env
 ```
 
 > [!IMPORTANT]
-> Be aware that once the scenario is launched you will create and run resources within AWS. After you are done using the scenario, [you should destroy it](#destroy-enos-scenario).
+> Be aware that once an aws scenario is launched you will create and run resources within AWS. After you are done using the scenario, [you should destroy it](#destroy-enos-scenario). This isn't necessary but still a good idea for docker enos scenarios.
 
-### Admin
+#### Admin
 
 Using Terminal 2:
 
@@ -159,8 +184,14 @@ Set the env variables `test_e2e_env.sh` script output in this terminal.
 
 ```bash
 cd boundary-ui/e2e-tests
-yarn run admin
 ```
+
+Run the command for the corresponding enos scenario to run all supported tests:
+|               | `@aws`                            | `@docker`                            |
+| ------------- | --------------------------------- | ------------------------------------ |
+| `@ce`         | command: `yarn run admin:ce:aws`  | command: `admin:ce:docker`           |
+| `@enterprise` | command: `yarn run admin:ent:aws` | command: `yarn run admin:ent:docker` |
+
 
 Here are some additional commands to assist with debugging.
 
@@ -170,19 +201,7 @@ PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.j
 PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js --debug
 ```
 
-To run all tests for a certain configuration, you can use the following shortcuts
-
-```bash
-# Runs all tests pertaining to the Community Edition
-yarn run e2e:ce:aws
-yarn run e2e:ce:docker
-
-# Runs all tests pertaining to the Enterprise Edition
-yarn run e2e:ent:aws
-yarn run e2e:ent:docker
-```
-
-### Desktop
+#### Desktop
 
 > [!NOTE]
 > Currently the desktop client e2e tests assumes that the Boundary server is an enterprise edition.
@@ -202,18 +221,36 @@ yarn run desktop
 
 Using Terminal 1:
 
-```bash
-# Community Edition
-enos scenario destroy e2e_ui_aws builder:local
+Destroy the previously launched enos scenario:
 
-# Enterprise Edition
+```bash
+# aws / ce
+enos scenario destroy e2e_ui_aws builder:local
+```
+
+```bash
+# aws / enterprise
 enos scenario destroy e2e_ui_aws_ent builder:local
+```
+
+```bash
+# docker / ce
+enos scenario destroy e2e_ui_docker builder:local
+```
+
+```bash
+# docker / enterprise
+enos scenario destroy e2e_ui_docker_ent builder:local
 ```
 
 After all the steps pass, you should see a `Enos operations finished!`.
 
 ## Developing Tests
 
+### Test names and tagging
+For admin tests, it's important to tag the test with the correct tags to denote which enos scenario is supported by the test. The test tags should have at least specifying the edition (`@ce`, `@ent`) and at least one specifying the enos test infrastructure (`@aws`, or `@docker`).
+
+### Selecting / Locating Elements
 It is recommended to use locators that resemble how users interact with the application. `getByRole`
 should be the most prioritized locator as this is the closest way to how users and
 accessibility features perceive the page. `getByLabel` should be used for form fields.
