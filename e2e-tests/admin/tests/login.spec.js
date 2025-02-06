@@ -36,7 +36,7 @@ test('Log in, log out, and then log back in @ce @ent @aws @docker', async ({
   ).toBeVisible();
 });
 
-test.describe('Failure Cases', async () => {
+test.describe('Failure Cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });

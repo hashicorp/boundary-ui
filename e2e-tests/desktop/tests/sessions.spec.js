@@ -91,7 +91,7 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Sessions tests', async () => {
+test.describe('Sessions tests', () => {
   test('Establishes two different sessions and cancels them', async ({
     authedPage,
   }) => {
@@ -135,7 +135,7 @@ test.describe('Sessions tests', async () => {
   });
 });
 
-test.describe('Filtering sessions tests', async () => {
+test.describe('Filtering sessions tests', () => {
   test.beforeEach(async ({ authedPage }) => {
     // Connect to three targets
     await authedPage

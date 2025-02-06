@@ -46,11 +46,11 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Scope tests', async () => {
+test.describe('Scope tests', () => {
   test('Shows the filtered targets based on selected scope', async ({
     authedPage,
   }) => {
-    const headerNavLocator = await authedPage.getByLabel('header-nav');
+    const headerNavLocator = authedPage.getByLabel('header-nav');
     await expect(headerNavLocator).toBeVisible();
     await expect(headerNavLocator.locator('summary')).toHaveText('Global');
 
@@ -62,7 +62,7 @@ test.describe('Scope tests', async () => {
     ).toBeVisible();
 
     await headerNavLocator.click();
-    const orgAHeaderNavLink = await authedPage.getByRole('link', {
+    const orgAHeaderNavLink = authedPage.getByRole('link', {
       name: orgA.name,
     });
     await orgAHeaderNavLink.click();
@@ -73,10 +73,10 @@ test.describe('Scope tests', async () => {
     ).toBeVisible();
     await expect(
       authedPage.getByRole('link', { name: targetB.name }),
-    ).not.toBeVisible();
+    ).toBeHidden();
 
     await headerNavLocator.click();
-    const orgBHeaderNavLink = await authedPage.getByRole('link', {
+    const orgBHeaderNavLink = authedPage.getByRole('link', {
       name: orgB.name,
     });
     await orgBHeaderNavLink.click();
@@ -87,6 +87,6 @@ test.describe('Scope tests', async () => {
     ).toBeVisible();
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),
-    ).not.toBeVisible();
+    ).toBeHidden();
   });
 });

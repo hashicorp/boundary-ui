@@ -203,7 +203,7 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Credential Panel tests', async () => {
+test.describe('Credential Panel tests', () => {
   test('Display Vault brokered Credentials and handle special characters', async ({
     authedPage,
   }) => {
