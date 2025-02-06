@@ -30,8 +30,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    orgScope: null,
     projectScope: null,
     credentialStores: null,
     staticCredentialStore: null,
@@ -59,8 +57,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
       type: 'vault',
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.credentialStores = `${urls.projectScope}/credential-stores`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
@@ -74,22 +70,24 @@ module('Acceptance | credential-stores | read', function (hooks) {
   test('visiting static credential store', async function (assert) {
     featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
 
-    await click(`[href="${urls.staticCredentialStore}"]`);
-    await a11yAudit();
+    await click(commonSelectors.HREF(urls.staticCredentialStore));
 
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
   });
 
   test('visiting vault credential store', async function (assert) {
     await visit(urls.credentialStores);
+
     assert.strictEqual(currentURL(), urls.credentialStores);
 
-    await click(`[href="${urls.vaultCredentialStore}"]`);
-    await a11yAudit();
+    await click(commonSelectors.HREF(urls.vaultCredentialStore));
 
+    await a11yAudit();
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
   });
 
@@ -100,7 +98,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
         (item) => item !== 'read',
       );
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultCredentialStore))
@@ -118,7 +116,7 @@ module('Acceptance | credential-stores | read', function (hooks) {
         (item) => item !== 'read',
       );
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticCredentialStore))
@@ -130,8 +128,8 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     await visit(urls.unknownCredentialStore);
-    await a11yAudit();
 
+    await a11yAudit();
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
@@ -140,13 +138,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   test('users can link to docs page for credential store', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.credentialStores}"]`);
+    await click(commonSelectors.HREF(urls.credentialStores));
 
     assert
       .dom(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores"]`,
+        commonSelectors.HREF(
+          'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores',
+        ),
       )
-      .exists();
+      .isVisible();
   });
 
   test('users can navigate to credential store and incorrect url auto-corrects', async function (assert) {
