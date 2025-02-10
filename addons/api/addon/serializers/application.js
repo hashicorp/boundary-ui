@@ -121,7 +121,7 @@ export default class ApplicationSerializer extends RESTSerializer {
       // Right now, we've only identified one string-array attribute that
       // will err if not trimmed before sending to backend
       // This fix may require a refactor in the future
-    } else if (type === 'string-array') {
+    } else if (type === 'string-array' && json?.preferred_endpoints) {
       json.preferred_endpoints = json.preferred_endpoints.map((str) =>
         str.trim(),
       );

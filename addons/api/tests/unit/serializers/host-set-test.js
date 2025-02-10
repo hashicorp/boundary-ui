@@ -54,7 +54,7 @@ module('Unit | Serializer | host set', function (hooks) {
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
-      preferred_endpoints: [{ value: 'option 1' }, { value: 'option 2' }],
+      preferred_endpoints: [{ value: ' option 1' }, { value: 'option 2 ' }],
       sync_interval_seconds: 1,
       filters: [{ value: 'filter 1' }, { value: 'filter 2' }],
     });
@@ -63,7 +63,7 @@ module('Unit | Serializer | host set', function (hooks) {
       description: 'Description',
       host_catalog_id: '123',
       version: 1,
-      preferred_endpoints: ['option 1 ', ' option 2'],
+      preferred_endpoints: ['option 1', 'option 2'],
       sync_interval_seconds: 1,
       attributes: {
         filters: ['filter 1', 'filter 2'],
