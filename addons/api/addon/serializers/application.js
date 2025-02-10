@@ -109,18 +109,22 @@ export default class ApplicationSerializer extends RESTSerializer {
         deleteKey(json);
       }
     }
-    if (
-      options.trimWhitespace &&
-      json.attributes[attribute?.name] &&
-      options.isNestedAttribute &&
-      type === 'string'
-    ) {
-      console.log('str', json);
-      json.attributes[attribute.name] = json.attributes[attribute.name].trim();
-    } else if (options.trimWhitespace && type === 'array') {
-      console.log('arr', json);
-      // console.log(json.preferred_endpoints);
-      // json.preferred_endpoints = json.preferred_endpoints.map(str => str.trim());
+    if (options.trimWhitespace) {
+      if (
+        options.isNestedAttribute &&
+        json.attributes[attribute?.name] &&
+        type === 'string'
+      ) {
+        json.attributes[attribute.name] =
+          json.attributes[attribute.name].trim();
+      }
+      // Right now, we've only identified one string-array attribute that
+      // will err if not trimmed before sending to backend
+      // This fix may require a refactor in the future
+    } else if (type === 'string-array') {
+      json.preferred_endpoints = json.preferred_endpoints.map((str) =>
+        str.trim(),
+      );
     }
     return value;
   }
