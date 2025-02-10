@@ -10,4 +10,5 @@ export default class ScopesScopeController extends Controller {
   // =services
 
   @service session;
+  @service scope;
 }
