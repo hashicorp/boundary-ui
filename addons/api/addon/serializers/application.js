@@ -112,9 +112,15 @@ export default class ApplicationSerializer extends RESTSerializer {
     if (
       options.trimWhitespace &&
       json.attributes[attribute?.name] &&
+      options.isNestedAttribute &&
       type === 'string'
     ) {
+      console.log('str', json);
       json.attributes[attribute.name] = json.attributes[attribute.name].trim();
+    } else if (options.trimWhitespace && type === 'array') {
+      console.log('arr', json);
+      // console.log(json.preferred_endpoints);
+      // json.preferred_endpoints = json.preferred_endpoints.map(str => str.trim());
     }
     return value;
   }
