@@ -47,7 +47,8 @@
     "lint-staged": "^15.2.10"
   },
   "resolutions": {
-    "micromatch": "^4.0.8"
+    "micromatch": "^4.0.8",
+    "underscore": "^1.13.1"
   },
   "config": {
     "commitizen": {
