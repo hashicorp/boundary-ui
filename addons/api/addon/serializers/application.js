@@ -61,6 +61,18 @@ export default class ApplicationSerializer extends RESTSerializer {
     // TODO:  disabled is temporarily disabled
     if (key === 'disabled') delete json[key];
     // Push nested attributes down into the attributes key
+
+    // Before we transform our json
+    // Let's trim the values in the json obj
+    // Currently, json values will only ever be a string or an array
+    if (options.trimWhitespace && json[key]) {
+      if (typeOf(json[key]) === 'array') {
+        json[key] = json[key].map((str) => str.trim());
+      } else if (typeOf(json[key] === 'string')) {
+        json[key] = json[key].trim();
+      }
+    }
+
     if (options.isNestedAttribute && json[key] !== undefined) {
       if (!json.attributes) json.attributes = {};
       json.attributes[key] = json[key];
@@ -108,23 +120,6 @@ export default class ApplicationSerializer extends RESTSerializer {
       ) {
         deleteKey(json);
       }
-    }
-    if (options.trimWhitespace) {
-      if (
-        options.isNestedAttribute &&
-        json.attributes[attribute?.name] &&
-        type === 'string'
-      ) {
-        json.attributes[attribute.name] =
-          json.attributes[attribute.name].trim();
-      }
-      // Right now, we've only identified one string-array attribute that
-      // will err if not trimmed before sending to backend
-      // This fix may require a refactor in the future
-    } else if (type === 'string-array' && json?.preferred_endpoints) {
-      json.preferred_endpoints = json.preferred_endpoints.map((str) =>
-        str.trim(),
-      );
     }
     return value;
   }
