@@ -47,8 +47,11 @@
     "lint-staged": "^15.2.10"
   },
   "resolutions": {
+    "nomnom/underscore": "^1.12.1",
+    "ember-stargate": "^0.6.0",
     "micromatch": "^4.0.8",
-    "underscore": "^1.13.1"
+    "decorator-transforms": "^2.2.2",
+    "eslint": "^8.54.0"
   },
   "config": {
     "commitizen": {
