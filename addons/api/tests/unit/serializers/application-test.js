@@ -381,4 +381,29 @@ module('Unit | Serializer | application', function (hooks) {
       },
     });
   });
+
+  // JSON values will only be trimmed if the model attr
+  // includes the trimWhitespace property set to true
+  // See preferred_endpoints attr on host-set model
+  test('it trims whitespace on json values', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const record = store.createRecord('host-set', {
+      name: 'Host Set 1',
+      compositeType: 'azure',
+      description: 'Description',
+      host_catalog_id: '123',
+      version: 1,
+      preferred_endpoints: [{ value: ' option 1' }, { value: 'option 2 ' }],
+      sync_interval_seconds: 1,
+    });
+    assert.deepEqual(record.serialize(), {
+      name: 'Host Set 1',
+      description: 'Description',
+      host_catalog_id: '123',
+      version: 1,
+      preferred_endpoints: ['option 1', 'option 2'],
+      sync_interval_seconds: 1,
+      attributes: {},
+    });
+  });
 });

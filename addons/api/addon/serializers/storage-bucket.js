@@ -72,6 +72,7 @@ export default class StorageBucketSerializer extends ApplicationSerializer {
     const value = super.serializeAttribute(...arguments);
     const { credentialType } = snapshot.record;
     const { options } = attribute;
+
     // This deletes any fields that don't belong to the record's credential type
     if (options.isNestedAttribute && json.attributes) {
       // The key must be included in the fieldsByType list above
