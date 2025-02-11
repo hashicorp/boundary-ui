@@ -43,6 +43,8 @@ export const MODAL_WARNING_CANCEL_BTN =
 export const MODAL_WARNING_TITLE = '.hds-modal__header';
 export const MODAL_WARNING_MESSAGE = '.hds-modal__body';
 
+// Search filtering selectors
+export const SEARCH_INPUT = '.search-filtering [type="search"]';
 export const FILTER_DROPDOWN = (filterName) =>
   `.search-filtering [name="${filterName}"] button`;
 export const FILTER_DROPDOWN_ITEM = (itemList) => `input[value="${itemList}"]`;

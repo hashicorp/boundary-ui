@@ -89,6 +89,11 @@ test.beforeEach(
         nested: {
           key1: String.raw`val\bue1`,
           key2: String.raw`val\tue2`,
+          key3: '',
+          key4: null,
+          key5: 0,
+          key6: false,
+          key7: true,
         },
       },
     });
@@ -111,6 +116,8 @@ test.beforeEach(
         secretsPath,
         secretName,
         `password=${String.raw`pass\word`}`,
+        'private_key=0',
+        'username=false',
       ],
       {
         encoding: 'utf-8',
@@ -224,6 +231,28 @@ test.describe('Credential Panel tests', async () => {
         .filter({ hasText: 'password' })
         .locator('pre'),
     ).toHaveText(String.raw`pass\word`);
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'private_key' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'private_key' })
+        .locator('pre'),
+    ).toHaveText('0');
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'username' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'username' })
+        .locator('pre'),
+    ).toHaveText('false');
 
     // End session as active sessions will show a popup when trying to close the DC
     await authedPage.getByRole('button', { name: 'End Session' }).click();
@@ -271,6 +300,48 @@ test.describe('Credential Panel tests', async () => {
         .filter({ hasText: 'nested.key2' })
         .locator('pre'),
     ).toHaveText(String.raw`val\tue2`);
+    // Empty string and null should not be visible
+    await expect(
+      authedPage.getByRole('listitem').filter({ hasText: 'nested.key3' }),
+    ).not.toBeVisible();
+
+    await expect(
+      authedPage.getByRole('listitem').filter({ hasText: 'nested.key4' }),
+    ).not.toBeVisible();
+
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key5' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key5' })
+        .locator('pre'),
+    ).toHaveText('0');
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key6' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key6' })
+        .locator('pre'),
+    ).toHaveText('false');
+    await authedPage
+      .getByRole('listitem')
+      .filter({ hasText: 'nested.key7' })
+      .getByLabel('Toggle secret visibility')
+      .click();
+    await expect(
+      authedPage
+        .getByRole('listitem')
+        .filter({ hasText: 'nested.key7' })
+        .locator('pre'),
+    ).toHaveText('true');
 
     // SSH private key credential
     await expect(
