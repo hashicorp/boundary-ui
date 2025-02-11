@@ -159,5 +159,5 @@ worker-filter-generator:
     label: Name
     helper: Format a worker name
   operator:
-    matches: matches
+    matches: matches (regex)
     contains: contains

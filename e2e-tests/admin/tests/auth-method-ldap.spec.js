@@ -109,7 +109,7 @@ test('Set up LDAP auth method @ce @ent @docker', async ({
     ).toBeVisible();
 
     // Change state to active-public
-    await page.getByTitle('Inactive').click();
+    await page.getByRole('button', { name: 'Inactive' }).click();
     await page.getByText('Public').click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),

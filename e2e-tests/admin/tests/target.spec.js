@@ -211,10 +211,10 @@ test('Verify TCP target is updated @ce @aws @docker', async ({
     ).toBeVisible();
     await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-    await page.getByRole('textbox').click({ force: true });
+    await page.locator('textarea').click({ force: true });
     await page.keyboard.press('Meta+A');
     await page.keyboard.press('Backspace');
-    await page.getByRole('textbox').fill('"prod" in "/tags/type"');
+    await page.locator('textarea').fill('"prod" in "/tags/type"');
     await page.getByRole('button', { name: 'Save' }).click();
     const basePage = new BasePage(page);
     await basePage.dismissSuccessAlert();

@@ -71,7 +71,7 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
     );
 
     // Change OIDC Auth Method state to active-public
-    await page.getByTitle('Inactive').click();
+    await page.getByRole('button', { name: 'Inactive' }).click();
     await page.getByText('Public').click();
     await expect(
       page.getByRole('alert').getByText('Success', { exact: true }),
@@ -140,6 +140,11 @@ test('Set up OIDC auth method @ce @ent @docker @aws', async ({
 
     // View the OIDC account and verify account attributes
     await page.getByRole('link', { name: orgName }).click();
+    await expect(
+      page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(orgName),
+    ).toBeVisible();
     await page
       .getByRole('navigation', { name: 'IAM' })
       .getByRole('link', { name: 'Auth Methods' })

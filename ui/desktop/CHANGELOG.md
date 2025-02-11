@@ -2,6 +2,18 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.3.0 [CLI 0.19.0] (2025.02.10)
+
+### New & Improved
+
+- Upgrade CLI to v0.19.0 ([PR](https://github.com/hashicorp/boundary-ui/pull/2670))
+- Update how we display brokered credentials from Vault ([PR](https://github.com/hashicorp/boundary-ui/pull/2583))
+- Update how we display brokered static JSON credentials ([PR](https://github.com/hashicorp/boundary-ui/pull/2611))
+
+### Bug Fixes
+
+- Fix memory leak for OIDC authentication ([PR](https://github.com/hashicorp/boundary-ui/pull/2640))
+
 ## V2.2.0 [CLI 0.18.0] (2024.10.14)
 
 ### New
