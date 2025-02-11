@@ -13,6 +13,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | auth-methods | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -21,14 +22,6 @@ module('Acceptance | auth-methods | delete', function (hooks) {
 
   let featuresService;
   let getAuthMethodCount;
-
-  const ERROR_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-auth-method] ul li:last-child button';
 
   const instances = {
     scopes: {
@@ -75,9 +68,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodsCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
 
     assert.strictEqual(getAuthMethodCount(), authMethodsCount - 1);
   });
@@ -87,9 +80,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodsCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
 
     assert.strictEqual(getAuthMethodCount(), authMethodsCount - 1);
   });
@@ -108,12 +101,12 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     });
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('errors are displayed when delete on an ldap auth method fails', async function (assert) {
@@ -131,12 +124,12 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     });
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('cannot delete an auth method without proper authorization', async function (assert) {
@@ -146,10 +139,10 @@ module('Acceptance | auth-methods | delete', function (hooks) {
       );
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
 
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_DELETE).doesNotExist();
   });
 
   test('cannot delete an ldap auth method without proper authorization', async function (assert) {
@@ -160,10 +153,10 @@ module('Acceptance | auth-methods | delete', function (hooks) {
       );
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN);
 
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_DELETE).doesNotExist();
   });
 
   test('user can accept delete auth method via dialog', async function (assert) {
@@ -172,9 +165,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethods);
@@ -188,9 +181,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethods);
@@ -203,9 +196,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.authMethod);
@@ -219,9 +212,9 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     const authMethodCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.ldapAuthMethod);

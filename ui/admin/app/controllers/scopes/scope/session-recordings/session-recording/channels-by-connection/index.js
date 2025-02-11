@@ -78,8 +78,13 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   @notifyError(({ message }) => message, { catch: true })
   @notifySuccess('notifications.delete-success')
   async delete(sessionRecording) {
-    await sessionRecording.destroyRecord();
-    this.router.replaceWith('scopes.scope.session-recordings');
-    this.router.refresh();
+    try {
+      await sessionRecording.destroyRecord();
+      this.router.replaceWith('scopes.scope.session-recordings');
+      await this.router.refresh('scopes.scope.session-recordings');
+    } catch (e) {
+      sessionRecording.rollbackAttributes();
+      throw new Error(e);
+    }
   }
 }

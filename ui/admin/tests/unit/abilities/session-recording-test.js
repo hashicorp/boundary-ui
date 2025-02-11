@@ -5,7 +5,11 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { TYPE_SESSION_RECORDING_SSH } from 'api/models/session-recording';
+import {
+  TYPE_SESSION_RECORDING_SSH,
+  STATE_SESSION_RECORDING_AVAILABLE,
+} from 'api/models/session-recording';
+import { faker } from '@faker-js/faker';
 
 module('Unit | Abilities | session-recording', function (hooks) {
   setupTest(hooks);
@@ -175,6 +179,70 @@ module('Unit | Abilities | session-recording', function (hooks) {
       canService.can('navigate scope', scopeModelWithoutAuthorizedAction, {
         collection: 'session-recordings',
       }),
+    );
+  });
+
+  test('can delete session recording when feature is enabled', async function (assert) {
+    features.enable('ssh-session-recording');
+    const recordingWithAuthorizedAction = await store.createRecord(
+      'session-recording',
+      {
+        authorized_actions: ['delete'],
+        type: TYPE_SESSION_RECORDING_SSH,
+        state: STATE_SESSION_RECORDING_AVAILABLE,
+        retain_until: faker.date.recent(),
+      },
+    );
+    const recordingWithoutAuthorizedAction = store.createRecord(
+      'session-recording',
+      {
+        authorized_actions: [],
+        type: TYPE_SESSION_RECORDING_SSH,
+        state: STATE_SESSION_RECORDING_AVAILABLE,
+        retain_until: faker.date.recent(),
+      },
+    );
+
+    assert.true(
+      canService.can('delete session-recording', recordingWithAuthorizedAction),
+    );
+    assert.false(
+      canService.can(
+        'delete session-recording',
+        recordingWithoutAuthorizedAction,
+      ),
+    );
+  });
+
+  test('cannot delete session recording when feature is enabled but retain policy is forever', async function (assert) {
+    features.enable('ssh-session-recording');
+    const recordingWithAuthorizedAction = await store.createRecord(
+      'session-recording',
+      {
+        authorized_actions: ['delete'],
+        type: TYPE_SESSION_RECORDING_SSH,
+        state: STATE_SESSION_RECORDING_AVAILABLE,
+        retain_until: new Date('9999-12-31T23:23:23.999Z'),
+      },
+    );
+    const recordingWithoutAuthorizedAction = store.createRecord(
+      'session-recording',
+      {
+        authorized_actions: [],
+        type: TYPE_SESSION_RECORDING_SSH,
+        state: STATE_SESSION_RECORDING_AVAILABLE,
+        retain_until: new Date('9999-12-31T23:23:23.999Z'),
+      },
+    );
+
+    assert.false(
+      canService.can('delete session-recording', recordingWithAuthorizedAction),
+    );
+    assert.false(
+      canService.can(
+        'delete session-recording',
+        recordingWithoutAuthorizedAction,
+      ),
     );
   });
 });

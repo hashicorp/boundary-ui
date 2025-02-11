@@ -99,6 +99,8 @@ export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error mess
 export const MANAGE_DROPDOWN = '[data-test-manage-auth-method] button';
 export const MANAGE_DROPDOWN_MAKE_PRIMARY =
   '[data-test-manage-auth-method] ul li:first-child button';
+export const MANAGE_DROPDOWN_DELETE =
+  '[data-test-manage-auth-method] ul li:last-child button';
 
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';
