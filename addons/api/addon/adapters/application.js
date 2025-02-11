@@ -163,7 +163,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
   }
 
   /**
-   * Overrides default ajax method by rewritting PUT requests as PATCH.
+   * Overrides default ajax method by rewriting PUT requests as PATCH.
    * PATCH is the request method used by our API for updates.
    *
    * @override
