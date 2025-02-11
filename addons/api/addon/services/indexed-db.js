@@ -117,21 +117,18 @@ export default class IndexedDbService extends Service {
       return;
     }
 
-    // If the database doesn't exist, just create it and skip checking version
     const doesDbExist = await Dexie.exists(dbName);
-    if (!doesDbExist) {
-      this.#db = new Dexie(dbName);
-      this.#db.version(this.#version).stores(modelIndexes);
-      return;
-    }
 
-    // Open the database and check if the version is a lower version than the current one
-    const dbVerifier = new Dexie(dbName);
-    await dbVerifier.open();
-    if (dbVerifier.verno < this.#version) {
-      await dbVerifier.delete();
-    } else {
-      dbVerifier.close();
+    // If the database already exists, open the database and
+    // check if the version is a lower version than the current one
+    if (doesDbExist) {
+      const dbVerifier = new Dexie(dbName);
+      await dbVerifier.open();
+      if (dbVerifier.verno < this.#version) {
+        await dbVerifier.delete();
+      } else {
+        dbVerifier.close();
+      }
     }
 
     this.#db = new Dexie(dbName);
