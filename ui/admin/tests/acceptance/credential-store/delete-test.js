@@ -12,6 +12,8 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | credential-stores | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,10 +22,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
 
   let getStaticCredentialStoresCount;
   let getVaultCredentialStoresCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -34,9 +32,6 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
-    orgScope: null,
-    projectScope: null,
     credentialStores: null,
     staticCredentialStore: null,
     vaultCredentialStore: null,
@@ -62,10 +57,7 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       type: 'vault',
     });
     // Generate route URLs for resources
-    urls.globalScope = `/scopes/global/scopes`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-    urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-    urls.credentialStores = `${urls.projectScope}/credential-stores`;
+    urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.staticCredentialStore = `${urls.credentialStores}/${instances.staticCredentialStore.id}`;
     urls.vaultCredentialStore = `${urls.credentialStores}/${instances.vaultCredentialStore.id}`;
     // Generate resource counter
@@ -83,16 +75,20 @@ module('Acceptance | credential-stores | delete', function (hooks) {
   test('can delete credential store of type vault', async function (assert) {
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getVaultCredentialStoresCount(), count - 1);
   });
 
   test('can delete credential store of type static', async function (assert) {
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getStaticCredentialStoresCount(), count - 1);
   });
 
@@ -102,9 +98,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.vaultCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    await click(selectors.MANAGE_DROPDOWN);
+
+    assert.dom(selectors.DELETE_ACTION).doesNotExist();
   });
 
   test('cannot delete a static credential store without proper authorization', async function (assert) {
@@ -113,9 +110,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
         (item) => item !== 'delete',
       );
     await visit(urls.staticCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    await click(selectors.MANAGE_DROPDOWN);
+
+    assert.dom(selectors.DELETE_ACTION).doesNotExist();
   });
 
   test('can accept delete static credential store via dialog', async function (assert) {
@@ -124,8 +122,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getStaticCredentialStoresCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -136,8 +136,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getVaultCredentialStoresCount(), count - 1);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -148,8 +150,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getStaticCredentialStoresCount();
     await visit(urls.staticCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getStaticCredentialStoresCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -160,8 +164,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getVaultCredentialStoresCount();
     await visit(urls.vaultCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
     assert.strictEqual(getVaultCredentialStoresCount(), count);
     assert.ok(confirmService.confirm.calledOnce);
   });
@@ -179,11 +185,11 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       );
     });
     await visit(urls.staticCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('deleting a vault credential store which errors displays error messages', async function (assert) {
@@ -199,10 +205,10 @@ module('Acceptance | credential-stores | delete', function (hooks) {
       );
     });
     await visit(urls.vaultCredentialStore);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
