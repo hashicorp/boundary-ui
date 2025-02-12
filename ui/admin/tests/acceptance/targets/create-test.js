@@ -30,8 +30,6 @@ module('Acceptance | targets | create', function (hooks) {
   let getSSHTargetCount;
   let featuresService;
 
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-
   const instances = {
     scopes: {
       global: null,
@@ -99,7 +97,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -119,7 +117,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
@@ -226,7 +224,7 @@ module('Acceptance | targets | create', function (hooks) {
       'alias 2',
     );
     await click('[name="with_aliases"] tbody tr:nth-of-type(2) button');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
@@ -275,12 +273,12 @@ module('Acceptance | targets | create', function (hooks) {
     });
 
     await visit(urls.newTCPTarget);
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
@@ -304,12 +302,12 @@ module('Acceptance | targets | create', function (hooks) {
       );
     });
     await visit(urls.newSSHTarget);
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('can save address', async function (assert) {
@@ -322,7 +320,7 @@ module('Acceptance | targets | create', function (hooks) {
 
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="address"]', '0.0.0.0');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(

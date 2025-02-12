@@ -12,6 +12,9 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
+
+const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
 
 module('Acceptance | aliases | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,14 +23,6 @@ module('Acceptance | aliases | create', function (hooks) {
 
   let features;
   let getAliasCount;
-
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-  const DESTINATION_ID_SELECTOR = '[name="destination_id"]';
-  const HOST_ID_SELECTOR = '[name="authorize_session_arguments"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-  const NAME_FIELD_TEXT = 'random string';
 
   const instances = {
     scopes: {
@@ -56,37 +51,37 @@ module('Acceptance | aliases | create', function (hooks) {
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
 
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await fillIn(DESTINATION_ID_SELECTOR, 'tcp_123');
-    await fillIn(HOST_ID_SELECTOR, 'h_123');
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(selectors.DESTINATION_ID_SELECTOR, 'tcp_123');
+    await fillIn(selectors.HOST_ID_SELECTOR, 'h_123');
+    await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
-      name: NAME_FIELD_TEXT,
+      name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(alias.name, NAME_FIELD_TEXT);
+    assert.strictEqual(alias.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 
   test('users can create a new alias without host or target info', async function (assert) {
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
-      name: NAME_FIELD_TEXT,
+      name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(alias.name, NAME_FIELD_TEXT);
+    assert.strictEqual(alias.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(getAliasCount(), aliasCount + 1);
   });
 
   test('user can cancel new alias creation', async function (assert) {
     const aliasCount = getAliasCount();
     await visit(urls.newAlias);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(CANCEL_BTN_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.aliases);
     assert.strictEqual(getAliasCount(), aliasCount);
@@ -113,7 +108,7 @@ module('Acceptance | aliases | create', function (hooks) {
       );
     });
     await visit(urls.newAlias);
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
     assert
