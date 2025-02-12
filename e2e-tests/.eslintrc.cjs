@@ -22,4 +22,10 @@ module.exports = {
   rules: {
     'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
   },
+  overrides: [
+    {
+      "files": ["admin/tests/**", "desktop/tests/**"],
+      "extends": "plugin:playwright/recommended"
+    }
+  ]
 };

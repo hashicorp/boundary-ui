@@ -181,5 +181,5 @@ test('Worker Tags @ce @ent @aws @docker', async ({ page }) => {
   await workersPage.removeTag(newTagKey);
   await expect(
     page.getByRole('table').getByRole('cell', { name: newTagKey }),
-  ).not.toBeVisible();
+  ).toBeHidden();
 });

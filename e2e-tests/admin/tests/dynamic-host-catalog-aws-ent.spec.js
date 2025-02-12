@@ -19,7 +19,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test.describe('AWS', async () => {
+test.describe('AWS', () => {
   test('Create an AWS Dynamic Host Catalog and set up Host Sets @ent @aws', async ({
     page,
     baseURL,
