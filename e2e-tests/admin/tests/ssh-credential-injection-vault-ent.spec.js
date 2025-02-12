@@ -34,106 +34,110 @@ test.afterEach(() => {
   execSync(`vault secrets disable ${secretsPath}`);
 });
 
-test('SSH Credential Injection (Vault User & Key Pair) @ent @docker', async ({
-  page,
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-  sshUser,
-  sshKeyPath,
-  targetAddress,
-  targetPort,
-  vaultAddr,
-}) => {
-  let orgId;
-  let connect;
-  try {
-    // Set up vault
-    execSync(
-      `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
-    );
-    execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
-    execSync(
-      `vault kv put -mount ${secretsPath} ${secretName} ` +
-        ` username=${sshUser}` +
-        ` private_key=@${sshKeyPath}`,
-    );
-    execSync(
-      `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
-    );
-    const vaultToken = JSON.parse(
+test(
+  'SSH Credential Injection (Vault User & Key Pair)',
+  { tag: ['@ent', '@docker'] },
+  async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+    targetAddress,
+    targetPort,
+    vaultAddr,
+  }) => {
+    let orgId;
+    let connect;
+    try {
+      // Set up vault
       execSync(
-        `vault token create` +
-          ` -no-default-policy=true` +
-          ` -policy=${boundaryPolicyName}` +
-          ` -policy=${secretPolicyName}` +
-          ` -orphan=true` +
-          ` -period=20m` +
-          ` -renewable=true` +
-          ` -format=json`,
-      ),
-    );
-    const clientToken = vaultToken.auth.client_token;
-
-    // Create org
-    const orgsPage = new OrgsPage(page);
-    const orgName = await orgsPage.createOrg();
-
-    // Create project
-    const projectsPage = new ProjectsPage(page);
-    const projectName = await projectsPage.createProject();
-
-    // Create target
-    const targetsPage = new TargetsPage(page);
-    const targetName = await targetsPage.createSshTargetWithAddressEnt(
-      targetAddress,
-      targetPort,
-    );
-
-    // Create credentials
-    const credentialStoresPage = new CredentialStoresPage(page);
-    await credentialStoresPage.createVaultCredentialStore(
-      vaultAddr,
-      clientToken,
-    );
-    const credentialLibraryName =
-      await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
-        `${secretsPath}/data/${secretName}`,
-        'SSH Private Key',
+        `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
       );
-    await targetsPage.addInjectedCredentialsToTarget(
-      targetName,
-      credentialLibraryName,
-    );
+      execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
+      execSync(
+        `vault kv put -mount ${secretsPath} ${secretName} ` +
+          ` username=${sshUser}` +
+          ` private_key=@${sshKeyPath}`,
+      );
+      execSync(
+        `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
+      );
+      const vaultToken = JSON.parse(
+        execSync(
+          `vault token create` +
+            ` -no-default-policy=true` +
+            ` -policy=${boundaryPolicyName}` +
+            ` -policy=${secretPolicyName}` +
+            ` -orphan=true` +
+            ` -period=20m` +
+            ` -renewable=true` +
+            ` -format=json`,
+        ),
+      );
+      const clientToken = vaultToken.auth.client_token;
 
-    // Connect to target
-    await boundaryCli.authenticateBoundary(
-      baseURL,
-      adminAuthMethodId,
-      adminLoginName,
-      adminPassword,
-    );
-    orgId = await boundaryCli.getOrgIdFromName(orgName);
-    const projectId = await boundaryCli.getProjectIdFromName(
-      orgId,
-      projectName,
-    );
-    const targetId = await boundaryCli.getTargetIdFromName(
-      projectId,
-      targetName,
-    );
-    connect = await boundaryCli.connectSshToTarget(targetId);
-    const sessionsPage = new SessionsPage(page);
-    await sessionsPage.waitForSessionToBeVisible(targetName);
-  } finally {
-    // End `boundary connect` process
-    if (connect) {
-      connect.kill('SIGTERM');
-    }
+      // Create org
+      const orgsPage = new OrgsPage(page);
+      const orgName = await orgsPage.createOrg();
 
-    if (orgId) {
-      await boundaryCli.deleteScope(orgId);
+      // Create project
+      const projectsPage = new ProjectsPage(page);
+      const projectName = await projectsPage.createProject();
+
+      // Create target
+      const targetsPage = new TargetsPage(page);
+      const targetName = await targetsPage.createSshTargetWithAddressEnt(
+        targetAddress,
+        targetPort,
+      );
+
+      // Create credentials
+      const credentialStoresPage = new CredentialStoresPage(page);
+      await credentialStoresPage.createVaultCredentialStore(
+        vaultAddr,
+        clientToken,
+      );
+      const credentialLibraryName =
+        await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
+          `${secretsPath}/data/${secretName}`,
+          'SSH Private Key',
+        );
+      await targetsPage.addInjectedCredentialsToTarget(
+        targetName,
+        credentialLibraryName,
+      );
+
+      // Connect to target
+      await boundaryCli.authenticateBoundary(
+        baseURL,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
+      );
+      orgId = await boundaryCli.getOrgIdFromName(orgName);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
+      connect = await boundaryCli.connectSshToTarget(targetId);
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
+    } finally {
+      // End `boundary connect` process
+      if (connect) {
+        connect.kill('SIGTERM');
+      }
+
+      if (orgId) {
+        await boundaryCli.deleteScope(orgId);
+      }
     }
-  }
-});
+  },
+);
