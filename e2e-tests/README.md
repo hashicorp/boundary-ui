@@ -150,7 +150,7 @@ Corresponding Enos Scenario for Given Tags
 
 #### Desktop
 
-Currently the desktop client e2e tests assumes using the an enterprise enos scenario, either: `e2e_ui_aws_ent` (with aws) or `e2e_ui_docker_ent`  (with docker)
+Currently the desktop client e2e tests assumes using an enterprise enos scenario, either: `e2e_ui_aws_ent` (with aws) or `e2e_ui_docker_ent`  (with docker)
 
 ### Launch Enos Scenario
 
