@@ -5,6 +5,8 @@
 
 import { nanoid } from 'nanoid';
 import { checkResponse } from './responseHelper.js';
+import { TargetServiceApi } from '../../api-client/apis/TargetServiceApi.js';
+import { Configuration } from '../../api-client/runtime.js';
 
 /**
  * Creates a new target
@@ -15,11 +17,18 @@ import { checkResponse } from './responseHelper.js';
  * @param {string} address Optional target address
  * @returns {Promise<Serializable>}
  */
-export async function createTarget(request, { scopeId, type, port, address }) {
-  const response = await request.post(`/v1/targets`, {
-    data: {
+export async function createTarget(_request, { scopeId, type, port, address }) {
+  const targetService = new TargetServiceApi(
+    new Configuration({
+      headers: { Authorization: `Bearer ${process.env.E2E_TOKEN}` },
+      basePath: process.env.BOUNDARY_ADDR ?? 'http://localhost:9200',
+    }),
+  );
+
+  const result = targetService.targetServiceCreateTarget({
+    item: {
       name: `Target-${nanoid()}`,
-      scope_id: scopeId,
+      scopeId: scopeId,
       type: type,
       attributes: {
         default_port: port,
@@ -28,7 +37,7 @@ export async function createTarget(request, { scopeId, type, port, address }) {
     },
   });
 
-  return checkResponse(response);
+  return result;
 }
 
 /**
