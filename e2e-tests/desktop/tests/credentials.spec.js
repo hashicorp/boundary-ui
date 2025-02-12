@@ -43,10 +43,6 @@ test.beforeEach(
     sshKeyPath,
     vaultAddr,
   }) => {
-    execSync(`vault policy delete ${secretPolicyName}`);
-    execSync(`vault policy delete ${boundaryPolicyName}`);
-    execSync(`vault secrets disable ${secretsPath}`);
-
     org = await boundaryHttp.createOrg(request);
     const project = await boundaryHttp.createProject(request, org.id);
 
@@ -198,12 +194,16 @@ test.beforeEach(
 );
 
 test.afterEach(async ({ request }) => {
+  execSync(`vault policy delete ${secretPolicyName}`);
+  execSync(`vault policy delete ${boundaryPolicyName}`);
+  execSync(`vault secrets disable ${secretsPath}`);
+
   if (org) {
     await boundaryHttp.deleteOrg(request, org.id);
   }
 });
 
-test.describe('Credential Panel tests', async () => {
+test.describe('Credential Panel tests', () => {
   test('Display Vault brokered Credentials and handle special characters', async ({
     authedPage,
   }) => {
@@ -303,11 +303,11 @@ test.describe('Credential Panel tests', async () => {
     // Empty string and null should not be visible
     await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key3' }),
-    ).not.toBeVisible();
+    ).toBeHidden();
 
     await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key4' }),
-    ).not.toBeVisible();
+    ).toBeHidden();
 
     await authedPage
       .getByRole('listitem')
