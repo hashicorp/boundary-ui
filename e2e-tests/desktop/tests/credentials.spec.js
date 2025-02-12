@@ -303,11 +303,11 @@ test.describe('Credential Panel tests', () => {
     // Empty string and null should not be visible
     await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key3' }),
-    ).toBeHidden();
+    ).not.toBeVisible();
 
     await expect(
       authedPage.getByRole('listitem').filter({ hasText: 'nested.key4' }),
-    ).toBeHidden();
+    ).not.toBeVisible();
 
     await authedPage
       .getByRole('listitem')
