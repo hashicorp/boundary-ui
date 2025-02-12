@@ -7403,7 +7403,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-html@npm:^0.0.7":
+"ansi-html@npm:^0.0.9":
   version: 0.0.9
   resolution: "ansi-html@npm:0.0.9"
   bin:
@@ -7731,7 +7731,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^2.4.1, async@npm:^2.6.4, async@npm:~0.2.9":
+"async@npm:^2.6.4":
   version: 2.6.4
   resolution: "async@npm:2.6.4"
   dependencies:
@@ -7842,6 +7842,13 @@ __metadata:
   version: 2.0.0
   resolution: "babel-import-util@npm:2.0.0"
   checksum: 10c0/0a0dc569c882a8e9663ad8918509704700f14652d97a00c3e9dd426121cec9da61225c1bad0a4a727dee7ff5863e7e4162acb970305c76fd5a84f8c88da8f627
+  languageName: node
+  linkType: hard
+
+"babel-import-util@npm:^2.0.1":
+  version: 2.1.1
+  resolution: "babel-import-util@npm:2.1.1"
+  checksum: 10c0/3abf7abb213fa5b37ca53eac637da8148ff43292259b99f90027c99b3c5ff69d1daa22015b7174c56142827666f6583fd62ad78fe35fd365de9d90c847edf83e
   languageName: node
   linkType: hard
 
@@ -10563,7 +10570,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decorator-transforms@npm:^2.2.2":
+"decorator-transforms@npm:^1.1.0":
+  version: 1.2.1
+  resolution: "decorator-transforms@npm:1.2.1"
+  dependencies:
+    "@babel/plugin-syntax-decorators": "npm:^7.23.3"
+    babel-import-util: "npm:^2.0.1"
+  checksum: 10c0/7a3791580a7f927714eb5ef927a0579a5ff1c8b50d514280bb3b0eda1d7646401d302870f3292fe6bbe29602803f564fc8cd54c09388d3c35b9e25a55ff0d187
+  languageName: node
+  linkType: hard
+
+"decorator-transforms@npm:^2.0.0":
   version: 2.3.0
   resolution: "decorator-transforms@npm:2.3.0"
   dependencies:
@@ -18763,7 +18780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nth-check@npm:^1.0.2":
+"nth-check@npm:^2.0.0":
   version: 2.1.1
   resolution: "nth-check@npm:2.1.1"
   dependencies:
