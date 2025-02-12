@@ -28,12 +28,14 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(async ({ page }) => {
+  await page.goto('/');
+});
+
+test.afterEach(() => {
   execSync(`vault policy delete ${secretPolicyName}`);
   execSync(`vault policy delete ${boundaryPolicyName}`);
   execSync(`vault secrets disable ${secretsPath}`);
-
-  await page.goto('/');
-});
+})
 
 test('Vault Credential Store (User & Key Pair) @ce @aws @docker', async ({
   page,

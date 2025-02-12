@@ -26,8 +26,10 @@ test.beforeAll(async () => {
   await vaultCli.checkVaultCli();
 });
 
-test.beforeEach(async () => {
+test.afterEach(async () => {
   execSync(`vault secrets disable ${secretsPath}`);
+  execSync(`vault policy delete ${sshPolicyName}`);
+  execSync(`vault policy delete ${boundaryPolicyName}`);
 });
 
 test('SSH Certificate Injection @ent @docker', async ({
@@ -143,9 +145,5 @@ test('SSH Certificate Injection @ent @docker', async ({
     if (orgId) {
       await boundaryCli.deleteScope(orgId);
     }
-
-    execSync(`vault secrets disable ${secretsPath}`);
-    execSync(`vault policy delete ${sshPolicyName}`);
-    execSync(`vault policy delete ${boundaryPolicyName}`);
   }
 });
