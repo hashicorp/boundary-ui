@@ -72,7 +72,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
@@ -84,7 +84,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
     assert.strictEqual(
@@ -100,7 +100,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
