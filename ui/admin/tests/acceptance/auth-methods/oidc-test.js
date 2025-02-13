@@ -72,7 +72,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.findBy({
+    const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
@@ -84,7 +84,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.findBy({
+    const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
     assert.strictEqual(
@@ -100,7 +100,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.db.authMethods.findBy({
+    const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
@@ -133,7 +133,9 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click('.rose-layout-page-actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${newState}"]`);
-    const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
+    const authMethod = this.server.schema.authMethods.find(
+      instances.authMethod.id,
+    );
     assert.notEqual(
       newState,
       authMethod.attributes.state,
