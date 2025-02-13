@@ -39,6 +39,10 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
+      - name: Corepack version
+        run: corepack --version
+      - name: Enable corepack
+        run: corepack enable
       - run: yarn run compliance:licenses
 
   lint:
@@ -58,6 +62,10 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
+      - name: Corepack version
+        run: corepack --version
+      - name: Enable corepack
+        run: corepack enable
       - run: yarn lint
 
   test:
@@ -75,4 +83,8 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
+      - name: Corepack version
+        run: corepack --version
+      - name: Enable corepack
+        run: corepack enable
       - run: yarn test
