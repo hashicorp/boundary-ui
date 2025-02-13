@@ -278,9 +278,7 @@ module(
       await visit(urls.usernamePasswordCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .hasText('Oops.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     });
 
     test('deleting a username & key pair credential which errors displays error message', async function (assert) {
@@ -298,9 +296,7 @@ module(
       await visit(urls.usernameKeyPairCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .hasText('Oops.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     });
 
     test('deleting a JSON credential which errors displays error message', async function (assert) {
@@ -318,9 +314,7 @@ module(
       await visit(urls.jsonCredential);
       await click(MANAGE_DROPDOWN_SELECTOR);
       await click(DELETE_ACTION_SELECTOR);
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .hasText('Oops.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     });
   },
 );

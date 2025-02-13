@@ -171,7 +171,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -257,7 +257,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount);
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 

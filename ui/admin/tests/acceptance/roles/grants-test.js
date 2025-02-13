@@ -17,6 +17,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | grants', function (hooks) {
   setupApplicationTest(hooks);
@@ -135,7 +136,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await fillIn(`${grantsForm} [name="grant"]`, 'ids=123,action=delete');
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -189,7 +190,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await fillIn(`${newGrantForm} [name="grant"]`, 'ids=123,action=delete');
     await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
+    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
   });
 
   test('delete a grant', async function (assert) {
@@ -232,6 +233,6 @@ module('Acceptance | roles | grants', function (hooks) {
     );
     await click(`${grantsForm} button:not([type="submit"])`);
     await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
+    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
   });
 });

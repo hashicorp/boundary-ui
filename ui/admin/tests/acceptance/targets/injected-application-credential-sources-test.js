@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | targets | injected application credential sources',
@@ -318,9 +319,7 @@ module(
       await click('tbody tr:last-child label');
       await click('tbody tr:first-child label');
       await click('form [type="submit"]');
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .isVisible();
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
 
     test('can remove a vault type credential library', async function (assert) {
@@ -393,9 +392,7 @@ module(
       assert.strictEqual(findAll('tbody tr').length, count);
       await click('.hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .isVisible();
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
 
     test('removing a target credential which errors displays error messages', async function (assert) {
@@ -421,9 +418,7 @@ module(
       assert.strictEqual(findAll('tbody tr').length, count);
       await click('.hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
-      assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
-        .isVisible();
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
   },
 );

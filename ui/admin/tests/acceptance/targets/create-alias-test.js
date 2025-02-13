@@ -11,6 +11,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
@@ -27,8 +28,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const ALIAS_FIELD_SELECTOR = '[name="value"]';
   const DEST_FIELD_SELECTOR = '[name="destination_id"]';
-  const ALERT_TEXT_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const ALIAS_VALUE_TEXT = 'www.target1.com';
@@ -199,7 +198,9 @@ module('Acceptance | targets | create-alias', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 });

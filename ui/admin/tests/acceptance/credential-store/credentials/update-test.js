@@ -234,7 +234,7 @@ module(
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),
@@ -268,7 +268,7 @@ module(
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),
@@ -302,7 +302,7 @@ module(
       await fillIn('[name="name"]', mockInput);
       await click('[type="submit"]');
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
       assert.ok(
         find('[data-test-error-message-name]').textContent.trim(),

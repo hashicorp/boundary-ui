@@ -86,7 +86,7 @@ module('Acceptance | targets | delete', function (hooks) {
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('Deleted successfully.');
     assert.strictEqual(getTargetCount(), targetCount - 1);
     assert.strictEqual(currentURL(), urls.targets);
@@ -137,8 +137,6 @@ module('Acceptance | targets | delete', function (hooks) {
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
 
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });

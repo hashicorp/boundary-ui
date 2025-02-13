@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -135,7 +136,7 @@ module('Acceptance | users | create', function (hooks) {
 
     assert.strictEqual(getUsersCount(), usersCount);
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });

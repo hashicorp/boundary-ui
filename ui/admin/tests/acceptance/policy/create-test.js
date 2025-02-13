@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | policies | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,8 +23,6 @@ module('Acceptance | policies | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const RETAIN_FOR_TEXT_INPUT = '[data-input="retain_for"]';
-  const ALERT_TEXT_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const DELETE_AFTER_TEXT_INPUT = '[data-input="delete_after"]';
@@ -167,7 +166,9 @@ module('Acceptance | policies | create', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 

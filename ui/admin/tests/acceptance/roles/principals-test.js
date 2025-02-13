@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | principals', function (hooks) {
   setupApplicationTest(hooks);
@@ -101,7 +102,7 @@ module('Acceptance | roles | principals', function (hooks) {
     await click('.hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -163,6 +164,6 @@ module('Acceptance | roles | principals', function (hooks) {
     await visit(urls.addPrincipals);
     await click('tbody label');
     await click('form [type="submit"]');
-    assert.ok(find('[data-test-toast-notification] .hds-alert__description'));
+    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
   });
 });

@@ -17,6 +17,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);
@@ -132,7 +133,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await click('[data-test-host-set-hosts-dropdown-toggle]');
     await click('[data-test-host-set-hosts-dropdown-remove-host]');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -207,7 +208,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await click('tbody .hds-table__tr .hds-form-label');
     await click('form [type="submit"]');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -255,7 +256,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await fillIn('[name="name"]', 'New Host');
     await click('form [type="submit"]');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 
@@ -277,7 +278,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     await fillIn('[name="name"]', 'New Host');
     await click('form [type="submit"]');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
   });
 

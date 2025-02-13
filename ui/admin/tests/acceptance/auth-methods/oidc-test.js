@@ -10,8 +10,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 //import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 const CHANGE_STATE_SELECTOR = '[data-test-change-state] button:first-child';
 const CHANGE_STATE_INPUT_CHECKED = '[data-test-change-state] input:checked';
@@ -72,7 +72,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
@@ -84,7 +84,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
     assert.strictEqual(
@@ -100,7 +100,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     await visit(urls.authMethod);
     await click(CHANGE_STATE_SELECTOR);
     await click(`${CHANGE_STATE_INPUT_SELECTOR} input[value="${updateValue}"]`);
-    const authMethod = this.server.schema.authMethods.findBy({
+    const authMethod = this.server.db.authMethods.findBy({
       id: instances.authMethod.id,
     });
 
@@ -139,8 +139,6 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
       authMethod.attributes.state,
       'Auth method state is not be updated.',
     );
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Sorry!');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Sorry!');
   });
 });

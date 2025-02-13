@@ -146,7 +146,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await visit(urls.newHostSet);
     await click(SUBMIT_BTN_SELECTOR);
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.ok(
       find('[data-test-error-message-name]').textContent.trim(),
@@ -334,7 +334,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click(SUBMIT_BTN_SELECTOR);
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.ok(
       find('[data-test-error-message-name]').textContent.trim(),
