@@ -54,10 +54,12 @@ export function notifySuccess(notification) {
  *                                  the notification until user dismissal
  * @param {object} options.catch - defaults to false, whether or not to catch
  *                                 and squelch the error
+ * @param {object} options.log - defaults to false, whether or not to log
+ *                                 the error to our electron logging service
  */
 export function notifyError(
   notification,
-  options = { catch: false, sticky: true },
+  options = { catch: false, sticky: true, log: false },
 ) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
@@ -69,6 +71,9 @@ export function notifyError(
       try {
         return await method.apply(this, arguments);
       } catch (error) {
+        if (options.log) {
+          __electronLog?.error('notifyError', error.message);
+        }
         const candidateKey =
           typeof notification === 'function'
             ? notification.apply(this, [error])
