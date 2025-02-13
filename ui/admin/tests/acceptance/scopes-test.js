@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -213,7 +214,7 @@ module('Acceptance | scopes', function (hooks) {
     await click(SAVE_BUTTON_SELECTOR);
 
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.dom('.hds-form-error__message').hasText('Name is required.');
   });

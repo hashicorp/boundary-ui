@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | session-recordings | session-recording | channels-by-connection | channel',
@@ -23,8 +24,6 @@ module(
 
     const DELETE_DROPDOWN_SELECTOR = '[data-test-manage-dropdown-delete]';
     const DROPDOWN_SELECTOR = '[data-test-manage-dropdown]';
-    const ERROR_MSG_SELECTOR =
-      '[data-test-toast-notification] .hds-alert__description';
 
     // Instances
     const instances = {
@@ -142,7 +141,9 @@ module(
       // if there was an error player will not render
       assert.dom('.session-recording-player').doesNotExist();
       assert.dom('.hds-application-state__title').hasText('Playback error');
-      assert.dom(ERROR_MSG_SELECTOR).includesText('rpc error: code = Unknown');
+      assert
+        .dom(commonSelectors.ALERT_TOAST_BODY)
+        .includesText('rpc error: code = Unknown');
     });
 
     test('user can navigate back to session recording screen', async function (assert) {
@@ -182,7 +183,9 @@ module(
       await visit(incorrectUrl);
 
       assert.strictEqual(currentURL(), urls.sessionRecordings);
-      assert.dom(ERROR_MSG_SELECTOR).hasText('Resource not found');
+      assert
+        .dom(commonSelectors.ALERT_TOAST_BODY)
+        .hasText('Resource not found');
     });
 
     test('user cannot view manage dropdown without proper authorization', async function (assert) {

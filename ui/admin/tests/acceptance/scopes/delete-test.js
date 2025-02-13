@@ -132,8 +132,6 @@ module('Acceptance | scopes | delete', function (hooks) {
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
 
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
