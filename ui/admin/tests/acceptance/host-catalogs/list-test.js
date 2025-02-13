@@ -123,9 +123,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert
-      .dom('[title="Resources"] a:nth-of-type(3)')
-      .doesNotIncludeText('Host Catalogs');
+    assert.dom(commonSelectors.HREF(urls.hostCatalogs)).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {

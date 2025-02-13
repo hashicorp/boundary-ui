@@ -122,9 +122,7 @@ module('Acceptance | targets | list', function (hooks) {
         'create',
       ),
     );
-    assert
-      .dom('[title="Resources"] a:nth-of-type(2)')
-      .doesNotIncludeText('Targets');
+    assert.dom('.hds-side-nav__content').doesNotIncludeText('Targets');
   });
 
   test('user can navigate to index with only create action', async function (assert) {

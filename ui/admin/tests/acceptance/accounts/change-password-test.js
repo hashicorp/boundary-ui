@@ -58,18 +58,9 @@ module('Acceptance | accounts | change password', function (hooks) {
   test('visiting account change password', async function (assert) {
     await visit(urls.orgScope);
 
+    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
     await click(commonSelectors.HREF(urls.changePassword));
     await a11yAudit();
-
-    assert.strictEqual(currentURL(), urls.changePassword);
-  });
-
-  test('visiting account change password from header', async function (assert) {
-    await visit(urls.orgScope);
-    // Open header utilities dropdown
-    await click(selectors.APP_HEADER_DROPDOWN);
-    // Find first element in dropdown - should be change password link
-    await click(commonSelectors.HREF(urls.changePassword));
 
     assert.strictEqual(currentURL(), urls.changePassword);
   });
@@ -145,6 +136,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     await visit(urls.orgScope);
 
+    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
     await click(commonSelectors.HREF(urls.changePassword));
     await fillIn(
       selectors.FIELD_CURRENT_PASSWORD,

@@ -20,7 +20,8 @@ module('Acceptance | policies | list', function (hooks) {
   let intl;
 
   const STORAGE_POLICY_TITLE = 'Storage Policies';
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_BUTTON_SELECTOR =
+    'tbody tr td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
   const instances = {
@@ -93,9 +94,7 @@ module('Acceptance | policies | list', function (hooks) {
         'policies'
       ].includes('create'),
     );
-    assert
-      .dom('[title="General"] a:nth-of-type(3)')
-      .doesNotIncludeText(STORAGE_POLICY_TITLE);
+    assert.dom(commonSelectors.HREF(urls.policies)).doesNotExist();
 
     await visit(urls.policies);
 
