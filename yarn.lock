@@ -7196,6 +7196,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/eslint-parser": "npm:^7.21.3"
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
+    "@babel/runtime": "npm:7.12.18"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^3.0.1"
@@ -7228,7 +7229,7 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539"
+    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -10736,7 +10737,7 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539"
+    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -12383,13 +12384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-pollster@https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539":
+"ember-pollster@https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2":
   version: 0.0.1-beta.2
-  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=718db797382b04aca281216319885c5ff625f539"
+  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=f80834d184048a6a9c7c46f52fcf80553c61e5e2"
   dependencies:
     ember-cli-babel: "npm:^7.26.8"
     ember-cli-htmlbars: "npm:^6.0.1"
-  checksum: 10c0/a526541d1c80a585fe3fa5365f1743e2cc46a65b999fa552cd88d7c08bad503654d5b3bd827c9d1b71b0584dfdaa197a421a994a9a27ac9c2baa64943c4262b0
+  checksum: 10c0/7bf40a13aa1151a27345303513b96e59d91dc5df5e3dab1b86a3dacdab0b7557cd8ad6346dadea91e7e22e86b0cddc213b255c12f06007125279d12d8ca58c78
   languageName: node
   linkType: hard
 
