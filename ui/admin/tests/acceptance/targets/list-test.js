@@ -17,6 +17,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -122,7 +123,7 @@ module('Acceptance | targets | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom('.hds-side-nav__content').doesNotIncludeText('Targets');
+    assert.dom(commonSelectors.SIDE_NAV_CONTENT).doesNotIncludeText('Targets');
   });
 
   test('user can navigate to index with only create action', async function (assert) {
