@@ -28,7 +28,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const ALIAS_FIELD_SELECTOR = '[name="value"]';
   const DEST_FIELD_SELECTOR = '[name="destination_id"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const ALIAS_VALUE_TEXT = 'www.target1.com';
   const ADD_AN_ALIAS_SELECTOR = '.target-sidebar-aliases .hds-button';
@@ -201,6 +200,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 });

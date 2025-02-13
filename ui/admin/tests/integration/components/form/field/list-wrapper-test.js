@@ -8,6 +8,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { click, findAll, render, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Integration | Component | list-wrapper', function (hooks) {
   setupRenderingTest(hooks);
@@ -42,7 +43,7 @@ module('Integration | Component | list-wrapper', function (hooks) {
     assert.dom('legend').exists().hasText('Label');
     assert.dom('.hds-form-helper-text').exists().hasText('Help');
 
-    assert.dom('.hds-form-error__message').exists().hasText('Error!');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).exists().hasText('Error!');
     assert.dom('button').exists().hasText('Add');
   });
 
