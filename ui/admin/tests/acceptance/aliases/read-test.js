@@ -11,13 +11,12 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | aliases | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
 
   const instances = {
     scopes: {
@@ -55,9 +54,9 @@ module('Acceptance | aliases | read', function (hooks) {
     await visit(urls.globalScope);
     await a11yAudit();
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
     await a11yAudit();
-    await click(`[href="${urls.alias}"]`);
+    await click(commonSelectors.HREF(urls.alias));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.alias);
@@ -68,9 +67,9 @@ module('Acceptance | aliases | read', function (hooks) {
     instances.alias.authorized_actions =
       instances.alias.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(selectors.TABLE_LINK_SELECTOR).doesNotExist();
   });
 
   test('visiting an unknown alias displays 404 message', async function (assert) {
