@@ -7229,7 +7229,7 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2"
+    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -10737,7 +10737,7 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2"
+    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -12384,13 +12384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-pollster@https://github.com/hashicorp/ember-pollster.git#f80834d184048a6a9c7c46f52fcf80553c61e5e2":
+"ember-pollster@https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8":
   version: 0.0.1-beta.2
-  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=f80834d184048a6a9c7c46f52fcf80553c61e5e2"
+  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=605d82e986d829b098667e4a5e221877a4ee4ac8"
   dependencies:
     ember-cli-babel: "npm:^7.26.8"
     ember-cli-htmlbars: "npm:^6.0.1"
-  checksum: 10c0/7bf40a13aa1151a27345303513b96e59d91dc5df5e3dab1b86a3dacdab0b7557cd8ad6346dadea91e7e22e86b0cddc213b255c12f06007125279d12d8ca58c78
+  checksum: 10c0/0e1b6e8b9ef466d864d01e63a5c58b9ccd81ea5d1e71402a5bd74d010f52a40bd9d257c2c9adf3ccd7f383327e8ffaa1b4ec73980afb6ddd4b1e18676ab099c4
   languageName: node
   linkType: hard
 
