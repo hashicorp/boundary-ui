@@ -94,12 +94,12 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('can cancel new role creation', async function (assert) {
-    const rolesCount = this.server.db.roles.length;
+    const rolesCount = this.server.schema.roles.length;
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.roles);
-    assert.strictEqual(this.server.db.roles.length, rolesCount);
+    assert.strictEqual(this.server.schema.roles.length, rolesCount);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
