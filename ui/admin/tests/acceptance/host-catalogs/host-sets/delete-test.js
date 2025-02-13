@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -133,8 +134,6 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
     await visit(urls.hostSet);
     await click(MANAGE_DROPDOWN_SELECTOR);
     await click(DELETE_ACTION_SELECTOR);
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
-      .hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });

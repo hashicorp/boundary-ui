@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -93,12 +94,12 @@ module('Acceptance | roles | create', function (hooks) {
   });
 
   test('can cancel new role creation', async function (assert) {
-    const rolesCount = this.server.db.roles.length;
+    const rolesCount = this.server.schema.roles.length;
     await visit(urls.newRole);
     await fillIn('[name="name"]', 'role name');
     await click('.rose-form-actions [type="button"]');
     assert.strictEqual(currentURL(), urls.roles);
-    assert.strictEqual(this.server.db.roles.length, rolesCount);
+    assert.strictEqual(this.server.schema.roles.length, rolesCount);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
@@ -126,7 +127,7 @@ module('Acceptance | roles | create', function (hooks) {
     await click('form [type="submit"]');
     await a11yAudit();
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.ok(find('.hds-form-error__message'));
   });
