@@ -345,7 +345,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
 
     // open dropdown
-    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
+    await click(commonSelectors.SIDE_NAV_USER_DROPDOWN);
 
     // toggle system default
     await click('[value="system-default-theme"]');

@@ -19,6 +19,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -128,7 +129,7 @@ module('Acceptance | sessions | list', function (hooks) {
       ),
     );
 
-    assert.dom('.hds-side-nav__content').doesNotIncludeText('Sessions');
+    assert.dom(commonSelectors.SIDE_NAV_CONTENT).doesNotIncludeText('Sessions');
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {

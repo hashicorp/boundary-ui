@@ -116,7 +116,9 @@ module('Acceptance | aliases | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom(commonSelectors.HREF(urls.aliases)).doesNotExist();
+    assert
+      .dom(commonSelectors.SIDE_NAV_CONTENT)
+      .doesNotIncludeText(ALIAS_TITLE);
 
     await visit(urls.aliases);
 

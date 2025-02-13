@@ -58,7 +58,7 @@ module('Acceptance | accounts | change password', function (hooks) {
   test('visiting account change password', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
+    await click(commonSelectors.SIDE_NAV_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
     await a11yAudit();
 
@@ -136,7 +136,7 @@ module('Acceptance | accounts | change password', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
+    await click(commonSelectors.SIDE_NAV_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
     await fillIn(
       selectors.FIELD_CURRENT_PASSWORD,

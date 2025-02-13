@@ -134,7 +134,9 @@ module('Acceptance | session recordings | list', function (hooks) {
       ].includes('list'),
     );
     assert.dom(`[href="${urls.sessionRecordings}"]`).exists();
-    assert.dom('.hds-side-nav__content').includesText(SESSION_RECORDING_TITLE);
+    assert
+      .dom(commonSelectors.SIDE_NAV_CONTENT)
+      .includesText(SESSION_RECORDING_TITLE);
 
     // Visit session recordings
     await click(`[href="${urls.sessionRecordings}"]`);
@@ -154,7 +156,7 @@ module('Acceptance | session recordings | list', function (hooks) {
       ].includes('list'),
     );
     assert
-      .dom('.hds-side-nav__content')
+      .dom(commonSelectors.SIDE_NAV_CONTENT)
       .doesNotIncludeText(SESSION_RECORDING_TITLE);
     assert.dom(`[href="${urls.sessionRecordings}"]`).doesNotExist();
   });

@@ -8,11 +8,14 @@ import { inject as service } from '@ember/service';
 
 export default class ScopesScopeController extends Controller {
   @controller('application') application;
+
   // =services
 
   @service session;
   @service scope;
   @service featureEdition;
+
+  // =attributes
 
   /**
    * Returns the side-bar element.

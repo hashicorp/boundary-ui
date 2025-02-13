@@ -94,7 +94,9 @@ module('Acceptance | policies | list', function (hooks) {
         'policies'
       ].includes('create'),
     );
-    assert.dom(commonSelectors.HREF(urls.policies)).doesNotExist();
+    assert
+      .dom(commonSelectors.SIDE_NAV_CONTENT)
+      .doesNotIncludeText(STORAGE_POLICY_TITLE);
 
     await visit(urls.policies);
 
