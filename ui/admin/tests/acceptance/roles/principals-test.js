@@ -17,8 +17,8 @@ module('Acceptance | roles | principals', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
-  const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-dropdown-principals]';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-role] button';
+  const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-role-principals]';
 
   const instances = {
     scopes: {
@@ -69,7 +69,7 @@ module('Acceptance | roles | principals', function (hooks) {
   test('principal can be removed from a role', async function (assert) {
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
   });
@@ -98,7 +98,7 @@ module('Acceptance | roles | principals', function (hooks) {
     });
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -134,7 +134,7 @@ module('Acceptance | roles | principals', function (hooks) {
     await visit(urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
     // Remove a principal to populate association view
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
     await click(MANAGE_DROPDOWN_SELECTOR);

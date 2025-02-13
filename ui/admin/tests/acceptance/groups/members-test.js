@@ -68,7 +68,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('can remove a member', async function (assert) {
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, membersCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
   });
@@ -97,7 +97,7 @@ module('Acceptance | groups | members', function (hooks) {
     });
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, membersCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -144,7 +144,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('select and cancel members to add', async function (assert) {
     await visit(urls.members);
     assert.strictEqual(findAll('tbody tr').length, membersCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
     await click(MANAGE_DROPDOWN_SELECTOR);

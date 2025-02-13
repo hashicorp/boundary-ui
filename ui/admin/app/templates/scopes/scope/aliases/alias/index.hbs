@@ -33,7 +33,7 @@
     <page.actions>
 
       {{#if (or perms.canUpdate perms.canDelete)}}
-        <Hds::Dropdown as |dd|>
+        <Hds::Dropdown data-test-manage-alias as |dd|>
           <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
           {{#if (and perms.canUpdate @model.destination_id)}}
             <dd.Interactive

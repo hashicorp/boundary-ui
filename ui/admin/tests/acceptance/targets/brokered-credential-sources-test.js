@@ -310,7 +310,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const availableCredentialsCount = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount - 1);
     await visit(urls.addBrokeredCredentialSources);
@@ -328,7 +328,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const availableCredentialsCount = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, credentialCount);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
     await visit(urls.addBrokeredCredentialSources);
@@ -366,7 +366,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const count = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')
@@ -392,7 +392,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     const count = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
     assert.strictEqual(findAll('tbody tr').length, count);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert
       .dom('[data-test-toast-notification] .hds-alert__description')

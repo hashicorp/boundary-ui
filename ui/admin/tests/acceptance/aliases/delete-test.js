@@ -17,7 +17,8 @@ module('Acceptance | aliases | delete', function (hooks) {
 
   let aliasCount;
 
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_BUTTON_SELECTOR =
+    'tbody tr td:last-child .hds-dropdown-toggle-icon';
   const DELETE_DROPDOWN_SELECTOR =
     '.hds-dropdown-list-item--color-critical button';
 
@@ -35,7 +36,6 @@ module('Acceptance | aliases | delete', function (hooks) {
     globalScope: null,
     aliases: null,
     alias: null,
-    target: null,
   };
 
   hooks.beforeEach(async function () {
