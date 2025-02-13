@@ -115,7 +115,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.strictEqual(currentURL(), urls.orgScopes);
   });
 
-  test('can navigate among org scopes via header navigation', async function (assert) {
+  test('can navigate among org scopes via side-nav', async function (assert) {
     await visit(urls.globalScope);
     await a11yAudit();
 
@@ -130,7 +130,7 @@ module('Acceptance | scopes', function (hooks) {
     assert.strictEqual(currentURL(), urls.org2Scopes);
   });
 
-  test('can navigate among project scopes via header navigation', async function (assert) {
+  test('can navigate among project scopes via side-nav', async function (assert) {
     await visit(urls.projectScope);
     await a11yAudit();
 
