@@ -17,10 +17,8 @@ module('Acceptance | scopes', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const ORG_SCOPES_DROPDOWN_SELECTOR = (url) =>
-    `.rose-header-nav .rose-dropdown [href="${url}"]`;
-  const PROJECT_SCOPES_DROPDOWN_SELECTOR = (url) =>
-    `.rose-header-nav .rose-dropdown + .rose-dropdown [href="${url}"]`;
+  const SCOPES_DROPDOWN_BTN = '.scope-picker button';
+  const SCOPES_DROPDOWN_SELECTOR = (url) => `.scope-picker [href="${url}"]`;
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
@@ -123,10 +121,12 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.globalScope);
 
-    await click(ORG_SCOPES_DROPDOWN_SELECTOR(urls.orgScope));
+    await click(SCOPES_DROPDOWN_BTN);
+    await click(SCOPES_DROPDOWN_SELECTOR(urls.orgScope));
     assert.strictEqual(currentURL(), urls.orgScopes);
 
-    await click(ORG_SCOPES_DROPDOWN_SELECTOR(urls.org2Scope));
+    await click(SCOPES_DROPDOWN_BTN);
+    await click(SCOPES_DROPDOWN_SELECTOR(urls.org2Scope));
     assert.strictEqual(currentURL(), urls.org2Scopes);
   });
 
@@ -136,7 +136,8 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.projectScopeEdit);
 
-    await click(PROJECT_SCOPES_DROPDOWN_SELECTOR(urls.project2Scope));
+    await click(SCOPES_DROPDOWN_BTN);
+    await click(SCOPES_DROPDOWN_SELECTOR(urls.project2Scope));
 
     assert.strictEqual(currentURL(), urls.project2ScopeEdit);
   });

@@ -332,7 +332,7 @@ module(
       const credentialLibraryCount = getCredentialLibraryCount();
       await visit(urls.injectedApplicationCredentialSources);
       assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
-      await click('.hds-dropdown-toggle-icon');
+      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
       assert.strictEqual(
         findAll('tbody tr').length,
@@ -354,7 +354,7 @@ module(
       const credentialCount = getCredentialCount();
       await visit(urls.injectedApplicationCredentialSources);
       assert.strictEqual(findAll('tbody tr').length, credentialCount);
-      await click('.hds-dropdown-toggle-icon');
+      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
       assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
       await visit(urls.addInjectedApplicationCredentialSources);
@@ -391,7 +391,7 @@ module(
       const count = getCredentialLibraryCount();
       await visit(urls.injectedApplicationCredentialSources);
       assert.strictEqual(findAll('tbody tr').length, count);
-      await click('.hds-dropdown-toggle-icon');
+      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
       assert
         .dom('[data-test-toast-notification] .hds-alert__description')
@@ -419,7 +419,7 @@ module(
       const count = getCredentialCount();
       await visit(urls.injectedApplicationCredentialSources);
       assert.strictEqual(findAll('tbody tr').length, count);
-      await click('.hds-dropdown-toggle-icon');
+      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
       await click('tbody tr .hds-dropdown-list-item button');
       assert
         .dom('[data-test-toast-notification] .hds-alert__description')

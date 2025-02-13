@@ -28,6 +28,7 @@ import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -343,8 +344,11 @@ module('Acceptance | authentication', function (hooks) {
     assert.ok(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
 
+    // open dropdown
+    await click(commonSelectors.SIDENAV_USER_DROPDOWN_BTN);
+
     // toggle system default
-    await click('[name="theme"][value="system-default-theme"]');
+    await click('[value="system-default-theme"]');
 
     assert.strictEqual(
       currentSession().get('data.theme'),
@@ -354,14 +358,14 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
 
     // toggle dark mode
-    await click('[name="theme"][value="dark"]');
+    await click('[value="dark"]');
 
     assert.strictEqual(currentSession().get('data.theme'), 'dark');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
 
     // toggle system default
-    await click('[name="theme"][value="system-default-theme"]');
+    await click('[value="system-default-theme"]');
 
     assert.strictEqual(
       currentSession().get('data.theme'),
