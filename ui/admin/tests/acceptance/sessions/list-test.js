@@ -128,9 +128,7 @@ module('Acceptance | sessions | list', function (hooks) {
       ),
     );
 
-    assert
-      .dom('[title="Resources"] a:first-of-type')
-      .doesNotIncludeText('Sessions');
+    assert.dom('.hds-side-nav__content').doesNotIncludeText('Sessions');
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {

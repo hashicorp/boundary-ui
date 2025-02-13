@@ -53,3 +53,18 @@ form {
     color: inherit;
   }
 }
+
+// These overrides are necessary to insure that changing the color theme to won't alter the dropdown colors.
+.hds-side-nav .hds-dropdown-toggle-button,
+.hds-side-nav .hds-dropdown-toggle-icon {
+  background: var(--token-side-nav-color-surface-primary);
+
+  &:hover {
+    background: var(--token-side-nav-color-surface-interactive-hover);
+  }
+
+  &:active,
+  &:focus {
+    background: var(--token-side-nav-color-surface-primary);
+  }
+}
