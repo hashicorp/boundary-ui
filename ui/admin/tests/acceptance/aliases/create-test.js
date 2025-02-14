@@ -14,8 +14,6 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 
-const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-
 module('Acceptance | aliases | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -114,7 +112,7 @@ module('Acceptance | aliases | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('can navigate to new aliases route with proper authorization', async function (assert) {
