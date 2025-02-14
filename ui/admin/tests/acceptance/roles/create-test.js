@@ -129,7 +129,7 @@ module('Acceptance | roles | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.ok(find('.hds-form-error__message'));
+    assert.ok(find(commonSelectors.FIELD_TEXT_ERROR));
   });
 
   test('users cannot directly navigate to new role route without proper authorization', async function (assert) {
