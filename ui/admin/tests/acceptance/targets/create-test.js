@@ -30,6 +30,8 @@ module('Acceptance | targets | create', function (hooks) {
   let getSSHTargetCount;
   let featuresService;
 
+  const SAVE_BTN_SELECTOR = '[type="submit"]';
+
   const instances = {
     scopes: {
       global: null,
@@ -97,7 +99,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="ssh"]');
     await fillIn('[name="name"]', 'random string');
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
@@ -117,7 +119,7 @@ module('Acceptance | targets | create', function (hooks) {
     await click(`[href="${urls.newTarget}"]`);
     await click('[value="tcp"]');
     await fillIn('[name="name"]', 'random string');
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
@@ -224,7 +226,7 @@ module('Acceptance | targets | create', function (hooks) {
       'alias 2',
     );
     await click('[name="with_aliases"] tbody tr:nth-of-type(2) button');
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
@@ -273,7 +275,7 @@ module('Acceptance | targets | create', function (hooks) {
     });
 
     await visit(urls.newTCPTarget);
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
@@ -302,7 +304,7 @@ module('Acceptance | targets | create', function (hooks) {
       );
     });
     await visit(urls.newSSHTarget);
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
@@ -320,7 +322,7 @@ module('Acceptance | targets | create', function (hooks) {
 
     await fillIn('[name="name"]', 'random string');
     await fillIn('[name="address"]', '0.0.0.0');
-    await click(commonSelectors.SAVE_BTN);
+    await click(SAVE_BTN_SELECTOR);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
