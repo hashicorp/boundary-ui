@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | credential-stores | credentials | create',
@@ -234,7 +235,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
       assert
         .dom('[data-test-error-message-password]')
@@ -269,7 +270,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
       assert
         .dom('[data-test-error-message-private-key]')
@@ -304,7 +305,7 @@ module(
       await click('[type="submit"]');
 
       assert
-        .dom('[data-test-toast-notification] .hds-alert__description')
+        .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('Error in provided request.');
     });
 

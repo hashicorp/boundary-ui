@@ -14,6 +14,7 @@ import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | managed-groups | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,8 +26,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     '[data-test-managed-group-dropdown] button:first-child';
   const DELETE_ACTION_SELECTOR =
     '[data-test-managed-group-dropdown] ul li button';
-  const ERROR_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
 
   const instances = {
     scopes: {
@@ -154,7 +153,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.managedGroup);
   });
 
@@ -177,7 +176,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(DELETE_ACTION_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);
   });
 });
