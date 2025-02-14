@@ -108,7 +108,7 @@ module('Acceptance | roles | update', function (hooks) {
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.strictEqual(
-      find('.hds-form-error__message').textContent.trim(),
+      find(commonSelectors.FIELD_TEXT_ERROR).textContent.trim(),
       'Name is required.',
       'Displays field-level errors.',
     );

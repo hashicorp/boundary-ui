@@ -23,7 +23,6 @@ module('Acceptance | policies | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const RETAIN_FOR_TEXT_INPUT = '[data-input="retain_for"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const DELETE_AFTER_TEXT_INPUT = '[data-input="delete_after"]';
   const RETAIN_OVERRIDE = '[data-toggle="retain_for"]';
@@ -169,7 +168,7 @@ module('Acceptance | policies | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('users cannot directly navigate to new policy route without proper authorization', async function (assert) {

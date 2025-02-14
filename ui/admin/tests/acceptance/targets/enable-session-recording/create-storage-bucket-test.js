@@ -24,7 +24,6 @@ module(
     const SAVE_BTN_SELECTOR = '[type="submit"]';
     const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
     const NAME_FIELD_SELECTOR = '[name="name"]';
-    const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
     const NAME_FIELD_TEXT = 'random string';
     const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
     const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
@@ -167,7 +166,7 @@ module(
       assert
         .dom(commonSelectors.ALERT_TOAST_BODY)
         .hasText('The request was invalid.');
-      assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+      assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
     });
   },
 );

@@ -29,7 +29,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-auth-method] button:first-child';
 
@@ -246,7 +245,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('Users cannot directly navigate to a new managed group route without proper authorization', async function (assert) {

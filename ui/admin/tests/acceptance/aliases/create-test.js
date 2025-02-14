@@ -26,7 +26,6 @@ module('Acceptance | aliases | create', function (hooks) {
   const NAME_FIELD_SELECTOR = '[name="name"]';
   const DESTINATION_ID_SELECTOR = '[name="destination_id"]';
   const HOST_ID_SELECTOR = '[name="authorize_session_arguments"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
 
   const instances = {
@@ -119,7 +118,7 @@ module('Acceptance | aliases | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
   });
 
   test('can navigate to new aliases route with proper authorization', async function (assert) {
