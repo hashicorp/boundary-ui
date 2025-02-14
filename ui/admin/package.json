@@ -108,8 +108,8 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
+    "*.js": ["eslint --fix", "prettier --write"],
     "*.hbs": "ember-template-lint --fix",
-    "*.{js,scss,yaml}": "prettier --write"
+    "*.{scss,yaml}": "prettier --write"
   }
 }

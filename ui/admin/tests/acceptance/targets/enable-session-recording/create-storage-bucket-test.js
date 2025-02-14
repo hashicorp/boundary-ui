@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
   'Acceptance | targets | enable session recording | create storage bucket',
@@ -23,8 +24,6 @@ module(
     const SAVE_BTN_SELECTOR = '[type="submit"]';
     const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
     const NAME_FIELD_SELECTOR = '[name="name"]';
-    const ALERT_TEXT_SELECTOR =
-      '[data-test-toast-notification] .hds-alert__description';
     const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
     const NAME_FIELD_TEXT = 'random string';
     const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
@@ -165,7 +164,9 @@ module(
       await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
       await click(SAVE_BTN_SELECTOR);
 
-      assert.dom(ALERT_TEXT_SELECTOR).hasText('The request was invalid.');
+      assert
+        .dom(commonSelectors.ALERT_TOAST_BODY)
+        .hasText('The request was invalid.');
       assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
     });
   },
