@@ -10,6 +10,9 @@
       "e2e-tests"
     ]
   },
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "scripts": {
     "build": "yarn build:ui:admin",
     "build:ui:admin": "yarn workspace admin build",
