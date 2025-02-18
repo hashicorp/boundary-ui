@@ -11,6 +11,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | users | accounts', function (hooks) {
   setupApplicationTest(hooks);
@@ -24,8 +25,6 @@ module('Acceptance | users | accounts', function (hooks) {
     '[data-test-manage-user-dropdown] ul li:first-child a';
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-user-dropdown] button:first-child';
-  const ERROR_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const TABLE_ROWS_SELECTOR = 'tbody tr';
   const CHECKBOX_SELECTOR = 'tbody label';
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';
@@ -162,7 +161,7 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.dom(TABLE_ROWS_SELECTOR).exists({ count: accountsCount });
     await click(ACCOUNTS_ACTION_SELECTOR);
     await click(REMOVE_ACTION_SELECTOR);
-    assert.dom(ERROR_MSG_SELECTOR).isVisible();
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
 
   test('visiting account add accounts', async function (assert) {
@@ -296,6 +295,6 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.addAccounts);
     await click(CHECKBOX_SELECTOR);
     await click(SUBMIT_BTN_SELECTOR);
-    assert.dom(ERROR_MSG_SELECTOR).isVisible();
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
 });

@@ -22,8 +22,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
 
   const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
   const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item [type="button"]';
-  const NOTIFICATION_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const NOTIFICATION_MSG_TEXT = 'Deleted successfully.';
 
   const instances = {
@@ -87,7 +85,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
 
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
-    assert.dom(NOTIFICATION_MSG_SELECTOR).hasText(NOTIFICATION_MSG_TEXT);
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(NOTIFICATION_MSG_TEXT);
     assert.strictEqual(currentURL(), urls.storageBuckets);
     assert.strictEqual(getStorageBucketCount(), storageBucketCount - 1);
   });
@@ -154,6 +152,6 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     await click(DROPDOWN_BUTTON_SELECTOR);
     await click(DELETE_DROPDOWN_SELECTOR);
 
-    assert.dom(NOTIFICATION_MSG_SELECTOR).hasText('Oops.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });

@@ -15,13 +15,15 @@ export default class SessionService extends BaseSessionService {
    * Extend ember simple auth's handleAuthentication method
    * so we can hook in and setup the DB after a successful authentication
    */
-  handleAuthentication() {
-    super.handleAuthentication(...arguments);
-
+  async handleAuthentication() {
     const userId = this.data?.authenticated?.user_id;
-    const hostUrl = this.window.location.host;
+    const hostUrl = this.window.location?.host;
     if (userId && hostUrl) {
-      this.indexedDb.setup(formatDbName(userId, hostUrl));
+      await this.indexedDb.setup(formatDbName(userId, hostUrl));
     }
+
+    // We let ember-simple-auth handle transitioning back to the index after authentication.
+    // This route can be configured in our environment config.
+    super.handleAuthentication(...arguments);
   }
 }

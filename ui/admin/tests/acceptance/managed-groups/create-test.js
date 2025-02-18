@@ -15,6 +15,7 @@ import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -28,8 +29,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const NAME_INPUT_SELECTOR = '[name="name"]';
   const DESC_INPUT_SELECTOR = '[name="description"]';
-  const ERROR_MSG_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const MANAGE_DROPDOWN_SELECTOR =
     '[data-test-manage-auth-method] button:first-child';
@@ -210,7 +209,9 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 
@@ -242,7 +243,9 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await click(SAVE_BTN_SELECTOR);
     await a11yAudit();
 
-    assert.dom(ERROR_MSG_SELECTOR).hasText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
     assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
   });
 

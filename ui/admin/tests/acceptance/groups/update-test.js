@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | groups | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -92,7 +93,7 @@ module('Acceptance | groups | update', function (hooks) {
     await fillIn('[name="name"]', 'random string');
     await click('[type="submit"]');
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.strictEqual(
       find('[data-test-error-message-name]').textContent.trim(),

@@ -88,6 +88,7 @@ export default class GeneratedHostSetModel extends BaseModel {
       name: ['aws', 'azure', 'gcp'],
     },
     emptyArrayIfMissing: true,
+    trimWhitespace: true,
   })
   preferred_endpoints;
 

@@ -39,58 +39,31 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   await credentialStoresPage.createStaticCredentialStore();
 });
 
-test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
-  page,
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-  sshUser,
-  sshKeyPath,
-}) => {
-  try {
-    const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        sshUser,
-        sshKeyPath,
+test(
+  'Static Credential Store (User & Key Pair)',
+  { tag: ['@ce', '@aws', '@docker'] },
+  async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+  }) => {
+    try {
+      const credentialStoresPage = new CredentialStoresPage(page);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName,
       );
-    const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
 
-    await boundaryCli.authenticateBoundary(
-      baseURL,
-      adminAuthMethodId,
-      adminLoginName,
-      adminPassword,
-    );
-    const orgId = await boundaryCli.getOrgIdFromName(orgName);
-    const projectId = await boundaryCli.getProjectIdFromName(
-      orgId,
-      projectName,
-    );
-    const targetId = await boundaryCli.getTargetIdFromName(
-      projectId,
-      targetName,
-    );
-    const session = await boundaryCli.authorizeSessionByTargetId(targetId);
-    const retrievedUser = session.item.credentials[0].credential.username;
-    const retrievedKey = session.item.credentials[0].credential.private_key;
-
-    expect(retrievedUser).toBe(sshUser);
-
-    const keyData = await readFile(sshKeyPath, {
-      encoding: 'utf-8',
-    });
-    expect(retrievedKey).toBe(keyData);
-
-    const sessionsPage = new SessionsPage(page);
-    await sessionsPage.waitForSessionToBeVisible(targetName);
-  } finally {
-    if (orgName) {
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
@@ -98,61 +71,69 @@ test('Static Credential Store (User & Key Pair) @ce @aws @docker', async ({
         adminPassword,
       );
       const orgId = await boundaryCli.getOrgIdFromName(orgName);
-      if (orgId) {
-        await boundaryCli.deleteScope(orgId);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
+      const session = await boundaryCli.authorizeSessionByTargetId(targetId);
+      const retrievedUser = session.item.credentials[0].credential.username;
+      const retrievedKey = session.item.credentials[0].credential.private_key;
+
+      expect(retrievedUser).toBe(sshUser);
+
+      const keyData = await readFile(sshKeyPath, {
+        encoding: 'utf-8',
+      });
+      expect(retrievedKey).toBe(keyData);
+
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
+    } finally {
+      if (orgName) {
+        await boundaryCli.authenticateBoundary(
+          baseURL,
+          adminAuthMethodId,
+          adminLoginName,
+          adminPassword,
+        );
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
+        if (orgId) {
+          await boundaryCli.deleteScope(orgId);
+        }
       }
     }
-  }
-});
+  },
+);
 
-test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
-  page,
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-  sshUser,
-}) => {
-  try {
-    const testPassword = 'password';
-    const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialUsernamePassword(
-        sshUser,
-        testPassword,
+test(
+  'Static Credential Store (Username & Password)',
+  { tag: ['@ce', '@aws', '@docker'] },
+  async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+  }) => {
+    try {
+      const testPassword = 'password';
+      const credentialStoresPage = new CredentialStoresPage(page);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialUsernamePassword(
+          sshUser,
+          testPassword,
+        );
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName,
       );
-    const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
 
-    await boundaryCli.authenticateBoundary(
-      baseURL,
-      adminAuthMethodId,
-      adminLoginName,
-      adminPassword,
-    );
-    const orgId = await boundaryCli.getOrgIdFromName(orgName);
-    const projectId = await boundaryCli.getProjectIdFromName(
-      orgId,
-      projectName,
-    );
-    const targetId = await boundaryCli.getTargetIdFromName(
-      projectId,
-      targetName,
-    );
-    const session = await boundaryCli.authorizeSessionByTargetId(targetId);
-    const retrievedUser = session.item.credentials[0].credential.username;
-    const retrievedPassword = session.item.credentials[0].credential.password;
-
-    expect(retrievedUser).toBe(sshUser);
-    expect(retrievedPassword).toBe(testPassword);
-
-    const sessionsPage = new SessionsPage(page);
-    await sessionsPage.waitForSessionToBeVisible(targetName);
-  } finally {
-    if (orgName) {
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
@@ -160,81 +141,88 @@ test('Static Credential Store (Username & Password) @ce @aws @docker', async ({
         adminPassword,
       );
       const orgId = await boundaryCli.getOrgIdFromName(orgName);
-      if (orgId) {
-        await boundaryCli.deleteScope(orgId);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
+      const session = await boundaryCli.authorizeSessionByTargetId(targetId);
+      const retrievedUser = session.item.credentials[0].credential.username;
+      const retrievedPassword = session.item.credentials[0].credential.password;
+
+      expect(retrievedUser).toBe(sshUser);
+      expect(retrievedPassword).toBe(testPassword);
+
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
+    } finally {
+      if (orgName) {
+        await boundaryCli.authenticateBoundary(
+          baseURL,
+          adminAuthMethodId,
+          adminLoginName,
+          adminPassword,
+        );
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
+        if (orgId) {
+          await boundaryCli.deleteScope(orgId);
+        }
       }
     }
-  }
-});
+  },
+);
 
-test('Static Credential Store (JSON) @ce @aws @docker', async ({
-  page,
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-}) => {
-  try {
-    const credentialName = 'Credential ' + nanoid();
-    await page.getByRole('link', { name: 'Credentials', exact: true }).click();
-    await page.getByRole('link', { name: 'New', exact: true }).click();
-    await page.getByLabel('Name (Optional)').fill(credentialName);
-    await page.getByLabel('Description').fill('This is an automated test');
-    await page.getByRole('group', { name: 'Type' }).getByLabel('JSON').click();
-    await page.getByText('{}').click();
-    const testName = 'name-json';
-    const testPassword = 'password-json';
-    const testId = 'id-json';
-    await page.keyboard.type(
-      `"username": "${testName}",
+test(
+  'Static Credential Store (JSON)',
+  { tag: ['@ce', '@aws', '@docker'] },
+  async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+  }) => {
+    try {
+      const credentialName = 'Credential ' + nanoid();
+      await page
+        .getByRole('link', { name: 'Credentials', exact: true })
+        .click();
+      await page.getByRole('link', { name: 'New', exact: true }).click();
+      await page.getByLabel('Name (Optional)').fill(credentialName);
+      await page.getByLabel('Description').fill('This is an automated test');
+      await page
+        .getByRole('group', { name: 'Type' })
+        .getByLabel('JSON')
+        .click();
+      await page.getByText('{}').click();
+      const testName = 'name-json';
+      const testPassword = 'password-json';
+      const testId = 'id-json';
+      await page.keyboard.type(
+        `"username": "${testName}",
     "password": "${testPassword}",
     "id": "${testId}"`,
-    );
-    await page.getByRole('button', { name: 'Save' }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
-    await expect(
-      page
-        .getByRole('navigation', { name: 'breadcrumbs' })
-        .getByText(credentialName),
-    ).toBeVisible();
+      );
+      await page.getByRole('button', { name: 'Save' }).click();
+      await expect(
+        page.getByRole('alert').getByText('Success', { exact: true }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'Dismiss' }).click();
+      await expect(
+        page
+          .getByRole('navigation', { name: 'breadcrumbs' })
+          .getByText(credentialName),
+      ).toBeVisible();
 
-    const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName,
+      );
 
-    await boundaryCli.authenticateBoundary(
-      baseURL,
-      adminAuthMethodId,
-      adminLoginName,
-      adminPassword,
-    );
-    const orgId = await boundaryCli.getOrgIdFromName(orgName);
-    const projectId = await boundaryCli.getProjectIdFromName(
-      orgId,
-      projectName,
-    );
-    const targetId = await boundaryCli.getTargetIdFromName(
-      projectId,
-      targetName,
-    );
-    const session = await boundaryCli.authorizeSessionByTargetId(targetId);
-    const retrievedUser = session.item.credentials[0].credential.username;
-    const retrievedPassword = session.item.credentials[0].credential.password;
-    const retrievedId = session.item.credentials[0].credential.id;
-
-    expect(retrievedUser).toBe(testName);
-    expect(retrievedPassword).toBe(testPassword);
-    expect(retrievedId).toBe(testId);
-
-    const sessionsPage = new SessionsPage(page);
-    await sessionsPage.waitForSessionToBeVisible(targetName);
-  } finally {
-    if (orgName) {
       await boundaryCli.authenticateBoundary(
         baseURL,
         adminAuthMethodId,
@@ -242,70 +230,103 @@ test('Static Credential Store (JSON) @ce @aws @docker', async ({
         adminPassword,
       );
       const orgId = await boundaryCli.getOrgIdFromName(orgName);
-      if (orgId) {
-        await boundaryCli.deleteScope(orgId);
+      const projectId = await boundaryCli.getProjectIdFromName(
+        orgId,
+        projectName,
+      );
+      const targetId = await boundaryCli.getTargetIdFromName(
+        projectId,
+        targetName,
+      );
+      const session = await boundaryCli.authorizeSessionByTargetId(targetId);
+      const retrievedUser = session.item.credentials[0].credential.username;
+      const retrievedPassword = session.item.credentials[0].credential.password;
+      const retrievedId = session.item.credentials[0].credential.id;
+
+      expect(retrievedUser).toBe(testName);
+      expect(retrievedPassword).toBe(testPassword);
+      expect(retrievedId).toBe(testId);
+
+      const sessionsPage = new SessionsPage(page);
+      await sessionsPage.waitForSessionToBeVisible(targetName);
+    } finally {
+      if (orgName) {
+        await boundaryCli.authenticateBoundary(
+          baseURL,
+          adminAuthMethodId,
+          adminLoginName,
+          adminPassword,
+        );
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
+        if (orgId) {
+          await boundaryCli.deleteScope(orgId);
+        }
       }
     }
-  }
-});
+  },
+);
 
-test('Multiple Credential Stores (CE) @ce @aws @docker', async ({
-  page,
-  baseURL,
-  adminAuthMethodId,
-  adminLoginName,
-  adminPassword,
-  sshUser,
-  sshKeyPath,
-}) => {
-  try {
-    const credentialStoresPage = new CredentialStoresPage(page);
-    const credentialName =
-      await credentialStoresPage.createStaticCredentialKeyPair(
-        sshUser,
-        sshKeyPath,
+test(
+  'Multiple Credential Stores (CE)',
+  { tag: ['@ce', '@aws', '@docker'] },
+  async ({
+    page,
+    baseURL,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    sshUser,
+    sshKeyPath,
+  }) => {
+    try {
+      const credentialStoresPage = new CredentialStoresPage(page);
+      const credentialName =
+        await credentialStoresPage.createStaticCredentialKeyPair(
+          sshUser,
+          sshKeyPath,
+        );
+      const credentialName2 =
+        await credentialStoresPage.createStaticCredentialUsernamePassword(
+          sshUser,
+          'testPassword',
+        );
+
+      const targetsPage = new TargetsPage(page);
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName,
       );
-    const credentialName2 =
-      await credentialStoresPage.createStaticCredentialUsernamePassword(
-        sshUser,
-        'testPassword',
+      await targetsPage.addBrokeredCredentialsToTarget(
+        targetName,
+        credentialName2,
       );
 
-    const targetsPage = new TargetsPage(page);
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName,
-    );
-    await targetsPage.addBrokeredCredentialsToTarget(
-      targetName,
-      credentialName2,
-    );
-
-    // Remove the host source from the target
-    await page
-      .getByRole('link', { name: credentialName2 })
-      .locator('..')
-      .locator('..')
-      .getByRole('button', { name: 'Manage' })
-      .click();
-    await page.getByRole('button', { name: 'Remove' }).click();
-    await page.getByRole('button', { name: 'OK', exact: true }).click();
-    await expect(
-      page.getByRole('alert').getByText('Success', { exact: true }),
-    ).toBeVisible();
-    await page.getByRole('button', { name: 'Dismiss' }).click();
-  } finally {
-    if (orgName) {
-      await boundaryCli.authenticateBoundary(
-        baseURL,
-        adminAuthMethodId,
-        adminLoginName,
-        adminPassword,
-      );
-      const orgId = await boundaryCli.getOrgIdFromName(orgName);
-      if (orgId) {
-        await boundaryCli.deleteScope(orgId);
+      // Remove the host source from the target
+      await page
+        .getByRole('link', { name: credentialName2 })
+        .locator('..')
+        .locator('..')
+        .getByRole('button', { name: 'Manage' })
+        .click();
+      await page.getByRole('button', { name: 'Remove' }).click();
+      await page.getByRole('button', { name: 'OK', exact: true }).click();
+      await expect(
+        page.getByRole('alert').getByText('Success', { exact: true }),
+      ).toBeVisible();
+      await page.getByRole('button', { name: 'Dismiss' }).click();
+    } finally {
+      if (orgName) {
+        await boundaryCli.authenticateBoundary(
+          baseURL,
+          adminAuthMethodId,
+          adminLoginName,
+          adminPassword,
+        );
+        const orgId = await boundaryCli.getOrgIdFromName(orgName);
+        if (orgId) {
+          await boundaryCli.deleteScope(orgId);
+        }
       }
     }
-  }
-});
+  },
+);
