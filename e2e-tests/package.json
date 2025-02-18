@@ -43,7 +43,7 @@
     "node": "20.* || 22.*"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
-    "*.{js,scss,yaml}": "prettier --write"
+    "*.js": ["eslint --fix", "prettier --write"],
+    "*.{scss,yaml}": "prettier --write"
   }
 }
