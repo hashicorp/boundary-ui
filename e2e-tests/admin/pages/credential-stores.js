@@ -71,6 +71,47 @@ export class CredentialStoresPage extends BaseResourcePage {
   }
 
   /**
+   * Creates a vault credential store. Assumes you have selected the desired project.
+   * @param {string} vaultAddr address of the vault server
+   * @param {string} clientToken vault token to connect to boundary
+   * @param {string} workerFilter Worker filter for the Storage Bucket
+   * @returns Name of the credential store
+   */
+  async createVaultCredentialStoreWithWorkerFilter(
+    vaultAddr,
+    clientToken,
+    workerFilter,
+  ) {
+    const credentialStoreName = 'Credential Store ' + nanoid();
+    await this.page
+      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('link', { name: 'Credential Stores' })
+      .click();
+    await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    await this.page.getByLabel('Name (Optional)').fill(credentialStoreName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page
+      .getByRole('group', { name: 'Type' })
+      .getByLabel('Vault')
+      .click();
+    await this.page.getByLabel('Address').fill(vaultAddr);
+    await this.page
+      .getByLabel('Worker filter')
+      .locator('textarea')
+      .fill(workerFilter);
+    await this.page.getByLabel('Token').fill(clientToken);
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(credentialStoreName),
+    ).toBeVisible();
+
+    return credentialStoreName;
+  }
+
+  /**
    * Creates a static key pair credential. Assumes you have selected the desired project.
    * @param {string} username username for the credential
    * @param {string} keyPath path to the private key
