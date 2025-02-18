@@ -986,7 +986,7 @@ __metadata:
     electron-squirrel-startup: "npm:^1.0.0"
     electron-store: "npm:^8.2.0"
     node-html-parser: "npm:^5.3.3"
-    node-pty: "npm:^1.0.0"
+    node-pty: "npm:^1.1.0-beta27"
     semver: "npm:^7.5.3"
     shell-env: "npm:^3.0.1"
     shell-quote: "npm:^1.7.3"
@@ -3402,7 +3402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.17.0, nan@npm:^2.4.0":
+"nan@npm:^2.4.0":
   version: 2.20.0
   resolution: "nan@npm:2.20.0"
   dependencies:
@@ -3447,6 +3447,15 @@ __metadata:
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10c0/41f21c9d12318875a2c429befd06070ce367065a3ef02952cfd4ea17ef69fa14012732f510b82b226e99c254da8d671847ea018cad785f839a5366e02dd56302
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.1.0":
+  version: 7.1.1
+  resolution: "node-addon-api@npm:7.1.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/fb32a206276d608037fa1bcd7e9921e177fe992fc610d098aa3128baca3c0050fc1e014fa007e9b3874cf865ddb4f5bd9f43ccb7cbbbe4efaff6a83e920b17e9
   languageName: node
   linkType: hard
 
@@ -3535,13 +3544,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-pty@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-pty@npm:1.0.0"
+"node-pty@npm:^1.1.0-beta27":
+  version: 1.1.0-beta9
+  resolution: "node-pty@npm:1.1.0-beta9"
   dependencies:
-    nan: "npm:^2.17.0"
+    node-addon-api: "npm:^7.1.0"
     node-gyp: "npm:latest"
-  checksum: 10c0/c308686826eb2f7616735f4c71e6e41ff630346b14319972dbdf9711640bc6975ce21eab66a47b7ce9a88c70308fe81bfd9840127388d5fa26c52afbad255871
+  checksum: 10c0/42981ad24fb048371ff69ec8a421132c6d3a530992a6db85c76333c5ab6f633a19f796e5c91f0373b3131a3f187f0b44f4913eeac31a151ddb59aed976d220a8
   languageName: node
   linkType: hard
 
