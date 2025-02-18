@@ -65,7 +65,7 @@
     }
   },
   "engines": {
-    "node": "20.* || 22.*"
+    "node": "18.* || 20.* || 22.*"
   },
   "packageManager": "yarn@4.6.0"
 }
