@@ -5,6 +5,8 @@
 
 import { getOwner } from '@ember/application';
 
+const { __electronLog } = globalThis;
+
 /**
  * Decorates a method and, if the method does not error, shows a success
  * notification via the notify service.  The text of the notification is derived
