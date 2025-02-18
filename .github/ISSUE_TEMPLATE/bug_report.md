@@ -21,11 +21,7 @@ Linux: ~/.config/Boundary/logs/desktop-client.log
 MacOS: ~/Library/Logs/Boundary/desktop-client.log
 Windows: $env:USERPROFILE\AppData\Roaming\Boundary\logs\desktop-client.log
 
-We also have some debug logging initially which logs how long search requests take (only way to change this until log levels can be changed directly in settings page)
-
-Linux: BOUNDARY_DESKTOP_LOG_LEVEL=debug ./boundary-desktop
-MacOS: BOUNDARY_DESKTOP_LOG_LEVEL=debug ./Boundary.app/Contents/MacOS/Boundary
-Windows: $env:BOUNDARY_DESKTOP_LOG_LEVEL='debug'; .\Boundary.exe
+We also have some debug logging initially which logs how long search requests take and this can be seen by changing the logging level on the settings page of the Desktop Client
 
 -->
 
