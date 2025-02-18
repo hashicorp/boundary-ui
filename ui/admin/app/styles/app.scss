@@ -1090,7 +1090,8 @@
     width: 100%;
   }
 
-  .indentation {
-    padding-left: 40px;
+  li:has(.indentation),
+  li.indentation {
+    margin-left: 2rem;
   }
 }
