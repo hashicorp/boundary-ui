@@ -63,7 +63,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     assert.dom(PROJECT_LIST_ITEM).doesNotExist();
   });
 
-  test('it renders correct content when there are less than five orgs', async function (assert) {
+  test('it renders correct content when there are five or less orgs', async function (assert) {
     const orgs = this.server.createList('scope', 4, {
       type: 'org',
       scope: { id: 'global', type: 'global' },
@@ -84,7 +84,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     assert.dom(ORG_ADD_MORE_TEXT).doesNotExist();
     // Scope picker should always render five or less orgs.
     assert.dom(ORG_LIST_ITEM).isVisible({ count: 4 });
-    assert.dom(ORG_LIST_COUNT).includesText(`(${orgs.length})`);
+    assert.dom(ORG_LIST_COUNT).doesNotExist();
     // Project scopes do not render when a project hasn't been selected.
     assert.dom(PROJECT_LIST_ITEM).doesNotExist();
   });
@@ -113,11 +113,12 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     assert.dom(PROJECT_LIST_ITEM).isVisible({ count: 5 });
     assert.dom(PROJECT_LIST_ITEM).hasClass('indentation');
     assert.dom(PROJECT_LIST_COUNT).includesText(`(${projects.length})`);
+    assert.dom(PROJECT_LIST_COUNT).hasClass('indentation');
     assert.dom(ORG_LIST_ITEM).isVisible({ count: orgs.length });
   });
 
-  test('it renders correct content when there are less than five projects', async function (assert) {
-    const orgs = this.server.createList('scope', 2, {
+  test('it renders correct content when there are five or less projects', async function (assert) {
+    const orgs = this.server.createList('scope', 5, {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
@@ -139,8 +140,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     // Scope picker should always render five or less projects.
     assert.dom(PROJECT_LIST_ITEM).isVisible({ count: projects.length });
     assert.dom(PROJECT_LIST_ITEM).hasClass('indentation');
-    assert.dom(PROJECT_LIST_COUNT).includesText(`(${projects.length})`);
-    assert.dom(PROJECT_LIST_COUNT).hasClass('indentation');
+    assert.dom(PROJECT_LIST_COUNT).doesNotExist();
     assert.dom(ORG_LIST_ITEM).isVisible({ count: orgs.length });
   });
 

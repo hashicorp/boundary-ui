@@ -49,9 +49,7 @@
       @text={{t 'descriptions.and-more'}}
       data-test-scope-picker-org-and-more-text
     />
-  {{/if}}
 
-  {{#if this.scope.orgsList}}
     <D.Interactive
       @route='scopes.scope.scopes'
       @model='global'
@@ -85,16 +83,16 @@
         class='indentation'
         data-test-scope-picker-project-and-more-text
       />
-    {{/if}}
 
-    <D.Interactive
-      @route='scopes.scope.scopes'
-      @model={{this.scope.org.id}}
-      class='indentation'
-      data-test-scope-picker-project-count
-    >{{t
-        'descriptions.view-all-projects'
-        total=this.scope.projectsList.length
-      }}</D.Interactive>
+      <D.Interactive
+        @route='scopes.scope.scopes'
+        @model={{this.scope.org.id}}
+        class='indentation'
+        data-test-scope-picker-project-count
+      >{{t
+          'descriptions.view-all-projects'
+          total=this.scope.projectsList.length
+        }}</D.Interactive>
+    {{/if}}
   {{/if}}
 </Hds::Dropdown>
