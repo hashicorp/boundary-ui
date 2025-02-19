@@ -216,6 +216,6 @@ module('Acceptance | scopes', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
+    assert.dom('.hds-form-error__message').hasText('Name is required.');
   });
 });
