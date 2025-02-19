@@ -101,14 +101,14 @@
     "webpack": "^5.94.0"
   },
   "engines": {
-    "node": "18.* || 20.*"
+    "node": "20.* || 22.*"
   },
   "ember": {
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
+    "*.js": ["eslint --fix", "prettier --write"],
     "*.hbs": "ember-template-lint --fix",
-    "*.{js,scss,yaml}": "prettier --write"
+    "*.{scss,yaml}": "prettier --write"
   }
 }

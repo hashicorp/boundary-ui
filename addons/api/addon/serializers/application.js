@@ -60,6 +60,18 @@ export default class ApplicationSerializer extends RESTSerializer {
     // Do not serialize `disabled` fields.
     // TODO:  disabled is temporarily disabled
     if (key === 'disabled') delete json[key];
+
+    // Before we transform our json
+    // Let's trim the values in the json obj
+    // Currently, json values will only ever be a string or an array
+    if (options.trimWhitespace && json[key]) {
+      if (typeOf(json[key]) === 'array') {
+        json[key] = json[key].map((str) => str.trim());
+      } else if (typeOf(json[key] === 'string')) {
+        json[key] = json[key].trim();
+      }
+    }
+
     // Push nested attributes down into the attributes key
     if (options.isNestedAttribute && json[key] !== undefined) {
       if (!json.attributes) json.attributes = {};

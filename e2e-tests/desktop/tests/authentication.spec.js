@@ -6,7 +6,7 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import LoginPage from '../pages/loginPage.js';
 
-test.describe('user/password authentication tests', async () => {
+test.describe('user/password authentication tests', () => {
   test('Authenticates and signs out', async ({
     electronPage,
     clusterUrl,

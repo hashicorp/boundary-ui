@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -24,8 +25,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   const TYPE_INPUT_SELECTOR = '[name="Type"]';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const ALERT_TEXT_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const WORKER_FILTER_INPUT_SELECTOR = '[name=worker_filter]';
 
   const instances = {
@@ -215,7 +214,9 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     });
     await visit(urls.newStaticHostCatalog);
     await click(SAVE_BUTTON_SELECTOR);
-    assert.dom(ALERT_TEXT_SELECTOR).includesText('The request was invalid.');
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .includesText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
 

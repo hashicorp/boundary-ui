@@ -34,6 +34,7 @@
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-playwright": "^2.2.0",
     "nanoid": "^5.0.9",
     "prettier": "^3.0.0"
   },
@@ -41,7 +42,7 @@
     "node": "20.* || 22.*"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
-    "*.{js,scss,yaml}": "prettier --write"
+    "*.js": ["eslint --fix", "prettier --write"],
+    "*.{scss,yaml}": "prettier --write"
   }
 }

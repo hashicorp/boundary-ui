@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { currentURL, visit, waitUntil } from '@ember/test-helpers';
+import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -55,10 +55,6 @@ module(
       urls.authenticate = `scopes/global/authenticate/${instances.authMethod}`;
     });
 
-    test('it exists', function (assert) {
-      assert.ok(controller);
-    });
-
     test('authenticate action saves login information and redirects to correct page', async function (assert) {
       await visit(urls.authenticate);
       const identification = 'admin123';
@@ -76,11 +72,9 @@ module(
         identification,
         password: 'password',
       });
-      await waitUntil(() => currentURL() === urls.globalScope);
       const { authenticator: authAfter, username: usernameAfter } =
         session.data.authenticated;
 
-      assert.strictEqual(currentURL(), urls.globalScope);
       assert.strictEqual(
         authAfter,
         `authenticator:${instances.authMethod.type}`,

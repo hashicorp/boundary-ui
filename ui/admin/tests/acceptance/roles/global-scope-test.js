@@ -49,8 +49,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
   const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
-  const TOAST_SELECTOR =
-    '[data-test-toast-notification] .hds-alert__description';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
@@ -359,7 +357,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
     await click(SAVE_BTN_SELECTOR);
 
-    assert.dom(TOAST_SELECTOR).isVisible();
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage scopes page', async function (assert) {
@@ -486,7 +484,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(SCOPE_CHECKBOX_SELECTOR('org', instances.scopes.org.id));
     await click(SAVE_BTN_SELECTOR);
 
-    assert.dom(TOAST_SELECTOR).isVisible();
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage custom scopes page', async function (assert) {
@@ -820,7 +818,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     );
     await click(SAVE_BTN_SELECTOR);
 
-    assert.dom(TOAST_SELECTOR).isVisible();
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
 
   test('user is prompted to confirm exit when there are unsaved changes on manage org projects page', async function (assert) {
