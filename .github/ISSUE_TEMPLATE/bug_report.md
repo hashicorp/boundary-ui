@@ -55,7 +55,7 @@ _Add screenshots or screen recordings to help explain the issue._
 - **OS and Version:** (e.g., Windows 10 (22H2), macOS (14.7.2))
 - **Architecture:** (e.g., arm64, x86_64)
 - **Browser/Version:** (if applicable)
-- **App Version:** (if applicable)
+- **Desktop Client Version:** (if applicable)
 - **Controller/worker versions:** (if applicable)
 
 ## **Logs & Console Output (if applicable)**
