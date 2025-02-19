@@ -40,6 +40,7 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
+    "@babel/runtime": "7.12.18",
     "@xterm/addon-canvas": "^0.7.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/xterm": "^5.5.0",

@@ -36,6 +36,7 @@
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
+    "@babel/runtime": "7.12.18",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
     "uuid": "^11.0.3"
