@@ -16,22 +16,22 @@
     "build:oss": "EDITION=oss ember build --environment=production",
     "build:enterprise": "EDITION=enterprise ember build --environment=production",
     "build:hcp": "EDITION=hcp ember build --environment=production",
-    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint": "../../node_modules/.bin/concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "../../node_modules/.bin/concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "lint:sass": "stylelint 'app/styles/**/*.scss'",
     "lint:sass:fix": "stylelint 'app/styles/**/*.scss' --fix",
-    "format": "concurrently \"npm:format:*\" --names \"format:\"",
+    "format": "../../node_modules/.bin/concurrently \"npm:format:*\" --names \"format:\"",
     "format:hbs": "prettier --write 'app/**/*.hbs'",
     "format:js": "prettier --write '{app,config,stories,tests}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_*",
     "pretest": "yarn clean:coverage",
-    "test": "concurrently \"npm:test:*\" --names \"test:\"",
+    "test": "../../node_modules/.bin/concurrently \"npm:test:*\" --names \"test:\"",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
     "posttest": "ember coverage-merge && yarn clean:coverage"
   },
@@ -55,7 +55,6 @@
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
     "babel-loader": "^9.2.1",
     "broccoli-asset-rev": "^3.0.0",
-    "concurrently": "^9.1.0",
     "core": "*",
     "doctoc": "^2.2.0",
     "ember-a11y-testing": "^7.0.0",
@@ -76,7 +75,7 @@
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
     "ember-page-title": "^7.0.0",
-    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539",
+    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8",
     "ember-qunit": "^8.1.0",
     "ember-resolver": "^10.0.0",
     "ember-source": "~4.12.0",
@@ -89,6 +88,7 @@
     "eslint-plugin-qunit": "^8.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
+    "postcss": "^8.4.31",
     "prettier": "^3.0.0",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
@@ -107,7 +107,10 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "*.hbs": "ember-template-lint --fix",
     "*.{scss,yaml}": "prettier --write"
   }

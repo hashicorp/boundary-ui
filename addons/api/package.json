@@ -10,11 +10,11 @@
   "scripts": {
     "build:development": "ember build",
     "build": "ember build --environment=production",
-    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint": "../../node_modules/.bin/concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "../../node_modules/.bin/concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
-    "format": "concurrently \"npm:format:*\" --names \"format:\"",
+    "format": "../../node_modules/.bin/concurrently \"npm:format:*\" --names \"format:\"",
     "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
     "start": "ember serve",
     "test": "ember exam --test-port 0 --split=4 --parallel=1 --random",
@@ -29,8 +29,8 @@
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",
     "ember-cli-mirage": "^3.0.3",
-    "miragejs": "^0.1.48",
     "ember-data": "~4.12.0",
+    "miragejs": "^0.1.48",
     "tracked-built-ins": "^3.1.1"
   },
   "devDependencies": {
@@ -45,7 +45,6 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
-    "concurrently": "^9.1.0",
     "doctoc": "^2.2.0",
     "ember-cli": "^5.12.0",
     "ember-cli-dependency-checker": "^3.3.2",
@@ -82,7 +81,10 @@
     "configPath": "tests/dummy/config"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "*.hbs": "ember-template-lint --fix",
     "*.{scss,yaml}": "prettier --write"
   }

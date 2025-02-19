@@ -8,39 +8,37 @@
       "addons/*",
       "ui/*",
       "e2e-tests"
-    ],
-    "nohoist": [
-      "**/electron**"
     ]
   },
   "scripts": {
     "build": "yarn build:ui:admin",
-    "build:ui:admin": "yarn --cwd ui/admin build",
-    "build:ui:admin:oss": "yarn --cwd ui/admin build:oss",
-    "build:ui:admin:enterprise": "yarn --cwd ui/admin build:enterprise",
-    "build:ui:admin:hcp": "yarn --cwd ui/admin build:hcp",
-    "build:ui:desktop": "yarn --cwd ui/desktop build",
-    "build:ui:desktop:production": "yarn --cwd ui/desktop build:production",
-    "build:ui:desktop:app": "yarn --cwd ui/desktop build:desktop",
+    "build:ui:admin": "yarn workspace admin build",
+    "build:ui:admin:oss": "yarn workspace admin build:oss",
+    "build:ui:admin:enterprise": "yarn workspace admin build:enterprise",
+    "build:ui:admin:hcp": "yarn workspace admin build:hcp",
+    "build:ui:desktop": "yarn workspace desktop build",
+    "build:ui:desktop:production": "yarn workspace desktop build:production",
+    "build:ui:desktop:app": "yarn workspace desktop build:desktop",
     "lint": "concurrently \"yarn:lint:*\" --names \"lint:\"",
-    "lint:addons-api": "yarn --cwd addons/api lint",
-    "lint:addons-auth": "yarn --cwd addons/auth lint",
-    "lint:addons-core": "yarn --cwd addons/core lint",
-    "lint:addons-rose": "yarn --cwd addons/rose lint",
-    "lint:ui-admin": "yarn --cwd ui/admin lint",
-    "lint:ui-desktop": "yarn --cwd ui/desktop lint",
+    "lint:addons-api": "yarn workspace api lint",
+    "lint:addons-auth": "yarn workspace auth lint",
+    "lint:addons-core": "yarn workspace core lint",
+    "lint:addons-rose": "yarn workspace rose lint",
+    "lint:ui-admin": "yarn workspace admin lint",
+    "lint:ui-desktop": "yarn workspace desktop lint",
     "test": "concurrently \"yarn:test:*\" --names \"test:\"",
-    "test:addons-api": "yarn --cwd addons/api test",
-    "test:addons-auth": "yarn --cwd addons/auth test",
-    "test:addons-core": "yarn --cwd addons/core test",
-    "test:addons-rose": "yarn --cwd addons/rose test",
-    "test:ui-admin": "yarn --cwd ui/admin test",
-    "test:ui-desktop": "yarn --cwd ui/desktop test",
-    "compliance:licenses": "license-checker --onlyAllow 'Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;BUSL-1.1;Public Domain;Python-2.0;Unicode-TOU;Unlicense;WTFPL' --excludePackages 'boundary-ui;admin@0.0.0;desktop@0.0.0;e2e-tests@0.0.0;cycle@1.0.3;cldr-core@43.1.0;make-plural@7.2.0;@hashicorp/ember-asciinema-player@0.0.0;path-scurry@1.10.1'",
+    "test:addons-api": "yarn workspace api test",
+    "test:addons-auth": "yarn workspace auth test",
+    "test:addons-core": "yarn workspace core test",
+    "test:addons-rose": "yarn workspace rose test",
+    "test:ui-admin": "yarn workspace admin test",
+    "test:ui-desktop": "yarn workspace desktop test",
+    "compliance:licenses": "license-checker --onlyAllow 'Apache*;Apache License, Version 2.0;Apache-2.0;Apache 2.0;Artistic-2.0;BSD;BSD-3-Clause;CC-BY-3.0;CC-BY-4.0;CC0-1.0;ISC;MIT;MPL-2.0;BUSL-1.1;Public Domain;Python-2.0;Unicode-TOU;Unlicense;BlueOak-1.0.0' --excludePackages 'boundary-ui;admin@0.0.0;desktop@0.0.0;e2e-tests@0.0.0;cycle@1.0.3;cldr-core@43.1.0;make-plural@7.2.0;@hashicorp/ember-asciinema-player@0.0.0;path-scurry@1.10.1'",
     "doc:toc": "doctoc README.md",
     "prepare": "husky"
   },
   "devDependencies": {
+    "concurrently": "^9.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "doctoc": "^2.2.0",
     "git-cz": "^4.9.0",
@@ -49,12 +47,13 @@
     "lint-staged": "^15.2.10"
   },
   "resolutions": {
-    "**/nomnom/underscore": "^1.12.1",
-    "**/core/ember-inline-svg/**/nth-check": "^2.0.1",
-    "**/ember-cli/**/ansi-html": "^0.0.9",
-    "**/ember-cli/testem/fireworm/async": "^2.6.4",
-    "**/@hashicorp/design-system-components/ember-stargate": "^0.6.0",
-    "micromatch": "^4.0.8"
+    "nomnom/underscore": "^1.12.1",
+    "ember-stargate": "^0.6.0",
+    "micromatch": "^4.0.8",
+    "eslint": "^8.54.0",
+    "ansi-html": "^0.0.9",
+    "nth-check": "^2.0.0",
+    "async": "^2.6.4"
   },
   "config": {
     "commitizen": {
@@ -64,5 +63,5 @@
   "engines": {
     "node": "20.* || 22.*"
   },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "packageManager": "yarn@4.6.0"
 }
