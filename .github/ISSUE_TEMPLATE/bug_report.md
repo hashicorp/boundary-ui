@@ -21,7 +21,7 @@ Linux: ~/.config/Boundary/logs/desktop-client.log
 MacOS: ~/Library/Logs/Boundary/desktop-client.log
 Windows: $env:USERPROFILE\AppData\Roaming\Boundary\logs\desktop-client.log
 
-We also have some debug logging initially which logs how long search requests take and this can be seen by changing the logging level on the settings page of the Desktop Client
+If requests are taking longer than expected, please change the logging level to DEBUG. This will log the cache daemon request times as well.
 
 -->
 
@@ -59,7 +59,7 @@ _Add screenshots or screen recordings to help explain the issue._
 
 ## **Logs & Console Output (if applicable)**
 
-_Paste any relevant error logs or console output here._
+_Paste any relevant error logs or browser console output here._
 
 ## **Additional Context**
 
