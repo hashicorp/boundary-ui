@@ -11,7 +11,6 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
 
 module('Acceptance | aliases | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -69,7 +68,7 @@ module('Acceptance | aliases | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(selectors.TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.FIELD_TABLE_LINK_SELECTOR).doesNotExist();
   });
 
   test('visiting an unknown alias displays 404 message', async function (assert) {
