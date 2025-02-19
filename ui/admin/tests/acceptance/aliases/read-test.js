@@ -68,7 +68,7 @@ module('Acceptance | aliases | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(commonSelectors.FIELD_TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.TABLE_LINK_SELECTOR).doesNotExist();
   });
 
   test('visiting an unknown alias displays 404 message', async function (assert) {
