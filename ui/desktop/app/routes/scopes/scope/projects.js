@@ -6,6 +6,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
+const { __electronLog } = globalThis;
+
 /**
  * TODO:  This route is now vestigial.  Desktop does not provide project-based
  * navigation.  This route formerly provided a way to aggregate

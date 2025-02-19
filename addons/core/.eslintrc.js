@@ -25,7 +25,6 @@ module.exports = {
   env: {
     browser: true,
   },
-  globals: { __electronLog: 'true' },
   rules: {
     'ember/no-get': 'off',
     'ember/no-get-with-default': 'off',
