@@ -50,8 +50,8 @@ module('Acceptance | aliases | create', function (hooks) {
     await visit(urls.newAlias);
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
-    await fillIn(selectors.DESTINATION_ID_SELECTOR, 'tcp_123');
-    await fillIn(selectors.HOST_ID_SELECTOR, 'h_123');
+    await fillIn(selectors.FIELD_DESTINATION_ID_SELECTOR, 'tcp_123');
+    await fillIn(selectors.FIELD_HOST_ID_SELECTOR, 'h_123');
     await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
       name: commonSelectors.FIELD_NAME_VALUE,
