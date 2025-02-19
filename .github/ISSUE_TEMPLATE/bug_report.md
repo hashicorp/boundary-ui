@@ -11,7 +11,7 @@ assignees: ''
 
 For questions, the best place to get answers is on our [discussion forum](https://discuss.hashicorp.com/c/boundary), as they will get more visibility from experienced users than the issue tracker.
 
-Please note: We take Boundary's security and our users' trust very seriously. If you believe you have found a security issue in Boundary, please responsibly disclose by contacting us at security@hashicorp.com. Our PGP key is available at [our security page](https://www.hashicorp.com/security/).
+Please note: We take Boundary's security and our users' trust very seriously. If you believe you have found a security issue in Boundary, please responsibly disclose this by contacting us at security@hashicorp.com. Our PGP key is available on [our security page](https://www.hashicorp.com/security/).
 
 If Boundary Desktop Client version >= 2.1.0
 
