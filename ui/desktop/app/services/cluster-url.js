@@ -88,7 +88,7 @@ export default class ClusterUrlService extends Service {
   /**
    * Resets the clusterUrl.
    */
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message, { catch: true, log: true })
   async resetClusterUrl() {
     this.rendererClusterUrl = null;
     await this.ipc.invoke('resetClusterUrl');

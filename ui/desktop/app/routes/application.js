@@ -29,7 +29,7 @@ export default class ApplicationRoute extends Route {
    * reported by the main process.  If they differ, update the main process
    * clusterUrl so that the renderer's CSP can be rewritten to allow requests.
    */
-  @notifyError(({ message }) => message, { catch: true })
+  @notifyError(({ message }) => message, { catch: true, log: true })
   async beforeModel() {
     this.intl.setLocale(['en-us']);
     await this.session.setup();
