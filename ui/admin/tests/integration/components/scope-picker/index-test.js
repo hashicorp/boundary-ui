@@ -25,6 +25,7 @@ module('Integration | Component | scope-picker/index', function (hooks) {
   const PROJECT_ADD_MORE_TEXT =
     '[data-test-scope-picker-project-and-more-text]';
   const PROJECT_LIST_COUNT = '[data-test-scope-picker-project-count]';
+  const SELECTED_SCOPE_CHECK = (id) => `[href="/scopes/${id}"] .hds-icon-check`;
 
   let global;
   let scopeService;
@@ -34,7 +35,8 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     store = this.owner.lookup('service:store');
     scopeService = this.owner.lookup('service:scope');
 
-    global = this.server.create('scope', { id: 'global' });
+    this.server.create('scope', { id: 'global' });
+    global = await store.findRecord('scope', 'global');
   });
 
   test('it renders correct content when there are more than five orgs', async function (assert) {
@@ -153,9 +155,11 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     scopeService.orgsList = await store.query('scope', { scope_id: 'global' });
 
     await render(hbs`<ScopePicker />`);
+    await click(SCOPE_PICKER_DROPDOWN);
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText('Global');
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-globe');
+    assert.dom(SELECTED_SCOPE_CHECK('global')).isVisible();
   });
 
   test('it renders correct dropdown button text and icon when selected scope is org type', async function (assert) {
@@ -168,9 +172,11 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     scopeService.org = scopeService.orgsList[0];
 
     await render(hbs`<ScopePicker />`);
+    await click(SCOPE_PICKER_DROPDOWN);
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText(scopeService.org.displayName);
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-org');
+    assert.dom(SELECTED_SCOPE_CHECK(scopeService.org.id)).isVisible();
   });
 
   test('it renders correct dropdown button text and icon when selected scope is project type', async function (assert) {
@@ -189,8 +195,10 @@ module('Integration | Component | scope-picker/index', function (hooks) {
     scopeService.projectsList = projects;
 
     await render(hbs`<ScopePicker />`);
+    await click(SCOPE_PICKER_DROPDOWN);
 
     assert.dom(SCOPE_PICKER_DROPDOWN).hasText(scopeService.project.displayName);
     assert.dom(SCOPE_PICKER_DROPDOWN_ICON).hasClass('hds-icon-grid');
+    assert.dom(SELECTED_SCOPE_CHECK(scopeService.project.id)).isVisible();
   });
 });
