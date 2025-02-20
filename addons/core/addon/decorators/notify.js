@@ -52,16 +52,19 @@ export function notifySuccess(notification) {
  *
  * @param {string|function} notification
  * @param {object} options
- * @param {object} options.sticky - defaults to true, whether or not to persist
+ * @param {boolean} options.sticky - defaults to true, whether or not to persist
  *                                  the notification until user dismissal
- * @param {object} options.catch - defaults to false, whether or not to catch
+ * @param {boolean} options.catch - defaults to false, whether or not to catch
  *                                 and squelch the error
- * @param {object} options.log - defaults to false, whether or not to log
- *                                 the error to our electron logging service
+ * @param {object} options.log - defaults to undefined, object with unique
+ *                              information about the error to send to our
+ *                              electron logging service
+ * @param {string} options.log.origin - defaults to undefined, the origin that
+ *                                     triggered the error
  */
 export function notifyError(
   notification,
-  options = { catch: false, sticky: true, log: false },
+  options = { catch: false, sticky: true, log: undefined },
 ) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
@@ -74,7 +77,11 @@ export function notifyError(
         return await method.apply(this, arguments);
       } catch (error) {
         if (options.log) {
-          __electronLog?.error('notifyError', error.message);
+          const { origin } = options.log;
+          __electronLog?.error(
+            `Error triggered in '${origin}':`,
+            error.message,
+          );
         }
         const candidateKey =
           typeof notification === 'function'

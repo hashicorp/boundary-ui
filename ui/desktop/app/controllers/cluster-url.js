@@ -26,7 +26,7 @@ export default class ClusterUrlController extends Controller {
   @loading
   @notifyError(() => 'errors.cluster-url-verification-failed.description', {
     catch: true,
-    log: true,
+    log: { origin: 'setClusterUrl' },
   })
   async setClusterUrl(clusterUrl) {
     await this.clusterUrlService.setClusterUrl(clusterUrl);
