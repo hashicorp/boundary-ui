@@ -6,15 +6,12 @@
 <Hds::Dropdown
   @enableCollisionDetection={{true}}
   @matchToggleWidth={{true}}
+  {{! HDS provided class to automatically fade in/out }}
   class='hds-side-nav-hide-when-minimized scope-picker'
   as |D|
 >
   {{#let this.currentScope as |scope|}}
-    <D.ToggleButton
-      @text={{scope.name}}
-      @icon={{scope.icon}}
-      class='scope-picker__toggle-button'
-    />
+    <D.ToggleButton @text={{scope.name}} @icon={{scope.icon}} />
   {{/let}}
 
   <D.Checkmark
