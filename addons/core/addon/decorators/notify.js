@@ -61,10 +61,12 @@ export function notifySuccess(notification) {
  *                              electron logging service
  * @param {string} options.log.origin - defaults to undefined, the origin that
  *                                     triggered the error
+ * @param {string} options.log.level - defaults to undefined, the log level that
+ *                                     our electron logging service should use
  */
 export function notifyError(
   notification,
-  options = { catch: false, sticky: true, log: undefined },
+  options = { catch: false, sticky: true },
 ) {
   return function (_target, _propertyKey, desc) {
     const method = desc.value;
@@ -77,11 +79,8 @@ export function notifyError(
         return await method.apply(this, arguments);
       } catch (error) {
         if (options.log) {
-          const { origin } = options.log;
-          __electronLog?.error(
-            `Error triggered in '${origin}':`,
-            error.message,
-          );
+          const { origin, level = 'error' } = options.log;
+          __electronLog?.[level](`${origin}:`, error.message);
         }
         const candidateKey =
           typeof notification === 'function'
