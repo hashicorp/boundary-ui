@@ -16,14 +16,14 @@
 
 {{#if @model.isProject}}
   {{page-title (t 'resources.org.title_plural')}}
-  {{page-title this.scopes.selectedOrg.displayName}}
+  {{page-title this.scope.org.displayName}}
   {{page-title (t 'resources.project.title_plural')}}
   {{page-title @model.displayName}}
   <Breadcrumbs::Item
-    @text={{this.scopes.selectedOrg.displayName}}
+    @text={{this.scope.org.displayName}}
     @icon='org'
     @route='scopes.scope.edit'
-    @model={{this.scopes.selectedOrg.id}}
+    @model={{this.scope.org.id}}
   />
   <Breadcrumbs::Item
     @text={{@model.displayName}}
