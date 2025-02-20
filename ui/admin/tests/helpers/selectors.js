@@ -10,7 +10,6 @@ export const EDIT_BTN = '.rose-form-actions [type=button]';
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
 export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
-export const FIELD_TEXT_ERROR = '.hds-form-error__message';
 
 export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';

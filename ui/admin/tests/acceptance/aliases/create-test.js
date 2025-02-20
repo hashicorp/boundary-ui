@@ -112,7 +112,7 @@ module('Acceptance | aliases | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(commonSelectors.FIELD_TEXT_ERROR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can navigate to new aliases route with proper authorization', async function (assert) {
