@@ -1083,3 +1083,15 @@
     margin-bottom: 0;
   }
 }
+
+// scope picker
+.scope-picker {
+  &__toggle-button {
+    width: 100%;
+  }
+
+  li:has(.indentation),
+  li.indentation {
+    margin-left: 2rem;
+  }
+}
