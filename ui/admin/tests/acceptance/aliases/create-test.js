@@ -124,7 +124,7 @@ module('Acceptance | aliases | create', function (hooks) {
       ),
     );
 
-    assert.dom(`[href="${urls.newAlias}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(urls.newAlias)).isVisible();
   });
 
   test('users cannot directly navigate to new alias route without proper authorization', async function (assert) {
