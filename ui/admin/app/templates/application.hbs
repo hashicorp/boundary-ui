@@ -6,9 +6,7 @@
 {{page-title (app-name)}}
 
 <Hds::AppFrame @hasHeader={{false}} as |Frame|>
-  {{#if this.session.isAuthenticated}}
-    <Frame.Sidebar id='global-app-frame-sidebar' />
-  {{/if}}
+  <Frame.Sidebar id='global-app-frame-sidebar' />
 
   <Frame.Main>
     {{outlet}}
