@@ -11,7 +11,11 @@
   as |D|
 >
   {{#let this.currentScope as |scope|}}
-    <D.ToggleButton @text={{scope.name}} @icon={{scope.icon}} />
+    <D.ToggleButton
+      @text={{scope.name}}
+      @icon={{scope.icon}}
+      class='scope-picker__toggle-button'
+    />
   {{/let}}
 
   <D.Checkmark
