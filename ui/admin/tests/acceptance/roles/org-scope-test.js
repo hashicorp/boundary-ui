@@ -44,8 +44,8 @@ module('Acceptance | roles | org-scope', function (hooks) {
   const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
   const SAVE_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
-  const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-role] button';
+  const MANAGE_SCOPES_SELECTOR = '[data-test-manage-role-scopes]';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';

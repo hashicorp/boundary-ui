@@ -1095,3 +1095,13 @@
     margin-left: 2rem;
   }
 }
+
+// global side-nav
+.hds-side-nav__list-wrapper {
+  display: grid;
+  width: 100%;
+  .hds-side-nav--is-minimized & {
+    height: 0;
+    overflow: hidden;
+  }
+}

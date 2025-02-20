@@ -6,25 +6,10 @@
 {{outlet}}
 
 {{#unless @model}}
-  <Rose::Layout::Sidebar as |sidebarLayout|>
-    <sidebarLayout.body>
-      <main>
-        <Rose::Layout::Centered>
-          <Hds::ApplicationState as |A|>
-            <A.Header
-              @title={{t 'auth.titles.no-scopes'}}
-              @icon='alert-circle'
-            />
-            <A.Body @text={{t 'auth.descriptions.no-scopes'}} />
-          </Hds::ApplicationState>
-        </Rose::Layout::Centered>
-      </main>
-    </sidebarLayout.body>
-    <sidebarLayout.footer>
-      <Hds::AppFooter @theme={{this.session.data.theme}} as |AF|>
-        <AF.Link @href={{(doc-url)}}>{{t 'titles.documentation'}}</AF.Link>
-        <AF.LegalLinks />
-      </Hds::AppFooter>
-    </sidebarLayout.footer>
-  </Rose::Layout::Sidebar>
+  <Rose::Layout::Centered>
+    <Hds::ApplicationState as |A|>
+      <A.Header @title={{t 'auth.titles.no-scopes'}} @icon='alert-circle' />
+      <A.Body @text={{t 'auth.descriptions.no-scopes'}} />
+    </Hds::ApplicationState>
+  </Rose::Layout::Centered>
 {{/unless}}
