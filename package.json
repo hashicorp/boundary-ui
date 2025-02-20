@@ -54,7 +54,7 @@
     "ansi-html": "^0.0.9",
     "nth-check": "^2.0.0",
     "async": "^2.6.4",
-    "node-gyp": "^9.4.0"
+    "node-gyp": "^10.0.0"
   },
   "config": {
     "commitizen": {
