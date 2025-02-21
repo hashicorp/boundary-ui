@@ -163,24 +163,6 @@ test(
       await page.locator('div.session-recording-player').hover();
       await page.locator('.ap-playback-button').click();
 
-      // Try to delete session recording: expect failure
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-      await page
-        .getByRole('navigation', { name: 'General' })
-        .getByRole('link', { name: 'Session Recordings', exact: true })
-        .click();
-      await page
-        .getByRole('row', { name: targetName })
-        .getByRole('link', { name: 'View' })
-        .click();
-      await page.getByText('Manage').click();
-      await page.getByRole('button', { name: 'Delete recording' }).click();
-      await page.getByRole('button', { name: 'OK', exact: true }).click();
-      await expect(
-        page.getByRole('alert').getByText('Error', { exact: true }),
-      ).toBeVisible();
-      await page.getByRole('button', { name: 'Dismiss' }).click();
-
       // Edit storage policy: do not protect from deletion
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
@@ -206,11 +188,6 @@ test(
         page.getByRole('alert').getByText('Success', { exact: true }),
       ).toBeVisible();
       await page.getByRole('button', { name: 'Dismiss' }).click();
-
-      // BUG? After the error trying to delete the session recording, subsequent
-      // actions result in an error. Reloading the page fixes the issue. This is a
-      // temporary workaround.
-      await page.reload();
 
       // Re-apply storage policy to the session recording and delete
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();

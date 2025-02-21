@@ -113,7 +113,7 @@ module('Acceptance | users | update', function (hooks) {
     await click('[type="submit"]');
 
     assert
-      .dom('[data-test-toast-notification] .hds-alert__description')
+      .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
     assert.dom('[data-test-error-message-name]').hasText('Name is required.');
   });
