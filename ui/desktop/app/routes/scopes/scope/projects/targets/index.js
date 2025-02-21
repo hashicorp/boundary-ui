@@ -11,6 +11,8 @@ import {
 } from 'api/models/session';
 import { action } from '@ember/object';
 
+const { __electronLog } = globalThis;
+
 export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
 

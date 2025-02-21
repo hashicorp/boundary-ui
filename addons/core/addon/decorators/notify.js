@@ -5,6 +5,8 @@
 
 import { getOwner } from '@ember/application';
 
+const { __electronLog } = globalThis;
+
 /**
  * Decorates a method and, if the method does not error, shows a success
  * notification via the notify service.  The text of the notification is derived
@@ -50,10 +52,17 @@ export function notifySuccess(notification) {
  *
  * @param {string|function} notification
  * @param {object} options
- * @param {object} options.sticky - defaults to true, whether or not to persist
+ * @param {boolean} options.sticky - defaults to true, whether or not to persist
  *                                  the notification until user dismissal
- * @param {object} options.catch - defaults to false, whether or not to catch
+ * @param {boolean} options.catch - defaults to false, whether or not to catch
  *                                 and squelch the error
+ * @param {object} options.log - defaults to undefined, object with unique
+ *                              information about the error to send to our
+ *                              electron logging service
+ * @param {string} options.log.origin - defaults to undefined, the origin that
+ *                                     triggered the error
+ * @param {string} options.log.level - defaults to undefined, the log level that
+ *                                     our electron logging service should use
  */
 export function notifyError(
   notification,
@@ -69,6 +78,10 @@ export function notifyError(
       try {
         return await method.apply(this, arguments);
       } catch (error) {
+        if (options.log) {
+          const { origin, level = 'error' } = options.log;
+          __electronLog?.[level](`${origin}:`, error.message);
+        }
         const candidateKey =
           typeof notification === 'function'
             ? notification.apply(this, [error])
