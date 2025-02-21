@@ -6,6 +6,7 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import SessionPage from '../pages/sessionPage.js';
+import { textToMatch } from '../fixtures/tesseractTest.js';
 
 let org;
 let targetWithHost;
@@ -210,14 +211,18 @@ test.describe('Filtering sessions tests', () => {
     ).toBeVisible();
   });
 
-  test('Filters by status', async ({ authedPage }) => {
+  test('Filters by status', async ({ authedPage, tesseract }) => {
     await authedPage
       .getByRole('row', { name: sshTarget.name })
       .getByRole('link')
       .first()
       .click();
     await authedPage.getByRole('tab', { name: 'Shell' }).click();
-    await authedPage.waitForTimeout(3000);
+    await expect(async () => {
+      const screenshot = await authedPage.locator('.xterm-screen').screenshot();
+      const result = await tesseract.recognize(screenshot);
+      expect(result.data.text).toMatch(textToMatch);
+    }).toPass();
     await authedPage.getByRole('link', { name: 'Sessions' }).click();
 
     await authedPage.getByRole('button', { name: 'Clear Filters' }).click();
