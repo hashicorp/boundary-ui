@@ -55,26 +55,18 @@ form {
 }
 
 // These overrides are necessary to insure that changing the color theme to won't alter the dropdown colors.
-.hds-side-nav
-  .hds-dropdown-toggle-button:not(
-    .hds-dropdown * *,
-    .ember-basic-dropdown-trigger * *,
-    .ember-basic-dropdown-content * *
-  ),
-.hds-side-nav
-  .hds-dropdown-toggle-icon:not(
-    .hds-dropdown * *,
-    .ember-basic-dropdown-trigger * *,
-    .ember-basic-dropdown-content * *
-  ) {
-  background: var(--token-side-nav-color-surface-primary);
-
-  &:hover {
-    background: var(--token-side-nav-color-surface-interactive-hover);
-  }
-
-  &:active,
-  &:focus {
+.hds-app-frame__sidebar .hds-side-nav {
+  .hds-dropdown-toggle-button,
+  .hds-dropdown-toggle-icon {
     background: var(--token-side-nav-color-surface-primary);
+
+    &:hover {
+      background: var(--token-side-nav-color-surface-interactive-hover);
+    }
+
+    &:active,
+    &:focus {
+      background: var(--token-side-nav-color-surface-primary);
+    }
   }
 }
