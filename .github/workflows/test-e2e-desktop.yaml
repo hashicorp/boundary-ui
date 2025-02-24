@@ -13,8 +13,9 @@ jobs:
     name: Run Desktop E2E Tests
     runs-on: ubuntu-22.04
     env:
-      ENOS_VAR_boundary_edition: "oss"
+      ENOS_VAR_boundary_edition: "ent"
       ENOS_VAR_e2e_debug_no_run: true
+      ENOS_VAR_boundary_license_path: "./license.hclic"
       SETUP_CLI: true
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -25,7 +26,7 @@ jobs:
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: 20
-          cache: 'yarn'
+          cache: "yarn"
           cache-dependency-path: |
             yarn.lock
             ui/desktop/electron-app/yarn.lock
@@ -50,27 +51,27 @@ jobs:
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
           unzip /tmp/vault.zip -d /usr/local/bin
 
-  # # -- Get Boundary binary (!! get latest?)
-  #     - name: Download Boundary AMD64 binary
-  #       run: |
-  #         wget https://releases.hashicorp.com/boundary/0.18.2/boundary_0.18.2_linux_amd64.zip -O /tmp/boundary.zip
+      # # -- Get Boundary binary (!! get latest?)
+      #     - name: Download Boundary AMD64 binary
+      #       run: |
+      #         wget https://releases.hashicorp.com/boundary/0.18.2/boundary_0.18.2_linux_amd64.zip -O /tmp/boundary.zip
 
-      - name: Checkout boundary
+      #      - name: Checkout boundary
+      #        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      #        with:
+      #          repository: hashicorp/boundary
+      #          path: support/src/boundary
+
+      - name: Checkout boundary-enterprise
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          repository: hashicorp/boundary
-          path: support/src/boundary
-
-      # - name: Checkout boundary-enterprise
-      #   uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      #   with:
-      #     repository: hashicorp/boundary-enterprise
-      #     ref: ${{ github.event.inputs.boundary-enterprise-branch }}
-      #     path: support/src/boundary-enterprise
-      #     token: ${{ env.GITHUB_TOKEN }}
+          repository: hashicorp/boundary-enterprise
+          #          ref: ${{ github.event.inputs.boundary-enterprise-branch }}
+          path: support/src/boundary-enterprise
+          token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
       - name: GH fix for localhost resolution
-        # !! does this work in boundary-ui-enterprise?
+        #         !! does this work in boundary-ui-enterprise?
         if: github.repository == 'hashicorp/boundary-ui'
         run: |
           cat /etc/hosts && echo "-----------"
@@ -84,19 +85,21 @@ jobs:
 
       - name: Get Boundary docker image
         run: |
-          docker pull hashicorp/boundary:latest
-          docker save hashicorp/boundary:latest | gzip > /tmp/boundary.zip
+          docker pull hashicorp/boundary-enterprise:latest
+          docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
 
+        # TODO: Set up license in a better way
       - name: Set up test infra
         id: infra
         run: |
+          echo "${{ secrets.BOUNDARY_ENT_LICENSE }}" > ./support/src/boundary-enterprise/enos/license.hclic
           ssh-keygen -N '' -t ed25519 -f ~/.ssh/github_enos
           mkdir -p ./enos/terraform-plugin-cache
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
-          export ENOS_VAR_boundary_docker_image_name=hashicorp/boundary:latest && \
-          export ENOS_VAR_boundary_docker_image_file=/tmp/boundary.zip && \
-          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary/enos e2e_ui_docker builder:crt
+          export ENOS_VAR_boundary_docker_image_name=hashicorp/boundary-enterprise:latest && \
+          export ENOS_VAR_boundary_docker_image_file=/tmp/boundary-enterprise.zip && \
+          enos scenario launch --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
 
       - name: Install dependencies
         run: |
@@ -105,31 +108,28 @@ jobs:
           yarn playwright install --with-deps
 
       # Issue with Ubuntu 24.04 causing issues with using sandboxes
-#      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      #      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
 
       - name: Run Tests
         run: |
-          source <(bash ./support/src/boundary/enos/scripts/test_e2e_env.sh)
+          source <(bash ./support/src/boundary-enterprise/enos/scripts/test_e2e_env.sh)
           cd e2e-tests
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           yarn run desktop
 
-
-      - name: Upload /dist folder
+      - name: Upload Playwright report
         if: ${{ failure() }}
         uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: playwright-report
-          path: playwright-report/
+          path: e2e-tests/playwright-report
 
       - name: Clean up test infra
         if: ${{ always() }}
         run: |
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
-          enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary/enos e2e_ui_docker builder:crt
-
+          enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
 
   # Log files?
-
