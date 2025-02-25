@@ -54,7 +54,7 @@ form {
   }
 }
 
-// These overrides are necessary to insure that changing the color theme to won't alter the dropdown colors.
+// TODO: This is a temporary fix that ensures changing the color theme won't alter the dropdown colors.
 .hds-app-frame__sidebar .hds-side-nav {
   .hds-dropdown-toggle-button,
   .hds-dropdown-toggle-icon {
