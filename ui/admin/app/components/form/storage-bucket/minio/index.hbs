@@ -127,7 +127,7 @@
       <G.RadioCard
         @value={{pluginType}}
         @checked={{eq pluginType @model.compositeType}}
-        @disabled={{(not @model.isNew)}}
+        @disabled={{not @model.isNew}}
         {{on 'input' (fn @changePluginType pluginType)}}
         as |R|
       >
