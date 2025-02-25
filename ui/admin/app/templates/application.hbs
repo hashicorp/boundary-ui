@@ -6,7 +6,10 @@
 {{page-title (app-name)}}
 
 <Hds::AppFrame @hasHeader={{false}} as |Frame|>
-  <Frame.Sidebar id='global-app-frame-sidebar' />
+  <Frame.Sidebar
+    class='app-frame-sidebar-style-overrides'
+    id='global-app-frame-sidebar'
+  />
 
   <Frame.Main>
     {{outlet}}

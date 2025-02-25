@@ -55,7 +55,7 @@ form {
 }
 
 // TODO: This is a temporary fix that ensures changing the color theme won't alter the dropdown colors.
-.hds-app-frame__sidebar .hds-side-nav {
+.app-frame-sidebar-style-overrides .side-nav-style-overrides {
   .hds-dropdown-toggle-button,
   .hds-dropdown-toggle-icon {
     background: var(--token-side-nav-color-surface-primary);
