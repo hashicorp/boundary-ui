@@ -25,6 +25,7 @@ const createConfig = () => {
     releaseVersion: process.env.RELEASE_VERSION,
     releaseCommit: process.env.RELEASE_COMMIT,
     executableName: 'Boundary',
+    releaseVersionRaw: process.env.RELEASE_VERSION,
   };
 
   // Take a valid release version in semVer format.
