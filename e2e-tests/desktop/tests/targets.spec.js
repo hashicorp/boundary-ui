@@ -6,6 +6,7 @@
 import { expect, test } from '../fixtures/baseTest.js';
 import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { textToMatch } from '../fixtures/tesseractTest.js';
+import { execSync } from 'child_process';
 
 const hostName = 'Host name for test';
 let org;
@@ -242,6 +243,9 @@ test.describe('Targets tests', () => {
 
   test('Searches targets correctly', async ({ authedPage }) => {
     await authedPage.getByLabel('Search').fill(targetWithHost.name);
+
+    const output = execSync(`boundary cache status`);
+    console.log(output.toString());
 
     await expect(
       authedPage

@@ -51,6 +51,11 @@ jobs:
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
           unzip /tmp/vault.zip -d /usr/local/bin
 
+      - name: Setup `boundary`
+        uses: hashicorp/setup-boundary@8373fde01681beb0bfa40e3d3e9a84f3a3cb8283 # v1.1.0
+        with:
+          version: "latest"
+
       # # -- Get Boundary binary (!! get latest?)
       #     - name: Download Boundary AMD64 binary
       #       run: |

@@ -32,5 +32,13 @@ test.describe('Settings Page tests', () => {
     await expect(authedPage.getByLabel('Logging level')).toHaveValue('debug');
   });
 
+  test('Cache daemon is running correctly', async ({ authedPage }) => {
+    await expect(
+      authedPage
+        .locator('[data-test-cache-version]')
+        .locator('.hds-badge__text'),
+    ).toHaveText('Running');
+  });
+
   // TODO: Add some client agent tests? Need to figure out best solution to include client agent
 });
