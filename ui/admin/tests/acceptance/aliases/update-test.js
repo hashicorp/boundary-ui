@@ -28,7 +28,8 @@ module('Acceptance | aliases | update', function (hooks) {
   const CLEAR_DROPDOWN_SELECTOR =
     '.hds-dropdown-list-item--color-action:nth-child(2)';
 
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_BUTTON_SELECTOR =
+    'tbody tr td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item';
 
   const instances = {

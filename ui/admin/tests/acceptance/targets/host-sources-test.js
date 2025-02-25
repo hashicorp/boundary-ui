@@ -130,7 +130,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetHostSources}"]`);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
@@ -166,7 +166,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await visit(urls.target);
 
     await click(`[href="${urls.targetHostSources}"]`);
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
 
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
@@ -216,7 +216,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     assert.dom('tbody tr').exists({ count: targetHostSetCount });
 
     // first, remove a target host set (otherwise none would be available to add)
-    await click('.hds-dropdown-toggle-icon');
+    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
     await click('tbody tr .hds-dropdown-list-item button');
     assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
 
