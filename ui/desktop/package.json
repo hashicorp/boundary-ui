@@ -29,7 +29,7 @@
     "format:js": "prettier --write '{app,config,stories,tests,electron-app/src}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve --port 4201",
-    "init:desktop": "yarn --cwd electron-app configure",
+    "init:desktop": "yarn --cwd electron-app build:all",
     "start:desktop": "yarn init:desktop && ember electron",
     "clean:coverage": "rm -rf coverage_* || true",
     "test": "yarn clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && yarn test:finalize",

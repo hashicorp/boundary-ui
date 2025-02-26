@@ -10,10 +10,10 @@
   "scripts": {
     "build:cli": "node -e \"require('./config/cli.js').setup()\"",
     "build:config": "node -e \"require('./config/desktop.js').setup()\"",
+    "build:all": "yarn build:cli && yarn build:config",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "configure": "yarn build:cli && yarn build:config",
-    "make": "yarn configure && electron-forge make",
+    "make": "yarn build:all && electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
@@ -42,7 +42,6 @@
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
     "electron": "31.0.1",
-    "patch-package": "^8.0.0",
     "unzipper": "^0.11.5"
   },
   "resolutions": {

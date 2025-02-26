@@ -52,7 +52,7 @@
     "micromatch": "^4.0.8",
     "ember-inline-svg/nth-check": "^2.0.1",
     "node-gyp": "^10.0.0",
-    "ember-cli/ansi-html": "^0.0.9",
+    "ansi-html": "^0.0.9",
     "fireworm/async": "^2.6.4"
   },
   "config": {
@@ -62,5 +62,6 @@
   },
   "engines": {
     "node": "20.* || 22.*"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }

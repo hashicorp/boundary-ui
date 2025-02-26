@@ -7348,12 +7348,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-html@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "ansi-html@npm:0.0.7"
+"ansi-html@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "ansi-html@npm:0.0.9"
   bin:
-    ansi-html: ./bin/ansi-html
-  checksum: 10c0/f6d3072422dc8d4c795142fd4ee8ee596538ddd02ac23676ec6c61dc61c1149f61acfc651b28ff49e7828a6372d4adab2d94d14e95feff73f656388803e13929
+    ansi-html: bin/ansi-html
+  checksum: 10c0/4a5de9802fb50193e32b51a9ea48dc0d7e4436b860cb819d7110c62f2bfb1410288e1a2f9a848269f5eab8f903797a7f0309fe4c552f92a92b61a5b759ed52bd
   languageName: node
   linkType: hard
 
