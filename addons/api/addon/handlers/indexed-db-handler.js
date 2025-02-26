@@ -132,11 +132,29 @@ export default class IndexedDbHandler {
           await indexedDb[type].bulkPut(items);
         }
 
-        const indexedDbResults = await queryIndexedDb(
+        let indexedDbResults = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
         );
+
+        // eslint-disable-next-line no-inner-declarations
+        function sortResults(results, sort = { attribute: 'created_time', direction: 'descending' }) {
+          const { attribute, direction } = sort;
+          console.log('sorting with sort', { sort });
+
+          return results.sort((a, b) => {
+            const aVal = a.attributes[attribute];
+            const bVal = b.attributes[attribute];
+            if (direction === 'ascending') {
+              return aVal > bVal ? 1 : -1;
+            } else {
+              return aVal < bVal ? 1 : -1;
+            }
+          });
+        }
+
+        indexedDbResults = sortResults(indexedDbResults, queryObj.sort);
 
         const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
           (item) =>
@@ -147,6 +165,8 @@ export default class IndexedDbHandler {
               serializer,
             }),
         );
+
+        console.log(indexedDbResults, dbRecords);
 
         // Return the raw data if we don't push to the store.
         let records = dbRecords.map((record) => ({
