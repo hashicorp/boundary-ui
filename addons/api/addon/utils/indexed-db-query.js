@@ -78,7 +78,7 @@ export async function queryIndexedDb(indexedDb, resource, query) {
   const direction = query.sort?.direction ?? 'descending';
 
   if (filterCollection.orderBy) {
-    console.log('using orderBy');
+    console.log('using orderBy', orderKey, direction);
     filterCollection = filterCollection.orderBy(orderKey);
     if (direction === 'descending') {
       filterCollection = filterCollection.reverse();
@@ -90,7 +90,7 @@ export async function queryIndexedDb(indexedDb, resource, query) {
     filterCollection = filterCollection.reverse();
   }
 
-  console.log('using sortBy');
+  console.log('using sortBy', orderKey, direction);
   return filterCollection.sortBy(orderKey);
 }
 
