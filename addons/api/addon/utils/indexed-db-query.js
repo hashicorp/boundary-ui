@@ -74,10 +74,24 @@ export async function queryIndexedDb(indexedDb, resource, query) {
   // collection already we have to use sortBy. We'll also sort by
   // descending order based on created time to match the API as any
   // "or" clause can change the order
+  const orderKey = getKey(query.sort?.attribute ?? 'created_time');
+  const direction = query.sort?.direction ?? 'descending';
+
   if (filterCollection.orderBy) {
-    return filterCollection.orderBy(getKey('created_time')).reverse().toArray();
+    console.log('using orderBy');
+    filterCollection = filterCollection.orderBy(orderKey);
+    if (direction === 'descending') {
+      filterCollection = filterCollection.reverse();
+    }
+    return filterCollection.toArray();
   }
-  return filterCollection.reverse().sortBy(getKey('created_time'));
+
+  if (direction === 'descending') {
+    filterCollection = filterCollection.reverse();
+  }
+
+  console.log('using sortBy');
+  return filterCollection.sortBy(orderKey);
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
