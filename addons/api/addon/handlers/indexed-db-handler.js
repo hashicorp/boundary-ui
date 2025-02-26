@@ -154,7 +154,15 @@ export default class IndexedDbHandler {
           });
         }
 
+        const sortMark = {
+          start: 'sort-start',
+          end: 'sort-end',
+        };
+        performance.mark(sortMark.start);
         indexedDbResults = sortResults(indexedDbResults, queryObj.sort);
+        performance.mark(sortMark.end);
+        const sortMeasure = performance.measure('sort', sortMark.start, sortMark.end);
+        console.log('sort measure', `${sortMeasure.duration}ms`);
 
         const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
           (item) =>
