@@ -33,3 +33,6 @@
 
 # broccoli-debug
 /DEBUG/
+
+#yarn 
+.yarn/*

@@ -218,10 +218,10 @@ will not be accepted.
 
 [git]: https://git-scm.com/
 [node]: https://nodejs.org/
-[yarn]: https://classic.yarnpkg.com/lang/en/
+[yarn]: https://yarnpkg.com/
 [chrome]: https://google.com/chrome/
 [firefox]: https://firefox.com/
-[yarn-workspaces]: https://classic.yarnpkg.com/en/docs/workspaces/
+[yarn-workspaces]: https://yarnpkg.com/features/workspaces
 [homebrew]: https://brew.sh
 [warp]: https://www.warp.dev
 [vscode]: https://code.visualstudio.com/
