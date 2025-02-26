@@ -54,6 +54,8 @@
           <:body as |B|>
             <B.Tr data-test-alias-row={{B.data.alias.id}}>
               <B.Td>
+                {{! template-lint-disable no-bare-strings }}
+                <strong>Name: {{B.data.alias.name}}</strong><br />
                 {{#if (can 'read model' B.data.alias)}}
                   <LinkTo
                     @route='scopes.scope.aliases.alias'
