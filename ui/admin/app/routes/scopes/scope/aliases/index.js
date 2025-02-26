@@ -28,6 +28,30 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     },
   };
 
+  sortingIntervalId;
+
+  sort = { direction: 'ascending', attribute: 'name' };
+
+  activate() {
+    const sortAttributes = ['created_time', 'name'];
+
+    this.sortingTimeoutId = setInterval(() => {
+      const sort = {
+        direction: Math.random() > 0.5 ? 'ascending' : 'descending',
+        attribute:
+          sortAttributes[Math.floor(Math.random() * sortAttributes.length)],
+      };
+
+      console.log('change timeout randomly every 5 seconds: ', sort);
+      this.sort = sort;
+      this.refresh();
+    }, 5_000);
+  }
+
+  deactivate() {
+    clearInterval(this.sortingTimeoutId);
+  }
+
   // =methods
 
   /**
@@ -47,12 +71,36 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
         collection: 'aliases',
       })
     ) {
+      const aliasMark = {
+        start: 'indexed-db-handler:before-alias-query',
+        end: 'indexed-db-handler:after-alias-query',
+      };
+
+      const { sort } = this;
+      performance.mark(aliasMark.start);
       aliases = await this.store.query('alias', {
         scope_id,
-        query: { search },
+        query: { search, sort },
         page,
         pageSize,
       });
+
+      performance.mark(aliasMark.end);
+      const aliasQueryMeasure = performance.measure(
+        'Aliases Query',
+        aliasMark.start,
+        aliasMark.end,
+      );
+      console.log(
+        '-------',
+        'aliases query measure',
+        sort,
+        `${aliasQueryMeasure.duration}ms`,
+        '-------',
+      );
+      performance.clearMarks(aliasMark.start);
+      performance.clearMarks(aliasMark.end);
+
       totalItems = aliases.meta?.totalItems;
       // since we don't receive target info from aliases list API,
       // we query the store to fetch target information based on the destination id
@@ -68,6 +116,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           }),
         ),
       );
+
       doAliasesExist = await this.getDoAliasesExist(scope_id, totalItems);
     }
 
