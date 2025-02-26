@@ -40,6 +40,26 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     },
   };
 
+  constructor() {
+    super(...arguments);
+
+    const sortAttributes = ['created_time', 'name', 'type'];
+
+    setInterval(() => {
+      const sort = {
+        direction: Math.random() > 0.5 ? 'ascending' : 'descending',
+        attribute:
+          sortAttributes[Math.floor(Math.random() * sortAttributes.length)],
+      };
+
+      console.log('change timeout randomly every 5 seconds: ', sort);
+      this.sort = sort;
+      this.refresh();
+    }, 5_000);
+  }
+
+  sort = { direction: 'ascending', attribute: 'name' };
+
   // =methods
 
   /**
@@ -80,12 +100,40 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     let totalItems = 0;
     let doTargetsExist = false;
     if (this.can.can('list model', scope, { collection: 'targets' })) {
+      const targetMark = {
+        start: 'indexed-db-handler:before-target-query',
+        end: 'indexed-db-handler:after-target-query',
+      };
+
+      const { sort } = this;
+      performance.mark(targetMark.start);
       targets = await this.store.query('target', {
         scope_id,
-        query: { search, filters },
+        query: {
+          search,
+          filters,
+          sort,
+        },
         page,
         pageSize,
       });
+
+      performance.mark(targetMark.end);
+      const targetQueryMeasure = performance.measure(
+        'IndexedDB: Target Query',
+        targetMark.start,
+        targetMark.end,
+      );
+      console.log(
+        '-------',
+        'target query measure',
+        sort,
+        `${targetQueryMeasure.duration}ms`,
+        '-------',
+      );
+      performance.clearMarks(targetMark.start);
+      performance.clearMarks(targetMark.end);
+
       totalItems = targets.meta?.totalItems;
       doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
     }
