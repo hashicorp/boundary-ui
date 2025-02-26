@@ -112,7 +112,7 @@ export default function (server) {
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
     server.createList('host-catalog', 8, { scope }, 'withChildren');
     server.createList('credential-store', 3, { scope }, 'withAssociations');
-    server.createList('target', 50, { scope }, 'withAssociations');
+    server.createList('target', 4, { scope }, 'withAssociations');
     server.create('target', { scope, address: '0.0.0.0' });
     // Sessions have target data. Create it after targets.
     server.createList('session', 4, { scope }, 'withAssociations');
@@ -123,6 +123,11 @@ export default function (server) {
     server.createList('group', 3, { scope });
     server.createList('role', 3, { scope });
   });
+
+  const scope = server.schema.scopes.where({ type: 'project' }).models[0];
+  console.log("creating 4,000 targets for scope...", scope);
+  server.createList('target', 4_000, { scope });
+  console.log("...done");
 
   // Aliases
   const aliasDestinationTarget = server.schema.targets.all().models[0];
