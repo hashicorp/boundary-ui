@@ -40,12 +40,14 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     },
   };
 
-  constructor() {
-    super(...arguments);
+  sortingIntervalId;
 
+  sort = { direction: 'ascending', attribute: 'name' };
+
+  activate() {
     const sortAttributes = ['created_time', 'name', 'type'];
 
-    setInterval(() => {
+    this.sortingTimeoutId = setInterval(() => {
       const sort = {
         direction: Math.random() > 0.5 ? 'ascending' : 'descending',
         attribute:
@@ -58,7 +60,9 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     }, 5_000);
   }
 
-  sort = { direction: 'ascending', attribute: 'name' };
+  deactivate() {
+    clearInterval(this.sortingTimeoutId);
+  }
 
   // =methods
 
