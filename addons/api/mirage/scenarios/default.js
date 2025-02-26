@@ -132,7 +132,8 @@ export default function (server) {
   // Aliases
   const aliasDestinationTarget = server.schema.targets.all().models[0];
   const { id: destination_id } = aliasDestinationTarget;
-  const aliases = server.createList('alias', 4, {
+  console.log("creating 10,000 aliases on the global scope...");
+  const aliases = server.createList('alias', 10_000, {
     scope: globalScope,
     destination_id,
   });
