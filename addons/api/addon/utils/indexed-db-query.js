@@ -75,9 +75,10 @@ export async function queryIndexedDb(indexedDb, resource, query) {
   // descending order based on created time to match the API as any
   // "or" clause can change the order
   if (filterCollection.orderBy) {
-    return filterCollection.orderBy(getKey('created_time')).reverse().toArray();
+    return filterCollection.toArray();
   }
-  return filterCollection.reverse().sortBy(getKey('created_time'));
+
+  return filterCollection;
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
