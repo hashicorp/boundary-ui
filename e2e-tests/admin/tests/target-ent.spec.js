@@ -23,7 +23,7 @@ test(
   { tag: ['@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -47,7 +47,7 @@ test(
       );
 
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
@@ -90,7 +90,7 @@ test(
   { tag: ['@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -125,7 +125,7 @@ test(
       );
 
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
@@ -164,7 +164,7 @@ test(
   { tag: ['@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -231,7 +231,7 @@ test(
 
       // Connect to target
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
