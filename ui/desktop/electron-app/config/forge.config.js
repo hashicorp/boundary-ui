@@ -99,7 +99,7 @@ module.exports = {
       // Copy artifacts into release folder
       options.forEach(({ artifacts, platform, arch }) => {
         // Generate release name
-        const version = forgeConfig.packagerConfig.appVersion;
+        const version = config.releaseVersionRaw;
         const destination = path.join('out', 'release', version);
         if (!fs.existsSync(destination))
           fs.mkdirSync(destination, { recursive: true });
