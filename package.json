@@ -50,7 +50,7 @@
     "nomnom/underscore": "^1.12.1",
     "@hashicorp/design-system-components/ember-stargate": "^0.6.0",
     "micromatch": "^4.0.8",
-    "ember-inline-svg/nth-check": "^2.0.1",
+    "css-select/nth-check": "^2.0.1",
     "node-gyp": "^10.0.0",
     "ansi-html": "^0.0.9",
     "fireworm/async": "^2.6.4"
