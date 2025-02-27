@@ -16,6 +16,7 @@ import {
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -24,14 +25,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
   let getManagedGroupCount;
   let featuresService;
-
-  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_INPUT_SELECTOR = '[name="name"]';
-  const DESC_INPUT_SELECTOR = '[name="description"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {
@@ -42,7 +35,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
     ldapAuthMethod: null,
   };
   const urls = {
-    orgScope: null,
     authMethods: null,
     authMethod: null,
     ldapAuthMethod: null,
@@ -69,8 +61,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
     });
 
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
+    urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.ldapAuthMethod = `${urls.authMethods}/${instances.ldapAuthMethod.id}`;
     urls.managedGroups = `${urls.authMethod}/managed-groups`;
@@ -85,38 +76,57 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
   test('can create a new managed group', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
-    const name = 'Managed group name';
     await visit(urls.authMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(`[href="${urls.newManagedGroup}"]`);
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(commonSelectors.HREF(urls.newManagedGroup));
 
-    await fillIn(NAME_INPUT_SELECTOR, name);
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
 
-    const managedGroup = this.server.schema.managedGroups.findBy({ name });
-    assert.strictEqual(managedGroup.name, name);
-    assert.strictEqual(managedGroup.description, 'description');
+    const managedGroup = this.server.schema.managedGroups.findBy({
+      name: commonSelectors.FIELD_NAME_VALUE,
+    });
+    assert.strictEqual(managedGroup.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.strictEqual(
+      managedGroup.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount + 1);
   });
 
   test('can create a new ldap managed group', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
-    const name = 'Managed group name';
     await visit(urls.ldapAuthMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
 
-    await click(`[href="${urls.newLdapManagedGroup}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, name);
-    await fillIn(DESC_INPUT_SELECTOR, 'description');
-    await fillIn('[name="group_names"] input', 'group name');
-    await click('[name="group_names"] button');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newLdapManagedGroup));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_GROUP_NAMES,
+      selectors.FIELD_GROUP_NAMES_VALUE,
+    );
+    await click(selectors.FIELD_GROUP_NAMES_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
-    const managedGroup = this.server.schema.managedGroups.findBy({ name });
-    assert.strictEqual(managedGroup.name, name);
-    assert.strictEqual(managedGroup.description, 'description');
-    assert.deepEqual(managedGroup.attributes.group_names, ['group name']);
+    const managedGroup = this.server.schema.managedGroups.findBy({
+      name: commonSelectors.FIELD_NAME_VALUE,
+    });
+    assert.strictEqual(managedGroup.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.strictEqual(
+      managedGroup.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.deepEqual(managedGroup.attributes.group_names, [
+      selectors.FIELD_GROUP_NAMES_VALUE,
+    ]);
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount + 1);
   });
 
@@ -127,14 +137,14 @@ module('Acceptance | managed-groups | create', function (hooks) {
       ].filter((item) => item !== 'create');
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
+    await click(commonSelectors.HREF(urls.authMethod));
 
     assert.false(
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newManagedGroup}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.newManagedGroup)).doesNotExist();
   });
 
   test('User cannot create a new ldap managed group without proper authorization', async function (assert) {
@@ -145,24 +155,24 @@ module('Acceptance | managed-groups | create', function (hooks) {
       ].filter((item) => item !== 'create');
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
 
     assert.false(
       instances.ldapAuthMethod.authorized_collection_actions[
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newLdapManagedGroup}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.newLdapManagedGroup)).doesNotExist();
   });
 
   test('User can cancel a new managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
 
-    await click(`[href="${urls.newManagedGroup}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'Managed group name');
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newManagedGroup));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount);
     assert.strictEqual(currentURL(), urls.managedGroups);
@@ -171,11 +181,11 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('User can cancel a new ldap managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
 
-    await click(`[href="${urls.newLdapManagedGroup}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'Managed group name');
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newLdapManagedGroup));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount);
     assert.strictEqual(currentURL(), urls.ldapManagedGroups);
@@ -193,8 +203,8 @@ module('Acceptance | managed-groups | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'attributes.filter',
+                description: 'This field is required.',
               },
             ],
           },
@@ -202,17 +212,17 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.authMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
 
-    await click(`[href="${urls.newManagedGroup}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'new managed group');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newManagedGroup));
+    await fillIn(commonSelectors.FIELD_NAME, 'new managed group');
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
+    assert.dom(selectors.FIELD_FILTER_ERROR).hasText('This field is required.');
   });
 
   test('When user saving a new ldap managed group with invalid fields displays error message', async function (assert) {
@@ -227,8 +237,8 @@ module('Acceptance | managed-groups | create', function (hooks) {
           details: {
             request_fields: [
               {
-                name: 'name',
-                description: 'Name is required.',
+                name: 'attributes.group_names',
+                description: 'This field is required.',
               },
             ],
           },
@@ -236,17 +246,19 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.ldapAuthMethod);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
 
-    await click(`[href="${urls.newLdapManagedGroup}"]`);
-    await fillIn(NAME_INPUT_SELECTOR, 'new managed group');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newLdapManagedGroup));
+    await fillIn(commonSelectors.FIELD_NAME, 'new managed group');
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert
+      .dom(selectors.FIELD_GROUP_NAMES_ERROR)
+      .hasText('This field is required.');
   });
 
   test('Users cannot directly navigate to a new managed group route without proper authorization', async function (assert) {

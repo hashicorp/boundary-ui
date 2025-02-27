@@ -67,7 +67,9 @@
     {{#if @model.errors.filter_string}}
       <F.Error as |E|>
         {{#each @model.errors.filter_string as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+          <E.Message
+            data-test-error-message-filter-string
+          >{{error.message}}</E.Message>
         {{/each}}
       </F.Error>
     {{/if}}
