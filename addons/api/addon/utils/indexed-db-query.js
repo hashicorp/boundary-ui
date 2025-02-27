@@ -78,7 +78,7 @@ export async function queryIndexedDb(indexedDb, resource, query) {
     return filterCollection.toArray();
   }
 
-  return filterCollection;
+  return filterCollection.toArray();
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
