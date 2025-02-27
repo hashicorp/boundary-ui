@@ -197,4 +197,26 @@ module('Unit | Adapter | application', function (hooks) {
       'A base error plus one field error',
     );
   });
+
+  test('it returns field-level attribute filter error with "filter_string" name', function (assert) {
+    const adapter = this.owner.lookup('adapter:application');
+    const payload = {
+      status: 400,
+      code: 'invalid_argument',
+      message: 'The request was invalid.',
+      details: {
+        request_fields: [
+          { name: 'attributes.filter', description: 'This field is required.' },
+        ],
+      },
+    };
+
+    const handledResponse = adapter.handleResponse(400, {}, payload);
+
+    const fieldError = handledResponse.errors[1];
+    assert.strictEqual(
+      fieldError.source.pointer,
+      '/data/attributes/filter_string',
+    );
+  });
 });

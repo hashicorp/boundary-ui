@@ -288,16 +288,21 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       source: { pointer: '/data' },
     };
     // Normalize field-specific errors, if any.
-    const errors = fieldErrors.map((error) => ({
-      detail: error.description,
-      // Going forward, nested attributes will be hoisted.  Thus "attributes."
-      // must be stripped from the error name key.  Until all models are
-      // transitioned away from model fragments, however, both this and the
-      // prior error key mappings are necessary.
-      source: {
-        pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
-      },
-    }));
+    const errors = fieldErrors.map((error) => {
+      if (error.name === 'attributes.filter') {
+        error.name = 'attributes.filter_string';
+      }
+      return {
+        detail: error.description,
+        // Going forward, nested attributes will be hoisted.  Thus "attributes."
+        // must be stripped from the error name key.  Until all models are
+        // transitioned away from model fragments, however, both this and the
+        // prior error key mappings are necessary.
+        source: {
+          pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
+        },
+      };
+    });
 
     // Return a list of JSON API errors rooted under the `errors` key.
     return {
