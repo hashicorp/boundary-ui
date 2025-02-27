@@ -26,7 +26,7 @@ test(
   { tag: ['@ce', '@ent', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -297,7 +297,7 @@ test(
     } finally {
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,

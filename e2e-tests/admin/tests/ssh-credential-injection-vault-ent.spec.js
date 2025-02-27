@@ -39,7 +39,7 @@ test(
   { tag: ['@ent', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -112,7 +112,7 @@ test(
 
       // Connect to target
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,

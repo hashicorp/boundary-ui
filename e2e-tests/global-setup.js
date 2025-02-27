@@ -28,7 +28,7 @@ const authenticateToBoundary = async () => {
   // Log in and save the authenticated state to reuse in tests
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.goto(process.env.BOUNDARY_ADDR);
+  await page.goto(url);
 
   const loginPage = new LoginPage(page);
   await loginPage.login(
@@ -49,6 +49,10 @@ const authenticateToBoundary = async () => {
 
 export default globalSetup;
 
+export const url = process.env.BOUNDARY_ADDR_BRANCH
+  ? process.env.BOUNDARY_ADDR_BRANCH
+  : process.env.BOUNDARY_ADDR;
+
 export const authenticatedState = path.resolve(
   __dirname,
   './.auth/authenticated-state.json',
@@ -65,6 +69,7 @@ export const test = baseTest.extend({
   awsHostSetIps: process.env.E2E_AWS_HOST_SET_IPS,
   awsRegion: process.env.E2E_AWS_REGION,
   awsSecretAccessKey: process.env.E2E_AWS_SECRET_ACCESS_KEY,
+  controllerAddr: process.env.BOUNDARY_ADDR,
   bucketAccessKeyId: process.env.E2E_BUCKET_ACCESS_KEY_ID,
   bucketEndpointUrl: process.env.E2E_BUCKET_ENDPOINT_URL,
   bucketName: process.env.E2E_BUCKET_NAME,
