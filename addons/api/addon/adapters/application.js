@@ -298,9 +298,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       return {
         detail: error.description,
         // Going forward, nested attributes will be hoisted.  Thus "attributes."
-        // must be stripped from the error name key.  Until all models are
-        // transitioned away from model fragments, however, both this and the
-        // prior error key mappings are necessary.
+        // must be stripped from the error name key.
         source: {
           pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
         },
