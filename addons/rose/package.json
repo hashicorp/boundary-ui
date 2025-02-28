@@ -107,9 +107,15 @@
     "configPath": "tests/dummy/config"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "*.hbs": "ember-template-lint --fix",
-    "*.scss": ["stylelint --fix", "prettier --write"],
+    "*.scss": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
     "*.{mdx,yaml}": "prettier --write"
   }
 }

@@ -29,13 +29,13 @@
     "format:js": "prettier --write '{app,config,stories,tests}/**/*.js' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
-    "clean:coverage": "rm -rf coverage_*",
-    "pretest": "yarn clean:coverage",
-    "test": "concurrently \"npm:test:*\" --names \"test:\"",
+    "clean:coverage": "rm -rf coverage_* || true",
+    "test": "yarn clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && yarn test:finalize",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
-    "posttest": "ember coverage-merge && yarn clean:coverage"
+    "test:finalize": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
+    "@babel/runtime": "7.12.18",
     "ember-named-blocks-polyfill": "^0.2.5",
     "lodash": "^4.17.21",
     "uuid": "^11.0.3"
@@ -76,7 +76,7 @@
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^4.1.0",
     "ember-page-title": "^7.0.0",
-    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#718db797382b04aca281216319885c5ff625f539",
+    "ember-pollster": "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8",
     "ember-qunit": "^8.1.0",
     "ember-resolver": "^10.0.0",
     "ember-source": "~4.12.0",
@@ -89,6 +89,7 @@
     "eslint-plugin-qunit": "^8.0.1",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
+    "postcss": "^8.4.31",
     "prettier": "^3.0.0",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
@@ -107,7 +108,10 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "*.hbs": "ember-template-lint --fix",
     "*.{scss,yaml}": "prettier --write"
   }
