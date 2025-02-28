@@ -31,6 +31,7 @@ const createConfig = () => {
   // Take a valid release version in semVer format.
   if (!config.releaseVersion) {
     config.releaseVersion = '0.0.0';
+    config.releaseVersionRaw = '0.0.0';
   } else {
     config.releaseVersion = returnSemVerFromReleaseVersion(
       config.releaseVersion,
