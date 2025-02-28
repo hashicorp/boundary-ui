@@ -86,9 +86,6 @@ export default class HostSetSerializer extends ApplicationSerializer {
       normalizedHash.attributes.filters = [normalizedHash.attributes.filters];
     }
 
-    // NOTE: When translating API fields to Ember Data fields, we need to
-    // add a check in the adapter 'transformValidationErrors' method to ensure
-    // that the translation is handled correctly if errors are encountered.
     // Change name from filter to filter_string
     if (normalizedHash?.attributes?.filter) {
       normalizedHash.attributes.filter_string =

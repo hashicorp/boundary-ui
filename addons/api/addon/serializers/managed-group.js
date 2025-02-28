@@ -35,9 +35,6 @@ export default class ManagedGroupSerializer extends ApplicationSerializer {
 
   serializeOIDC() {
     const serialized = super.serialize(...arguments);
-    // NOTE: When translating API fields to Ember Data fields, we need to
-    // add a check in the adapter 'transformValidationErrors' method to ensure
-    // that the translation is handled correctly if errors are encountered.
     if (serialized.attributes.filter_string !== undefined) {
       serialized.attributes.filter = serialized.attributes.filter_string;
     }
@@ -48,9 +45,6 @@ export default class ManagedGroupSerializer extends ApplicationSerializer {
   normalize(typeClass, hash, ...rest) {
     const normalizedHash = structuredClone(hash);
 
-    // NOTE: When translating API fields to Ember Data fields, we need to
-    // add a check in the adapter 'transformValidationErrors' method to ensure
-    // that the translation is handled correctly if errors are encountered.
     if (normalizedHash?.attributes?.filter) {
       normalizedHash.attributes.filter_string =
         normalizedHash.attributes.filter;

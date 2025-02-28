@@ -287,6 +287,9 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       detail: payload?.message,
       source: { pointer: '/data' },
     };
+    // NOTE: When translating API attributes to Ember Data attributes, we need
+    // to add a check here to ensure that the translation is handled correctly
+    // if errors are returned from the API.
     // Normalize field-specific errors, if any.
     const errors = fieldErrors.map((error) => {
       if (error.name === 'attributes.filter') {
