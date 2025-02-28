@@ -287,23 +287,15 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       detail: payload?.message,
       source: { pointer: '/data' },
     };
-    // NOTE: When translating API attributes to Ember Data attributes, we need
-    // to add a check here to ensure that the translation is handled correctly
-    // if errors are returned from the API.
     // Normalize field-specific errors, if any.
-    const errors = fieldErrors.map((error) => {
-      if (error.name === 'attributes.filter') {
-        error.name = 'attributes.filter_string';
-      }
-      return {
-        detail: error.description,
-        // Going forward, nested attributes will be hoisted.  Thus "attributes."
-        // must be stripped from the error name key.
-        source: {
-          pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
-        },
-      };
-    });
+    const errors = fieldErrors.map((error) => ({
+      detail: error.description,
+      // Going forward, nested attributes will be hoisted.  Thus "attributes."
+      // must be stripped from the error name key.
+      source: {
+        pointer: `/data/attributes/${error.name.replace('attributes.', '')}`,
+      },
+    }));
 
     // Return a list of JSON API errors rooted under the `errors` key.
     return {
