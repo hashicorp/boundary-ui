@@ -30,6 +30,7 @@ export default class ApplicationController extends Controller {
   @service features;
   @service featureEdition;
   @service flashMessages;
+  @service router;
 
   /**
    * Returns available themes
@@ -37,6 +38,13 @@ export default class ApplicationController extends Controller {
    */
   get themes() {
     return THEMES;
+  }
+
+  get showSideNav() {
+    return (
+      this.router.currentRouteName.startsWith('scopes.scope') &&
+      this.session.isAuthenticated
+    );
   }
 
   // =actions

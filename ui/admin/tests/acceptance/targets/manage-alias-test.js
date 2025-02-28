@@ -17,7 +17,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
   let aliasResourceTwo, aliasResourceOne, getAliasCount;
   const ALIASES_SIDEBAR = '.target-sidebar-aliases';
   const ALIASES_SIDEBAR_LIST = '.link-list-item';
-  const DROPDOWN_ACTION = '[data-test-manage-alias] button';
+  const DROPDOWN_ACTION = '[data-test-manage-target-alias] button';
   const CLEAR_BTN_SELECTOR = '.hds-dropdown-list-item--color-action button';
   const DELETE_BTN_SELECTOR = '.hds-dropdown-list-item--color-critical button';
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';

@@ -33,309 +33,213 @@
   />
 {{/if}}
 
-{{#if this.session.isAuthenticated}}
-  {{#in-element this.sideBarContainer}}
-    <Hds::SideNav class='side-nav-style-overrides'>
-      <:header>
-        <Hds::SideNav::Header>
-          <:logo>
-            <Hds::SideNav::Header::HomeLink
-              @icon='boundary'
-              @color='var(--token-color-boundary-brand)'
-              @ariaLabel={{(app-name)}}
-              @route='index'
-            />
-          </:logo>
-          <:actions>
-            {{#if (feature-flag 'dev-edition-toggle')}}
-              <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
-                <dd.ToggleIcon
-                  @icon='layers'
-                  @text={{t
-                    'titles.feature-edition'
-                    edition=this.featureEdition.edition
-                  }}
-                />
+<Hds::SideNav::Portal as |Nav|>
+  {{#if @model.isGlobal}}
+    <Nav.Title>{{t 'titles.scope-level' scope=(t 'titles.global')}}</Nav.Title>
 
-                <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
-                {{#each this.featureEdition.editions as |edition|}}
-                  <dd.Radio
-                    @value={{edition}}
-                    checked={{eq this.featureEdition.edition edition}}
-                    {{on 'change' (fn this.application.toggleEdition edition)}}
-                  >
-                    {{edition}}
-                  </dd.Radio>
-                {{/each}}
-                <dd.Separator />
+    <Nav.Link
+      @icon='org'
+      @text={{t 'resources.org.title_plural'}}
+      @route='scopes.scope.scopes'
+    />
 
-                <dd.Title @text={{t 'actions.toggle-licensed-features'}} />
-                {{#each this.featureEdition.licensedFeatures as |feature|}}
-                  <dd.Checkbox
-                    @value={{feature}}
-                    checked={{feature-flag feature}}
-                    {{on 'change' (fn this.application.toggleFeature feature)}}
-                  >
-                    {{feature}}
-                  </dd.Checkbox>
-                {{/each}}
-              </Hds::Dropdown>
-            {{/if}}
+    {{#if (can 'navigate scope' @model collection='session-recordings')}}
+      <Nav.Link
+        @icon='film'
+        @text={{t 'resources.session-recording.title_plural'}}
+        @route='scopes.scope.session-recordings'
+      />
+    {{/if}}
 
-            <Hds::Dropdown
-              @enableCollisionDetection={{true}}
-              data-test-side-nav-user-dropdown
-              as |dd|
-            >
-              <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
+    {{#if (can 'navigate scope' @model collection='storage-buckets')}}
+      <Nav.Link
+        @icon='cloud-upload'
+        @text={{t 'resources.storage-bucket.title_plural'}}
+        @route='scopes.scope.storage-buckets'
+      />
+    {{/if}}
 
-              <dd.Interactive @route='account.change-password'>{{t
-                  'actions.change-password'
-                }}</dd.Interactive>
-              <dd.Separator />
+    {{#if (can 'navigate scope' @model collection='policies')}}
+      <Nav.Link
+        @icon='hourglass'
+        @text={{t 'resources.policy.title_plural'}}
+        @route='scopes.scope.policies'
+      />
+    {{/if}}
 
-              <dd.Interactive
-                {{on 'click' this.application.invalidateSession}}
-              >{{t 'actions.deauthenticate'}}</dd.Interactive>
-              <dd.Separator />
+    {{#if (can 'navigate scope' @model collection='aliases')}}
+      <Nav.Link
+        @icon='at-sign'
+        @text={{t 'resources.alias.title_plural'}}
+        @route='scopes.scope.aliases'
+      />
+    {{/if}}
 
-              <dd.Title @text={{t 'actions.toggle-color-theme'}} />
-              {{#each this.application.themes as |theme|}}
-                <dd.Radio
-                  @value={{theme.value}}
-                  checked={{eq this.session.data.theme theme.value}}
-                  {{on 'change' (fn this.application.toggleTheme theme.value)}}
-                >
-                  {{t (concat 'themes.' theme.label)}}
-                </dd.Radio>
-              {{/each}}
-            </Hds::Dropdown>
-          </:actions>
-        </Hds::SideNav::Header>
-      </:header>
+    {{#if
+      (and
+        (can 'navigate worker' @model collection='workers')
+        (feature-flag 'byow')
+      )
+    }}
+      <Nav.Link
+        @icon='cpu'
+        @text={{t 'titles.workers'}}
+        @route='scopes.scope.workers'
+      />
+    {{/if}}
 
-      <:body>
-        {{! TODO: Refactor to use Hds::SideNav::List once bug is fixed }}
-        <Hds::SideNav::Portal::Target />
-      </:body>
+    <Nav.Title>{{t 'titles.scope-iam' scope=(t 'titles.global')}}</Nav.Title>
+  {{/if}}
 
-      <:footer>
-        <ScopePicker />
-      </:footer>
-    </Hds::SideNav>
-  {{/in-element}}
+  {{#if @model.isOrg}}
+    <Nav.Title>{{t
+        'titles.scope-level'
+        scope=(t 'resources.org.title')
+      }}</Nav.Title>
 
-  <Hds::SideNav::Portal as |Nav|>
-    {{#if @model.isGlobal}}
-      <Nav.Title>{{t
-          'titles.scope-level'
-          scope=(t 'titles.global')
-        }}</Nav.Title>
-
+    {{#if this.session.data.authenticated.isGlobal}}
       <Nav.Link
         @icon='org'
         @text={{t 'resources.org.title_plural'}}
         @route='scopes.scope.scopes'
+        @model='global'
       />
-
-      {{#if (can 'navigate scope' @model collection='session-recordings')}}
-        <Nav.Link
-          @icon='film'
-          @text={{t 'resources.session-recording.title_plural'}}
-          @route='scopes.scope.session-recordings'
-        />
-      {{/if}}
-
-      {{#if (can 'navigate scope' @model collection='storage-buckets')}}
-        <Nav.Link
-          @icon='cloud-upload'
-          @text={{t 'resources.storage-bucket.title_plural'}}
-          @route='scopes.scope.storage-buckets'
-        />
-      {{/if}}
-
-      {{#if (can 'navigate scope' @model collection='policies')}}
-        <Nav.Link
-          @icon='hourglass'
-          @text={{t 'resources.policy.title_plural'}}
-          @route='scopes.scope.policies'
-        />
-      {{/if}}
-
-      {{#if (can 'navigate scope' @model collection='aliases')}}
-        <Nav.Link
-          @icon='at-sign'
-          @text={{t 'resources.alias.title_plural'}}
-          @route='scopes.scope.aliases'
-        />
-      {{/if}}
-
-      {{#if
-        (and
-          (can 'navigate worker' @model collection='workers')
-          (feature-flag 'byow')
-        )
-      }}
-        <Nav.Link
-          @icon='cpu'
-          @text={{t 'titles.workers'}}
-          @route='scopes.scope.workers'
-        />
-      {{/if}}
-
-      <Nav.Title>{{t 'titles.scope-iam' scope=(t 'titles.global')}}</Nav.Title>
     {{/if}}
 
-    {{#if @model.isOrg}}
-      <Nav.Title>{{t
-          'titles.scope-level'
-          scope=(t 'resources.org.title')
-        }}</Nav.Title>
+    <Nav.Link
+      @icon='grid'
+      @text={{t 'resources.project.title_plural'}}
+      @route='scopes.scope.scopes'
+    />
 
-      {{#if this.session.data.authenticated.isGlobal}}
-        <Nav.Link
-          @icon='org'
-          @text={{t 'resources.org.title_plural'}}
-          @route='scopes.scope.scopes'
-          @model='global'
-        />
-      {{/if}}
-
+    {{#if (can 'navigate scope' @model collection='policies')}}
       <Nav.Link
-        @icon='grid'
-        @text={{t 'resources.project.title_plural'}}
-        @route='scopes.scope.scopes'
+        @icon='hourglass'
+        @text={{t 'resources.policy.title_plural'}}
+        @route='scopes.scope.policies'
       />
-
-      {{#if (can 'navigate scope' @model collection='policies')}}
-        <Nav.Link
-          @icon='hourglass'
-          @text={{t 'resources.policy.title_plural'}}
-          @route='scopes.scope.policies'
-        />
-      {{/if}}
-
-      <Nav.Title>{{t
-          'titles.scope-iam'
-          scope=(t 'resources.org.title')
-        }}</Nav.Title>
     {{/if}}
 
-    {{#if @model.isProject}}
-      <Nav.BackLink
-        @text={{concat 'Back to ' this.scope.org.displayName}}
-        @route='scopes.scope.scopes'
-        @model={{@model.scopeID}}
-      />
+    <Nav.Title>{{t
+        'titles.scope-iam'
+        scope=(t 'resources.org.title')
+      }}</Nav.Title>
+  {{/if}}
 
-      <Nav.Title>{{t 'titles.project-actions'}}</Nav.Title>
+  {{#if @model.isProject}}
+    <Nav.BackLink
+      @text={{concat 'Back to ' this.scope.org.displayName}}
+      @route='scopes.scope.scopes'
+      @model={{@model.scopeID}}
+    />
 
-      {{#if (can 'navigate model' @model collection='sessions')}}
-        <Nav.Link
-          @icon='entry-point'
-          @text={{t 'resources.session.title_plural'}}
-          @route='scopes.scope.sessions'
-        />
-      {{/if}}
+    <Nav.Title>{{t 'titles.project-actions'}}</Nav.Title>
 
-      {{#if (can 'navigate model' @model collection='targets')}}
-        <Nav.Link
-          @icon='target'
-          @text={{t 'resources.target.title_plural'}}
-          @route='scopes.scope.targets'
-        />
-      {{/if}}
-
-      {{#if (can 'navigate model' @model collection='host-catalogs')}}
-        <Nav.Link
-          @icon='collections'
-          @text={{t 'resources.host-catalog.title_plural'}}
-          @route='scopes.scope.host-catalogs'
-        />
-      {{/if}}
-
-      {{#if (can 'navigate model' @model collection='credential-stores')}}
-        <Nav.Link
-          @icon='key'
-          @text={{t 'resources.credential-store.title_plural'}}
-          @route='scopes.scope.credential-stores'
-        />
-      {{/if}}
-
-      <Nav.Title>{{t
-          'titles.scope-iam'
-          scope=(t 'resources.project.title')
-        }}</Nav.Title>
-    {{/if}}
-
-    {{! Users are available only for org/global scopes }}
-    {{#unless @model.isProject}}
-      {{#if (can 'navigate model' @model collection='users')}}
-        <Nav.Link
-          @icon='users'
-          @text={{t 'resources.user.title_plural'}}
-          @route='scopes.scope.users'
-        />
-      {{/if}}
-    {{/unless}}
-
-    {{! Groups and roles are available for all scopes }}
-    {{#if (can 'navigate model' @model collection='groups')}}
+    {{#if (can 'navigate model' @model collection='sessions')}}
       <Nav.Link
-        @icon='folder-users'
-        @text={{t 'resources.group.title_plural'}}
-        @route='scopes.scope.groups'
+        @icon='entry-point'
+        @text={{t 'resources.session.title_plural'}}
+        @route='scopes.scope.sessions'
       />
     {{/if}}
-    {{#if (can 'navigate model' @model collection='roles')}}
+
+    {{#if (can 'navigate model' @model collection='targets')}}
       <Nav.Link
-        @icon='identity-user'
-        @text={{t 'resources.role.title_plural'}}
-        @route='scopes.scope.roles'
+        @icon='target'
+        @text={{t 'resources.target.title_plural'}}
+        @route='scopes.scope.targets'
       />
     {{/if}}
 
-    {{! Auth methods are available only for org/global scopes }}
-    {{#unless @model.isProject}}
-      {{#if (can 'navigate model' @model collection='auth-methods')}}
-        <Nav.Link
-          @icon='lock'
-          @text={{t 'resources.auth-method.title_plural'}}
-          @route='scopes.scope.auth-methods'
-        />
-      {{/if}}
-    {{/unless}}
-
-    <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
-
-    {{#if (and @model.isGlobal (feature-flag 'ssh-session-recording'))}}
-      {{#if this.session.data.authenticated.isGlobal}}
-        <Nav.Link
-          @icon='settings'
-          @text={{t 'resources.global.messages.settings.title'}}
-          @route='scopes.scope.edit'
-        />
-      {{/if}}
+    {{#if (can 'navigate model' @model collection='host-catalogs')}}
+      <Nav.Link
+        @icon='collections'
+        @text={{t 'resources.host-catalog.title_plural'}}
+        @route='scopes.scope.host-catalogs'
+      />
     {{/if}}
 
-    {{#if @model.isOrg}}
-      {{#if this.session.data.authenticated.isGlobal}}
-        <Nav.Link
-          @icon='settings'
-          @text={{t 'resources.org.messages.settings.title'}}
-          @route='scopes.scope.edit'
-        />
-      {{/if}}
+    {{#if (can 'navigate model' @model collection='credential-stores')}}
+      <Nav.Link
+        @icon='key'
+        @text={{t 'resources.credential-store.title_plural'}}
+        @route='scopes.scope.credential-stores'
+      />
     {{/if}}
 
-    {{#if @model.isProject}}
+    <Nav.Title>{{t
+        'titles.scope-iam'
+        scope=(t 'resources.project.title')
+      }}</Nav.Title>
+  {{/if}}
+
+  {{! Users are available only for org/global scopes }}
+  {{#unless @model.isProject}}
+    {{#if (can 'navigate model' @model collection='users')}}
+      <Nav.Link
+        @icon='users'
+        @text={{t 'resources.user.title_plural'}}
+        @route='scopes.scope.users'
+      />
+    {{/if}}
+  {{/unless}}
+
+  {{! Groups and roles are available for all scopes }}
+  {{#if (can 'navigate model' @model collection='groups')}}
+    <Nav.Link
+      @icon='folder-users'
+      @text={{t 'resources.group.title_plural'}}
+      @route='scopes.scope.groups'
+    />
+  {{/if}}
+  {{#if (can 'navigate model' @model collection='roles')}}
+    <Nav.Link
+      @icon='identity-user'
+      @text={{t 'resources.role.title_plural'}}
+      @route='scopes.scope.roles'
+    />
+  {{/if}}
+
+  {{! Auth methods are available only for org/global scopes }}
+  {{#unless @model.isProject}}
+    {{#if (can 'navigate model' @model collection='auth-methods')}}
+      <Nav.Link
+        @icon='lock'
+        @text={{t 'resources.auth-method.title_plural'}}
+        @route='scopes.scope.auth-methods'
+      />
+    {{/if}}
+  {{/unless}}
+
+  <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
+
+  {{#if (and @model.isGlobal (feature-flag 'ssh-session-recording'))}}
+    {{#if this.session.data.authenticated.isGlobal}}
       <Nav.Link
         @icon='settings'
-        @text={{t 'resources.project.messages.settings.title'}}
+        @text={{t 'resources.global.messages.settings.title'}}
         @route='scopes.scope.edit'
       />
     {{/if}}
-  </Hds::SideNav::Portal>
-{{/if}}
+  {{/if}}
+
+  {{#if @model.isOrg}}
+    {{#if this.session.data.authenticated.isGlobal}}
+      <Nav.Link
+        @icon='settings'
+        @text={{t 'resources.org.messages.settings.title'}}
+        @route='scopes.scope.edit'
+      />
+    {{/if}}
+  {{/if}}
+
+  {{#if @model.isProject}}
+    <Nav.Link
+      @icon='settings'
+      @text={{t 'resources.project.messages.settings.title'}}
+      @route='scopes.scope.edit'
+    />
+  {{/if}}
+</Hds::SideNav::Portal>
 
 {{outlet}}
