@@ -124,7 +124,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       ].includes('create'),
     );
     assert
-      .dom('[title="Resources"] a:nth-of-type(3)')
+      .dom(commonSelectors.SIDE_NAV_CONTENT)
       .doesNotIncludeText('Host Catalogs');
   });
 
