@@ -211,10 +211,10 @@
     {{/if}}
   {{/unless}}
 
-  <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
-
   {{#if (and @model.isGlobal (feature-flag 'ssh-session-recording'))}}
     {{#if this.session.data.authenticated.isGlobal}}
+      <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
+
       <Nav.Link
         @icon='settings'
         @text={{t 'resources.global.messages.settings.title'}}
@@ -225,6 +225,8 @@
 
   {{#if @model.isOrg}}
     {{#if this.session.data.authenticated.isGlobal}}
+      <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
+
       <Nav.Link
         @icon='settings'
         @text={{t 'resources.org.messages.settings.title'}}
@@ -234,6 +236,8 @@
   {{/if}}
 
   {{#if @model.isProject}}
+    <Nav.Title>{{t 'titles.settings'}}</Nav.Title>
+
     <Nav.Link
       @icon='settings'
       @text={{t 'resources.project.messages.settings.title'}}
