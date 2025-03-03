@@ -215,7 +215,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN);
 
     await click(commonSelectors.HREF(urls.newManagedGroup));
-    await fillIn(commonSelectors.FIELD_NAME, 'new managed group');
     await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
@@ -249,7 +248,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN);
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
-    await fillIn(commonSelectors.FIELD_NAME, 'new managed group');
     await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
