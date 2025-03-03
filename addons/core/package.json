@@ -42,12 +42,13 @@
     "ember-feature-flags": "^6.0.0",
     "ember-intl": "^7.0.7",
     "ember-loading": "^2.0.0",
-    "ember-truth-helpers": "^3.0.0",
+    "ember-truth-helpers": "^4.0.3",
     "filesize": "^10.0.7",
     "lodash": "^4.17.21",
     "sass": "^1.69.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
     "@babel/eslint-parser": "^7.21.3",
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@ember/optional-features": "^2.0.0",
@@ -98,7 +99,10 @@
     "configPath": "tests/dummy/config"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
     "*.hbs": "ember-template-lint --fix",
     "*.{scss,yaml}": "prettier --write"
   }
