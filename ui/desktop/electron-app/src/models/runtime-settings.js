@@ -4,26 +4,25 @@
  */
 
 const { netRequest } = require('../helpers/request-promise.js');
+const store = require('../services/electron-store-manager');
 
 // Runtime settings are any configuration, especially user-specified,
 // set up at runtime.  For example, the Boundary clusterUrl is a runtime setting.
 class RuntimeSettings {
-  // Internal private clusterUrl is exposed via getter/setter below.
-  #clusterUrl = undefined;
-
   /**
    * The user-specified Boundary clusterUrl, which should be allowed by CSP.
    * @type {?string}
    */
   get clusterUrl() {
-    return this.#clusterUrl;
+    return store.get('clusterUrl');
   }
 
-  async setClusterUrl(clusterUrl) {
-    if (this.#clusterUrl !== clusterUrl) {
-      this.#clusterUrl = clusterUrl;
-      await this.triggerClusterUrlChanged();
-    }
+  /**
+   * Sets the user specified Boundary clusterUrl.
+   * @param value {string}
+   */
+  set clusterUrl(value) {
+    store.set('clusterUrl', value);
   }
 
   /**
@@ -52,7 +51,7 @@ class RuntimeSettings {
    * Sets the clusterUrl to null.
    */
   resetClusterUrl() {
-    this.clusterUrl = null;
+    store.delete('clusterUrl');
   }
 
   // Quick and dirty event handler pattern to enable the application to respond
@@ -63,11 +62,14 @@ class RuntimeSettings {
     this.#clusterUrlWatchers.push(fn);
   }
 
-  async triggerClusterUrlChanged() {
-    // We currently only store one function but this will execute serially
-    // which may or may not be the desired behavior if there ever is more
-    for (const fn of this.#clusterUrlWatchers) {
-      await fn(this.#clusterUrl);
+  async triggerClusterUrlUpdate(clusterUrl) {
+    if (this.clusterUrl !== clusterUrl) {
+      this.clusterUrl = clusterUrl;
+      for (const fn of this.#clusterUrlWatchers) {
+        // We currently only store one function but this will execute serially
+        // which may or may not be the desired behavior if there ever is more
+        await fn(this.clusterUrl);
+      }
     }
   }
 }

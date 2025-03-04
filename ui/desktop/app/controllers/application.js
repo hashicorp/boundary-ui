@@ -14,6 +14,7 @@ export default class ApplicationController extends Controller {
   @service session;
   @service clusterUrl;
   @service flashMessages;
+  @service router;
 
   // =actions
 
@@ -31,8 +32,8 @@ export default class ApplicationController extends Controller {
    */
   @action
   disconnect() {
-    this.clusterUrl.resetClusterUrl();
     this.invalidateSession();
+    this.router.replaceWith('cluster-url');
   }
 
   @action
