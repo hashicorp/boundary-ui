@@ -208,4 +208,22 @@ module('Unit | Serializer | host set', function (hooks) {
       },
     });
   });
+
+  test('it handles errors correctly', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('host-set');
+    const schema = store.modelFor('host-set');
+
+    const errors = {
+      base: ['Error in provided request.'],
+      filter: ['This field is required.'],
+    };
+
+    const result = serializer.extractErrors(store, schema, errors, null);
+
+    assert.deepEqual(result, {
+      base: ['Error in provided request.'],
+      filter_string: ['This field is required.'],
+    });
+  });
 });
