@@ -99,7 +99,7 @@ module.exports = {
       // Copy artifacts into release folder
       options.forEach(({ artifacts, platform, arch }) => {
         // Generate release name
-        const version = forgeConfig.packagerConfig.appVersion;
+        const version = config.releaseVersionRaw;
         const destination = path.join('out', 'release', version);
         if (!fs.existsSync(destination))
           fs.mkdirSync(destination, { recursive: true });
@@ -136,22 +136,6 @@ module.exports = {
           }
         });
       });
-    },
-    packageAfterPrune: async (_, buildPath) => {
-      // This is needed to delete temporary sym links when creating an asar during
-      // building for native node modules.
-
-      // TODO: This issue was fixed and merged in a recent PR as noted here
-      //  https://github.com/nodejs/node-gyp/issues/2713 so we should update node-gyp
-      //  when it gets released and remove this workaround
-      const gypPath = path.join(
-        buildPath,
-        'node_modules',
-        'node-pty',
-        'build',
-        'node_gyp_bins',
-      );
-      await fs.promises.rm(gypPath, { recursive: true, force: true });
     },
   },
 };

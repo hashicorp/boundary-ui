@@ -95,4 +95,18 @@ export default class HostSetSerializer extends ApplicationSerializer {
 
     return super.normalize(typeClass, normalizedHash, ...rest);
   }
+
+  /**
+   * Extracts errors from the payload and transforms specific keys if needed.
+   * @override
+   * @return {object}
+   */
+  extractErrors() {
+    const errors = super.extractErrors(...arguments);
+    if (errors?.filter) {
+      errors.filter_string = errors.filter;
+      delete errors.filter;
+    }
+    return errors;
+  }
 }

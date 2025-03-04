@@ -6,6 +6,8 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
+const { __electronLog } = globalThis;
+
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   // =services
 

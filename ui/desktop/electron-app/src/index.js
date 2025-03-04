@@ -85,7 +85,7 @@ if (isWindows()) {
   app.setAppUserModelId(app.name);
 }
 
-const createWindow = (partition, closeWindowCB) => {
+const createWindow = async (partition, closeWindowCB) => {
   /**
    * Enable electron OS window frame/chrome for MacOS only.
    * Disable frame/chrome regardless of OS when
@@ -128,15 +128,17 @@ const createWindow = (partition, closeWindowCB) => {
 
   // If the user-specified cluster URL changes, reload the page so that
   // the CSP can be refreshed with the this source allowed
-  runtimeSettings.onClusterUrlChange(() => browserWindow.loadURL(emberAppURL));
+  runtimeSettings.onClusterUrlChange(
+    async () => await browserWindow.loadURL(emberAppURL),
+  );
 
   // Load the ember application
-  browserWindow.loadURL(emberAppURL);
+  await browserWindow.loadURL(emberAppURL);
 
   // If a loading operation goes wrong, we'll send Electron back to
   // Ember App entry point
-  browserWindow.webContents.on('did-fail-load', () => {
-    browserWindow.loadURL(emberAppURL);
+  browserWindow.webContents.on('did-fail-load', async () => {
+    await browserWindow.loadURL(emberAppURL);
   });
 
   browserWindow.webContents.on('render-process-gone', () => {
@@ -259,7 +261,7 @@ app.on('ready', async () => {
     mainWindow = null;
   };
 
-  mainWindow = createWindow(partition, closeWindowCB);
+  mainWindow = await createWindow(partition, closeWindowCB);
 
   // Check for updates on launch
   appUpdater.run({ suppressNoUpdatePrompt: true });
@@ -270,9 +272,9 @@ app.on('ready', async () => {
    * while the app is not close.
    * More info: https://www.electronjs.org/docs/latest/tutorial/quick-start#open-a-window-if-none-are-open-macos
    */
-  app.on('activate', () => {
+  app.on('activate', async () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      mainWindow = createWindow(partition, closeWindowCB);
+      mainWindow = await createWindow(partition, closeWindowCB);
     }
   });
 
