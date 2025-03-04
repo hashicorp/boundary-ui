@@ -33,6 +33,7 @@ test(
     page,
     context,
     baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -263,7 +264,7 @@ test(
 
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,

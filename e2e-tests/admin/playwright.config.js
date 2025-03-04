@@ -4,7 +4,7 @@
  */
 
 import { defineConfig, devices } from '@playwright/test';
-import { authenticatedState } from '../global-setup';
+import { authenticatedState, url } from '../global-setup';
 
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 export default defineConfig({
@@ -13,7 +13,7 @@ export default defineConfig({
   timeout: 90000, // Each test is given 90s to complete
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
   use: {
-    baseURL: process.env.BOUNDARY_ADDR,
+    baseURL: url,
     extraHTTPHeaders: {
       // This token is set in global-setup.js
       Authorization: `Bearer ${process.env.E2E_TOKEN}`,

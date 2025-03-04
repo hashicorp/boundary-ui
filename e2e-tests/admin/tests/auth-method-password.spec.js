@@ -25,7 +25,7 @@ test(
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -108,7 +108,7 @@ test(
       ).toBeVisible();
     } finally {
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,

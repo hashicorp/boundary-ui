@@ -44,7 +44,7 @@ test(
   { tag: ['@ce', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -65,7 +65,7 @@ test(
       );
 
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
@@ -95,7 +95,7 @@ test(
     } finally {
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -114,7 +114,7 @@ test(
   { tag: ['@ce', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -135,7 +135,7 @@ test(
       );
 
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
@@ -161,7 +161,7 @@ test(
     } finally {
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -180,7 +180,7 @@ test(
   { tag: ['@ce', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -224,7 +224,7 @@ test(
       );
 
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
@@ -252,7 +252,7 @@ test(
     } finally {
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -271,7 +271,7 @@ test(
   { tag: ['@ce', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -317,7 +317,7 @@ test(
     } finally {
       if (orgName) {
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,

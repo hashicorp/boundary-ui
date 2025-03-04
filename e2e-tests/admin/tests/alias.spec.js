@@ -24,7 +24,7 @@ test.describe('Aliases', () => {
     { tag: ['@ce', '@aws', '@docker'] },
     async ({
       page,
-      baseURL,
+      controllerAddr,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
@@ -64,7 +64,7 @@ test.describe('Aliases', () => {
 
         // Connect to target using alias
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -98,7 +98,7 @@ test.describe('Aliases', () => {
           connect.kill('SIGTERM');
         }
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -121,7 +121,7 @@ test.describe('Aliases', () => {
     { tag: ['@ce', '@aws', '@docker'] },
     async ({
       page,
-      baseURL,
+      controllerAddr,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
@@ -139,7 +139,7 @@ test.describe('Aliases', () => {
         const orgsPage = new OrgsPage(page);
         orgName = await orgsPage.createOrg();
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -163,7 +163,7 @@ test.describe('Aliases', () => {
           connect.kill('SIGTERM');
         }
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -186,7 +186,7 @@ test.describe('Aliases', () => {
     { tag: ['@ce', '@aws', '@docker'] },
     async ({
       page,
-      baseURL,
+      controllerAddr,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
@@ -213,7 +213,7 @@ test.describe('Aliases', () => {
 
         // Create new alias from scope page
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -244,7 +244,7 @@ test.describe('Aliases', () => {
           connect.kill('SIGTERM');
         }
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
