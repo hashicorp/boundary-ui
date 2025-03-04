@@ -8,8 +8,8 @@ import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,12 +17,6 @@ module('Acceptance | aliases | update', function (hooks) {
   setupIndexedDb(hooks);
 
   let aliasCount;
-
-  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-
-  const NAME_FIELD_TEXT = 'random string';
 
   const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
   const CLEAR_DROPDOWN_SELECTOR =
@@ -73,8 +67,8 @@ module('Acceptance | aliases | update', function (hooks) {
     await visit(urls.aliases);
     await click(`[href="${urls.alias}"]`);
     await click(BUTTON_SELECTOR, 'Click edit mode');
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(commonSelector.FIELD_NAME, NAME_FIELD_TEXT);
+    await click(commonSelectors.SAVE_BTN);
     assert.strictEqual(instances.alias.name, NAME_FIELD_TEXT);
   });
 
@@ -86,11 +80,11 @@ module('Acceptance | aliases | update', function (hooks) {
     await click(`[href="${urls.alias}"]`);
 
     await click(BUTTON_SELECTOR, 'Click edit mode');
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await fillIn(commonSelector.FIELD_NAME, NAME_FIELD_TEXT);
 
     await click(BUTTON_SELECTOR, 'Click cancel');
 
-    assert.dom(NAME_FIELD_SELECTOR).hasValue(`${name}`);
+    assert.dom(commonSelector.FIELD_NAME).hasValue(`${name}`);
     assert.strictEqual(instances.alias.name, name);
   });
 
