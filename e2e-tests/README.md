@@ -116,19 +116,6 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 
 More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
-> [!TIP]
-> To run e2e tests against a local branch for Admin UI, update the UI commit in boundary so it gets picked up when enos builds the binary
-
-By default, enos will build the version of the UI that is specified in the `VERSION` commit for `boundary`. To use a specific branch, update the version first before running the scenario.
-
-In the `boundary` or `boundary-enterprise` repository:
-```bash
-UI_COMMITISH=<commit sha> make update-ui-version
-
-# Alternatively if you want to just be able to run the same command for the most recent commit
-UI_COMMITISH=$(git -C <boundary-ui(-enterprise) repo path> rev-parse HEAD) make update-ui-version
-```
-
 ## Run tests:
 Make sure you followed all the steps within the [Getting started section](#getting-started).
 
@@ -210,8 +197,7 @@ ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR yarn workspace admin start
 
 # In another terminal, run the `test_e2e_env.sh` script and then do the following...
 cd boundary-ui/e2e-tests
-export BOUNDARY_ADDR_BRANCH="http://localhost:4200" # This is the URL provided by the first terminal
-yarn run admin:{edition}:{infra} # Example: yarn run admin:ce:aws
+BOUNDARY_ADDR_BRANCH="http://localhost:4200" yarn run admin:{edition}:{infra} # Example: yarn run admin:ce:aws
 ```
 
 #### Desktop

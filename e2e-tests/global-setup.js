@@ -28,7 +28,7 @@ const authenticateToBoundary = async () => {
   // Log in and save the authenticated state to reuse in tests
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  await page.goto(url);
+  await page.goto(baseUrl);
 
   const loginPage = new LoginPage(page);
   await loginPage.login(
@@ -49,9 +49,8 @@ const authenticateToBoundary = async () => {
 
 export default globalSetup;
 
-export const url = process.env.BOUNDARY_ADDR_BRANCH
-  ? process.env.BOUNDARY_ADDR_BRANCH
-  : process.env.BOUNDARY_ADDR;
+export const baseUrl =
+  process.env.BOUNDARY_ADDR_BRANCH ?? process.env.BOUNDARY_ADDR;
 
 export const authenticatedState = path.resolve(
   __dirname,
