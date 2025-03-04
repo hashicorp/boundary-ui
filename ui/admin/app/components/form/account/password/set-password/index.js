@@ -5,9 +5,7 @@
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { computed } from '@ember/object';
 import { action } from '@ember/object';
-import { run } from '@ember/runloop';
 
 export default class FormAccountPasswordSetPasswordIndexComponent extends Component {
   // =properties
@@ -21,7 +19,6 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
   /**
    * @type {boolean}
    */
-  @computed('password')
   get cannotSave() {
     return !this.password;
   }
@@ -45,7 +42,7 @@ export default class FormAccountPasswordSetPasswordIndexComponent extends Compon
    */
   @action
   submit(fn, password) {
-    run(() => this.resetPassword());
-    run(() => fn(password));
+    this.resetPassword();
+    fn(password);
   }
 }

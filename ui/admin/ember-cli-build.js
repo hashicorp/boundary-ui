@@ -18,6 +18,11 @@ module.exports = function (defaults) {
     },
     babel: {
       sourceMaps: 'inline',
+      plugins: [
+        // ... any other plugins
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+        // NOTE: put any code coverage plugins last, after the transform.
+      ],
     },
     sourcemaps: {
       enabled: true,
@@ -34,7 +39,7 @@ module.exports = function (defaults) {
       },
     },
     // TODO: Update to 4.12 when deprecations are resolved
-    //   as multiple things break when forcing compatability on > 4.6
+    //   as multiple things break when forcing compatibility on > 4.6
     emberData: {
       compatWith: '4.6',
     },

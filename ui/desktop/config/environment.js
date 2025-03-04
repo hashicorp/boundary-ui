@@ -43,8 +43,8 @@ module.exports = function (environment) {
 
     appName: APP_NAME,
 
-    sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
+    sessionPollingTimeoutSeconds: 2,
 
     documentation: {
       baseURL: 'https://developer.hashicorp.com/boundary',
@@ -94,6 +94,10 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.flashMessageDefaults.timeout = 0;
+    // OIDC Authentication timeout should be 0 for fast tests
+    ENV.oidcPollingTimeoutSeconds = 0;
+    // Sessions polling timeout should be 0 for fast tests
+    ENV.sessionPollingTimeoutSeconds = 0;
 
     ENV.enableConfirmService = false;
 

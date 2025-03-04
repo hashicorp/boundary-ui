@@ -5,9 +5,7 @@
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { computed } from '@ember/object';
 import { action } from '@ember/object';
-import { run } from '@ember/runloop';
 
 export default class FormAccountPasswordChangePasswordIndexComponent extends Component {
   // =properties
@@ -25,7 +23,6 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
   /**
    * @type {boolean}
    */
-  @computed('currentPassword', 'newPassword')
   get canSave() {
     return this.currentPassword && this.newPassword;
   }
@@ -33,7 +30,6 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
   /**
    * @type {boolean}
    */
-  @computed('canSave')
   get cannotSave() {
     return !this.canSave;
   }
@@ -41,7 +37,7 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
   // =methods
 
   /**
-   * Unsets the password fields.
+   * Un-sets the password fields.
    */
   resetPasswords() {
     this.currentPassword = null;
@@ -52,15 +48,15 @@ export default class FormAccountPasswordChangePasswordIndexComponent extends Com
 
   /**
    * Call passed submit function with passwords.
-   * Unset passwords before callack.
+   * Unset passwords before callback.
    * @param {function} fn
    * @param {string} currentPassword
    * @param {string} newPassword
    */
   @action
   submit(fn, currentPassword, newPassword) {
-    run(() => this.resetPasswords());
-    run(() => fn(currentPassword, newPassword));
+    this.resetPasswords();
+    fn(currentPassword, newPassword);
   }
 
   /**

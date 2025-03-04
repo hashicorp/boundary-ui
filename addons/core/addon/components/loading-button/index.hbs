@@ -6,7 +6,7 @@
 <Hds::Button
   @text={{t 'actions.refresh'}}
   @color='secondary'
-  @icon={{if this.isLoading 'loading' 'reload'}}
+  @icon={{if this.toggleRefresh.isRunning 'loading' 'reload'}}
   @disabled={{this.isLoading}}
-  {{on 'click' this.toggleRefresh}}
+  {{on 'click' this.toggleRefresh.perform}}
 />
