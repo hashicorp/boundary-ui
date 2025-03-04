@@ -183,7 +183,8 @@ module('Unit | Serializer | Managed group', function (hooks) {
   test('it normalizes correctly', function (assert) {
     const store = this.owner.lookup('service:store');
     const serializer = store.serializerFor('managed-group');
-    const hostSetModelClass = store.createRecord('managed-group').constructor;
+    const managedGroupModelClass =
+      store.createRecord('managed-group').constructor;
     const payload = {
       id: '1',
       description: 'Description for the test',
@@ -196,7 +197,7 @@ module('Unit | Serializer | Managed group', function (hooks) {
     };
     const normalized = serializer.normalizeSingleResponse(
       store,
-      hostSetModelClass,
+      managedGroupModelClass,
       payload,
     );
 
@@ -217,6 +218,24 @@ module('Unit | Serializer | Managed group', function (hooks) {
         type: 'managed-group',
         relationships: {},
       },
+    });
+  });
+
+  test('it handles errors correctly', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('managed-group');
+    const schema = store.modelFor('managed-group');
+
+    const errors = {
+      base: ['Error in provided request.'],
+      filter: ['This field is required.'],
+    };
+
+    const result = serializer.extractErrors(store, schema, errors, null);
+
+    assert.deepEqual(result, {
+      base: ['Error in provided request.'],
+      filter_string: ['This field is required.'],
     });
   });
 });
