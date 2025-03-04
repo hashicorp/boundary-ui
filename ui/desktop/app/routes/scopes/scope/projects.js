@@ -80,6 +80,7 @@ export default class ScopesScopeProjectsRoute extends Route {
   poller = restartableTask(async () => {
     let sessions;
 
+    // We use a while loop to continuously poll for new sessions from the client agent.
     // eslint-disable-next-line no-constant-condition
     while (true) {
       try {
