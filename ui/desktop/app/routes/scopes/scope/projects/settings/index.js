@@ -23,7 +23,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
 
     const logLevel = await this.ipc.invoke('getLogLevel');
     const logPath = await this.ipc.invoke('getLogPath');
-    const serverInformation = this.clusterUrl.rendererClusterUrl;
+    const serverInformation = await this.clusterUrl.getClusterUrl();
 
     return {
       desktopVersion: `v${desktopVersion}`,

@@ -102,8 +102,8 @@ export default class ApplicationController extends Controller {
    */
   @action
   disconnect() {
-    this.clusterUrl.resetClusterUrl();
     this.session.invalidate();
+    this.router.replaceWith('cluster-url');
   }
 
   @action

@@ -41,9 +41,9 @@ export default class ClusterUrlRoute extends Route {
    * Adds the existing clusterUrl, if any, to the controller scope.
    * @param {Controller} controller
    */
-  setupController(controller) {
+  async setupController(controller) {
     super.setupController(...arguments);
-    let clusterUrl = this.clusterUrl.rendererClusterUrl;
+    let clusterUrl = await this.clusterUrl.getClusterUrl();
     // If clusterUrl is unset and this is a development environment,
     // auto-set the clusterUrl field of the UI for better DX.
     // The controller URL is almost always the same as the current window when

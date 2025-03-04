@@ -18,7 +18,6 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
   // =services
 
   @service abilities;
-  @service clusterUrl;
   @service resourceFilterStore;
   @service router;
   @service session;
