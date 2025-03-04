@@ -33,7 +33,7 @@ handle('getClusterUrl', () => runtimeSettings.clusterUrl);
 handle('setClusterUrl', async (requestOrigin) => {
   const clusterUrl = sanitizer.urlValidate(requestOrigin);
   await runtimeSettings.validateClusterUrl(clusterUrl);
-  runtimeSettings.clusterUrl = clusterUrl;
+  await runtimeSettings.setClusterUrl(clusterUrl);
 });
 
 /**
