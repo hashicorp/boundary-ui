@@ -64,17 +64,20 @@ export default class ScopesScopeAuthenticateRoute extends Route {
     };
   }
 
-  redirect() {
-    if (!this.clusterUrl.rendererClusterUrl) this.router.replaceWith('index');
+  async redirect() {
+    const clusterUrl = await this.clusterUrl.getClusterUrl();
+    if (!clusterUrl) {
+      this.router.replaceWith('cluster-url');
+    }
   }
 
   /**
    * Adds the existing clusterUrl, if any, to the controller scope.
    * @param {Controller} controller
    */
-  setupController(controller) {
+  async setupController(controller) {
     super.setupController(...arguments);
-    const clusterUrl = this.clusterUrl.rendererClusterUrl;
+    const clusterUrl = await this.clusterUrl.getClusterUrl();
     controller.setProperties({ clusterUrl });
   }
 }

@@ -22,7 +22,7 @@ export default class ScopesScopeProjectsSettingsIndexRoute extends Route {
 
     const logLevel = await window.desktop.logging.getLogLevel();
     const logPath = await window.desktop.logging.getLogPath();
-    const serverInformation = this.clusterUrl.rendererClusterUrl;
+    const serverInformation = await this.clusterUrl.getClusterUrl();
     const { isLinux } = await window.desktop.system.checkOS();
 
     return {
