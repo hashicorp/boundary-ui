@@ -6,7 +6,6 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { next } from '@ember/runloop';
 
 export default class ClockTickService extends Service {
   // =attributes
@@ -75,9 +74,9 @@ export default class ClockTickService extends Service {
   }
 
   /**
-   * Updates the value of `now` within the next runloop.
+   * Updates the value of `now`.
    */
   _tick() {
-    next(() => (this.now = Date.now()));
+    this.now = Date.now();
   }
 }

@@ -812,6 +812,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-module-imports@npm:^7.22.15, @babel/helper-module-imports@npm:^7.25.9":
+  version: 7.25.9
+  resolution: "@babel/helper-module-imports@npm:7.25.9"
+  dependencies:
+    "@babel/traverse": "npm:^7.25.9"
+    "@babel/types": "npm:^7.25.9"
+  checksum: 10c0/078d3c2b45d1f97ffe6bb47f61961be4785d2342a4156d8b42c92ee4e1b7b9e365655dd6cb25329e8fe1a675c91eeac7e3d04f0c518b67e417e29d6e27b6aa70
+  languageName: node
+  linkType: hard
+
 "@babel/helper-module-imports@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-module-imports@npm:7.22.5"
@@ -828,16 +838,6 @@ __metadata:
     "@babel/traverse": "npm:^7.24.7"
     "@babel/types": "npm:^7.24.7"
   checksum: 10c0/97c57db6c3eeaea31564286e328a9fb52b0313c5cfcc7eee4bc226aebcf0418ea5b6fe78673c0e4a774512ec6c86e309d0f326e99d2b37bfc16a25a032498af0
-  languageName: node
-  linkType: hard
-
-"@babel/helper-module-imports@npm:^7.25.9":
-  version: 7.25.9
-  resolution: "@babel/helper-module-imports@npm:7.25.9"
-  dependencies:
-    "@babel/traverse": "npm:^7.25.9"
-    "@babel/types": "npm:^7.25.9"
-  checksum: 10c0/078d3c2b45d1f97ffe6bb47f61961be4785d2342a4156d8b42c92ee4e1b7b9e365655dd6cb25329e8fe1a675c91eeac7e3d04f0c518b67e417e29d6e27b6aa70
   languageName: node
   linkType: hard
 
@@ -4409,6 +4409,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types@npm:^7.12.13, @babel/types@npm:^7.8.3":
+  version: 7.26.9
+  resolution: "@babel/types@npm:7.26.9"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.25.9"
+    "@babel/helper-validator-identifier": "npm:^7.25.9"
+  checksum: 10c0/999c56269ba00e5c57aa711fbe7ff071cd6990bafd1b978341ea7572cc78919986e2aa6ee51dacf4b6a7a6fa63ba4eb3f1a03cf55eee31b896a56d068b895964
+  languageName: node
+  linkType: hard
+
 "@babel/types@npm:^7.14.5, @babel/types@npm:^7.14.8, @babel/types@npm:^7.15.0, @babel/types@npm:^7.4.4, @babel/types@npm:^7.7.2":
   version: 7.15.0
   resolution: "@babel/types@npm:7.15.0"
@@ -4469,16 +4479,6 @@ __metadata:
     "@babel/helper-string-parser": "npm:^7.25.9"
     "@babel/helper-validator-identifier": "npm:^7.25.9"
   checksum: 10c0/b694f41ad1597127e16024d766c33a641508aad037abd08d0d1f73af753e1119fa03b4a107d04b5f92cc19c095a594660547ae9bead1db2299212d644b0a5cb8
-  languageName: node
-  linkType: hard
-
-"@babel/types@npm:^7.8.3":
-  version: 7.26.9
-  resolution: "@babel/types@npm:7.26.9"
-  dependencies:
-    "@babel/helper-string-parser": "npm:^7.25.9"
-    "@babel/helper-validator-identifier": "npm:^7.25.9"
-  checksum: 10c0/999c56269ba00e5c57aa711fbe7ff071cd6990bafd1b978341ea7572cc78919986e2aa6ee51dacf4b6a7a6fa63ba4eb3f1a03cf55eee31b896a56d068b895964
   languageName: node
   linkType: hard
 
@@ -7187,13 +7187,13 @@ __metadata:
     ember-cli-sass: "npm:^11.0.1"
     ember-cli-sri: "npm:^2.1.1"
     ember-cli-terser: "npm:^4.0.2"
+    ember-concurrency: "npm:^4.0.3"
     ember-exam: "npm:^8.0.0"
     ember-inline-svg: "npm:^1.0.1"
     ember-load-initializers: "npm:^2.1.2"
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -10090,6 +10090,7 @@ __metadata:
     ember-cli-sass: "npm:^11.0.1"
     ember-cli-sri: "npm:^2.1.1"
     ember-cli-terser: "npm:^4.0.2"
+    ember-concurrency: "npm:^4.0.3"
     ember-feature-flags: "npm:^6.0.0"
     ember-inline-svg: "npm:^1.0.1"
     ember-intl: "npm:^7.0.7"
@@ -10488,7 +10489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decorator-transforms@npm:^1.1.0":
+"decorator-transforms@npm:^1.0.1, decorator-transforms@npm:^1.1.0":
   version: 1.2.1
   resolution: "decorator-transforms@npm:1.2.1"
   dependencies:
@@ -10649,6 +10650,7 @@ __metadata:
     ember-cli-sass: "npm:^11.0.1"
     ember-cli-sri: "npm:^2.1.1"
     ember-cli-terser: "npm:^4.0.2"
+    ember-concurrency: "npm:^4.0.3"
     ember-electron: "npm:^4.2.2"
     ember-exam: "npm:^8.0.0"
     ember-inline-svg: "npm:^1.0.1"
@@ -10656,7 +10658,6 @@ __metadata:
     ember-modifier: "npm:^4.1.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
     ember-page-title: "npm:^7.0.0"
-    ember-pollster: "https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8"
     ember-qunit: "npm:^8.1.0"
     ember-resolver: "npm:^10.0.0"
     ember-source: "npm:~4.12.0"
@@ -11167,7 +11168,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.26.8, ember-cli-babel@npm:^7.7.3":
+"ember-cli-babel@npm:^7.10.0, ember-cli-babel@npm:^7.11.1, ember-cli-babel@npm:^7.13.0, ember-cli-babel@npm:^7.19.0, ember-cli-babel@npm:^7.21.0, ember-cli-babel@npm:^7.22.1, ember-cli-babel@npm:^7.23.0, ember-cli-babel@npm:^7.26.11, ember-cli-babel@npm:^7.26.3, ember-cli-babel@npm:^7.26.5, ember-cli-babel@npm:^7.26.6, ember-cli-babel@npm:^7.7.3":
   version: 7.26.11
   resolution: "ember-cli-babel@npm:7.26.11"
   dependencies:
@@ -11933,6 +11934,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ember-concurrency@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "ember-concurrency@npm:4.0.3"
+  dependencies:
+    "@babel/helper-module-imports": "npm:^7.22.15"
+    "@babel/helper-plugin-utils": "npm:^7.12.13"
+    "@babel/types": "npm:^7.12.13"
+    "@embroider/addon-shim": "npm:^1.8.7"
+    decorator-transforms: "npm:^1.0.1"
+  peerDependencies:
+    "@glimmer/tracking": ^1.1.2
+    "@glint/template": ">= 1.0.0"
+    ember-source: ^3.28.0 || ^4.0.0 || >=5.0.0
+  peerDependenciesMeta:
+    "@glint/template":
+      optional: true
+  checksum: 10c0/01fd3b6b3358f185ee8df7667803044d9a0c13f5e8500c2c8c8b478632a070e03fd7372a2e557ec5fcd605bb34b1f2edea9d3e0968a222a1b1c2d0bce9a9bff3
+  languageName: node
+  linkType: hard
+
 "ember-cookies@npm:^1.0.0, ember-cookies@npm:^1.2.0":
   version: 1.2.0
   resolution: "ember-cookies@npm:1.2.0"
@@ -12301,16 +12322,6 @@ __metadata:
   dependencies:
     ember-cli-babel: "npm:^7.26.6"
   checksum: 10c0/8adaa1ce276e4d6e0ecf4b7481bc8b073c1916b472e10266d914978f7c6f2189c9c0a1bf435b43a0e1aad4924dcd0713574a6880e9b5d078d423a36eb9b12b1b
-  languageName: node
-  linkType: hard
-
-"ember-pollster@https://github.com/hashicorp/ember-pollster.git#605d82e986d829b098667e4a5e221877a4ee4ac8":
-  version: 0.0.1-beta.2
-  resolution: "ember-pollster@https://github.com/hashicorp/ember-pollster.git#commit=605d82e986d829b098667e4a5e221877a4ee4ac8"
-  dependencies:
-    ember-cli-babel: "npm:^7.26.8"
-    ember-cli-htmlbars: "npm:^6.0.1"
-  checksum: 10c0/0e1b6e8b9ef466d864d01e63a5c58b9ccd81ea5d1e71402a5bd74d010f52a40bd9d257c2c9adf3ccd7f383327e8ffaa1b4ec73980afb6ddd4b1e18676ab099c4
   languageName: node
   linkType: hard
 
