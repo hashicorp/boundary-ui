@@ -83,6 +83,7 @@ export const test = baseTest.extend({
   sshUser: process.env.E2E_SSH_USER,
   targetAddress: process.env.E2E_TARGET_ADDRESS,
   targetPort: process.env.E2E_TARGET_PORT,
-  vaultAddr: process.env.E2E_VAULT_ADDR,
+  vaultAddr: process.env.E2E_VAULT_ADDR_PUBLIC,
+  vaultAddrPrivate: process.env.E2E_VAULT_ADDR_PRIVATE,
   workerTagEgress: process.env.E2E_WORKER_TAG_EGRESS,
 });
