@@ -16,9 +16,7 @@ module.exports = function (defaults) {
     },
     babel: {
       plugins: [
-        // ... any other plugins
         require.resolve('ember-concurrency/async-arrow-task-transform'),
-        // NOTE: put any code coverage plugins last, after the transform.
       ],
     },
   });

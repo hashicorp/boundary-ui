@@ -4,12 +4,12 @@
  */
 
 import Component from '@glimmer/component';
-import { task, timeout } from 'ember-concurrency';
+import { dropTask, timeout } from 'ember-concurrency';
 
 export default class LoadingButton extends Component {
   // =attributes
 
-  toggleRefresh = task({ drop: true }, async () => {
+  toggleRefresh = dropTask(async () => {
     await this.args.onClick();
     await timeout(1000);
   });
