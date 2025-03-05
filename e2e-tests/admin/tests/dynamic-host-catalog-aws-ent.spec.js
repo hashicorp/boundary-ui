@@ -25,7 +25,7 @@ test.describe('AWS', () => {
     { tag: ['@ent', '@aws'] },
     async ({
       page,
-      baseURL,
+      controllerAddr,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,
@@ -199,7 +199,7 @@ test.describe('AWS', () => {
 
         // Connect to target
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,
@@ -222,7 +222,7 @@ test.describe('AWS', () => {
         }
 
         await boundaryCli.authenticateBoundary(
-          baseURL,
+          controllerAddr,
           adminAuthMethodId,
           adminLoginName,
           adminPassword,

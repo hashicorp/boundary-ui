@@ -42,7 +42,7 @@ test(
   { tag: ['@ce', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -120,7 +120,7 @@ test(
 
       // Verify correct credentials are returned after authorizing session
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,
