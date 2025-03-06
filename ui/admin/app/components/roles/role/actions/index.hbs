@@ -8,7 +8,7 @@
   {{#if (can 'addPrincipals role' @model)}}
     <dd.Interactive
       @route='scopes.scope.roles.role.add-principals'
-      data-test-manage-dropdown-principals
+      data-test-manage-role-principals
     >
       {{t 'resources.role.principal.actions.add-principals'}}
     </dd.Interactive>
@@ -16,7 +16,7 @@
   {{#if (can 'setGrantScopes role' @model)}}
     <dd.Interactive
       @route='scopes.scope.roles.role.manage-scopes'
-      data-test-manage-dropdown-scopes
+      data-test-manage-role-scopes
     >
       {{t 'resources.role.scope.actions.manage-scopes'}}
     </dd.Interactive>

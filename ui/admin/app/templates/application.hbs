@@ -5,113 +5,108 @@
 
 {{page-title (app-name)}}
 
-<Rose::Layout::Global as |layout|>
+<Hds::AppFrame @hasHeader={{false}} @hasSidebar={{this.showSideNav}} as |Frame|>
+  <Frame.Sidebar class='app-frame-sidebar-style-overrides'>
+    <Hds::SideNav class='side-nav-style-overrides'>
+      <:header>
+        <Hds::SideNav::Header>
+          <:logo>
+            <Hds::SideNav::Header::HomeLink
+              @icon='boundary'
+              @color='var(--token-color-boundary-brand)'
+              @ariaLabel={{(app-name)}}
+              @route='index'
+            />
+          </:logo>
+          <:actions>
+            {{#if (feature-flag 'dev-edition-toggle')}}
+              <Hds::Dropdown @enableCollisionDetection={{true}} as |dd|>
+                <dd.ToggleIcon
+                  @icon='layers'
+                  @text={{t
+                    'titles.feature-edition'
+                    edition=this.featureEdition.edition
+                  }}
+                />
 
-  <layout.header>
-    <Rose::Header class={{if (is-loading) ' loading'}} as |header|>
-      <header.brand @logo='logo-app' @text={{(app-name)}} />
-
-      {{#if this.session.isAuthenticated}}
-        <header.nav>
-          <HeaderNav />
-        </header.nav>
-
-        <header.utilities as |utilities|>
-          <utilities.dropdown
-            @text={{this.session.data.authenticated.username}}
-            @icon='flight-icons/svg/user-circle-16'
-            as |dropdown|
-          >
-            <dropdown.link @route='account.change-password'>
-              {{t 'actions.change-password'}}
-            </dropdown.link>
-            <dropdown.separator />
-
-            <dropdown.button {{on 'click' this.invalidateSession}}>
-              {{t 'actions.deauthenticate'}}
-            </dropdown.button>
-
-            <dropdown.separator />
-
-            <dropdown.section @title={{t 'actions.toggle-color-theme'}}>
-              <Hds::Form::Radio::Group
-                @name='theme'
-                class='dropdown-radio-btn'
-                as |G|
-              >
-                {{#each this.themes as |theme|}}
-                  <G.RadioField
-                    @value={{theme.value}}
-                    checked={{eq this.session.data.theme theme.value}}
-                    {{on 'change' (fn this.toggleTheme theme.value)}}
-                    as |F|
+                <dd.Title @text={{t 'actions.toggle-feature-edition'}} />
+                {{#each this.featureEdition.editions as |edition|}}
+                  <dd.Radio
+                    @value={{edition}}
+                    checked={{eq this.featureEdition.edition edition}}
+                    {{on 'change' (fn this.toggleEdition edition)}}
                   >
-                    <F.Label>{{t (concat 'themes.' theme.label)}}</F.Label>
-                  </G.RadioField>
+                    {{edition}}
+                  </dd.Radio>
                 {{/each}}
-              </Hds::Form::Radio::Group>
-            </dropdown.section>
+                <dd.Separator />
 
-          </utilities.dropdown>
+                <dd.Title @text={{t 'actions.toggle-licensed-features'}} />
+                {{#each this.featureEdition.licensedFeatures as |feature|}}
+                  <dd.Checkbox
+                    @value={{feature}}
+                    checked={{feature-flag feature}}
+                    {{on 'change' (fn this.toggleFeature feature)}}
+                  >
+                    {{feature}}
+                  </dd.Checkbox>
+                {{/each}}
+              </Hds::Dropdown>
+            {{/if}}
 
-          {{#if (feature-flag 'dev-edition-toggle')}}
-            <utilities.dropdown
-              data-test-dev-edition-toggle
-              @text={{t
-                'titles.feature-edition'
-                edition=this.featureEdition.edition
-              }}
-              @icon='flight-icons/svg/layers-16'
-              as |dropdown|
+            <Hds::Dropdown
+              @enableCollisionDetection={{true}}
+              data-test-side-nav-user-dropdown
+              as |dd|
             >
-              <dropdown.section @title={{t 'actions.toggle-feature-edition'}}>
-                <Hds::Form::Radio::Group
-                  @name='edition'
-                  class='dropdown-radio-btn'
-                  as |G|
+              <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
+
+              <dd.Interactive @route='account.change-password'>{{t
+                  'actions.change-password'
+                }}</dd.Interactive>
+              <dd.Separator />
+
+              <dd.Interactive {{on 'click' this.invalidateSession}}>{{t
+                  'actions.deauthenticate'
+                }}</dd.Interactive>
+              <dd.Separator />
+
+              <dd.Title @text={{t 'actions.toggle-color-theme'}} />
+              {{#each this.themes as |theme|}}
+                <dd.Radio
+                  @value={{theme.value}}
+                  checked={{eq this.session.data.theme theme.value}}
+                  {{on 'change' (fn this.toggleTheme theme.value)}}
                 >
-                  {{#each this.featureEdition.editions as |edition|}}
-                    <G.RadioField
-                      @value={{edition}}
-                      checked={{eq this.featureEdition.edition edition}}
-                      {{on 'change' (fn this.toggleEdition edition)}}
-                      as |F|
-                    >
-                      <F.Label>{{edition}}</F.Label>
-                    </G.RadioField>
-                  {{/each}}
-                </Hds::Form::Radio::Group>
+                  {{t (concat 'themes.' theme.label)}}
+                </dd.Radio>
+              {{/each}}
+            </Hds::Dropdown>
+          </:actions>
+        </Hds::SideNav::Header>
+      </:header>
 
-              </dropdown.section>
-              <dropdown.separator />
-              <dropdown.section @title={{t 'actions.toggle-licensed-features'}}>
-                <Rose::Form as |form|>
-                  {{#each this.featureEdition.licensedFeatures as |feature|}}
-                    <dropdown.item>
-                      <form.checkbox
-                        @label={{feature}}
-                        @checked={{feature-flag feature}}
-                        @onChange={{fn this.toggleFeature feature}}
-                      />
-                    </dropdown.item>
-                  {{/each}}
-                </Rose::Form>
-              </dropdown.section>
-            </utilities.dropdown>
-          {{/if}}
+      <:body>
+        <Hds::SideNav::Portal::Target />
+      </:body>
 
-        </header.utilities>
+      <:footer>
+        <ScopePicker />
+      </:footer>
+    </Hds::SideNav>
+  </Frame.Sidebar>
 
-      {{/if}}
-
-    </Rose::Header>
-  </layout.header>
-
-  <layout.body>
+  <Frame.Main>
     {{outlet}}
-  </layout.body>
+  </Frame.Main>
 
-</Rose::Layout::Global>
+  <Frame.Footer>
+    <Hds::AppFooter @theme={{this.session.data.theme}} as |AF|>
+      <AF.Link @href={{(doc-url)}}>{{t 'titles.documentation'}}</AF.Link>
+      <AF.LegalLinks />
+    </Hds::AppFooter>
+  </Frame.Footer>
+</Hds::AppFrame>
 
 {{#if this.flashMessages.queue}}
   <div class='ember-notify-cn'>
