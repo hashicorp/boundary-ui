@@ -13,6 +13,8 @@ import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | managed-groups | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,8 +22,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-auth-method] button:first-child';
 
   const instances = {
     scopes: {
@@ -33,7 +33,6 @@ module('Acceptance | managed-groups | list', function (hooks) {
     managedGroup: null,
   };
   const urls = {
-    orgScope: null,
     authMethods: null,
     authMethod: null,
     ldapAuthMethod: null,
@@ -64,8 +63,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
     });
 
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
+    urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.ldapAuthMethod = `${urls.authMethods}/${instances.ldapAuthMethod.id}`;
     urls.managedGroups = `${urls.authMethod}/managed-groups`;
@@ -78,7 +76,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
   test('User can navigate to managed groups with proper authorization', async function (assert) {
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
+    await click(commonSelectors.HREF(urls.authMethod));
 
     assert.true(
       instances.authMethod.authorized_collection_actions[
@@ -90,14 +88,14 @@ module('Acceptance | managed-groups | list', function (hooks) {
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.managedGroups}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.managedGroups)).exists();
   });
 
   test('User can navigate to ldap managed groups with proper authorization', async function (assert) {
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
 
     assert.true(
       instances.ldapAuthMethod.authorized_collection_actions[
@@ -109,14 +107,14 @@ module('Acceptance | managed-groups | list', function (hooks) {
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.ldapManagedGroups}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.ldapManagedGroups)).exists();
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
     instances.authMethod.authorized_collection_actions['managed-groups'] = [];
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
+    await click(commonSelectors.HREF(urls.authMethod));
 
     assert.false(
       instances.authMethod.authorized_collection_actions[
@@ -128,7 +126,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.managedGroups}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.managedGroups)).doesNotExist();
   });
 
   test('User cannot navigate to ldap managed group index without either list or create actions', async function (assert) {
@@ -137,7 +135,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
       [];
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.ldapAuthMethod}"]`);
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
 
     assert.false(
       instances.ldapAuthMethod.authorized_collection_actions[
@@ -149,7 +147,7 @@ module('Acceptance | managed-groups | list', function (hooks) {
         'managed-groups'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.ldapManagedGroups}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.ldapManagedGroups)).doesNotExist();
   });
 
   test('User can navigate to index with only create action', async function (assert) {
@@ -158,11 +156,11 @@ module('Acceptance | managed-groups | list', function (hooks) {
     ];
     await visit(urls.authMethods);
 
-    await click(`[href="${urls.authMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(commonSelectors.HREF(urls.authMethod));
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
-    assert.dom(`[href="${urls.managedGroups}"]`).exists();
-    assert.dom(`[href="${urls.newManagedGroup}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.managedGroups)).exists();
+    assert.dom(commonSelectors.HREF(urls.newManagedGroup)).exists();
   });
 
   test('User can navigate to ldap managed groups index with only create action', async function (assert) {
@@ -171,10 +169,11 @@ module('Acceptance | managed-groups | list', function (hooks) {
       'create',
     ];
     await visit(urls.authMethods);
-    await click(`[href="${urls.ldapAuthMethod}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
 
-    assert.dom(`[href="${urls.ldapManagedGroups}"]`).exists();
-    assert.dom(`[href="${urls.newLdapManagedGroup}"]`).exists();
+    await click(commonSelectors.HREF(urls.ldapAuthMethod));
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
+
+    assert.dom(commonSelectors.HREF(urls.ldapManagedGroups)).exists();
+    assert.dom(commonSelectors.HREF(urls.newLdapManagedGroup)).exists();
   });
 });
