@@ -86,7 +86,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(commonSelectors.HREF(urls.managedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
-    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.managedGroups);
@@ -98,7 +98,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
-    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.ldapManagedGroups);
@@ -144,7 +144,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(commonSelectors.HREF(urls.managedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
-    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
     await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
@@ -167,7 +167,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
 
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
-    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
     await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
