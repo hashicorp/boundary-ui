@@ -19,10 +19,10 @@ export default class extends Helper {
     // Parse the expiration time
     const expirationTime = new Date(expiration_time);
 
-    // Get the curent time
+    // Get the current time
     const currentTime = this.clockTick.now;
 
-    // Calculate the difference in milleseconds
+    // Calculate the difference in milliseconds
     const difference = expirationTime - currentTime;
 
     // Calculate the difference in seconds if the difference is positive

@@ -7,7 +7,7 @@ import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import runEvery from 'ember-pollster/decorators/route/run-every';
+import { task, timeout } from 'ember-concurrency';
 import { notifyError } from 'core/decorators/notify';
 import config from '../../../../../config/environment';
 
@@ -18,6 +18,15 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
 
   @service session;
   @service router;
+
+  // =attributes
+
+  poller = task(async () => {
+    while (!this.session.isAuthenticated) {
+      await timeout(POLL_TIMEOUT_SECONDS * 1000);
+      this.refresh();
+    }
+  });
 
   // =methods
 
@@ -41,9 +50,19 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
     controller.authMethod = authMethod;
   }
 
-  @runEvery(POLL_TIMEOUT_SECONDS * 1000)
-  poller() {
-    this.refresh();
+  /**
+   * When this route is activated (entered), start polling for authentication.
+   */
+  activate() {
+    this.poller.perform();
+  }
+
+  /**
+   * When this route is deactivated (exited), stop polling for changes and close
+   * any windows opened via the window manager service.
+   */
+  deactivate() {
+    this.poller.cancelAll();
   }
 
   /**
