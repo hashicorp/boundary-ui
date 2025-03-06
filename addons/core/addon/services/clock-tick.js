@@ -25,7 +25,7 @@ export default class ClockTickService extends Service {
   frequency = 1000;
 
   /**
-   * Updates the value of `now`every `frequency` milliseconds.
+   * Updates the value of `now` every `frequency` milliseconds.
    */
   _tick = dropTask(async () => {
     // eslint-disable-next-line no-constant-condition
