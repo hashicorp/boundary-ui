@@ -112,7 +112,7 @@ export const electronTest = test.extend({
       const app = await playwright._electron.launch({
         executablePath: getExecutablePath(),
         env: {
-          NODE_ENV: 'development',
+          NODE_ENV: 'test',
           BYPASS_APP_UPDATER: true,
           ...process.env,
         },

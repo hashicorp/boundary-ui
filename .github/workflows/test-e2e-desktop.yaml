@@ -1,15 +1,13 @@
 name: Test E2E Desktop Client
 
-# run only on changes to desktop?
-
 on:
-  push: # !! test
-    branches:
-      - poc/e2e-desktop
+  pull_request:
+    types: [labeled]
   workflow_dispatch:
 
 jobs:
   test:
+    if: ${{ github.repository == 'hashicorp/boundary-ui' && github.event.label.name == 'desktop' }}
     name: Run Desktop E2E Tests
     runs-on: ubuntu-22.04
     env:
@@ -39,28 +37,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # !! might not need this
-      # - name: Set up Go
-      #   uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5.2.0
-      #   with:
-      #     go-version: ${{ inputs.go-version }}
-      #     cache: false
-
       - name: Install Vault CLI
         run: |
           wget https://releases.hashicorp.com/vault/1.12.2/vault_1.12.2_linux_amd64.zip -O /tmp/vault.zip
           unzip /tmp/vault.zip -d /usr/local/bin
-
-      # # -- Get Boundary binary (!! get latest?)
-      #     - name: Download Boundary AMD64 binary
-      #       run: |
-      #         wget https://releases.hashicorp.com/boundary/0.18.2/boundary_0.18.2_linux_amd64.zip -O /tmp/boundary.zip
-
-      #      - name: Checkout boundary
-      #        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      #        with:
-      #          repository: hashicorp/boundary
-      #          path: support/src/boundary
 
       - name: Checkout boundary-enterprise
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
@@ -71,8 +51,6 @@ jobs:
           token: ${{ secrets.ELEVATED_GITHUB_TOKEN }}
 
       - name: GH fix for localhost resolution
-        #         !! does this work in boundary-ui-enterprise?
-        if: github.repository == 'hashicorp/boundary-ui'
         run: |
           cat /etc/hosts && echo "-----------"
           sudo sed -i 's/::1 *localhost ip6-localhost ip6-loopback/::1 ip6 -localhost ip6-loopback/g' /etc/hosts
@@ -88,7 +66,7 @@ jobs:
           docker pull hashicorp/boundary-enterprise:latest
           docker save hashicorp/boundary-enterprise:latest | gzip > /tmp/boundary-enterprise.zip
 
-        # TODO: Set up license in a better way
+        # TODO: Set up license in a better way? Use directly rather than writing to file and pull from secrets manager
       - name: Set up test infra
         id: infra
         run: |
@@ -107,9 +85,7 @@ jobs:
           cd e2e-tests
           yarn playwright install --with-deps
 
-      # Issue with Ubuntu 24.04 causing issues with using sandboxes
-      #      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-
+        # Runner is headless so we need to enable a display to run the client
       - name: Run Tests
         run: |
           source <(bash ./support/src/boundary-enterprise/enos/scripts/test_e2e_env.sh)
@@ -131,5 +107,3 @@ jobs:
           export ENOS_VAR_enos_user=$GITHUB_ACTOR && \
           export ENOS_VAR_aws_ssh_private_key_path=~/.ssh/github_enos && \
           enos scenario destroy --timeout 60m0s --chdir ./support/src/boundary-enterprise/enos e2e_ui_docker_ent builder:crt
-
-  # Log files?
