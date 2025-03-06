@@ -19,7 +19,7 @@ test(
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -38,7 +38,7 @@ test(
       await rolesPage.addGrantsToRole('ids=*;type=*;actions=read,list');
     } finally {
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,

@@ -116,19 +116,6 @@ Enos needs some configuration variables to run the scenario successfully. [See t
 
 More documentation about [scenario variables](https://github.com/hashicorp/boundary/tree/main/enos#scenarios-variables).
 
-> [!TIP]
-> To run e2e tests against a local branch for Admin UI, update the UI commit in boundary so it gets picked up when enos builds the binary
-
-By default, enos will build the version of the UI that is specified in the `VERSION` commit for `boundary`. To use a specific branch, update the version first before running the scenario.
-
-In the `boundary` or `boundary-enterprise` repository:
-```bash
-UI_COMMITISH=<commit sha> make update-ui-version
-
-# Alternatively if you want to just be able to run the same command for the most recent commit
-UI_COMMITISH=$(git -C <boundary-ui(-enterprise) repo path> rev-parse HEAD) make update-ui-version
-```
-
 ## Run tests:
 Make sure you followed all the steps within the [Getting started section](#getting-started).
 
@@ -166,7 +153,7 @@ Using Terminal 1:
 - `eval "$(doormat aws export --account boundary_team_acctest_dev)"`. Exporting AWS env variables from doormat to your terminal.
 - `enos scenario launch e2e_ui_aws builder:local` or `enos scenario launch e2e_ui_aws_ent builder:local` if in enterprise.
   - Launches enos scenario, this will take from 5 to 10 minutes. When its done, you will see a Enos Operations finished! within your terminal. Check out more scenarios [here](https://github.com/hashicorp/boundary/tree/main/enos).
-- `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are need within Boundary UI to run the test against the enos scenario. 
+- `bash scripts/test_e2e_env.sh`. Prints all the env variables within Enos scenario. Copy the output and paste it within your Terminal 2 (Boundary UI). These env variables are needed within Boundary UI to run the test against the enos scenario.
 
 Alternatively, you can also redirect the output to an `.env` file that will get picked up by tests automatically which is useful if you're running tests in your IDE:
 ```
@@ -199,6 +186,18 @@ Here are some additional commands to assist with debugging.
 PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js
 PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js:13 --debug
 PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js --debug
+```
+
+##### Admin (Using a Local Branch)
+
+```shell
+# In one terminal, run the `test_e2e_env.sh` script, and then do the following...
+cd boundary-ui/
+ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR yarn workspace admin start
+
+# In another terminal, run the `test_e2e_env.sh` script and then do the following...
+cd boundary-ui/e2e-tests
+BOUNDARY_ADDR_BRANCH="http://localhost:4200" yarn run admin:{edition}:{infra} # Example: yarn run admin:ce:aws
 ```
 
 #### Desktop
