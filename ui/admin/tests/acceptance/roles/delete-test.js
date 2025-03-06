@@ -15,7 +15,7 @@ module('Acceptance | roles | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-role] button';
   const DELETE_DROPDOWN_SELECTOR =
     '.hds-dropdown-list-item--color-critical button';
 
