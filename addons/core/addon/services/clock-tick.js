@@ -6,7 +6,7 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { dropTask, timeout } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 
 export default class ClockTickService extends Service {
   // =attributes
@@ -27,7 +27,7 @@ export default class ClockTickService extends Service {
   /**
    * Updates the value of `now`every `frequency` milliseconds.
    */
-  _tick = dropTask(async () => {
+  _tick = task(async () => {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       await timeout(this.frequency);

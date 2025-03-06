@@ -69,8 +69,10 @@ export default class ScopesScopeProjectsRoute extends Route {
     return projects;
   }
 
-  willDestroy() {
-    super.willDestroy(...arguments);
+  /**
+   * Cancel poller task instances when exiting this route.
+   */
+  deactivate() {
     this.poller.cancelAll();
   }
 
@@ -99,8 +101,8 @@ export default class ScopesScopeProjectsRoute extends Route {
               token,
             });
 
-            this.poller.perform();
             __electronLog?.info('Starting polling of new sessions again');
+            this.poller.perform();
             return;
           } catch (e) {
             __electronLog?.error('Failed to add token to daemons', e.message);
