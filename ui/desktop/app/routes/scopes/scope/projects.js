@@ -5,7 +5,10 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
+import config from '../../../config/environment';
 
+const POLL_TIMEOUT_SECONDS = config.sessionPollingTimeoutSeconds;
 const { __electronLog } = globalThis;
 
 /**
@@ -23,10 +26,6 @@ const { __electronLog } = globalThis;
  * It no longer makes sense as a dedicated route.
  */
 export default class ScopesScopeProjectsRoute extends Route {
-  // =attributes
-
-  job;
-
   // =services
 
   @service session;
@@ -36,7 +35,6 @@ export default class ScopesScopeProjectsRoute extends Route {
   @service intl;
   @service ipc;
   @service clientAgentSessions;
-  @service pollster;
   @service flashMessages;
 
   // =methods
@@ -53,17 +51,13 @@ export default class ScopesScopeProjectsRoute extends Route {
    * @return {Promise<ScopeModel>}
    */
   async model() {
-    // Setup the poller job
-    if (!this.job) {
-      this.boundPoller = this.poller.bind(this);
-      this.job = this.pollster.findOrCreateJob(this.boundPoller, 2000);
-    }
-
     const isClientAgentRunning = await this.ipc.invoke('isClientAgentRunning');
     if (isClientAgentRunning) {
-      this.job.start();
+      this.poller.perform();
+      // start polling task
     } else {
-      this.job.stop();
+      this.poller.cancelAll();
+      // cancel polling job
     }
 
     const { id: scope_id } = this.modelFor('scopes.scope');
@@ -75,42 +69,48 @@ export default class ScopesScopeProjectsRoute extends Route {
     return projects;
   }
 
-  willDestroy() {
-    this.job?.stop();
-    super.willDestroy();
+  /**
+   * Cancel poller task instances when exiting this route.
+   */
+  deactivate() {
+    this.poller.cancelAll();
   }
 
   /**
    * Poll for new sessions with credentials. Sends a notification for each new session that has a credential.
    */
-  async poller() {
+  poller = restartableTask(async () => {
     let sessions;
 
-    try {
-      sessions = await this.clientAgentSessions.getNewSessionsWithCredentials();
-    } catch (e) {
-      // If we're unauthenticated, try and re-authenticate
-      if (e.statusCode === 401 || e.statusCode === 403) {
-        const sessionData = this.session.data?.authenticated;
-        const auth_token_id = sessionData?.id;
-        const token = sessionData?.token;
+    // We use a while loop to poll for new sessions from the client agent.
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      try {
+        sessions =
+          await this.clientAgentSessions.getNewSessionsWithCredentials();
+      } catch (e) {
+        // If we're unauthenticated, try and re-authenticate
+        if (e.statusCode === 401 || e.statusCode === 403) {
+          const sessionData = this.session.data?.authenticated;
+          const auth_token_id = sessionData?.id;
+          const token = sessionData?.token;
 
-        try {
-          await this.ipc.invoke('addTokenToDaemons', {
-            tokenId: auth_token_id,
-            token,
-          });
-          this.job.start();
-          __electronLog?.info('Starting polling of new sessions again');
-          return;
-        } catch (e) {
-          __electronLog?.error('Failed to add token to daemons', e.message);
-          // If it fails again, just let the poller be killed
+          try {
+            await this.ipc.invoke('addTokenToDaemons', {
+              tokenId: auth_token_id,
+              token,
+            });
+
+            __electronLog?.info('Starting polling of new sessions again');
+            this.poller.perform();
+            return;
+          } catch (e) {
+            __electronLog?.error('Failed to add token to daemons', e.message);
+            // If it fails again, just let the poller be killed
+          }
         }
-      }
 
-      __electronLog?.error('Failed to get new Sessions', e.message);
-      if (this.job) {
+        __electronLog?.error('Failed to get new Sessions', e.message);
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),
           {
@@ -120,46 +120,46 @@ export default class ScopesScopeProjectsRoute extends Route {
           },
         );
 
-        // Kill the poller if we get an error
-        this.job.stop();
         __electronLog?.info('Stopping polling of new sessions');
+        return;
       }
 
-      return;
+      sessions.forEach((session) => {
+        new window.Notification(
+          this.intl.t('notifications.connected-to-target.title', {
+            target: session.alias,
+          }),
+          {
+            body: this.intl.t('notifications.connected-to-target.description'),
+            // This only has an effect on windows
+            requireInteraction: true,
+          },
+        ).onclick = async () => {
+          let orgScope = 'global';
+
+          try {
+            const aliases = await this.store.query('alias', {
+              scope_id: 'global',
+              force_refresh: true,
+            });
+            const alias = aliases.find(
+              (alias) => alias.value === session.alias,
+            );
+
+            const target = await this.store.findRecord(
+              'target',
+              alias.destination_id,
+            );
+            orgScope = target.scope.parent_scope_id;
+          } catch (e) {
+            // Do nothing and default scope to global if an error occurs
+          }
+
+          window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
+          await this.ipc.invoke('focusWindow');
+        };
+      });
+      await timeout(POLL_TIMEOUT_SECONDS * 1000);
     }
-
-    sessions.forEach((session) => {
-      new window.Notification(
-        this.intl.t('notifications.connected-to-target.title', {
-          target: session.alias,
-        }),
-        {
-          body: this.intl.t('notifications.connected-to-target.description'),
-          // This only has an effect on windows
-          requireInteraction: true,
-        },
-      ).onclick = async () => {
-        let orgScope = 'global';
-
-        try {
-          const aliases = await this.store.query('alias', {
-            scope_id: 'global',
-            force_refresh: true,
-          });
-          const alias = aliases.find((alias) => alias.value === session.alias);
-
-          const target = await this.store.findRecord(
-            'target',
-            alias.destination_id,
-          );
-          orgScope = target.scope.parent_scope_id;
-        } catch (e) {
-          // Do nothing and default scope to global if an error occurs
-        }
-
-        window.location.href = `serve://boundary/#/scopes/${orgScope}/projects/sessions/${session.session_authorization.session_id}`;
-        await this.ipc.invoke('focusWindow');
-      };
-    });
-  }
+  });
 }

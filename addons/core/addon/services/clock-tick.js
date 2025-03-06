@@ -6,7 +6,7 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { next } from '@ember/runloop';
+import { task, timeout } from 'ember-concurrency';
 
 export default class ClockTickService extends Service {
   // =attributes
@@ -25,9 +25,15 @@ export default class ClockTickService extends Service {
   frequency = 1000;
 
   /**
-   * The timer interval ID
+   * Updates the value of `now` every `frequency` milliseconds.
    */
-  #timer;
+  _tick = task(async () => {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+      await timeout(this.frequency);
+      this.now = Date.now();
+    }
+  });
 
   /**
    * This service is enabled only in non-test environments.
@@ -45,7 +51,7 @@ export default class ClockTickService extends Service {
    */
   constructor() {
     super(...arguments);
-    if (this.enabled) this._start();
+    if (this.enabled) this._tick.perform();
   }
 
   /**
@@ -53,31 +59,6 @@ export default class ClockTickService extends Service {
    */
   willDestroy() {
     super.willDestroy(...arguments);
-    this._stop();
-  }
-
-  /**
-   * Sets up the timer interval, calling `_tick()` every
-   * `frequency` milliseconds.
-   */
-  _start() {
-    const self = this;
-    this.#timer = setInterval(function () {
-      self._tick();
-    }, this.frequency);
-  }
-
-  /**
-   * Clears the timer interval.
-   */
-  _stop() {
-    clearInterval(this.#timer);
-  }
-
-  /**
-   * Updates the value of `now` within the next runloop.
-   */
-  _tick() {
-    next(() => (this.now = Date.now()));
+    this._tick.cancelAll();
   }
 }

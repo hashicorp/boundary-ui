@@ -6,7 +6,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { run } from '@ember/runloop';
 
 export default class FormAuthenticateDetailsComponent extends Component {
   // =properties
@@ -36,7 +35,7 @@ export default class FormAuthenticateDetailsComponent extends Component {
    */
   @action
   submit(fn, creds) {
-    run(() => this.resetPassword());
-    run(() => fn(creds));
+    this.resetPassword();
+    fn(creds);
   }
 }
