@@ -18,7 +18,8 @@ module('Acceptance | policies | delete', function (hooks) {
   let featuresService;
   let policyCount;
 
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_BUTTON_SELECTOR =
+    'tbody tr td:last-child .hds-dropdown-toggle-icon';
   const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item button';
 
   const instances = {

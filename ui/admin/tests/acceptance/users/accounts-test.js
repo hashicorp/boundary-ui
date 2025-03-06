@@ -30,7 +30,8 @@ module('Acceptance | users | accounts', function (hooks) {
   const SUBMIT_BTN_SELECTOR = 'form [type="submit"]';
   const CANCEL_BTN_SELECTOR = 'form [type="button"]';
   const REMOVE_ACTION_SELECTOR = 'tbody tr .hds-dropdown-list-item button';
-  const ACCOUNTS_ACTION_SELECTOR = '.hds-dropdown-toggle-icon';
+  const ACCOUNTS_ACTION_SELECTOR =
+    'tbody tr td:last-child .hds-dropdown-toggle-icon';
 
   const instances = {
     scopes: {
