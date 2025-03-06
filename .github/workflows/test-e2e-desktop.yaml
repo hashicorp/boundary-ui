@@ -2,12 +2,12 @@ name: Test E2E Desktop Client
 
 on:
   pull_request:
-    types: [labeled]
+    types: [labeled, opened, synchronize, reopened]
   workflow_dispatch:
 
 jobs:
   test:
-    if: ${{ github.repository == 'hashicorp/boundary-ui' && github.event.label.name == 'desktop' }}
+    if: ${{ github.repository == 'hashicorp/boundary-ui' && contains(github.event.pull_request.labels.*.name, 'desktop')}}
     name: Run Desktop E2E Tests
     runs-on: ubuntu-22.04
     env:
@@ -61,6 +61,7 @@ jobs:
           echo "127.0.0.1 localhost worker" | sudo tee -a /etc/hosts
           echo "127.0.0.1 localhost vault" | sudo tee -a /etc/hosts
 
+      # TODO: Build image ourselves in case we don't want to use latest?
       - name: Get Boundary docker image
         run: |
           docker pull hashicorp/boundary-enterprise:latest
