@@ -13,6 +13,7 @@ import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | managed-groups | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -76,7 +77,7 @@ module('Acceptance | managed-groups | read', function (hooks) {
   test('User can navigate to a managed group form', async function (assert) {
     await visit(urls.managedGroups);
 
-    await click(`[href="${urls.managedGroup}"]`);
+    await click(commonSelectors.HREF(urls.managedGroup));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.managedGroup);
@@ -85,7 +86,7 @@ module('Acceptance | managed-groups | read', function (hooks) {
   test('User can navigate to a ldap managed group form', async function (assert) {
     await visit(urls.ldapManagedGroups);
 
-    await click(`[href="${urls.ldapManagedGroup}"]`);
+    await click(commonSelectors.HREF(urls.ldapManagedGroup));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);
@@ -98,9 +99,9 @@ module('Acceptance | managed-groups | read', function (hooks) {
       );
     await visit(urls.authMethod);
 
-    await click(`[href="${urls.managedGroups}"]`);
+    await click(commonSelectors.HREF(urls.managedGroups));
 
-    assert.dom(`[href="${urls.managedGroup}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.managedGroup)).doesNotExist();
   });
 
   test('User cannot navigate to a ldap managed group form without proper authorization', async function (assert) {
@@ -110,9 +111,9 @@ module('Acceptance | managed-groups | read', function (hooks) {
       );
     await visit(urls.ldapAuthMethod);
 
-    await click(`[href="${urls.ldapManagedGroups}"]`);
+    await click(commonSelectors.HREF(urls.ldapManagedGroups));
 
-    assert.dom(`[href="${urls.ldapManagedGroup}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.ldapManagedGroup)).doesNotExist();
   });
 
   test('User can navigate to managed group and incorrect url autocorrects', async function (assert) {

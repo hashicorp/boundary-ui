@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, findAll } from '@ember/test-helpers';
+import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -25,7 +25,6 @@ module('Acceptance | managed-groups | members', function (hooks) {
     accounts: null,
   };
   const urls = {
-    orgScope: null,
     authMethods: null,
     authMethod: null,
     managedGroups: null,
@@ -51,8 +50,7 @@ module('Acceptance | managed-groups | members', function (hooks) {
 
     instances.managedGroup = this.server.db.managedGroups[0];
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
+    urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.managedGroups = `${urls.authMethod}/managed-groups`;
     urls.managedGroup = `${urls.managedGroups}/${instances.managedGroup.id}`;
@@ -62,9 +60,10 @@ module('Acceptance | managed-groups | members', function (hooks) {
   test('User can navigate to index', async function (assert) {
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
+
     await a11yAudit();
     assert.strictEqual(currentURL(), urls.managedGroupMembers);
     assert.ok(membersCount);
-    assert.strictEqual(findAll('tbody tr').length, membersCount);
+    assert.dom('tbody tr').exists({ count: membersCount });
   });
 });
