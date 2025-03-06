@@ -15,17 +15,13 @@ import {
   TYPE_AUTH_METHOD_LDAP,
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | managed-groups | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getManagedGroupCount;
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-managed-group-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-managed-group-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -39,7 +35,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
   };
 
   const urls = {
-    orgScope: null,
     authMethods: null,
     authMethod: null,
     ldapAuthMethod: null,
@@ -73,8 +68,7 @@ module('Acceptance | managed-groups | delete', function (hooks) {
       authMethod: instances.ldapAuthMethod,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
-    urls.authMethods = `${urls.orgScope}/auth-methods`;
+    urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;
     urls.ldapAuthMethod = `${urls.authMethods}/${instances.ldapAuthMethod.id}`;
     urls.managedGroups = `${urls.authMethod}/managed-groups`;
@@ -90,9 +84,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.managedGroups);
 
-    await click(`[href="${urls.managedGroup}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.managedGroup));
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
+    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.managedGroups);
@@ -102,9 +96,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapManagedGroups);
 
-    await click(`[href="${urls.ldapManagedGroup}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapManagedGroup));
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
+    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
 
     assert.strictEqual(getManagedGroupCount(), managedGroupsCount - 1);
     assert.strictEqual(currentURL(), urls.ldapManagedGroups);
@@ -117,9 +111,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
       );
     await visit(urls.managedGroups);
 
-    await click(`[href="${urls.managedGroup}"]`);
+    await click(commonSelectors.HREF(urls.managedGroup));
 
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS).doesNotExist();
   });
 
   test('User cannot delete a ldap managed-group without proper authorization', async function (assert) {
@@ -129,9 +123,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
       );
     await visit(urls.ldapManagedGroups);
 
-    await click(`[href="${urls.ldapManagedGroup}"]`);
+    await click(commonSelectors.HREF(urls.ldapManagedGroup));
 
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS).doesNotExist();
   });
 
   test('Errors are displayed when delete on managed group fails', async function (assert) {
@@ -148,9 +142,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     });
     await visit(urls.managedGroups);
 
-    await click(`[href="${urls.managedGroup}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.managedGroup));
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
+    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
     await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
@@ -171,9 +165,9 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     });
     await visit(urls.ldapManagedGroups);
 
-    await click(`[href="${urls.ldapManagedGroup}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.ldapManagedGroup));
+    await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
+    await click(selectors.MANAGED_DROPDOWN_DELETE_ACTION);
     await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
