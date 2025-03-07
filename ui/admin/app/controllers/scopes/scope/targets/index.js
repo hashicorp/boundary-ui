@@ -13,6 +13,7 @@ import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { TYPES_TARGET } from 'api/models/target';
 
+
 export default class ScopesScopeTargetsIndexController extends Controller {
   // =services
 
@@ -38,6 +39,47 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked selectedTarget;
+
+  // Sorting spike ////////////////////////////////////////////////////
+  @tracked customSortOrder = 'asc';
+  @action
+  customOnSort(_sortBy, sortOrder) {
+    console.log('Sort By: ',_sortBy);
+    console.log('Previous sort order: ',this.customSortOrder);
+    this.customSortOrder = sortOrder;
+    console.log('sort order: ',this.customSortOrder);
+  }
+
+  // Sorting for type
+  get customSortingForType() {
+    const customSortingCriteria = ['ssh', 'tcp'];
+    return (s1, s2) => {
+      const index1 = customSortingCriteria.indexOf(s1.type);
+      const index2 = customSortingCriteria.indexOf(s2.type);
+
+      if (index1 < index2) {
+        return this.customSortOrder === 'asc' ? -1 : 1;
+      } else if (index1 > index2) {
+        return this.customSortOrder === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  // Sorting for active sessions
+  get customSortingForActiveSession() {
+    return (s1, s2) => {
+      if (s1.isActive < s2.isActive) {
+        return this.customSortOrder === 'asc' ? 1 : -1;
+      } else if (s1.isActive > s2.isActive) {
+        return this.customSortOrder === 'asc' ? -1 : 1;
+      } else {
+        return 0;
+      }
+    }
+  }
+  // End sorting spike //////////////////////////////////////////////////
 
   get availableSessionOptions() {
     return [

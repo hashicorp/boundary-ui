@@ -5,6 +5,8 @@
 
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
@@ -92,6 +94,20 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
     return { targets, doTargetsExist, totalItems };
   }
+
+  // SORTING ////////////////////////////////////////////////
+  // @tracked customSortOrder = 'asc';
+  // @action
+  // customOnSort(_sortBy, sortOrder){
+  //   console.log('Previous sort order: ',this.customSortOrder);
+  //   this.customSortOrder = sortOrder;
+  //   console.log('sort order: ',this.customSortOrder)
+  // }
+
+  // async customSortingForType() {
+  //   console.log('Hey this is carlos');
+  // }
+  ///////////////////////////////////////////////////////////
 
   /**
    * Sets doTargetsExist to true if there exists any targets.

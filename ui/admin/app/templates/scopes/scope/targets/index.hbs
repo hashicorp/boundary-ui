@@ -67,10 +67,21 @@
         <Hds::Table
           @columns={{array
             (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'resources.target.titles.active-sessions'))
+            (hash
+              key='type'
+              label=(t 'form.type.label')
+              isSortable=true
+              sortingFunction=this.customSortingForType
+            )
+            (hash
+              key='isActive'
+              label=(t 'resources.target.titles.active-sessions')
+              isSortable=true
+              sortingFunction=this.customSortingForActiveSession
+            )
             (hash label=(t 'form.id.label'))
           }}
+          @onSort={{this.customOnSort}}
           @model={{@model.targets}}
           @density='short'
           @valign='middle'
