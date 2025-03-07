@@ -4,21 +4,19 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | groups | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-group-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-group-dropdown] ul li button';
+  let getGroupsCount;
 
   const instances = {
     scopes: {
@@ -47,26 +45,31 @@ module('Acceptance | groups | delete', function (hooks) {
     urls.groups = `/scopes/${instances.scopes.org.id}/groups`;
     urls.group = `${urls.groups}/${instances.group.id}`;
     urls.newGroup = `${urls.groups}/new`;
+
+    getGroupsCount = () => this.server.schema.groups.all().models.length;
   });
 
   test('can delete a group', async function (assert) {
-    const groupsCount = this.server.db.groups.length;
+    const count = getGroupsCount();
     await visit(urls.group);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
-    assert.strictEqual(this.server.db.groups.length, groupsCount - 1);
+
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.DELETE_ACTION_SELECTOR);
+
+    assert.strictEqual(getGroupsCount(), count - 1);
   });
 
   test('cannot delete a group without proper authorization', async function (assert) {
     instances.group.authorized_actions =
       instances.group.authorized_actions.filter((item) => item !== 'delete');
+
     await visit(urls.group);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    assert.dom(selectors.DELETE_ACTION_SELECTOR).doesNotExist();
   });
 
-  test('errors are displayed when delete project fails', async function (assert) {
+  test('deleting a group which displays error messages', async function (assert) {
     this.server.del('/groups/:id', () => {
       return new Response(
         490,
@@ -79,8 +82,10 @@ module('Acceptance | groups | delete', function (hooks) {
       );
     });
     await visit(urls.group);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.DELETE_ACTION_SELECTOR);
+
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
