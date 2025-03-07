@@ -20,7 +20,7 @@ export default class WorkerFilterGeneratorIndexComponent extends Component {
   @tracked operator = '';
 
   /**
-   * @return {string}
+   * @type {string}
    */
   get defaultShowFilterGenerator() {
     return this.args.showFilterGenerator;
