@@ -13,6 +13,7 @@ module('Acceptance | develop', function (hooks) {
   setupMirage(hooks);
 
   let featuresService;
+  const DEV_TOGGLE_SELECTOR = '[data-test-dev-edition-toggle]';
 
   hooks.beforeEach(function () {
     const { owner } = getContext();
@@ -21,14 +22,17 @@ module('Acceptance | develop', function (hooks) {
 
   test('edition toggle is hidden when `dev-edition-toggle` is false', async function (assert) {
     await visit('/');
+
     assert.false(featuresService.isEnabled('dev-edition-toggle'));
-    assert.dom('data-dev-edition-toggle').doesNotExist();
+    assert.dom(DEV_TOGGLE_SELECTOR).doesNotExist();
   });
 
   test('edition toggle is visible when `dev-edition-toggle` is true', async function (assert) {
     assert.false(featuresService.isEnabled('dev-edition-toggle'));
     featuresService.enable('dev-edition-toggle');
+
     await visit('/');
-    assert.dom('data-dev-edition-toggle').doesNotExist();
+
+    assert.dom(DEV_TOGGLE_SELECTOR).isVisible();
   });
 });
