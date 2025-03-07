@@ -8,6 +8,8 @@ import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | onboarding | success', function (hooks) {
   setupApplicationTest(hooks);
@@ -26,24 +28,30 @@ module('Acceptance | onboarding | success', function (hooks) {
 
   test('check if the done button is present', async function (assert) {
     await visit(urls.success);
-    assert.dom(doneButtonSelector).isVisible();
+    assert.dom(selectors.DONE_BTN).isVisible();
   });
 
   test('check the controller url is copyable', async function (assert) {
     const origin = window.location.origin;
     await visit(urls.success);
-    assert.dom('.hds-copy-snippet__text').isVisible();
+    assert.dom(selectors.COPY_BTN_TEXT).isVisible();
     assert.strictEqual(
-      find('.hds-copy-snippet__text').textContent.trim(),
+      find(selectors.COPY_BTN_TEXT).textContent.trim(),
       origin,
     );
   });
 
   test('fill the onboarding form and redirect user to target detail when done is clicked', async function (assert) {
     await visit(urls.onboarding);
-    await fillIn('[name="targetAddress"]', '0.0.0.0');
-    await fillIn('[name="targetPort"]', '22');
-    await click('[type="submit"]');
+    await fillIn(
+      selectors.FIELD_TARGET_ADDRESS,
+      selectors.FIELD_TARGET_ADDRESS_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_TARGET_PORT,
+      selectors.FIELD_TARGET_PORT_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
     await click(doneButtonSelector);
     const projectId = this.server.db.scopes.where({ type: 'project' })[0].id;
     const targetId = this.server.db.targets[0].id;

@@ -1,0 +1,6 @@
+export const DO_THIS_LATER_BTN = '.rose-form-actions [type="button"]';
+export const COPY_BTN_TEXT = '.hds-copy-snippet__text';
+export const FIELD_TARGET_ADDRESS = '[name="targetAddress"]';
+export const FIELD_TARGET_ADDRESS_VALUE = '192.168.1.0';
+export const FIELD_TARGET_PORT = '[name="targetPort"]';
+export const FIELD_TARGET_PORT_VALUE = '22';
