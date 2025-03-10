@@ -27,12 +27,14 @@ module('Acceptance | onboarding', function (hooks) {
 
   test('show targetAddress and targetPort fields', async function (assert) {
     await visit(urls.onboarding);
+
     assert.dom(selectors.FIELD_TARGET_ADDRESS).isVisible();
     assert.dom(selectors.FIELD_TARGET_PORT).isVisible();
   });
 
   test('redirect user to success when fill targetAddress, targetPort and click Save', async function (assert) {
     await visit(urls.onboarding);
+
     await fillIn(
       selectors.FIELD_TARGET_ADDRESS,
       selectors.FIELD_TARGET_ADDRESS_VALUE,
@@ -42,12 +44,15 @@ module('Acceptance | onboarding', function (hooks) {
       selectors.FIELD_TARGET_PORT_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.success);
   });
 
   test('redirect user to orgs screen when click do this later', async function (assert) {
     await visit(urls.onboarding);
+
     await click(selectors.DO_THIS_LATER_BTN);
+
     assert.strictEqual(currentURL(), urls.orgs);
   });
 });
