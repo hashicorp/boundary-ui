@@ -11,15 +11,13 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-user-dropdown] ul li button';
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-user-dropdown] button:first-child';
+
   const instances = {
     scopes: {
       global: null,
@@ -46,20 +44,22 @@ module('Acceptance | users | delete', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
+    this.getUsersCount = () => this.server.schema.users.all().models.length;
+    this.confirmService = this.owner.lookup('service:confirm');
 
     await authenticateSession({});
   });
 
   test('can delete a user', async function (assert) {
-    const usersCount = this.server.db.users.length;
+    const usersCount = this.getUsersCount();
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
+    await click(commonSelectors.HREF(urls.user));
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_USER);
+    await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
 
-    assert.strictEqual(this.server.db.users.length, usersCount - 1);
+    assert.strictEqual(this.getUsersCount(), usersCount - 1);
   });
 
   test('cannot delete a user without proper authorization', async function (assert) {
@@ -67,42 +67,40 @@ module('Acceptance | users | delete', function (hooks) {
       instances.user.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
+    await click(commonSelectors.HREF(urls.user));
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.dom('[data-test-manage-user-dropdown] ul li button').doesNotExist();
+    await click(selectors.MANAGE_DROPDOWN_USER);
+    assert.dom(selectors.MANAGE_DROPDOWN_USER_DELETE).doesNotExist();
   });
 
   test('can accept delete user via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    const usersCount = this.server.db.users.length;
+    const usersCount = this.getUsersCount();
+    this.confirmService.enabled = true;
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.user));
+    await click(selectors.MANAGE_DROPDOWN_USER);
+    await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('Deleted successfully.');
-    assert.strictEqual(this.server.db.users.length, usersCount - 1);
+    assert.strictEqual(this.getUsersCount(), usersCount - 1);
     assert.strictEqual(currentURL(), urls.users);
   });
 
   test('can cancel delete user via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
-    confirmService.enabled = true;
-    const usersCount = this.server.db.users.length;
+    const usersCount = this.getUsersCount();
+    this.confirmService.enabled = true;
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.user));
+    await click(selectors.MANAGE_DROPDOWN_USER);
+    await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
-    assert.strictEqual(this.server.db.users.length, usersCount);
+    assert.strictEqual(this.getUsersCount(), usersCount);
     assert.strictEqual(currentURL(), urls.user);
   });
 
@@ -120,9 +118,10 @@ module('Acceptance | users | delete', function (hooks) {
       );
     });
 
-    await click(`[href="${urls.user}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.user));
+    await click(selectors.MANAGE_DROPDOWN_USER);
+    await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
+
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
