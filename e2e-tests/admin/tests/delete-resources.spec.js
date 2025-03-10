@@ -26,9 +26,14 @@ test.beforeAll(async () => {
 });
 
 test.beforeEach(
-  async ({ baseURL, adminAuthMethodId, adminLoginName, adminPassword }) => {
+  async ({
+    controllerAddr,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+  }) => {
     await boundaryCli.authenticateBoundary(
-      baseURL,
+      controllerAddr,
       adminAuthMethodId,
       adminLoginName,
       adminPassword,

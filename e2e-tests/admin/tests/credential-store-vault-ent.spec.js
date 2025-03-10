@@ -39,7 +39,7 @@ test(
   { tag: ['@ent', '@aws', '@docker'] },
   async ({
     page,
-    baseURL,
+    controllerAddr,
     adminAuthMethodId,
     adminLoginName,
     adminPassword,
@@ -47,7 +47,8 @@ test(
     sshKeyPath,
     targetAddress,
     targetPort,
-    vaultAddr,
+    vaultAddrPrivate,
+    workerTagEgress,
   }) => {
     let orgId;
     let connect;
@@ -88,9 +89,10 @@ test(
         targetPort,
       );
       const credentialStoresPage = new CredentialStoresPage(page);
-      await credentialStoresPage.createVaultCredentialStore(
-        vaultAddr,
+      await credentialStoresPage.createVaultCredentialStoreWithWorkerFilter(
+        vaultAddrPrivate,
         clientToken,
+        `"${workerTagEgress}" in "/tags/type"`,
       );
       const credentialLibraryName =
         await credentialStoresPage.createVaultGenericCredentialLibraryEnt(
@@ -104,7 +106,7 @@ test(
 
       // Verify that session can be established
       await boundaryCli.authenticateBoundary(
-        baseURL,
+        controllerAddr,
         adminAuthMethodId,
         adminLoginName,
         adminPassword,

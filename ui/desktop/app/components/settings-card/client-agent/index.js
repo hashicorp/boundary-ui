@@ -63,6 +63,8 @@ export default class SettingsCardClientAgentComponent extends Component {
     } else {
       await this.ipc.invoke('resumeClientAgent');
     }
-    await this.router.refresh('scopes.scope.projects.settings');
+    // Refresh projects page in order to stop or start
+    // polling when client agent status changes.
+    await this.router.refresh('scopes.scope.projects');
   }
 }

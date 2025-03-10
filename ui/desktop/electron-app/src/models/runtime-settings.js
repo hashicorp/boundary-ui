@@ -18,10 +18,11 @@ class RuntimeSettings {
   get clusterUrl() {
     return this.#clusterUrl;
   }
-  set clusterUrl(clusterUrl) {
+
+  async setClusterUrl(clusterUrl) {
     if (this.#clusterUrl !== clusterUrl) {
       this.#clusterUrl = clusterUrl;
-      this.triggerClusterUrlChanged();
+      await this.triggerClusterUrlChanged();
     }
   }
 
@@ -50,7 +51,7 @@ class RuntimeSettings {
   /**
    * Sets the clusterUrl to null.
    */
-  async resetClusterUrl() {
+  resetClusterUrl() {
     this.clusterUrl = null;
   }
 
@@ -62,8 +63,12 @@ class RuntimeSettings {
     this.#clusterUrlWatchers.push(fn);
   }
 
-  triggerClusterUrlChanged() {
-    this.#clusterUrlWatchers.forEach((fn) => fn(this.#clusterUrl));
+  async triggerClusterUrlChanged() {
+    // We currently only store one function but this will execute serially
+    // which may or may not be the desired behavior if there ever is more
+    for (const fn of this.#clusterUrlWatchers) {
+      await fn(this.#clusterUrl);
+    }
   }
 }
 
