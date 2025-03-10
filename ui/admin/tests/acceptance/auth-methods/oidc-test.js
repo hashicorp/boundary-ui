@@ -50,12 +50,15 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
   test('visiting oidc auth method', async function (assert) {
     await visit(urls.authMethod);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.authMethod);
   });
 
   test('can view oidc state', async function (assert) {
     await visit(urls.authMethod);
+
     await click(selectors.CHANGE_STATE_DROPDOWN);
+
     assert.strictEqual(
       find(selectors.CHANGE_STATE_DROPDOWN_CHECKED).value,
       instances.authMethod.attributes.state,
@@ -65,20 +68,23 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
   test('can update oidc state', async function (assert) {
     const updateValue = 'inactive';
     await visit(urls.authMethod);
+
     await click(selectors.CHANGE_STATE_DROPDOWN);
     await click(selectors.CHANGE_STATE_DROPDOWN_STATE(updateValue));
+
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
-
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
   test('can update oidc state to active-private', async function (assert) {
     const updateValue = 'active-private';
     await visit(urls.authMethod);
+
     await click(selectors.CHANGE_STATE_DROPDOWN);
     await click(selectors.CHANGE_STATE_DROPDOWN_STATE(updateValue));
+
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
@@ -93,17 +99,17 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     instances.authMethod.attributes.state = 'inactive';
     const updateValue = 'active-public';
     await visit(urls.authMethod);
+
     await click(selectors.CHANGE_STATE_DROPDOWN);
     await click(selectors.CHANGE_STATE_DROPDOWN_STATE(updateValue));
+
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
-
     assert.strictEqual(
       find(selectors.CHANGE_STATE_DROPDOWN_CHECKED).value,
       instances.authMethod.attributes.state,
     );
-
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
