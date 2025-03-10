@@ -4,7 +4,7 @@
  */
 
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { TYPES_CREDENTIAL } from 'api/models/credential';
 
 export default class FormCredentialComponent extends Component {

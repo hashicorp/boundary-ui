@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { all, hash } from 'rsvp';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class ScopesScopeTargetsTargetHostSourcesRoute extends Route {
   // =services

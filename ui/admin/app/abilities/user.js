@@ -4,7 +4,7 @@
  */
 
 import UserAbility from 'api/abilities/user';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideUserAbility extends UserAbility {
   // =service

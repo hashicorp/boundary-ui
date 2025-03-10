@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { TYPE_ALIAS_TARGET } from 'api/models/alias';
 
 export default class ScopesScopeAliasesNewRoute extends Route {
