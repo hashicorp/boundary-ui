@@ -52,7 +52,6 @@ module.exports = function (environment) {
     appName: APP_NAME,
     companyName: 'HashiCorp',
 
-    sessionPollingTimeoutSeconds: 300,
     oidcPollingTimeoutSeconds: 1,
 
     documentation: {
@@ -195,6 +194,8 @@ module.exports = function (environment) {
 
     // Notification timeout should be 0 for fast tests
     ENV.flashMessageDefaults.timeout = 0;
+    // OIDC Authentication timeout should be 0 for fast tests
+    ENV.oidcPollingTimeoutSeconds = 0;
 
     ENV.enableConfirmService = false;
   }

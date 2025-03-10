@@ -77,7 +77,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('can create a new managed group', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
     await click(commonSelectors.HREF(urls.newManagedGroup));
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -101,7 +101,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('can create a new ldap managed group', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -168,7 +168,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('User can cancel a new managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     await click(commonSelectors.HREF(urls.newManagedGroup));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -181,7 +181,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
   test('User can cancel a new ldap managed group creation', async function (assert) {
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -212,7 +212,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.authMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     await click(commonSelectors.HREF(urls.newManagedGroup));
     await click(commonSelectors.SAVE_BTN);
@@ -245,7 +245,7 @@ module('Acceptance | managed-groups | create', function (hooks) {
       );
     });
     await visit(urls.ldapAuthMethod);
-    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
     await click(commonSelectors.SAVE_BTN);
