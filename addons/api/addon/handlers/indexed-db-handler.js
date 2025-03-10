@@ -148,15 +148,13 @@ export default class IndexedDbHandler {
             }),
         );
 
-        // Return the raw data if we don't push to the store.
-        let records = dbRecords.map((record) => ({
-          ...record.attributes,
-          id: record.id,
-        }));
-
-        if (pushToStore) {
-          records = store.push({ data: dbRecords });
-        }
+        // If we're not pushing to the store, just use the transformed raw data
+        const records = pushToStore
+          ? store.push({ data: dbRecords })
+          : dbRecords.map((record) => ({
+              ...record.attributes,
+              id: record.id,
+            }));
 
         // Set a meta property on the array to store the total items of the results.
         // This isn't conventional but is better than returning an ArrayProxy
