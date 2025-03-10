@@ -19,6 +19,12 @@ module.exports = {
         // --no-sandbox is needed when running Chrome inside a container
         process.env.CI ? '--no-sandbox' : null,
         '--headless',
+        // Disable backgrounding renders for occluded windows
+        '--disable-backgrounding-occluded-windows',
+        // Disable renderer process backgrounding
+        '--disable-renderer-backgrounding',
+        // Disable task throttling of timer tasks from background pages
+        '--disable-background-timer-throttling',
         '--disable-dev-shm-usage',
         '--disable-software-rasterizer',
         '--mute-audio',
