@@ -53,8 +53,8 @@ module('Acceptance | groups | delete', function (hooks) {
     const count = getGroupsCount();
     await visit(urls.group);
 
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    await click(selectors.DELETE_ACTION_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
 
     assert.strictEqual(getGroupsCount(), count - 1);
   });
@@ -65,8 +65,8 @@ module('Acceptance | groups | delete', function (hooks) {
 
     await visit(urls.group);
 
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    assert.dom(selectors.DELETE_ACTION_SELECTOR).doesNotExist();
+    await click(selectors.MANAGE_DROPDOWN);
+    assert.dom(selectors.DELETE_ACTION).doesNotExist();
   });
 
   test('deleting a group which displays error messages', async function (assert) {
@@ -83,8 +83,8 @@ module('Acceptance | groups | delete', function (hooks) {
     });
     await visit(urls.group);
 
-    await click(selectors.MANAGE_DROPDOWN_SELECTOR);
-    await click(selectors.DELETE_ACTION_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.DELETE_ACTION);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
