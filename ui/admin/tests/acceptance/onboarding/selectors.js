@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 export const DO_THIS_LATER_BTN = '.rose-form-actions [type="button"]';
 export const COPY_BTN_TEXT = '.hds-copy-snippet__text';
 export const FIELD_TARGET_ADDRESS = '[name="targetAddress"]';
