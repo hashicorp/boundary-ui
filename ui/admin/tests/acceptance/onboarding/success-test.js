@@ -28,7 +28,7 @@ module('Acceptance | onboarding | success', function (hooks) {
 
   test('check if the done button is present', async function (assert) {
     await visit(urls.success);
-    assert.dom(selectors.DONE_BTN).isVisible();
+    assert.dom(doneButtonSelector).isVisible();
   });
 
   test('check the controller url is copyable', async function (assert) {
