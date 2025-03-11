@@ -41,7 +41,7 @@ export const STATIC_CREDENTIAL_FIELDS = ['access_key_id, secret_access_key'];
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
 
-  @tracked credentialTypeValue;
+  @tracked _credentialTypeValue;
 
   /**
    * True if the host catalog is static.
@@ -64,14 +64,14 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {string}
    */
   get credentialType() {
-    if (!this.credentialTypeValue) {
+    if (!this._credentialTypeValue) {
       if (DYNAMIC_CREDENTIAL_FIELDS.some((field) => this[field])) {
         return TYPE_CREDENTIAL_DYNAMIC;
       } else {
         return TYPE_CREDENTIAL_STATIC;
       }
     }
-    return this.credentialTypeValue;
+    return this._credentialTypeValue;
   }
 
   /**
@@ -79,7 +79,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {string}
    */
   set credentialType(type) {
-    this.credentialTypeValue = type;
+    this._credentialTypeValue = type;
   }
 
   /**

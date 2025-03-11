@@ -27,7 +27,7 @@ export const TYPES_CREDENTIALS = Object.freeze([
 export default class StorageBucketModel extends GeneratedStorageBucketModel {
   // attributes
 
-  @tracked credentialTypeValue;
+  @tracked _credentialTypeValue;
 
   /**
    * True if the storage bucket is a plugin.
@@ -42,14 +42,14 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   get credentialType() {
-    if (!this.credentialTypeValue) {
+    if (!this._credentialTypeValue) {
       if (this.role_arn) {
         return TYPE_CREDENTIAL_DYNAMIC;
       } else {
         return TYPE_CREDENTIAL_STATIC;
       }
     }
-    return this.credentialTypeValue;
+    return this._credentialTypeValue;
   }
 
   /**
@@ -57,7 +57,7 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   set credentialType(type) {
-    this.credentialTypeValue = type;
+    this._credentialTypeValue = type;
   }
 
   /**

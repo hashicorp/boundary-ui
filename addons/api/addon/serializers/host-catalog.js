@@ -34,7 +34,7 @@ export default class HostCatalogSerializer extends ApplicationSerializer {
     ) {
       if (options.isNestedAttribute) {
         json.attributes[key] = null;
-      } else if (options.isNestedSecret && json.secrets && json.secrets[key]) {
+      } else if (options.isNestedSecret && json.secrets?.[key]) {
         delete json.secrets[key];
         if (Object.keys(json.secrets).length === 0) {
           delete json.secrets;

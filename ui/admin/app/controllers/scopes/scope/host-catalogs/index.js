@@ -133,7 +133,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
 
   /**
    * Updates credential type
-   * @param {model} hostcatalog
+   * @param {model} hostCatalog
    * @param {string} credentialType
    */
   @action

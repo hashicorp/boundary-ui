@@ -9,6 +9,7 @@ import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
+import { TYPE_CREDENTIAL_STATIC } from 'api/models/storage-bucket';
 
 export default class ScopesScopeStorageBucketsIndexController extends Controller {
   // =services
@@ -55,6 +56,10 @@ export default class ScopesScopeStorageBucketsIndexController extends Controller
   @notifyError(({ message }) => message)
   @notifySuccess('notifications.save-success')
   async save(storageBucket) {
+    // If the role_arn is empty, then the credential type should be static
+    if (!storageBucket.role_arn) {
+      storageBucket.credentialType = TYPE_CREDENTIAL_STATIC;
+    }
     await storageBucket.save();
     await this.router.transitionTo(
       'scopes.scope.storage-buckets.storage-bucket',
