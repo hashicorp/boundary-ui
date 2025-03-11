@@ -35,7 +35,7 @@ module('Acceptance | onboarding | success', function (hooks) {
     const origin = window.location.origin;
     await visit(urls.success);
 
-    assert.dom(selectors.COPY_BTN_TEXT).isVisible().hasText(origin);
+    assert.dom(selectors.COPY_TEXT_BTN).isVisible().hasText(origin);
   });
 
   test('fill the onboarding form and redirect user to target detail when done is clicked', async function (assert) {
