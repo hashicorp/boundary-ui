@@ -24,12 +24,11 @@ module('Acceptance | onboarding | success', function (hooks) {
     success: '/onboarding/success',
     target: null,
   };
-  const doneButtonSelector = '[data-test-onboarding-done-button]';
 
   test('check if the done button is present', async function (assert) {
     await visit(urls.success);
 
-    assert.dom(doneButtonSelector).isVisible();
+    assert.dom(selectors.DONE_BTN).isVisible();
   });
 
   test('check the controller url is copyable', async function (assert) {
@@ -51,7 +50,7 @@ module('Acceptance | onboarding | success', function (hooks) {
     );
     await click(commonSelectors.SAVE_BTN);
 
-    await click(doneButtonSelector);
+    await click(selectors.DONE_BTN);
     const projectId = this.server.schema.scopes.where({ type: 'project' })
       .models[0].id;
     const targetId = this.server.schema.targets.all().models[0].id;
