@@ -211,7 +211,6 @@ export default class IndexedDbHandler {
           );
 
           const defaultSortKey = SORT_UNIVERSAL_KEY_CREATED_TIME;
-          const defaultSortDirection = SORT_DIRECTION_DESCENDING;
 
           // the sort.attribute represents the attribute as defined on the model type,
           // which could be different than the JSON API attribute key, so `keyForAttribute`
@@ -219,6 +218,12 @@ export default class IndexedDbHandler {
           const sortKey = querySort.attribute
             ? serializer.keyForAttribute(querySort.attribute)
             : defaultSortKey;
+
+          // the default sort is ascending unless the sort key is `created_time` key in which case it is descending
+          const defaultSortDirection =
+            sortKey === SORT_UNIVERSAL_KEY_CREATED_TIME
+              ? SORT_DIRECTION_DESCENDING
+              : SORT_DIRECTION_ASCENDING;
           const sortDirection = querySort.direction ?? defaultSortDirection;
 
           const sortFunction = getSortFunction(type, sortKey);
