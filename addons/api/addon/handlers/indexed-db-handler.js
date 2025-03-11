@@ -9,6 +9,45 @@ import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
+import { assert } from '@ember/debug';
+
+export const SORT_DIRECTION_ASCENDING = 'asc';
+export const SORT_DIRECTION_DESCENDING = 'desc';
+const SORT_DEFAULT_ATTRIBUTE = 'created_time';
+
+const sort = {
+  string: (a, b) => String(a).localeCompare(String(b)),
+  date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+};
+
+function getSortFunction(modelType, key) {
+  if (key === SORT_DEFAULT_ATTRIBUTE) {
+    return sort.date;
+  }
+
+  const sortForModel = {
+    target: {
+      id: sort.string,
+      name: sort.string,
+    },
+
+    alias: {
+      value: sort.string,
+    },
+  };
+
+  assert(
+    `No sort functions defined for model: "${modelType}". Ensure the type and attribute sort function is added to \`sortForModel\``,
+    sortForModel[modelType],
+  );
+
+  assert(
+    `No sort functions defined for model: "${modelType}", key: ${key}. Ensure the type and key sort function is added to \`sortForModel\``,
+    sortForModel[modelType][key],
+  );
+
+  return sortForModel[modelType]?.[key] ?? sort.string;
+}
 
 /**
  * Handler to sit in front of the API request layer
@@ -45,6 +84,12 @@ export default class IndexedDbHandler {
         }
 
         let { page, pageSize, query: queryObj, ...remainingQuery } = query;
+
+        const sort = {
+          direction: SORT_DIRECTION_ASCENDING,
+          attribute: SORT_DEFAULT_ATTRIBUTE,
+          ...queryObj.sort,
+        };
 
         const adapter = store.adapterFor(type);
         const schema = store.modelFor(type);
@@ -132,26 +177,58 @@ export default class IndexedDbHandler {
           await indexedDb[type].bulkPut(items);
         }
 
-        const indexedDbResults = await queryIndexedDb(
+        // Results are returned in the shape of a JSON API response but in a format
+        // optmized for storage in indexeddb
+        const indexedDbRecords = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
         );
 
-        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          (item) =>
-            this.indexedDb.normalizeData({
-              data: item,
-              cleanData: false,
-              schema,
-              serializer,
-            }),
+        // Normalize the data, cleaning up changes made for indexedDB storage.
+        // This leaves it with a JSON API format ready for use by ember data
+        const normalizedJsonApiRecords = indexedDbRecords.map((item) => {
+          return this.indexedDb.normalizeData({
+            data: item,
+            cleanData: false,
+            schema,
+            serializer,
+          });
+        });
+
+        const sortedJsonApiRecords = normalizedJsonApiRecords.sort((a, b) => {
+          assert(
+            `The attribute "${sort.attribute}" used for sorting exists on the model "${type}" or is the default sort attribute "${SORT_DEFAULT_ATTRIBUTE}"`,
+            sort.attribute === SORT_DEFAULT_ATTRIBUTE ||
+              schema.attributes.has(sort.attribute),
+          );
+
+          // the sort.attribute represents the attribute as defined on the model type,
+          // which could be different than the JSON API attribute name
+          const normalizedSortAttribute = serializer.keyForAttribute(
+            sort.attribute,
+          );
+
+          const sortFunction = getSortFunction(type, sort.attribute);
+          const sortValueA = a.attributes[normalizedSortAttribute];
+          const sortValueB = b.attributes[normalizedSortAttribute];
+          const sortResult = sortFunction(sortValueA, sortValueB);
+
+          return sort.direction === SORT_DIRECTION_ASCENDING
+            ? sortResult
+            : -1 * sortResult;
+        });
+
+        const paginatedApiRecords = paginateResults(
+          sortedJsonApiRecords,
+          page,
+          pageSize,
         );
 
-        // If we're not pushing to the store, just use the transformed raw data
+        // If we're not pushing to the store, just use the raw data in a model-ish shape (id and properties)
         const records = pushToStore
-          ? store.push({ data: dbRecords })
-          : dbRecords.map((record) => ({
+          ? store.push({ data: paginatedApiRecords })
+          : paginatedApiRecords.map((record) => ({
               ...record.attributes,
               id: record.id,
             }));
@@ -160,7 +237,7 @@ export default class IndexedDbHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: indexedDbResults.length };
+        records.meta = { totalItems: indexedDbRecords.length };
         return records;
       }
       default:
