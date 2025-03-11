@@ -16,7 +16,7 @@ export const SORT_DIRECTION_DESCENDING = 'desc';
 
 // This is an attribute universally available on payloads coming back from the API
 // that can be used for sorting. It is not an attribute defined on models, but
-// before custom sorting key used for sorting.
+// before custom sorting was the default key to sort on.
 const SORT_UNIVERSAL_KEY_CREATED_TIME = 'created_time';
 
 const sortFunctions = {
@@ -224,7 +224,6 @@ export default class IndexedDbHandler {
           const sortFunction = getSortFunction(type, sortKey);
           const sortValueA = a.attributes[sortKey];
           const sortValueB = b.attributes[sortKey];
-          console.log(a, b);
           const sortResult = sortFunction(sortValueA, sortValueB);
 
           return sortDirection === SORT_DIRECTION_ASCENDING
