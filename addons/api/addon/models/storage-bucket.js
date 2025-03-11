@@ -4,6 +4,7 @@
  */
 
 import GeneratedStorageBucketModel from '../generated/models/storage-bucket';
+import { tracked } from '@glimmer/tracking';
 
 export const TYPE_STORAGE_BUCKET_PLUGIN = 'plugin';
 export const TYPES_STORAGE_BUCKET = Object.freeze([TYPE_STORAGE_BUCKET_PLUGIN]);
@@ -26,7 +27,8 @@ export const TYPES_CREDENTIALS = Object.freeze([
 export default class StorageBucketModel extends GeneratedStorageBucketModel {
   // attributes
 
-  #credentialType;
+  @tracked credentialTypeValue;
+
   /**
    * True if the storage bucket is a plugin.
    * @type {boolean}
@@ -40,14 +42,14 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   get credentialType() {
-    if (!this.#credentialType) {
+    if (!this.credentialTypeValue) {
       if (this.role_arn) {
-        this.#credentialType = TYPE_CREDENTIAL_DYNAMIC;
+        return TYPE_CREDENTIAL_DYNAMIC;
       } else {
-        this.#credentialType = TYPE_CREDENTIAL_STATIC;
+        return TYPE_CREDENTIAL_STATIC;
       }
     }
-    return this.#credentialType;
+    return this.credentialTypeValue;
   }
 
   /**
@@ -55,8 +57,9 @@ export default class StorageBucketModel extends GeneratedStorageBucketModel {
    * @type {string}
    */
   set credentialType(type) {
-    this.#credentialType = type;
+    this.credentialTypeValue = type;
   }
+
   /**
    * True if the storage bucket is an unknown type.
    * @type {boolean}

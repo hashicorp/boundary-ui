@@ -4,6 +4,7 @@
  */
 
 import GeneratedHostCatalogModel from '../generated/models/host-catalog';
+import { tracked } from '@glimmer/tracking';
 
 export const TYPE_HOST_CATALOG_STATIC = 'static';
 export const TYPE_HOST_CATALOG_DYNAMIC = 'plugin';
@@ -40,7 +41,8 @@ export const STATIC_CREDENTIAL_FIELDS = ['access_key_id, secret_access_key'];
 export default class HostCatalogModel extends GeneratedHostCatalogModel {
   // =attributes
 
-  #credentialType;
+  @tracked credentialTypeValue;
+
   /**
    * True if the host catalog is static.
    * @type {boolean}
@@ -62,14 +64,14 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {string}
    */
   get credentialType() {
-    if (!this.#credentialType) {
+    if (!this.credentialTypeValue) {
       if (DYNAMIC_CREDENTIAL_FIELDS.some((field) => this[field])) {
-        this.#credentialType = TYPE_CREDENTIAL_DYNAMIC;
+        return TYPE_CREDENTIAL_DYNAMIC;
       } else {
-        this.#credentialType = TYPE_CREDENTIAL_STATIC;
+        return TYPE_CREDENTIAL_STATIC;
       }
     }
-    return this.#credentialType;
+    return this.credentialTypeValue;
   }
 
   /**
@@ -77,7 +79,7 @@ export default class HostCatalogModel extends GeneratedHostCatalogModel {
    * @type {string}
    */
   set credentialType(type) {
-    this.#credentialType = type;
+    this.credentialTypeValue = type;
   }
 
   /**
