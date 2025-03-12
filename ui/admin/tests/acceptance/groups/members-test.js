@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -61,21 +61,18 @@ module('Acceptance | groups | members', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.members);
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
   });
 
   test('can remove a member', async function (assert) {
     await visit(urls.members);
 
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
-    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
 
-    assert.strictEqual(
-      findAll(commonSelectors.TABLE_ROW).length,
-      membersCount - 1,
-    );
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
   });
 
   test('cannot remove a member without proper authorization', async function (assert) {
@@ -85,7 +82,9 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ authorized_actions });
     await visit(urls.members);
 
-    assert.dom(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER).doesNotExist();
+    assert
+      .dom(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER)
+      .doesNotExist();
   });
 
   test('shows error message on member remove', async function (assert) {
@@ -103,11 +102,10 @@ module('Acceptance | groups | members', function (hooks) {
       );
     });
     await visit(urls.members);
-
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
-    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });
@@ -139,7 +137,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
 
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
@@ -151,21 +149,18 @@ module('Acceptance | groups | members', function (hooks) {
 
     await visit(urls.members);
 
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, 1);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('select and cancel members to add', async function (assert) {
     await visit(urls.members);
 
-    assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
-    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
 
-    assert.strictEqual(
-      findAll(commonSelectors.TABLE_ROW).length,
-      membersCount - 1,
-    );
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
 
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
@@ -177,10 +172,7 @@ module('Acceptance | groups | members', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.members);
-    assert.strictEqual(
-      findAll(commonSelectors.TABLE_ROW).length,
-      membersCount - 1,
-    );
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
   });
 
   test('shows error message on member add', async function (assert) {

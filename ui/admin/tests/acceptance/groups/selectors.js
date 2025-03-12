@@ -13,5 +13,5 @@ export const TABLE_MEMBER_ACTION_DROPDOWN =
   '[data-test-group-member-action] button:first-child';
 export const MANAGE_DROPDOWN_ADD_MEMBER =
   '[data-test-manage-group-dropdown] ul li a';
-export const TABLE_ACTION_DROPDOWN_DELETE_MEMBER =
+export const TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER =
   '[data-test-group-member-action] ul li button';
