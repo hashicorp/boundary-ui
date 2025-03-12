@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * The change password flow is associated only with password-type auth methods.

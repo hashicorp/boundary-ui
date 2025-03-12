@@ -4,7 +4,7 @@
  */
 
 import SessionRecordingAbility from 'api/abilities/session-recording';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideSessionRecordingAbility extends SessionRecordingAbility {
   // =service

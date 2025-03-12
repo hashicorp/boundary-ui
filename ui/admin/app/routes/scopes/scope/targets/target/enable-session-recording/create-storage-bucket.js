@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import {
   TYPE_STORAGE_BUCKET_PLUGIN,
   TYPE_STORAGE_BUCKET_PLUGIN_AWS_S3,

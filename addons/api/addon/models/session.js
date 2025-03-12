@@ -7,7 +7,7 @@ import GeneratedSessionModel from '../generated/models/session';
 import { equal } from '@ember/object/computed';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { flattenObject } from '../utils/flatten-nested-object';
 import { TYPES_CREDENTIAL_LIBRARY } from 'api/models/credential-library';
 import { TYPE_CREDENTIAL_JSON } from 'api/models/credential';

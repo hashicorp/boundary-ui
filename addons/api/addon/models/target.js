@@ -5,7 +5,7 @@
 
 import GeneratedTargetModel from '../generated/models/target';
 import { attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export const TYPE_TARGET_TCP = 'tcp';
 export const TYPE_TARGET_SSH = 'ssh';
