@@ -4,7 +4,7 @@
  */
 
 import BaseAuthenticator from './base';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { reject } from 'rsvp';
 import { waitForPromise } from '@ember/test-waiters';
 

@@ -4,7 +4,7 @@
  */
 
 import BasePasswordAuthenticator from 'auth/authenticators/password';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * A username/password authenticator that authenticates with

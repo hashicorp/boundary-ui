@@ -165,9 +165,9 @@
       <G.RadioField
         name={{credentialType}}
         @value={{credentialType}}
-        checked={{eq credentialType this.selectedCredentialType}}
+        checked={{eq credentialType @model.credentialType}}
         disabled={{form.disabled}}
-        {{on 'input' (fn this.updateCredentialTypeSelection credentialType)}}
+        {{on 'input' (fn @changeCredentialType credentialType)}}
         as |F|
       >
         <F.Label>

@@ -6,7 +6,7 @@
 import BaseSessionStore from 'ember-simple-auth/session-stores/base';
 import { resolve, reject } from 'rsvp';
 import { get } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  *
