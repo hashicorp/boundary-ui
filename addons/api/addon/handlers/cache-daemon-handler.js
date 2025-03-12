@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { generateMQLExpression } from '../utils/mql-query';
 import { paginateResults } from '../utils/paginate-results';

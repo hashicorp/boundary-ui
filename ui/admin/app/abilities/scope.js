@@ -4,7 +4,7 @@
  */
 
 import OverrideModelAbility from './model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideScopeAbility extends OverrideModelAbility {
   // =services

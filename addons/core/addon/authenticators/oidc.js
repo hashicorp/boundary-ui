@@ -4,7 +4,7 @@
  */
 
 import BaseOIDCAuthenticator from 'auth/authenticators/oidc';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * An OIDC authenticator that handles flow kick-off and polling.

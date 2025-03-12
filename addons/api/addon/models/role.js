@@ -5,7 +5,7 @@
 
 import GeneratedRoleModel from '../generated/models/role';
 import { attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export const GRANT_SCOPE_THIS = 'this';
 export const GRANT_SCOPE_CHILDREN = 'children';
