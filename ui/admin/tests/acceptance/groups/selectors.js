@@ -5,11 +5,13 @@
 
 export const MANAGE_DROPDOWN =
   '[data-test-manage-group-dropdown] button:first-child';
-export const DELETE_ACTION = '[data-test-manage-group-dropdown] ul li button';
+export const MANAGE_DROPDOWN_DELETE_GROUP =
+  '[data-test-manage-group-dropdown] ul li button';
 
 // Members
-export const MEMBERS_MANAGE_DROPDOWN =
-  '[data-test-manage-groups-members] button:first-child';
-export const ADD_MEMBERS_ACTION = '[data-test-manage-group-dropdown] ul li a';
-export const DELETE_MEMBER_ACTION =
-  '[data-test-manage-groups-members] ul li button';
+export const TABLE_MEMBER_ACTION_DROPDOWN =
+  '[data-test-group-member-action] button:first-child';
+export const MANAGE_DROPDOWN_ADD_MEMBER =
+  '[data-test-manage-group-dropdown] ul li a';
+export const TABLE_ACTION_DROPDOWN_DELETE_MEMBER =
+  '[data-test-group-member-action] ul li button';

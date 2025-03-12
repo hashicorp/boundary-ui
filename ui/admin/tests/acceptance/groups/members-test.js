@@ -69,8 +69,8 @@ module('Acceptance | groups | members', function (hooks) {
 
     assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
 
-    await click(selectors.MEMBERS_MANAGE_DROPDOWN);
-    await click(selectors.DELETE_MEMBER_ACTION);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
 
     assert.strictEqual(
       findAll(commonSelectors.TABLE_ROW).length,
@@ -85,7 +85,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ authorized_actions });
     await visit(urls.members);
 
-    assert.dom(selectors.DELETE_MEMBER_ACTION).doesNotExist();
+    assert.dom(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER).doesNotExist();
   });
 
   test('shows error message on member remove', async function (assert) {
@@ -106,8 +106,8 @@ module('Acceptance | groups | members', function (hooks) {
 
     assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
 
-    await click(selectors.MEMBERS_MANAGE_DROPDOWN);
-    await click(selectors.DELETE_MEMBER_ACTION);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });
@@ -121,7 +121,7 @@ module('Acceptance | groups | members', function (hooks) {
   test('can navigate to add members with proper authorization', async function (assert) {
     await visit(urls.group);
     await click(selectors.MANAGE_DROPDOWN);
-    assert.dom(selectors.ADD_MEMBERS_ACTION).isVisible();
+    assert.dom(selectors.MANAGE_DROPDOWN_ADD_MEMBER).isVisible();
   });
 
   test('cannot navigate to add members without proper authorization', async function (assert) {
@@ -142,7 +142,7 @@ module('Acceptance | groups | members', function (hooks) {
     assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, 0);
 
     await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.ADD_MEMBERS_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
 
     assert.strictEqual(currentURL(), urls.addMembers);
     // Click three times to select, unselect, then reselect (for coverage)
@@ -159,13 +159,16 @@ module('Acceptance | groups | members', function (hooks) {
 
     assert.strictEqual(findAll(commonSelectors.TABLE_ROW).length, membersCount);
 
-    await click(selectors.MEMBERS_MANAGE_DROPDOWN);
-    await click(selectors.DELETE_MEMBER_ACTION);
+    await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ACTION_DROPDOWN_DELETE_MEMBER);
 
-    assert.strictEqual(findAll('tbody tr').length, membersCount - 1);
+    assert.strictEqual(
+      findAll(commonSelectors.TABLE_ROW).length,
+      membersCount - 1,
+    );
 
     await click(selectors.MANAGE_DROPDOWN);
-    await click(selectors.ADD_MEMBERS_ACTION);
+    await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
 
     assert.strictEqual(currentURL(), urls.addMembers);
 
