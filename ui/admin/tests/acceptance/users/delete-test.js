@@ -18,6 +18,8 @@ module('Acceptance | users | delete', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  let getUsersCount, confirmService;
+
   const instances = {
     scopes: {
       global: null,
@@ -44,14 +46,14 @@ module('Acceptance | users | delete', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
-    this.getUsersCount = () => this.server.schema.users.all().models.length;
-    this.confirmService = this.owner.lookup('service:confirm');
+    getUsersCount = () => this.server.schema.users.all().models.length;
+    confirmService = this.owner.lookup('service:confirm');
 
     await authenticateSession({});
   });
 
   test('can delete a user', async function (assert) {
-    const usersCount = this.getUsersCount();
+    const usersCount = getUsersCount();
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
@@ -59,7 +61,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
 
-    assert.strictEqual(this.getUsersCount(), usersCount - 1);
+    assert.strictEqual(getUsersCount(), usersCount - 1);
   });
 
   test('cannot delete a user without proper authorization', async function (assert) {
@@ -74,8 +76,8 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can accept delete user via dialog', async function (assert) {
-    const usersCount = this.getUsersCount();
-    this.confirmService.enabled = true;
+    const usersCount = getUsersCount();
+    confirmService.enabled = true;
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
@@ -86,13 +88,13 @@ module('Acceptance | users | delete', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('Deleted successfully.');
-    assert.strictEqual(this.getUsersCount(), usersCount - 1);
+    assert.strictEqual(getUsersCount(), usersCount - 1);
     assert.strictEqual(currentURL(), urls.users);
   });
 
   test('can cancel delete user via dialog', async function (assert) {
-    const usersCount = this.getUsersCount();
-    this.confirmService.enabled = true;
+    const usersCount = getUsersCount();
+    confirmService.enabled = true;
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
@@ -100,7 +102,7 @@ module('Acceptance | users | delete', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_USER_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
-    assert.strictEqual(this.getUsersCount(), usersCount);
+    assert.strictEqual(getUsersCount(), usersCount);
     assert.strictEqual(currentURL(), urls.user);
   });
 

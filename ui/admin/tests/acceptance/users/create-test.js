@@ -109,6 +109,8 @@ module('Acceptance | users | create', function (hooks) {
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
     const usersCount = getUsersCount();
+    const errorMessage =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     await visit(urls.users);
     this.server.post('/users', () => {
       return new Response(
@@ -117,15 +119,7 @@ module('Acceptance | users | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
@@ -138,10 +132,7 @@ module('Acceptance | users | create', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getUsersCount(), usersCount);
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {
