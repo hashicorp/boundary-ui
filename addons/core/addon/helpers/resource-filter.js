@@ -4,7 +4,7 @@
  */
 
 import Helper from '@ember/component/helper';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 

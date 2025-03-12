@@ -4,7 +4,7 @@
  */
 
 import ChannelRecordingAbility from 'api/abilities/channel-recording';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideChannelRecordingAbility extends ChannelRecordingAbility {
   // =service

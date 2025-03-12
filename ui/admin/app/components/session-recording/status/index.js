@@ -4,7 +4,7 @@
  */
 
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import {
   STATE_SESSION_RECORDING_STARTED,
   STATE_SESSION_RECORDING_AVAILABLE,

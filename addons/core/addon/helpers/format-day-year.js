@@ -4,7 +4,7 @@
  */
 
 import Helper from '@ember/component/helper';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * Takes a `Day` instance and returns in year format if there are no remainders,

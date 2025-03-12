@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import config from '../../../config/environment';
 

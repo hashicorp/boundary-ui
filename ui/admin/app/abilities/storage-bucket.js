@@ -4,7 +4,7 @@
  */
 
 import StorageBucketAbility from 'api/abilities/storage-bucket';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideStorageBucketAbility extends StorageBucketAbility {
   // =service

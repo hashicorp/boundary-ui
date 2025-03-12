@@ -4,7 +4,7 @@
  */
 
 import CredentialAbility from 'api/abilities/credential';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideCredentialAbility extends CredentialAbility {
   // =service
