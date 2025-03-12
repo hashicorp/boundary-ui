@@ -4,7 +4,7 @@
  */
 
 import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * The window manager service enables browser windows to open and close

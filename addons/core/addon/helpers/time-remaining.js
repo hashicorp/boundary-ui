@@ -4,7 +4,7 @@
  */
 
 import Helper from '@ember/component/helper';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { DurationFormat } from '@formatjs/intl-durationformat';
 import { secondsToDuration } from 'core/utils/seconds-to-duration';
 
