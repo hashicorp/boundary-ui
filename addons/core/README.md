@@ -121,7 +121,7 @@ This addon exposes a service to hold all active scopes (org and project where av
 To make use of the service, import it and initialize it using service injection.
 
 ```js
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class ExampleRoute extends Route {
   @service scope;

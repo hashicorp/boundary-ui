@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { TYPE_TARGET_TCP } from 'api/models/target';
 
 export default class OnboardingRoute extends Route {

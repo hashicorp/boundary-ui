@@ -4,7 +4,7 @@
  */
 
 import AuthMethodAbility from 'api/abilities/auth-method';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideAuthMethodAbility extends AuthMethodAbility {
   //service
