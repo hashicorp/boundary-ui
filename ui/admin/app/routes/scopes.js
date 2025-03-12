@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { A } from '@ember/array';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class ScopesRoute extends Route {
   // =services

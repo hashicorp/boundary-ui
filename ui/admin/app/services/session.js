@@ -4,7 +4,7 @@
  */
 
 import BaseSessionService from 'ember-simple-auth/services/session';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { formatDbName } from 'api/services/indexed-db';
 
 export default class SessionService extends BaseSessionService {

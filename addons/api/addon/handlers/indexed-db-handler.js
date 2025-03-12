@@ -4,7 +4,7 @@
  */
 
 import { modelIndexes } from 'api/services/indexed-db';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';

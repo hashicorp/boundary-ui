@@ -4,7 +4,7 @@
  */
 
 import ModelAbility from './model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 /**
  * Provides abilities for credential store.
  */

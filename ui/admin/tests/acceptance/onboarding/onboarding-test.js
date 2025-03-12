@@ -8,6 +8,8 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { visit, fillIn, click, currentURL } from '@ember/test-helpers';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | onboarding', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,21 +27,32 @@ module('Acceptance | onboarding', function (hooks) {
 
   test('show targetAddress and targetPort fields', async function (assert) {
     await visit(urls.onboarding);
-    assert.dom('[name="targetAddress"]').isVisible();
-    assert.dom('[name="targetPort"]').isVisible();
+
+    assert.dom(selectors.FIELD_TARGET_ADDRESS).isVisible();
+    assert.dom(selectors.FIELD_TARGET_PORT).isVisible();
   });
 
   test('redirect user to success when fill targetAddress, targetPort and click Save', async function (assert) {
     await visit(urls.onboarding);
-    await fillIn('[name="targetAddress"]', '192.168.1.0');
-    await fillIn('[name="targetPort"]', '22');
-    await click('[type="submit"]');
+
+    await fillIn(
+      selectors.FIELD_TARGET_ADDRESS,
+      selectors.FIELD_TARGET_ADDRESS_VALUE,
+    );
+    await fillIn(
+      selectors.FIELD_TARGET_PORT,
+      selectors.FIELD_TARGET_PORT_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.success);
   });
 
   test('redirect user to orgs screen when click do this later', async function (assert) {
     await visit(urls.onboarding);
-    await click('.rose-form-actions [type="button"]');
+
+    await click(selectors.DO_THIS_LATER_BTN);
+
     assert.strictEqual(currentURL(), urls.orgs);
   });
 });
