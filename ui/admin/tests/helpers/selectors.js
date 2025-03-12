@@ -15,6 +15,12 @@ export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
+export const TABLE_ROW = 'tbody tr';
+export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
+export const TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN =
+  'tbody tr .hds-dropdown-toggle-icon[type=button]';
+export const TABLE_ROW_ACTION_DROPDOWN_REMOVE =
+  'tbody tr .hds-dropdown-list-item button';
 
 export const RESOURCE_NOT_FOUND_SUBTITLE =
   '[data-test-error-application-state] .hds-application-state__error-code';
