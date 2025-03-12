@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -59,10 +59,9 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
 
     await click(selectors.CHANGE_STATE_DROPDOWN);
 
-    assert.strictEqual(
-      find(selectors.CHANGE_STATE_DROPDOWN_CHECKED).value,
-      instances.authMethod.attributes.state,
-    );
+    assert
+      .dom(selectors.CHANGE_STATE_DROPDOWN_CHECKED)
+      .hasValue(instances.authMethod.attributes.state);
   });
 
   test('can update oidc state', async function (assert) {
@@ -88,10 +87,10 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
-    assert.strictEqual(
-      find(selectors.CHANGE_STATE_DROPDOWN_CHECKED).value,
-      instances.authMethod.attributes.state,
-    );
+
+    assert
+      .dom(selectors.CHANGE_STATE_DROPDOWN_CHECKED)
+      .hasValue(instances.authMethod.attributes.state);
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
@@ -106,10 +105,10 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     const authMethod = this.server.schema.authMethods.findBy({
       id: instances.authMethod.id,
     });
-    assert.strictEqual(
-      find(selectors.CHANGE_STATE_DROPDOWN_CHECKED).value,
-      instances.authMethod.attributes.state,
-    );
+
+    assert
+      .dom(selectors.CHANGE_STATE_DROPDOWN_CHECKED)
+      .hasValue(instances.authMethod.attributes.state);
     assert.strictEqual(authMethod.attributes.state, updateValue);
   });
 
