@@ -19,6 +19,8 @@ export default class BreadcrumbsContainerComponent extends Component {
   container = null;
 
   insertedBreadcrumbContainer = modifier((element) => {
+    // A child `ol` is rendered in the Hds::Breadcrumb container and this is
+    // the element that the in-element helper should drop breadcrumbs into.
     this.container = {
       element: element.querySelector('ol'),
     };
