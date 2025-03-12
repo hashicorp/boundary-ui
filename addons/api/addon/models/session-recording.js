@@ -5,7 +5,7 @@
 
 import GeneratedSessionRecordingModel from '../generated/models/session-recording';
 import { hasMany } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export const TYPE_SESSION_RECORDING_SSH = 'ssh';
 export const TYPES_SESSION_RECORDING = Object.freeze([

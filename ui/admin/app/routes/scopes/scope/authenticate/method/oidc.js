@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { getOwner } from '@ember/application';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { task, timeout } from 'ember-concurrency';
 import { notifyError } from 'core/decorators/notify';

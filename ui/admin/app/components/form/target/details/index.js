@@ -5,7 +5,7 @@
 
 import Component from '@glimmer/component';
 import { TYPES_TARGET } from 'api/models/target';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 // NOTE: this is all a temporary solution till we have a resource type helper.
 const types = [...TYPES_TARGET].reverse();
