@@ -11,7 +11,7 @@ import { debounce } from 'core/decorators/debounce';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-import { TYPE_STATIC_CREDENTIAL } from 'api/models/host-catalog';
+import { TYPE_CREDENTIAL_STATIC } from 'api/models/host-catalog';
 
 export default class ScopesScopeHostCatalogsIndexController extends Controller {
   // =services
@@ -92,7 +92,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
   async save(hostCatalog) {
     // If the role_arn is empty, then the credential type should be static
     if (!hostCatalog.role_arn) {
-      hostCatalog.credentialType = TYPE_STATIC_CREDENTIAL;
+      hostCatalog.credentialType = TYPE_CREDENTIAL_STATIC;
     }
     await hostCatalog.save();
     if (this.can.can('read host-catalog', hostCatalog)) {
@@ -133,7 +133,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
 
   /**
    * Updates credential type
-   * @param {model} hostcatalog
+   * @param {model} hostCatalog
    * @param {string} credentialType
    */
   @action
