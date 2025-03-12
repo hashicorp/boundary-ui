@@ -5,8 +5,8 @@
 
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { modifier } from 'ember-modifier';
 
 /*
   `BreadcrumbsItem` inserts the crumbs to an existing container.
@@ -18,10 +18,9 @@ export default class BreadcrumbsItemComponent extends Component {
 
   @tracked element = null;
 
-  @action
-  registerSelf(element) {
+  insertedBreadcrumbItem = modifier((element) => {
     this.element = element;
-  }
+  });
 
   get current() {
     const crumbs = this.breadcrumbsService.containers[0].element.children;
