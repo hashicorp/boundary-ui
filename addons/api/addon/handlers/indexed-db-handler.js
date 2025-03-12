@@ -22,40 +22,38 @@ const SORT_UNIVERSAL_KEY_CREATED_TIME = 'created_time';
 const sortFunctions = {
   string: (a, b) => String(a).localeCompare(String(b)),
   date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+  number: (a, b) => Number(a) - Number(b),
+  boolean: (a, b) => Number(a) - Number(b),
 };
 
-function getSortFunction(modelType, key) {
-  // this represents keys that are universally sortable across all normalized json api payloads
-  const universalSort = {
-    [SORT_UNIVERSAL_KEY_CREATED_TIME]: sortFunctions.date,
-  };
-
-  if (universalSort[key]) {
-    return universalSort[key];
-  }
-
-  const sortForModel = {
-    target: {
-      id: sortFunctions.string,
-      name: sortFunctions.string,
-    },
-
-    alias: {
-      value: sortFunctions.string,
-    },
-  };
+function sortJsonApiRecords(records, { querySort, schema }) {
+  querySort = querySort ?? {};
 
   assert(
-    `No sort functions defined for model: "${modelType}". Ensure the type and attribute sort function is added to \`sortForModel\``,
-    sortForModel[modelType],
+    `The attribute "${querySort?.attribute}" used for sorting exists on the model "${schema.modelName}"`,
+    !querySort.attribute ||
+      (querySort.attribute && schema.attributes.has(querySort.attribute)),
   );
 
-  assert(
-    `No sort functions defined for model: "${modelType}", key: ${key}. Ensure the type and key sort function is added to \`sortForModel\``,
-    sortForModel[modelType][key],
-  );
+  const sortAttribute = querySort.attribute ?? SORT_UNIVERSAL_KEY_CREATED_TIME;
+  // the default sort is ascending unless the sort attribute is `created_time` key in which case it is descending
+  const defaultSortDirection =
+    sortAttribute === SORT_UNIVERSAL_KEY_CREATED_TIME
+      ? SORT_DIRECTION_DESCENDING
+      : SORT_DIRECTION_ASCENDING;
+  const sortDirection = querySort.direction ?? defaultSortDirection;
+  const attributeDataType = schema.attributes.get(sortAttribute)?.type;
+  const sortFunction = sortFunctions[attributeDataType] ?? sortFunctions.string;
 
-  return sortForModel[modelType]?.[key] ?? sortFunctions.string;
+  return records.sort((a, b) => {
+    const sortValueA = a.attributes[sortAttribute];
+    const sortValueB = b.attributes[sortAttribute];
+    const sortResult = sortFunction(sortValueA, sortValueB);
+
+    return sortDirection === SORT_DIRECTION_ASCENDING
+      ? sortResult
+      : -1 * sortResult;
+  });
 }
 
 /**
@@ -199,42 +197,10 @@ export default class IndexedDbHandler {
           });
         });
 
-        const sortedJsonApiRecords = normalizedJsonApiRecords.sort((a, b) => {
-          const querySort = queryObj.sort ?? {};
-          const isDefinedModelAttribute =
-            querySort.attribute && schema.attributes.has(querySort.attribute);
-
-          assert(
-            `The attribute "${querySort.attribute}" used for sorting exists on the model "${type}"`,
-            !querySort.attribute ||
-              (querySort.attribute && isDefinedModelAttribute),
-          );
-
-          const defaultSortKey = SORT_UNIVERSAL_KEY_CREATED_TIME;
-
-          // the sort.attribute represents the attribute as defined on the model type,
-          // which could be different than the JSON API attribute key, so `keyForAttribute`
-          // handles this lookup
-          const sortKey = querySort.attribute
-            ? serializer.keyForAttribute(querySort.attribute)
-            : defaultSortKey;
-
-          // the default sort is ascending unless the sort key is `created_time` key in which case it is descending
-          const defaultSortDirection =
-            sortKey === SORT_UNIVERSAL_KEY_CREATED_TIME
-              ? SORT_DIRECTION_DESCENDING
-              : SORT_DIRECTION_ASCENDING;
-          const sortDirection = querySort.direction ?? defaultSortDirection;
-
-          const sortFunction = getSortFunction(type, sortKey);
-          const sortValueA = a.attributes[sortKey];
-          const sortValueB = b.attributes[sortKey];
-          const sortResult = sortFunction(sortValueA, sortValueB);
-
-          return sortDirection === SORT_DIRECTION_ASCENDING
-            ? sortResult
-            : -1 * sortResult;
-        });
+        const sortedJsonApiRecords = sortJsonApiRecords(
+          normalizedJsonApiRecords,
+          { querySort: queryObj.sort ?? {}, schema },
+        );
 
         const paginatedApiRecords = paginateResults(
           sortedJsonApiRecords,
