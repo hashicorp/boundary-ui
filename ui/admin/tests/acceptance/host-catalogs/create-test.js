@@ -95,7 +95,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
       selectors.FIELD_DESCRIPTION,
       selectors.FIELD_DESCRIPTION_VALUE,
     );
-    await fillIn(selectors.FIELD_TYPE, 'static');
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('static'));
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostCatalogCount(), count + 1);
@@ -110,7 +110,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
       selectors.FIELD_DESCRIPTION,
       selectors.FIELD_DESCRIPTION_VALUE,
     );
-    await fillIn(selectors.FIELD_TYPE, 'aws');
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('aws'));
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostCatalogCount(), count + 1);
@@ -125,7 +125,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
       selectors.FIELD_DESCRIPTION,
       selectors.FIELD_DESCRIPTION_VALUE,
     );
-    await fillIn(selectors.FIELD_TYPE, 'azure');
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('azure'));
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostCatalogCount(), count + 1);
