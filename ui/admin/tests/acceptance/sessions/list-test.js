@@ -105,8 +105,9 @@ module('Acceptance | sessions | list', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
-    // TODO: use common selector TABLE_ROW once merged
-    assert.dom('tbody tr').exists({ count: instances.sessions.length });
+    assert
+      .dom(commonSelectors.TABLE_ROW)
+      .exists({ count: instances.sessions.length });
   });
 
   test('users cannot navigate to sessions tab without proper authorization', async function (assert) {
@@ -152,8 +153,9 @@ module('Acceptance | sessions | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessions));
 
-    // TODO: use common selector TABLE_ROW once merged
-    assert.dom('tbody tr').exists({ count: instances.sessions.length });
+    assert
+      .dom(commonSelectors.TABLE_ROW)
+      .exists({ count: instances.sessions.length });
   });
 
   test('cancelling a session', async function (assert) {
@@ -221,8 +223,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    // TODO: use common selector TABLE_ROW once merged
-    assert.dom('tbody tr').exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('users filter is hidden if no users returned or no list permissions', async function (assert) {
@@ -252,8 +253,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    // TODO: use common selector TABLE_ROW once merged
-    assert.dom('tbody tr').exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('targets filter is hidden if no targets returned or no list permissions', async function (assert) {
