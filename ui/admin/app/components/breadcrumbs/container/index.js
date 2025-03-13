@@ -5,7 +5,7 @@
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
+import { modifier } from 'ember-modifier';
 
 /*
   The `containers` property from the `breadcrumbsService` is tracked
@@ -18,8 +18,7 @@ export default class BreadcrumbsContainerComponent extends Component {
 
   container = null;
 
-  @action
-  registerContainer(element) {
+  insertedBreadcrumbContainer = modifier((element) => {
     // A child `ol` is rendered in the Hds::Breadcrumb container and this is
     // the element that the in-element helper should drop breadcrumbs into.
     this.container = {
@@ -27,11 +26,7 @@ export default class BreadcrumbsContainerComponent extends Component {
     };
 
     this.breadcrumbsService.registerContainer(this.container);
-  }
 
-  willDestroy() {
-    super.willDestroy(...arguments);
-
-    this.breadcrumbsService.unregisterContainer(this.container);
-  }
+    return () => this.breadcrumbsService.unregisterContainer(this.container);
+  });
 }
