@@ -84,14 +84,22 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * isCacheDaemonRunning: boolean, isLoadIncomplete: boolean, isCacheRefreshing: boolean}>}
    */
   async model(params) {
-    return this.retrieveData.perform(params);
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
 
   retrieveData = restartableTask(
-    async ({ search, scopes, availableSessions, types, page, pageSize }) => {
-      // Only add a debounce timeout if there's a search field
-      // Not perfect if they search first then filter as it then adds extra time
-      if (search) {
+    async ({
+      search,
+      scopes,
+      availableSessions,
+      types,
+      page,
+      pageSize,
+      useDebounce,
+    }) => {
+      if (useDebounce) {
         await timeout(250);
       }
 
