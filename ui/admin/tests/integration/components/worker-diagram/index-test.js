@@ -14,8 +14,8 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   let featuresService;
-  const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';
-  const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';
+  const targetWorkerFilterIngress = 'worker-filter';
+  const targetWorkerFilterHCP = 'worker-filter-hcp';
 
   test('it renders a single filter diagram', async function (assert) {
     featuresService = this.owner.lookup('service:features');
@@ -25,7 +25,7 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     assert.dom('[data-test-single-filter-egress-off]').isVisible();
   });
 
-  test('it renders a dual filter diagram when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
+  test('it renders a dual filter diagram when `worker-filter` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
     assert.true(featuresService.isEnabled(targetWorkerFilterIngress));
@@ -35,7 +35,7 @@ module('Integration | Component | worker-diagram/index', function (hooks) {
     assert.dom('[data-test-dual-filter-egress-off-ingress-off]').isVisible();
   });
 
-  test('it renders an HCP dual filter diagram when `target-worker-filters-v2-hcp` is enabled', async function (assert) {
+  test('it renders an HCP dual filter diagram when `worker-filter-hcp` is enabled', async function (assert) {
     featuresService = this.owner.lookup('service:features');
     featuresService.enable(targetWorkerFilterIngress);
     featuresService.enable(targetWorkerFilterHCP);

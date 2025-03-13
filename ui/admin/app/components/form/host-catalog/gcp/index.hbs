@@ -257,7 +257,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (feature-flag 'host-catalog-worker-filter')}}
+  {{#if (feature-flag 'worker-filter')}}
     <Hds::Form::Textarea::Field
       name='worker_filter'
       @value={{@model.worker_filter}}

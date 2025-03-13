@@ -231,13 +231,13 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   });
 
   test('users should see worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
-    featuresService.enable('host-catalog-worker-filter');
+    featuresService.enable('worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
     assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
   });
 
   test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {
-    featuresService.enable('host-catalog-worker-filter');
+    featuresService.enable('worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
     assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
   });
