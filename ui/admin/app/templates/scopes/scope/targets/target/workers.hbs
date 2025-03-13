@@ -39,7 +39,7 @@
       @ingressWorkerFilterEnabled={{@model.ingress_worker_filter}}
     />
     <Hds::Accordion as |A|>
-      {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
+      {{#if (feature-flag 'worker-filter')}}
         <A.Item
           @containsInteractive={{true}}
           @isOpen={{@model.ingress_worker_filter}}
