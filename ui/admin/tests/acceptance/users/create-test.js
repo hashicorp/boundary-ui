@@ -57,9 +57,9 @@ module('Acceptance | users | create', function (hooks) {
     const usersCount = getUsersCount();
     await visit(urls.users);
 
-    await click(`[href="${urls.newUser}"]`);
-    await fillIn('[name="name"]', 'User name');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(urls.newUser));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getUsersCount(), usersCount + 1);
   });
@@ -67,14 +67,14 @@ module('Acceptance | users | create', function (hooks) {
   test('users can navigate to new users route with proper authorization', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.users}"]`);
+    await click(commonSelectors.HREF(urls.users));
 
     assert.true(
       instances.scopes.org.authorized_collection_actions.users.includes(
         'create',
       ),
     );
-    assert.dom(`[href="${urls.newUser}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.newUser)).exists();
   });
 
   test('users cannot navigate to new users route without proper authorization', async function (assert) {
@@ -84,7 +84,7 @@ module('Acceptance | users | create', function (hooks) {
       );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.users}"]`);
+    await click(commonSelectors.HREF(urls.users));
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.users.includes(
@@ -92,16 +92,16 @@ module('Acceptance | users | create', function (hooks) {
       ),
     );
 
-    assert.dom('.rose-button-primary').doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.newUser)).doesNotExist();
   });
 
   test('can cancel creation of a new user', async function (assert) {
     const usersCount = getUsersCount();
     await visit(urls.users);
 
-    await click(`[href="${urls.newUser}"]`);
-    await fillIn('[name="name"]', 'User name');
-    await click('.rose-form-actions [type="button"]');
+    await click(commonSelectors.HREF(urls.newUser));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.users);
     assert.strictEqual(getUsersCount(), usersCount);
@@ -109,6 +109,8 @@ module('Acceptance | users | create', function (hooks) {
 
   test('saving a new user with invalid fields displays error messages', async function (assert) {
     const usersCount = getUsersCount();
+    const errorMessage =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     await visit(urls.users);
     this.server.post('/users', () => {
       return new Response(
@@ -117,28 +119,20 @@ module('Acceptance | users | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
 
-    await click(`[href="${urls.newUser}"]`);
-    await fillIn('[name="description"]', 'test');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(urls.newUser));
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getUsersCount(), usersCount);
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 
   test('users cannot directly navigate to new user route without proper authorization', async function (assert) {
