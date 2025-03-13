@@ -117,3 +117,10 @@ export const TABLE_ROW_TYPE = (authMethodId) =>
   `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:nth-child(2)`;
 export const TABLE_ROW_NAME_LINK = (authMethodId) =>
   `tbody [data-test-auth-methods-table-row="${authMethodId}"] .hds-table__td:first-child a`;
+
+export const CHANGE_STATE_DROPDOWN =
+  '[data-test-change-state] button:first-child';
+export const CHANGE_STATE_DROPDOWN_CHECKED =
+  '[data-test-change-state] input:checked';
+export const CHANGE_STATE_DROPDOWN_STATE = (state) =>
+  `[data-test-change-state] input[value="${state}"]`;
