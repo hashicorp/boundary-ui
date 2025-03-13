@@ -50,7 +50,7 @@ module('Acceptance | users | read', function (hooks) {
     await visit(urls.orgScope);
     await a11yAudit();
 
-    await click(`[href="${urls.users}"]`);
+    await click(commonSelectors.HREF(urls.users));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.users);
@@ -59,7 +59,7 @@ module('Acceptance | users | read', function (hooks) {
   test('visiting user', async function (assert) {
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
+    await click(commonSelectors.HREF(urls.user));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.user);
@@ -70,7 +70,7 @@ module('Acceptance | users | read', function (hooks) {
       instances.user.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.users}"]`);
+    await click(commonSelectors.HREF(urls.users));
 
     assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.user)).doesNotExist();
   });
@@ -78,7 +78,7 @@ module('Acceptance | users | read', function (hooks) {
   test('users can link to docs page for users', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.users}"]`);
+    await click(commonSelectors.HREF(urls.users));
 
     assert
       .dom(

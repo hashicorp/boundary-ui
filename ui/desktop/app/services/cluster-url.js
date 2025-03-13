@@ -5,7 +5,7 @@
 
 import Service from '@ember/service';
 import { assert } from '@ember/debug';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { notifyError } from 'core/decorators/notify';
 
 export default class ClusterUrlService extends Service {

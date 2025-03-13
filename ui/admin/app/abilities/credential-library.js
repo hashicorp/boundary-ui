@@ -4,7 +4,7 @@
  */
 
 import CredentialLibraryAbility from 'api/abilities/credential-library';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class OverrideCredentialLibraryAbility extends CredentialLibraryAbility {
   // =service

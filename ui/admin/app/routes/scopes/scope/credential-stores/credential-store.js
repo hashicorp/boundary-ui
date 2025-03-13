@@ -4,7 +4,7 @@
  */
 
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { paramValueFinder } from 'admin/utils/param-value-finder';
 
 export default class ScopesScopeCredentialStoresCredentialStoreRoute extends Route {

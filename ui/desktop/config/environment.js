@@ -6,13 +6,14 @@
 'use strict';
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
+const locationType = process.env.EMBER_CLI_ELECTRON ? 'hash' : 'history';
 
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'desktop',
     environment,
     rootURL: process.env.EMBER_CLI_ELECTRON ? '' : '/',
-    locationType: process.env.EMBER_CLI_ELECTRON ? 'hash' : 'auto',
+    locationType,
     EmberENV: {
       EXTEND_PROTOTYPES: false,
       FEATURES: {

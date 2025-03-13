@@ -4,7 +4,7 @@
  */
 
 import Helper from '@ember/component/helper';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 /**
  * This helper returns true or false based on the state of the ember-loading
