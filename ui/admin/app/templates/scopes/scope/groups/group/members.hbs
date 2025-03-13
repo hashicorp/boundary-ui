@@ -67,7 +67,7 @@
             </B.Td>
             <B.Td>
               {{#if (can 'removeMembers group' @model.group)}}
-                <Hds::Dropdown as |dd|>
+                <Hds::Dropdown data-test-group-member-action as |dd|>
                   <dd.ToggleIcon
                     @icon='more-horizontal'
                     @text={{t 'actions.manage'}}
