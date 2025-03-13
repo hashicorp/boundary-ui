@@ -19,19 +19,15 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-results]';
   const SESSION_ID_SELECTOR = (id) => `[data-test-session="${id}"]`;
-  const FILTER_TOGGLE_SELECTOR = (name) =>
-    `[data-test-sessions-bar] div[name="${name}"] button`;
-  const FILTER_APPLY_BUTTON = (name) =>
-    `[data-test-sessions-bar] div[name="${name}"] div div:last-child button[type="button"]`;
 
   const instances = {
     scopes: {
@@ -105,10 +101,11 @@ module('Acceptance | sessions | list', function (hooks) {
     await visit(urls.projectScope);
     await a11yAudit();
 
-    await click(`[href="${urls.sessions}"]`);
+    await click(commonSelectors.HREF(urls.sessions));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
+    // TODO: use common selector TABLE_ROW once merged
     assert.dom('tbody tr').exists({ count: instances.sessions.length });
   });
 
@@ -120,7 +117,7 @@ module('Acceptance | sessions | list', function (hooks) {
         (item) => item !== 'list',
       );
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.sessions.includes(
@@ -129,21 +126,21 @@ module('Acceptance | sessions | list', function (hooks) {
     );
 
     assert
-      .dom('[title="Resources"] a:first-of-type')
-      .doesNotIncludeText('Sessions');
+      .dom(commonSelectors.RESOURCES_SIDEBAR_NAV_LINK(urls.sessions))
+      .doesNotExist();
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.sessions.includes(
         'list',
       ),
     );
-    assert.dom(`[href="${urls.sessions}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.sessions)).exists();
   });
 
   test('visiting sessions without users or targets is OK', async function (assert) {
@@ -153,52 +150,49 @@ module('Acceptance | sessions | list', function (hooks) {
       targetId: null,
     });
 
-    await click(`[href="${urls.sessions}"]`);
+    await click(commonSelectors.HREF(urls.sessions));
 
+    // TODO: use common selector TABLE_ROW once merged
     assert.dom('tbody tr').exists({ count: instances.sessions.length });
   });
 
   test('cancelling a session', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.sessions}"]`);
-    await click('tbody tr:first-child td:last-child button');
+    await click(commonSelectors.HREF(urls.sessions));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
     assert
-      .dom('[data-test-toast-notification] .hds-alert__title')
-      .hasText('Success');
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('Canceled successfully.');
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
     await visit(urls.projectScope);
     this.server.post('/sessions/:id_method', () => new Response(400));
 
-    await click(`[href="${urls.sessions}"]`);
-    await click('tbody tr:first-child td:last-child button');
+    await click(commonSelectors.HREF(urls.sessions));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert
-      .dom('[data-test-toast-notification] .hds-alert__title')
-      .hasText('Error');
+    assert.dom(commonSelectors.ALERT_TOAST).includesText('Error');
   });
 
   test('users can link to docs page for sessions', async function (assert) {
+    const docsUrl =
+      'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/sessions';
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.sessions}"]`);
+    await click(commonSelectors.HREF(urls.sessions));
 
-    assert
-      .dom(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/sessions"]`,
-      )
-      .exists();
+    assert.dom(commonSelectors.HREF(docsUrl)).exists();
   });
 
   test('user can search for a specific session by id', async function (assert) {
     await visit(urls.projectScope);
     const sessionId = instances.sessions[0].id;
 
-    await click(`[href="${urls.sessions}"]`);
-    await fillIn(SEARCH_INPUT_SELECTOR, sessionId);
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, sessionId);
     await waitUntil(() => findAll(SESSION_ID_SELECTOR(sessionId)).length === 1);
 
     assert.dom(SESSION_ID_SELECTOR(sessionId)).hasText(sessionId);
@@ -208,8 +202,8 @@ module('Acceptance | sessions | list', function (hooks) {
     await visit(urls.projectScope);
     const sessionId = 'fake session that does not exist';
 
-    await click(`[href="${urls.sessions}"]`);
-    await fillIn(SEARCH_INPUT_SELECTOR, sessionId);
+    await click(commonSelectors.HREF(urls.sessions));
+    await fillIn(commonSelectors.SEARCH_INPUT, sessionId);
     await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
 
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
@@ -221,12 +215,13 @@ module('Acceptance | sessions | list', function (hooks) {
       userId: instances.dev.id,
     });
 
-    await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('user'));
-    await click(`input[value="${instances.dev.id}"]`);
-    await click(FILTER_APPLY_BUTTON('user'));
+    await click(commonSelectors.HREF(urls.sessions));
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.dev.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
+    // TODO: use common selector TABLE_ROW once merged
     assert.dom('tbody tr').exists({ count: 1 });
   });
 
@@ -241,8 +236,8 @@ module('Acceptance | sessions | list', function (hooks) {
       );
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.sessions}"]`);
-    assert.dom(FILTER_TOGGLE_SELECTOR('user')).doesNotExist();
+    await click(commonSelectors.HREF(urls.sessions));
+    assert.dom(commonSelectors.FILTER_DROPDOWN('user')).doesNotExist();
   });
 
   test('user can filter for sessions by target', async function (assert) {
@@ -251,12 +246,13 @@ module('Acceptance | sessions | list', function (hooks) {
       targetId: instances.sshTarget.id,
     });
 
-    await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('target'));
-    await click(`input[value="${instances.sshTarget.id}"]`);
-    await click(FILTER_APPLY_BUTTON('target'));
+    await click(commonSelectors.HREF(urls.sessions));
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.sshTarget.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
+    // TODO: use common selector TABLE_ROW once merged
     assert.dom('tbody tr').exists({ count: 1 });
   });
 
@@ -267,17 +263,17 @@ module('Acceptance | sessions | list', function (hooks) {
       );
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.sessions}"]`);
-    assert.dom(FILTER_TOGGLE_SELECTOR('target')).doesNotExist();
+    await click(commonSelectors.HREF(urls.sessions));
+    assert.dom(commonSelectors.FILTER_DROPDOWN('target')).doesNotExist();
   });
 
   test('user can filter for sessions by status', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.sessions}"]`);
-    await click(FILTER_TOGGLE_SELECTOR('status'));
-    await click('input[value="active"]');
-    await click(FILTER_APPLY_BUTTON('status'));
+    await click(commonSelectors.HREF(urls.sessions));
+    await click(commonSelectors.FILTER_DROPDOWN('status'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM('active'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('status'));
 
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
