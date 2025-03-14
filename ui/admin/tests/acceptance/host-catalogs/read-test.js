@@ -62,9 +62,10 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   test('visiting host catalogs', async function (assert) {
     await visit(urls.hostCatalogs);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hostCatalogs);
 
-    await click(`[href="${urls.hostCatalog}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalog));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
@@ -77,7 +78,7 @@ module('Acceptance | host-catalogs | read', function (hooks) {
         (item) => item !== 'read',
       );
 
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.hostCatalog))
@@ -96,11 +97,13 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   test('users can link to docs page for host catalog', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
     assert
       .dom(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs"]`,
+        commonSelectors.HREF(
+          'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs',
+        ),
       )
       .exists();
   });
