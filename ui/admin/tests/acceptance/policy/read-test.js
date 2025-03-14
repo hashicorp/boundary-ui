@@ -11,7 +11,6 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
 
 module('Acceptance | policies | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -73,7 +72,7 @@ module('Acceptance | policies | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.policies));
 
-    assert.dom(selectors.TABLE_ROW_LINK).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.policy)).doesNotExist();
   });
 
   test('visiting an unknown policy displays 404 message', async function (assert) {
