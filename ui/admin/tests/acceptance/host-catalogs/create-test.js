@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,13 +20,6 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
   let featuresService;
   let getHostCatalogCount;
-
-  const NAME_INPUT_SELECTOR = '[name="name"]';
-  const DESCRIPTION_INPUT_SELECTOR = '[name="description"]';
-  const TYPE_INPUT_SELECTOR = '[name="Type"]';
-  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
-  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const WORKER_FILTER_INPUT_SELECTOR = '[name=worker_filter]';
 
   const instances = {
     scopes: {
@@ -95,50 +89,75 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   test('Users can create new static host catalogs', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newStaticHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
-    await fillIn(TYPE_INPUT_SELECTOR, 'static');
-    await click(SAVE_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('static'));
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
 
   test('Users can create new dynamic aws host catalogs with aws provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
-    await fillIn(TYPE_INPUT_SELECTOR, 'aws');
-    await click(SAVE_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('aws'));
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
 
   test('Users can create new dynamic azure host catalogs with azure provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
-    await fillIn(TYPE_INPUT_SELECTOR, 'azure');
-    await click(SAVE_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('azure'));
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
 
   test('Users can create new dynamic host catalogs with GCP provider ', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newGCPDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await fillIn(DESCRIPTION_INPUT_SELECTOR, 'random string');
-    await fillIn('[name="zone"]', 'random string');
-    await fillIn('[name="project_id"]', 'random string');
-    await fillIn('[name="client_email"]', 'random string');
-    await click(SAVE_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_ZONE, selectors.FIELD_ZONE_VALUE);
+    await fillIn(selectors.FIELD_PROJECT, selectors.FIELD_PROJECT_VALUE);
+    await fillIn(
+      selectors.FIELD_CLIENT_EMAIL,
+      selectors.FIELD_CLIENT_EMAIL_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getHostCatalogCount(), count + 1);
   });
 
   test('Users can cancel creation of new static host catalogs', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newStaticHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.strictEqual(getHostCatalogCount(), count);
   });
@@ -146,8 +165,10 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   test('Users can cancel creation of new dynamic host catalogs with AWS provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAWSDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.strictEqual(getHostCatalogCount(), count);
   });
@@ -155,8 +176,10 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   test('Users can cancel creation of new dynamic host catalogs with GCP provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newGCPDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.strictEqual(getHostCatalogCount(), count);
   });
@@ -164,35 +187,43 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   test('Users can cancel creation of new dynamic host catalogs with Azure provider', async function (assert) {
     const count = getHostCatalogCount();
     await visit(urls.newAzureDynamicHostCatalog);
-    await fillIn(NAME_INPUT_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostCatalogs);
     assert.strictEqual(getHostCatalogCount(), count);
   });
 
   test('Users can navigate to new static host catalogs route with proper authorization', async function (assert) {
     await visit(urls.hostCatalogs);
+
     assert.ok(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newHostCatalog}"]`).isVisible();
+
+    assert.dom(commonSelectors.HREF(urls.newHostCatalog)).isVisible();
   });
 
   test('Users cannot navigate to new static host catalogs route without proper authorization', async function (assert) {
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
     await visit(urls.hostCatalogs);
+
     assert.notOk(
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.newStaticHostCatalog}"]`).isNotVisible();
+
+    assert.dom(commonSelectors.HREF(urls.newStaticHostCatalog)).doesNotExist();
   });
 
   test('saving a new static host catalog with invalid fields displays error messages', async function (assert) {
+    const errorMsg =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/host-catalogs', () => {
       return new Response(
         400,
@@ -200,46 +231,49 @@ module('Acceptance | host-catalogs | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: errorMsg,
           details: {
             request_fields: [
               {
                 name: 'name',
-                description: 'Name is required.',
+                description: errorMsg,
               },
             ],
           },
         },
       );
     });
+
     await visit(urls.newStaticHostCatalog);
-    await click(SAVE_BUTTON_SELECTOR);
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .includesText('The request was invalid.');
-    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).includesText(errorMsg);
   });
 
   test('users should not see worker filter field in community edition when AWS host catalog is selected', async function (assert) {
     await visit(urls.newAWSDynamicHostCatalog);
-    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isNotVisible();
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).doesNotExist();
   });
 
   test('users should not see worker filter field in community edition when GCP host catalog is selected', async function (assert) {
     await visit(urls.newGCPDynamicHostCatalog);
-    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isNotVisible();
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).doesNotExist();
   });
 
   test('users should see worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
     featuresService.enable('worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
-    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
   });
 
   test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {
     featuresService.enable('worker-filter');
     await visit(urls.newAWSDynamicHostCatalog);
-    assert.dom(WORKER_FILTER_INPUT_SELECTOR).isVisible();
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
   });
 
   test('users cannot directly navigate to new host catalog route without proper authorization', async function (assert) {
