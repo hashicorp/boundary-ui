@@ -19,8 +19,6 @@ module('Acceptance | policies | read', function (hooks) {
 
   let features;
 
-  const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
-
   const instances = {
     scopes: {
       global: null,
@@ -59,9 +57,9 @@ module('Acceptance | policies | read', function (hooks) {
     await visit(urls.globalScope);
     await a11yAudit();
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
     await a11yAudit();
-    await click(`[href="${urls.policy}"]`);
+    await click(commonSelectors.HREF(urls.policy));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.policy);
@@ -72,9 +70,9 @@ module('Acceptance | policies | read', function (hooks) {
     instances.policy.authorized_actions =
       instances.policy.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
 
-    assert.dom(TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.policy)).doesNotExist();
   });
 
   test('visiting an unknown policy displays 404 message', async function (assert) {

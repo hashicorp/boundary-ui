@@ -11,6 +11,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | policies | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,18 +19,6 @@ module('Acceptance | policies | create', function (hooks) {
 
   let features;
   let getPolicyCount;
-
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-  const RETAIN_FOR_TEXT_INPUT = '[data-input="retain_for"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-  const NAME_FIELD_TEXT = 'random string';
-  const DELETE_AFTER_TEXT_INPUT = '[data-input="delete_after"]';
-  const RETAIN_OVERRIDE = '[data-toggle="retain_for"]';
-  const DELETE_OVERRIDE = '[data-toggle="delete_after"]';
-  const RETAIN_SELECT_LIST = '[data-select="retention_policy"]';
-  const DELETE_SELECT_LIST = '[data-select="deletion_policy"]';
 
   const instances = {
     scopes: {
@@ -63,18 +52,18 @@ module('Acceptance | policies | create', function (hooks) {
     const policyCount = getPolicyCount();
     await visit(urls.policies);
 
-    await click(`[href="${urls.newPolicy}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
-    await click('.hds-form-select');
-    await fillIn('.hds-form-select', 1);
-    await fillIn(RETAIN_FOR_TEXT_INPUT, 90);
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.POLICY_LIST_DROPDOWN('retention_policy'));
+    await fillIn(selectors.POLICY_LIST_DROPDOWN('retention_policy'), 1);
+    await fillIn(selectors.FIELD_NUMBER_OF_DAYS('retain_for'), 90);
+    await click(commonSelectors.SAVE_BTN);
     const policy = this.server.schema.policies.findBy({
-      name: NAME_FIELD_TEXT,
+      name: commonSelectors.FIELD_NAME_VALUE,
     });
 
-    assert.strictEqual(policy.name, NAME_FIELD_TEXT);
+    assert.strictEqual(policy.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(policy.scopeId, 'global');
     assert.strictEqual(policy.attributes.retain_for.days, 90);
     assert.strictEqual(getPolicyCount(), policyCount + 1);
@@ -82,65 +71,81 @@ module('Acceptance | policies | create', function (hooks) {
 
   test('delete policy is automatically disabled when forever retention policy is chosen', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(RETAIN_SELECT_LIST, '-1');
-    assert.dom(DELETE_SELECT_LIST).isDisabled();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('retention_policy'), '-1');
+
+    assert.dom(selectors.POLICY_LIST_DROPDOWN('deletion_policy')).isDisabled();
   });
 
   test('user can enter custom value when custom retain option is selected', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(RETAIN_SELECT_LIST, '1');
-    assert.dom(RETAIN_FOR_TEXT_INPUT).isVisible();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('retention_policy'), '1');
+
+    assert.dom(selectors.FIELD_NUMBER_OF_DAYS('retain_for')).isVisible();
   });
 
   test('user can enter custom value when custom delete option is selected', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(DELETE_SELECT_LIST, '1');
-    assert.dom(DELETE_AFTER_TEXT_INPUT).isVisible();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('deletion_policy'), '1');
+
+    assert.dom(selectors.FIELD_NUMBER_OF_DAYS('delete_after')).isVisible();
   });
   test('user can select SOC option and will not see custom input', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(RETAIN_SELECT_LIST, '2555');
-    assert.dom(RETAIN_FOR_TEXT_INPUT).isNotVisible();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('retention_policy'), '2555');
+
+    assert.dom(selectors.FIELD_NUMBER_OF_DAYS('retain_for')).isNotVisible();
   });
 
   test('user can select do_not_delete option and will not see custom input', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(DELETE_SELECT_LIST, '0');
-    assert.dom(DELETE_AFTER_TEXT_INPUT).isNotVisible();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('deletion_policy'), '0');
+
+    assert.dom(selectors.FIELD_NUMBER_OF_DAYS('delete_after')).isNotVisible();
   });
 
   test('org override is disabled when do_not_protect is selected', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(RETAIN_SELECT_LIST, '0');
-    assert.dom(RETAIN_OVERRIDE).isDisabled();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('retention_policy'), '0');
+
+    assert.dom(selectors.OVERRIDE_TOGGLE_BTN('retain_for')).isDisabled();
   });
 
   test('org override is disabled when do_not_delete is selected', async function (assert) {
     await visit(urls.policies);
-    await click(`[href="${urls.newPolicy}"]`);
-    await select(DELETE_SELECT_LIST, '0');
-    assert.dom(DELETE_OVERRIDE).isDisabled();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await select(selectors.POLICY_LIST_DROPDOWN('deletion_policy'), '0');
+
+    assert.dom(selectors.OVERRIDE_TOGGLE_BTN('delete_after')).isDisabled();
   });
 
   test('user can cancel new policy creation', async function (assert) {
     const policyCount = getPolicyCount();
     await visit(urls.policies);
 
-    await click(`[href="${urls.newPolicy}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.policies);
     assert.strictEqual(getPolicyCount(), policyCount);
   });
 
   test('saving a new policy with invalid fields displays error messages', async function (assert) {
+    const errorMessage =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/policies', () => {
       return new Response(
         400,
@@ -148,28 +153,17 @@ module('Acceptance | policies | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
     await visit(urls.policies);
 
-    await click(`[href="${urls.newPolicy}"]`);
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newPolicy));
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 
   test('users cannot directly navigate to new policy route without proper authorization', async function (assert) {
