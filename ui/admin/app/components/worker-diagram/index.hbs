@@ -4,8 +4,8 @@
 }}
 
 <div class='worker-diagram'>
-  {{#if (feature-flag 'target-worker-filters-v2-ingress')}}
-    {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+  {{#if (feature-flag 'worker-filter')}}
+    {{#if (feature-flag 'worker-filter-hcp')}}
       <WorkerDiagram::DualFilter::Hcp
         @egressWorkerFilterEnabled={{@egressWorkerFilterEnabled}}
         @ingressWorkerFilterEnabled={{@ingressWorkerFilterEnabled}}

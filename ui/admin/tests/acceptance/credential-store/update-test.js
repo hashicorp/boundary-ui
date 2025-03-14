@@ -63,7 +63,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
 
     // Enable feature flag
     const featuresService = this.owner.lookup('service:features');
-    featuresService.enable('vault-worker-filter');
+    featuresService.enable('worker-filter');
   });
 
   test('can save changes to existing static credential store', async function (assert) {
