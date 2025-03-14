@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | policies | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,8 +19,6 @@ module('Acceptance | policies | read', function (hooks) {
   setupIndexedDb(hooks);
 
   let features;
-
-  const TABLE_LINK_SELECTOR = '.hds-table__tbody tr:first-child a';
 
   const instances = {
     scopes: {
@@ -59,9 +58,9 @@ module('Acceptance | policies | read', function (hooks) {
     await visit(urls.globalScope);
     await a11yAudit();
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
     await a11yAudit();
-    await click(`[href="${urls.policy}"]`);
+    await click(commonSelectors.HREF(urls.policy));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.policy);
@@ -72,9 +71,9 @@ module('Acceptance | policies | read', function (hooks) {
     instances.policy.authorized_actions =
       instances.policy.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
 
-    assert.dom(TABLE_LINK_SELECTOR).doesNotExist();
+    assert.dom(selectors.TABLE_ROW_LINK).doesNotExist();
   });
 
   test('visiting an unknown policy displays 404 message', async function (assert) {
