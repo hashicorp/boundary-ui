@@ -16,7 +16,7 @@ module(
     setupIntl(hooks, 'en-us');
 
     let featuresService;
-    const targetWorkerFilterIngress = 'target-worker-filters-v2-ingress';
+    const targetWorkerFilterIngress = 'worker-filter';
 
     hooks.beforeEach(function () {
       featuresService = this.owner.lookup('service:features');

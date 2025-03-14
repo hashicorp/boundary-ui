@@ -51,7 +51,7 @@
       {{t 'resources.target.workers.diagram.client'}}
     </D.Item>
     <D.Item @icon='settings'>
-      {{#if (feature-flag 'target-worker-filters-v2-hcp')}}
+      {{#if (feature-flag 'worker-filter-hcp')}}
         {{t 'resources.target.workers.diagram.hcp-worker'}}
       {{else}}
         {{t 'resources.target.workers.diagram.frontline-worker'}}

@@ -15,6 +15,10 @@ export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
+export const TABLE_ROW = 'tbody tr';
+export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
+export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
+  'tbody tr:first-child td:last-child button';
 
 export const RESOURCE_NOT_FOUND_SUBTITLE =
   '[data-test-error-application-state] .hds-application-state__error-code';
@@ -28,6 +32,8 @@ export const PAGE_MESSAGE_LINK =
 export const HREF = (url) => `[href="${url}"]`;
 
 export const SIDEBAR_NAV_LINK = (url) => `[title="General"] a[href="${url}"]`;
+export const RESOURCES_SIDEBAR_NAV_LINK = (url) =>
+  `[title="Resources"] a[href="${url}"]`;
 
 export const ALERT_TOAST = '[data-test-toast-notification]';
 export const ALERT_TOAST_BODY =

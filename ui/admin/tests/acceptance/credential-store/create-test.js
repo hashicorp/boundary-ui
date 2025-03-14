@@ -91,7 +91,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
   test('Users can create a new credential store of type vault with a worker filter', async function (assert) {
     featuresService.enable('static-credentials');
-    featuresService.enable('vault-worker-filter');
+    featuresService.enable('worker-filter');
     const count = getVaultCredentialStoresCount();
     await visit(urls.newCredentialStore);
 
