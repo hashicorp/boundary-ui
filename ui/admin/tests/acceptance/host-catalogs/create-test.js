@@ -92,8 +92,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('static'));
     await click(commonSelectors.SAVE_BTN);
@@ -107,8 +107,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('aws'));
     await click(commonSelectors.SAVE_BTN);
@@ -122,8 +122,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_TYPE, selectors.FIELD_TYPE_VALUE('azure'));
     await click(commonSelectors.SAVE_BTN);
@@ -137,8 +137,8 @@ module('Acceptance | host-catalogs | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await fillIn(
-      selectors.FIELD_DESCRIPTION,
-      selectors.FIELD_DESCRIPTION_VALUE,
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_ZONE, selectors.FIELD_ZONE_VALUE);
     await fillIn(selectors.FIELD_PROJECT, selectors.FIELD_PROJECT_VALUE);

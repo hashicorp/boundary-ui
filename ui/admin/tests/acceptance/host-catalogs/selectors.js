@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const FIELD_DESCRIPTION = '[name="description"]';
-export const FIELD_DESCRIPTION_VALUE = 'random description';
-
 export const FIELD_TYPE = '[name="Type"]';
 export const FIELD_TYPE_VALUE = (type) => `[value=${type}]`;
 
