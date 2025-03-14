@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute extends Route {
   // =attributes
@@ -35,38 +36,50 @@ export default class ScopesScopeRolesRoleManageScopesManageOrgProjectsRoute exte
    * Loads projects for current org scope.
    * @return {Promise<{role: RoleModel, orgScope: ScopeModel, projectScopes: [ScopeModel], totalItems: number, totalItemsCount: number, remainingProjectIDs: [string]}> }
    */
-  async model({ org_id, search, page, pageSize }) {
-    const role = this.modelFor('scopes.scope.roles.role');
-    const orgScope = this.store.peekRecord('scope', org_id);
-    const filters = {
-      scope_id: [{ equals: org_id }],
-    };
-
-    const projectScopes = await this.store.query('scope', {
-      scope_id: role.scope.id,
-      query: { search, filters },
-      page,
-      pageSize,
-      recursive: true,
-    });
-    const totalItems = projectScopes.meta?.totalItems;
-    const totalItemsCount = await this.getTotalItemsCount(
-      org_id,
-      search,
-      totalItems,
-    );
-
-    const remainingProjectIDs = await this.getRemainingProjects(role, org_id);
-
-    return {
-      role,
-      orgScope,
-      projectScopes,
-      totalItems,
-      totalItemsCount,
-      remainingProjectIDs,
-    };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ org_id, search, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const role = this.modelFor('scopes.scope.roles.role');
+      const orgScope = this.store.peekRecord('scope', org_id);
+      const filters = {
+        scope_id: [{ equals: org_id }],
+      };
+
+      const projectScopes = await this.store.query('scope', {
+        scope_id: role.scope.id,
+        query: { search, filters },
+        page,
+        pageSize,
+        recursive: true,
+      });
+      const totalItems = projectScopes.meta?.totalItems;
+      const totalItemsCount = await this.getTotalItemsCount(
+        org_id,
+        search,
+        totalItems,
+      );
+
+      const remainingProjectIDs = await this.getRemainingProjects(role, org_id);
+
+      return {
+        role,
+        orgScope,
+        projectScopes,
+        totalItems,
+        totalItemsCount,
+        remainingProjectIDs,
+      };
+    },
+  );
 
   /**
    * Sets scopesExist to true if there exists any scopes and

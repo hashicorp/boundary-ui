@@ -8,7 +8,6 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { loading } from 'ember-loading';
-import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { confirm } from 'core/decorators/confirm';
 
@@ -120,7 +119,6 @@ export default class ScopesScopeAliasesIndexController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

@@ -7,7 +7,6 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { debounce } from 'core/decorators/debounce';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
@@ -23,7 +22,7 @@ export default class ScopesScopeUsersIndexController extends Controller {
 
   queryParams = ['search', 'page', 'pageSize'];
 
-  @tracked search = '';
+  @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
 
@@ -59,7 +58,6 @@ export default class ScopesScopeUsersIndexController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

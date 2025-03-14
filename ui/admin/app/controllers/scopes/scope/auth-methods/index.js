@@ -10,7 +10,6 @@ import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { tracked } from '@glimmer/tracking';
-import { debounce } from 'core/decorators/debounce';
 import { TYPES_AUTH_METHOD } from 'api/models/auth-method';
 
 export default class ScopesScopeAuthMethodsIndexController extends Controller {
@@ -104,7 +103,6 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

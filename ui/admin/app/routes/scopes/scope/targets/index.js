@@ -9,6 +9,7 @@ import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeTargetsIndexRoute extends Route {
   // =services
@@ -47,51 +48,70 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
    * active sessions filtering options.
    * @returns {Promise<{totalItems: number, targets: [TargetModel], doTargetsExist: boolean }> }
    */
-  async model({ search, availableSessions, types, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-      id: { values: [] },
-      type: [],
-    };
-    types.forEach((type) => {
-      filters.type.push({ equals: type });
-    });
-
-    if (this.can.can('list model', scope, { collection: 'sessions' })) {
-      const sessions = await this.store.query('session', {
-        scope_id,
-        query: {
-          filters: {
-            scope_id: [{ equals: scope_id }],
-            status: [
-              { equals: STATUS_SESSION_ACTIVE },
-              { equals: STATUS_SESSION_PENDING },
-            ],
-          },
-        },
-      });
-      this.addActiveSessionFilters(filters, availableSessions, sessions);
-    }
-
-    let targets;
-    let totalItems = 0;
-    let doTargetsExist = false;
-    if (this.can.can('list model', scope, { collection: 'targets' })) {
-      targets = await this.store.query('target', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
-      totalItems = targets.meta?.totalItems;
-      doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
-    }
-
-    return { targets, doTargetsExist, totalItems };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({
+      search,
+      availableSessions,
+      types,
+      page,
+      pageSize,
+      useDebounce,
+    }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        id: { values: [] },
+        type: [],
+      };
+      types.forEach((type) => {
+        filters.type.push({ equals: type });
+      });
+
+      if (this.can.can('list model', scope, { collection: 'sessions' })) {
+        const sessions = await this.store.query('session', {
+          scope_id,
+          query: {
+            filters: {
+              scope_id: [{ equals: scope_id }],
+              status: [
+                { equals: STATUS_SESSION_ACTIVE },
+                { equals: STATUS_SESSION_PENDING },
+              ],
+            },
+          },
+        });
+        this.addActiveSessionFilters(filters, availableSessions, sessions);
+      }
+
+      let targets;
+      let totalItems = 0;
+      let doTargetsExist = false;
+      if (this.can.can('list model', scope, { collection: 'targets' })) {
+        targets = await this.store.query('target', {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        });
+        totalItems = targets.meta?.totalItems;
+        doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
+      }
+
+      return { targets, doTargetsExist, totalItems };
+    },
+  );
 
   /**
    * Sets doTargetsExist to true if there exists any targets.

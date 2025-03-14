@@ -13,7 +13,6 @@ import {
   statusTypes,
 } from 'api/models/session';
 import { action } from '@ember/object';
-import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 
 export default class ScopesScopeSessionsIndexController extends Controller {
@@ -33,7 +32,7 @@ export default class ScopesScopeSessionsIndexController extends Controller {
     'pageSize',
   ];
 
-  @tracked search = '';
+  @tracked search;
   @tracked users = [];
   @tracked targets = [];
   @tracked status = [
@@ -81,7 +80,6 @@ export default class ScopesScopeSessionsIndexController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

@@ -9,7 +9,6 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { loading } from 'ember-loading';
 import { confirm } from 'core/decorators/confirm';
-import { debounce } from 'core/decorators/debounce';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
 import { TYPES_CREDENTIAL_STORE } from 'api/models/credential-store';
 
@@ -133,7 +132,6 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

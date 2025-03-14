@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeCredentialStoresIndexRoute extends Route {
   // =services
@@ -37,40 +38,52 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
    * Loads queried credential-stores and the number of credential-stores under current scope.
    * @returns {Promise<{totalItems: number, credentialStores: [CredentialStoreModel], doCredentialStoresExist: boolean }> }
    */
-  async model({ search, types, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-      type: [],
-    };
-    types.forEach((type) => {
-      filters.type.push({ equals: type });
-    });
-
-    let credentialStores;
-    let totalItems = 0;
-    let doCredentialStoresExist = false;
-    if (
-      this.can.can('list model', scope, {
-        collection: 'credential-stores',
-      })
-    ) {
-      credentialStores = await this.store.query('credential-store', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
-      totalItems = credentialStores.meta?.totalItems;
-      doCredentialStoresExist = await this.getDoCredentialStoresExist(
-        scope_id,
-        totalItems,
-      );
-    }
-    return { credentialStores, doCredentialStoresExist, totalItems };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, types, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        type: [],
+      };
+      types.forEach((type) => {
+        filters.type.push({ equals: type });
+      });
+
+      let credentialStores;
+      let totalItems = 0;
+      let doCredentialStoresExist = false;
+      if (
+        this.can.can('list model', scope, {
+          collection: 'credential-stores',
+        })
+      ) {
+        credentialStores = await this.store.query('credential-store', {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        });
+        totalItems = credentialStores.meta?.totalItems;
+        doCredentialStoresExist = await this.getDoCredentialStoresExist(
+          scope_id,
+          totalItems,
+        );
+      }
+      return { credentialStores, doCredentialStoresExist, totalItems };
+    },
+  );
 
   /**
    * Sets doCredentialStoresExist to true if there exists any credential-stores.

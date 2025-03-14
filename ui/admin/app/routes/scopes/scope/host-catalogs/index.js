@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   // =services
@@ -33,35 +34,47 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
    * Loads all host catalogs under the current scope.
    * @returns {Promise<{doHostCatalogsExist: boolean, totalItems: number, hostCatalogs: [HostCatalogModel]}>}
    */
-  async model({ search, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-      type: [],
-      'plugin.name': [],
-    };
-
-    let hostCatalogs;
-    let totalItems = 0;
-    let doHostCatalogsExist = false;
-    if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
-      hostCatalogs = await this.store.query('host-catalog', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
-      totalItems = hostCatalogs.meta?.totalItems;
-      doHostCatalogsExist = await this.getDoHostCatalogsExist(
-        scope_id,
-        totalItems,
-      );
-    }
-
-    return { hostCatalogs, totalItems, doHostCatalogsExist };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        type: [],
+        'plugin.name': [],
+      };
+
+      let hostCatalogs;
+      let totalItems = 0;
+      let doHostCatalogsExist = false;
+      if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
+        hostCatalogs = await this.store.query('host-catalog', {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        });
+        totalItems = hostCatalogs.meta?.totalItems;
+        doHostCatalogsExist = await this.getDoHostCatalogsExist(
+          scope_id,
+          totalItems,
+        );
+      }
+
+      return { hostCatalogs, totalItems, doHostCatalogsExist };
+    },
+  );
 
   /**
    * Returns true if any host catalogs exist.

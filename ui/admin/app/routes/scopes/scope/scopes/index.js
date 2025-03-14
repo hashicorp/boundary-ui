@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeScopesIndexRoute extends Route {
   // =attributes
@@ -33,29 +34,41 @@ export default class ScopesScopeScopesIndexRoute extends Route {
    * Loads sub scopes for the current scope.
    * @returns {Promise<{totalItems: number, currentScope: ScopeModel, subScopes: [ScopeModel], doScopesExist: boolean }> }
    */
-  async model({ search, page, pageSize }) {
-    const currentScope = this.modelFor('scopes.scope');
-    const { id: scope_id } = currentScope;
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-    };
-
-    const subScopes = await this.store.query('scope', {
-      scope_id,
-      query: { search, filters },
-      page,
-      pageSize,
-    });
-    const totalItems = subScopes.meta?.totalItems;
-    const doScopesExist = await this.getDoScopesExist(scope_id, totalItems);
-
-    return {
-      currentScope,
-      subScopes,
-      doScopesExist,
-      totalItems,
-    };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const currentScope = this.modelFor('scopes.scope');
+      const { id: scope_id } = currentScope;
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+      };
+
+      const subScopes = await this.store.query('scope', {
+        scope_id,
+        query: { search, filters },
+        page,
+        pageSize,
+      });
+      const totalItems = subScopes.meta?.totalItems;
+      const doScopesExist = await this.getDoScopesExist(scope_id, totalItems);
+
+      return {
+        currentScope,
+        subScopes,
+        doScopesExist,
+        totalItems,
+      };
+    },
+  );
 
   /**
    * Sets doScopesExist to true if there exists any scopes.
