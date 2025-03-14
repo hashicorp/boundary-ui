@@ -119,9 +119,13 @@ module('Acceptance | users | update', function (hooks) {
 
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.user);
+
     await click(commonSelectors.HREF(urls.users));
+
     assert.dom(commonSelectors.MODAL_WARNING).exists();
+
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.users);
@@ -138,9 +142,13 @@ module('Acceptance | users | update', function (hooks) {
 
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.user);
+
     await click(commonSelectors.HREF(urls.users));
+
     assert.dom(commonSelectors.MODAL_WARNING).exists();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.user);

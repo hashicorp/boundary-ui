@@ -72,7 +72,9 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('can remove an account', async function (assert) {
     await visit(urls.user);
+
     await click(commonSelectors.HREF(urls.accounts));
+
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
 
     await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN);
@@ -148,7 +150,9 @@ module('Acceptance | users | accounts', function (hooks) {
       );
     });
     await visit(urls.user);
+
     await click(commonSelectors.HREF(urls.accounts));
+
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
 
     await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN);
@@ -242,10 +246,14 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
+
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
+
     assert.strictEqual(currentURL(), urls.addAccounts);
+
     // Click three times to select, unselect, then reselect (for coverage)
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
@@ -259,12 +267,16 @@ module('Acceptance | users | accounts', function (hooks) {
 
   test('select and cancel accounts to add', async function (assert) {
     await visit(urls.user);
+
     await click(commonSelectors.HREF(urls.accounts));
+
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
 
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
+
     assert.strictEqual(currentURL(), urls.addAccounts);
+
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.CANCEL_BTN);
 
