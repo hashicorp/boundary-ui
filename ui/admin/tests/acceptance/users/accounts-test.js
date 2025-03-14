@@ -77,8 +77,8 @@ module('Acceptance | users | accounts', function (hooks) {
 
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
 
-    await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN);
-    await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_REMOVE);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount - 1 });
   });
@@ -92,7 +92,9 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_REMOVE).doesNotExist();
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .doesNotExist();
   });
 
   test('cannot remove an ldap account when feature flag disabled', async function (assert) {
@@ -110,9 +112,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert
-      .dom(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN)
-      .doesNotExist();
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
     assert.dom(selectors.TABLE_ROW_ACCOUNT_TYPE).hasText('LDAP');
   });
 
@@ -132,7 +132,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN).exists();
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).exists();
     assert.dom(selectors.TABLE_ROW_ACCOUNT_TYPE).hasText('LDAP');
   });
 
@@ -155,8 +155,8 @@ module('Acceptance | users | accounts', function (hooks) {
 
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
 
-    await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_TOGGLE_BTN);
-    await click(commonSelectors.TABLE_ROW_ACTION_DROPDOWN_REMOVE);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
