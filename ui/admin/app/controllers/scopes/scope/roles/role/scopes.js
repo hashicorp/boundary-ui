@@ -7,7 +7,6 @@ import Controller, { inject as controller } from '@ember/controller';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { debounce } from 'core/decorators/debounce';
 import {
   GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
@@ -32,7 +31,7 @@ export default class ScopesScopeRolesRoleScopesController extends Controller {
     'pageSize',
   ];
 
-  @tracked search = '';
+  @tracked search;
   @tracked parentScopes = [];
   @tracked types = [];
   @tracked page = 1;
@@ -108,7 +107,6 @@ export default class ScopesScopeRolesRoleScopesController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
