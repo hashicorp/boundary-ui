@@ -161,8 +161,8 @@ module('Acceptance | targets | workers', function (hooks) {
     assert.dom(CODE_BLOCK_SELECTOR('egress')).doesNotExist();
   });
 
-  test('user can view egress and ingress filters when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+  test('user can view egress and ingress filters when `worker-filter` is enabled', async function (assert) {
+    featuresService.enable('worker-filter');
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
@@ -175,8 +175,8 @@ module('Acceptance | targets | workers', function (hooks) {
       .hasText(instances.target.egress_worker_filter);
   });
 
-  test('user can only view egress filter when `target-worker-filters-v2-ingress` is disabled', async function (assert) {
-    featuresService.disable('target-worker-filters-v2-ingress');
+  test('user can only view egress filter when `worker-filter` is disabled', async function (assert) {
+    featuresService.disable('worker-filter');
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
@@ -187,8 +187,8 @@ module('Acceptance | targets | workers', function (hooks) {
       .hasText(instances.target.egress_worker_filter);
   });
 
-  test('user can save ingress worker filter to a target when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+  test('user can save ingress worker filter to a target when `worker-filter` is enabled', async function (assert) {
+    featuresService.enable('worker-filter');
     instances.target.update({ ingress_worker_filter: '' });
     const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
@@ -205,8 +205,8 @@ module('Acceptance | targets | workers', function (hooks) {
     assert.dom(CODE_BLOCK_SELECTOR('ingress')).hasText(ingressWorkerFilter);
   });
 
-  test('user can cancel changes to ingress worker filter in a target when `target-worker-filters-v2-ingress` is enabled', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+  test('user can cancel changes to ingress worker filter in a target when `worker-filter` is enabled', async function (assert) {
+    featuresService.enable('worker-filter');
     const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
@@ -246,7 +246,7 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user will see "Add worker filter" if no filter set', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.enable('worker-filter');
     instances.target.update({
       egress_worker_filter: '',
       ingress_worker_filter: '',
@@ -264,7 +264,7 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user will see "Edit worker filter" if filter is set', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.enable('worker-filter');
     await visit(urls.target);
 
     await click(`[href="${urls.targetWorkers}"]`);
@@ -296,7 +296,7 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can discard unsaved ingress worker filter changes in a target via dialog', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const ingressWorkerFilter = '"random" in "/worker/filters"';
@@ -321,7 +321,7 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved ingress worker filter changes', async function (assert) {
-    featuresService.enable('target-worker-filters-v2-ingress');
+    featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const ingressWorkerFilter = '"random" in "/worker/filters"';

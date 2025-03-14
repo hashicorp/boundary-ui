@@ -10,6 +10,7 @@ import {
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
 import { action } from '@ember/object';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 const { __electronLog } = globalThis;
 
@@ -82,78 +83,101 @@ export default class ScopesScopeProjectsTargetsIndexRoute extends Route {
    * @return {Promise<{totalItems: number, targets: [TargetModel], projects: [ScopeModel],
    * isCacheDaemonRunning: boolean, isLoadIncomplete: boolean, isCacheRefreshing: boolean}>}
    */
-  async model({ search, scopes, availableSessions, types, page, pageSize }) {
-    const isCacheRunningPromise = this.ipc.invoke('isCacheDaemonRunning');
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
+  }
 
-    const orgScope = this.modelFor('scopes.scope');
-    const projects = this.modelFor('scopes.scope.projects');
-
-    // orgFilter used to narrow down resources to only those under
-    // the current org scope if org is not global
-    const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
-
-    const filters = { scope_id: [], id: { values: [] }, type: [] };
-    scopes.forEach((scope) => {
-      filters.scope_id.push({ equals: scope });
-    });
-    types.forEach((type) => {
-      filters.type.push({ equals: type });
-    });
-
-    const sessions = await this.getSessions(orgScope, scopes, orgFilter);
-    this.addActiveSessionFilters(filters, availableSessions, sessions);
-
-    const query = {
-      recursive: true,
-      scope_id: orgScope.id,
-      query: { search, filters },
+  retrieveData = restartableTask(
+    async ({
+      search,
+      scopes,
+      availableSessions,
+      types,
       page,
       pageSize,
-      force_refresh: true,
-    };
-    if (orgScope.isOrg && scopes.length === 0) {
-      query.filter = orgFilter;
-    }
-    let targets = await this.store.query('target', query);
-    const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
-    // Filter out targets to which users do not have the connect ability
-    targets = targets.filter((target) =>
-      this.can.can('connect target', target),
-    );
+      useDebounce,
+    }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
 
-    const aliasPromise = this.store.query('alias', {
-      scope_id: 'global',
-      force_refresh: true,
-      query: {
-        filters: {
-          destination_id: {
-            logicalOperator: 'or',
-            values: targets.map((target) => ({
-              equals: target.id,
-            })),
+      const isCacheRunningPromise = this.ipc.invoke('isCacheDaemonRunning');
+
+      const orgScope = this.modelFor('scopes.scope');
+      const projects = this.modelFor('scopes.scope.projects');
+
+      // orgFilter used to narrow down resources to only those under
+      // the current org scope if org is not global
+      const orgFilter = `"/item/scope/parent_scope_id" == "${orgScope.id}"`;
+
+      const filters = { scope_id: [], id: { values: [] }, type: [] };
+      scopes.forEach((scope) => {
+        filters.scope_id.push({ equals: scope });
+      });
+      types.forEach((type) => {
+        filters.type.push({ equals: type });
+      });
+
+      const sessions = await this.getSessions(orgScope, scopes, orgFilter);
+      this.addActiveSessionFilters(filters, availableSessions, sessions);
+
+      const query = {
+        recursive: true,
+        scope_id: orgScope.id,
+        query: { search, filters },
+        page,
+        pageSize,
+        force_refresh: true,
+      };
+      if (orgScope.isOrg && scopes.length === 0) {
+        query.filter = orgFilter;
+      }
+      let targets = await this.store.query('target', query);
+      const { totalItems, isLoadIncomplete, isCacheRefreshing } = targets.meta;
+      // Filter out targets to which users do not have the connect ability
+      targets = targets.filter((target) =>
+        this.can.can('connect target', target),
+      );
+
+      const aliasPromise = this.store.query('alias', {
+        scope_id: 'global',
+        force_refresh: true,
+        query: {
+          filters: {
+            destination_id: {
+              logicalOperator: 'or',
+              values: targets.map((target) => ({
+                equals: target.id,
+              })),
+            },
           },
         },
-      },
-    });
+      });
 
-    // Load the aliases for the targets on the current page
-    try {
-      await aliasPromise;
-    } catch (e) {
-      __electronLog?.warn('Could not retrieve aliases for targets', e.message);
-      // Separately await and catch the error here so we can continue loading
-      // the page in case the controller doesn't support aliases yet
-    }
+      // Load the aliases for the targets on the current page
+      try {
+        await aliasPromise;
+      } catch (e) {
+        __electronLog?.warn(
+          'Could not retrieve aliases for targets',
+          e.message,
+        );
+        // Separately await and catch the error here so we can continue loading
+        // the page in case the controller doesn't support aliases yet
+      }
 
-    return {
-      targets,
-      projects,
-      totalItems,
-      isLoadIncomplete,
-      isCacheRefreshing,
-      isCacheDaemonRunning: await isCacheRunningPromise,
-    };
-  }
+      return {
+        targets,
+        projects,
+        totalItems,
+        isLoadIncomplete,
+        isCacheRefreshing,
+        isCacheDaemonRunning: await isCacheRunningPromise,
+      };
+    },
+  );
 
   async getSessions(orgScope, scopes, orgFilter) {
     // Retrieve all sessions so that the session and activeSessions getters

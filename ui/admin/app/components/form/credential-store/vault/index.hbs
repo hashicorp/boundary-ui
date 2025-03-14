@@ -118,7 +118,7 @@
   </Hds::Form::TextInput::Field>
 
   {{! worker_filter }}
-  {{#if (and (feature-flag 'vault-worker-filter') @model.isNew)}}
+  {{#if (and (feature-flag 'worker-filter') @model.isNew)}}
     {{#let (unique-id) (unique-id) as |labelId helpId|}}
       <Hds::Form::Fieldset
         @isOptional={{true}}

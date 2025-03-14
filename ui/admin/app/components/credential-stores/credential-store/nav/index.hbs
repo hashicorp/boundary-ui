@@ -8,7 +8,7 @@
     {{t 'titles.details'}}
   </nav.link>
   {{#if @model.isVault}}
-    {{#if (feature-flag 'vault-worker-filter')}}
+    {{#if (feature-flag 'worker-filter')}}
       <nav.link
         @route='scopes.scope.credential-stores.credential-store.worker-filter'
       >

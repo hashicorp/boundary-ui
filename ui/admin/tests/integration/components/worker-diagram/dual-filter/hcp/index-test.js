@@ -16,7 +16,7 @@ module(
     setupIntl(hooks, 'en-us');
 
     let featuresService;
-    const targetWorkerFilterHCP = 'target-worker-filters-v2-hcp';
+    const targetWorkerFilterHCP = 'worker-filter-hcp';
 
     hooks.beforeEach(function () {
       featuresService = this.owner.lookup('service:features');

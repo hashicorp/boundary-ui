@@ -23,12 +23,10 @@ const baseEdition = {
   'byow-pki-hcp-cluster-id': false,
   'json-credentials': false,
   'static-credentials': false,
-  'target-worker-filters-v2-ingress': false,
-  'target-worker-filters-v2-hcp': false,
   'target-network-address': false,
-  'vault-worker-filter': false,
   'ldap-auth-methods': false,
-  'host-catalog-worker-filter': false,
+  'worker-filter': false,
+  'worker-filter-hcp': false,
 };
 // Editions maps edition keys to their associated featuresets.
 const featureEditions = {};
@@ -42,14 +40,12 @@ featureEditions.oss = {
 };
 featureEditions.enterprise = {
   ...featureEditions.oss,
-  'target-worker-filters-v2-ingress': true,
-  'vault-worker-filter': true,
-  'host-catalog-worker-filter': true,
+  'worker-filter': true,
 };
 featureEditions.hcp = {
   ...featureEditions.enterprise,
   'byow-pki-hcp-cluster-id': true,
-  'target-worker-filters-v2-hcp': true,
+  'worker-filter-hcp': true,
 };
 
 module.exports = {
