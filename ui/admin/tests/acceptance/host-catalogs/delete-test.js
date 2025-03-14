@@ -15,6 +15,7 @@ import {
   TYPE_HOST_CATALOG_DYNAMIC,
   TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,10 +23,6 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getHostCatalogCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -81,11 +78,11 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
 
   test('can delete host catalog', async function (assert) {
     const hostCatalogCount = getHostCatalogCount();
-
     await visit(urls.hostCatalogs);
-    await click(`[href="${urls.hostCatalog}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+
+    await click(commonSelectors.HREF(urls.hostCatalog));
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
   });
@@ -94,10 +91,10 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const hostCatalogCount = getHostCatalogCount();
 
     await visit(urls.hostCatalogs);
-    await click(`[href="${urls.gcpDynamicHostCatalog}"]`);
+    await click(commonSelectors.HREF(urls.gcpDynamicHostCatalog));
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount - 1);
   });
@@ -110,9 +107,9 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
       );
 
     await click(`[href="${urls.hostCatalog}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
 
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE).doesNotExist();
   });
 
   test('can accept delete host catalog via dialog', async function (assert) {
@@ -121,9 +118,9 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const hostCatalogCount = getHostCatalogCount();
     await visit(urls.hostCatalogs);
 
-    await click(`[href="${urls.hostCatalog}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.hostCatalog));
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
@@ -139,9 +136,9 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
     const hostCatalogCount = getHostCatalogCount();
     await visit(urls.hostCatalogs);
 
-    await click(`[href="${urls.hostCatalog}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.hostCatalog));
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getHostCatalogCount(), hostCatalogCount);
@@ -162,9 +159,9 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
       );
     });
 
-    await click(`[href="${urls.hostCatalog}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.hostCatalog));
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
