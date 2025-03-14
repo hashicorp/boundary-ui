@@ -102,8 +102,6 @@ export const MANAGE_DROPDOWN_MAKE_PRIMARY =
 export const MANAGE_DROPDOWN_DELETE =
   '[data-test-manage-auth-method] ul li:last-child button';
 
-export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
-  'tbody tr:first-child td:last-child button';
 export const TABLE_FIRST_ROW_ACTION_FIRST_ITEM =
   'tbody tr:first-child td:last-child ul li:first-child button';
 

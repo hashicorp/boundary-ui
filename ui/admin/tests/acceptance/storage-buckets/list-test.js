@@ -190,7 +190,7 @@ module('Acceptance | storage-buckets | list', function (hooks) {
     urls.storageBucket = `${urls.storageBuckets}/${instances.storageBucket.id}`;
 
     await click(commonSelectors.HREF(urls.storageBuckets));
-    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
     assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).exists();
     assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).hasText('Edit');
