@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -51,56 +52,68 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    * an array of objects containing their associated users and targets.
    * @return {Promise{[{sessions: [SessionModel], allSessions: [SessionModel], associatedUsers: [UserModel], associatedTargets: [TargetModel], totalItems: number}]}}
    */
-  async model({ search, users, targets, status, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-      status: [],
-      user_id: [],
-      target_id: [],
-    };
-    users.forEach((user) => {
-      filters.user_id.push({ equals: user });
-    });
-    targets.forEach((target) => {
-      filters.target_id.push({ equals: target });
-    });
-    status.forEach((item) => {
-      filters.status.push({ equals: item });
-    });
-
-    const queryOptions = {
-      scope_id,
-      include_terminated: true,
-      query: { search, filters },
-      page,
-      pageSize,
-    };
-
-    const sessions = await this.store.query('session', queryOptions);
-    const totalItems = sessions.meta?.totalItems;
-
-    // Query all sessions, users, and targets for defining filtering values if entering route for the first time
-    if (!this.allSessions) {
-      await this.getAllSessions(scope_id);
-    }
-    if (this.associatedUsers.length === 0) {
-      await this.getAssociatedUsers(scope);
-    }
-    if (this.associatedTargets.length === 0) {
-      await this.getAssociatedTargets(scope);
-    }
-
-    return {
-      sessions,
-      allSessions: this.allSessions,
-      associatedUsers: this.associatedUsers,
-      associatedTargets: this.associatedTargets,
-      totalItems,
-    };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, users, targets, status, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        status: [],
+        user_id: [],
+        target_id: [],
+      };
+      users.forEach((user) => {
+        filters.user_id.push({ equals: user });
+      });
+      targets.forEach((target) => {
+        filters.target_id.push({ equals: target });
+      });
+      status.forEach((item) => {
+        filters.status.push({ equals: item });
+      });
+
+      const queryOptions = {
+        scope_id,
+        include_terminated: true,
+        query: { search, filters },
+        page,
+        pageSize,
+      };
+
+      const sessions = await this.store.query('session', queryOptions);
+      const totalItems = sessions.meta?.totalItems;
+
+      // Query all sessions, users, and targets for defining filtering values if entering route for the first time
+      if (!this.allSessions) {
+        await this.getAllSessions(scope_id);
+      }
+      if (this.associatedUsers.length === 0) {
+        await this.getAssociatedUsers(scope);
+      }
+      if (this.associatedTargets.length === 0) {
+        await this.getAssociatedTargets(scope);
+      }
+
+      return {
+        sessions,
+        allSessions: this.allSessions,
+        associatedUsers: this.associatedUsers,
+        associatedTargets: this.associatedTargets,
+        totalItems,
+      };
+    },
+  );
 
   /**
    * Get all the sessions but only load them once when entering the route.
