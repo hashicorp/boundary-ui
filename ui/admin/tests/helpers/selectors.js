@@ -35,7 +35,8 @@ export const PAGE_MESSAGE_LINK =
 
 export const HREF = (url) => `[href="${url}"]`;
 
-export const SIDEBAR_NAV_LINK = (url) => `[title="General"] a[href="${url}"]`;
+export const GENERAL_SIDEBAR_NAV_LINK = (url) =>
+  `[title="General"] a[href="${url}"]`;
 export const RESOURCES_SIDEBAR_NAV_LINK = (url) =>
   `[title="Resources"] a[href="${url}"]`;
 

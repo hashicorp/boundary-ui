@@ -36,7 +36,5 @@ export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFUL_VALUE = 'Saved successfully.';
 
-export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
-  'tbody tr:first-child td:last-child button';
 export const TABLE_FIRST_ROW_ACTION_FIRST_ITEM =
   'tbody tr:first-child td:last-child ul li:first-child a';

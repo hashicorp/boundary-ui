@@ -494,7 +494,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
     );
     await visit(urls.authMethods);
 
-    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     assert.dom(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM).isVisible();
     await click(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM);
 
@@ -506,7 +506,7 @@ module('Acceptance | auth-methods | create', function (hooks) {
       'Primary auth method is set.',
     );
 
-    await click(selectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(selectors.TABLE_FIRST_ROW_ACTION_FIRST_ITEM);
 
     scope = this.server.schema.scopes.find(instances.orgScope.id);
