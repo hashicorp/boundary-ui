@@ -10,7 +10,7 @@ jobs:
   trigger-oss-merge:
     # Run this only on merge events in OSS repo
     if: ${{ github.event.pull_request.merged && github.repository == 'hashicorp/boundary-ui' }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(vars.RUNNER) }}
     steps:
       - name: Trigger Merge
         env:
