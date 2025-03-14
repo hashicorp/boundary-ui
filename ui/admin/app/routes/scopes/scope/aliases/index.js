@@ -49,7 +49,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     ) {
       aliases = await this.store.query('alias', {
         scope_id,
-        query: { search },
+        query: { search, sort: { attribute: 'value', direction: 'desc' } },
         page,
         pageSize,
       });
