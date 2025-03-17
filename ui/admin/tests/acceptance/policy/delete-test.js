@@ -66,9 +66,7 @@ module('Acceptance | policies | delete', function (hooks) {
 
     assert
       .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
-      .exists();
-    assert
-      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .exists()
       .hasText('Delete Storage Policy');
 
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
