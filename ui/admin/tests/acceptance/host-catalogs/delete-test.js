@@ -106,7 +106,7 @@ module('Acceptance | host-catalogs | delete', function (hooks) {
         (item) => item !== 'delete',
       );
 
-    await click(`[href="${urls.hostCatalog}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalog));
     await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
 
     assert.dom(selectors.MANAGE_DROPDOWN_HOST_CATALOG_DELETE).doesNotExist();
