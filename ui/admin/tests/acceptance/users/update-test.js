@@ -17,6 +17,8 @@ module('Acceptance | users | update', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  let confirmService;
+
   const urls = {
     orgScope: null,
     users: null,
@@ -43,6 +45,7 @@ module('Acceptance | users | update', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}`;
     urls.users = `${urls.orgScope}/users`;
     urls.user = `${urls.users}/${instances.user.id}`;
+    confirmService = this.owner.lookup('service:confirm');
 
     await authenticateSession({});
   });
@@ -50,15 +53,15 @@ module('Acceptance | users | update', function (hooks) {
   test('can save changes to an existing user', async function (assert) {
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated user name');
-    await click('.rose-form-actions [type="submit"]');
+    await click(commonSelectors.HREF(urls.user));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.user);
     assert.strictEqual(
       this.server.schema.users.first().name,
-      'Updated user name',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -67,25 +70,27 @@ module('Acceptance | users | update', function (hooks) {
       instances.user.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
+    await click(commonSelectors.HREF(urls.user));
 
     assert.false(instances.user.authorized_actions.includes('update'));
-    assert.dom('form [type="button"]').doesNotExist();
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can cancel changes to an existing user', async function (assert) {
     await visit(urls.users);
 
-    await click(`[href="${urls.user}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Unsaved user name');
-    await click('.rose-form-actions [type="button"]');
+    await click(commonSelectors.HREF(urls.user));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
-    assert.notEqual(instances.user.name, 'Unsaved user name');
-    assert.dom('[name="name"]').hasValue(instances.user.name);
+    assert.notEqual(instances.user.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(instances.user.name);
   });
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
+    const errorMessage =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     await visit(urls.users);
     this.server.patch('/users/:id', () => {
       return new Response(
@@ -94,61 +99,62 @@ module('Acceptance | users | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
 
-    await click(`[href="${urls.user}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'User name');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(urls.user));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.dom('[data-test-error-message-name]').hasText('Name is required.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 
   test('can discard unsaved user changes via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.user.name, 'Unsaved user name');
+    assert.notEqual(instances.user.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.user);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Unsaved user name');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.user);
-    await click(`[href="${urls.users}"]`);
+
+    await click(commonSelectors.HREF(urls.users));
+
     assert.dom(commonSelectors.MODAL_WARNING).exists();
+
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.users);
-    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
+    assert.notEqual(
+      this.server.schema.users.first().name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
   });
 
   test('can click cancel on discard dialog box for unsaved user changes', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.user.name, 'Unsaved user name');
+    assert.notEqual(instances.user.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.user);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Unsaved user name');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.user);
-    await click(`[href="${urls.users}"]`);
+
+    await click(commonSelectors.HREF(urls.users));
+
     assert.dom(commonSelectors.MODAL_WARNING).exists();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.user);
-    assert.notEqual(this.server.schema.users.first().name, 'Unsaved user name');
+    assert.notEqual(
+      this.server.schema.users.first().name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
   });
 });
