@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | policies | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,9 +18,6 @@ module('Acceptance | policies | delete', function (hooks) {
 
   let featuresService;
   let policyCount;
-
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item button';
 
   const instances = {
     scopes: {
@@ -63,13 +61,18 @@ module('Acceptance | policies | delete', function (hooks) {
 
     urls.policy = `${urls.policies}/${instances.policy.id}`;
 
-    await click(`[href="${urls.policies}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.policies));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Delete Storage Policy');
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .exists();
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .hasText('Delete Storage Policy');
 
-    await click(DROPDOWN_ITEM_SELECTOR);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
     assert.strictEqual(policyCount(), count - 1);
   });
 
@@ -83,9 +86,11 @@ module('Acceptance | policies | delete', function (hooks) {
 
     urls.policy = `${urls.policies}/${instances.policy.id}`;
 
-    await click(`[href="${urls.policies}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.policies));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).isNotVisible();
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .isNotVisible();
   });
 });

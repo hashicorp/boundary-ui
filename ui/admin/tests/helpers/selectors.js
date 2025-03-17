@@ -19,6 +19,10 @@ export const TABLE_ROW = 'tbody tr';
 export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';
+export const TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN =
+  'tbody tr:first-child td:last-child ul li button';
+export const TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_LINK =
+  'tbody tr:first-child td:last-child ul li a';
 
 export const RESOURCE_NOT_FOUND_SUBTITLE =
   '[data-test-error-application-state] .hds-application-state__error-code';
