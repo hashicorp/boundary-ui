@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeRolesRoleScopesRoute extends Route {
   // =services
@@ -40,49 +41,61 @@ export default class ScopesScopeRolesRoleScopesRoute extends Route {
    * Loads grant scopes for current role.
    * @return {Promise<{role: RoleModel, grantScopes: [ScopeModel], allGrantScopes: [ScopeModel], totalItems: number}> }
    */
-  async model({ search, parentScopes, types, page, pageSize }) {
-    const role = this.modelFor('scopes.scope.roles.role');
-    const filters = {
-      scope_id: [],
-      type: [],
-      id: [],
-    };
-    role.grant_scope_ids.forEach((id) => {
-      if (id.startsWith('p_') || id.startsWith('o_')) {
-        filters.id.push({ equals: id });
-      }
-    });
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
+  }
 
-    let grantScopes = [];
-    if (!parentScopes.length && !types.length) {
-      role.grantScopeKeywords.forEach((keyword) => {
-        if (keyword.includes(search)) {
-          grantScopes.push({ id: keyword });
+  retrieveData = restartableTask(
+    async ({ search, parentScopes, types, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const role = this.modelFor('scopes.scope.roles.role');
+      const filters = {
+        scope_id: [],
+        type: [],
+        id: [],
+      };
+      role.grant_scope_ids.forEach((id) => {
+        if (id.startsWith('p_') || id.startsWith('o_')) {
+          filters.id.push({ equals: id });
         }
       });
-    }
 
-    let allGrantScopes = [];
-    let totalItems = grantScopes.length;
-    if (filters.id.length) {
-      parentScopes.forEach((id) => filters.scope_id.push({ equals: id }));
-      types.forEach((type) => filters.type.push({ equals: type }));
+      let grantScopes = [];
+      if (!parentScopes.length && !types.length) {
+        role.grantScopeKeywords.forEach((keyword) => {
+          if (keyword.includes(search) || !search) {
+            grantScopes.push({ id: keyword });
+          }
+        });
+      }
 
-      allGrantScopes = await this.getAllGrantScopes(filters.id);
+      let allGrantScopes = [];
+      let totalItems = grantScopes.length;
+      if (filters.id.length) {
+        parentScopes.forEach((id) => filters.scope_id.push({ equals: id }));
+        types.forEach((type) => filters.type.push({ equals: type }));
 
-      const queriedScopes = await this.store.query('scope', {
-        scope_id: role.scope.id,
-        query: { search, filters },
-        page,
-        pageSize: pageSize - totalItems,
-        recursive: true,
-      });
-      grantScopes =
-        page === 1 ? [...grantScopes, ...queriedScopes] : queriedScopes;
-      totalItems += queriedScopes.meta?.totalItems;
-    }
-    return { role, grantScopes, allGrantScopes, totalItems };
-  }
+        allGrantScopes = await this.getAllGrantScopes(filters.id);
+
+        const queriedScopes = await this.store.query('scope', {
+          scope_id: role.scope.id,
+          query: { search, filters },
+          page,
+          pageSize: pageSize - totalItems,
+          recursive: true,
+        });
+        grantScopes =
+          page === 1 ? [...grantScopes, ...queriedScopes] : queriedScopes;
+        totalItems += queriedScopes.meta?.totalItems;
+      }
+      return { role, grantScopes, allGrantScopes, totalItems };
+    },
+  );
 
   /**
    * Get all the grant scopes but only load them once when entering the route.
