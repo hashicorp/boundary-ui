@@ -9,6 +9,52 @@ import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
+import { assert } from '@ember/debug';
+
+export const SORT_DIRECTION_ASCENDING = 'asc';
+export const SORT_DIRECTION_DESCENDING = 'desc';
+
+// This is an attribute universally available on payloads coming back from the API
+// that can be used for sorting. It is not an attribute defined on models, but
+// before custom sorting was the default key to sort on.
+const SORT_UNIVERSAL_KEY_CREATED_TIME = 'created_time';
+
+const sortFunctions = {
+  string: (a, b) => String(a).localeCompare(String(b)),
+  date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+  number: (a, b) => Number(a) - Number(b),
+  boolean: (a, b) => Number(a) - Number(b),
+};
+
+function sortJsonApiRecords(records, { querySort, schema }) {
+  querySort = querySort ?? {};
+
+  assert(
+    `The attribute "${querySort?.attribute}" used for sorting exists on the model "${schema.modelName}"`,
+    !querySort.attribute ||
+      (querySort.attribute && schema.attributes.has(querySort.attribute)),
+  );
+
+  const sortAttribute = querySort.attribute ?? SORT_UNIVERSAL_KEY_CREATED_TIME;
+  // the default sort is ascending unless the sort attribute is `created_time` key in which case it is descending
+  const defaultSortDirection =
+    sortAttribute === SORT_UNIVERSAL_KEY_CREATED_TIME
+      ? SORT_DIRECTION_DESCENDING
+      : SORT_DIRECTION_ASCENDING;
+  const sortDirection = querySort.direction ?? defaultSortDirection;
+  const attributeDataType = schema.attributes.get(sortAttribute)?.type;
+  const sortFunction = sortFunctions[attributeDataType] ?? sortFunctions.string;
+
+  return records.sort((a, b) => {
+    const sortValueA = a.attributes[sortAttribute];
+    const sortValueB = b.attributes[sortAttribute];
+    const sortResult = sortFunction(sortValueA, sortValueB);
+
+    return sortDirection === SORT_DIRECTION_ASCENDING
+      ? sortResult
+      : -1 * sortResult;
+  });
+}
 
 /**
  * Handler to sit in front of the API request layer
@@ -132,37 +178,49 @@ export default class IndexedDbHandler {
           await indexedDb[type].bulkPut(items);
         }
 
-        const indexedDbResults = await queryIndexedDb(
+        // Results are returned in the shape of a JSON API response but in a format
+        // optmized for storage in indexeddb
+        const indexedDbRecords = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
         );
 
-        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          (item) =>
-            this.indexedDb.normalizeData({
-              data: item,
-              cleanData: false,
-              schema,
-              serializer,
-            }),
+        // Normalize the data, cleaning up changes made for indexedDB storage.
+        // This leaves it with a JSON API format ready for use by ember data
+        const normalizedJsonApiRecords = indexedDbRecords.map((item) => {
+          return this.indexedDb.normalizeData({
+            data: item,
+            cleanData: false,
+            schema,
+            serializer,
+          });
+        });
+
+        const sortedJsonApiRecords = sortJsonApiRecords(
+          normalizedJsonApiRecords,
+          { querySort: queryObj.sort ?? {}, schema },
         );
 
-        // Return the raw data if we don't push to the store.
-        let records = dbRecords.map((record) => ({
-          ...record.attributes,
-          id: record.id,
-        }));
+        const paginatedApiRecords = paginateResults(
+          sortedJsonApiRecords,
+          page,
+          pageSize,
+        );
 
-        if (pushToStore) {
-          records = store.push({ data: dbRecords });
-        }
+        // If we're not pushing to the store, just use the raw data in a model-ish shape (id and properties)
+        const records = pushToStore
+          ? store.push({ data: paginatedApiRecords })
+          : paginatedApiRecords.map((record) => ({
+              ...record.attributes,
+              id: record.id,
+            }));
 
         // Set a meta property on the array to store the total items of the results.
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: indexedDbResults.length };
+        records.meta = { totalItems: indexedDbRecords.length };
         return records;
       }
       default:
