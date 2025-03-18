@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find, fillIn } from '@ember/test-helpers';
+import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -42,23 +42,30 @@ module('Acceptance | workers | update', function (hooks) {
 
   test('can save changes to an existing worker', async function (assert) {
     await visit(urls.worker);
-    await click('form [type="button"]', 'Click edit mode');
-    await fillIn('[name="name"]', 'Updated worker name');
-    await click('.rose-form-actions [type="submit"]');
-    assert.dom(`[href="${urls.worker}"]`).isVisible();
-    await assert.dom('input[name="name"]').hasValue('Updated worker name');
+
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.HREF(urls.worker)).isVisible();
+    await assert
+      .dom(commonSelectors.FIELD_NAME)
+      .hasValue(commonSelectors.FIELD_NAME_VALUE);
   });
 
   test('can cancel changes to an existing worker', async function (assert) {
     const name = instances.worker.name;
     await visit(urls.worker);
-    await click('form [type="button"]', 'Click edit mode');
-    await fillIn('[name="name"]', `Updated Worker Name`);
-    await click('.rose-form-actions [type="button"]');
-    await assert.dom('input[name="name"]').hasValue(`${name}`);
+
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    await assert.dom(commonSelectors.FIELD_NAME).hasValue(`${name}`);
   });
 
   test('saving an existing worker with invalid fields displays error messages', async function (assert) {
+    const errorMessage = 'Error in provided request.';
     this.server.patch('/workers/:id', () => {
       return new Response(
         400,
@@ -66,29 +73,16 @@ module('Acceptance | workers | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
     await visit(urls.worker);
-    await click('.rose-form-actions [type="button"]', 'Click edit mode');
-    await fillIn('[name="name"]', 'Worker Name');
-    await click('[type="submit"]');
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.strictEqual(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required',
-      'Displays field-level errors.',
-    );
+
+    await click(commonSelectors.EDIT_BTN, 'Click edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 });

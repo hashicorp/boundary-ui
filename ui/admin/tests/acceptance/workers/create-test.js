@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,6 +20,7 @@ module('Acceptance | workers | create', function (hooks) {
   let workersURL;
   let newWorkerURL;
   let getWorkersCount;
+  let featuresService;
 
   hooks.beforeEach(async function () {
     globalScope = this.server.create('scope', { id: 'global' });
@@ -26,6 +28,7 @@ module('Acceptance | workers | create', function (hooks) {
     workersURL = `/scopes/global/workers`;
     newWorkerURL = `${workersURL}/new`;
     getWorkersCount = () => this.server.schema.workers.all().length;
+    featuresService = this.owner.lookup('service:features');
 
     await authenticateSession({});
   });
@@ -33,33 +36,41 @@ module('Acceptance | workers | create', function (hooks) {
   test('can create new workers', async function (assert) {
     const workersCount = getWorkersCount();
     await visit(newWorkerURL);
-    await fillIn('[name="worker_auth_registration_request"]', 'token');
-    await click('[type="submit"]');
+
+    await fillIn(
+      selectors.FIELD_WORKER_AUTH_REGISTRATION,
+      selectors.FIELD_WORKER_AUTH_REGISTRATION_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getWorkersCount(), workersCount + 1);
   });
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
-    const labels = findAll('.worker-create-section label.hds-form-label');
+
+    const labels = findAll(selectors.WORKER_CREATE_SECTION_FORM_LABEL);
+
     assert.dom(labels[0]).hasText('Boundary Cluster ID (Optional)');
     assert.dom(labels[2]).doesNotIncludeText('Initial Upstreams');
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
-    const labels = findAll('.worker-create-section label.hds-form-label');
+
+    const labels = findAll(selectors.WORKER_CREATE_SECTION_FORM_LABEL);
+
     assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert.dom(labels[0]).doesNotIncludeText('Boundary Cluster ID');
     assert.dom(labels[2]).hasText('Initial Upstreams (Optional)');
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
     await visit(newWorkerURL);
-    const createSection = findAll('.worker-create-section');
+
+    const createSection = findAll(selectors.WORKER_CREATE_SECTION);
+
     assert.false(featuresService.isEnabled('byow-pki-hcp-cluster-id'));
     assert
       .dom(createSection[1])
@@ -74,10 +85,11 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
-    const featuresService = this.owner.lookup('service:features');
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
-    const createSection = findAll('.worker-create-section');
+
+    const createSection = findAll(selectors.WORKER_CREATE_SECTION);
+
     assert
       .dom(createSection[1])
       .includesText(
@@ -92,23 +104,25 @@ module('Acceptance | workers | create', function (hooks) {
 
   test('Users can navigate to new workers route with proper authorization', async function (assert) {
     await visit(workersURL);
+
     assert.ok(
       globalScope.authorized_collection_actions.workers.includes(
         'create:worker-led',
       ),
     );
-    assert.dom(`[href="${newWorkerURL}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(newWorkerURL)).isVisible();
   });
 
   test('Users cannot navigate to new workers route without proper authorization', async function (assert) {
     globalScope.authorized_collection_actions.workers = [];
     await visit(workersURL);
+
     assert.notOk(
       globalScope.authorized_collection_actions.users.includes(
         'create:worker-led',
       ),
     );
-    assert.dom(`[href="${newWorkerURL}"]`).isNotVisible();
+    assert.dom(commonSelectors.HREF(newWorkerURL)).isNotVisible();
   });
 
   test('saving a new worker with invalid fields displays error messages', async function (assert) {
@@ -124,8 +138,13 @@ module('Acceptance | workers | create', function (hooks) {
       );
     });
     await visit(newWorkerURL);
-    await fillIn('[name="worker_auth_registration_request"]', 'token');
-    await click('[type="submit"]');
+
+    await fillIn(
+      selectors.FIELD_WORKER_AUTH_REGISTRATION,
+      selectors.FIELD_WORKER_AUTH_REGISTRATION_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('rpc error: code = Unknown');
