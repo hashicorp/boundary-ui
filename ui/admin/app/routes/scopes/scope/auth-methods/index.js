@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   // =services
@@ -42,49 +43,61 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
    * Loads queried auth-methods and the number of auth-methods under current scope.
    * @returns {Promise<{totalItems: number, authMethods: [AuthMethodModel], doAuthMethodsExist: boolean }> }
    */
-  async model({ search, types, primary, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-      type: [],
-      is_primary: [],
-    };
-
-    types.forEach((type) => {
-      filters.type.push({ equals: type });
-    });
-    if (primary.length == 1) {
-      primary.forEach((val) => {
-        filters.is_primary.push({ equals: val });
-      });
-    }
-
-    let authMethods;
-    let totalItems = 0;
-    let doAuthMethodsExist = false;
-    if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
-      // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
-      const options = { storeToken: false };
-      authMethods = await this.store.query(
-        'auth-method',
-        {
-          scope_id,
-          query: { search, filters },
-          page,
-          pageSize,
-        },
-        options,
-      );
-      totalItems = authMethods.meta?.totalItems;
-      doAuthMethodsExist = await this.getDoAuthMethodsExist(
-        scope_id,
-        totalItems,
-      );
-    }
-
-    return { authMethods, doAuthMethodsExist, totalItems };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, types, primary, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+        type: [],
+        is_primary: [],
+      };
+
+      types.forEach((type) => {
+        filters.type.push({ equals: type });
+      });
+      if (primary.length === 1) {
+        primary.forEach((val) => {
+          filters.is_primary.push({ equals: val });
+        });
+      }
+
+      let authMethods;
+      let totalItems = 0;
+      let doAuthMethodsExist = false;
+      if (this.can.can('list model', scope, { collection: 'auth-methods' })) {
+        // TODO: Remove storeToken option as this is a temporary fix for auth-methods.
+        const options = { storeToken: false };
+        authMethods = await this.store.query(
+          'auth-method',
+          {
+            scope_id,
+            query: { search, filters },
+            page,
+            pageSize,
+          },
+          options,
+        );
+        totalItems = authMethods.meta?.totalItems;
+        doAuthMethodsExist = await this.getDoAuthMethodsExist(
+          scope_id,
+          totalItems,
+        );
+      }
+
+      return { authMethods, doAuthMethodsExist, totalItems };
+    },
+  );
 
   /**
    * Sets doAuthMethodsExist to true if there exists any auth methods.

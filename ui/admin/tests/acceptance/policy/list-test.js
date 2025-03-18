@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, currentURL, find } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -18,10 +18,6 @@ module('Acceptance | policies | list', function (hooks) {
 
   let featuresService;
   let intl;
-
-  const STORAGE_POLICY_TITLE = 'Storage Policies';
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
 
   const instances = {
     scopes: {
@@ -66,9 +62,9 @@ module('Acceptance | policies | list', function (hooks) {
         'policies'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.policies}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.policies)).exists();
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
 
     assert
       .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
@@ -94,14 +90,14 @@ module('Acceptance | policies | list', function (hooks) {
       ].includes('create'),
     );
     assert
-      .dom('[title="General"] a:nth-of-type(3)')
-      .doesNotIncludeText(STORAGE_POLICY_TITLE);
+      .dom(commonSelectors.GENERAL_SIDEBAR_NAV_LINK(urls.policies))
+      .doesNotExist();
 
     await visit(urls.policies);
 
     assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.neither-list-nor-create', {
-        resource: STORAGE_POLICY_TITLE,
+        resource: 'Storage Policies',
       }),
     );
     assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
@@ -127,13 +123,13 @@ module('Acceptance | policies | list', function (hooks) {
         'policies'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.policies}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.policies)).exists();
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
 
     assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.create-but-not-list', {
-        resource: STORAGE_POLICY_TITLE,
+        resource: 'Storage Policies',
       }),
     );
     assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
@@ -159,9 +155,9 @@ module('Acceptance | policies | list', function (hooks) {
         'policies'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.policies}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.policies)).exists();
 
-    await click(`[href="${urls.policies}"]`);
+    await click(commonSelectors.HREF(urls.policies));
 
     assert
       .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
@@ -174,7 +170,7 @@ module('Acceptance | policies | list', function (hooks) {
 
     assert.false(featuresService.isEnabled('ssh-session-recording'));
 
-    assert.notOk(find(`[href="${urls.policies}"]`));
+    assert.dom(commonSelectors.HREF(urls.policies)).doesNotExist();
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
@@ -185,12 +181,16 @@ module('Acceptance | policies | list', function (hooks) {
     });
     urls.policy = `${urls.policies}/${instances.policy.id}`;
 
-    await click(`[href="${urls.policies}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.policies));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Edit');
-    await click(DROPDOWN_ITEM_SELECTOR);
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_LINK)
+      .exists()
+      .hasText('Edit');
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_LINK);
+
     assert.strictEqual(currentURL(), urls.policy);
   });
 });

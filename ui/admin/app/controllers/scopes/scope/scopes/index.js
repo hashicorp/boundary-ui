@@ -6,14 +6,13 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { debounce } from 'core/decorators/debounce';
 
 export default class ScopesScopeScopesIndexController extends Controller {
   // =attributes
 
   queryParams = ['search', 'page', 'pageSize'];
 
-  @tracked search = '';
+  @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
 
@@ -24,7 +23,6 @@ export default class ScopesScopeScopesIndexController extends Controller {
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
