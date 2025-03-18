@@ -29,6 +29,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     { types: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked search;
@@ -38,6 +40,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked selectedTarget;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   get availableSessionOptions() {
     return [
