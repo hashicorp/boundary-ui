@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeUsersIndexRoute extends Route {
   // =attributes
@@ -33,30 +34,42 @@ export default class ScopesScopeUsersIndexRoute extends Route {
    * Loads queried users and the number of users under current scope.
    * @returns {Promise<{totalItems: number, users: [UserModel], doUsersExist: boolean }> }
    */
-  async model({ search, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-    };
-
-    let users;
-    let totalItems = 0;
-    let doUsersExist = false;
-    if (this.can.can('list model', scope, { collection: 'users' })) {
-      users = await this.store.query('user', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
-      totalItems = users.meta?.totalItems;
-      doUsersExist = await this.getDoUsersExist(scope_id, totalItems);
-    }
-
-    return { users, doUsersExist, totalItems };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+      };
+
+      let users;
+      let totalItems = 0;
+      let doUsersExist = false;
+      if (this.can.can('list model', scope, { collection: 'users' })) {
+        users = await this.store.query('user', {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        });
+        totalItems = users.meta?.totalItems;
+        doUsersExist = await this.getDoUsersExist(scope_id, totalItems);
+      }
+
+      return { users, doUsersExist, totalItems };
+    },
+  );
 
   /**
    * Sets doUsersExist to true if there exists any users.
