@@ -35,13 +35,25 @@ function sortJsonApiRecords(records, { querySort, schema }) {
       (querySort.attribute && schema.attributes.has(querySort.attribute)),
   );
 
-  const sortAttribute = querySort.attribute ?? SORT_UNIVERSAL_KEY_CREATED_TIME;
+  const sortAttribute = querySort.attribute || SORT_UNIVERSAL_KEY_CREATED_TIME;
   // the default sort is ascending unless the sort attribute is `created_time` key in which case it is descending
   const defaultSortDirection =
     sortAttribute === SORT_UNIVERSAL_KEY_CREATED_TIME
       ? SORT_DIRECTION_DESCENDING
       : SORT_DIRECTION_ASCENDING;
-  const sortDirection = querySort.direction ?? defaultSortDirection;
+  const sortDirection = querySort.direction || defaultSortDirection;
+
+  const validSortDirections = [
+    SORT_DIRECTION_ASCENDING,
+    SORT_DIRECTION_DESCENDING,
+  ];
+  assert(
+    `The sort direction "${sortDirection}" is one of ${validSortDirections.join(
+      ', ',
+    )}`,
+    validSortDirections.includes(sortDirection),
+  );
+
   const attributeDataType = schema.attributes.get(sortAttribute)?.type;
   const sortFunction = sortFunctions[attributeDataType] ?? sortFunctions.string;
 
