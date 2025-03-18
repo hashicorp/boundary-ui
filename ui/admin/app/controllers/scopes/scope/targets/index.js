@@ -103,6 +103,14 @@ export default class ScopesScopeTargetsIndexController extends Controller {
 
   // =actions
 
+  @action
+  customOnSort(_sortBy, sortOrder) {
+    this.sortDirection = sortOrder;
+    if (this.sortAttribute !== _sortBy) {
+      this.sortAttribute = _sortBy;
+    }
+  }
+
   /**
    * Handles input on each keystroke and the search queryParam
    * @param {object} event
