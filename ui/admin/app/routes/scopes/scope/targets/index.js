@@ -38,6 +38,14 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refresModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -47,7 +55,15 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
    * active sessions filtering options.
    * @returns {Promise<{totalItems: number, targets: [TargetModel], doTargetsExist: boolean }> }
    */
-  async model({ search, availableSessions, types, page, pageSize }) {
+  async model({
+    search,
+    availableSessions,
+    types,
+    page,
+    pageSize,
+    sortAttribute,
+    sortDirection,
+  }) {
     const scope = this.modelFor('scopes.scope');
     const { id: scope_id } = scope;
 
@@ -82,7 +98,14 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     if (this.can.can('list model', scope, { collection: 'targets' })) {
       targets = await this.store.query('target', {
         scope_id,
-        query: { search, filters },
+        query: {
+          search,
+          filters,
+          sort: {
+            attribute: sortAttribute,
+            direction: sortDirection,
+          },
+        },
         page,
         pageSize,
       });
