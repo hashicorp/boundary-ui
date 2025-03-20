@@ -66,6 +66,7 @@ module('Acceptance | workers | update', function (hooks) {
 
   test('saving an existing worker with invalid fields displays error messages', async function (assert) {
     const errorMessage = 'Error in provided request.';
+    const errorDescription = 'Must be all lowercase.';
     this.server.patch('/workers/:id', () => {
       return new Response(
         400,
@@ -74,6 +75,14 @@ module('Acceptance | workers | update', function (hooks) {
           status: 400,
           code: 'invalid_argument',
           message: errorMessage,
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: errorDescription,
+              },
+            ],
+          },
         },
       );
     });
@@ -84,5 +93,6 @@ module('Acceptance | workers | update', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
   });
 });
