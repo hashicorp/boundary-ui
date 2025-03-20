@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -24,7 +24,6 @@ module('Acceptance | roles | update', function (hooks) {
     role: null,
   };
   const urls = {
-    orgScope: null,
     roles: null,
     role: null,
     newRole: null,
@@ -58,29 +57,42 @@ module('Acceptance | roles | update', function (hooks) {
 
   test('can save changes to an existing role', async function (assert) {
     await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="submit"]');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.role);
-    assert.strictEqual(this.server.db.roles[0].name, 'Updated admin role');
+    assert.strictEqual(
+      this.server.schema.roles.all().models[0].name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
   });
 
   test('cannot make changes to an existing role without proper authorization', async function (assert) {
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.role);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can cancel changes to an existing role', async function (assert) {
     await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'Updated admin role');
-    await click('.rose-form-actions [type="button"]');
-    assert.notEqual(find('[name="name"]').value, 'Updated admin role');
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(
+      this.server.schema.roles.all().models[0].name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
   });
 
   test('saving an existing role with invalid fields displays error messages', async function (assert) {
+    const errorMessage = 'Error in provided request.';
+    const errorDescription = 'Must be all lowercase.';
     this.server.patch('/roles/:id', () => {
       return new Response(
         400,
@@ -88,12 +100,12 @@ module('Acceptance | roles | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: errorMessage,
           details: {
             request_fields: [
               {
                 name: 'name',
-                description: 'Name is required.',
+                description: errorDescription,
               },
             ],
           },
@@ -101,16 +113,11 @@ module('Acceptance | roles | update', function (hooks) {
       );
     });
     await visit(urls.role);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.strictEqual(
-      find('.hds-form-error__message').textContent.trim(),
-      'Name is required.',
-      'Displays field-level errors.',
-    );
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
   });
 });
