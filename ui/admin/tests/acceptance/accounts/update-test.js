@@ -56,12 +56,12 @@ module('Acceptance | accounts | update', function (hooks) {
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].name,
-      'updated name',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -69,17 +69,20 @@ module('Acceptance | accounts | update', function (hooks) {
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
-    await fillIn(commonSelectors.FIELD_DESCRIPTION, 'updated desc');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].name,
-      'updated name',
+      commonSelectors.FIELD_NAME_VALUE,
     );
     assert.strictEqual(
       this.server.schema.accounts.all().models[0].description,
-      'updated desc',
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
   });
 
@@ -94,17 +97,13 @@ module('Acceptance | accounts | update', function (hooks) {
   test('can update an account and cancel changes', async function (assert) {
     await visit(urls.account);
 
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'updated name');
-    await click('form button:not([type="submit"])');
-
     await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.CANCEL_BTN);
 
     assert.notEqual(
       this.server.schema.accounts.all().models[0].name,
-      'updated name',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -123,7 +122,7 @@ module('Acceptance | accounts | update', function (hooks) {
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, 'updated name');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
     await a11yAudit();
@@ -153,7 +152,7 @@ module('Acceptance | accounts | update', function (hooks) {
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
-    await fillIn(commonSelectors.FIELD_NAME, 'existing account');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
     await a11yAudit();
