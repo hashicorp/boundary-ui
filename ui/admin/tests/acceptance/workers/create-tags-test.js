@@ -10,20 +10,13 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | workers | worker | create-tags', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
-  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const MANAGE_DROPDOWN_TOGGLE =
-    '[data-test-manage-worker-dropdown] button:first-child';
-  const CREATE_TAGS_BUTTON_SELECTOR =
-    '[data-test-manage-worker-dropdown] ul a:first-child';
-  const KEY_INPUT_SELECTOR = '[name="api_tags"] tr td:first-child input';
-  const VALUE_INPUT_SELECTOR = '[name="api_tags"] tr td:nth-child(2) input';
-  const ADD_INPUT_SELECTOR = '[name="api_tags"] tr td:last-child button';
+  let confirmService;
 
   const instances = {
     scopes: {
@@ -48,6 +41,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     urls.worker = `${urls.workers}/${instances.worker.id}`;
     urls.tags = `${urls.worker}/tags`;
     urls.createTags = `${urls.worker}/create-tags`;
+    confirmService = this.owner.lookup('service:confirm');
 
     await authenticateSession({ username: 'admin' });
   });
@@ -55,8 +49,8 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   test('visiting worker create tags', async function (assert) {
     await visit(urls.worker);
 
-    await click(MANAGE_DROPDOWN_TOGGLE);
-    await click(CREATE_TAGS_BUTTON_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_WORKER);
+    await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.createTags);
@@ -69,48 +63,45 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
       );
     await visit(urls.worker);
 
-    await click(MANAGE_DROPDOWN_TOGGLE);
+    await click(selectors.MANAGE_DROPDOWN_WORKER);
 
-    assert.dom(CREATE_TAGS_BUTTON_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS).doesNotExist();
   });
 
   test('user can save worker tags', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
 
-    await click(MANAGE_DROPDOWN_TOGGLE);
-    await click(CREATE_TAGS_BUTTON_SELECTOR);
-    await fillIn(KEY_INPUT_SELECTOR, 'key');
-    await fillIn(VALUE_INPUT_SELECTOR, 'value');
-    await click(ADD_INPUT_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_WORKER);
+    await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
+    await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
+    await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+    await click(commonSelectors.SAVE_BTN);
 
-    await click(SAVE_BUTTON_SELECTOR);
-
-    assert.dom('tbody tr').exists({ count: 12 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 12 });
     assert.strictEqual(currentURL(), urls.tags);
   });
 
   test('user can cancel tag creation', async function (assert) {
     await visit(urls.worker);
 
-    await click(MANAGE_DROPDOWN_TOGGLE);
-    await click(CREATE_TAGS_BUTTON_SELECTOR);
-
-    await click(CANCEL_BUTTON_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_WORKER);
+    await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.tags);
   });
 
   test('user is prompted to confirm exit when there are unsaved changes', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.createTags);
-    await fillIn(KEY_INPUT_SELECTOR, 'key');
-    await fillIn(VALUE_INPUT_SELECTOR, 'value');
-    await click(ADD_INPUT_SELECTOR);
 
-    await click(`[href="${urls.workers}"]`);
+    await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
+    await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+    await click(commonSelectors.HREF(urls.workers));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -120,14 +111,13 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   });
 
   test('user can cancel transition when there are unsaved changes', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.createTags);
-    await fillIn(KEY_INPUT_SELECTOR, 'key');
-    await fillIn(VALUE_INPUT_SELECTOR, 'value');
-    await click(ADD_INPUT_SELECTOR);
 
-    await click(`[href="${urls.workers}"]`);
+    await fillIn(selectors.FIELD_KEY, selectors.FIELD_KEY_VALUE);
+    await fillIn(selectors.FIELD_VALUE, selectors.FIELD_VALUE_VALUE);
+    await click(selectors.ADD_WORKER_TAG_ACTION);
+    await click(commonSelectors.HREF(urls.workers));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 

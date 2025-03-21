@@ -9,18 +9,8 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-
-const WORKERS_FLYOUT = '[data-test-worker-tags-flyout]';
-const WORKERS_FLYOUT_DISMISS = '[data-test-worker-tags-flyout] div button';
-const WORKERS_FLYOUT_TABLE_BODY = '[data-test-worker-tags-flyout] tbody';
-const WORKERS_FLYOUT_TABLE_ROWS = '[data-test-worker-tags-flyout] tbody tr';
-const WORKERS_FLYOUT_VIEW_MORE_TAGS =
-  '[data-test-worker-tags-flyout] .view-more-tags a';
-const WORKER_TAGS_BUTTON = (workerId) =>
-  `[data-test-worker-tags-flyout-button="${workerId}"]`;
-const TAGS_FILTER_TOGGLE = '.workers details summary';
-const TAGS_FILTER_FIRST_ITEM_SELECTOR =
-  '.workers details div input:first-child';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | workers | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -63,20 +53,21 @@ module('Acceptance | workers | list', function (hooks) {
   test('Users can navigate to workers with proper authorization', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.globalScope);
+
     assert.ok(
       instances.scopes.global.authorized_collection_actions.workers.includes(
         'list',
       ),
     );
-    assert.dom(`[href="${urls.workers}"]`).isVisible();
+    assert.dom(commonSelectors.HREF(urls.workers)).isVisible();
   });
 
   test('Users cannot navigate to workers without list or create permissions', async function (assert) {
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = [];
-
     await visit(urls.globalScope);
-    assert.dom(`[href="${urls.workers}"]`).isNotVisible();
+
+    assert.dom(commonSelectors.HREF(urls.workers)).isNotVisible();
   });
 
   test('Users can navigate to workers with only create permission', async function (assert) {
@@ -84,49 +75,59 @@ module('Acceptance | workers | list', function (hooks) {
     instances.scopes.global.authorized_collection_actions.workers = [
       'create:worker-led',
     ];
-
     await visit(urls.globalScope);
-    assert.dom(`[href="${urls.workers}"]`).isVisible();
+
+    assert.dom(commonSelectors.HREF(urls.workers)).isVisible();
   });
 
   test('Users can navigate to workers with only list permission', async function (assert) {
     featuresService.enable('byow');
     instances.scopes.global.authorized_collection_actions.workers = ['list'];
-
     await visit(urls.globalScope);
-    assert.dom(`[href="${urls.workers}"]`).isVisible();
+
+    assert.dom(commonSelectors.HREF(urls.workers)).isVisible();
   });
 
   test('Users can filter by tags', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.workers);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 2 });
 
-    await click(TAGS_FILTER_TOGGLE);
-    await click(TAGS_FILTER_FIRST_ITEM_SELECTOR);
+    await click(selectors.WORKER_TAGS_FILTER_DROPDOWN);
+    await click(selectors.WORKER_TAGS_FILTER_DROPDOWN_FIRST_ITEM);
 
-    assert.dom('tbody tr').exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('Users can open and close tags flyout for a specific worker', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.workers);
-    assert.dom(WORKERS_FLYOUT).isNotVisible();
 
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
-    assert.dom(WORKERS_FLYOUT).isVisible();
+    assert.dom(selectors.WORKER_TAGS_FLYOUT).isNotVisible();
 
-    await click(WORKERS_FLYOUT_DISMISS);
-    assert.dom(WORKERS_FLYOUT).isNotVisible();
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
+
+    assert.dom(selectors.WORKER_TAGS_FLYOUT).isVisible();
+
+    await click(selectors.WORKER_TAGS_FLYOUT_DISMISS_BUTTON);
+
+    assert.dom(selectors.WORKER_TAGS_FLYOUT).isNotVisible();
   });
 
   test('Users can see worker tags in the tags flyout', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.workers);
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
-    assert.dom(WORKERS_FLYOUT_TABLE_BODY).includesText('os = z-os');
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
+
+    assert
+      .dom(selectors.WORKER_TAGS_FLYOUT_TABLE_BODY)
+      .includesText('os = z-os');
   });
 
   test('Users can only see first 10 tags in the tags flyout', async function (assert) {
@@ -148,9 +149,12 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
-    assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
+
+    assert.dom(selectors.WORKER_TAGS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
   });
 
   test('Users can click on "view more tags" if there are more than 10 tags', async function (assert) {
@@ -172,10 +176,13 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
-    assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
-    assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isVisible();
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
+
+    assert.dom(selectors.WORKER_TAGS_FLYOUT_TABLE_ROWS).exists({ count: 10 });
+    assert.dom(selectors.WORKER_TAGS_FLYOUT_VIEW_MORE_TAGS_BUTTON).isVisible();
   });
 
   test('Users do not see "view more tags" if there are 10 or less tags', async function (assert) {
@@ -191,26 +198,34 @@ module('Acceptance | workers | list', function (hooks) {
     });
 
     await visit(urls.workers);
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
-    assert.dom(WORKERS_FLYOUT_TABLE_ROWS).exists({ count: 5 });
-    assert.dom(WORKERS_FLYOUT_VIEW_MORE_TAGS).isNotVisible();
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
+
+    assert.dom(selectors.WORKER_TAGS_FLYOUT_TABLE_ROWS).exists({ count: 5 });
+    assert
+      .dom(selectors.WORKER_TAGS_FLYOUT_VIEW_MORE_TAGS_BUTTON)
+      .isNotVisible();
   });
 
   test('Users do not see worker tags flyout when returning to workers list', async function (assert) {
     featuresService.enable('byow');
     await visit(urls.workers);
-    await click(WORKER_TAGS_BUTTON(instances.worker.id));
 
-    assert.dom(WORKERS_FLYOUT).isVisible();
+    await click(
+      selectors.TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON(instances.worker.id),
+    );
 
-    await click(WORKERS_FLYOUT_VIEW_MORE_TAGS);
+    assert.dom(selectors.WORKER_TAGS_FLYOUT).isVisible();
+
+    await click(selectors.WORKER_TAGS_FLYOUT_VIEW_MORE_TAGS_BUTTON);
 
     assert.strictEqual(currentURL(), urls.workerTags);
 
-    await click(`[href="${urls.workers}"]`);
+    await click(commonSelectors.HREF(urls.workers));
 
     assert.strictEqual(currentURL(), urls.workers);
-    assert.dom(WORKERS_FLYOUT).isNotVisible();
+    assert.dom(selectors.WORKER_TAGS_FLYOUT).isNotVisible();
   });
 });
