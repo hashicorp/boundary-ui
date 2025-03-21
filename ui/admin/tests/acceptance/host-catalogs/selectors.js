@@ -16,3 +16,5 @@ export const FIELD_PROJECT_VALUE = 'project ID';
 
 export const FIELD_CLIENT_EMAIL = '[name="client_email"]';
 export const FIELD_CLIENT_EMAIL_VALUE = 'email';
+
+export const NO_RESULTS_MSG = '[data-test-no-host-catalog-results]';
