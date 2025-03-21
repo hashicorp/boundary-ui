@@ -4,20 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, find } from '@ember/test-helpers';
+import { visit, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | delete', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
-  const DELETE_DROPDOWN_SELECTOR =
-    '.hds-dropdown-list-item--color-critical button';
 
   const instances = {
     scopes: {
@@ -28,7 +25,6 @@ module('Acceptance | roles | delete', function (hooks) {
     role: null,
   };
   const urls = {
-    orgScope: null,
     roles: null,
     role: null,
     newRole: null,
@@ -63,8 +59,10 @@ module('Acceptance | roles | delete', function (hooks) {
   test('can delete a role', async function (assert) {
     const rolesCount = this.server.db.roles.length;
     await visit(urls.role);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_REMOVE);
+
     assert.strictEqual(this.server.db.roles.length, rolesCount - 1);
   });
 
@@ -72,9 +70,10 @@ module('Acceptance | roles | delete', function (hooks) {
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.role);
-    assert.notOk(
-      find('.rose-layout-page-actions .rose-dropdown-button-danger'),
-    );
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+
+    assert.dom(selectors.MANAGE_DROPDOWN_ROLES_REMOVE).doesNotExist();
   });
 
   test('errors are displayed when delete project fails', async function (assert) {
@@ -90,8 +89,10 @@ module('Acceptance | roles | delete', function (hooks) {
       );
     });
     await visit(urls.role);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_REMOVE);
+
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });
