@@ -12,3 +12,12 @@ export const MANAGE_DROPDOWN_ROLES_SCOPES =
   '[data-test-manage-dropdown-scopes]';
 export const MANAGE_DROPDOWN_ROLES_REMOVE =
   '[data-test-manage-roles-dropdown] div:last-child button';
+
+export const ROLE_BADGE = (id) =>
+  `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
+export const ROLE_TOOLTIP_BTN = (id) =>
+  `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-tooltip-button`;
+export const ROLE_TOOLTIP_CONTENT = (id) =>
+  `tbody [data-test-role-row="${id}"] td:nth-child(2) [data-tippy-root]`;
+
+export const NO_RESULTS_MSG = '[data-test-no-role-results]';

@@ -17,20 +17,13 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const ROLE_BADGE_SELECTOR = (id) =>
-    `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
-  const ROLE_TOOLTIP_BTN_SELECTOR = (id) =>
-    `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-tooltip-button`;
-  const ROLE_TOOLTIP_CONTENT_SELECTOR = (id) =>
-    `tbody [data-test-role-row="${id}"] td:nth-child(2) [data-tippy-root]`;
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-role-results]';
 
   const instances = {
     scopes: {
@@ -72,64 +65,66 @@ module('Acceptance | roles | list', function (hooks) {
   test('users can navigate to roles with proper authorization', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
+    await click(commonSelectors.HREF(urls.orgScope));
 
     assert.true(
       instances.scopes.org.authorized_collection_actions.roles.includes('list'),
     );
-    assert.dom(`[href="${urls.roles}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.roles)).exists();
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
     instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
+    await click(commonSelectors.HREF(urls.orgScope));
 
     assert.false(
       instances.scopes.org.authorized_collection_actions.roles.includes('list'),
     );
-    assert.dom(`[href="${urls.roles}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.roles)).doesNotExist();
   });
 
   test('users can navigate to index with only create action', async function (assert) {
     instances.scopes.org.authorized_collection_actions.roles = ['create'];
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.orgScope}"]`);
+    await click(commonSelectors.HREF(urls.orgScope));
 
-    assert.dom(`[href="${urls.roles}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.roles)).exists();
   });
 
-  test('user can search for a specifc role by id', async function (assert) {
+  test('user can search for a specific role by id', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.roles}"]`);
+    await click(commonSelectors.HREF(urls.roles));
 
-    assert.dom(`[href="${urls.role1}"]`).exists();
-    assert.dom(`[href="${urls.role2}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.role1)).exists();
+    assert.dom(commonSelectors.HREF(urls.role2)).exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.role1.id);
-    await waitUntil(() => findAll(`[href="${urls.role2}"]`).length === 0);
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.role1.id);
+    await waitUntil(
+      () => findAll(commonSelectors.HREF(urls.role2)).length === 0,
+    );
 
-    assert.dom(`[href="${urls.role1}"]`).exists();
-    assert.dom(`[href="${urls.role2}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.role1)).exists();
+    assert.dom(commonSelectors.HREF(urls.role2)).doesNotExist();
   });
 
   test('user can search for roles and get no results', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.roles}"]`);
+    await click(commonSelectors.HREF(urls.roles));
 
-    assert.dom(`[href="${urls.role1}"]`).exists();
-    assert.dom(`[href="${urls.role2}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.role1)).exists();
+    assert.dom(commonSelectors.HREF(urls.role2)).exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake role that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await fillIn(commonSelectors.SEARCH_INPUT, 'fake role that does not exist');
+    await waitUntil(() => findAll(selectors.NO_RESULTS_MSG).length === 1);
 
-    assert.dom(`[href="${urls.role1}"]`).doesNotExist();
-    assert.dom(`[href="${urls.role2}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(commonSelectors.HREF(urls.role1)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.role2)).doesNotExist();
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
   test('correct badge in grants applied column is visible to user', async function (assert) {
@@ -138,22 +133,22 @@ module('Acceptance | roles | list', function (hooks) {
     );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.roles}"]`);
+    await click(commonSelectors.HREF(urls.roles));
 
     assert.true(instances.role2.grant_scope_ids.includes(GRANT_SCOPE_THIS));
-    assert.dom(ROLE_BADGE_SELECTOR(instances.role1.id)).hasText('No');
-    assert.dom(ROLE_BADGE_SELECTOR(instances.role2.id)).hasText('Yes');
+    assert.dom(selectors.ROLE_BADGE(instances.role1.id)).hasText('No');
+    assert.dom(selectors.ROLE_BADGE(instances.role2.id)).hasText('Yes');
 
-    await focus(ROLE_TOOLTIP_BTN_SELECTOR(instances.role1.id));
+    await focus(selectors.ROLE_TOOLTIP_BTN(instances.role1.id));
 
     assert
-      .dom(ROLE_TOOLTIP_CONTENT_SELECTOR(instances.role1.id))
+      .dom(selectors.ROLE_TOOLTIP_CONTENT(instances.role1.id))
       .hasText('The grants on this role have not been applied to this scope.');
 
-    await focus(ROLE_TOOLTIP_BTN_SELECTOR(instances.role2.id));
+    await focus(selectors.ROLE_TOOLTIP_BTN(instances.role2.id));
 
     assert
-      .dom(ROLE_TOOLTIP_CONTENT_SELECTOR(instances.role2.id))
+      .dom(selectors.ROLE_TOOLTIP_CONTENT(instances.role2.id))
       .hasText('The grants on this role have been applied to this scope.');
   });
 });
