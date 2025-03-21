@@ -8,6 +8,7 @@
     <Hds::CodeEditor
       @ariaLabel='Worker Filter'
       @hasCopyButton={{true}}
+      @isLintingEnabled={{true}}
       @language='shell'
       @value={{or (get @model @name) ''}}
       @onInput={{fn this.setWorkerFilter @model @name}}
