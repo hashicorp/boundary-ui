@@ -17,39 +17,12 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { HCP_MANAGED_KEY } from 'api/models/worker';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | workers | worker | tags', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const CONFIG_TAG_TOOLTIP_SELECTOR =
-    'tbody tr:first-child td:nth-child(3) button';
-  const CONFIG_TAG_TOOLTIP_TEXT_SELECTOR =
-    'tbody tr:first-child td:nth-child(3) > div';
-  const API_TAG_KEY_SELECTOR = (row) =>
-    `tbody tr:nth-child(${row}) td:first-child pre`;
-  const API_TAG_VALUE_SELECTOR = (row) =>
-    `tbody tr:nth-child(${row}) td:nth-child(2) pre`;
-  const API_TAG_ACTION_SELECTOR =
-    'tbody tr:nth-child(4) td:nth-child(4) button';
-  const API_TAG_FIRST_BUTTON_SELECTOR =
-    'tbody tr:nth-child(4) td:nth-child(4) ul li:first-child button';
-  const API_TAG_LAST_BUTTON_SELECTOR =
-    'tbody tr:nth-child(4) td:nth-child(4) ul li:nth-child(2) button';
-  const EDIT_TAG_KEY_INPUT_SELECTOR =
-    '[data-test-edit-modal] [name="edit-tag-key"]';
-  const EDIT_TAG_VALUE_INPUT_SELECTOR =
-    '[data-test-edit-modal] [name="edit-tag-value"]';
-  const EDIT_TAG_CONFIRM_BUTTON = '[data-test-edit-modal] button:first-child';
-  const EDIT_TAG_CANCEL_BUTTON = '[data-test-edit-modal] button:last-child';
-  const CONFIRMATION_MODAL_INPUT_SELECTOR =
-    '[data-test-confirmation-modal] input';
-  const CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR =
-    '[data-test-confirmation-modal] button:first-child';
-  const CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR =
-    '[data-test-confirmation-modal] button:last-child';
-  const NO_TAGS_STATE_TITLE = '[data-test-no-tags] div:first-child';
-  const NO_TAGS_STATE_ACTION = '[data-test-no-tags] div:nth-child(3) a';
 
   const instances = {
     scopes: {
@@ -78,21 +51,22 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
   test('visiting worker tags', async function (assert) {
     await visit(urls.worker);
-    await click(`[href="${urls.tags}"]`);
+
+    await click(commonSelectors.HREF(urls.tags));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tags);
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
   });
 
   test('config tags display a tooltip for HCP managed tag', async function (assert) {
     instances.worker.config_tags = { [HCP_MANAGED_KEY]: ['true'] };
     await visit(urls.tags);
 
-    await focus(CONFIG_TAG_TOOLTIP_SELECTOR);
+    await focus(selectors.TABLE_ROW_CONFIG_TAG_TOOLTIP_BUTTON);
 
     assert
-      .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
+      .dom(selectors.TABLE_ROW_CONFIG_TAG_TOOLTIP_TEXT)
       .hasText(
         'This is a HCP managed worker, you cannot edit or delete this worker’s tags.',
       );
@@ -101,43 +75,43 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   test('config tags display a tooltip self managed tag', async function (assert) {
     await visit(urls.tags);
 
-    await focus(CONFIG_TAG_TOOLTIP_SELECTOR);
+    await focus(selectors.TABLE_ROW_CONFIG_TAG_TOOLTIP_BUTTON);
 
     assert
-      .dom(CONFIG_TAG_TOOLTIP_TEXT_SELECTOR)
+      .dom(selectors.TABLE_ROW_CONFIG_TAG_TOOLTIP_TEXT)
       .hasText('To edit config tags, edit them in your worker config file.');
   });
 
   test('users can remove a specific tag', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
 
-    await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_LAST_BUTTON_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON);
 
-    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isDisabled();
+    assert.dom(selectors.MODAL_CONFIRMATION_SAVE_BUTTON).isDisabled();
 
-    await fillIn(CONFIRMATION_MODAL_INPUT_SELECTOR, 'REMOVE');
+    await fillIn(selectors.MODAL_CONFIRMATION_FIELD_REMOVE, 'REMOVE');
 
-    assert.dom(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR).isEnabled();
+    assert.dom(selectors.MODAL_CONFIRMATION_CANCEL_BUTTON).isEnabled();
 
-    await click(CONFIRMATION_MODAL_REMOVE_BUTTON_SELECTOR);
+    await click(selectors.MODAL_CONFIRMATION_SAVE_BUTTON);
 
-    assert.dom('tbody tr').exists({ count: 10 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 10 });
   });
 
   test('user can cancel tag removal', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
 
-    await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_LAST_BUTTON_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON);
 
-    await click(CONFIRMATION_MODAL_CANCEL_BUTTON_SELECTOR);
+    await click(selectors.MODAL_CONFIRMATION_CANCEL_BUTTON);
 
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
   });
 
   test('user cannot remove a tag without proper permission', async function (assert) {
@@ -147,53 +121,57 @@ module('Acceptance | workers | worker | tags', function (hooks) {
       );
     await visit(urls.tags);
 
-    assert.dom('tbody tr').exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
 
-    await click(API_TAG_ACTION_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
 
     // Asserts first button is for editing and there is no second button
-    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Edit Tag');
-    assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_FIRST_BUTTON)
+      .hasText('Edit Tag');
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON)
+      .doesNotExist();
   });
 
   test('users can edit a specific tag', async function (assert) {
     await visit(urls.tags);
-    const key = find(API_TAG_KEY_SELECTOR(4)).textContent.trim();
-    const value = find(API_TAG_VALUE_SELECTOR(4)).textContent.trim();
+    const key = find(selectors.TABLE_ROW_API_TAG_KEY(4)).textContent.trim();
+    const value = find(selectors.TABLE_ROW_API_TAG_VALUE(4)).textContent.trim();
 
-    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
-    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+    assert.dom(selectors.TABLE_ROW_API_TAG_KEY(4)).hasText(key);
+    assert.dom(selectors.TABLE_ROW_API_TAG_VALUE(4)).hasText(value);
 
-    await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_FIRST_BUTTON_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_FIRST_BUTTON);
 
-    await fillIn(EDIT_TAG_KEY_INPUT_SELECTOR, 'red');
-    await fillIn(EDIT_TAG_VALUE_INPUT_SELECTOR, 'blue');
+    await fillIn(selectors.MODAL_EDIT_TAG_FIELD_KEY, 'red');
+    await fillIn(selectors.MODAL_EDIT_TAG_FIELD_VALUE, 'blue');
 
-    await click(EDIT_TAG_CONFIRM_BUTTON);
+    await click(selectors.MODAL_EDIT_TAG_SAVE_BUTTON);
 
-    assert.dom(API_TAG_KEY_SELECTOR(11)).hasText('red');
-    assert.dom(API_TAG_VALUE_SELECTOR(11)).hasText('blue');
+    assert.dom(selectors.TABLE_ROW_API_TAG_KEY(11)).hasText('red');
+    assert.dom(selectors.TABLE_ROW_API_TAG_VALUE(11)).hasText('blue');
   });
 
   test('users can cancel editing a tag', async function (assert) {
     await visit(urls.tags);
-    const key = find(API_TAG_KEY_SELECTOR(4)).textContent.trim();
-    const value = find(API_TAG_VALUE_SELECTOR(4)).textContent.trim();
+    const key = find(selectors.TABLE_ROW_API_TAG_KEY(4)).textContent.trim();
+    const value = find(selectors.TABLE_ROW_API_TAG_VALUE(4)).textContent.trim();
 
-    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
-    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+    assert.dom(selectors.TABLE_ROW_API_TAG_KEY(4)).hasText(key);
+    assert.dom(selectors.TABLE_ROW_API_TAG_VALUE(4)).hasText(value);
 
-    await click(API_TAG_ACTION_SELECTOR);
-    await click(API_TAG_FIRST_BUTTON_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_FIRST_BUTTON);
 
-    await fillIn(EDIT_TAG_KEY_INPUT_SELECTOR, 'red');
-    await fillIn(EDIT_TAG_VALUE_INPUT_SELECTOR, 'blue');
+    await fillIn(selectors.MODAL_EDIT_TAG_FIELD_KEY, 'red');
+    await fillIn(selectors.MODAL_EDIT_TAG_FIELD_VALUE, 'blue');
 
-    await click(EDIT_TAG_CANCEL_BUTTON);
+    await click(selectors.MODAL_EDIT_TAG_CANCEL_BUTTON);
 
-    assert.dom(API_TAG_KEY_SELECTOR(4)).hasText(key);
-    assert.dom(API_TAG_VALUE_SELECTOR(4)).hasText(value);
+    assert.dom(selectors.TABLE_ROW_API_TAG_KEY(4)).hasText(key);
+    assert.dom(selectors.TABLE_ROW_API_TAG_VALUE(4)).hasText(value);
   });
 
   test('user cannot edit a tag without proper permission', async function (assert) {
@@ -203,11 +181,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
       );
     await visit(urls.tags);
 
-    await click(API_TAG_ACTION_SELECTOR);
+    await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
 
     // Asserts first button is for removing and there is no second button
-    assert.dom(API_TAG_FIRST_BUTTON_SELECTOR).hasText('Remove Tag');
-    assert.dom(API_TAG_LAST_BUTTON_SELECTOR).doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_FIRST_BUTTON)
+      .hasText('Remove Tag');
+    assert
+      .dom(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON)
+      .doesNotExist();
   });
 
   test('user does not see tag action dropdown if they cannot edit or remove tags', async function (assert) {
@@ -218,7 +200,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     await visit(urls.tags);
 
-    assert.dom(API_TAG_ACTION_SELECTOR).doesNotExist();
+    assert.dom(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN).doesNotExist();
   });
 
   test('shows "No tags added" message when there are no worker tags', async function (assert) {
@@ -228,7 +210,9 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     await visit(urls.tags);
 
-    assert.dom(NO_TAGS_STATE_TITLE).hasText('No tags added');
-    assert.dom(NO_TAGS_STATE_ACTION).hasAttribute('href', urls.createTags);
+    assert.dom(selectors.NO_TAGS_STATE_TITLE).hasText('No tags added');
+    assert
+      .dom(selectors.NO_TAGS_STATE_ACTION)
+      .hasAttribute('href', urls.createTags);
   });
 });
