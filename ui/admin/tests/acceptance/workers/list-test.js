@@ -206,7 +206,7 @@ module('Acceptance | workers | list', function (hooks) {
     assert.dom(selectors.WORKER_TAGS_FLYOUT_TABLE_ROWS).exists({ count: 5 });
     assert
       .dom(selectors.WORKER_TAGS_FLYOUT_VIEW_MORE_TAGS_BUTTON)
-      .isNotVisible();
+      .doesNotExist();
   });
 
   test('Users do not see worker tags flyout when returning to workers list', async function (assert) {
