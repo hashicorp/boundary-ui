@@ -39,6 +39,7 @@ export const GENERAL_SIDEBAR_NAV_LINK = (url) =>
   `[title="General"] a[href="${url}"]`;
 export const RESOURCES_SIDEBAR_NAV_LINK = (url) =>
   `[title="Resources"] a[href="${url}"]`;
+export const IAM_SIDEBAR_NAV_LINK = (url) => `[title="IAM"] a[href="${url}"]`;
 
 export const ALERT_TOAST = '[data-test-toast-notification]';
 export const ALERT_TOAST_BODY =

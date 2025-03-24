@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =services
@@ -50,67 +51,88 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    * Load all session recordings.
    * @return {Promise<{ totalItems: number, sessionRecordings: [SessionRecordingModel], doSessionRecordingsExist: boolean, doStorageBucketsExist: boolean }>}
    */
-  async model({ search, time, users, scopes, targets, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    let sessionRecordings;
-    let totalItems = 0;
-    let doSessionRecordingsExist = false;
-    let doStorageBucketsExist = false;
-    const filters = {
-      created_time: [],
-      'create_time_values.user.id': [],
-      'create_time_values.target.scope.id': [],
-      'create_time_values.target.id': [],
-    };
-    if (time) filters.created_time.push({ gte: new Date(time) });
-    users.forEach((user) => {
-      filters['create_time_values.user.id'].push({ equals: user });
-    });
-    scopes.forEach((scope) => {
-      filters['create_time_values.target.scope.id'].push({ equals: scope });
-    });
-    targets.forEach((target) => {
-      filters['create_time_values.target.id'].push({ equals: target });
-    });
-
-    if (
-      this.can.can('list scope', scope, {
-        collection: 'session-recordings',
-      })
-    ) {
-      const queryOptions = {
-        scope_id,
-        recursive: true,
-        query: { search, filters },
-        page,
-        pageSize,
-      };
-
-      sessionRecordings = await this.store.query(
-        'session-recording',
-        queryOptions,
-      );
-      totalItems = sessionRecordings.meta?.totalItems;
-      // Query all session recordings for filtering values if entering route for the first time
-      if (!this.allSessionRecordings) {
-        await this.getAllSessionRecordings(scope_id);
-      }
-      doSessionRecordingsExist = await this.getDoSessionRecordingsExist(
-        scope_id,
-        totalItems,
-      );
-      doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
-
-      return {
-        sessionRecordings,
-        doSessionRecordingsExist: doSessionRecordingsExist,
-        allSessionRecordings: this.allSessionRecordings,
-        totalItems,
-        doStorageBucketsExist: doStorageBucketsExist,
-      };
-    }
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({
+      search,
+      time,
+      users,
+      scopes,
+      targets,
+      page,
+      pageSize,
+      useDebounce,
+    }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+      let sessionRecordings;
+      let totalItems = 0;
+      let doSessionRecordingsExist = false;
+      let doStorageBucketsExist = false;
+      const filters = {
+        created_time: [],
+        'create_time_values.user.id': [],
+        'create_time_values.target.scope.id': [],
+        'create_time_values.target.id': [],
+      };
+      if (time) filters.created_time.push({ gte: new Date(time) });
+      users.forEach((user) => {
+        filters['create_time_values.user.id'].push({ equals: user });
+      });
+      scopes.forEach((scope) => {
+        filters['create_time_values.target.scope.id'].push({ equals: scope });
+      });
+      targets.forEach((target) => {
+        filters['create_time_values.target.id'].push({ equals: target });
+      });
+
+      if (
+        this.can.can('list scope', scope, {
+          collection: 'session-recordings',
+        })
+      ) {
+        const queryOptions = {
+          scope_id,
+          recursive: true,
+          query: { search, filters },
+          page,
+          pageSize,
+        };
+
+        sessionRecordings = await this.store.query(
+          'session-recording',
+          queryOptions,
+        );
+        totalItems = sessionRecordings.meta?.totalItems;
+        // Query all session recordings for filtering values if entering route for the first time
+        if (!this.allSessionRecordings) {
+          await this.getAllSessionRecordings(scope_id);
+        }
+        doSessionRecordingsExist = await this.getDoSessionRecordingsExist(
+          scope_id,
+          totalItems,
+        );
+        doStorageBucketsExist = await this.getDoStorageBucketsExist(scope_id);
+
+        return {
+          sessionRecordings,
+          doSessionRecordingsExist: doSessionRecordingsExist,
+          allSessionRecordings: this.allSessionRecordings,
+          totalItems,
+          doStorageBucketsExist: doStorageBucketsExist,
+        };
+      }
+    },
+  );
 
   /**
    * Sets allSessionRecordings to all session recordings for filters

@@ -4,12 +4,13 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -61,16 +62,17 @@ module('Acceptance | roles | read', function (hooks) {
   test('visiting roles', async function (assert) {
     await visit(urls.roles);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.roles);
   });
 
   test('can navigate to a role form', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.roles}"]`);
-
-    await click('main tbody .hds-table__tr:nth-child(1) a');
+    await click(commonSelectors.HREF(urls.roles));
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.role));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.role);
   });
 
@@ -78,7 +80,8 @@ module('Acceptance | roles | read', function (hooks) {
     instances.role.authorized_actions =
       instances.role.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.roles);
-    assert.notOk(find('main tbody .hds-table__tr:nth-child(1) a'));
+
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.role)).doesNotExist();
   });
 
   test('can navigate to a roles and fetches scopes correctly', async function (assert) {
@@ -89,8 +92,10 @@ module('Acceptance | roles | read', function (hooks) {
     });
 
     await visit(urls.roles);
-    await click('main tbody .hds-table__tr:nth-child(1) a');
+
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.role));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.role);
   });
 

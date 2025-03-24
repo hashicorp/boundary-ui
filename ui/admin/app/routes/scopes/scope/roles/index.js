@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class ScopesScopeRolesIndexRoute extends Route {
   // =attributes
@@ -33,29 +34,41 @@ export default class ScopesScopeRolesIndexRoute extends Route {
    * Loads queried roles and the number of roles under current scope.
    * @returns {Promise<{totalItems: number, roles: [RoleModel], doRolesExist: boolean }> }
    */
-  async model({ search, page, pageSize }) {
-    const scope = this.modelFor('scopes.scope');
-    const { id: scope_id } = scope;
-    const filters = {
-      scope_id: [{ equals: scope_id }],
-    };
-
-    let roles;
-    let totalItems = 0;
-    let doRolesExist = false;
-    if (this.can.can('list model', scope, { collection: 'roles' })) {
-      roles = await this.store.query('role', {
-        scope_id,
-        query: { search, filters },
-        page,
-        pageSize,
-      });
-      totalItems = roles.meta?.totalItems;
-      doRolesExist = await this.getDoRolesExist(scope_id, totalItems);
-    }
-
-    return { roles, doRolesExist, totalItems };
+  async model(params) {
+    const useDebounce =
+      this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
+    return this.retrieveData.perform({ ...params, useDebounce });
   }
+
+  retrieveData = restartableTask(
+    async ({ search, page, pageSize, useDebounce }) => {
+      if (useDebounce) {
+        await timeout(250);
+      }
+
+      const scope = this.modelFor('scopes.scope');
+      const { id: scope_id } = scope;
+      const filters = {
+        scope_id: [{ equals: scope_id }],
+      };
+
+      let roles;
+      let totalItems = 0;
+      let doRolesExist = false;
+      if (this.can.can('list model', scope, { collection: 'roles' })) {
+        roles = await this.store.query('role', {
+          scope_id,
+          query: { search, filters },
+          page,
+          pageSize,
+        });
+        totalItems = roles.meta?.totalItems;
+        doRolesExist = await this.getDoRolesExist(scope_id, totalItems);
+      }
+
+      return { roles, doRolesExist, totalItems };
+    },
+  );
 
   /**
    * Sets doRolesExist to true if there exists any roles.

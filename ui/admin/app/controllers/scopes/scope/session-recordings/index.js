@@ -6,7 +6,6 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { debounce } from 'core/decorators/debounce';
 import { service } from '@ember/service';
 
 export default class ScopesScopeSessionRecordingsIndexController extends Controller {
@@ -29,7 +28,7 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
 
   now = new Date();
 
-  @tracked search = '';
+  @tracked search;
   @tracked time = null;
   @tracked users = [];
   @tracked scopes = [];
@@ -155,7 +154,6 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
    * @param {object} event
    */
   @action
-  @debounce(250)
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;

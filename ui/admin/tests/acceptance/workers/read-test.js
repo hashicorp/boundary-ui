@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | workers | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -62,7 +63,7 @@ module('Acceptance | workers | read', function (hooks) {
     await visit(urls.workers);
     await a11yAudit();
 
-    await click(`[href="${urls.worker}"]`);
+    await click(commonSelectors.HREF(urls.worker));
 
     assert.strictEqual(currentURL(), urls.worker);
   });
@@ -72,19 +73,17 @@ module('Acceptance | workers | read', function (hooks) {
       instances.worker.authorized_actions.filter((itm) => itm !== 'read');
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.workers}"]`);
+    await click(commonSelectors.HREF(urls.workers));
 
-    assert
-      .dom('.hds-table__tbody .hds-table__tr:nth-child(1) a')
-      .isNotVisible();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.worker)).isNotVisible();
   });
 
   test('can navigate to an worker form with proper authorization', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.workers}"]`);
+    await click(commonSelectors.HREF(urls.workers));
 
-    assert.dom('.hds-table__tbody .hds-table__tr:nth-child(1) a').isVisible();
+    assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.worker)).isVisible();
   });
 
   test('users can navigate to worker and incorrect url autocorrects', async function (assert) {

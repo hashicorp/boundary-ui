@@ -18,3 +18,17 @@ export const FIELD_CLIENT_EMAIL = '[name="client_email"]';
 export const FIELD_CLIENT_EMAIL_VALUE = 'email';
 
 export const NO_RESULTS_MSG = '[data-test-no-host-catalog-results]';
+
+export const MANAGE_DROPDOWN_HOST_CATALOG =
+  '[data-test-manage-host-catalogs-dropdown] button:first-child';
+export const MANAGE_DROPDOWN_HOST_CATALOG_DELETE =
+  '[data-test-manage-host-catalogs-dropdown] ul li button';
+
+export const FIELD_ROLE_ARN = '[name="role_arn"]';
+export const FIELD_ROLE_ARN_VALUE = 'arn:aws:iam';
+
+export const FIELD_CREDENTIAL_TYPE =
+  '.dynamic-credential-selection input:checked';
+export const FIELD_DYNAMIC_CREDENTIAL = '[name="dynamic-credential"]';
+export const FIELD_DYNAMIC_CREDENTIAL_VALUE = 'dynamic-credentials';
+export const FIELD_STATIC_CREDENTIAL = '[name="static-credential"]';
