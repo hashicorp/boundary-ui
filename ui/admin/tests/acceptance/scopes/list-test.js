@@ -9,16 +9,13 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | scopes | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-scope-results]';
-  const SCOPE_LINK_SELECTOR = (id) =>
-    `tbody [data-test-scopes-table-row="${id}"] a`;
 
   const instances = {
     scopes: {
@@ -61,60 +58,97 @@ module('Acceptance | scopes | list', function (hooks) {
   test('user can search for a specifc org scope by id', async function (assert) {
     await visit(urls.globalScope);
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org1.id)).exists();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org2.id)).exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
+      .exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.scopes.org1.id);
-    await waitFor(SCOPE_LINK_SELECTOR(instances.scopes.org2.id), { count: 0 });
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.org1.id);
+    await waitFor(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id), {
+      count: 0,
+    });
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org1.id)).exists();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org2.id)).doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
+      .doesNotExist();
   });
 
   test('user can search for org scopes and get no results', async function (assert) {
     await visit(urls.globalScope);
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org1.id)).exists();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org2.id)).exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
+      .exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake org scope that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake org scope that does not exist',
+    );
+    await waitFor(selectors.NO_SCOPE_RESULTS_MSG, { count: 1 });
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org1.id)).doesNotExist();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.org2.id)).doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
+      .doesNotExist();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
+      .doesNotExist();
   });
 
   test('user can search for a specifc project scope by id', async function (assert) {
     await visit(urls.orgScope);
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.project1.id)).exists();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.project2.id)).exists();
-
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.scopes.project1.id);
-    await waitFor(SCOPE_LINK_SELECTOR(instances.scopes.project2.id), {
-      count: 0,
-    });
-
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.project1.id)).exists();
     assert
-      .dom(SCOPE_LINK_SELECTOR(instances.scopes.project2.id))
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
+      .exists();
+
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.project1.id);
+    await waitFor(
+      selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id),
+      {
+        count: 0,
+      },
+    );
+
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
       .doesNotExist();
   });
 
   test('user can search for project scopes and get no results', async function (assert) {
     await visit(urls.orgScope);
 
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.project1.id)).exists();
-    assert.dom(SCOPE_LINK_SELECTOR(instances.scopes.project2.id)).exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
+      .exists();
+    assert
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
+      .exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake org scope that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake org scope that does not exist',
+    );
+    await waitFor(selectors.NO_SCOPE_RESULTS_MSG, { count: 1 });
 
     assert
-      .dom(SCOPE_LINK_SELECTOR(instances.scopes.project1.id))
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
       .doesNotExist();
     assert
-      .dom(SCOPE_LINK_SELECTOR(instances.scopes.project2.id))
+      .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
       .doesNotExist();
   });
 });
