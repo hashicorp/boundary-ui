@@ -17,6 +17,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -43,9 +44,6 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     staticHostCatalog: null,
     gcpHostCatalog: null,
   };
-
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-host-catalog-results]';
 
   hooks.beforeEach(async function () {
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -91,7 +89,8 @@ module('Acceptance | host-catalogs | list', function (hooks) {
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {
     await visit(urls.orgScope);
-    await click(`[href="${urls.projectScope}"]`);
+
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions[
@@ -103,7 +102,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.hostCatalogs)).isVisible();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
@@ -111,7 +110,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       [];
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions[
@@ -123,9 +122,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert
-      .dom('[title="Resources"] a:nth-of-type(3)')
-      .doesNotIncludeText('Host Catalogs');
+    assert.dom(commonSelectors.HREF(urls.hostCatalogs)).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -135,7 +132,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       ].filter((item) => item !== 'list');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions[
@@ -147,11 +144,11 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('create'),
     );
-    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.hostCatalogs)).isVisible();
 
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    assert.dom('.hds-application-state__body-text').isVisible();
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).isVisible();
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.staticHostCatalog))
       .doesNotExist();
@@ -164,7 +161,7 @@ module('Acceptance | host-catalogs | list', function (hooks) {
       ].filter((item) => item !== 'create');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions[
@@ -176,84 +173,94 @@ module('Acceptance | host-catalogs | list', function (hooks) {
         'host-catalogs'
       ].includes('list'),
     );
-    assert.dom(`[href="${urls.hostCatalogs}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.hostCatalogs)).isVisible();
 
-    await click(`[href="${urls.hostCatalogs}"]`);
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
   });
 
   test('user can search for a specific host catalog by id', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.staticHostCatalog.id);
-    await waitFor(`[href="${urls.awsHostCatalog}"]`, { count: 0 });
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
 
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.staticHostCatalog.id);
+    await waitFor(commonSelectors.HREF(urls.awsHostCatalog), {
+      count: 0,
+    });
+
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
   });
 
   test('user can search for aws host catalog', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, TYPE_HOST_CATALOG_PLUGIN_AWS);
-    await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
 
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
+    await fillIn(commonSelectors.SEARCH_INPUT, TYPE_HOST_CATALOG_PLUGIN_AWS);
+    await waitFor(commonSelectors.HREF(urls.staticHostCatalog), { count: 0 });
+
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
   });
 
   test('user can search for azure host catalog', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, TYPE_HOST_CATALOG_PLUGIN_AZURE);
-    await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
 
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    await fillIn(commonSelectors.SEARCH_INPUT, TYPE_HOST_CATALOG_PLUGIN_AZURE);
+    await waitFor(commonSelectors.HREF(urls.staticHostCatalog), { count: 0 });
+
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
   });
 
   test('user can search for gcp host catalog', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).isVisible();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).isVisible();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).isVisible();
-    assert.dom(`[href="${urls.gcpHostCatalog}"]`).isVisible();
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, TYPE_HOST_CATALOG_PLUGIN_GCP);
-    await waitFor(`[href="${urls.staticHostCatalog}"]`, { count: 0 });
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.gcpHostCatalog)).isVisible();
 
-    assert.dom(`[href="${urls.gcpHostCatalog}"]`).isVisible();
+    await fillIn(commonSelectors.SEARCH_INPUT, TYPE_HOST_CATALOG_PLUGIN_GCP);
+    await waitFor(commonSelectors.HREF(urls.staticHostCatalog), { count: 0 });
+
+    assert.dom(commonSelectors.HREF(urls.gcpHostCatalog)).isVisible();
   });
 
   test('user can search for host catalogs and get no results', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.hostCatalogs}"]`);
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).exists();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).exists();
+    await click(commonSelectors.HREF(urls.hostCatalogs));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'wow look at me I am a search query');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).isVisible();
 
-    assert.dom(`[href="${urls.staticHostCatalog}"]`).doesNotExist();
-    assert.dom(`[href="${urls.awsHostCatalog}"]`).doesNotExist();
-    assert.dom(`[href="${urls.azureHostCatalog}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'wow look at me I am a search query',
+    );
+    await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
+
+    assert.dom(commonSelectors.HREF(urls.staticHostCatalog)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.awsHostCatalog)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).doesNotExist();
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 });
