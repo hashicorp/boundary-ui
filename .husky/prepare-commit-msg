@@ -21,4 +21,3 @@ else
   # This is to allow interaction with the terminal for commitizen
   exec < /dev/tty && npx git-cz --hook || true
 fi
-
