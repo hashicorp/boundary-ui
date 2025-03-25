@@ -46,6 +46,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     role: null,
     roleScopes: null,
     manageScopes: null,
+    manageScopesOrg: null,
     manageCustomScopes: null,
   };
 
@@ -74,6 +75,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.roleScopes = `${urls.role}/scopes`;
     urls.manageScopes = `${urls.role}/manage-scopes`;
+    urls.manageScopesOrg = `${urls.manageScopes}/${instances.scopes.org.id}`;
     urls.manageCustomScopes = `${urls.manageScopes}/manage-custom-scopes`;
   });
 
@@ -709,9 +711,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
     await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
@@ -750,9 +750,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(
@@ -797,9 +795,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
     await click(
       selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
@@ -814,9 +810,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await visit(urls.manageScopes);
 
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
     await click(
       selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
@@ -835,9 +829,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await visit(urls.manageScopes);
 
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
     await click(
       selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
@@ -863,9 +855,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
 
     assert
       .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
@@ -899,9 +889,7 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await click(
-      `tbody [href="${urls.manageScopes}/${instances.scopes.org.id}"]`,
-    );
+    await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
 
     assert
       .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
