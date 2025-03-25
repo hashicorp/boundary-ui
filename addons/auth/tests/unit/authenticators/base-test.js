@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import Pretender from 'pretender';
+import { getOwner } from '@ember/owner';
 
 module('Unit | Authenticator | base', function (hooks) {
   setupTest(hooks);
@@ -22,7 +23,7 @@ module('Unit | Authenticator | base', function (hooks) {
 
   test('it deauthenticates on invalidation', async function (assert) {
     assert.expect(1);
-    const authenticator = this.owner.lookup('authenticator:base');
+    const authenticator = getOwner(this).lookup('authenticator:base');
     const endpoint = authenticator.buildDeauthEndpointURL({ id: 'token123' });
     server.delete(endpoint, () => {
       assert.ok(true, 'deauthentication occurred');
