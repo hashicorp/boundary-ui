@@ -23,6 +23,7 @@ export default class ApplicationRoute extends Route {
   @service featureEdition;
   @service indexedDb;
   @service('browser/window') window;
+  @service store;
 
   // =attributes
 
@@ -75,6 +76,10 @@ export default class ApplicationRoute extends Route {
       if (userId && hostUrl) {
         await this.indexedDb.setup(formatDbName(userId, hostUrl));
       }
+    } else {
+      // If the user is unauthenticated then create temporary global scope
+      // if it doesn't already exist to prevent duplicate 'global' id error.
+      this.store.createRecord('scope', { id: 'global', type: 'global' });
     }
   }
 

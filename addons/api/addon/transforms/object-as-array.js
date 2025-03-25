@@ -3,13 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Transform from '@ember-data/serializer/transform';
-
-export default class ObjectAsArrayTransform extends Transform {
+export default class ObjectAsArrayTransform {
   deserialize(serialized) {
     const obj = serialized || {};
     return Object.entries(obj).map(([key, value]) => ({ key, value }));
   }
+
   serialize(deserialized) {
     const array = deserialized || [];
 
@@ -23,5 +22,9 @@ export default class ObjectAsArrayTransform extends Transform {
 
       return result;
     }, {});
+  }
+
+  static create() {
+    return new this();
   }
 }

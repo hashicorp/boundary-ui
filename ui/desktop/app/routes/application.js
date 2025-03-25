@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service store;
 
   // =attributes
 
@@ -49,6 +50,8 @@ export default class ApplicationRoute extends Route {
         tokenId: sessionData?.id,
         token: sessionData?.token,
       });
+    } else {
+      this.store.createRecord('scope', { id: 'global', type: 'global' });
     }
   }
 

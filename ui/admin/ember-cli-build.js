@@ -7,7 +7,9 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+module.exports = async function (defaults) {
+  const { setConfig } = await import('@warp-drive/build-config');
+
   const app = new EmberApp(defaults, {
     hinting: false,
     'ember-cli-babel': {
@@ -36,10 +38,16 @@ module.exports = function (defaults) {
         },
       },
     },
-    // TODO: Update to 4.12 when deprecations are resolved
-    //   as multiple things break when forcing compatibility on > 4.6
-    emberData: {
-      compatWith: '4.6',
+  });
+
+  // TODO: This is config can be removed in ember-data 6.0.
+  // This silences ember-data deprecate warnings by setting to false to
+  // strip the deprecated code (thereby opting into the new behavior).
+  setConfig(app, __dirname, {
+    //compatWith: '5.3',
+    deprecations: {
+      DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
+      DEPRECATE_RELATIONSHIP_REMOTE_UPDATE_CLEARING_LOCAL_STATE: false,
     },
   });
 

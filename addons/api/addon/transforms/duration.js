@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Transform from '@ember-data/serializer/transform';
-
-export default class DurationTransform extends Transform {
+export default class DurationTransform {
   /**
    * Normalize a duration string in the format "3.0001s" to milliseconds.
    * The backend returns a precision of nanoseconds but we round to whole
@@ -36,5 +34,9 @@ export default class DurationTransform extends Transform {
       useGrouping: false,
       maximumFractionDigits: 9,
     })}s`;
+  }
+
+  static create() {
+    return new this();
   }
 }

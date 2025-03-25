@@ -24,6 +24,8 @@ export default class ScopesRoute extends Route {
    * @return {Promise{[ScopeModel]}}
    */
   async model() {
+    // const test = this.store.createRecord('scope', { id: 'global', type: 'global'});
+    // console.log("teswwt ", test)
     // Always preload the global scope, if possible, since the query below
     // only fetches org scopes.
     await this.store.findRecord('scope', 'global').catch(() => {
