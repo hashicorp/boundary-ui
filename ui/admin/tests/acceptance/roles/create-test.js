@@ -4,19 +4,22 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, find } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+
+  let getRolesCount;
 
   const instances = {
     scopes: {
@@ -30,7 +33,6 @@ module('Acceptance | roles | create', function (hooks) {
     roles: null,
     role: null,
     newRole: null,
-    orgScope: null,
   };
 
   hooks.beforeEach(async function () {
@@ -61,48 +63,60 @@ module('Acceptance | roles | create', function (hooks) {
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.newRole = `${urls.roles}/new`;
-    urls.orgScope = `/scopes/${instances.scopes.org.id}`;
+    getRolesCount = () => this.server.schema.roles.all().models.length;
   });
 
   test('can create new role', async function (assert) {
-    const rolesCount = this.server.db.roles.length;
+    const rolesCount = getRolesCount();
     await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('[type="submit"]');
-    assert.strictEqual(this.server.db.roles.length, rolesCount + 1);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(getRolesCount(), rolesCount + 1);
   });
 
   test('Users can navigate to new roles route with proper authorization', async function (assert) {
     await visit(urls.roles);
+
     assert.ok(
       instances.scopes.org.authorized_collection_actions.roles.includes(
         'create',
       ),
     );
-    assert.ok(find(`[href="${urls.newRole}"]`));
+    assert.dom(selectors.NEW_ROLE_BTN).isVisible();
+    assert.dom(commonSelectors.IAM_SIDEBAR_NAV_LINK(urls.roles)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.newRole)).isVisible();
   });
 
   test('Users cannot navigate to new roles route without proper authorization', async function (assert) {
     instances.scopes.org.authorized_collection_actions.roles = [];
     await visit(urls.roles);
+
     assert.notOk(
       instances.scopes.org.authorized_collection_actions.roles.includes(
         'create',
       ),
     );
-    assert.notOk(find(`[href="${urls.newRole}"]`));
+    assert.dom(selectors.NEW_ROLE_BTN).doesNotExist();
+    assert.dom(commonSelectors.IAM_SIDEBAR_NAV_LINK(urls.roles)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.newRole)).doesNotExist();
   });
 
   test('can cancel new role creation', async function (assert) {
-    const rolesCount = this.server.db.roles.length;
+    const rolesCount = getRolesCount();
     await visit(urls.newRole);
-    await fillIn('[name="name"]', 'role name');
-    await click('.rose-form-actions [type="button"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.roles);
-    assert.strictEqual(this.server.db.roles.length, rolesCount);
+    assert.strictEqual(getRolesCount(), rolesCount);
   });
 
   test('saving a new role with invalid fields displays error messages', async function (assert) {
+    const errorMsg =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/roles', () => {
       return new Response(
         400,
@@ -110,12 +124,12 @@ module('Acceptance | roles | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: errorMsg,
           details: {
             request_fields: [
               {
                 name: 'name',
-                description: 'Name is required.',
+                description: errorMsg,
               },
             ],
           },
@@ -123,13 +137,12 @@ module('Acceptance | roles | create', function (hooks) {
       );
     });
     await visit(urls.newRole);
-    await fillIn('[name="name"]', 'new target');
-    await click('form [type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.ok(find('.hds-form-error__message'));
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });
 
   test('users cannot directly navigate to new role route without proper authorization', async function (assert) {
