@@ -19,5 +19,27 @@ export const ROLE_TOOLTIP_BTN = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-tooltip-button`;
 export const ROLE_TOOLTIP_CONTENT = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) [data-tippy-root]`;
+export const GRANT_SCOPE_ROW = (id) =>
+  `tbody [data-test-grant-scope-row="${id}"]`;
+export const GRANT_SCOPE_PARENT_SCOPE =
+  'tbody tr:nth-child(2) td:nth-child(3) a';
+export const TABLE_ALL_CHECKBOX = 'thead input[type="checkbox"]';
 
 export const NO_RESULTS_MSG = '[data-test-no-role-results]';
+export const NO_RESULTS_GRANT_SCOPE_MSG = '[data-test-no-grant-scope-results]';
+
+export const NO_SCOPES_MSG = '.role-grant-scopes div';
+export const NO_SCOPES_MSG_LINK = '.role-grant-scopes div div:nth-child(3) a';
+
+// Manage scopes selectors
+export const SCOPE_TOGGLE = (name) => `.hds-form-toggle input[name="${name}"]`;
+export const SCOPE_CHECKBOX = (type, id) =>
+  `tbody [data-test-${type}-scopes-table-row="${id}"] input`;
+export const MANAGE_CUSTOM_SCOPES_BUTTON_ICON =
+  '[data-test-manage-custom-scopes-button] [data-test-icon="check-circle"]';
+export const REMOVE_ORG_MODAL = (name) =>
+  `[data-test-manage-scopes-remove-${name}-modal]`;
+export const REMOVE_ORG_ONLY_BTN = (name) =>
+  `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button:last-of-type`;
+export const REMOVE_ORG_PROJECTS_BTN = (name) =>
+  `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button`;

@@ -87,6 +87,7 @@
       'scopes.scope.roles.role.manage-scopes.manage-org-projects'
     }}
     @model={{if @model.scope.isOrg @model.scope.id}}
+    data-test-manage-custom-scopes-button
   />
 
   <Hds::Form::HelperText
