@@ -5114,11 +5114,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ember/test-helpers@npm:^4.0.4":
-  version: 4.0.4
-  resolution: "@ember/test-helpers@npm:4.0.4"
+"@ember/test-helpers@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "@ember/test-helpers@npm:4.0.5"
   dependencies:
-    "@ember/test-waiters": "npm:^3.1.0"
+    "@ember/test-waiters": "npm:^3.1.0 || ^4.0.0"
     "@embroider/addon-shim": "npm:^1.8.7"
     "@embroider/macros": "npm:^1.16.5"
     "@simple-dom/interface": "npm:^1.4.0"
@@ -5126,7 +5126,7 @@ __metadata:
     dom-element-descriptors: "npm:^0.5.0"
   peerDependencies:
     ember-source: ">= 4.0.0"
-  checksum: 10c0/d3adbcdff167143efc7fee6a97e1e578886000245c64a62a905b03edf7f5d34d348ccfaaa78626fd0f919def29e3f0890326b0e3dd92ad05bb6a9df0f720023c
+  checksum: 10c0/4ff9b6ae5c0f4800ca5984b922da19137e726028af7482fc3b3d96697608deffb21f97407a93f223ca15d2b8c85e536ba37c020488d6f3cd2797fc88f55cb774
   languageName: node
   linkType: hard
 
@@ -5152,7 +5152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embroider/addon-shim@npm:1.8.3, @embroider/addon-shim@npm:^1.3.0":
+"@embroider/addon-shim@npm:1.8.3":
   version: 1.8.3
   resolution: "@embroider/addon-shim@npm:1.8.3"
   dependencies:
@@ -5162,41 +5162,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embroider/addon-shim@npm:^1.0.0":
-  version: 1.8.4
-  resolution: "@embroider/addon-shim@npm:1.8.4"
-  dependencies:
-    "@embroider/shared-internals": "npm:^2.0.0"
-    broccoli-funnel: "npm:^3.0.8"
-    semver: "npm:^7.3.8"
-  checksum: 10c0/3619755701b23730141325cb35f34ee949f5356235e5382828f659d718ffd5d6110070c0d7d8953e5a9a2ce2c618e1a53a3cf9545c3e969bb857543b93338064
-  languageName: node
-  linkType: hard
-
-"@embroider/addon-shim@npm:^1.2.0":
-  version: 1.8.5
-  resolution: "@embroider/addon-shim@npm:1.8.5"
-  dependencies:
-    "@embroider/shared-internals": "npm:^2.1.0"
-    broccoli-funnel: "npm:^3.0.8"
-    semver: "npm:^7.3.8"
-  checksum: 10c0/19280be930a1a5aa597708e54cb56988a6e687dbfa0b9995a796ed4557c860241da40c96f5924e5068665e35d5d7b019ceb14c813c8309f03433d7a9655df786
-  languageName: node
-  linkType: hard
-
-"@embroider/addon-shim@npm:^1.6.0, @embroider/addon-shim@npm:^1.8.6, @embroider/addon-shim@npm:^1.8.7":
-  version: 1.8.9
-  resolution: "@embroider/addon-shim@npm:1.8.9"
-  dependencies:
-    "@embroider/shared-internals": "npm:^2.6.0"
-    broccoli-funnel: "npm:^3.0.8"
-    common-ancestor-path: "npm:^1.0.1"
-    semver: "npm:^7.3.8"
-  checksum: 10c0/9f8ba77d74f3e248fed91ea0330a2261bda481740bd647822443b306caf82719557b56ee883870f063acb624a7232c0c70a683c9b23492a5a2bbd4af5b810bb0
-  languageName: node
-  linkType: hard
-
-"@embroider/addon-shim@npm:^1.7.1, @embroider/addon-shim@npm:^1.8.9, @embroider/addon-shim@npm:^1.9.0":
+"@embroider/addon-shim@npm:^1.0.0, @embroider/addon-shim@npm:^1.2.0, @embroider/addon-shim@npm:^1.3.0, @embroider/addon-shim@npm:^1.6.0, @embroider/addon-shim@npm:^1.7.1, @embroider/addon-shim@npm:^1.8.3, @embroider/addon-shim@npm:^1.8.4, @embroider/addon-shim@npm:^1.8.6, @embroider/addon-shim@npm:^1.8.7, @embroider/addon-shim@npm:^1.8.9, @embroider/addon-shim@npm:^1.9.0":
   version: 1.9.0
   resolution: "@embroider/addon-shim@npm:1.9.0"
   dependencies:
@@ -5205,17 +5171,6 @@ __metadata:
     common-ancestor-path: "npm:^1.0.1"
     semver: "npm:^7.3.8"
   checksum: 10c0/daadc5347a6114642e242302f762e8c81149c98cc259c4325d80134c9020c9a6a8079592477ee9e040c55d97cb1992391b4229b419485dff9e085ae523a3c26c
-  languageName: node
-  linkType: hard
-
-"@embroider/addon-shim@npm:^1.8.3, @embroider/addon-shim@npm:^1.8.4":
-  version: 1.8.6
-  resolution: "@embroider/addon-shim@npm:1.8.6"
-  dependencies:
-    "@embroider/shared-internals": "npm:^2.2.3"
-    broccoli-funnel: "npm:^3.0.8"
-    semver: "npm:^7.3.8"
-  checksum: 10c0/cb1f86d5be21a5adc9f747daa897d04e1c6e11b00fe3ae464755b5ff3e8821ecddfeab4b5d6123a0e6aaecaca2caeb6764e6f1af4d3c543530118e6ee8d61dc7
   languageName: node
   linkType: hard
 
@@ -5282,7 +5237,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embroider/shared-internals@npm:2.8.1, @embroider/shared-internals@npm:^2.0.0, @embroider/shared-internals@npm:^2.1.0, @embroider/shared-internals@npm:^2.2.3, @embroider/shared-internals@npm:^2.6.0, @embroider/shared-internals@npm:^2.8.1":
+"@embroider/shared-internals@npm:2.8.1, @embroider/shared-internals@npm:^2.0.0, @embroider/shared-internals@npm:^2.8.1":
   version: 2.8.1
   resolution: "@embroider/shared-internals@npm:2.8.1"
   dependencies:
@@ -7197,7 +7152,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@embroider/macros": "npm:^1.16.9"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
@@ -7513,7 +7468,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^2.1.1"
     "@faker-js/faker": "npm:^8.0.2"
@@ -7738,7 +7693,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^2.1.1"
     "@glimmer/component": "npm:^1.1.2"
@@ -10034,7 +9989,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@embroider/test-setup": "npm:^2.1.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@formatjs/intl-durationformat": "npm:^0.2.4"
@@ -10551,7 +10506,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@embroider/macros": "npm:^1.16.9"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
@@ -20565,7 +20520,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.21.0"
     "@ember/optional-features": "npm:^2.0.0"
     "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.4"
+    "@ember/test-helpers": "npm:^4.0.5"
     "@embroider/test-setup": "npm:^2.1.1"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
