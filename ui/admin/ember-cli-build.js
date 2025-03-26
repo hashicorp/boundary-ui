@@ -40,7 +40,7 @@ module.exports = async function (defaults) {
     },
   });
 
-  // TODO: This is config can be removed in ember-data 6.0.
+  // TODO: This config can be removed in ember-data 6.0.
   // This silences ember-data deprecate warnings by setting to false to
   // strip the deprecated code (thereby opting into the new behavior).
   setConfig(app, __dirname, {
