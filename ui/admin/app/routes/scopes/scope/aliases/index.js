@@ -53,6 +53,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
       let aliases;
       let doAliasesExist = false;
       let totalItems = 0;
+      let isLoadIncomplete = false;
 
       if (
         this.can.can('list model', scope, {
@@ -66,6 +67,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           pageSize,
         });
         totalItems = aliases.meta?.totalItems;
+        isLoadIncomplete = aliases.meta?.isLoadIncomplete;
         // since we don't receive target info from aliases list API,
         // we query the store to fetch target information based on the destination id
         aliases = await Promise.all(
@@ -83,7 +85,12 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
         doAliasesExist = await this.getDoAliasesExist(scope_id, totalItems);
       }
 
-      return { aliases, doAliasesExist, totalItems };
+      return {
+        aliases,
+        doAliasesExist,
+        totalItems,
+        isLoadIncomplete,
+      };
     },
   );
 
@@ -102,6 +109,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
       'alias',
       {
         scope_id,
+        query: { filters: { scope_id: [{ equals: scope_id }] } },
         page: 1,
         pageSize: 1,
       },

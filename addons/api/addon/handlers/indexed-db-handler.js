@@ -6,7 +6,8 @@
 import { modelIndexes } from 'api/services/indexed-db';
 import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
-import { queryIndexedDb } from '../utils/indexed-db-query';
+import { HARD_LIMIT, queryIndexedDb } from '../utils/indexed-db-query';
+import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
 
 /**
@@ -49,7 +50,7 @@ export default class IndexedDbHandler {
         const schema = store.modelFor(type);
         const serializer = store.serializerFor(type);
 
-        console.time('queryIndexedDb');
+        console.time(`queryIndexedDb-${type}`);
         if (!peekIndexedDB) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
           let payload;
@@ -102,7 +103,7 @@ export default class IndexedDbHandler {
           await writeToIndexedDbPromise;
         }
 
-        const { items: indexedDbResults, itemCount } = await queryIndexedDb(
+        const indexedDbResults = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
@@ -110,13 +111,14 @@ export default class IndexedDbHandler {
           pageSize,
         );
 
-        const dbRecords = indexedDbResults.map((item) =>
-          this.indexedDb.normalizeData({
-            data: item,
-            cleanData: false,
-            schema,
-            serializer,
-          }),
+        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
+          (item) =>
+            this.indexedDb.normalizeData({
+              data: item,
+              cleanData: false,
+              schema,
+              serializer,
+            }),
         );
 
         // Return the raw data if we don't push to the store.
@@ -133,9 +135,12 @@ export default class IndexedDbHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: itemCount };
+        records.meta = {
+          totalItems: indexedDbResults.length,
+          isLoadIncomplete: indexedDbResults.length === HARD_LIMIT,
+        };
 
-        console.timeEnd('queryIndexedDb');
+        console.timeEnd(`queryIndexedDb-${type}`);
         return records;
       }
       default:
@@ -187,6 +192,7 @@ export default class IndexedDbHandler {
     store,
     schema,
   }) {
+    // console.log('writing to indexed db', payload);
     // Store the token we just got back from the payload if it exists
     if (payload.list_token && storeToken) {
       await indexedDb.token.put({

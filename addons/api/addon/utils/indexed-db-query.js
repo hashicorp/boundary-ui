@@ -6,6 +6,8 @@
 import { get } from '@ember/object';
 import { modelIndexes } from '../services/indexed-db';
 
+export const HARD_LIMIT = 250;
+
 /**
  * Takes a POJO representing a filter query and builds a query to
  * query indexedDb with. Note that the first filter is important as that
@@ -22,13 +24,7 @@ import { modelIndexes } from '../services/indexed-db';
  *     },
  *   });
  */
-export async function queryIndexedDb(
-  indexedDb,
-  resource,
-  query,
-  page,
-  pageSize,
-) {
+export async function queryIndexedDb(indexedDb, resource, query) {
   let { search, filters = {} } = query ?? {};
   let filterCollection = indexedDb[resource];
 
@@ -76,14 +72,14 @@ export async function queryIndexedDb(
     );
   }
 
-  const itemCount = await filterCollection.count();
-  const offset = (page - 1) * pageSize;
-  const items = await filterCollection.offset(offset).limit(pageSize).toArray();
-  return {
-    items,
-    itemCount,
-  };
-  // return filterCollection.limit(250).toArray();
+  // const itemCount = await filterCollection.count();
+  // const offset = (page - 1) * pageSize;
+  // const items = await filterCollection.offset(offset).limit(pageSize).toArray();
+  // return {
+  //   items,
+  //   itemCount,
+  // };
+  return filterCollection.limit(HARD_LIMIT).toArray();
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
