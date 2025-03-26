@@ -7,7 +7,6 @@ import { modelIndexes } from 'api/services/indexed-db';
 import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
-import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
 
 /**
@@ -103,20 +102,21 @@ export default class IndexedDbHandler {
           await writeToIndexedDbPromise;
         }
 
-        const indexedDbResults = await queryIndexedDb(
+        const { items: indexedDbResults, itemCount } = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
+          page,
+          pageSize,
         );
 
-        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          (item) =>
-            this.indexedDb.normalizeData({
-              data: item,
-              cleanData: false,
-              schema,
-              serializer,
-            }),
+        const dbRecords = indexedDbResults.map((item) =>
+          this.indexedDb.normalizeData({
+            data: item,
+            cleanData: false,
+            schema,
+            serializer,
+          }),
         );
 
         // Return the raw data if we don't push to the store.
@@ -133,9 +133,8 @@ export default class IndexedDbHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: indexedDbResults.length };
+        records.meta = { totalItems: itemCount };
 
-        console.log(records);
         console.timeEnd('queryIndexedDb');
         return records;
       }
@@ -188,7 +187,6 @@ export default class IndexedDbHandler {
     store,
     schema,
   }) {
-    console.log('writing to indexed db', payload);
     // Store the token we just got back from the payload if it exists
     if (payload.list_token && storeToken) {
       await indexedDb.token.put({

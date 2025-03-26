@@ -22,7 +22,13 @@ import { modelIndexes } from '../services/indexed-db';
  *     },
  *   });
  */
-export async function queryIndexedDb(indexedDb, resource, query) {
+export async function queryIndexedDb(
+  indexedDb,
+  resource,
+  query,
+  page,
+  pageSize,
+) {
   let { search, filters = {} } = query ?? {};
   let filterCollection = indexedDb[resource];
 
@@ -70,14 +76,14 @@ export async function queryIndexedDb(indexedDb, resource, query) {
     );
   }
 
-  // OrderBy has to be used on where clauses while if it's a
-  // collection already we have to use sortBy. We'll also sort by
-  // descending order based on created time to match the API as any
-  // "or" clause can change the order
-  if (filterCollection.orderBy) {
-    return filterCollection.orderBy(getKey('created_time')).reverse().toArray();
-  }
-  return filterCollection.reverse().sortBy(getKey('created_time'));
+  const itemCount = await filterCollection.count();
+  const offset = (page - 1) * pageSize;
+  const items = await filterCollection.offset(offset).limit(pageSize).toArray();
+  return {
+    items,
+    itemCount,
+  };
+  // return filterCollection.limit(250).toArray();
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
