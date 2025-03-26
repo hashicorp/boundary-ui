@@ -4,24 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  fillIn,
-  find,
-  findAll,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | grants', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+
+  let grantsCount;
 
   const instances = {
     scopes: {
@@ -31,14 +27,10 @@ module('Acceptance | roles | grants', function (hooks) {
     role: null,
   };
   const urls = {
-    orgScope: null,
     roles: null,
     role: null,
     newRole: null,
   };
-  const newGrantForm = 'form:nth-child(1)';
-  const grantsForm = 'form:nth-child(2)';
-  let grantsCount;
 
   hooks.beforeEach(async function () {
     await authenticateSession({ username: 'admin' });
@@ -50,20 +42,19 @@ module('Acceptance | roles | grants', function (hooks) {
     instances.role = this.server.create('role', {
       scope: instances.scopes.org,
     });
-    grantsCount = this.server.db.roles[0].grant_strings.length;
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.grants = `${urls.role}/grants`;
+    grantsCount = () =>
+      this.server.schema.roles.all().models[0].grant_strings.length;
   });
 
   test('visiting role grants', async function (assert) {
     await visit(urls.grants);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.grants);
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount,
-    );
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
   });
 
   test('cannot set grants without proper authorization', async function (assert) {
@@ -72,17 +63,13 @@ module('Acceptance | roles | grants', function (hooks) {
     );
     instances.role.update({ authorized_actions });
     await visit(urls.grants);
-    assert.strictEqual(
-      findAll('main form').length,
-      1,
-      'New grant form is not displayed.',
-    );
-    assert.notOk(
-      find('main form button:not([type="submit"])'),
-      'Grant delete button is not displayed.',
-    );
-    assert.notOk(find('.rose-form-actions'), 'Form actions are not displayed.');
-    assert.ok(find('main form input[disabled]'), 'Grant fields are disabled.');
+
+    // This checks that only the form for existing grants is displayed
+    assert.dom('main form').exists({ count: 1 });
+    assert.dom(selectors.FIELD_NEW_GRANT_ADD_BTN).doesNotExist();
+    assert.dom('input[disabled]').exists({ count: grantsCount() });
+    assert.dom(selectors.SAVE_BTN).doesNotExist();
+    assert.dom(commonSelectors.CANCEL_BTN).doesNotExist();
   });
 
   test('update a grant', async function (assert) {
@@ -93,7 +80,7 @@ module('Acceptance | roles | grants', function (hooks) {
         const attrs = JSON.parse(requestBody);
         assert.strictEqual(
           attrs.grant_strings[0],
-          'ids=123,action=delete',
+          selectors.FIELD_GRANT_VALUE,
           'A grant is updated',
         );
         const id = idMethod.split(':')[0];
@@ -101,18 +88,20 @@ module('Acceptance | roles | grants', function (hooks) {
       },
     );
     await visit(urls.grants);
-    await fillIn(`${grantsForm} [name="grant"]`, 'ids=123,action=delete');
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
+
+    await fillIn(selectors.FIELD_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(selectors.SAVE_BTN);
   });
 
   test('cancel a grant update', async function (assert) {
     await visit(urls.grants);
-    await fillIn(`${grantsForm} [name="grant"]`, 'ids=123,action=delete');
-    await click('.rose-form-actions button:not([type="submit"])');
-    assert.notEqual(
-      find(`${grantsForm} [name="grant"]`).value,
-      'ids=123,action=delete',
-    );
+
+    await fillIn(selectors.FIELD_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert
+      .dom(selectors.FIELD_GRANT)
+      .doesNotIncludeText(selectors.FIELD_GRANT_VALUE);
   });
 
   test('shows error message on grant update', async function (assert) {
@@ -129,12 +118,12 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount,
-    );
-    await fillIn(`${grantsForm} [name="grant"]`, 'ids=123,action=delete');
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
+
+    await fillIn(selectors.FIELD_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(selectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -148,7 +137,7 @@ module('Acceptance | roles | grants', function (hooks) {
         const attrs = JSON.parse(requestBody);
         assert.strictEqual(
           attrs.grant_strings.length,
-          grantsCount + 1,
+          grantsCount() + 1,
           'A grant is created',
         );
         const id = idMethod.split(':')[0];
@@ -156,17 +145,23 @@ module('Acceptance | roles | grants', function (hooks) {
       },
     );
     await visit(urls.grants);
-    await fillIn(`${newGrantForm} [name="grant"]`, 'ids=123,action=delete');
-    await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
+
+    await fillIn(selectors.FIELD_NEW_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(selectors.FIELD_NEW_GRANT_ADD_BTN);
+    await click(selectors.SAVE_BTN);
   });
 
   test('cancel a grant creation', async function (assert) {
     await visit(urls.grants);
-    await fillIn(`${newGrantForm} [name="grant"]`, 'ids=123,action=delete');
-    await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
-    await click('.rose-form-actions button:not([type="submit"])');
-    assert.notOk(find(`${newGrantForm} [name="grant"]`).value);
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
+
+    await fillIn(selectors.FIELD_NEW_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(selectors.FIELD_NEW_GRANT_ADD_BTN);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.dom(selectors.FIELD_NEW_GRANT).hasNoText();
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
   });
 
   test('shows error message on grant create', async function (assert) {
@@ -183,34 +178,34 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount,
-    );
-    await fillIn(`${newGrantForm} [name="grant"]`, 'ids=123,action=delete');
-    await click(`${newGrantForm} [type="submit"]:not(:disabled)`);
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
+
+    await fillIn(selectors.FIELD_NEW_GRANT, selectors.FIELD_GRANT_VALUE);
+    await click(selectors.FIELD_NEW_GRANT_ADD_BTN);
+    await click(selectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
   });
 
   test('delete a grant', async function (assert) {
     await visit(urls.grants);
-    await click(`${grantsForm} button:not([type="submit"])`);
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount - 1,
-    );
+
+    await click(selectors.FIELD_GRANT_REMOVE_BTN);
+    await click(selectors.SAVE_BTN);
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() - 1 });
   });
 
   test('cancel a grant remove', async function (assert) {
     await visit(urls.grants);
-    await click(`${grantsForm} button`);
-    await click('.rose-form-actions button:not([type="submit"])');
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount,
-    );
+
+    await click(selectors.FIELD_GRANT_REMOVE_BTN);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
   });
 
   test('shows error message on grant remove', async function (assert) {
@@ -227,12 +222,14 @@ module('Acceptance | roles | grants', function (hooks) {
       );
     });
     await visit(urls.grants);
-    assert.strictEqual(
-      findAll(`${grantsForm} [name="grant"]`).length,
-      grantsCount,
-    );
-    await click(`${grantsForm} button:not([type="submit"])`);
-    await click('.rose-form-actions [type="submit"]:not(:disabled)');
-    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
+
+    assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });
+
+    await click(selectors.FIELD_GRANT_REMOVE_BTN);
+    await click(selectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
   });
 });
