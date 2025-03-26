@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const SCOPE_FORM = 'main .rose-form';
-export const FIELD_STORAGE_POLICY_DROPDOWN = '[name=policy_id]';
+export const SCOPE_FORM = 'main form';
+export const FIELD_STORAGE_POLICY_SELECT = '[name=policy_id]';
 
 export const MANAGE_PROJECTS_DROPDOWN =
   '[data-test-manage-projects-dropdown] button:first-child';

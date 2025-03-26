@@ -80,7 +80,6 @@ module('Acceptance | scopes | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
     assert.dom(selectors.SCOPE_FORM).exists();
     assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).doesNotExist();
-    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN_DELETE).doesNotExist();
   });
 
   test('user cannot visit global scope settings when feature flag is not enabled', async function (assert) {

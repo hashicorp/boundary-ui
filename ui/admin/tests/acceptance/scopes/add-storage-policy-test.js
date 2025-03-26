@@ -120,11 +120,11 @@ module('Acceptance | scope | add storage policy', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
 
-    assert.dom(selectors.FIELD_STORAGE_POLICY_DROPDOWN).hasNoValue();
+    assert.dom(selectors.FIELD_STORAGE_POLICY_SELECT).hasNoValue();
 
-    await select(selectors.FIELD_STORAGE_POLICY_DROPDOWN, policyTwo.id);
+    await select(selectors.FIELD_STORAGE_POLICY_SELECT, policyTwo.id);
 
-    assert.dom(selectors.FIELD_STORAGE_POLICY_DROPDOWN).hasValue();
+    assert.dom(selectors.FIELD_STORAGE_POLICY_SELECT).hasValue();
 
     await click(commonSelectors.SAVE_BTN);
 
@@ -147,7 +147,7 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
 
     //update the storage policy selection
-    await select(selectors.FIELD_STORAGE_POLICY_DROPDOWN, policyTwo);
+    await select(selectors.FIELD_STORAGE_POLICY_SELECT, policyTwo);
 
     await click(commonSelectors.CANCEL_BTN);
 
