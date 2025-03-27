@@ -75,7 +75,7 @@ test.describe('Aliases', () => {
 
         // Clear destination from alias
         await page
-          .getByRole('navigation', { name: 'Resources' })
+          .getByRole('navigation', { name: 'Application local navigation' })
           .getByRole('link', { name: 'Targets' })
           .click();
         await page.getByRole('link', { name: targetName }).click();
@@ -230,7 +230,7 @@ test.describe('Aliases', () => {
 
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId);
+        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
         await page.getByRole('link', { name: 'Orgs', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
         await page.getByRole('link', { name: orgName }).click();

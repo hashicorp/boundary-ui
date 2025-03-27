@@ -33,8 +33,9 @@ test(
       await page.goto('/');
       await page.getByRole('link', { name: org.name }).click();
       await page.getByRole('link', { name: project.name }).click();
+      await page.pause();
       await page
-        .getByRole('navigation', { name: 'Resources' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Targets' })
         .click();
       await expect(

@@ -128,7 +128,7 @@
 
   {{#if @model.isProject}}
     <Nav.BackLink
-      @text={{concat 'Back to ' this.scope.org.displayName}}
+      @text={{t 'titles.back-link' scope=this.scope.org.displayName}}
       @route='scopes.scope.scopes'
       @model={{@model.scopeID}}
     />
