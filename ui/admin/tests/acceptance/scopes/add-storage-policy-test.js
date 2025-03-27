@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -129,10 +129,7 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.strictEqual(
-      find(commonSelectors.LINK_LIST_ITEM_TEXT).textContent.trim(),
-      policyTwo.name,
-    );
+    assert.dom(commonSelectors.LINK_LIST_ITEM_TEXT).hasText(policyTwo.name);
   });
 
   test('can cancel changes to an existing storage policy selection', async function (assert) {
@@ -152,9 +149,6 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.strictEqual(
-      find(commonSelectors.LINK_LIST_ITEM_TEXT).textContent.trim(),
-      policyOne.name,
-    );
+    assert.dom(commonSelectors.LINK_LIST_ITEM_TEXT).hasText(policyOne.name);
   });
 });

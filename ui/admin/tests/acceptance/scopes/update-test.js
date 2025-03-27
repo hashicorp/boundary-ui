@@ -146,7 +146,7 @@ module('Acceptance | scopes | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.globalScope));
 
-    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
@@ -173,7 +173,7 @@ module('Acceptance | scopes | update', function (hooks) {
 
     await click(commonSelectors.HREF(urls.globalScope));
 
-    assert.dom(commonSelectors.MODAL_WARNING).exists();
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
