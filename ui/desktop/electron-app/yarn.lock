@@ -908,14 +908,14 @@ __metadata:
     "@electron-forge/maker-dmg": "npm:^7.7.0"
     "@electron-forge/maker-squirrel": "npm:^7.7.0"
     "@electron-forge/maker-zip": "npm:^7.7.0"
-    electron: "npm:32.3.3"
+    electron: "npm:33.4.7"
     electron-devtools-installer: "npm:^3.2.0"
     electron-is-dev: "npm:^2.0.0"
     electron-log: "npm:^5.1.2"
     electron-squirrel-startup: "npm:^1.0.0"
     electron-store: "npm:^8.2.0"
     node-html-parser: "npm:^5.3.3"
-    node-pty: "npm:^1.0.0"
+    node-pty: "npm:^1.1.0-beta33"
     semver: "npm:^7.5.3"
     shell-env: "npm:^3.0.1"
     shell-quote: "npm:^1.7.3"
@@ -1606,16 +1606,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:32.3.3":
-  version: 32.3.3
-  resolution: "electron@npm:32.3.3"
+"electron@npm:33.4.7":
+  version: 33.4.7
+  resolution: "electron@npm:33.4.7"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^20.9.0"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10c0/e89bac16410785a77c56d8b3315fa306d64dcd7921121ac390d7c41c7aae074efe580e69e9532e8f14e4ed57d18bd273f238f821fd94616a0daf62f77ff529d2
+  checksum: 10c0/e4994b09a29fab4f040cff7e5c4122faf434c5eb77e2688dd35edd8cbbc39ef20a4b38d280676b3766d19d1115f904262013d127148b1529a83c5bc9ec160e46
   languageName: node
   linkType: hard
 
@@ -3123,7 +3123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.17.0, nan@npm:^2.4.0":
+"nan@npm:^2.4.0":
   version: 2.22.0
   resolution: "nan@npm:2.22.0"
   dependencies:
@@ -3152,6 +3152,15 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 10c0/a6c83c448d5e8b591f749a0157c9ec02f653021cdf3415c1a44fcb5fc8afc124acad186bc1ec76cb4db2485cc2dcdda187aacd382c54b6e3093ffc0389603643
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.1.0":
+  version: 7.1.1
+  resolution: "node-addon-api@npm:7.1.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/fb32a206276d608037fa1bcd7e9921e177fe992fc610d098aa3128baca3c0050fc1e014fa007e9b3874cf865ddb4f5bd9f43ccb7cbbbe4efaff6a83e920b17e9
   languageName: node
   linkType: hard
 
@@ -3208,13 +3217,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-pty@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-pty@npm:1.0.0"
+"node-pty@npm:^1.1.0-beta33":
+  version: 1.1.0-beta9
+  resolution: "node-pty@npm:1.1.0-beta9"
   dependencies:
-    nan: "npm:^2.17.0"
+    node-addon-api: "npm:^7.1.0"
     node-gyp: "npm:latest"
-  checksum: 10c0/c308686826eb2f7616735f4c71e6e41ff630346b14319972dbdf9711640bc6975ce21eab66a47b7ce9a88c70308fe81bfd9840127388d5fa26c52afbad255871
+  checksum: 10c0/42981ad24fb048371ff69ec8a421132c6d3a530992a6db85c76333c5ab6f633a19f796e5c91f0373b3131a3f187f0b44f4913eeac31a151ddb59aed976d220a8
   languageName: node
   linkType: hard
 
