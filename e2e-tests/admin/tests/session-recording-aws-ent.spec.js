@@ -148,7 +148,7 @@ test(
       // Play back session recording
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       await page
-        .getByRole('navigation', { name: 'General' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Session Recordings', exact: true })
         .click();
       await page
