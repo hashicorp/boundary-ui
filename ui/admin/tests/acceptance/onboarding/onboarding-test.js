@@ -22,8 +22,6 @@ module('Acceptance | onboarding', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
-    this.server.create('scope', { id: 'global' });
-
     await authenticateSession({});
   });
 
