@@ -908,7 +908,7 @@ __metadata:
     "@electron-forge/maker-dmg": "npm:^7.7.0"
     "@electron-forge/maker-squirrel": "npm:^7.7.0"
     "@electron-forge/maker-zip": "npm:^7.7.0"
-    electron: "npm:31.0.1"
+    electron: "npm:32.3.3"
     electron-devtools-installer: "npm:^3.2.0"
     electron-is-dev: "npm:^2.0.0"
     electron-log: "npm:^5.1.2"
@@ -1606,16 +1606,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:31.0.1":
-  version: 31.0.1
-  resolution: "electron@npm:31.0.1"
+"electron@npm:32.3.3":
+  version: 32.3.3
+  resolution: "electron@npm:32.3.3"
   dependencies:
     "@electron/get": "npm:^2.0.0"
     "@types/node": "npm:^20.9.0"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10c0/94aac92f7d83332cfe0e1243b36d32190de83c744a36717b11cd5205aaebbbcdb3b73067cf6e141d728f09a5b656e0d385672f0311e2d94d3fd937416e31c5f6
+  checksum: 10c0/e89bac16410785a77c56d8b3315fa306d64dcd7921121ac390d7c41c7aae074efe580e69e9532e8f14e4ed57d18bd273f238f821fd94616a0daf62f77ff529d2
   languageName: node
   linkType: hard
 
