@@ -18,7 +18,7 @@ module('Acceptance | roles | project-scope', function (hooks) {
   const GRANT_SCOPE_ROW_SELECTOR = (id) =>
     `tbody [data-test-grant-scope-row="${id}"]`;
   const TABLE_ROW_SELECTOR = 'tbody tr';
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-role] button';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-roles-dropdown] button';
   const MANAGE_SCOPES_SELECTOR = '[data-test-manage-role-scopes]';
   const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
   const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
