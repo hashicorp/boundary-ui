@@ -85,7 +85,7 @@ module('Acceptance | roles | create', function (hooks) {
       ),
     );
     assert.dom(selectors.NEW_ROLE_BTN).isVisible();
-    assert.dom(commonSelectors.IAM_SIDEBAR_NAV_LINK(urls.roles)).isVisible();
+    assert.dom(commonSelectors.SIDEBAR_NAV_LINK(urls.roles)).isVisible();
     assert.dom(commonSelectors.HREF(urls.newRole)).isVisible();
   });
 
@@ -99,7 +99,7 @@ module('Acceptance | roles | create', function (hooks) {
       ),
     );
     assert.dom(selectors.NEW_ROLE_BTN).doesNotExist();
-    assert.dom(commonSelectors.IAM_SIDEBAR_NAV_LINK(urls.roles)).doesNotExist();
+    assert.dom(commonSelectors.SIDEBAR_NAV_LINK(urls.roles)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.newRole)).doesNotExist();
   });
 
