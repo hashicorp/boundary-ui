@@ -626,12 +626,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.9.0":
-  version: 20.17.19
-  resolution: "@types/node@npm:20.17.19"
+"@types/node@npm:^22.7.7":
+  version: 22.13.14
+  resolution: "@types/node@npm:22.13.14"
   dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/930e554eadeb0c2848f9225007ef66ea9c7fe987c80e2f2c1a9f316b297036d4054bbc5459b67051cf32cd360a022344c2998dcb1ec7579109f631b6d5f21bf8
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/fa2ab5b8277bfbcc86c42e46a3ea9871b0d559894cc9d955685d17178c9499f0b1bf03d1d1ea8d92ef2dda818988f4035acb8abf9dc15423a998fa56173ab804
   languageName: node
   linkType: hard
 
@@ -908,14 +908,14 @@ __metadata:
     "@electron-forge/maker-dmg": "npm:^7.7.0"
     "@electron-forge/maker-squirrel": "npm:^7.7.0"
     "@electron-forge/maker-zip": "npm:^7.7.0"
-    electron: "npm:31.0.1"
+    electron: "npm:35.1.2"
     electron-devtools-installer: "npm:^3.2.0"
     electron-is-dev: "npm:^2.0.0"
     electron-log: "npm:^5.1.2"
     electron-squirrel-startup: "npm:^1.0.0"
     electron-store: "npm:^8.2.0"
     node-html-parser: "npm:^5.3.3"
-    node-pty: "npm:^1.0.0"
+    node-pty: "npm:^1.1.0-beta33"
     semver: "npm:^7.5.3"
     shell-env: "npm:^3.0.1"
     shell-quote: "npm:^1.7.3"
@@ -1606,16 +1606,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:31.0.1":
-  version: 31.0.1
-  resolution: "electron@npm:31.0.1"
+"electron@npm:35.1.2":
+  version: 35.1.2
+  resolution: "electron@npm:35.1.2"
   dependencies:
     "@electron/get": "npm:^2.0.0"
-    "@types/node": "npm:^20.9.0"
+    "@types/node": "npm:^22.7.7"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10c0/94aac92f7d83332cfe0e1243b36d32190de83c744a36717b11cd5205aaebbbcdb3b73067cf6e141d728f09a5b656e0d385672f0311e2d94d3fd937416e31c5f6
+  checksum: 10c0/2cd8adb70f669d28fbb1c7dddeb2cbe32b970950f13310b518cfa6aa926eaa6647514ed44fda4af95577c648353a4dd3a3a398bfb8a5f31fcbe48054241c2d14
   languageName: node
   linkType: hard
 
@@ -3123,7 +3123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.17.0, nan@npm:^2.4.0":
+"nan@npm:^2.4.0":
   version: 2.22.0
   resolution: "nan@npm:2.22.0"
   dependencies:
@@ -3152,6 +3152,15 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 10c0/a6c83c448d5e8b591f749a0157c9ec02f653021cdf3415c1a44fcb5fc8afc124acad186bc1ec76cb4db2485cc2dcdda187aacd382c54b6e3093ffc0389603643
+  languageName: node
+  linkType: hard
+
+"node-addon-api@npm:^7.1.0":
+  version: 7.1.1
+  resolution: "node-addon-api@npm:7.1.1"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/fb32a206276d608037fa1bcd7e9921e177fe992fc610d098aa3128baca3c0050fc1e014fa007e9b3874cf865ddb4f5bd9f43ccb7cbbbe4efaff6a83e920b17e9
   languageName: node
   linkType: hard
 
@@ -3208,13 +3217,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-pty@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-pty@npm:1.0.0"
+"node-pty@npm:^1.1.0-beta33":
+  version: 1.1.0-beta9
+  resolution: "node-pty@npm:1.1.0-beta9"
   dependencies:
-    nan: "npm:^2.17.0"
+    node-addon-api: "npm:^7.1.0"
     node-gyp: "npm:latest"
-  checksum: 10c0/c308686826eb2f7616735f4c71e6e41ff630346b14319972dbdf9711640bc6975ce21eab66a47b7ce9a88c70308fe81bfd9840127388d5fa26c52afbad255871
+  checksum: 10c0/42981ad24fb048371ff69ec8a421132c6d3a530992a6db85c76333c5ab6f633a19f796e5c91f0373b3131a3f187f0b44f4913eeac31a151ddb59aed976d220a8
   languageName: node
   linkType: hard
 
@@ -4411,13 +4420,6 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
-  languageName: node
-  linkType: hard
-
-"undici-types@npm:~6.19.2":
-  version: 6.19.8
-  resolution: "undici-types@npm:6.19.8"
-  checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
   languageName: node
   linkType: hard
 
