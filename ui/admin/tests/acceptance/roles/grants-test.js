@@ -17,6 +17,9 @@ module('Acceptance | roles | grants', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  // This is unique to permissions tests and only used once here
+  const FIELD_GRANT_DISABLED = 'input[disabled]';
+
   let grantsCount;
 
   const instances = {
@@ -67,7 +70,7 @@ module('Acceptance | roles | grants', function (hooks) {
     // This checks that only the form for existing grants is displayed
     assert.dom('main form').exists({ count: 1 });
     assert.dom(selectors.FIELD_NEW_GRANT_ADD_BTN).doesNotExist();
-    assert.dom('input[disabled]').exists({ count: grantsCount() });
+    assert.dom(FIELD_GRANT_DISABLED).exists({ count: grantsCount() });
     assert.dom(selectors.SAVE_BTN).doesNotExist();
     assert.dom(commonSelectors.CANCEL_BTN).doesNotExist();
   });
