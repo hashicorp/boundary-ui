@@ -27,7 +27,8 @@ async function globalSetup() {
 const authenticateToBoundary = async () => {
   // Log in and save the authenticated state to reuse in tests
   const browser = await chromium.launch();
-  const page = await browser.newPage();
+  const browserContext = await browser.newContext();
+  const page = await browserContext.newPage();
   await page.goto(baseUrl);
 
   const loginPage = new LoginPage(page);
@@ -35,15 +36,16 @@ const authenticateToBoundary = async () => {
     process.env.E2E_PASSWORD_ADMIN_LOGIN_NAME,
     process.env.E2E_PASSWORD_ADMIN_PASSWORD,
   );
-  const storageState = await page
-    .context()
-    .storageState({ path: authenticatedState });
+  const storageState = await browserContext.storageState({
+    path: authenticatedState,
+  });
 
   const state = JSON.parse(storageState.origins[0].localStorage[0].value);
 
   // Set the token in the environment for use in API requests
   process.env.E2E_TOKEN = state.authenticated.token;
 
+  await browserContext.close();
   await browser.close();
 };
 
@@ -90,4 +92,10 @@ export const test = baseTest.extend({
   vaultAddr: process.env.E2E_VAULT_ADDR_PUBLIC,
   vaultAddrPrivate: process.env.E2E_VAULT_ADDR_PRIVATE,
   workerTagEgress: process.env.E2E_WORKER_TAG_EGRESS,
+  request: async ({ playwright }, use) => {
+    const request = await playwright.request.newContext({
+      baseURL: process.env.BOUNDARY_ADDR,
+    });
+    await use(request);
+  },
 });
