@@ -115,7 +115,7 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
    * @return {Promise} promise
    */
   async query(store, schema, query) {
-    const queryObject = structuredClone(query);
+    const { batchLimit, ...queryObject } = query;
     let result;
     let data = [];
 
@@ -126,8 +126,10 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
       result = await super.query(store, schema, query);
       return prenormalizeArrayResponse(result);
     }
+
     // Run this loop as long as the response_type is delta,
     // which indicates that there are more items in the list
+    // or the batch size has not been reached
     do {
       result = await super.query(store, schema, queryObject);
       //add the result items to a data array
@@ -136,7 +138,10 @@ export default class ApplicationAdapter extends RESTAdapter.extend(
         //pass in the list token for subsequent calls to fetch the remaining list items
         queryObject.list_token = result.list_token;
       }
-    } while (result && result.response_type === 'delta');
+    } while (
+      result?.response_type === 'delta' &&
+      (!batchLimit || data.length < batchLimit)
+    );
 
     result.items = data;
     return prenormalizeArrayResponse(result);
