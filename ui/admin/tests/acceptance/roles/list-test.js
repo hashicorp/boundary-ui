@@ -70,7 +70,7 @@ module('Acceptance | roles | list', function (hooks) {
     assert.true(
       instances.scopes.org.authorized_collection_actions.roles.includes('list'),
     );
-    assert.dom(commonSelectors.HREF(urls.roles)).exists();
+    assert.dom(commonSelectors.HREF(urls.roles)).isVisible();
   });
 
   test('users cannot navigate to index without either list or create actions', async function (assert) {
@@ -91,7 +91,7 @@ module('Acceptance | roles | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.orgScope));
 
-    assert.dom(commonSelectors.HREF(urls.roles)).exists();
+    assert.dom(commonSelectors.HREF(urls.roles)).isVisible();
   });
 
   test('user can search for a specific role by id', async function (assert) {
@@ -99,15 +99,15 @@ module('Acceptance | roles | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roles));
 
-    assert.dom(commonSelectors.HREF(urls.role1)).exists();
-    assert.dom(commonSelectors.HREF(urls.role2)).exists();
+    assert.dom(commonSelectors.HREF(urls.role1)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.role2)).isVisible();
 
     await fillIn(commonSelectors.SEARCH_INPUT, instances.role1.id);
     await waitUntil(
       () => findAll(commonSelectors.HREF(urls.role2)).length === 0,
     );
 
-    assert.dom(commonSelectors.HREF(urls.role1)).exists();
+    assert.dom(commonSelectors.HREF(urls.role1)).isVisible();
     assert.dom(commonSelectors.HREF(urls.role2)).doesNotExist();
   });
 
@@ -116,8 +116,8 @@ module('Acceptance | roles | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roles));
 
-    assert.dom(commonSelectors.HREF(urls.role1)).exists();
-    assert.dom(commonSelectors.HREF(urls.role2)).exists();
+    assert.dom(commonSelectors.HREF(urls.role1)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.role2)).isVisible();
 
     await fillIn(commonSelectors.SEARCH_INPUT, 'fake role that does not exist');
     await waitUntil(() => findAll(selectors.NO_RESULTS_MSG).length === 1);
