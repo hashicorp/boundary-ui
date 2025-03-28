@@ -60,7 +60,14 @@
               data-test-side-nav-user-dropdown
               as |dd|
             >
-              <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
+              {{#if this.session.data.authenticated.username}}
+                <dd.ToggleButton
+                  @icon='user'
+                  @text={{this.session.data.authenticated.username}}
+                />
+              {{else}}
+                <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
+              {{/if}}
 
               <dd.Interactive @route='account.change-password'>{{t
                   'actions.change-password'

@@ -32,7 +32,6 @@ test(
   async ({
     page,
     context,
-    baseURL,
     controllerAddr,
     adminAuthMethodId,
     adminLoginName,
@@ -52,7 +51,7 @@ test(
           userName,
           password,
           email,
-          baseURL,
+          controllerAddr,
         );
       policyName = authPolicyName;
 
@@ -71,7 +70,7 @@ test(
         issuer,
         clientId,
         clientSecret,
-        baseURL,
+        controllerAddr,
       );
 
       // Change OIDC Auth Method state to active-public
@@ -134,9 +133,7 @@ test(
       ).toBeVisible();
 
       // Log back in as an admin
-      // WORKAROUND: Currently, users logging using OIDC don't have a username
-      // displayed in the UI, so there's no simple locator to access this menu.
-      await page.locator('details').filter({ hasText: 'Sign Out' }).click();
+      await page.getByRole('button', { name: 'User Menu' }).click();
       await page.getByRole('button', { name: 'Sign Out' }).click();
       await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
       await loginPage.login(adminLoginName, adminPassword);
@@ -152,7 +149,7 @@ test(
           .getByText(orgName),
       ).toBeVisible();
       await page
-        .getByRole('navigation', { name: 'IAM' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Auth Methods' })
         .click();
       await page.getByRole('link', { name: oidcAuthMethodName }).click();
@@ -241,7 +238,7 @@ test(
 
       // View the User account and verify attributes
       await page
-        .getByRole('navigation', { name: 'IAM' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Users' })
         .click();
       await page
