@@ -68,7 +68,7 @@ module('Acceptance | roles | grants', function (hooks) {
     await visit(urls.grants);
 
     // This checks that only the form for existing grants is displayed
-    assert.dom('main form').exists({ count: 1 });
+    assert.dom(commonSelectors.FORM).exists({ count: 1 });
     assert.dom(selectors.FIELD_NEW_GRANT_ADD_BTN).doesNotExist();
     assert.dom(FIELD_GRANT_DISABLED).exists({ count: grantsCount() });
     assert.dom(selectors.SAVE_BTN).doesNotExist();
