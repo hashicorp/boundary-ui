@@ -17,6 +17,8 @@ module('Acceptance | scopes | update', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  let confirmService;
+
   const instances = {
     scopes: {
       global: null,
@@ -51,22 +53,27 @@ module('Acceptance | scopes | update', function (hooks) {
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.orgScopeEdit = `/scopes/${instances.scopes.org.id}/edit`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
+    confirmService = this.owner.lookup('service:confirm');
+
     await authenticateSession({ isGlobal: true });
   });
 
   test('can save changes to existing scope', async function (assert) {
-    assert.notEqual(instances.scopes.org.name, 'random string');
+    assert.notEqual(
+      instances.scopes.org.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.strictEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -78,25 +85,30 @@ module('Acceptance | scopes | update', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
 
     assert.false(instances.scopes.org.authorized_actions.includes('update'));
-    assert.dom('form [type="button"]').doesNotExist();
+    assert.dom(commonSelectors.SAVE_BTN).doesNotExist();
   });
 
   test('can cancel changes to existing scope', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
-    assert.notEqual(instances.scopes.org.name, 'random string');
-    assert.dom('[name="name"]').hasValue(instances.scopes.org.name);
+    assert.notEqual(
+      instances.scopes.org.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(instances.scopes.org.name);
   });
 
   test('saving an existing scope with invalid fields displays error messages', async function (assert) {
+    const errorMessage =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     await visit(urls.orgScope);
     this.server.patch('/scopes/:id', () => {
       return new Response(
@@ -105,69 +117,70 @@ module('Acceptance | scopes | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
-          details: {
-            request_fields: [
-              {
-                name: 'name',
-                description: 'Name is required.',
-              },
-            ],
-          },
+          message: errorMessage,
         },
       );
     });
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });
 
   test('can discard unsaved scope changes via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.scopes.org.name, 'random string');
+    assert.notEqual(
+      instances.scopes.org.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    await click(`[href="${urls.globalScope}"]`);
-    assert.dom(commonSelectors.MODAL_WARNING).exists();
+
+    await click(commonSelectors.HREF(urls.globalScope));
+
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.notEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
   test('can click cancel on discard dialog box for unsaved scope changes', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.scopes.org.name, 'random string');
+    assert.notEqual(
+      instances.scopes.org.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click('form [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    await click(`[href="${urls.globalScope}"]`);
-    assert.dom(commonSelectors.MODAL_WARNING).exists();
+
+    await click(commonSelectors.HREF(urls.globalScope));
+
+    assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.notEqual(
       this.server.schema.scopes.where({ type: 'org' }).models[0].name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 });

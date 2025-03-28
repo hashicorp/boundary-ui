@@ -4,13 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find, click, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-
 import select from '@ember/test-helpers/dom/select';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | scope | add storage policy', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,16 +20,6 @@ module('Acceptance | scope | add storage policy', function (hooks) {
   let featuresService;
   let policyOne;
   let policyTwo;
-
-  const SETTINGS_LINK_SELECTOR = '.policy-sidebar .hds-link-standalone';
-  const ENABLE_BUTTON_SELECTOR = '.policy-sidebar .hds-button';
-  const DROPDOWN_SELECTOR = '[name=policy_id]';
-
-  const LINK_LIST_SELECTOR_ITEM_TEXT = '.link-list-item__text';
-
-  const LINK_TO_NEW_STORAGE_POLICY = '.hds-link-standalone';
-  const SAVE_BTN_SELECTOR = '.hds-button--color-primary';
-  const CANCEL_BTN_SELECTOR = '.hds-button--color-secondary';
 
   // Instances
   const instances = {
@@ -79,16 +70,21 @@ module('Acceptance | scope | add storage policy', function (hooks) {
 
   test('cannot attach policy on a scope without proper authorization', async function (assert) {
     assert.false(featuresService.isEnabled('ssh-session-recording'));
+
     await visit(urls.orgScopeEdit);
     await a11yAudit();
-    assert.dom('.policy-sidebar a').doesNotExist();
+
+    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).doesNotExist();
   });
 
   test('users can click on add storage policy button in the sidebar and it takes them to add a policy', async function (assert) {
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
-    assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
-    await click(ENABLE_BUTTON_SELECTOR);
+
+    assert.dom(selectors.ADD_STORAGE_POLICY_LINK).doesNotExist();
+
+    await click(selectors.ADD_STORAGE_POLICY_BTN);
+
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
   });
 
@@ -98,38 +94,42 @@ module('Acceptance | scope | add storage policy', function (hooks) {
       storagePolicyId: policyOne.id,
     });
     await visit(urls.orgScopeEdit);
-    await click(SETTINGS_LINK_SELECTOR);
+
+    await click(selectors.ADD_STORAGE_POLICY_LINK);
+
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
   });
 
   test('link to add new storage policy should be displayed and redirect to new storage policy form', async function (assert) {
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
-    await click(ENABLE_BUTTON_SELECTOR);
+    await click(selectors.ADD_STORAGE_POLICY_BTN);
+
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
-    assert.dom(LINK_TO_NEW_STORAGE_POLICY).isVisible();
-    await click(LINK_TO_NEW_STORAGE_POLICY);
+    assert.dom(commonSelectors.HREF(urls.newPolicy)).isVisible();
+
+    await click(commonSelectors.HREF(urls.newPolicy));
+
     assert.strictEqual(currentURL(), urls.newPolicy);
   });
 
   test('can assign a storage policy for the scope', async function (assert) {
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
-    await click(ENABLE_BUTTON_SELECTOR);
+    await click(selectors.ADD_STORAGE_POLICY_BTN);
 
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
 
-    assert.dom(DROPDOWN_SELECTOR).hasNoValue();
-    await select(DROPDOWN_SELECTOR, policyTwo.id);
-    assert.dom(DROPDOWN_SELECTOR).hasValue();
-    await click(SAVE_BTN_SELECTOR);
+    assert.dom(selectors.FIELD_STORAGE_POLICY_SELECT).hasNoValue();
+
+    await select(selectors.FIELD_STORAGE_POLICY_SELECT, policyTwo.id);
+
+    assert.dom(selectors.FIELD_STORAGE_POLICY_SELECT).hasValue();
+
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-
-    assert.strictEqual(
-      find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-      policyTwo.name,
-    );
+    assert.dom(commonSelectors.LINK_LIST_ITEM_TEXT).hasText(policyTwo.name);
   });
 
   test('can cancel changes to an existing storage policy selection', async function (assert) {
@@ -139,18 +139,16 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     });
 
     await visit(urls.orgScopeEdit);
-    await click(SETTINGS_LINK_SELECTOR);
+    await click(selectors.ADD_STORAGE_POLICY_LINK);
+
     assert.strictEqual(currentURL(), urls.addStoragePolicy);
 
     //update the storage policy selection
-    await select(DROPDOWN_SELECTOR, policyTwo);
+    await select(selectors.FIELD_STORAGE_POLICY_SELECT, policyTwo);
 
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-
-    assert.strictEqual(
-      find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-      policyOne.name,
-    );
+    assert.dom(commonSelectors.LINK_LIST_ITEM_TEXT).hasText(policyOne.name);
   });
 });

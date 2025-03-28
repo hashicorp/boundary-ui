@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | scopes | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,10 +19,7 @@ module('Acceptance | scopes | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getScopeCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-projects-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-projects-dropdown] ul li button';
+  let confirmService;
 
   const instances = {
     scopes: {
@@ -56,6 +54,7 @@ module('Acceptance | scopes | delete', function (hooks) {
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
+    confirmService = this.owner.lookup('service:confirm');
     await authenticateSession({ isGlobal: true });
   });
 
@@ -63,9 +62,9 @@ module('Acceptance | scopes | delete', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN);
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN_DELETE);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
   });
@@ -78,21 +77,20 @@ module('Acceptance | scopes | delete', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
 
     assert.false(instances.scopes.org.authorized_actions.includes('delete'));
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).doesNotExist();
   });
 
   test('can accept delete scope via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN);
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount - 1);
@@ -100,14 +98,13 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can cancel delete scope via dialog', async function (assert) {
-    const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN);
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
@@ -128,9 +125,9 @@ module('Acceptance | scopes | delete', function (hooks) {
       );
     });
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN);
+    await click(selectors.MANAGE_PROJECTS_DROPDOWN_DELETE);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
