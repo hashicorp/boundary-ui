@@ -63,5 +63,6 @@ export const FILTER_DROPDOWN_ITEM = (itemList) => `input[value="${itemList}"]`;
 export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
   `.search-filtering [name="${filterName}"] .hds-dropdown__footer button`;
 
+export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
