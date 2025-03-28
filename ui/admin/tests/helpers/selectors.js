@@ -64,3 +64,4 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
   `.search-filtering [name="${filterName}"] .hds-dropdown__footer button`;
 
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
+export const FORM = 'main form';

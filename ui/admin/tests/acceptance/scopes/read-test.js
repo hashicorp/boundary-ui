@@ -59,8 +59,8 @@ module('Acceptance | scopes | read', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom(selectors.SCOPE_FORM).exists();
-    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).exists();
+    assert.dom(commonSelectors.FORM).isVisible();
+    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).isVisible();
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
@@ -78,7 +78,7 @@ module('Acceptance | scopes | read', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(selectors.SCOPE_FORM).exists();
+    assert.dom(commonSelectors.FORM).isVisible();
     assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).doesNotExist();
   });
 
@@ -96,7 +96,7 @@ module('Acceptance | scopes | read', function (hooks) {
     await click(commonSelectors.HREF(urls.globalScopeEdit));
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).exists();
+    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).isVisible();
   });
 
   test('user can attatch a storage policy to a scope in hcp edition', async function (assert) {
@@ -106,7 +106,7 @@ module('Acceptance | scopes | read', function (hooks) {
     await click(commonSelectors.HREF(urls.globalScopeEdit));
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).exists();
+    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).isVisible();
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
@@ -119,6 +119,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.orgScopeEdit));
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom(selectors.SCOPE_FORM).doesNotExist();
+    assert.dom(commonSelectors.FORM).doesNotExist();
   });
 });
