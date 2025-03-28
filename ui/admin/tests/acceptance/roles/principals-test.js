@@ -18,7 +18,7 @@ module('Acceptance | roles | principals', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-role] button';
+  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-roles-dropdown] button';
   const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-role-principals]';
 
   const instances = {
