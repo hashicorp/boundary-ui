@@ -43,3 +43,15 @@ export const REMOVE_ORG_ONLY_BTN = (name) =>
   `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button:last-of-type`;
 export const REMOVE_ORG_PROJECTS_BTN = (name) =>
   `[data-test-manage-scopes-remove-${name}-modal] div:nth-child(3) button`;
+
+// Role grants
+export const FIELD_NEW_GRANT = 'form:nth-child(1) [name="grant"]';
+export const FIELD_NEW_GRANT_ADD_BTN = 'form:nth-child(1) [type="submit"]';
+export const FIELD_GRANT = 'form:nth-child(2) [name="grant"]';
+export const FIELD_GRANT_VALUE = 'ids=123,action=delete';
+export const FIELD_GRANT_REMOVE_BTN =
+  'form:nth-child(2) button[title="Remove"]';
+export const GRANTS_FORM = 'form:nth-child(2)';
+// We need to use a different selector for the grants form because the
+// grants form has multiple submit buttons
+export const SAVE_BTN = '.rose-form-actions [type=submit]';
