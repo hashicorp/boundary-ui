@@ -16,6 +16,7 @@ export default class ApplicationRoute extends Route {
   @service clusterUrl;
   @service ipc;
   @service intl;
+  @service store;
 
   // =attributes
 

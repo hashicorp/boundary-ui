@@ -3,7 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Store, { CacheHandler } from '@ember-data/store';
+// This an example of using Store from ember-data/store to get default configuration automatically.
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import Store from 'ember-data/store';
+import { CacheHandler } from '@ember-data/store';
 import RequestManager from '@ember-data/request';
 import { LegacyNetworkHandler } from '@ember-data/legacy-compat';
 import CacheDaemonHandler from 'api/handlers/cache-daemon-handler';

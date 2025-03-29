@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { A } from '@ember/array';
+import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
 
 export default class ScopesScopeRoute extends Route {
   // =services
@@ -27,19 +28,20 @@ export default class ScopesScopeRoute extends Route {
    * @param {string} params.scope_id
    * @return {Promise{ScopeModel}}
    */
-  model({ scope_id: id }) {
+  async model({ scope_id: id }) {
     // Since only global and org scopes are authenticatable, we can infer type
     // from ID because global has a fixed ID.
-    const type = id === 'global' ? 'global' : 'org';
+    const type = id === 'global' ? TYPE_SCOPE_GLOBAL : TYPE_SCOPE_ORG;
     return this.store.findRecord('scope', id).catch(() => {
       const maybeExistingScope = this.store.peekRecord('scope', id);
-      const scopeOptions = { id, type };
+      const attributes = { type };
       /* istanbul ignore else */
       if (type === 'global') {
-        scopeOptions.name = this.intl.t('titles.global');
+        attributes.name = this.intl.t('titles.global');
       }
       return (
-        maybeExistingScope || this.store.createRecord('scope', scopeOptions)
+        maybeExistingScope ||
+        this.store.push({ data: { id, type: 'scope', attributes } })
       );
     });
   }

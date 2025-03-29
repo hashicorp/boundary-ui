@@ -7,7 +7,9 @@
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
-module.exports = function (defaults) {
+module.exports = async function (defaults) {
+  const { setConfig } = await import('@warp-drive/build-config');
+
   const app = new EmberApp(defaults, {
     hinting: false,
     'ember-cli-babel': {
@@ -35,6 +37,16 @@ module.exports = function (defaults) {
           polyfillUUID: true,
         },
       },
+    },
+  });
+
+  // TODO: This config can be removed in ember-data 6.0.
+  // This silences ember-data deprecate warnings by setting to false to
+  // strip the deprecated code (thereby opting into the new behavior).
+  setConfig(app, __dirname, {
+    deprecations: {
+      DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
+      DEPRECATE_RELATIONSHIP_REMOTE_UPDATE_CLEARING_LOCAL_STATE: false,
     },
   });
 

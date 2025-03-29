@@ -43,7 +43,10 @@ const fetchControllerData = async (context, next) => {
   // If we get an error or cache daemon is unavailable, fall back to calling the API
   context.request.data.query = remainingQuery;
   const results = await next(context.request);
-  const models = results.content.toArray();
+
+  // As a result of https://rfcs.emberjs.com/id/0846-ember-data-deprecate-proxies/ we cannot use proxy array methods like .toArray
+  // use slice() instead as indicated in the RFC.
+  const models = results.content.slice();
 
   const paginatedResult = paginateResults(models, page, pageSize);
   paginatedResult.meta = { totalItems: models.length };
