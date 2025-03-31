@@ -19,6 +19,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 
 const SIGNOUT_SELECTOR = '[data-test-signout-button]';
 
@@ -39,6 +40,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
     target: null,
     target2: null,
     session: null,
+    user: null,
   };
 
   const urls = {
@@ -55,6 +57,8 @@ module('Acceptance | projects | settings | index', function (hooks) {
     projects: null,
     targets: null,
     settings: null,
+    session: null,
+    target: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -64,12 +68,19 @@ module('Acceptance | projects | settings | index', function (hooks) {
   };
 
   hooks.beforeEach(async function () {
+    instances.user = this.server.create('user', {
+      scope: instances.scopes.global,
+    });
     await authenticateSession();
     // Generate scopes
     instances.scopes.global = this.server.create('scope', {
       id: 'global',
       name: 'Global',
     });
+    instances.authMethods.global = this.server.create('auth-method', {
+      scope: instances.scopes.global,
+    });
+
     const globalScope = { id: 'global', type: 'global' };
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
@@ -80,11 +91,34 @@ module('Acceptance | projects | settings | index', function (hooks) {
       type: 'project',
       scope: orgScope,
     });
+    instances.hostCatalog = this.server.create(
+      'host-catalog',
+      { scope: instances.scopes.project },
+      'withChildren',
+    );
+    instances.target = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withAssociations',
+    );
+    instances.session = this.server.create(
+      'session',
+      {
+        scope: instances.scopes.project,
+        target: instances.target,
+        status: STATUS_SESSION_ACTIVE,
+        user: instances.user,
+      },
+      'withAssociations',
+    );
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
-
+    urls.targets = `${urls.projects}/targets`;
+    urls.target = `${urls.targets}/${instances.target.id}`;
     urls.settings = `${urls.projects}/settings`;
+    urls.sessions = `${urls.projects}/sessions`;
+    urls.session = `${urls.sessions}/${instances.session.id}`;
 
     this.owner.register('service:browser/window', WindowMockIPC);
     setDefaultClusterUrl(this);

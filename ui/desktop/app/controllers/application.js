@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+
 export default class ApplicationController extends Controller {
   // =services
 
@@ -14,6 +15,7 @@ export default class ApplicationController extends Controller {
   @service session;
   @service clusterUrl;
   @service flashMessages;
+  @service store;
 
   // =actions
 
@@ -22,6 +24,11 @@ export default class ApplicationController extends Controller {
    */
   @action
   invalidateSession() {
+    // Check if there are any active sessions before invalidating
+    const sessions = this.store.peekAll('session');
+    sessions.forEach(async (session) => {
+      await this.ipc.invoke('stop', { session_id: session.id });
+    });
     this.session.invalidate();
   }
 

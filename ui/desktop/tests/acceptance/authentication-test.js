@@ -15,10 +15,12 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const instances = {
     scopes: {
@@ -181,12 +183,14 @@ module('Acceptance | authentication', function (hooks) {
     await click('[type="submit"]');
     assert.ok(currentSession().isAuthenticated);
     await click('.rose-header-utilities .rose-dropdown summary');
+
     assert.strictEqual(
       find(
         '.rose-header-utilities .rose-dropdown-content button',
       ).textContent.trim(),
       'Sign Out',
     );
+
     await click('.rose-header-utilities .rose-dropdown-content button');
     assert.notOk(currentSession().isAuthenticated);
   });

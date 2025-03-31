@@ -33,8 +33,10 @@ module('Integration | Component | settings-card/user', function (hooks) {
         isAuthenticated = true;
       },
     );
-
-    await render(hbs`<SettingsCard::User />`);
+    this.set('invalidateSession', () => {});
+    await render(
+      hbs`<SettingsCard::User @invalidateSession={{this.invalidateSession}}/>`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('Password');
@@ -51,8 +53,11 @@ module('Integration | Component | settings-card/user', function (hooks) {
         isAuthenticated = true;
       },
     );
+    this.set('invalidateSession', () => {});
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @invalidateSession={{this.invalidateSession}}/>`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('OIDC');
@@ -69,8 +74,11 @@ module('Integration | Component | settings-card/user', function (hooks) {
         isAuthenticated = true;
       },
     );
+    this.set('invalidateSession', () => {});
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @invalidateSession={{this.invalidateSession}}/>`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('LDAP');
