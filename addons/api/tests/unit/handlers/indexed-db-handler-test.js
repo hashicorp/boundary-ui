@@ -72,6 +72,9 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     manager.use([handler]);
   });
 
+  // this number is intentionally different from the `testBatchLimit` so
+  // that multiple calls to the server are required to fetch a single batch,
+  // and these multiples can be asserted in the tests individually
   const serverResultPageLimit = 5;
   let aliases, aliasesServerHandlerSpy;
   hooks.beforeEach(function setupMirageData() {
