@@ -6,6 +6,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { faker } from '@faker-js/faker';
 import sinon from 'sinon';
 import { assert } from '@ember/debug';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
 function createPaginatedResponses(mirageRecords, { pageSize }) {
   assert('pageSize is required', pageSize);
@@ -39,6 +40,7 @@ function createPaginatedResponses(mirageRecords, { pageSize }) {
 
 module('Unit | Handler | indexed-db-handler', function (hooks) {
   setupTest(hooks);
+  setupIndexedDb(hooks);
   setupMirage(hooks);
 
   const testBatchLimit = 10;
@@ -57,7 +59,6 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
 
   let manager, handler, store, applicationAdapter;
   hooks.beforeEach(async function setupIndexHandler() {
-    const indexedDBService = this.owner.lookup('service:indexed-db');
     store = this.owner.lookup('service:store');
     manager = new RequestManager();
     handler = new IndexedDbHandler(store);
@@ -69,9 +70,6 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
 
     store.requestManager = manager;
     manager.use([handler]);
-    await indexedDBService.setup(
-      `test-db-${faker.string.nanoid({ min: 5, max: 5 })}`,
-    );
   });
 
   const serverResultPageLimit = 5;
