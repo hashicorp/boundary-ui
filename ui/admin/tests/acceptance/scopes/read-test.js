@@ -10,6 +10,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | scopes | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,13 +20,6 @@ module('Acceptance | scopes | read', function (hooks) {
 
   let features;
   let featureEdition;
-
-  const FORM_SELECTOR = 'main .rose-form';
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-projects-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-projects-dropdown] ul li button';
-  const STORAGE_POLICY_SIDEBAR = '.policy-sidebar';
 
   const instances = {
     scopes: {
@@ -60,12 +55,12 @@ module('Acceptance | scopes | read', function (hooks) {
     await visit(urls.orgScope);
     await a11yAudit();
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom(FORM_SELECTOR).exists();
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
+    assert.dom(commonSelectors.FORM).isVisible();
+    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).isVisible();
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
@@ -79,40 +74,39 @@ module('Acceptance | scopes | read', function (hooks) {
     await visit(urls.globalScope);
     await a11yAudit();
 
-    await click(`[href="${urls.globalScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.globalScopeEdit));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(FORM_SELECTOR).exists();
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
-    assert.dom(DELETE_ACTION_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.FORM).isVisible();
+    assert.dom(selectors.MANAGE_PROJECTS_DROPDOWN).doesNotExist();
   });
 
   test('user cannot visit global scope settings when feature flag is not enabled', async function (assert) {
     await visit(urls.globalScope);
 
     assert.strictEqual(currentURL(), urls.globalScope);
-    assert.dom(`[href="${urls.globalScopeEdit}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.globalScopeEdit)).doesNotExist();
   });
 
   test('user can attatch a storage policy to a scope in enterprise edition', async function (assert) {
     featureEdition.setEdition('enterprise', ['ssh-session-recording']);
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.globalScopeEdit));
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(STORAGE_POLICY_SIDEBAR).exists();
+    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).isVisible();
   });
 
   test('user can attatch a storage policy to a scope in hcp edition', async function (assert) {
     featureEdition.setEdition('hcp', ['ssh-session-recording']);
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.globalScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.globalScopeEdit));
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
-    assert.dom(STORAGE_POLICY_SIDEBAR).exists();
+    assert.dom(selectors.STORAGE_POLICY_SIDEBAR).isVisible();
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
@@ -123,8 +117,8 @@ module('Acceptance | scopes | read', function (hooks) {
     });
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.orgScopeEdit}"]`);
+    await click(commonSelectors.HREF(urls.orgScopeEdit));
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
-    assert.dom(FORM_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.FORM).doesNotExist();
   });
 });
