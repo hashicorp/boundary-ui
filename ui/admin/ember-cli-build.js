@@ -44,7 +44,6 @@ module.exports = async function (defaults) {
   // This silences ember-data deprecate warnings by setting to false to
   // strip the deprecated code (thereby opting into the new behavior).
   setConfig(app, __dirname, {
-    //compatWith: '5.3',
     deprecations: {
       DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
       DEPRECATE_RELATIONSHIP_REMOTE_UPDATE_CLEARING_LOCAL_STATE: false,
