@@ -6,6 +6,7 @@
 const { path } = require('../cli/path.js');
 const { spawn, spawnSync } = require('child_process');
 const jsonify = require('../utils/jsonify.js');
+const { isWindows } = require('./platform.js');
 
 // You can throw exceptions, or allow them to occur, and this is supported.
 // Exceptions thrown in this way will be returned to the UI as an
@@ -37,6 +38,7 @@ module.exports = {
           ...process.env,
           BOUNDARY_TOKEN: token,
         },
+        detached: isWindows,
       });
       let outputStream = '';
       let errorStream = '';
