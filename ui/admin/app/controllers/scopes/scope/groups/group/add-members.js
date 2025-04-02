@@ -65,6 +65,11 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    */
   @action
   callFilterBy(field, value) {
+    console.log('field:', field);
+    console.log('value:', value);
+    // keep a tracked variable for the selected items
+    // and pass it to the applyFilter function
+
     this.send('filterBy', field, value);
   }
 
@@ -73,6 +78,8 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    */
   @action
   callClearAllFilters() {
+    // use the selectedItems array to see if the item is already selected, if so deselect them
+    // and call the clearAllFilters function
     this.send('clearAllFilters');
   }
 }

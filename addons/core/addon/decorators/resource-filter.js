@@ -78,6 +78,7 @@ class RouteResourceFilter extends EmberObject {
   }
   set value(value) {
     const queryParams = {};
+    console.log(value, 'VALUE');
     const serialized = value.map((value) => this.serializeValue(value));
     queryParams[this.filterKey] = JSON.stringify(serialized);
     this.router.transitionTo(this.route.routeName, { queryParams });
