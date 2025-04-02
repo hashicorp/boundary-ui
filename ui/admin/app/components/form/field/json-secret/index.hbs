@@ -6,7 +6,7 @@
 <div class='secret-editor'>
   {{#if this.isDisabled}}
     <Form::Field::JsonSecret::Skeleton>
-      <Rose::Icon @name='flight-icons/svg/eye-off-16' @size='medium' />
+      <Hds::Icon @name='eye-off' @isInline={{true}} />
       {{t 'form.secret-editor.details'}}
     </Form::Field::JsonSecret::Skeleton>
   {{else if this.isActionable}}

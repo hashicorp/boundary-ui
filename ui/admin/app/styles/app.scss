@@ -38,7 +38,7 @@
     margin-top: 0;
   }
 
-  .rose-icon {
+  .hds-icon {
     margin-right: sizing.rems(xs);
   }
 }
@@ -303,10 +303,6 @@
         }
       }
     }
-
-    .rose-icon {
-      color: var(--success);
-    }
   }
 }
 
@@ -431,6 +427,9 @@
     left: 50%;
     position: absolute;
     top: 50%;
+    display: flex;
+    align-items: center;
+    gap: sizing.rems(xxxs);
 
     // centers message with editor body and gutter
     transform: translate(-50%, -50%);

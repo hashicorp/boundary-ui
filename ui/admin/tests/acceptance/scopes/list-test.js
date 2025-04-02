@@ -60,10 +60,10 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
-      .exists();
+      .isVisible();
 
     await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.org1.id);
     await waitFor(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id), {
@@ -72,7 +72,7 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
       .doesNotExist();
@@ -83,10 +83,10 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.org2.id))
-      .exists();
+      .isVisible();
 
     await fillIn(
       commonSelectors.SEARCH_INPUT,
@@ -107,10 +107,10 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
-      .exists();
+      .isVisible();
 
     await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.project1.id);
     await waitFor(
@@ -122,7 +122,7 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
       .doesNotExist();
@@ -133,10 +133,10 @@ module('Acceptance | scopes | list', function (hooks) {
 
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project1.id))
-      .exists();
+      .isVisible();
     assert
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
-      .exists();
+      .isVisible();
 
     await fillIn(
       commonSelectors.SEARCH_INPUT,
