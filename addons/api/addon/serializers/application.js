@@ -244,12 +244,10 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {object}
    */
   normalizeMissingArrays(store, primaryModelClass, payload) {
-    const attrDefs = store
-      .getSchemaDefinitionService()
-      .attributesDefinitionFor({ type: primaryModelClass.modelName });
+    const attrDefs = store.schema.fields({ type: primaryModelClass.modelName });
     if (attrDefs) {
-      Object.keys(attrDefs).forEach((key) => {
-        if (!payload[key] && attrDefs[key]?.options?.emptyArrayIfMissing) {
+      attrDefs.keys().forEach((key) => {
+        if (!payload[key] && attrDefs.get(key)?.options?.emptyArrayIfMissing) {
           payload[key] = [];
         }
       });
@@ -268,12 +266,10 @@ export default class ApplicationSerializer extends RESTSerializer {
    * @return {object}
    */
   normalizeMissingObjects(store, primaryModelClass, payload) {
-    const attrDefs = store
-      .getSchemaDefinitionService()
-      .attributesDefinitionFor({ type: primaryModelClass.modelName });
+    const attrDefs = store.schema.fields({ type: primaryModelClass.modelName });
     if (attrDefs) {
-      Object.keys(attrDefs).forEach((key) => {
-        if (!payload[key] && attrDefs[key]?.options?.emptyObjectIfMissing) {
+      attrDefs.keys().forEach((key) => {
+        if (!payload[key] && attrDefs.get(key)?.options?.emptyObjectIfMissing) {
           payload[key] = {};
         }
       });
