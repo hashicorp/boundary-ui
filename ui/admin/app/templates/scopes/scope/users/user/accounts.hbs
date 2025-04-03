@@ -46,10 +46,14 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <span class='hds-font-weight-semibold'>{{#if
-                  (can 'read accounts' B.data)
-                }}
-                  {{B.data.accountName}}
+              <span class='hds-font-weight-semibold'>
+                {{#if (can 'read accounts' B.data)}}
+                  <LinkTo
+                    @route='scopes.scope.auth-methods.auth-method.accounts.account'
+                    @models={{array B.data.auth_method_id B.data.id}}
+                  >
+                    {{B.data.accountName}}
+                  </LinkTo>
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
