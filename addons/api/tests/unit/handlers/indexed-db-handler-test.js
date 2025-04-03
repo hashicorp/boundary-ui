@@ -35,7 +35,7 @@ function createPaginatedResponseHandler(mirageRecords, { pageSize }) {
       ({ list_token }) => list_token === listToken,
     );
     const nextResult = index === -1 ? null : results[index + 1];
-    return nextResult ?? null;
+    return nextResult;
   }
 
   // mirage handler compatible with paginated responses
@@ -46,7 +46,15 @@ function createPaginatedResponseHandler(mirageRecords, { pageSize }) {
     }
 
     const result = nextResult(listToken);
-    assert('requested paginated result should exist', result);
+
+    if (!result) {
+      return new Response(
+        404,
+        {},
+        `No results found for list token "${listToken}"`,
+      );
+    }
+
     return result;
   };
 }
