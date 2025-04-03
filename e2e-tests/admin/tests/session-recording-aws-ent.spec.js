@@ -62,6 +62,9 @@ test(
       const projectName = await projectsPage.createProject();
 
       // Create storage bucket
+      await page
+        .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+        .click();
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       const storageBucketsPage = new StorageBucketsPage(page);
       const storageBucketName = await storageBucketsPage.createStorageBucketAws(
@@ -107,6 +110,9 @@ test(
       await targetsPage.enableSessionRecording(storageBucketName);
 
       // Create storage policy in org scope: keep session recordings forever
+      await page
+        .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+        .click();
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
       await page.getByRole('link', { name: orgName }).click();
@@ -146,9 +152,12 @@ test(
       await boundaryCli.waitForSessionRecording(storageBucket.id);
 
       // Play back session recording
+      await page
+        .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+        .click();
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       await page
-        .getByRole('navigation', { name: 'General' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Session Recordings', exact: true })
         .click();
       await page

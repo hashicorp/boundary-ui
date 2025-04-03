@@ -16,7 +16,7 @@ export class HostCatalogsPage extends BaseResourcePage {
   async createHostCatalog() {
     const hostCatalogName = 'Host Catalog ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Host Catalogs' })
       .click();
     await expect(
