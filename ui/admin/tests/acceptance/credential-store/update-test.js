@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -381,7 +388,17 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click(commonSelectors.HREF(urls.workerFilter));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.EDIT_WORKER_FILTER_ACTION);
-    await fillIn(commonSelectors.CODE_EDITOR_CONTENT, '"bar" in "/tags/foo"');
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.CODE_EDITOR_BODY);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: '"bar" in "/tags/foo"',
+      },
+    });
+
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.CODE_BLOCK_BODY).exists();

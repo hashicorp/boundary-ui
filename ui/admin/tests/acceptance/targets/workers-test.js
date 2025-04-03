@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, find, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
@@ -20,8 +20,21 @@ module('Acceptance | targets | workers', function (hooks) {
   let featuresService;
   let featureEdition;
 
+<<<<<<< HEAD
   const EGRESS_WORKER_FILTER_VALUE = '"egress" in "/worker/filters"';
   const INGRESS_WORKER_FILTER_VALUE = '"ingress" in "/worker/filters"';
+=======
+  const ACCORDION_DROPDOWN_TEXT_SELECTOR = (name) =>
+    `[data-test-target-${name}-workers-accordion-item] a`;
+  const ACCORDION_DROPDOWN_SELECTOR = (name) =>
+    `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
+  const CODE_BLOCK_SELECTOR = (name) =>
+    `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
+  const CODE_EDITOR_CM_LOADED = '.cm-editor';
+  const CODE_EDITOR_CONTENT_SELECTOR = '.hds-code-editor__editor';
+  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
+  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
+>>>>>>> ed0916f8c (updating tests for new code editor)
 
   const instances = {
     scopes: {
@@ -187,11 +200,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
+    await waitFor(CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      INGRESS_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: INGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
@@ -208,11 +227,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
+    await waitFor(CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      INGRESS_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: INGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
@@ -234,10 +259,17 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      EGRESS_WORKER_FILTER_VALUE,
-    );
+    await waitFor(CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: EGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
@@ -285,11 +317,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
+    await waitFor(CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      EGRESS_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: EGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
@@ -312,10 +350,16 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      INGRESS_WORKER_FILTER_VALUE,
-    );
+    await waitFor(CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: INGRESS_WORKER_FILTER_VALUE,
+      },
+    });
     await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
@@ -339,10 +383,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      INGRESS_WORKER_FILTER_VALUE,
-    );
+    await waitFor(CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: ingressWorkerFilter,
+      },
+    });
+
     await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
@@ -365,10 +416,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      EGRESS_WORKER_FILTER_VALUE,
-    );
+    await waitFor(CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: EGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
@@ -391,11 +449,17 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
+    await waitFor(CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      EGRESS_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: EGRESS_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
