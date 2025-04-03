@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import { assert } from '@ember/debug';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 
-function createPaginatedResponses(mirageRecords, { pageSize }) {
+function createPaginatedResponseHandler(mirageRecords, { pageSize }) {
   assert('pageSize is required', pageSize);
   const pagesCount = mirageRecords.length / pageSize;
 
@@ -25,16 +25,24 @@ function createPaginatedResponses(mirageRecords, { pageSize }) {
     });
   }
 
-  return {
-    results,
+  function nextResult(listToken) {
+    const index = results.findIndex(
+      ({ list_token }) => list_token === listToken,
+    );
+    const nextResult = index === -1 ? null : results[index + 1];
+    return nextResult ?? null;
+  }
 
-    nextResult(listToken) {
-      const index = results.findIndex(
-        ({ list_token }) => list_token === listToken,
-      );
-      const nextResult = index === -1 ? null : results[index + 1];
-      return nextResult ?? null;
-    },
+  // mirage handler compatible with paginated responses
+  return function (_schema, request) {
+    const listToken = request.queryParams.list_token;
+    if (!listToken) {
+      return results[0];
+    }
+
+    const result = nextResult(listToken);
+    assert('requested paginated result should exist', result);
+    return result;
   };
 }
 
@@ -42,20 +50,6 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
   setupTest(hooks);
   setupIndexedDb(hooks);
   setupMirage(hooks);
-
-  const testBatchLimit = 10;
-  let previousBatchLimit;
-  hooks.beforeEach(function setBatchLimitConfig() {
-    const environmentConfig =
-      this.owner.resolveRegistration('config:environment');
-    previousBatchLimit = environmentConfig.api.batchLimit;
-    environmentConfig.api.batchLimit = testBatchLimit;
-  });
-  hooks.afterEach(function restoreBatchLimitConfig() {
-    const environmentConfig =
-      this.owner.resolveRegistration('config:environment');
-    environmentConfig.api.batchLimit = previousBatchLimit;
-  });
 
   let manager, handler, store, applicationAdapter;
   hooks.beforeEach(async function setupIndexHandler() {
@@ -72,76 +66,115 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     manager.use([handler]);
   });
 
-  // this number is intentionally different from the `testBatchLimit` so
-  // that multiple calls to the server are required to fetch a single batch,
-  // and these multiples can be asserted in the tests individually
-  const serverResultPageLimit = 5;
-  let aliases, aliasesServerHandlerSpy;
-  hooks.beforeEach(function setupMirageData() {
-    aliases = this.server.createList('alias', 50);
-    const paginatedResponses = createPaginatedResponses(
-      this.server.schema.aliases.all().models,
-      { pageSize: serverResultPageLimit },
-    );
+  module('fetching and batch loading', function (hooks) {
+    // `testBatchLimit` and `serverResultPageLimit` are intentionally difference
+    // so that multiple calls to the server are required to fetch a single batch,
+    // and these multiples can be asserted in the tests individually
+    const testBatchLimit = 10;
+    const serverResultPageLimit = 5;
 
-    // mock response for aliases query
-    aliasesServerHandlerSpy = sinon.spy(function (_schema, request) {
-      const listToken = request.queryParams.list_token;
-      if (!listToken) {
-        return paginatedResponses.results[0];
-      }
-
-      const result = paginatedResponses.nextResult(listToken);
-      assert('requested paginated result should exist', result);
-      return result;
+    hooks.beforeEach(function () {
+      handler.batchLimit = testBatchLimit;
     });
-    this.server.get('aliases', aliasesServerHandlerSpy);
+
+    let aliases, aliasResponseHandlerSpy;
+
+    hooks.beforeEach(function setupMirageData() {
+      aliases = this.server.createList('alias', 50);
+
+      const aliasResponseHandler = createPaginatedResponseHandler(
+        this.server.schema.aliases.all().models,
+        { pageSize: serverResultPageLimit },
+      );
+
+      aliasResponseHandlerSpy = sinon.spy(aliasResponseHandler);
+      this.server.get('aliases', aliasResponseHandlerSpy);
+    });
+
+    test('it returns all data for a resource from the server', async function (assert) {
+      const results = await store.query('alias', {});
+
+      assert.strictEqual(
+        aliases.length,
+        results.length,
+        'all records are returned',
+      );
+
+      const aliasesSortedByCreatedTime = [...aliases].sort(
+        (a, b) => new Date(b.created_time) - new Date(a.created_time),
+      );
+
+      assert.deepEqual(
+        aliasesSortedByCreatedTime.map(({ name }) => name),
+        results.map(({ name }) => name),
+        '`name` property matches between the returned results and the mirage records sorted by created_time',
+      );
+    });
+
+    test('supports batching requests and writes to indexedDB', async function (assert) {
+      await store.query('alias', {});
+
+      assert.strictEqual(
+        handler.writeToIndexedDb.callCount,
+        aliases.length / testBatchLimit,
+        'handler #writeToIndexedDb is called once for each batch',
+      );
+
+      assert.strictEqual(
+        applicationAdapter.query.callCount,
+        aliases.length / testBatchLimit,
+        'application adapter #query is called once for each batch',
+      );
+
+      assert.strictEqual(
+        aliasResponseHandlerSpy.callCount,
+        aliases.length / serverResultPageLimit,
+        'server handler should be called once for each page',
+      );
+    });
   });
 
-  test('it returns data sorted by created_time', async function (assert) {
-    const results = await store.query('alias', {});
+  module('sorting', function () {
+    test('it sorts by descending `created_time` by default', async function (assert) {
+      const target2020 = this.server.create('target', {
+        name: 'Target 2020',
+        created_time: '2020-01-01T00:00:00Z',
+      });
 
-    assert.strictEqual(
-      aliases.length,
-      results.length,
-      'all records are returned',
-    );
+      const target2021 = this.server.create('target', {
+        name: 'Target 2021',
+        created_time: '2021-01-01T00:00:00Z',
+      });
 
-    const aliasesSortedByCreatedTime = [...aliases].sort(
-      (a, b) => new Date(b.created_time) - new Date(a.created_time),
-    );
-    assert.notDeepEqual(
-      aliases,
-      aliasesSortedByCreatedTime,
-      'aliases are not sorted by created_time by default',
-    );
+      const target2022 = this.server.create('target', {
+        name: 'Target 2022',
+        created_time: '2022-01-01T00:00:00Z',
+      });
 
-    assert.deepEqual(
-      aliasesSortedByCreatedTime.map(({ name }) => name),
-      results.map(({ name }) => name),
-      '`name` property matches between the returned results and the mirage records sorted by created_time',
-    );
-  });
+      const target2023 = this.server.create('target', {
+        name: 'Target 2023',
+        created_time: '2023-01-01T00:00:00Z',
+      });
 
-  test('supports batching requests and writes to indexedDB', async function (assert) {
-    await store.query('alias', {});
+      const shuffledTargets = faker.helpers.shuffle([
+        target2020,
+        target2021,
+        target2022,
+        target2023,
+      ]);
 
-    assert.strictEqual(
-      handler.writeToIndexedDb.callCount,
-      aliases.length / testBatchLimit,
-      'handler #writeToIndexedDb is called once for each batch',
-    );
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(shuffledTargets, {
+          pageSize: 1,
+        }),
+      );
 
-    assert.strictEqual(
-      applicationAdapter.query.callCount,
-      aliases.length / testBatchLimit,
-      'application adapter #query is called once for each batch',
-    );
-
-    assert.strictEqual(
-      aliasesServerHandlerSpy.callCount,
-      aliases.length / serverResultPageLimit,
-      'server handler should be called once for each page',
-    );
+      const results = await store.query('target', {});
+      assert.deepEqual(
+        results.map(({ name }) => name),
+        ['Target 2023', 'Target 2022', 'Target 2021', 'Target 2020'],
+      );
+    });
   });
 });
