@@ -38,7 +38,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
 
   // =properties
   /**
-   * Returns directory creation text for `<Hds::CodeEditor>`.
+   * Returns directory creation text for `<Hds::CodeBlock>`.
    * @type {string}
    */
   get createConfigText() {
@@ -55,7 +55,7 @@ touch ${this.configFilePath || '<path>'}/pki-worker.hcl`;
   }
 
   /**
-   * Returns config creation text for `<Hds::CodeEditor>`. The user will see
+   * Returns config creation text for `<Hds::CodeBlock>`. The user will see
    * different outputs based on if they are using `hcp` or `oss` binaries.
    * @type {string}
    */
@@ -108,7 +108,7 @@ ${listenerText}
 
   /**
    * Returns boundary installation command and start worker server command
-   * for `<Hds::CodeEditor>`.
+   * for `<Hds::CodeBlock>`.
    * @type {string}
    */
   get installBoundaryText() {
