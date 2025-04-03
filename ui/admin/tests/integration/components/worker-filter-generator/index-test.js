@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click, fillIn, select } from '@ember/test-helpers';
+import { render, click, fillIn, select, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
 
@@ -15,9 +15,8 @@ module(
     setupRenderingTest(hooks);
     setupIntl(hooks, 'en-us');
 
-    const CODE_EDITOR = '[data-test-code-editor-field-editor]';
-    const CODE_EDITOR_LINE =
-      '[data-test-code-editor-field-editor] .CodeMirror-line';
+    const CODE_EDITOR = '.hds-code-editor__editor';
+    const CODE_EDITOR_CONTENT = '.cm-content';
     const FILTER_GENERATOR = '[name="filter_generator"]';
     const SHOW_FILTER_GENERATOR = '[name="show_filter_generator"]';
     const TAG_TYPE_OPTION = '[value="tag"]';
@@ -32,9 +31,10 @@ module(
       await render(
         hbs`<WorkerFilterGenerator @name='egress_worker_filter' @model={{this.model}} />`,
       );
+      await waitFor('.cm-editor');
 
       assert.dom(CODE_EDITOR).isVisible();
-      assert.dom(CODE_EDITOR_LINE).hasText(this.model.egress_worker_filter);
+      assert.dom(CODE_EDITOR_CONTENT).hasText(this.model.egress_worker_filter);
     });
 
     test('it renders correct content when ingress_worker_filter is passed in', async function (assert) {
@@ -42,9 +42,10 @@ module(
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
       );
+      await waitFor('.cm-editor');
 
       assert.dom(CODE_EDITOR).isVisible();
-      assert.dom(CODE_EDITOR_LINE).hasText(this.model.ingress_worker_filter);
+      assert.dom(CODE_EDITOR_CONTENT).hasText(this.model.ingress_worker_filter);
     });
 
     test('toggleFilterGenerator shows filter generator when toggled on', async function (assert) {

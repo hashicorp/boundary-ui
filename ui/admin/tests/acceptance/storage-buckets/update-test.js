@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn } from '@ember/test-helpers';
+import { visit, click, fillIn, find, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -165,10 +165,16 @@ module('Acceptance | storage-buckets | update', function (hooks) {
 
     await click(`[href="${urls.storageBucket}"]`);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
     await click(commonSelectors.SAVE_BTN);
 
     assert
