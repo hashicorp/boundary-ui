@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -115,10 +122,17 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(selectors.TYPE_VAULT);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.CODE_EDITOR_BODY);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.CODE_BLOCK_BODY).doesNotExist();

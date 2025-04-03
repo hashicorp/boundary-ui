@@ -4,7 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  select,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
@@ -69,11 +77,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await select(selectors.FIELD_SCOPE, 'global');
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isNotDisabled();
     assert.dom(selectors.FIELD_BUCKET_PREFIX).isNotDisabled();
@@ -114,11 +127,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await select(selectors.FIELD_SCOPE, instances.scopes.org.id);
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
 
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     assert.dom(selectors.FIELD_BUCKET_NAME).isNotDisabled();
     assert.dom(selectors.FIELD_BUCKET_PREFIX).isNotDisabled();
@@ -173,10 +191,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     );
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     await click(commonSelectors.SAVE_BTN);
 
@@ -224,10 +248,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     await click(commonSelectors.SAVE_BTN);
     const storageBucket = this.server.schema.storageBuckets.findBy({
@@ -265,10 +295,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(selectors.FIELD_STATIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     await click(commonSelectors.SAVE_BTN);
 
@@ -316,10 +352,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     );
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
 
     await click(commonSelectors.SAVE_BTN);
 
@@ -404,10 +446,16 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await visit(urls.storageBuckets);
 
     await click(`[href="${urls.newStorageBucket}"]`);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+
+    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
     await click(commonSelectors.SAVE_BTN);
 
     assert
