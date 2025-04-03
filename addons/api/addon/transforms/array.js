@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Transform from '@ember-data/serializer/transform';
 import { TrackedArray } from 'tracked-built-ins';
 
-export default class ArrayTransform extends Transform {
+export default class ArrayTransform {
   deserialize(serialized) {
     const arr = new TrackedArray(serialized || []);
     return arr;
@@ -15,5 +14,9 @@ export default class ArrayTransform extends Transform {
   serialize(deserialized) {
     const arr = deserialized || [];
     return arr;
+  }
+
+  static create() {
+    return new this();
   }
 }
