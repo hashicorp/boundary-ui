@@ -6049,7 +6049,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hashicorp/design-system-components@npm:^4.16.0":
+"@hashicorp/design-system-components@npm:^4.18.1":
   version: 4.18.1
   resolution: "@hashicorp/design-system-components@npm:4.18.1"
   dependencies:
@@ -21457,7 +21457,7 @@ __metadata:
     "@embroider/test-setup": "npm:^2.1.1"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
-    "@hashicorp/design-system-components": "npm:^4.16.0"
+    "@hashicorp/design-system-components": "npm:^4.18.1"
     babel-loader: "npm:^9.2.1"
     babel-plugin-ember-modules-api-polyfill: "npm:^2.12.0"
     babel-plugin-htmlbars-inline-precompile: "npm:3"
