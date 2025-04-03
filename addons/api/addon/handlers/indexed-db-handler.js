@@ -17,14 +17,14 @@ import { hashCode } from '../utils/hash-code';
 export default class IndexedDbHandler {
   @service indexedDb;
 
+  batchLimit = 10_000;
+
   constructor(context) {
     setOwner(this, getOwner(context));
   }
 
   async request(context, next) {
-    const environmentConfig =
-      getOwner(this).resolveRegistration('config:environment');
-    const batchLimit = environmentConfig.api?.batchLimit ?? 10000;
+    const { batchLimit } = this;
 
     switch (context.request.op) {
       case 'query': {
