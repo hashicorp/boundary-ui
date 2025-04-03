@@ -10,6 +10,8 @@ import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
 
+const BATCH_LIMIT = 10000;
+
 /**
  * Handler to sit in front of the API request layer
  * so we can handle any caching with indexedDb first
@@ -52,84 +54,54 @@ export default class IndexedDbHandler {
 
         if (!peekIndexedDB) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
-
+          let payload;
           let listToken;
+          let writeToIndexedDbPromise;
+
           if (storeToken) {
-            listToken = await indexedDb.token.get(tokenKey);
+            const tokenObj = await indexedDb.token.get(tokenKey);
+            listToken = tokenObj?.token;
           }
 
-          let payload;
-          try {
-            payload = await adapter.query(store, schema, {
-              ...remainingQuery,
-              list_token: listToken?.token,
-            });
-          } catch (e) {
-            // If we get an invalid list token, we'll delete the token and
-            // clear the DB and try again without a token.
-            if (
-              e?.errors[0].status === 400 &&
-              e?.errors[0].code === 'invalid list token'
-            ) {
-              await indexedDb[type].clear();
-              // Delete all tokens of the same resource type so we don't keep clearing the DB.
-              // Even if other tokens may still be valid, we might have cleared data that they
-              // depended on so we should clear all tokens of the same type when clearing the DB.
-              const tokenKeys = await indexedDb.token
-                .where(':id')
-                .startsWith(type)
-                .primaryKeys();
-
-              await indexedDb.token.bulkDelete(tokenKeys);
-
+          do {
+            try {
               payload = await adapter.query(store, schema, {
                 ...remainingQuery,
+                list_token: listToken,
+                batchLimit: BATCH_LIMIT,
               });
-            } else {
-              throw e;
+
+              // await the previous writeToIndexedDbPromise before writing to indexedDb again
+              if (writeToIndexedDbPromise) {
+                await writeToIndexedDbPromise;
+              }
+            } catch (err) {
+              payload = await this.retryQueryFailure({
+                err,
+                indexedDb,
+                type,
+                adapter,
+                store,
+                schema,
+                remainingQuery,
+              });
             }
-          }
+            listToken = payload.list_token;
 
-          // Store the token we just got back from the payload if it exists
-          if (payload.list_token && storeToken) {
-            await indexedDb.token.put({
-              id: tokenKey,
-              token: payload.list_token,
-            });
-          }
-
-          // Remove any records from the DB if the API indicates they've been deleted
-          if (payload.removed_ids?.length > 0) {
-            await indexedDb[type].bulkDelete(payload.removed_ids);
-          }
-          // This is a temporary fix of clearing the DB (specifically for auth-methods)
-          // since we are not storing the token we do not get back a list of removed_ids
-          // from the API call and we do not want deleted items from showing in list view.
-          if (!storeToken) {
-            await indexedDb[type].clear();
-          }
-
-          const normalizedPayload = serializer.normalizeResponse(
-            store,
-            schema,
-            payload,
-            null,
-            'query',
-          );
-
-          const { data: payloadData } = normalizedPayload;
-
-          // Store the new data we just got back from the API refresh
-          const items = payloadData.map((datum) =>
-            this.indexedDb.normalizeData({
-              data: datum,
-              cleanData: true,
-              schema,
+            // Don't await immediately and let the next query run while we write to indexedDb
+            writeToIndexedDbPromise = this.writeToIndexedDb({
+              payload,
+              storeToken,
+              indexedDb,
+              tokenKey,
+              type,
               serializer,
-            }),
-          );
+              store,
+              schema,
+            });
+          } while (payload.response_type === 'delta');
 
-          await indexedDb[type].bulkPut(items);
+          await writeToIndexedDbPromise;
         }
 
         const indexedDbResults = await queryIndexedDb(
@@ -163,10 +135,98 @@ export default class IndexedDbHandler {
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
         records.meta = { totalItems: indexedDbResults.length };
+
         return records;
       }
       default:
         return next(context.request);
     }
+  }
+
+  async retryQueryFailure({
+    err,
+    indexedDb,
+    type,
+    adapter,
+    store,
+    schema,
+    remainingQuery,
+  }) {
+    // If we get an invalid list token, we'll delete the token and
+    // clear the DB and try again without a token.
+    if (
+      err?.errors[0].status === 400 &&
+      err?.errors[0].code === 'invalid list token'
+    ) {
+      await indexedDb[type].clear();
+      // Delete all tokens of the same resource type so we don't keep clearing the DB.
+      // Even if other tokens may still be valid, we might have cleared data that they
+      // depended on so we should clear all tokens of the same type when clearing the DB.
+      const tokenKeys = await indexedDb.token
+        .where(':id')
+        .startsWith(type)
+        .primaryKeys();
+
+      await indexedDb.token.bulkDelete(tokenKeys);
+
+      return await adapter.query(store, schema, {
+        ...remainingQuery,
+      });
+    } else {
+      throw err;
+    }
+  }
+
+  async writeToIndexedDb({
+    payload,
+    storeToken,
+    indexedDb,
+    tokenKey,
+    type,
+    serializer,
+    store,
+    schema,
+  }) {
+    // Store the token we just got back from the payload if it exists
+    if (payload.list_token && storeToken) {
+      await indexedDb.token.put({
+        id: tokenKey,
+        token: payload.list_token,
+      });
+    }
+
+    // Remove any records from the DB if the API indicates they've been deleted
+    if (payload.removed_ids?.length > 0) {
+      await indexedDb[type].bulkDelete(payload.removed_ids);
+    }
+
+    // This is a temporary fix of clearing the DB (specifically for auth-methods)
+    // since we are not storing the token we do not get back a list of removed_ids
+    // from the API call and we do not want deleted items from showing in list view.
+    if (!storeToken) {
+      await indexedDb[type].clear();
+    }
+
+    const normalizedPayload = serializer.normalizeResponse(
+      store,
+      schema,
+      payload,
+      null,
+      'query',
+    );
+
+    const { data: payloadData } = normalizedPayload;
+
+    // Store the new data we just got back from the API refresh
+    const items = payloadData.map((datum) =>
+      this.indexedDb.normalizeData({
+        data: datum,
+        cleanData: true,
+        schema,
+        serializer,
+      }),
+    );
+
+    await indexedDb[type].bulkPut(items);
   }
 }
