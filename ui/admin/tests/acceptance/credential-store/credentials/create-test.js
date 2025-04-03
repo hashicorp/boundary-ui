@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -172,14 +179,24 @@ module(
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
       featuresService.enable('json-credentials');
-      const editorSelector = '[data-test-code-editor-field-editor]';
+      const editorSelector = '.cm-content';
       const newSecret = '{"test": "value"}';
 
       await visit(urls.credentials);
       await click(`[href="${urls.newCredential}"]`);
       await click('[value="json"]');
 
-      await fillIn(`${editorSelector} textarea`, newSecret);
+      await waitFor('.cm-editor');
+
+      const editorElement = find('.hds-code-editor__editor');
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: newSecret,
+        },
+      });
+
       assert.dom(editorSelector).includesText(newSecret);
 
       await click('[value="username_password"]');
