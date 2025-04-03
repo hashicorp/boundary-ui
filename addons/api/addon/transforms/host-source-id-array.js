@@ -3,9 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Transform from '@ember-data/serializer/transform';
-
-export default class HostSourceIdArrayTransform extends Transform {
+export default class HostSourceIdArrayTransform {
   deserialize(serialized) {
     const stringValues = serialized || [];
     return stringValues.map(({ id: host_source_id, ...obj }) => ({
@@ -17,5 +15,9 @@ export default class HostSourceIdArrayTransform extends Transform {
   serialize(deserialized) {
     const strings = deserialized || [];
     return strings.map(({ host_source_id: id, ...obj }) => ({ id, ...obj }));
+  }
+
+  static create() {
+    return new this();
   }
 }
