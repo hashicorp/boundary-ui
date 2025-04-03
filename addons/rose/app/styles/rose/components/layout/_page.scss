@@ -23,7 +23,7 @@
   .rose-layout-page-header {
     grid-area: header;
 
-    > h2 {
+    h2 {
       display: flex;
       gap: sizing.rems(xxs);
 
