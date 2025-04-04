@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.worker.tags.create.title'}}
       <DocLink @doc='worker.create-tags' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     {{t 'resources.worker.tags.create.description'}}
     <Hds::Link::Inline @color='secondary' @href={{doc-url 'worker'}}>
       {{t 'resources.worker.tags.create.link'}}
