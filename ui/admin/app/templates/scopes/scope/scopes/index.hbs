@@ -13,7 +13,7 @@
     {{#if @model.currentScope.isGlobal}}
       <h2>
         {{t 'resources.org.title_plural'}}
-        <DocLink @doc='org' @iconSize='large' />
+        <DocLink @doc='org' @iconSize='24' />
       </h2>
       {{#if @model.doScopesExist}}
         <p>{{t 'resources.org.description'}}</p>
@@ -21,7 +21,7 @@
     {{else if @model.currentScope.isOrg}}
       <h2>
         {{t 'resources.project.title_plural'}}
-        <DocLink @doc='project' @iconSize='large' />
+        <DocLink @doc='project' @iconSize='24' />
       </h2>
       {{#if @model.doScopesExist}}
         <p>{{t 'resources.project.description'}}</p>

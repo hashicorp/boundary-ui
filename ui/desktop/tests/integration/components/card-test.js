@@ -35,7 +35,7 @@ module('Integration | Component | card', function (hooks) {
     await render(hbs`
       <Card
         @heading='This is a heading test'
-        @icon='flight-icons/svg/key-16'>
+        @icon='key'>
         <:header></:header>
         <:body></:body>
         <:footer></:footer>
@@ -44,7 +44,7 @@ module('Integration | Component | card', function (hooks) {
 
     assert.ok(find('.card'));
     assert.ok(find('.card-header'));
-    assert.ok(find('.card-header .rose-icon'));
+    assert.ok(find('.card-header .hds-icon'));
     assert.strictEqual(
       this.element.textContent.trim(),
       'This is a heading test',

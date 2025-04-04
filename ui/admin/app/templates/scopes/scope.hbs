@@ -41,37 +41,31 @@
       {{#if @model.isGlobal}}
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           <nav.link @route='scopes.scope.scopes'>
-            <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
+            <Hds::Icon @name='org' @isInline={{true}} />
             {{t 'resources.org.title_plural'}}
           </nav.link>
 
           {{#if (can 'navigate scope' @model collection='session-recordings')}}
             <nav.link @route='scopes.scope.session-recordings'>
-              <Rose::Icon @name='flight-icons/svg/film-16' @size='medium' />
+              <Hds::Icon @name='film' @isInline={{true}} />
               {{t 'resources.session-recording.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate scope' @model collection='storage-buckets')}}
             <nav.link @route='scopes.scope.storage-buckets'>
-              <Rose::Icon
-                @name='flight-icons/svg/cloud-upload-16'
-                @size='medium'
-              />
+              <Hds::Icon @name='cloud-upload' @isInline={{true}} />
               {{t 'resources.storage-bucket.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate scope' @model collection='policies')}}
             <nav.link @route='scopes.scope.policies'>
-              <Rose::Icon
-                @name='flight-icons/svg/hourglass-16'
-                @size='medium'
-              />
+              <Hds::Icon @name='hourglass' @isInline={{true}} />
               {{t 'resources.policy.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate scope' @model collection='aliases')}}
             <nav.link @route='scopes.scope.aliases'>
-              <Rose::Icon @name='flight-icons/svg/at-sign-16' @size='medium' />
+              <Hds::Icon @name='at-sign' @isInline={{true}} />
               {{t 'resources.alias.title_plural'}}
             </nav.link>
           {{/if}}
@@ -82,7 +76,7 @@
             )
           }}
             <nav.link @route='scopes.scope.workers'>
-              <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+              <Hds::Icon @name='cpu' />
               {{t 'titles.workers'}}
             </nav.link>
           {{/if}}
@@ -93,21 +87,18 @@
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           {{#if this.session.data.authenticated.isGlobal}}
             <nav.link @route='scopes.scope.scopes' @model='global'>
-              <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
+              <Hds::Icon @name='org' @isInline={{true}} />
               {{t 'resources.org.title_plural'}}
             </nav.link>
           {{/if}}
           <nav.link @route='scopes.scope.scopes'>
-            <Rose::Icon @name='flight-icons/svg/grid-16' @size='medium' />
+            <Hds::Icon @name='grid' @isInline={{true}} />
             {{t 'resources.project.title_plural'}}
           </nav.link>
 
           {{#if (can 'navigate scope' @model collection='policies')}}
             <nav.link @route='scopes.scope.policies'>
-              <Rose::Icon
-                @name='flight-icons/svg/hourglass-16'
-                @size='medium'
-              />
+              <Hds::Icon @name='hourglass' @isInline={{true}} />
               {{t 'resources.policy.title_plural'}}
             </nav.link>
           {{/if}}
@@ -119,12 +110,12 @@
         <Rose::Nav::Sidebar @title={{t 'titles.general'}} as |nav|>
           {{#if this.session.data.authenticated.isGlobal}}
             <nav.link @route='scopes.scope.scopes' @model='global'>
-              <Rose::Icon @name='flight-icons/svg/org-16' @size='medium' />
+              <Hds::Icon @name='org' @isInline={{true}} />
               {{t 'resources.org.title_plural'}}
             </nav.link>
           {{/if}}
           <nav.link @route='scopes.scope.scopes' @model={{@model.scopeID}}>
-            <Rose::Icon @name='flight-icons/svg/grid-16' @size='medium' />
+            <Hds::Icon @name='grid' @isInline={{true}} />
             {{t 'resources.project.title_plural'}}
           </nav.link>
         </Rose::Nav::Sidebar>
@@ -132,31 +123,25 @@
         <Rose::Nav::Sidebar @title={{t 'titles.resources'}} as |nav|>
           {{#if (can 'navigate model' @model collection='sessions')}}
             <nav.link @route='scopes.scope.sessions'>
-              <Rose::Icon
-                @name='flight-icons/svg/entry-point-16'
-                @size='medium'
-              />
+              <Hds::Icon @name='entry-point' @isInline={{true}} />
               {{t 'resources.session.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate model' @model collection='targets')}}
             <nav.link @route='scopes.scope.targets'>
-              <Rose::Icon @name='flight-icons/svg/target-16' @size='medium' />
+              <Hds::Icon @name='target' @isInline={{true}} />
               {{t 'resources.target.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate model' @model collection='host-catalogs')}}
             <nav.link @route='scopes.scope.host-catalogs'>
-              <Rose::Icon
-                @name='flight-icons/svg/collections-16'
-                @size='medium'
-              />
+              <Hds::Icon @name='collections' @isInline={{true}} />
               {{t 'resources.host-catalog.title_plural'}}
             </nav.link>
           {{/if}}
           {{#if (can 'navigate model' @model collection='credential-stores')}}
             <nav.link @route='scopes.scope.credential-stores'>
-              <Rose::Icon @name='flight-icons/svg/key-16' @size='medium' />
+              <Hds::Icon @name='key' @isInline={{true}} />
               {{t 'resources.credential-store.title_plural'}}
             </nav.link>
           {{/if}}
@@ -168,7 +153,7 @@
         {{#unless @model.isProject}}
           {{#if (can 'navigate model' @model collection='users')}}
             <nav.link @route='scopes.scope.users'>
-              <Rose::Icon @name='flight-icons/svg/users-16' @size='medium' />
+              <Hds::Icon @name='users' @isInline={{true}} />
               {{t 'resources.user.title_plural'}}
             </nav.link>
           {{/if}}
@@ -177,19 +162,13 @@
         {{! Groups and roles are available for all scopes }}
         {{#if (can 'navigate model' @model collection='groups')}}
           <nav.link @route='scopes.scope.groups'>
-            <Rose::Icon
-              @name='flight-icons/svg/folder-users-16'
-              @size='medium'
-            />
+            <Hds::Icon @name='folder-users' @isInline={{true}} />
             {{t 'resources.group.title_plural'}}
           </nav.link>
         {{/if}}
         {{#if (can 'navigate model' @model collection='roles')}}
           <nav.link @route='scopes.scope.roles'>
-            <Rose::Icon
-              @name='flight-icons/svg/identity-user-16'
-              @size='medium'
-            />
+            <Hds::Icon @name='identity-user' @isInline={{true}} />
             {{t 'resources.role.title_plural'}}
           </nav.link>
         {{/if}}
@@ -198,7 +177,7 @@
         {{#unless @model.isProject}}
           {{#if (can 'navigate model' @model collection='auth-methods')}}
             <nav.link @route='scopes.scope.auth-methods'>
-              <Rose::Icon @name='flight-icons/svg/lock-16' @size='medium' />
+              <Hds::Icon @name='lock' @isInline={{true}} />
               {{t 'resources.auth-method.title_plural'}}
             </nav.link>
           {{/if}}
