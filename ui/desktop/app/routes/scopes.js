@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { A } from '@ember/array';
 import { service } from '@ember/service';
 
 export default class ScopesRoute extends Route {
@@ -46,7 +45,7 @@ export default class ScopesRoute extends Route {
   async model() {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    return this.store.query('scope', {}).catch(() => A([]));
+    return this.store.query('scope', {}).catch(() => []);
   }
 
   /**
