@@ -10,10 +10,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.host-catalog.title_plural'}}
       <DocLink @doc='host-catalog' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     {{#if @model.doHostCatalogsExist}}
       <p>{{t 'resources.host-catalog.description'}}</p>
     {{/if}}

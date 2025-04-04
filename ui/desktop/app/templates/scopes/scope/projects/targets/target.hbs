@@ -8,10 +8,10 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <h1 class='target-details-header'>
+    <Hds::Text::Display @tag='h1' @size='500' class='target-details-header'>
       <Hds::IconTile @color='boundary' @icon='target' />
       {{@model.target.displayName}}
-    </h1>
+    </Hds::Text::Display>
   </page.header>
 
   <page.actions>

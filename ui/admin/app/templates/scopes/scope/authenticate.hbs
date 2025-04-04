@@ -12,7 +12,12 @@
 
       <Rose::Frame>
         <:header>
-          <h2>{{t 'actions.authenticate'}}</h2>
+          <Hds::Text::Display
+            @tag='h2'
+            @size='400'
+            @weight='bold'
+            class='header-spacing'
+          >{{t 'actions.authenticate'}}</Hds::Text::Display>
         </:header>
         <:body>
           <p>{{t

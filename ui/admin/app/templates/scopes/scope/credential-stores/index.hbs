@@ -9,10 +9,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.credential-store.title_plural'}}
       <DocLink @doc='credential-store' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     {{#if @model.doCredentialStoresExist}}
       <p>{{t 'resources.credential-store.description'}}</p>
     {{/if}}

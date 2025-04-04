@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.user.titles.new'}}
       <DocLink @doc='user' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.user.description'}}</p>
   </page.header>
 

@@ -8,7 +8,8 @@
   aria-labelledby={{concat 'dropdown-section-title-' this.id}}
 >
   {{#if @title}}
-    <h2
+    <Hds::Text::Display
+      @tag='h2'
       id={{concat 'dropdown-section-title-' this.id}}
       class='rose-dropdown-section-title'
     >
@@ -16,7 +17,7 @@
         <Rose::Icon @name={{@icon}} @size='medium' />
       {{/if}}
       {{@title}}
-    </h2>
+    </Hds::Text::Display>
   {{/if}}
 
   {{yield}}

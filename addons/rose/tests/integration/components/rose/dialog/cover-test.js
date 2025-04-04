@@ -15,7 +15,9 @@ module('Integration | Component | rose/dialog/cover', function (hooks) {
     await render(hbs`
       <Rose::Dialog::Cover>
         <:header>
-          <h1>Authentication Pending</h1>
+          <Hds::Text::Display
+            @tag='h1'
+          >Authentication Pending</Hds::Text::Display>
         </:header>
         <:body>
           <p>Complete authentication in the newly-opened window.</p>

@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.worker.titles.new'}}
       <DocLink @doc='worker' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
   </page.header>
   <page.body>
     <Form::Worker::CreateWorkerLed

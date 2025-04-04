@@ -23,7 +23,10 @@
         <Rose::Icon @name={{@icon}} @size='medium' />
       {{/if}}
 
-      <h2 class='rose-dialog-heading'>{{@heading}}</h2>
+      <Hds::Text::Display
+        @tag='h2'
+        class='rose-dialog-heading'
+      >{{@heading}}</Hds::Text::Display>
 
       <button
         type='button'
@@ -65,7 +68,10 @@
           <Rose::Icon @name={{@icon}} @size='medium' />
         {{/if}}
 
-        <h2 class='rose-dialog-heading'>{{@heading}}</h2>
+        <Hds::Text::Display
+          @tag='h2'
+          class='rose-dialog-heading'
+        >{{@heading}}</Hds::Text::Display>
 
         <button
           type='button'

@@ -5,7 +5,9 @@
 
 <Rose::Dialog::Cover>
   <:header>
-    <h1>{{t 'resources.auth-method.messages.pending.title'}}</h1>
+    <Hds::Text::Display @tag='h1' @size='400' class='header-spacing'>{{t
+        'resources.auth-method.messages.pending.title'
+      }}</Hds::Text::Display>
   </:header>
   <:body>
     <p>{{t 'resources.auth-method.messages.pending.description'}}</p>

@@ -4,7 +4,11 @@
 }}
 
 <div class='branded-card'>
-  <h2 class='branded-card-title h1'>{{@title}}</h2>
+  <Hds::Text::Display
+    @tag='h1'
+    @size='500'
+    class='branded-card-title'
+  >{{@title}}</Hds::Text::Display>
   <p class='branded-card-description'>{{@description}}</p>
   {{yield}}
 </div>
