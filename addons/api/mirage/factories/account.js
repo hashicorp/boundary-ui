@@ -50,7 +50,8 @@ export default factory.extend({
       }
       case TYPE_AUTH_METHOD_OIDC:
         return {
-          issuer: faker.internet.ip(),
+          issuer:
+            Math.random() > 0.5 ? faker.internet.ip() : faker.internet.ipv6(),
           subject: 'sub',
           email: faker.internet.email(),
           full_name: faker.person.fullName(),

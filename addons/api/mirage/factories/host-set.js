@@ -43,10 +43,12 @@ export default factory.extend({
   },
   preferred_endpoints() {
     if (this.type === 'plugin') {
-      const enpointsAmount = faker.number.int({ min: 1, max: 5 });
+      const endpointsAmount = faker.number.int({ min: 1, max: 5 });
       let result = [];
-      for (let i = 0; i < enpointsAmount; ++i) {
-        result.push(faker.internet.ip());
+      for (let i = 0; i < endpointsAmount; ++i) {
+        result.push(
+          Math.random() > 0.5 ? faker.internet.ip() : faker.internet.ipv6(),
+        );
       }
       return result;
     }
