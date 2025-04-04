@@ -39,7 +39,8 @@ export default factory.extend({
     switch (this.type) {
       case 'vault':
         return {
-          address: faker.internet.ip(),
+          address:
+            Math.random() > 0.5 ? faker.internet.ip() : faker.internet.ipv6(),
           namespace: faker.word.words(1),
           ca_cert: 'ca-cert-123',
           tls_server_name: faker.internet.domainName(),
