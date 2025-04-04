@@ -17,7 +17,7 @@ export class TargetsPage extends BaseResourcePage {
   async createTarget(port) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -44,7 +44,7 @@ export class TargetsPage extends BaseResourcePage {
   async createTargetWithAddress(address, port) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -73,7 +73,7 @@ export class TargetsPage extends BaseResourcePage {
   async createTargetWithAddressAndAlias(address, port, alias) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -109,7 +109,7 @@ export class TargetsPage extends BaseResourcePage {
   async createTcpTargetWithAddressEnt(address, port) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -140,7 +140,7 @@ export class TargetsPage extends BaseResourcePage {
   async createSshTargetEnt(port) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -172,7 +172,7 @@ export class TargetsPage extends BaseResourcePage {
   async createSshTargetWithAddressEnt(address, port) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -206,7 +206,7 @@ export class TargetsPage extends BaseResourcePage {
   async createSshTargetWithAddressAndAlias(address, port, alias) {
     const targetName = 'Target ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();
@@ -349,7 +349,7 @@ export class TargetsPage extends BaseResourcePage {
    */
   async addBrokeredCredentialsToTarget(targetName, credentialName) {
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await expect(
@@ -397,7 +397,7 @@ export class TargetsPage extends BaseResourcePage {
    */
   async addInjectedCredentialsToTarget(targetName, credentialName) {
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Targets' })
       .click();
     await expect(

@@ -190,7 +190,7 @@ test(
 
       // Create another host set
       await page
-        .getByRole('navigation', { name: 'Resources' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Host Catalogs' })
         .click();
       await page.getByRole('link', { name: hostCatalogName }).click();

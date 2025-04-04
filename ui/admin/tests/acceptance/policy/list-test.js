@@ -90,7 +90,7 @@ module('Acceptance | policies | list', function (hooks) {
       ].includes('create'),
     );
     assert
-      .dom(commonSelectors.GENERAL_SIDEBAR_NAV_LINK(urls.policies))
+      .dom(commonSelectors.SIDEBAR_NAV_LINK(urls.policies))
       .doesNotExist();
 
     await visit(urls.policies);

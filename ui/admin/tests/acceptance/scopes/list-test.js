@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, fillIn, waitFor } from '@ember/test-helpers';
+import { currentURL, visit, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -28,6 +28,7 @@ module('Acceptance | scopes | list', function (hooks) {
   };
 
   const urls = {
+    scopes: null,
     globalScope: null,
     orgScope: null,
   };
@@ -50,12 +51,20 @@ module('Acceptance | scopes | list', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org1.id, type: 'org' },
     });
-    urls.globalScope = `/scopes/global/scopes`;
+
+    urls.scopes = '/scopes';
+    urls.globalScope = '/scopes/global/scopes';
     urls.orgScope = `/scopes/${instances.scopes.org1.id}/scopes`;
     await authenticateSession({});
   });
 
-  test('user can search for a specifc org scope by id', async function (assert) {
+  test('user gets redirected to scopes list view', async function (assert) {
+    await visit(urls.scopes);
+
+    assert.strictEqual(currentURL(), urls.globalScope);
+  });
+
+  test('user can search for a specific org scope by id', async function (assert) {
     await visit(urls.globalScope);
 
     assert
@@ -102,7 +111,7 @@ module('Acceptance | scopes | list', function (hooks) {
       .doesNotExist();
   });
 
-  test('user can search for a specifc project scope by id', async function (assert) {
+  test('user can search for a specific project scope by id', async function (assert) {
     await visit(urls.orgScope);
 
     assert
