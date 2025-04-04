@@ -10,7 +10,11 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
+import {
+  TYPE_AUTH_METHOD_PASSWORD,
+  TYPE_AUTH_METHOD_LDAP,
+  TYPE_AUTH_METHOD_OIDC,
+} from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 
@@ -43,10 +47,11 @@ module('Acceptance | users | accounts', function (hooks) {
       type: 'org',
       scope: { id: 'global', type: 'global' },
     });
-    this.server.create(
+    instances.authMethod = this.server.create(
       'auth-method',
       {
         scope: instances.scopes.org,
+        type: TYPE_AUTH_METHOD_PASSWORD,
       },
       'withAccountsAndUsersAndManagedGroups',
     );
@@ -304,5 +309,77 @@ module('Acceptance | users | accounts', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
+  });
+
+  test('can navigate to account link for password account', async function (assert) {
+    await visit(urls.user);
+    await click(commonSelectors.HREF(urls.accounts));
+
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          `/scopes/${instances.scopes.org.id}/auth-methods/${instances.authMethod.id}/accounts/${instances.user.accountIds[0]}`,
+        ),
+      )
+      .exists({ count: accountsCount });
+  });
+
+  test('can navigate to account link for oidc account', async function (assert) {
+    this.server.db.authMethods.remove();
+    this.server.db.users.remove();
+    this.server.db.accounts.remove();
+
+    const authMethod = this.server.create(
+      'auth-method',
+      {
+        scope: instances.scopes.org,
+        type: TYPE_AUTH_METHOD_OIDC,
+      },
+      'withAccountsAndUsersAndManagedGroups',
+    );
+    const user = this.server.schema.users.first();
+    const count = user.accountIds.length;
+
+    await visit(`${urls.users}/${user.id}`);
+    await click(commonSelectors.HREF(`${urls.users}/${user.id}/accounts`));
+
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count });
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          `/scopes/${instances.scopes.org.id}/auth-methods/${authMethod.id}/accounts/${user.accountIds[0]}`,
+        ),
+      )
+      .exists({ count });
+  });
+
+  test('can navigate to account link for ldap account', async function (assert) {
+    this.server.db.authMethods.remove();
+    this.server.db.users.remove();
+    this.server.db.accounts.remove();
+
+    const authMethod = this.server.create(
+      'auth-method',
+      {
+        scope: instances.scopes.org,
+        type: TYPE_AUTH_METHOD_LDAP,
+      },
+      'withAccountsAndUsersAndManagedGroups',
+    );
+    const user = this.server.schema.users.first();
+    const count = user.accountIds.length;
+
+    await visit(`${urls.users}/${user.id}`);
+    await click(commonSelectors.HREF(`${urls.users}/${user.id}/accounts`));
+
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count });
+    assert
+      .dom(
+        commonSelectors.TABLE_RESOURCE_LINK(
+          `/scopes/${instances.scopes.org.id}/auth-methods/${authMethod.id}/accounts/${user.accountIds[0]}`,
+        ),
+      )
+      .exists({ count });
   });
 });
