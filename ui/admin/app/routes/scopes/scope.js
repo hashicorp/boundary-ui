@@ -5,7 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { A } from '@ember/array';
 import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
 
 export default class ScopesScopeRoute extends Route {
@@ -52,7 +51,7 @@ export default class ScopesScopeRoute extends Route {
         scope_id: 'global',
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
-      .catch(() => A([]));
+      .catch(() => []);
 
     if (model.isProject) {
       projects = await this.store.query('scope', {

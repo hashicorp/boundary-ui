@@ -4,7 +4,6 @@
  */
 
 import Route from '@ember/routing/route';
-import { A } from '@ember/array';
 import { service } from '@ember/service';
 
 export default class ScopesRoute extends Route {
@@ -35,6 +34,6 @@ export default class ScopesRoute extends Route {
         scope_id: 'global',
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
-      .catch(() => A([]));
+      .catch(() => []);
   }
 }

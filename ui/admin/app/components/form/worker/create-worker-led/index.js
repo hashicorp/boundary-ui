@@ -7,7 +7,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 import Tag from '../tag';
 
 export default class FormWorkerCreateWorkerLedComponent extends Component {
@@ -21,7 +20,7 @@ export default class FormWorkerCreateWorkerLedComponent extends Component {
   @tracked ipAddress;
   @tracked configFilePath;
   @tracked initialUpstreams;
-  @tracked workerTags = A([]);
+  @tracked workerTags = [];
   @tracked enableRecordingStoragePath = false;
   @tracked recording_storage_path = '';
 
