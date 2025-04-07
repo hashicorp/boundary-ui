@@ -38,8 +38,9 @@
   .rose-nav-link {
     @include type.type(s);
 
-    display: block;
+    display: flex;
     color: var(--white);
+    align-items: center;
 
     $line-height: math.div(36, 14);
 
@@ -48,7 +49,7 @@
     padding: 0 sizing.rems(m);
     border-right: $three-px solid transparent;
 
-    .rose-icon {
+    .hds-icon {
       opacity: 0.65;
     }
 

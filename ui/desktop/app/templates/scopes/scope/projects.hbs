@@ -7,16 +7,16 @@
   <sidebarLayout.sidebar>
     <Rose::Nav::Sidebar as |nav|>
       <nav.link @route='scopes.scope.projects.targets'>
-        <Rose::Icon @name='flight-icons/svg/crosshair-16' @size='medium' />
+        <Hds::Icon @name='crosshair' @isInline={{true}} />
         {{t 'resources.target.title_plural'}}
       </nav.link>
 
       <nav.link @route='scopes.scope.projects.sessions'>
-        <Rose::Icon @name='flight-icons/svg/entry-point-16' @size='medium' />
+        <Hds::Icon @name='entry-point' @isInline={{true}} />
         {{t 'resources.session.title_plural'}}
       </nav.link>
       <nav.link @route='scopes.scope.projects.settings'>
-        <Rose::Icon @name='flight-icons/svg/settings-16' @size='medium' />
+        <Hds::Icon @name='settings' @isInline={{true}} />
         {{t 'titles.settings'}}
       </nav.link>
     </Rose::Nav::Sidebar>

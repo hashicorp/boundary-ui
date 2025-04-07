@@ -26,13 +26,13 @@
     {{#if @model.isOrg}}
       <h2>
         {{t 'resources.org.titles.new'}}
-        <DocLink @doc='org.new' @iconSize='large' />
+        <DocLink @doc='org.new' @iconSize='24' />
       </h2>
       <p>{{t 'resources.org.description'}}</p>
     {{else if @model.isProject}}
       <h2>
         {{t 'resources.project.titles.new'}}
-        <DocLink @doc='project.new' @iconSize='large' />
+        <DocLink @doc='project.new' @iconSize='24' />
       </h2>
       <p>{{t 'resources.project.description'}}</p>
     {{/if}}

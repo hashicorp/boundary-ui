@@ -22,6 +22,16 @@
 
   .rose-layout-page-header {
     grid-area: header;
+
+    h2 {
+      display: flex;
+      gap: sizing.rems(xxs);
+
+      .doc-link {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 
   .rose-layout-page-actions {
