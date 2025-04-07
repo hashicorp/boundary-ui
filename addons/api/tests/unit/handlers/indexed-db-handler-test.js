@@ -64,7 +64,12 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
   setupIndexedDb(hooks);
   setupMirage(hooks);
 
-  let manager, handler, store, applicationAdapter;
+  let manager,
+    handler,
+    store,
+    applicationAdapter,
+    handlerSpy,
+    applicationAdapterSpy;
   hooks.beforeEach(async function setupIndexHandler() {
     store = this.owner.lookup('service:store');
     manager = new RequestManager();
@@ -72,8 +77,8 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     applicationAdapter = store.adapterFor('application');
 
     // spy on all handler and application adapter methods
-    sinon.spy(handler);
-    sinon.spy(applicationAdapter);
+    handlerSpy = sinon.spy(handler);
+    applicationAdapterSpy = sinon.spy(applicationAdapter);
 
     store.requestManager = manager;
     manager.use([handler]);
@@ -125,13 +130,13 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       await store.query('alias', {});
 
       assert.strictEqual(
-        handler.writeToIndexedDb.callCount,
+        handlerSpy.writeToIndexedDb.callCount,
         aliases.length / testBatchLimit,
         'handler #writeToIndexedDb is called once for each batch',
       );
 
       assert.strictEqual(
-        applicationAdapter.query.callCount,
+        applicationAdapterSpy.query.callCount,
         aliases.length / testBatchLimit,
         'application adapter #query is called once for each batch',
       );
