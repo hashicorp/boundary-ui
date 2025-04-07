@@ -85,14 +85,11 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     // and these multiples can be asserted in the tests individually
     const testBatchLimit = 10;
     const serverResultPageLimit = 5;
-
-    hooks.beforeEach(function () {
-      handler.batchLimit = testBatchLimit;
-    });
-
     let aliases, aliasResponseHandlerSpy;
 
     hooks.beforeEach(function setupMirageData() {
+      handler.batchLimit = testBatchLimit;
+
       aliases = this.server.createList('alias', 50);
 
       const aliasResponseHandler = createPaginatedResponseHandler(
