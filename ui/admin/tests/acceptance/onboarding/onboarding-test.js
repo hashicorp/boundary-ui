@@ -21,7 +21,7 @@ module('Acceptance | onboarding', function (hooks) {
     orgs: '/scopes/global/scopes',
   };
 
-  hooks.beforeEach(async () => {
+  hooks.beforeEach(async function () {
     await authenticateSession({});
   });
 

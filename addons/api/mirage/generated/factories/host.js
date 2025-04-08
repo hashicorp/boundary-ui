@@ -16,6 +16,9 @@ export default Factory.extend({
   updated_time: () => faker.date.recent(),
   version: () => faker.number.int(),
   attributes: () => {
-    return { address: faker.internet.ipv6() };
+    return {
+      address:
+        Math.random() > 0.5 ? faker.internet.ip() : faker.internet.ipv6(),
+    };
   },
 });

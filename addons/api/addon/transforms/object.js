@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Transform from '@ember-data/serializer/transform';
 import { TrackedObject } from 'tracked-built-ins';
 
-export default class ObjectTransform extends Transform {
+export default class ObjectTransform {
   /**
    * @param serialized
    * @returns {object}
@@ -25,5 +24,9 @@ export default class ObjectTransform extends Transform {
       return {};
     }
     return deserialized;
+  }
+
+  static create() {
+    return new this();
   }
 }

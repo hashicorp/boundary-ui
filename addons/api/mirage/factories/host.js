@@ -36,7 +36,9 @@ export default factory.extend({
     const addressesAmount = Math.floor(Math.random() * 6) + 1;
     let result = [];
     for (let i = 0; i < addressesAmount; ++i) {
-      result.push(faker.internet.ip());
+      result.push(
+        Math.random() > 0.5 ? faker.internet.ip() : faker.internet.ipv6(),
+      );
     }
     return result;
   },
