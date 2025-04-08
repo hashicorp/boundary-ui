@@ -92,11 +92,12 @@ module('Acceptance | workers | list', function (hooks) {
     featuresService.enable('byow');
     await visit(urls.workers);
 
+    
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: 2 });
-
+    
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN);
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN_FIRST_ITEM);
-
+    
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
