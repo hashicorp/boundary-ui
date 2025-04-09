@@ -10,7 +10,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-import * as selectors from './selectors';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -70,8 +69,7 @@ module('Acceptance | aliases | update', function (hooks) {
   test('can cancel changes to an existing alias', async function (assert) {
     const name = instances.alias.name;
     await visit(urls.aliases);
-    
-    await click(commonSelectors.HREF(urls.aliases));
+
     await click(commonSelectors.HREF(urls.alias));
 
     await click(commonSelectors.EDIT_BTN);
@@ -79,7 +77,7 @@ module('Acceptance | aliases | update', function (hooks) {
 
     await click(commonSelectors.CANCEL_BTN);
 
-    assert.dom(commonSelectors.FIELD_NAME).hasValue(`${name}`);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(name);
     assert.strictEqual(instances.alias.name, name);
   });
 
@@ -88,14 +86,15 @@ module('Acceptance | aliases | update', function (hooks) {
     assert.true(instances.alias.authorized_actions.includes('update'));
     await visit(urls.globalScope);
 
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
-
+    
     await click(commonSelectors.HREF(urls.aliases));
-    await click(selectors.DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    assert.dom(selectors.DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(selectors.CLEAR_DROPDOWN_SELECTOR).exists();
-    await click(selectors.CLEAR_DROPDOWN_SELECTOR);
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .hasText('Clear');
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
     assert.strictEqual(aliasCount(), count);
   });
 
@@ -106,10 +105,12 @@ module('Acceptance | aliases | update', function (hooks) {
 
     assert.false(instances.alias.authorized_actions.includes('update'));
 
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
     await click(commonSelectors.HREF(urls.aliases));
-    await click(selectors.DROPDOWN_BUTTON_SELECTOR);
-    assert.dom(selectors.DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(selectors.CLEAR_DROPDOWN_SELECTOR).doesNotExist();
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).exists();
+
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .doesNotIncludeText('Clear');
   });
 });
