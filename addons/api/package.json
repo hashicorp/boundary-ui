@@ -33,6 +33,9 @@
     "miragejs": "^0.1.48",
     "tracked-built-ins": "^3.1.1"
   },
+  "peerDependencies": {
+    "sinon": "^19.0.2"
+  },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/eslint-parser": "^7.21.3",
@@ -71,6 +74,7 @@
     "prettier": "^3.0.0",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
+    "sinon": "^19.0.2",
     "webpack": "^5.94.0"
   },
   "engines": {
