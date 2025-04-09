@@ -7636,8 +7636,11 @@ __metadata:
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
+    sinon: "npm:^19.0.2"
     tracked-built-ins: "npm:^3.1.1"
     webpack: "npm:^5.94.0"
+  peerDependencies:
+    sinon: ^19.0.2
   languageName: unknown
   linkType: soft
 
