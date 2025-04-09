@@ -3,9 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-export const APP_HEADER_DROPDOWN =
-  '.rose-header-utilities details:first-child summary';
-
 export const MANAGE_DROPDOWN_AUTH_METHOD =
   '[data-test-manage-auth-method] button';
 export const MANAGE_DROPDOWN_ACCOUNT =

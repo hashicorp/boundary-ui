@@ -16,7 +16,7 @@ export class GroupsPage extends BaseResourcePage {
   async createGroup() {
     const groupName = 'Group ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Groups' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();

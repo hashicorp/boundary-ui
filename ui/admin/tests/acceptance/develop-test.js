@@ -7,17 +7,26 @@ import { module, test } from 'qunit';
 import { visit, getContext } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | develop', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupIndexedDb(hooks);
 
   let featuresService;
   const DEV_TOGGLE_SELECTOR = '[data-test-dev-edition-toggle]';
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(async function () {
     const { owner } = getContext();
     featuresService = owner.lookup('service:features');
+    this.server.create('scope', { id: 'global' });
+    this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    await authenticateSession({});
   });
 
   test('edition toggle is hidden when `dev-edition-toggle` is false', async function (assert) {

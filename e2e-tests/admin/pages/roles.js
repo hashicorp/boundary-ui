@@ -16,7 +16,7 @@ export class RolesPage extends BaseResourcePage {
     const roleName = 'Role ' + nanoid();
 
     await this.page
-      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Roles' })
       .click();
     await this.page.getByRole('link', { name: 'New Role' }).click();
