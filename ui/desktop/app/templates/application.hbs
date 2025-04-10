@@ -86,53 +86,58 @@
 
 <PendingConfirmations as |confirmation accept deny|>
   {{#if confirmation.options.isConnectError}}
-    <Rose::Dialog
-      @heading={{t 'states.error'}}
-      @dismissButtonText={{t 'actions.ok'}}
-      @icon='flight-icons/svg/x-square-16'
-      @style='error'
-      @modal={{true}}
-      @dismiss={{deny}}
-      as |dialog|
-    >
-      <dialog.body>
-        <p>
+    <Hds::Modal @color='critical' as |M|>
+      <M.Header @icon='alert-diamond' @onDismiss={{deny}}>
+        {{t 'states.error'}}
+      </M.Header>
+      <M.Body>
+        <Hds::Text::Body @tag='p'>
           {{confirmation.text}}
-        </p>
-        <p>
+        </Hds::Text::Body>
+        <br />
+        <Hds::Text::Body @tag='p'>
           {{t 'questions.retry-confirm'}}
-        </p>
-      </dialog.body>
-      <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.retry'}}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
-      </dialog.footer>
-    </Rose::Dialog>
+        </Hds::Text::Body>
+      </M.Body>
+      <M.Footer>
+        <Hds::ButtonSet>
+          <Hds::Button
+            @text={{t 'actions.retry'}}
+            @color='primary'
+            {{on 'click' accept}}
+          />
+          <Hds::Button
+            @text={{t 'actions.cancel'}}
+            @color='secondary'
+            {{on 'click' deny}}
+          />
+        </Hds::ButtonSet>
+      </M.Footer>
+    </Hds::Modal>
   {{else}}
-    <Rose::Dialog
-      @heading={{t 'actions.confirm'}}
-      @dismissButtonText={{t 'actions.cancel'}}
-      @icon='flight-icons/svg/alert-triangle-16'
-      @style='warning'
-      @modal={{true}}
-      @dismiss={{deny}}
-      as |dialog|
-    >
-      <dialog.body>
-        <p>{{confirmation.text}}</p>
-      </dialog.body>
-      <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.ok'}}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
-      </dialog.footer>
-    </Rose::Dialog>
+    <Hds::Modal @color='warning' as |M|>
+      <M.Header @icon='alert-triangle' @onDismiss={{deny}}>
+        {{t 'actions.confirm'}}
+      </M.Header>
+      <M.Body>
+        <Hds::Text::Body @tag='p'>
+          {{confirmation.text}}
+        </Hds::Text::Body>
+      </M.Body>
+      <M.Footer>
+        <Hds::ButtonSet>
+          <Hds::Button
+            @text={{t 'actions.ok'}}
+            @color='primary'
+            {{on 'click' accept}}
+          />
+          <Hds::Button
+            @text={{t 'actions.cancel'}}
+            @color='secondary'
+            {{on 'click' deny}}
+          />
+        </Hds::ButtonSet>
+      </M.Footer>
+    </Hds::Modal>
   {{/if}}
 </PendingConfirmations>
