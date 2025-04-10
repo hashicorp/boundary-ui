@@ -27,6 +27,7 @@ module.exports = function (environment) {
   if (environment === 'development') {
     policy['script-src'].push("'unsafe-eval'");
     policy['style-src'].push("'unsafe-inline'");
+    policy['style-src-attr'].push("'unsafe-inline'");
     if (API_HOST) policy['connect-src'].push(API_HOST);
   }
 

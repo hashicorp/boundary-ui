@@ -3,22 +3,22 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dialog::Cover>
-  <:header>
-    <h1>{{t 'resources.auth-method.messages.pending.title'}}</h1>
-  </:header>
-  <:body>
-    <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
-    <p>
-      {{t 'resources.auth-method.questions.no-see-window'}}
-      <a href='#' {{on 'click' this.retryAuthentication}}>
-        {{t 'actions.retry'}}
-      </a>
-    </p>
-    <p>
-      <LinkTo @route='scopes.scope.authenticate.method'>
-        {{t 'actions.cancel'}}
-      </LinkTo>
-    </p>
-  </:body>
-</Rose::Dialog::Cover>
+<Hds::ApplicationState @align='center' as |A|>
+  <A.Media>
+    <Image @name='auth-pending' />
+  </A.Media>
+  <A.Header @title={{t 'resources.auth-method.messages.pending.title'}} />
+  <A.Body @text={{t 'resources.auth-method.messages.pending.description'}} />
+  <A.Footer as |F|>
+    <F.Button
+      @text={{t 'resources.auth-method.actions.dont-see-new-window-retry'}}
+      @color='primary'
+      {{on 'click' this.retryAuthentication}}
+    />
+    <F.Button
+      @text={{t 'actions.cancel'}}
+      @color='secondary'
+      {{on 'click' this.cancelAuthentication}}
+    />
+  </A.Footer>
+</Hds::ApplicationState>
