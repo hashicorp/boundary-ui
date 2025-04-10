@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesRoute extends Route {
   // =services
@@ -34,6 +35,6 @@ export default class ScopesRoute extends Route {
         scope_id: 'global',
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
-      .catch(() => []);
+      .catch(() => new TrackedArray([]));
   }
 }

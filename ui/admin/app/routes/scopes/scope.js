@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRoute extends Route {
   // =services
@@ -51,7 +52,7 @@ export default class ScopesScopeRoute extends Route {
         scope_id: 'global',
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
-      .catch(() => []);
+      .catch(() => new TrackedArray([]));
 
     if (model.isProject) {
       projects = await this.store.query('scope', {
