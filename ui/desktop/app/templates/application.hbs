@@ -90,10 +90,11 @@
       <M.Header @icon='alert-diamond' @onDismiss={{deny}}>
         {{t 'states.error'}}
       </M.Header>
-      <M.Body class='error-modal-body'>
+      <M.Body>
         <Hds::Text::Body @tag='p'>
           {{confirmation.text}}
         </Hds::Text::Body>
+        <br />
         <Hds::Text::Body @tag='p'>
           {{t 'questions.retry-confirm'}}
         </Hds::Text::Body>

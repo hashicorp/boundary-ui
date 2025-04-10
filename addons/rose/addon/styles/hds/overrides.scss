@@ -53,3 +53,19 @@ form {
     color: inherit;
   }
 }
+
+.ember-application.rose-theme-dark {
+  // override for HDS dialog overlay to keep darker overlay
+  .hds-dialog-primitive__overlay {
+    background-color: var(--token-color-palette-neutral-0);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .ember-application:not(.rose-theme-light) {
+    // override for HDS dialog overlay to keep darker overlay
+    .hds-dialog-primitive__overlay {
+      background-color: var(--token-color-palette-neutral-0);
+    }
+  }
+}
