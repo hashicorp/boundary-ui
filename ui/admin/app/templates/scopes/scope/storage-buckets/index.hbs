@@ -9,10 +9,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.storage-bucket.title_plural'}}
       <DocLink @doc='storage-bucket' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.storage-bucket.description'}}</p>
   </page.header>
 

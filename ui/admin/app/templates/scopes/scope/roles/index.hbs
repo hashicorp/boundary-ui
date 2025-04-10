@@ -10,10 +10,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.role.title_plural'}}
       <DocLink @doc='role' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     {{#if @model.doRolesExist}}
       <p>{{t 'resources.role.description'}}</p>
     {{/if}}

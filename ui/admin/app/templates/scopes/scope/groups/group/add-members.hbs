@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.group.messages.add-members.title'}}
       <DocLink @doc='group.add-members' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.group.messages.add-members.description'}}</p>
   </page.header>
 
