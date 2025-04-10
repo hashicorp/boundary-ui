@@ -10,8 +10,6 @@ import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
 import { hashCode } from '../utils/hash-code';
 
-const BATCH_LIMIT = 10000;
-
 /**
  * Handler to sit in front of the API request layer
  * so we can handle any caching with indexedDb first
@@ -19,11 +17,15 @@ const BATCH_LIMIT = 10000;
 export default class IndexedDbHandler {
   @service indexedDb;
 
+  batchLimit = 10_000;
+
   constructor(context) {
     setOwner(this, getOwner(context));
   }
 
   async request(context, next) {
+    const { batchLimit } = this;
+
     switch (context.request.op) {
       case 'query': {
         const { store, data } = context.request;
@@ -68,7 +70,7 @@ export default class IndexedDbHandler {
               payload = await adapter.query(store, schema, {
                 ...remainingQuery,
                 list_token: listToken,
-                batchLimit: BATCH_LIMIT,
+                batchLimit: batchLimit,
               });
 
               // await the previous writeToIndexedDbPromise before writing to indexedDb again
