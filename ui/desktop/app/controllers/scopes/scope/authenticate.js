@@ -10,6 +10,7 @@ export default class ScopesScopeAuthenticateController extends Controller {
   // =services
 
   @service clusterUrl;
+  @service router;
 
   // =attributes
 
@@ -22,5 +23,16 @@ export default class ScopesScopeAuthenticateController extends Controller {
       ...this.model.scopes.filter((scope) => scope.id === 'global'),
       ...this.model.scopes.filter((scope) => scope.id !== 'global'),
     ];
+  }
+
+  /**
+   * Checks if the current route is the OIDC method authentication route.
+   * @type {boolean}
+   * @returns {boolean}
+   */
+  get isOIDCRoute() {
+    return (
+      this.router.currentRouteName === 'scopes.scope.authenticate.method.oidc'
+    );
   }
 }
