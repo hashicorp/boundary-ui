@@ -5,6 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesRoute extends Route {
   // =services
@@ -45,7 +46,7 @@ export default class ScopesRoute extends Route {
   async model() {
     // NOTE:  In the absence of a `scope_id` query parameter, this endpoint is
     // expected to default to the global scope, thus returning org scopes.
-    return this.store.query('scope', {}).catch(() => []);
+    return this.store.query('scope', {}).catch(() => new TrackedArray([]));
   }
 
   /**
