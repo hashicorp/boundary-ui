@@ -18,6 +18,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
 
   @service session;
   @service router;
+  @service flashMessages;
 
   // =attributes
 
@@ -46,6 +47,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
+    this.flashMessages.clearMessages(); // clear any ui messages during login
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
     controller.authMethod = authMethod;
   }
