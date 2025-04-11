@@ -21,25 +21,28 @@
 
       <header.utilities as |utilities|>
         {{#if this.showWindowActions}}
-          <Rose::Button
-            @iconOnly='flight-icons/svg/x-16'
-            @style='warning'
+          <Hds::Button
+            @icon='x'
+            @size='small'
+            @text={{t 'actions.close'}}
+            @color='critical'
             class='button-window-close'
-            title={{t 'actions.close'}}
             {{on 'click' this.close}}
           />
-          <Rose::Button
-            @iconOnly='flight-icons/svg/square-16'
-            @style='secondary'
+          <Hds::Button
+            @icon='x'
+            @size='small'
+            @color='secondary'
+            @text={{t 'actions.fullscreen'}}
             class='button-window-fullscreen'
-            title={{t 'actions.fullscreen'}}
             {{on 'click' this.toggleFullScreen}}
           />
-          <Rose::Button
-            @iconOnly='flight-icons/svg/minus-16'
-            @style='secondary'
+          <Hds::Button
+            @icon='x'
+            @size='small'
+            @color='secondary'
+            @text={{t 'actions.minimize'}}
             class='button-window-minimize'
-            title={{t 'actions.minimize'}}
             {{on 'click' this.minimize}}
           />
         {{/if}}
@@ -104,12 +107,16 @@
         </p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.retry'}}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
+        <Hds::Button
+          @color='primary'
+          @text={{t 'actions.retry'}}
+          {{on 'click' accept}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'actions.cancel'}}
+          {{on 'click' deny}}
+        />
       </dialog.footer>
     </Rose::Dialog>
   {{else}}
@@ -126,12 +133,16 @@
         <p>{{confirmation.text}}</p>
       </dialog.body>
       <dialog.footer>
-        <Rose::Button @style='primary' {{on 'click' accept}}>
-          {{t 'actions.ok'}}
-        </Rose::Button>
-        <Rose::Button @style='secondary' {{on 'click' deny}}>
-          {{t 'actions.cancel'}}
-        </Rose::Button>
+        <Hds::Button
+          @color='primary'
+          @text={{t 'actions.ok'}}
+          {{on 'click' accept}}
+        />
+        <Hds::Button
+          @color='secondary'
+          @text={{t 'actions.cancel'}}
+          {{on 'click' deny}}
+        />
       </dialog.footer>
     </Rose::Dialog>
   {{/if}}
