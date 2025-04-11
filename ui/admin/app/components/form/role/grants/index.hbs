@@ -29,14 +29,13 @@
             <input.field title={{t 'form.grant.help'}} />
           </item.cell>
           <item.cell>
-            <Rose::Button
+            <Hds::Button
               @onSubmit={{true}}
-              @disabled={{this.cannotSave}}
-              @style='secondary'
-              title={{t 'actions.add'}}
-            >
-              {{t 'actions.add'}}
-            </Rose::Button>
+              disabled={{this.cannotSave}}
+              @color='secondary'
+              @text={{t 'actions.add'}}
+              type='submit'
+            />
           </item.cell>
         </form.input>
       </list.item>
@@ -82,14 +81,12 @@
         </form.input>
         <item.cell>
           {{#if (can 'setGrants role' @model)}}
-            <Rose::Button
-              @style='secondary'
-              @iconOnly='flight-icons/svg/trash-16'
-              title={{t 'actions.remove'}}
+            <Hds::Button
+              @color='secondary'
+              @icon='x'
+              @text={{t 'actions.remove'}}
               {{on 'click' (fn @removeGrant grant.value)}}
-            >
-              {{t 'actions.remove'}}
-            </Rose::Button>
+            />
           {{/if}}
         </item.cell>
       </list.item>

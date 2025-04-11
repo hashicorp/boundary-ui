@@ -66,3 +66,8 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
+
+// ui/desktop
+// testing a solution to update our selectors
+export const DESKTOP_RETRY_BTN = '[data-test-retry-btn]';
+export const DESKTOP_CANCEL_BTN = '[data-test-cancel-btn]';
