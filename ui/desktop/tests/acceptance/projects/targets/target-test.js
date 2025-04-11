@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | projects | targets | target', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,9 +23,6 @@ module('Acceptance | projects | targets | target', function (hooks) {
   const APP_STATE_TITLE = '.hds-application-state__title';
   const ROSE_DIALOG_MODAL = '.rose-dialog-error';
   const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
-  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
-  const ROSE_DIALOG_CANCEL_BUTTON =
-    '.rose-dialog footer .rose-button-secondary';
 
   const instances = {
     scopes: {
@@ -166,8 +164,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(commonSelectors.DESKTOP_RETRY_BTN).hasText('Retry');
+    assert.dom(commonSelectors.DESKTOP_CANCEL_BTN).hasText('Cancel');
   });
 
   test('handles connect error', async function (assert) {
@@ -183,8 +181,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(commonSelectors.DESKTOP_RETRY_BTN).hasText('Retry');
+    assert.dom(commonSelectors.DESKTOP_CANCEL_BTN).hasText('Cancel');
   });
 
   test('user can retry on error', async function (assert) {
@@ -198,7 +196,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await click(TARGET_CONNECT_BUTTON);
     const firstErrorDialog = find(ROSE_DIALOG_MODAL);
-    await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
+    await click(commonSelectors.DESKTOP_RETRY_BTN, 'Retry');
     const secondErrorDialog = find(ROSE_DIALOG_MODAL);
 
     assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
