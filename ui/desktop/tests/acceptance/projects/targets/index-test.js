@@ -34,9 +34,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
   const ROSE_DIALOG_MODAL = '.rose-dialog-error';
   const CHOOSE_HOST_MODAL = '[data-test-host-modal]';
   const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
-  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
-  const ROSE_DIALOG_CANCEL_BUTTON =
-    '.rose-dialog footer .rose-button-secondary';
+  const RETRY_BTN = '[data-test-retry-btn]';
+  const CANCEL_BTN = '[data-test-cancel-btn]'
   const SESSIONS_FLYOUT = '[data-test-targets-sessions-flyout]';
   const SESSIONS_FLYOUT_TITLE =
     '[data-test-targets-sessions-flyout] .hds-flyout__title';
@@ -319,8 +318,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     assert.strictEqual(currentURL(), urls.targets);
     assert.dom(ROSE_DIALOG_MODAL).exists();
     assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(RETRY_BTN).hasText('Retry');
+    assert.dom(CANCEL_BTN).hasText('Cancel');
   });
 
   test('user can open sessions flyout when target has active or pending sessions', async function (assert) {

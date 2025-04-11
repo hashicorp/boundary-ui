@@ -111,11 +111,13 @@
           @color='primary'
           @text={{t 'actions.retry'}}
           {{on 'click' accept}}
+          data-test-retry-btn
         />
         <Hds::Button
           @color='secondary'
           @text={{t 'actions.cancel'}}
           {{on 'click' deny}}
+          data-test-cancel-btn
         />
       </dialog.footer>
     </Rose::Dialog>
