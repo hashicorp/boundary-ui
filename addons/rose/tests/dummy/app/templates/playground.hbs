@@ -71,7 +71,7 @@
                 <input.field />
               </item.cell>
               <item.cell>
-                <Hds::Button @color='secondary'>Add</Hds::Button>
+                <Rose::Button @style='secondary'>Add</Rose::Button>
               </item.cell>
             </list.item>
           </Rose::Form::Input>
@@ -85,7 +85,13 @@
                 <input.field />
               </item.cell>
               <item.cell>
-                <Hds::Button @color='secondary' @icon='trash' @text='Remove' />
+                <Rose::Button
+                  @style='secondary'
+                  @iconOnly='flight-icons/svg/trash-16'
+                  title='Remove'
+                >
+                  Remove
+                </Rose::Button>
               </item.cell>
             </list.item>
           </Rose::Form::Input>
