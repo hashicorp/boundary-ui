@@ -54,7 +54,8 @@ export default class ScopesScopeGroupsGroupAddMembersRoute extends Route {
       recursive: true,
       query,
     });
-    return { group, users, scopes };
+
+    return { group, users, scopes, selectedScopes: this.scope };
   }
 
   // =actions

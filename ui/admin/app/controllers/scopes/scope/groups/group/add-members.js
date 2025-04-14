@@ -59,27 +59,31 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
   }
 
   /**
+   * Adds or removes a scope from the selectedScopes array.
    * Calls filterBy action located in the route.
    * @param {string} field
    * @param {[ScopeModel]} value
    */
   @action
   callFilterBy(field, value) {
-    console.log('field:', field);
-    console.log('value:', value);
-    // keep a tracked variable for the selected items
-    // and pass it to the applyFilter function
-
-    this.send('filterBy', field, value);
+    if (this.model.selectedScopes) {
+      const isSelected = this.model.selectedScopes.some(
+        (item) => item.id === value.id,
+      );
+      this.model.selectedScopes = isSelected
+        ? this.model.selectedScopes.filter((item) => item.id !== value.id)
+        : [...this.model.selectedScopes, value];
+    }
+    this.send('filterBy', field, this.model.selectedScopes);
   }
 
   /**
+   * Clears all filters and resets selectedScopes.
    * Calls clearAllFilters action located in the route.
    */
   @action
   callClearAllFilters() {
-    // use the selectedItems array to see if the item is already selected, if so deselect them
-    // and call the clearAllFilters function
+    this.model.selectedScopes = [];
     this.send('clearAllFilters');
   }
 }
