@@ -4,8 +4,9 @@
 }}
 
 {{page-title (t 'titles.success')}}
-<Rose::Layout::Centered class='create-resources'>
-  <Rose::Frame>
+
+<Rose::Layout::Centered>
+  <Rose::Frame class='create-resources'>
     <:header>
       <Hds::Text::Display
         @tag='h2'
@@ -13,6 +14,10 @@
         @weight='bold'
         class='header-spacing'
       >{{t 'onboarding.success.titles.connect'}}</Hds::Text::Display>
+      <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>{{t
+          'onboarding.success.titles.connect'
+        }}</Hds::Text::Display>
     </:header>
     <:body>
       {{! We have created }}
@@ -34,7 +39,6 @@
       {{! Download Desktop client }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
           <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>{{t
               'onboarding.success.titles.desktop'
             }}</Hds::Text::Display>

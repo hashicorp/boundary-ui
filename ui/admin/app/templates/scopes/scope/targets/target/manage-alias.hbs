@@ -42,7 +42,7 @@
     <page.actions>
       {{#if (or perms.canUpdate perms.canDelete)}}
 
-        <Hds::Dropdown as |dd|>
+        <Hds::Dropdown data-test-manage-target-alias as |dd|>
           <dd.ToggleButton
             data-test-manage-dropdown
             @text={{t 'actions.manage'}}
