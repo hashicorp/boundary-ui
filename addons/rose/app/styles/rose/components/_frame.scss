@@ -7,7 +7,7 @@
 @use '../utilities/type';
 @use '../variables/media';
 
-$l: sizing.rems(l); // 16
+$l: sizing.rems(l); // 24
 $m: sizing.rems(m); // 16
 $s: sizing.rems(s); // 12
 $xs: sizing.rems(xs); // 8
@@ -36,11 +36,22 @@ $xxxxs: sizing.rems(xxxxs); // 1
     border-bottom: $xxxxs solid var(--header-border-color);
     border-top-left-radius: $xxxs;
     border-top-right-radius: $xxxs;
+    display: flex;
+    align-items: center;
+    column-gap: $xs;
+
+    h2 {
+      margin: $m 0;
+    }
   }
 
   .rose-frame-body {
     $body-padding: $l;
 
     padding: $body-padding;
+
+    p {
+      margin-bottom: $m;
+    }
   }
 }

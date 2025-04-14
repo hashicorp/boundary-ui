@@ -15,13 +15,16 @@
       {{else}}
         <Rose::Frame>
           <:header>
-            <h2>{{t 'actions.authenticate'}}</h2>
+            <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
+            <Hds::Text::Display @tag='h2' @size='300' @weight='bold'>{{t
+                'actions.authenticate'
+              }}</Hds::Text::Display>
           </:header>
           <:body>
-            <p>{{t
+            <Hds::Text::Body @tag='p'>{{t
                 'auth.descriptions.authenticating-with-org'
                 name=@model.scope.displayName
-              }}</p>
+              }}</Hds::Text::Body>
 
             <Rose::Dropdown
               @text={{t 'actions.choose-different-org'}}

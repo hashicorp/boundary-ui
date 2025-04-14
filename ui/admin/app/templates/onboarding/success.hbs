@@ -4,10 +4,14 @@
 }}
 
 {{page-title (t 'titles.success')}}
-<Rose::Layout::Centered class='create-resources'>
-  <Rose::Frame>
+
+<Rose::Layout::Centered>
+  <Rose::Frame class='create-resources'>
     <:header>
-      <h2>{{t 'onboarding.success.titles.connect'}}</h2>
+      <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
+      <Hds::Text::Display @tag='h2' @size='300' @weight='bold'>{{t
+          'onboarding.success.titles.connect'
+        }}</Hds::Text::Display>
     </:header>
     <:body>
       {{! We have created }}
@@ -27,7 +31,6 @@
       {{! Download Desktop client }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
           <h3>{{t 'onboarding.success.titles.desktop'}}</h3>
         </span>
         <p>{{t 'onboarding.success.descriptions.download'}}</p>
