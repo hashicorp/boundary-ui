@@ -16,7 +16,7 @@ export class UsersPage extends BaseResourcePage {
   async createUser() {
     const userName = 'User ' + nanoid();
     await this.page
-      .getByRole('navigation', { name: 'IAM' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Users' })
       .click();
     await this.page.getByRole('link', { name: 'New', exact: true }).click();

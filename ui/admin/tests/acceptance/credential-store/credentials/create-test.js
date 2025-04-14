@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
@@ -87,9 +88,12 @@ module(
         getUsernamePasswordCredentialCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.SAVE_BTN);
 
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
@@ -104,10 +108,13 @@ module(
         getUsernameKeyPairCredentialCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('[value="ssh_private_key"]');
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_SSH);
+      await click(commonSelectors.SAVE_BTN);
 
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(
@@ -122,10 +129,13 @@ module(
       const jsonCredentialCount = getJsonCredentialCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('[value="json"]');
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_JSON);
+      await click(commonSelectors.SAVE_BTN);
 
       assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
       assert.strictEqual(getJsonCredentialCount(), jsonCredentialCount + 1);
@@ -135,9 +145,12 @@ module(
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('.rose-form-actions [type="button"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
@@ -147,10 +160,13 @@ module(
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('[value="ssh_private_key"]');
-      await click('.rose-form-actions [type="button"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_SSH);
+      await click(commonSelectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
@@ -161,10 +177,13 @@ module(
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
-      await fillIn('[name="name"]', 'random string');
-      await click('[value="json"]');
-      await click('.rose-form-actions [type="button"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_JSON);
+      await click(commonSelectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getCredentialsCount(), credentialsCount);
@@ -172,20 +191,17 @@ module(
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
       featuresService.enable('json-credentials');
-      const editorSelector = '[data-test-code-editor-field-editor]';
-      const newSecret = '{"test": "value"}';
 
       await visit(urls.credentials);
-      await click(`[href="${urls.newCredential}"]`);
-      await click('[value="json"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.FIELD_TYPE_JSON);
 
-      await fillIn(`${editorSelector} textarea`, newSecret);
-      assert.dom(editorSelector).includesText(newSecret);
+      await fillIn(selectors.FIELD_EDITOR, selectors.FIELD_EDITOR_VALUE);
+      assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
-      await click('[value="username_password"]');
-
-      await click('[value="json"]');
-      assert.dom(editorSelector).includesText('{}');
+      await click(selectors.FIELD_TYPE_JSON);
+      assert.dom(selectors.EDITOR).includesText('{}');
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
@@ -198,17 +214,20 @@ module(
         );
       await visit(urls.credentialStores);
 
-      await click(`[href="${urls.staticCredentialStore}"]`);
+      await click(commonSelectors.HREF(urls.staticCredentialStore));
 
       assert.false(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create',
         ),
       );
-      assert.dom('.rose-layout-page-actions a').doesNotExist();
+      assert.dom(selectors.MANAGE_DROPDOWN_NEW_CREDENTIAL).doesNotExist();
     });
 
     test('saving a new username & password credential with invalid fields displays error messages', async function (assert) {
+      const errorMessage = 'Error in provided request.';
+      const errorDescription =
+        'Field required for creating a username-password credential.';
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
@@ -217,13 +236,12 @@ module(
           {
             status: 400,
             code: 'invalid_argument',
-            message: 'Error in provided request.',
+            message: errorMessage,
             details: {
               request_fields: [
                 {
                   name: 'attributes.password',
-                  description:
-                    'Field required for creating a username-password credential.',
+                  description: errorDescription,
                 },
               ],
             },
@@ -231,18 +249,17 @@ module(
         );
       });
 
-      await click(`[href="${urls.newCredential}"]`);
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await click(commonSelectors.SAVE_BTN);
 
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
-      assert
-        .dom('[data-test-error-message-password]')
-        .hasText('Field required for creating a username-password credential.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+      assert.dom(selectors.FIELD_PASSWORD_ERROR).hasText(errorDescription);
     });
 
     test('saving a new username & key pair credential with invalid fields displays error messages', async function (assert) {
+      const errorMessage = 'Error in provided request.';
+      const errorDescription =
+        'Field required for creating a username-key-pair credential.';
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
@@ -251,13 +268,12 @@ module(
           {
             status: 400,
             code: 'invalid_argument',
-            message: 'Error in provided request.',
+            message: errorMessage,
             details: {
               request_fields: [
                 {
                   name: 'attributes.private_key',
-                  description:
-                    'Field required for creating a username-key-pair credential.',
+                  description: errorDescription,
                 },
               ],
             },
@@ -265,20 +281,19 @@ module(
         );
       });
 
-      await click(`[href="${urls.newCredential}"]`);
-      await click('[value="ssh_private_key"]');
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.FIELD_TYPE_SSH);
+      await click(commonSelectors.SAVE_BTN);
 
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
       assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
-      assert
-        .dom('[data-test-error-message-private-key]')
-        .hasText('Field required for creating a username-key-pair credential.');
+        .dom(selectors.FIELD_SSH_PRIVATE_KEY_ERROR)
+        .hasText(errorDescription);
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
       featuresService.enable('json-credentials');
+      const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);
       this.server.post('/credentials', () => {
         return new Response(
@@ -287,7 +302,7 @@ module(
           {
             status: 400,
             code: 'invalid_argument',
-            message: 'Error in provided request.',
+            message: errorMessage,
             details: {
               request_fields: [
                 {
@@ -300,32 +315,33 @@ module(
         );
       });
 
-      await click(`[href="${urls.newCredential}"]`);
-      await click('[value="json"]');
-      await click('[type="submit"]');
+      await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.FIELD_TYPE_JSON);
+      await click(commonSelectors.SAVE_BTN);
 
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     });
 
     test('cannot navigate to json credential when feature is disabled', async function (assert) {
       await visit(urls.credentials);
 
-      await click(`[href="${urls.newCredential}"]`);
+      await click(commonSelectors.HREF(urls.newCredential));
+
       assert.false(featuresService.isEnabled('json-credentials'));
       assert.true(
         instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
           'create',
         ),
       );
-      assert.dom('.hds-form-radio-card').exists({ count: 2 });
       assert
-        .dom('.hds-form-radio-card:first-child input')
+        .dom(selectors.FIELD_TYPE_USERNAME_PASSWORD)
+        .exists()
         .hasAttribute('value', 'username_password');
       assert
-        .dom('.hds-form-radio-card:nth-child(2) input')
+        .dom(selectors.FIELD_TYPE_SSH)
+        .exists()
         .hasAttribute('value', 'ssh_private_key');
+      assert.dom(selectors.FIELD_TYPE_JSON).doesNotExist();
     });
 
     test('users cannot directly navigate to new credential route without proper authorization', async function (assert) {
