@@ -92,7 +92,7 @@ test.describe('Aliases (Enterprise)', () => {
 
         // Clear destination from alias
         await page
-          .getByRole('navigation', { name: 'Resources' })
+          .getByRole('navigation', { name: 'Application local navigation' })
           .getByRole('link', { name: 'Targets' })
           .click();
         await page.getByRole('link', { name: targetName }).click();
@@ -270,10 +270,10 @@ test.describe('Aliases (Enterprise)', () => {
 
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId);
+        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
         connect = await boundaryCli.connectSshToAlias(alias);
         await page
-          .getByRole('navigation', { name: 'General' })
+          .getByRole('navigation', { name: 'Application local navigation' })
           .getByRole('link', { name: 'Orgs' })
           .click();
         await page.getByRole('link', { name: orgName }).click();

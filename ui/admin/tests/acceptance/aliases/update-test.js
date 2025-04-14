@@ -8,8 +8,8 @@ import { visit, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,19 +17,6 @@ module('Acceptance | aliases | update', function (hooks) {
   setupIndexedDb(hooks);
 
   let aliasCount;
-
-  const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-
-  const NAME_FIELD_TEXT = 'random string';
-
-  const BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const CLEAR_DROPDOWN_SELECTOR =
-    '.hds-dropdown-list-item--color-action:nth-child(2)';
-
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item';
 
   const instances = {
     scopes: {
@@ -71,26 +58,26 @@ module('Acceptance | aliases | update', function (hooks) {
 
   test('users can update an exisiting alias', async function (assert) {
     await visit(urls.aliases);
-    await click(`[href="${urls.alias}"]`);
-    await click(BUTTON_SELECTOR, 'Click edit mode');
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(SAVE_BTN_SELECTOR);
-    assert.strictEqual(instances.alias.name, NAME_FIELD_TEXT);
+    await click(commonSelectors.HREF(urls.alias));
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(instances.alias.name, commonSelectors.FIELD_NAME_VALUE);
   });
 
   test('can cancel changes to an existing alias', async function (assert) {
     const name = instances.alias.name;
     await visit(urls.aliases);
 
-    await click(`[href="${urls.aliases}"]`);
-    await click(`[href="${urls.alias}"]`);
+    await click(commonSelectors.HREF(urls.alias));
 
-    await click(BUTTON_SELECTOR, 'Click edit mode');
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
-    await click(BUTTON_SELECTOR, 'Click cancel');
+    await click(commonSelectors.CANCEL_BTN);
 
-    assert.dom(NAME_FIELD_SELECTOR).hasValue(`${name}`);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(name);
     assert.strictEqual(instances.alias.name, name);
   });
 
@@ -99,14 +86,14 @@ module('Acceptance | aliases | update', function (hooks) {
     assert.true(instances.alias.authorized_actions.includes('update'));
     await visit(urls.globalScope);
 
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
+    await click(commonSelectors.HREF(urls.aliases));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
-    await click(`[href="${urls.aliases}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .hasText('Clear');
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(CLEAR_DROPDOWN_SELECTOR).exists();
-    await click(CLEAR_DROPDOWN_SELECTOR);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
     assert.strictEqual(aliasCount(), count);
   });
 
@@ -117,10 +104,12 @@ module('Acceptance | aliases | update', function (hooks) {
 
     assert.false(instances.alias.authorized_actions.includes('update'));
 
-    urls.alias = `${urls.aliases}/${instances.alias.id}`;
-    await click(`[href="${urls.aliases}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(CLEAR_DROPDOWN_SELECTOR).doesNotExist();
+    await click(commonSelectors.HREF(urls.aliases));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).exists();
+
+    assert
+      .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN)
+      .doesNotIncludeText('Clear');
   });
 });
