@@ -2,7 +2,7 @@ const { shell, dialog } = require('electron');
 const appUpdater = require('../helpers/app-updater.js');
 const { isMac, isWindows } = require('../helpers/platform.js');
 const config = require('../../config/config.js');
-const { version } = require('../cli/index.js');
+const { isBuiltInCli, version } = require('../cli/index.js');
 
 const generateMenuTemplate = () => {
   const aboutDialog = () => {
@@ -30,11 +30,15 @@ const generateMenuTemplate = () => {
                 label: `About ${config.productName}`,
                 click: aboutDialog,
               },
-              {
-                id: 'update',
-                label: 'Check for Updates',
-                click: async () => appUpdater.run(),
-              },
+              ...(isBuiltInCli
+                ? [
+                    {
+                      id: 'update',
+                      label: 'Check for Updates',
+                      click: async () => appUpdater.run(),
+                    },
+                  ]
+                : []),
               { type: 'separator' },
               { role: 'services' },
               { type: 'separator' },
