@@ -62,7 +62,7 @@ module('Acceptance | aliases | update', function (hooks) {
     await click(commonSelectors.EDIT_BTN);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    
+
     assert.strictEqual(instances.alias.name, commonSelectors.FIELD_NAME_VALUE);
   });
 
@@ -86,7 +86,6 @@ module('Acceptance | aliases | update', function (hooks) {
     assert.true(instances.alias.authorized_actions.includes('update'));
     await visit(urls.globalScope);
 
-    
     await click(commonSelectors.HREF(urls.aliases));
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
