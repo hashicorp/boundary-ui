@@ -42,7 +42,7 @@ test(
 
       // Navigate to orgs page when done
       await page
-        .getByRole('navigation', { name: 'General' })
+        .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Orgs' })
         .click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
