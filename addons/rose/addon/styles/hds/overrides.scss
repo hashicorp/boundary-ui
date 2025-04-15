@@ -76,6 +76,12 @@ form {
   .hds-dialog-primitive__overlay {
     background-color: var(--token-color-palette-neutral-0);
   }
+
+  // override for HDS modal to remove high contrast shadow and set border
+  .hds-modal {
+    border: 1px solid var(--token-color-border-strong);
+    box-shadow: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,6 +89,12 @@ form {
     // override for HDS dialog overlay to keep darker overlay
     .hds-dialog-primitive__overlay {
       background-color: var(--token-color-palette-neutral-0);
+    }
+
+    // override for HDS modal to remove high contrast shadow and set border
+    .hds-modal {
+      border: 1px solid var(--token-color-border-strong);
+      box-shadow: none;
     }
   }
 }
