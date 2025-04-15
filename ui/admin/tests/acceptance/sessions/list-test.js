@@ -127,7 +127,7 @@ module('Acceptance | sessions | list', function (hooks) {
     );
 
     assert
-      .dom(commonSelectors.RESOURCES_SIDEBAR_NAV_LINK(urls.sessions))
+      .dom(commonSelectors.SIDEBAR_NAV_LINK(urls.sessions))
       .doesNotExist();
   });
 
