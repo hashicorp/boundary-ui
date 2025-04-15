@@ -29,12 +29,4 @@ export default class ScopesScopeAuthenticateMethodOidcController extends Control
       authMethod: this.authMethod,
     });
   }
-
-  /**
-   * Route back to sign-in page.
-   */
-  @action
-  cancelAuthentication() {
-    this.router.transitionTo('scopes.scope.authenticate.method');
-  }
 }

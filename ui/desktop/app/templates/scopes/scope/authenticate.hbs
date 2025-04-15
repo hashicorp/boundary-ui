@@ -49,8 +49,7 @@
 
       {{#if @model.authMethods}}
         {{outlet}}
-      {{/if}}
-      {{#unless @model.authMethods}}
+      {{else}}
         <Rose::Layout::Centered>
           <Hds::ApplicationState data-test-no-auth-methods as |A|>
             <A.Header
@@ -62,7 +61,7 @@
             />
           </Hds::ApplicationState>
         </Rose::Layout::Centered>
-      {{/unless}}
+      {{/if}}
       <p class='change-origin'>
         {{t 'cluster-url.connected-to'}}:
         <code>{{this.clusterUrl}}</code>
