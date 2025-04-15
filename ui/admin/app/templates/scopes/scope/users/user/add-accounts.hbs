@@ -16,7 +16,12 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t 'resources.user.messages.add-accounts.title'}}</h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >{{t 'resources.user.messages.add-accounts.title'}}</Hds::Text::Display>
     <p>{{t 'resources.user.messages.add-accounts.description'}}</p>
   </page.header>
 

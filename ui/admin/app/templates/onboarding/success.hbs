@@ -9,9 +9,12 @@
   <Rose::Frame class='create-resources'>
     <:header>
       <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
-      <Hds::Text::Display @tag='h2' @size='300' @weight='bold'>{{t
-          'onboarding.success.titles.connect'
-        }}</Hds::Text::Display>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >{{t 'onboarding.success.titles.connect'}}</Hds::Text::Display>
     </:header>
     <:body>
       {{! We have created }}
@@ -23,7 +26,9 @@
             class='hds-foreground-success'
             @isInline={{true}}
           />
-          <h3>{{t 'onboarding.success.titles.creation-success'}}</h3>
+          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>{{t
+              'onboarding.success.titles.creation-success'
+            }}</Hds::Text::Display>
         </span>
         <p>{{t 'onboarding.success.descriptions.role'}}</p>
       </div>
@@ -31,7 +36,9 @@
       {{! Download Desktop client }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <h3>{{t 'onboarding.success.titles.desktop'}}</h3>
+          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>{{t
+              'onboarding.success.titles.desktop'
+            }}</Hds::Text::Display>
         </span>
         <p>{{t 'onboarding.success.descriptions.download'}}</p>
 
@@ -51,9 +58,9 @@
 
         {{! Controller }}
         <div class='create-resources-item-controller'>
-          <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
+          <Hds::Text::Display @tag='h4'>
             {{t 'onboarding.success.titles.controller'}}
-          </h4>
+          </Hds::Text::Display>
           <span class='create-resources-item-controller-label'>{{t
               'onboarding.success.descriptions.controller'
             }}</span>
@@ -67,9 +74,9 @@
 
       {{! Developers }}
       <div class='create-resources-item'>
-        <h4 class='hds-typography-display-200 hds-font-weight-semibold'>
+        <Hds::Text::Display @tag='h4'>
           {{t 'onboarding.success.titles.developers'}}
-        </h4>
+        </Hds::Text::Display>
         <p>{{t 'onboarding.success.descriptions.developers'}}</p>
 
         <Hds::Link::Standalone
