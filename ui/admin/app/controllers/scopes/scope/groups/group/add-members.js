@@ -69,12 +69,10 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    */
   @action
   callFilterBy(field, value) {
-    console.log(field, value, 'FROM tests');
     const isSelected = this.selectedScopes.some((item) => item.id === value.id);
     this.selectedScopes = isSelected
       ? this.selectedScopes.filter((item) => item.id !== value.id)
       : [...this.selectedScopes, value];
-    console.log(this.selectedScopes, 'SELECTED');
     this.send('filterBy', field, this.selectedScopes);
   }
 
