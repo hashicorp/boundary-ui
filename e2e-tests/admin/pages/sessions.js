@@ -14,7 +14,7 @@ export class SessionsPage extends BasePage {
    */
   async waitForSessionToBeVisible(targetName) {
     await this.page
-      .getByRole('navigation', { name: 'Resources' })
+      .getByRole('navigation', { name: 'Application local navigation' })
       .getByRole('link', { name: 'Sessions' })
       .click();
     let i = 0;

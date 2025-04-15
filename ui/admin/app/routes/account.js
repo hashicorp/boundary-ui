@@ -15,9 +15,14 @@ export default class AccountRoute extends Route {
   // =methods
 
   /**
-   * If arriving here unauthenticated, redirect to index for further processing.
+   * If arriving here unauthenticated, redirect to index for further processing
+   * else redirect to change-password route since account route is empty.
    */
   beforeModel() {
-    if (!this.session.isAuthenticated) this.router.transitionTo('index');
+    if (!this.session.isAuthenticated) {
+      this.router.transitionTo('index');
+    } else {
+      this.router.transitionTo('account.change-password');
+    }
   }
 }

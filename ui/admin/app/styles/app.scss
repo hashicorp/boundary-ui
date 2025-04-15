@@ -173,8 +173,6 @@
 
 // Onboarding styles
 .create-resources {
-  display: flex;
-  align-items: flex-start;
   width: sizing.rems(xl) * 15;
 
   .create-resources-form {
@@ -185,7 +183,6 @@
 
   .hds-form-group {
     margin-top: sizing.rems(l);
-    justify-content: center;
 
     .image-container {
       display: flex;
@@ -1081,5 +1078,26 @@
 .worker-filter-generator-form-layout {
   .hds-form-field--layout-flag {
     margin-bottom: 0;
+  }
+}
+
+.header-spacing {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+
+  .doc-link {
+    vertical-align: middle;
+  }
+}
+
+// scope picker
+.scope-picker {
+  &__toggle-button {
+    width: 100%;
+  }
+
+  li:has(.indentation),
+  li.indentation {
+    margin-left: 1.5rem;
   }
 }
