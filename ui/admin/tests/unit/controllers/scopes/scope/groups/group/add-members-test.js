@@ -91,7 +91,7 @@ module(
 
       assert.notOk(route.scope);
 
-      controller.callFilterBy('scope', [scope]);
+      controller.callFilterBy('scope', scope);
 
       assert.deepEqual(route.scope, [scope]);
     });

@@ -18,7 +18,10 @@ export class LoginPage extends BaseResourcePage {
     await this.page.getByLabel('Password', { exact: true }).fill(password);
     await this.page.getByRole('button', { name: 'Sign In' }).click();
     await expect(
-      this.page.getByRole('navigation', { name: 'General' }),
+      this.page.getByRole('navigation', {
+        // TODO: Uncomment line below once both UIs have been refactored to use HDS side nav.
+        // name: 'Application local navigation',
+      }),
     ).toBeVisible();
     await expect(this.page.getByText(loginName)).toBeEnabled();
   }

@@ -29,12 +29,12 @@ export default class ScopesScopeRoute extends Route {
   async model({ scope_id: id }) {
     // Since only global and org scopes are authenticatable, we can infer type
     // from ID because global has a fixed ID.
-    const type = id === 'global' ? TYPE_SCOPE_GLOBAL : TYPE_SCOPE_ORG;
     return this.store.findRecord('scope', id).catch(() => {
+      const type = id === 'global' ? TYPE_SCOPE_GLOBAL : TYPE_SCOPE_ORG;
       const maybeExistingScope = this.store.peekRecord('scope', id);
-      const scopeOptions = { id, type };
       return (
-        maybeExistingScope || this.store.createRecord('scope', scopeOptions)
+        maybeExistingScope ||
+        this.store.push({ data: { id, type: 'scope', attributes: { type } } })
       );
     });
   }
@@ -72,29 +72,5 @@ export default class ScopesScopeRoute extends Route {
     this.scope.project = selectedProject;
     this.scope.orgsList = orgs;
     this.scope.projectsList = projects;
-    this.scopes = { orgs, projects, selectedOrg, selectedProject };
-    // Update the controller (if exists), since setupController is only
-    // called once the first time the route is activated.  It is not called
-    // again on route refreshes.
-    /* eslint-disable-next-line ember/no-controller-access-in-routes */
-    if (this.controller) this.setControllerProperties(this.scopes);
-  }
-
-  /**
-   * Adds the scopes hash to the controller context (see `afterModel`).
-   * @param {Controller} controller
-   */
-  setupController(/* controller */) {
-    super.setupController(...arguments);
-    this.setControllerProperties(this.scopes);
-  }
-
-  /**
-   * Updates the controller's `scopes`.
-   * @param {array} scopes
-   */
-  setControllerProperties(scopes) {
-    /* eslint-disable-next-line ember/no-controller-access-in-routes */
-    this.controller.setProperties({ scopes });
   }
 }

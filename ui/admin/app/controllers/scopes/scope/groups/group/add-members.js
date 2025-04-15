@@ -8,11 +8,14 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-
+import { tracked } from '@glimmer/tracking';
 export default class ScopesScopeGroupsGroupAddMembersController extends Controller {
   // =services
 
   @service router;
+
+  // =tracked
+  @tracked selectedScopes = this.model.selectedScopes || [];
 
   // =attributes
 
@@ -66,15 +69,13 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    */
   @action
   callFilterBy(field, value) {
-    if (this.model.selectedScopes) {
-      const isSelected = this.model.selectedScopes.some(
-        (item) => item.id === value.id,
-      );
-      this.model.selectedScopes = isSelected
-        ? this.model.selectedScopes.filter((item) => item.id !== value.id)
-        : [...this.model.selectedScopes, value];
-    }
-    this.send('filterBy', field, this.model.selectedScopes);
+    console.log(field, value, 'FROM tests');
+    const isSelected = this.selectedScopes.some((item) => item.id === value.id);
+    this.selectedScopes = isSelected
+      ? this.selectedScopes.filter((item) => item.id !== value.id)
+      : [...this.selectedScopes, value];
+    console.log(this.selectedScopes, 'SELECTED');
+    this.send('filterBy', field, this.selectedScopes);
   }
 
   /**
@@ -83,7 +84,7 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
    */
   @action
   callClearAllFilters() {
-    this.model.selectedScopes = [];
+    this.selectedScopes = [];
     this.send('clearAllFilters');
   }
 }

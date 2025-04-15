@@ -127,7 +127,6 @@ class RouteResourceFilter extends EmberObject {
    */
   static setupRouteQueryParams(routeClass, name, refreshRouteOnChange = true) {
     const filterKey = `filter-${name}`;
-
     // If the route has no query params specified yet, declare them.
     if (!Object.keys(routeClass.queryParams).length)
       routeClass.queryParams = {};

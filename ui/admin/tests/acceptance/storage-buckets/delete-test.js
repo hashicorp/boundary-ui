@@ -20,7 +20,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
   let features;
   let getStorageBucketCount;
 
-  const DROPDOWN_BUTTON_SELECTOR = '.hds-dropdown-toggle-icon';
+  const DROPDOWN_BUTTON_SELECTOR = 'tbody tr td:last-child button';
   const DELETE_DROPDOWN_SELECTOR = '.hds-dropdown-list-item [type="button"]';
   const NOTIFICATION_MSG_TEXT = 'Deleted successfully.';
 

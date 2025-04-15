@@ -17,6 +17,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
   GRANT_SCOPE_THIS,
@@ -31,29 +32,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
   let confirmService;
 
-  const SCOPE_TOGGLE_SELECTOR = (name) =>
-    `.hds-form-toggle input[name="${name}"]`;
-  const SCOPE_CHECKBOX_SELECTOR = (type, id) =>
-    `tbody [data-test-${type}-scopes-table-row="${id}"] input`;
-  const GRANT_SCOPE_ROW_SELECTOR = (id) =>
-    `tbody [data-test-grant-scope-row="${id}"]`;
-  const FILTER_DROPDOWN_SELECTOR = (name) =>
-    `.search-filtering [name="${name}"] button`;
-  const TABLE_ROW_SELECTOR = 'tbody tr';
-  const TABLE_SCOPE_SELECTOR = 'tbody tr:nth-child(2) a';
-  const TABLE_PARENT_SCOPE_SELECTOR = 'tbody tr:nth-child(2) td:nth-child(3) a';
-  const SAVE_BTN_SELECTOR = 'form [type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const MANAGE_DROPDOWN_SELECTOR = '.hds-dropdown-toggle-button';
-  const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-grant-scope-results]';
-  const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
-  const NO_SCOPES_MSG_LINK_SELECTOR =
-    '.role-grant-scopes div div:nth-child(3) a';
-  const BUTTON_ICON_SELECTOR =
-    '.hds-button__icon [data-test-icon="check-circle"]';
-  const PAGINATION_SELECTOR = '.hds-pagination';
   const instances = {
     scopes: {
       global: null,
@@ -64,7 +42,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
   };
 
   const urls = {
-    orgScope: null,
     roles: null,
     role: null,
     roleScopes: null,
@@ -109,32 +86,30 @@ module('Acceptance | roles | org-scope', function (hooks) {
     session.set('data.theme', 'light');
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert
-      .dom(TABLE_ROW_SELECTOR)
+      .dom(commonSelectors.TABLE_ROW)
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
   test('user can navigate to scope from role grant scopes', async function (assert) {
+    const scopeUrl = `/scopes/${instances.role.grant_scope_ids[1]}`;
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
-    await click(TABLE_SCOPE_SELECTOR);
+    await click(commonSelectors.HREF(urls.roleScopes));
+    await click(commonSelectors.TABLE_RESOURCE_LINK(scopeUrl));
 
-    assert.strictEqual(
-      currentURL(),
-      `/scopes/${instances.role.grant_scope_ids[1]}/edit`,
-    );
+    assert.strictEqual(currentURL(), `${scopeUrl}/edit`);
   });
 
   test('user can navigate to parent scope from role grant scopes', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
-    await click(TABLE_PARENT_SCOPE_SELECTOR);
+    await click(commonSelectors.HREF(urls.roleScopes));
+    await click(selectors.GRANT_SCOPE_PARENT_SCOPE);
 
     assert.strictEqual(
       currentURL(),
@@ -145,72 +120,82 @@ module('Acceptance | roles | org-scope', function (hooks) {
   test('user can search for existing grant scope on a role', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
-      .exists();
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[0]))
+      .isVisible();
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
-      .exists();
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[1]))
+      .isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.role.grant_scope_ids[0]);
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      instances.role.grant_scope_ids[0],
+    );
     await waitUntil(
       () =>
-        findAll(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+        findAll(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[1]))
           .length === 0,
     );
 
-    assert.dom(PAGINATION_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGINATION).isVisible();
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
-      .exists();
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[0]))
+      .isVisible();
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[1]))
       .doesNotExist();
   });
 
   test('user can search for grant scopes on a role and get no results', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
-      .exists();
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[0]))
+      .isVisible();
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
-      .exists();
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[1]))
+      .isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake scope that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake scope that does not exist',
+    );
+    await waitUntil(
+      () => findAll(selectors.NO_RESULTS_GRANT_SCOPE_MSG).length === 1,
+    );
 
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[0]))
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[0]))
       .doesNotExist();
     assert
-      .dom(GRANT_SCOPE_ROW_SELECTOR(instances.role.grant_scope_ids[1]))
+      .dom(selectors.GRANT_SCOPE_ROW(instances.role.grant_scope_ids[1]))
       .doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert
+      .dom(selectors.NO_RESULTS_GRANT_SCOPE_MSG)
+      .includesText('No results found');
   });
 
   test('user cannot filter grant scopes on an org level role', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(FILTER_DROPDOWN_SELECTOR('parent-scope')).doesNotExist();
-    assert.dom(FILTER_DROPDOWN_SELECTOR('type')).doesNotExist();
+    assert.dom(commonSelectors.FILTER_DROPDOWN('parent-scope')).doesNotExist();
+    assert.dom(commonSelectors.FILTER_DROPDOWN('type')).doesNotExist();
   });
 
   test('user sees no scopes message and action when role has no grant scopes', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(NO_SCOPES_MSG_SELECTOR).includesText('No scopes added');
-    assert.dom(NO_SCOPES_MSG_LINK_SELECTOR).isVisible();
+    assert.dom(selectors.NO_SCOPES_MSG).includesText('No scopes added');
+    assert.dom(selectors.NO_SCOPES_MSG_LINK).isVisible();
   });
 
   test('user does not see action to add scopes when role has no grant scopes without proper permissions', async function (assert) {
@@ -222,68 +207,68 @@ module('Acceptance | roles | org-scope', function (hooks) {
     });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(NO_SCOPES_MSG_LINK_SELECTOR).doesNotExist();
+    assert.dom(selectors.NO_SCOPES_MSG_LINK).doesNotExist();
   });
 
   test('correct toggles are visible for org level role on manage scopes page', async function (assert) {
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
-    assert.dom(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS)).isVisible();
-    assert.dom(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_CHILDREN)).isVisible();
-    assert.dom(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_DESCENDANTS)).doesNotExist();
+    assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS)).isVisible();
+    assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_CHILDREN)).isVisible();
+    assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_DESCENDANTS)).doesNotExist();
   });
 
   test('user can save scope keywords to add on manage scopes page', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('user can cancel scope keywords to add on manage scopes page', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(CANCEL_BTN_SELECTOR);
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
   });
 
   test('shows error message on scope save on manage scopes page', async function (assert) {
@@ -302,10 +287,10 @@ module('Acceptance | roles | org-scope', function (hooks) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(SAVE_BTN_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
@@ -315,10 +300,10 @@ module('Acceptance | roles | org-scope', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(`[href="${urls.roles}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(commonSelectors.HREF(urls.roles));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -332,10 +317,10 @@ module('Acceptance | roles | org-scope', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(SCOPE_TOGGLE_SELECTOR(GRANT_SCOPE_THIS));
-    await click(`[href="${urls.roles}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS));
+    await click(commonSelectors.HREF(urls.roles));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -348,67 +333,67 @@ module('Acceptance | roles | org-scope', function (hooks) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
     await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
-    assert.dom(BUTTON_ICON_SELECTOR).isVisible();
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON_ICON).isVisible();
 
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 1);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });
 
   test('user can cancel custom scopes to add on manage org projects page', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
     await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.strictEqual(findAll(TABLE_ROW_SELECTOR).length, 0);
+    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
   });
 
   test('shows error message on custom scope save on manage org projects page', async function (assert) {
@@ -427,13 +412,13 @@ module('Acceptance | roles | org-scope', function (hooks) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
   });
@@ -443,11 +428,11 @@ module('Acceptance | roles | org-scope', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.manageScopes);
 
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
-    await click(`[href="${urls.roles}"]`);
+    await click(commonSelectors.HREF(urls.roles));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -461,11 +446,11 @@ module('Acceptance | roles | org-scope', function (hooks) {
     confirmService.enabled = true;
     await visit(urls.manageScopes);
 
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
     await click(
-      SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id),
+      selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id),
     );
-    await click(`[href="${urls.roles}"]`);
+    await click(commonSelectors.HREF(urls.roles));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -481,27 +466,29 @@ module('Acceptance | roles | org-scope', function (hooks) {
     });
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
 
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
-      .exists();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id)).exists();
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
+      .isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.scopes.project.id);
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.project.id);
     await waitUntil(
       () =>
-        findAll(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+        findAll(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
           .length === 0,
     );
 
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
-      .exists();
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
       .doesNotExist();
   });
 
@@ -512,24 +499,33 @@ module('Acceptance | roles | org-scope', function (hooks) {
     });
     await visit(urls.role);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(MANAGE_SCOPES_SELECTOR);
-    await click(`[href="${urls.manageOrgProjects}"]`);
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+    await click(commonSelectors.HREF(urls.manageOrgProjects));
 
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
-      .exists();
-    assert.dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id)).exists();
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
+      .isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake scope that does not exist');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake scope that does not exist',
+    );
+    await waitUntil(
+      () => findAll(selectors.NO_RESULTS_GRANT_SCOPE_MSG).length === 1,
+    );
 
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', instances.scopes.project.id))
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
       .doesNotExist();
     assert
-      .dom(SCOPE_CHECKBOX_SELECTOR('project', anotherProject.id))
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
       .doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert
+      .dom(selectors.NO_RESULTS_GRANT_SCOPE_MSG)
+      .includesText('No results found');
   });
 });

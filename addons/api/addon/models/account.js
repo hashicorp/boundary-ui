@@ -47,8 +47,8 @@ export default class AccountModel extends GeneratedAccountModel {
    * @type {string}
    */
   get accountName() {
-    const { email, full_name, login_name } = this;
-    return email || full_name || login_name;
+    const { email, full_name, login_name, subject } = this;
+    return email || full_name || login_name || subject;
   }
 
   // =methods
