@@ -912,7 +912,6 @@ __metadata:
     electron-devtools-installer: "npm:^3.2.0"
     electron-is-dev: "npm:^2.0.0"
     electron-log: "npm:^5.1.2"
-    electron-squirrel-startup: "npm:^1.0.0"
     electron-store: "npm:^8.2.0"
     node-html-parser: "npm:^5.3.3"
     node-pty: "npm:^1.1.0-beta33"
@@ -1567,15 +1566,6 @@ __metadata:
   version: 5.3.0
   resolution: "electron-log@npm:5.3.0"
   checksum: 10c0/a9a438b4b4f178e7eb25ca7c2fbab43c0b8264ff54e6bfbc88ae2c568f9e943b7b45d0da3d0bde31e5264f7360984a5c161173f6041653ee22a3cdd93373e54d
-  languageName: node
-  linkType: hard
-
-"electron-squirrel-startup@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "electron-squirrel-startup@npm:1.0.1"
-  dependencies:
-    debug: "npm:^2.2.0"
-  checksum: 10c0/eaff42844702321237b23f68ae2bff2eae17cb1251189e9a5397d94d1598a607e3cbedc60e130a0641798739019db44c37b2a8801e7a60f9261810bb8d07e9bf
   languageName: node
   linkType: hard
 
