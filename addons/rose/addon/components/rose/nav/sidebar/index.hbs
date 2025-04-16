@@ -12,9 +12,11 @@
 >
 
   {{#if @title}}
-    <span class='rose-nav-title' id='title-{{this.id}}'>
+    {{! Updated span however this is hidden by default in the desktop,
+    once side nav refactor is done this will ultimately be removed }}
+    <Hds::Text::Body class='rose-nav-title' id='title-{{this.id}}'>
       {{@title}}
-    </span>
+    </Hds::Text::Body>
   {{/if}}
 
   {{yield (hash link=(component 'rose/nav/link'))}}

@@ -7,9 +7,13 @@
 
   <div class='ordered-series-diagram-item-content'>
     <Hds::IconTile @icon={{@icon}} @size='large' @color='hcp' />
-    <span class='ordered-series-diagram-item-title'>
+    <Hds::Text::Body
+      @weight='semibold'
+      @size='300'
+      class='ordered-series-diagram-item-title'
+    >
       {{yield}}
-    </span>
+    </Hds::Text::Body>
   </div>
 
   <div class='ordered-series-diagram-separator-icon'>
