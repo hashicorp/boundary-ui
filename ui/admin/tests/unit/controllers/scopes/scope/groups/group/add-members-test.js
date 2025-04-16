@@ -31,7 +31,9 @@ module(
       globalScope: null,
       addMembers: null,
     };
-
+    const model = {
+      scopes: [{ id: 'global', type: 'global' }],
+    };
     hooks.beforeEach(async function () {
       await authenticateSession({});
       store = this.owner.lookup('service:store');
@@ -82,33 +84,19 @@ module(
       assert.deepEqual(group.members, [user]);
     });
 
-    test('callFilterBy action adds expected property values to route', async function (assert) {
-      const route = this.owner.lookup(
-        'route:scopes/scope/groups/group/add-members',
-      );
-      await visit(urls.addMembers);
-      const scope = await store.findRecord('scope', instances.scopes.global.id);
+    test('applyFilter action sets expected values correctly', async function (assert) {
+      controller.set('model', model);
+      const selectedItems = ['yes'];
+      controller.applyFilter('scopeIds', selectedItems);
 
-      assert.notOk(route.scope);
-
-      controller.callFilterBy('scope', [scope]);
-
-      assert.deepEqual(route.scope, [scope]);
+      assert.deepEqual(controller.scopeIds, selectedItems);
     });
 
-    test('callClearAllFilters action removes all filter values from route', async function (assert) {
-      const route = this.owner.lookup(
-        'route:scopes/scope/groups/group/add-members',
-      );
-      await visit(urls.addMembers);
-      const scope = await store.findRecord('scope', instances.scopes.global.id);
-      route.scope = [scope];
+    test('filters returns expected entries', function (assert) {
+      controller.set('model', model);
 
-      assert.deepEqual(route.scope, [scope]);
-
-      controller.callClearAllFilters();
-
-      assert.deepEqual(route.scope, []);
+      assert.ok(controller.filters.allFilters);
+      assert.ok(controller.filters.selectedFilters);
     });
   },
 );

@@ -5,12 +5,12 @@
 
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
-
+import { action } from '@ember/object';
 export default class ScopesScopeAuthenticateController extends Controller {
   // =services
 
   @service clusterUrl;
-
+  @service router;
   // =attributes
 
   /**
@@ -22,5 +22,13 @@ export default class ScopesScopeAuthenticateController extends Controller {
       ...this.model.scopes.filter((scope) => scope.id === 'global'),
       ...this.model.scopes.filter((scope) => scope.id !== 'global'),
     ];
+  }
+
+  // =actions
+
+  @action
+  selectScope(scope, callback) {
+    this.router.transitionTo('scopes.scope.authenticate', scope);
+    callback();
   }
 }

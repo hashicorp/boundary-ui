@@ -126,9 +126,7 @@ module('Acceptance | sessions | list', function (hooks) {
       ),
     );
 
-    assert
-      .dom(commonSelectors.SIDEBAR_NAV_LINK(urls.sessions))
-      .doesNotExist();
+    assert.dom(commonSelectors.SIDEBAR_NAV_LINK(urls.sessions)).doesNotExist();
   });
 
   test('users can navigate to sessions with proper authorization', async function (assert) {

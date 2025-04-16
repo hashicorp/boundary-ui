@@ -35,7 +35,8 @@ export const PAGE_MESSAGE_LINK =
 
 export const HREF = (url) => `[href="${url}"]`;
 
-export const SIDEBAR_NAV_LINK = (url) => `.hds-side-nav__content a[href="${url}"]`;
+export const SIDEBAR_NAV_LINK = (url) =>
+  `.hds-side-nav__content a[href="${url}"]`;
 export const SIDEBAR_NAV_CONTENT = '.hds-side-nav__content';
 export const SIDEBAR_USER_DROPDOWN =
   '[data-test-side-nav-user-dropdown] button';
