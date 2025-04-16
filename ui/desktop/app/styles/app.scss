@@ -240,7 +240,8 @@
   }
 
   .branded-card-title {
-    margin-bottom: 0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .branded-card-description {
@@ -651,5 +652,14 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
     .hds-alert {
       flex-basis: 100%;
     }
+  }
+}
+
+.header-spacing {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+
+  .doc-link {
+    vertical-align: middle;
   }
 }
