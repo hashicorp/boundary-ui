@@ -30,10 +30,10 @@
           </item.cell>
           <item.cell>
             <Hds::Button
+              type='submit'
               disabled={{this.cannotSave}}
               @color='secondary'
               @text={{t 'actions.add'}}
-              type='submit'
             />
           </item.cell>
         </form.input>
@@ -85,7 +85,7 @@
               @icon='trash'
               @isIconOnly={{true}}
               @text={{t 'actions.remove'}}
-              type='submit'
+              type='button'
               {{on 'click' (fn @removeGrant grant.value)}}
             />
           {{/if}}
