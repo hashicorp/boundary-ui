@@ -21,7 +21,7 @@ This addon contains the authentication layer for Boundary.
 ## Add to an App
 
 Add this addon to an Ember application's `devDependencies` as:
-`"auth": "*"`, for applications included in this monorepo.
+`"auth": "workspace:*"`, for applications included in this monorepo.
 
 ## Installation
 

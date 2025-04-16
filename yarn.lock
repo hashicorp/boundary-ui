@@ -8455,7 +8455,7 @@ __metadata:
     babel-loader: "npm:^9.2.1"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^9.1.0"
-    core: "npm:*"
+    core: "workspace:*"
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^7.0.0"
     ember-auto-import: "npm:^2.10.0"
@@ -8494,7 +8494,7 @@ __metadata:
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
-    rose: "npm:*"
+    rose: "workspace:*"
     sinon: "npm:^19.0.2"
     stylelint: "npm:^15.10.1"
     stylelint-config-prettier-scss: "npm:^0.0.1"
@@ -8791,7 +8791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"api@npm:*, api@workspace:addons/api":
+"api@workspace:*, api@workspace:addons/api":
   version: 0.0.0-use.local
   resolution: "api@workspace:addons/api"
   dependencies:
@@ -9019,7 +9019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"auth@npm:*, auth@workspace:addons/auth":
+"auth@workspace:*, auth@workspace:addons/auth":
   version: 0.0.0-use.local
   resolution: "auth@workspace:addons/auth"
   dependencies:
@@ -11420,7 +11420,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core@npm:*, core@workspace:addons/core":
+"core@workspace:*, core@workspace:addons/core":
   version: 0.0.0-use.local
   resolution: "core@workspace:addons/core"
   dependencies:
@@ -11435,8 +11435,8 @@ __metadata:
     "@formatjs/intl-durationformat": "npm:^0.2.4"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
-    api: "npm:*"
-    auth: "npm:*"
+    api: "workspace:*"
+    auth: "workspace:*"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^9.1.0"
     doctoc: "npm:^2.2.0"
@@ -11476,7 +11476,7 @@ __metadata:
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
-    rose: "npm:*"
+    rose: "workspace:*"
     sass: "npm:^1.69.5"
     sinon: "npm:^19.0.2"
     webpack: "npm:^5.94.0"
@@ -12030,7 +12030,7 @@ __metadata:
     babel-loader: "npm:^9.2.1"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^9.1.0"
-    core: "npm:*"
+    core: "workspace:*"
     cross-env: "npm:^7.0.3"
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^7.0.0"
@@ -12071,7 +12071,7 @@ __metadata:
     prettier: "npm:^3.0.0"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
-    rose: "npm:*"
+    rose: "workspace:*"
     sass: "npm:^1.69.5"
     shx: "npm:^0.3.4"
     sinon: "npm:^19.0.2"
@@ -22854,7 +22854,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"rose@npm:*, rose@workspace:addons/rose":
+"rose@workspace:*, rose@workspace:addons/rose":
   version: 0.0.0-use.local
   resolution: "rose@workspace:addons/rose"
   dependencies:
