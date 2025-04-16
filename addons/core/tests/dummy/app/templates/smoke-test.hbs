@@ -3,11 +3,13 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<h1>Smoke Test</h1>
+<Hds::Text::Display @tag='h1'>Smoke Test</Hds::Text::Display>
 <p>
   This template is used by the smoke-test acceptance tests, which validate that
   Ember can start up and basic features work as intended.
 </p>
 
-<h2>{{t 'resources.account.title'}}</h2>
+<Hds::Text::Display @tag='h2'>{{t
+    'resources.account.title'
+  }}</Hds::Text::Display>
 <p>{{t 'resources.account.description'}}</p>
