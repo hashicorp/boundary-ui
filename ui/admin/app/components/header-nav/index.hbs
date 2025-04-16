@@ -14,7 +14,7 @@
     @color='secondary'
   />
   {{#if this.session.data.authenticated.isGlobal}}
-    <dd.Interactive @route='scopes.scope.authenticate' @model='global'>
+    <dd.Interactive @route='scopes.scope' @model='global'>
       {{t 'titles.global'}}
     </dd.Interactive>
   {{/if}}
