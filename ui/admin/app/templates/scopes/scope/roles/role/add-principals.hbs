@@ -28,6 +28,7 @@
     <Dropdown
       name='scopeIds'
       class='dropdown-checkbox-list'
+      @listPosition='bottom-left'
       @toggleText={{t 'resources.scope.title_plural'}}
       @itemOptions={{@model.scopes}}
       @checkedItems={{this.scopeIds}}
