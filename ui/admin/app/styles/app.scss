@@ -1081,6 +1081,15 @@
   }
 }
 
+.header-spacing {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+
+  .doc-link {
+    vertical-align: middle;
+  }
+}
+
 // scope picker
 .scope-picker {
   &__toggle-button {

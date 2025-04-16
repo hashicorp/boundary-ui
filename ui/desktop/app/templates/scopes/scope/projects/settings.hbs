@@ -5,11 +5,16 @@
 
 <Rose::Layout::Page class='settings-card' as |page|>
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'titles.settings'}}
       {{! TODO: Add a link to the settings documentation }}
       {{! <DocLink @doc='setting' @iconSize='large' /> }}
-    </h2>
+    </Hds::Text::Display>
   </page.header>
   <page.body>
     {{outlet}}

@@ -9,10 +9,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.policy.title'}}
       <DocLink @doc='storage-policy' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.policy.description'}}</p>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
