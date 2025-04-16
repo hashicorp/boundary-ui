@@ -219,7 +219,7 @@ module('Acceptance | authentication', function (hooks) {
 
     await click('.hds-dropdown-toggle-button');
 
-    assert.dom('.hds-dropdown-list-item a').exists({ count: 2 });
+    assert.dom('.hds-dropdown-list-item button').exists({ count: 2 });
   });
 
   test('change cluster url is visible when no auth methods are available', async function (assert) {
