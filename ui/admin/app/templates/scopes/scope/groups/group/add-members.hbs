@@ -25,48 +25,15 @@
 
   <page.body>
 
-    {{#let
-      (resource-filter 'scopes.scope.groups.group.add-members' 'scope')
-      as |filter|
-    }}
-      <Rose::Toolbar as |toolbar|>
-        <toolbar.primary>
-          <Rose::Form>
-            <Hds::Dropdown as |dd|>
-              <dd.ToggleButton
-                @text={{t (concat 'resources.' filter.name '.title')}}
-                @count={{filter.selectedValue.length}}
-                @color='secondary'
-              />
-              {{#each this.flatSortedScopes as |scope|}}
-                <dd.Checkbox
-                  @value={{scope}}
-                  checked={{includes scope filter.selectedValue}}
-                  {{on 'change' (fn this.callFilterBy filter.name scope)}}
-                >
-                  {{scope.displayName}}
-                </dd.Checkbox>
-              {{/each}}
-
-            </Hds::Dropdown>
-
-            {{#if
-              (has-resource-filter-selections
-                'scopes.scope.groups.group.add-members' 'scope'
-              )
-            }}
-              <Rose::Button
-                @style='inline-link-action'
-                @iconLeft='flight-icons/svg/x-16'
-                {{on 'click' this.callClearAllFilters}}
-              >{{t 'actions.clear-all-filters'}}
-              </Rose::Button>
-            {{/if}}
-          </Rose::Form>
-        </toolbar.primary>
-      </Rose::Toolbar>
-    {{/let}}
-
+    <Dropdown
+      name='scopeIds'
+      class='dropdown-checkbox-list'
+      @toggleText={{t 'resources.scope.title_plural'}}
+      @itemOptions={{@model.scopes}}
+      @checkedItems={{this.scopeIds}}
+      @applyFilter={{fn this.applyFilter 'scopeIds'}}
+    />
+    <FilterTags @filters={{this.filters}} />
     <br />
 
     <Form::Group::AddMembers

@@ -5,8 +5,6 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
-import { resourceFilter } from 'core/decorators/resource-filter';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
@@ -20,12 +18,12 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
 
   // =attributes
 
-  @resourceFilter({
-    allowed: (route) => route.store.peekAll('scope'),
-    serialize: ({ id }) => id,
-    findBySerialized: ({ id }, value) => id === value,
-  })
-  scope;
+  queryParams = {
+    scopeIds: {
+      refreshModel: true,
+      replace: true,
+    },
+  };
 
   // =methods
 
@@ -42,12 +40,12 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
    * Returns the current role, all users, and all groups
    * @return {{role: RoleModel, users: [UserModel], groups: [GroupModel]}}
    */
-  async model() {
+  async model({ scopeIds }) {
     const role = this.modelFor('scopes.scope.roles.role');
     const scopes = this.store.peekAll('scope');
-    const scopeIDs = this.scope?.map((scope) => scope.id);
+
     const query = { filters: { scope_id: [] } };
-    scopeIDs?.forEach((scopeID) => {
+    scopeIds?.forEach((scopeID) => {
       query.filters.scope_id.push({ equals: scopeID });
     });
     const users = await this.store.query('user', {
@@ -83,24 +81,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsRoute extends Route {
       users,
       groups,
       managedGroups: managedGroups.flat(),
+      selectedScopes: this.scope,
     };
-  }
-
-  /**
-   * Sets the specified resource filter field to the specified value.
-   * @param {string} field
-   * @param value
-   */
-  @action
-  filterBy(field, value) {
-    this[field] = value;
-  }
-
-  /**
-   * Clears and filter selections.
-   */
-  @action
-  clearAllFilters() {
-    this.scope = [];
   }
 }

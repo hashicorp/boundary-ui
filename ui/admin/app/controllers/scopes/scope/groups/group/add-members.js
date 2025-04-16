@@ -15,10 +15,11 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
   @service router;
 
   // =tracked
-  @tracked selectedScopes = this.model.selectedScopes || [];
+  @tracked scopeIds = [];
 
   // =attributes
 
+  queryParams = ['search', { scopeIds: { type: 'array' } }];
   /**
    * Returns a flat array of scopes, sorted and "grouped by" parent scope,
    * beginning with global.
@@ -36,7 +37,32 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
     return sorted;
   }
 
+  /**
+   * Returns the filters object used for displaying filter tags.
+   * @type {object}
+   */
+  get filters() {
+    return {
+      allFilters: {
+        scopeIds: this.model.scopes,
+      },
+      selectedFilters: {
+        scopeIds: this.scopeIds,
+      },
+    };
+  }
+
   // =actions
+
+  /**
+   * Sets a query param to the value of selectedItems
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+  }
 
   /**
    * Adds members to the group and saves, replaces with the members index
@@ -59,30 +85,5 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
   @action
   async cancel() {
     await this.router.replaceWith('scopes.scope.groups.group.members');
-  }
-
-  /**
-   * Adds or removes a scope from the selectedScopes array.
-   * Calls filterBy action located in the route.
-   * @param {string} field
-   * @param {[ScopeModel]} value
-   */
-  @action
-  callFilterBy(field, value) {
-    const isSelected = this.selectedScopes.some((item) => item.id === value.id);
-    this.selectedScopes = isSelected
-      ? this.selectedScopes.filter((item) => item.id !== value.id)
-      : [...this.selectedScopes, value];
-    this.send('filterBy', field, this.selectedScopes);
-  }
-
-  /**
-   * Clears all filters and resets selectedScopes.
-   * Calls clearAllFilters action located in the route.
-   */
-  @action
-  callClearAllFilters() {
-    this.selectedScopes = [];
-    this.send('clearAllFilters');
   }
 }
