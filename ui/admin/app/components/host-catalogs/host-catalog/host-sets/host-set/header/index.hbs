@@ -3,9 +3,9 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<h2>
+<Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>
   {{t 'resources.host-set.title'}}
   <DocLink @doc='host-set' @iconSize='24' />
-</h2>
+</Hds::Text::Display>
 <p>{{t 'resources.host-set.description'}}</p>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

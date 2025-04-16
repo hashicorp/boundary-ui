@@ -7,12 +7,17 @@
   {{#if (if (has-block 'header') true @heading)}}
     <header class='card-header'>
       {{#if @heading}}
-        <h2>
+        <Hds::Text::Display
+          @tag='h2'
+          @size='400'
+          @weight='bold'
+          class='header-spacing'
+        >
           {{#if @icon}}
             <Hds::Icon @name={{@icon}} />
           {{/if}}
           {{@heading}}
-        </h2>
+        </Hds::Text::Display>
       {{/if}}
 
       {{yield to='header'}}

@@ -24,16 +24,26 @@
 
   <page.header>
     {{#if @model.isOrg}}
-      <h2>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >
         {{t 'resources.org.titles.new'}}
         <DocLink @doc='org.new' @iconSize='24' />
-      </h2>
+      </Hds::Text::Display>
       <p>{{t 'resources.org.description'}}</p>
     {{else if @model.isProject}}
-      <h2>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >
         {{t 'resources.project.titles.new'}}
         <DocLink @doc='project.new' @iconSize='24' />
-      </h2>
+      </Hds::Text::Display>
       <p>{{t 'resources.project.description'}}</p>
     {{/if}}
   </page.header>

@@ -11,10 +11,15 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.auth-method.titles.new'}}
       <DocLink @doc='auth-method' @iconSize='24' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.auth-method.description'}}</p>
   </page.header>
 

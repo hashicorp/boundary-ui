@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<h2>
+<Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>
   {{t 'resources.auth-method.title'}}
   {{#if @model.isPrimary}}
     &nbsp;
@@ -11,6 +11,6 @@
     &nbsp;
   {{/if}}
   <DocLink @doc='auth-method' @iconSize='24' />
-</h2>
+</Hds::Text::Display>
 <p>{{t 'resources.auth-method.description'}}</p>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

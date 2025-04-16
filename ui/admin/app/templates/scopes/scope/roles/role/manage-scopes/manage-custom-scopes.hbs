@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.role.scope.messages.manage-custom-scopes.title'}}
       <DocLink @doc='role.add-grant-scopes' @iconSize='24' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t
         'resources.role.scope.messages.manage-custom-scopes.description'
       }}</p>

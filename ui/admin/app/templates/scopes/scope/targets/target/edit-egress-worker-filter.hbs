@@ -15,10 +15,15 @@
     <Breadcrumbs::Container />
   </page.breadcrumbs>
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.target.workers.edit-egress-worker-filter.title'}}
       <DocLink @doc='worker-filters-format' @iconSize='24' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t
         'resources.target.workers.edit-egress-worker-filter.description'
       }}</p>

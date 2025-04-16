@@ -5,10 +5,15 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.session.title_plural'}}
       <DocLink @doc='sessions' @iconSize='24' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.session.description'}}</p>
   </page.header>
 

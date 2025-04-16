@@ -21,24 +21,39 @@
 
   <page.header>
     {{#if @model.isGlobal}}
-      <h2>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >
         {{t 'resources.global.title'}}
         <DocLink @doc='global' @iconSize='24' />
-      </h2>
+      </Hds::Text::Display>
       <p>{{t 'resources.global.description'}}</p>
     {{/if}}
     {{#if @model.isOrg}}
-      <h2>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >
         {{t 'resources.org.title'}}
         <DocLink @doc='org' @iconSize='24' />
-      </h2>
+      </Hds::Text::Display>
       <p>{{t 'resources.org.description'}}</p>
     {{/if}}
     {{#if @model.isProject}}
-      <h2>
+      <Hds::Text::Display
+        @tag='h2'
+        @size='400'
+        @weight='bold'
+        class='header-spacing'
+      >
         {{t 'resources.project.title'}}
         <DocLink @doc='project' @iconSize='24' />
-      </h2>
+      </Hds::Text::Display>
       <p>{{t 'resources.project.description'}}</p>
     {{/if}}
     <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

@@ -16,10 +16,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.role.principal.messages.add-principals.title'}}
       <DocLink @doc='role.add-principals' @iconSize='24' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.role.principal.messages.add-principals.description'}}</p>
   </page.header>
 
