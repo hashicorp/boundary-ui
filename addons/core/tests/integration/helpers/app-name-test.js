@@ -12,7 +12,7 @@ module('Integration | Helper | app-name', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`{{app-name}}`);
+    await render(hbs`<app-name />`);
     assert.strictEqual(this.element.textContent.trim(), 'App Name');
   });
 });
