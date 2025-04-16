@@ -19,11 +19,11 @@
         @icon='org'
         @color='secondary'
       />
-      <dd.Interactive @route='scopes.scope.authenticate' @model='global'>
+      <dd.Interactive {{on 'click' (fn this.selectScope 'global' dd.close)}}>
         {{t 'titles.global'}}
       </dd.Interactive>
       {{#each this.sortedScopes as |scope|}}
-        <dd.Interactive @route='scopes.scope.authenticate' @model={{scope.id}}>
+        <dd.Interactive {{on 'click' (fn this.selectScope scope.id dd.close)}}>
           {{scope.displayName}}
         </dd.Interactive>
       {{/each}}
