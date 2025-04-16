@@ -70,9 +70,10 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   test('visiting host sets', async function (assert) {
     await visit(urls.hostSets);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hostSets);
 
-    await click(`[href="${urls.hostSet}"]`);
+    await click(commonSelectors.HREF(urls.hostSet));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
@@ -83,7 +84,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.hostSets}"]`);
+    await click(commonSelectors.HREF(urls.hostSets));
 
     assert
       .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.hostSet))
@@ -102,7 +103,7 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
   test('users can link to docs page for host sets', async function (assert) {
     await visit(urls.hostSets);
 
-    await click(`[href="${urls.hostSet}"]`);
+    await click(commonSelectors.HREF(urls.hostSet));
 
     assert
       .dom(
