@@ -20,7 +20,7 @@ export default class ScopesScopeRolesRoleAddPrincipalsController extends Control
 
   // =attributes
 
-  queryParams = ['search', { scopeIds: { type: 'array' } }];
+  queryParams = [{ scopeIds: { type: 'array' } }];
   /**
    * Returns a flat array of scopes, sorted and "grouped by" parent scope,
    * beginning with global.
