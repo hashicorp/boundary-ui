@@ -9,7 +9,14 @@
   @showEditToggle={{false}}
   as |form|
 >
-  <h3>{{t 'resources.worker.form.steps.1.title'}}</h3>
+  <Hds::Text::Display
+    @tag='h3'
+    @size='300'
+    @weight='bold'
+    class='header-spacing'
+  >
+    {{t 'resources.worker.form.steps.1.title'}}
+  </Hds::Text::Display>
   <div class='worker-create-section'>
     {{#if (feature-flag 'byow-pki-hcp-cluster-id')}}
       <Hds::Form::TextInput::Field
@@ -179,7 +186,14 @@
     </p>
   </div>
 
-  <h3>{{t 'resources.worker.form.steps.2.title'}}</h3>
+  <Hds::Text::Display
+    @tag='h3'
+    @size='300'
+    @weight='bold'
+    class='header-spacing'
+  >
+    {{t 'resources.worker.form.steps.2.title'}}
+  </Hds::Text::Display>
   <div class='worker-create-section'>
 
     <p>
@@ -201,7 +215,14 @@
     </p>
   </div>
 
-  <h3>{{t 'resources.worker.form.steps.3.title'}}</h3>
+  <Hds::Text::Display
+    @tag='h3'
+    @size='300'
+    @weight='bold'
+    class='header-spacing'
+  >
+    {{t 'resources.worker.form.steps.3.title'}}
+  </Hds::Text::Display>
   <div class='worker-create-section'>
     <div class='worker-auth-token'>
       <Hds::Form::TextInput::Field

@@ -15,7 +15,10 @@
   {{/if}}
 
   {{#if @text}}
-    <h1 class='rose-header-brand-text'>{{@text}}</h1>
+    <Hds::Text::Display
+      @tag='h1'
+      class='rose-header-brand-text'
+    >{{@text}}</Hds::Text::Display>
   {{/if}}
 
 </LinkTo>
