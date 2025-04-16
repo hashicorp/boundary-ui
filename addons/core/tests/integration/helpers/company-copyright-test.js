@@ -8,7 +8,7 @@ module('Integration | Helper | company-copyright', function (hooks) {
 
   test('it renders', async function (assert) {
     const currentYear = new Date().getFullYear();
-    await render(hbs`<company-copyright />`);
+    await render(hbs`{{company-copyright}}`);
     assert.strictEqual(
       this.element.textContent.trim(),
       `© ${currentYear} Company Name`,

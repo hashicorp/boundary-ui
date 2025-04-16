@@ -12,7 +12,7 @@ module('Integration | Helper | company-name', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    await render(hbs`<company-name />`);
+    await render(hbs`{{company-name}}`);
     assert.strictEqual(this.element.textContent.trim(), 'Company Name');
   });
 });

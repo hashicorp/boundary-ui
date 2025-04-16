@@ -5537,6 +5537,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ember/test-helpers@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "@ember/test-helpers@npm:3.3.1"
+  dependencies:
+    "@ember/test-waiters": "npm:^3.0.2"
+    "@embroider/macros": "npm:^1.10.0"
+    "@simple-dom/interface": "npm:^1.4.0"
+    broccoli-debug: "npm:^0.6.5"
+    broccoli-funnel: "npm:^3.0.8"
+    dom-element-descriptors: "npm:^0.5.0"
+    ember-auto-import: "npm:^2.6.0"
+    ember-cli-babel: "npm:^8.2.0"
+    ember-cli-htmlbars: "npm:^6.2.0"
+  peerDependencies:
+    ember-source: ^4.0.0 || ^5.0.0
+  checksum: 10c0/dd77a2d10b51aff63be5f761646f6a0e65bb89b786f33fa6fcede95783cc397d9d27fa2aa8f471886ff1ac20198c68103665938ab91c957143418b7d273b6606
+  languageName: node
+  linkType: hard
+
 "@ember/test-helpers@npm:^4.0.5":
   version: 4.0.5
   resolution: "@ember/test-helpers@npm:4.0.5"
@@ -5553,7 +5572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ember/test-waiters@npm:^2.4.3 || ^3.0.0, @ember/test-waiters@npm:^3, @ember/test-waiters@npm:^3.1.0":
+"@ember/test-waiters@npm:^2.4.3 || ^3.0.0, @ember/test-waiters@npm:^3, @ember/test-waiters@npm:^3.0.2, @ember/test-waiters@npm:^3.1.0":
   version: 3.1.0
   resolution: "@ember/test-waiters@npm:3.1.0"
   dependencies:
@@ -11350,7 +11369,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^3.3.1"
     "@embroider/test-setup": "npm:^4.0.0"
     "@faker-js/faker": "npm:^8.0.2"
     "@formatjs/intl-durationformat": "npm:^0.2.4"
@@ -12335,7 +12354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-auto-import@npm:^2.10.0, ember-auto-import@npm:^2.2.3, ember-auto-import@npm:^2.2.4, ember-auto-import@npm:^2.4.1, ember-auto-import@npm:^2.4.2, ember-auto-import@npm:^2.5.0, ember-auto-import@npm:^2.6.3, ember-auto-import@npm:^2.8.1":
+"ember-auto-import@npm:^2.10.0, ember-auto-import@npm:^2.2.3, ember-auto-import@npm:^2.2.4, ember-auto-import@npm:^2.4.1, ember-auto-import@npm:^2.4.2, ember-auto-import@npm:^2.5.0, ember-auto-import@npm:^2.6.0, ember-auto-import@npm:^2.6.3, ember-auto-import@npm:^2.8.1":
   version: 2.10.0
   resolution: "ember-auto-import@npm:2.10.0"
   dependencies:
