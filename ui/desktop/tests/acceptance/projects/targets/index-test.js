@@ -318,8 +318,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
     assert.strictEqual(currentURL(), urls.targets);
-    assert.dom(HDS_DIALOG_MODAL).exists();
-    assert.dom(HDS_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+    assert.dom(HDS_DIALOG_MODAL_BUTTONS).isVisible({ count: 2 });
     assert.dom(HDS_DIALOG_RETRY_BUTTON).hasText('Retry');
     assert.dom(HDS_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });

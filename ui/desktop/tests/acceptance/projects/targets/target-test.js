@@ -165,8 +165,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(HDS_DIALOG_MODAL).exists();
-    assert.dom(HDS_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+    assert.dom(HDS_DIALOG_MODAL_BUTTONS).isVisible({ count: 2 });
     assert.dom(HDS_DIALOG_RETRY_BUTTON).hasText('Retry');
     assert.dom(HDS_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
@@ -182,8 +182,8 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(HDS_DIALOG_MODAL).exists();
-    assert.dom(HDS_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+    assert.dom(HDS_DIALOG_MODAL_BUTTONS).isVisible({ count: 2 });
     assert.dom(HDS_DIALOG_RETRY_BUTTON).hasText('Retry');
     assert.dom(HDS_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
