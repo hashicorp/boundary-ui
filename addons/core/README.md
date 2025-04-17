@@ -28,7 +28,7 @@ helpers.
 ## Add core to an App
 
 Add this addon to an Ember application's `devDependencies` as:
-`"core": "*"`, for applications included in this monorepo.
+`"core": "workspace:*"`, for applications included in this monorepo.
 
 
 ## Installation

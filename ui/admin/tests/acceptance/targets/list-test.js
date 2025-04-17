@@ -123,7 +123,9 @@ module('Acceptance | targets | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom(commonSelectors.SIDEBAR_NAV_CONTENT).doesNotIncludeText('Targets');
+    assert
+      .dom(commonSelectors.SIDEBAR_NAV_CONTENT)
+      .doesNotIncludeText('Targets');
   });
 
   test('user can navigate to index with only create action', async function (assert) {
