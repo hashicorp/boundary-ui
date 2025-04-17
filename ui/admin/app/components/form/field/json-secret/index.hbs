@@ -12,8 +12,9 @@
   {{else if this.isActionable}}
     <Form::Field::JsonSecret::Skeleton>
       <Hds::Button
+        class='secret-editor-skeleton-button'
         @icon='pencil-tool'
-        @isIconOnly={{true}}
+        @color='secondary'
         @text={{t 'form.secret-editor.edit'}}
         {{on 'click' this.enableEditing}}
       />
