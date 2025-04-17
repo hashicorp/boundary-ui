@@ -28,7 +28,8 @@ helpers.
 ## Add core to an App
 
 Add this addon to an Ember application's `devDependencies` as:
-`"core": "*"`, for applications included in this monorepo.
+`"core": "workspace:*"`, for applications included in this monorepo.
+
 
 ## Installation
 
@@ -180,9 +181,11 @@ Before submitting your work, be sure to run auto-formatters
 * `yarn start`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
+
 ## Contributing
 
 See monorepo README for more contribution instructions.
+
 
 ### Building ToC
 
