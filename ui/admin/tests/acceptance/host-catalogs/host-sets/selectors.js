@@ -4,10 +4,10 @@
  */
 
 export const FIELD_PREFERRED_ENDPOINT = '[name="preferred_endpoints"] input';
-export const ADD_PREFERRED_ENDPOINT_BUTTON =
+export const FIELD_PREFERRED_ENDPOINT_ADD_BTN =
   '[name="preferred_endpoints"] button';
 export const FIELD_FILTERS = '[name="filters"] input';
-export const ADD_FILTERS_BUTTON = '[name="filters"] button';
+export const FIELD_FILTERS_ADD_BTN = '[name="filters"] button';
 export const FIELD_SYNC_INTERVAL = '[name="sync_interval_seconds"]';
 export const FIELD_AZURE_FILTER = '[name="filter"]';
 
