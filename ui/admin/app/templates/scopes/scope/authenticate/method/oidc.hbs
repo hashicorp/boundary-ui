@@ -5,6 +5,7 @@
 
 <Hds::ApplicationState @align='center' as |A|>
   <A.Media>
+    {{! We are not using the <Image> component here due to a CSP violation caused by the use of inline styles on this image. }}
     <img src='/core/auth-pending.svg' alt='' role='none' />
   </A.Media>
   <A.Header @title={{t 'resources.auth-method.messages.pending.title'}} />
