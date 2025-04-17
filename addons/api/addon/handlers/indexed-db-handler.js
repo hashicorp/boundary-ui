@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
+import { sortApiRecords } from '../utils/sort-api-records';
 import { hashCode } from '../utils/hash-code';
 
 /**
@@ -106,38 +107,48 @@ export default class IndexedDbHandler {
           await writeToIndexedDbPromise;
         }
 
-        const indexedDbResults = await queryIndexedDb(
+        // Results returned in JSON API reponse, but in a format optimized for indexedDb
+        const indexedDbRecords = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
         );
 
-        const dbRecords = paginateResults(indexedDbResults, page, pageSize).map(
-          (item) =>
-            this.indexedDb.normalizeData({
-              data: item,
-              cleanData: false,
-              schema,
-              serializer,
-            }),
+        // Normalize the data and clean up indexedDb format, ready for ember data consumption
+        const normalizedApiRecords = indexedDbRecords.map((item) => {
+          return this.indexedDb.normalizeData({
+            data: item,
+            cleanData: false,
+            schema,
+            serializer,
+          });
+        });
+
+        const sortedApiRecords = sortApiRecords(normalizedApiRecords, {
+          querySort: queryObj?.sort ?? {},
+          schema,
+        });
+
+        // Paginate the API records
+        const paginatedApiRecords = paginateResults(
+          sortedApiRecords,
+          page,
+          pageSize,
         );
 
-        // Return the raw data if we don't push to the store.
-        let records = dbRecords.map((record) => ({
-          ...record.attributes,
-          id: record.id,
-        }));
-
-        if (pushToStore) {
-          records = store.push({ data: dbRecords });
-        }
+        // If we are not pushing to the store, use the raw data with id property
+        const records = pushToStore
+          ? store.push({ data: paginatedApiRecords })
+          : paginatedApiRecords.map((record) => ({
+              ...record.attributes,
+              id: record.id,
+            }));
 
         // Set a meta property on the array to store the total items of the results.
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: indexedDbResults.length };
-
+        records.meta = { totalItems: indexedDbRecords.length };
         return records;
       }
       default:
