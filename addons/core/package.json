@@ -32,8 +32,8 @@
   },
   "dependencies": {
     "@formatjs/intl-durationformat": "^0.2.4",
-    "api": "*",
-    "auth": "*",
+    "api": "workspace:*",
+    "auth": "workspace:*",
     "ember-auto-import": "^2.10.0",
     "ember-browser-services": "^4.0.3",
     "ember-cli-babel": "^8.2.0",
@@ -86,7 +86,7 @@
     "prettier": "^3.0.0",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
-    "rose": "*",
+    "rose": "workspace:*",
     "sinon": "^19.0.2",
     "webpack": "^5.94.0"
   },
