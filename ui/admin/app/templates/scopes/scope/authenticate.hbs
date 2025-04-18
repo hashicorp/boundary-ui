@@ -10,77 +10,84 @@
 
     <page.body>
 
-      <Rose::Frame>
-        <:header>
-          <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
-          <Hds::Text::Display
-            @tag='h2'
-            @size='400'
-            @weight='bold'
-            class='header-spacing'
-          >{{t 'actions.authenticate'}}</Hds::Text::Display>
-        </:header>
-        <:body>
-          <Hds::Text::Body @tag='p'>{{t
-              'auth.descriptions.authenticating-with-org'
-              name=@model.scope.displayName
-            }}</Hds::Text::Body>
+      {{#if this.isOIDCRoute}}
+        {{outlet}}
+      {{else}}
+        <Rose::Frame>
+          <:header>
+            <Hds::Icon @name='boundary-color' @size='24' @isInline={{true}} />
+            <Hds::Text::Display
+              @tag='h2'
+              @size='400'
+              @weight='bold'
+              class='header-spacing'
+            >{{t 'actions.authenticate'}}</Hds::Text::Display>
+          </:header>
+          <:body>
+            <Hds::Text::Body @tag='p'>{{t
+                'auth.descriptions.authenticating-with-org'
+                name=@model.scope.displayName
+              }}</Hds::Text::Body>
 
-          <Rose::Dropdown
-            @text={{t 'actions.choose-different-org'}}
-            @icon='flight-icons/svg/org-16'
-            as |dropdown|
-          >
-            <dropdown.link @route='scopes.scope.authenticate' @model='global'>
-              {{t 'titles.global'}}
-            </dropdown.link>
-
-            {{#each this.sortedScopes as |scope|}}
-              <dropdown.link
-                @route='scopes.scope.authenticate'
-                @model={{scope.id}}
-              >
-                {{scope.displayName}}
+            <Rose::Dropdown
+              @text={{t 'actions.choose-different-org'}}
+              @icon='flight-icons/svg/org-16'
+              as |dropdown|
+            >
+              <dropdown.link @route='scopes.scope.authenticate' @model='global'>
+                {{t 'titles.global'}}
               </dropdown.link>
 
-            {{/each}}
-          </Rose::Dropdown>
-          <Hds::Separator />
+              {{#each this.sortedScopes as |scope|}}
+                <dropdown.link
+                  @route='scopes.scope.authenticate'
+                  @model={{scope.id}}
+                >
+                  {{scope.displayName}}
+                </dropdown.link>
 
-          <Rose::Nav::Tabs as |nav|>
-            {{#each @model.authMethods as |authMethod|}}
-              <nav.link
-                @route='scopes.scope.authenticate.method'
-                @model={{authMethod.id}}
-              >
-                {{#if authMethod.name}}
-                  {{authMethod.name}}
-                {{else}}
-                  {{t (concat 'resources.auth-method.types.' authMethod.type)}}
-                {{/if}}
-              </nav.link>
-            {{/each}}
+              {{/each}}
+            </Rose::Dropdown>
+            <Hds::Separator />
 
-          </Rose::Nav::Tabs>
+            <Rose::Nav::Tabs as |nav|>
+              {{#each @model.authMethods as |authMethod|}}
+                <nav.link
+                  @route='scopes.scope.authenticate.method'
+                  @model={{authMethod.id}}
+                >
+                  {{#if authMethod.name}}
+                    {{authMethod.name}}
+                  {{else}}
+                    {{t
+                      (concat 'resources.auth-method.types.' authMethod.type)
+                    }}
+                  {{/if}}
+                </nav.link>
+              {{/each}}
 
-          {{#if @model.authMethods}}
-            {{outlet}}
-          {{/if}}
-          {{#unless @model.authMethods}}
-            <Rose::Layout::Centered>
-              <Hds::ApplicationState as |A|>
-                <A.Header
-                  @title={{t 'resources.auth-method.messages.none.title'}}
-                  @icon='alert-circle'
-                />
-                <A.Body
-                  @text={{t 'resources.auth-method.messages.none.description'}}
-                />
-              </Hds::ApplicationState>
-            </Rose::Layout::Centered>
-          {{/unless}}
-        </:body>
-      </Rose::Frame>
+            </Rose::Nav::Tabs>
+
+            {{#if @model.authMethods}}
+              {{outlet}}
+            {{else}}
+              <Rose::Layout::Centered>
+                <Hds::ApplicationState as |A|>
+                  <A.Header
+                    @title={{t 'resources.auth-method.messages.none.title'}}
+                    @icon='alert-circle'
+                  />
+                  <A.Body
+                    @text={{t
+                      'resources.auth-method.messages.none.description'
+                    }}
+                  />
+                </Hds::ApplicationState>
+              </Rose::Layout::Centered>
+            {{/if}}
+          </:body>
+        </Rose::Frame>
+      {{/if}}
     </page.body>
 
   </Rose::Layout::Page>

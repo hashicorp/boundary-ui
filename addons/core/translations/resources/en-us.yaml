@@ -72,6 +72,7 @@ auth-method:
     delete: Delete Auth Method
     make-primary: Make Primary
     remove-as-primary: Remove as Primary
+    no-new-window-retry: Don't see the new window? Retry
   notifications:
     make-primary-success: Auth method successfully elected to primary.
     remove-as-primary-success: Auth method successfully removed as primary.
@@ -80,7 +81,6 @@ auth-method:
     remove-as-primary: Remove primary auth method?
     make-primary-confirm: 'A primary auth method auto-creates users on their first authentication attempt if needed.  Note:  if you change the primary auth method, the previous primary will no longer auto-create users.'
     remove-as-primary-confirm: Removing the primary auth method may lead to authentication failures for this scope.
-    no-see-window: Don't see the new window?
   form:
     urls:
       label: Server address (URL and port)
