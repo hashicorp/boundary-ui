@@ -435,6 +435,15 @@
   }
 
   .secret-editor-skeleton-button {
+    
+    @media (prefers-color-scheme: light) {
+      .ember-application:not(.rose-theme-dark) & {
+        background: var(--token-color-palette-neutral-600);
+        color: var(--token-color-palette-neutral-50);
+        border-color: var(--token-color-palette-neutral-50);
+      }
+    }
+    
     .ember-application.rose-theme-light & {
       background: var(--token-color-palette-neutral-600);
       color: var(--token-color-palette-neutral-50);
