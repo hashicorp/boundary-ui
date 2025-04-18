@@ -263,13 +263,14 @@
     {{#unless @model.isNew}}
       <div class='worker-success'>
         <div>
-          <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+          <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
           <p>{{this.generatedWorkerAuthToken}}</p>
         </div>
         <div>
-          <Rose::Icon
-            @name='flight-icons/svg/check-circle-fill-16'
-            @size='medium'
+          <Hds::Icon
+            @name='check-circle-fill'
+            @color='success'
+            @isInline={{true}}
           />
           <p>{{t 'resources.worker.form.steps.3.registered'}}</p>
         </div>
