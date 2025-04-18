@@ -50,7 +50,7 @@ export const FIELD_NEW_GRANT_ADD_BTN = 'form:nth-child(1) [type="submit"]';
 export const FIELD_GRANT = 'form:nth-child(2) [name="grant"]';
 export const FIELD_GRANT_VALUE = 'ids=123,action=delete';
 export const FIELD_GRANT_REMOVE_BTN =
-  'form:nth-child(2) button[title="Remove"]';
+  'form:nth-child(2) button[type="button"]';
 export const GRANTS_FORM = 'form:nth-child(2)';
 // We need to use a different selector for the grants form because the
 // grants form has multiple submit buttons

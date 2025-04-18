@@ -31,16 +31,4 @@ $xxxxs: sizing.rems(xxxxs); // 1
     display: flex;
     width: auto;
   }
-
-  .rose-button-inline-link-action {
-    @include type.type(button, semibold);
-
-    color: var(--stark);
-    display: inline-block;
-    vertical-align: middle;
-
-    $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
-
-    padding: $y-padding sizing.rems(m);
-  }
 }
