@@ -43,8 +43,10 @@ module.exports = {
   includeHDSStyles(app) {
     const tokensPath =
       '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
-    const hdsPath =
-      '../../node_modules/@hashicorp/design-system-components/dist/styles';
+    const hdsPath = path.resolve(
+      __dirname,
+      'node_modules/@hashicorp/design-system-components/dist/styles',
+    );
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
