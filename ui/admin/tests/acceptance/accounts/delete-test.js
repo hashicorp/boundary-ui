@@ -63,16 +63,13 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('can delete an account', async function (assert) {
-    const accountsCount = this.server.schema.accounts.all().models.length;
+    const accountsCount = this.server.db.accounts.length;
     await visit(urls.account);
 
     await click(selectors.MANAGE_DROPDOWN_ACCOUNT);
     await click(selectors.MANAGE_DROPDOWN_DELETE_ACCOUNT);
 
-    assert.strictEqual(
-      this.server.schema.accounts.all().models.length,
-      accountsCount - 1,
-    );
+    assert.strictEqual(this.server.db.accounts.length, accountsCount - 1);
   });
 
   test('cannot delete an account without proper authorization', async function (assert) {

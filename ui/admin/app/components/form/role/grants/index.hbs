@@ -13,20 +13,20 @@
     <Rose::List::KeyValue as |list|>
       {{! Add grant field (only one per form) }}
       <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{this.newGrantString}}
-          as |input|
-        >
+        <form.input @contextual={{true}}>
           <item.key>
-            <input.label>{{t
-                'resources.role.grant.actions.create'
-              }}</input.label>
+            <Hds::Form::Label @controlId='add-grant'>
+              {{t 'resources.role.grant.actions.create'}}
+            </Hds::Form::Label>
           </item.key>
           <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
+            <Input
+              class='rose-form-input-field'
+              id='add-grant'
+              @type='text'
+              name='grant'
+              @value={{this.newGrantString}}
+            />
           </item.cell>
           <item.cell>
             <Hds::Button
@@ -72,7 +72,9 @@
           as |input|
         >
           <item.key>
-            <input.label>{{t 'form.grant.label'}}</input.label>
+            <Hds::Form::Label>
+              {{t 'form.grant.label'}}
+            </Hds::Form::Label>
           </item.key>
           <item.cell>
             <input.field title={{t 'form.grant.help'}} />
