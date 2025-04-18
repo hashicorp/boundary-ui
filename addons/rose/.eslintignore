@@ -6,11 +6,9 @@
 /dist/
 
 # misc
-main.js
 /coverage/
 !.*
 .*/
 
-index.js
 # ember-try
 /.node_modules.ember-try/
