@@ -23,7 +23,9 @@
     {{/if}}
 
     <span class='rose-dropdown-trigger-text'>
-      {{@text}}
+      <Hds::Text::Body @weight='medium'>
+        {{@text}}
+      </Hds::Text::Body>
       {{#if @count}}
         <Hds::BadgeCount @text={{@count}} @size='small' />
       {{/if}}

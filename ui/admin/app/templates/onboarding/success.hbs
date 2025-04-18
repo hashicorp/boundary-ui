@@ -61,9 +61,9 @@
           <Hds::Text::Display @tag='h4'>
             {{t 'onboarding.success.titles.controller'}}
           </Hds::Text::Display>
-          <span class='create-resources-item-controller-label'>{{t
+          <Hds::Text::Body @color='faint'>{{t
               'onboarding.success.descriptions.controller'
-            }}</span>
+            }}</Hds::Text::Body>
           <div class='create-resources-item-controller-copyable'>
             <Hds::Copy::Snippet @textToCopy={{this.model.clusterUrl}} />
           </div>
