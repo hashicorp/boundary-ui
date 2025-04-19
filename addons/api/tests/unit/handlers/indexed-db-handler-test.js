@@ -222,15 +222,48 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       });
 
       assert.deepEqual(
-        results.map((result) => ({
-          name: result.name,
-          description: result.description,
-        })),
+        results
+          // search results aren't returning in a consistent order so
+          // the sorting is used to be able to assert
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .map(({ name, description }) => ({ name, description })),
         [
-          { name: 'Target 2', description: 'Target with magic' },
-          { name: 'Magical Target', description: 'A target' },
+          {
+            description: 'A target',
+            name: 'Magical Target',
+          },
+          {
+            description: 'Target with magic',
+            name: 'Target 2',
+          },
         ],
       );
+    });
+  });
+
+  module('filtering', function () {
+    test('it supports filtering', async function (assert) {
+      this.server.create('target', {
+        name: 'specific-target',
+      });
+
+      this.server.createList('target', 5);
+
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(
+          this.server.schema.targets.all().models,
+          {
+            pageSize: 1,
+          },
+        ),
+      );
+
+      const results = await store.query('target', {
+        query: { filters: { name: [{ equals: 'specific-target' }] } },
+      });
+
+      assert.strictEqual(results[0].name, 'specific-target');
     });
   });
 });
