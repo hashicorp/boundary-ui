@@ -43,7 +43,7 @@
     "electron": "35.1.2",
     "unzipper": "^0.11.5"
   },
-  "resolutions": {
+  "overrides": {
     "highlight.js": "^10.4.1",
     "node-gyp": "^10.0.0"
   }

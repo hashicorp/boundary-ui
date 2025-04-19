@@ -45,7 +45,7 @@
     "license-checker": "^25.0.1",
     "lint-staged": "^15.2.10"
   },
-  "resolutions": {
+  "overrides": {
     "nomnom/underscore": "^1.12.1",
     "@hashicorp/design-system-components/ember-stargate": "^0.6.0",
     "micromatch": "^4.0.8",
