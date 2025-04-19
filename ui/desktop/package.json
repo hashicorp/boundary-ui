@@ -15,7 +15,7 @@
     "build:production": "cross-env EMBER_CLI_ELECTRON=true ember build --environment=production",
     "build:development": "ember build",
     "clean": "shx rm -rf electron-app/ember-dist electron-app/out && shx cp -r dist/ electron-app/ember-dist/",
-    "build:desktop": "yarn clean && yarn --cwd electron-app install && yarn --cwd electron-app make",
+    "build:desktop": "pnpm clean && pnpm --dir electron-app install && pnpm --dir electron-app make",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
