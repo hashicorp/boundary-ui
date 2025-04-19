@@ -44,6 +44,14 @@
     "unzipper": "^0.11.5"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-winstaller",
+      "fs-xattr",
+      "node-pty",
+      "macos-alias"
+    ],
+    "ignoredBuiltDependencies": [],
     "overrides": {
       "highlight.js": "^10.4.1",
       "node-gyp": "^10.0.0"
