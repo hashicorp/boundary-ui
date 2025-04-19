@@ -1,0 +1,4 @@
+packages:
+  - addons/*
+  - ui/*
+  - e2e-tests
