@@ -66,23 +66,23 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
   setupMirage(hooks);
 
   let manager,
-    handler,
+    indexeddbHandler,
     store,
     applicationAdapter,
-    handlerSpy,
+    indexedbHandlerSpy,
     applicationAdapterSpy;
   hooks.beforeEach(async function setupIndexHandler() {
     store = this.owner.lookup('service:store');
     manager = new RequestManager();
-    handler = new IndexedDbHandler(store);
+    indexeddbHandler = new IndexedDbHandler(store);
     applicationAdapter = store.adapterFor('application');
 
     // spy on all handler and application adapter methods
-    handlerSpy = sinon.spy(handler);
+    indexedbHandlerSpy = sinon.spy(indexeddbHandler);
     applicationAdapterSpy = sinon.spy(applicationAdapter);
 
     store.requestManager = manager;
-    manager.use([handler]);
+    manager.use([indexeddbHandler]);
   });
 
   module('fetching and batch loading', function (hooks) {
@@ -94,7 +94,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     let aliases, aliasResponseHandlerSpy;
 
     hooks.beforeEach(function setupMirageData() {
-      handler.batchLimit = testBatchLimit;
+      indexeddbHandler.batchLimit = testBatchLimit;
 
       aliases = this.server.createList('alias', 50);
 
@@ -131,7 +131,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       await store.query('alias', {});
 
       assert.strictEqual(
-        handlerSpy.writeToIndexedDb.callCount,
+        indexedbHandlerSpy.writeToIndexedDb.callCount,
         aliases.length / testBatchLimit,
         'handler #writeToIndexedDb is called once for each batch',
       );
@@ -150,21 +150,21 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     });
 
     test('it loads from indexeddb only when peekIndexedDB option is used', async function (assert) {
-      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 0);
+      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 0);
       assert.strictEqual(aliasResponseHandlerSpy.callCount, 0);
 
       const results = await store.query('alias', {});
       assert.strictEqual(results.length, 50);
 
       // first `store.query()` calls api and writes batches to indexededdb
-      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 5);
+      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 5);
       assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
 
       await store.query('alias', {}, { peekIndexedDB: true });
       assert.strictEqual(results.length, 50);
 
       // second run does not increase call counts to api or writes to indexeddb
-      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 5);
+      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 5);
       assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
     });
   });
