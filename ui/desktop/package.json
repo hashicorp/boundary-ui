@@ -34,7 +34,7 @@
     "clean:coverage": "rm -rf coverage_* || true",
     "test": "yarn clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && yarn test:finalize",
     "test:ember": "cross-env COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
-    "postinstall": "cd electron-app && yarn install",
+    "postinstall": "cd electron-app && pnpm install",
     "test:finalize": "ember coverage-merge && yarn clean:coverage"
   },
   "dependencies": {
