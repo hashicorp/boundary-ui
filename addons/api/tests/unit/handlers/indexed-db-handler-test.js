@@ -193,77 +193,67 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     });
   });
 
-  module('searching', function () {
-    test('it supports searching', async function (assert) {
-      this.server.create('target', {
-        name: 'Magical Target',
-        description: 'A target',
-      });
-
-      this.server.create('target', {
-        name: 'Target 2',
-        description: 'Target with magic',
-      });
-
-      this.server.createList('target', 4);
-
-      this.server.get(
-        'targets',
-        createPaginatedResponseHandler(
-          this.server.schema.targets.all().models,
-          {
-            pageSize: 1,
-          },
-        ),
-      );
-
-      const results = await store.query('target', {
-        query: { search: 'magic' },
-      });
-
-      assert.deepEqual(
-        results
-          // search results aren't returning in a consistent order so
-          // the sorting is used to be able to assert
-          .sort((a, b) => (a.name > b.name ? 1 : -1))
-          .map(({ name, description }) => ({ name, description })),
-        [
-          {
-            description: 'A target',
-            name: 'Magical Target',
-          },
-          {
-            description: 'Target with magic',
-            name: 'Target 2',
-          },
-        ],
-      );
+  test('it supports searching', async function (assert) {
+    this.server.create('target', {
+      name: 'Magical Target',
+      description: 'A target',
     });
+
+    this.server.create('target', {
+      name: 'Target 2',
+      description: 'Target with magic',
+    });
+
+    this.server.createList('target', 4);
+
+    this.server.get(
+      'targets',
+      createPaginatedResponseHandler(this.server.schema.targets.all().models, {
+        pageSize: 1,
+      }),
+    );
+
+    const results = await store.query('target', {
+      query: { search: 'magic' },
+    });
+
+    assert.deepEqual(
+      results
+        // search results aren't returning in a consistent order so
+        // the sorting is used to be able to assert
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
+        .map(({ name, description }) => ({ name, description })),
+      [
+        {
+          description: 'A target',
+          name: 'Magical Target',
+        },
+        {
+          description: 'Target with magic',
+          name: 'Target 2',
+        },
+      ],
+    );
   });
 
-  module('filtering', function () {
-    test('it supports filtering', async function (assert) {
-      this.server.create('target', {
-        name: 'specific-target',
-      });
-
-      this.server.createList('target', 5);
-
-      this.server.get(
-        'targets',
-        createPaginatedResponseHandler(
-          this.server.schema.targets.all().models,
-          {
-            pageSize: 1,
-          },
-        ),
-      );
-
-      const results = await store.query('target', {
-        query: { filters: { name: [{ equals: 'specific-target' }] } },
-      });
-
-      assert.strictEqual(results[0].name, 'specific-target');
+  test('it supports filtering', async function (assert) {
+    this.server.create('target', {
+      name: 'specific-target',
     });
+
+    this.server.createList('target', 5);
+
+    this.server.get(
+      'targets',
+      createPaginatedResponseHandler(this.server.schema.targets.all().models, {
+        pageSize: 1,
+      }),
+    );
+
+    const results = await store.query('target', {
+      query: { filters: { name: [{ equals: 'specific-target' }] } },
+    });
+
+    assert.strictEqual(results[0].name, 'specific-target');
   });
 });
