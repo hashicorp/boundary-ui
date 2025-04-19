@@ -147,6 +147,25 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         'server handler should be called once for each page',
       );
     });
+
+    test('it loads from indexeddb only when peekIndexedDB option is used', async function (assert) {
+      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 0);
+      assert.strictEqual(aliasResponseHandlerSpy.callCount, 0);
+
+      const results = await store.query('alias', {});
+      assert.strictEqual(results.length, 50);
+
+      // first `store.query()` calls api and writes batches to indexededdb
+      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 5);
+      assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
+
+      await store.query('alias', {}, { peekIndexedDB: true });
+      assert.strictEqual(results.length, 50);
+
+      // second run does not increase call counts to api or writes to indexeddb
+      assert.strictEqual(handlerSpy.writeToIndexedDb.callCount, 5);
+      assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
+    });
   });
 
   module('sorting', function () {
