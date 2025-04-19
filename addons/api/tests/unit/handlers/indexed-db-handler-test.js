@@ -213,7 +213,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     });
   });
 
-  module('#pushToStore', function(hooks) {
+  module('option: pushToStore', function(hooks) {
     let mirageTargets;
 
     hooks.beforeEach(function() {
