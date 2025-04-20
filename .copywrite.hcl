@@ -8,6 +8,8 @@ project {
   # Supports doublestar glob patterns for more flexibility in defining which
   # files or folders should be ignored
   header_ignore = [
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
     ".github/**",
     ".husky/**",
     "**/node_modules/**",
@@ -15,5 +17,7 @@ project {
     "**/coverage/**",
     "ui/desktop/electron-app/out/**",
     "ui/desktop/electron-app/ember-dist/**",
+    "ui/desktop/electron-app/pnpm-lock.yaml",
+    "ui/desktop/electron-app/pnpm-workspace.yaml",
   ]
 }
