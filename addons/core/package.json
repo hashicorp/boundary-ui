@@ -27,7 +27,7 @@
     "start": "ember serve",
     "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
-    "precommit": "yarn lint && yarn format && yarn test",
+    "precommit": "pnpm lint && pnpm format && pnpm test",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
