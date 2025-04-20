@@ -17,9 +17,6 @@ importers:
 
   .:
     devDependencies:
-      concurrently:
-        specifier: ^9.1.0
-        version: 9.1.2
       doctoc:
         specifier: ^2.2.0
         version: 2.2.1
