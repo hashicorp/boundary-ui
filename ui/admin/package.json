@@ -30,9 +30,9 @@
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_* || true",
-    "test": "yarn clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && yarn test:finalize",
+    "test": "pnpm clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && pnpm test:finalize",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
-    "test:finalize": "ember coverage-merge && yarn clean:coverage"
+    "test:finalize": "ember coverage-merge && pnpm clean:coverage"
   },
   "dependencies": {
     "@babel/runtime": "7.12.18",
