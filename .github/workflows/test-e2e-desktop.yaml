@@ -87,7 +87,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install --immutable
+          pnpm install --frozen-lockfile
           cd e2e-tests
           pnpm playwright install --with-deps
 
