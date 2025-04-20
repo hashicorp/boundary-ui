@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - run: yarn install
+      - run: pnpm install
 
   compliance:
     name: License Compliance
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - run: yarn run compliance:licenses
+      - run: pnpm run compliance:licenses
 
   lint:
     name: Lint
@@ -54,7 +54,7 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - run: yarn lint
+      - run: pnpm lint
 
   test:
     name: Test
@@ -74,4 +74,4 @@ jobs:
       - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - run: yarn test
+      - run: pnpm test
