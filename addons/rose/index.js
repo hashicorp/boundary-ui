@@ -50,8 +50,8 @@ module.exports = {
       app.options.sassOptions.includePaths || [];
 
     // Include the addon styles
-    app.options.sassOptions.includePaths.push(tokensPath);
-    app.options.sassOptions.includePaths.push(hdsPath);
+    app.options.sassOptions.includePaths.push(path.resolve(tokensPath));
+    app.options.sassOptions.includePaths.push(path.resolve(hdsPath));
   },
 
   /**
