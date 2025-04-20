@@ -8,10 +8,10 @@
     "ember-addon"
   ],
   "scripts": {
-    "lint": "concurrently \"yarn:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"yarn:lint:*:fix\" --names \"fix:\"",
+    "lint": "pnpm \"/lint:.*(?<!:fix)$/\"",
+    "lint:fix": "pnpm \"/lint:.*:fix/\"",
     "lint:css": "stylelint \"**/*.css\"",
-    "lint:css:fix": "concurrently \"yarn:lint:css -- --fix\"",
+    "lint:css:fix": "pnpm \"lint:css\" --fix",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
@@ -41,7 +41,6 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
-    "concurrently": "^9.1.0",
     "doctoc": "^2.2.0",
     "ember-cli": "~5.12.0",
     "ember-cli-clean-css": "^3.0.0",
