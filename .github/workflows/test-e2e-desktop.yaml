@@ -24,10 +24,10 @@ jobs:
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: 20
-          cache: "yarn"
+          cache: "pnpm"
           cache-dependency-path: |
-            yarn.lock
-            ui/desktop/electron-app/yarn.lock
+            pnpm-lock.yaml
+            ui/desktop/electron-app/pnpm-lock.yaml
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36
