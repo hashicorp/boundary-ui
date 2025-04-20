@@ -5,19 +5,17 @@
 
 'use strict';
 
-var path = require('path');
-var Funnel = require('broccoli-funnel');
-var mergeTrees = require('broccoli-merge-trees');
+const path = require('path');
 
 module.exports = {
   name: require('./package').name,
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import('node_modules/codemirror/lib/codemirror.css');
-    app.import('node_modules/codemirror/theme/monokai.css');
-    app.import('node_modules/codemirror/addon/lint/lint.css');
-    app.import('node_modules/jsonlint/lib/jsonlint.js');
+    app.import(path.resolve('node_modules/codemirror/lib/codemirror.css'));
+    app.import(path.resolve('node_modules/codemirror/theme/monokai.css'));
+    app.import(path.resolve('node_modules/codemirror/addon/lint/lint.css'));
+    app.import(path.resolve('node_modules/jsonlint/lib/jsonlint.js'));
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
