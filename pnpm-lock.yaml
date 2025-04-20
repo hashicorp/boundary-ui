@@ -696,9 +696,6 @@ importers:
       '@playwright/test':
         specifier: ^1.49.0
         version: 1.52.0
-      concurrently:
-        specifier: ^9.1.0
-        version: 9.1.2
       dotenv:
         specifier: ^16.4.5
         version: 16.5.0
