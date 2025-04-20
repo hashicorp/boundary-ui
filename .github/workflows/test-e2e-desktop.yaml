@@ -20,6 +20,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
+        with:
+          version: 10
+
       - name: Set up Node
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
@@ -28,11 +33,6 @@ jobs:
           cache-dependency-path: |
             pnpm-lock.yaml
             ui/desktop/electron-app/pnpm-lock.yaml
-
-      - name: Set up pnpm
-        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
-        with:
-          version: 10
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36
