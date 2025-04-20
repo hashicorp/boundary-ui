@@ -9,7 +9,7 @@ The desktop client UI for Boundary.
 - [Desktop client UI](#desktop-client-ui)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
+  - [Pnpm Commands](#pnpm-commands)
   - [Running / Development](#running--development)
     - [Developing Using Non-Release Versions of Boundary](#developing-using-non-release-versions-of-boundary)
     - [Environment Variables (DEV)](#environment-variables-dev)
@@ -35,7 +35,7 @@ You will need the following things properly installed on your computer.
 
 - [Git](https://git-scm.com/)
 - [Node.js](https://nodejs.org/)
-- [Yarn](https://yarnpkg.com/)
+- [Pnpm](https://pnpm.io/)
 - [Ember CLI](https://cli.emberjs.com/release/)
 - [Google Chrome](https://google.com/chrome/)
 
@@ -43,9 +43,9 @@ You will need the following things properly installed on your computer.
 
 See [boundary-ui README](https://github.com/hashicorp/boundary-ui#installation) for installation instructions.
 
-## Yarn Commands
+## Pnpm Commands
 
-List of available project commands.  `yarn run <command-name>`
+List of available project commands.  `pnpm run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
@@ -74,15 +74,15 @@ List of available project commands.  `yarn run <command-name>`
 
 To run as web app:
 
-- `yarn start`
+- `pnpm start`
 - Visit your app at [http://localhost:4201](http://localhost:4201).
 - Visit your tests at [http://localhost:4201/tests](http://localhost:4201/tests).
 
 To run as a desktop app:
 
-- `yarn start:desktop`
+- `pnpm start:desktop`
 
-The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `SETUP_CLI` to true. Example: `SETUP_CLI=true yarn start:desktop`.
+The Boundary CLI is NOT downloaded by default, to download and extract the CLI to `electron-app/cli` folder as part of the build, you need to set the environment variable `SETUP_CLI` to true. Example: `SETUP_CLI=true pnpm start:desktop`.
 The CLI version is defined in `electron-app/config/cli/VERSION`.
 
 ### Developing Using Non-Release Versions of Boundary
@@ -111,8 +111,8 @@ for your target [environment](#environment-variables-prod) and you have full per
 To build this UI for production, run the following commands from this folder:
 
 ```bash
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 `BOUNDARY_DESKTOP_SIGNING_IDENTITY` environment variable must be provided
@@ -139,7 +139,7 @@ These environment variables may be used to customized the build.
 
 ### Running Tests
 
-- `yarn test` runs full tests in random order with coverage
+- `pnpm test` runs full tests in random order with coverage
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
@@ -167,7 +167,7 @@ Steps:
 
 - Open a terminal and run `$ boundary dev`.
 - Open another terminal and navigate to `$ boundary-ui/ui/desktop` folder.
-- Run `$ yarn run e2e` and tests will start run.
+- Run `$ pnpm run e2e` and tests will start run.
 - You can check the screenshots the tests take: `desktop/tests/end2end/screenshots`.
 
 ### Troubleshooting
@@ -182,7 +182,7 @@ The workaround to fix this issue is to reset/clear cookies and data (local stora
 
 This issue will likely pop up if you are using Python v3.12 and above as `python-setuptools` is no longer included by default.
 
-If you are running into issues with running the desktop client after a node upgrade you may need to rebuild some tools needed for building the electron app. Be sure to remove `node_models/` for `ui/desktop/` and `ui/desktop/electron-app/` to make sure you have a clean slate. First thing you will need to check is if you have `python-setuptools` installed. It is needed for node-gyp to rebuild the native tools for electron. If you are on a mac and use Homebrew, you can run `brew install python-setuptools`. If you aren't using Homebrew you can run use tthe following command: `python3 -m pip install setuptools`. You should be able to run `yarn start:desktop` now. This will trigger the rebuild for electron but if you want to be safe you can run `./electron-app/node_modules/.bin/electron-rebuild` before trying to start up the desktop client.
+If you are running into issues with running the desktop client after a node upgrade you may need to rebuild some tools needed for building the electron app. Be sure to remove `node_models/` for `ui/desktop/` and `ui/desktop/electron-app/` to make sure you have a clean slate. First thing you will need to check is if you have `python-setuptools` installed. It is needed for node-gyp to rebuild the native tools for electron. If you are on a mac and use Homebrew, you can run `brew install python-setuptools`. If you aren't using Homebrew you can run use tthe following command: `python3 -m pip install setuptools`. You should be able to run `pnpm start:desktop` now. This will trigger the rebuild for electron but if you want to be safe you can run `./electron-app/node_modules/.bin/electron-rebuild` before trying to start up the desktop client.
 
 ### Deploying
 
@@ -213,11 +213,11 @@ browserWindow.webContents.openDevTools()
 
 To start the electron app with the inspector adding a breakpoint before code starts:
 
-`$ yarn start:desktop --- --inspect-brk`.
+`$ pnpm start:desktop --- --inspect-brk`.
 
 To avoid the breakpoint:
 
-`$ yarn start:desktop --- --inspect`.
+`$ pnpm start:desktop --- --inspect`.
 
 You can use any of [these clients](https://nodejs.org/en/docs/guides/debugging-getting-started/#inspector-clients), but we will use the chrome inspector client. Open chrome and on the url bar: `$ chrome://inspect` and click inspect on the electron instance.
 

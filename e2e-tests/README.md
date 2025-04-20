@@ -72,7 +72,7 @@ Ensure you install project dependencies and playwright needs.
 
 ```bash
 cd boundary-ui/e2e-tests/admin
-yarn install
+pnpm install
 npx playwright install # this installs the browsers used by Playwright
 ```
 
@@ -124,10 +124,10 @@ Before running e2e tests locally, we need to launch the correct Enos Scenario.
 
 #### Admin
 Tests names are tagged (eg: `@docker`) to show which enos scenarios are supported. Some tests will support multiple tags while others require a specific enos scenario in order to run successfully. Put another way, not all tests will run successfully under all enos scenarios. Either check the test name and its corresponding tags or use the `--list` flag for any playwright command to output tests covered:
-* `yarn admin:ce:aws --list`
-* `yarn admin:ce:docker --list`
-* `yarn admin:ent:aws --list`
-* `yarn admin:ent:docker --list`
+* `pnpm admin:ce:aws --list`
+* `pnpm admin:ce:docker --list`
+* `pnpm admin:ent:aws --list`
+* `pnpm admin:ent:docker --list`
 
 Corresponding Enos Scenario for Given Tags
 |               | `@aws`                     | `@docker`                     |
@@ -176,16 +176,16 @@ cd boundary-ui/e2e-tests
 Run the command for the corresponding enos scenario to run all supported tests:
 |               | `@aws`                            | `@docker`                            |
 | ------------- | --------------------------------- | ------------------------------------ |
-| `@ce`         | command: `yarn run admin:ce:aws`  | command: `admin:ce:docker`           |
-| `@enterprise` | command: `yarn run admin:ent:aws` | command: `yarn run admin:ent:docker` |
+| `@ce`         | command: `pnpm run admin:ce:aws`  | command: `admin:ce:docker`           |
+| `@enterprise` | command: `pnpm run admin:ent:aws` | command: `pnpm run admin:ent:docker` |
 
 
 Here are some additional commands to assist with debugging.
 
 ```bash
-PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js
-PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js:13 --debug
-PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.js login.spec.js --debug
+PWDEBUG=console pnpm playwright test --headed --config admin/playwright.config.js login.spec.js
+PWDEBUG=console pnpm playwright test --headed --config admin/playwright.config.js login.spec.js:13 --debug
+PWDEBUG=console pnpm playwright test --headed --config admin/playwright.config.js login.spec.js --debug
 ```
 
 ##### Admin (Using a Local Branch)
@@ -193,11 +193,11 @@ PWDEBUG=console yarn playwright test --headed --config admin/playwright.config.j
 ```shell
 # In one terminal, run the `test_e2e_env.sh` script, and then do the following...
 cd boundary-ui/
-ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR yarn workspace admin start
+ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR pnpm workspace admin start
 
 # In another terminal, run the `test_e2e_env.sh` script and then do the following...
 cd boundary-ui/e2e-tests
-BOUNDARY_ADDR_BRANCH="http://localhost:4200" yarn run admin:{edition}:{infra} # Example: yarn run admin:ce:aws
+BOUNDARY_ADDR_BRANCH="http://localhost:4200" pnpm run admin:{edition}:{infra} # Example: pnpm run admin:ce:aws
 ```
 
 #### Desktop
@@ -211,7 +211,7 @@ Set the env variables `test_e2e_env.sh` script output in this terminal.
 
 ```bash
 cd boundary-ui/e2e-tests
-yarn run desktop
+pnpm run desktop
 ```
 
 [Playwright documentation about running tests](https://playwright.dev/docs/running-tests).
