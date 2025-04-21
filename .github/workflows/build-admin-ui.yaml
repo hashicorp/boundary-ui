@@ -21,7 +21,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
   build-admin-ui-oss:
     name: Build Admin UI OSS
     needs: [dependencies]
