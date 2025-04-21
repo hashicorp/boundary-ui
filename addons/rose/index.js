@@ -22,7 +22,7 @@ module.exports = {
       path.resolve(__dirname, 'node_modules/codemirror/addon/lint/lint.css'),
     );
     app.import(
-      path.resolve(__dirname, 'node_modules/jsonlint/lib/jsonlint.js'),
+      require.resolve('jsonlint'),
     );
 
     this.includeHDSStyles(app);
