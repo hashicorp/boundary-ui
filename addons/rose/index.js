@@ -12,10 +12,18 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import(path.resolve('node_modules/codemirror/lib/codemirror.css'));
-    app.import(path.resolve('node_modules/codemirror/theme/monokai.css'));
-    app.import(path.resolve('node_modules/codemirror/addon/lint/lint.css'));
-    app.import(path.resolve('node_modules/jsonlint/lib/jsonlint.js'));
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/lib/codemirror.css'),
+    );
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/theme/monokai.css'),
+    );
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/addon/lint/lint.css'),
+    );
+    app.import(
+      path.resolve(__dirname, 'node_modules/jsonlint/lib/jsonlint.js'),
+    );
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
@@ -50,8 +58,10 @@ module.exports = {
       app.options.sassOptions.includePaths || [];
 
     // Include the addon styles
-    app.options.sassOptions.includePaths.push(path.resolve(tokensPath));
-    app.options.sassOptions.includePaths.push(path.resolve(hdsPath));
+    app.options.sassOptions.includePaths.push(
+      path.resolve(__dirname, tokensPath),
+    );
+    app.options.sassOptions.includePaths.push(path.resolve(__dirname, hdsPath));
   },
 
   /**
@@ -60,6 +70,7 @@ module.exports = {
    */
   includeFlightIcons(app) {
     const iconPackagePath = path.resolve(
+      __dirname,
       '../../node_modules/@hashicorp/flight-icons',
     );
     const iconsPath = path.resolve(iconPackagePath, '..');
