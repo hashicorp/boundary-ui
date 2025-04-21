@@ -149,23 +149,50 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
     });
 
-    test('it loads from indexeddb only when peekIndexedDB option is used', async function (assert) {
-      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 0);
-      assert.strictEqual(aliasResponseHandlerSpy.callCount, 0);
+    test('it loads from indexeddb only and does not fetch from api, when peekIndexedDB option is used', async function (assert) {
+      const callCounts = {
+        get writeToIndexedDb() {
+          return indexedbHandlerSpy.writeToIndexedDb.callCount;
+        },
+        get aliasResponseHandler() {
+          return aliasResponseHandlerSpy.callCount;
+        },
+      };
+
+      // before first query, no data has been fetched or written to indexeddb
+      // the call counts should therefore be 0
+      assert.strictEqual(callCounts.aliasResponseHandler, 0);
+      assert.strictEqual(callCounts.writeToIndexedDb, 0);
 
       const results = await store.query('alias', {});
       assert.strictEqual(results.length, 50);
 
+      // call counts expected after first query
+      const expectedWriteToIndexedDbCallCount = 5;
+      const expectedResponseHandlerCallCount = 10;
+
       // first `store.query()` calls api and writes batches to indexededdb
-      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 5);
-      assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
+      assert.strictEqual(
+        callCounts.aliasResponseHandler,
+        expectedResponseHandlerCallCount,
+      );
+      assert.strictEqual(
+        callCounts.writeToIndexedDb,
+        expectedWriteToIndexedDbCallCount,
+      );
 
       await store.query('alias', {}, { peekIndexedDB: true });
       assert.strictEqual(results.length, 50);
 
       // second run does not increase call counts to api or writes to indexeddb
-      assert.strictEqual(indexedbHandlerSpy.writeToIndexedDb.callCount, 5);
-      assert.strictEqual(aliasResponseHandlerSpy.callCount, 10);
+      assert.strictEqual(
+        callCounts.aliasResponseHandler,
+        expectedResponseHandlerCallCount,
+      );
+      assert.strictEqual(
+        callCounts.writeToIndexedDb,
+        expectedWriteToIndexedDbCallCount,
+      );
     });
   });
 
