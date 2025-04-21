@@ -213,14 +213,14 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     });
   });
 
-  module('option: pushToStore', function(hooks) {
+  module('option: pushToStore', function (hooks) {
     let mirageTargets;
 
-    hooks.beforeEach(function() {
+    hooks.beforeEach(function () {
       mirageTargets = this.server.createList('target', 5);
     });
 
-    test('it pushes fetched results to store by default', async function(assert) {
+    test('it pushes fetched results to the store by default', async function (assert) {
       this.server.get(
         'targets',
         createPaginatedResponseHandler(mirageTargets, {
@@ -232,11 +232,14 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       assert.strictEqual(store.peekAll('target').length, 0);
       const results = await store.query('target', {});
       assert.strictEqual(results.length, 5);
-      assert.ok(results.every(result => result instanceof TargetModel), 'results are ember data models');
+      assert.ok(
+        results.every((result) => result instanceof TargetModel),
+        'results are ember data models',
+      );
       assert.strictEqual(store.peekAll('target').length, 5);
     });
 
-    test('it pushes fethed results to store when pushToStore is true', async function(assert) {
+    test('it pushes fethed results to the store when pushToStore is true', async function (assert) {
       this.server.get(
         'targets',
         createPaginatedResponseHandler(mirageTargets, {
@@ -248,11 +251,14 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       assert.strictEqual(store.peekAll('target').length, 0);
       const results = await store.query('target', {}, { pushToStore: true });
       assert.strictEqual(results.length, 5);
-      assert.ok(results.every(result => result instanceof TargetModel), 'results are ember data models');
+      assert.ok(
+        results.every((result) => result instanceof TargetModel),
+        'results are ember data models',
+      );
       assert.strictEqual(store.peekAll('target').length, 5);
     });
 
-    test('it does not push fetchedResults to store when pushToStore is false', async function(assert) {
+    test('it does not push fetched results to the store when pushToStore is false', async function (assert) {
       this.server.get(
         'targets',
         createPaginatedResponseHandler(mirageTargets, {
@@ -264,7 +270,10 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       assert.strictEqual(store.peekAll('target').length, 0);
       const results = await store.query('target', {}, { pushToStore: false });
       assert.strictEqual(results.length, 5);
-      assert.ok(results.every(result => !(result instanceof TargetModel)), 'results are not ember data models');
+      assert.ok(
+        results.every((result) => !(result instanceof TargetModel)),
+        'results are not ember data models',
+      );
       assert.strictEqual(store.peekAll('target').length, 0);
     });
   });
