@@ -33,8 +33,8 @@ subproject, e.g. running or testing.
       - [Building with a Container](#building-with-a-container)
     - [Building Desktop UI for Production](#building-desktop-ui-for-production)
     - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-      - [For admin](#for-admin)
-      - [For desktop](#for-desktop)
+      - [For Admin](#for-admin)
+      - [For Desktop](#for-desktop)
     - [Committing](#committing)
       - [License Checking](#license-checking)
 
@@ -201,7 +201,7 @@ Enter the cluster URL of your Boundary dev instance, by default is: `http://loca
 We use `husky` and `lint-staged` to ensure linting and other checks pass before a
 commit is completed. Simply do a `pnpm install` to make sure the hooks are installed.
 
-Use a normal `git commit` to go through the checks, if **y**ou need to skip these checks,
+Use a normal `git commit` to go through the checks, if you need to skip these checks,
 use `git commit --no-verify` to bypass them. However, a consistent commit message will
 still be enforced even if you use `--no-verify`.
 
