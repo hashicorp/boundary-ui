@@ -12,19 +12,15 @@ jobs:
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        id: node-modules-cache
-        with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-
-      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
-        with:
-          node-version: 20
       - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
         with:
           version: 10
+          run_install: false
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install
   build-admin-ui-oss:
     name: Build Admin UI OSS
@@ -32,20 +28,17 @@ jobs:
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        id: node-modules-cache
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
         with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-
+          version: 10
+          run_install: false
       - name: Build
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
-        with:
-          version: 10
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm install --offline
       - run: pnpm run build:ui:admin:oss
       - name: Upload artifact admin-ui
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -63,20 +56,17 @@ jobs:
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        id: node-modules-cache
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
         with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-
+          version: 10
+          run_install: false
       - name: Build
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
-        with:
-          version: 10
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm install --offline
       - run: pnpm run build:ui:admin:enterprise
       - name: Upload artifact enterprise admin UI
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
@@ -89,20 +79,17 @@ jobs:
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
-        id: node-modules-cache
+      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
         with:
-          path: "**/node_modules"
-          key: node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-
+          version: 10
+          run_install: false
       - name: Build
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: 20
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
-        with:
-          version: 10
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm install --offline
       - run: pnpm run build:ui:admin:hcp
       - name: Upload artifact HCP admin UI
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
