@@ -23,12 +23,12 @@
     flex-direction: row;
   }
 
-  &.has-icon-left .rose-icon:first-child {
+  &.has-icon-left .hds-icon:first-child {
     margin-left: -(sizing.rems(xs));
     margin-right: sizing.rems(xxs);
   }
 
-  &.has-icon-right .rose-icon:last-child {
+  &.has-icon-right .hds-icon:last-child {
     margin-left: sizing.rems(xxs);
     margin-right: -(sizing.rems(xs));
   }

@@ -20,7 +20,7 @@
     <header class='rose-dialog-header' id={{concat 'dialog-header-' this.id}}>
 
       {{#if @icon}}
-        <Rose::Icon @name={{@icon}} @size='medium' />
+        <Hds::Icon @name={{@icon}} />
       {{/if}}
 
       <Hds::Text::Display
@@ -34,7 +34,7 @@
         title={{@dismissButtonText}}
         {{on 'click' (fn this.dismiss @dismiss)}}
       >
-        <Rose::Icon @name='flight-icons/svg/x-16' @size='small' />
+        <Hds::Icon @name='x' />
       </button>
 
     </header>
@@ -65,7 +65,7 @@
       <header class='rose-dialog-header'>
 
         {{#if @icon}}
-          <Rose::Icon @name={{@icon}} @size='medium' />
+          <Hds::Icon @name={{@icon}} />
         {{/if}}
 
         <Hds::Text::Display
@@ -79,7 +79,7 @@
           title={{@dismissButtonText}}
           {{on 'click' (fn this.dismiss @dismiss)}}
         >
-          <Rose::Icon @name='flight-icons/svg/x-16' @size='small' />
+          <Hds::Icon @name='x' />
         </button>
 
       </header>

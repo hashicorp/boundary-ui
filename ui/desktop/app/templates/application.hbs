@@ -22,21 +22,21 @@
       <header.utilities as |utilities|>
         {{#if this.showWindowActions}}
           <Rose::Button
-            @iconOnly='flight-icons/svg/x-16'
+            @iconOnly='x'
             @style='warning'
             class='button-window-close'
             title={{t 'actions.close'}}
             {{on 'click' this.close}}
           />
           <Rose::Button
-            @iconOnly='flight-icons/svg/square-16'
+            @iconOnly='square'
             @style='secondary'
             class='button-window-fullscreen'
             title={{t 'actions.fullscreen'}}
             {{on 'click' this.toggleFullScreen}}
           />
           <Rose::Button
-            @iconOnly='flight-icons/svg/minus-16'
+            @iconOnly='minus'
             @style='secondary'
             class='button-window-minimize'
             title={{t 'actions.minimize'}}
@@ -47,7 +47,7 @@
         {{#if this.session.isAuthenticated}}
           <utilities.dropdown
             @text={{this.session.data.authenticated.username}}
-            @icon='flight-icons/svg/user-circle-16'
+            @icon='user-circle'
             as |dropdown|
           >
             <dropdown.button {{on 'click' this.invalidateSession}}>

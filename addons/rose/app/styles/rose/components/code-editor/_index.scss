@@ -78,8 +78,8 @@
     height: sizing.rems(xl);
     white-space: nowrap;
 
-    &-icon {
-      margin-right: sizing.rems(xs);
+    .hds-icon {
+      vertical-align: top;
     }
   }
 }

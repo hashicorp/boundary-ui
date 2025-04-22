@@ -84,7 +84,7 @@
           {{#if (can 'setGrants role' @model)}}
             <Rose::Button
               @style='secondary'
-              @iconOnly='flight-icons/svg/trash-16'
+              @iconOnly='trash'
               title={{t 'actions.remove'}}
               {{on 'click' (fn @removeGrant grant.value)}}
             >
