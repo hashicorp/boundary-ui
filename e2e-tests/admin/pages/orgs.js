@@ -64,8 +64,6 @@ export class OrgsPage extends BaseResourcePage {
       .getByLabel('header-nav')
       .getByRole('link', { name: scopeName, exact: true })
       .click()
-
-
     await expect(
       this.page.getByTitle(scopeName)
     ).toBeVisible()

@@ -22,11 +22,19 @@ test(
             //Choose the org from the scope picker
             await page.goto('/');
             const orgsPage = new OrgsPage(page);
-            await orgsPage.chooseScopeFromDropdown(org.name, org.id);
+            await orgsPage.chooseScopeFromDropdown(org.name);
 
             //Expect the project to be displayed on the projects page
             await expect(
                 page.getByRole('link', { name: project.name })
+            ).toBeVisible()
+
+            //Switch back to global scope
+            await orgsPage.chooseScopeFromDropdown("Global");
+
+            //Expect to be back on the orgs page
+            await expect(
+                page.getByRole('heading', { name: 'Orgs' })
             ).toBeVisible()
         } finally {
             if (org.id) {
