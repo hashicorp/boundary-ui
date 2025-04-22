@@ -5,7 +5,6 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import Controller from '@ember/controller';
 import sinon from 'sinon';
 
 module(
@@ -13,9 +12,10 @@ module(
   function (hooks) {
     setupTest(hooks);
 
-    let route = this.owner.lookup(
-      'route:scopes/scope/authenticate/method/oidc',
-    );
+    let route;
+    hooks.beforeEach(function () {
+      route = this.owner.lookup('route:scopes/scope/authenticate/method/oidc');
+    });
 
     test('it exists', function (assert) {
       assert.ok(route);
@@ -24,16 +24,20 @@ module(
     test('setupController clears UI messages and sets authMethod on the controller', function (assert) {
       assert.expect(2);
 
-      let flashMessagesService, clearMessagesSpy;
       const fakeAuthMethod = { name: 'OIDC', type: 'oidc' };
 
-      flashMessagesService = this.owner.lookup('service:flash-messages');
-      clearMessagesSpy = sinon.spy(flashMessagesService, 'clearMessages');
+      const flashMessagesService = this.owner.lookup('service:flash-messages');
+      const clearMessagesSpy = sinon.spy(flashMessagesService, 'clearMessages');
       route.flashMessages = flashMessagesService;
 
-      sinon.stub(route, 'modelFor').returns(fakeAuthMethod);
+      sinon
+        .stub(route, 'modelFor')
+        .withArgs('scopes.scope.authenticate.method')
+        .returns(fakeAuthMethod);
 
-      const controller = new (class extends Controller {})();
+      const controller = this.owner.lookup(
+        'controller:scopes/scope/authenticate/method/oidc',
+      );
       route.setupController(controller);
 
       assert.ok(clearMessagesSpy.calledOnce, 'clearMessages was called');
