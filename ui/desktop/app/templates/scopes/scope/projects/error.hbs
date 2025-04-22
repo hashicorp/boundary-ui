@@ -24,8 +24,10 @@
   </Rose::Layout::Centered>
 
   <Rose::Layout::Centered>
-    <Rose::Button @style='primary' {{on 'click' this.appUtilities.disconnect}}>
-      {{t 'actions.disconnect'}}
-    </Rose::Button>
+    <Hds::Button
+      @color='primary'
+      @text={{t 'actions.disconnect'}}
+      {{on 'click' this.appUtilities.disconnect}}
+    />
   </Rose::Layout::Centered>
 {{/unless}}
