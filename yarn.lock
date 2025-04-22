@@ -8830,7 +8830,7 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-auto-import: "npm:^2.10.0"
     ember-can: "npm:^4.2.0"
-    ember-cli: "npm:^5.12.0"
+    ember-cli: "npm:~5.12.0"
     ember-cli-babel: "npm:^8.2.0"
     ember-cli-clean-css: "npm:^3.0.0"
     ember-cli-dependency-checker: "npm:^3.3.2"
@@ -8848,10 +8848,12 @@ __metadata:
     ember-source: "npm:~5.12.0"
     ember-source-channel-url: "npm:^3.0.0"
     ember-template-lint: "npm:^6.0.0"
+    ember-try: "npm:^3.0.0"
     eslint: "npm:^8.57.1"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-ember: "npm:^12.2.1"
     eslint-plugin-n: "npm:^16.6.2"
+    eslint-plugin-prettier: "npm:^5.2.1"
     eslint-plugin-qunit: "npm:^8.1.2"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
@@ -8863,6 +8865,7 @@ __metadata:
     tracked-built-ins: "npm:^3.1.1"
     webpack: "npm:^5.95.0"
   peerDependencies:
+    ember-source: ">= 4.0.0"
     sinon: ^19.0.2
   languageName: unknown
   linkType: soft
