@@ -12,9 +12,9 @@
     {{if @iconOnly "has-icon-only"}}'
 >
   <span class='rose-dropdown-button-wrapper'>
-    <span class='rose-dropdown-button-body'>
+    <Hds::Text::Body>
       {{yield}}
-    </span>
+    </Hds::Text::Body>
 
     {{#if @iconOnly}}
       <Rose::Icon @name={{@iconOnly}} @size='medium' />

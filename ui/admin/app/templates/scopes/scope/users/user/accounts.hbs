@@ -46,7 +46,7 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <span class='hds-font-weight-semibold'>
+              <Hds::Text::Body @weight='semibold'>
                 {{#if (can 'read accounts' B.data)}}
                   <LinkTo
                     @route='scopes.scope.auth-methods.auth-method.accounts.account'
@@ -57,7 +57,7 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-              </span>
+              </Hds::Text::Body>
 
               <p>{{B.data.description}}</p>
             </B.Td>
