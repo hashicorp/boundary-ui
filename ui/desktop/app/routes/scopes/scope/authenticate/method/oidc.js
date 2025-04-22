@@ -47,7 +47,6 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    */
   setupController(controller) {
     super.setupController(...arguments);
-    this.flashMessages.clearMessages(); // clear any ui messages during login
     const authMethod = this.modelFor('scopes.scope.authenticate.method');
     controller.authMethod = authMethod;
   }
@@ -56,6 +55,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    * When this route is activated (entered), start polling for authentication.
    */
   activate() {
+    this.flashMessages.clearMessages(); // clear any ui messages during login
     this.poller.perform();
   }
 
