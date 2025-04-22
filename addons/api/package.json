@@ -7,20 +7,36 @@
   "keywords": [
     "ember-addon"
   ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./*": "./dist/*",
+    "./test-support": "./dist/test-support/index.js",
+    "./addon-main.js": "./addon-main.js"
+  },
+  "files": [
+    "addon-main.js",
+    "dist"
+  ],
   "scripts": {
-    "build:development": "ember build",
-    "build": "ember build --environment=production",
+    "build": "rollup --config",
+    "prepublishOnly": "rollup --config",
+    "start": "rollup --config --watch",
     "lint": "pnpm lint:js",
     "lint:fix": "pnpm lint:js:fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "format": "pnpm run \"npm:format:*\" --names \"format:\"",
     "format:js": "prettier --write '{addon,app,config,stories,mirage}/**/*.js' *.js",
-    "start": "ember serve",
     "precommit": "pnpm lint && pnpm format",
     "doc:toc": "doctoc README.md"
   },
+  "ember-addon": {
+    "main": "addon-main.js",
+    "type": "addon",
+    "version": 2
+  },
   "dependencies": {
+    "@embroider/addon-shim": "^1.10.0",
     "dexie": "^3.2.4",
     "ember-auto-import": "^2.10.0",
     "ember-can": "^4.2.0",
@@ -38,14 +54,17 @@
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/eslint-parser": "^7.21.3",
-    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@babel/plugin-proposal-decorators": "^7.25.9",
+    "@babel/plugin-transform-class-properties": "^7.25.9",
     "@ember-data/store": "^5.4.1",
     "@ember/optional-features": "^2.0.0",
     "@ember/string": "^3.0.1",
+    "@embroider/addon-dev": "^8.0.1",
     "@embroider/test-setup": "^2.1.1",
     "@faker-js/faker": "^8.0.2",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@rollup/plugin-babel": "^6.0.4",
     "broccoli-asset-rev": "^3.0.0",
     "doctoc": "^2.2.0",
     "ember-cli": "^5.12.0",
@@ -66,6 +85,7 @@
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
     "prettier": "^3.0.0",
+    "rollup": "^4.40.0",
     "webpack": "^5.94.0"
   },
   "engines": {
