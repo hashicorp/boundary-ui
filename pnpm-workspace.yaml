@@ -2,4 +2,3 @@ packages:
   - addons/*
   - ui/*
   - e2e-tests
-nodeLinker: hoisted
