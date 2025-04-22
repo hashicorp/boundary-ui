@@ -28,6 +28,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
       case TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC:
         return this.serializeVaultGeneric(...arguments);
       case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
+        return this.serializeVaultSshCertificate(...arguments);
       default:
         return super.serialize(...arguments);
     }
@@ -57,6 +58,18 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
           }
           return obj;
         }, {});
+      }
+      return serialized;
+    }
+  }
+
+  serializeVaultSshCertificate() {
+    const serialized = super.serialize(...arguments);
+    if (serialized.attributes) {
+      const { key_type } = serialized.attributes;
+      if (key_type !== 'rsa' && key_type !== 'ecdsa') {
+        // If the key type is not RSA or ECDSA, set key_bits to null
+        serialized.attributes.key_bits = null;
       }
       return serialized;
     }
