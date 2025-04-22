@@ -21,9 +21,7 @@ module.exports = {
     app.import(
       path.resolve(__dirname, 'node_modules/codemirror/addon/lint/lint.css'),
     );
-    app.import(
-      require.resolve('jsonlint'),
-    );
+    app.import(require.resolve('jsonlint'));
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
@@ -48,20 +46,19 @@ module.exports = {
    */
   includeHDSStyles(app) {
     const tokensPath =
-      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
+      'node_modules/@hashicorp/design-system-tokens/dist/products/css';
     const hdsPath =
-      '../../node_modules/@hashicorp/design-system-components/dist/styles';
+      'node_modules/@hashicorp/design-system-components/dist/styles';
 
     // Setup default sassOptions on the running application
-    app.options.sassOptions = app.options.sassOptions || {};
-    app.options.sassOptions.includePaths =
-      app.options.sassOptions.includePaths || [];
+    app.options.sassOptions ||= {};
+    app.options.sassOptions.includePaths ||= [];
 
     // Include the addon styles
     app.options.sassOptions.includePaths.push(
       path.resolve(__dirname, tokensPath),
+      path.resolve(__dirname, hdsPath),
     );
-    app.options.sassOptions.includePaths.push(path.resolve(__dirname, hdsPath));
   },
 
   /**
