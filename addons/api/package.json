@@ -84,9 +84,6 @@
   "ember": {
     "edition": "octane"
   },
-  "ember-addon": {
-    "configPath": "tests/dummy/config"
-  },
   "lint-staged": {
     "*.js": [
       "eslint --fix",

@@ -6,15 +6,16 @@ This addon contains the API data access layer for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Add API to an App](#add-api-to-an-app)
-- [Installation](#installation)
-- [Pnpm Commands](#pnpm-commands)
-- [Linting](#linting)
-- [Formatting](#formatting)
-- [Running tests](#running-tests)
-- [Running the dummy application](#running-the-dummy-application)
-- [Contributing](#contributing)
-  - [Building ToC](#building-toc)
+- [API data layer Ember Addon for Boundary](#api-data-layer-ember-addon-for-boundary)
+  - [Add API to an App](#add-api-to-an-app)
+  - [Installation](#installation)
+  - [Pnpm Commands](#pnpm-commands)
+  - [Linting](#linting)
+  - [Formatting](#formatting)
+  - [Running tests](#running-tests)
+  - [Running the dummy application](#running-the-dummy-application)
+  - [Contributing](#contributing)
+    - [Building ToC](#building-toc)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

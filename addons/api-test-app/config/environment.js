@@ -7,7 +7,7 @@
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'dummy',
+    modulePrefix: 'api-test-app',
     environment,
     rootURL: '/',
     locationType: 'history',

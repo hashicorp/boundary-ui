@@ -34,7 +34,7 @@ importers:
         specifier: ^15.2.10
         version: 15.5.1
 
-  addons/api-addon:
+  addons/api:
     dependencies:
       dexie:
         specifier: ^3.2.4
@@ -221,8 +221,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       api:
-        specifier: link:../api-addon
-        version: link:../api-addon
+        specifier: link:../api
+        version: link:../api
       broccoli-asset-rev:
         specifier: ^3.0.0
         version: 3.0.0
@@ -469,7 +469,7 @@ importers:
         version: 0.2.4
       api:
         specifier: workspace:*
-        version: link:../api-addon
+        version: link:../api
       auth:
         specifier: workspace:*
         version: link:../auth

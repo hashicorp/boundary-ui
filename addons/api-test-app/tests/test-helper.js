@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import Application from 'dummy/app';
-import config from 'dummy/config/environment';
+import Application from 'api-test-app/app';
+import config from 'api-test-app/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

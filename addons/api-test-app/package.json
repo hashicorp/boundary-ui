@@ -5,9 +5,6 @@
   "license": "BUSL-1.1",
   "author": "HashiCorp",
   "private": true,
-  "keywords": [
-    "ember-addon"
-  ],
   "scripts": {
     "build:development": "ember build",
     "build": "ember build --environment=production",
@@ -30,7 +27,7 @@
     "sinon": "^19.0.2"
   },
   "devDependencies": {
-    "api": "link:../api-addon",
+    "api": "link:../api",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-htmlbars": "^6.2.0",

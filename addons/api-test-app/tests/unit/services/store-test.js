@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { setupTest } from 'dummy/tests/helpers';
+import { setupTest } from 'api-test-app/tests/helpers';
 
 module('Unit | Service | store', function (hooks) {
   setupTest(hooks);
