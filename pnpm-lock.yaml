@@ -82,12 +82,6 @@ importers:
       '@ember/string':
         specifier: ^3.0.1
         version: 3.1.1
-      '@ember/test-helpers':
-        specifier: ^4.0.5
-        version: 4.0.5(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6))
-      '@ember/test-waiters':
-        specifier: ^4.1.0
-        version: 4.1.0(@glint/template@1.5.2)
       '@embroider/test-setup':
         specifier: ^2.1.1
         version: 2.1.1
@@ -130,9 +124,6 @@ importers:
       ember-page-title:
         specifier: ^7.0.0
         version: 7.0.0
-      ember-qunit:
-        specifier: ^8.1.0
-        version: 8.1.1(@ember/test-helpers@4.0.5(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6)))(@glint/template@1.5.2)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6))(qunit@2.24.1)
       ember-resolver:
         specifier: ^10.0.0
         version: 10.1.1(@ember/string@3.1.1)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6))
@@ -157,9 +148,6 @@ importers:
       eslint-plugin-n:
         specifier: ^16.3.1
         version: 16.6.2(eslint@8.57.1)
-      eslint-plugin-qunit:
-        specifier: ^8.0.1
-        version: 8.1.2(eslint@8.57.1)
       js-bexpr:
         specifier: hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1
         version: https://codeload.github.com/hashicorp/js-bexpr/tar.gz/9b4a4b54d85eba67fdfc0990133d1518d890b1e1
@@ -169,12 +157,6 @@ importers:
       prettier:
         specifier: ^3.0.0
         version: 3.5.3
-      qunit:
-        specifier: ^2.22.0
-        version: 2.24.1
-      qunit-dom:
-        specifier: ^3.2.1
-        version: 3.4.0
       sinon:
         specifier: ^19.0.2
         version: 19.0.5
