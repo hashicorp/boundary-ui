@@ -217,10 +217,6 @@
     .create-resources-item-controller {
       margin-top: sizing.rems(xl);
 
-      .create-resources-item-controller-label {
-        color: var(--ui-gray);
-      }
-
       .create-resources-item-controller-copyable {
         margin: sizing.rems(xxs) 0 sizing.rems(l) 0;
       }
@@ -469,7 +465,6 @@
     }
 
     &-title {
-      font-weight: var(--token-typography-font-weight-semibold);
       margin-top: 0.5rem;
       width: 4rem;
     }

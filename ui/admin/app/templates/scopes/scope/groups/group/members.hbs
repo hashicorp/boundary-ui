@@ -46,7 +46,7 @@
         <:body as |B|>
           <B.Tr>
             <B.Td>
-              <span class='hds-font-weight-semibold'>{{#if
+              <Hds::Text::Body @weight='semibold'>{{#if
                   (can 'read group' B.data)
                 }}
                   {{B.data.displayName}}
@@ -54,7 +54,7 @@
                     <br /><Hds::Badge @text={{B.data.accountName}} />
                   {{/if}}
                 {{/if}}
-              </span>
+              </Hds::Text::Body>
             </B.Td>
             <B.Td>
               <Hds::Copy::Snippet
