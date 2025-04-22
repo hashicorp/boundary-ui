@@ -144,11 +144,11 @@
               {{! Created Time }}
               <B.Td>
                 {{#if B.data.created_time}}
-                  <span class='hds-foreground-faint'>
+                  <Hds::Text::Body @color='faint'>
                     <time datetime={{format-date-iso B.data.created_time}}>
                       {{format-date-iso B.data.created_time}}
                     </time>
-                  </span>
+                  </Hds::Text::Body>
                 {{/if}}
               </B.Td>
               {{! Status }}
