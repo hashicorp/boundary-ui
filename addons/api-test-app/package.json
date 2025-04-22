@@ -1,0 +1,99 @@
+{
+  "name": "api-test-app",
+  "version": "0.0.0",
+  "description": "API data layer for Boundary.",
+  "license": "BUSL-1.1",
+  "author": "HashiCorp",
+  "keywords": [
+    "ember-addon"
+  ],
+  "scripts": {
+    "build:development": "ember build",
+    "build": "ember build --environment=production",
+    "lint": "pnpm lint:js",
+    "lint:fix": "pnpm lint:js:fix",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
+    "format": "pnpm run \"npm:format:*\" --names \"format:\"",
+    "format:js": "prettier --write '{addon,app,config,stories,tests,mirage}/**/*.js' *.js",
+    "start": "ember serve",
+    "test": "ember exam --test-port 0 --split=4 --parallel=1 --random",
+    "test:ember-compatibility": "ember try:each",
+    "precommit": "pnpm lint && pnpm format && pnpm test",
+    "doc:toc": "doctoc README.md"
+  },
+  "dependencies": {
+    "api": "link:../api-addon",
+    "dexie": "^3.2.4",
+    "ember-auto-import": "^2.10.0",
+    "ember-can": "^4.2.0",
+    "ember-cli-babel": "^8.2.0",
+    "ember-cli-htmlbars": "^6.2.0",
+    "ember-cli-mirage": "^3.0.3",
+    "ember-data": "~5.3.12",
+    "miragejs": "^0.1.48",
+    "tracked-built-ins": "^3.1.1"
+  },
+  "peerDependencies": {
+    "@ember-data/store": "^5.4.1",
+    "sinon": "^19.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/eslint-parser": "^7.21.3",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@ember-data/store": "^5.4.1",
+    "@ember/optional-features": "^2.0.0",
+    "@ember/string": "^3.0.1",
+    "@ember/test-helpers": "^4.0.5",
+    "@ember/test-waiters": "^4.1.0",
+    "@embroider/test-setup": "^2.1.1",
+    "@faker-js/faker": "^8.0.2",
+    "@glimmer/component": "^1.1.2",
+    "@glimmer/tracking": "^1.1.2",
+    "broccoli-asset-rev": "^3.0.0",
+    "doctoc": "^2.2.0",
+    "ember-cli": "^5.12.0",
+    "ember-cli-dependency-checker": "^3.3.2",
+    "ember-cli-inject-live-reload": "^2.1.0",
+    "ember-cli-sri": "^2.1.1",
+    "ember-cli-terser": "^4.0.2",
+    "ember-exam": "^8.0.0",
+    "ember-load-initializers": "^2.1.2",
+    "ember-page-title": "^7.0.0",
+    "ember-qunit": "^8.1.0",
+    "ember-resolver": "^10.0.0",
+    "ember-source": "~4.12.0",
+    "ember-source-channel-url": "^3.0.0",
+    "ember-template-lint": "^7.0.8",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-ember": "^11.11.1",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-qunit": "^8.0.1",
+    "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
+    "loader.js": "^4.7.0",
+    "prettier": "^3.0.0",
+    "qunit": "^2.22.0",
+    "qunit-dom": "^3.2.1",
+    "sinon": "^19.0.2",
+    "webpack": "^5.94.0"
+  },
+  "engines": {
+    "node": "20.* || 22.*"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "ember-addon": {
+    "configPath": "tests/dummy/config"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.hbs": "ember-template-lint --fix",
+    "*.{scss,yaml}": "prettier --write"
+  }
+}
