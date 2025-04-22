@@ -68,7 +68,7 @@ module.exports = {
   includeFlightIcons(app) {
     const iconPackagePath = path.resolve(
       __dirname,
-      '../../node_modules/@hashicorp/flight-icons',
+      'node_modules/@hashicorp/flight-icons',
     );
     const iconsPath = path.resolve(iconPackagePath, '..');
 
