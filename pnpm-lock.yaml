@@ -60,6 +60,9 @@ importers:
       miragejs:
         specifier: ^0.1.48
         version: 0.1.48
+      sinon:
+        specifier: ^19.0.2
+        version: 19.0.5
       tracked-built-ins:
         specifier: ^3.1.1
         version: 3.4.0(@babel/core@7.26.10)
@@ -115,9 +118,6 @@ importers:
       ember-cli-terser:
         specifier: ^4.0.2
         version: 4.0.2
-      ember-exam:
-        specifier: ^8.0.0
-        version: 8.0.0(@glint/template@1.5.2)(ember-qunit@8.1.1(@ember/test-helpers@4.0.5(@babel/core@7.26.10)(@glint/template@1.5.2)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6)))(@glint/template@1.5.2)(ember-source@4.12.4(@babel/core@7.26.10)(@glimmer/component@1.1.2(@babel/core@7.26.10))(@glint/template@1.5.2)(webpack@5.99.6))(qunit@2.24.1))(qunit@2.24.1)(webpack@5.99.6)
       ember-load-initializers:
         specifier: ^2.1.2
         version: 2.1.2(@babel/core@7.26.10)
@@ -157,9 +157,6 @@ importers:
       prettier:
         specifier: ^3.0.0
         version: 3.5.3
-      sinon:
-        specifier: ^19.0.2
-        version: 19.0.5
       webpack:
         specifier: ^5.94.0
         version: 5.99.6
