@@ -36,6 +36,7 @@
     {{#if @model}}
       <Dropdown
         name='tags'
+        @listPosition='bottom-left'
         @toggleText={{t 'form.tags.label'}}
         @itemOptions={{this.groupedTags}}
         @checkedItems={{this.tags}}

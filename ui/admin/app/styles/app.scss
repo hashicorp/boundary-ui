@@ -993,6 +993,15 @@
     padding: 0.25rem 0.75rem;
   }
 }
+.dropdown-section {
+  padding: 0.5rem 0.75rem 0;
+  display: flex;
+
+  .hds-dropdown-list-item--variant-title {
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    text-transform: uppercase;
+  }
+}
 
 // worker filter generator
 .filter-generator-selection {

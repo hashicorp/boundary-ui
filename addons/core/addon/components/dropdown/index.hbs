@@ -37,7 +37,10 @@
   {{else}}
     {{#if @isGrouped}}
       {{#each-in (group-by 'key' this.itemOptions) as |key groupItems|}}
-        <DD.Title @text={{key}} />
+        <DD.Generic class='dropdown-section'>
+          <Hds::Icon @name='tag' @isInline={{true}} />
+          <DD.Title @text={{key}} />
+        </DD.Generic>
         {{#each groupItems as |itemOption|}}
           <DD.Checkbox
             @value={{itemOption}}

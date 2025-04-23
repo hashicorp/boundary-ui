@@ -178,24 +178,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     await this.router.refresh();
   }
 
-  // /**
-  //  * Calls filterBy action located in the route.
-  //  * @param {string} field
-  //  * @param {[object]} value
-  //  */
-  // @action
-  // callFilterBy(field, value) {
-  //   this.send('filterBy', field, value);
-  // }
-
-  // /**
-  //  * Calls clearAllFilters action located in the route.
-  //  */
-  // @action
-  // callClearAllFilters() {
-  //   this.send('clearAllFilters');
-  // }
-
   /**
    * Refreshes worker data.
    */
