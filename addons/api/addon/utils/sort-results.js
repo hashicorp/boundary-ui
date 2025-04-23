@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-// created_time is not an attribute defined in models perse, but present in
+// created_time is not an attribute defined in models per se, but present in
 // all the resources coming from API. It is the default sorting attribute
 const SORT_DEFAULT_ATTRIBUTE = 'created_time';
 const SORT_DIRECTION_ASCENDING = 'asc';
@@ -14,7 +14,7 @@ const sortFunctions = {
   date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
 };
 
-export const sortApiRecords = (records, { querySort, schema }) => {
+export const sortResults = (results, { querySort, schema }) => {
   // The consumer is already doing this, not sure is necessary
   querySort = querySort ?? {};
 
@@ -38,7 +38,7 @@ export const sortApiRecords = (records, { querySort, schema }) => {
   const sortFunction =
     sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
 
-  return records.sort((a, b) => {
+  return results.sort((a, b) => {
     // Extract the values to sort and sort them.
     const sortValueA = a.attributes[sortAttribute];
     const sortValueB = b.attributes[sortAttribute];

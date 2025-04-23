@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 import { getOwner, setOwner } from '@ember/application';
 import { queryIndexedDb } from '../utils/indexed-db-query';
 import { paginateResults } from '../utils/paginate-results';
-import { sortApiRecords } from '../utils/sort-api-records';
+import { sortResults } from '../utils/sort-results';
 import { hashCode } from '../utils/hash-code';
 
 /**
@@ -108,14 +108,14 @@ export default class IndexedDbHandler {
         }
 
         // Results returned in JSON API reponse, but in a format optimized for indexedDb
-        const indexedDbRecords = await queryIndexedDb(
+        const indexedDbResults = await queryIndexedDb(
           indexedDb,
           type,
           queryObj,
         );
 
         // Normalize the data and clean up indexedDb format, ready for ember data consumption
-        const normalizedApiRecords = indexedDbRecords.map((item) => {
+        const normalizedResults = indexedDbResults.map((item) => {
           return this.indexedDb.normalizeData({
             data: item,
             cleanData: false,
@@ -124,22 +124,18 @@ export default class IndexedDbHandler {
           });
         });
 
-        const sortedApiRecords = sortApiRecords(normalizedApiRecords, {
+        const sortedResults = sortResults(normalizedResults, {
           querySort: queryObj?.sort ?? {},
           schema,
         });
 
         // Paginate the API records
-        const paginatedApiRecords = paginateResults(
-          sortedApiRecords,
-          page,
-          pageSize,
-        );
+        const paginatedResults = paginateResults(sortedResults, page, pageSize);
 
         // If we are not pushing to the store, use the raw data with id property
         const records = pushToStore
-          ? store.push({ data: paginatedApiRecords })
-          : paginatedApiRecords.map((record) => ({
+          ? store.push({ data: paginatedResults })
+          : paginatedResults.map((record) => ({
               ...record.attributes,
               id: record.id,
             }));
@@ -148,7 +144,7 @@ export default class IndexedDbHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        records.meta = { totalItems: indexedDbRecords.length };
+        records.meta = { totalItems: indexedDbResults.length };
         return records;
       }
       default:
