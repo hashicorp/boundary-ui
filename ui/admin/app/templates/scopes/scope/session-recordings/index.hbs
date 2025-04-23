@@ -9,9 +9,14 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>{{t 'resources.session-recording.title_plural'}}
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >{{t 'resources.session-recording.title_plural'}}
       <DocLink @doc='session-recording' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.session-recording.description'}}</p>
   </page.header>
 
@@ -139,11 +144,11 @@
               {{! Created Time }}
               <B.Td>
                 {{#if B.data.created_time}}
-                  <span class='hds-foreground-faint'>
+                  <Hds::Text::Body @color='faint'>
                     <time datetime={{format-date-iso B.data.created_time}}>
                       {{format-date-iso B.data.created_time}}
                     </time>
-                  </span>
+                  </Hds::Text::Body>
                 {{/if}}
               </B.Td>
               {{! Status }}

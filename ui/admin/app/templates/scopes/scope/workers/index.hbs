@@ -10,10 +10,15 @@
   </page.breadcrumbs>
 
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'titles.workers'}}
       <DocLink @doc='worker' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
   </page.header>
 
   <page.actions>
@@ -75,12 +80,12 @@
                 'scopes.scope.workers.index' 'tags'
               )
             }}
-              <Rose::Button
-                @style='inline-link-action'
-                @iconLeft='flight-icons/svg/x-16'
+              <Hds::Button
+                @size='small'
+                @icon='x'
+                @text={{t 'actions.clear-all-filters'}}
                 {{on 'click' this.callClearAllFilters}}
-              >{{t 'actions.clear-all-filters'}}
-              </Rose::Button>
+              />
             {{/if}}
           </Rose::Form>
         </toolbar.primary>

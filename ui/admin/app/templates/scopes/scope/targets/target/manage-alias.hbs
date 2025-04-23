@@ -13,10 +13,15 @@
     <Breadcrumbs::Container />
   </page.breadcrumbs>
   <page.header>
-    <h2>
+    <Hds::Text::Display
+      @tag='h2'
+      @size='400'
+      @weight='bold'
+      class='header-spacing'
+    >
       {{t 'resources.alias.title'}}
       <DocLink @doc='alias' @iconSize='large' />
-    </h2>
+    </Hds::Text::Display>
     <p>{{t 'resources.alias.description'}}</p>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
@@ -37,7 +42,7 @@
     <page.actions>
       {{#if (or perms.canUpdate perms.canDelete)}}
 
-        <Hds::Dropdown as |dd|>
+        <Hds::Dropdown data-test-manage-target-alias as |dd|>
           <dd.ToggleButton
             data-test-manage-dropdown
             @text={{t 'actions.manage'}}

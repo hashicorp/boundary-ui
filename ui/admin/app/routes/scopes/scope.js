@@ -5,8 +5,8 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import { A } from '@ember/array';
 import { TYPE_SCOPE_GLOBAL, TYPE_SCOPE_ORG } from 'api/models/scope';
+import { TrackedArray } from 'tracked-built-ins';
 
 export default class ScopesScopeRoute extends Route {
   // =services
@@ -52,7 +52,7 @@ export default class ScopesScopeRoute extends Route {
         scope_id: 'global',
         query: { filters: { scope_id: [{ equals: 'global' }] } },
       })
-      .catch(() => A([]));
+      .catch(() => new TrackedArray([]));
 
     if (model.isProject) {
       projects = await this.store.query('scope', {
@@ -72,29 +72,5 @@ export default class ScopesScopeRoute extends Route {
     this.scope.project = selectedProject;
     this.scope.orgsList = orgs;
     this.scope.projectsList = projects;
-    this.scopes = { orgs, projects, selectedOrg, selectedProject };
-    // Update the controller (if exists), since setupController is only
-    // called once the first time the route is activated.  It is not called
-    // again on route refreshes.
-    /* eslint-disable-next-line ember/no-controller-access-in-routes */
-    if (this.controller) this.setControllerProperties(this.scopes);
-  }
-
-  /**
-   * Adds the scopes hash to the controller context (see `afterModel`).
-   * @param {Controller} controller
-   */
-  setupController(/* controller */) {
-    super.setupController(...arguments);
-    this.setControllerProperties(this.scopes);
-  }
-
-  /**
-   * Updates the controller's `scopes`.
-   * @param {array} scopes
-   */
-  setControllerProperties(scopes) {
-    /* eslint-disable-next-line ember/no-controller-access-in-routes */
-    this.controller.setProperties({ scopes });
   }
 }
