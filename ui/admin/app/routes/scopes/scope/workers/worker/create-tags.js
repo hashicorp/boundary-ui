@@ -18,7 +18,7 @@ export default class ScopesScopeWorkersWorkerCreateTagsRoute extends Route {
   async willTransition(transition) {
     // eslint-disable-next-line ember/no-controller-access-in-routes
     const controller = this.controllerFor(this.routeName);
-    if (controller.get('apiTags').length) {
+    if (controller.apiTags.length) {
       transition.abort();
       try {
         await this.confirm.confirm(this.intl.t('questions.abandon-confirm'), {

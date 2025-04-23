@@ -17,10 +17,10 @@ module(
       this.set('client', 'Client');
 
       await render(hbs`
-        <OrderedSeriesDiagram::Item @icon='user'>
-          {{this.client}}
-        </OrderedSeriesDiagram::Item>
-      `);
+      <OrderedSeriesDiagram::Item @icon='user'>
+        {{this.client}}
+      </OrderedSeriesDiagram::Item>
+    `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert.dom('.ordered-series-diagram-item-title').hasText('Client');

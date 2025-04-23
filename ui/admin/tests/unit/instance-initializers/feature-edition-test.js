@@ -32,7 +32,9 @@ module('Unit | Instance Initializer | feature-edition', function (hooks) {
   });
 
   hooks.afterEach(function () {
+    // eslint-disable-next-line ember/no-runloop
     run(this.instance, 'destroy');
+    // eslint-disable-next-line ember/no-runloop
     run(this.application, 'destroy');
   });
 

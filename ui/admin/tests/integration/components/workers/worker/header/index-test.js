@@ -19,8 +19,8 @@ module(
       this.set('model', { id: 'w_123' });
 
       await render(hbs`
-      <Workers::Worker::Header @model={{this.model}} />
-    `);
+    <Workers::Worker::Header @model={{this.model}} />
+  `);
 
       assert.dom(this.element).includesText('w_123');
     });
