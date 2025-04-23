@@ -70,6 +70,8 @@ export async function queryIndexedDb(indexedDb, resource, query) {
     );
   }
 
+  // filterCollection can be Dexie Table or a Dexie Collection.
+  // This is an important detail you need to keep in mind when working on it.
   return filterCollection.toArray();
 }
 
