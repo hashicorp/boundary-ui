@@ -21,6 +21,42 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   // =attributes
 
   @tracked selectedWorker;
+  @tracked tags = [];
+
+  queryParams = [{ tags: { type: 'array' } }];
+
+  get groupedTags() {
+    const allTags = this.model
+      .flatMap((worker) => worker.allTags)
+      .filter(Boolean);
+
+    // Filter out duplicate tags
+    return allTags.reduce((uniqueTags, currentTag) => {
+      const isDuplicateTag = uniqueTags.some(
+        (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
+      );
+
+      if (!isDuplicateTag) {
+        uniqueTags.push(currentTag);
+      }
+      return uniqueTags;
+    }, []);
+  }
+  /**
+   * Returns the filters object used for displaying filter tags.
+   * @type {object}
+   */
+
+  get filters() {
+    return {
+      allFilters: {
+        tags: this.groupedTags,
+      },
+      selectedFilters: {
+        tags: this.tags,
+      },
+    };
+  }
 
   /**
    * If can list (at least): return default welcome message.
@@ -75,6 +111,16 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   }
 
   // =actions
+
+  /**
+   * Sets a query param to the value of selectedItems
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+  }
 
   /**
    * Toggle the tags flyout to display or hide the tags of a worker.
@@ -132,23 +178,23 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     await this.router.refresh();
   }
 
-  /**
-   * Calls filterBy action located in the route.
-   * @param {string} field
-   * @param {[object]} value
-   */
-  @action
-  callFilterBy(field, value) {
-    this.send('filterBy', field, value);
-  }
+  // /**
+  //  * Calls filterBy action located in the route.
+  //  * @param {string} field
+  //  * @param {[object]} value
+  //  */
+  // @action
+  // callFilterBy(field, value) {
+  //   this.send('filterBy', field, value);
+  // }
 
-  /**
-   * Calls clearAllFilters action located in the route.
-   */
-  @action
-  callClearAllFilters() {
-    this.send('clearAllFilters');
-  }
+  // /**
+  //  * Calls clearAllFilters action located in the route.
+  //  */
+  // @action
+  // callClearAllFilters() {
+  //   this.send('clearAllFilters');
+  // }
 
   /**
    * Refreshes worker data.

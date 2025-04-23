@@ -50,7 +50,7 @@
                   <FD.Checkbox
                     @value={{itemOption.id}}
                     checked={{includes itemOption.id this.users}}
-                    {{on 'change' selectItem}}
+                    {{on 'change' (fn selectItem itemOption.id)}}
                   >
                     {{itemOption.name}}
                   </FD.Checkbox>

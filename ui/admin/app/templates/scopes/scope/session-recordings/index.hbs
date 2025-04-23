@@ -61,7 +61,7 @@
                 <FD.Checkbox
                   @value={{itemOption.id}}
                   checked={{includes itemOption.id this.users}}
-                  {{on 'change' selectItem}}
+                  {{on 'change' (fn selectItem itemOption.id)}}
                 >
                   {{itemOption.name}}
                 </FD.Checkbox>
@@ -90,7 +90,7 @@
                   <FD.Checkbox
                     @value={{project.id}}
                     checked={{includes project.id this.scopes}}
-                    {{on 'change' selectItem}}
+                    {{on 'change' (fn selectItem project.id)}}
                   >
                     {{project.name}}
                   </FD.Checkbox>
@@ -112,7 +112,7 @@
                 <FD.Checkbox
                   @value={{itemOption.id}}
                   checked={{includes itemOption.id this.targets}}
-                  {{on 'change' selectItem}}
+                  {{on 'change' (fn selectItem itemOption.id)}}
                 >
                   {{itemOption.name}}
                 </FD.Checkbox>

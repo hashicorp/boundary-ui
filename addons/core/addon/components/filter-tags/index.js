@@ -14,19 +14,59 @@ export default class FilterTagsIndexComponent extends Component {
   @service router;
 
   // =attributes
-
+  /**
+   *  Computes the list of active (selected) filters for display.
+   *  This getter handles both grouped and ungrouped filters:
+      - Grouped filters are matched using `key=value` pairs.
+      - Ungrouped filters are matched by item `id`.
+   
+   * For Example:
+      grouped filter - [{ key: 'env', value: 'prod', type: 'tags' }]  
+      ungrouped filter - [{ id: 'abc123', name: 'admin', type: 'roles' } ]
+   */
   get filters() {
     const { allFilters, selectedFilters } = this.args.filters;
-    return Object.entries(allFilters).flatMap(([key, value]) => {
-      assert(`Tags must be an array for key ${key}`, Array.isArray(value));
-      const paramsSet = new Set(selectedFilters[key]);
-      const filters = value.filter((item) => paramsSet.has(item.id));
+    const isGrouped = this.args.isGrouped;
 
-      return filters.map((item) => ({
-        id: item.id,
-        name: item.name,
-        type: key,
-      }));
+    const getSelectedSet = (key) => {
+      const selected = selectedFilters[key] ?? [];
+      return new Set(
+        isGrouped
+          ? selected.map((s) => `${s.key}=${s.value}`)
+          : selected.map((s) => s?.id ?? s),
+      );
+    };
+
+    // Checks whether the given item is part of the selected filters
+    const isSelected = (item, selectedSet) => {
+      return isGrouped
+        ? selectedSet.has(`${item.key}=${item.value}`)
+        : selectedSet.has(item.id);
+    };
+
+    // Formats the item based on whether it's grouped or not to return the correct structure
+    const formatItem = (item, key) => {
+      return isGrouped
+        ? {
+            key: item.key,
+            value: item.value,
+            type: key,
+          }
+        : {
+            id: item.id,
+            name: item.name,
+            type: key,
+          };
+    };
+
+    // Formats only the selected filter values from all available filters
+    return Object.entries(allFilters).flatMap(([key, values]) => {
+      assert(`Tags must be an array for key ${key}`, Array.isArray(values));
+
+      const selectedSet = getSelectedSet(key);
+      return values
+        .filter((item) => isSelected(item, selectedSet))
+        .map((item) => formatItem(item, key));
     });
   }
 
@@ -34,16 +74,31 @@ export default class FilterTagsIndexComponent extends Component {
 
   /**
    * Clears a single filter from queryParams for current route
+   * This supports both grouped and ungrouped filters:
+   * - Grouped filters are matched using `key=value` pairs.
+   * - Ungrouped filters are matched by item `id` or `name`
    * @param {object} tag
    */
   @action
   removeFilter(tag) {
-    const queryParamValue = this.args.filters.selectedFilters[tag.type];
+    const { selectedFilters } = this.args.filters;
+    const currentValues = selectedFilters[tag.type] ?? [];
+    const isGrouped = this.args.isGrouped;
+    const updatedValue = currentValues.filter((item) => {
+      if (typeof item !== 'object' || item === null) {
+        return item !== tag?.id;
+      }
+
+      if (isGrouped) {
+        return !(item.key === tag.key && item.value === tag.value);
+      }
+
+      return item.id !== tag?.id;
+    });
 
     const queryParams = {
-      [tag.type]: queryParamValue.filter((item) => item !== tag.id),
+      [tag.type]: updatedValue,
     };
-
     this.router.replaceWith({ queryParams });
   }
 

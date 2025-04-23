@@ -50,12 +50,18 @@ export default class DropdownComponent extends Component {
    * @param {object} event
    */
   @action
-  selectItem(event) {
-    const { checked, value } = event.target;
+  selectItem(item, event) {
+    const { checked } = event.target;
     if (checked) {
-      this.selectedItems = [...this.selectedItems, value];
+      this.selectedItems = [...this.selectedItems, item];
     } else {
-      this.selectedItems = this.selectedItems.filter((item) => item !== value);
+      if (this.args.isGrouped && item?.key && item?.value) {
+        this.selectedItems = this.selectedItems.filter(
+          (i) => !(i.key === item.key && i.value === item.value),
+        );
+      } else {
+        this.selectedItems = this.selectedItems.filter((i) => i !== item);
+      }
     }
   }
 
