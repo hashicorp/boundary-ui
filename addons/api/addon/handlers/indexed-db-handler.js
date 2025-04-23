@@ -114,7 +114,7 @@ export default class IndexedDbHandler {
           queryObj,
         );
 
-        // Normalize the data and clean up indexedDb format, ready for ember data consumption
+        // Normalize the results and clean up indexedDb format, ready for ember data consumption
         const normalizedResults = indexedDbResults.map((item) => {
           return this.indexedDb.normalizeData({
             data: item,
@@ -124,12 +124,13 @@ export default class IndexedDbHandler {
           });
         });
 
+        // Sort the results
         const sortedResults = sortResults(normalizedResults, {
           querySort: queryObj?.sort ?? {},
           schema,
         });
 
-        // Paginate the API records
+        // Paginate the results
         const paginatedResults = paginateResults(sortedResults, page, pageSize);
 
         // If we are not pushing to the store, use the raw data with id property

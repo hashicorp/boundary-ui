@@ -18,8 +18,7 @@ export const sortResults = (results, { querySort, schema }) => {
   // The consumer is already doing this, not sure is necessary
   querySort = querySort ?? {};
 
-  // Why the spike uses an assertion to check the attribute exists? - Ask Chad about it.
-  // Perhaps what we should do is throw an error if the attribute does not exists?
+  // TBD checkquerySort.attribute throw error vs assertion
 
   const sortAttribute = querySort.attribute || SORT_DEFAULT_ATTRIBUTE;
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
@@ -33,8 +32,6 @@ export const sortResults = (results, { querySort, schema }) => {
   // Perhaps what we should do is throw an error if the direction is not correct?
 
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
-  // This implementation does not accept the consumer sending a custom sorting function
-  // but with small change it can be implemented
   const sortFunction =
     sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
 
