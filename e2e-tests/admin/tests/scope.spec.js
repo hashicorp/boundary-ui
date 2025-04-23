@@ -30,7 +30,7 @@ test(
             ).toBeVisible()
 
             //Switch back to global scope
-            await orgsPage.chooseScopeFromDropdown("Global");
+            await orgsPage.chooseScopeFromDropdown('Global');
 
             //Expect to be back on the orgs page
             await expect(
