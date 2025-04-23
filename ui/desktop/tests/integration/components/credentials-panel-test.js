@@ -74,7 +74,7 @@ module('Integration | Component | credentials-panel', function (hooks) {
     `);
     assert.dom('.credential-name').hasText('Credential Library 2');
     assert.dom('.secret-container').isVisible();
-    assert.dom('.secret-key').hasText('username');
+    assert.dom('.secret-container span').hasText('username');
   });
 
   test('it shows code editor when toggle clicked', async function (assert) {

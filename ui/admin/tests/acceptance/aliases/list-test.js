@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | aliases | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -116,7 +117,7 @@ module('Acceptance | aliases | list', function (hooks) {
       ),
     );
     assert
-      .dom('[title="General"] a:nth-of-type(1)')
+      .dom(commonSelectors.SIDEBAR_NAV_CONTENT)
       .doesNotIncludeText(ALIAS_TITLE);
 
     await visit(urls.aliases);
