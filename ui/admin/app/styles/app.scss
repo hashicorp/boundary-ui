@@ -639,11 +639,6 @@
     }
   }
 
-  // Remove divider between table header cells
-  .hds-table__thead .hds-table__tr .hds-table__th + .hds-table__th::before {
-    all: unset;
-  }
-
   .hds-table__thead,
   .hds-table__tbody {
     .hds-table__tr {
@@ -653,6 +648,8 @@
 
     .hds-table__th,
     .hds-table__td {
+      // Remove table borders from cells.
+      border: none;
       padding: 0.75rem 1rem;
 
       // Rely on right padding for cell spacing...
