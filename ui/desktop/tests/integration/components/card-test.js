@@ -42,9 +42,9 @@ module('Integration | Component | card', function (hooks) {
       </Card>
     `);
 
-    assert.ok(find('.card'));
-    assert.ok(find('.card-header'));
-    assert.ok(find('.card-header .hds-icon'));
+    assert.dom('.card').exists();
+    assert.dom('.card-header').exists();
+    assert.dom('.card-header .hds-icon').isVisible();
     assert.strictEqual(
       this.element.textContent.trim(),
       'This is a heading test',

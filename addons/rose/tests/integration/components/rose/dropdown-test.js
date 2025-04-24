@@ -38,7 +38,7 @@ module('Integration | Component | rose/dropdown', function (hooks) {
 
   test('it supports an icon', async function (assert) {
     await render(hbs`<Rose::Dropdown @icon="user-circle" />`);
-    assert.ok(find('svg'));
+    assert.dom('svg').isVisible();
   });
 
   test('it supports icon-only display', async function (assert) {

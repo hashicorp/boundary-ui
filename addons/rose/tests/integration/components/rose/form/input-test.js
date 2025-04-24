@@ -68,7 +68,7 @@ module('Integration | Component | rose/form/input', function (hooks) {
 
   test('it supports an icon using @icon', async function (assert) {
     await render(hbs`<Rose::Form::Input @icon="search" />`);
-    assert.ok(find('.hds-icon'));
+    assert.dom('.hds-icon').isVisible();
   });
 
   test('it supports readonly attribute', async function (assert) {
