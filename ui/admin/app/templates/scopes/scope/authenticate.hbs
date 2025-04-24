@@ -29,25 +29,27 @@
                 name=@model.scope.displayName
               }}</Hds::Text::Body>
 
-            <Rose::Dropdown
-              @text={{t 'actions.choose-different-org'}}
-              @icon='org'
-              as |dropdown|
-            >
-              <dropdown.link @route='scopes.scope.authenticate' @model='global'>
+            <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+              <dd.ToggleButton
+                @text={{t 'actions.choose-different-org'}}
+                @icon='org'
+                @color='secondary'
+              />
+              <dd.Interactive
+                @route='scopes.scope.authenticate'
+                @model='global'
+              >
                 {{t 'titles.global'}}
-              </dropdown.link>
-
+              </dd.Interactive>
               {{#each this.sortedScopes as |scope|}}
-                <dropdown.link
+                <dd.Interactive
                   @route='scopes.scope.authenticate'
                   @model={{scope.id}}
                 >
                   {{scope.displayName}}
-                </dropdown.link>
-
+                </dd.Interactive>
               {{/each}}
-            </Rose::Dropdown>
+            </Hds::Dropdown>
             <Hds::Separator />
 
             <Rose::Nav::Tabs as |nav|>
