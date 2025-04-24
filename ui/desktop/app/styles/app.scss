@@ -274,68 +274,6 @@
   z-index: 5500;
 }
 
-// Reveal component (app/components/reveal)
-$chevron-up: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563FF' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M7.41 16L12 11.42L16.59 16L18 14.59L12 8.59L6 14.59L7.41 16Z' /></svg>");
-$chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231563FF' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17L7.41 8.59L6 10L12 16L18 10L16.59 8.59Z' /></svg>");
-
-.reveal {
-  --trigger-color: var(--action);
-
-  .reveal-trigger {
-    background: url($chevron-down) no-repeat right center;
-    color: var(--trigger-color);
-    cursor: default;
-    display: inline-block;
-    overflow: hidden;
-    padding-right: sizing.rems(l);
-    white-space: nowrap;
-
-    // Hide default twistie triangle
-    // Firefox
-    list-style-type: none;
-
-    // Webkit / Chromium
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &::marker {
-      display: none;
-    }
-
-    &:hover {
-      --trigger-color: var(--action-starker-1);
-    }
-  }
-
-  &:not([open]) {
-    .reveal-trigger-text-close {
-      background: $chevron-down no-repeat right center;
-      padding-right: sizing.rems(l);
-    }
-
-    .reveal-trigger-text-open {
-      display: none;
-    }
-  }
-
-  &[open] {
-    .reveal-trigger-text-open {
-      background: $chevron-up no-repeat right center;
-      padding-right: sizing.rems(l);
-    }
-
-    .reveal-trigger-text-close {
-      display: none;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-  }
-}
-
 // Card component (app/components/card)
 .card {
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
@@ -377,10 +315,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 .hidden-secret {
   display: flex;
   align-items: center;
-
-  .secret-mask {
-    color: var(--ui-gray-subtler-2);
-  }
 
   .secret-content {
     display: flex;
@@ -532,10 +466,6 @@ $chevron-down: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%231
 
       &:last-child {
         border-bottom: 0;
-      }
-
-      .secret-key {
-        font-weight: var(--token-typography-font-weight-semibold);
       }
 
       .hidden-secret {

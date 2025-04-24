@@ -1,6 +1,6 @@
 # compiled output
 /dist/
-/tmp/
+/declarations/
 
 # dependencies
 /node_modules/
@@ -14,9 +14,6 @@
 /testem.log
 /yarn-error.log
 
-# Vagrant
-.vagrant/
-
 # ember-try
 /.node_modules.ember-try/
 /npm-shrinkwrap.json.ember-try
@@ -26,6 +23,3 @@
 
 # broccoli-debug
 /DEBUG/
-
-#yarn 
-.yarn/*

@@ -23,7 +23,7 @@ module('Integration | Component | rose/form/checkbox', function (hooks) {
       hbs`<Rose::Form::Checkbox @label="Label" @description="Hello world" />`,
     );
     assert.strictEqual(
-      find('.rose-form-checkbox-label-text').textContent.trim(),
+      find('.rose-form-checkbox-label span').textContent.trim(),
       'Label',
     );
     assert.strictEqual(

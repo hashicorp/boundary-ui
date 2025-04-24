@@ -13,19 +13,15 @@ export default class ScopesScopeAuthenticateMethodOidcController extends Control
   // =services
 
   @service session;
+  @service router;
 
   // =actions
 
   /**
    * Retry by starting a new OIDC authentication flow.
-   * @param {object} e
    */
   @action
-  async retryAuthentication(e) {
-    // TODO: This event handler can be removed when rose dialog gets
-    // refactored to use hds.
-    e.preventDefault();
-
+  async retryAuthentication() {
     const scope = this.authMethod.scope;
     const authenticatorName = `authenticator:${this.authMethod.type}`;
     await this.authenticateMethod.startOIDCAuthentication(authenticatorName, {

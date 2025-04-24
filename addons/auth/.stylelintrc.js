@@ -6,6 +6,5 @@
 'use strict';
 
 module.exports = {
-  singleQuote: true,
-  printWidth: 80,
+  extends: ['stylelint-config-standard', 'stylelint-prettier/recommended'],
 };

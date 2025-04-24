@@ -20,11 +20,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
   const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
   const TARGET_HOST_CONNECT_BUTTON = '[data-test-host-connect]';
   const APP_STATE_TITLE = '.hds-application-state__title';
-  const ROSE_DIALOG_MODAL = '.rose-dialog-error';
-  const ROSE_DIALOG_MODAL_BUTTONS = '.rose-dialog-footer button';
-  const ROSE_DIALOG_RETRY_BUTTON = '.rose-dialog footer .rose-button-primary';
-  const ROSE_DIALOG_CANCEL_BUTTON =
-    '.rose-dialog footer .rose-button-secondary';
+  const HDS_DIALOG_MODAL = '.hds-modal';
+  const HDS_DIALOG_MODAL_BUTTONS = '.hds-modal__footer button';
+  const HDS_DIALOG_RETRY_BUTTON =
+    '.hds-modal__footer .hds-button--color-primary';
+  const HDS_DIALOG_CANCEL_BUTTON =
+    '.hds-modal__footer .hds-button--color-secondary';
 
   const instances = {
     scopes: {
@@ -164,10 +165,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(ROSE_DIALOG_MODAL).exists();
-    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+    assert.dom(HDS_DIALOG_MODAL_BUTTONS).isVisible({ count: 2 });
+    assert.dom(HDS_DIALOG_RETRY_BUTTON).hasText('Retry');
+    assert.dom(HDS_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 
   test('handles connect error', async function (assert) {
@@ -181,10 +182,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await click(`[href="${urls.target}"]`);
     await click(TARGET_CONNECT_BUTTON);
 
-    assert.dom(ROSE_DIALOG_MODAL).exists();
-    assert.dom(ROSE_DIALOG_MODAL_BUTTONS).exists({ count: 2 });
-    assert.dom(ROSE_DIALOG_RETRY_BUTTON).hasText('Retry');
-    assert.dom(ROSE_DIALOG_CANCEL_BUTTON).hasText('Cancel');
+    assert.dom(HDS_DIALOG_MODAL).isVisible();
+    assert.dom(HDS_DIALOG_MODAL_BUTTONS).isVisible({ count: 2 });
+    assert.dom(HDS_DIALOG_RETRY_BUTTON).hasText('Retry');
+    assert.dom(HDS_DIALOG_CANCEL_BUTTON).hasText('Cancel');
   });
 
   test('user can retry on error', async function (assert) {
@@ -197,11 +198,14 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await visit(urls.target);
 
     await click(TARGET_CONNECT_BUTTON);
-    const firstErrorDialog = find(ROSE_DIALOG_MODAL);
-    await click(ROSE_DIALOG_RETRY_BUTTON, 'Retry');
-    const secondErrorDialog = find(ROSE_DIALOG_MODAL);
+    const firstErrorDialog = find(HDS_DIALOG_MODAL);
+    await click(HDS_DIALOG_RETRY_BUTTON, 'Retry');
+    const secondErrorDialog = find(HDS_DIALOG_MODAL);
 
-    assert.notEqual(secondErrorDialog.id, firstErrorDialog.id);
+    assert.notEqual(
+      secondErrorDialog.getAttribute('aria-labelledby'),
+      firstErrorDialog.getAttribute('aria-labelledby'),
+    );
   });
 
   test('user can connect to a target with one host', async function (assert) {

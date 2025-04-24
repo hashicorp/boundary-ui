@@ -217,10 +217,6 @@
     .create-resources-item-controller {
       margin-top: sizing.rems(xl);
 
-      .create-resources-item-controller-label {
-        color: var(--ui-gray);
-      }
-
       .create-resources-item-controller-copyable {
         margin: sizing.rems(xxs) 0 sizing.rems(l) 0;
       }
@@ -434,19 +430,21 @@
     z-index: 1;
   }
 
-  .rose-button-secret-editor-skeleton-button {
-    background: var(--secret-editor-body);
-    border: sizing.rems(xxxxs) solid var(--ui-gray);
-    border-radius: sizing.rems(xxxs);
-    box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs) var(--button-shadow);
-
-    // using ui-gray directly so it does not change when
-    // user is in dark mode since the secret editor
-    // does not change theme colors between light and dark
-    color: #{color(ui-gray, 050)};
-    font-size: sizing.rems(s) + sizing.rems(xxxs); // 14
-    height: sizing.rems(xl);
-    padding: 0 sizing.rems(l);
+  .secret-editor-skeleton-button {
+    
+    @media (prefers-color-scheme: light) {
+      .ember-application:not(.rose-theme-dark) & {
+        background: var(--token-color-palette-neutral-600);
+        color: var(--token-color-palette-neutral-50);
+        border-color: var(--token-color-palette-neutral-50);
+      }
+    }
+    
+    .ember-application.rose-theme-light & {
+      background: var(--token-color-palette-neutral-600);
+      color: var(--token-color-palette-neutral-50);
+      border-color: var(--token-color-palette-neutral-50);
+    }
   }
 }
 
@@ -469,7 +467,6 @@
     }
 
     &-title {
-      font-weight: var(--token-typography-font-weight-semibold);
       margin-top: 0.5rem;
       width: 4rem;
     }
@@ -644,11 +641,6 @@
     }
   }
 
-  // Remove divider between table header cells
-  .hds-table__thead .hds-table__tr .hds-table__th + .hds-table__th::before {
-    all: unset;
-  }
-
   .hds-table__thead,
   .hds-table__tbody {
     .hds-table__tr {
@@ -658,6 +650,8 @@
 
     .hds-table__th,
     .hds-table__td {
+      // Remove table borders from cells.
+      border: none;
       padding: 0.75rem 1rem;
 
       // Rely on right padding for cell spacing...
