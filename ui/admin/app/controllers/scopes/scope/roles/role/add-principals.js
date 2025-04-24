@@ -15,10 +15,9 @@ export default class ScopesScopeRolesRoleAddPrincipalsController extends Control
 
   @service router;
 
-  // =tracked
-  @tracked scopeIds = [];
-
   // =attributes
+
+  @tracked scopeIds = [];
 
   queryParams = [{ scopeIds: { type: 'array' } }];
   /**

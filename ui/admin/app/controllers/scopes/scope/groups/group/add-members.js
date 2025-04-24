@@ -14,10 +14,9 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
 
   @service router;
 
-  // =tracked
-  @tracked scopeIds = [];
-
   // =attributes
+
+  @tracked scopeIds = [];
 
   queryParams = [{ scopeIds: { type: 'array' } }];
   /**
