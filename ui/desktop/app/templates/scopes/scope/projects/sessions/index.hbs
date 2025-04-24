@@ -46,7 +46,7 @@
                 <FD.Checkbox
                   @value={{project.id}}
                   checked={{includes project.id this.scopes}}
-                  {{on 'change' selectItem}}
+                  {{on 'change' (fn selectItem project.id)}}
                 >
                   {{project.displayName}}
                 </FD.Checkbox>
