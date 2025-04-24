@@ -12044,7 +12044,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^3.3.1"
     "@embroider/macros": "npm:^1.16.9"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
@@ -12053,7 +12053,6 @@ __metadata:
     "@xterm/addon-canvas": "npm:^0.7.0"
     "@xterm/addon-fit": "npm:^0.10.0"
     "@xterm/xterm": "npm:^5.5.0"
-    babel-loader: "npm:^9.2.1"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^9.1.0"
     core: "workspace:*"
@@ -12061,7 +12060,8 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^7.0.0"
     ember-auto-import: "npm:^2.10.0"
-    ember-cli: "npm:^5.12.0"
+    ember-cli: "npm:~5.12.0"
+    ember-cli-app-version: "npm:^7.0.0"
     ember-cli-babel: "npm:^8.2.0"
     ember-cli-clean-css: "npm:^3.0.0"
     ember-cli-code-coverage: "npm:^1.0.3"
@@ -12090,6 +12090,7 @@ __metadata:
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-ember: "npm:^12.2.1"
     eslint-plugin-n: "npm:^16.6.2"
+    eslint-plugin-prettier: "npm:^5.2.1"
     eslint-plugin-qunit: "npm:^8.1.2"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
@@ -12539,6 +12540,18 @@ __metadata:
     ember-cli-htmlbars: "npm:^6.0.0"
     ember-inflector: "npm:^4.0.2"
   checksum: 10c0/6e191688317d9a0d7e7b946648141f219c78f35785188223be6a4dad4fb28f151de837e5b790b526b94437d905a266051db2320b07d6e0735fc67d48f519c512
+  languageName: node
+  linkType: hard
+
+"ember-cli-app-version@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "ember-cli-app-version@npm:7.0.0"
+  dependencies:
+    ember-cli-babel: "npm:^7.26.11"
+    git-repo-info: "npm:^2.1.1"
+  peerDependencies:
+    ember-source: ^3.28.0 || >= 4.0.0
+  checksum: 10c0/6c3d31f74dd03d43c6b80d1496474daeace7799ce3f51f0273f5a728650a274adf2f0701cea7a42b238aafbfbcc00f7517fd10293ca46484efb2354288f2b733
   languageName: node
   linkType: hard
 
