@@ -63,6 +63,9 @@ export class OrgsPage extends BaseResourcePage {
     await this.page
       .getByRole('option', { name: scopeName, exact: true })
       .click()
+    await expect(
+      this.page.getByRole('button', { name: scopeName, exact: true })
+    ).toBeVisible()
     if (scopeName != 'Global')
       await expect(
         this.page.getByRole('link', { name: scopeName, exact: true })
