@@ -217,9 +217,9 @@ module('Acceptance | authentication', function (hooks) {
   test('org scopes with no auth methods are not visible in dropdown', async function (assert) {
     await visit(urls.authenticate.methods.global);
 
-    await click('.rose-dropdown-trigger');
+    await click('.hds-dropdown-toggle-button');
 
-    assert.dom('.rose-dropdown-content a').exists({ count: 2 });
+    assert.dom('.hds-dropdown-list-item button').exists({ count: 2 });
   });
 
   test('change cluster url is visible when no auth methods are available', async function (assert) {

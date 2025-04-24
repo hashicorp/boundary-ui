@@ -431,7 +431,6 @@
   }
 
   .secret-editor-skeleton-button {
-    
     @media (prefers-color-scheme: light) {
       .ember-application:not(.rose-theme-dark) & {
         background: var(--token-color-palette-neutral-600);
@@ -439,7 +438,7 @@
         border-color: var(--token-color-palette-neutral-50);
       }
     }
-    
+
     .ember-application.rose-theme-light & {
       background: var(--token-color-palette-neutral-600);
       color: var(--token-color-palette-neutral-50);
@@ -1097,4 +1096,9 @@
   li.indentation {
     margin-left: 1.5rem;
   }
+}
+
+// dropdown checkbox list
+.dropdown-checkbox-list {
+  margin-bottom: 1rem;
 }
