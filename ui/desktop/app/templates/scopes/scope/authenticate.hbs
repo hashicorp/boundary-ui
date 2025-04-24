@@ -6,67 +6,73 @@
 {{page-title (t 'actions.authenticate')}}
 
 <main>
-  <BrandedCard
-    @title={{t 'actions.authenticate'}}
-    @description={{t
-      'auth.descriptions.authenticating-with-org'
-      name=@model.scope.displayName
-    }}
-  >
-    <Hds::Dropdown @listPosition='bottom-left' as |dd|>
-      <dd.ToggleButton
-        @text={{t 'actions.choose-different-org'}}
-        @icon='org'
-        @color='secondary'
-      />
-      <dd.Interactive {{on 'click' (fn this.selectScope 'global' dd.close)}}>
-        {{t 'titles.global'}}
-      </dd.Interactive>
-      {{#each this.sortedScopes as |scope|}}
-        <dd.Interactive {{on 'click' (fn this.selectScope scope.id dd.close)}}>
-          {{scope.displayName}}
+  {{#if this.isOIDCRoute}}
+    {{outlet}}
+  {{else}}
+    <BrandedCard
+      @title={{t 'actions.authenticate'}}
+      @description={{t
+        'auth.descriptions.authenticating-with-org'
+        name=@model.scope.displayName
+      }}
+    >
+
+      <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+        <dd.ToggleButton
+          @text={{t 'actions.choose-different-org'}}
+          @icon='org'
+          @color='secondary'
+        />
+        <dd.Interactive {{on 'click' (fn this.selectScope 'global' dd.close)}}>
+          {{t 'titles.global'}}
         </dd.Interactive>
-      {{/each}}
-    </Hds::Dropdown>
+        {{#each this.sortedScopes as |scope|}}
+          <dd.Interactive
+            {{on 'click' (fn this.selectScope scope.id dd.close)}}
+          >
+            {{scope.displayName}}
+          </dd.Interactive>
+        {{/each}}
+      </Hds::Dropdown>
 
-    <Rose::Nav::Tabs as |nav|>
-      {{#each @model.authMethods as |authMethod|}}
-        <nav.link
-          @route='scopes.scope.authenticate.method'
-          @model={{authMethod.id}}
-        >
-          {{#if authMethod.name}}
-            {{authMethod.name}}
-          {{else}}
-            {{t (concat 'resources.auth-method.types.' authMethod.type)}}
-          {{/if}}
-        </nav.link>
-      {{/each}}
-    </Rose::Nav::Tabs>
+      <Rose::Nav::Tabs as |nav|>
+        {{#each @model.authMethods as |authMethod|}}
+          <nav.link
+            @route='scopes.scope.authenticate.method'
+            @model={{authMethod.id}}
+          >
+            {{#if authMethod.name}}
+              {{authMethod.name}}
+            {{else}}
+              {{t (concat 'resources.auth-method.types.' authMethod.type)}}
+            {{/if}}
+          </nav.link>
+        {{/each}}
+      </Rose::Nav::Tabs>
 
-    {{#if @model.authMethods}}
-      {{outlet}}
-    {{/if}}
-    {{#unless @model.authMethods}}
-      <Rose::Layout::Centered>
-        <Hds::ApplicationState data-test-no-auth-methods as |A|>
-          <A.Header
-            @icon='alert-circle'
-            @title={{t 'resources.auth-method.messages.none.title'}}
-          />
-          <A.Body
-            @text={{t 'resources.auth-method.messages.none.description'}}
-          />
-        </Hds::ApplicationState>
-      </Rose::Layout::Centered>
-    {{/unless}}
-    <p class='change-origin'>
-      {{t 'cluster-url.connected-to'}}:
-      <code>{{this.clusterUrl}}</code>
-      <br />
-      <LinkTo @route='cluster-url'>
-        {{t 'actions.change-cluster-url'}}
-      </LinkTo>
-    </p>
-  </BrandedCard>
+      {{#if @model.authMethods}}
+        {{outlet}}
+      {{else}}
+        <Rose::Layout::Centered>
+          <Hds::ApplicationState data-test-no-auth-methods as |A|>
+            <A.Header
+              @icon='alert-circle'
+              @title={{t 'resources.auth-method.messages.none.title'}}
+            />
+            <A.Body
+              @text={{t 'resources.auth-method.messages.none.description'}}
+            />
+          </Hds::ApplicationState>
+        </Rose::Layout::Centered>
+      {{/if}}
+      <p class='change-origin'>
+        {{t 'cluster-url.connected-to'}}:
+        <code>{{this.clusterUrl}}</code>
+        <br />
+        <LinkTo @route='cluster-url'>
+          {{t 'actions.change-cluster-url'}}
+        </LinkTo>
+      </p>
+    </BrandedCard>
+  {{/if}}
 </main>

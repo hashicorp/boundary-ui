@@ -4,28 +4,17 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, find, click, fillIn } from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR =
-    '[name="preferred_endpoints"] input';
-  const PREFERRED_ENDPOINT_BUTTON_SELECTOR =
-    '[name="preferred_endpoints"] button';
-  const FILTER_TEXT_INPUT_SELECTOR = '[name="filters"] input';
-  const FILTER_BUTTON_SELECTOR = '[name="filters"] button';
-  const AZURE_FILTER_SELECTOR = '[name="filter"]';
-  const SYNC_INTERVAL_SELECTOR = '[name="sync_interval_seconds"]';
-  const SUBMIT_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_SELECTOR = '[name="name"]';
 
   let getHostSetCount;
 
@@ -78,7 +67,7 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
     urls.hostSet = `${urls.hostSets}/${instances.hostSet.id}`;
     urls.unknownHostSet = `${urls.hostSets}/foo`;
     urls.newHostSet = `${urls.hostSets}/new`;
-    // Generate resource couner
+    // Generate resource counter
     getHostSetCount = () => this.server.schema.hostSets.all().models.length;
     await authenticateSession({});
   });
@@ -86,8 +75,10 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   test('can create new host sets', async function (assert) {
     const count = getHostSetCount();
     await visit(urls.newHostSet);
-    await fillIn(NAME_SELECTOR, 'random string');
-    await click(SUBMIT_BTN_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(getHostSetCount(), count + 1);
   });
 
@@ -106,14 +97,14 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
     );
     const name = 'aws host set';
-    await fillIn(NAME_SELECTOR, name);
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
-    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'filter_test');
-    await click(FILTER_BUTTON_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, name);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
+    await fillIn(selectors.FIELD_FILTERS, 'filter_test');
+    await click(selectors.FIELD_FILTERS_ADD_BTN);
 
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -137,12 +128,12 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
     );
     const name = 'azure host set';
-    await fillIn(NAME_SELECTOR, name);
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
-    await fillIn(AZURE_FILTER_SELECTOR, 'filter');
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, name);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
+    await fillIn(selectors.FIELD_AZURE_FILTER, 'filter');
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -166,14 +157,14 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       `${urls.hostCatalogs}/${instances.hostCatalog.id}/host-sets/new`,
     );
     const name = 'gcp host set';
-    await fillIn(NAME_SELECTOR, name);
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'endpoint');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
-    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'filter_test');
-    await click(FILTER_BUTTON_SELECTOR);
+    await fillIn(commonSelectors.FIELD_NAME, name);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'endpoint');
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
+    await fillIn(selectors.FIELD_FILTERS, 'filter_test');
+    await click(selectors.FIELD_FILTERS_ADD_BTN);
 
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getHostSetCount(), count + 1);
     const hostSet = this.server.schema.hostSets.findBy({ name });
@@ -185,35 +176,41 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   test('Users cannot create a new host set without proper authorization', async function (assert) {
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
+
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'create',
       ),
     );
-    assert.notOk(find(`.rose-layout-page-actions [href="${urls.newHostSet}"]`));
+    assert.dom(commonSelectors.HREF(urls.newHostSet)).doesNotExist();
   });
 
   test('Users cannot navigate to new host sets route without proper authorization', async function (assert) {
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostSets);
+
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'create',
       ),
     );
-    assert.notOk(find(`[href="${urls.newHostSet}"]`));
+    assert.dom(commonSelectors.HREF(urls.newHostSet)).doesNotExist();
   });
 
   test('can cancel create new host', async function (assert) {
     const count = getHostSetCount();
     await visit(urls.newHostSet);
-    await fillIn(NAME_SELECTOR, 'random string');
-    await click(CANCEL_BTN_SELECTOR);
+
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostSets);
     assert.strictEqual(getHostSetCount(), count);
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
+    const errorMsg =
+      'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/host-sets', () => {
       return new Response(
         400,
@@ -221,12 +218,12 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: errorMsg,
           details: {
             request_fields: [
               {
                 name: 'name',
-                description: 'Name is required.',
+                description: errorMsg,
               },
             ],
           },
@@ -234,14 +231,10 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
       );
     });
     await visit(urls.newHostSet);
-    await click(SUBMIT_BTN_SELECTOR);
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });
 
   test('users cannot directly navigate to new host set route without proper authorization', async function (assert) {

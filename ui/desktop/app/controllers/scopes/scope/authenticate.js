@@ -31,4 +31,14 @@ export default class ScopesScopeAuthenticateController extends Controller {
     this.router.transitionTo('scopes.scope.authenticate', scope);
     callback();
   }
+  /**
+   * Checks if the current route is the OIDC method authentication route.
+   * @type {boolean}
+   * @returns {boolean}
+   */
+  get isOIDCRoute() {
+    return (
+      this.router.currentRouteName === 'scopes.scope.authenticate.method.oidc'
+    );
+  }
 }

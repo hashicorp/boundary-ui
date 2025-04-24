@@ -64,7 +64,9 @@
         {{#if credential.secrets}}
           {{#each (order-by credential.secrets this.customOrder) as |secret|}}
             <li class='secret-container'>
-              <span class='secret-key'>{{secret.key}}</span>
+              <Hds::Text::Body
+                @weight='semibold'
+              >{{secret.key}}</Hds::Text::Body>
               <HiddenSecret @secret={{secret.value}} />
             </li>
           {{/each}}

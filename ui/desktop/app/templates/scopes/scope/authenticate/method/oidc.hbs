@@ -3,24 +3,22 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Dialog::Cover>
-  <:header>
-    <Hds::Text::Display @tag='h1' @size='400' class='header-spacing'>{{t
-        'resources.auth-method.messages.pending.title'
-      }}</Hds::Text::Display>
-  </:header>
-  <:body>
-    <p>{{t 'resources.auth-method.messages.pending.description'}}</p>
-    <p>
-      {{t 'resources.auth-method.questions.no-see-window'}}
-      <a href='#' {{on 'click' this.retryAuthentication}}>
-        {{t 'actions.retry'}}
-      </a>
-    </p>
-    <p>
-      <LinkTo @route='scopes.scope.authenticate.method'>
-        {{t 'actions.cancel'}}
-      </LinkTo>
-    </p>
-  </:body>
-</Rose::Dialog::Cover>
+<Hds::ApplicationState @align='center' as |A|>
+  <A.Media>
+    <Image @name='auth-pending' />
+  </A.Media>
+  <A.Header @title={{t 'resources.auth-method.messages.pending.title'}} />
+  <A.Body @text={{t 'resources.auth-method.messages.pending.description'}} />
+  <A.Footer as |F|>
+    <F.Button
+      @text={{t 'resources.auth-method.actions.no-new-window-retry'}}
+      @color='primary'
+      {{on 'click' this.retryAuthentication}}
+    />
+    <F.Button
+      @text={{t 'actions.cancel'}}
+      @color='secondary'
+      @route='scopes.scope.authenticate.method'
+    />
+  </A.Footer>
+</Hds::ApplicationState>

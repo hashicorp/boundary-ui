@@ -95,7 +95,7 @@
     <:body as |B|>
       <B.Tr>
         <B.Td>
-          <span class='hds-font-weight-semibold'>
+          <Hds::Text::Body @weight='semibold'>
             {{#if (can 'read model' B.data)}}
               <LinkTo
                 data-test-visit-target={{B.data.id}}
@@ -111,7 +111,7 @@
             {{#if B.data.description}}
               <p>{{B.data.description}}</p>
             {{/if}}
-          </span>
+          </Hds::Text::Body>
         </B.Td>
         <B.Td data-test-target-aliases={{B.data.id}}>
           {{truncate-list 'actions.more' B.data.associatedAliases}}

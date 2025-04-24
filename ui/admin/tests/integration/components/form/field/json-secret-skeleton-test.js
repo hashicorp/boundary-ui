@@ -21,7 +21,6 @@ module(
         {{this.value}}
       </Form::Field::JsonSecret::Skeleton>
     `);
-
       assert.dom('.secret-editor-skeleton-wrapper').isVisible();
       assert.dom('.secret-editor-skeleton-message').hasText('Skeleton Message');
     });

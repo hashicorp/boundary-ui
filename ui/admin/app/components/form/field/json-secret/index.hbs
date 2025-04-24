@@ -11,13 +11,13 @@
     </Form::Field::JsonSecret::Skeleton>
   {{else if this.isActionable}}
     <Form::Field::JsonSecret::Skeleton>
-      <Rose::Button
-        @iconLeft='flight-icons/svg/pencil-tool-16'
-        @style='secret-editor-skeleton-button'
+      <Hds::Button
+        class='secret-editor-skeleton-button'
+        @icon='pencil-tool'
+        @color='secondary'
+        @text={{t 'form.secret-editor.edit'}}
         {{on 'click' this.enableEditing}}
-      >
-        {{t 'form.secret-editor.edit'}}
-      </Rose::Button>
+      />
     </Form::Field::JsonSecret::Skeleton>
   {{else}}
     <Rose::CodeEditor as |c|>
