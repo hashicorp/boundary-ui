@@ -198,8 +198,6 @@ module(
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
       featuresService.enable('json-credentials');
-      const editorSelector = '.cm-content';
-      const newSecret = '{"test": "value"}';
 
       await visit(urls.credentials);
       await click(commonSelectors.HREF(urls.newCredential));
