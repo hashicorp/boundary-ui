@@ -9,11 +9,7 @@
     (t 'titles.global')
     this.scope.org.displayName
   }}
-  @icon={{if
-    this.scope.org.isGlobal
-    'flight-icons/svg/globe-16'
-    'flight-icons/svg/org-16'
-  }}
+  @icon={{if this.scope.org.isGlobal 'globe' 'org'}}
   as |dropdown|
 >
   {{#if this.session.data.authenticated.isGlobal}}
@@ -32,7 +28,7 @@
 {{#if this.scope.project}}
   <Rose::Dropdown
     @text={{this.scope.project.displayName}}
-    @icon='flight-icons/svg/grid-16'
+    @icon='grid'
     as |dropdown|
   >
     {{#each this.scope.projectsList as |project|}}
