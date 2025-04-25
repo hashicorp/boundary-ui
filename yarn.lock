@@ -13729,7 +13729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-modifier@npm:^3.2.7 || ^4.0.0, ember-modifier@npm:^4.1.0":
+"ember-modifier@npm:^3.2.7 || ^4.0.0":
   version: 4.1.0
   resolution: "ember-modifier@npm:4.1.0"
   dependencies:
