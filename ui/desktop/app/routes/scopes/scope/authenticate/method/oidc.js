@@ -19,6 +19,7 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
   @service session;
   @service router;
   @service flashMessages;
+  @service intl;
 
   // =attributes
 
@@ -55,7 +56,11 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    * When this route is activated (entered), start polling for authentication.
    */
   activate() {
-    this.flashMessages.clearMessages(); // clear any ui messages during login
+    const prevAuthFailedMessage = this.flashMessages.queue.find(
+      (flash) =>
+        flash.message === this.intl.t('errors.authentication-failed.title'),
+    );
+    prevAuthFailedMessage?.destroyMessage();
     this.poller.perform();
   }
 
