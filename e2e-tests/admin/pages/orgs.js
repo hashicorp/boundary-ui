@@ -54,21 +54,22 @@ export class OrgsPage extends BaseResourcePage {
 
   /**
    * Switches the scope using the dropdown on the top menu bar.
-   * @param {string} scopeName name of the scope to click in the dropdown
+   * @param {stinrg} fromScope the current scope, required to click dropdown
+   * @param {string} toScope name of the scope to click in the dropdown
    */
-  async chooseScopeFromDropdown(currentScope, scopeName) {
+  async chooseScopeFromDropdown(fromeScope, toScope) {
     await this.page
-      .getByRole('button', { name: currentScope, exact: true })
+      .getByRole('button', { name: fromeScope, exact: true })
       .click()
     await this.page
-      .getByRole('option', { name: scopeName, exact: true })
+      .getByRole('option', { name: toScope, exact: true })
       .click()
     await expect(
-      this.page.getByRole('button', { name: scopeName, exact: true })
+      this.page.getByRole('button', { name: toScope, exact: true })
     ).toBeVisible()
-    if (scopeName != 'Global')
+    if (toScope != 'Global')
       await expect(
-        this.page.getByRole('link', { name: scopeName, exact: true })
+        this.page.getByRole('link', { name: toScope, exact: true })
       ).toBeVisible()
   }
 }
