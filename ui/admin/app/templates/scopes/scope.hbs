@@ -92,19 +92,18 @@
   {{/if}}
 
   {{#if @model.isOrg}}
+    {{#if this.session.data.authenticated.isGlobal}}
+      <Nav.BackLink
+        @text={{t 'titles.back-link' scope=(t 'titles.global')}}
+        @route='scopes.scope.scopes'
+        @model={{@model.scopeID}}
+      />
+    {{/if}}
+
     <Nav.Title>{{t
         'titles.scope-level'
         scope=(t 'resources.org.title')
       }}</Nav.Title>
-
-    {{#if this.session.data.authenticated.isGlobal}}
-      <Nav.Link
-        @icon='org'
-        @text={{t 'resources.org.title_plural'}}
-        @route='scopes.scope.scopes'
-        @model='global'
-      />
-    {{/if}}
 
     <Nav.Link
       @icon='grid'
