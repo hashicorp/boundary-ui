@@ -18,7 +18,9 @@
       {{t 'resources.policy.title'}}
       <DocLink @doc='storage-policy' @iconSize='large' />
     </Hds::Text::Display>
-    <p>{{t 'resources.policy.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.policy.description'}}
+    </Hds::Text::Body>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
 

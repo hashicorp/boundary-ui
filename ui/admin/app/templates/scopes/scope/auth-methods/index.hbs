@@ -14,7 +14,9 @@
       {{t 'resources.auth-method.title_plural'}}
       <DocLink @doc='auth-method' @iconSize='large' />
     </Hds::Text::Display>
-    <p>{{t 'resources.auth-method.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.auth-method.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.breadcrumbs>
@@ -124,7 +126,9 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 <Hds::Badge

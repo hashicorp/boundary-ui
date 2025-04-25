@@ -17,7 +17,9 @@
       {{t 'resources.policy.title_plural'}}
       <DocLink @doc='storage-policy' @iconSize='large' />
     </Hds::Text::Display>
-    <p>{{t 'resources.policy.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.policy.description'}}
+    </Hds::Text::Body>
   </page.header>
   <page.actions>
     {{#if (can 'create model' this.scope collection='policies')}}
@@ -56,7 +58,9 @@
                 {{B.data.displayName}}
               {{/if}}
               {{#if B.data.description}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               {{/if}}
             </B.Td>
             <B.Td>

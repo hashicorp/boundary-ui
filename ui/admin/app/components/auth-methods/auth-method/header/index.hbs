@@ -12,5 +12,7 @@
   {{/if}}
   <DocLink @doc='auth-method' @iconSize='large' />
 </Hds::Text::Display>
-<p>{{t 'resources.auth-method.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>{{t
+    'resources.auth-method.description'
+  }}</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

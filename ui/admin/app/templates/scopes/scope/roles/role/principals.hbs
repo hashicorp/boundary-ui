@@ -25,7 +25,9 @@
       {{t 'resources.role.title'}}
       <DocLink @doc='role' @iconSize='large' />
     </Hds::Text::Display>
-    <p>{{t 'resources.role.principal.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.role.principal.description'}}
+    </Hds::Text::Body>
     <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
   </page.header>
 

@@ -20,7 +20,9 @@
       <DocLink @doc='role' @iconSize='large' />
     </Hds::Text::Display>
     {{#if @model.doRolesExist}}
-      <p>{{t 'resources.role.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.role.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 
@@ -68,7 +70,9 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 {{#if (includes this.grantScopeThis B.data.grant_scope_ids)}}

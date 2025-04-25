@@ -21,7 +21,9 @@
         <DocLink @doc='org' @iconSize='large' />
       </Hds::Text::Display>
       {{#if @model.doScopesExist}}
-        <p>{{t 'resources.org.description'}}</p>
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.org.description'}}
+        </Hds::Text::Body>
       {{/if}}
     {{else if @model.currentScope.isOrg}}
       <Hds::Text::Display
@@ -34,7 +36,9 @@
         <DocLink @doc='project' @iconSize='large' />
       </Hds::Text::Display>
       {{#if @model.doScopesExist}}
-        <p>{{t 'resources.project.description'}}</p>
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.project.description'}}
+        </Hds::Text::Body>
       {{/if}}
     {{/if}}
   </page.header>

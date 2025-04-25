@@ -30,7 +30,9 @@
         {{t 'resources.global.title'}}
         <DocLink @doc='global' @iconSize='large' />
       </Hds::Text::Display>
-      <p>{{t 'resources.global.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.global.description'}}
+      </Hds::Text::Body>
     {{/if}}
     {{#if @model.isOrg}}
       <Hds::Text::Display
@@ -42,7 +44,9 @@
         {{t 'resources.org.title'}}
         <DocLink @doc='org' @iconSize='large' />
       </Hds::Text::Display>
-      <p>{{t 'resources.org.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.org.description'}}
+      </Hds::Text::Body>
     {{/if}}
     {{#if @model.isProject}}
       <Hds::Text::Display
@@ -54,7 +58,9 @@
         {{t 'resources.project.title'}}
         <DocLink @doc='project' @iconSize='large' />
       </Hds::Text::Display>
-      <p>{{t 'resources.project.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.project.description'}}
+      </Hds::Text::Body>
     {{/if}}
     <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>

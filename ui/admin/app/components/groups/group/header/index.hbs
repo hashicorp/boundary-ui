@@ -7,5 +7,7 @@
   {{t 'resources.group.title'}}
   <DocLink @doc='group' @iconSize='large' />
 </Hds::Text::Display>
-<p>{{t 'resources.group.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>
+  {{t 'resources.group.description'}}
+</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

@@ -20,7 +20,9 @@
       <DocLink @doc='host-catalog' @iconSize='large' />
     </Hds::Text::Display>
     {{#if @model.doHostCatalogsExist}}
-      <p>{{t 'resources.host-catalog.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.host-catalog.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 

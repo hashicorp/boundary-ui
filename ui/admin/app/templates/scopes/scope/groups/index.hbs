@@ -20,7 +20,9 @@
       <DocLink @doc='group' @iconSize='large' />
     </Hds::Text::Display>
     {{#if @model.doGroupsExist}}
-      <p>{{t 'resources.group.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.group.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 
@@ -71,7 +73,9 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 <Hds::Copy::Snippet

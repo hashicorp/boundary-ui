@@ -7,5 +7,7 @@
   {{t 'resources.managed-group.title'}}
   <DocLink @doc='managed-groups' @iconSize='large' />
 </Hds::Text::Display>
-<p>{{t 'resources.managed-group.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>{{t
+    'resources.managed-group.description'
+  }}</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

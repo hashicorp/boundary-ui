@@ -19,7 +19,9 @@
       {{t 'resources.session.title_plural'}}
       <DocLink @doc='session' @iconSize='large' />
     </Hds::Text::Display>
-    <p>{{t 'resources.session.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.session.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body class='search-filtering'>
