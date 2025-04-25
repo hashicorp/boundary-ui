@@ -35,16 +35,16 @@ module('Integration | Component | card', function (hooks) {
     await render(hbs`
       <Card
         @heading='This is a heading test'
-        @icon='flight-icons/svg/key-16'>
+        @icon='key'>
         <:header></:header>
         <:body></:body>
         <:footer></:footer>
       </Card>
     `);
 
-    assert.ok(find('.card'));
-    assert.ok(find('.card-header'));
-    assert.ok(find('.card-header .rose-icon'));
+    assert.dom('.card').exists();
+    assert.dom('.card-header').exists();
+    assert.dom('.card-header .hds-icon').isVisible();
     assert.strictEqual(
       this.element.textContent.trim(),
       'This is a heading test',

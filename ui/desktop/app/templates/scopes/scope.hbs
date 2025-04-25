@@ -9,11 +9,7 @@
   <EmberWormhole @to='header-nav'>
     <Rose::Dropdown
       @text={{this.scopes.selectedOrg.displayName}}
-      @icon={{if
-        this.scopes.selectedOrg.isGlobal
-        'flight-icons/svg/globe-16'
-        'flight-icons/svg/org-16'
-      }}
+      @icon={{if this.scopes.selectedOrg.isGlobal 'globe' 'org'}}
       as |dropdown|
     >
       {{!-- {{#if this.session.data.authenticated.isGlobal}} --}}
