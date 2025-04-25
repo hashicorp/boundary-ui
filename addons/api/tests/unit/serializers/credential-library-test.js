@@ -231,4 +231,52 @@ module('Unit | Serializer | credential library', function (hooks) {
       version: 1,
     });
   });
+
+  test('it serializes vault_ssh_certificate correctly when changing type to ed25519', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const serializer = store.serializerFor('credential-library');
+    store.push({
+      data: {
+        id: '1',
+        type: 'credential-library',
+        attributes: {
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+          version: 1,
+          name: 'Name',
+          description: 'Description',
+          path: '/vault/path',
+          username: 'user',
+          key_type: 'rsa',
+          key_bits: 100,
+          ttl: '100',
+          key_id: 'id',
+          extensions: [{ key: 'key', value: 'value' }],
+          critical_options: [{ key: 'key', value: 'value' }],
+        },
+      },
+    });
+    const record = store.peekRecord('credential-library', '1');
+    record.key_type = 'ed25519';
+
+    const snapshot = record._createSnapshot();
+    const serializedRecord = serializer.serialize(snapshot);
+
+    assert.deepEqual(serializedRecord, {
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+      credential_store_id: null,
+      name: 'Name',
+      description: 'Description',
+      attributes: {
+        path: '/vault/path',
+        username: 'user',
+        key_type: 'ed25519',
+        key_bits: null,
+        ttl: '100',
+        key_id: 'id',
+        extensions: { key: 'value' },
+        critical_options: { key: 'value' },
+      },
+      version: 1,
+    });
+  });
 });
