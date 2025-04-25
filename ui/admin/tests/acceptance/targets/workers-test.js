@@ -29,7 +29,7 @@ module('Acceptance | targets | workers', function (hooks) {
     `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
   const CODE_BLOCK_SELECTOR = (name) =>
     `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
-  const CODE_EDITOR_CM_LOADED = '.cm-editor';
+  const CODE_EDITOR_CM = '.cm-editor';
   const CODE_EDITOR_CONTENT_SELECTOR = '.hds-code-editor__editor';
   const SAVE_BUTTON_SELECTOR = '[type="submit"]';
   const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
@@ -274,7 +274,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -315,7 +315,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -361,7 +361,7 @@ module('Acceptance | targets | workers', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
 
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -451,7 +451,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -498,7 +498,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -545,7 +545,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -592,7 +592,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
@@ -639,7 +639,7 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await waitFor(CODE_EDITOR_CM_LOADED);
+    await waitFor(CODE_EDITOR_CM);
 
     const editorElement = find(CODE_EDITOR_CONTENT_SELECTOR);
     const editorView = editorElement.editor;
