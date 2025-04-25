@@ -6,9 +6,8 @@
 <Hds::Form::Field as |F|>
   <F.Control>
     <Hds::CodeEditor
-      @ariaLabel='Worker Filter'
-      @hasCopyButton={{true}}
-      @isLintingEnabled={{true}}
+      @ariaLabel={{t 'form.worker_filter.label'}}
+      @hasCopyButton={{not @hideToolbar}}
       @language='shell'
       @value={{or (get @model @name) ''}}
       @onInput={{fn this.setWorkerFilter @model @name}}
