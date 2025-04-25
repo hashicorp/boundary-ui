@@ -378,8 +378,6 @@ module(
       });
 
       featuresService.enable('json-credentials');
-      const editorSelector = '.cm-content';
-      const newSecret = '{"test": "value"}';
 
       await visit(urls.credentials);
       await click(commonSelectors.HREF(urls.newCredential));
