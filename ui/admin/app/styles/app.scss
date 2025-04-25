@@ -279,6 +279,11 @@
   margin-bottom: sizing.rems(l);
   width: 100%;
 
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-code-editor__editor {
+    height: var(--secret-editor-height);
+  }
+
   .secret-editor-skeleton-wrapper {
     // using ui-gray directly so it does not change when
     // user is in dark mode since the secret editor
