@@ -18,15 +18,15 @@ module(
       this.set('egressWorker', 'Egress Worker');
 
       await render(hbs`
-        <OrderedSeriesDiagram::Group @title='Private Network' @color='highlight'>
-          <OrderedSeriesDiagram::Item @icon='user'>
-            {{this.client}}
-          </OrderedSeriesDiagram::Item>
-          <OrderedSeriesDiagram::Item @icon='settings'>
-            {{this.egressWorker}}
-          </OrderedSeriesDiagram::Item>
-        </OrderedSeriesDiagram::Group>
-      `);
+      <OrderedSeriesDiagram::Group @title='Private Network' @color='highlight'>
+        <OrderedSeriesDiagram::Item @icon='user'>
+          {{this.client}}
+        </OrderedSeriesDiagram::Item>
+        <OrderedSeriesDiagram::Item @icon='settings'>
+          {{this.egressWorker}}
+        </OrderedSeriesDiagram::Item>
+      </OrderedSeriesDiagram::Group>
+    `);
 
       assert
         .dom('.ordered-series-diagram-group-content')
