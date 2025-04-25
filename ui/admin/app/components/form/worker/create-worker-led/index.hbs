@@ -263,15 +263,16 @@
     {{#unless @model.isNew}}
       <div class='worker-success'>
         <div>
-          <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
+          <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
           <Hds::Text::Body @tag='p' @size='300' class='p'>
             {{this.generatedWorkerAuthToken}}
           </Hds::Text::Body>
         </div>
         <div>
-          <Rose::Icon
-            @name='flight-icons/svg/check-circle-fill-16'
-            @size='medium'
+          <Hds::Icon
+            @name='check-circle-fill'
+            @color='success'
+            @isInline={{true}}
           />
           <Hds::Text::Body @tag='p' @size='300' class='p'>
             {{t 'resources.worker.form.steps.3.registered'}}

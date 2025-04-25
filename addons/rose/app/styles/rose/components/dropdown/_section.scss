@@ -19,5 +19,9 @@
 
     line-height: $line-height;
     color: var(--ui-gray);
+
+    .hds-icon {
+      vertical-align: text-top;
+    }
   }
 }

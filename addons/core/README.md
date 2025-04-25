@@ -98,7 +98,7 @@ To render doc links in your application, be sure to configure the links in your
 Ember config (see admin).  Then reference doc links by keys:
 
 ```html
-<DocLink @doc="account" @iconSize="large" />
+<DocLink @doc="account" @iconSize="24" />
 ```
 
 ## Loading Helper

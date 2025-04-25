@@ -17,7 +17,7 @@
       class='header-spacing'
     >
       {{t 'titles.workers'}}
-      <DocLink @doc='worker' @iconSize='large' />
+      <DocLink @doc='worker' />
     </Hds::Text::Display>
   </page.header>
 
@@ -52,10 +52,7 @@
                     (group-by 'key' filter.allowedValues)
                     as |key tags|
                   }}
-                    <dropdown.section
-                      @title={{key}}
-                      @icon='flight-icons/svg/tag-16'
-                    />
+                    <dropdown.section @title={{key}} @icon='tag' />
                     <form.checkboxGroup
                       @name={{key}}
                       @items={{tags}}
