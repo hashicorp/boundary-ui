@@ -27,7 +27,6 @@ echo "Trying to merge the latest oss commit - ${latest_oss_commit} from oss/${BR
 if ! errors=$(git merge -m "Merge Boundary UI OSS branch '${BRANCH}' at commit ${latest_oss_commit}" "${latest_oss_commit}"); then
   # Here we can try to auto resolve conflicts
   # This logic will vary from project to project. The below is just an example.
-  # We'll try to resolve package.json and yarn.lock conflicts by taking the OSS changes
   conflicts=$(git diff --name-only --diff-filter=U)
   printf "Found conflicts:\n${conflicts}\n"
   # Resolve package.json conflicts by taking oss
@@ -36,11 +35,12 @@ if ! errors=$(git merge -m "Merge Boundary UI OSS branch '${BRANCH}' at commit $
     git checkout --theirs package.json
     git add package.json
   fi
-  # Resolve yarn.lock conflicts by taking oss
-  if echo "$conflicts" | grep -q yarn.lock; then
-    echo "Checking out oss yarn.lock..."
-    git checkout --theirs yarn.lock
-    git add yarn.lock
+  # Resolve pnpm-lock.yaml conflicts by re-running pnpm install:
+  # https://pnpm.io/git#merge-conflicts
+  if echo "$conflicts" | grep -q pnpm-lock.yaml; then
+    echo "Re-running pnpm install to fix conflicts by regenerating pnpm-lock.yaml..."
+    pnpm install
+    git add pnpm-lock.yaml
   fi
 
   # If we can commit all the changes without conflict, we have resolved everything automatically

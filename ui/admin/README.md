@@ -8,7 +8,7 @@ The Admin UI for Boundary.
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
+- [Pnpm Commands](#pnpm-commands)
 - [Running / Development](#running--development)
   - [Building for Production](#building-for-production)
     - [Environment Variables](#environment-variables)
@@ -24,7 +24,7 @@ You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/)
-* [Yarn](https://yarnpkg.com/)
+* [Pnpm](https://pnpm.io/)
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
 * [Firefox](https://www.mozilla.org/firefox)
@@ -33,9 +33,9 @@ You will need the following things properly installed on your computer.
 
 See monorepo README for installation instructions.
 
-## Yarn Commands
+## Pnpm Commands
 
-List of available project commands.  `yarn run <command-name>`
+List of available project commands.  `pnpm run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
@@ -65,8 +65,8 @@ for your target environment (see next section).  To build this UI for
 production, run the following commads from this folder:
 
 ```bash
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 The static production assets are saved into the `dist/` folder.

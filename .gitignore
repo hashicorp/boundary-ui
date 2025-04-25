@@ -19,7 +19,6 @@ coverage-*
 libpeerconnection.log
 npm-debug.log*
 testem.log
-yarn-error.log
 .watchman-cookie*
 
 ### VisualStudioCode ###
@@ -40,7 +39,3 @@ yarn-error.log
 # Ignore all local history of files
 .history
 .ionide
-
-#yarn 
-.yarn/*
-!.yarn/releases

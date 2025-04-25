@@ -12,7 +12,6 @@
 /coverage/
 /npm-debug.log*
 /testem.log
-/yarn-error.log
 
 # Vagrant
 .vagrant/
@@ -22,10 +21,6 @@
 /npm-shrinkwrap.json.ember-try
 /package.json.ember-try
 /package-lock.json.ember-try
-/yarn.lock.ember-try
 
 # broccoli-debug
 /DEBUG/
-
-#yarn 
-.yarn/*

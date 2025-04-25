@@ -28,8 +28,6 @@
 /ember-cli-build.js
 /testem.js
 /tests/
-/yarn-error.log
-/yarn.lock
 .gitkeep
 
 # ember-try
@@ -38,4 +36,3 @@
 /npm-shrinkwrap.json.ember-try
 /package.json.ember-try
 /package-lock.json.ember-try
-/yarn.lock.ember-try

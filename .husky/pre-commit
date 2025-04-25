@@ -1,2 +1,2 @@
-yarn compliance:licenses
-npx lint-staged
+pnpm compliance:licenses
+pnpm lint-staged
