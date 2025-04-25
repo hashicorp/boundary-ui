@@ -2323,9 +2323,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ember/test-helpers@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "@ember/test-helpers@npm:4.0.5"
+"@ember/test-helpers@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@ember/test-helpers@npm:5.2.1"
   dependencies:
     "@ember/test-waiters": "npm:^3.1.0 || ^4.0.0"
     "@embroider/addon-shim": "npm:^1.8.7"
@@ -2335,7 +2335,7 @@ __metadata:
     dom-element-descriptors: "npm:^0.5.0"
   peerDependencies:
     ember-source: ">= 4.0.0"
-  checksum: 10c0/4ff9b6ae5c0f4800ca5984b922da19137e726028af7482fc3b3d96697608deffb21f97407a93f223ca15d2b8c85e536ba37c020488d6f3cd2797fc88f55cb774
+  checksum: 10c0/48a397b8cd4df0ff847af7cb041554041f9698180fb99555ac10d5d049a96539946016bc5415781f6f4b811516520a177cc21f9e9e47e4c79d9b86a47c6be9d8
   languageName: node
   linkType: hard
 
@@ -4378,7 +4378,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -4706,7 +4706,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^4.0.0"
     "@faker-js/faker": "npm:^8.0.2"
@@ -4936,7 +4936,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^4.0.0"
     "@glimmer/component": "npm:^1.1.2"
@@ -6979,7 +6979,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@embroider/test-setup": "npm:^4.0.0"
     "@faker-js/faker": "npm:^8.0.2"
     "@formatjs/intl-durationformat": "npm:^0.2.4"
@@ -7466,7 +7466,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -16337,7 +16337,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@embroider/test-setup": "npm:^4.0.0"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
