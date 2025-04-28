@@ -75,10 +75,11 @@ test.describe('Scope tests', () => {
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeHidden();
 
-    await headerNavLocator.click();
     const orgBHeaderNavLink = authedPage.getByRole('link', {
       name: orgB.name,
     });
+    await expect(orgBHeaderNavLink).toBeVisible();
+
     await orgBHeaderNavLink.click();
 
     await expect(headerNavLocator.locator('.hds-dropdown-toggle-button')).toHaveText(orgB.name);
