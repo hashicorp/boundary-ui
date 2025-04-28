@@ -228,13 +228,17 @@ module('Acceptance | scopes', function (hooks) {
     );
     await visit(urls.targets);
 
-    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    await click('.rose-header-nav .hds-dropdown-toggle-button');
+    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+
     assert.strictEqual(currentURL(), urls.targets);
 
-    await click('.rose-header-nav .rose-dropdown a:nth-of-type(3)');
+    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(4) a');
+
     assert.strictEqual(currentURL(), urls.org2Targets);
 
-    await click('.rose-header-nav .rose-dropdown a:nth-of-type(1)');
+    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(1) a');
+
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
