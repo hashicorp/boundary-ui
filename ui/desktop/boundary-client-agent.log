@@ -1,2 +1,0 @@
-2025-04-28T15:49:20.418-0700 [ERROR] error starting HTTP server: error="main.runHttpServer: failed to listen on address: listen tcp 127.0.0.1:9300: bind: address already in use"
-2025-04-28T15:49:20.421-0700 [INFO]  client agent shutting down
