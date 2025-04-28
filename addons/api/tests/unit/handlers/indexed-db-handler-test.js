@@ -7,7 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import IndexedDbHandler from 'api/handlers/indexed-db-handler';
 import RequestManager from '@ember-data/request';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'ember-mirage/test-support';
 import { faker } from '@faker-js/faker';
 import sinon from 'sinon';
 import { assert } from '@ember/debug';

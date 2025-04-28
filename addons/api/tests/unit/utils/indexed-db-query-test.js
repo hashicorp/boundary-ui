@@ -6,7 +6,7 @@
 import { queryIndexedDb } from 'api/utils/indexed-db-query';
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'ember-mirage/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { pluralize } from 'ember-inflector';
 import { camelize } from '@ember/string';
