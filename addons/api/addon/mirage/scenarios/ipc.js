@@ -273,7 +273,7 @@ export default function initializeMockIPC(server, config) {
    * We mock certain functions even in electron (e.g. hasMacOSChrome) when running
    * locally which will force a certain appearance regardless of platform
    */
-  if (config['ember-cli-mirage'].enabled && !isTesting) {
+  if (true && !isTesting) {
     const mockIPC = new MockIPC();
 
     window.addEventListener('message', async function (event) {
