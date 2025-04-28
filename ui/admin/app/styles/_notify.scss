@@ -83,7 +83,7 @@
   }
 }
 
-@media only screen and (width <= sizing.rems(680)) {
+@media only screen and (width <= 680px) {
   .ember-notify {
     width: 100%;
   }
