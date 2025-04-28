@@ -4,7 +4,6 @@
  */
 
 import { createServer, Response } from 'miragejs';
-import environmentConfig from '../config/environment';
 import { authHandler, deauthHandler } from './route-handlers/auth';
 import { targetHandler } from './route-handlers/target';
 import { pickRandomStatusString } from './factories/session';
@@ -13,6 +12,7 @@ import makeBooleanFilter from './helpers/bexpr-filter';
 import { faker } from '@faker-js/faker';
 import { asciicasts } from './data/asciicasts';
 import { TYPE_WORKER_PKI } from 'api/models/worker';
+import config from 'ember-get-config';
 
 // mirage models (alphabetical)
 import accountModel from './models/account';
@@ -92,6 +92,7 @@ import targetFactory from './factories/target';
 import userFactory from './factories/user';
 import workerFactory from './factories/worker';
 
+const environmentConfig = config.environment;
 const isTesting = environmentConfig.environment === 'test';
 
 // Main function
@@ -210,7 +211,7 @@ function routes() {
   });
 
   // make this `/api`, for example, if your API is namespaced
-  this.namespace = environmentConfig.api.namespace;
+  this.namespace = environmentConfig.api?.namespace;
   // delay for each request, automatically set to 0 during testing
   this.timing = 1;
 
