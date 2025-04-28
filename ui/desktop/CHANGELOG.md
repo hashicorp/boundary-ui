@@ -7,7 +7,7 @@ Canonical reference for changes, improvements, and bugfixes for Boundary Desktop
 ### Bug Fixes
 
 - Fix target search field race condition. ([PR](https://github.com/hashicorp/boundary-ui/pull/2723))
-- Fix to conditionally display "Check for Updates" menu item. ([PR](https://github.com/hashicorp/boundary-ui/pull/2754))
+- Remove "Check for Updates" menu item when desktop client is installed through the Boundary installer. ([PR](https://github.com/hashicorp/boundary-ui/pull/2754))
 
 ## V2.3.1 [CLI 0.19.1] (2025.03.04)
 
