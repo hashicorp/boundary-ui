@@ -15,7 +15,7 @@
 
   <span class='rose-button-wrapper'>
     {{#if @iconLeft}}
-      <Rose::Icon @name={{@iconLeft}} @size='medium' />
+      <Hds::Icon @name={{@iconLeft}} @isInline={{true}} />
     {{/if}}
 
     <span class='rose-button-body'>
@@ -23,11 +23,11 @@
     </span>
 
     {{#if @iconOnly}}
-      <Rose::Icon @name={{@iconOnly}} @size='medium' />
+      <Hds::Icon @name={{@iconOnly}} @isInline={{true}} />
     {{/if}}
 
     {{#if @iconRight}}
-      <Rose::Icon @name={{@iconRight}} @size='medium' />
+      <Hds::Icon @name={{@iconRight}} @isInline={{true}} />
     {{/if}}
   </span>
 </button>

@@ -38,6 +38,8 @@ $chevron-grey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%236
 
     cursor: default;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 
     $y-padding: sizing.rems(xxs) + sizing.rems(xxxs);
 
@@ -63,7 +65,7 @@ $chevron-grey: url("data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%236
       background-color: var(--ui-gray-subtler-5);
     }
 
-    &:not(.has-icon-only) .rose-icon:first-child {
+    &:not(.has-icon-only) .hds-icon:first-child {
       margin-left: -(sizing.rems(xs));
       margin-right: sizing.rems(xxs);
     }

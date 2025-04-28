@@ -31,7 +31,7 @@
         class='header-spacing'
       >
         {{t 'resources.org.titles.new'}}
-        <DocLink @doc='org.new' @iconSize='large' />
+        <DocLink @doc='org.new' />
       </Hds::Text::Display>
       <p>{{t 'resources.org.description'}}</p>
     {{else if @model.isProject}}
@@ -42,7 +42,7 @@
         class='header-spacing'
       >
         {{t 'resources.project.titles.new'}}
-        <DocLink @doc='project.new' @iconSize='large' />
+        <DocLink @doc='project.new' />
       </Hds::Text::Display>
       <p>{{t 'resources.project.description'}}</p>
     {{/if}}

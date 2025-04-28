@@ -38,7 +38,7 @@
     margin-top: 0;
   }
 
-  .rose-icon {
+  .hds-icon {
     margin-right: sizing.rems(xs);
   }
 }
@@ -296,10 +296,6 @@
         }
       }
     }
-
-    .rose-icon {
-      color: var(--success);
-    }
   }
 }
 
@@ -424,6 +420,9 @@
     left: 50%;
     position: absolute;
     top: 50%;
+    display: flex;
+    align-items: center;
+    gap: sizing.rems(xxxs);
 
     // centers message with editor body and gutter
     transform: translate(-50%, -50%);
@@ -431,7 +430,6 @@
   }
 
   .secret-editor-skeleton-button {
-    
     @media (prefers-color-scheme: light) {
       .ember-application:not(.rose-theme-dark) & {
         background: var(--token-color-palette-neutral-600);
@@ -439,7 +437,7 @@
         border-color: var(--token-color-palette-neutral-50);
       }
     }
-    
+
     .ember-application.rose-theme-light & {
       background: var(--token-color-palette-neutral-600);
       color: var(--token-color-palette-neutral-50);
@@ -1078,10 +1076,6 @@
 .header-spacing {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-
-  .doc-link {
-    vertical-align: middle;
-  }
 }
 
 // scope picker
