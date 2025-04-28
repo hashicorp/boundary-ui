@@ -5789,27 +5789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@embroider/macros@npm:^1.16.10":
-  version: 1.16.13
-  resolution: "@embroider/macros@npm:1.16.13"
-  dependencies:
-    "@embroider/shared-internals": "npm:2.9.0"
-    assert-never: "npm:^1.2.1"
-    babel-import-util: "npm:^2.0.0"
-    ember-cli-babel: "npm:^7.26.6"
-    find-up: "npm:^5.0.0"
-    lodash: "npm:^4.17.21"
-    resolve: "npm:^1.20.0"
-    semver: "npm:^7.3.2"
-  peerDependencies:
-    "@glint/template": ^1.0.0
-  peerDependenciesMeta:
-    "@glint/template":
-      optional: true
-  checksum: 10c0/eb116afe0aed464f3b6838b8464f589297f4804f5ae935d5bc209afac936a4b920f3de3c8b3ca67fe68595379af058e22493e2ed87fd070771c07c6af4a7fb04
-  languageName: node
-  linkType: hard
-
 "@embroider/macros@npm:^1.16.11":
   version: 1.16.12
   resolution: "@embroider/macros@npm:1.16.12"
@@ -5828,6 +5807,27 @@ __metadata:
     "@glint/template":
       optional: true
   checksum: 10c0/ee2d5925510fc813077445ec50a2850fb603710bbbe1eb4ebc952dad069d27af00bea2c3aa9c68295c7a98b6350bf706a374125c4e8f7f55e23a95a198b1ec71
+  languageName: node
+  linkType: hard
+
+"@embroider/macros@npm:^1.16.12":
+  version: 1.17.2
+  resolution: "@embroider/macros@npm:1.17.2"
+  dependencies:
+    "@embroider/shared-internals": "npm:3.0.0"
+    assert-never: "npm:^1.2.1"
+    babel-import-util: "npm:^3.0.1"
+    ember-cli-babel: "npm:^7.26.6"
+    find-up: "npm:^5.0.0"
+    lodash: "npm:^4.17.21"
+    resolve: "npm:^1.20.0"
+    semver: "npm:^7.3.2"
+  peerDependencies:
+    "@glint/template": ^1.0.0
+  peerDependenciesMeta:
+    "@glint/template":
+      optional: true
+  checksum: 10c0/04a54971236f48c1276d4c24e6b2f48e5f05912d35767d5eb3928dc53c330abc969ef1d20e710391f0656eceac30ce05decd1d2b7cb29a28a0440b71d2491e43
   languageName: node
   linkType: hard
 
@@ -5868,6 +5868,27 @@ __metadata:
     semver: "npm:^7.3.5"
     typescript-memoize: "npm:^1.0.1"
   checksum: 10c0/b2ff15298032bbf07f45e4771ace15fd775cc00fc315c26e2cea7d3e0672553a85d60003122dac92cdda5c7f5667ec2bcc305d8c7e6d2de5416e5e14f949fea4
+  languageName: node
+  linkType: hard
+
+"@embroider/shared-internals@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@embroider/shared-internals@npm:3.0.0"
+  dependencies:
+    babel-import-util: "npm:^3.0.1"
+    debug: "npm:^4.3.2"
+    ember-rfc176-data: "npm:^0.3.17"
+    fs-extra: "npm:^9.1.0"
+    is-subdir: "npm:^1.2.0"
+    js-string-escape: "npm:^1.0.1"
+    lodash: "npm:^4.17.21"
+    minimatch: "npm:^3.0.4"
+    pkg-entry-points: "npm:^1.1.0"
+    resolve-package-path: "npm:^4.0.1"
+    resolve.exports: "npm:^2.0.2"
+    semver: "npm:^7.3.5"
+    typescript-memoize: "npm:^1.0.1"
+  checksum: 10c0/8e1c7228011dfcad71f98eff1dfa2e5feeb51e9f9658ed7201bbab947b176c7797d0388ccc2c6b5f5d63670cdfbfb8fb5f636b6d85fc6cdce8d8301b5c7f5d3f
   languageName: node
   linkType: hard
 
@@ -6561,9 +6582,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hashicorp/design-system-components@npm:^4.18.1":
-  version: 4.18.1
-  resolution: "@hashicorp/design-system-components@npm:4.18.1"
+"@hashicorp/design-system-components@npm:^4.18.2":
+  version: 4.18.2
+  resolution: "@hashicorp/design-system-components@npm:4.18.2"
   dependencies:
     "@codemirror/commands": "npm:^6.8.0"
     "@codemirror/lang-go": "npm:^6.0.1"
@@ -6581,7 +6602,7 @@ __metadata:
     "@ember/string": "npm:^3.1.1"
     "@ember/test-waiters": "npm:^3.1.0"
     "@embroider/addon-shim": "npm:^1.9.0"
-    "@embroider/macros": "npm:^1.16.10"
+    "@embroider/macros": "npm:^1.16.12"
     "@embroider/util": "npm:^1.13.2"
     "@floating-ui/dom": "npm:^1.6.12"
     "@hashicorp/design-system-tokens": "npm:^2.3.0"
@@ -6609,7 +6630,7 @@ __metadata:
     tippy.js: "npm:^6.3.7"
   peerDependencies:
     ember-source: ^3.28.0 || ^4.0.0 || ^5.3.0
-  checksum: 10c0/d2f82198534fb2060bd425e9fa92655a86cc4c104a990526e95dd0179dcd12b7fba2350960b1ba2558150b1c524ce2e78612d779cfadf7a3d6022d852174b383
+  checksum: 10c0/d34ce8852003813bb501d9ae33025bca114485205a0e68d0dc03e9ab5b0148f1aeff097eaf0213912be99f238362118abf2df37e0755148ff05d27f1a65f0c1b
   languageName: node
   linkType: hard
 
@@ -9279,6 +9300,13 @@ __metadata:
   version: 3.0.0
   resolution: "babel-import-util@npm:3.0.0"
   checksum: 10c0/cad6e83b36e1939562c27a3e3fdf16ed509369717af2cdba0870f116bd217d031fe1202cf4a54bbfba7eacbfd4e076aee7fd49ea573fba44d4d4dee8dfc2b388
+  languageName: node
+  linkType: hard
+
+"babel-import-util@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "babel-import-util@npm:3.0.1"
+  checksum: 10c0/ad3af23f8526d6e7ba1d3f26c52555542bec58d6869f3ac15ffefd183b511a8f673957496ca4056b6eb1a1a60d01011b53c33986966cbaa9c438f60d1d2ce005
   languageName: node
   linkType: hard
 
@@ -22774,6 +22802,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"resolve.exports@npm:^2.0.2":
+  version: 2.0.3
+  resolution: "resolve.exports@npm:2.0.3"
+  checksum: 10c0/1ade1493f4642a6267d0a5e68faeac20b3d220f18c28b140343feb83694d8fed7a286852aef43689d16042c61e2ddb270be6578ad4a13990769e12065191200d
+  languageName: node
+  linkType: hard
+
 "resolve@npm:^1.1.6, resolve@npm:^1.10.0, resolve@npm:^1.11.1, resolve@npm:^1.13.1, resolve@npm:^1.14.2, resolve@npm:^1.17.0, resolve@npm:^1.20.0, resolve@npm:^1.3.3, resolve@npm:^1.4.0, resolve@npm:^1.5.0":
   version: 1.20.0
   resolution: "resolve@npm:1.20.0"
@@ -23031,7 +23066,7 @@ __metadata:
     "@embroider/test-setup": "npm:^2.1.1"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
-    "@hashicorp/design-system-components": "npm:^4.18.1"
+    "@hashicorp/design-system-components": "npm:^4.18.2"
     babel-loader: "npm:^9.2.1"
     babel-plugin-ember-modules-api-polyfill: "npm:^2.12.0"
     babel-plugin-htmlbars-inline-precompile: "npm:3"
