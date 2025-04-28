@@ -15,15 +15,12 @@
       <list.item as |item|>
         <form.input @contextual={{true}}>
           <item.key>
-            <Hds::Form::Label @controlId='add-grant'>
+            <Hds::Form::Label>
               {{t 'resources.role.grant.actions.create'}}
             </Hds::Form::Label>
           </item.key>
           <item.cell>
-            <Input
-              class='rose-form-input-field'
-              id='add-grant'
-              @type='text'
+            <Hds::Form::TextInput::Field
               name='grant'
               @value={{this.newGrantString}}
             />
