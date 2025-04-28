@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+@use 'rose/variables/sizing';
+
 // This file is essentially a rip of the default ember notify styles with some minor tweaks for positioning.
 
 // sass-lint:disable no-vendor-prefixes
 @-webkit-keyframes ember-notify-show {
   from {
-    right: -310px;
+    right: sizing.rems(-310);
   }
 
   to {
@@ -17,7 +19,7 @@
 }
 @keyframes ember-notify-show {
   from {
-    right: -310px;
+    right: sizing.rems(-310);
   }
 
   to {
@@ -30,7 +32,7 @@
   }
 
   to {
-    right: -310px;
+    right: sizing.rems(-310);
   }
 }
 @keyframes ember-notify-hide {
@@ -39,7 +41,7 @@
   }
 
   to {
-    right: -310px;
+    right: sizing.rems(-310);
   }
 }
 
@@ -48,15 +50,15 @@
   right: 0;
   position: fixed;
   z-index: 5000;
-  margin-bottom: 16px;
+  margin-bottom: sizing.rems(m);
 }
 
 .ember-notify {
   box-sizing: border-box;
   display: block;
-  margin: 16px 24px;
+  margin: sizing.rems(m) sizing.rems(l);
   position: relative;
-  width: 360px;
+  width: sizing.rems(360);
 }
 
 .ember-notify-show {
@@ -83,7 +85,7 @@
   }
 }
 
-@media only screen and (width <= 680px) {
+@media only screen and (width <= sizing.rems(680)) {
   .ember-notify {
     width: 100%;
   }

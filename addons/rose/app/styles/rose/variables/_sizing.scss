@@ -40,8 +40,16 @@ $size-coefficients: (
 }
 
 /**
- * Returns a value in rem units equal to the requested size.
+ * @param {string|number} $name - The size name (e.g., 'm', 'l', 'xl') or a numeric value in pixels.
+ * @return {dimension|null} - The size in rem units, or null if the input is invalid.
  */
 @function rems($name) {
-  @return size($name) * 1rem;
+  @if type-of($name) == 'string' {
+    @return size($name) * 1rem;
+  } @else if type-of($name) == 'number' {
+    @return calc($name / 16) * 1rem;
+  } @else {
+    @warn "Invalid type for rems: '#{$name}'";
+    @return null;
+  }
 }
