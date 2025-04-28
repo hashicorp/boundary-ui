@@ -29,8 +29,8 @@ module.exports = function (environment) {
       namespace: 'v1',
     },
 
-    'ember-cli-mirage': {
-      directory: './mirage',
+    mirage: {
+      enabled: true
     },
   };
 
