@@ -54,7 +54,9 @@
             <B.Tr>
               <B.Td>
                 {{B.data.accountName}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>{{B.data.issuer}}</B.Td>
               <B.Td>{{B.data.subject}}</B.Td>
@@ -86,7 +88,9 @@
             <B.Tr>
               <B.Td>
                 {{B.data.displayName}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>{{B.data.email}}</B.Td>
               <B.Td>{{B.data.full_name}}</B.Td>

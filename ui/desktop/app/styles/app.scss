@@ -442,8 +442,9 @@
   }
 }
 
-.credential-name {
-  font-weight: var(--token-typography-font-weight-semibold);
+.credential-name,
+.credential-description {
+  overflow-wrap: break-word;
 }
 
 .raw-credential-panel-body {

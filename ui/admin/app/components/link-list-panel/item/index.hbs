@@ -13,7 +13,9 @@
           {{/if}}
 
           <div>
-            <p class='link-list-item__text'>{{@text}}</p>
+            <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+              {{@text}}
+            </Hds::Text::Body>
             {{yield}}
           </div>
         </div>
@@ -28,7 +30,9 @@
           {{/if}}
 
           <div>
-            <p class='link-list-item__text'>{{@text}}</p>
+            <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+              {{@text}}
+            </Hds::Text::Body>
             {{yield}}
           </div>
         </div>
@@ -43,7 +47,9 @@
       {{/if}}
 
       <div>
-        <p class='link-list-item__text'>{{@text}}</p>
+        <Hds::Text::Body @tag='p' @size='300' class='link-list-item__text'>
+          {{@text}}
+        </Hds::Text::Body>
         {{yield}}
       </div>
     </div>
