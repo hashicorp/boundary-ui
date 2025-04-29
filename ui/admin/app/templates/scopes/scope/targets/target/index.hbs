@@ -38,9 +38,9 @@
             <Hds::Text::Display @tag='h3'>
               {{t 'resources.alias.title_plural'}}
             </Hds::Text::Display>
-            <p class='description'>
+            <Hds::Text::Body @tag='p' @color='faint' class='p'>
               {{t 'resources.alias.form.sidebar.help'}}
-            </p>
+            </Hds::Text::Body>
             {{#each this.aliases as |alias|}}
               <LinkListPanel as |P|>
                 <P.Item
@@ -96,9 +96,9 @@
               <Hds::Text::Display @tag='h3'>
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
-              <p class='description'>
+              <Hds::Text::Body @tag='p' @color='faint' class='p'>
                 {{t 'resources.alias.form.sidebar.help'}}
-              </p>
+              </Hds::Text::Body>
 
               <Hds::Button
                 @icon='plus'
@@ -114,9 +114,9 @@
             <Hds::Text::Display @tag='h3'>
               {{t 'resources.target.form.sidebar.label'}}
             </Hds::Text::Display>
-            <p class='description'>
+            <Hds::Text::Body @tag='p' @color='faint' class='p'>
               {{t 'resources.target.form.sidebar.help'}}
-            </p>
+            </Hds::Text::Body>
             {{#if @model.enable_session_recording}}
               {{#if this.storageBucket.isUnknown}}
                 <LinkListPanel as |P|>

@@ -27,7 +27,7 @@ module('Integration | Component | rose/layout/body-content', function (hooks) {
   test('it renders with content', async function (assert) {
     await render(hbs`<Rose::Layout::BodyContent as |bc|>
       <bc.Body><button id="button" type="button" /></bc.Body>
-      <bc.Sidebar><p id="details">Resource Details</p></bc.Sidebar>
+      <bc.Sidebar><Hds::Text::Body @tag='p' id="details">Resource Details</Hds::Text::Body></bc.Sidebar>
     </Rose::Layout::BodyContent>`);
 
     assert.dom('.rose-layout-body-content-body #button').isVisible();

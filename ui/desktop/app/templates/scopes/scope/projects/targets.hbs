@@ -16,7 +16,9 @@
       {{t 'resources.target.title_plural'}}
       <DocLink @doc='targets' />
     </Hds::Text::Display>
-    <p>{{t 'resources.target.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.target.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body class='search-filtering'>

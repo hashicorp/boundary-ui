@@ -25,7 +25,7 @@
       {{t 'resources.role.title'}}
       <DocLink @doc='role' />
     </Hds::Text::Display>
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{#if @model.role.scope.isOrg}}
         {{t 'resources.role.scope.description.org'}}
       {{else if @model.role.scope.isProject}}
@@ -33,7 +33,7 @@
       {{else}}
         {{t 'resources.role.scope.description.global'}}
       {{/if}}
-    </p>
+    </Hds::Text::Body>
     <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
   </page.header>
 

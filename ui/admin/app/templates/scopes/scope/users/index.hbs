@@ -20,7 +20,9 @@
       <DocLink @doc='user' />
     </Hds::Text::Display>
     {{#if @model.doUsersExist}}
-      <p>{{t 'resources.user.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.user.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 
@@ -69,7 +71,9 @@
                 {{#if B.data.accountName}}
                   <br /><Hds::Badge @text={{B.data.accountName}} />
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 <Hds::Copy::Snippet

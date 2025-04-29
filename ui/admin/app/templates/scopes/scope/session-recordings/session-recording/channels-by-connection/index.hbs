@@ -83,13 +83,13 @@
               as |connection|
             }}
               <div class='channels-by-connection-connection-header'>
-                <p class='hds-typography-display-300 hds-font-weight-semibold'>
+                <Hds::Text::Display @size='300' @weight='semibold'>
                   {{reverse-indexed-display-name
                     'resources.session-recording.connection.title_index'
                     @model.sessionRecording.connection_recordings
                     connection
                   }}
-                </p>
+                </Hds::Text::Display>
                 <Hds::Copy::Snippet
                   @textToCopy={{connection.id}}
                   @color='secondary'
