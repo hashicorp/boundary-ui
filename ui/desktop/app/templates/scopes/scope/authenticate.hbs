@@ -19,7 +19,7 @@
 
       <Rose::Dropdown
         @text={{t 'actions.choose-different-org'}}
-        @icon='flight-icons/svg/org-16'
+        @icon='org'
         as |dropdown|
       >
         <dropdown.link @route='scopes.scope.authenticate' @model='global'>
@@ -62,14 +62,14 @@
           </Hds::ApplicationState>
         </Rose::Layout::Centered>
       {{/if}}
-      <p class='change-origin'>
+      <Hds::Text::Body @tag='p' class='change-origin'>
         {{t 'cluster-url.connected-to'}}:
         <code>{{this.clusterUrl}}</code>
         <br />
         <LinkTo @route='cluster-url'>
           {{t 'actions.change-cluster-url'}}
         </LinkTo>
-      </p>
+      </Hds::Text::Body>
     </BrandedCard>
   {{/if}}
 </main>

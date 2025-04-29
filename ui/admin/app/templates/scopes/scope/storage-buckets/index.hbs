@@ -16,9 +16,11 @@
       class='header-spacing'
     >
       {{t 'resources.storage-bucket.title_plural'}}
-      <DocLink @doc='storage-bucket' @iconSize='large' />
+      <DocLink @doc='storage-bucket' />
     </Hds::Text::Display>
-    <p>{{t 'resources.storage-bucket.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.storage-bucket.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.actions>
@@ -59,7 +61,9 @@
                 {{B.data.displayName}}
               {{/if}}
               {{#if B.data.description}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               {{/if}}
             </B.Td>
             <B.Td>

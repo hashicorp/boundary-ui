@@ -4,7 +4,7 @@
 }}
 
 <Hds::Text::Display @tag='h2' id='title'>Welcome to Ember</Hds::Text::Display>
-<p>{{relative-datetime-live this.now}}</p>
+<Hds::Text::Body @tag='p'>{{relative-datetime-live this.now}}</Hds::Text::Body>
 
 <ul>
   <li>{{truncate-list 'actions.more' this.list}}</li>

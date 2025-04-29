@@ -59,7 +59,7 @@
     margin-top: 0;
   }
 
-  .rose-icon {
+  .hds-icon {
     margin-right: sizing.rems(xs);
   }
 }
@@ -296,7 +296,7 @@
       padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
     }
 
-    .rose-icon {
+    .hds-icon {
       margin-right: sizing.rems(xxxs);
     }
   }
@@ -479,8 +479,9 @@
   }
 }
 
-.credential-name {
-  font-weight: var(--token-typography-font-weight-semibold);
+.credential-name,
+.credential-description {
+  overflow-wrap: break-word;
 }
 
 .raw-credential-panel-body {
@@ -588,8 +589,4 @@
 .header-spacing {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-
-  .doc-link {
-    vertical-align: middle;
-  }
 }

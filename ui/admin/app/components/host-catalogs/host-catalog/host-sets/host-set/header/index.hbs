@@ -5,7 +5,9 @@
 
 <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>
   {{t 'resources.host-set.title'}}
-  <DocLink @doc='host-set' @iconSize='large' />
+  <DocLink @doc='host-set' />
 </Hds::Text::Display>
-<p>{{t 'resources.host-set.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>
+  {{t 'resources.host-set.description'}}
+</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

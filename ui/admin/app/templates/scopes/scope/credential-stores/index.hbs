@@ -16,10 +16,12 @@
       class='header-spacing'
     >
       {{t 'resources.credential-store.title_plural'}}
-      <DocLink @doc='credential-store' @iconSize='large' />
+      <DocLink @doc='credential-store' />
     </Hds::Text::Display>
     {{#if @model.doCredentialStoresExist}}
-      <p>{{t 'resources.credential-store.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.credential-store.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 

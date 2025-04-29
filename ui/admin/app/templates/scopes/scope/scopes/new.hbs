@@ -31,9 +31,11 @@
         class='header-spacing'
       >
         {{t 'resources.org.titles.new'}}
-        <DocLink @doc='org.new' @iconSize='large' />
+        <DocLink @doc='org.new' />
       </Hds::Text::Display>
-      <p>{{t 'resources.org.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.org.description'}}
+      </Hds::Text::Body>
     {{else if @model.isProject}}
       <Hds::Text::Display
         @tag='h2'
@@ -42,9 +44,11 @@
         class='header-spacing'
       >
         {{t 'resources.project.titles.new'}}
-        <DocLink @doc='project.new' @iconSize='large' />
+        <DocLink @doc='project.new' />
       </Hds::Text::Display>
-      <p>{{t 'resources.project.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.project.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 

@@ -22,11 +22,11 @@
       class='header-spacing'
     >
       {{t 'resources.target.workers.edit-egress-worker-filter.title'}}
-      <DocLink @doc='worker-filters-format' @iconSize='large' />
+      <DocLink @doc='worker-filters-format' />
     </Hds::Text::Display>
-    <p>{{t
-        'resources.target.workers.edit-egress-worker-filter.description'
-      }}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.target.workers.edit-egress-worker-filter.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body class='target-workers'>

@@ -20,9 +20,11 @@
       class='header-spacing'
     >
       {{t 'resources.alias.title'}}
-      <DocLink @doc='alias' @iconSize='large' />
+      <DocLink @doc='alias' />
     </Hds::Text::Display>
-    <p>{{t 'resources.alias.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.alias.description'}}
+    </Hds::Text::Body>
     <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
   </page.header>
   <page.navigation>

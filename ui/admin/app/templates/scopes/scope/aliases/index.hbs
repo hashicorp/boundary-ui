@@ -16,9 +16,11 @@
       class='header-spacing'
     >
       {{t 'resources.alias.title_plural'}}
-      <DocLink @doc='alias' @iconSize='large' />
+      <DocLink @doc='alias' />
     </Hds::Text::Display>
-    <p>{{t 'resources.alias.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.alias.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.actions>

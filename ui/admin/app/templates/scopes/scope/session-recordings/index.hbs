@@ -15,9 +15,11 @@
       @weight='bold'
       class='header-spacing'
     >{{t 'resources.session-recording.title_plural'}}
-      <DocLink @doc='session-recording' @iconSize='large' />
+      <DocLink @doc='session-recording' />
     </Hds::Text::Display>
-    <p>{{t 'resources.session-recording.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.session-recording.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body class='search-filtering'>
