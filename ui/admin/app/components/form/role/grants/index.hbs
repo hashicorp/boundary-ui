@@ -15,17 +15,18 @@
       <list.item as |item|>
         <form.input @contextual={{true}}>
           <item.key>
-            <Hds::Form::Label>
+            <Hds::Form::Label @controlId='add-grant'>
               {{t 'resources.role.grant.actions.create'}}
             </Hds::Form::Label>
           </item.key>
           <item.cell>
             <Hds::Form::TextInput::Field
-              aria-describedby={{t 'form.grant.help'}}
-              @type='text'
-              name='grant'
-              @value={{this.newGrantString}}
               {{on 'input' this.onInputFieldChanged}}
+              name='grant'
+              @id='add-grant'
+              @type='text'
+              @value={{this.newGrantString}}
+              @extraAriaDescribedBy={{t 'form.grant.help'}}
             />
           </item.cell>
           <item.cell>
@@ -50,22 +51,24 @@
 >
 
   <Rose::List::KeyValue as |list|>
-    {{#each this.grants as |grant|}}
+    {{#each this.grants as |grant index|}}
       <list.item as |item|>
         <form.input @contextual={{true}}>
           <item.key>
-            <Hds::Form::Label>
+            <Hds::Form::Label @controlId='update-grant-{{index}}'>
               {{t 'form.grant.label'}}
             </Hds::Form::Label>
           </item.key>
           <item.cell>
             <Hds::Form::TextInput::Field
-              aria-describedby={{t 'form.grant.help'}}
-              @type='text'
+              {{on 'input' (fn this.onUpdateGrant grant)}}
               name='grant'
+              disabled={{if (can 'setGrants role' @model) false true}}
+              @id='update-grant-{{index}}'
+              @type='text'
               @value={{grant.value}}
-              @disabled={{if (can 'setGrants role' @model) false true}}
               @error={{@model.errors.grant_strings}}
+              @extraAriaDescribedBy={{t 'form.grant.help'}}
             />
           </item.cell>
         </form.input>

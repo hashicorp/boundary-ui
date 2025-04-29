@@ -48,12 +48,22 @@ export default class FormRoleGrantsComponent extends Component {
   // =actions
 
   /**
-   * Input event updates newGrantString tracked prop
+   * Listens on user input and populates newGrantString tracked prop
    * @param {string} event
    */
   @action
   onInputFieldChanged(event) {
     this.newGrantString = event.target.value;
+  }
+
+  /**
+   * Listens on user input and updates existing grants
+   * @param {string} grant
+   * @param {string} event
+   */
+  @action
+  onUpdateGrant(grant, event) {
+    grant.value = event.target.value;
   }
 
   /**
