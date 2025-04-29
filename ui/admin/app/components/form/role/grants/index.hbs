@@ -21,8 +21,11 @@
           </item.key>
           <item.cell>
             <Hds::Form::TextInput::Field
+              aria-describedby={{t 'form.grant.help'}}
+              @type='text'
               name='grant'
               @value={{this.newGrantString}}
+              {{on 'input' this.onInputFieldChanged}}
             />
           </item.cell>
           <item.cell>
@@ -46,16 +49,6 @@
   as |form|
 >
 
-  {{!--
-  {{#if @model.errors.grants}}
-    <input.errors as |errors|>
-      {{#each @model.errors.grants as |error|}}
-        <errors.message>{{error.message}}</errors.message>
-      {{/each}}
-    </input.errors>
-  {{/if}}
-  --}}
-
   <Rose::List::KeyValue as |list|>
     {{#each this.grants as |grant|}}
       <list.item as |item|>
@@ -74,7 +67,10 @@
             </Hds::Form::Label>
           </item.key>
           <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
+            <input.field
+              title={{t 'form.grant.help'}}
+              aria-label={{t 'form.grant.help'}}
+            />
           </item.cell>
         </form.input>
         <item.cell>
