@@ -20,11 +20,9 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.egress-worker'}}
-  </p>
+  </Hds::Text::Body>
 {{else}}
   <OrderedSeriesDiagram data-test-single-filter-egress-off as |D|>
     <D.Item @icon='user'>
@@ -37,9 +35,7 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.any-worker'}}
-  </p>
+  </Hds::Text::Body>
 {{/if}}

@@ -59,7 +59,9 @@
                 {{/if}}
               </Hds::Text::Body>
 
-              <p>{{B.data.description}}</p>
+              <Hds::Text::Body @tag='p' class='p'>
+                {{B.data.description}}
+              </Hds::Text::Body>
             </B.Td>
             <B.Td>
               <Hds::Badge
