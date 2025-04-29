@@ -52,24 +52,20 @@
   <Rose::List::KeyValue as |list|>
     {{#each this.grants as |grant|}}
       <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{grant.value}}
-          @disabled={{if (can 'setGrants role' @model) false true}}
-          @error={{@model.errors.grant_strings}}
-          as |input|
-        >
+        <form.input @contextual={{true}}>
           <item.key>
             <Hds::Form::Label>
               {{t 'form.grant.label'}}
             </Hds::Form::Label>
           </item.key>
           <item.cell>
-            <input.field
-              title={{t 'form.grant.help'}}
-              aria-label={{t 'form.grant.help'}}
+            <Hds::Form::TextInput::Field
+              aria-describedby={{t 'form.grant.help'}}
+              @type='text'
+              name='grant'
+              @value={{grant.value}}
+              @disabled={{if (can 'setGrants role' @model) false true}}
+              @error={{@model.errors.grant_strings}}
             />
           </item.cell>
         </form.input>

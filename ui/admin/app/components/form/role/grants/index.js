@@ -16,7 +16,10 @@ export default class FormRoleGrantsComponent extends Component {
   @tracked newGrantString = '';
 
   /**
-   * @type {[object]}
+   * Returns grants currently on model, in addition to
+   * grants added (or deleted) interactively by user -
+   * before form submission
+   * @return {[string]}
    */
   @computed('args.model.grant_strings.[]')
   get grants() {
@@ -24,7 +27,8 @@ export default class FormRoleGrantsComponent extends Component {
   }
 
   /**
-   * @type {[string]}
+   * Returns grants after form submission
+   * @return {[object]}
    */
   @computed('grants.@each.value')
   get grantStrings() {
