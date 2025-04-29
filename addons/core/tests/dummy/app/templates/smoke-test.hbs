@@ -4,12 +4,14 @@
 }}
 
 <Hds::Text::Display @tag='h1'>Smoke Test</Hds::Text::Display>
-<p>
+<Hds::Text::Body @tag='p'>
   This template is used by the smoke-test acceptance tests, which validate that
   Ember can start up and basic features work as intended.
-</p>
+</Hds::Text::Body>
 
 <Hds::Text::Display @tag='h2'>{{t
     'resources.account.title'
   }}</Hds::Text::Display>
-<p>{{t 'resources.account.description'}}</p>
+<Hds::Text::Body @tag='p'>{{t
+    'resources.account.description'
+  }}</Hds::Text::Body>
