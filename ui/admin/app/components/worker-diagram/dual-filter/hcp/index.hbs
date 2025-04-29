@@ -23,11 +23,9 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.dual-egress-on-ingress-on'}}
-  </p>
+  </Hds::Text::Body>
 {{else if @ingressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-off-ingress-on as |D|>
     <D.Item @icon='user'>
@@ -40,11 +38,9 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.ingress-worker'}}
-  </p>
+  </Hds::Text::Body>
 {{else if @egressWorkerFilterEnabled}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-on-ingress-off as |D|>
     <D.Item @icon='user'>
@@ -69,11 +65,9 @@
       </D.Item>
     </D.Group>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.hcp-dual-egress-on'}}
-  </p>
+  </Hds::Text::Body>
 {{else}}
   <OrderedSeriesDiagram data-test-dual-filter-hcp-egress-off-ingress-off as |D|>
     <D.Item @icon='user'>
@@ -86,9 +80,7 @@
       {{t 'resources.target.workers.diagram.host'}}
     </D.Item>
   </OrderedSeriesDiagram>
-  <p
-    class='hds-foreground-faint hds-typography-body-100 hds-font-weight-regular'
-  >
+  <Hds::Text::Body @tag='p' @size='100' @color='faint'>
     {{t 'resources.target.workers.filter-explainer.hcp-worker'}}
-  </p>
+  </Hds::Text::Body>
 {{/if}}

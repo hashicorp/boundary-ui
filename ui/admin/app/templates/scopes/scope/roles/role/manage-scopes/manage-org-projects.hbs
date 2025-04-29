@@ -43,7 +43,9 @@
       }}
       <DocLink @doc='role.add-grant-scopes' />
     </Hds::Text::Display>
-    <p>{{t 'resources.role.scope.messages.manage-org-projects.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.role.scope.messages.manage-org-projects.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body class='search-filtering'>

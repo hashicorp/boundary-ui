@@ -48,16 +48,20 @@
   {{else}}
     <div class='credential-panel-body'>
       <div class='credential-header'>
-        <div class='credential-name hds-typography-display-200'>
+        <Hds::Text::Display class='credential-name' @weight='semibold'>
           {{#if credential.source.name}}
             {{credential.source.name}}
           {{else}}
             {{credential.source.id}}
           {{/if}}
-        </div>
-        <div class='hds-typography-body-100'>
+        </Hds::Text::Display>
+        <Hds::Text::Body
+          class='credential-description'
+          @size='100'
+          @weight='semibold'
+        >
           {{credential.source.description}}
-        </div>
+        </Hds::Text::Body>
       </div>
 
       <ul class='credential-secret'>

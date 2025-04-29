@@ -56,7 +56,9 @@
               {{else}}
                 {{B.data.model.displayName}}
               {{/if}}
-              <p>{{B.data.model.description}}</p>
+              <Hds::Text::Body @tag='p' class='p'>
+                {{B.data.description}}
+              </Hds::Text::Body>
             </B.Td>
             <B.Td>
               <HostCatalogTypeBadge @model={{B.data.model}} />

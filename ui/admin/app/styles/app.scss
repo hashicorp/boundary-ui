@@ -549,12 +549,6 @@
 
 // target sidebar
 .target-sidebar {
-  .description {
-    color: var(--token-form-helper-text-color);
-    font-weight: var(--token-typography-font-weight-normal);
-    font-size: var(--token-typography-body-200-font-size);
-  }
-
   .hds-link-standalone {
     margin-top: 1rem;
   }
@@ -562,12 +556,6 @@
 
 .target-sidebar-aliases {
   margin-bottom: 3rem;
-
-  .description {
-    color: var(--token-form-helper-text-color);
-    font-weight: var(--token-typography-font-weight-normal);
-    font-size: var(--token-typography-body-200-font-size);
-  }
 
   .hds-link-standalone {
     margin-top: 1rem;
