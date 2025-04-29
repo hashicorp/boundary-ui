@@ -20,9 +20,9 @@ module('Integration | Component | rose/dialog/cover', function (hooks) {
           >Authentication Pending</Hds::Text::Display>
         </:header>
         <:body>
-          <p>Complete authentication in the newly-opened window.</p>
-          <p>Don't see the new window?  <a href="#">Try again.</a></p>
-          <p><a href="#">Cancel</a></p>
+          <Hds::Text::Body @tag='p'>Complete authentication in the newly-opened window.</Hds::Text::Body>
+          <Hds::Text::Body @tag='p'>Don't see the new window?  <a href="#">Try again.</a></Hds::Text::Body>
+          <Hds::Text::Body @tag='p'><a href="#">Cancel</a></Hds::Text::Body>
         </:body>
       </Rose::Dialog::Cover>
     `);

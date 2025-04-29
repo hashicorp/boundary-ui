@@ -57,7 +57,9 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 {{B.data.issuer}}
@@ -108,7 +110,9 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 {{B.data.email}}
@@ -148,7 +152,9 @@
                 {{else}}
                   {{B.data.accountName}}
                 {{/if}}
-                <p>{{B.data.description}}</p>
+                <Hds::Text::Body @tag='p' class='p'>
+                  {{B.data.description}}
+                </Hds::Text::Body>
               </B.Td>
               <B.Td>
                 {{B.data.login_name}}
