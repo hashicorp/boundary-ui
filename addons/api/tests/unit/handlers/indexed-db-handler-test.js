@@ -12,6 +12,7 @@ import { faker } from '@faker-js/faker';
 import sinon from 'sinon';
 import { assert } from '@ember/debug';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import TargetModel from 'api/models/target';
 
 function createPaginatedResponseHandler(mirageRecords, { pageSize }) {
   assert('pageSize is required', pageSize);
@@ -65,23 +66,23 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
   setupMirage(hooks);
 
   let manager,
-    handler,
+    indexeddbHandler,
     store,
     applicationAdapter,
-    handlerSpy,
+    indexedbHandlerSpy,
     applicationAdapterSpy;
   hooks.beforeEach(async function setupIndexHandler() {
     store = this.owner.lookup('service:store');
     manager = new RequestManager();
-    handler = new IndexedDbHandler(store);
+    indexeddbHandler = new IndexedDbHandler(store);
     applicationAdapter = store.adapterFor('application');
 
     // spy on all handler and application adapter methods
-    handlerSpy = sinon.spy(handler);
+    indexedbHandlerSpy = sinon.spy(indexeddbHandler);
     applicationAdapterSpy = sinon.spy(applicationAdapter);
 
     store.requestManager = manager;
-    manager.use([handler]);
+    manager.use([indexeddbHandler]);
   });
 
   module('fetching and batch loading', function (hooks) {
@@ -93,7 +94,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
     let aliases, aliasResponseHandlerSpy;
 
     hooks.beforeEach(function setupMirageData() {
-      handler.batchLimit = testBatchLimit;
+      indexeddbHandler.batchLimit = testBatchLimit;
 
       aliases = this.server.createList('alias', 50);
 
@@ -130,7 +131,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       await store.query('alias', {});
 
       assert.strictEqual(
-        handlerSpy.writeToIndexedDb.callCount,
+        indexedbHandlerSpy.writeToIndexedDb.callCount,
         aliases.length / testBatchLimit,
         'handler #writeToIndexedDb is called once for each batch',
       );
@@ -145,6 +146,52 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         aliasResponseHandlerSpy.callCount,
         aliases.length / serverResultPageLimit,
         'server handler should be called once for each page',
+      );
+    });
+
+    test('it loads from indexeddb only and does not fetch from api, when peekIndexedDB option is used', async function (assert) {
+      const callCounts = {
+        get writeToIndexedDb() {
+          return indexedbHandlerSpy.writeToIndexedDb.callCount;
+        },
+        get aliasResponseHandler() {
+          return aliasResponseHandlerSpy.callCount;
+        },
+      };
+
+      // before first query, no data has been fetched or written to indexeddb
+      // the call counts should therefore be 0
+      assert.strictEqual(callCounts.aliasResponseHandler, 0);
+      assert.strictEqual(callCounts.writeToIndexedDb, 0);
+
+      const results = await store.query('alias', {});
+      assert.strictEqual(results.length, 50);
+
+      // call counts expected after first query
+      const expectedWriteToIndexedDbCallCount = 5;
+      const expectedResponseHandlerCallCount = 10;
+
+      // first `store.query()` calls api and writes batches to indexededdb
+      assert.strictEqual(
+        callCounts.aliasResponseHandler,
+        expectedResponseHandlerCallCount,
+      );
+      assert.strictEqual(
+        callCounts.writeToIndexedDb,
+        expectedWriteToIndexedDbCallCount,
+      );
+
+      await store.query('alias', {}, { peekIndexedDB: true });
+      assert.strictEqual(results.length, 50);
+
+      // second run does not increase call counts to api or writes to indexeddb
+      assert.strictEqual(
+        callCounts.aliasResponseHandler,
+        expectedResponseHandlerCallCount,
+      );
+      assert.strictEqual(
+        callCounts.writeToIndexedDb,
+        expectedWriteToIndexedDbCallCount,
       );
     });
   });
@@ -259,5 +306,134 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         ['Alias 001', 'Alias 002', 'Alias 003', 'Alias 004'],
       );
     });
+  });
+
+  module('option: pushToStore', function (hooks) {
+    let mirageTargets;
+
+    hooks.beforeEach(function () {
+      mirageTargets = this.server.createList('target', 5);
+    });
+
+    test('it pushes fetched results to the store by default', async function (assert) {
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(mirageTargets, {
+          pageSize: 1,
+        }),
+      );
+
+      assert.strictEqual(mirageTargets.length, 5);
+      assert.strictEqual(store.peekAll('target').length, 0);
+      const results = await store.query('target', {});
+      assert.strictEqual(results.length, 5);
+      assert.ok(
+        results.every((result) => result instanceof TargetModel),
+        'results are ember data models',
+      );
+      assert.strictEqual(store.peekAll('target').length, 5);
+    });
+
+    test('it pushes fethed results to the store when pushToStore is true', async function (assert) {
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(mirageTargets, {
+          pageSize: 1,
+        }),
+      );
+
+      assert.strictEqual(mirageTargets.length, 5);
+      assert.strictEqual(store.peekAll('target').length, 0);
+      const results = await store.query('target', {}, { pushToStore: true });
+      assert.strictEqual(results.length, 5);
+      assert.ok(
+        results.every((result) => result instanceof TargetModel),
+        'results are ember data models',
+      );
+      assert.strictEqual(store.peekAll('target').length, 5);
+    });
+
+    test('it does not push fetched results to the store when pushToStore is false', async function (assert) {
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(mirageTargets, {
+          pageSize: 1,
+        }),
+      );
+
+      assert.strictEqual(mirageTargets.length, 5);
+      assert.strictEqual(store.peekAll('target').length, 0);
+      const results = await store.query('target', {}, { pushToStore: false });
+      assert.strictEqual(results.length, 5);
+      assert.ok(
+        results.every((result) => !(result instanceof TargetModel)),
+        'results are not ember data models',
+      );
+      assert.strictEqual(store.peekAll('target').length, 0);
+    });
+  });
+
+  test('it supports searching', async function (assert) {
+    this.server.create('target', {
+      name: 'Magical Target',
+      description: 'A target',
+    });
+
+    this.server.create('target', {
+      name: 'Target 2',
+      description: 'Target with magic',
+    });
+
+    this.server.createList('target', 4);
+
+    this.server.get(
+      'targets',
+      createPaginatedResponseHandler(this.server.schema.targets.all().models, {
+        pageSize: 1,
+      }),
+    );
+
+    const results = await store.query('target', {
+      query: { search: 'magic' },
+    });
+
+    assert.deepEqual(
+      results
+        // search results aren't returning in a consistent order so
+        // the sorting is used to be able to assert
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
+        .map(({ name, description }) => ({ name, description })),
+      [
+        {
+          description: 'A target',
+          name: 'Magical Target',
+        },
+        {
+          description: 'Target with magic',
+          name: 'Target 2',
+        },
+      ],
+    );
+  });
+
+  test('it supports filtering', async function (assert) {
+    this.server.create('target', {
+      name: 'specific-target',
+    });
+
+    this.server.createList('target', 5);
+
+    this.server.get(
+      'targets',
+      createPaginatedResponseHandler(this.server.schema.targets.all().models, {
+        pageSize: 1,
+      }),
+    );
+
+    const results = await store.query('target', {
+      query: { filters: { name: [{ equals: 'specific-target' }] } },
+    });
+
+    assert.strictEqual(results[0].name, 'specific-target');
   });
 });
