@@ -957,6 +957,15 @@
     max-height: 300px;
     overflow: scroll;
   }
+
+  .workers-filtering {
+    display: flex;
+    margin-bottom: 1rem;
+
+    .toolbar-refresher {
+      margin-left: auto;
+    }
+  }
 }
 
 .view-more-tags {
@@ -992,11 +1001,6 @@
   .hds-form-group__control-field {
     padding: 0.25rem 0.75rem;
   }
-}
-.dropdown-section {
-  padding: 0.5rem;
-  text-transform: uppercase;
-  color: var(--ui-gray);
 }
 
 // worker filter generator

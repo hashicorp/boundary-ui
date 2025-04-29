@@ -35,36 +35,16 @@
   {{#if (has-block)}}
     {{yield DD this.selectItem this.itemOptions}}
   {{else}}
-    {{#if @isGrouped}}
-      {{#each-in (group-by 'key' this.itemOptions) as |key groupItems|}}
-        <DD.Generic class='dropdown-section'>
-          <Hds::Icon @name='tag' @isInline={{true}} />
-          {{key}}
-        </DD.Generic>
-        {{#each groupItems as |itemOption|}}
-          <DD.Checkbox
-            @value={{itemOption}}
-            data-test-checkbox={{itemOption.key}}
-            checked={{is-tag-checked @checkedItems itemOption}}
-            {{on 'change' (fn this.selectItem itemOption)}}
-          >
-            {{itemOption.value}}
-          </DD.Checkbox>
-        {{/each}}
-      {{/each-in}}
-    {{else}}
-      {{#each this.itemOptions as |itemOption|}}
-        <DD.Checkbox
-          @value={{itemOption.id}}
-          data-test-checkbox={{itemOption.id}}
-          checked={{includes itemOption.id @checkedItems}}
-          {{on 'change' (fn this.selectItem itemOption.id)}}
-        >
-          {{if itemOption.name itemOption.name itemOption.id}}
-        </DD.Checkbox>
-      {{/each}}
-    {{/if}}
-
+    {{#each this.itemOptions as |itemOption|}}
+      <DD.Checkbox
+        @value={{itemOption.id}}
+        data-test-checkbox={{itemOption.id}}
+        checked={{includes itemOption.id @checkedItems}}
+        {{on 'change' (fn this.selectItem itemOption.id)}}
+      >
+        {{if itemOption.name itemOption.name itemOption.id}}
+      </DD.Checkbox>
+    {{/each}}
   {{/if}}
 
   <DD.Footer @hasDivider={{true}}>
