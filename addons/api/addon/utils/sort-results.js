@@ -15,10 +15,9 @@ const sortFunctions = {
 };
 
 export const sortResults = (results, { querySort, schema }) => {
-  // The consumer is already doing this, not sure is necessary
   querySort = querySort ?? {};
 
-  // TBD checkquerySort.attribute throw error vs assertion
+  // ToDo: Validate checkquerySort.attribute with assertion
 
   const sortAttribute = querySort.attribute || SORT_DEFAULT_ATTRIBUTE;
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
@@ -28,8 +27,7 @@ export const sortResults = (results, { querySort, schema }) => {
       : SORT_DIRECTION_ASCENDING;
   const sortDirection = querySort.direction || defaultSortDirection;
 
-  // Why the spike uses an assertion to check the sort direction is valid with _ASC or _DESC?
-  // Perhaps what we should do is throw an error if the direction is not correct?
+  // ToDo: Check sortDirection is valid with assert
 
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
   const sortFunction =
