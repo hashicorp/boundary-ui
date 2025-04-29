@@ -41,7 +41,11 @@
               {{/if}}
             </Hds::Form::Checkbox::Field>
           </B.Td>
-          <B.Td><code>{{B.data.id}}</code></B.Td>
+          <B.Td>
+            <Hds::Text::Code @tag='code'>
+              {{B.data.id}}
+            </Hds::Text::Code>
+          </B.Td>
           <B.Td><ScopeBadge @scope={{B.data.scopeModel}} /></B.Td>
           <B.Td>{{B.data.description}}</B.Td>
         </B.Tr>

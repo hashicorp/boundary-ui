@@ -64,7 +64,9 @@
       {{/if}}
       <Hds::Text::Body @tag='p' class='change-origin'>
         {{t 'cluster-url.connected-to'}}:
-        <code>{{this.clusterUrl}}</code>
+        <Hds::Text::Code @tag='code'>
+          {{this.clusterUrl}}
+        </Hds::Text::Code>
         <br />
         <LinkTo @route='cluster-url'>
           {{t 'actions.change-cluster-url'}}

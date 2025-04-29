@@ -40,7 +40,11 @@
           </B.Td>
           <B.Td>{{B.data.name}}</B.Td>
           <B.Td><HostCatalogTypeBadge @model={{B.data}} /></B.Td>
-          <B.Td><code>{{B.data.host_catalog_id}}</code></B.Td>
+          <B.Td>
+            <Hds::Text::Code @tag='code'>
+              {{B.data.host_catalog_id}}
+            </Hds::Text::Code>
+          </B.Td>
         </B.Tr>
       </:body>
     </Hds::Table>
