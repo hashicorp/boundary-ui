@@ -57,9 +57,9 @@ export class OrgsPage extends BaseResourcePage {
    * @param {string} fromScope the current scope, required to click dropdown
    * @param {string} toScope name of the scope to click in the dropdown
    */
-  async chooseScopeFromDropdown(fromeScope, toScope) {
+  async chooseScopeFromDropdown(fromScope, toScope) {
     await this.page
-      .getByRole('button', { name: fromeScope, exact: true })
+      .getByRole('button', { name: fromScope, exact: true })
       .click()
     await this.page
       .getByRole('option', { name: toScope, exact: true })
