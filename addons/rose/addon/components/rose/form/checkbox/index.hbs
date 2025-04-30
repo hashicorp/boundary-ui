@@ -23,7 +23,11 @@
   <label class='rose-form-checkbox-label' for={{this.id}}>
     <Hds::Text::Body>{{@label}}</Hds::Text::Body>
     {{#if @description}}
-      <p class='rose-form-checkbox-label-description'>{{@description}}</p>
+      <Hds::Text::Body
+        @tag='p'
+        @weight='semibold'
+        class='rose-form-checkbox-label-description'
+      >{{@description}}</Hds::Text::Body>
     {{/if}}
   </label>
 

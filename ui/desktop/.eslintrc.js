@@ -11,17 +11,19 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    // This is specific babel-config. If grows consider creating a babel config file
     requireConfigFile: false,
     babelOptions: {
       plugins: [
         ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
       ],
     },
-    // end of babel-config
   },
   plugins: ['ember'],
-  extends: ['eslint:recommended', 'plugin:ember/recommended', 'prettier'],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
+  ],
   env: {
     browser: true,
   },

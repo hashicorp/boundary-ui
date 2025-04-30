@@ -274,43 +274,6 @@
   z-index: 5500;
 }
 
-// Card component (app/components/card)
-.card {
-  border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-  display: flex;
-  flex-direction: column;
-  margin-bottom: sizing.rems(m);
-
-  .card-header {
-    align-items: center;
-    border-bottom: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-    display: flex;
-    justify-content: space-between;
-    padding: sizing.rems(s) sizing.rems(s) sizing.rems(s) sizing.rems(m);
-
-    h2 {
-      @include type.type(s, normal);
-
-      color: var(--ui-gray-starker-1);
-      margin: 0;
-      padding: sizing.rems(xxs) + sizing.rems(xxxs) 0;
-    }
-
-    .hds-icon {
-      margin-right: sizing.rems(xxxs);
-    }
-  }
-
-  .card-body {
-    padding: sizing.rems(s);
-  }
-
-  .card-footer {
-    border-top: sizing.rems(xxxxs) solid var(--ui-gray-subtler-3);
-    padding: sizing.rems(s);
-  }
-}
-
 // Hidden secret component (app/components/hidden-secret)
 .hidden-secret {
   display: flex;
@@ -479,8 +442,9 @@
   }
 }
 
-.credential-name {
-  font-weight: var(--token-typography-font-weight-semibold);
+.credential-name,
+.credential-description {
+  overflow-wrap: break-word;
 }
 
 .raw-credential-panel-body {

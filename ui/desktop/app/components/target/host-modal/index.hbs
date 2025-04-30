@@ -24,15 +24,13 @@
                   @size='small'
                 />
                 <div class='host-info'>
-                  <p
-                    class='hds-typography-body-200 hds-font-weight-semibold hds-foreground-primary'
-                  >
+                  <Hds::Text::Body @tag='p' @weight='semibold' @color='primary'>
                     {{host.displayName}}
-                  </p>
+                  </Hds::Text::Body>
                   {{#if host.isStatic}}
-                    <p class='hds-typography-body-100 hds-foreground-faint'>
+                    <Hds::Text::Body @tag='p' @size='100' @color='faint'>
                       {{host.address}}
-                    </p>
+                    </Hds::Text::Body>
                   {{/if}}
                   {{#if host.isPlugin}}
                     {{#if host.isUnknown}}
@@ -47,9 +45,9 @@
                     {{/if}}
                   {{/if}}
                   {{#if host.description}}
-                    <p class='hds-typography-body-100 hds-foreground-faint'>
+                    <Hds::Text::Body @tag='p' @size='100' @color='faint'>
                       {{host.description}}
-                    </p>
+                    </Hds::Text::Body>
                   {{/if}}
                 </div>
               </div>
