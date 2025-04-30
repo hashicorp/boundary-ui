@@ -965,6 +965,11 @@
     .toolbar-refresher {
       margin-left: auto;
     }
+    .hds-dropdown-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 }
 

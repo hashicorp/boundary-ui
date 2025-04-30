@@ -49,7 +49,7 @@
           {{#each-in (group-by 'key' itemOptions) as |key groupItems|}}
             <FD.Generic>
               <Hds::Icon @name='tag' @isInline={{true}} />
-              {{key}}
+              <Hds::Text::Display @tag='h5'>{{key}}</Hds::Text::Display>
             </FD.Generic>
             {{#each groupItems as |item|}}
               <FD.Checkbox
