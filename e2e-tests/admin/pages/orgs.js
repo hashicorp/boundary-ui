@@ -54,7 +54,7 @@ export class OrgsPage extends BaseResourcePage {
 
   /**
    * Switches the scope using the dropdown on the top menu bar.
-   * @param {stinrg} fromScope the current scope, required to click dropdown
+   * @param {string} fromScope the current scope, required to click dropdown
    * @param {string} toScope name of the scope to click in the dropdown
    */
   async chooseScopeFromDropdown(fromeScope, toScope) {
