@@ -21,7 +21,7 @@
           </item.key>
           <item.cell>
             <Hds::Form::TextInput::Field
-              {{on 'input' this.onInputFieldChanged}}
+              {{on 'input' (set-from-event this 'newGrantString')}}
               name='grant'
               @id='add-grant'
               @type='text'
@@ -31,8 +31,8 @@
           </item.cell>
           <item.cell>
             <Hds::Button
-              type='submit'
               disabled={{this.cannotSave}}
+              type='submit'
               @color='secondary'
               @text={{t 'actions.add'}}
             />
@@ -61,7 +61,7 @@
           </item.key>
           <item.cell>
             <Hds::Form::TextInput::Field
-              {{on 'input' (fn this.onUpdateGrant grant)}}
+              {{on 'input' (set-from-event grant 'value')}}
               name='grant'
               disabled={{if (can 'setGrants role' @model) false true}}
               @id='update-grant-{{index}}'
@@ -75,12 +75,12 @@
         <item.cell>
           {{#if (can 'setGrants role' @model)}}
             <Hds::Button
+              {{on 'click' (fn @removeGrant grant.value)}}
+              type='button'
               @color='secondary'
               @icon='trash'
               @isIconOnly={{true}}
               @text={{t 'actions.remove'}}
-              type='button'
-              {{on 'click' (fn @removeGrant grant.value)}}
             />
           {{/if}}
         </item.cell>
