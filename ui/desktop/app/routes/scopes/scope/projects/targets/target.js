@@ -86,7 +86,7 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
     const controller = this.controllerFor(
       'scopes.scope.projects.targets.target',
     );
-    if (controller.get('isConnectionError')) {
+    if (controller.isConnectionError) {
       controller.set('isConnecting', false);
       controller.set('isConnectionError', false);
     }

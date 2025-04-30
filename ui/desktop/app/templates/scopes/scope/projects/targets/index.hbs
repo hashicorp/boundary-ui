@@ -109,7 +109,9 @@
               {{B.data.displayName}}
             {{/if}}
             {{#if B.data.description}}
-              <p>{{B.data.description}}</p>
+              <Hds::Text::Body @tag='p' class='p'>
+                {{B.data.description}}
+              </Hds::Text::Body>
             {{/if}}
           </Hds::Text::Body>
         </B.Td>

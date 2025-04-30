@@ -14,7 +14,10 @@
 
   <div class='secret-content'>
     {{#if this.isHidden}}
-      <pre>{{this.displaySecretValue}}</pre>
+      <Hds::Text::Code
+        @tag='pre'
+        @size='300'
+      >{{this.displaySecretValue}}</Hds::Text::Code>
     {{else}}
       <Hds::Text::Body @color='disabled'>{{this.textMask}}</Hds::Text::Body>
     {{/if}}

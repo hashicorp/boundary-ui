@@ -3,8 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<section ...attributes class='rose-frame'>
-
+<Hds::Card::Container @level='high' @hasBorder='true' ...attributes>
   <header class='rose-frame-header'>
     {{yield to='header'}}
   </header>
@@ -12,5 +11,4 @@
   <div class='rose-frame-body'>
     {{yield to='body'}}
   </div>
-
-</section>
+</Hds::Card::Container>

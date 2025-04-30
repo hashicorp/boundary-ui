@@ -9,6 +9,8 @@
     @size='500'
     class='branded-card-title'
   >{{@title}}</Hds::Text::Display>
-  <p class='branded-card-description'>{{@description}}</p>
+  <Hds::Text::Body @tag='p' @size='300' class='branded-card-description'>
+    {{@description}}
+  </Hds::Text::Body>
   {{yield}}
 </div>

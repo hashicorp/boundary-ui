@@ -7,5 +7,7 @@
   {{t 'resources.role.title'}}
   <DocLink @doc='role' />
 </Hds::Text::Display>
-<p>{{t 'resources.role.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>
+  {{t 'resources.role.description'}}
+</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

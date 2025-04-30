@@ -30,7 +30,9 @@
               'onboarding.success.titles.creation-success'
             }}</Hds::Text::Display>
         </span>
-        <p>{{t 'onboarding.success.descriptions.role'}}</p>
+        <Hds::Text::Body @tag='p'>
+          {{t 'onboarding.success.descriptions.role'}}
+        </Hds::Text::Body>
       </div>
 
       {{! Download Desktop client }}
@@ -40,7 +42,9 @@
               'onboarding.success.titles.desktop'
             }}</Hds::Text::Display>
         </span>
-        <p>{{t 'onboarding.success.descriptions.download'}}</p>
+        <Hds::Text::Body @tag='p'>
+          {{t 'onboarding.success.descriptions.download'}}
+        </Hds::Text::Body>
 
         <Hds::Link::Standalone
           @icon='download'
@@ -77,7 +81,9 @@
         <Hds::Text::Display @tag='h4'>
           {{t 'onboarding.success.titles.developers'}}
         </Hds::Text::Display>
-        <p>{{t 'onboarding.success.descriptions.developers'}}</p>
+        <Hds::Text::Body @tag='p'>
+          {{t 'onboarding.success.descriptions.developers'}}
+        </Hds::Text::Body>
 
         <Hds::Link::Standalone
           @icon='docs-link'
