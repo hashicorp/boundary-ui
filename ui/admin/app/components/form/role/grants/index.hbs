@@ -8,36 +8,32 @@
     @onSubmit={{fn this.createGrant @addGrant}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
-    as |form|
   >
     <Rose::List::KeyValue as |list|>
       {{! Add grant field (only one per form) }}
       <list.item as |item|>
-        <form.input @contextual={{true}}>
-          <item.key>
-            <Hds::Form::Label @controlId='add-grant'>
-              {{t 'resources.role.grant.actions.create'}}
-            </Hds::Form::Label>
-          </item.key>
-          <item.cell>
-            <Hds::Form::TextInput::Field
-              {{on 'input' (set-from-event this 'newGrantString')}}
-              name='grant'
-              @id='add-grant'
-              @type='text'
-              @value={{this.newGrantString}}
-              @extraAriaDescribedBy={{t 'form.grant.help'}}
-            />
-          </item.cell>
-          <item.cell>
-            <Hds::Button
-              disabled={{this.cannotSave}}
-              type='submit'
-              @color='secondary'
-              @text={{t 'actions.add'}}
-            />
-          </item.cell>
-        </form.input>
+        <item.key>
+          <Hds::Form::Label @controlId='add-grant'>
+            {{t 'resources.role.grant.actions.create'}}
+          </Hds::Form::Label>
+        </item.key>
+        <item.cell>
+          <Hds::Form::TextInput::Field
+            {{on 'input' (set-from-event this 'newGrantString')}}
+            name='grant'
+            @id='add-grant'
+            @type='text'
+            @value={{this.newGrantString}}
+          />
+        </item.cell>
+        <item.cell>
+          <Hds::Button
+            disabled={{this.cannotSave}}
+            type='submit'
+            @color='secondary'
+            @text={{t 'actions.add'}}
+          />
+        </item.cell>
       </list.item>
     </Rose::List::KeyValue>
   </Rose::Form>
@@ -53,25 +49,22 @@
   <Rose::List::KeyValue as |list|>
     {{#each this.grants as |grant index|}}
       <list.item as |item|>
-        <form.input @contextual={{true}}>
-          <item.key>
-            <Hds::Form::Label @controlId='update-grant-{{index}}'>
-              {{t 'form.grant.label'}}
-            </Hds::Form::Label>
-          </item.key>
-          <item.cell>
-            <Hds::Form::TextInput::Field
-              {{on 'input' (set-from-event grant 'value')}}
-              name='grant'
-              disabled={{if (can 'setGrants role' @model) false true}}
-              @id='update-grant-{{index}}'
-              @type='text'
-              @value={{grant.value}}
-              @error={{@model.errors.grant_strings}}
-              @extraAriaDescribedBy={{t 'form.grant.help'}}
-            />
-          </item.cell>
-        </form.input>
+        <item.key>
+          <Hds::Form::Label @controlId='update-grant-{{index}}'>
+            {{t 'form.grant.label'}}
+          </Hds::Form::Label>
+        </item.key>
+        <item.cell>
+          <Hds::Form::TextInput::Field
+            {{on 'input' (set-from-event grant 'value')}}
+            name='grant'
+            disabled={{if (can 'setGrants role' @model) false true}}
+            @id='update-grant-{{index}}'
+            @type='text'
+            @value={{grant.value}}
+            @error={{@model.errors.grant_strings}}
+          />
+        </item.cell>
         <item.cell>
           {{#if (can 'setGrants role' @model)}}
             <Hds::Button
