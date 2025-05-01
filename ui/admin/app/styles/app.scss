@@ -953,11 +953,6 @@
 
 // workers
 .workers {
-  .hds-dropdown__content {
-    max-height: 300px;
-    overflow: scroll;
-  }
-
   .workers-filtering {
     display: flex;
     margin-bottom: 1rem;
@@ -965,7 +960,7 @@
     .toolbar-refresher {
       margin-left: auto;
     }
-    
+
     .hds-dropdown-list-item {
       display: flex;
       align-items: center;
