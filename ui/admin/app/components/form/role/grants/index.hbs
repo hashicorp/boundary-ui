@@ -21,6 +21,7 @@
           <Hds::Form::TextInput::Field
             {{on 'input' (set-from-event this 'newGrantString')}}
             name='grant'
+            title={{t 'form.grant.help'}}
             @id='add-grant'
             @type='text'
             @value={{this.newGrantString}}
@@ -58,6 +59,7 @@
           <Hds::Form::TextInput::Field
             {{on 'input' (set-from-event grant 'value')}}
             name='grant'
+            title={{t 'form.grant.help'}}
             disabled={{if (can 'setGrants role' @model) false true}}
             @id='update-grant-{{index}}'
             @type='text'
