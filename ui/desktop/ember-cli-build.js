@@ -31,16 +31,9 @@ module.exports = async function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
-    '@embroider/macros': {
-      setConfig: {
-        '@ember-data/store': {
-          polyfillUUID: true,
-        },
-      },
-    },
   });
 
-  // TODO: This config can be removed in ember-data 6.0.
+  // TODO: The deprecations object removed in ember-data 6.0.
   // This silences ember-data deprecate warnings by setting to false to
   // strip the deprecated code (thereby opting into the new behavior).
   setConfig(app, __dirname, {
@@ -48,6 +41,7 @@ module.exports = async function (defaults) {
       DEPRECATE_STORE_EXTENDS_EMBER_OBJECT: false,
       DEPRECATE_RELATIONSHIP_REMOTE_UPDATE_CLEARING_LOCAL_STATE: false,
     },
+    polyfillUUID: true,
   });
 
   // Use `app.import` to add additional libraries to the generated
