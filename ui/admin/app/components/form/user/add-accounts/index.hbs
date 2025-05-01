@@ -44,7 +44,11 @@
               @text={{t (concat 'resources.auth-method.types.' B.data.type)}}
             />
           </B.Td>
-          <B.Td><code>{{B.data.auth_method_id}}</code></B.Td>
+          <B.Td>
+            <Hds::Text::Code>
+              {{B.data.auth_method_id}}
+            </Hds::Text::Code>
+          </B.Td>
         </B.Tr>
       </:body>
     </Hds::Table>
