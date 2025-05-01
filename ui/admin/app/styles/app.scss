@@ -249,10 +249,9 @@
     margin-bottom: sizing.rems(l);
   }
 
-  > p code {
+  > p span {
     background-color: var(--token-color-surface-strong);
     border-radius: 5px;
-    color: var(--token-color-foreground-primary);
     padding: sizing.rems(xxxs) sizing.rems(xxs);
   }
 
