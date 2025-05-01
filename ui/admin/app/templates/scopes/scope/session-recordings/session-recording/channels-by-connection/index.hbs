@@ -9,12 +9,9 @@
   </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >{{t 'resources.session-recording.session.title'}}</Hds::Text::Display>
+    <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>{{t
+        'resources.session-recording.session.title'
+      }}</Hds::Text::Display>
   </page.header>
 
   <page.actions>
@@ -207,7 +204,7 @@
               @tag='h2'
               @size='400'
               @weight='bold'
-              class='header-spacing'
+              class='header'
             >{{t 'resources.session-recording.details'}}</Hds::Text::Display>
 
             <Rose::MetadataList @orientation='vertical' as |list|>
@@ -301,7 +298,7 @@
               @tag='h2'
               @size='400'
               @weight='bold'
-              class='header-spacing'
+              class='header'
             >{{t 'resources.session-recording.related'}}</Hds::Text::Display>
             <LinkListPanel as |list|>
               {{! User name }}

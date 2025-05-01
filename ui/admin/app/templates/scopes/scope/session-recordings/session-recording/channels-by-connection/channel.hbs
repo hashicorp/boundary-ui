@@ -19,12 +19,7 @@
   </page.breadcrumbs>
 
   <page.header class='channel-header'>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
+    <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
       {{reverse-indexed-display-name
         'resources.session-recording.channel.title_index'
         @model.channelRecording.connection_recording.channel_recordings
@@ -50,7 +45,7 @@
             @tag='h2'
             @size='400'
             @weight='bold'
-            class='header-spacing'
+            class='header'
           >{{t
               'resources.session-recording.channel.details'
             }}</Hds::Text::Display>
@@ -104,7 +99,7 @@
             @tag='h2'
             @size='400'
             @weight='bold'
-            class='header-spacing'
+            class='header'
           >{{t 'resources.session-recording.related'}}</Hds::Text::Display>
           <LinkListPanel as |list|>
             {{! User name }}
