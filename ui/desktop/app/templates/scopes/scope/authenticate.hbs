@@ -62,14 +62,16 @@
           </Hds::ApplicationState>
         </Rose::Layout::Centered>
       {{/if}}
-      <p class='change-origin'>
+      <Hds::Text::Body @tag='p' class='change-origin'>
         {{t 'cluster-url.connected-to'}}:
-        <code>{{this.clusterUrl}}</code>
+        <Hds::Text::Code>
+          {{this.clusterUrl}}
+        </Hds::Text::Code>
         <br />
         <LinkTo @route='cluster-url'>
           {{t 'actions.change-cluster-url'}}
         </LinkTo>
-      </p>
+      </Hds::Text::Body>
     </BrandedCard>
   {{/if}}
 </main>

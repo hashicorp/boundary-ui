@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | rose/frame', function (hooks) {
@@ -19,7 +19,7 @@ module('Integration | Component | rose/frame', function (hooks) {
       </Rose::Frame>
     `);
 
-    assert.ok(find('section > header'));
-    assert.ok(find('section > div'));
+    assert.dom('.hds-card__container > header').isVisible();
+    assert.dom('.hds-card__container > div').isVisible();
   });
 });

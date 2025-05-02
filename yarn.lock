@@ -8472,7 +8472,6 @@ __metadata:
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
     "@ember/test-helpers": "npm:^3.3.1"
-    "@embroider/macros": "npm:^1.16.9"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -8485,7 +8484,6 @@ __metadata:
     ember-a11y-testing: "npm:^7.0.0"
     ember-auto-import: "npm:^2.10.0"
     ember-cli: "npm:~5.12.0"
-    ember-cli-app-version: "npm:^7.0.0"
     ember-cli-babel: "npm:^8.2.0"
     ember-cli-clean-css: "npm:^3.0.0"
     ember-cli-code-coverage: "npm:^1.0.3"
@@ -12040,14 +12038,13 @@ __metadata:
   resolution: "desktop@workspace:ui/desktop"
   dependencies:
     "@babel/core": "npm:^7.26.10"
-    "@babel/eslint-parser": "npm:^7.21.3"
-    "@babel/plugin-proposal-decorators": "npm:^7.21.0"
+    "@babel/eslint-parser": "npm:^7.25.1"
+    "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@babel/runtime": "npm:7.12.18"
-    "@ember/optional-features": "npm:^2.0.0"
+    "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
-    "@ember/string": "npm:^3.0.1"
-    "@ember/test-helpers": "npm:^4.0.5"
-    "@embroider/macros": "npm:^1.16.9"
+    "@ember/string": "npm:^4.0.0"
+    "@ember/test-helpers": "npm:^3.3.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -12055,7 +12052,6 @@ __metadata:
     "@xterm/addon-canvas": "npm:^0.7.0"
     "@xterm/addon-fit": "npm:^0.10.0"
     "@xterm/xterm": "npm:^5.5.0"
-    babel-loader: "npm:^9.2.1"
     broccoli-asset-rev: "npm:^3.0.0"
     concurrently: "npm:^9.1.0"
     core: "workspace:*"
@@ -12063,12 +12059,13 @@ __metadata:
     doctoc: "npm:^2.2.0"
     ember-a11y-testing: "npm:^7.0.0"
     ember-auto-import: "npm:^2.10.0"
-    ember-cli: "npm:^5.12.0"
+    ember-cli: "npm:~5.12.0"
     ember-cli-babel: "npm:^8.2.0"
+    ember-cli-clean-css: "npm:^3.0.0"
     ember-cli-code-coverage: "npm:^1.0.3"
     ember-cli-dependency-checker: "npm:^3.3.2"
     ember-cli-flash: "npm:^4.0.0"
-    ember-cli-htmlbars: "npm:^6.2.0"
+    ember-cli-htmlbars: "npm:^6.3.0"
     ember-cli-inject-live-reload: "npm:^2.1.0"
     ember-cli-sass: "npm:^11.0.1"
     ember-cli-sri: "npm:^2.1.1"
@@ -12078,38 +12075,39 @@ __metadata:
     ember-exam: "npm:^8.0.0"
     ember-inline-svg: "npm:^1.0.1"
     ember-load-initializers: "npm:^2.1.2"
-    ember-modifier: "npm:^4.1.0"
+    ember-modifier: "npm:^4.2.0"
     ember-named-blocks-polyfill: "npm:^0.2.5"
-    ember-page-title: "npm:^7.0.0"
+    ember-page-title: "npm:^8.2.3"
     ember-qunit: "npm:^8.1.0"
-    ember-resolver: "npm:^10.0.0"
-    ember-source: "npm:~4.12.0"
-    ember-template-lint: "npm:^5.7.2"
+    ember-resolver: "npm:^12.0.1"
+    ember-source: "npm:~5.12.0"
+    ember-template-lint: "npm:^6.0.0"
     ember-template-lint-plugin-prettier: "npm:^5.0.0"
     ember-wormhole: "npm:^0.6.0"
-    eslint: "npm:^8.54.0"
-    eslint-config-prettier: "npm:^9.0.0"
-    eslint-plugin-ember: "npm:^11.11.1"
-    eslint-plugin-n: "npm:^16.3.1"
-    eslint-plugin-qunit: "npm:^8.0.1"
+    eslint: "npm:^8.57.1"
+    eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-ember: "npm:^12.2.1"
+    eslint-plugin-n: "npm:^16.6.2"
+    eslint-plugin-prettier: "npm:^5.2.1"
+    eslint-plugin-qunit: "npm:^8.1.2"
     js-bexpr: "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1"
     loader.js: "npm:^4.7.0"
     lodash: "npm:^4.17.21"
     postcss: "npm:^8.4.31"
-    prettier: "npm:^3.0.0"
+    prettier: "npm:^3.3.3"
     qunit: "npm:^2.22.0"
     qunit-dom: "npm:^3.2.1"
     rose: "workspace:*"
     sass: "npm:^1.69.5"
     shx: "npm:^0.3.4"
     sinon: "npm:^19.0.2"
-    stylelint: "npm:^15.10.1"
+    stylelint: "npm:^15.11.0"
     stylelint-config-prettier-scss: "npm:^0.0.1"
-    stylelint-config-standard: "npm:^32.0.0"
+    stylelint-config-standard: "npm:^34.0.0"
     stylelint-config-standard-scss: "npm:^11.0.0"
-    tracked-built-ins: "npm:^3.1.1"
+    tracked-built-ins: "npm:^3.3.0"
     uuid: "npm:^11.0.3"
-    webpack: "npm:^5.94.0"
+    webpack: "npm:^5.95.0"
   languageName: unknown
   linkType: soft
 
@@ -12540,18 +12538,6 @@ __metadata:
     ember-cli-htmlbars: "npm:^6.0.0"
     ember-inflector: "npm:^4.0.2"
   checksum: 10c0/6e191688317d9a0d7e7b946648141f219c78f35785188223be6a4dad4fb28f151de837e5b790b526b94437d905a266051db2320b07d6e0735fc67d48f519c512
-  languageName: node
-  linkType: hard
-
-"ember-cli-app-version@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "ember-cli-app-version@npm:7.0.0"
-  dependencies:
-    ember-cli-babel: "npm:^7.26.11"
-    git-repo-info: "npm:^2.1.1"
-  peerDependencies:
-    ember-source: ^3.28.0 || >= 4.0.0
-  checksum: 10c0/6c3d31f74dd03d43c6b80d1496474daeace7799ce3f51f0273f5a728650a274adf2f0701cea7a42b238aafbfbcc00f7517fd10293ca46484efb2354288f2b733
   languageName: node
   linkType: hard
 
@@ -13466,7 +13452,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-element-helper@npm:^0.8.6":
+"ember-element-helper@npm:^0.8.6, ember-element-helper@npm:^0.8.7":
   version: 0.8.7
   resolution: "ember-element-helper@npm:0.8.7"
   dependencies:
@@ -13727,7 +13713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-modifier@npm:^3.2.7 || ^4.0.0, ember-modifier@npm:^4.1.0":
+"ember-modifier@npm:^3.2.7 || ^4.0.0":
   version: 4.1.0
   resolution: "ember-modifier@npm:4.1.0"
   dependencies:
@@ -22927,6 +22913,7 @@ __metadata:
     ember-cli-terser: "npm:^4.0.2"
     ember-composable-helpers: "npm:^5.0.0"
     ember-disable-prototype-extensions: "npm:^1.1.3"
+    ember-element-helper: "npm:^0.8.7"
     ember-exam: "npm:^8.0.0"
     ember-export-application-global: "npm:^2.0.1"
     ember-focus-trap: "npm:^1.0.1"
@@ -24310,15 +24297,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-config-recommended@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "stylelint-config-recommended@npm:11.0.0"
-  peerDependencies:
-    stylelint: ^15.3.0
-  checksum: 10c0/67f2e77383f3a2451f7a7096c26312361085f829eac2bb380884eb1e3f3f5d8ef2ea48d9619dba7b2ab8854a7560038aaf6ae5d3ef5fddf83be8335595d1b762
-  languageName: node
-  linkType: hard
-
 "stylelint-config-recommended@npm:^13.0.0":
   version: 13.0.0
   resolution: "stylelint-config-recommended@npm:13.0.0"
@@ -24341,17 +24319,6 @@ __metadata:
     postcss:
       optional: true
   checksum: 10c0/22d00e75c1eacce9883fd48c3d67b1107b0e39d7d86e9f73deaa332b11c39a9678c947ae2c34cd5159a452ec9a857694ed58b5a851087480d3c9a66dab629415
-  languageName: node
-  linkType: hard
-
-"stylelint-config-standard@npm:^32.0.0":
-  version: 32.0.0
-  resolution: "stylelint-config-standard@npm:32.0.0"
-  dependencies:
-    stylelint-config-recommended: "npm:^11.0.0"
-  peerDependencies:
-    stylelint: ^15.4.0
-  checksum: 10c0/0314836da4c310e3d819b3ed6274ec6a86a792fa58f147f489302d07ef9e89e7fc6a6136e1ec3af3330fdb0b1f7c42f65292862d2e44b67261c8715fbc6a7530
   languageName: node
   linkType: hard
 

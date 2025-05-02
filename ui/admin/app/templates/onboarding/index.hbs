@@ -15,7 +15,9 @@
       >{{t 'onboarding.add-target.titles.have-a-target'}}</Hds::Text::Display>
     </:header>
     <:body>
-      <p>{{t 'onboarding.add-target.descriptions.setup-first-target'}}</p>
+      <Hds::Text::Body @tag='p'>
+        {{t 'onboarding.add-target.descriptions.setup-first-target'}}
+      </Hds::Text::Body>
       <Form::Onboarding
         @model={{@model}}
         @submit={{fn this.createResources @model}}
