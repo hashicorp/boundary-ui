@@ -24,6 +24,7 @@
           <Hds::Button
             {{on 'click' this.close}}
             class='button-window-close'
+            title={{t 'actions.close'}}
             @text={{t 'actions.close'}}
             @icon='x'
             @isIconOnly={{true}}
@@ -32,6 +33,7 @@
           <Hds::Button
             {{on 'click' this.toggleFullScreen}}
             class='button-window-fullscreen'
+            title={{t 'actions.fullscreen'}}
             @text={{t 'actions.fullscreen'}}
             @icon='square'
             @isIconOnly={{true}}
@@ -40,6 +42,7 @@
           <Hds::Button
             {{on 'click' this.minimize}}
             class='button-window-minimize'
+            title={{t 'actions.minimize'}}
             @text={{t 'actions.minimize'}}
             @icon='minus'
             @isIconOnly={{true}}
