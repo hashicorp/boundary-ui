@@ -4,25 +4,27 @@
 }}
 
 <Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <CredentialStores::CredentialStore::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#let (hash title=PH.Title description=PH.Description) as |header|}}
+        <CredentialStores::CredentialStore::Header @header={{header}} />
+      {{/let}}
+      <PH.Actions>
+        <CredentialStores::CredentialStore::Actions
+          @model={{@model}}
+          @delete={{fn this.credentialStores.delete @model}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
     <CredentialStores::CredentialStore::Nav @model={{@model}} />
   </page.navigation>
-
-  <page.actions>
-    <CredentialStores::CredentialStore::Actions
-      @model={{@model}}
-      @delete={{fn this.credentialStores.delete @model}}
-    />
-  </page.actions>
 
   <page.body>
     <Form::CredentialStore

@@ -15,53 +15,70 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    {{#if @model.isGlobal}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.global.title'}}
-        <DocLink @doc='global' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.global.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-    {{#if @model.isOrg}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.org.title'}}
-        <DocLink @doc='org' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.org.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-    {{#if @model.isProject}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.project.title'}}
-        <DocLink @doc='project' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.project.description'}}
-      </Hds::Text::Body>
-    {{/if}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#let
+        (array
+          (hash
+            key='isGlobal'
+            title='resources.global.title'
+            description='resources.global.description'
+            doc='global'
+          )
+          (hash
+            key='isOrg'
+            title='resources.org.title'
+            description='resources.org.description'
+            doc='org'
+          )
+          (hash
+            key='isProject'
+            title='resources.project.title'
+            description='resources.project.description'
+            doc='project'
+          )
+          (hash
+            key='isScope'
+            title='resources.scope.title'
+            description='resources.scope.description'
+            doc='scope'
+          )
+        )
+        as |scopes|
+      }}
+        {{#each scopes as |scope|}}
+          {{#if (get @model scope.key)}}
+            <PH.Title>
+              {{t scope.title}}
+              <DocLink @doc={{scope.doc}} />
+            </PH.Title>
+            <PH.Description>
+              {{t scope.description}}
+            </PH.Description>
+          {{/if}}
+        {{/each}}
+      {{/let}}
+      {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
+        <PH.Actions>
+          <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+            <dd.Interactive
+              @color='critical'
+              {{on 'click' (fn this.scopes.delete @model)}}
+            >{{t
+                (if
+                  @model.isOrg
+                  'resources.org.actions.delete'
+                  'resources.project.actions.delete'
+                )
+              }}</dd.Interactive>
+          </Hds::Dropdown>
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
     <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
@@ -73,24 +90,6 @@
         </nav.link>
       </Rose::Nav::Tabs>
     </page.navigation>
-  {{/if}}
-
-  {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
-    <page.actions>
-      <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-        <dd.Interactive
-          @color='critical'
-          {{on 'click' (fn this.scopes.delete @model)}}
-        >{{t
-            (if
-              @model.isOrg
-              'resources.org.actions.delete'
-              'resources.project.actions.delete'
-            )
-          }}</dd.Interactive>
-      </Hds::Dropdown>
-    </page.actions>
   {{/if}}
 
   <page.body>

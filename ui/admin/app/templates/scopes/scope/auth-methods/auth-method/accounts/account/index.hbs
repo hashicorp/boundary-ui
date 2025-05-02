@@ -5,24 +5,29 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <AuthMethods::AuthMethod::Accounts::Account::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#let (hash title=PH.Title description=PH.Description) as |header|}}
+        <AuthMethods::AuthMethod::Accounts::Account::Header
+          @header={{header}}
+        />
+      {{/let}}
+      <PH.Actions>
+        <AuthMethods::AuthMethod::Accounts::Account::Actions
+          @model={{@model}}
+          @delete={{this.accounts.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
     <AuthMethods::AuthMethod::Accounts::Account::Nav @model={{@model}} />
   </page.navigation>
-
-  <page.actions>
-    <AuthMethods::AuthMethod::Accounts::Account::Actions
-      @model={{@model}}
-      @delete={{this.accounts.delete}}
-    />
-  </page.actions>
 
   <page.body>
     <Form::Account

@@ -9,8 +9,7 @@
 .rose-layout-page {
   display: grid;
   grid-template-areas:
-    'breadcrumbs breadcrumbs breadcrumbs'
-    'header header actions'
+    'header header header'
     'navigation navigation navigation'
     'body body body';
   grid-template-columns: repeat(3, 1fr);
@@ -23,8 +22,9 @@
   .rose-layout-page-header {
     grid-area: header;
 
-    h2 {
+    h1 {
       display: flex;
+      align-items: center;
       gap: sizing.rems(xxs);
 
       .doc-link {
@@ -32,13 +32,11 @@
         align-items: center;
       }
     }
-  }
 
-  .rose-layout-page-actions {
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    /* stylelint-disable selector-class-pattern */
+    .hds-page-header__main {
+      margin-bottom: sizing.rems(s);
+    }
   }
 
   .rose-layout-page-navigation {
@@ -55,9 +53,7 @@
   .rose-layout-page {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'breadcrumbs'
       'header'
-      'actions'
       'navigation'
       'body';
   }
