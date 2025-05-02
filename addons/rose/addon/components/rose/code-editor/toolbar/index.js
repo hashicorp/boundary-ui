@@ -24,7 +24,7 @@ export default class RoseCodeEditorToolbarComponent extends Component {
     if (onCopy) {
       onCopy();
     }
-
+    // eslint-disable-next-line ember/no-runloop
     later(() => (this.copyIconType = originalIconType), 1000);
   }
 }

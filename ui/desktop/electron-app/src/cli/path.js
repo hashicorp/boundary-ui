@@ -24,14 +24,14 @@ const isBuiltInCli = existsSync(builtInCliPath);
 const pathBoundary = isBuiltInCli
   ? builtInCliPath
   : // On Windows, we need to filter out the path that is within the current working directory.
-  // This is necessary because the spawn methods may not always find the correct binary path.
-  // The `which` module returns an array of all available paths for the 'boundary' binary.
-  // We then filter out the path that is within the current working directory.
-  isWindows()
-  ? which
-      .sync(binaryName, { nothrow: true, all: true })
-      .filter((binary) => !binary.startsWith(process.cwd()))[0]
-  : binaryName;
+    // This is necessary because the spawn methods may not always find the correct binary path.
+    // The `which` module returns an array of all available paths for the 'boundary' binary.
+    // We then filter out the path that is within the current working directory.
+    isWindows()
+    ? which
+        .sync(binaryName, { nothrow: true, all: true })
+        .filter((binary) => !binary.startsWith(process.cwd()))[0]
+    : binaryName;
 
 module.exports = {
   path: pathBoundary,
