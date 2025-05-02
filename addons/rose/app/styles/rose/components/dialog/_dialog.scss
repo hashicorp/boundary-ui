@@ -58,17 +58,6 @@ $xxxxs: sizing.rems(xxxxs); // 1
     border-top-left-radius: $xxxs;
     border-top-right-radius: $xxxs;
 
-    .rose-icon {
-      color: var(--header-icon-color);
-      margin-right: $xxs + $xxxs;
-
-      svg {
-        transform: scale(1.25);
-        position: relative;
-        top: $xxxxs;
-      }
-    }
-
     .rose-dialog-heading {
       @include type.type(m, semibold);
 
@@ -90,15 +79,6 @@ $xxxxs: sizing.rems(xxxxs); // 1
 
       &:hover {
         border-color: currentcolor;
-      }
-
-      .rose-icon {
-        margin: 0;
-        color: var(--ui-gray);
-
-        svg {
-          top: $xxxs;
-        }
       }
     }
   }
