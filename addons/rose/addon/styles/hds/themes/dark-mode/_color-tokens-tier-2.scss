@@ -148,51 +148,51 @@
 
   --token-elevation-inset-box-shadow: inset 0 1px 2px 1px
     var(--token-color-palette-alpha-100);
-  --token-elevation-low-box-shadow: 0 1px 1px 0
-      var(--token-color-palette-neutral-500-alpha-50),
+  --token-elevation-low-box-shadow:
+    0 1px 1px 0 var(--token-color-palette-neutral-500-alpha-50),
     0 2px 2px 0 var(--token-color-palette-neutral-500-alpha-50);
-  --token-elevation-mid-box-shadow: 0 2px 3px 0
-      var(--token-color-palette-alpha-100),
+  --token-elevation-mid-box-shadow:
+    0 2px 3px 0 var(--token-color-palette-alpha-100),
     0 8px 16px -10px var(--token-color-palette-alpha-200);
-  --token-elevation-high-box-shadow: 0 2px 3px 0
-      var(--token-color-palette-neutral-500-alpha-100),
+  --token-elevation-high-box-shadow:
+    0 2px 3px 0 var(--token-color-palette-neutral-500-alpha-100),
     0 16px 16px -10px var(--token-color-palette-alpha-200);
-  --token-elevation-higher-box-shadow: 0 2px 3px 0
-      var(--token-color-palette-alpha-100),
+  --token-elevation-higher-box-shadow:
+    0 2px 3px 0 var(--token-color-palette-alpha-100),
     0 12px 28px 0 var(--token-color-palette-neutral-500-alpha-200);
-  --token-elevation-overlay-box-shadow: 0 2px 3px 0
-      var(--token-color-palette-neutral-600-alpha-100),
+  --token-elevation-overlay-box-shadow:
+    0 2px 3px 0 var(--token-color-palette-neutral-600-alpha-100),
     0 12px 24px 0 var(--token-color-palette-neutral-600-alpha-200);
-  --token-surface-inset-box-shadow: inset 0 0 0 1px
-      var(--token-color-palette-neutral-500-alpha-200),
+  --token-surface-inset-box-shadow:
+    inset 0 0 0 1px var(--token-color-palette-neutral-500-alpha-200),
     inset 0 1px 2px 1px var(--token-color-palette-alpha-100);
   --token-surface-base-box-shadow: 0 0 0 1px
     var(--token-color-palette-alpha-200);
-  --token-surface-low-box-shadow: 0 0 0 1px
-      var(--token-color-palette-neutral-500-alpha-100),
+  --token-surface-low-box-shadow:
+    0 0 0 1px var(--token-color-palette-neutral-500-alpha-100),
     0 1px 1px 0 var(--token-color-palette-neutral-500-alpha-50),
     0 2px 2px 0 var(--token-color-palette-neutral-500-alpha-50);
-  --token-surface-mid-box-shadow: 0 0 0 1px
-      var(--token-color-palette-neutral-500-alpha-100),
+  --token-surface-mid-box-shadow:
+    0 0 0 1px var(--token-color-palette-neutral-500-alpha-100),
     0 2px 3px 0 var(--token-color-palette-alpha-100),
     0 8px 16px -10px var(--token-color-palette-alpha-200);
-  --token-surface-high-box-shadow: 0 0 0 1px
-      var(--token-color-palette-neutral-500-alpha-200),
+  --token-surface-high-box-shadow:
+    0 0 0 1px var(--token-color-palette-neutral-500-alpha-200),
     0 2px 3px 0 var(--token-color-palette-neutral-500-alpha-100),
     0 16px 16px -10px var(--token-color-palette-alpha-200);
-  --token-surface-higher-box-shadow: 0 0 0 1px
-      var(--token-color-palette-alpha-200),
+  --token-surface-higher-box-shadow:
+    0 0 0 1px var(--token-color-palette-alpha-200),
     0 2px 3px 0 var(--token-color-palette-alpha-100),
     0 12px 28px 0 var(--token-color-palette-neutral-500-alpha-200);
-  --token-surface-overlay-box-shadow: 0 0 0 1px
-      var(--token-color-palette-neutral-600-alpha-100),
+  --token-surface-overlay-box-shadow:
+    0 0 0 1px var(--token-color-palette-neutral-600-alpha-100),
     0 2px 3px 0 var(--token-color-palette-neutral-600-alpha-100),
     0 12px 24px 0 var(--token-color-palette-neutral-600-alpha-200);
-  --token-focus-ring-action-box-shadow: inset 0 0 0 1px
-      var(--token-color-palette-blue-300),
+  --token-focus-ring-action-box-shadow:
+    inset 0 0 0 1px var(--token-color-palette-blue-300),
     0 0 0 3px var(--token-color-focus-action-external);
-  --token-focus-ring-critical-box-shadow: inset 0 0 0 1px
-      var(--token-color-palette-red-300),
+  --token-focus-ring-critical-box-shadow:
+    inset 0 0 0 1px var(--token-color-palette-red-300),
     0 0 0 3px var(--token-color-focus-critical-external);
   --token-form-label-color: var(--token-color-palette-neutral-700);
   --token-form-legend-color: var(--token-color-palette-neutral-700);
