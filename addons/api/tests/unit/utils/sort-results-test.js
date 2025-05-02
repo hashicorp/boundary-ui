@@ -1,0 +1,285 @@
+import { module, test } from 'qunit';
+import { sortResults } from 'api/utils/sort-results';
+import { faker } from '@faker-js/faker';
+import { setupTest } from 'ember-qunit';
+
+module('Unit | Utility | sortResults', function (hooks) {
+  setupTest(hooks);
+
+  module('string sorting', function () {
+    test('when passing no querySort, sorts using default created_time, descending order and string sorting', async function (assert) {
+      const result01 = {
+        attributes: { created_time: '2021' },
+      };
+      const result02 = {
+        attributes: { created_time: '2022' },
+      };
+      const result03 = {
+        attributes: { created_time: '2023' },
+      };
+      const result04 = {
+        attributes: { created_time: '2024' },
+      };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = {};
+      const schema = { attributes: new Map() };
+      schema.attributes.set('created_time', { type: 'string' });
+
+      const sortedResults = sortResults(shuffledResults, {
+        querySort,
+        schema,
+      });
+
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { created_time } }) => created_time),
+        ['2024', '2023', '2022', '2021'],
+      );
+    });
+
+    test('it sorts by ascending (default) `name` using string sorting', async function (assert) {
+      const result01 = { attributes: { name: 'Result 01' } };
+      const result02 = { attributes: { name: 'Result 02' } };
+      const result03 = { attributes: { name: 'Result 03' } };
+      const result04 = { attributes: { name: 'Result 04' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'name' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('name', { type: 'string' });
+
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { name } }) => name),
+        ['Result 01', 'Result 02', 'Result 03', 'Result 04'],
+      );
+    });
+
+    test('it sorts by ascending then descending `name` using string sorting', async function (assert) {
+      const result01 = { attributes: { name: 'Result 01' } };
+      const result02 = { attributes: { name: 'Result 02' } };
+      const result03 = { attributes: { name: 'Result 03' } };
+      const result04 = { attributes: { name: 'Result 04' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+
+      const querySortAsc = { attribute: 'name', direction: 'asc' };
+      const querySortDesc = { attribute: 'name', direction: 'desc' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('name', { type: 'string' });
+
+      const sortedResultsAsc = sortResults(shuffledResults, {
+        querySort: querySortAsc,
+        schema,
+      });
+      const sortedResultsDesc = sortResults(shuffledResults, {
+        querySort: querySortDesc,
+        schema,
+      });
+
+      assert.deepEqual(
+        sortedResultsAsc.map(({ attributes: { name } }) => name),
+        ['Result 01', 'Result 02', 'Result 03', 'Result 04'],
+      );
+
+      assert.deepEqual(
+        sortedResultsDesc.map(({ attributes: { name } }) => name),
+        ['Result 04', 'Result 03', 'Result 02', 'Result 01'],
+      );
+    });
+  });
+
+  module('date sorting', function () {
+    test('it sorts by ascending (default) `date` using date sorting', function (assert) {
+      const result01 = { attributes: { date: '2021' } };
+      const result02 = { attributes: { date: '2022' } };
+      const result03 = { attributes: { date: '2023' } };
+      const result04 = { attributes: { date: '2024' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'date' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('date', { type: 'date' });
+
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { date } }) => date),
+        ['2021', '2022', '2023', '2024'],
+      );
+    });
+
+    test('it sorts by ascending then descending `date` using date sorting', function (assert) {
+      const result01 = { attributes: { date: '2021' } };
+      const result02 = { attributes: { date: '2022' } };
+      const result03 = { attributes: { date: '2023' } };
+      const result04 = { attributes: { date: '2024' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySortAsc = { attribute: 'date', direction: 'asc' };
+      const querySortDesc = { attribute: 'date', direction: 'desc' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('date', { type: 'date' });
+
+      const sortedResultsAsc = sortResults(shuffledResults, {
+        querySort: querySortAsc,
+        schema,
+      });
+      const sortedResultsDesc = sortResults(shuffledResults, {
+        querySort: querySortDesc,
+        schema,
+      });
+
+      assert.deepEqual(
+        sortedResultsAsc.map(({ attributes: { date } }) => date),
+        ['2021', '2022', '2023', '2024'],
+      );
+      assert.deepEqual(
+        sortedResultsDesc.map(({ attributes: { date } }) => date),
+        ['2024', '2023', '2022', '2021'],
+      );
+    });
+  });
+
+  module('number sorting', function () {
+    test('it sorts by ascending (default) `sessions`', function (assert) {
+      const result01 = { attributes: { sessions: '10' } };
+      const result02 = { attributes: { sessions: '200' } };
+      const result03 = { attributes: { sessions: '3333' } };
+      const result04 = { attributes: { sessions: '40444' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'sessions' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('sessions', { type: 'number' });
+
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { sessions } }) => sessions),
+        ['10', '200', '3333', '40444'],
+      );
+    });
+
+    test('it sorts by ascending then descending `sessions`', function (assert) {
+      const result01 = { attributes: { sessions: '10' } };
+      const result02 = { attributes: { sessions: '200' } };
+      const result03 = { attributes: { sessions: '3333' } };
+      const result04 = { attributes: { sessions: '40444' } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySortAsc = { attribute: 'sessions', direction: 'asc' };
+      const querySortDesc = { attribute: 'sessions', direction: 'desc' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('sessions', { type: 'number' });
+
+      const sortedResultsAsc = sortResults(shuffledResults, {
+        querySort: querySortAsc,
+        schema,
+      });
+      const sortedResultsDesc = sortResults(shuffledResults, {
+        querySort: querySortDesc,
+        schema,
+      });
+
+      assert.deepEqual(
+        sortedResultsAsc.map(({ attributes: { sessions } }) => sessions),
+        ['10', '200', '3333', '40444'],
+      );
+      assert.deepEqual(
+        sortedResultsDesc.map(({ attributes: { sessions } }) => sessions),
+        ['40444', '3333', '200', '10'],
+      );
+    });
+  });
+
+  module('boolean sorting', function () {
+    test('it sorts by ascending (default) `active`', function (assert) {
+      const result01 = { attributes: { active: true } };
+      const result02 = { attributes: { active: false } };
+      const result03 = { attributes: { active: false } };
+      const result04 = { attributes: { active: true } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'active' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('active', { type: 'boolean' });
+
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { active } }) => active),
+        [false, false, true, true],
+      );
+    });
+
+    test('it sorts by ascending then descending `active`', function (assert) {
+      const result01 = { attributes: { active: true } };
+      const result02 = { attributes: { active: false } };
+      const result03 = { attributes: { active: false } };
+      const result04 = { attributes: { active: true } };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySortAsc = { attribute: 'active', direction: 'asc' };
+      const querySortDesc = { attribute: 'active', direction: 'desc' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('active', { type: 'boolean' });
+
+      const sortedResultsAsc = sortResults(shuffledResults, {
+        querySort: querySortAsc,
+        schema,
+      });
+      const sortedResultsDesc = sortResults(shuffledResults, {
+        querySort: querySortDesc,
+        schema,
+      });
+
+      assert.deepEqual(
+        sortedResultsAsc.map(({ attributes: { active } }) => active),
+        [false, false, true, true],
+      );
+
+      assert.deepEqual(
+        sortedResultsDesc.map(({ attributes: { active } }) => active),
+        [true, true, false, false],
+      );
+    });
+  });
+});

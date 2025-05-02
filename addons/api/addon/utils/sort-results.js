@@ -12,6 +12,8 @@ const SORT_DIRECTION_DESCENDING = 'desc';
 const sortFunctions = {
   string: (a, b) => String(a).localeCompare(String(b)),
   date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+  number: (a, b) => Number(a) - Number(b),
+  boolean: (a, b) => Number(a) - Number(b),
 };
 
 export const sortResults = (results, { querySort, schema }) => {
@@ -28,12 +30,12 @@ export const sortResults = (results, { querySort, schema }) => {
   const sortDirection = querySort.direction || defaultSortDirection;
 
   // ToDo: Check sortDirection is valid with assert
-
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
+
   const sortFunction =
     sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
 
-  return results.sort((a, b) => {
+  return results.toSorted((a, b) => {
     // Extract the values to sort and sort them.
     const sortValueA = a.attributes[sortAttribute];
     const sortValueB = b.attributes[sortAttribute];

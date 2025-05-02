@@ -126,7 +126,7 @@ export default class IndexedDbHandler {
 
         // Sort the results
         const sortedResults = sortResults(normalizedResults, {
-          querySort: queryObj?.sort ?? {},
+          querySort: queryObj?.sort,
           schema,
         });
 
