@@ -125,29 +125,3 @@ $size-xxxxs: sizing.rems(xxxxs); // 1
     opacity: var(--opacity-1),
   )
 );
-
-.rose-button-inline-link-action {
-  @include typography.type(m, semibold);
-
-  color: var(--info);
-  border: 0;
-  background: none;
-  margin: 0;
-  padding: 0;
-  display: inline;
-
-  &:not(:disabled) {
-    &:disabled {
-      cursor: not-allowed;
-      opacity: var(--opacity-1);
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    &:active {
-      color: var(--info-starker-1);
-    }
-  }
-}
