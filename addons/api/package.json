@@ -40,7 +40,6 @@
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@ember/optional-features": "^2.1.0",
-    "@ember/string": "^3.0.1",
     "@ember/test-helpers": "^4.0.5",
     "@ember/test-waiters": "^4.1.0",
     "@embroider/test-setup": "^4.0.0",
