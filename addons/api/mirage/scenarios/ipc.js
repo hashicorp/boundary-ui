@@ -199,7 +199,7 @@ export default function initializeMockIPC(server, config) {
      * Check for OS chrome state
      */
     showWindowActions() {
-      return true;
+      return window.navigator?.userAgentData?.platform === 'Windows';
     }
 
     /**
