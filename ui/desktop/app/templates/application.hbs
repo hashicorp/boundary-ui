@@ -22,21 +22,24 @@
       <header.utilities as |utilities|>
         {{#if this.showWindowActions}}
           <Rose::Button
-            @iconOnly='x'
+            @icon='x'
+            @isIconOnly={{true}}
             @style='warning'
             class='button-window-close'
             title={{t 'actions.close'}}
             {{on 'click' this.close}}
           />
           <Rose::Button
-            @iconOnly='square'
+            @icon='square'
+            @isIconOnly={{true}}
             @style='secondary'
             class='button-window-fullscreen'
             title={{t 'actions.fullscreen'}}
             {{on 'click' this.toggleFullScreen}}
           />
           <Rose::Button
-            @iconOnly='minus'
+            @icon='minus'
+            @isIconOnly={{true}}
             @style='secondary'
             class='button-window-minimize'
             title={{t 'actions.minimize'}}
