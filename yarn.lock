@@ -7953,6 +7953,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
+    "@ember/string": "npm:^4.0.0"
     "@ember/test-helpers": "npm:^4.0.5"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^4.0.0"
