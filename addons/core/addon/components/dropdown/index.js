@@ -21,6 +21,7 @@ export default class DropdownComponent extends Component {
    */
   get itemOptions() {
     let items = this.args.itemOptions;
+
     if (this.searchTerm) {
       const searchTerm = this.searchTerm.toLowerCase();
       items = this.args.itemOptions.filter((item) => {
@@ -48,20 +49,15 @@ export default class DropdownComponent extends Component {
   /**
    * Handles checkbox event changes for selectedItems
    * @param {object} event
+   * 
    */
   @action
-  selectItem(item, event) {
-    const { checked } = event.target;
+  selectItem(event) {
+    const { checked, value } = event.target;
     if (checked) {
-      this.selectedItems = [...this.selectedItems, item];
+      this.selectedItems = [...this.selectedItems, value];
     } else {
-      if (this.args.isGrouped && item?.key && item?.value) {
-        this.selectedItems = this.selectedItems.filter(
-          (i) => !(i.key === item.key && i.value === item.value),
-        );
-      } else {
-        this.selectedItems = this.selectedItems.filter((i) => i !== item);
-      }
+      this.selectedItems = this.selectedItems.filter((item) => item !== value);
     }
   }
 

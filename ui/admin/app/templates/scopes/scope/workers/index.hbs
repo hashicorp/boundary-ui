@@ -41,21 +41,21 @@
           @listPosition='bottom-left'
           @toggleText={{t 'form.tags.label'}}
           @itemOptions={{this.groupedTags}}
-          @checkedItems={{this.tags}}
+          @checkedItems={{this.encodedTags}}
           @applyFilter={{fn this.applyFilter 'tags'}}
           @isGrouped={{true}}
           as |FD selectItem itemOptions|
         >
-          {{#each-in (group-by 'key' itemOptions) as |key groupItems|}}
+          {{#each-in (group-by 'key' (decode itemOptions)) as |key groupItems|}}
             <FD.Generic>
               <Hds::Icon @name='tag' @isInline={{true}} />
               <Hds::Text::Display @tag='h5'>{{key}}</Hds::Text::Display>
             </FD.Generic>
             {{#each groupItems as |item|}}
               <FD.Checkbox
-                @value={{item}}
-                checked={{is-tag-checked this.tags item}}
-                {{on 'change' (fn selectItem item)}}
+                @value={{encode item}}
+                checked={{includes (encode item) this.encodedTags}}
+                {{on 'change' selectItem}}
               >
                 {{item.value}}
               </FD.Checkbox>
@@ -64,7 +64,17 @@
         </Dropdown>
         <ToolbarRefresher @onClick={{this.refresh}} />
       </div>
-      <FilterTags @filters={{this.filters}} @isGrouped={{true}} />
+      <FilterTags
+        @filters={{this.filters}}
+        @isCustomFilter={{true}}
+        as |filter|
+      >
+        <Hds::Tag
+          class='filter-tag'
+          @text={{get (decode filter) 'value'}}
+          @onDismiss={{fn this.removeFilter (decode filter)}}
+        />
+      </FilterTags>
 
       <Hds::Table
         class='workers-list-table'

@@ -25,23 +25,41 @@ export default class ScopesScopeWorkersIndexController extends Controller {
 
   queryParams = [{ tags: { type: 'array' } }];
 
+  /**
+   * Returns all unique tags of the selected worker in base64 encoded format.
+   * @type {object}
+   */
+
   get groupedTags() {
     const allTags = this.model
       .flatMap((worker) => worker.allTags)
       .filter(Boolean);
 
-    // Filter out duplicate tags
-    return allTags.reduce((uniqueTags, currentTag) => {
-      const isDuplicateTag = uniqueTags.some(
-        (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
-      );
+    const seen = new Set();
+    const uniqueTags = [];
 
-      if (!isDuplicateTag) {
-        uniqueTags.push(currentTag);
+    for (const tag of allTags) {
+      const encodedTag = window.btoa(JSON.stringify(tag));
+
+      if (!seen.has(encodedTag)) {
+        seen.add(encodedTag);
+        uniqueTags.push(encodedTag);
       }
-      return uniqueTags;
-    }, []);
+    }
+    return uniqueTags;
   }
+
+  /**
+   * Returns the selected tags of a worker in base64 encoded format.
+   *  @type {object}
+   */
+  get encodedTags() {
+    return this.tags.map((tag) => {
+      const stringify = JSON.stringify(tag);
+      return window.btoa(stringify);
+    });
+  }
+
   /**
    * Returns the filters object used for displaying filter tags.
    * @type {object}
@@ -53,7 +71,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
         tags: this.groupedTags,
       },
       selectedFilters: {
-        tags: this.tags,
+        tags: this.encodedTags,
       },
     };
   }
@@ -111,7 +129,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   }
 
   // =actions
-
   /**
    * Sets a query param to the value of selectedItems
    * @param {string} paramKey
@@ -119,7 +136,12 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    */
   @action
   applyFilter(paramKey, selectedItems) {
-    this[paramKey] = [...selectedItems];
+    // Decoding the selectedItems
+    const decodedItems = selectedItems.map((item) => {
+      const decodedString = window.atob(item);
+      return JSON.parse(decodedString);
+    });
+    this[paramKey] = [...decodedItems];
   }
 
   /**
@@ -184,5 +206,24 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   @action
   refresh() {
     this.router.refresh('scopes.scope.workers');
+  }
+
+  /**
+   * Removes a filter from the selected filters and updates the query params.
+   * @param {object} tag - The tag to remove from the filters.
+   **/
+  @action
+  removeFilter(tag) {
+    const decodedFilters = this.filters.selectedFilters['tags'].map((item) => {
+      const decodedString = window.atob(item);
+      return JSON.parse(decodedString);
+    });
+    const updatedFilters = decodedFilters.filter(
+      (item) => item.key !== tag.key || item.value !== tag.value,
+    );
+    const queryParams = {
+      tags: updatedFilters,
+    };
+    this.router.replaceWith({ queryParams });
   }
 }

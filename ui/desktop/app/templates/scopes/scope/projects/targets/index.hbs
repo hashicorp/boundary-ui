@@ -52,7 +52,7 @@
                   @value={{project.id}}
                   data-test-checkbox={{project.name}}
                   checked={{includes project.id this.scopes}}
-                  {{on 'change' (fn selectItem project.id)}}
+                  {{on 'change' selectItem}}
                 >
                   {{project.displayName}}
                 </FD.Checkbox>

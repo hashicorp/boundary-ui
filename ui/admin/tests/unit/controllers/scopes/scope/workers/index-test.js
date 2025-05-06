@@ -91,10 +91,12 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
 
   test('applyFilter action sets expected values correctly', async function (assert) {
     controller.set('model', model);
-    const tag = [{ key: 'type', value: 'dev', type: 'config' }];
-    controller.applyFilter('tags', tag);
+    const tag = { key: 'type', value: 'dev', type: 'config' };
+    // Encode the tag to base64
+    const encodedTag = window.btoa(JSON.stringify(tag));
+    controller.applyFilter('tags', [encodedTag]);
 
-    assert.deepEqual(controller.tags, tag);
+    assert.deepEqual(controller.tags, [tag]);
   });
 
   test('filters returns expected entries', function (assert) {
