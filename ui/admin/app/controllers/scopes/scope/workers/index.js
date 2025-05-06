@@ -119,14 +119,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     return `${tag.key} = ${tag.value}`;
   }
 
-  /**
-   * Determine equality between two tags based on both key and value.
-   * @param {object} firstTag
-   * @param {object} secondTag
-   */
-  isEqual(firstTag, secondTag) {
-    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
-  }
 
   // =actions
   /**
