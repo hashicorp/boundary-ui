@@ -119,7 +119,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     return `${tag.key} = ${tag.value}`;
   }
 
-
   // =actions
   /**
    * Sets a query param to the value of selectedItems
