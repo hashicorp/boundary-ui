@@ -13,7 +13,7 @@
   />
 {{/if}}
 
-<Rose::Layout::Page as |page|>
+<Rose::Layout::Page class='new-rose-page-layout' as |page|>
 
   <page.header>
     <Hds::PageHeader as |PH|>
@@ -112,7 +112,7 @@
       {{#if (can 'attachStoragePolicy scope' @model)}}
         <bc.Sidebar>
           <div class='policy-sidebar'>
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h2'>
               {{t 'resources.policy.title'}}
             </Hds::Text::Display>
 

@@ -17,6 +17,16 @@
   }
 }
 
+// remove this after the new layout is in place. This is a temporary fix
+// to make the new layout work with the old layout
+.new-rose-page-layout {
+  display: grid;
+  grid-template-areas:
+    'header header header'
+    'navigation navigation navigation'
+    'body body body';
+}
+
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;

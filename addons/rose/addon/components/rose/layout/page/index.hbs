@@ -6,7 +6,11 @@
 <div ...attributes class='rose-layout-page'>
   {{yield
     (hash
+      breadcrumbs=(component
+        'rose/anonymous' class='rose-layout-page-breadcrumbs'
+      )
       header=(component 'rose/anonymous' class='rose-layout-page-header')
+      actions=(component 'rose/anonymous' class='rose-layout-page-actions')
       navigation=(component
         'rose/anonymous' class='rose-layout-page-navigation'
       )
