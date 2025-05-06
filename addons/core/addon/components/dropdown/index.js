@@ -21,7 +21,6 @@ export default class DropdownComponent extends Component {
    */
   get itemOptions() {
     let items = this.args.itemOptions;
-
     if (this.searchTerm) {
       const searchTerm = this.searchTerm.toLowerCase();
       items = this.args.itemOptions.filter((item) => {
@@ -49,7 +48,6 @@ export default class DropdownComponent extends Component {
   /**
    * Handles checkbox event changes for selectedItems
    * @param {object} event
-   * 
    */
   @action
   selectItem(event) {

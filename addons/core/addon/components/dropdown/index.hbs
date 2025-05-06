@@ -40,7 +40,7 @@
         @value={{itemOption.id}}
         data-test-checkbox={{itemOption.id}}
         checked={{includes itemOption.id @checkedItems}}
-        {{on 'change' (fn this.selectItem)}}
+        {{on 'change' this.selectItem}}
       >
         {{if itemOption.name itemOption.name itemOption.id}}
       </DD.Checkbox>
