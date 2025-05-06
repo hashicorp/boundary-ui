@@ -26,17 +26,6 @@ $chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xm
           padding-left: sizing.rems(xs);
         }
 
-        .rose-icon {
-          --size: #{sizing.rems(l)};
-
-          display: inline-block;
-          height: var(--size);
-
-          > svg {
-            vertical-align: top;
-          }
-        }
-
         &:hover,
         &:focus {
           background-color: transparent;

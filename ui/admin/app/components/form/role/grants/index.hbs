@@ -8,35 +8,33 @@
     @onSubmit={{fn this.createGrant @addGrant}}
     @cancel={{@cancel}}
     @disabled={{@model.isSaving}}
-    as |form|
   >
     <Rose::List::KeyValue as |list|>
       {{! Add grant field (only one per form) }}
       <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{this.newGrantString}}
-          as |input|
-        >
-          <item.key>
-            <input.label>{{t
-                'resources.role.grant.actions.create'
-              }}</input.label>
-          </item.key>
-          <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
-          </item.cell>
-          <item.cell>
-            <Hds::Button
-              type='submit'
-              disabled={{this.cannotSave}}
-              @color='secondary'
-              @text={{t 'actions.add'}}
-            />
-          </item.cell>
-        </form.input>
+        <item.key>
+          <Hds::Form::Label @controlId='add-grant'>
+            {{t 'resources.role.grant.actions.create'}}
+          </Hds::Form::Label>
+        </item.key>
+        <item.cell>
+          <Hds::Form::TextInput::Field
+            {{on 'input' (set-from-event this 'newGrantString')}}
+            name='grant'
+            title={{t 'form.grant.help'}}
+            @id='add-grant'
+            @type='text'
+            @value={{this.newGrantString}}
+          />
+        </item.cell>
+        <item.cell>
+          <Hds::Button
+            disabled={{this.cannotSave}}
+            type='submit'
+            @color='secondary'
+            @text={{t 'actions.add'}}
+          />
+        </item.cell>
       </list.item>
     </Rose::List::KeyValue>
   </Rose::Form>
@@ -49,44 +47,35 @@
   as |form|
 >
 
-  {{!--
-  {{#if @model.errors.grants}}
-    <input.errors as |errors|>
-      {{#each @model.errors.grants as |error|}}
-        <errors.message>{{error.message}}</errors.message>
-      {{/each}}
-    </input.errors>
-  {{/if}}
-  --}}
-
   <Rose::List::KeyValue as |list|>
-    {{#each this.grants as |grant|}}
+    {{#each this.grants as |grant index|}}
       <list.item as |item|>
-        <form.input
-          @contextual={{true}}
-          @name='grant'
-          @type='text'
-          @value={{grant.value}}
-          @disabled={{if (can 'setGrants role' @model) false true}}
-          @error={{@model.errors.grant_strings}}
-          as |input|
-        >
-          <item.key>
-            <input.label>{{t 'form.grant.label'}}</input.label>
-          </item.key>
-          <item.cell>
-            <input.field title={{t 'form.grant.help'}} />
-          </item.cell>
-        </form.input>
+        <item.key>
+          <Hds::Form::Label @controlId='update-grant-{{index}}'>
+            {{t 'form.grant.label'}}
+          </Hds::Form::Label>
+        </item.key>
+        <item.cell>
+          <Hds::Form::TextInput::Field
+            {{on 'input' (set-from-event grant 'value')}}
+            name='grant'
+            title={{t 'form.grant.help'}}
+            disabled={{if (can 'setGrants role' @model) false true}}
+            @id='update-grant-{{index}}'
+            @type='text'
+            @value={{grant.value}}
+            @error={{@model.errors.grant_strings}}
+          />
+        </item.cell>
         <item.cell>
           {{#if (can 'setGrants role' @model)}}
             <Hds::Button
+              {{on 'click' (fn @removeGrant grant.value)}}
+              type='button'
               @color='secondary'
               @icon='trash'
               @isIconOnly={{true}}
               @text={{t 'actions.remove'}}
-              type='button'
-              {{on 'click' (fn @removeGrant grant.value)}}
             />
           {{/if}}
         </item.cell>
