@@ -8,7 +8,7 @@
     <Hds::Text::Display @size='100' @weight='medium' @color='faint'>
       {{t 'titles.filters-applied'}}
     </Hds::Text::Display>
-  
+
     {{#each this.filters as |filter|}}
       {{#if (has-block)}}
         {{yield filter}}
