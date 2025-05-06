@@ -64,6 +64,9 @@ test(
       const projectName = await projectsPage.createProject();
 
       // Create storage bucket
+      await page
+        .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+        .click();
       await page.getByRole('link', { name: 'Orgs', exact: true }).click();
       const storageBucketsPage = new StorageBucketsPage(page);
       const storageBucketName =
