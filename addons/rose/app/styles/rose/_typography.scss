@@ -22,9 +22,10 @@ body {
   background-color: var(--subtle);
 }
 
-.header {
-  margin-top: sizing.rems(m);
-  margin-bottom: sizing.rems(xs);
+// By default, we add top and bottom margins to all headers
+// so this class can be used to remove the margin if needed
+.remove-header-margin {
+  margin: 0;
 }
 
 .p {

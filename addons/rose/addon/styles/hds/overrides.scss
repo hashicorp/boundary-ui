@@ -3,6 +3,17 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+// header margin override (HDS leaves this to implementers)
+h1[class*='hds-typography-display-'],
+h2[class*='hds-typography-display-'],
+h3[class*='hds-typography-display-'],
+h4[class*='hds-typography-display-'],
+h5[class*='hds-typography-display-'],
+h6[class*='hds-typography-display-'] {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 // field and button bottom margin (HDS leaves this to implementers)
 form {
   [class*='hds-form-field--layout'],
