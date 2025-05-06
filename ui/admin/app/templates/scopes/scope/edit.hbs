@@ -21,7 +21,7 @@
 
   <page.header>
     {{#if @model.isGlobal}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.global.title'}}
         <DocLink @doc='global' />
       </Hds::Text::Display>
@@ -30,7 +30,7 @@
       </Hds::Text::Body>
     {{/if}}
     {{#if @model.isOrg}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.org.title'}}
         <DocLink @doc='org' />
       </Hds::Text::Display>
@@ -39,7 +39,7 @@
       </Hds::Text::Body>
     {{/if}}
     {{#if @model.isProject}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.project.title'}}
         <DocLink @doc='project' />
       </Hds::Text::Display>

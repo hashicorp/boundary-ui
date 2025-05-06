@@ -24,7 +24,7 @@
 
   <page.header>
     {{#if @model.isOrg}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.org.titles.new'}}
         <DocLink @doc='org.new' />
       </Hds::Text::Display>
@@ -32,7 +32,7 @@
         {{t 'resources.org.description'}}
       </Hds::Text::Body>
     {{else if @model.isProject}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.project.titles.new'}}
         <DocLink @doc='project.new' />
       </Hds::Text::Display>

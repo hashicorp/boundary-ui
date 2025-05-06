@@ -11,7 +11,7 @@
 
   <page.header>
     {{#if @model.currentScope.isGlobal}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.org.title_plural'}}
         <DocLink @doc='org' />
       </Hds::Text::Display>
@@ -21,7 +21,7 @@
         </Hds::Text::Body>
       {{/if}}
     {{else if @model.currentScope.isOrg}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header'>
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.project.title_plural'}}
         <DocLink @doc='project' />
       </Hds::Text::Display>
