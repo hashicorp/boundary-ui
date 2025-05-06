@@ -18,12 +18,8 @@
     {{#if
       (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
     }}
-      <Hds::Dropdown as |dd|>
-        <dd.ToggleButton
-          data-test-manage-dropdown
-          @text={{t 'actions.manage'}}
-          @color='secondary'
-        />
+      <Hds::Dropdown data-test-manage-channels-dropdown as |dd|>
+        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
         <dd.Interactive
           {{on 'click' (fn this.reapplyStoragePolicy @model.sessionRecording)}}
@@ -31,7 +27,6 @@
         {{#if (can 'delete session-recording' @model.sessionRecording)}}
           <dd.Separator />
           <dd.Interactive
-            data-test-manage-dropdown-delete
             @color='critical'
             {{on 'click' (fn this.delete @model.sessionRecording)}}
           >

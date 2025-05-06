@@ -16,8 +16,10 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
+    "format": "yarn run format:js",
+    "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "ember test",
+    "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
@@ -85,7 +87,11 @@
     "configPath": "tests/dummy/config"
   },
   "lint-staged": {
-    "*.{js,scss,yaml}": "eslint --fix",
-    "*.hbs": "ember-template-lint --fix"
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.hbs": "ember-template-lint --fix",
+    "*.{scss,yaml}": "prettier --write"
   }
 }

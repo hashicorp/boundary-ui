@@ -4,20 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  fillIn,
-  waitUntil,
-  findAll,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { faker } from '@faker-js/faker';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -25,17 +19,6 @@ module('Acceptance | session recordings | list', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
-
-  // Selectors
-  const SESSION_RECORDING_TITLE = 'Session Recordings';
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-recording-results]';
-  const FILTER_TOGGLE_SELECTOR = (name) =>
-    `[data-test-session-recordings-bar] div[name="${name}"] button`;
-  const FILTER_APPLY_BUTTON = (name) =>
-    `[data-test-session-recordings-bar] div[name="${name}"] div div:last-child button[type="button"]`;
-  const LAST_3_DAYS_OPTION =
-    '[data-test-session-recordings-bar] div[name="time"] li:nth-child(2) button';
 
   // Instances
   const instances = {
@@ -127,19 +110,20 @@ module('Acceptance | session recordings | list', function (hooks) {
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {
     await visit(urls.globalScope);
-
     assert.true(
       instances.scopes.global.authorized_collection_actions[
         'session-recordings'
       ].includes('list'),
     );
-    assert.dom(`[href="${urls.sessionRecordings}"]`).exists();
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecordings)).isVisible();
     assert
       .dom(commonSelectors.SIDEBAR_NAV_CONTENT)
-      .includesText(SESSION_RECORDING_TITLE);
+      .includesText(selectors.SESSION_RECORDING_TITLE);
 
     // Visit session recordings
-    await click(`[href="${urls.sessionRecordings}"]`);
+    await click(commonSelectors.HREF(urls.sessionRecordings));
+
     assert.strictEqual(currentURL(), urls.sessionRecordings);
   });
 
@@ -147,7 +131,6 @@ module('Acceptance | session recordings | list', function (hooks) {
     instances.scopes.global.authorized_collection_actions[
       'session-recordings'
     ] = [];
-
     await visit(urls.globalScope);
 
     assert.false(
@@ -157,83 +140,95 @@ module('Acceptance | session recordings | list', function (hooks) {
     );
     assert
       .dom(commonSelectors.SIDEBAR_NAV_CONTENT)
-      .doesNotIncludeText(SESSION_RECORDING_TITLE);
-    assert.dom(`[href="${urls.sessionRecordings}"]`).doesNotExist();
+      .doesNotIncludeText(selectors.SESSION_RECORDING_TITLE);
+    assert.dom(commonSelectors.HREF(urls.sessionRecordings)).doesNotExist();
   });
 
   test('user can search for a session recording by id', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
-    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).exists();
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.sessionRecording.id);
-    await waitUntil(
-      () => findAll(commonSelectors.HREF(urls.sessionRecording2)).length === 0,
-    );
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).isVisible();
 
-    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.sessionRecording.id);
+    await waitFor(commonSelectors.HREF(urls.sessionRecording2), { count: 0 });
+
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).isVisible();
     assert.dom(commonSelectors.HREF(urls.sessionRecording2)).doesNotExist();
   });
 
   test('user can search for a session recording by id and get no results', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom(commonSelectors.HREF(urls.sessionRecording)).exists();
-    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).exists();
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'sr_404');
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording2)).isVisible();
+
+    await fillIn(commonSelectors.SEARCH_INPUT, 'sr_404');
+    await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
 
     assert.dom(commonSelectors.HREF(urls.sessionRecording)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.sessionRecording2)).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
   test('user can filter session recordings by user', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await click(FILTER_TOGGLE_SELECTOR('user'));
-    await click(`input[value="${instances.user.id}"]`);
-    await click(FILTER_APPLY_BUTTON('user'));
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
 
-    assert.dom('tbody tr').exists({ count: 1 });
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
+
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by scope', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await click(FILTER_TOGGLE_SELECTOR('target'));
-    await click(`input[value="${instances.target.id}"]`);
-    await click(FILTER_APPLY_BUTTON('target'));
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
 
-    assert.dom('tbody tr').exists({ count: 1 });
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
+
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by target', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await click(FILTER_TOGGLE_SELECTOR('scope'));
-    await click(`input[value="${instances.target.scope.id}"]`);
-    await click(FILTER_APPLY_BUTTON('scope'));
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
 
-    assert.dom('tbody tr').exists({ count: 1 });
+    await click(commonSelectors.FILTER_DROPDOWN('scope'));
+    await click(
+      commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.scope.id),
+    );
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('scope'));
+
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by time', async function (assert) {
-    await visit(urls.sessionRecordings);
+    await visit(urls.globalScope);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    await click(FILTER_TOGGLE_SELECTOR('time'));
-    await click(LAST_3_DAYS_OPTION);
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
 
-    assert.dom('tbody tr').exists({ count: 1 });
+    await click(commonSelectors.FILTER_DROPDOWN('time'));
+    await click(selectors.LAST_3_DAYS_OPTION);
+
+    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
   });
 });
