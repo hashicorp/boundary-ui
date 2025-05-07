@@ -26,7 +26,7 @@ Boundary UIs.
 
 Add this addon to an Ember application's `devDependencies` as:
 `"rose": "workspace:*"`, for applications included in this monorepo. Application's
-may then import rose styles by adding `@import 'rose';` to their stylesheets.
+may then import rose styles by adding `@use 'rose';` to their stylesheets.
 
 ## Installation
 

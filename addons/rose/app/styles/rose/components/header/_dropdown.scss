@@ -1,3 +1,6 @@
+@use '../../variables/color/sass';
+@use '../dropdown/dropdown';
+
 /**
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
@@ -6,15 +9,15 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
-$chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
+dropdown.$chevron: "data:image/svg+xml;utf-8,<svg viewBox='0 0 24 24' fill='%23bac1cc' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z'></path></svg>";
 
 .rose-header {
   .rose-dropdown {
     &,
     &[open] {
       .rose-dropdown-trigger {
-        color: #{color(ui-gray, 300)};
-        background: url($chevron) no-repeat right sizing.rems(s) center;
+        color: #{sass.color(ui-gray, 300)};
+        background: url(dropdown.$chevron) no-repeat right sizing.rems(s) center;
         background-size: sizing.rems(m);
 
         $y-padding: sizing.rems(xxxs);

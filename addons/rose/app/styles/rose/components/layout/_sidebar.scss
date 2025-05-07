@@ -1,3 +1,5 @@
+@use '../../variables/color/sass';
+
 /**
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
@@ -22,7 +24,7 @@
 
   .rose-layout-sidebar-sidebar {
     grid-area: sidebar;
-    background-color: #{color(ui-gray, 950)};
+    background-color: #{sass.color(ui-gray, 950)};
     border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
   }
 
