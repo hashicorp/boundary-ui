@@ -7,9 +7,9 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'rose';
-@import 'notify';
-@import '@hashicorp/ember-asciinema-player';
+@use 'rose';
+@use 'notify';
+@use '@hashicorp/ember-asciinema-player';
 
 .rose-layout-global {
   .rose-layout-global-body {

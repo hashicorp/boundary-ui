@@ -3,6 +3,6 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@import '@hashicorp/design-system-components';
-@import 'hds/themes/dark-mode';
-@import 'hds/overrides';
+@use '@hashicorp/design-system-components';
+@use 'hds/themes/dark-mode';
+@use 'hds/overrides';

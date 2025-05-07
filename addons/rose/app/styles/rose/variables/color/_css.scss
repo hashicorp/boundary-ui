@@ -1,3 +1,5 @@
+@use 'sass';
+
 /**
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
@@ -13,8 +15,8 @@
 // Light Mode
 @mixin light-mode {
   // absolutes
-  --white: #{color(white)};
-  --black: #{color(black)};
+  --white: #{sass.color(white)};
+  --black: #{sass.color(black)};
   --black-components: 0, 0, 0;
 
   // poles
@@ -23,59 +25,59 @@
   --stark-components: 0, 0, 0;
 
   // brand colors
-  --brand-black: #{brand-color(black)};
-  --brand-white: #{brand-color(white)};
-  --brand-secondary: #{brand-color(secondary)};
-  --brand-gray-7: #{brand-color(gray-7)};
-  --brand-gray-6: #{brand-color(gray-6)};
-  --brand-gray-5: #{brand-color(gray-5)};
-  --brand-gray-4: #{brand-color(gray-4)};
-  --brand-gray-3: #{brand-color(gray-3)};
-  --brand-gray-2: #{brand-color(gray-2)};
-  --brand-gray-1: #{brand-color(gray-1)};
+  --brand-black: #{sass.brand-color(black)};
+  --brand-white: #{sass.brand-color(white)};
+  --brand-secondary: #{sass.brand-color(secondary)};
+  --brand-gray-7: #{sass.brand-color(gray-7)};
+  --brand-gray-6: #{sass.brand-color(gray-6)};
+  --brand-gray-5: #{sass.brand-color(gray-5)};
+  --brand-gray-4: #{sass.brand-color(gray-4)};
+  --brand-gray-3: #{sass.brand-color(gray-3)};
+  --brand-gray-2: #{sass.brand-color(gray-2)};
+  --brand-gray-1: #{sass.brand-color(gray-1)};
 
   // theme colors
-  --info-subtler-3: #{color(blue, 010)};
-  --info-subtler-2: #{color(blue, 100)};
-  --info-subtler-1: #{color(blue, 400)};
-  --info: #{color(blue)};
-  --info-starker-1: #{color(blue, 700)};
-  --info-starker-2: #{color(blue, 800)};
-  --alert-subtler-2: #{color(orange, 010)};
-  --alert-subtler-1: #{color(orange, 100)};
-  --alert: #{color(orange)};
-  --alert-starker-1: #{color(orange, 800)};
-  --warning-subtler-2: #{color(yellow, 010)};
-  --warning-subtler-1: #{color(yellow, 100)};
-  --warning: #{color(yellow)};
-  --warning-starker-1: #{color(yellow, 800)};
-  --failure-subtler-2: #{color(red, 010)};
-  --failure-subtler-1: #{color(red, 100)};
-  --failure: #{color(red)};
-  --failure-starker-1: #{color(red, 800)};
-  --success-subtler-2: #{color(green, 010)};
-  --success-subtler-1: #{color(green, 100)};
-  --success: #{color(green)};
-  --success-starker-1: #{color(green, 800)};
-  --action-subtler-2: #{color(blue, 010)};
-  --action-subtler-1h: #{color(blue, 050)};
-  --action-subtler-1: #{color(blue, 100)};
-  --action: #{color(blue)};
-  --action-starker-1: #{color(blue, 700)};
-  --ui-border-subtler-1: #{color(ui-gray, 200)};
-  --ui-border: #{color(ui-gray, 300)};
-  --ui-gray-subtler-6: #{color(ui-gray, 010)};
-  --ui-gray-subtler-5: #{color(ui-gray, 050)};
-  --ui-gray-subtler-4: #{color(ui-gray, 100)};
-  --ui-gray-subtler-3: #{color(ui-gray, 200)};
-  --ui-gray-subtler-2: #{color(ui-gray, 300)};
-  --ui-gray-subtler-1: #{color(ui-gray, 400)};
-  --ui-gray: #{color(ui-gray)};
-  --ui-gray-starker-1: #{color(ui-gray, 600)};
-  --ui-gray-starker-2: #{color(ui-gray, 700)};
-  --ui-gray-starker-3: #{color(ui-gray, 800)};
-  --ui-gray-starker-4: #{color(ui-gray, 900)};
-  --ui-header-subtler: #{color(ui-cool-gray, 700)};
+  --info-subtler-3: #{sass.color(blue, 010)};
+  --info-subtler-2: #{sass.color(blue, 100)};
+  --info-subtler-1: #{sass.color(blue, 400)};
+  --info: #{sass.color(blue)};
+  --info-starker-1: #{sass.color(blue, 700)};
+  --info-starker-2: #{sass.color(blue, 800)};
+  --alert-subtler-2: #{sass.color(orange, 010)};
+  --alert-subtler-1: #{sass.color(orange, 100)};
+  --alert: #{sass.color(orange)};
+  --alert-starker-1: #{sass.color(orange, 800)};
+  --warning-subtler-2: #{sass.color(yellow, 010)};
+  --warning-subtler-1: #{sass.color(yellow, 100)};
+  --warning: #{sass.color(yellow)};
+  --warning-starker-1: #{sass.color(yellow, 800)};
+  --failure-subtler-2: #{sass.color(red, 010)};
+  --failure-subtler-1: #{sass.color(red, 100)};
+  --failure: #{sass.color(red)};
+  --failure-starker-1: #{sass.color(red, 800)};
+  --success-subtler-2: #{sass.color(green, 010)};
+  --success-subtler-1: #{sass.color(green, 100)};
+  --success: #{sass.color(green)};
+  --success-starker-1: #{sass.color(green, 800)};
+  --action-subtler-2: #{sass.color(blue, 010)};
+  --action-subtler-1h: #{sass.color(blue, 050)};
+  --action-subtler-1: #{sass.color(blue, 100)};
+  --action: #{sass.color(blue)};
+  --action-starker-1: #{sass.color(blue, 700)};
+  --ui-border-subtler-1: #{sass.color(ui-gray, 200)};
+  --ui-border: #{sass.color(ui-gray, 300)};
+  --ui-gray-subtler-6: #{sass.color(ui-gray, 010)};
+  --ui-gray-subtler-5: #{sass.color(ui-gray, 050)};
+  --ui-gray-subtler-4: #{sass.color(ui-gray, 100)};
+  --ui-gray-subtler-3: #{sass.color(ui-gray, 200)};
+  --ui-gray-subtler-2: #{sass.color(ui-gray, 300)};
+  --ui-gray-subtler-1: #{sass.color(ui-gray, 400)};
+  --ui-gray: #{sass.color(ui-gray)};
+  --ui-gray-starker-1: #{sass.color(ui-gray, 600)};
+  --ui-gray-starker-2: #{sass.color(ui-gray, 700)};
+  --ui-gray-starker-3: #{sass.color(ui-gray, 800)};
+  --ui-gray-starker-4: #{sass.color(ui-gray, 900)};
+  --ui-header-subtler: #{sass.color(ui-cool-gray, 700)};
 
   color-scheme: light;
 }
@@ -84,51 +86,51 @@
 @mixin dark-mode {
   // poles
   --subtle: var(--black);
-  --stark: #{color(ui-gray, 100)};
+  --stark: #{sass.color(ui-gray, 100)};
   --stark-components: 255, 255, 255;
 
   // theme colors
-  --info-subtler-3: #{color(blue, 800)};
-  --info-subtler-2: #{color(blue, 700)};
-  --info-subtler-1: #{color(blue, 600)};
-  --info: #{color(blue)};
-  --info-starker-1: #{color(blue, 300)};
-  --info-starker-2: #{color(blue, 200)};
-  --alert-subtler-2: #{color(orange, 900)};
-  --alert-subtler-1: #{color(orange, 800)};
-  --alert: #{color(orange)};
-  --alert-starker-1: #{color(orange, 200)};
-  --warning-subtler-2: #{color(yellow, 900)};
-  --warning-subtler-1: #{color(yellow, 800)};
-  --warning: #{color(yellow)};
-  --warning-starker-1: #{color(yellow, 200)};
-  --failure-subtler-2: #{color(red, 900)};
-  --failure-subtler-1: #{color(red, 800)};
-  --failure: #{color(red, 300)};
-  --failure-starker-1: #{color(red, 200)};
-  --success-subtler-2: #{color(green, 900)};
-  --success-subtler-1: #{color(green, 800)};
-  --success: #{color(green, 700)};
-  --success-starker-1: #{color(green, 400)};
-  --action-subtler-2: #{color.adjust(color(blue, 900), $lightness: -10%)};
-  --action-subtler-1h: #{color.adjust(color(blue, 900), $lightness: -5%)};
-  --action-subtler-1: #{color(blue, 800)};
-  --action: #{color(blue, 400)};
-  --action-starker-1: #{color(blue, 200)};
-  --ui-border-subtler-1: #{color(ui-gray, 800)};
-  --ui-border: #{color(ui-gray, 700)};
-  --ui-gray-subtler-6: #{color(ui-gray, 950)};
-  --ui-gray-subtler-5: #{color(ui-gray, 900)};
-  --ui-gray-subtler-4: #{color(ui-gray, 800)};
-  --ui-gray-subtler-3: #{color(ui-gray, 600)};
-  --ui-gray-subtler-2: #{color(ui-gray, 500)};
-  --ui-gray-subtler-1: #{color(ui-gray, 400)};
-  --ui-gray: #{color(ui-gray, 300)};
-  --ui-gray-starker-1: #{color(ui-gray, 200)};
-  --ui-gray-starker-2: #{color(ui-gray, 100)};
-  --ui-gray-starker-3: #{color(ui-gray, 050)};
-  --ui-gray-starker-4: #{color(ui-gray, 010)};
-  --ui-header-subtler: #{color(ui-cool-gray, 100)};
+  --info-subtler-3: #{sass.color(blue, 800)};
+  --info-subtler-2: #{sass.color(blue, 700)};
+  --info-subtler-1: #{sass.color(blue, 600)};
+  --info: #{sass.color(blue)};
+  --info-starker-1: #{sass.color(blue, 300)};
+  --info-starker-2: #{sass.color(blue, 200)};
+  --alert-subtler-2: #{sass.color(orange, 900)};
+  --alert-subtler-1: #{sass.color(orange, 800)};
+  --alert: #{sass.color(orange)};
+  --alert-starker-1: #{sass.color(orange, 200)};
+  --warning-subtler-2: #{sass.color(yellow, 900)};
+  --warning-subtler-1: #{sass.color(yellow, 800)};
+  --warning: #{sass.color(yellow)};
+  --warning-starker-1: #{sass.color(yellow, 200)};
+  --failure-subtler-2: #{sass.color(red, 900)};
+  --failure-subtler-1: #{sass.color(red, 800)};
+  --failure: #{sass.color(red, 300)};
+  --failure-starker-1: #{sass.color(red, 200)};
+  --success-subtler-2: #{sass.color(green, 900)};
+  --success-subtler-1: #{sass.color(green, 800)};
+  --success: #{sass.color(green, 700)};
+  --success-starker-1: #{sass.color(green, 400)};
+  --action-subtler-2: #{color.adjust(sass.color(blue, 900), $lightness: -10%)};
+  --action-subtler-1h: #{color.adjust(sass.color(blue, 900), $lightness: -5%)};
+  --action-subtler-1: #{sass.color(blue, 800)};
+  --action: #{sass.color(blue, 400)};
+  --action-starker-1: #{sass.color(blue, 200)};
+  --ui-border-subtler-1: #{sass.color(ui-gray, 800)};
+  --ui-border: #{sass.color(ui-gray, 700)};
+  --ui-gray-subtler-6: #{sass.color(ui-gray, 950)};
+  --ui-gray-subtler-5: #{sass.color(ui-gray, 900)};
+  --ui-gray-subtler-4: #{sass.color(ui-gray, 800)};
+  --ui-gray-subtler-3: #{sass.color(ui-gray, 600)};
+  --ui-gray-subtler-2: #{sass.color(ui-gray, 500)};
+  --ui-gray-subtler-1: #{sass.color(ui-gray, 400)};
+  --ui-gray: #{sass.color(ui-gray, 300)};
+  --ui-gray-starker-1: #{sass.color(ui-gray, 200)};
+  --ui-gray-starker-2: #{sass.color(ui-gray, 100)};
+  --ui-gray-starker-3: #{sass.color(ui-gray, 050)};
+  --ui-gray-starker-4: #{sass.color(ui-gray, 010)};
+  --ui-header-subtler: #{sass.color(ui-cool-gray, 100)};
 
   color-scheme: dark;
 }

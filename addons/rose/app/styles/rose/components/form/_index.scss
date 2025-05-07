@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@import 'label';
-@import 'errors';
-@import 'helper-text';
-@import 'input';
-@import 'checkbox';
-@import 'select';
-@import 'fieldset';
+@use 'label';
+@use 'errors';
+@use 'helper-text';
+@use 'input';
+@use 'checkbox';
+@use 'select';
+@use 'fieldset';

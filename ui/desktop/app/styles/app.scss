@@ -7,8 +7,8 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'rose';
-@import 'notify';
+@use 'rose';
+@use 'notify';
 
 .rose-layout-centered {
   > .rose-layout-page {
