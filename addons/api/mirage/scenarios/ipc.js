@@ -199,7 +199,10 @@ export default function initializeMockIPC(server, config) {
      * Check for OS chrome state
      */
     showWindowActions() {
-      return window.navigator?.userAgentData?.platform === 'Windows';
+      if (navigator.userAgent.includes('Mac')) {
+        return false;
+      }
+      return true;
     }
 
     /**
