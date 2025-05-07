@@ -5304,9 +5304,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ember/test-helpers@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "@ember/test-helpers@npm:4.0.5"
+"@ember/test-helpers@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "@ember/test-helpers@npm:5.2.1"
   dependencies:
     "@ember/test-waiters": "npm:^3.1.0 || ^4.0.0"
     "@embroider/addon-shim": "npm:^1.8.7"
@@ -5316,11 +5316,21 @@ __metadata:
     dom-element-descriptors: "npm:^0.5.0"
   peerDependencies:
     ember-source: ">= 4.0.0"
-  checksum: 10c0/4ff9b6ae5c0f4800ca5984b922da19137e726028af7482fc3b3d96697608deffb21f97407a93f223ca15d2b8c85e536ba37c020488d6f3cd2797fc88f55cb774
+  checksum: 10c0/48a397b8cd4df0ff847af7cb041554041f9698180fb99555ac10d5d049a96539946016bc5415781f6f4b811516520a177cc21f9e9e47e4c79d9b86a47c6be9d8
   languageName: node
   linkType: hard
 
-"@ember/test-waiters@npm:^2.4.3 || ^3.0.0, @ember/test-waiters@npm:^3, @ember/test-waiters@npm:^3.1.0":
+"@ember/test-waiters@npm:^2.4.3 || ^3.0.0 || ^4.0.0, @ember/test-waiters@npm:^3.1.0 || ^4.0.0, @ember/test-waiters@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@ember/test-waiters@npm:4.1.0"
+  dependencies:
+    "@embroider/addon-shim": "npm:^1.9.0"
+    "@embroider/macros": "npm:^1.16.9"
+  checksum: 10c0/af1bf843b4060e55f93e1ff095f7c4a127258b18f73dad81cc797dbff052d8dea51b17b51ca3b1ebc773e843ea99daef0f7771b5323de6ec215bb262e0c46328
+  languageName: node
+  linkType: hard
+
+"@ember/test-waiters@npm:^3, @ember/test-waiters@npm:^3.1.0":
   version: 3.1.0
   resolution: "@ember/test-waiters@npm:3.1.0"
   dependencies:
@@ -5329,16 +5339,6 @@ __metadata:
     ember-cli-version-checker: "npm:^5.1.2"
     semver: "npm:^7.3.5"
   checksum: 10c0/fd3b3d6be45f22fd8f09bc12a7ae44d0740b0b5fd38daef7f89e0e1e6347f64e2388ec86ab8d0c907a5d2dc6e586d1be132b3e5e31aafa2a648e8c8a95d566bd
-  languageName: node
-  linkType: hard
-
-"@ember/test-waiters@npm:^3.1.0 || ^4.0.0, @ember/test-waiters@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@ember/test-waiters@npm:4.1.0"
-  dependencies:
-    "@embroider/addon-shim": "npm:^1.9.0"
-    "@embroider/macros": "npm:^1.16.9"
-  checksum: 10c0/af1bf843b4060e55f93e1ff095f7c4a127258b18f73dad81cc797dbff052d8dea51b17b51ca3b1ebc773e843ea99daef0f7771b5323de6ec215bb262e0c46328
   languageName: node
   linkType: hard
 
@@ -7599,7 +7599,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -7609,7 +7609,7 @@ __metadata:
     concurrently: "npm:^9.1.0"
     core: "workspace:*"
     doctoc: "npm:^2.2.0"
-    ember-a11y-testing: "npm:^7.0.0"
+    ember-a11y-testing: "npm:^7.1.2"
     ember-auto-import: "npm:^2.10.0"
     ember-cli: "npm:~5.12.0"
     ember-cli-babel: "npm:^8.2.0"
@@ -7946,7 +7946,7 @@ __metadata:
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^4.0.0"
     "@faker-js/faker": "npm:^8.0.2"
@@ -8176,7 +8176,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@ember/test-waiters": "npm:^4.1.0"
     "@embroider/test-setup": "npm:^4.0.0"
     "@glimmer/component": "npm:^1.1.2"
@@ -8229,10 +8229,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axe-core@npm:^4.6.3":
-  version: 4.10.0
-  resolution: "axe-core@npm:4.10.0"
-  checksum: 10c0/732c171d48caaace5e784895c4dacb8ca6155e9d98045138ebe3952f78457dd05b92c57d05b41ce2a570aff87dbd0471e8398d2c0f6ebe79617b746c8f658998
+"axe-core@npm:^4.10.3":
+  version: 4.10.3
+  resolution: "axe-core@npm:4.10.3"
+  checksum: 10c0/1b1c24f435b2ffe89d76eca0001cbfff42dbf012ad9bd37398b70b11f0d614281a38a28bc3069e8972e3c90ec929a8937994bd24b0ebcbaab87b8d1e241ab0c7
   languageName: node
   linkType: hard
 
@@ -8701,7 +8701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"body-parser@npm:1.20.3, body-parser@npm:^1.17.0, body-parser@npm:^1.19.0, body-parser@npm:^1.19.1":
+"body-parser@npm:1.20.3, body-parser@npm:^1.17.0, body-parser@npm:^1.19.0":
   version: 1.20.3
   resolution: "body-parser@npm:1.20.3"
   dependencies:
@@ -10412,7 +10412,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@embroider/test-setup": "npm:^4.0.0"
     "@faker-js/faker": "npm:^8.0.2"
     "@formatjs/intl-durationformat": "npm:^0.2.4"
@@ -10940,7 +10940,7 @@ __metadata:
     "@ember/optional-features": "npm:^2.1.0"
     "@ember/render-modifiers": "npm:^2.0.4"
     "@ember/string": "npm:^4.0.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@faker-js/faker": "npm:^8.0.2"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
@@ -10953,7 +10953,7 @@ __metadata:
     core: "workspace:*"
     cross-env: "npm:^7.0.3"
     doctoc: "npm:^2.2.0"
-    ember-a11y-testing: "npm:^7.0.0"
+    ember-a11y-testing: "npm:^7.1.2"
     ember-auto-import: "npm:^2.10.0"
     ember-cli: "npm:~5.12.0"
     ember-cli-babel: "npm:^8.2.0"
@@ -11313,29 +11313,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-a11y-testing@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "ember-a11y-testing@npm:7.0.0"
+"ember-a11y-testing@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "ember-a11y-testing@npm:7.1.2"
   dependencies:
-    "@ember/test-waiters": "npm:^2.4.3 || ^3.0.0"
+    "@ember/test-waiters": "npm:^2.4.3 || ^3.0.0 || ^4.0.0"
+    "@glimmer/env": "npm:^0.1.7"
     "@scalvert/ember-setup-middleware-reporter": "npm:^0.1.1"
-    axe-core: "npm:^4.6.3"
-    body-parser: "npm:^1.19.1"
+    axe-core: "npm:^4.10.3"
     broccoli-persistent-filter: "npm:^3.1.2"
     ember-auto-import: "npm:^2.2.4"
     ember-cli-babel: "npm:^7.26.11"
+    ember-cli-htmlbars: "npm:^6.3.0"
     ember-cli-typescript: "npm:^4.2.1"
     ember-cli-version-checker: "npm:^5.1.2"
-    ember-destroyable-polyfill: "npm:^2.0.1"
     fs-extra: "npm:^11.2.0"
     validate-peer-dependencies: "npm:^2.0.0"
   peerDependencies:
-    "@ember/test-helpers": ^3.0.3 || ^4.0.2
+    "@ember/test-helpers": ^3.0.3 || ^4.0.2 || ^5.0.0
     qunit: ">= 2"
   peerDependenciesMeta:
     qunit:
       optional: true
-  checksum: 10c0/5f1587fa175dfb407462f9c59a5178ba1872f8fcd111a64eb4521d463605115f6f5c503752e3500d229a5d949f24eaa35a48b303501127a7075a26c4d90a7ab8
+  checksum: 10c0/c0428a5abe5bc3995cd8fa497a30eecdf8319aabc51a82a9eb8ebee6cca912ed764dcc33957bc6a3d67866c0fa6cf8dd04cb59fe7f3fb2a7f3ee87c8d9f39430
   languageName: node
   linkType: hard
 
@@ -12299,7 +12299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ember-destroyable-polyfill@npm:^2.0.1, ember-destroyable-polyfill@npm:^2.0.2":
+"ember-destroyable-polyfill@npm:^2.0.2":
   version: 2.0.3
   resolution: "ember-destroyable-polyfill@npm:2.0.3"
   dependencies:
@@ -20780,7 +20780,7 @@ __metadata:
     "@babel/eslint-parser": "npm:^7.25.1"
     "@babel/plugin-proposal-decorators": "npm:^7.24.7"
     "@ember/optional-features": "npm:^2.1.0"
-    "@ember/test-helpers": "npm:^4.0.5"
+    "@ember/test-helpers": "npm:^5.2.1"
     "@embroider/test-setup": "npm:^4.0.0"
     "@glimmer/component": "npm:^1.1.2"
     "@glimmer/tracking": "npm:^1.1.2"
