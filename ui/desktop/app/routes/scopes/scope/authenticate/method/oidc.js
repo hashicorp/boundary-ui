@@ -18,8 +18,6 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
 
   @service session;
   @service router;
-  @service flashMessages;
-  @service intl;
 
   // =attributes
 
