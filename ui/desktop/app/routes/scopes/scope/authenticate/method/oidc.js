@@ -56,11 +56,6 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    * When this route is activated (entered), start polling for authentication.
    */
   activate() {
-    const prevAuthFailedMessage = this.flashMessages.queue.find(
-      (flash) =>
-        flash.message === this.intl.t('errors.authentication-failed.title'),
-    );
-    prevAuthFailedMessage?.destroyMessage();
     this.poller.perform();
   }
 
@@ -77,7 +72,10 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    * notified and returned to the index.
    */
   @action
-  @notifyError(() => 'errors.authentication-failed.title', { catch: true })
+  @notifyError(() => 'errors.authentication-failed.title', {
+    catch: true,
+    sticky: false,
+  })
   error(e) {
     this.router.transitionTo('scopes.scope.authenticate.method.index');
     // rethrow the error to activate the notifyError decorator
