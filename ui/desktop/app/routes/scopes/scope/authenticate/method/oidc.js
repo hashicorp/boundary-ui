@@ -70,7 +70,10 @@ export default class ScopesScopeAuthenticateMethodOidcRoute extends Route {
    * notified and returned to the index.
    */
   @action
-  @notifyError(() => 'errors.authentication-failed.title', { catch: true })
+  @notifyError(() => 'errors.authentication-failed.title', {
+    catch: true,
+    sticky: false,
+  })
   error(e) {
     this.router.transitionTo('scopes.scope.authenticate.method.index');
     // rethrow the error to activate the notifyError decorator
