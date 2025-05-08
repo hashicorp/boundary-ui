@@ -33,7 +33,7 @@ module('Integration | Component | rose/form', function (hooks) {
     await click('button:not([type="submit"])');
   });
 
-  test('it can render contextual form components', async function (assert) {
+  test('it yields child form components', async function (assert) {
     this.submit = () => {};
     this.cancel = () => {};
     this.select = () => {};
@@ -44,7 +44,7 @@ module('Integration | Component | rose/form', function (hooks) {
         @disabled={{false}}
         as |form|
       >
-        <form.input @label="Input" @name="input-field" />
+        <Hds::Form::TextInput::Field name="input-field" />
         <Hds::Form::Textarea::Field
           @value="This is my description"
           name="textarea-field"
@@ -96,7 +96,7 @@ module('Integration | Component | rose/form', function (hooks) {
         @showEditToggle={{true}}
         as |form|
       >
-        <form.input @label="Label" @value="value" />
+        <Hds::Form::TextInput::Field @value="value" disabled={{if form.isEditable false true}} />
         <form.actions
           @submitText="Save"
           @cancelText="Cancel"
@@ -133,7 +133,7 @@ module('Integration | Component | rose/form', function (hooks) {
         @showEditToggle={{true}}
         as |form|
       >
-        <form.input @label="Label" @value="value" />
+        <Hds::Form::TextInput::Field @value="value" disabled={{if form.isEditable false true}} />
         <form.actions
           @submitText="Save"
           @cancelText="Cancel"

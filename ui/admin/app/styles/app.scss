@@ -48,14 +48,6 @@
     width: 66%;
   }
 
-  .rose-form-input {
-    width: 100%;
-
-    .rose-form-input-field {
-      width: 100%;
-    }
-  }
-
   .rose-dropdown {
     $icon-width: sizing.rems(m) + sizing.rems(s);
     $indent: $icon-width + sizing.rems(xs);
