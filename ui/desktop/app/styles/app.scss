@@ -123,6 +123,14 @@
     margin: sizing.rems(xs);
   }
 
+  .button-window-close {
+    &:not(:disabled) {
+      &:hover {
+      background: var(--failure);
+      }
+    }
+  }
+
   .logotype {
     display: none;
   }
