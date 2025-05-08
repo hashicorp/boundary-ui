@@ -238,6 +238,74 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         ['Target 2023', 'Target 2022', 'Target 2021', 'Target 2020'],
       );
     });
+
+    test('it sorts by ascending (default) `name` using string sorting', async function (assert) {
+      const target001 = this.server.create('target', { name: 'Target 001' });
+      const target002 = this.server.create('target', { name: 'Target 002' });
+      const target003 = this.server.create('target', { name: 'Target 003' });
+      const target004 = this.server.create('target', { name: 'Target 004' });
+      const target005 = this.server.create('target', { name: 'Target 005' });
+
+      const shuffledTargets = faker.helpers.shuffle([
+        target001,
+        target002,
+        target003,
+        target004,
+        target005,
+      ]);
+
+      this.server.get(
+        'targets',
+        createPaginatedResponseHandler(shuffledTargets, {
+          pageSize: 1,
+        }),
+      );
+
+      const results = await store.query('target', {
+        query: { sort: { attribute: 'name' } },
+      });
+
+      assert.deepEqual(
+        results.map(({ name }) => name),
+        ['Target 001', 'Target 002', 'Target 003', 'Target 004', 'Target 005'],
+      );
+    });
+
+    test('it sorts by descending, then ascending `name` using string sorting', async function (assert) {
+      const alias001 = this.server.create('alias', { name: 'Alias 001' });
+      const alias002 = this.server.create('alias', { name: 'Alias 002' });
+      const alias003 = this.server.create('alias', { name: 'Alias 003' });
+      const alias004 = this.server.create('alias', { name: 'Alias 004' });
+
+      const shuffledAliases = faker.helpers.shuffle([
+        alias001,
+        alias002,
+        alias003,
+        alias004,
+      ]);
+
+      this.server.get(
+        'aliases',
+        createPaginatedResponseHandler(shuffledAliases, {
+          pageSize: 1,
+        }),
+      );
+
+      const resultsDesc = await store.query('alias', {
+        query: { sort: { attribute: 'name', direction: 'desc' } },
+      });
+      const resultsAsc = await store.query('alias', {
+        query: { sort: { attribute: 'name', direction: 'asc' } },
+      });
+      assert.deepEqual(
+        resultsDesc.map(({ name }) => name),
+        ['Alias 004', 'Alias 003', 'Alias 002', 'Alias 001'],
+      );
+      assert.deepEqual(
+        resultsAsc.map(({ name }) => name),
+        ['Alias 001', 'Alias 002', 'Alias 003', 'Alias 004'],
+      );
+    });
   });
 
   module('option: pushToStore', function (hooks) {

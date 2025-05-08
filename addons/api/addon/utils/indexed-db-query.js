@@ -70,14 +70,9 @@ export async function queryIndexedDb(indexedDb, resource, query) {
     );
   }
 
-  // OrderBy has to be used on where clauses while if it's a
-  // collection already we have to use sortBy. We'll also sort by
-  // descending order based on created time to match the API as any
-  // "or" clause can change the order
-  if (filterCollection.orderBy) {
-    return filterCollection.orderBy(getKey('created_time')).reverse().toArray();
-  }
-  return filterCollection.reverse().sortBy(getKey('created_time'));
+  // filterCollection can be Dexie Table or a Dexie Collection.
+  // This is an important detail you need to keep in mind when working on it.
+  return filterCollection.toArray();
 }
 
 const buildInitialWhereClause = ({ filterArrayOrObject, table, key }) => {
