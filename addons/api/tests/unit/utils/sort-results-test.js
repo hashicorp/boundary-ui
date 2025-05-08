@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { module, test } from 'qunit';
+import { assert, module, test } from 'qunit';
 import { sortResults } from 'api/utils/sort-results';
 import { faker } from '@faker-js/faker';
 import { setupTest } from 'ember-qunit';
@@ -11,7 +11,29 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Utility | sortResults', function (hooks) {
   setupTest(hooks);
 
-  module('string sorting', function () {
+  module('Defaults', function () {
+    test('throws error because the results do not contain the property to be sorted with', function () {
+      const result01 = { id: 'id_01', name: 'Result 01' };
+      const result02 = { id: 'id_02', name: 'Result 02' };
+      const result03 = { id: 'id_03', name: 'Result 03' };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+      ]);
+      const querySort = { attribute: 'doesNotExists' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('doesNotExists', { type: 'string' });
+      try {
+        sortResults(shuffledResults, { querySort, schema });
+      } catch (e) {
+        assert.strictEqual(
+          e.message,
+          'The attribute you are trying to sortBy does not exists',
+        );
+      }
+    });
+
     test('when passing no querySort, sorts using default created_time, descending order and string sorting', async function (assert) {
       const result01 = {
         attributes: { created_time: '2021' },
@@ -34,18 +56,40 @@ module('Unit | Utility | sortResults', function (hooks) {
       const querySort = {};
       const schema = { attributes: new Map() };
       schema.attributes.set('created_time', { type: 'string' });
-
       const sortedResults = sortResults(shuffledResults, {
         querySort,
         schema,
       });
-
       assert.deepEqual(
         sortedResults.map(({ attributes: { created_time } }) => created_time),
         ['2024', '2023', '2022', '2021'],
       );
     });
 
+    test('when sorting by id, without being on the results attributes it sorts as expected ', function () {
+      const result01 = { id: 'id_01' };
+      const result02 = { id: 'id_02' };
+      const result03 = { id: 'id_03' };
+      const result04 = { id: 'id_04' };
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'id' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('id', { type: 'string' });
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+
+      assert.deepEqual(
+        sortedResults.map(({ id }) => id),
+        ['id_01', 'id_02', 'id_03', 'id_04'],
+      );
+    });
+  });
+
+  module('string sorting', function () {
     test('it sorts by ascending (default) `name` using string sorting', async function (assert) {
       const result01 = { attributes: { name: 'Result 01' } };
       const result02 = { attributes: { name: 'Result 02' } };
@@ -60,9 +104,7 @@ module('Unit | Utility | sortResults', function (hooks) {
       const querySort = { attribute: 'name' };
       const schema = { attributes: new Map() };
       schema.attributes.set('name', { type: 'string' });
-
       const sortedResults = sortResults(shuffledResults, { querySort, schema });
-
       assert.deepEqual(
         sortedResults.map(({ attributes: { name } }) => name),
         ['Result 01', 'Result 02', 'Result 03', 'Result 04'],
@@ -80,12 +122,10 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-
       const querySortAsc = { attribute: 'name', direction: 'asc' };
       const querySortDesc = { attribute: 'name', direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('name', { type: 'string' });
-
       const sortedResultsAsc = sortResults(shuffledResults, {
         querySort: querySortAsc,
         schema,
@@ -94,12 +134,10 @@ module('Unit | Utility | sortResults', function (hooks) {
         querySort: querySortDesc,
         schema,
       });
-
       assert.deepEqual(
         sortedResultsAsc.map(({ attributes: { name } }) => name),
         ['Result 01', 'Result 02', 'Result 03', 'Result 04'],
       );
-
       assert.deepEqual(
         sortedResultsDesc.map(({ attributes: { name } }) => name),
         ['Result 04', 'Result 03', 'Result 02', 'Result 01'],

@@ -16,6 +16,19 @@ const sortFunctions = {
   boolean: (a, b) => Number(a) - Number(b),
 };
 
+const getSortValue = (sortValue, sortAttribute) => {
+  if (
+    sortValue.attributes &&
+    Object.hasOwn(sortValue.attributes, sortAttribute)
+  ) {
+    return sortValue.attributes[sortAttribute];
+  } else if (Object.hasOwn(sortValue, sortAttribute)) {
+    return sortValue[sortAttribute];
+  } else {
+    throw new Error('The attribute you are trying to sortBy does not exists');
+  }
+};
+
 export const sortResults = (results, { querySort, schema }) => {
   querySort = querySort ?? {};
 
@@ -37,8 +50,8 @@ export const sortResults = (results, { querySort, schema }) => {
 
   return results.toSorted((a, b) => {
     // Extract the values to sort and sort them.
-    const sortValueA = a.attributes[sortAttribute];
-    const sortValueB = b.attributes[sortAttribute];
+    const sortValueA = getSortValue(a, sortAttribute);
+    const sortValueB = getSortValue(b, sortAttribute);
     const sortResult = sortFunction(sortValueA, sortValueB);
 
     return sortDirection === SORT_DIRECTION_ASCENDING
