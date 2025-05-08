@@ -24,8 +24,8 @@ $family-primary:
   'Droid Sans',
   'Helvetica Neue',
   sans-serif;
-$family-monospace: 'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier,
-  monospace;
+$family-monospace:
+  'SFMono-Regular', consolas, 'Liberation Mono', menlo, courier, monospace;
 
 // Available font weights by name
 $font-weights: (
@@ -55,8 +55,7 @@ $font-sizes: (
   // 20
   h3: sizing.size(m),
   // 16
-  button: sizing.size(m) * 0.8125,
-  // 13
+  button: sizing.size(m) * 0.8125, // 13
 );
 
 // Line height expressed as ratio.
