@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@import 'global';
-@import 'sidebar';
-@import 'page';
-@import 'centered';
-@import 'body-content';
+@use 'global';
+@use 'sidebar';
+@use 'page';
+@use 'centered';
+@use 'body-content';
 
 // TODO:  this is prescriptive and can be removed if it becomes a problem,
 // but used here reflects the fact that the "main" element, of which there

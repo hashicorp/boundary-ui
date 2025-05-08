@@ -6,6 +6,8 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 
+$size-xxs: sizing.rems(xxs); // 4
+
 .rose-form-select {
   margin-bottom: sizing.rems(m);
 }
