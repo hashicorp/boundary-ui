@@ -7,8 +7,8 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@use 'rose';
 @use 'notify';
+@use 'rose';
 
 .rose-layout-centered {
   > .rose-layout-page {
@@ -482,4 +482,9 @@
       flex-basis: 100%;
     }
   }
+}
+
+.header-spacing {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
