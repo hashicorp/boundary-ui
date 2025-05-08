@@ -23,12 +23,11 @@
         {{#if this.showWindowActions}}
           <Hds::Button
             {{on 'click' this.close}}
-            class='button-window-close'
+            class='button-window-close warning'
             title={{t 'actions.close'}}
             @text={{t 'actions.close'}}
             @icon='x'
             @isIconOnly={{true}}
-            @style='warning'
           />
           <Hds::Button
             {{on 'click' this.toggleFullScreen}}
@@ -37,7 +36,7 @@
             @text={{t 'actions.fullscreen'}}
             @icon='square'
             @isIconOnly={{true}}
-            @style='secondary'
+            @color='secondary'
           />
           <Hds::Button
             {{on 'click' this.minimize}}
@@ -46,7 +45,7 @@
             @text={{t 'actions.minimize'}}
             @icon='minus'
             @isIconOnly={{true}}
-            @style='secondary'
+            @color='secondary'
           />
         {{/if}}
 
