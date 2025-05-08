@@ -47,7 +47,13 @@
   </Hds::Form::Textarea::Field>
 
   <div class='ldap-section'>
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+    <Hds::Text::Display
+      @tag='h3'
+      @size='300'
+      @weight='bold'
+      class='remove-header-margin'
+    >
+      {{t 'resources.account.title'}}
       {{t 'resources.auth-method.section.connection.title'}}
     </Hds::Text::Display>
     <Hds::Form::HelperText @controlId='for-connection'>{{t
@@ -215,7 +221,13 @@
   </Hds::Form::Toggle::Field>
 
   <div class='ldap-section'>
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+    <Hds::Text::Display
+      @tag='h3'
+      @size='300'
+      @weight='bold'
+      class='remove-header-margin'
+    >
+      {{t 'resources.account.title'}}
       {{t 'resources.auth-method.section.authenticated-search.title'}}
     </Hds::Text::Display>
     <Hds::Form::HelperText @controlId='for-authenticated-search'>{{t
@@ -294,7 +306,13 @@
   </Hds::Form::TextInput::Field>
 
   <div class='ldap-section'>
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+    <Hds::Text::Display
+      @tag='h3'
+      @size='300'
+      @weight='bold'
+      class='remove-header-margin'
+    >
+      {{t 'resources.account.title'}}
       {{t 'resources.auth-method.section.anonymous-search.title'}}
     </Hds::Text::Display>
     <Hds::Form::HelperText @controlId='for-anonymous-search'>{{t
@@ -331,7 +349,13 @@
   </Hds::Form::Toggle::Field>
 
   <div class='ldap-section'>
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+    <Hds::Text::Display
+      @tag='h3'
+      @size='300'
+      @weight='bold'
+      class='remove-header-margin'
+    >
+      {{t 'resources.account.title'}}
       {{t 'resources.auth-method.section.user-entries.title'}}
     </Hds::Text::Display>
     <Hds::Form::HelperText @controlId='for-user-entries'>{{t
@@ -423,7 +447,13 @@
   </Form::Field::ListWrapper>
 
   <div class='ldap-section'>
-    <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+    <Hds::Text::Display
+      @tag='h3'
+      @size='300'
+      @weight='bold'
+      class='remove-header-margin'
+    >
+      {{t 'resources.account.title'}}
       {{t 'resources.auth-method.section.group-entries.title'}}
     </Hds::Text::Display>
     <Hds::Form::HelperText @controlId='for-group-entries'>{{t
