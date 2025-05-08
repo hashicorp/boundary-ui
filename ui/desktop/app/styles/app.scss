@@ -7,7 +7,6 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'button';
 @import 'notify';
 @import 'rose';
 
@@ -134,6 +133,14 @@
     border: transparent;
     color: var(--white);
     margin: sizing.rems(xs);
+  }
+
+  .button-window-close {
+    &:not(:disabled) {
+      &:hover {
+      background: var(--failure);
+      }
+    }
   }
 
   .logotype {
@@ -516,44 +523,3 @@
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
-
-.warning {
-  @include button.button-style(
-    'warning',
-    (
-      color: var(--failure),
-      background-color: var(--subtle),
-      border-color: var(--failure),
-      box-shadow: 0 $size-xxs $size-xxs
-        rgba(var(--stark-components), var(--opacity-2)),
-    ),
-    (
-      color: var(--white),
-      border-color: var(--failure-starker-1),
-      background-color: var(--failure),
-      box-shadow: (
-        0 $size-xxs $size-xxs rgba(var(--stark-components), var(--opacity-3)),
-        0 $size-xxs $size-xs rgba(var(--stark-components), var(--opacity-4)),
-      ),
-      text-shadow: 0 $size-xxxxs $size-xxxxs
-        rgba(var(--black-components), var(--opacity-2)),
-    ),
-    (
-      color: var(--white),
-      border-color: var(--ui-gray-starker-2),
-      background-color: var(--failure-starker-1),
-      box-shadow: (
-        0 $size-xxs $size-xxs rgba(var(--stark-components), var(--opacity-3)),
-        0 $size-xxs $size-xs rgba(var(--stark-components), var(--opacity-4)),
-      ),
-      text-shadow: 0 $size-xxxxs $size-xxxxs
-        rgba(var(--black-components), var(--opacity-2)),
-    ),
-    (
-      border-color: var(--ui-gray-subtler-2),
-      opacity: var(--opacity-1),
-      box-shadow: none,
-    )
-  );
-}
-
