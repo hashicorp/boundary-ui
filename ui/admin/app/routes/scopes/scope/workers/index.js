@@ -27,12 +27,19 @@ export default class ScopesScopeWorkersIndexRoute extends Route {
     if (tags?.length) {
       // Return workers that have config and/or api tags that have at
       // least one intersection with the filter tags
+
+      // Decode the tags from base64
+      const decodedTags = tags.map((tag) => {
+        const decodedString = window.atob(tag);
+        return JSON.parse(decodedString);
+      });
+
       return workers.filter((worker) => {
         if (!worker.config_tags && !worker.api_tags) {
           return null;
         }
         const workerTags = worker.allTags;
-        return tags.some((tag) =>
+        return decodedTags.some((tag) =>
           workerTags.some(
             (workerTag) =>
               tag.key === workerTag.key && tag.value === workerTag.value,

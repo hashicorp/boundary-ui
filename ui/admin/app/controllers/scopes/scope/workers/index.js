@@ -35,28 +35,23 @@ export default class ScopesScopeWorkersIndexController extends Controller {
       .flatMap((worker) => worker.allTags)
       .filter(Boolean);
 
-    const seen = new Set();
-    const uniqueTags = [];
-
-    for (const tag of allTags) {
-      const encodedTag = window.btoa(JSON.stringify(tag));
-
-      if (!seen.has(encodedTag)) {
-        seen.add(encodedTag);
-        uniqueTags.push(encodedTag);
+    // Filter out duplicate tags
+    const uniqueTags = allTags.reduce((acc, currentTag) => {
+      const existingTag = acc.find(
+        (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
+      );
+      if (!existingTag) {
+        acc.push(currentTag);
       }
-    }
-    return uniqueTags;
-  }
+      return acc;
+    }, []);
 
-  /**
-   * Returns the selected tags of a worker in base64 encoded format.
-   *  @type {object}
-   */
-  get encodedTags() {
-    return this.tags.map((tag) => {
-      const stringify = JSON.stringify(tag);
-      return window.btoa(stringify);
+    return uniqueTags.map((tag) => {
+      const encodedTag = window.btoa(JSON.stringify(tag));
+      return {
+        id: encodedTag,
+        name: tag.value,
+      };
     });
   }
 
@@ -71,7 +66,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
         tags: this.groupedTags,
       },
       selectedFilters: {
-        tags: this.encodedTags,
+        tags: this.tags,
       },
     };
   }
@@ -127,12 +122,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    */
   @action
   applyFilter(paramKey, selectedItems) {
-    // Decoding the selectedItems
-    const decodedItems = selectedItems.map((item) => {
-      const decodedString = window.atob(item);
-      return JSON.parse(decodedString);
-    });
-    this[paramKey] = [...decodedItems];
+    this[paramKey] = [...selectedItems];
   }
 
   /**
@@ -205,16 +195,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    **/
   @action
   removeFilter(tag) {
-    const decodedFilters = this.filters.selectedFilters['tags'].map((item) => {
-      const decodedString = window.atob(item);
-      return JSON.parse(decodedString);
-    });
-    const updatedFilters = decodedFilters.filter(
-      (item) => item.key !== tag.key || item.value !== tag.value,
-    );
-    const queryParams = {
-      tags: updatedFilters,
-    };
-    this.router.replaceWith({ queryParams });
+    this.tags = this.tags.filter((item) => item !== tag.id);
+    this.router.replaceWith({ queryParams: { tags: this.tags } });
   }
 }

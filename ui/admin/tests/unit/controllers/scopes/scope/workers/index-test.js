@@ -96,7 +96,7 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     const encodedTag = window.btoa(JSON.stringify(tag));
     controller.applyFilter('tags', [encodedTag]);
 
-    assert.deepEqual(controller.tags, [tag]);
+    assert.deepEqual(controller.tags, [encodedTag]);
   });
 
   test('filters returns expected entries', function (assert) {

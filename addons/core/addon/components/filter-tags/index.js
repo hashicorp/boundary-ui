@@ -27,13 +27,8 @@ export default class FilterTagsIndexComponent extends Component {
     return Object.entries(allFilters).flatMap(([key, value]) => {
       assert(`Tags must be an array for key ${key}`, Array.isArray(value));
 
-      if (this.args.isCustomFilter) {
-        return selectedFilters[key];
-      }
-
       const paramsSet = new Set(selectedFilters[key]);
       const filters = value.filter((item) => paramsSet.has(item.id));
-
       return filters.map((item) => ({
         id: item.id,
         name: item.name,

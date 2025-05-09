@@ -16,13 +16,12 @@ export default helper(function decode([value]) {
   if (!value) {
     return '';
   }
-
   // if the value is an array, decode each item
   if (Array.isArray(value)) {
     return value.map((item) => {
-      return JSON.parse(window.atob(item));
+      return JSON.parse(window.atob(item.id));
     });
   }
 
-  return JSON.parse(window.atob(value));
+  return JSON.parse(window.atob(value.id));
 });

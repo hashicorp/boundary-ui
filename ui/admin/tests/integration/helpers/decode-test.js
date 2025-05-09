@@ -17,13 +17,13 @@ module('Integration | Helper | decode', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it decodes and parses the base64 encoded string', async function (assert) {
-    const encoded = window.btoa(JSON.stringify({ key: 'foo', value: 'bar' }));
+    const encoded = {
+      id: window.btoa(JSON.stringify({ key: 'foo', value: 'bar' })),
+    };
     this.set('encodedString', encoded);
-
     await render(
       hbs`<div data-test>{{get (decode this.encodedString) "value"}}</div>`,
     );
-
     assert.dom('[data-test]').hasText('bar');
   });
 
