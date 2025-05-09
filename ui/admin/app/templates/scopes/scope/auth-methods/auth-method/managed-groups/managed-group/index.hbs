@@ -3,16 +3,23 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
-    <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Header
-      @model={{@model}}
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Header
+        @model={{@model}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Actions
+          @model={{@model}}
+          @delete={{this.managedGroups.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
@@ -20,13 +27,6 @@
       @model={{@model}}
     />
   </page.navigation>
-
-  <page.actions>
-    <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Actions
-      @model={{@model}}
-      @delete={{this.managedGroups.delete}}
-    />
-  </page.actions>
 
   <page.body>
     <Form::ManagedGroup

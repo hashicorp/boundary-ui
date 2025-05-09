@@ -3,28 +3,29 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
-    <CredentialStores::CredentialStore::Header
-      @model={{this.credentialStore}}
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <CredentialStores::CredentialStore::Header
+        @model={{this.credentialStore}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <CredentialStores::CredentialStore::Actions
+          @model={{this.credentialStore}}
+          @delete={{fn this.credentialStores.delete this.credentialStore}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
+
   </page.header>
 
   <page.navigation>
     <CredentialStores::CredentialStore::Nav @model={{this.credentialStore}} />
   </page.navigation>
-
-  <page.actions>
-    <CredentialStores::CredentialStore::Actions
-      @model={{this.credentialStore}}
-      @delete={{fn this.credentialStores.delete this.credentialStore}}
-    />
-  </page.actions>
 
   <page.body>
     {{#if @model}}
