@@ -953,9 +953,29 @@
 
 // workers
 .workers {
-  .rose-dropdown-content {
-    max-height: 300px;
-    overflow: scroll;
+  .workers-filtering {
+    display: flex;
+    margin-bottom: 1rem;
+
+    .toolbar-refresher {
+      margin-left: auto;
+    }
+
+    .hds-dropdown-list-item--variant-generic {
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+      color: var(--ui-gray)
+    }
+
+    .hds-dropdown-list-item--variant-checkbox {
+      padding-left: 2.25rem;
+    }
+
+    .hds-dropdown-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
   }
 }
 

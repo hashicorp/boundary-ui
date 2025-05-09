@@ -36,9 +36,12 @@ export const WORKER_TAGS_FLYOUT_TABLE_ROWS =
 export const WORKER_TAGS_FLYOUT_VIEW_MORE_TAGS_BUTTON =
   '[data-test-worker-tags-flyout] .view-more-tags a';
 
-export const WORKER_TAGS_FILTER_DROPDOWN = '.workers details summary';
+export const WORKER_TAGS_FILTER_DROPDOWN =
+  '.workers .hds-dropdown-toggle-button';
 export const WORKER_TAGS_FILTER_DROPDOWN_FIRST_ITEM =
-  '.workers details div input:first-child';
+  '.workers .hds-dropdown-list-item:nth-of-type(2) input';
+export const WORKER_TAGS_FILTER_APPLY_BUTTON =
+  '.workers [data-test-dropdown-apply-button]';
 
 export const TABLE_ROW_WORKER_TAGS_FLYOUT_BUTTON = (workerId) =>
   `[data-test-worker-tags-flyout-button="${workerId}"]`;
