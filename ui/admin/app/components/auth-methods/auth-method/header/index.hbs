@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<@header.title>
+<@header.Title>
   {{t 'resources.auth-method.title'}}
   {{#if @model.isPrimary}}
     <Hds::Badge
@@ -13,7 +13,12 @@
     />
   {{/if}}
   <DocLink @doc='auth-method' />
-</@header.title>
-<@header.description>
+</@header.Title>
+<@header.Description>
   {{t 'resources.auth-method.description'}}
-</@header.description>
+</@header.Description>
+<@header.Generic>
+  <div class='code-snippet-container'>
+    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+  </div>
+</@header.Generic>

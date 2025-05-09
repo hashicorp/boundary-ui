@@ -35,8 +35,12 @@
       }
     }
     /* stylelint-disable selector-class-pattern */
-    .hds-page-header__main {
+    .hds-page-header__body {
       margin-bottom: sizing.rems(s);
+
+      .code-snippet-container {
+        margin-top: sizing.rems(s);
+      }
     }
   }
 

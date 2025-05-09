@@ -13,54 +13,24 @@
   />
 {{/if}}
 
-<Rose::Layout::Page class='new-rose-page-layout' as |page|>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
     <Hds::PageHeader as |PH|>
       <PH.Breadcrumb>
         <Breadcrumbs::Container />
       </PH.Breadcrumb>
-      {{#let
-        (array
-          (hash
-            key='isGlobal'
-            title='resources.global.title'
-            description='resources.global.description'
-            doc='global'
-          )
-          (hash
-            key='isOrg'
-            title='resources.org.title'
-            description='resources.org.description'
-            doc='org'
-          )
-          (hash
-            key='isProject'
-            title='resources.project.title'
-            description='resources.project.description'
-            doc='project'
-          )
-          (hash
-            key='isScope'
-            title='resources.scope.title'
-            description='resources.scope.description'
-            doc='scope'
-          )
-        )
-        as |scopes|
-      }}
-        {{#each scopes as |scope|}}
-          {{#if (get @model scope.key)}}
-            <PH.Title>
-              {{t scope.title}}
-              <DocLink @doc={{scope.doc}} />
-            </PH.Title>
-            <PH.Description>
-              {{t scope.description}}
-            </PH.Description>
-          {{/if}}
-        {{/each}}
-      {{/let}}
+      {{#each this.scopeTypes as |scope|}}
+        {{#if (get @model scope.key)}}
+          <PH.Title>
+            {{t scope.title}}
+            <DocLink @doc={{scope.doc}} />
+          </PH.Title>
+          <PH.Description>
+            {{t scope.description}}
+          </PH.Description>
+        {{/if}}
+      {{/each}}
       {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
         <PH.Actions>
           <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>

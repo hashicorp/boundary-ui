@@ -19,7 +19,7 @@
 
 // remove this after the new layout is in place. This is a temporary fix
 // to make the new layout work with the old layout
-.new-rose-page-layout {
+.rose-layout-page.hds-migration-overrides {
   display: grid;
   grid-template-areas:
     'header header header'

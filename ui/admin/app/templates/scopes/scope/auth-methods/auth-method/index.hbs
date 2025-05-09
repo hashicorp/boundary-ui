@@ -3,15 +3,13 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page class='new-rose-page-layout' as |page|>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
     <Hds::PageHeader as |PH|>
       <PH.Breadcrumb>
         <Breadcrumbs::Container />
       </PH.Breadcrumb>
-      {{#let (hash title=PH.Title description=PH.Description) as |header|}}
-        <AuthMethods::AuthMethod::Header @model={{@model}} @header={{header}} />
-      {{/let}}
+      <AuthMethods::AuthMethod::Header @model={{@model}} @header={{PH}} />
       <PH.Actions>
         <AuthMethods::AuthMethod::Actions
           @model={{@model}}
@@ -22,7 +20,6 @@
         />
       </PH.Actions>
     </Hds::PageHeader>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
