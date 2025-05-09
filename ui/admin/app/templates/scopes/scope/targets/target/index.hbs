@@ -55,7 +55,7 @@
 
             {{#if this.showFlyoutBtn}}
               <Hds::Button
-                data-test-view-more
+                data-test-aliases-view-more
                 @text={{t 'resources.target.actions.view-more-aliases'}}
                 @color='secondary'
                 {{on 'click' this.toggleFlyout}}
@@ -63,7 +63,7 @@
             {{/if}}
             {{#if this.showFlyOutComponent}}
               <Hds::Flyout
-                data-test-flyout
+                data-test-aliases-flyout
                 @onClose={{this.toggleFlyout}}
                 as |M|
               >
