@@ -6,8 +6,6 @@
 'use strict';
 
 var path = require('path');
-var Funnel = require('broccoli-funnel');
-var mergeTrees = require('broccoli-merge-trees');
 
 module.exports = {
   name: require('./package').name,
@@ -27,7 +25,7 @@ module.exports = {
 
   /**
    * Due to a limitation in how ember treats nested addons (see https://github.com/ember-cli/ember-cli/issues/4475)
-   * this is neeeded to reach down into @hashicorp/design-system-components' contentFor hook to run the logic
+   * this is needed to reach down into @hashicorp/design-system-components' contentFor hook to run the logic
    * that injects the sprite into the DOM
    */
   contentFor(type, config) {

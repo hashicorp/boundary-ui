@@ -10,6 +10,8 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | session-recordings | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -17,12 +19,6 @@ module('Acceptance | session-recordings | read', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
-
-  // Selectors
-  const LIST_SESSION_RECORDING_BUTTON =
-    'table > tbody > tr > td:last-child > a';
-  const LIST_CHANNEL_RECORDING_BUTTON =
-    'table > tbody > tr > td:last-child > a';
 
   // Instances
   const instances = {
@@ -81,23 +77,31 @@ module('Acceptance | session-recordings | read', function (hooks) {
     const session = this.owner.lookup('service:session');
     session.set('data.theme', 'light');
     featuresService.enable('ssh-session-recording');
+    await visit(urls.globalScope);
+
     // Visit session recordings
-    await visit(urls.sessionRecordings);
+    await click(commonSelectors.HREF(urls.sessionRecordings));
     await a11yAudit();
     // Click a session recording and check it navigates properly
-    await click(LIST_SESSION_RECORDING_BUTTON);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_LINK);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.sessionRecording);
   });
 
   test('user can navigate to a session recording with proper authorization', async function (assert) {
     featuresService.enable('ssh-session-recording');
+    await visit(urls.globalScope);
+
     // Visit session recordings
-    await visit(urls.sessionRecordings);
+    await click(commonSelectors.HREF(urls.sessionRecordings));
+
     assert.true(instances.sessionRecording.authorized_actions.includes('read'));
-    assert.dom(`[href="${urls.sessionRecording}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.sessionRecording)).isVisible();
+
     // Click a session recording and check it navigates properly
-    await click(LIST_SESSION_RECORDING_BUTTON);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_LINK);
+
     assert.strictEqual(currentURL(), urls.sessionRecording);
   });
 
@@ -107,22 +111,27 @@ module('Acceptance | session-recordings | read', function (hooks) {
       instances.sessionRecording.authorized_actions.filter(
         (item) => item !== 'read',
       );
+    await visit(urls.globalScope);
+
     // Visit session recordings
-    await visit(urls.sessionRecordings);
-    assert.dom(LIST_SESSION_RECORDING_BUTTON).doesNotExist();
+    await click(commonSelectors.HREF(urls.sessionRecordings));
+
+    assert.dom(selectors.TABLE_FIRST_ROW_ACTION_LINK).doesNotExist();
   });
 
   test('user can navigate to a channel recording', async function (assert) {
     featuresService.enable('ssh-session-recording');
-    // Visit session recording
-    await visit(urls.sessionRecording);
-    assert.dom('table').hasClass('hds-table');
+    await visit(urls.sessionRecordings);
+
+    // Visit session recordings
+    await click(commonSelectors.HREF(urls.sessionRecording));
     // Click a channel recording and check it navigates properly
-    await click(LIST_CHANNEL_RECORDING_BUTTON);
+    await click(selectors.TABLE_FIRST_ROW_ACTION_LINK);
+
     assert.strictEqual(currentURL(), urls.channelRecording);
   });
 
-  test('users can navigate to session recording and incorrect url autocorrects', async function (assert) {
+  test('users can navigate to session recording and incorrect url auto-corrects', async function (assert) {
     featuresService.enable('ssh-session-recording');
     const incorrectUrl = `/scopes/${instances.scopes.org.id}/session-recordings/${instances.sessionRecording.id}/channels-by-connection`;
 
