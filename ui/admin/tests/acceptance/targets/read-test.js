@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -12,6 +12,7 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -20,11 +21,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   let featuresService;
   let aliasResource;
-  const ALIASES_SIDEBAR = '.target-sidebar-aliases';
-  const ALIASES_SIDEBAR_LIST = '.link-list-item';
-  const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
-  const VIEW_MORE_BTN = '[data-test-view-more]';
-  const FLYOUT_COMPONENT = '[data-test-flyout]';
 
   const instances = {
     scopes: {
@@ -84,7 +80,6 @@ module('Acceptance | targets | read', function (hooks) {
     urls.tcpTarget = `${urls.targets}/${instances.tcpTarget.id}`;
     urls.unknownTarget = `${urls.targets}/foo`;
     urls.aliases = `${urls.globalScope}/aliases`;
-
     urls.alias = `${urls.tcpTarget}/${aliasResource.id}`;
 
     await authenticateSession({ username: 'admin' });
@@ -92,22 +87,26 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting ssh target', async function (assert) {
     featuresService.enable('ssh-target');
+    await visit(urls.projectScope);
 
-    await visit(urls.targets);
+    await click(commonSelectors.HREF(urls.targets));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.targets);
 
-    await click(`[href="${urls.sshTarget}"]`);
+    await click(commonSelectors.HREF(urls.sshTarget));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sshTarget);
   });
 
   test('visiting tcp target', async function (assert) {
-    await visit(urls.targets);
+    await visit(urls.projectScope);
+
+    await click(commonSelectors.HREF(urls.targets));
     assert.strictEqual(currentURL(), urls.targets);
 
-    await click(`[href="${urls.tcpTarget}"]`);
+    await click(commonSelectors.HREF(urls.tcpTarget));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tcpTarget);
@@ -119,7 +118,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.sshTarget.authorized_actions =
       instances.sshTarget.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
     assert
@@ -133,7 +132,7 @@ module('Acceptance | targets | read', function (hooks) {
     instances.tcpTarget.authorized_actions =
       instances.tcpTarget.authorized_actions.filter((item) => item !== 'read');
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget)).isVisible();
     assert
@@ -153,13 +152,15 @@ module('Acceptance | targets | read', function (hooks) {
   test('users can link to docs page for target', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert
       .dom(
-        `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/targets"]`,
+        commonSelectors.HREF(
+          'https://developer.hashicorp.com/boundary/docs/concepts/domain-model/targets',
+        ),
       )
-      .exists();
+      .isVisible();
   });
 
   test('users can navigate to target and incorrect url auto-corrects', async function (assert) {
@@ -175,21 +176,26 @@ module('Acceptance | targets | read', function (hooks) {
     instances.tcpTarget.update({
       aliases: [{ id: aliasResource.id, value: aliasResource.value }],
     });
-    await visit(urls.tcpTarget);
-    assert.dom(ALIASES_SIDEBAR).exists();
-    assert.dom(ALIASES_SIDEBAR_LIST).exists();
-    assert.strictEqual(
-      find(ALIASES_SIDEBAR_LIST).textContent.trim(),
-      'alias 1',
-    );
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.tcpTarget));
+
+    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
+    assert.dom(selectors.ALIASES_SIDEBAR_LIST).isVisible();
+    assert.dom(selectors.ALIASES_SIDEBAR_LIST).hasText('alias 1');
   });
 
   test('cannot view aliases list on the right sidebar if there is no alias associated with the target', async function (assert) {
     aliasResource.authorized_collection_actions = ['create'];
-    await visit(urls.tcpTarget);
-    assert.dom(ALIASES_SIDEBAR).exists();
-    assert.dom(LINK_TO_NEW_ALIAS).hasText('Add an alias');
-    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.tcpTarget));
+
+    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
+    assert
+      .dom(selectors.ALIASES_NEW_LINK)
+      .hasText(selectors.ALIASES_NEW_LINK_TEXT);
+    assert.dom(selectors.ALIASES_SIDEBAR_LIST).doesNotExist();
   });
 
   test('user should not see add a new alias button without proper auth ', async function (assert) {
@@ -197,11 +203,13 @@ module('Acceptance | targets | read', function (hooks) {
       instances.scopes.global.authorized_collection_actions['aliases'].filter(
         (item) => item !== 'create',
       );
-    await visit(urls.tcpTarget);
+    await visit(urls.targets);
 
-    assert.dom(ALIASES_SIDEBAR).doesNotExist();
-    assert.dom(LINK_TO_NEW_ALIAS).doesNotExist();
-    assert.dom(ALIASES_SIDEBAR_LIST).doesNotExist();
+    await click(commonSelectors.HREF(urls.tcpTarget));
+
+    assert.dom(selectors.ALIASES_SIDEBAR).doesNotExist();
+    assert.dom(selectors.ALIASES_NEW_LINK).doesNotExist();
+    assert.dom(selectors.ALIASES_SIDEBAR_LIST).doesNotExist();
   });
 
   test('can click `view more aliases` to see the remaining associated aliases if there are more than 3', async function (assert) {
@@ -213,11 +221,15 @@ module('Acceptance | targets | read', function (hooks) {
         { id: aliasResource.id, value: 'alias 4' },
       ],
     });
-    await visit(urls.tcpTarget);
+    await visit(urls.targets);
 
-    assert.dom(ALIASES_SIDEBAR).exists();
-    assert.dom(VIEW_MORE_BTN).exists();
-    await click(VIEW_MORE_BTN);
-    assert.dom(FLYOUT_COMPONENT).exists();
+    await click(commonSelectors.HREF(urls.tcpTarget));
+
+    assert.dom(selectors.ALIASES_SIDEBAR).isVisible();
+    assert.dom(selectors.ALIASES_VIEW_MORE_BTN).isVisible();
+
+    await click(selectors.ALIASES_VIEW_MORE_BTN);
+
+    assert.dom(selectors.ALIASES_FLYOUT).isVisible();
   });
 });
