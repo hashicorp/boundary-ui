@@ -30,8 +30,9 @@ function getSortableValue(schema, record, attribute) {
     return record.attributes[attribute];
   }
 
+  const attributes = Array.from(schema.attributes.keys());
   throw new Error(
-    `The attribute ${attribute} does not map to a value on the record with id ${record.id}`,
+    `The attribute "${attribute}" does not map to a value on the record of ${record.type} with id "${record.id}". Supported sortable attributes are 'id', 'created_time', or ${attributes.join(', ')}`,
   );
 }
 
