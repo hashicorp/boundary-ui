@@ -8,14 +8,28 @@ import { sortResults } from 'api/utils/sort-results';
 import { faker } from '@faker-js/faker';
 import { setupTest } from 'ember-qunit';
 
+function createJsonApiMockRecord(id, type, attributes) {
+  return {
+    id,
+    type,
+    attributes,
+  };
+}
+
 module('Unit | Utility | sortResults', function (hooks) {
   setupTest(hooks);
 
   module('Defaults', function () {
-    test('throws error because the results do not contain the property to be sorted with', function () {
-      const result01 = { id: 'id_01', name: 'Result 01' };
-      const result02 = { id: 'id_02', name: 'Result 02' };
-      const result03 = { id: 'id_03', name: 'Result 03' };
+    test('throws error because the results do not contain the property to be sorted with', function (assert) {
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        name: 'Result 02',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'Result 03',
+      });
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -23,30 +37,28 @@ module('Unit | Utility | sortResults', function (hooks) {
       ]);
       const querySort = { attribute: 'doesNotExists' };
       const schema = { attributes: new Map() };
-      schema.attributes.set('doesNotExists', { type: 'string' });
-      try {
-        sortResults(shuffledResults, { querySort, schema });
-      } catch (e) {
-        assert.strictEqual(
-          e.message,
-          'The attribute you are trying to sortBy does not exists',
-        );
-      }
+      schema.attributes.set('name', { type: 'string' });
+
+      assert.throws(
+        () => sortResults(shuffledResults, { querySort, schema }),
+        /Error: The attribute "doesNotExists" does not map to a value on the record of target with id "id_\d\d". Supported sortable attributes are 'id', 'created_time', or name/,
+      );
     });
 
     test('when passing no querySort, sorts using default created_time, descending order and string sorting', async function (assert) {
-      const result01 = {
-        attributes: { created_time: '2021' },
-      };
-      const result02 = {
-        attributes: { created_time: '2022' },
-      };
-      const result03 = {
-        attributes: { created_time: '2023' },
-      };
-      const result04 = {
-        attributes: { created_time: '2024' },
-      };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        created_time: '2021',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        created_time: '2022',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        created_time: '2023',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        created_time: '2024',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -67,10 +79,19 @@ module('Unit | Utility | sortResults', function (hooks) {
     });
 
     test('when sorting by id, without being on the results attributes it sorts as expected ', function () {
-      const result01 = { id: 'id_01' };
-      const result02 = { id: 'id_02' };
-      const result03 = { id: 'id_03' };
-      const result04 = { id: 'id_04' };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        name: 'Result 02',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'Result 03',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'Result 04',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -91,10 +112,19 @@ module('Unit | Utility | sortResults', function (hooks) {
 
   module('string sorting', function () {
     test('it sorts by ascending (default) `name` using string sorting', async function (assert) {
-      const result01 = { attributes: { name: 'Result 01' } };
-      const result02 = { attributes: { name: 'Result 02' } };
-      const result03 = { attributes: { name: 'Result 03' } };
-      const result04 = { attributes: { name: 'Result 04' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        name: 'Result 02',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'Result 03',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'Result 04',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -112,10 +142,19 @@ module('Unit | Utility | sortResults', function (hooks) {
     });
 
     test('it sorts by ascending then descending `name` using string sorting', async function (assert) {
-      const result01 = { attributes: { name: 'Result 01' } };
-      const result02 = { attributes: { name: 'Result 02' } };
-      const result03 = { attributes: { name: 'Result 03' } };
-      const result04 = { attributes: { name: 'Result 04' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        name: 'Result 02',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'Result 03',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'Result 04',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -147,10 +186,19 @@ module('Unit | Utility | sortResults', function (hooks) {
 
   module('date sorting', function () {
     test('it sorts by ascending (default) `date` using date sorting', function (assert) {
-      const result01 = { attributes: { date: '2021' } };
-      const result02 = { attributes: { date: '2022' } };
-      const result03 = { attributes: { date: '2023' } };
-      const result04 = { attributes: { date: '2024' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        date: '2021',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        date: '2022',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        date: '2023',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        date: '2024',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -170,10 +218,19 @@ module('Unit | Utility | sortResults', function (hooks) {
     });
 
     test('it sorts by ascending then descending `date` using date sorting', function (assert) {
-      const result01 = { attributes: { date: '2021' } };
-      const result02 = { attributes: { date: '2022' } };
-      const result03 = { attributes: { date: '2023' } };
-      const result04 = { attributes: { date: '2024' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        date: '2021',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        date: '2022',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        date: '2023',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        date: '2024',
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -207,10 +264,19 @@ module('Unit | Utility | sortResults', function (hooks) {
 
   module('number sorting', function () {
     test('it sorts by ascending (default) `sessions`', function (assert) {
-      const result01 = { attributes: { sessions: '10' } };
-      const result02 = { attributes: { sessions: '200' } };
-      const result03 = { attributes: { sessions: '3333' } };
-      const result04 = { attributes: { sessions: '40444' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 10,
+      });
+      const result02 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 200,
+      });
+      const result03 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 3333,
+      });
+      const result04 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 40444,
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -225,15 +291,24 @@ module('Unit | Utility | sortResults', function (hooks) {
 
       assert.deepEqual(
         sortedResults.map(({ attributes: { sessions } }) => sessions),
-        ['10', '200', '3333', '40444'],
+        [10, 200, 3333, 40444],
       );
     });
 
     test('it sorts by ascending then descending `sessions`', function (assert) {
-      const result01 = { attributes: { sessions: '10' } };
-      const result02 = { attributes: { sessions: '200' } };
-      const result03 = { attributes: { sessions: '3333' } };
-      const result04 = { attributes: { sessions: '40444' } };
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 10,
+      });
+      const result02 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 200,
+      });
+      const result03 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 3333,
+      });
+      const result04 = createJsonApiMockRecord('id_01', 'target', {
+        sessions: 40444,
+      });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
@@ -256,11 +331,11 @@ module('Unit | Utility | sortResults', function (hooks) {
 
       assert.deepEqual(
         sortedResultsAsc.map(({ attributes: { sessions } }) => sessions),
-        ['10', '200', '3333', '40444'],
+        [10, 200, 3333, 40444],
       );
       assert.deepEqual(
         sortedResultsDesc.map(({ attributes: { sessions } }) => sessions),
-        ['40444', '3333', '200', '10'],
+        [40444, 3333, 200, 10],
       );
     });
   });
