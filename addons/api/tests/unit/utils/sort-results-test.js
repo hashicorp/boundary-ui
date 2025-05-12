@@ -20,7 +20,7 @@ module('Unit | Utility | sortResults', function (hooks) {
   setupTest(hooks);
 
   module('Defaults', function () {
-    test('throws error because the results do not contain the property to be sorted with', function (assert) {
+    test('throws error when results do not contain the property to be sorted with', function (assert) {
       const result01 = createJsonApiMockRecord('id_01', 'target', {
         name: 'Result 01',
       });
@@ -42,6 +42,23 @@ module('Unit | Utility | sortResults', function (hooks) {
       assert.throws(
         () => sortResults(shuffledResults, { querySort, schema }),
         /Error: The attribute "doesNotExists" does not map to a value on the record of target with id "id_\d\d". Supported sortable attributes are 'id', 'created_time', or name/,
+      );
+    });
+
+    test('throws error when results do not contain a valid sort direction', function (assert) {
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+
+      const querySort = {
+        attribute: 'name',
+        direction: 'invalid sort direction',
+      };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('name', { type: 'string' });
+      assert.throws(
+        () => sortResults([result01], { querySort, schema }),
+        /Error: Invalid sort direction/,
       );
     });
 
