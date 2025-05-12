@@ -20,7 +20,7 @@ module('Unit | Utility | sortResults', function (hooks) {
   setupTest(hooks);
 
   module('Defaults', function () {
-    test('throws error when results do not contain the property to be sorted with', function (assert) {
+    test("throws an error when an attribute is not id, created_time or defined as a schema attribute, even when it exists on the record's attribute object", function (assert) {
       const result01 = createJsonApiMockRecord('id_01', 'target', {
         name: 'Result 01',
       });
@@ -30,22 +30,26 @@ module('Unit | Utility | sortResults', function (hooks) {
       const result03 = createJsonApiMockRecord('id_03', 'target', {
         name: 'Result 03',
       });
+
       const shuffledResults = faker.helpers.shuffle([
         result01,
         result02,
         result03,
       ]);
-      const querySort = { attribute: 'doesNotExists' };
+
+      const querySort = { attribute: 'name' };
+
+      // Note: `name` is not defined as a schema attribute but exists on the record
       const schema = { attributes: new Map() };
-      schema.attributes.set('name', { type: 'string' });
+      schema.attributes.set('date', { type: 'date' });
 
       assert.throws(
         () => sortResults(shuffledResults, { querySort, schema }),
-        /Error: The attribute "doesNotExists" does not map to a value on the record of target with id "id_\d\d". Supported sortable attributes are 'id', 'created_time', or name/,
+        /Error: The attribute "name" does not map to the model definition of type "target". Supported sortable attributes are 'id', 'created_time', or 'date'/,
       );
     });
 
-    test('throws error when results do not contain a valid sort direction', function (assert) {
+    test('throws an error when results do not contain a valid sort direction', function (assert) {
       const result01 = createJsonApiMockRecord('id_01', 'target', {
         name: 'Result 01',
       });
