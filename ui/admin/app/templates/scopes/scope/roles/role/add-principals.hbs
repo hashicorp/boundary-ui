@@ -9,25 +9,21 @@
   @route='scopes.scope.roles.role.add-principals'
 />
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.role.principal.messages.add-principals.title'}}
-      <DocLink @doc='role.add-principals' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.role.principal.messages.add-principals.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.principal.messages.add-principals.title'}}
+        <DocLink @doc='role.add-principals' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.role.principal.messages.add-principals.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

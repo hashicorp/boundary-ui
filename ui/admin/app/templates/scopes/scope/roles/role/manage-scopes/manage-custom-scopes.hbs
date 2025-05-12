@@ -9,25 +9,21 @@
   @route='scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
 />
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.role.scope.messages.manage-custom-scopes.title'}}
-      <DocLink @doc='role.add-grant-scopes' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.role.scope.messages.manage-custom-scopes.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.scope.messages.manage-custom-scopes.title'}}
+        <DocLink @doc='role.add-grant-scopes' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.role.scope.messages.manage-custom-scopes.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body class='search-filtering'>

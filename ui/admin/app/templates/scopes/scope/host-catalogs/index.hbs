@@ -3,39 +3,34 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.host-catalog.title_plural'}}
-      <DocLink @doc='host-catalog' />
-    </Hds::Text::Display>
-    {{#if @model.doHostCatalogsExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.host-catalog.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='host-catalogs')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.host-catalog.title_plural'}}
+        <DocLink @doc='host-catalog' />
+      </PH.Title>
       {{#if @model.doHostCatalogsExist}}
-        <Hds::Button
-          @route='scopes.scope.host-catalogs.new'
-          @text={{t 'resources.host-catalog.titles.new'}}
-        />
+        <PH.Description>
+          {{t 'resources.host-catalog.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='host-catalogs')}}
+          {{#if @model.doHostCatalogsExist}}
+            <Hds::Button
+              @route='scopes.scope.host-catalogs.new'
+              @text={{t 'resources.host-catalog.titles.new'}}
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doHostCatalogsExist}}

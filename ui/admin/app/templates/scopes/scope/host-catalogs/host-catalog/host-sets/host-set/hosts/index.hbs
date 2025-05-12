@@ -3,23 +3,25 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Header
-      @model={{@model.hostSet}}
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <HostCatalogs::HostCatalog::HostSets::HostSet::Header
+        @model={{@model.hostSet}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
+          @model={{@model.hostSet}}
+          @delete={{this.hostSets.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
-      @model={{@model.hostSet}}
-      @delete={{this.hostSets.delete}}
-    />
-  </page.actions>
 
   <page.navigation>
     <HostCatalogs::HostCatalog::HostSets::HostSet::Navigation
