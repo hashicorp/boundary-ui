@@ -46,9 +46,9 @@
           @isGrouped={{true}}
           as |FD selectItem itemOptions|
         >
-          {{#each-in (group-by 'key' (decode itemOptions)) as |key groupItems|}}
+          {{#each-in (group-by 'key' itemOptions) as |key groupItems|}}
             <FD.Generic class='grouping'>
-              <Hds::Icon @name='tag' @isInline={{true}} />
+              <Hds::Icon @name='tag' @isInline={{true}} @color='faint' />
               <Hds::Text::Display
                 @size='100'
                 @weight='medium'
@@ -58,8 +58,8 @@
             {{#each groupItems as |item|}}
               <FD.Checkbox
                 class='indentation'
-                @value={{encode item}}
-                checked={{includes (encode item) this.tags}}
+                @value={{item.id}}
+                checked={{includes item.id this.tags}}
                 {{on 'change' selectItem}}
               >
                 {{item.value}}
@@ -70,9 +70,7 @@
         <ToolbarRefresher @onClick={{this.refresh}} />
       </div>
       <FilterTags @filters={{this.filters}} as |filter|>
-        <Hds::Tag
-          @text={{get (decode filter) 'value'}}
-        />
+        <Hds::Tag @text={{filter.value}} />
       </FilterTags>
 
       <Hds::Table

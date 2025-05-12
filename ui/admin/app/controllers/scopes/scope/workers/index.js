@@ -51,6 +51,8 @@ export default class ScopesScopeWorkersIndexController extends Controller {
       return {
         id: encodedTag,
         name: tag.value,
+        key: tag.key,
+        value: tag.value,
       };
     });
   }
