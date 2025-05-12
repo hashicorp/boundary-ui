@@ -133,19 +133,9 @@
 
   .button-window-minimize,
   .button-window-fullscreen {
-    &:not(:disabled) {
-      &:hover {
-        background: var(--white);
-        color: var(--ui-gray-starker-4);
-
-        @media (prefers-color-scheme: dark) {
-          color: var(--ui-gray-subtler-4);
-        }
-
-        .ember-application.rose-theme-dark & {
-          color: var(--ui-gray-subtler-4);
-        }
-      }
+    &:hover {
+      background: var(--white);
+      color: var(--black);
     }
   }
 
