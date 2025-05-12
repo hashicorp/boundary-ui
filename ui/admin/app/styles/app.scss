@@ -621,7 +621,6 @@
 }
 
 .auth-methods-list-table,
-.workers-list-table,
 .sessions-list-table {
   margin-top: 1rem;
 }
@@ -953,7 +952,7 @@
 
 // workers
 .workers {
-  .workers-filtering {
+  .tags-list {
     display: flex;
     margin-bottom: 1rem;
 
@@ -961,21 +960,22 @@
       margin-left: auto;
     }
 
-    .hds-dropdown-list-item--variant-generic {
-      padding: 0.5rem 1rem;
-      text-transform: uppercase;
-      color: var(--ui-gray)
-    }
+    .grouping {
+	      display: flex;
+	      align-items: center;
+	      gap: 0.2rem;
+	      padding: 0.5rem 1rem;
+	      text-transform: uppercase;
+        color: var(--ui-gray);
+	    }
+	
+	    li:has(.indentation) {
+	      padding-left: 2.25rem;
+	    }
+  }
 
-    .hds-dropdown-list-item--variant-checkbox {
-      padding-left: 2.25rem;
-    }
-
-    .hds-dropdown-list-item {
-      display: flex;
-      align-items: center;
-      gap: 0.2rem;
-    }
+  .filters-applied {
+    margin-bottom: 1rem
   }
 }
 

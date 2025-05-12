@@ -30,17 +30,17 @@ export default class ScopesScopeWorkersIndexController extends Controller {
    * @type {object}
    */
 
-  get groupedTags() {
+  get workerTagOptions() {
     const allTags = this.model
       .flatMap((worker) => worker.allTags)
       .filter(Boolean);
 
     // Filter out duplicate tags
     const uniqueTags = allTags.reduce((acc, currentTag) => {
-      const existingTag = acc.find(
+      const doesTaxExist = acc.some(
         (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
       );
-      if (!existingTag) {
+      if (!doesTaxExist) {
         acc.push(currentTag);
       }
       return acc;
@@ -63,7 +63,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   get filters() {
     return {
       allFilters: {
-        tags: this.groupedTags,
+        tags: this.workerTagOptions,
       },
       selectedFilters: {
         tags: this.tags,
@@ -187,15 +187,5 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   @action
   refresh() {
     this.router.refresh('scopes.scope.workers');
-  }
-
-  /**
-   * Removes a filter from the selected filters and updates the query params.
-   * @param {object} tag - The tag to remove from the filters.
-   **/
-  @action
-  removeFilter(tag) {
-    this.tags = this.tags.filter((item) => item !== tag.id);
-    this.router.replaceWith({ queryParams: { tags: this.tags } });
   }
 }

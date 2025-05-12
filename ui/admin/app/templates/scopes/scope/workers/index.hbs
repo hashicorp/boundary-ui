@@ -35,27 +35,29 @@
   <page.body class='workers'>
     {{#if @model}}
 
-      <div class='workers-filtering'>
+      <div class='tags-list'>
         <Dropdown
           name='tags'
           @listPosition='bottom-left'
           @toggleText={{t 'form.tags.label'}}
-          @itemOptions={{this.groupedTags}}
+          @itemOptions={{this.workerTagOptions}}
           @checkedItems={{this.tags}}
           @applyFilter={{fn this.applyFilter 'tags'}}
           @isGrouped={{true}}
           as |FD selectItem itemOptions|
         >
           {{#each-in (group-by 'key' (decode itemOptions)) as |key groupItems|}}
-            <FD.Generic>
+            <FD.Generic class='grouping'>
               <Hds::Icon @name='tag' @isInline={{true}} />
               <Hds::Text::Display
                 @size='100'
                 @weight='medium'
+                @color='faint'
               >{{key}}</Hds::Text::Display>
             </FD.Generic>
             {{#each groupItems as |item|}}
               <FD.Checkbox
+                class='indentation'
                 @value={{encode item}}
                 checked={{includes (encode item) this.tags}}
                 {{on 'change' selectItem}}
@@ -69,14 +71,11 @@
       </div>
       <FilterTags @filters={{this.filters}} as |filter|>
         <Hds::Tag
-          class='filter-tag'
           @text={{get (decode filter) 'value'}}
-          @onDismiss={{fn this.removeFilter filter}}
         />
       </FilterTags>
 
       <Hds::Table
-        class='workers-list-table'
         @model={{@model}}
         @columns={{array
           (hash label=(t 'resources.worker.title'))
