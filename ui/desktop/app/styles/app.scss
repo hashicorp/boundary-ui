@@ -124,10 +124,8 @@
   }
 
   .button-window-close {
-    &:not(:disabled) {
-      &:hover {
-      background: var(--failure);
-      }
+    &:hover {
+    background: var(--failure);
     }
   }
 
