@@ -62,16 +62,14 @@
                 checked={{includes item.id this.tags}}
                 {{on 'change' selectItem}}
               >
-                {{item.value}}
+                {{item.name}}
               </FD.Checkbox>
             {{/each}}
           {{/each-in}}
         </Dropdown>
         <ToolbarRefresher @onClick={{this.refresh}} />
       </div>
-      <FilterTags @filters={{this.filters}} as |filter|>
-        <Hds::Tag @text={{filter.value}} />
-      </FilterTags>
+      <FilterTags @filters={{this.filters}} />
 
       <Hds::Table
         @model={{@model}}

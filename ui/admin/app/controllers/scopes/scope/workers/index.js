@@ -37,10 +37,10 @@ export default class ScopesScopeWorkersIndexController extends Controller {
 
     // Filter out duplicate tags
     const uniqueTags = allTags.reduce((acc, currentTag) => {
-      const doesTaxExist = acc.some(
+      const doesTagExist = acc.some(
         (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
       );
-      if (!doesTaxExist) {
+      if (!doesTagExist) {
         acc.push(currentTag);
       }
       return acc;
@@ -52,7 +52,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
         id: encodedTag,
         name: tag.value,
         key: tag.key,
-        value: tag.value,
       };
     });
   }

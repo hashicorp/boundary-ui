@@ -952,9 +952,12 @@
 
 // workers
 .workers {
+  > div {
+    margin-bottom: 1rem;
+  }
+
   .tags-list {
     display: flex;
-    margin-bottom: 1rem;
 
     .toolbar-refresher {
       margin-left: auto;
@@ -971,10 +974,6 @@
 	    li:has(.indentation) {
 	      padding-left: 2.25rem;
 	    }
-  }
-
-  .filters-applied {
-    margin-bottom: 1rem
   }
 }
 
