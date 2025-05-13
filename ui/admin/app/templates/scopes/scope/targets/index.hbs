@@ -74,14 +74,15 @@
       {{#if @model.targets}}
         <Hds::Table
           @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
+            (hash key='name' label=(t 'form.name.label') isSortable=true)
+            (hash key='type' label=(t 'form.type.label') isSortable=true)
             (hash label=(t 'resources.target.titles.active-sessions'))
-            (hash label=(t 'form.id.label'))
+            (hash key='id' label=(t 'form.id.label') isSortable=true)
           }}
           @model={{@model.targets}}
           @density='short'
           @valign='middle'
+          @onSort={{this.customOnSort}}
         >
           <:body as |B|>
             {{#if (feature-flag 'ssh-target')}}

@@ -39,6 +39,14 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -61,6 +69,8 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       types,
       page,
       pageSize,
+      sortAttribute,
+      sortDirection,
       useDebounce,
     }) => {
       if (useDebounce) {
@@ -89,6 +99,10 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
                 { equals: STATUS_SESSION_ACTIVE },
                 { equals: STATUS_SESSION_PENDING },
               ],
+            },
+            sort: {
+              attribute: sortAttribute,
+              direction: sortDirection,
             },
           },
         });
