@@ -22,8 +22,8 @@ body {
   background-color: var(--subtle);
 }
 
-// By default, we add top and bottom margins to all headers
-// so this class can be used to remove the margin if needed
+// Many elements get margin by default
+// but if we want to remove it we can use this class
 .remove-margin {
   margin: 0;
 }
