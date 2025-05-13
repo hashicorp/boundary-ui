@@ -42,7 +42,7 @@
     "ember-cli-sass": "^11.0.1",
     "ember-concurrency": "^4.0.3",
     "ember-feature-flags": "^6.0.0",
-    "ember-intl": "^7.0.7",
+    "ember-intl": "^7.1.8",
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^4.0.3",
     "filesize": "^10.0.7",
