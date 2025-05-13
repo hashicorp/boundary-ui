@@ -4,12 +4,7 @@
  */
 
 // header margin override (HDS leaves this to implementers)
-h1[class*='hds-typography-display-'],
-h2[class*='hds-typography-display-'],
-h3[class*='hds-typography-display-'],
-h4[class*='hds-typography-display-'],
-h5[class*='hds-typography-display-'],
-h6[class*='hds-typography-display-'] {
+:where(h1, h2, h3, h4, h5, h6)[class*='hds-typography-display-'] {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
