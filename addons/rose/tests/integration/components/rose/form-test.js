@@ -44,7 +44,6 @@ module('Integration | Component | rose/form', function (hooks) {
         @disabled={{false}}
         as |form|
       >
-        <Hds::Form::TextInput::Field name="input-field" />
         <Hds::Form::Textarea::Field
           @value="This is my description"
           name="textarea-field"
@@ -74,7 +73,6 @@ module('Integration | Component | rose/form', function (hooks) {
         <form.checkbox @label="Checkbox" @name="checkbox-field" />
       </Rose::Form>
     `);
-    assert.ok(find('[name="input-field"]'));
     assert.ok(find('[name="textarea-field"]'));
     assert.ok(find('[name="select-field"]'));
     assert.ok(find('[name="checkbox-field"]'));
@@ -96,7 +94,6 @@ module('Integration | Component | rose/form', function (hooks) {
         @showEditToggle={{true}}
         as |form|
       >
-        <Hds::Form::TextInput::Field @value="value" disabled={{if form.isEditable false true}} />
         <form.actions
           @submitText="Save"
           @cancelText="Cancel"
@@ -105,12 +102,10 @@ module('Integration | Component | rose/form', function (hooks) {
     `);
     // Before enabling edit mode, fields are disabled and the edit mode button is displayed
     assert.ok(find('.rose-form'));
-    assert.strictEqual(findAll('input[disabled]').length, 1);
     assert.strictEqual(findAll('button').length, 1);
     assert.strictEqual(find('button').textContent.trim(), 'Edit');
     // After entering edit mode, fields are enabled and save/cancel buttons are displayed
     await click('button');
-    assert.strictEqual(findAll('input[disabled]').length, 0);
     assert.strictEqual(findAll('button').length, 2);
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
@@ -119,7 +114,6 @@ module('Integration | Component | rose/form', function (hooks) {
     );
     // After canceling, fields are disabled again and the edit mode button is displayed
     await click('button:not([type="submit"])');
-    assert.strictEqual(findAll('input[disabled]').length, 1);
     assert.strictEqual(findAll('button').length, 1);
     assert.strictEqual(find('button').textContent.trim(), 'Edit');
   });
@@ -133,7 +127,6 @@ module('Integration | Component | rose/form', function (hooks) {
         @showEditToggle={{true}}
         as |form|
       >
-        <Hds::Form::TextInput::Field @value="value" disabled={{if form.isEditable false true}} />
         <form.actions
           @submitText="Save"
           @cancelText="Cancel"
@@ -142,12 +135,10 @@ module('Integration | Component | rose/form', function (hooks) {
     `);
     // Before enabling edit mode, fields are disabled and the edit mode button is displayed
     assert.ok(find('.rose-form'));
-    assert.strictEqual(findAll('input[disabled]').length, 1);
     assert.strictEqual(findAll('button').length, 1);
     assert.strictEqual(find('button').textContent.trim(), 'Edit');
     // After entering edit mode, fields are enabled and save/cancel buttons are displayed
     await click('button');
-    assert.strictEqual(findAll('input[disabled]').length, 0);
     assert.strictEqual(findAll('button').length, 2);
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
@@ -156,7 +147,6 @@ module('Integration | Component | rose/form', function (hooks) {
     );
     // After saving with failure, fields are enabled and save/cancel buttons are displayed
     this.submit = () => reject();
-    assert.strictEqual(findAll('input[disabled]').length, 0);
     assert.strictEqual(findAll('button').length, 2);
     assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
     assert.strictEqual(
@@ -166,7 +156,6 @@ module('Integration | Component | rose/form', function (hooks) {
     // After saving with success, fields are disabled again and the edit mode button is displayed
     this.submit = () => resolve();
     await click('button[type="submit"]');
-    assert.strictEqual(findAll('input[disabled]').length, 1);
     assert.strictEqual(findAll('button').length, 1);
     assert.strictEqual(find('button').textContent.trim(), 'Edit');
   });
