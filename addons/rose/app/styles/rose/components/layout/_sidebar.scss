@@ -1,5 +1,3 @@
-@use '../../variables/color/sass';
-
 /**
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
@@ -7,6 +5,7 @@
 
 @use '../../variables/sizing';
 @use '../../variables/media';
+@use '../../variables/color/sass';
 
 .rose-layout-sidebar {
   --sidebar-width: #{sizing.rems(m) * 16};
