@@ -964,16 +964,16 @@
     }
 
     .grouping {
-	      display: flex;
-	      align-items: center;
-	      gap: 0.2rem;
-	      padding: 0.5rem 1rem;
-	      text-transform: uppercase;
-	    }
-	
-	    li:has(.indentation) {
-	      padding-left: 2.25rem;
-	    }
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+    }
+
+    li:has(.indentation) {
+      padding-left: 2.25rem;
+    }
   }
 }
 
