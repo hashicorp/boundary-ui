@@ -96,6 +96,7 @@ module('Acceptance | workers | list', function (hooks) {
 
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN);
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN_FIRST_ITEM);
+    await click(selectors.WORKER_TAGS_FILTER_APPLY_BUTTON);
 
     assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
   });

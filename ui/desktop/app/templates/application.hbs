@@ -19,7 +19,7 @@
         <div id='header-nav'></div>
       </header.nav>
 
-      <header.utilities as |utilities|>
+      <header.utilities>
         {{#if this.showWindowActions}}
           <Rose::Button
             @iconOnly='x'
@@ -45,15 +45,22 @@
         {{/if}}
 
         {{#if this.session.isAuthenticated}}
-          <utilities.dropdown
-            @text={{this.session.data.authenticated.username}}
-            @icon='user-circle'
-            as |dropdown|
-          >
-            <dropdown.button {{on 'click' this.invalidateSession}}>
+          <Hds::Dropdown as |dd|>
+            {{#if this.session.data.authenticated.username}}
+              <dd.ToggleButton
+                @icon='user-circle'
+                @text={{this.session.data.authenticated.username}}
+              />
+            {{else}}
+              <dd.ToggleIcon
+                @icon='user-circle'
+                @text={{t 'titles.user-menu'}}
+              />
+            {{/if}}
+            <dd.Interactive {{on 'click' this.invalidateSession}}>
               {{t 'actions.deauthenticate'}}
-            </dropdown.button>
-          </utilities.dropdown>
+            </dd.Interactive>
+          </Hds::Dropdown>
         {{/if}}
 
       </header.utilities>
