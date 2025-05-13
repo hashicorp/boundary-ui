@@ -29,11 +29,9 @@ module('Acceptance | targets | update', function (hooks) {
     target: null,
   };
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
-    newTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -52,12 +50,9 @@ module('Acceptance | targets | update', function (hooks) {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.unknownTarget = `${urls.targets}/foo`;
-    urls.newTarget = `${urls.targets}/new`;
 
     await authenticateSession({});
   });
@@ -122,7 +117,7 @@ module('Acceptance | targets | update', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(selectors.FIELD_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {

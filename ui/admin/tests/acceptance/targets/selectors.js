@@ -12,9 +12,11 @@ export const FIELD_ALIASES =
   '[name="with_aliases"] tbody tr:last-of-type input';
 export const FIELD_ALIASES_ADD_BTN =
   '[name="with_aliases"] tbody tr:last-of-type button';
-export const FIELD_ERROR = '.hds-form-error__message';
 export const FIELD_ADDRESS = '[name="address"]';
 export const FIELD_ADDRESS_VALUE = '0.0.0.0';
+export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
+export const FIELD_DEFAULT_PORT_ERROR =
+  '[data-test-error-message-default-port]';
 
 export const NEW_TARGET_BTN = '[data-test-new-target-button';
 export const MANAGE_DROPDOWN = '[data-test-manage-targets-dropdown] button';

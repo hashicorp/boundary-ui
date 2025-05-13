@@ -39,7 +39,6 @@ module('Acceptance | targets | create', function (hooks) {
     target: null,
   };
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -64,11 +63,9 @@ module('Acceptance | targets | create', function (hooks) {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.unknownTarget = `${urls.targets}/foo`;
     urls.newTarget = `${urls.targets}/new`;
     urls.newTCPTarget = `${urls.targets}/new?type=tcp`;
     urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
@@ -269,6 +266,10 @@ module('Acceptance | targets | create', function (hooks) {
                 name: 'name',
                 description: 'Name is required.',
               },
+              {
+                name: 'attributes.default_port',
+                description: 'Default port is required.',
+              },
             ],
           },
         },
@@ -281,7 +282,10 @@ module('Acceptance | targets | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(selectors.FIELD_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert
+      .dom(selectors.FIELD_DEFAULT_PORT_ERROR)
+      .hasText('Default port is required.');
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
@@ -311,7 +315,7 @@ module('Acceptance | targets | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(selectors.FIELD_ERROR).hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can save address', async function (assert) {
