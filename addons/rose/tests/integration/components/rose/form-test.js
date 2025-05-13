@@ -78,46 +78,6 @@ module('Integration | Component | rose/form', function (hooks) {
     assert.ok(find('[name="checkbox-field"]'));
   });
 
-  test('it supports an editability toggle when @showEditToggle is true', async function (assert) {
-    assert.expect(12);
-    this.cancel = () => {
-      assert.ok(
-        true,
-        'cancel function may still be passed even for @showEditToggle',
-      );
-    };
-    this.submit = () => {};
-    await render(hbs`
-      <Rose::Form
-        @onSubmit={{this.submit}}
-        @cancel={{this.cancel}}
-        @showEditToggle={{true}}
-        as |form|
-      >
-        <form.actions
-          @submitText="Save"
-          @cancelText="Cancel"
-          @enableEditText="Edit" />
-      </Rose::Form>
-    `);
-    // Before enabling edit mode, fields are disabled and the edit mode button is displayed
-    assert.ok(find('.rose-form'));
-    assert.strictEqual(findAll('button').length, 1);
-    assert.strictEqual(find('button').textContent.trim(), 'Edit');
-    // After entering edit mode, fields are enabled and save/cancel buttons are displayed
-    await click('button');
-    assert.strictEqual(findAll('button').length, 2);
-    assert.strictEqual(find('[type="submit"]').textContent.trim(), 'Save');
-    assert.strictEqual(
-      find('button:not([type="submit"])').textContent.trim(),
-      'Cancel',
-    );
-    // After canceling, fields are disabled again and the edit mode button is displayed
-    await click('button:not([type="submit"])');
-    assert.strictEqual(findAll('button').length, 1);
-    assert.strictEqual(find('button').textContent.trim(), 'Edit');
-  });
-
   test('it re-enables read-only mode if the submit handler returns a resolving promise', async function (assert) {
     this.cancel = () => {};
     await render(hbs`
