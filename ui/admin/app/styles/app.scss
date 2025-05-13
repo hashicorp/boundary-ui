@@ -613,7 +613,6 @@
 }
 
 .auth-methods-list-table,
-.workers-list-table,
 .sessions-list-table {
   margin-top: 1rem;
 }
@@ -945,9 +944,28 @@
 
 // workers
 .workers {
-  .rose-dropdown-content {
-    max-height: 300px;
-    overflow: scroll;
+  > div {
+    margin-bottom: 1rem;
+  }
+
+  .tags-list {
+    display: flex;
+
+    .toolbar-refresher {
+      margin-left: auto;
+    }
+
+    .grouping {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+    }
+
+    li:has(.indentation) {
+      padding-left: 2.25rem;
+    }
   }
 }
 
