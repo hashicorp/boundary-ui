@@ -97,6 +97,8 @@ const createWindow = async (partition, closeWindowCB) => {
   const browserWindowOptions = {
     width: 1280,
     height: 760,
+    minWidth: 812,
+    minHeight: 400,
     frame: showWindowChrome,
     titleBarStyle: showWindowChrome ? 'hiddenInset' : 'none',
     webPreferences: {
