@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build:development": "ember build",
-    "build": "ember build --environment=production && cp metadata.json dist/metadata.json",
+    "build": "ember build --environment=production",
     "lint": "concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
     "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
