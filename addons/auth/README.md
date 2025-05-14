@@ -8,7 +8,7 @@ This addon contains the authentication layer for Boundary.
 
 - [Add to an App](#add-to-an-app)
 - [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
+- [Pnpm Commands](#pnpm-commands)
 - [Linting](#linting)
 - [Formatting](#formatting)
 - [Running tests](#running-tests)
@@ -27,9 +27,9 @@ Add this addon to an Ember application's `devDependencies` as:
 
 See monorepo README for installation instructions.
 
-## Yarn Commands
+## Pnpm Commands
 
-List of available project commands.  `yarn run <command-name>`
+List of available project commands.  `pnpm run <command-name>`
 
 | Command | Description |
 | ------- | ----------- |
@@ -49,25 +49,25 @@ Additional commands in the monorepo package may affect this projects.
 
 ## Linting
 
-* `yarn lint:js`
-* `yarn lint:js --fix`
+* `pnpm lint:js`
+* `pnpm lint:js --fix`
 
 ## Formatting
 
 Before submitting your work, be sure to run auto-formatters
 (see commands above).  This helps to ensure consistency among authors.
 
-* `yarn format`
+* `pnpm format`
 
 ## Running tests
 
-* `yarn test` – Runs the test suite on the current Ember version
-* `yarn test --server` – Runs the test suite in "watch mode"
-* `yarn test:all` – Runs the test suite against multiple Ember versions
+* `pnpm test` – Runs the test suite on the current Ember version
+* `pnpm test --server` – Runs the test suite in "watch mode"
+* `pnpm test:all` – Runs the test suite against multiple Ember versions
 
 ## Running the dummy application
 
-* `yarn start`
+* `pnpm start`
 * Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
 ## Contributing
@@ -77,5 +77,5 @@ See monorepo README for more contribution instructions.
 ### Building ToC
 
 To autogenerate a ToC (table of contents) for this README,
-run `yarn doc:toc`.  Please update the ToC whenever editing the structure
+run `pnpm doc:toc`.  Please update the ToC whenever editing the structure
 of README.
