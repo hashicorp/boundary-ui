@@ -61,41 +61,6 @@
             <item.key>Key</item.key>
             <item.cell>Value</item.cell>
           </list.item>
-
-          <Rose::Form::Input @contextual={{true}} as |input|>
-            <list.item as |item|>
-              <item.key>
-                <input.label>Key</input.label>
-              </item.key>
-              <item.cell>
-                <input.field />
-              </item.cell>
-              <item.cell>
-                <Rose::Button @style='secondary'>Add</Rose::Button>
-              </item.cell>
-            </list.item>
-          </Rose::Form::Input>
-
-          <Rose::Form::Input @contextual={{true}} as |input|>
-            <list.item as |item|>
-              <item.key>
-                <input.label>Key</input.label>
-              </item.key>
-              <item.cell>
-                <input.field />
-              </item.cell>
-              <item.cell>
-                <Rose::Button
-                  @style='secondary'
-                  @iconOnly='flight-icons/svg/trash-16'
-                  title='Remove'
-                >
-                  Remove
-                </Rose::Button>
-              </item.cell>
-            </list.item>
-          </Rose::Form::Input>
-
         </Rose::List::KeyValue>
 
       </layout.body>
