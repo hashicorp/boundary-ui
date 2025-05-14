@@ -25,7 +25,7 @@ subproject, e.g. running or testing.
   - [Prerequisites](#prerequisites)
   - [Optional Tooling](#optional-tooling)
   - [Installation](#installation)
-  - [Yarn Commands](#yarn-commands)
+  - [Pnpm Commands](#pnpm-commands)
   - [Contributing](#contributing)
     - [Branching](#branching)
     - [Building ToC](#building-toc)
@@ -33,8 +33,8 @@ subproject, e.g. running or testing.
       - [Building with a Container](#building-with-a-container)
     - [Building Desktop UI for Production](#building-desktop-ui-for-production)
     - [Connect Boundary UI to Boundary local instance](#connect-boundary-ui-to-boundary-local-instance)
-      - [For admin](#for-admin)
-      - [For desktop](#for-desktop)
+      - [For Admin](#for-admin)
+      - [For Desktop](#for-desktop)
     - [Committing](#committing)
       - [License Checking](#license-checking)
 
@@ -68,7 +68,7 @@ You will need the following things properly installed on your computer.
 * [Git][git]
 * [Node.js][node]
   * Supported versions: `v20` and `v22`.
-* [Yarn][yarn] installed globally
+* [Pnpm][pnpm] installed globally
 * [Google Chrome][chrome]
 * [Firefox][firefox]
 
@@ -90,18 +90,18 @@ that best suit you and your personal style.
 
 * `git clone <repository-url>` this repository
 * `cd boundary-ui`
-* `yarn install`
+* `pnpm install`
 
-## Yarn Commands
+## Pnpm Commands
 
-List of available project commands.  `yarn run <command-name>`
+List of available project commands.  `pnpm run <command-name>`
 
 | Command             | Description |
 |---------------------|---|
 | build               | Builds Admin UI for production. |
 | test                | Runs tests in CI mode. |
 | lint                | Runs ember-template-lint on all of the hbs, js, and sass files. |
-| compliance:audit    | Checks for issues using `yarn audit` with moderate and above criticality.|
+| compliance:audit    | Checks for issues using `pnpm audit` with moderate and above criticality.|
 | compliance:licenses | Checks that all dependencies have OSS-compatible licenses. |
 | doc:toc             | Automatically generates a table of contents for the README file. |
 
@@ -114,7 +114,7 @@ We follow [GitHub Flow][github-flow].
 ### Building ToC
 
 To autogenerate a ToC (table of contents) for this README,
-run `yarn doc:toc`.  Please update the ToC whenever editing the structure
+run `pnpm doc:toc`.  Please update the ToC whenever editing the structure
 of README.
 
 ### Building Admin UI for Production
@@ -126,8 +126,8 @@ necessary for your target environment, as described in the [Environment Variable
 To quickly produce a production build of Admin UI, run from this folder:
 
 ```bash
-yarn install
-yarn build
+pnpm install
+pnpm build
 ```
 
 Assets are saved to `ui/admin/dist/`.
@@ -151,20 +151,20 @@ necessary for your target environment, as described in the [Environment Variable
 To quickly produce a production build of Desktop UI, run from this folder:
 
 ```bash
-yarn install
-yarn build:ui:desktop
+pnpm install
+pnpm build:ui:desktop
 ```
 
 In windows, UI is generated using docker to provide a stable UI across platforms.
 
 ```cmd
-yarn install
+pnpm install
 docker-compose -f docker-compose-embedding.yml run build-desktop-production
-yarn build:ui:desktop:app
+pnpm build:ui:desktop:app
 ```
 
 To provide a signing identify for macOS build, use `BOUNDARY_DESKTOP_SIGNING_IDENTITY`
-environment variable to set signing certificate name (e.g Developer ID Application: * (*)) when building desktop app using `yarn build:ui:desktop:app`.
+environment variable to set signing certificate name (e.g Developer ID Application: * (*)) when building desktop app using `pnpm build:ui:desktop:app`.
 
 Assets are saved to `ui/desktop/electron-app/out/make/`.
 DMG packaged desktop UI is available at asset location as `boundary.dmg`.
@@ -180,7 +180,7 @@ This assumes you already have up and running a Boundary dev instance in your loc
 
 This assumes you are within `boundary-ui/ui/admin`.
 
-You will need to turn `off` mirage, tell the UI where to find Boundary and run it: `$ ENABLE_MIRAGE=false API_HOST=http://localhost:9200 yarn start`.
+You will need to turn `off` mirage, tell the UI where to find Boundary and run it: `$ ENABLE_MIRAGE=false API_HOST=http://localhost:9200 pnpm start`.
 
 Following terminal instructions, open in your browser: `http://localhost:4200/`.
 
@@ -190,7 +190,7 @@ Once you open the UI you will see the login screen, authenticate using generated
 
 This assumes you are within `boundary-ui/ui/desktop`.
 
-You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false yarn start:desktop`.
+You will need to turn `off` mirage and run it: `$ ENABLE_MIRAGE=false pnpm start:desktop`.
 
 In login screen, authenticate using generated admin login name and password.
 
@@ -199,7 +199,7 @@ Enter the cluster URL of your Boundary dev instance, by default is: `http://loca
 ### Committing
 
 We use `husky` and `lint-staged` to ensure linting and other checks pass before a
-commit is completed. Simply do a `yarn install` to make sure the hooks are installed.
+commit is completed. Simply do a `pnpm install` to make sure the hooks are installed.
 
 Use a normal `git commit` to go through the checks, if you need to skip these checks,
 use `git commit --no-verify` to bypass them. However, a consistent commit message will
@@ -218,10 +218,10 @@ will not be accepted.
 
 [git]: https://git-scm.com/
 [node]: https://nodejs.org/
-[yarn]: https://yarnpkg.com/
+[pnpm]: https://pnpmpkg.com/
 [chrome]: https://google.com/chrome/
 [firefox]: https://firefox.com/
-[yarn-workspaces]: https://yarnpkg.com/features/workspaces
+[pnpm-workspaces]: https://pnpmpkg.com/features/workspaces
 [homebrew]: https://brew.sh
 [warp]: https://www.warp.dev
 [vscode]: https://code.visualstudio.com/
