@@ -5,6 +5,7 @@
 
 @use '../../variables/sizing';
 @use '../../variables/media';
+@use '../../variables/color/sass';
 
 .rose-layout-sidebar {
   --sidebar-width: #{sizing.rems(m) * 16};
@@ -22,7 +23,7 @@
 
   .rose-layout-sidebar-sidebar {
     grid-area: sidebar;
-    background-color: #{color(ui-gray, 950)};
+    background-color: #{sass.color(ui-gray, 950)};
     border-right: sizing.rems(xxxxs) solid var(--ui-border-subtler-1);
   }
 
