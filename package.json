@@ -45,14 +45,17 @@
     "license-checker": "^25.0.1",
     "lint-staged": "^15.2.10"
   },
-  "resolutions": {
-    "nomnom/underscore": "^1.12.1",
-    "@hashicorp/design-system-components/ember-stargate": "^0.6.0",
-    "micromatch": "^4.0.8",
-    "css-select/nth-check": "^2.0.1",
-    "node-gyp": "^10.0.0",
-    "ansi-html": "^0.0.9",
-    "fireworm/async": "^2.6.4"
+  "pnpm": {
+    "overrides": {
+      "nomnom>underscore": "^1.12.1",
+      "@hashicorp/design-system-components>ember-stargate": "^0.6.0",
+      "micromatch": "^4.0.8",
+      "css-select>nth-check": "^2.0.1",
+      "node-gyp": "^10.0.0",
+      "ansi-html": "^0.0.9",
+      "fireworm>async": "^2.6.4",
+      "ember-inflector": "^4.0.2"
+    }
   },
   "config": {
     "commitizen": {
