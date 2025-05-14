@@ -48,8 +48,12 @@
           </Hds::Dropdown>
         </PH.Actions>
       {{/if}}
+      <PH.Generic>
+        <div class='copy-snippet-container'>
+          <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+        </div>
+      </PH.Generic>
     </Hds::PageHeader>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   {{#if (can 'read model' @model)}}

@@ -16,8 +16,8 @@
       <PH.Description>
         {{t 'resources.credential-library.description'}}
       </PH.Description>
-      <PH.Actions>
-        {{#if (can 'delete model' @model)}}
+      {{#if (can 'delete model' @model)}}
+        <PH.Actions>
           <Hds::Dropdown data-test-manage-credential-library-dropdown as |dd|>
             <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
             <dd.Interactive
@@ -27,10 +27,14 @@
               {{t 'resources.credential-library.actions.delete'}}
             </dd.Interactive>
           </Hds::Dropdown>
-        {{/if}}
-      </PH.Actions>
+        </PH.Actions>
+      {{/if}}
+      <PH.Generic>
+        <div class='copy-snippet-container'>
+          <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+        </div>
+      </PH.Generic>
     </Hds::PageHeader>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
   </page.header>
 
   <page.navigation>
