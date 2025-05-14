@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -28,11 +29,9 @@ module('Acceptance | targets | update', function (hooks) {
     target: null,
   };
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
-    newTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -51,12 +50,9 @@ module('Acceptance | targets | update', function (hooks) {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.unknownTarget = `${urls.targets}/foo`;
-    urls.newTarget = `${urls.targets}/new`;
 
     await authenticateSession({});
   });
@@ -66,27 +62,28 @@ module('Acceptance | targets | update', function (hooks) {
     assert.notEqual(instances.target.name, 'random string');
     assert.notEqual(instances.target.worker_filter, 'random filter');
 
-    await click(`[href="${urls.target}"]`);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="submit"]');
+    await click(commonSelectors.HREF(urls.target));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.target);
     assert.strictEqual(
       this.server.schema.targets.first().name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
   test('can cancel changes to existing target', async function (assert) {
     await visit(urls.targets);
-    await click(`[href="${urls.target}"]`);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
 
-    assert.notEqual(instances.target.name, 'random string');
-    assert.dom('[name="name"]').hasValue(instances.target.name);
+    await click(commonSelectors.HREF(urls.target));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(instances.target.name);
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
@@ -110,60 +107,66 @@ module('Acceptance | targets | update', function (hooks) {
         },
       );
     });
+    await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(urls.target));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.target.name, 'random string');
+    assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(commonSelectors.HREF(urls.target));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
     assert.strictEqual(currentURL(), urls.target);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(currentURL(), urls.targets);
-    assert.notEqual(this.server.schema.targets.first().name, 'random string');
+    assert.notEqual(
+      this.server.schema.targets.first().name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
   });
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.target.name, 'random string');
+    assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+    await click(commonSelectors.HREF(urls.target));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
     assert.strictEqual(currentURL(), urls.target);
-    await click(`[href="${urls.targets}"]`);
+
+    await click(commonSelectors.HREF(urls.targets));
+
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.target);
-    assert.notEqual(this.server.schema.targets.first().name, 'random string');
     assert.notEqual(
-      this.server.schema.targets.first().egressWorkerFilter,
-      'random string',
+      this.server.schema.targets.first().name,
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -172,9 +175,9 @@ module('Acceptance | targets | update', function (hooks) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'update');
 
-    await click(`[href="${urls.target}"]`);
+    await click(commonSelectors.HREF(urls.target));
 
-    assert.dom('.rose-form-actions [type="button"]').doesNotExist();
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
@@ -203,18 +206,20 @@ module('Acceptance | targets | update', function (hooks) {
 
     const url = `${urls.targets}/${target.id}`;
     await visit(urls.targets);
-    await click(`[href="${url}"]`);
 
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="address"]', '0.0.0.0');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(url));
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(selectors.FIELD_ADDRESS, selectors.FIELD_ADDRESS_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
       this.server.schema.targets.find(target.id).address,
-      '0.0.0.0',
+      selectors.FIELD_ADDRESS_VALUE,
     );
     assert.strictEqual(
       this.server.schema.targets.find(target.id).hostSets.length,
@@ -248,13 +253,14 @@ module('Acceptance | targets | update', function (hooks) {
 
     const url = `${urls.targets}/${target.id}`;
     await visit(urls.targets);
-    await click(`[href="${url}"]`);
 
-    await click('.rose-form-actions [type="button"]', 'Activate edit mode');
-    await fillIn('[name="address"]', '0.0.0.0');
-    await click('[type="submit"]');
+    await click(commonSelectors.HREF(url));
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(selectors.FIELD_ADDRESS, selectors.FIELD_ADDRESS_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(

@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -18,10 +19,6 @@ module('Acceptance | targets | delete', function (hooks) {
   setupIndexedDb(hooks);
 
   let getTargetCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-targets-dropdown] button:first-child';
-  const DELETE_ACTION_SELECTOR =
-    '[data-test-manage-targets-dropdown] ul li button';
 
   const instances = {
     scopes: {
@@ -68,9 +65,10 @@ module('Acceptance | targets | delete', function (hooks) {
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
+
     assert.strictEqual(getTargetCount(), targetCount - 1);
   });
 
@@ -80,9 +78,9 @@ module('Acceptance | targets | delete', function (hooks) {
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert
@@ -98,9 +96,9 @@ module('Acceptance | targets | delete', function (hooks) {
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount);
@@ -112,11 +110,9 @@ module('Acceptance | targets | delete', function (hooks) {
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'delete');
 
-    await click(`[href="${urls.target}"]`);
+    await click(commonSelectors.HREF(urls.target));
 
-    assert
-      .dom('.rose-layout-page-actions .rose-dropdown-button-danger')
-      .doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_DELETE).doesNotExist();
   });
 
   test('deleting a target which errors displays error messages', async function (assert) {
@@ -133,9 +129,9 @@ module('Acceptance | targets | delete', function (hooks) {
       );
     });
 
-    await click(`[href="${urls.target}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(DELETE_ACTION_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_DELETE);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
