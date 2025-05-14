@@ -5,17 +5,23 @@
 
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = {
   name: require('./package').name,
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import('node_modules/codemirror/lib/codemirror.css');
-    app.import('node_modules/codemirror/theme/monokai.css');
-    app.import('node_modules/codemirror/addon/lint/lint.css');
-    app.import('node_modules/jsonlint/lib/jsonlint.js');
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/lib/codemirror.css'),
+    );
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/theme/monokai.css'),
+    );
+    app.import(
+      path.resolve(__dirname, 'node_modules/codemirror/addon/lint/lint.css'),
+    );
+    app.import(require.resolve('jsonlint'));
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
@@ -39,10 +45,14 @@ module.exports = {
    * application's `sassOptions.includePaths`.
    */
   includeHDSStyles(app) {
-    const tokensPath =
-      '../../node_modules/@hashicorp/design-system-tokens/dist/products/css';
-    const hdsPath =
-      '../../node_modules/@hashicorp/design-system-components/dist/styles';
+    const tokensPath = path.resolve(
+      __dirname,
+      'node_modules/@hashicorp/design-system-tokens/dist/products/css',
+    );
+    const hdsPath = path.resolve(
+      __dirname,
+      'node_modules/@hashicorp/design-system-components/dist/styles',
+    );
 
     // Setup default sassOptions on the running application
     app.options.sassOptions = app.options.sassOptions || {};
@@ -50,8 +60,7 @@ module.exports = {
       app.options.sassOptions.includePaths || [];
 
     // Include the addon styles
-    app.options.sassOptions.includePaths.push(tokensPath);
-    app.options.sassOptions.includePaths.push(hdsPath);
+    app.options.sassOptions.includePaths.push(tokensPath, hdsPath);
   },
 
   /**
@@ -60,12 +69,13 @@ module.exports = {
    */
   includeFlightIcons(app) {
     const iconPackagePath = path.resolve(
-      '../../node_modules/@hashicorp/flight-icons',
+      __dirname,
+      'node_modules/@hashicorp/flight-icons',
     );
     const iconsPath = path.resolve(iconPackagePath, '..');
 
-    app.options.svg = app.options.svg || {};
-    app.options.svg.paths = app.options.svg.paths || [];
+    app.options.svg ||= {};
+    app.options.svg.paths ||= [];
 
     app.options.svg.paths.push(iconsPath);
 
