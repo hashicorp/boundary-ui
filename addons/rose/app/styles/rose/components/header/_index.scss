@@ -7,10 +7,10 @@
 @use '../../variables/media';
 @use '../../utilities/type';
 
-@import 'brand';
-@import 'nav';
-@import 'utilities';
-@import 'dropdown';
+@use 'brand';
+@use 'nav';
+@use 'utilities';
+@use 'dropdown';
 
 .rose-header {
   --box-shadow-light: none;
