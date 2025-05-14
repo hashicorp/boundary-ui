@@ -3,13 +3,6 @@
   "description": "Monorepo for Boundary UIs and addons.",
   "license": "BUSL-1.1",
   "author": "HashiCorp",
-  "workspaces": {
-    "packages": [
-      "addons/*",
-      "ui/*",
-      "e2e-tests"
-    ]
-  },
   "scripts": {
     "build": "yarn build:ui:admin",
     "build:ui:admin": "yarn workspace admin build",
