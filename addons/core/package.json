@@ -15,8 +15,8 @@
   "scripts": {
     "build:development": "ember build",
     "build": "ember build --environment=production",
-    "lint": "concurrently \"yarn:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"yarn:lint:*:fix\" --names \"fix:\"",
+    "lint": "concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
@@ -27,7 +27,7 @@
     "start": "ember serve",
     "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
-    "precommit": "yarn lint && yarn format && yarn test",
+    "precommit": "pnpm lint && pnpm format && pnpm test",
     "doc:toc": "doctoc README.md"
   },
   "dependencies": {
