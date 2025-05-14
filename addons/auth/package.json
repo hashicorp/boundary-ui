@@ -16,8 +16,10 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
+    "format": "yarn run format:js",
+    "format:js": "prettier --write '{addon,app,config,stories,tests}/**/*.js' *.js",
     "start": "ember serve",
-    "test": "ember test",
+    "test": "ember test --test-port 0",
     "test:ember-compatibility": "ember try:each",
     "precommit": "yarn lint && yarn format && yarn test",
     "doc:toc": "doctoc README.md"
@@ -34,7 +36,7 @@
     "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-proposal-decorators": "^7.24.7",
     "@ember/optional-features": "^2.1.0",
-    "@ember/test-helpers": "^4.0.5",
+    "@ember/test-helpers": "^5.2.1",
     "@embroider/test-setup": "^4.0.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
@@ -60,7 +62,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-ember": "^12.2.1",
     "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-qunit": "^8.1.2",
     "loader.js": "^4.7.0",
     "pretender": "^3.4.3",
@@ -85,7 +86,11 @@
     "configPath": "tests/dummy/config"
   },
   "lint-staged": {
-    "*.{js,scss,yaml}": "eslint --fix",
-    "*.hbs": "ember-template-lint --fix"
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.hbs": "ember-template-lint --fix",
+    "*.{scss,yaml}": "prettier --write"
   }
 }

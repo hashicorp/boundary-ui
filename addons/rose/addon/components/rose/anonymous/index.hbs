@@ -3,4 +3,8 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-{{yield}}
+{{#let (element (or @tagName 'div')) as |Tag|}}
+  <Tag id={{@id}} class={{@class}} ...attributes>
+    {{yield}}
+  </Tag>
+{{/let}}

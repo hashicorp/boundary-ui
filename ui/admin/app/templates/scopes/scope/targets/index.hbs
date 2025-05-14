@@ -16,10 +16,12 @@
       class='header-spacing'
     >
       {{t 'resources.target.title_plural'}}
-      <DocLink @doc='target' @iconSize='large' />
+      <DocLink @doc='target' />
     </Hds::Text::Display>
     {{#if @model.doTargetsExist}}
-      <p>{{t 'resources.target.description'}}</p>
+      <Hds::Text::Body @tag='p' @size='300' class='p'>
+        {{t 'resources.target.description'}}
+      </Hds::Text::Body>
     {{/if}}
   </page.header>
 
@@ -94,7 +96,9 @@
                   {{else}}
                     {{B.data.displayName}}
                   {{/if}}
-                  <p>{{B.data.description}}</p>
+                  <Hds::Text::Body @tag='p' class='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
                 </B.Td>
                 <B.Td>
                   {{#if B.data.type}}
@@ -134,7 +138,9 @@
                     {{else}}
                       {{B.data.displayName}}
                     {{/if}}
-                    <p>{{B.data.description}}</p>
+                    <Hds::Text::Body @tag='p' class='p'>
+                      {{B.data.description}}
+                    </Hds::Text::Body>
                   </B.Td>
                   <B.Td>
                     {{#if B.data.type}}

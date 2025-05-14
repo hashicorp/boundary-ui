@@ -189,10 +189,6 @@ test(
       await hostCatalogsPage.createHostInHostSet(targetAddress);
 
       // Create another host set
-      await page
-        .getByRole('navigation', { name: 'Application local navigation' })
-        .getByRole('link', { name: 'Host Catalogs' })
-        .click();
       await page.getByRole('link', { name: hostCatalogName }).click();
       const hostSetName2 = await hostCatalogsPage.createHostSet();
 

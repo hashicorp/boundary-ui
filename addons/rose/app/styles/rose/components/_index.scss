@@ -5,19 +5,18 @@
 
 // This list is sorted in ascending order to improve readability
 
-@import 'button';
-@import 'card';
-@import 'cards';
-@import 'code-editor';
-@import 'dialog';
-@import 'dropdown';
-@import 'form';
-@import 'frame';
-@import 'header';
-@import 'icon';
-@import 'layout';
-@import 'list';
-@import 'metadata-list';
-@import 'nav';
-@import 'page-header';
-@import 'toolbar';
+@use 'button';
+@use 'card';
+@use 'cards';
+@use 'code-editor';
+@use 'dialog';
+@use 'dropdown';
+@use 'form';
+@use 'frame';
+@use 'header';
+@use 'layout';
+@use 'list';
+@use 'metadata-list';
+@use 'nav';
+@use 'page-header';
+@use 'toolbar';

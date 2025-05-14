@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@use '../../variables/sizing';
 @use '../../utilities/type';
+@use '../../variables/sizing';
 
 .rose-form-select {
   margin-bottom: sizing.rems(m);
@@ -22,7 +22,7 @@
   padding: sizing.rems(xs) sizing.rems(xxl) sizing.rems(xs) sizing.rems(xs);
   border: sizing.rems(xxxxs) solid var(--ui-gray-subtler-2);
   border-radius: sizing.rems(xxxs);
-  box-shadow: 0 $size-xxs $size-xxs
+  box-shadow: 0 sizing.rems(xxs) sizing.rems(xxs)
     rgba(var(--stark-components), var(--opacity-2));
   background: var(--ui-gray-subtler-5)
     url('data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M12%205.83L15.17%209l1.41-1.41L12%203%207.41%207.59%208.83%209%2012%205.83zm0%2012.34L8.83%2015l-1.41%201.41L12%2021l4.59-4.59L15.17%2015%2012%2018.17z%22%20fill%3D%22%23525761%22%2F%3E%3C%2Fsvg%3E')

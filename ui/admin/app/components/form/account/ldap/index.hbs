@@ -79,9 +79,9 @@
 
       <F.Control>
         <div class='ldap-section'>
-          <p class='hds-typography-display-300 hds-font-weight-bold'>{{t
-              'form.other_fields.label'
-            }}</p>
+          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+            {{t 'form.other_fields.label'}}
+          </Hds::Text::Display>
           <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t
               'form.other_fields.help'
             }}</Hds::Form::HelperText>
@@ -109,9 +109,9 @@
         {{/if}}
 
         {{#if @model.member_of_groups}}
-          <p class='hds-font-weight-semibold'>
-            {{t 'resources.account.form.member_of_groups.label'}}
-          </p>
+          <Hds::Text::Body @tag='p' @size='300' @weight='semibold' class='p'>{{t
+              'resources.account.form.member_of_groups.label'
+            }}</Hds::Text::Body>
           {{#each @model.member_of_groups as |group|}}
             <Hds::Form::TextInput::Field
               @value={{group.value}}

@@ -5,7 +5,7 @@
 
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
-import { computed, action } from '@ember/object';
+import { action } from '@ember/object';
 
 export default class RoseFormComponent extends Component {
   // =attributes
@@ -24,7 +24,6 @@ export default class RoseFormComponent extends Component {
    * in which case the value is dependent on `@disabled` and `this.isEditable`.
    * @type {boolean}
    */
-  @computed('args.disabled', 'args.showEditToggle', 'isEditable')
   get disabled() {
     if (this.args.showEditToggle) return this.args.disabled || !this.isEditable;
     return this.args.disabled;
@@ -34,7 +33,6 @@ export default class RoseFormComponent extends Component {
    * True if showEditToggle is true and edit mode is enabled.
    * @type {boolean}
    */
-  @computed('args.showEditToggle', 'isEditable')
   get showEditToggleButton() {
     return this.args.showEditToggle && !this.isEditable;
   }

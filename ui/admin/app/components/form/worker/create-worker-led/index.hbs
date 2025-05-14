@@ -157,9 +157,9 @@
       </Hds::Form::Fieldset>
     {{/if}}
 
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{t 'resources.worker.form.steps.1.create_directory'}}
-    </p>
+    </Hds::Text::Body>
 
     <Hds::CodeBlock
       @language='bash'
@@ -169,9 +169,9 @@
       data-test-worker-directory
     />
 
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{t 'resources.worker.form.steps.1.create_config'}}
-    </p>
+    </Hds::Text::Body>
 
     <Hds::CodeBlock
       @language='hcl'
@@ -181,9 +181,9 @@
       data-test-worker-config
     />
 
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{t 'resources.worker.form.steps.1.save_config' htmlSafe=true}}
-    </p>
+    </Hds::Text::Body>
   </div>
 
   <Hds::Text::Display
@@ -196,9 +196,9 @@
   </Hds::Text::Display>
   <div class='worker-create-section'>
 
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{t 'resources.worker.form.steps.2.run_command'}}
-    </p>
+    </Hds::Text::Body>
 
     <Hds::CodeBlock
       @language='bash'
@@ -207,12 +207,13 @@
       @hasLineNumbers={{false}}
     />
 
-    <p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
       {{t 'resources.worker.form.steps.2.copy_registration_request'}}
-      <code>{{t
+      <Hds::Text::Code @size='300' @color='primary'>
+        {{t
           'resources.worker.form.steps.3.worker_auth_registration_request.label'
-        }}</code>.
-    </p>
+        }}</Hds::Text::Code>.
+    </Hds::Text::Body>
   </div>
 
   <Hds::Text::Display
@@ -263,15 +264,20 @@
     {{#unless @model.isNew}}
       <div class='worker-success'>
         <div>
-          <Rose::Icon @name='flight-icons/svg/cpu-16' @size='medium' />
-          <p>{{this.generatedWorkerAuthToken}}</p>
+          <Hds::Icon @name='cpu' @color='success' @isInline={{true}} />
+          <Hds::Text::Body @tag='p' @size='300' class='p'>
+            {{this.generatedWorkerAuthToken}}
+          </Hds::Text::Body>
         </div>
         <div>
-          <Rose::Icon
-            @name='flight-icons/svg/check-circle-fill-16'
-            @size='medium'
+          <Hds::Icon
+            @name='check-circle-fill'
+            @color='success'
+            @isInline={{true}}
           />
-          <p>{{t 'resources.worker.form.steps.3.registered'}}</p>
+          <Hds::Text::Body @tag='p' @size='300' class='p'>
+            {{t 'resources.worker.form.steps.3.registered'}}
+          </Hds::Text::Body>
         </div>
       </div>
     {{/unless}}

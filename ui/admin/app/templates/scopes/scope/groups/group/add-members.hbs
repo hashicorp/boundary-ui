@@ -23,9 +23,11 @@
       class='header-spacing'
     >
       {{t 'resources.group.messages.add-members.title'}}
-      <DocLink @doc='group.add-members' @iconSize='large' />
+      <DocLink @doc='group.add-members' />
     </Hds::Text::Display>
-    <p>{{t 'resources.group.messages.add-members.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.group.messages.add-members.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body>

@@ -23,9 +23,11 @@
       class='header-spacing'
     >
       {{t 'resources.group.titles.new'}}
-      <DocLink @doc='group' @iconSize='large' />
+      <DocLink @doc='group' />
     </Hds::Text::Display>
-    <p>{{t 'resources.group.description'}}</p>
+    <Hds::Text::Body @tag='p' @size='300' class='p'>
+      {{t 'resources.group.description'}}
+    </Hds::Text::Body>
   </page.header>
 
   <page.body>

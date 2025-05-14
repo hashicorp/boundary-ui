@@ -2,9 +2,17 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.3.2 [CLI 0.19.2] (2025.05.08)
+
+### Bug Fixes
+
+- Fix target search field race condition. ([PR](https://github.com/hashicorp/boundary-ui/pull/2723))
+- Remove "Check for Updates" menu item when desktop client is installed through the Boundary installer. ([PR](https://github.com/hashicorp/boundary-ui/pull/2754))
+
 ## V2.3.1 [CLI 0.19.1] (2025.03.04)
 
 ### Bug Fixes
+
 - Fix re-authentication issue when re-opening Desktop Client. ([PR](https://github.com/hashicorp/boundary-ui/pull/2701))
 
 ## V2.3.0 [CLI 0.19.0] (2025.02.10)

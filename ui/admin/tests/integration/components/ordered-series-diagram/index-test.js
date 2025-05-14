@@ -18,11 +18,11 @@ module(
       this.set('egressWorker', 'Egress Worker');
 
       await render(hbs`
-        <OrderedSeriesDiagram as |D|>
-          <D.Item @icon='user'>{{this.client}}</D.Item>
-          <D.Item @icon='settings'>{{this.egressWorker}}</D.Item>
-        </OrderedSeriesDiagram>
-      `);
+      <OrderedSeriesDiagram as |D|>
+        <D.Item @icon='user'>{{this.client}}</D.Item>
+        <D.Item @icon='settings'>{{this.egressWorker}}</D.Item>
+      </OrderedSeriesDiagram>
+    `);
 
       assert.dom('[data-test-icon="user"]').isVisible();
       assert.dom('.ordered-series-diagram-item-title').hasText('Client');

@@ -102,14 +102,6 @@ $xxxs: sizing.rems(xxxs); // 2
     margin: 0;
     margin-bottom: sizing.rems(xs);
 
-    .rose-icon {
-      margin-right: sizing.rems(xs);
-
-      svg {
-        vertical-align: text-bottom;
-      }
-    }
-
     .rose-card-link-title-text {
       flex-grow: 1;
       height: typography.line-height(m) * 2rem;

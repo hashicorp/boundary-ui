@@ -5,7 +5,9 @@
 
 <Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>
   {{t 'resources.user.title'}}
-  <DocLink @doc='user' @iconSize='large' />
+  <DocLink @doc='user' />
 </Hds::Text::Display>
-<p>{{t 'resources.user.description'}}</p>
+<Hds::Text::Body @tag='p' @size='300' class='p'>
+  {{t 'resources.user.description'}}
+</Hds::Text::Body>
 <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />

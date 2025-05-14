@@ -18,10 +18,12 @@
         class='header-spacing'
       >
         {{t 'resources.org.title_plural'}}
-        <DocLink @doc='org' @iconSize='large' />
+        <DocLink @doc='org' />
       </Hds::Text::Display>
       {{#if @model.doScopesExist}}
-        <p>{{t 'resources.org.description'}}</p>
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.org.description'}}
+        </Hds::Text::Body>
       {{/if}}
     {{else if @model.currentScope.isOrg}}
       <Hds::Text::Display
@@ -31,10 +33,12 @@
         class='header-spacing'
       >
         {{t 'resources.project.title_plural'}}
-        <DocLink @doc='project' @iconSize='large' />
+        <DocLink @doc='project' />
       </Hds::Text::Display>
       {{#if @model.doScopesExist}}
-        <p>{{t 'resources.project.description'}}</p>
+        <Hds::Text::Body @tag='p' @size='300' class='p'>
+          {{t 'resources.project.description'}}
+        </Hds::Text::Body>
       {{/if}}
     {{/if}}
   </page.header>

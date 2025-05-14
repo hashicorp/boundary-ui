@@ -7,9 +7,9 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'rose';
-@import 'notify';
-@import '@hashicorp/ember-asciinema-player';
+@use 'rose';
+@use 'notify';
+@use '@hashicorp/ember-asciinema-player';
 
 .rose-layout-global {
   .rose-layout-global-body {
@@ -38,7 +38,7 @@
     margin-top: 0;
   }
 
-  .rose-icon {
+  .hds-icon {
     margin-right: sizing.rems(xs);
   }
 }
@@ -48,24 +48,12 @@
     width: 66%;
   }
 
-  .rose-form-input {
-    width: 100%;
-
-    .rose-form-input-field {
-      width: 100%;
-    }
-  }
-
   .rose-dropdown {
     $icon-width: sizing.rems(m) + sizing.rems(s);
     $indent: $icon-width + sizing.rems(xs);
 
     .rose-form-radio-label {
       display: flex;
-
-      .rose-icon {
-        padding-right: sizing.rems(xxs);
-      }
     }
 
     .indent-label-1 {
@@ -81,12 +69,6 @@
         padding-left: $indent + $icon-width;
       }
     }
-
-    .is-project {
-      .rose-icon {
-        visibility: hidden;
-      }
-    }
   }
 }
 
@@ -95,12 +77,6 @@
 
   .logotype {
     display: none;
-  }
-
-  .rose-dropdown {
-    .rose-icon {
-      transform: scale(0.7);
-    }
   }
 
   &.loading {
@@ -136,12 +112,6 @@
   }
 }
 
-.rose-dialog-cover {
-  svg {
-    max-width: 20rem;
-  }
-}
-
 [class*='session-status-'] {
   color: var(--ui-gray-subtler-2);
 }
@@ -152,23 +122,6 @@
 
 .nowrap {
   white-space: nowrap;
-}
-
-//  Spinning animation for refresh button icon
-@media (prefers-reduced-motion: no-preference) {
-  .is-loading {
-    .rose-icon {
-      @keyframes hds-flight-icon-animation-rotation {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      > svg {
-        animation: hds-flight-icon-animation-rotation 0.7s linear infinite;
-      }
-    }
-  }
 }
 
 // Onboarding styles
@@ -249,10 +202,9 @@
     margin-bottom: sizing.rems(l);
   }
 
-  > p code {
+  > p span {
     background-color: var(--token-color-surface-strong);
     border-radius: 5px;
-    color: var(--token-color-foreground-primary);
     padding: sizing.rems(xxxs) sizing.rems(xxs);
   }
 
@@ -295,10 +247,6 @@
           color: var(--success);
         }
       }
-    }
-
-    .rose-icon {
-      color: var(--success);
     }
   }
 }
@@ -424,6 +372,9 @@
     left: 50%;
     position: absolute;
     top: 50%;
+    display: flex;
+    align-items: center;
+    gap: sizing.rems(xxxs);
 
     // centers message with editor body and gutter
     transform: translate(-50%, -50%);
@@ -431,7 +382,6 @@
   }
 
   .secret-editor-skeleton-button {
-    
     @media (prefers-color-scheme: light) {
       .ember-application:not(.rose-theme-dark) & {
         background: var(--token-color-palette-neutral-600);
@@ -439,7 +389,7 @@
         border-color: var(--token-color-palette-neutral-50);
       }
     }
-    
+
     .ember-application.rose-theme-light & {
       background: var(--token-color-palette-neutral-600);
       color: var(--token-color-palette-neutral-50);
@@ -551,12 +501,6 @@
 
 // target sidebar
 .target-sidebar {
-  .description {
-    color: var(--token-form-helper-text-color);
-    font-weight: var(--token-typography-font-weight-normal);
-    font-size: var(--token-typography-body-200-font-size);
-  }
-
   .hds-link-standalone {
     margin-top: 1rem;
   }
@@ -564,12 +508,6 @@
 
 .target-sidebar-aliases {
   margin-bottom: 3rem;
-
-  .description {
-    color: var(--token-form-helper-text-color);
-    font-weight: var(--token-typography-font-weight-normal);
-    font-size: var(--token-typography-body-200-font-size);
-  }
 
   .hds-link-standalone {
     margin-top: 1rem;
@@ -1078,10 +1016,6 @@
 .header-spacing {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-
-  .doc-link {
-    vertical-align: middle;
-  }
 }
 
 // scope picker
