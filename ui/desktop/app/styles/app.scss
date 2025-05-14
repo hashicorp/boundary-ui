@@ -94,10 +94,6 @@
 
   fieldset {
     margin-bottom: sizing.rems(m);
-
-    legend {
-      @extend .hds-form-label !optional;
-    }
   }
 }
 
