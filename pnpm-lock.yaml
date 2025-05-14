@@ -510,6 +510,12 @@ importers:
       '@hashicorp/design-system-components':
         specifier: ^4.18.1
         version: 4.19.0(@babel/core@7.27.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(ember-basic-dropdown@8.6.1(@babel/core@7.27.1)(@ember/string@3.1.1)(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8)))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))
+      '@hashicorp/design-system-tokens':
+        specifier: ^2.3.0
+        version: 2.3.0
+      '@hashicorp/flight-icons':
+        specifier: ^3.10.0
+        version: 3.10.0
       codemirror:
         specifier: 5.65.7
         version: 5.65.7
