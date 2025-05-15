@@ -21,15 +21,14 @@ test.describe('user/password authentication tests', () => {
       /.*\/scopes\/global\/projects\/targets$/,
     );
 
+    // click dropdown
     await electronPage
-      .locator('details')
-      .filter({ hasText: 'Sign Out' })
+      .getByRole('button', { name: 'admin' })
       .click();
 
     await electronPage.getByRole('button', { name: 'Sign Out' }).click();
     await expect(electronPage).toHaveURL(/.*\/scopes\/global\/authenticate\//);
   });
-
   test('Fails to authenticate with wrong password', async ({
     electronPage,
     clusterUrl,
