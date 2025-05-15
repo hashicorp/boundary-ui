@@ -12,60 +12,27 @@ html {
 }
 
 body {
+  // Used by Rose::Tabs and '/' in breadcrumbs
+  // and link list panel
   font-family: typography.$family-primary;
 
-  // This is the only time we'll explicitly use pixels.  All other sizes are
-  // expressed in rem units.
-  font-size: typography.$base-font-size * 1px;
+  // these 3 are used across the app
   line-height: typography.line-height(m);
   color: var(--stark);
   background-color: var(--subtle);
 }
 
-input,
-textarea,
-button {
-  font-family: typography.$family-primary;
+// Many elements get margin by default
+// but if we want to remove it we can use this class
+.remove-margin {
+  margin: 0;
 }
 
-pre,
-code {
-  font-family: typography.$family-monospace;
-}
-
-h1,
-.h1 {
-  @include type-mixins.type(h1, bold);
-
-  margin-top: sizing.rems(m);
-  margin-bottom: sizing.rems(xs);
-}
-
-h2,
-.h2 {
-  @include type-mixins.type(h2, bold);
-
-  margin-top: sizing.rems(m);
-  margin-bottom: sizing.rems(xs);
-}
-
-h3,
-.h3 {
-  @include type-mixins.type(h3, bold);
-
-  margin-top: sizing.rems(m);
-  margin-bottom: sizing.rems(xs);
-}
-
-p,
 .p {
   margin-bottom: sizing.rems(m);
 }
 
+// once we move to Hds::Link::Standalone we can remove this
 a {
   color: var(--action);
-}
-
-time {
-  font-variant-numeric: tabular-nums;
 }
