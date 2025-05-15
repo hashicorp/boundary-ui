@@ -8,7 +8,7 @@ import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { loading } from 'ember-loading';
 import { notifySuccess, notifyError } from 'core/decorators/notify';
-
+import { tracked } from '@glimmer/tracking';
 export default class ScopesScopeGroupsGroupAddMembersController extends Controller {
   // =services
 
@@ -16,6 +16,9 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
 
   // =attributes
 
+  @tracked scopeIds = [];
+
+  queryParams = [{ scopeIds: { type: 'array' } }];
   /**
    * Returns a flat array of scopes, sorted and "grouped by" parent scope,
    * beginning with global.
@@ -33,7 +36,32 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
     return sorted;
   }
 
+  /**
+   * Returns the filters object used for displaying filter tags.
+   * @type {object}
+   */
+  get filters() {
+    return {
+      allFilters: {
+        scopeIds: this.model.scopes,
+      },
+      selectedFilters: {
+        scopeIds: this.scopeIds,
+      },
+    };
+  }
+
   // =actions
+
+  /**
+   * Sets a query param to the value of selectedItems
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+  }
 
   /**
    * Adds members to the group and saves, replaces with the members index
@@ -56,23 +84,5 @@ export default class ScopesScopeGroupsGroupAddMembersController extends Controll
   @action
   async cancel() {
     await this.router.replaceWith('scopes.scope.groups.group.members');
-  }
-
-  /**
-   * Calls filterBy action located in the route.
-   * @param {string} field
-   * @param {[ScopeModel]} value
-   */
-  @action
-  callFilterBy(field, value) {
-    this.send('filterBy', field, value);
-  }
-
-  /**
-   * Calls clearAllFilters action located in the route.
-   */
-  @action
-  callClearAllFilters() {
-    this.send('clearAllFilters');
   }
 }

@@ -21,12 +21,7 @@
 
   <page.header>
     {{#if @model.isGlobal}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.global.title'}}
         <DocLink @doc='global' />
       </Hds::Text::Display>
@@ -35,12 +30,7 @@
       </Hds::Text::Body>
     {{/if}}
     {{#if @model.isOrg}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.org.title'}}
         <DocLink @doc='org' />
       </Hds::Text::Display>
@@ -49,12 +39,7 @@
       </Hds::Text::Body>
     {{/if}}
     {{#if @model.isProject}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
+      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
         {{t 'resources.project.title'}}
         <DocLink @doc='project' />
       </Hds::Text::Display>
@@ -113,7 +98,7 @@
       {{#if (can 'attachStoragePolicy scope' @model)}}
         <bc.Sidebar>
           <div class='policy-sidebar'>
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h3' class='remove-margin'>
               {{t 'resources.policy.title'}}
             </Hds::Text::Display>
 

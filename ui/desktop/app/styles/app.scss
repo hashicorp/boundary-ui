@@ -94,10 +94,6 @@
 
   fieldset {
     margin-bottom: sizing.rems(m);
-
-    legend {
-      @extend .rose-form-label;
-    }
   }
 }
 
@@ -208,11 +204,6 @@
     position: absolute;
     right: 0;
     top: 0;
-  }
-
-  .branded-card-title {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
   }
 
   .branded-card-description {
@@ -501,9 +492,4 @@
       flex-basis: 100%;
     }
   }
-}
-
-.header-spacing {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }

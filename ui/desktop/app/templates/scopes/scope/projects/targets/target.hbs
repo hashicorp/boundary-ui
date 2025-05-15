@@ -8,7 +8,11 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <Hds::Text::Display @tag='h1' @size='500' class='target-details-header'>
+    <Hds::Text::Display
+      @tag='h1'
+      @size='500'
+      class='target-details-header remove-margin'
+    >
       <Hds::IconTile @color='boundary' @icon='target' />
       {{@model.target.displayName}}
     </Hds::Text::Display>
