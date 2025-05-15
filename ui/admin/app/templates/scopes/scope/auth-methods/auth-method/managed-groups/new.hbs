@@ -9,25 +9,20 @@
   @route='scopes.scope.auth-methods.auth-method.managed-groups.new'
 />
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.managed-group.titles.new'}}
-      <DocLink @doc='managed-groups' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.managed-group.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.managed-group.titles.new'}}
+        <DocLink @doc='managed-groups' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.managed-group.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

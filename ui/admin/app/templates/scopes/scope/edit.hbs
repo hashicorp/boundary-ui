@@ -13,56 +13,45 @@
   />
 {{/if}}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    {{#if @model.isGlobal}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.global.title'}}
-        <DocLink @doc='global' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.global.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-    {{#if @model.isOrg}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.org.title'}}
-        <DocLink @doc='org' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.org.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-    {{#if @model.isProject}}
-      <Hds::Text::Display
-        @tag='h2'
-        @size='400'
-        @weight='bold'
-        class='header-spacing'
-      >
-        {{t 'resources.project.title'}}
-        <DocLink @doc='project' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.project.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#each this.scopeTypes as |scope|}}
+        {{#if (get @model scope.key)}}
+          <PH.Title>
+            {{t scope.title}}
+            <DocLink @doc={{scope.doc}} />
+          </PH.Title>
+          <PH.Description>
+            {{t scope.description}}
+          </PH.Description>
+        {{/if}}
+      {{/each}}
+      {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
+        <PH.Actions>
+          <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+            <dd.Interactive
+              @color='critical'
+              {{on 'click' (fn this.scopes.delete @model)}}
+            >{{t
+                (if
+                  @model.isOrg
+                  'resources.org.actions.delete'
+                  'resources.project.actions.delete'
+                )
+              }}</dd.Interactive>
+          </Hds::Dropdown>
+        </PH.Actions>
+      {{/if}}
+      <PH.Generic>
+        <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+      </PH.Generic>
+    </Hds::PageHeader>
   </page.header>
 
   {{#if (can 'read model' @model)}}
@@ -73,24 +62,6 @@
         </nav.link>
       </Rose::Nav::Tabs>
     </page.navigation>
-  {{/if}}
-
-  {{#if (and (can 'delete model' @model) (not @model.isGlobal))}}
-    <page.actions>
-      <Hds::Dropdown data-test-manage-projects-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-        <dd.Interactive
-          @color='critical'
-          {{on 'click' (fn this.scopes.delete @model)}}
-        >{{t
-            (if
-              @model.isOrg
-              'resources.org.actions.delete'
-              'resources.project.actions.delete'
-            )
-          }}</dd.Interactive>
-      </Hds::Dropdown>
-    </page.actions>
   {{/if}}
 
   <page.body>
@@ -113,7 +84,7 @@
       {{#if (can 'attachStoragePolicy scope' @model)}}
         <bc.Sidebar>
           <div class='policy-sidebar'>
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h2'>
               {{t 'resources.policy.title'}}
             </Hds::Text::Display>
 

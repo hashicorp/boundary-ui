@@ -22,23 +22,24 @@
 
   .rose-layout-page-header {
     grid-area: header;
+    margin-bottom: sizing.rems(s);
 
+    h1,
     h2 {
       display: flex;
-      gap: sizing.rems(xxs);
+      align-items: center;
+      gap: sizing.rems(xs);
 
       .doc-link {
         display: flex;
         align-items: center;
       }
     }
-  }
 
-  .rose-layout-page-actions {
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    .hds-copy-snippet {
+      align-self: start;
+      margin-top: sizing.rems(s);
+    }
   }
 
   .rose-layout-page-navigation {
@@ -48,6 +49,13 @@
   .rose-layout-page-body {
     grid-area: body;
     width: 100%;
+  }
+
+  .rose-layout-page-actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 }
 
@@ -61,4 +69,13 @@
       'navigation'
       'body';
   }
+}
+
+// TEMPORARY: Remove this override and update '.rose-layout-page' class, once all refactor PRs for 'llb/rose_page_layout_header' are merged.
+// This is a stopgap to ensure compatibility between the new and old layouts during the migration.
+.rose-layout-page.hds-migration-overrides {
+  grid-template-areas:
+    'header header header'
+    'navigation navigation navigation'
+    'body body body';
 }
