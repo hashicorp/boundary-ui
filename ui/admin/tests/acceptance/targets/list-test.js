@@ -10,6 +10,7 @@ import {
   fillIn,
   waitFor,
   currentRouteName,
+  currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -19,6 +20,7 @@ import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -255,98 +257,75 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(selectors.TABLE_SESSIONS_ID(instances.session.id)).isVisible();
   });
 
-  test('user can sort by `name` from targets table', async function (assert) {
-    this.server.schema.targets.all().destroy();
-    await visit(urls.projectScope);
-    for (let i = 1; i <= 5; i++) {
-      this.server.create('target', {
-        name: `target-${i}`,
-        scope: instances.scopes.project,
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: commonSelectors.NAME_VALUES_ARRAY,
+        },
+        expectedAscendingSort: commonSelectors.NAME_VALUES_ARRAY,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: commonSelectors.ID_VALUES_ARRAY,
+        },
+        expectedAscendingSort: commonSelectors.ID_VALUES_ARRAY,
+      },
+      'on type': {
+        attribute: {
+          key: 'type',
+          values: [TYPE_TARGET_SSH, TYPE_TARGET_TCP, TYPE_TARGET_SSH],
+        },
+        expectedAscendingSort: ['SSH', 'SSH', 'Generic TCP'],
+      },
+    },
+
+    async function (assert, input) {
+      this.server.schema.targets.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('target', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.project,
+        });
       });
-    }
+      await visit(urls.projectScope);
 
-    await click(commonSelectors.HREF(urls.targets));
-    await click(selectors.TABLE_SORT_BTN('name'));
+      await click(commonSelectors.HREF(urls.targets));
+      // click the sort button to sort in ascending order for provided column key
+      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
 
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('name')).isVisible();
-    for (let i = 1; i <= 5; i++) {
-      assert.dom(selectors.TABLE_ROW_NAME(i)).hasText(`target-${i}`);
-    }
-
-    await click(selectors.TABLE_SORT_BTN('name'));
-
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('name')).isVisible();
-    let j = 1;
-    for (let i = 5; i >= 1; i--) {
-      assert.dom(selectors.TABLE_ROW_NAME(j)).hasText(`target-${i}`);
-      j++;
-    }
-  });
-
-  test('user can sort by `id` from targets table', async function (assert) {
-    this.server.schema.targets.all().destroy();
-    await visit(urls.projectScope);
-    for (let i = 1; i <= 5; i++) {
-      this.server.create('target', {
-        id: `target-${i}`,
-        scope: instances.scopes.project,
+      assert.true(currentURL().includes(commonSelectors.SORT_ORDER('asc')));
+      assert.true(
+        currentURL().includes(commonSelectors.SORT_BY(input.attribute.key)),
+      );
+      assert
+        .dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.attribute.key))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
       });
-    }
 
-    await click(commonSelectors.HREF(urls.targets));
-    await click(selectors.TABLE_SORT_BTN('id'));
+      // click the sort button again to sort in descending order
+      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
 
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('id')).isVisible();
-    for (let i = 1; i <= 5; i++) {
-      assert.dom(selectors.TABLE_ROW_ID(i)).hasText(`target-${i}`);
-    }
-
-    await click(selectors.TABLE_SORT_BTN('id'));
-
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('id')).isVisible();
-    let j = 1;
-    for (let i = 5; i >= 1; i--) {
-      assert.dom(selectors.TABLE_ROW_ID(j)).hasText(`target-${i}`);
-      j++;
-    }
-  });
-
-  test('user can sort by `type` from targets table', async function (assert) {
-    this.server.schema.targets.all().destroy();
-    await visit(urls.projectScope);
-    for (let i = 1; i <= 3; i++) {
-      this.server.create('target', {
-        type: 'tcp',
-        scope: instances.scopes.project,
+      assert.true(currentURL().includes(commonSelectors.SORT_ORDER('desc')));
+      assert.true(
+        currentURL().includes(commonSelectors.SORT_BY(input.attribute.key)),
+      );
+      assert
+        .dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.attribute.key))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
       });
-    }
-
-    for (let i = 4; i <= 6; i++) {
-      this.server.create('target', {
-        type: 'ssh',
-        scope: instances.scopes.project,
-      });
-    }
-
-    await click(commonSelectors.HREF(urls.targets));
-    await click(selectors.TABLE_SORT_BTN('type'));
-
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('type')).isVisible();
-    for (let i = 1; i <= 3; i++) {
-      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('SSH');
-    }
-    for (let i = 4; i <= 6; i++) {
-      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('Generic TCP');
-    }
-
-    await click(selectors.TABLE_SORT_BTN('type'));
-
-    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('type')).isVisible();
-    for (let i = 1; i <= 3; i++) {
-      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('Generic TCP');
-    }
-    for (let i = 4; i <= 6; i++) {
-      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('SSH');
-    }
-  });
+    },
+  );
 });

@@ -72,7 +72,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.accounts);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
   });
 
   test('can remove an account', async function (assert) {
@@ -80,12 +80,12 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
 
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount - 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount - 1 });
   });
 
   test('cannot remove an account without proper authorization', async function (assert) {
@@ -158,7 +158,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
 
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
@@ -217,7 +217,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: accountsAvailableCount - 1 });
   });
 
@@ -242,7 +242,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: accountsAvailableCount });
   });
 
@@ -252,7 +252,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
@@ -260,13 +260,13 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.strictEqual(currentURL(), urls.addAccounts);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
     await visit(urls.accounts);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
     assert.strictEqual(instances.user.accountIds.length, 1);
   });
 
@@ -275,18 +275,18 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
 
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
 
     assert.strictEqual(currentURL(), urls.addAccounts);
 
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.accounts);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
   });
 
   test('shows error message on account add', async function (assert) {
@@ -305,7 +305,7 @@ module('Acceptance | users | accounts', function (hooks) {
     instances.user.update({ accountIds: [] });
     await visit(urls.addAccounts);
 
-    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
@@ -315,7 +315,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
     await click(commonSelectors.HREF(urls.accounts));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: accountsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
     assert
       .dom(
         commonSelectors.TABLE_RESOURCE_LINK(
@@ -344,7 +344,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(`${urls.users}/${user.id}`);
     await click(commonSelectors.HREF(`${urls.users}/${user.id}/accounts`));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
     assert
       .dom(
         commonSelectors.TABLE_RESOURCE_LINK(
@@ -373,7 +373,7 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(`${urls.users}/${user.id}`);
     await click(commonSelectors.HREF(`${urls.users}/${user.id}/accounts`));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
     assert
       .dom(
         commonSelectors.TABLE_RESOURCE_LINK(

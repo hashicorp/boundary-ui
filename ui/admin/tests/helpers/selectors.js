@@ -15,7 +15,8 @@ export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
-export const TABLE_ROW = 'tbody tr';
+export const TABLE_ROWS = 'tbody tr';
+export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;
 export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';
@@ -66,3 +67,14 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
+
+export const SORT_BY = (val) => `sortAttribute=${val}`;
+export const SORT_ORDER = (val) => `sortDirection=${val}`;
+export const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
+export const ID_VALUES_ARRAY = [
+  'i_0001',
+  'i_0010',
+  'i_0100',
+  'i_1000',
+  'i_10000',
+];
