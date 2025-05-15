@@ -92,19 +92,18 @@
   {{/if}}
 
   {{#if @model.isOrg}}
-    <Nav.Title>{{t
-        'titles.scope-level'
-        scope=(t 'resources.org.title')
-      }}</Nav.Title>
-
     {{#if this.session.data.authenticated.isGlobal}}
-      <Nav.Link
-        @icon='org'
-        @text={{t 'resources.org.title_plural'}}
+      <Nav.BackLink
+        @text={{t 'titles.back-link' scope=(t 'titles.global')}}
         @route='scopes.scope.scopes'
         @model='global'
       />
     {{/if}}
+
+    <Nav.Title>{{t
+        'titles.scope-level'
+        scope=(t 'resources.org.title')
+      }}</Nav.Title>
 
     <Nav.Link
       @icon='grid'
@@ -135,14 +134,6 @@
 
     <Nav.Title>{{t 'titles.project-actions'}}</Nav.Title>
 
-    {{#if (can 'navigate model' @model collection='sessions')}}
-      <Nav.Link
-        @icon='entry-point'
-        @text={{t 'resources.session.title_plural'}}
-        @route='scopes.scope.sessions'
-      />
-    {{/if}}
-
     {{#if (can 'navigate model' @model collection='targets')}}
       <Nav.Link
         @icon='target'
@@ -164,6 +155,14 @@
         @icon='key'
         @text={{t 'resources.credential-store.title_plural'}}
         @route='scopes.scope.credential-stores'
+      />
+    {{/if}}
+
+    {{#if (can 'navigate model' @model collection='sessions')}}
+      <Nav.Link
+        @icon='entry-point'
+        @text={{t 'resources.session.title_plural'}}
+        @route='scopes.scope.sessions'
       />
     {{/if}}
 
