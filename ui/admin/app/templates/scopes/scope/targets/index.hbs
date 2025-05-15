@@ -9,12 +9,7 @@
   </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
+    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
       {{t 'resources.target.title_plural'}}
       <DocLink @doc='target' />
     </Hds::Text::Display>
@@ -69,6 +64,7 @@
           </S.Generic>
         {{/if}}
       </Hds::SegmentedGroup>
+
       <FilterTags @filters={{this.filters}} />
 
       {{#if @model.targets}}

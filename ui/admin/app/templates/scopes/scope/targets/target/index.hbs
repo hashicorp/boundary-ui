@@ -35,7 +35,7 @@
       <bc.Sidebar>
         {{#if @model.aliases}}
           <div class='target-sidebar-aliases'>
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h3' class='remove-margin'>
               {{t 'resources.alias.title_plural'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -93,7 +93,7 @@
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
             <div class='target-sidebar-aliases'>
-              <Hds::Text::Display @tag='h3'>
+              <Hds::Text::Display @tag='h3' class='remove-margin'>
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
               <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -111,7 +111,7 @@
         {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h3' class='remove-margin'>
               {{t 'resources.target.form.sidebar.label'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>
