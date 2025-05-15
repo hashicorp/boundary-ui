@@ -257,6 +257,35 @@ module('Acceptance | targets | list', function (hooks) {
     assert.dom(selectors.TABLE_SESSIONS_ID(instances.session.id)).isVisible();
   });
 
+  test('targets table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    await visit(urls.projectScope);
+    const createdTimeToNameMapping = {};
+    commonSelectors.CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
+      createdTimeToNameMapping[value] =
+        commonSelectors.NAME_VALUES_ARRAY[index];
+    });
+    faker.helpers
+      .shuffle(commonSelectors.CREATED_TIME_VALUES_ARRAY)
+      .forEach((value) => {
+        this.server.create('target', {
+          name: createdTimeToNameMapping[value],
+          created_time: value,
+          scope: instances.scopes.project,
+        });
+      });
+
+    await click(commonSelectors.HREF(urls.targets));
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: commonSelectors.CREATED_TIME_VALUES_ARRAY.length });
+    commonSelectors.NAME_VALUES_ARRAY.forEach((expected, index) => {
+      // nth-child index starts at 1
+      assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+    });
+  });
+
   test.each(
     'sorting',
     {

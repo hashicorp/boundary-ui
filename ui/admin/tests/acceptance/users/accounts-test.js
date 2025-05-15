@@ -260,9 +260,9 @@ module('Acceptance | users | accounts', function (hooks) {
     assert.strictEqual(currentURL(), urls.addAccounts);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
     await visit(urls.accounts);
 
@@ -282,7 +282,7 @@ module('Acceptance | users | accounts', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.addAccounts);
 
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.accounts);
@@ -305,7 +305,7 @@ module('Acceptance | users | accounts', function (hooks) {
     instances.user.update({ accountIds: [] });
     await visit(urls.addAccounts);
 
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();

@@ -144,7 +144,7 @@ module('Acceptance | groups | members', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.addMembers);
     // Click three times to select, unselect, then reselect (for coverage)
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
     await visit(urls.members);
@@ -167,7 +167,7 @@ module('Acceptance | groups | members', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.addMembers);
 
-    await click(commonSelectors.TABLE_ROWS_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
 
     await click(commonSelectors.CANCEL_BTN);
 
