@@ -7,6 +7,7 @@ settings:
 overrides:
   nomnom>underscore: ^1.12.1
   '@hashicorp/design-system-components>ember-stargate': ^0.6.0
+  '@hashicorp/ember-asciinema-player>asciinema-player': 3.4.0
   micromatch: ^4.0.8
   css-select>nth-check: ^2.0.1
   node-gyp: ^10.0.0
@@ -2940,8 +2941,8 @@ packages:
   asap@2.0.6:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
 
-  asciinema-player@3.9.0:
-    resolution: {integrity: sha512-SXVFImVzeNr8ZUdNIHABGuzlbnGWTKy245AquAjODsAnv+Lp6vxjYGN0LfA8ns30tnx/ag/bMrTbLq13TpHE6w==}
+  asciinema-player@3.4.0:
+    resolution: {integrity: sha512-dX6jt5S3K6daItsVWzyY9mRDK+ivC2QgqCxFkdSiNslo0vY/ZqA4upcTzqIKZqBtxppovOZk44ltg9VnHG9QVg==}
 
   assert-never@1.4.0:
     resolution: {integrity: sha512-5oJg84os6NMQNl27T9LnZkvvqzvAnHu03ShCnoj6bsJwS7L8AO4lf+C/XjK/nvzEqQB744moC6V128RucQd1jA==}
@@ -10563,7 +10564,7 @@ snapshots:
 
   '@hashicorp/ember-asciinema-player@https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(webpack@5.99.8)':
     dependencies:
-      asciinema-player: 3.9.0
+      asciinema-player: 3.4.0
       ember-auto-import: 2.10.0(@glint/template@1.5.2)(webpack@5.99.8)
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 6.3.0
@@ -11310,7 +11311,7 @@ snapshots:
 
   asap@2.0.6: {}
 
-  asciinema-player@3.9.0:
+  asciinema-player@3.4.0:
     dependencies:
       '@babel/runtime': 7.27.1
       solid-js: 1.9.6
