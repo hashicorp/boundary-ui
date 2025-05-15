@@ -206,11 +206,6 @@
     top: 0;
   }
 
-  .branded-card-title {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
   .branded-card-description {
     margin-bottom: sizing.rems(l);
   }
@@ -497,9 +492,4 @@
       flex-basis: 100%;
     }
   }
-}
-
-.header-spacing {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
