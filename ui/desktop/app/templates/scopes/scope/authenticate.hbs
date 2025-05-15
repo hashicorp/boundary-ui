@@ -17,20 +17,23 @@
       }}
     >
 
-      <Rose::Dropdown
-        @text={{t 'actions.choose-different-org'}}
-        @icon='org'
-        as |dropdown|
-      >
-        <dropdown.link @route='scopes.scope.authenticate' @model='global'>
+      <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+        <dd.ToggleButton
+          @text={{t 'actions.choose-different-org'}}
+          @icon='org'
+          @color='secondary'
+        />
+        <dd.Interactive {{on 'click' (fn this.selectScope 'global' dd.close)}}>
           {{t 'titles.global'}}
-        </dropdown.link>
+        </dd.Interactive>
         {{#each this.sortedScopes as |scope|}}
-          <dropdown.link @route='scopes.scope.authenticate' @model={{scope.id}}>
+          <dd.Interactive
+            {{on 'click' (fn this.selectScope scope.id dd.close)}}
+          >
             {{scope.displayName}}
-          </dropdown.link>
+          </dd.Interactive>
         {{/each}}
-      </Rose::Dropdown>
+      </Hds::Dropdown>
 
       <Rose::Nav::Tabs as |nav|>
         {{#each @model.authMethods as |authMethod|}}

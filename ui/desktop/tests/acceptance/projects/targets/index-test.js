@@ -467,7 +467,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
       .exists();
 
-    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    await click('.rose-header-nav .hds-dropdown-toggle-button');
+    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+
     assert
       .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
       .exists();
