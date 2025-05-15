@@ -5,13 +5,12 @@
 
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
-
+import { action } from '@ember/object';
 export default class ScopesScopeAuthenticateController extends Controller {
   // =services
 
   @service clusterUrl;
   @service router;
-
   // =attributes
 
   /**
@@ -25,6 +24,13 @@ export default class ScopesScopeAuthenticateController extends Controller {
     ];
   }
 
+  // =actions
+
+  @action
+  selectScope(scope, callback) {
+    this.router.transitionTo('scopes.scope.authenticate', scope);
+    callback();
+  }
   /**
    * Checks if the current route is the OIDC method authentication route.
    * @type {boolean}
