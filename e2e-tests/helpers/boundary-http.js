@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+export * from './boundary-http/aliases.js'
 export * from './boundary-http/scopes.js';
 export * from './boundary-http/targets.js';
 export * from './boundary-http/host-catalogs.js';
