@@ -2,35 +2,31 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.policy.title_plural'}}
-      <DocLink @doc='storage-policy' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.policy.description'}}
-    </Hds::Text::Body>
-  </page.header>
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='policies')}}
-      {{#if @model}}
-        <Hds::Button
-          @route='scopes.scope.policies.new'
-          @text={{t 'resources.policy.titles.new'}}
-        />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.policy.title_plural'}}
+        <DocLink @doc='storage-policy' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.policy.description'}}
+      </PH.Description>
+      {{#if (can 'create model' this.scope collection='policies')}}
+        <PH.Actions>
+          <Hds::Button
+            @route='scopes.scope.policies.new'
+            @text={{t 'resources.policy.titles.new'}}
+          />
+        </PH.Actions>
       {{/if}}
-    {{/if}}
-  </page.actions>
+    </Hds::PageHeader>
+  </page.header>
+
   <page.body>
     {{#if @model}}
       <Hds::Table

@@ -3,39 +3,34 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.group.title_plural'}}
-      <DocLink @doc='group' />
-    </Hds::Text::Display>
-    {{#if @model.doGroupsExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.group.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='groups')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.group.title_plural'}}
+        <DocLink @doc='group' />
+      </PH.Title>
       {{#if @model.doGroupsExist}}
-        <Hds::Button
-          @route='scopes.scope.groups.new'
-          @text={{t 'resources.group.titles.new'}}
-        />
+        <PH.Description>
+          {{t 'resources.group.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      {{#if (can 'create model' this.scope collection='groups')}}
+        {{#if @model.doGroupsExist}}
+          <PH.Actions>
+            <Hds::Button
+              @route='scopes.scope.groups.new'
+              @text={{t 'resources.group.titles.new'}}
+            />
+          </PH.Actions>
+        {{/if}}
+      {{/if}}
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
 

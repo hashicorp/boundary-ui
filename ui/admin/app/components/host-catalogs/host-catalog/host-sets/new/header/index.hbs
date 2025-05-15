@@ -3,10 +3,10 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Text::Display @tag='h2' @size='400' @weight='bold' class='header-spacing'>
+<@header.Title>
   {{t 'resources.host-set.titles.new'}}
   <DocLink @doc='host-set.new' />
-</Hds::Text::Display>
-<Hds::Text::Body @tag='p' @size='300' class='p'>
+</@header.Title>
+<@header.Description>
   {{t 'resources.host-set.description'}}
-</Hds::Text::Body>
+</@header.Description>

@@ -9,26 +9,26 @@
   @route='scopes.scope.groups.group.members'
 />
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Groups::Group::Header @model={{@model.group}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <Groups::Group::Header @model={{@model.group}} @header={{PH}} />
+      <PH.Actions>
+        <Groups::Group::Actions
+          @model={{@model.group}}
+          @delete={{fn this.groups.delete @model.group}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
     <Groups::Group::Nav @model={{@model.group}} />
   </page.navigation>
-
-  <page.actions>
-    <Groups::Group::Actions
-      @model={{@model.group}}
-      @delete={{fn this.groups.delete @model.group}}
-    />
-  </page.actions>
 
   <page.body>
     {{#if @model.members}}
