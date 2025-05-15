@@ -42,13 +42,6 @@
     }
   }
 
-  .rose-layout-page-actions {
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
-
   .rose-layout-page-navigation {
     grid-area: navigation;
   }
@@ -56,6 +49,13 @@
   .rose-layout-page-body {
     grid-area: body;
     width: 100%;
+  }
+
+  .rose-layout-page-actions {
+    grid-area: actions;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 }
 
