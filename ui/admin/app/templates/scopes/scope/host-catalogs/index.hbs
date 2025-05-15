@@ -19,16 +19,16 @@
           {{t 'resources.host-catalog.description'}}
         </PH.Description>
       {{/if}}
-      <PH.Actions>
-        {{#if (can 'create model' this.scope collection='host-catalogs')}}
-          {{#if @model.doHostCatalogsExist}}
+      {{#if (can 'create model' this.scope collection='host-catalogs')}}
+        {{#if @model.doHostCatalogsExist}}
+          <PH.Actions>
             <Hds::Button
               @route='scopes.scope.host-catalogs.new'
               @text={{t 'resources.host-catalog.titles.new'}}
             />
-          {{/if}}
+          </PH.Actions>
         {{/if}}
-      </PH.Actions>
+      {{/if}}
     </Hds::PageHeader>
   </page.header>
 

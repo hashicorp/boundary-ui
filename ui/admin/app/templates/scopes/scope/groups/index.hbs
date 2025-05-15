@@ -19,16 +19,16 @@
           {{t 'resources.group.description'}}
         </PH.Description>
       {{/if}}
-      <PH.Actions>
-        {{#if (can 'create model' this.scope collection='groups')}}
-          {{#if @model.doGroupsExist}}
+      {{#if (can 'create model' this.scope collection='groups')}}
+        {{#if @model.doGroupsExist}}
+          <PH.Actions>
             <Hds::Button
               @route='scopes.scope.groups.new'
               @text={{t 'resources.group.titles.new'}}
             />
-          {{/if}}
+          </PH.Actions>
         {{/if}}
-      </PH.Actions>
+      {{/if}}
     </Hds::PageHeader>
   </page.header>
 

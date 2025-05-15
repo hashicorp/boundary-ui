@@ -24,12 +24,7 @@
         {{t 'resources.role.principal.description'}}
       </PH.Description>
       <PH.Generic>
-        <div class='code-snippet-container'>
-          <Hds::Copy::Snippet
-            @textToCopy={{@model.role.id}}
-            @color='secondary'
-          />
-        </div>
+        <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
       </PH.Generic>
       <PH.Actions>
         <Roles::Role::Actions

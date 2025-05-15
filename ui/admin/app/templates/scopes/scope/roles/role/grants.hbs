@@ -24,9 +24,7 @@
         {{t 'resources.role.grant.description'}}
       </PH.Description>
       <PH.Generic>
-        <div class='code-snippet-container'>
-          <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
-        </div>
+        <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
       </PH.Generic>
       <PH.Actions>
         <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />

@@ -16,14 +16,14 @@
       <PH.Description>
         {{t 'resources.policy.description'}}
       </PH.Description>
-      <PH.Actions>
-        {{#if (can 'create model' this.scope collection='policies')}}
+      {{#if (can 'create model' this.scope collection='policies')}}
+        <PH.Actions>
           <Hds::Button
             @route='scopes.scope.policies.new'
             @text={{t 'resources.policy.titles.new'}}
           />
-        {{/if}}
-      </PH.Actions>
+        </PH.Actions>
+      {{/if}}
     </Hds::PageHeader>
   </page.header>
 
