@@ -16,12 +16,6 @@ module.exports = {
       },
     },
     {
-      files: ['addon/components/rose/dialog/index.hbs'],
-      rules: {
-        'no-duplicate-landmark-elements': false,
-      },
-    },
-    {
       files: ['addon/components/rose/form/actions/index.hbs'],
       rules: {
         'no-passed-in-event-handlers': false,
