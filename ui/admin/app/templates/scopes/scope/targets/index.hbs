@@ -146,18 +146,18 @@
                 {{#if data.isTCP}}
                   <B.Tr data-test-targets-table-row={{data.id}}>
                     <B.Td>
-                      {{#if (can 'read model' B.data)}}
+                      {{#if (can 'read model' data)}}
                         <LinkTo
                           @route='scopes.scope.targets.target'
-                          @model={{B.data.id}}
+                          @model={{data.id}}
                         >
-                          {{B.data.displayName}}
+                          {{data.displayName}}
                         </LinkTo>
                       {{else}}
-                        {{B.data.displayName}}
+                        {{data.displayName}}
                       {{/if}}
                       <Hds::Text::Body @tag='p' class='p'>
-                        {{B.data.description}}
+                        {{data.description}}
                       </Hds::Text::Body>
                     </B.Td>
                     <B.Td>
