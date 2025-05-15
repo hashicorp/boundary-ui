@@ -235,16 +235,6 @@
   text-align: center;
 }
 
-// Rose dialog - positioned above modal overlay
-.rose-dialog {
-  z-index: 6000;
-}
-
-// Overlay above everything - including notifications
-.rose-dialog-modal-overlay {
-  z-index: 5500;
-}
-
 // Hidden secret component (app/components/hidden-secret)
 .hidden-secret {
   display: flex;
