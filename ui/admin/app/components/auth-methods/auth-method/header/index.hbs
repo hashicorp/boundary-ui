@@ -6,11 +6,7 @@
 <@header.Title>
   {{t 'resources.auth-method.title'}}
   {{#if @model.isPrimary}}
-    <Hds::Badge
-      @text={{t 'states.primary'}}
-      @color='success'
-      class='primary-badge'
-    />
+    <Hds::Badge @text={{t 'states.primary'}} @color='success' />
   {{/if}}
   <DocLink @doc='auth-method' />
 </@header.Title>
@@ -18,7 +14,5 @@
   {{t 'resources.auth-method.description'}}
 </@header.Description>
 <@header.Generic>
-  <div class='copy-snippet-container'>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
-  </div>
+  <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
 </@header.Generic>

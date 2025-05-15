@@ -17,16 +17,6 @@
   }
 }
 
-// remove this after the new layout is in place. This is a temporary fix
-// to make the new layout work with the old layout
-.rose-layout-page.hds-migration-overrides {
-  display: grid;
-  grid-template-areas:
-    'header header header'
-    'navigation navigation navigation'
-    'body body body';
-}
-
 .rose-layout-centered {
   > .rose-layout-page {
     width: sizing.rems(l) * 18;
@@ -1046,10 +1036,4 @@
   li.indentation {
     margin-left: 1.5rem;
   }
-}
-
-// auth method header
-.primary-badge {
-  margin-right: sizing.rems(xxs);
-  margin-left: sizing.rems(xxs);
 }
