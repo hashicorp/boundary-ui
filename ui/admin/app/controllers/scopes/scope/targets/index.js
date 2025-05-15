@@ -372,5 +372,6 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   onSort(sortBy, sortOrder) {
     this.sortAttribute = sortBy;
     this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
