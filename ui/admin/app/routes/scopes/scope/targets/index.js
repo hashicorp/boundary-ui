@@ -100,10 +100,6 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
                 { equals: STATUS_SESSION_PENDING },
               ],
             },
-            sort: {
-              attribute: sortAttribute,
-              direction: sortDirection,
-            },
           },
         });
         this.addActiveSessionFilters(filters, availableSessions, sessions);
@@ -113,16 +109,19 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       let totalItems = 0;
       let doTargetsExist = false;
       if (this.can.can('list model', scope, { collection: 'targets' })) {
+        const sort = {
+          attribute: sortAttribute,
+          direction: sortDirection,
+        };
         targets = await this.store.query('target', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });
         totalItems = targets.meta?.totalItems;
         doTargetsExist = await this.getDoTargetsExist(scope_id, totalItems);
       }
-
       return { targets, doTargetsExist, totalItems };
     },
   );

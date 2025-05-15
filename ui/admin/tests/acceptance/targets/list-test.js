@@ -59,7 +59,7 @@ module('Acceptance | targets | list', function (hooks) {
       scope: instances.scopes.project,
     });
     instances.sshTarget = this.server.create('target', {
-      id: 'target-1',
+      id: 'target-0',
       type: TYPE_TARGET_SSH,
       scope: instances.scopes.project,
     });
@@ -76,6 +76,7 @@ module('Acceptance | targets | list', function (hooks) {
 
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
+
     await authenticateSession({});
   });
 
@@ -252,5 +253,100 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.strictEqual(currentRouteName(), 'scopes.scope.sessions.index');
     assert.dom(selectors.TABLE_SESSIONS_ID(instances.session.id)).isVisible();
+  });
+
+  test('user can sort by `name` from targets table', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    await visit(urls.projectScope);
+    for (let i = 1; i <= 5; i++) {
+      this.server.create('target', {
+        name: `target-${i}`,
+        scope: instances.scopes.project,
+      });
+    }
+
+    await click(commonSelectors.HREF(urls.targets));
+    await click(selectors.TABLE_SORT_BTN('name'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('name')).isVisible();
+    for (let i = 1; i <= 5; i++) {
+      assert.dom(selectors.TABLE_ROW_NAME(i)).hasText(`target-${i}`);
+    }
+
+    await click(selectors.TABLE_SORT_BTN('name'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('name')).isVisible();
+    let j = 1;
+    for (let i = 5; i >= 1; i--) {
+      assert.dom(selectors.TABLE_ROW_NAME(j)).hasText(`target-${i}`);
+      j++;
+    }
+  });
+
+  test('user can sort by `id` from targets table', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    await visit(urls.projectScope);
+    for (let i = 1; i <= 5; i++) {
+      this.server.create('target', {
+        id: `target-${i}`,
+        scope: instances.scopes.project,
+      });
+    }
+
+    await click(commonSelectors.HREF(urls.targets));
+    await click(selectors.TABLE_SORT_BTN('id'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('id')).isVisible();
+    for (let i = 1; i <= 5; i++) {
+      assert.dom(selectors.TABLE_ROW_ID(i)).hasText(`target-${i}`);
+    }
+
+    await click(selectors.TABLE_SORT_BTN('id'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('id')).isVisible();
+    let j = 1;
+    for (let i = 5; i >= 1; i--) {
+      assert.dom(selectors.TABLE_ROW_ID(j)).hasText(`target-${i}`);
+      j++;
+    }
+  });
+
+  test('user can sort by `type` from targets table', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    await visit(urls.projectScope);
+    for (let i = 1; i <= 3; i++) {
+      this.server.create('target', {
+        type: 'tcp',
+        scope: instances.scopes.project,
+      });
+    }
+
+    for (let i = 4; i <= 6; i++) {
+      this.server.create('target', {
+        type: 'ssh',
+        scope: instances.scopes.project,
+      });
+    }
+
+    await click(commonSelectors.HREF(urls.targets));
+    await click(selectors.TABLE_SORT_BTN('type'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP('type')).isVisible();
+    for (let i = 1; i <= 3; i++) {
+      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('SSH');
+    }
+    for (let i = 4; i <= 6; i++) {
+      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('Generic TCP');
+    }
+
+    await click(selectors.TABLE_SORT_BTN('type'));
+
+    assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN('type')).isVisible();
+    for (let i = 1; i <= 3; i++) {
+      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('Generic TCP');
+    }
+    for (let i = 4; i <= 6; i++) {
+      assert.dom(selectors.TABLE_ROW_TYPE(i)).hasText('SSH');
+    }
   });
 });

@@ -305,7 +305,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   }
 
   /**
-   * Remove destaination_id from alias
+   * Remove destination_id from alias
    * @param {AliasModel} alias
    */
   @action
@@ -369,8 +369,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   }
 
   @action
-  customOnSort(_sortBy, sortOrder) {
-    this.sortAttribute = _sortBy;
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
     this.sortDirection = sortOrder;
   }
 }
