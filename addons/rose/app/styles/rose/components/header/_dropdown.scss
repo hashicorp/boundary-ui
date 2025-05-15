@@ -4,9 +4,10 @@
  */
 
 .rose-header {
+  // Temporary fix: This header component will be retired upon integrating HDS side nav for desktop.
    .hds-dropdown > button {
     background: var(--black);
     border: none;
-    color: var(--ui-gray-subtler-3);
+    color: var(--white);
   }
 }
