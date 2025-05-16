@@ -70,18 +70,3 @@ export const FORM = 'main form';
 
 export const SORT_BY = (val) => `sortAttribute=${val}`;
 export const SORT_ORDER = (val) => `sortDirection=${val}`;
-export const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
-export const ID_VALUES_ARRAY = [
-  'i_0001',
-  'i_0010',
-  'i_0100',
-  'i_1000',
-  'i_10000',
-];
-export const CREATED_TIME_VALUES_ARRAY = [
-  '2020-01-01T00:01:00.000Z',
-  '2020-01-01T00:00:10.000Z',
-  '2020-01-01T00:00:01.000Z',
-  '2020-01-01T00:00:00.100Z',
-  '2020-01-01T00:00:00.010Z',
-];

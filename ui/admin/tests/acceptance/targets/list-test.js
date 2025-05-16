@@ -27,6 +27,16 @@ module('Acceptance | targets | list', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
+  const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
+  const CREATED_TIME_VALUES_ARRAY = [
+    '2020-01-01T00:01:00.000Z',
+    '2020-01-01T00:00:10.000Z',
+    '2020-01-01T00:00:01.000Z',
+    '2020-01-01T00:00:00.100Z',
+    '2020-01-01T00:00:00.010Z',
+  ];
+
   const instances = {
     scopes: {
       global: null,
@@ -261,26 +271,23 @@ module('Acceptance | targets | list', function (hooks) {
     this.server.schema.targets.all().destroy();
     await visit(urls.projectScope);
     const createdTimeToNameMapping = {};
-    commonSelectors.CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
-      createdTimeToNameMapping[value] =
-        commonSelectors.NAME_VALUES_ARRAY[index];
+    CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
+      createdTimeToNameMapping[value] = NAME_VALUES_ARRAY[index];
     });
-    faker.helpers
-      .shuffle(commonSelectors.CREATED_TIME_VALUES_ARRAY)
-      .forEach((value) => {
-        this.server.create('target', {
-          name: createdTimeToNameMapping[value],
-          created_time: value,
-          scope: instances.scopes.project,
-        });
+    faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
+      this.server.create('target', {
+        name: createdTimeToNameMapping[value],
+        created_time: value,
+        scope: instances.scopes.project,
       });
+    });
 
     await click(commonSelectors.HREF(urls.targets));
 
     assert
       .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: commonSelectors.CREATED_TIME_VALUES_ARRAY.length });
-    commonSelectors.NAME_VALUES_ARRAY.forEach((expected, index) => {
+      .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
+    NAME_VALUES_ARRAY.forEach((expected, index) => {
       // nth-child index starts at 1
       assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
     });
@@ -292,16 +299,16 @@ module('Acceptance | targets | list', function (hooks) {
       'on name': {
         attribute: {
           key: 'name',
-          values: commonSelectors.NAME_VALUES_ARRAY,
+          values: NAME_VALUES_ARRAY,
         },
-        expectedAscendingSort: commonSelectors.NAME_VALUES_ARRAY,
+        expectedAscendingSort: NAME_VALUES_ARRAY,
       },
       'on id': {
         attribute: {
           key: 'id',
-          values: commonSelectors.ID_VALUES_ARRAY,
+          values: ID_VALUES_ARRAY,
         },
-        expectedAscendingSort: commonSelectors.ID_VALUES_ARRAY,
+        expectedAscendingSort: ID_VALUES_ARRAY,
       },
       'on type': {
         attribute: {

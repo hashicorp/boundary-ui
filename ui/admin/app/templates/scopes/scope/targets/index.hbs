@@ -97,7 +97,7 @@
           </:head>
           <:body as |B|>
             {{#each @model.targets as |data|}}
-              {{#if (feature-flag 'ssh-target')}}
+              {{#if (or (feature-flag 'ssh-target') data.isTCP)}}
                 <B.Tr data-test-targets-table-row={{data.id}}>
                   <B.Td>
                     {{#if (can 'read model' data)}}
@@ -138,51 +138,6 @@
                     />
                   </B.Td>
                 </B.Tr>
-              {{else}}
-                {{#if data.isTCP}}
-                  <B.Tr data-test-targets-table-row={{data.id}}>
-                    <B.Td>
-                      {{#if (can 'read model' data)}}
-                        <LinkTo
-                          @route='scopes.scope.targets.target'
-                          @model={{data.id}}
-                        >
-                          {{data.displayName}}
-                        </LinkTo>
-                      {{else}}
-                        {{data.displayName}}
-                      {{/if}}
-                      <Hds::Text::Body @tag='p' class='p'>
-                        {{data.description}}
-                      </Hds::Text::Body>
-                    </B.Td>
-                    <B.Td>
-                      {{#if data.type}}
-                        <Hds::Badge
-                          @text={{t
-                            (concat 'resources.target.types.' data.type)
-                          }}
-                        />
-                      {{/if}}
-                    </B.Td>
-                    <B.Td>
-                      {{#if data.isActive}}
-                        <Hds::Link::Standalone
-                          @text={{t 'actions.yes'}}
-                          @route='scopes.scope.sessions.index'
-                          @query={{hash targets=(array data.id)}}
-                          @icon='info'
-                        />
-                      {{/if}}
-                    </B.Td>
-                    <B.Td>
-                      <Hds::Copy::Snippet
-                        @textToCopy={{data.id}}
-                        @color='secondary'
-                      />
-                    </B.Td>
-                  </B.Tr>
-                {{/if}}
               {{/if}}
             {{/each}}
           </:body>
