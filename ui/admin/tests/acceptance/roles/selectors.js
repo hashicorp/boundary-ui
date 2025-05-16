@@ -12,6 +12,8 @@ export const MANAGE_DROPDOWN_ROLES_SCOPES =
   '[data-test-manage-dropdown-scopes]';
 export const MANAGE_DROPDOWN_ROLES_REMOVE =
   '[data-test-manage-roles-dropdown] div:last-child button';
+export const MANAGE_DROPDOWN_ADD_PRINCIPALS =
+  '[data-test-manage-role-principals]';
 
 export const ROLE_BADGE = (id) =>
   `tbody [data-test-role-row="${id}"] td:nth-child(2) .hds-badge__text`;
