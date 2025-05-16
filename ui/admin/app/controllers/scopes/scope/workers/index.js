@@ -21,6 +21,56 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   // =attributes
 
   @tracked selectedWorker;
+  @tracked tags = [];
+
+  queryParams = [{ tags: { type: 'array' } }];
+
+  /**
+   * Returns all unique tags of the selected worker in base64 encoded format.
+   * @type {object}
+   */
+
+  get workerTagOptions() {
+    const allTags = this.model
+      .flatMap((worker) => worker.allTags)
+      .filter(Boolean);
+
+    // Filter out duplicate tags
+    const uniqueTags = allTags.reduce((acc, currentTag) => {
+      const doesTagExist = acc.some(
+        (tag) => tag.key === currentTag.key && tag.value === currentTag.value,
+      );
+      if (!doesTagExist) {
+        acc.push(currentTag);
+      }
+      return acc;
+    }, []);
+
+    return uniqueTags.map((tag) => {
+      const encodedTag = window.btoa(JSON.stringify(tag));
+      return {
+        id: encodedTag,
+        name: tag.value,
+        key: tag.key,
+      };
+    });
+  }
+
+  /**
+   * Returns the filters object used for displaying filter tags.
+   * @type {object}
+   */
+
+  get filters() {
+    return {
+      allFilters: {
+        tags: this.workerTagOptions,
+      },
+      selectedFilters: {
+        tags: this.tags,
+      },
+    };
+  }
 
   /**
    * If can list (at least): return default welcome message.
@@ -65,16 +115,16 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     return `${tag.key} = ${tag.value}`;
   }
 
-  /**
-   * Determine equality between two tags based on both key and value.
-   * @param {object} firstTag
-   * @param {object} secondTag
-   */
-  isEqual(firstTag, secondTag) {
-    return firstTag.key === secondTag.key && firstTag.value === secondTag.value;
-  }
-
   // =actions
+  /**
+   * Sets a query param to the value of selectedItems
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
+  }
 
   /**
    * Toggle the tags flyout to display or hide the tags of a worker.
@@ -130,24 +180,6 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     await worker.destroyRecord();
     await this.router.replaceWith('scopes.scope.workers');
     await this.router.refresh();
-  }
-
-  /**
-   * Calls filterBy action located in the route.
-   * @param {string} field
-   * @param {[object]} value
-   */
-  @action
-  callFilterBy(field, value) {
-    this.send('filterBy', field, value);
-  }
-
-  /**
-   * Calls clearAllFilters action located in the route.
-   */
-  @action
-  callClearAllFilters() {
-    this.send('clearAllFilters');
   }
 
   /**

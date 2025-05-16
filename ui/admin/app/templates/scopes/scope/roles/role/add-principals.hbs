@@ -16,12 +16,7 @@
   </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
+    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
       {{t 'resources.role.principal.messages.add-principals.title'}}
       <DocLink @doc='role.add-principals' />
     </Hds::Text::Display>
@@ -32,62 +27,16 @@
 
   <page.body>
 
-    {{#let
-      (resource-filter 'scopes.scope.roles.role.add-principals' 'scope')
-      as |filter|
-    }}
-      <Rose::Toolbar as |toolbar|>
-        <toolbar.primary>
-          <Rose::Form as |form|>
-            <Rose::Dropdown
-              @text={{t (concat 'resources.' filter.name '.title')}}
-              @count={{filter.selectedValue.length}}
-              @ignoreClickInside={{true}}
-              as |dropdown|
-            >
-              <ul>
-                <form.checkboxGroup
-                  @name={{filter.name}}
-                  @items={{this.flatSortedScopes}}
-                  @selectedItems={{filter.selectedValue}}
-                  @onChange={{fn this.callFilterBy filter.name}}
-                  as |group|
-                >
-                  <li
-                    class={{if
-                      group.item.isOrg
-                      'indent-label-1'
-                      (if group.item.isProject 'indent-label-2')
-                    }}
-                  >
-                    <dropdown.item>
-                      <group.checkbox
-                        @label={{group.item.displayName}}
-                        value={{group.item}}
-                      />
-                    </dropdown.item>
-                  </li>
-                </form.checkboxGroup>
-              </ul>
-            </Rose::Dropdown>
-
-            {{#if
-              (has-resource-filter-selections
-                'scopes.scope.roles.role.add-principals' 'scope'
-              )
-            }}
-              <Hds::Button
-                @size='small'
-                @icon='x'
-                @text={{t 'actions.clear-all-filters'}}
-                {{on 'click' this.callClearAllFilters}}
-              />
-            {{/if}}
-          </Rose::Form>
-        </toolbar.primary>
-      </Rose::Toolbar>
-    {{/let}}
-
+    <Dropdown
+      name='scopeIds'
+      class='dropdown-checkbox-list'
+      @listPosition='bottom-left'
+      @toggleText={{t 'resources.scope.title_plural'}}
+      @itemOptions={{@model.scopes}}
+      @checkedItems={{this.scopeIds}}
+      @applyFilter={{fn this.applyFilter 'scopeIds'}}
+    />
+    <FilterTags @filters={{this.filters}} />
     <br />
 
     <Form::Role::AddPrincipals
