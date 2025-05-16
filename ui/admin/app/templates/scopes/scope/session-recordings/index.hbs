@@ -127,7 +127,6 @@
       {{#if @model.sessionRecordings}}
         <Hds::Table
           @model={{@model.sessionRecordings}}
-          @density='tall'
           @columns={{array
             (hash label=(t 'resources.session-recording.form.time.label'))
             (hash label=(t 'resources.session-recording.form.status.label'))

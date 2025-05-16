@@ -105,7 +105,6 @@
             )
             (hash label=(t 'titles.actions'))
           }}
-          @density='short'
           @valign='middle'
         >
           <:body as |B|>
@@ -121,7 +120,7 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <Hds::Text::Body @tag='p' class='p'>
+                <Hds::Text::Body @tag='p'>
                   {{B.data.description}}
                 </Hds::Text::Body>
               </B.Td>

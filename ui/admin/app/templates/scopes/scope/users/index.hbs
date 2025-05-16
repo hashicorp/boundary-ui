@@ -50,7 +50,6 @@
             (hash label=(t 'form.name.label'))
             (hash label=(t 'form.id.label'))
           }}
-          @density='short'
           @valign='middle'
         >
           <:body as |B|>
@@ -66,7 +65,7 @@
                 {{#if B.data.accountName}}
                   <br /><Hds::Badge @text={{B.data.accountName}} />
                 {{/if}}
-                <Hds::Text::Body @tag='p' class='p'>
+                <Hds::Text::Body @tag='p'>
                   {{B.data.description}}
                 </Hds::Text::Body>
               </B.Td>

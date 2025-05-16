@@ -76,7 +76,6 @@
           (hash label=(t 'resources.worker.table.ip_address'))
           (hash label=(t 'form.id.label'))
         }}
-        @density='short'
         @valign='middle'
       >
         <:body as |B|>
@@ -93,7 +92,7 @@
                 {{B.data.displayName}}
               {{/if}}
               {{#if B.data.description}}
-                <Hds::Text::Body @tag='p' class='p'>
+                <Hds::Text::Body @tag='p'>
                   {{B.data.description}}
                 </Hds::Text::Body>
               {{/if}}
