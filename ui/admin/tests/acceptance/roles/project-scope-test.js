@@ -10,21 +10,12 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
+import * as selectors from './selectors';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | project-scope', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const GRANT_SCOPE_ROW_SELECTOR = (id) =>
-    `tbody [data-test-grant-scope-row="${id}"]`;
-  const TABLE_ROW_SELECTOR = 'tbody tr';
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-roles-dropdown] button';
-  const MANAGE_SCOPES_SELECTOR = '[data-test-manage-dropdown-scopes]';
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_SCOPES_MSG_SELECTOR = '.role-grant-scopes div';
-  const NO_SCOPES_MSG_LINK_SELECTOR =
-    '.role-grant-scopes div div:nth-child(3) a';
-  const PAGINATION_SELECTOR = '.hds-pagination';
 
   const instances = {
     scopes: {
@@ -64,42 +55,42 @@ module('Acceptance | roles | project-scope', function (hooks) {
   test('visiting role scopes', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(GRANT_SCOPE_ROW_SELECTOR(GRANT_SCOPE_THIS)).exists();
+    assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_THIS)).exists();
     assert
-      .dom(TABLE_ROW_SELECTOR)
+      .dom(commonSelectors.TABLE_ROW)
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
   test('search and pagination is not visible for project role scopes', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(SEARCH_INPUT_SELECTOR).doesNotExist();
-    assert.dom(PAGINATION_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.SEARCH_INPUT).doesNotExist();
+    assert.dom(commonSelectors.PAGINATION).doesNotExist();
   });
 
   test('user cannot manage scopes for project role scopes', async function (assert) {
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
+    await click(commonSelectors.HREF(urls.roleScopes));
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
 
-    assert.dom(MANAGE_SCOPES_SELECTOR).doesNotExist();
+    assert.dom(selectors.MANAGE_DROPDOWN_ROLES_SCOPES).doesNotExist();
   });
 
   test('user sees no scopes message without action when role has no grant scopes', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
 
-    await click(`[href="${urls.roleScopes}"]`);
+    await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(NO_SCOPES_MSG_SELECTOR).includesText('No scopes added');
-    assert.dom(NO_SCOPES_MSG_LINK_SELECTOR).doesNotExist();
+    assert.dom(selectors.NO_SCOPES_MSG).includesText('No scopes added');
+    assert.dom(selectors.NO_SCOPES_MSG_LINK).doesNotExist();
   });
 });
