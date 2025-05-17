@@ -61,18 +61,18 @@ module('Acceptance | groups | members', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.members);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
   });
 
   test('can remove a member', async function (assert) {
     await visit(urls.members);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount - 1 });
   });
 
   test('cannot remove a member without proper authorization', async function (assert) {
@@ -102,7 +102,7 @@ module('Acceptance | groups | members', function (hooks) {
       );
     });
     await visit(urls.members);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
@@ -137,7 +137,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ memberIds: [] });
     await visit(urls.members);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
@@ -149,18 +149,18 @@ module('Acceptance | groups | members', function (hooks) {
 
     await visit(urls.members);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('select and cancel members to add', async function (assert) {
     await visit(urls.members);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount });
 
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN);
     await click(selectors.TABLE_MEMBER_ACTION_DROPDOWN_DELETE_MEMBER);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount - 1 });
 
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_MEMBER);
@@ -172,7 +172,7 @@ module('Acceptance | groups | members', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.members);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: membersCount - 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: membersCount - 1 });
   });
 
   test('shows error message on member add', async function (assert) {

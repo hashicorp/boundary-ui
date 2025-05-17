@@ -15,7 +15,8 @@ export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
-export const TABLE_ROW = 'tbody tr';
+export const TABLE_ROWS = 'tbody tr';
+export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;
 export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';

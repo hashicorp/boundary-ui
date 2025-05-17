@@ -43,6 +43,14 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   allSessionRecordings;
@@ -66,6 +74,8 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       targets,
       page,
       pageSize,
+      sortAttribute,
+      sortDirection,
       useDebounce,
     }) => {
       if (useDebounce) {
@@ -100,10 +110,14 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
           collection: 'session-recordings',
         })
       ) {
+        const sort = {
+          attribute: sortAttribute,
+          direction: sortDirection,
+        };
         const queryOptions = {
           scope_id,
           recursive: true,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         };

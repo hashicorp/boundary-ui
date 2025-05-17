@@ -12,13 +12,27 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import {
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_UNKNOWN,
+} from 'api/models/session-recording';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
+  const CREATED_TIME_VALUES_ARRAY = [
+    '2020-01-01T00:00:00.010Z',
+    '2020-01-01T00:00:00.100Z',
+    '2020-01-01T00:00:01.000Z',
+    '2020-01-01T00:00:10.000Z',
+    '2020-01-01T00:01:00.000Z',
+  ];
+
   let featuresService;
+  let createdTimeValues;
 
   // Instances
   const instances = {
@@ -66,20 +80,21 @@ module('Acceptance | session recordings | list', function (hooks) {
     });
     instances.user = this.server.create('user');
     instances.user2 = this.server.create('user');
+    createdTimeValues = {
+      target: {
+        id: instances.target.id,
+        name: instances.target.name,
+        scope: {
+          id: instances.scopes.project.id,
+          name: instances.scopes.project.name,
+          parent_scope_id: instances.scopes.org.id,
+        },
+      },
+      user: instances.user.attrs,
+    };
     instances.sessionRecording = this.server.create('session-recording', {
       scope: instances.scopes.global,
-      create_time_values: {
-        target: {
-          id: instances.target.id,
-          name: instances.target.name,
-          scope: {
-            id: instances.scopes.project.id,
-            name: instances.scopes.project.name,
-            parent_scope_id: instances.scopes.org.id,
-          },
-        },
-        user: instances.user.attrs,
-      },
+      create_time_values: createdTimeValues,
     });
     instances.sessionRecording2 = this.server.create('session-recording', {
       scope: instances.scopes.global,
@@ -180,13 +195,13 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('user'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by scope', async function (assert) {
@@ -194,13 +209,13 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('target'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by target', async function (assert) {
@@ -208,7 +223,7 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('scope'));
     await click(
@@ -216,7 +231,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     );
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('scope'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by time', async function (assert) {
@@ -224,11 +239,104 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('time'));
     await click(selectors.LAST_3_DAYS_OPTION);
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
+
+  test('session recordings table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.sessionRecordings.all().destroy();
+    await visit(urls.globalScope);
+    const expectedDescendingSort = CREATED_TIME_VALUES_ARRAY.toReversed();
+    faker.helpers.shuffle(expectedDescendingSort).forEach((value) => {
+      this.server.create('session-recording', {
+        created_time: value,
+        scope: instances.scopes.global,
+        create_time_values: createdTimeValues,
+      });
+    });
+
+    await click(commonSelectors.HREF(urls.sessionRecordings));
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
+    expectedDescendingSort.forEach((expected, index) => {
+      // nth-child index starts at 1
+      assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on created_time': {
+        attribute: {
+          key: 'created_time',
+          values: CREATED_TIME_VALUES_ARRAY,
+        },
+        expectedAscendingSort: CREATED_TIME_VALUES_ARRAY,
+      },
+      'on state': {
+        attribute: {
+          key: 'state',
+          values: [
+            STATE_SESSION_RECORDING_AVAILABLE,
+            STATE_SESSION_RECORDING_UNKNOWN,
+            STATE_SESSION_RECORDING_STARTED,
+          ],
+        },
+        expectedAscendingSort: ['Completed', 'Recording', 'Failed'],
+      },
+    },
+
+    async function (assert, input) {
+      this.server.schema.sessionRecordings.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('session-recording', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.global,
+          create_time_values: createdTimeValues,
+        });
+      });
+      await visit(urls.globalScope);
+
+      await click(commonSelectors.HREF(urls.sessionRecordings));
+      // click the sort button to sort in ascending order for provided column key
+      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.attribute.key))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.attribute.key))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
