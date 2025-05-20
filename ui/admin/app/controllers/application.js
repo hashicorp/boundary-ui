@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { defaultValidator } from 'ember-a11y-refocus';
 
 const THEMES = [
   {
@@ -104,5 +105,20 @@ export default class ApplicationController extends Controller {
     } else {
       this.features.enable(feature);
     }
+  }
+  /**
+   * Add custom route change validation to prevent refocus when
+   * user is trying to type in search box.
+   * @param {object} transition
+   * @returns
+   */
+  customRouteChangeValidator(transition) {
+    if (
+      transition.to?.name === transition.from?.name &&
+      Object.hasOwn(transition.to.queryParams, 'search')
+    ) {
+      return false;
+    }
+    return defaultValidator(transition);
   }
 }
