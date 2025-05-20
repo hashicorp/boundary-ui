@@ -3,39 +3,34 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.user.title_plural'}}
-      <DocLink @doc='user' />
-    </Hds::Text::Display>
-    {{#if @model.doUsersExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.user.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='users')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.user.title_plural'}}
+        <DocLink @doc='user' />
+      </PH.Title>
       {{#if @model.doUsersExist}}
-        <Hds::Button
-          @route='scopes.scope.users.new'
-          @text={{t 'resources.user.titles.new'}}
-        />
+        <PH.Description>
+          {{t 'resources.user.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      {{#if (can 'create model' this.scope collection='users')}}
+        <PH.Actions>
+          {{#if @model.doUsersExist}}
+            <Hds::Button
+              @route='scopes.scope.users.new'
+              @text={{t 'resources.user.titles.new'}}
+            />
+          {{/if}}
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doUsersExist}}

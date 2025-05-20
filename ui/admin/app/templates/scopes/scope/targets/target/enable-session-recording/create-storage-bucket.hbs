@@ -9,21 +9,18 @@
   @route='scopes.scope.targets.target.enable-session-recording.create-storage-bucket'
 />
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.storage-bucket.titles.new'}}
-      <DocLink @doc='storage-bucket' />
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.storage-bucket.titles.new'}}
+        <DocLink @doc='storage-bucket' />
+      </PH.Title>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

@@ -3,36 +3,29 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.storage-bucket.title_plural'}}
-      <DocLink @doc='storage-bucket' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.storage-bucket.description'}}
-    </Hds::Text::Body>
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create scope' this.scope collection='storage-buckets')}}
-      {{#if @model}}
-        <Hds::Button
-          @route='scopes.scope.storage-buckets.new'
-          @text={{t 'resources.storage-bucket.titles.new'}}
-        />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.storage-bucket.title_plural'}}
+        <DocLink @doc='storage-bucket' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.storage-bucket.description'}}
+      </PH.Description>
+      {{#if (can 'create scope' this.scope collection='storage-buckets')}}
+        <PH.Actions>
+          <Hds::Button
+            @route='scopes.scope.storage-buckets.new'
+            @text={{t 'resources.storage-bucket.titles.new'}}
+          />
+        </PH.Actions>
       {{/if}}
-    {{/if}}
-  </page.actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body>
     {{#if @model}}

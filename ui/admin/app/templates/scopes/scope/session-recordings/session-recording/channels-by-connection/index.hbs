@@ -3,42 +3,44 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >{{t 'resources.session-recording.session.title'}}</Hds::Text::Display>
-  </page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.session-recording.session.title'}}
+      </PH.Title>
+      <PH.Actions>
+        {{#if
+          (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
+        }}
+          <Hds::Dropdown data-test-manage-channels-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
 
-  <page.actions>
-    {{#if
-      (can 'reapplyStoragePolicy session-recording' @model.sessionRecording)
-    }}
-      <Hds::Dropdown data-test-manage-channels-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-
-        <dd.Interactive
-          {{on 'click' (fn this.reapplyStoragePolicy @model.sessionRecording)}}
-        >{{t 'resources.policy.actions.update'}}</dd.Interactive>
-        {{#if (can 'delete session-recording' @model.sessionRecording)}}
-          <dd.Separator />
-          <dd.Interactive
-            @color='critical'
-            {{on 'click' (fn this.delete @model.sessionRecording)}}
-          >
-            {{t 'resources.policy.actions.delete_recording'}}
-          </dd.Interactive>
+            <dd.Interactive
+              {{on
+                'click'
+                (fn this.reapplyStoragePolicy @model.sessionRecording)
+              }}
+            >{{t 'resources.policy.actions.update'}}</dd.Interactive>
+            {{#if (can 'delete session-recording' @model.sessionRecording)}}
+              <dd.Separator />
+              <dd.Interactive
+                @color='critical'
+                {{on 'click' (fn this.delete @model.sessionRecording)}}
+              >
+                {{t 'resources.policy.actions.delete_recording'}}
+              </dd.Interactive>
+            {{/if}}
+          </Hds::Dropdown>
         {{/if}}
-      </Hds::Dropdown>
-    {{/if}}
-  </page.actions>
+      </PH.Actions>
+    </Hds::PageHeader>
+
+  </page.header>
 
   <page.body>
     <div class='channels-by-connection'>
