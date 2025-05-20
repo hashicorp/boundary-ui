@@ -119,9 +119,10 @@ export default class ApplicationController extends Controller {
    * @returns {boolean}
    */
   customRouteChangeValidator(transition) {
+    const urlHasQueryParams = /^[\S]+[?][\S]+$/;
     if (
       transition.to?.name === transition.from?.name &&
-      window.location.search
+      urlHasQueryParams.test(this.router.currentURL)
     ) {
       return false;
     }
