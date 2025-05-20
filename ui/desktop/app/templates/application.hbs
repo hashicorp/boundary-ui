@@ -62,7 +62,10 @@
                 @text={{t 'titles.user-menu'}}
               />
             {{/if}}
-            <dd.Interactive data-test-sign-out {{on 'click' this.invalidateSession}}>
+            <dd.Interactive
+              data-test-sign-out
+              {{on 'click' this.invalidateSession}}
+            >
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
           </Hds::Dropdown>
