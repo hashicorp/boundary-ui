@@ -69,29 +69,6 @@
     width: 66%;
   }
 
-  .rose-dropdown {
-    $icon-width: sizing.rems(m) + sizing.rems(s);
-    $indent: $icon-width + sizing.rems(xs);
-
-    .rose-form-radio-label {
-      display: flex;
-    }
-
-    .indent-label-1 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent;
-      }
-    }
-
-    .indent-label-2 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent * 1.5;
-      }
-    }
-  }
-
   fieldset {
     margin-bottom: sizing.rems(m);
   }
@@ -105,7 +82,7 @@
 
   .rose-header-brand,
   .rose-header-nav,
-  .rose-header-utilities .rose-dropdown,
+  .rose-header-utilities,
   .rose-header-utilities button {
     -webkit-app-region: no-drag;
   }
