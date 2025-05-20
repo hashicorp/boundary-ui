@@ -115,7 +115,7 @@ export default class ApplicationController extends Controller {
   customRouteChangeValidator(transition) {
     if (
       transition.to?.name === transition.from?.name &&
-      Object.hasOwn(transition.to.queryParams, 'search')
+      typeof transition.to.queryParams.search === 'string'
     ) {
       return false;
     }
