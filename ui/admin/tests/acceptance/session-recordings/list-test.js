@@ -249,7 +249,6 @@ module('Acceptance | session recordings | list', function (hooks) {
 
   test('session recordings table is sorted by `created_time` descending by default', async function (assert) {
     this.server.schema.sessionRecordings.all().destroy();
-    await visit(urls.globalScope);
     const expectedDescendingSort = CREATED_TIME_VALUES_ARRAY.toReversed();
     faker.helpers.shuffle(expectedDescendingSort).forEach((value) => {
       this.server.create('session-recording', {
@@ -258,8 +257,7 @@ module('Acceptance | session recordings | list', function (hooks) {
         create_time_values: createdTimeValues,
       });
     });
-
-    await click(commonSelectors.HREF(urls.sessionRecordings));
+    await visit(urls.sessionRecordings);
 
     assert
       .dom(commonSelectors.TABLE_ROWS)
@@ -304,9 +302,8 @@ module('Acceptance | session recordings | list', function (hooks) {
           create_time_values: createdTimeValues,
         });
       });
-      await visit(urls.globalScope);
+      await visit(urls.sessionRecordings);
 
-      await click(commonSelectors.HREF(urls.sessionRecordings));
       // click the sort button to sort in ascending order for provided column key
       await click(commonSelectors.TABLE_SORT_BTN(input.column));
 
