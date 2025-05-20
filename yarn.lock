@@ -6478,6 +6478,7 @@ __metadata:
     concurrently: "npm:^9.1.0"
     core: "workspace:*"
     doctoc: "npm:^2.2.0"
+    ember-a11y-refocus: "npm:^4.1.4"
     ember-a11y-testing: "npm:^7.1.2"
     ember-auto-import: "npm:^2.10.0"
     ember-cli: "npm:~5.12.0"

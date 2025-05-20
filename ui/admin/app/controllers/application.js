@@ -34,13 +34,18 @@ export default class ApplicationController extends Controller {
   @service router;
 
   /**
-   * Returns available themes
+   * Returns available themes.
    * @type {array}
    */
   get themes() {
     return THEMES;
   }
 
+  /**
+   * Shows side navigation only for routes nested under a scope
+   * and if user has been authenticated.
+   * @type {boolean}
+   */
   get showSideNav() {
     return (
       this.router.currentRouteName.startsWith('scopes.scope') &&
@@ -95,7 +100,7 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   *
+   * Toggles on/off specified features.
    * @param {string} feature
    */
   @action
@@ -106,16 +111,17 @@ export default class ApplicationController extends Controller {
       this.features.enable(feature);
     }
   }
+
   /**
    * Add custom route change validation to prevent refocus when
-   * user is trying to type in search box.
+   * user is attempting to search, filter, or sort.
    * @param {object} transition
-   * @returns
+   * @returns {boolean}
    */
   customRouteChangeValidator(transition) {
     if (
       transition.to?.name === transition.from?.name &&
-      typeof transition.to.queryParams.search === 'string'
+      window.location.search
     ) {
       return false;
     }
