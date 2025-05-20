@@ -3,19 +3,19 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Roles::Role::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <Roles::Role::Header @model={{@model}} @header={{PH}} />
+      <PH.Actions>
+        <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    <Roles::Role::Actions @model={{@model}} @delete={{this.roles.delete}} />
-  </page.actions>
 
   <page.navigation>
     <Roles::Role::Nav @model={{@model}} />
