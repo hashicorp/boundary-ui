@@ -7,8 +7,8 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@use 'rose';
 @use 'notify';
+@use 'rose';
 
 .rose-layout-centered {
   > .rose-layout-page {
@@ -121,6 +121,20 @@
     border: transparent;
     color: var(--white);
     margin: sizing.rems(xs);
+  }
+
+  .button-window-close {
+    &:hover {
+      background: var(--failure);
+    }
+  }
+
+  .button-window-minimize,
+  .button-window-fullscreen {
+    &:hover {
+      background: var(--white);
+      color: var(--black);
+    }
   }
 
   .logotype {
