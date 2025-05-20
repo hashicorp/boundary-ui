@@ -269,7 +269,6 @@ module('Acceptance | targets | list', function (hooks) {
 
   test('targets table is sorted by `created_time` descending by default', async function (assert) {
     this.server.schema.targets.all().destroy();
-    await visit(urls.projectScope);
     const createdTimeToNameMapping = {};
     CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
       createdTimeToNameMapping[value] = NAME_VALUES_ARRAY[index];
@@ -281,8 +280,7 @@ module('Acceptance | targets | list', function (hooks) {
         scope: instances.scopes.project,
       });
     });
-
-    await click(commonSelectors.HREF(urls.targets));
+    await visit(urls.targets);
 
     assert
       .dom(commonSelectors.TABLE_ROWS)
@@ -330,17 +328,18 @@ module('Acceptance | targets | list', function (hooks) {
           scope: instances.scopes.project,
         });
       });
-      await visit(urls.projectScope);
+      await visit(urls.targets);
 
-      await click(commonSelectors.HREF(urls.targets));
       // click the sort button to sort in ascending order for provided column key
-      await click(selectors.TABLE_SORT_BTN(input.column));
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
 
       assert.true(currentURL().includes('sortDirection=asc'));
       assert.true(
         currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
-      assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.column)).isVisible();
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
       assert
         .dom(commonSelectors.TABLE_ROWS)
         .isVisible({ count: input.attribute.values.length });
@@ -350,13 +349,15 @@ module('Acceptance | targets | list', function (hooks) {
       });
 
       // click the sort button again to sort in descending order
-      await click(selectors.TABLE_SORT_BTN(input.column));
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
 
       assert.true(currentURL().includes('sortDirection=desc'));
       assert.true(
         currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
-      assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.column)).isVisible();
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
       input.expectedAscendingSort.toReversed().forEach((expected, index) => {
         // nth-child index starts at 1
         assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);

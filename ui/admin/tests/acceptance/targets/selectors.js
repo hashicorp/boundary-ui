@@ -35,9 +35,3 @@ export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
 export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
-export const TABLE_SORT_BTN = (column) =>
-  `thead tr th:nth-child(${column}) button`;
-export const TABLE_SORT_BTN_ARROW_UP = (column) =>
-  `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
-export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
-  `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;

@@ -67,3 +67,11 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
+
+// Sorting selectors
+export const TABLE_SORT_BTN = (column) =>
+  `thead tr th:nth-child(${column}) button`;
+export const TABLE_SORT_BTN_ARROW_UP = (column) =>
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
+export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;
