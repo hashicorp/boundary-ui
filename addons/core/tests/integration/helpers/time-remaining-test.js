@@ -13,7 +13,7 @@ module('Integration | Helper | time-remaining', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
-  test('it calculates the correct time remainin with less than 24 hours', async function (assert) {
+  test('it calculates the correct time remaining with less than 24 hours', async function (assert) {
     this.set('expirationTime', new Date(Date.now() + 1000 * 60 * 60 * 24));
 
     await render(hbs`{{time-remaining this.expirationTime}}`);
