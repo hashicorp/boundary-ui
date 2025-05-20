@@ -24,16 +24,6 @@
               {{t (concat 'resources.' scopeType '.description')}}
             </PH.Description>
           {{/if}}
-          {{#if (can 'create model' @model.currentScope collection='scopes')}}
-            <PH.Actions>
-              {{#if @model.doScopesExist}}
-                <Hds::Button
-                  @route='scopes.scope.scopes.new'
-                  @text={{t (concat 'resources.' scopeType '.titles.new')}}
-                />
-              {{/if}}
-            </PH.Actions>
-          {{/if}}
         {{/let}}
       {{/if}}
       {{#if (can 'create model' @model.currentScope collection='scopes')}}
