@@ -45,7 +45,7 @@
         {{/if}}
 
         {{#if this.session.isAuthenticated}}
-          <Hds::Dropdown as |dd|>
+          <Hds::Dropdown class='header-dropdown-button-override' as |dd|>
             {{#if this.session.data.authenticated.username}}
               <dd.ToggleButton
                 @icon='user-circle'
