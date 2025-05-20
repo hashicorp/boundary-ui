@@ -176,18 +176,24 @@ module('Acceptance | authentication', function (hooks) {
   test('signing out redirects to first global authenticate method', async function (assert) {
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
+
     await fillIn('[name="identification"]', 'test');
     await fillIn('[name="password"]', 'test');
     await click('[type="submit"]');
+
     assert.ok(currentSession().isAuthenticated);
-    await click('.rose-header-utilities .rose-dropdown summary');
+
+    await click('.rose-header-utilities .header-dropdown-button-override button');
+
     assert.strictEqual(
       find(
-        '.rose-header-utilities .rose-dropdown-content button',
+        '[data-test-sign-out]',
       ).textContent.trim(),
       'Sign Out',
     );
-    await click('.rose-header-utilities .rose-dropdown-content button');
+
+    await click('[data-test-sign-out]');
+
     assert.notOk(currentSession().isAuthenticated);
   });
 
