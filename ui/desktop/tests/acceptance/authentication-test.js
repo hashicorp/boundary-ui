@@ -183,16 +183,16 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click('.rose-header-utilities .hds-dropdown-toggle-button');
+    await click('.rose-header-utilities .header-dropdown-button-override button');
 
     assert.strictEqual(
       find(
-        '.hds-dropdown-list-item button',
+        '[data-test-sign-out]',
       ).textContent.trim(),
       'Sign Out',
     );
 
-    await click('.rose-header-utilities .hds-dropdown-list-item button');
+    await click('[data-test-sign-out]');
 
     assert.notOk(currentSession().isAuthenticated);
   });
