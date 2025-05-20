@@ -302,13 +302,7 @@ module('Acceptance | targets | list', function (hooks) {
           values: NAME_VALUES_ARRAY,
         },
         expectedAscendingSort: NAME_VALUES_ARRAY,
-      },
-      'on id': {
-        attribute: {
-          key: 'id',
-          values: ID_VALUES_ARRAY,
-        },
-        expectedAscendingSort: ID_VALUES_ARRAY,
+        column: 1,
       },
       'on type': {
         attribute: {
@@ -316,6 +310,15 @@ module('Acceptance | targets | list', function (hooks) {
           values: [TYPE_TARGET_SSH, TYPE_TARGET_TCP, TYPE_TARGET_SSH],
         },
         expectedAscendingSort: ['SSH', 'SSH', 'Generic TCP'],
+        column: 2,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ID_VALUES_ARRAY,
+        },
+        expectedAscendingSort: ID_VALUES_ARRAY,
+        column: 4,
       },
     },
 
@@ -331,15 +334,13 @@ module('Acceptance | targets | list', function (hooks) {
 
       await click(commonSelectors.HREF(urls.targets));
       // click the sort button to sort in ascending order for provided column key
-      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+      await click(selectors.TABLE_SORT_BTN(input.column));
 
-      assert.true(currentURL().includes(commonSelectors.SORT_ORDER('asc')));
+      assert.true(currentURL().includes('sortDirection=asc'));
       assert.true(
-        currentURL().includes(commonSelectors.SORT_BY(input.attribute.key)),
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
-      assert
-        .dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.attribute.key))
-        .isVisible();
+      assert.dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.column)).isVisible();
       assert
         .dom(commonSelectors.TABLE_ROWS)
         .isVisible({ count: input.attribute.values.length });
@@ -349,15 +350,13 @@ module('Acceptance | targets | list', function (hooks) {
       });
 
       // click the sort button again to sort in descending order
-      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+      await click(selectors.TABLE_SORT_BTN(input.column));
 
-      assert.true(currentURL().includes(commonSelectors.SORT_ORDER('desc')));
+      assert.true(currentURL().includes('sortDirection=desc'));
       assert.true(
-        currentURL().includes(commonSelectors.SORT_BY(input.attribute.key)),
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
-      assert
-        .dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.attribute.key))
-        .isVisible();
+      assert.dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.column)).isVisible();
       input.expectedAscendingSort.toReversed().forEach((expected, index) => {
         // nth-child index starts at 1
         assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);

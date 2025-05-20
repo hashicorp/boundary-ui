@@ -36,8 +36,8 @@ export const TABLE_ACTIVE_SESSIONS = (id) =>
 export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
 export const TABLE_SORT_BTN = (column) =>
-  `[data-test-targets-sort-by-${column}] button`;
+  `thead tr th:nth-child(${column}) button`;
 export const TABLE_SORT_BTN_ARROW_UP = (column) =>
-  `[data-test-targets-sort-by-${column}] button .hds-icon-arrow-up`;
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
 export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
-  `[data-test-targets-sort-by-${column}] button .hds-icon-arrow-down`;
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;

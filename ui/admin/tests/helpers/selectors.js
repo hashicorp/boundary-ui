@@ -67,6 +67,3 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
-
-export const SORT_BY = (val) => `sortAttribute=${val}`;
-export const SORT_ORDER = (val) => `sortDirection=${val}`;

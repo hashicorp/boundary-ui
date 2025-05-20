@@ -76,22 +76,19 @@
           @sortOrder={{this.sortDirection}}
         >
           <:head as |H|>
-            <H.Tr data-test->
+            <H.Tr>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'name'}}
                 @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
-                data-test-targets-sort-by-name
               >{{t 'form.name.label'}}</H.ThSort>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'type'}}
                 @sortOrder={{if (eq 'type' H.sortBy) H.sortOrder}}
-                data-test-targets-sort-by-type
               >{{t 'form.type.label'}}</H.ThSort>
               <H.Th>{{t 'resources.target.titles.active-sessions'}}</H.Th>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'id'}}
                 @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
-                data-test-targets-sort-by-id
               >{{t 'form.id.label'}}</H.ThSort>
             </H.Tr>
           </:head>
