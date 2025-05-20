@@ -61,7 +61,7 @@ module('Acceptance | roles | project-scope', function (hooks) {
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_THIS)).isVisible();
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
