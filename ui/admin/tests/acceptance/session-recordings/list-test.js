@@ -279,6 +279,7 @@ module('Acceptance | session recordings | list', function (hooks) {
           values: CREATED_TIME_VALUES_ARRAY,
         },
         expectedAscendingSort: CREATED_TIME_VALUES_ARRAY,
+        column: 1,
       },
       'on state': {
         attribute: {
@@ -290,6 +291,7 @@ module('Acceptance | session recordings | list', function (hooks) {
           ],
         },
         expectedAscendingSort: ['Completed', 'Recording', 'Failed'],
+        column: 2,
       },
     },
 
@@ -306,14 +308,14 @@ module('Acceptance | session recordings | list', function (hooks) {
 
       await click(commonSelectors.HREF(urls.sessionRecordings));
       // click the sort button to sort in ascending order for provided column key
-      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
 
       assert.true(currentURL().includes('sortDirection=asc'));
       assert.true(
         currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
       assert
-        .dom(selectors.TABLE_SORT_BTN_ARROW_UP(input.attribute.key))
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
         .isVisible();
       assert
         .dom(commonSelectors.TABLE_ROWS)
@@ -324,14 +326,14 @@ module('Acceptance | session recordings | list', function (hooks) {
       });
 
       // click the sort button again to sort in descending order
-      await click(selectors.TABLE_SORT_BTN(input.attribute.key));
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
 
       assert.true(currentURL().includes('sortDirection=desc'));
       assert.true(
         currentURL().includes(`sortAttribute=${input.attribute.key}`),
       );
       assert
-        .dom(selectors.TABLE_SORT_BTN_ARROW_DOWN(input.attribute.key))
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
         .isVisible();
       input.expectedAscendingSort.toReversed().forEach((expected, index) => {
         // nth-child index starts at 1

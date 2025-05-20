@@ -126,7 +126,6 @@
 
       {{#if @model.sessionRecordings}}
         <Hds::Table
-          @density='tall'
           @valign='middle'
           @onSort={{this.onSort}}
           @sortBy={{this.sortAttribute}}
@@ -137,12 +136,10 @@
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'created_time'}}
                 @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
-                data-test-session-recordings-sort-by-created_time
               >{{t 'resources.session-recording.form.time.label'}}</H.ThSort>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'state'}}
                 @sortOrder={{if (eq 'state' H.sortBy) H.sortOrder}}
-                data-test-session-recordings-sort-by-state
               >{{t 'resources.session-recording.form.status.label'}}</H.ThSort>
               <H.Th>{{t 'resources.session-recording.form.user.label'}}</H.Th>
               <H.Th>{{t 'resources.session-recording.form.target.label'}}</H.Th>

@@ -22,11 +22,3 @@ export const MANAGE_DROPDOWN =
   '[data-test-manage-channels-dropdown] button:first-child';
 export const DELETE_ACTION =
   '[data-test-manage-channels-dropdown] ul li:last-child button';
-
-// Sorting selectors
-export const TABLE_SORT_BTN = (column) =>
-  `[data-test-session-recordings-sort-by-${column}] button`;
-export const TABLE_SORT_BTN_ARROW_UP = (column) =>
-  `[data-test-session-recordings-sort-by-${column}] button .hds-icon-arrow-up`;
-export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
-  `[data-test-session-recordings-sort-by-${column}] button .hds-icon-arrow-down`;
