@@ -3,25 +3,24 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.policy.title'}}
-      <DocLink @doc='storage-policy' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.policy.description'}}
-    </Hds::Text::Body>
-    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.policy.title'}}
+        <DocLink @doc='storage-policy' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.policy.description'}}
+      </PH.Description>
+      <PH.Generic>
+        <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+      </PH.Generic>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>

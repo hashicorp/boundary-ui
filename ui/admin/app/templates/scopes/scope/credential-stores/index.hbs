@@ -3,39 +3,33 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.credential-store.title_plural'}}
-      <DocLink @doc='credential-store' />
-    </Hds::Text::Display>
-    {{#if @model.doCredentialStoresExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.credential-store.description'}}
-      </Hds::Text::Body>
-    {{/if}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.credential-store.title_plural'}}
+        <DocLink @doc='credential-store' />
+      </PH.Title>
+      <PH.Description>
+        {{#if @model.doCredentialStoresExist}}
+          {{t 'resources.credential-store.description'}}
+        {{/if}}
+      </PH.Description>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='credential-stores')}}
+          {{#if @model.doCredentialStoresExist}}
+            <Hds::Button
+              @route='scopes.scope.credential-stores.new'
+              @text={{t 'resources.credential-store.titles.new'}}
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-
-    {{#if (can 'create model' this.scope collection='credential-stores')}}
-      {{#if @model.doCredentialStoresExist}}
-        <Hds::Button
-          @route='scopes.scope.credential-stores.new'
-          @text={{t 'resources.credential-store.titles.new'}}
-        />
-      {{/if}}
-    {{/if}}
-  </page.actions>
 
   <page.body class='search-filtering'>
     {{#if @model.doCredentialStoresExist}}
