@@ -7,8 +7,8 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@use 'rose';
 @use 'notify';
+@use 'rose';
 
 .rose-layout-centered {
   > .rose-layout-page {
@@ -123,6 +123,20 @@
     margin: sizing.rems(xs);
   }
 
+  .button-window-close {
+    &:hover {
+      background: var(--failure);
+    }
+  }
+
+  .button-window-minimize,
+  .button-window-fullscreen {
+    &:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+  }
+
   .logotype {
     display: none;
   }
@@ -224,16 +238,6 @@
   color: var(--ui-border-starker-1);
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
-}
-
-// Rose dialog - positioned above modal overlay
-.rose-dialog {
-  z-index: 6000;
-}
-
-// Overlay above everything - including notifications
-.rose-dialog-modal-overlay {
-  z-index: 5500;
 }
 
 // Hidden secret component (app/components/hidden-secret)
