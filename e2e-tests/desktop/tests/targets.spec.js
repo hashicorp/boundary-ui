@@ -166,13 +166,18 @@ test.describe('Targets tests', () => {
       await authedPage
         .getByRole('link', { name: targetWithTwoHosts.name })
         .click();
-      await authedPage.getByRole('button', { name: 'Connect' }).click();
 
-      await expect(
-        authedPage.getByRole('heading', { name: 'Choose a Host' }),
-      ).toBeVisible();
-
-      await authedPage.getByRole('button', { name: host }).click();
+      // eslint-disable-next-line playwright/no-conditional-in-test
+      if (host === 'Quick Connect') {
+        await authedPage.getByRole('button', { name: host }).click();
+      } else {
+        await authedPage
+          .getByRole('table')
+          .getByRole('cell', { name: host })
+          .locator('..')
+          .getByRole('button', { name: 'Connect' })
+          .click();
+      }
 
       await expect(
         authedPage.getByRole('heading', { name: 'Sessions' }),
