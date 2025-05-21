@@ -46,38 +46,44 @@
       </Hds::SegmentedGroup>
       {{#if @model.groups}}
 
-        <Hds::Table
-          @model={{@model.groups}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @valign='middle'
-        >
+        <Hds::Table @valign='middle'>
+          <:head as |H|>
+            <H.Tr>
+              <H.Th>
+                {{t 'form.name.label'}}
+              </H.Th>
+              <H.Th>
+                {{t 'form.id.label'}}
+              </H.Th>
+            </H.Tr>
+          </:head>
+
           <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read group' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.groups.group'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
+            {{#each @model.groups as |data|}}
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read group' data)}}
+                    <LinkTo
+                      @route='scopes.scope.groups.group'
+                      @model={{data.id}}
+                    >
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination
