@@ -347,7 +347,6 @@ session:
     end: End session
     host: Choose a Host
     quick-connect: Quick Connect
-    select: Select
   credential:
     title: Credential
     title_plural: Credentials
