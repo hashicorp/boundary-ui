@@ -66,12 +66,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  deactivate() {
-    this.allSessions = undefined;
-    this.associatedUsers = [];
-    this.associatedTargets = [];
-  }
-
   retrieveData = restartableTask(
     async ({
       search,
