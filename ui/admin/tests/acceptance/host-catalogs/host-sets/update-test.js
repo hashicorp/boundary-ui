@@ -297,7 +297,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.hostSet);
-    assert.notOk(find('.rose-layout-page-actions .rose-button-secondary'));
+    assert.notOk(find('.rose-layout-page-actions .hds-button-secondary'));
   });
 
   test('can cancel changes to existing host-set', async function (assert) {
