@@ -43,12 +43,20 @@
       </Hds::SegmentedGroup>
 
       {{#if @model.aliases}}
-        <Hds::Table @valign='middle'>
+        <Hds::Table
+          @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
+        >
           <:head as |H|>
             <H.Tr>
-              <H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'value'}}
+                @sortOrder={{if (eq 'value' H.sortBy) H.sortOrder}}
+              >
                 {{t 'resources.alias.title'}}
-              </H.Th>
+              </H.ThSort>
               <H.Th>
                 {{t 'resources.alias.titles.points_to'}}
               </H.Th>
