@@ -46,15 +46,26 @@
       </Hds::SegmentedGroup>
       {{#if @model.groups}}
 
-        <Hds::Table @valign='middle'>
+        <Hds::Table
+          @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
+        >
           <:head as |H|>
             <H.Tr>
-              <H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >
                 {{t 'form.name.label'}}
-              </H.Th>
-              <H.Th>
+              </H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >
                 {{t 'form.id.label'}}
-              </H.Th>
+              </H.ThSort>
             </H.Tr>
           </:head>
 
