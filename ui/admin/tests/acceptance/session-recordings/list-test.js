@@ -180,13 +180,13 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('user'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.user.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by scope', async function (assert) {
@@ -194,13 +194,13 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('target'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.target.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by target', async function (assert) {
@@ -208,7 +208,7 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('scope'));
     await click(
@@ -216,7 +216,7 @@ module('Acceptance | session recordings | list', function (hooks) {
     );
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('scope'));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('user can filter session recordings by time', async function (assert) {
@@ -224,11 +224,11 @@ module('Acceptance | session recordings | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 2 });
 
     await click(commonSelectors.FILTER_DROPDOWN('time'));
     await click(selectors.LAST_3_DAYS_OPTION);
 
-    assert.dom(commonSelectors.TABLE_ROW).isVisible({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 });
