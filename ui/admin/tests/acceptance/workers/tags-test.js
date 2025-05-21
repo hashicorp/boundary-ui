@@ -56,7 +56,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tags);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
   });
 
   test('config tags display a tooltip for HCP managed tag', async function (assert) {
@@ -85,7 +85,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   test('users can remove a specific tag', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
 
     await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
     await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON);
@@ -98,20 +98,20 @@ module('Acceptance | workers | worker | tags', function (hooks) {
 
     await click(selectors.MODAL_CONFIRMATION_SAVE_BUTTON);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 10 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 10 });
   });
 
   test('user can cancel tag removal', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
 
     await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
     await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN_LAST_BUTTON);
 
     await click(selectors.MODAL_CONFIRMATION_CANCEL_BUTTON);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
   });
 
   test('user cannot remove a tag without proper permission', async function (assert) {
@@ -121,7 +121,7 @@ module('Acceptance | workers | worker | tags', function (hooks) {
       );
     await visit(urls.tags);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
 
     await click(selectors.TABLE_ROW_API_TAG_ACTION_DROPDOWN);
 

@@ -69,103 +69,73 @@
 
       {{#if @model.targets}}
         <Hds::Table
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'resources.target.titles.active-sessions'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @model={{@model.targets}}
           @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'type'}}
+                @sortOrder={{if (eq 'type' H.sortBy) H.sortOrder}}
+              >{{t 'form.type.label'}}</H.ThSort>
+              <H.Th>{{t 'resources.target.titles.active-sessions'}}</H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            {{#if (feature-flag 'ssh-target')}}
-              <B.Tr data-test-targets-table-row={{B.data.id}}>
-                <B.Td>
-                  {{#if (can 'read model' B.data)}}
-                    <LinkTo
-                      @route='scopes.scope.targets.target'
-                      @model={{B.data.id}}
-                    >
-                      {{B.data.displayName}}
-                    </LinkTo>
-                  {{else}}
-                    {{B.data.displayName}}
-                  {{/if}}
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.description}}
-                  </Hds::Text::Body>
-                </B.Td>
-                <B.Td>
-                  {{#if B.data.type}}
-                    <Hds::Badge
-                      @text={{t (concat 'resources.target.types.' B.data.type)}}
-                    />
-                  {{/if}}
-                </B.Td>
-                <B.Td>
-                  {{#if B.data.isActive}}
-                    <Hds::Link::Standalone
-                      @text={{t 'actions.yes'}}
-                      @route='scopes.scope.sessions.index'
-                      @query={{hash targets=(array B.data.id)}}
-                      @icon='info'
-                    />
-                  {{/if}}
-                </B.Td>
-                <B.Td>
-                  <Hds::Copy::Snippet
-                    @textToCopy={{B.data.id}}
-                    @color='secondary'
-                  />
-                </B.Td>
-              </B.Tr>
-            {{else}}
-              {{#if B.data.isTCP}}
-                <B.Tr data-test-targets-table-row={{B.data.id}}>
+            {{#each @model.targets as |data|}}
+              {{#if (or (feature-flag 'ssh-target') data.isTCP)}}
+                <B.Tr data-test-targets-table-row={{data.id}}>
                   <B.Td>
-                    {{#if (can 'read model' B.data)}}
+                    {{#if (can 'read model' data)}}
                       <LinkTo
                         @route='scopes.scope.targets.target'
-                        @model={{B.data.id}}
+                        @model={{data.id}}
                       >
-                        {{B.data.displayName}}
+                        {{data.displayName}}
                       </LinkTo>
                     {{else}}
-                      {{B.data.displayName}}
+                      {{data.displayName}}
                     {{/if}}
                     <Hds::Text::Body @tag='p' class='p'>
-                      {{B.data.description}}
+                      {{data.description}}
                     </Hds::Text::Body>
                   </B.Td>
                   <B.Td>
-                    {{#if B.data.type}}
+                    {{#if data.type}}
                       <Hds::Badge
-                        @text={{t
-                          (concat 'resources.target.types.' B.data.type)
-                        }}
+                        @text={{t (concat 'resources.target.types.' data.type)}}
                       />
                     {{/if}}
                   </B.Td>
                   <B.Td>
-                    {{#if B.data.isActive}}
+                    {{#if data.isActive}}
                       <Hds::Link::Standalone
                         @text={{t 'actions.yes'}}
                         @route='scopes.scope.sessions.index'
-                        @query={{hash targets=(array B.data.id)}}
+                        @query={{hash targets=(array data.id)}}
                         @icon='info'
                       />
                     {{/if}}
                   </B.Td>
                   <B.Td>
                     <Hds::Copy::Snippet
-                      @textToCopy={{B.data.id}}
+                      @textToCopy={{data.id}}
                       @color='secondary'
                     />
                   </B.Td>
                 </B.Tr>
               {{/if}}
-            {{/if}}
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

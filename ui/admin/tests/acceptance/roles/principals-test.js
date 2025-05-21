@@ -69,13 +69,13 @@ module('Acceptance | roles | principals', function (hooks) {
   test('principal can be removed from a role', async function (assert) {
     await visit(urls.rolePrincipals);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: principalsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
 
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: principalsCount - 1 });
   });
 
@@ -105,7 +105,7 @@ module('Acceptance | roles | principals', function (hooks) {
     });
     await visit(urls.rolePrincipals);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: principalsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
 
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
@@ -131,7 +131,7 @@ module('Acceptance | roles | principals', function (hooks) {
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ADD_PRINCIPALS);
@@ -145,20 +145,20 @@ module('Acceptance | roles | principals', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
     await visit(urls.rolePrincipals);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('select and cancel principals to add', async function (assert) {
     await visit(urls.rolePrincipals);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: principalsCount });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
 
     // Remove a principal to populate association view
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: principalsCount - 1 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
@@ -171,7 +171,7 @@ module('Acceptance | roles | principals', function (hooks) {
     await visit(urls.rolePrincipals);
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: principalsCount - 1 });
   });
 
