@@ -20,11 +20,19 @@ export default class ScopesScopeAliasesIndexController extends Controller {
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   /**
    * If can list (at least): return default welcome message.
@@ -122,6 +130,13 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+    this.page = 1;
+  }
+
+  @action
+  sortBy(attribute, direction) {
+    this.sortAttribute = attribute;
+    this.sortDirection = direction;
     this.page = 1;
   }
 }
