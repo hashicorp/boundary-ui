@@ -16,9 +16,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
   setupMirage(hooks);
   setupStubs(hooks);
 
+  const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
+  const TARGET_TABLE_CONNECT_BUTTON = (id) =>
+    `[data-test-targets-connect-button="${id}"]`;
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
-  const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
-  const TARGET_HOST_CONNECT_BUTTON = '[data-test-host-connect]';
+  const TARGET_HOST_SOURCE_CONNECT_BUTTON = (id) =>
+    `[data-test-target-connect-button=${id}]`;
   const APP_STATE_TITLE = '.hds-application-state__title';
   const HDS_DIALOG_MODAL = '.hds-modal';
   const HDS_DIALOG_MODAL_BUTTONS = '.hds-modal__footer button';
@@ -228,8 +231,29 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('user can connect to a target with two hosts using host modal', async function (assert) {
-    assert.expect(3);
+  test('user can see host source table when visiting a target via resource link', async function (assert) {
+    const targetId = instances.targetWithTwoHosts.id;
+
+    await visit(urls.targets);
+    await click(TARGET_RESOURCE_LINK(targetId));
+
+    assert.dom('tbody tr').exists({ count: 2 });
+  });
+
+  test('user can see host source table when visiting a target via connect button', async function (assert) {
+    const targetId = instances.targetWithTwoHosts.id;
+
+    await visit(urls.targets);
+    await click(TARGET_TABLE_CONNECT_BUTTON(targetId));
+
+    assert.dom('tbody tr').exists({ count: 2 });
+  });
+
+  test('user can connect to a target with two hosts using host source table', async function (assert) {
+    const hostId =
+      instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0].id;
+
+    assert.expect(2);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -241,13 +265,9 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await click(`[href="${urls.targetWithTwoHosts}"]`);
 
-    assert.dom(APP_STATE_TITLE).hasText('Connect for more info');
+    assert.dom('tbody tr').exists({ count: 2 });
 
-    await click(TARGET_CONNECT_BUTTON);
-
-    assert.dom(TARGET_HOST_CONNECT_BUTTON).exists({ count: 2 });
-
-    await click(TARGET_QUICK_CONNECT_BUTTON);
+    await click(TARGET_HOST_SOURCE_CONNECT_BUTTON(hostId));
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
