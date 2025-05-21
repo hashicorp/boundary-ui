@@ -26,6 +26,14 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -41,7 +49,14 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -52,11 +67,15 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
       let totalItems = 0;
       let doGroupsExist = false;
       const filters = { scope_id: [{ equals: scope_id }] };
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
 
       if (this.can.can('list model', scope, { collection: 'groups' })) {
         groups = await this.store.query('group', {
           scope_id,
-          query: { filters, search },
+          query: { filters, search, sort },
           page,
           pageSize,
         });
