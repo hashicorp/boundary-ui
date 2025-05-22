@@ -22,6 +22,7 @@ export default class ApplicationRoute extends Route {
   @service features;
   @service featureEdition;
   @service indexedDb;
+  @service webWorker;
   @service('browser/window') window;
 
   // =attributes
@@ -70,6 +71,8 @@ export default class ApplicationRoute extends Route {
 
     // Setup the DB from a successful authentication restoration
     if (this.session.isAuthenticated) {
+      this.webWorker.setup('web-worker');
+
       const userId = this.session.data?.authenticated?.user_id;
       const hostUrl = this.window.location.host;
       if (userId && hostUrl) {

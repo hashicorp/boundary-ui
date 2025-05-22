@@ -28,6 +28,12 @@ module.exports = async function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
+    // Fingerprinting is enabled by default for production
+    // TODO: Double check how this works. It looks like it still works somehow without the map?
+    fingerprint: {
+      generateAssetMap: true,
+      fingerprintAssetMap: true,
+    },
   });
 
   // TODO: The deprecations object can be removed in ember-data 6.0.
