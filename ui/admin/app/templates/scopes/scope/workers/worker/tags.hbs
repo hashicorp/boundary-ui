@@ -30,13 +30,6 @@
     <Workers::Worker::Nav />
   </page.navigation>
 
-  <page.actions>
-    <Workers::Worker::Actions
-      @model={{@model}}
-      @delete={{this.workers.delete}}
-    />
-  </page.actions>
-
   <page.body class='worker-tags'>
     {{#if @model.allTags}}
       <Hds::Table
