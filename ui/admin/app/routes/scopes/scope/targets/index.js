@@ -5,11 +5,12 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 
 export default class ScopesScopeTargetsIndexRoute extends Route {
   // =services
@@ -62,6 +63,12 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  typeMap = { [TYPE_TARGET_SSH]: 'SSH', [TYPE_TARGET_TCP]: 'Generic TCP' };
+  customTypeSort = (recordA, recordB) =>
+    String(this.typeMap[recordA.attributes.type]).localeCompare(
+      String(this.typeMap[recordB.attributes.type]),
+    );
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -113,6 +120,9 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
           attribute: sortAttribute,
           direction: sortDirection,
         };
+        if (sortAttribute === 'type') {
+          sort.customSortFunction = this.customTypeSort;
+        }
         targets = await this.store.query('target', {
           scope_id,
           query: { search, filters, sort },
