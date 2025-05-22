@@ -3,25 +3,26 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Targets::Target::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <Targets::Target::Header @model={{@model}} @header={{PH}} />
+      <PH.Actions>
+        <Targets::Target::Actions
+          @model={{@model}}
+          @delete={{this.targets.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
     <Targets::Target::Nav @model={{@model}} />
   </page.navigation>
-
-  <page.actions>
-    <Targets::Target::Actions
-      @model={{@model}}
-      @delete={{this.targets.delete}}
-    />
-  </page.actions>
 
   <page.body>
     <Rose::Layout::BodyContent as |bc|>
@@ -35,7 +36,7 @@
       <bc.Sidebar>
         {{#if @model.aliases}}
           <div class='target-sidebar-aliases'>
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h2'>
               {{t 'resources.alias.title_plural'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -93,7 +94,7 @@
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
             <div class='target-sidebar-aliases'>
-              <Hds::Text::Display @tag='h3'>
+              <Hds::Text::Display @tag='h2'>
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
               <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -111,7 +112,7 @@
         {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-            <Hds::Text::Display @tag='h3'>
+            <Hds::Text::Display @tag='h2'>
               {{t 'resources.target.form.sidebar.label'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>

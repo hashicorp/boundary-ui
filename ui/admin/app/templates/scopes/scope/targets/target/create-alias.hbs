@@ -9,25 +9,21 @@
   @route='scopes.scope.aliases.new'
 />
 
-<Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.alias.titles.new'}}
-      <DocLink @doc='alias' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.alias.description'}}
-    </Hds::Text::Body>
-
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.alias.titles.new'}}
+        <DocLink @doc='alias' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.alias.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
   <page.body>
     <Form::Alias

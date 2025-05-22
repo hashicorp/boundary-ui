@@ -5,26 +5,27 @@
 
 {{page-title @model.target.displayName}}
 
-<Rose::Layout::Page as |page|>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display @tag='h1' @size='500' class='target-details-header'>
-      <Hds::IconTile @color='boundary' @icon='target' />
-      {{@model.target.displayName}}
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.IconTile @color='boundary' @icon='target' />
+      <PH.Title>
+        {{@model.target.displayName}}
+      </PH.Title>
+      {{#if (can 'connect target' @model.target)}}
+        <PH.Actions>
+          <Hds::Button
+            data-test-target-detail-connect-button
+            @text={{t 'resources.session.actions.connect'}}
+            @icon='entry-point'
+            @iconPosition='trailing'
+            {{on 'click' (fn this.preConnect @model)}}
+          />
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'connect target' @model.target)}}
-      <Hds::Button
-        data-test-target-detail-connect-button
-        @text={{t 'resources.session.actions.connect'}}
-        @icon='entry-point'
-        @iconPosition='trailing'
-        {{on 'click' (fn this.preConnect @model)}}
-      />
-    {{/if}}
-  </page.actions>
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>

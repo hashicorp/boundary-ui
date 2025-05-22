@@ -9,22 +9,20 @@
   @route='scopes.scope.users.user.add-accounts'
 />
 
-<Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
+<Rose::Layout::Page class='hds-migration-overrides' as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >{{t 'resources.user.messages.add-accounts.title'}}</Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.user.messages.add-accounts.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.user.messages.add-accounts.title'}}
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.user.messages.add-accounts.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>
