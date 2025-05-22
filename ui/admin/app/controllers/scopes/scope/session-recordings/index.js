@@ -24,6 +24,8 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
     { targets: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   now = new Date();
@@ -35,6 +37,8 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   @tracked targets = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   /**
    * Returns object of filters to be used for displaying selected filters
@@ -189,5 +193,17 @@ export default class ScopesScopeSessionRecordingsIndexController extends Control
   @action
   refresh() {
     this.send('refreshAll');
+  }
+
+  /**
+   * Sets sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
