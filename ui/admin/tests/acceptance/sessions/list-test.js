@@ -34,6 +34,7 @@ module('Acceptance | sessions | list', function (hooks) {
       global: null,
       org: null,
       project: null,
+      anotherProject: null,
     },
     sessions: null,
     tcpTarget: null,
@@ -65,6 +66,18 @@ module('Acceptance | sessions | list', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
+    instances.scopes.project.authorized_collection_actions.users = [
+      'create',
+      'list',
+    ];
+    instances.scopes.anotherProject = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
+    });
+    instances.scopes.anotherProject.authorized_collection_actions.users = [
+      'create',
+      'list',
+    ];
     this.server.createList(
       'group',
       1,
@@ -274,5 +287,131 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('status'));
 
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+  });
+
+  test('sessions can be loaded after visiting a project without sessions', async function (assert) {
+    await visit(`/scopes/${instances.scopes.anotherProject.id}/sessions`);
+    assert.dom('[data-test-no-sessions]').includesText('No sessions available');
+    await visit(`/scopes/${instances.scopes.project.id}/sessions`);
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: instances.sessions.length });
+  });
+
+  test('sessions show correct user filters when switching projects', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+
+    const anotherProject = {
+      sessionCount: 4,
+      user: instances.dev,
+      scope: instances.scopes.anotherProject,
+    };
+
+    const project = {
+      sessionCount: 2,
+      user: instances.admin,
+      scope: instances.scopes.project,
+    };
+
+    this.server.createList(
+      'session',
+      anotherProject.sessionCount,
+      {
+        status: 'active',
+        scope: anotherProject.scope,
+        user: anotherProject.user,
+      },
+      'withAssociations',
+    );
+
+    instances.sessions = this.server.createList(
+      'session',
+      project.sessionCount,
+      {
+        status: 'active',
+        scope: project.scope,
+        user: project.user,
+      },
+      'withAssociations',
+    );
+
+    await visit(`/scopes/${anotherProject.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProject.user.id))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: anotherProject.sessionCount });
+
+    await visit(`/scopes/${project.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(project.user.id))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: project.sessionCount });
+  });
+
+  test('sessions show correct target filters when switching projects', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+    this.server.schema.targets.all().destroy();
+
+    const anotherProjectRefs = {
+      sessionCount: 4,
+      user: instances.dev,
+      scope: instances.scopes.anotherProject,
+      target: this.server.create(
+        'target',
+        { scope: instances.scopes.anotherProject, type: TYPE_TARGET_TCP },
+        'withAssociations',
+      ),
+    };
+
+    const projectRefs = {
+      sessionCount: 2,
+      user: instances.admin,
+      scope: instances.scopes.project,
+      target: this.server.create(
+        'target',
+        { scope: instances.scopes.project, type: TYPE_TARGET_TCP },
+        'withAssociations',
+      ),
+    };
+
+    this.server.createList(
+      'session',
+      anotherProjectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: anotherProjectRefs.scope,
+        user: anotherProjectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    instances.sessions = this.server.createList(
+      'session',
+      projectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: projectRefs.scope,
+        user: projectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    await visit(`/scopes/${anotherProjectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProjectRefs.target.id))
+      .isVisible();
+
+    await visit(`/scopes/${projectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(projectRefs.target.id))
+      .isVisible();
   });
 });
