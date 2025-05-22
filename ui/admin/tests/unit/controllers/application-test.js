@@ -61,59 +61,64 @@ module('Unit | Controller | application', function (hooks) {
     assert.true(featuresService.isEnabled('ssh-target'));
   });
 
-  test('customRouteChangeValidator returns true when transitioning between different routes', function (assert) {
-    const transition = {
-      from: router.recognize('/scopes/global/scopes'),
-      to: router.recognize('/scopes/global/auth-methods'),
-    };
+  test.each(
+    'customRouteChangeValidator',
+    [
+      {
+        from: '/scopes',
+        to: '/scopes',
+        expectedResult: false,
+      },
+      {
+        from: '/scopes/global/scopes',
+        to: '/scopes/global/scopes',
+        expectedResult: false,
+      },
+      {
+        from: '/scopes/global/scopes?search=xyz',
+        to: '/scopes/global/scopes',
+        expectedResult: false,
+      },
+      {
+        from: '/scopes/global/scopes?search=xyz',
+        to: '/scopes/global/scopes?search=xy',
+        expectedResult: false,
+      },
+      {
+        to: '/scopes/global/scopes',
+        expectedResult: true,
+      },
+      {
+        from: '/scopes/global/scopes',
+        expectedResult: true,
+      },
+      {
+        from: '/scopes/global/scopes',
+        to: '/scopes/global/auth-methods',
+        expectedResult: true,
+      },
+      {
+        from: '/scopes/global/scopes',
+        to: '/scopes/o_12345/scopes',
+        expectedResult: true,
+      },
+      {
+        from: '/scopes/global/roles/r_123/scopes',
+        to: '/scopes/global/roles/r_321/scopes',
+        expectedResult: true,
+      },
+    ],
 
-    assert.true(controller.customRouteChangeValidator(transition));
+    async function (assert, input) {
+      const transition = {
+        from: input.from ? router.recognize(input.from) : undefined,
+        to: input.to ? router.recognize(input.to) : undefined,
+      };
 
-    transition.from = undefined;
-
-    assert.true(controller.customRouteChangeValidator(transition));
-  });
-
-  test('customRouteChangeValidator returns true when transitioning between the same route with different path parameters', function (assert) {
-    const transition = {
-      from: router.recognize('/scopes/global/scopes'),
-      to: router.recognize('/scopes/o_12345/scopes'),
-    };
-
-    assert.true(controller.customRouteChangeValidator(transition));
-
-    transition.to = router.recognize('/scopes/global/roles/r_123/scopes');
-    transition.from = router.recognize('/scopes/global/roles/r_321/scopes');
-
-    assert.true(controller.customRouteChangeValidator(transition));
-  });
-
-  test('customRouteChangeValidator returns false when transitioning between the same route', function (assert) {
-    const transition = {
-      from: router.recognize('/scopes/global/scopes'),
-      to: router.recognize('/scopes/global/scopes'),
-    };
-
-    assert.false(controller.customRouteChangeValidator(transition));
-
-    transition.from = router.recognize('/scopes');
-    transition.to = router.recognize('/scopes');
-
-    assert.false(controller.customRouteChangeValidator(transition));
-  });
-
-  test('customRouteChangeValidator returns false when transitioning between the same route with query params', function (assert) {
-    const transition = {
-      from: router.recognize('/scopes/global/scopes?search=xyz'),
-      to: router.recognize('/scopes/global/scopes'),
-    };
-
-    assert.strictEqual(transition.from.queryParams.search, 'xyz');
-    assert.false(controller.customRouteChangeValidator(transition));
-
-    transition.to = router.recognize('/scopes/global/scopes?search=xy');
-
-    assert.strictEqual(transition.to.queryParams.search, 'xy');
-    assert.false(controller.customRouteChangeValidator(transition));
-  });
+      assert.strictEqual(
+        controller.customRouteChangeValidator(transition),
+        input.expectedResult,
+      );
+    },
+  );
 });
