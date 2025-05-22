@@ -21,11 +21,19 @@ export default class ScopesScopeRolesIndexController extends Controller {
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   grantScopeThis = GRANT_SCOPE_THIS;
 
@@ -126,5 +134,17 @@ export default class ScopesScopeRolesIndexController extends Controller {
   async removePrincipal(role, principal) {
     await role.removePrincipal(principal.id);
     await this.router.refresh();
+  }
+
+  /**
+   * Sets sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }

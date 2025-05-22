@@ -55,6 +55,16 @@ export const sortResults = (results, { querySort, schema }) => {
     throw new Error('Invalid sort direction');
   }
 
+  if (querySort.customSortFunction) {
+    return results.toSorted((a, b) => {
+      const sortResult = querySort.customSortFunction(a, b);
+
+      return sortDirection === SORT_DIRECTION_ASCENDING
+        ? sortResult
+        : -1 * sortResult;
+    });
+  }
+
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
 
   const sortFunction =

@@ -21,6 +21,14 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =services
@@ -41,7 +49,14 @@ export default class ScopesScopeRolesIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -56,9 +71,23 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       let totalItems = 0;
       let doRolesExist = false;
       if (this.can.can('list model', scope, { collection: 'roles' })) {
+        const sort = {
+          attribute: sortAttribute,
+          direction: sortDirection,
+        };
+        if (sortAttribute === 'name') {
+          sort.customSortFunction = (recordA, recordB) => {
+            let a = recordA.attributes.name;
+            let b = recordB.attributes.name;
+            a = a ? a : recordA.id;
+            b = b ? b : recordB.id;
+            console.log('test ', a, b);
+            return String(a).localeCompare(b);
+          };
+        }
         roles = await this.store.query('role', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });

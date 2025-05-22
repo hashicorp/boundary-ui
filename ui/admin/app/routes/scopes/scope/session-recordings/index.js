@@ -7,6 +7,11 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
+import {
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_UNKNOWN,
+} from 'api/models/session-recording';
 
 export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =services
@@ -65,6 +70,16 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  stateMap = {
+    [STATE_SESSION_RECORDING_AVAILABLE]: 'Completed',
+    [STATE_SESSION_RECORDING_STARTED]: 'Recording',
+    [STATE_SESSION_RECORDING_UNKNOWN]: 'Failed',
+  };
+  customStateSort = (recordA, recordB) =>
+    String(this.stateMap[recordA.attributes.state]).localeCompare(
+      String(this.stateMap[recordB.attributes.state]),
+    );
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -114,6 +129,9 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
           attribute: sortAttribute,
           direction: sortDirection,
         };
+        if (sortAttribute === 'state') {
+          sort.customSortFunction = this.customStateSort;
+        }
         const queryOptions = {
           scope_id,
           recursive: true,
