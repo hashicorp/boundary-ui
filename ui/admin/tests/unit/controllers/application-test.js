@@ -74,11 +74,16 @@ module('Unit | Controller | application', function (hooks) {
     assert.true(controller.customRouteChangeValidator(transition));
   });
 
-  test('customRouteChangeValidator returns true when transitioning between different routes with the same name', function (assert) {
+  test('customRouteChangeValidator returns true when transitioning between the same route with different path parameters', function (assert) {
     const transition = {
       from: router.recognize('/scopes/global/scopes'),
       to: router.recognize('/scopes/o_12345/scopes'),
     };
+
+    assert.true(controller.customRouteChangeValidator(transition));
+
+    transition.to = router.recognize('/scopes/global/roles/r_123/scopes');
+    transition.from = router.recognize('/scopes/global/roles/r_321/scopes');
 
     assert.true(controller.customRouteChangeValidator(transition));
   });
