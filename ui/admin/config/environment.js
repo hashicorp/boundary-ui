@@ -201,7 +201,10 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    // here you can enable a production-specific feature
+    ENV.ifa = {
+      enabled: true,
+      inline: false,
+    };
   }
 
   return ENV;
