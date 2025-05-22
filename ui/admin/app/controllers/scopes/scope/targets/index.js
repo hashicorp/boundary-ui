@@ -28,6 +28,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     { types: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked search;
@@ -37,6 +39,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked selectedTarget;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   get availableSessionOptions() {
     return [
@@ -301,7 +305,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   }
 
   /**
-   * Remove destaination_id from alias
+   * Remove destination_id from alias
    * @param {AliasModel} alias
    */
   @action
@@ -362,5 +366,12 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   async cancelWorkerFilter(target) {
     target.rollbackAttributes();
     await this.router.replaceWith('scopes.scope.targets.target.workers');
+  }
+
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }

@@ -126,86 +126,104 @@
 
       {{#if @model.sessionRecordings}}
         <Hds::Table
-          @model={{@model.sessionRecordings}}
-          @density='tall'
-          @columns={{array
-            (hash label=(t 'resources.session-recording.form.time.label'))
-            (hash label=(t 'resources.session-recording.form.status.label'))
-            (hash label=(t 'resources.session-recording.form.user.label'))
-            (hash label=(t 'resources.session-recording.form.target.label'))
-            (hash label=(t 'resources.session-recording.form.duration.label'))
-            (hash label=(t 'actions.view') isVisuallyHidden=true align='right')
-          }}
           @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'created_time'}}
+                @sortOrder={{if (eq 'created_time' H.sortBy) H.sortOrder}}
+              >{{t 'resources.session-recording.form.time.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'state'}}
+                @sortOrder={{if (eq 'state' H.sortBy) H.sortOrder}}
+              >{{t 'resources.session-recording.form.status.label'}}</H.ThSort>
+              <H.Th>{{t 'resources.session-recording.form.user.label'}}</H.Th>
+              <H.Th>{{t 'resources.session-recording.form.target.label'}}</H.Th>
+              <H.Th>{{t
+                  'resources.session-recording.form.duration.label'
+                }}</H.Th>
+              <H.Th @isVisuallyHidden={{true}} @align='right'>{{t
+                  'actions.view'
+                }}</H.Th>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            <B.Tr>
-              {{! Created Time }}
-              <B.Td>
-                {{#if B.data.created_time}}
-                  <Hds::Text::Body @color='faint'>
-                    <time datetime={{format-date-iso B.data.created_time}}>
-                      {{format-date-iso B.data.created_time}}
-                    </time>
-                  </Hds::Text::Body>
-                {{/if}}
-              </B.Td>
-              {{! Status }}
-              <B.Td>
-                <SessionRecording::Status @status={{B.data.state}} />
-              </B.Td>
-              {{! User }}
-              <B.Td>
-                <div
-                  class='session-recording-list-cell-item hds-font-weight-semibold'
-                >
-                  <span><Hds::Icon @name='user' @isInline={{true}} /></span>
-                  <span>{{B.data.userDisplayName}}</span>
-                </div>
-              </B.Td>
-              {{! Target }}
-              <B.Td>
-                <div
-                  class='session-recording-list-cell-item target-column hds-font-weight-semibold'
-                >
-                  <span>
-                    <Hds::Icon @name='target' @isInline={{true}} />
-                    {{B.data.create_time_values.target.name}}
-                  </span>
-                  <span>
-                    <Hds::Badge
-                      @text={{B.data.targetScopeDisplayName}}
-                      @icon='grid'
-                    />
-                  </span>
-                </div>
-              </B.Td>
-              {{! Duration }}
-              <B.Td>
-                {{#if B.data.duration}}
+            {{#each @model.sessionRecordings as |data|}}
+              <B.Tr>
+                {{! Created Time }}
+                <B.Td>
+                  {{#if data.created_time}}
+                    <Hds::Text::Body @color='faint'>
+                      <time datetime={{format-date-iso data.created_time}}>
+                        {{format-date-iso data.created_time}}
+                      </time>
+                    </Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                {{! Status }}
+                <B.Td>
+                  <SessionRecording::Status @status={{data.state}} />
+                </B.Td>
+                {{! User }}
+                <B.Td>
                   <div
-                    class='session-recording-list-cell-item hds-foreground-faint'
+                    class='session-recording-list-cell-item hds-font-weight-semibold'
                   >
-                    <span><Hds::Icon @name='clock' @isInline={{true}} /></span>
+                    <span><Hds::Icon @name='user' @isInline={{true}} /></span>
+                    <span>{{data.userDisplayName}}</span>
+                  </div>
+                </B.Td>
+                {{! Target }}
+                <B.Td>
+                  <div
+                    class='session-recording-list-cell-item target-column hds-font-weight-semibold'
+                  >
                     <span>
-                      {{format-time-duration B.data.duration}}
+                      <Hds::Icon @name='target' @isInline={{true}} />
+                      {{data.create_time_values.target.name}}
+                    </span>
+                    <span>
+                      <Hds::Badge
+                        @text={{data.targetScopeDisplayName}}
+                        @icon='grid'
+                      />
                     </span>
                   </div>
-                {{/if}}
-              </B.Td>
-              <B.Td align='right'>
-                {{#if (can 'read session-recording' B.data)}}
-                  <Hds::Button
-                    @icon='arrow-right'
-                    @iconPosition='trailing'
-                    @color='secondary'
-                    @text={{t 'actions.view'}}
-                    @route='scopes.scope.session-recordings.session-recording.channels-by-connection'
-                    @model={{B.data.id}}
-                  />
-                {{/if}}
-              </B.Td>
-            </B.Tr>
+                </B.Td>
+                {{! Duration }}
+                <B.Td>
+                  {{#if data.duration}}
+                    <div
+                      class='session-recording-list-cell-item hds-foreground-faint'
+                    >
+                      <span><Hds::Icon
+                          @name='clock'
+                          @isInline={{true}}
+                        /></span>
+                      <span>
+                        {{format-time-duration data.duration}}
+                      </span>
+                    </div>
+                  {{/if}}
+                </B.Td>
+                <B.Td align='right'>
+                  {{#if (can 'read session-recording' data)}}
+                    <Hds::Button
+                      @icon='arrow-right'
+                      @iconPosition='trailing'
+                      @color='secondary'
+                      @text={{t 'actions.view'}}
+                      @route='scopes.scope.session-recordings.session-recording.channels-by-connection'
+                      @model={{data.id}}
+                    />
+                  {{/if}}
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination
