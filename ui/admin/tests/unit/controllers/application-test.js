@@ -14,6 +14,7 @@ module('Unit | Controller | application', function (hooks) {
   let featureEdition;
   let featuresService;
   let session;
+  let router;
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
@@ -21,6 +22,7 @@ module('Unit | Controller | application', function (hooks) {
     featureEdition = this.owner.lookup('service:featureEdition');
     featuresService = this.owner.lookup('service:features');
     session = this.owner.lookup('service:session');
+    router = this.owner.lookup('service:router');
   });
 
   test('it exists', function (assert) {
@@ -57,5 +59,56 @@ module('Unit | Controller | application', function (hooks) {
     controller.toggleFeature('ssh-target');
 
     assert.true(featuresService.isEnabled('ssh-target'));
+  });
+
+  test('customRouteChangeValidator returns true when transitioning between different routes', function (assert) {
+    const transition = {
+      from: router.recognize('/scopes/global/scopes'),
+      to: router.recognize('/scopes/global/auth-methods'),
+    };
+
+    assert.true(controller.customRouteChangeValidator(transition));
+
+    transition.from = undefined;
+
+    assert.true(controller.customRouteChangeValidator(transition));
+  });
+
+  test('customRouteChangeValidator returns true when transitioning between different routes with the same name', function (assert) {
+    const transition = {
+      from: router.recognize('/scopes/global/scopes'),
+      to: router.recognize('/scopes/o_12345/scopes'),
+    };
+
+    assert.true(controller.customRouteChangeValidator(transition));
+  });
+
+  test('customRouteChangeValidator returns false when transitioning between the same route', function (assert) {
+    const transition = {
+      from: router.recognize('/scopes/global/scopes'),
+      to: router.recognize('/scopes/global/scopes'),
+    };
+
+    assert.false(controller.customRouteChangeValidator(transition));
+
+    transition.from = router.recognize('/scopes');
+    transition.to = router.recognize('/scopes');
+
+    assert.false(controller.customRouteChangeValidator(transition));
+  });
+
+  test('customRouteChangeValidator returns false when transitioning between the same route with query params', function (assert) {
+    const transition = {
+      from: router.recognize('/scopes/global/scopes?search=xyz'),
+      to: router.recognize('/scopes/global/scopes'),
+    };
+
+    assert.strictEqual(transition.from.queryParams.search, 'xyz');
+    assert.false(controller.customRouteChangeValidator(transition));
+
+    transition.to = router.recognize('/scopes/global/scopes?search=xy');
+
+    assert.strictEqual(transition.to.queryParams.search, 'xy');
+    assert.false(controller.customRouteChangeValidator(transition));
   });
 });

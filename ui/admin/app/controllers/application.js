@@ -8,6 +8,7 @@ import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 import { defaultValidator } from 'ember-a11y-refocus';
+import { paramValueFinder } from 'admin/utils/param-value-finder';
 
 const THEMES = [
   {
@@ -119,12 +120,20 @@ export default class ApplicationController extends Controller {
    * @returns {boolean}
    */
   customRouteChangeValidator(transition) {
-    const urlHasQueryParams = /^[\S]+[?][\S]+$/;
-    if (
-      transition.to?.name === transition.from?.name &&
-      urlHasQueryParams.test(this.router.currentURL)
-    ) {
-      return false;
+    if (!transition.to || !transition.from) {
+      return true;
+    }
+    if (transition.to.name === transition.from.name) {
+      const toParams = paramValueFinder(
+        transition.to.localName,
+        transition.to.parent,
+      );
+      const fromParams = paramValueFinder(
+        transition.from.localName,
+        transition.from.parent,
+      );
+      // Return false to prevent refocus when routes have equivalent dynamic segments (params).
+      return JSON.stringify(toParams) !== JSON.stringify(fromParams);
     }
     return defaultValidator(transition);
   }
