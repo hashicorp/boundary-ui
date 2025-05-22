@@ -272,6 +272,28 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
+  test.each(
+    'user sees correct button text for a',
+    {
+      'target with address': { target: 'target', expectedText: 'Connect' },
+      'target with one host': {
+        target: 'targetWithOneHost',
+        expectedText: 'Connect',
+      },
+      'target with two hosts': {
+        target: 'targetWithTwoHosts',
+        expectedText: 'Quick Connect',
+      },
+    },
+    async function (assert, input) {
+      await visit(urls.targets);
+
+      await click(`[href="${urls[input.target]}"]`);
+
+      assert.dom(TARGET_CONNECT_BUTTON).hasText(input.expectedText);
+    },
+  );
+
   test('user can visit target details screen without read permissions for host-set', async function (assert) {
     assert.expect(1);
     this.server.get('/host-sets/:id', () => new Response(403));
