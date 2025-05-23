@@ -46,50 +46,68 @@
       </Hds::SegmentedGroup>
       {{#if @model.roles}}
         <Hds::Table
-          @model={{@model.roles}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'resources.role.titles.grants-applied'))
-            (hash label=(t 'form.id.label'))
-          }}
           @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.name.label'}}
+              </H.ThSort>
+              <H.Th>
+                {{t 'resources.role.titles.grants-applied'}}
+              </H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.id.label'}}
+              </H.ThSort>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            <B.Tr data-test-role-row={{B.data.id}}>
-              <B.Td>
-                {{#if (can 'read role' B.data)}}
-                  <LinkTo @route='scopes.scope.roles.role' @model={{B.data.id}}>
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                {{#if (includes this.grantScopeThis B.data.grant_scope_ids)}}
-                  <Hds::TooltipButton
-                    @text={{t 'resources.role.messages.tooltips.yes'}}
-                  >
-                    <Hds::Badge @text={{t 'actions.yes'}} @color='success' />
-                  </Hds::TooltipButton>
-                {{else}}
-                  <Hds::TooltipButton
-                    @text={{t 'resources.role.messages.tooltips.no'}}
-                  >
-                    <Hds::Badge @text={{t 'actions.no'}} />
-                  </Hds::TooltipButton>
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
+            {{#each @model.roles as |data|}}
+              <B.Tr data-test-role-row={{data.id}}>
+                <B.Td>
+                  {{#if (can 'read role' data)}}
+                    <LinkTo @route='scopes.scope.roles.role' @model={{data.id}}>
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p' class='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{#if (includes this.grantScopeThis data.grant_scope_ids)}}
+                    <Hds::TooltipButton
+                      @text={{t 'resources.role.messages.tooltips.yes'}}
+                    >
+                      <Hds::Badge @text={{t 'actions.yes'}} @color='success' />
+                    </Hds::TooltipButton>
+                  {{else}}
+                    <Hds::TooltipButton
+                      @text={{t 'resources.role.messages.tooltips.no'}}
+                    >
+                      <Hds::Badge @text={{t 'actions.no'}} />
+                    </Hds::TooltipButton>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

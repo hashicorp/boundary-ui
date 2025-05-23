@@ -11,6 +11,7 @@ import {
   fillIn,
   waitUntil,
   focus,
+  currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -19,6 +20,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | roles | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -151,4 +153,97 @@ module('Acceptance | roles | list', function (hooks) {
       .dom(selectors.ROLE_TOOLTIP_CONTENT(instances.role2.id))
       .hasText('The grants on this role have been applied to this scope.');
   });
+
+  test('roles table is sorted by created_time descending by default', async function (assert) {
+    this.server.schema.roles.all().destroy();
+
+    const years = ['2026', '2025', '2024', '2023'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('role', {
+        scope: instances.scopes.org,
+        id: `r_${year}`,
+        name: `Role ${year}`,
+        created_time: `${year}-01-01T00:00:00Z`,
+      });
+    });
+
+    await visit(urls.roles);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    assert.dom(commonSelectors.TABLE_ROW(1)).containsText('Role 2026');
+    assert.dom(commonSelectors.TABLE_ROW(2)).containsText('Role 2025');
+    assert.dom(commonSelectors.TABLE_ROW(3)).containsText('Role 2024');
+    assert.dom(commonSelectors.TABLE_ROW(4)).containsText('Role 2023');
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Beta', 'Delta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['r_0001', 'r_0010', 'r_0100', 'r_1000', 'r_10000'],
+        },
+        expectedAscendingSort: [
+          'r_0001',
+          'r_0010',
+          'r_0100',
+          'r_1000',
+          'r_10000',
+        ],
+        column: 3,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.roles.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('role', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.org,
+        });
+      });
+
+      await visit(urls.roles);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
