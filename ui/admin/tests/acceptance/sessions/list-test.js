@@ -344,6 +344,10 @@ module('Acceptance | sessions | list', function (hooks) {
       .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: anotherProject.sessionCount });
 
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(anotherProject.user.name);
+    });
+
     await visit(`/scopes/${project.scope.id}/sessions`);
     await click(commonSelectors.FILTER_DROPDOWN('user'));
     assert
@@ -352,6 +356,9 @@ module('Acceptance | sessions | list', function (hooks) {
     assert
       .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: project.sessionCount });
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(project.user.name);
+    });
   });
 
   test('sessions show correct target filters when switching projects', async function (assert) {
@@ -407,11 +414,17 @@ module('Acceptance | sessions | list', function (hooks) {
     assert
       .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProjectRefs.target.id))
       .isVisible();
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(anotherProjectRefs.target.name);
+    });
 
     await visit(`/scopes/${projectRefs.scope.id}/sessions`);
     await click(commonSelectors.FILTER_DROPDOWN('target'));
     assert
       .dom(commonSelectors.FILTER_DROPDOWN_ITEM(projectRefs.target.id))
       .isVisible();
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(projectRefs.target.name);
+    });
   });
 });
