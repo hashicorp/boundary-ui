@@ -7,7 +7,6 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -42,7 +41,6 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     },
   };
 
-  @tracked
   scopeContext;
 
   // =methods
