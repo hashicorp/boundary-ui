@@ -30,6 +30,8 @@ export default class ScopesScopeSessionsIndexController extends Controller {
     { status: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked search;
@@ -42,6 +44,8 @@ export default class ScopesScopeSessionsIndexController extends Controller {
   ];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   /**
    * Returns object of filters to be used for displaying selected filters
@@ -114,5 +118,17 @@ export default class ScopesScopeSessionsIndexController extends Controller {
   @notifySuccess('notifications.canceled-success')
   async cancelSession(session) {
     await session.cancelSession();
+  }
+
+  /**
+   * Sets sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
