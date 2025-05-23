@@ -172,9 +172,8 @@ test.describe('Targets tests', () => {
         await authedPage.getByRole('button', { name: host }).click();
       } else {
         await authedPage
-          .getByRole('table')
-          .getByRole('cell', { name: host })
-          .locator('..')
+          .getByRole('row')
+          .filter({ hasText: host })
           .getByRole('button', { name: 'Connect' })
           .click();
       }
