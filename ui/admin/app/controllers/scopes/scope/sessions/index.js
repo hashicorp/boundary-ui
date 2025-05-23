@@ -50,8 +50,8 @@ export default class ScopesScopeSessionsIndexController extends Controller {
   get filters() {
     return {
       allFilters: {
-        users: this.model.associatedUsers,
-        targets: this.model.associatedTargets,
+        users: this.model.scopeContext.users,
+        targets: this.model.scopeContext.targets,
         status: this.sessionStatusOptions,
       },
       selectedFilters: {
