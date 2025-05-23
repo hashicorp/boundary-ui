@@ -301,13 +301,13 @@ module('Acceptance | sessions | list', function (hooks) {
   test('sessions show correct user filters when switching projects', async function (assert) {
     this.server.schema.sessions.all().destroy();
 
-    const anotherProject = {
+    const anotherProjectRefs = {
       sessionCount: 4,
       user: instances.dev,
       scope: instances.scopes.anotherProject,
     };
 
-    const project = {
+    const projectRefs = {
       sessionCount: 2,
       user: instances.admin,
       scope: instances.scopes.project,
@@ -315,49 +315,49 @@ module('Acceptance | sessions | list', function (hooks) {
 
     this.server.createList(
       'session',
-      anotherProject.sessionCount,
+      anotherProjectRefs.sessionCount,
       {
         status: 'active',
-        scope: anotherProject.scope,
-        user: anotherProject.user,
+        scope: anotherProjectRefs.scope,
+        user: anotherProjectRefs.user,
       },
       'withAssociations',
     );
 
     instances.sessions = this.server.createList(
       'session',
-      project.sessionCount,
+      projectRefs.sessionCount,
       {
         status: 'active',
-        scope: project.scope,
-        user: project.user,
+        scope: projectRefs.scope,
+        user: projectRefs.user,
       },
       'withAssociations',
     );
 
-    await visit(`/scopes/${anotherProject.scope.id}/sessions`);
+    await visit(`/scopes/${anotherProjectRefs.scope.id}/sessions`);
     await click(commonSelectors.FILTER_DROPDOWN('user'));
     assert
-      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProject.user.id))
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProjectRefs.user.id))
       .isVisible();
     assert
       .dom(commonSelectors.TABLE_ROWS)
-      .exists({ count: anotherProject.sessionCount });
+      .exists({ count: anotherProjectRefs.sessionCount });
 
     findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
-      assert.dom(row).includesText(anotherProject.user.name);
+      assert.dom(row).includesText(anotherProjectRefs.user.name);
     });
 
-    await visit(`/scopes/${project.scope.id}/sessions`);
+    await visit(`/scopes/${projectRefs.scope.id}/sessions`);
     await click(commonSelectors.FILTER_DROPDOWN('user'));
     assert
-      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(project.user.id))
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(projectRefs.user.id))
       .isVisible();
     assert
       .dom(commonSelectors.TABLE_ROWS)
-      .exists({ count: project.sessionCount });
+      .exists({ count: projectRefs.sessionCount });
     findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
-      assert.dom(row).includesText(project.user.name);
+      assert.dom(row).includesText(projectRefs.user.name);
     });
   });
 
