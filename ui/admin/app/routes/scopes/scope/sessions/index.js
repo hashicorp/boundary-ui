@@ -7,6 +7,7 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
 
 export default class ScopesScopeSessionsIndexRoute extends Route {
   // =services
@@ -41,9 +42,8 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     },
   };
 
-  allSessions;
-  associatedUsers = [];
-  associatedTargets = [];
+  @tracked
+  scopeContext;
 
   // =methods
 
@@ -94,104 +94,111 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       const sessions = await this.store.query('session', queryOptions);
       const totalItems = sessions.meta?.totalItems;
 
-      // Query all sessions, users, and targets for defining filtering values if entering route for the first time
-      if (!this.allSessions) {
-        await this.getAllSessions(scope_id);
-      }
-      if (this.associatedUsers.length === 0) {
-        await this.getAssociatedUsers(scope);
-      }
-      if (this.associatedTargets.length === 0) {
-        await this.getAssociatedTargets(scope);
+      // refresh the saved current scope context when the scope changes or if it has not been previously set
+      if (this.scopeContext?.scopeId !== scope.id) {
+        this.scopeContext = await this.getScopeContext(scope);
       }
 
       return {
         sessions,
-        allSessions: this.allSessions,
-        associatedUsers: this.associatedUsers,
-        associatedTargets: this.associatedTargets,
+        scopeContext: this.scopeContext,
         totalItems,
       };
     },
   );
 
   /**
-   * Get all the sessions but only load them once when entering the route.
-   * @param scope_id
-   * @returns {Promise<void>}
+   *
+   * @param {*} scope
+   * @returns {Promise<{ scopeId: string, allSessions: [SessionModel], users: [UserModel], targets: [TargetModel] }>}
    */
-  async getAllSessions(scope_id) {
-    const allSessionsQuery = {
-      scope_id,
-      include_terminated: true,
-      query: { filters: { scope_id: [{ equals: scope_id }] } },
-    };
-    this.allSessions = await this.store.query('session', allSessionsQuery, {
-      pushToStore: false,
-    });
-  }
-
-  /**
-   * Get all the users but only load them once when entering the route.
-   * @param scope
-   * @returns {Promise<void>}
-   */
-  async getAssociatedUsers(scope) {
+  async getScopeContext(scope) {
     const orgScope = await this.store.findRecord('scope', scope.scope.id);
     const globalScope = await this.store.findRecord('scope', 'global');
 
-    if (
-      this.can.can('list model', globalScope, { collection: 'users' }) &&
-      this.can.can('list model', orgScope, { collection: 'users' })
-    ) {
-      const uniqueSessionUserIds = new Set(
-        this.allSessions
-          .filter((session) => session.user_id)
-          .map((session) => session.user_id),
-      );
-      const filters = {
-        id: { values: [] },
-      };
-      uniqueSessionUserIds.forEach((userId) => {
-        filters.id.values.push({ equals: userId });
-      });
-      const associatedUsersQuery = {
-        scope_id: 'global',
-        recursive: true,
-        query: { filters },
-      };
-      this.associatedUsers = await this.store.query(
-        'user',
-        associatedUsersQuery,
-      );
-    }
-  }
-
-  /**
-   * Get all the targets but only load them once when entering the route.
-   * @param scope
-   * @returns {Promise<void>}
-   */
-  async getAssociatedTargets(scope) {
-    if (this.can.can('list model', scope, { collection: 'targets' })) {
-      const uniqueSessionTargetIds = new Set(
-        this.allSessions
-          .filter((session) => session.target_id)
-          .map((session) => session.target_id),
-      );
-      const filters = { id: { values: [] } };
-      uniqueSessionTargetIds.forEach((targetId) => {
-        filters.id.values.push({ equals: targetId });
-      });
-      const associatedTargetsQuery = {
+    //
+    // `allSessions`
+    //
+    const allSessions = await this.store.query(
+      'session',
+      {
         scope_id: scope.id,
-        query: { filters },
-      };
-      this.associatedTargets = await this.store.query(
-        'target',
-        associatedTargetsQuery,
-      );
+        include_terminated: true,
+        query: { filters: { scope_id: [{ equals: scope.id }] } },
+      },
+      {
+        pushToStore: false,
+      },
+    );
+
+    //
+    // `users`
+    //
+    let users = [];
+    {
+      if (
+        this.can.can('list model', globalScope, { collection: 'users' }) &&
+        this.can.can('list model', orgScope, { collection: 'users' })
+      ) {
+        const uniqueSessionUserIds = [
+          ...new Set(
+            allSessions
+              .filter((session) => session.user_id)
+              .map((session) => session.user_id),
+          ),
+        ];
+
+        const filters = {
+          id: {
+            values: uniqueSessionUserIds.map((userId) => ({
+              equals: userId,
+            })),
+          },
+        };
+
+        users = await this.store.query('user', {
+          scope_id: 'global',
+          recursive: true,
+          query: { filters },
+        });
+      }
     }
+
+    //
+    // `targets`
+    //
+    let targets = [];
+    {
+      if (this.can.can('list model', scope, { collection: 'targets' })) {
+        const uniqueSessionTargetIds = [
+          ...new Set(
+            allSessions
+              .filter((session) => session.target_id)
+              .map((session) => session.target_id),
+          ),
+        ];
+
+        const filters = {
+          id: {
+            values: uniqueSessionTargetIds.map((targetId) => ({
+              equals: targetId,
+            })),
+          },
+        };
+
+        targets = await this.store.query('target', {
+          scope_id: scope.id,
+          query: { filters },
+        });
+      }
+    }
+
+    return Object.freeze({
+      scopeId: scope.id,
+      allSessions,
+      users,
+      targets,
+    });
   }
 
   // =actions
@@ -201,12 +208,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
    */
   @action
   async refreshAll() {
-    const scope = this.modelFor('scopes.scope');
-
-    await this.getAllSessions(scope.id);
-    await this.getAssociatedUsers(scope);
-    await this.getAssociatedTargets(scope);
-
+    this.scopeContext = undefined;
     return super.refresh(...arguments);
   }
 }

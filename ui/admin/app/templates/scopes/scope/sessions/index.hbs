@@ -20,7 +20,7 @@
   </page.header>
 
   <page.body class='search-filtering'>
-    {{#if @model.allSessions}}
+    {{#if @model.scopeContext.allSessions}}
       <div class='search-filtering-toolbar'>
         <Hds::SegmentedGroup data-test-sessions-bar as |S|>
           <S.TextInput
@@ -30,12 +30,12 @@
             aria-label={{t 'actions.search'}}
             {{on 'input' this.handleSearchInput}}
           />
-          {{#if @model.associatedUsers}}
+          {{#if @model.scopeContext.users}}
             <S.Generic>
               <Dropdown
                 name='user'
                 @toggleText={{t 'resources.user.title'}}
-                @itemOptions={{@model.associatedUsers}}
+                @itemOptions={{@model.scopeContext.users}}
                 @checkedItems={{this.users}}
                 @applyFilter={{fn this.applyFilter 'users'}}
                 @isSearchable={{true}}
@@ -53,12 +53,12 @@
               </Dropdown>
             </S.Generic>
           {{/if}}
-          {{#if @model.associatedTargets}}
+          {{#if @model.scopeContext.targets}}
             <S.Generic>
               <Dropdown
                 name='target'
                 @toggleText={{t 'resources.target.title'}}
-                @itemOptions={{@model.associatedTargets}}
+                @itemOptions={{@model.scopeContext.targets}}
                 @checkedItems={{this.targets}}
                 @applyFilter={{fn this.applyFilter 'targets'}}
                 @isSearchable={{true}}
