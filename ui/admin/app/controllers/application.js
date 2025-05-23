@@ -7,6 +7,8 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { defaultValidator } from 'ember-a11y-refocus';
+import { paramValueFinder } from 'admin/utils/param-value-finder';
 
 const THEMES = [
   {
@@ -33,13 +35,18 @@ export default class ApplicationController extends Controller {
   @service router;
 
   /**
-   * Returns available themes
+   * Returns available themes.
    * @type {array}
    */
   get themes() {
     return THEMES;
   }
 
+  /**
+   * Shows side navigation only for routes nested under a scope
+   * and if user has been authenticated.
+   * @type {boolean}
+   */
   get showSideNav() {
     return (
       this.router.currentRouteName.startsWith('scopes.scope') &&
@@ -94,7 +101,7 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   *
+   * Toggles on/off specified features.
    * @param {string} feature
    */
   @action
@@ -104,5 +111,30 @@ export default class ApplicationController extends Controller {
     } else {
       this.features.enable(feature);
     }
+  }
+
+  /**
+   * Add custom route change validation to prevent refocus when
+   * user is attempting to search, filter, or sort.
+   * @param {object} transition
+   * @returns {boolean}
+   */
+  customRouteChangeValidator(transition) {
+    if (!transition.to || !transition.from) {
+      return true;
+    }
+    if (transition.to.name === transition.from.name) {
+      const toParams = paramValueFinder(
+        transition.to.localName,
+        transition.to.parent,
+      );
+      const fromParams = paramValueFinder(
+        transition.from.localName,
+        transition.from.parent,
+      );
+      // Return false to prevent refocus when routes have equivalent dynamic segments (params).
+      return JSON.stringify(toParams) !== JSON.stringify(fromParams);
+    }
+    return defaultValidator(transition);
   }
 }
