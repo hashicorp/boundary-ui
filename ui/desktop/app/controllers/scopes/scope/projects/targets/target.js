@@ -20,10 +20,22 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
 
   queryParams = [{ isConnecting: { type: 'boolean' } }];
 
+  @tracked page = 1;
+  @tracked pageSize = 10;
+  @tracked totalItems = this.model.hosts.length;
+  @tracked paginatedHosts = this.paginateHosts();
+
   @tracked isConnecting = false;
   isConnectionError = false;
 
   // =methods
+
+  paginateHosts() {
+    return this.model.hosts.slice(
+      (this.page - 1) * this.pageSize,
+      this.page * this.pageSize,
+    );
+  }
 
   /**
    * Connect method that calls parent connect method and handles
@@ -47,5 +59,20 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
           this.isConnectionError = false;
         });
     }
+  }
+
+  @action
+  async handlePageChange(page) {
+    this.page = page;
+
+    this.paginatedHosts = this.paginateHosts();
+  }
+
+  @action
+  async handlePageSizeChange(pageSize) {
+    this.page = 1;
+    this.pageSize = pageSize;
+
+    this.paginatedHosts = this.paginateHosts();
   }
 }
