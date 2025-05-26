@@ -4,11 +4,12 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, waitFor, fillIn } from '@ember/test-helpers';
+import { visit, click, waitFor, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { faker } from '@faker-js/faker';
 import {
   TYPE_AUTH_METHOD_PASSWORD,
   TYPE_AUTH_METHOD_OIDC,
@@ -173,4 +174,106 @@ module('Acceptance | auth-methods | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.oidcAuthMethod)).isNotVisible();
     assert.dom(commonSelectors.HREF(urls.passwordAuthMethod)).isVisible();
   });
+
+  test('auth-methods table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.authMethods.all().destroy();
+    const years = ['2006', '2005', '2004', '2003'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('auth-method', {
+        scope: instances.scopes.org,
+        type: TYPE_AUTH_METHOD_PASSWORD,
+        created_time: `${year}-01-01T00:00:00Z`,
+        name: `Auth-method ${year}`,
+      });
+    });
+
+    await visit(urls.authMethods);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+
+    years.forEach((year, index) => {
+      // nth-child index starts at 1
+      assert
+        .dom(commonSelectors.TABLE_ROW(index + 1))
+        .containsText(`Auth-method ${year}`);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Beta', 'Delta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on type': {
+        attribute: {
+          key: 'type',
+          values: ['Password', 'Oidc', 'Oidc', 'Password', 'Ldap'],
+        },
+        expectedAscendingSort: ['Ldap', 'Oidc', 'Oidc', 'Password', 'Password'],
+        column: 2,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['am_1000', 'am_0001', 'am_0100', 'am_0010'],
+        },
+        expectedAscendingSort: ['am_0001', 'am_0010', 'am_0100', 'am_1000'],
+        column: 3,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.authMethods.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('auth-method', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.org,
+        });
+      });
+
+      await visit(urls.authMethods);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        console.log('Expected: ', expected);
+        console.log('Index: ', index);
+        // nth-child index starts at 1
+        console.log('Content: ', commonSelectors.TABLE_ROW(index + 1));
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
