@@ -268,10 +268,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
         .isVisible();
 
       input.expectedAscendingSort.toReversed().forEach((expected, index) => {
-        console.log('Expected: ', expected);
-        console.log('Index: ', index);
         // nth-child index starts at 1
-        console.log('Content: ', commonSelectors.TABLE_ROW(index + 1));
         assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
       });
     },
