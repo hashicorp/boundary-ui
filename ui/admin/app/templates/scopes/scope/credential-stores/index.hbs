@@ -56,49 +56,65 @@
 
       {{#if @model.credentialStores}}
         <Hds::Table
-          @model={{@model.credentialStores}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-          }}
           @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'type'}}
+                @sortOrder={{if (eq 'type' H.sortBy) H.sortOrder}}
+              >{{t 'form.type.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read credential-store' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.credential-stores.credential-store'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
+            {{#each @model.credentialStores as |data|}}
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read credential-store' data)}}
+                    <LinkTo
+                      @route='scopes.scope.credential-stores.credential-store'
+                      @model={{data.id}}
+                    >
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    <Hds::Text::Body @tag='p'>
+                      {{data.displayName}}
+                    </Hds::Text::Body>
+                  {{/if}}
                   <Hds::Text::Body @tag='p'>
-                    {{B.data.displayName}}
+                    {{data.description}}
                   </Hds::Text::Body>
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                <Hds::Badge
-                  @text={{t
-                    (concat 'resources.credential-store.types.' B.data.type)
-                  }}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
+                </B.Td>
+                <B.Td>
+                  <Hds::Badge
+                    @text={{t
+                      (concat 'resources.credential-store.types.' data.type)
+                    }}
+                  />
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
+
         <Rose::Pagination
           @totalItems={{@model.totalItems}}
           @currentPage={{this.page}}
