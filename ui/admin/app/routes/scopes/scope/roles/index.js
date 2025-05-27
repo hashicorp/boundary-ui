@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 export default class ScopesScopeRolesIndexRoute extends Route {
   // =attributes
@@ -48,6 +49,27 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  // This is what a custom name sort would look like if we don't handle it by default
+  // in the sort-results util instead.
+  // customNameSort = (recordA, recordB) => {
+  //   let a = recordA.attributes.name;
+  //   let b = recordB.attributes.name;
+  //   a = a ? a : recordA.id;
+  //   b = b ? b : recordB.id;
+  //   return String(a).localeCompare(b);
+  // };
+  customGrantsAppliedSort = (recordA, recordB) => {
+    const a = recordA.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
+    const b = recordB.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
+    if (a === b) {
+      return 0;
+    } else if (a) {
+      return 1;
+    } else {
+      return -1;
+    }
+  };
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -75,15 +97,11 @@ export default class ScopesScopeRolesIndexRoute extends Route {
           attribute: sortAttribute,
           direction: sortDirection,
         };
-        if (sortAttribute === 'name') {
-          sort.customSortFunction = (recordA, recordB) => {
-            let a = recordA.attributes.name;
-            let b = recordB.attributes.name;
-            a = a ? a : recordA.id;
-            b = b ? b : recordB.id;
-            console.log('test ', a, b);
-            return String(a).localeCompare(b);
-          };
+        // if (sortAttribute === 'name') {
+        //   sort.customSortFunction = this.customNameSort;
+        // }
+        if (sortAttribute === 'grants_applied') {
+          sort.customSortFunction = this.customGrantsAppliedSort;
         }
         roles = await this.store.query('role', {
           scope_id,

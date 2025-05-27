@@ -142,7 +142,10 @@
                 @sortOrder={{if (eq 'state' H.sortBy) H.sortOrder}}
               >{{t 'resources.session-recording.form.status.label'}}</H.ThSort>
               <H.Th>{{t 'resources.session-recording.form.user.label'}}</H.Th>
-              <H.Th>{{t 'resources.session-recording.form.target.label'}}</H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'target'}}
+                @sortOrder={{if (eq 'target' H.sortBy) H.sortOrder}}
+              >{{t 'resources.session-recording.form.target.label'}}</H.ThSort>
               <H.Th>{{t
                   'resources.session-recording.form.duration.label'
                 }}</H.Th>

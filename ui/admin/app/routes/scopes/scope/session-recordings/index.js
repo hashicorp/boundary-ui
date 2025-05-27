@@ -80,6 +80,14 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       String(this.stateMap[recordB.attributes.state]),
     );
 
+  customTargetSort = (recordA, recordB) => {
+    const targetA = recordA.attributes?.create_time_values?.target;
+    const targetB = recordB.attributes?.create_time_values?.target;
+    const a = targetA?.name ? targetA?.name : targetA?.id;
+    const b = targetB?.name ? targetB?.name : targetB?.id;
+    return String(a).localeCompare(b);
+  };
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -131,6 +139,9 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         };
         if (sortAttribute === 'state') {
           sort.customSortFunction = this.customStateSort;
+        }
+        if (sortAttribute === 'target') {
+          sort.customSortFunction = this.customTargetSort;
         }
         const queryOptions = {
           scope_id,

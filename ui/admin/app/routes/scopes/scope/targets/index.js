@@ -50,6 +50,8 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     },
   };
 
+  uniqueTargetIdsWithSessions;
+
   // =methods
 
   /**
@@ -68,6 +70,17 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     String(this.typeMap[recordA.attributes.type]).localeCompare(
       String(this.typeMap[recordB.attributes.type]),
     );
+  customActiveSessionsSort = (recordA, recordB) => {
+    const a = this.uniqueTargetIdsWithSessions.has(recordA.id);
+    const b = this.uniqueTargetIdsWithSessions.has(recordB.id);
+    if (a === b) {
+      return 0;
+    } else if (a) {
+      return 1;
+    } else {
+      return -1;
+    }
+  };
 
   retrieveData = restartableTask(
     async ({
@@ -96,6 +109,11 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         filters.type.push({ equals: type });
       });
 
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
+
       if (this.can.can('list model', scope, { collection: 'sessions' })) {
         const sessions = await this.store.query('session', {
           scope_id,
@@ -110,16 +128,15 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
           },
         });
         this.addActiveSessionFilters(filters, availableSessions, sessions);
+        if (sortAttribute === 'active_sessions') {
+          sort.customSortFunction = this.customActiveSessionsSort;
+        }
       }
-
+      console.log('sessions ', this.uniqueTargetIdsWithSessions);
       let targets;
       let totalItems = 0;
       let doTargetsExist = false;
       if (this.can.can('list model', scope, { collection: 'targets' })) {
-        const sort = {
-          attribute: sortAttribute,
-          direction: sortDirection,
-        };
         if (sortAttribute === 'type') {
           sort.customSortFunction = this.customTypeSort;
         }
@@ -171,7 +188,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
    * @param sessions
    */
   addActiveSessionFilters = (filters, availableSessions, sessions) => {
-    const uniqueTargetIdsWithSessions = new Set(
+    this.uniqueTargetIdsWithSessions = new Set(
       sessions.map((session) => session.target_id),
     );
 
@@ -183,13 +200,13 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     availableSessions.forEach((availability) => {
       if (availability === 'yes') {
         filters.id.logicalOperator = 'or';
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
+        this.uniqueTargetIdsWithSessions.forEach((targetId) => {
           filters.id.values.push({ equals: targetId });
         });
 
         // If there's no sessions just set it to a dummy value
         // so the search returns no results
-        if (uniqueTargetIdsWithSessions.size === 0) {
+        if (this.uniqueTargetIdsWithSessions.size === 0) {
           filters.id.values.push({ equals: 'none' });
         }
       }
@@ -197,7 +214,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       if (availability === 'no') {
         filters.id.logicalOperator = 'and';
 
-        uniqueTargetIdsWithSessions.forEach((targetId) => {
+        this.uniqueTargetIdsWithSessions.forEach((targetId) => {
           filters.id.values.push({ notEquals: targetId });
         });
       }
