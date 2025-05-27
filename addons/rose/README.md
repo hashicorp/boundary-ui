@@ -77,14 +77,6 @@ Before submitting your work, be sure to run auto-formatters
 To build a new component, start by generating it on the command line with
 `ember g component rose/component-name`.
 
-## Using Components
-
-A few of the components have additional ember package dependencies that need to be installed before usage.
-
-| Component      | Dependency     |
-| -------------- | -------------- |
-| Rose::Dropdown | ember-modifier |
-
 ## Running tests
 
 - `yarn test` – Runs the test suite on the current Ember version
