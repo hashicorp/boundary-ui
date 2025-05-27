@@ -34,20 +34,6 @@ module('Integration | Component | rose/header', function (hooks) {
     assert.notOk(find('.rose-header-utilities'));
   });
 
-  test('it renders with nav elements', async function (assert) {
-    await render(hbs`<Rose::Header as |header| >
-      <header.nav>
-        <div id='header-nav'></div>
-      </header.nav>
-      <Hds::Dropdown as |D|>
-        <D.ToggleButton @text="Menu" />
-        <D.Interactive @route='index'>Menu item</D.Interactive>
-        <D.Interactive @route='about'>Menu item</D.Interactive>
-      </Hds::Dropdown>
-    </Rose::Header>`);
-    assert.ok(find('.hds-dropdown'));
-  });
-
   test('it renders with utilities', async function (assert) {
     await render(hbs`<Rose::Header as |header| >
       <header.utilities />
@@ -57,9 +43,9 @@ module('Integration | Component | rose/header', function (hooks) {
     assert.ok(find('.rose-header-utilities'));
   });
 
-  test('it renders with utility elements', async function (assert) {
+  test('it renders the hds dropdown within header utilities', async function (assert) {
     await render(hbs`<Rose::Header as |header| >
-      <header.utilities as |utility| >
+      <header.utilities>
         <Hds::Dropdown as |D|>
           <D.ToggleButton @text="Menu" />
         </Hds::Dropdown>  
