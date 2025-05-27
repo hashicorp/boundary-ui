@@ -50,9 +50,6 @@
       "fs-xattr",
       "node-pty",
       "macos-alias"
-    ],
-    "overrides": {
-      "highlight.js": "^10.4.1"
-    }
+    ]
   }
 }
