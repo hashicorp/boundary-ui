@@ -789,6 +789,9 @@ importers:
       doctoc:
         specifier: ^2.2.0
         version: 2.2.0
+      ember-a11y-refocus:
+        specifier: ^4.1.4
+        version: 4.1.4
       ember-a11y-testing:
         specifier: ^7.1.2
         version: 7.1.2(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(qunit@2.24.1)(webpack@5.99.8)
