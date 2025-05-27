@@ -113,7 +113,7 @@
                 @onClickSort={{fn H.setSortBy 'id'}}
                 @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
               >{{t 'form.id.label'}}</H.ThSort>
-              <H.Th isVisuallyHidden='true'>{{t
+              <H.Th @isVisuallyHidden='true'>{{t
                   'resources.auth-method.titles.primary'
                 }}</H.Th>
               <H.Th>{{t 'titles.actions'}}</H.Th>
