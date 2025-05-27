@@ -5,22 +5,26 @@
 
 {{page-title @model.target.displayName}}
 
-<Rose::Layout::Page class='hds-migration-overrides' as |page|>
+<Rose::Layout::Page as |page|>
 
   <page.header>
     <Hds::PageHeader as |PH|>
       <PH.IconTile @color='boundary' @icon='target' />
-      <PH.Title class='target-details-header remove-margin'>
+      <PH.Title class='target-details-header'>
         {{@model.target.displayName}}
       </PH.Title>
       {{#if (can 'connect target' @model.target)}}
         <PH.Actions>
           <Hds::Button
             data-test-target-detail-connect-button
-            @text={{t 'resources.session.actions.connect'}}
+            @text={{if
+              (gt @model.hosts.length 1)
+              (t 'resources.session.actions.quick-connect')
+              (t 'resources.session.actions.connect')
+            }}
             @icon='entry-point'
             @iconPosition='trailing'
-            {{on 'click' (fn this.preConnect @model)}}
+            {{on 'click' (fn this.connect @model.target)}}
           />
         </PH.Actions>
       {{/if}}

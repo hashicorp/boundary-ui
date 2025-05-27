@@ -23,12 +23,7 @@
             class='hds-foreground-success'
             @isInline={{true}}
           />
-          <Hds::Text::Display
-            @tag='h3'
-            @size='300'
-            @weight='bold'
-            class='remove-margin'
-          >{{t
+          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>{{t
               'onboarding.success.titles.creation-success'
             }}</Hds::Text::Display>
         </span>
@@ -40,12 +35,9 @@
       {{! Download Desktop client }}
       <div class='create-resources-item'>
         <span class='create-resources-item-header'>
-          <Hds::Text::Display
-            @tag='h3'
-            @size='300'
-            @weight='bold'
-            class='remove-margin'
-          >{{t 'onboarding.success.titles.desktop'}}</Hds::Text::Display>
+          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>{{t
+              'onboarding.success.titles.desktop'
+            }}</Hds::Text::Display>
         </span>
         <Hds::Text::Body @tag='p'>
           {{t 'onboarding.success.descriptions.download'}}
@@ -67,7 +59,7 @@
 
         {{! Controller }}
         <div class='create-resources-item-controller'>
-          <Hds::Text::Display @tag='h4' class='remove-margin'>
+          <Hds::Text::Display @tag='h4'>
             {{t 'onboarding.success.titles.controller'}}
           </Hds::Text::Display>
           <Hds::Text::Body @color='faint'>{{t
@@ -83,7 +75,7 @@
 
       {{! Developers }}
       <div class='create-resources-item'>
-        <Hds::Text::Display @tag='h4' class='remove-margin'>
+        <Hds::Text::Display @tag='h4'>
           {{t 'onboarding.success.titles.developers'}}
         </Hds::Text::Display>
         <Hds::Text::Body @tag='p'>

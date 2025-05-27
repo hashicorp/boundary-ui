@@ -9,23 +9,17 @@
 .rose-layout-page {
   display: grid;
   grid-template-areas:
-    'breadcrumbs breadcrumbs breadcrumbs'
-    'header header actions'
+    'header header header'
     'navigation navigation navigation'
     'body body body';
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto 1fr;
 
-  .rose-layout-page-breadcrumbs {
-    grid-area: breadcrumbs;
-  }
-
   .rose-layout-page-header {
     grid-area: header;
     margin-bottom: sizing.rems(s);
 
-    h1,
-    h2 {
+    h1 {
       display: flex;
       align-items: center;
       gap: sizing.rems(xs);
@@ -50,32 +44,14 @@
     grid-area: body;
     width: 100%;
   }
-
-  .rose-layout-page-actions {
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-  }
 }
 
 @media (width <= (media.width(small))) {
   .rose-layout-page {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'breadcrumbs'
       'header'
-      'actions'
       'navigation'
       'body';
   }
-}
-
-// TEMPORARY: Remove this override and update '.rose-layout-page' class, once all refactor PRs for 'llb/rose_page_layout_header' are merged.
-// This is a stopgap to ensure compatibility between the new and old layouts during the migration.
-.rose-layout-page.hds-migration-overrides {
-  grid-template-areas:
-    'header header header'
-    'navigation navigation navigation'
-    'body body body';
 }

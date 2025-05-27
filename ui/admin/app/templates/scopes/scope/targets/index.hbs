@@ -3,7 +3,7 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Rose::Layout::Page class='hds-migration-overrides' as |page|>
+<Rose::Layout::Page as |page|>
 
   <page.header>
     <Hds::PageHeader as |PH|>
@@ -25,6 +25,7 @@
             <Hds::Button
               @route='scopes.scope.targets.new'
               @text={{t 'resources.target.titles.new'}}
+              data-test-new-target-button
             />
           {{/if}}
         </PH.Actions>

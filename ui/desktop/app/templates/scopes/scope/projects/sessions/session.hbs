@@ -5,12 +5,12 @@
 
 {{page-title @model.displayName}}
 
-<Rose::Layout::Page class='hds-migration-overrides' as |page|>
+<Rose::Layout::Page as |page|>
 
   <page.header>
     <Hds::PageHeader as |PH|>
       <PH.IconTile @color='boundary' @icon='terminal' />
-      <PH.Title class='remove-margin'>
+      <PH.Title>
         {{@model.displayName}}
       </PH.Title>
       <PH.Badges>
