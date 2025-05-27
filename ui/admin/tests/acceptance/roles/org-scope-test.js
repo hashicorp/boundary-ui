@@ -91,7 +91,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.role.grant_scope_ids.length });
   });
 
@@ -230,7 +230,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
@@ -245,7 +245,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('user can cancel scope keywords to add on manage scopes page', async function (assert) {
@@ -254,7 +254,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
@@ -268,7 +268,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
   });
 
   test('shows error message on scope save on manage scopes page', async function (assert) {
@@ -335,7 +335,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
@@ -360,7 +360,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('user can cancel custom scopes to add on manage org projects page', async function (assert) {
@@ -369,7 +369,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(commonSelectors.HREF(urls.roleScopes));
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
@@ -393,7 +393,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.roleScopes);
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 0 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
   });
 
   test('shows error message on custom scope save on manage org projects page', async function (assert) {

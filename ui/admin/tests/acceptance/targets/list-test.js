@@ -10,6 +10,7 @@ import {
   fillIn,
   waitFor,
   currentRouteName,
+  currentURL,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -18,22 +19,23 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-target-results]';
-  const FILTER_DROPDOWN_SELECTOR = (name) =>
-    `.search-filtering [name="${name}"] button`;
-  const FILTER_APPLY_BUTTON_SELECTOR =
-    '.search-filtering [data-test-dropdown-apply-button]';
-  const ACTIVE_SESSIONS_SELECTOR = (id) =>
-    `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
-  const SESSIONS_ID_SELECTOR = (id) =>
-    `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
+  const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
+  const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
+  const CREATED_TIME_VALUES_ARRAY = [
+    '2020-01-01T00:01:00.000Z',
+    '2020-01-01T00:00:10.000Z',
+    '2020-01-01T00:00:01.000Z',
+    '2020-01-01T00:00:00.100Z',
+    '2020-01-01T00:00:00.010Z',
+  ];
 
   const instances = {
     scopes: {
@@ -69,7 +71,7 @@ module('Acceptance | targets | list', function (hooks) {
       scope: instances.scopes.project,
     });
     instances.sshTarget = this.server.create('target', {
-      id: 'target-1',
+      id: 'target-0',
       type: TYPE_TARGET_SSH,
       scope: instances.scopes.project,
     });
@@ -86,13 +88,14 @@ module('Acceptance | targets | list', function (hooks) {
 
     const featuresService = this.owner.lookup('service:features');
     featuresService.enable('ssh-target');
+
     await authenticateSession({});
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -104,14 +107,14 @@ module('Acceptance | targets | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom(`[href="${urls.targets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.targets)).isVisible();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
     instances.scopes.project.authorized_collection_actions.targets = [];
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -135,7 +138,7 @@ module('Acceptance | targets | list', function (hooks) {
       );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -147,7 +150,7 @@ module('Acceptance | targets | list', function (hooks) {
         'list',
       ),
     );
-    assert.dom(`[href="${urls.targets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.targets)).isVisible();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
@@ -157,7 +160,7 @@ module('Acceptance | targets | list', function (hooks) {
       );
     await visit(urls.orgScope);
 
-    await click(`[href="${urls.projectScope}"]`);
+    await click(commonSelectors.HREF(urls.projectScope));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
@@ -169,70 +172,75 @@ module('Acceptance | targets | list', function (hooks) {
         'list',
       ),
     );
-    assert.dom(`[href="${urls.targets}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.targets)).isVisible();
   });
 
-  test('user can search for a specifc target by id', async function (assert) {
+  test('user can search for a specific target by id', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.sshTarget.id);
-    await waitFor(`[href="${urls.tcpTarget}"]`, { count: 0 });
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.sshTarget.id);
+    await waitFor(commonSelectors.HREF(urls.tcpTarget), { count: 0 });
 
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
-    assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).doesNotExist();
   });
 
   test('user can search for targets and get no results', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake target that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake target that does not exist',
+    );
+    await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
 
-    assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
-    assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).doesNotExist();
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
   test('user can filter for targets by type', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
 
-    await click(FILTER_DROPDOWN_SELECTOR('type'));
-    await click(`input[value="tcp"]`);
-    await click(FILTER_APPLY_BUTTON_SELECTOR);
+    await click(commonSelectors.FILTER_DROPDOWN('type'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM('tcp'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('type'));
 
-    assert.dom(`[href="${urls.sshTarget}"]`).doesNotExist();
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
   });
 
   test('user can filter for targets by active sessions', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
-    assert.dom(`[href="${urls.tcpTarget}"]`).exists();
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
 
-    await click(FILTER_DROPDOWN_SELECTOR('active-sessions'));
-    await click(`input[value="yes"]`);
-    await click(FILTER_APPLY_BUTTON_SELECTOR);
+    await click(commonSelectors.FILTER_DROPDOWN('active-sessions'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM('yes'));
+    await click(
+      commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('active-sessions'),
+    );
 
-    assert.dom(`[href="${urls.sshTarget}"]`).exists();
-    assert.dom(`[href="${urls.tcpTarget}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.sshTarget)).isVisible();
+    assert.dom(commonSelectors.HREF(urls.tcpTarget)).doesNotExist();
   });
 
   test('active sessions filter is hidden if user does not have permission to list sessions', async function (assert) {
@@ -242,18 +250,118 @@ module('Acceptance | targets | list', function (hooks) {
       );
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
-    assert.dom(FILTER_DROPDOWN_SELECTOR('active-sessions')).doesNotExist();
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN('active-sessions'))
+      .doesNotExist();
   });
 
   test('user can navigate to active sessions from targets table', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
-    await click(ACTIVE_SESSIONS_SELECTOR(instances.sshTarget.id));
+    await click(commonSelectors.HREF(urls.targets));
+    await click(selectors.TABLE_ACTIVE_SESSIONS(instances.sshTarget.id));
 
     assert.strictEqual(currentRouteName(), 'scopes.scope.sessions.index');
-    assert.dom(SESSIONS_ID_SELECTOR(instances.session.id)).exists();
+    assert.dom(selectors.TABLE_SESSIONS_ID(instances.session.id)).isVisible();
   });
+
+  test('targets table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    const createdTimeToNameMapping = {};
+    CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
+      createdTimeToNameMapping[value] = NAME_VALUES_ARRAY[index];
+    });
+    faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
+      this.server.create('target', {
+        name: createdTimeToNameMapping[value],
+        created_time: value,
+        scope: instances.scopes.project,
+      });
+    });
+    await visit(urls.targets);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
+    NAME_VALUES_ARRAY.forEach((expected, index) => {
+      // nth-child index starts at 1
+      assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: NAME_VALUES_ARRAY,
+        },
+        expectedAscendingSort: NAME_VALUES_ARRAY,
+        column: 1,
+      },
+      'on type': {
+        attribute: {
+          key: 'type',
+          values: [TYPE_TARGET_SSH, TYPE_TARGET_TCP, TYPE_TARGET_SSH],
+        },
+        expectedAscendingSort: ['SSH', 'SSH', 'Generic TCP'],
+        column: 2,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ID_VALUES_ARRAY,
+        },
+        expectedAscendingSort: ID_VALUES_ARRAY,
+        column: 4,
+      },
+    },
+
+    async function (assert, input) {
+      this.server.schema.targets.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('target', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.project,
+        });
+      });
+      await visit(urls.targets);
+
+      // click the sort button to sort in ascending order for provided column key
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });

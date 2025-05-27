@@ -36,7 +36,7 @@
       <bc.Sidebar>
         {{#if @model.aliases}}
           <div class='target-sidebar-aliases'>
-            <Hds::Text::Display @tag='h2'>
+            <Hds::Text::Display @tag='h2' class='remove-margin'>
               {{t 'resources.alias.title_plural'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -56,7 +56,7 @@
 
             {{#if this.showFlyoutBtn}}
               <Hds::Button
-                data-test-view-more
+                data-test-aliases-view-more
                 @text={{t 'resources.target.actions.view-more-aliases'}}
                 @color='secondary'
                 {{on 'click' this.toggleFlyout}}
@@ -64,7 +64,7 @@
             {{/if}}
             {{#if this.showFlyOutComponent}}
               <Hds::Flyout
-                data-test-flyout
+                data-test-aliases-flyout
                 @onClose={{this.toggleFlyout}}
                 as |M|
               >
@@ -94,7 +94,7 @@
         {{else}}
           {{#if (can 'create model' this.globalScope collection='aliases')}}
             <div class='target-sidebar-aliases'>
-              <Hds::Text::Display @tag='h2'>
+              <Hds::Text::Display @tag='h2' class='remove-margin'>
                 {{t 'resources.alias.title_plural'}}
               </Hds::Text::Display>
               <Hds::Text::Body @tag='p' @color='faint' class='p'>
@@ -112,7 +112,7 @@
         {{/if}}
         <div class='target-sidebar'>
           {{#if (and @model.isSSH (feature-flag 'ssh-session-recording'))}}
-            <Hds::Text::Display @tag='h2'>
+            <Hds::Text::Display @tag='h2' class='remove-margin'>
               {{t 'resources.target.form.sidebar.label'}}
             </Hds::Text::Display>
             <Hds::Text::Body @tag='p' @color='faint' class='p'>

@@ -7,7 +7,10 @@
 
 <Hds::AppFrame @hasHeader={{false}} @hasSidebar={{this.showSideNav}} as |Frame|>
   <Frame.Sidebar class='app-frame-sidebar-style-overrides'>
-    <Hds::SideNav class='side-nav-style-overrides'>
+    <Hds::SideNav
+      @a11yRefocusRouteChangeValidator={{this.customRouteChangeValidator}}
+      class='side-nav-style-overrides'
+    >
       <:header>
         <Hds::SideNav::Header>
           <:logo>

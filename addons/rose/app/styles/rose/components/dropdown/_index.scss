@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-@import 'dropdown';
-@import 'button';
-@import 'link';
-@import 'item';
-@import 'section';
-@import 'key-value';
+@use 'dropdown';
+@use 'link';
+@use 'item';
+@use 'section';
+@use 'key-value';

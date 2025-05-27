@@ -92,12 +92,13 @@ module('Acceptance | workers | list', function (hooks) {
     featuresService.enable('byow');
     await visit(urls.workers);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
 
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN);
     await click(selectors.WORKER_TAGS_FILTER_DROPDOWN_FIRST_ITEM);
+    await click(selectors.WORKER_TAGS_FILTER_APPLY_BUTTON);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('Users can open and close tags flyout for a specific worker', async function (assert) {

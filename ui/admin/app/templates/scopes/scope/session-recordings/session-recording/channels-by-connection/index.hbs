@@ -95,7 +95,6 @@
               {{#if connection.channel_recordings}}
                 <Hds::Table
                   @model={{connection.channel_recordings}}
-                  @density='tall'
                   @columns={{array
                     (hash
                       label=(t
@@ -200,12 +199,9 @@
         </bc.Body>
         <bc.Sidebar>
           <div class='section-details'>
-            <Hds::Text::Display
-              @tag='h2'
-              @size='400'
-              @weight='bold'
-              class='header-spacing'
-            >{{t 'resources.session-recording.details'}}</Hds::Text::Display>
+            <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>{{t
+                'resources.session-recording.details'
+              }}</Hds::Text::Display>
 
             <Rose::MetadataList @orientation='vertical' as |list|>
               {{! Session Recording Status }}
@@ -294,12 +290,9 @@
 
           {{! Related information }}
           <div>
-            <Hds::Text::Display
-              @tag='h2'
-              @size='400'
-              @weight='bold'
-              class='header-spacing'
-            >{{t 'resources.session-recording.related'}}</Hds::Text::Display>
+            <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>{{t
+                'resources.session-recording.related'
+              }}</Hds::Text::Display>
             <LinkListPanel as |list|>
               {{! User name }}
               {{#if @model.sessionRecording.create_time_values.user}}

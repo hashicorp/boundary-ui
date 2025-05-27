@@ -32,7 +32,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
   const TARGET_DETAILS_ROUTE_NAME =
     'scopes.scope.projects.targets.target.index';
   const HDS_DIALOG_MODAL = '.hds-modal';
-  const CHOOSE_HOST_MODAL = '[data-test-host-modal]';
   const HDS_DIALOG_MODAL_BUTTONS = '.hds-modal__footer button';
   const HDS_DIALOG_RETRY_BUTTON =
     '.hds-modal__footer .hds-button--color-primary';
@@ -275,7 +274,6 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await click(`[data-test-targets-connect-button="${instances.target.id}"]`);
 
     assert.dom(HDS_DIALOG_MODAL).isVisible();
-    assert.dom(CHOOSE_HOST_MODAL).doesNotExist();
     assert.strictEqual(currentRouteName(), TARGET_DETAILS_ROUTE_NAME);
   });
 
@@ -467,7 +465,9 @@ module('Acceptance | projects | targets | index', function (hooks) {
       .dom(`[data-test-target-project-id="${instances.scopes.project2.id}"]`)
       .exists();
 
-    await click('.rose-header-nav .rose-dropdown a:nth-of-type(2)');
+    await click('.rose-header-nav .hds-dropdown-toggle-button');
+    await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
+
     assert
       .dom(`[data-test-target-project-id="${instances.scopes.project.id}"]`)
       .exists();

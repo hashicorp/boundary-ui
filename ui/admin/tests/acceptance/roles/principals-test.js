@@ -4,22 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, findAll } from '@ember/test-helpers';
+import { visit, currentURL, click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | roles | principals', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR = '[data-test-manage-roles-dropdown] button';
-  const ADD_PRINCIPALS_SELECTOR = '[data-test-manage-role-principals]';
 
   const instances = {
     scopes: {
@@ -63,16 +61,22 @@ module('Acceptance | roles | principals', function (hooks) {
   test('visiting role principals', async function (assert) {
     await visit(urls.rolePrincipals);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
   });
 
   test('principal can be removed from a role', async function (assert) {
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
-    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: principalsCount - 1 });
   });
 
   test('principal cannot be removed from a role without proper authorization', async function (assert) {
@@ -80,8 +84,10 @@ module('Acceptance | roles | principals', function (hooks) {
       (item) => item !== 'remove-principals',
     );
     instances.role.update({ authorized_actions });
+
     await visit(urls.rolePrincipals);
-    assert.notOk(find('tbody tr .hds-dropdown-list-item button'));
+
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
   });
 
   test('shows error message on principal remove', async function (assert) {
@@ -98,9 +104,12 @@ module('Acceptance | roles | principals', function (hooks) {
       );
     });
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, principalsCount);
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -111,40 +120,59 @@ module('Acceptance | roles | principals', function (hooks) {
       (item) => item !== 'add-principals',
     );
     instances.role.update({ authorized_actions });
+
     await visit(urls.rolePrincipals);
-    assert.dom(ADD_PRINCIPALS_SELECTOR).doesNotExist();
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+
+    assert.dom(selectors.MANAGE_DROPDOWN_ADD_PRINCIPALS).doesNotExist();
   });
 
   test('select and save principals to add', async function (assert) {
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, 0);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_PRINCIPALS_SELECTOR);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 0 });
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ADD_PRINCIPALS);
+
     assert.strictEqual(currentURL(), urls.addPrincipals);
+
     // Click three times to select, unselect, then reselect (for coverage)
-    await click('tbody label');
-    await click('tbody label');
-    await click('tbody label');
-    await click('form [type="submit"]');
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, 1);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('select and cancel principals to add', async function (assert) {
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, principalsCount);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: principalsCount });
+
     // Remove a principal to populate association view
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
-    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_PRINCIPALS_SELECTOR);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: principalsCount - 1 });
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ADD_PRINCIPALS);
+
     assert.strictEqual(currentURL(), urls.addPrincipals);
-    await click('tbody label');
-    await click('form [type="button"]');
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.CANCEL_BTN);
     await visit(urls.rolePrincipals);
-    assert.strictEqual(findAll('tbody tr').length, principalsCount - 1);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: principalsCount - 1 });
   });
 
   test('shows error message on principal add', async function (assert) {
@@ -162,8 +190,12 @@ module('Acceptance | roles | principals', function (hooks) {
     });
     instances.role.update({ userIds: [], groupIds: [], managedGroupIds: [] });
     await visit(urls.addPrincipals);
-    await click('tbody label');
-    await click('form [type="submit"]');
-    assert.ok(find(commonSelectors.ALERT_TOAST_BODY));
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
   });
 });

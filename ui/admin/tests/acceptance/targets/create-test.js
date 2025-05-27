@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
-  find,
   click,
   fillIn,
   getContext,
@@ -19,6 +18,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -30,8 +30,6 @@ module('Acceptance | targets | create', function (hooks) {
   let getSSHTargetCount;
   let featuresService;
 
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-
   const instances = {
     scopes: {
       global: null,
@@ -41,7 +39,6 @@ module('Acceptance | targets | create', function (hooks) {
     target: null,
   };
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -66,11 +63,9 @@ module('Acceptance | targets | create', function (hooks) {
       scope: instances.scopes.project,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
-    urls.unknownTarget = `${urls.targets}/foo`;
     urls.newTarget = `${urls.targets}/new`;
     urls.newTCPTarget = `${urls.targets}/new?type=tcp`;
     urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
@@ -85,8 +80,11 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {
     featuresService.enable('ssh-target');
-    await visit(urls.newTarget);
-    assert.strictEqual(find('[name="Type"]:checked').value, TYPE_TARGET_SSH);
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_SSH);
   });
 
   test('can create a type `ssh` target', async function (assert) {
@@ -96,16 +94,16 @@ module('Acceptance | targets | create', function (hooks) {
     const sshTargetCount = getSSHTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[value="ssh"]');
-    await fillIn('[name="name"]', 'random string');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('ssh'));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getSSHTargetCount(), sshTargetCount + 1);
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
@@ -116,43 +114,49 @@ module('Acceptance | targets | create', function (hooks) {
     const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
-    await click('[value="tcp"]');
-    await fillIn('[name="name"]', 'random string');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('tcp'));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(getTCPTargetCount(), tcpTargetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].name,
-      'random string',
+      commonSelectors.FIELD_NAME_VALUE,
     );
   });
 
   test('default port is not marked required for SSH targets', async function (assert) {
     featuresService.enable('ssh-target');
-    await visit(urls.newTarget);
-    assert.dom('[data-test-default-port-label]').includesText('Optional');
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Optional');
   });
 
   test('default port is marked required for TCP targets', async function (assert) {
     featuresService.enable('ssh-target');
-    await visit(urls.newTarget);
-    await click('[value="tcp"]');
-    assert.dom('[data-test-default-port-label]').includesText('Required');
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('tcp'));
+
+    assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Required');
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create',
       ),
     );
-    assert.dom(`[href="${urls.newTarget}"]`).exists();
+    assert.dom(selectors.NEW_TARGET_BTN).isVisible();
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
@@ -162,28 +166,29 @@ module('Acceptance | targets | create', function (hooks) {
       );
     await visit(urls.projectScope);
 
-    await click(`[href="${urls.targets}"]`);
+    await click(commonSelectors.HREF(urls.targets));
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create',
       ),
     );
-    assert.dom('.rose-layout-page-actions a').doesNotExist();
+    assert.dom(selectors.NEW_TARGET_BTN).doesNotExist();
   });
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
     await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
+    await click(commonSelectors.HREF(urls.newTarget));
+
     assert.false(featuresService.isEnabled('ssh-target'));
     assert.true(
       instances.scopes.project.authorized_collection_actions.targets.includes(
         'create',
       ),
     );
-    assert.dom('.info-field').exists({ count: 1 });
-    assert.dom('.info-field .hds-form-helper-text').includesText('TCP');
+    assert.dom(selectors.FIELD_INFO).isVisible({ count: 1 });
+    assert.dom(selectors.FIELD_INFO_LABEL).includesText('TCP');
   });
 
   test('can cancel create new TCP target', async function (assert) {
@@ -191,9 +196,9 @@ module('Acceptance | targets | create', function (hooks) {
     const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetCount);
@@ -203,30 +208,23 @@ module('Acceptance | targets | create', function (hooks) {
   test('can add aliases during target creation', async function (assert) {
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
-    await visit(urls.targets);
     const name = 'target';
+    await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
-    await fillIn('[name="name"]', name);
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, name);
 
-    assert.ok(
+    assert.true(
       instances.scopes.global.authorized_collection_actions.aliases.includes(
         'create',
       ),
     );
 
-    await fillIn(
-      '[name="with_aliases"] tbody tr:nth-of-type(1) input',
-      'alias 1',
-    );
-    await click('[name="with_aliases"] tbody tr:nth-of-type(1) button');
-
-    await fillIn(
-      '[name="with_aliases"] tbody tr:nth-of-type(2) input',
-      'alias 2',
-    );
-    await click('[name="with_aliases"] tbody tr:nth-of-type(2) button');
-    await click(SAVE_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_ALIASES, 'alias 1');
+    await click(selectors.FIELD_ALIASES_ADD_BTN);
+    await fillIn(selectors.FIELD_ALIASES, 'alias 2');
+    await click(selectors.FIELD_ALIASES_ADD_BTN);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     const target = this.server.schema.targets.findBy({ name });
@@ -239,14 +237,14 @@ module('Acceptance | targets | create', function (hooks) {
 
   test('can cancel create new SSH target', async function (assert) {
     featuresService.enable('ssh-target');
-
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
     await visit(urls.targets);
-    await click(`[href="${urls.newTarget}"]`);
-    await fillIn('[name="name"]', 'random string');
-    await click('[value="ssh"]');
-    await click('.rose-form-actions [type="button"]');
+
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(selectors.FIELD_TYPE_VALUE('ssh'));
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targets);
     assert.strictEqual(getTargetCount(), targetCount);
@@ -268,19 +266,26 @@ module('Acceptance | targets | create', function (hooks) {
                 name: 'name',
                 description: 'Name is required.',
               },
+              {
+                name: 'attributes.default_port',
+                description: 'Default port is required.',
+              },
             ],
           },
         },
       );
     });
-
     await visit(urls.newTCPTarget);
-    await click(SAVE_BTN_SELECTOR);
+
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
+    assert
+      .dom(selectors.FIELD_DEFAULT_PORT_ERROR)
+      .hasText('Default port is required.');
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
@@ -304,38 +309,39 @@ module('Acceptance | targets | create', function (hooks) {
       );
     });
     await visit(urls.newSSHTarget);
-    await click(SAVE_BTN_SELECTOR);
+
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can save address', async function (assert) {
     featuresService.enable('target-network-address');
-
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.newTarget}"]`);
-
-    await fillIn('[name="name"]', 'random string');
-    await fillIn('[name="address"]', '0.0.0.0');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(selectors.FIELD_ADDRESS, selectors.FIELD_ADDRESS_VALUE);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getTargetCount(), targetCount + 1);
     assert.strictEqual(
       this.server.schema.targets.all().models[getTargetCount() - 1].address,
-      '0.0.0.0',
+      selectors.FIELD_ADDRESS_VALUE,
     );
   });
 
   test('address field does not exist when target network address feature is disabled', async function (assert) {
     await visit(urls.targets);
-    await click(`[href="${urls.newTarget}"]`);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
     assert.false(featuresService.isEnabled('target-network-address'));
-    assert.dom('[name="address"]').doesNotExist();
+    assert.dom(selectors.FIELD_ADDRESS).doesNotExist();
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
@@ -343,8 +349,7 @@ module('Acceptance | targets | create', function (hooks) {
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',
       );
-
-    await visit(urls.newSSHTarget);
+    await visit(urls.newTCPTarget);
 
     assert.false(
       instances.scopes.project.authorized_collection_actions.targets.includes(

@@ -52,7 +52,6 @@
             (hash label=(t 'resources.role.titles.grants-applied'))
             (hash label=(t 'form.id.label'))
           }}
-          @density='short'
           @valign='middle'
         >
           <:body as |B|>
@@ -65,7 +64,7 @@
                 {{else}}
                   {{B.data.displayName}}
                 {{/if}}
-                <Hds::Text::Body @tag='p' class='p'>
+                <Hds::Text::Body @tag='p'>
                   {{B.data.description}}
                 </Hds::Text::Body>
               </B.Td>

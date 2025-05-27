@@ -29,67 +29,44 @@
 
   <page.body class='workers'>
     {{#if @model}}
-      <Rose::Toolbar as |toolbar|>
-        <toolbar.primary>
-          <Rose::Form as |form|>
-            {{#let
-              (resource-filter 'scopes.scope.workers.index' 'tags')
-              as |filter|
-            }}
-              {{#if filter.allowedValues}}
-                <Rose::Dropdown
-                  @text={{t (concat 'form.' filter.name '.label')}}
-                  @count={{filter.selectedValue.length}}
-                  @ignoreClickInside={{true}}
-                  as |dropdown|
-                >
-                  {{#each-in
-                    (group-by 'key' filter.allowedValues)
-                    as |key tags|
-                  }}
-                    <dropdown.section @title={{key}} @icon='tag' />
-                    <form.checkboxGroup
-                      @name={{key}}
-                      @items={{tags}}
-                      @selectedItems={{filter.selectedValue}}
-                      @onChange={{fn this.callFilterBy filter.name}}
-                      @itemEqualityFunc={{this.isEqual}}
-                      as |group|
-                    >
-                      <dropdown.item class='indent-label-1'>
-                        <group.checkbox
-                          @label={{group.item.value}}
-                          value={{group.item}}
-                        />
-                      </dropdown.item>
-                    </form.checkboxGroup>
-                  {{/each-in}}
-                </Rose::Dropdown>
-              {{/if}}
-            {{/let}}
-            {{#if
-              (has-resource-filter-selections
-                'scopes.scope.workers.index' 'tags'
-              )
-            }}
-              <Hds::Button
-                @size='small'
-                @icon='x'
-                @text={{t 'actions.clear-all-filters'}}
-                {{on 'click' this.callClearAllFilters}}
-              />
-            {{/if}}
-          </Rose::Form>
-        </toolbar.primary>
 
-        <toolbar.secondary>
-          <ToolbarRefresher @onClick={{this.refresh}} />
-        </toolbar.secondary>
-
-      </Rose::Toolbar>
+      <div class='tags-list'>
+        <Dropdown
+          name='tags'
+          @listPosition='bottom-left'
+          @toggleText={{t 'form.tags.label'}}
+          @itemOptions={{this.workerTagOptions}}
+          @checkedItems={{this.tags}}
+          @applyFilter={{fn this.applyFilter 'tags'}}
+          @isGrouped={{true}}
+          as |FD selectItem itemOptions|
+        >
+          {{#each-in (group-by 'key' itemOptions) as |key groupItems|}}
+            <FD.Generic class='grouping'>
+              <Hds::Icon @name='tag' @isInline={{true}} @color='faint' />
+              <Hds::Text::Display
+                @size='100'
+                @weight='medium'
+                @color='faint'
+              >{{key}}</Hds::Text::Display>
+            </FD.Generic>
+            {{#each groupItems as |item|}}
+              <FD.Checkbox
+                class='indentation'
+                @value={{item.id}}
+                checked={{includes item.id this.tags}}
+                {{on 'change' selectItem}}
+              >
+                {{item.name}}
+              </FD.Checkbox>
+            {{/each}}
+          {{/each-in}}
+        </Dropdown>
+        <ToolbarRefresher @onClick={{this.refresh}} />
+      </div>
+      <FilterTags @filters={{this.filters}} />
 
       <Hds::Table
-        class='workers-list-table'
         @model={{@model}}
         @columns={{array
           (hash label=(t 'resources.worker.title'))
@@ -99,7 +76,6 @@
           (hash label=(t 'resources.worker.table.ip_address'))
           (hash label=(t 'form.id.label'))
         }}
-        @density='short'
         @valign='middle'
       >
         <:body as |B|>
@@ -116,7 +92,7 @@
                 {{B.data.displayName}}
               {{/if}}
               {{#if B.data.description}}
-                <Hds::Text::Body @tag='p' class='p'>
+                <Hds::Text::Body @tag='p'>
                   {{B.data.description}}
                 </Hds::Text::Body>
               {{/if}}

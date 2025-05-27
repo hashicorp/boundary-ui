@@ -106,7 +106,7 @@ module('Acceptance | sessions | list', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
   });
 
@@ -152,7 +152,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.HREF(urls.sessions));
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
   });
 
@@ -221,7 +221,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('users filter is hidden if no users returned or no list permissions', async function (assert) {
@@ -251,7 +251,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
     assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('targets filter is hidden if no targets returned or no list permissions', async function (assert) {

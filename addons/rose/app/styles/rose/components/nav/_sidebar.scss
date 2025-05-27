@@ -6,6 +6,7 @@
 @use '../../variables/sizing';
 @use '../../utilities/type';
 @use 'sass:math';
+@use '../../variables/color/sass';
 
 .rose-nav-sidebar {
   $three-px: sizing.rems(xxxs) + sizing.rems(xxxxs);
@@ -13,7 +14,7 @@
 
   padding-top: $y-padding;
   padding-bottom: $y-padding;
-  border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
+  border-bottom: sizing.rems(xxxxs) solid #{sass.color(ui-gray, 700)};
 
   &:last-child {
     border-bottom: 0;
@@ -24,7 +25,7 @@
     @include type.type(xs, semibold);
 
     display: none;
-    color: #{color(ui-gray, 400)};
+    color: #{sass.color(ui-gray, 400)};
     text-transform: uppercase;
 
     $line-height: math.div(20, 12);
@@ -32,7 +33,7 @@
     line-height: $line-height;
     padding: 0 sizing.rems(m);
     margin-bottom: $three-px;
-    border-bottom: sizing.rems(xxxxs) solid #{color(ui-gray, 700)};
+    border-bottom: sizing.rems(xxxxs) solid #{sass.color(ui-gray, 700)};
   }
 
   .rose-nav-link {
@@ -55,13 +56,13 @@
 
     &:hover {
       color: var(--white);
-      background-color: #{color(ui-gray, 800)};
+      background-color: #{sass.color(ui-gray, 800)};
     }
 
     &.active {
       color: var(--white);
-      border-color: #{color(ui-gray, 300)};
-      background-color: #{color(ui-gray, 800)};
+      border-color: #{sass.color(ui-gray, 300)};
+      background-color: #{sass.color(ui-gray, 800)};
     }
   }
 }

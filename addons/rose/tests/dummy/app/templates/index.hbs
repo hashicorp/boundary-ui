@@ -4,33 +4,16 @@
 }}
 
 <Rose::Toolbar as |toolbar|>
-  <Rose::Button @style='inline-link-action' @iconLeft='flight-icons/svg/x-16'>
-    Clear something
-  </Rose::Button>
+  <Hds::Button @icon='x' @isInline={{true}} @text='Clear something' />
   <toolbar.primary>
     <Rose::Form>
-      <Rose::Button
-        @style='inline-link-action'
-        @iconLeft='flight-icons/svg/x-16'
-      >
-        Clear something
-      </Rose::Button>
-      <Rose::Button
-        @style='inline-link-action'
-        @iconLeft='flight-icons/svg/x-16'
-      >
-        Clear something
-      </Rose::Button>
+      <Hds::Button@icon='x' @isInline={{true}} @text='Clear something' />
+      <Hds::Button @icon='x' @isInline={{true}} @text='Clear something' />
     </Rose::Form>
   </toolbar.primary>
   <toolbar.secondary>
     <Rose::Form>
-      <Rose::Button
-        @style='inline-link-action'
-        @iconLeft='flight-icons/svg/x-16'
-      >
-        Refresh
-      </Rose::Button>
+      <Hds::Button @icon='x' @isInline={{true}} @text='Refresh' />
     </Rose::Form>
   </toolbar.secondary>
 </Rose::Toolbar>

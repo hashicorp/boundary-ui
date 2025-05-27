@@ -7,22 +7,25 @@
 
 {{#if this.session.isAuthenticated}}
   <EmberWormhole @to='header-nav'>
-    <Rose::Dropdown
-      @text={{this.scopes.selectedOrg.displayName}}
-      @icon={{if this.scopes.selectedOrg.isGlobal 'globe' 'org'}}
-      as |dropdown|
+    <Hds::Dropdown
+      class='header-dropdown-button-override'
+      @enableCollisionDetection={{true}}
+      as |dd|
     >
-      {{!-- {{#if this.session.data.authenticated.isGlobal}} --}}
-      <dropdown.link @route='scopes.scope' @model='global'>
+      <dd.ToggleButton
+        @text={{this.scopes.selectedOrg.displayName}}
+        @icon={{if this.scopes.selectedOrg.isGlobal 'globe' 'org'}}
+        @color='secondary'
+      />
+      <dd.Interactive @route='scopes.scope' @model='global'>
         {{t 'titles.global'}}
-      </dropdown.link>
-      <dropdown.separator />
-      {{!-- {{/if}} --}}
+      </dd.Interactive>
+      <dd.Separator />
       {{#each this.scopes.orgs as |scope|}}
-        <dropdown.link @route='scopes.scope' @model={{scope.id}}>
+        <dd.Interactive @route='scopes.scope' @model={{scope.id}}>
           {{scope.displayName}}
-        </dropdown.link>
+        </dd.Interactive>
       {{/each}}
-    </Rose::Dropdown>
+    </Hds::Dropdown>
   </EmberWormhole>
 {{/if}}

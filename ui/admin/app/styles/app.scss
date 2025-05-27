@@ -7,9 +7,9 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'rose';
-@import 'notify';
-@import '@hashicorp/ember-asciinema-player';
+@use 'rose';
+@use 'notify';
+@use '@hashicorp/ember-asciinema-player';
 
 .rose-layout-global {
   .rose-layout-global-body {
@@ -46,14 +46,6 @@
 .rose-form {
   &:not(.full-width) {
     width: 66%;
-  }
-
-  .rose-form-input {
-    width: 100%;
-
-    .rose-form-input-field {
-      width: 100%;
-    }
   }
 
   .rose-dropdown {
@@ -621,7 +613,6 @@
 }
 
 .auth-methods-list-table,
-.workers-list-table,
 .sessions-list-table {
   margin-top: 1rem;
 }
@@ -953,9 +944,28 @@
 
 // workers
 .workers {
-  .rose-dropdown-content {
-    max-height: 300px;
-    overflow: scroll;
+  > div {
+    margin-bottom: 1rem;
+  }
+
+  .tags-list {
+    display: flex;
+
+    .toolbar-refresher {
+      margin-left: auto;
+    }
+
+    .grouping {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+    }
+
+    li:has(.indentation) {
+      padding-left: 2.25rem;
+    }
   }
 }
 
@@ -1021,11 +1031,6 @@
   }
 }
 
-.header-spacing {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
 // scope picker
 .scope-picker {
   &__toggle-button {
@@ -1036,4 +1041,9 @@
   li.indentation {
     margin-left: 1.5rem;
   }
+}
+
+// dropdown checkbox list
+.dropdown-checkbox-list {
+  margin-bottom: 1rem;
 }

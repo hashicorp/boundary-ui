@@ -7,8 +7,8 @@
 @use 'rose/variables/media';
 @use 'rose/utilities/type';
 
-@import 'rose';
-@import 'notify';
+@use 'notify';
+@use 'rose';
 
 .rose-layout-centered {
   > .rose-layout-page {
@@ -69,14 +69,6 @@
     width: 66%;
   }
 
-  .rose-form-input {
-    width: 100%;
-
-    .rose-form-input-field {
-      width: 100%;
-    }
-  }
-
   .rose-dropdown {
     $icon-width: sizing.rems(m) + sizing.rems(s);
     $indent: $icon-width + sizing.rems(xs);
@@ -102,10 +94,6 @@
 
   fieldset {
     margin-bottom: sizing.rems(m);
-
-    legend {
-      @extend .rose-form-label;
-    }
   }
 }
 
@@ -133,6 +121,20 @@
     border: transparent;
     color: var(--white);
     margin: sizing.rems(xs);
+  }
+
+  .button-window-close {
+    &:hover {
+      background: var(--failure);
+    }
+  }
+
+  .button-window-minimize,
+  .button-window-fullscreen {
+    &:hover {
+      background: var(--white);
+      color: var(--black);
+    }
   }
 
   .logotype {
@@ -218,11 +220,6 @@
     top: 0;
   }
 
-  .branded-card-title {
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
   .branded-card-description {
     margin-bottom: sizing.rems(l);
   }
@@ -241,16 +238,6 @@
   color: var(--ui-border-starker-1);
   margin: sizing.rems(l) 0 0 0;
   text-align: center;
-}
-
-// Rose dialog - positioned above modal overlay
-.rose-dialog {
-  z-index: 6000;
-}
-
-// Overlay above everything - including notifications
-.rose-dialog-modal-overlay {
-  z-index: 5500;
 }
 
 // Hidden secret component (app/components/hidden-secret)
@@ -392,10 +379,6 @@
       }
     }
   }
-
-  .rose-button-ghost {
-    margin-bottom: 0;
-  }
 }
 
 .credential-name,
@@ -406,43 +389,6 @@
 .raw-credential-panel-body {
   display: block;
   margin-top: 0.75rem;
-}
-
-// Host Modal
-.host-list-container {
-  border: 1px solid var(--token-color-border-primary);
-  padding: 0.25rem;
-  border-radius: 6px;
-}
-
-.host-container {
-  button {
-    background: unset;
-    border: unset;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0.5rem;
-
-    .host-info-container {
-      display: flex;
-      gap: 0.75rem;
-
-      .host-info {
-        text-align: left;
-      }
-    }
-
-    &:hover {
-      background-color: var(--token-color-page-faint);
-      cursor: pointer;
-    }
-  }
-
-  .host-arrow {
-    color: var(--token-color-foreground-faint);
-  }
 }
 
 // Unsupported controller modal
@@ -503,9 +449,4 @@
       flex-basis: 100%;
     }
   }
-}
-
-.header-spacing {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
