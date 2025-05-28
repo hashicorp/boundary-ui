@@ -366,7 +366,7 @@ module(
           (item) => item !== 'remove-credential-sources',
         );
       await visit(urls.injectedApplicationCredentialSources);
-      assert.dom('tbody tr .rose-dropdown-button-danger').doesNotExist();
+      assert.dom('tbody tr .hds-dropdown-list-item--color-critical').doesNotExist();
     });
 
     test('removing a target credential library which errors displays error messages', async function (assert) {

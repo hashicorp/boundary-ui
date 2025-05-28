@@ -4,7 +4,6 @@
 }}
 <Hds::Dropdown data-test-manage-targets-dropdown as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-
   {{#if (can 'addHostSources target' @model)}}
     <dd.Interactive @route='scopes.scope.targets.target.add-host-sources'>
       {{t 'resources.target.actions.add-host-sources'}}
@@ -28,12 +27,10 @@
       }}
     </dd.Interactive>
   {{/if}}
-
   {{#if (can 'delete model' @model)}}
     <dd.Separator />
     <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
       {{t 'resources.target.actions.delete'}}
     </dd.Interactive>
   {{/if}}
-
 </Hds::Dropdown>
