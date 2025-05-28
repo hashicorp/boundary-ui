@@ -147,7 +147,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click(`[href="${urls.targetHostSources}"]`);
 
     assert
-      .dom('tbody tr .hds-dropdown-list-item--color-critical')
+      .dom(`tbody tr ${commonSelectors.DELETE_BTN}`)
       .doesNotExist();
   });
 
