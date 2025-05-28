@@ -23,14 +23,13 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked totalItems = this.model.hosts.length;
-  @tracked paginatedHosts = this.paginateHosts;
 
   @tracked isConnecting = false;
   isConnectionError = false;
 
   // =methods
 
-  get paginateHosts() {
+  get paginatedHosts() {
     return this.model.hosts.slice(
       (this.page - 1) * this.pageSize,
       this.page * this.pageSize,
@@ -64,15 +63,11 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
   @action
   async handlePageChange(page) {
     this.page = page;
-
-    this.paginatedHosts = this.paginateHosts;
   }
 
   @action
   async handlePageSizeChange(pageSize) {
     this.page = 1;
     this.pageSize = pageSize;
-
-    this.paginatedHosts = this.paginateHosts;
   }
 }
