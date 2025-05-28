@@ -123,28 +123,20 @@ test.describe('Target with many hosts', () => {
       .getByRole('combobox', { name: 'Items per page' })
       .selectOption('30');
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
-    ).toBeVisible();
-    await expect(
-      authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
-        exact: true,
-      }),
-    ).toBeVisible();
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(15);
 
     // Use the "Items per page" options to show 10 items per page again.
     await authedPage
       .getByRole('combobox', { name: 'Items per page' })
       .selectOption('10');
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
-    ).toBeVisible();
-    await expect(
-      authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
-        exact: true,
-      }),
-    ).toBeHidden();
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(10);
   });
 });
 
