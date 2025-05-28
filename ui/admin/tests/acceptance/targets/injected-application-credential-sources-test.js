@@ -367,7 +367,7 @@ module(
         );
       await visit(urls.injectedApplicationCredentialSources);
       assert
-        .dom('tbody tr .hds-dropdown-list-item--color-critical')
+        .dom(`tbody tr ${commonSelectors.DELETE_BTN}`)
         .doesNotExist();
     });
 
