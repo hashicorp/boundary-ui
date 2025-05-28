@@ -146,7 +146,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click(`[href="${urls.targetHostSources}"]`);
 
-    assert.dom('tbody tr .hds-dropdown-list-item--color-critical').doesNotExist();
+    assert
+      .dom('tbody tr .hds-dropdown-list-item--color-critical')
+      .doesNotExist();
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
