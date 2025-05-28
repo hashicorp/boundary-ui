@@ -112,7 +112,7 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSetHosts);
-    assert.notOk(find('tbody tr .rose-dropdown-button-danger'));
+    assert.notOk(find('tbody tr [data-test-host-set-hosts-dropdown-remove-host]'));
   });
 
   test('shows error message on host remove error', async function (assert) {
