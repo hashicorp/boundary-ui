@@ -21,6 +21,14 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =services
@@ -41,7 +49,14 @@ export default class ScopesScopeRolesIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -51,6 +66,10 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       const filters = {
         scope_id: [{ equals: scope_id }],
       };
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
 
       let roles;
       let totalItems = 0;
@@ -58,7 +77,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       if (this.can.can('list model', scope, { collection: 'roles' })) {
         roles = await this.store.query('role', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });

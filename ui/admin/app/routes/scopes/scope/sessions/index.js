@@ -39,6 +39,14 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   scopeContext;
@@ -57,7 +65,17 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, users, targets, status, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      users,
+      targets,
+      status,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -81,10 +99,15 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
         filters.status.push({ equals: item });
       });
 
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
+
       const queryOptions = {
         scope_id,
         include_terminated: true,
-        query: { search, filters },
+        query: { search, filters, sort },
         page,
         pageSize,
       };

@@ -109,8 +109,7 @@
   .rose-header-utilities button {
     -webkit-app-region: no-drag;
   }
-  
- 
+
   &.header-cushion {
     padding-left: sizing.rems(l) * 3;
   }
@@ -396,43 +395,6 @@
 .raw-credential-panel-body {
   display: block;
   margin-top: 0.75rem;
-}
-
-// Host Modal
-.host-list-container {
-  border: 1px solid var(--token-color-border-primary);
-  padding: 0.25rem;
-  border-radius: 6px;
-}
-
-.host-container {
-  button {
-    background: unset;
-    border: unset;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0.5rem;
-
-    .host-info-container {
-      display: flex;
-      gap: 0.75rem;
-
-      .host-info {
-        text-align: left;
-      }
-    }
-
-    &:hover {
-      background-color: var(--token-color-page-faint);
-      cursor: pointer;
-    }
-  }
-
-  .host-arrow {
-    color: var(--token-color-foreground-faint);
-  }
 }
 
 // Unsupported controller modal
