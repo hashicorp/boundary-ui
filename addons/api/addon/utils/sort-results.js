@@ -21,15 +21,15 @@ function getSortableValue(schema, record, attribute) {
     return record.id;
   }
 
-  // When name is not defined, use id to sort instead.
-  if (attribute === 'name') {
-    const name = record.attributes[attribute];
-    return name ? name : record.id;
-  }
-
   // all models have a created_time attribute but not all models have it defined
   if (attribute === 'created_time') {
     return record.attributes.created_time;
+  }
+
+  // When name is an optional attribute, use id to sort instead.
+  if (schema.attributes.has(attribute) && attribute === 'name') {
+    const name = record.attributes[attribute];
+    return name ? name : record.id;
   }
 
   if (schema.attributes.has(attribute)) {

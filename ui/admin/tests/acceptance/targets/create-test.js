@@ -17,6 +17,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 
@@ -24,6 +25,7 @@ module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let getTargetCount;
   let getTCPTargetCount;
