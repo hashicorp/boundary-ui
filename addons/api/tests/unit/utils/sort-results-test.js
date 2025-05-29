@@ -162,6 +162,38 @@ module('Unit | Utility | sortResults', function (hooks) {
       );
     });
 
+    test('it sorts by ascending (default) `name` and `id` when `name` is not defined using string sorting', async function (assert) {
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'Result 01',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {});
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'Result 03',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'Result 04',
+      });
+
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+      ]);
+      const querySort = { attribute: 'name' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('name', { type: 'string' });
+      const sortedResults = sortResults(shuffledResults, { querySort, schema });
+      assert.deepEqual(
+        sortedResults.map(({ attributes: { name } }) => name),
+        [undefined, 'Result 01', 'Result 03', 'Result 04'],
+      );
+      assert.deepEqual(
+        sortedResults.map(({ id }) => id),
+        ['id_02', 'id_01', 'id_03', 'id_04'],
+      );
+    });
+
     test('it sorts by ascending then descending `name` using string sorting', async function (assert) {
       const result01 = createJsonApiMockRecord('id_01', 'target', {
         name: 'Result 01',
