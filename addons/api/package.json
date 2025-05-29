@@ -29,6 +29,7 @@
     "@ember/string": "^4.0.0",
     "@sqlite.org/sqlite-wasm": "^3.49.1-build4",
     "broccoli-funnel": "^3.0.8",
+    "broccoli-merge-trees": "^4.2.0",
     "broccoli-plugin": "^4.0.7",
     "broccoli-source": "^3.0.1",
     "dexie": "^3.2.4",
