@@ -4,28 +4,30 @@
 }}
 
 <Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <AuthMethods::AuthMethod::Header @model={{@model.authMethod}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <AuthMethods::AuthMethod::Header
+        @model={{@model.authMethod}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <AuthMethods::AuthMethod::Actions
+          @model={{@model.authMethod}}
+          @changeState={{this.authMethods.changeState}}
+          @removeAsPrimary={{this.authMethods.removeAsPrimary}}
+          @makePrimary={{this.authMethods.makePrimary}}
+          @delete={{this.authMethods.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
     <AuthMethods::AuthMethod::Nav @model={{@model.authMethod}} />
   </page.navigation>
-
-  <page.actions>
-    <AuthMethods::AuthMethod::Actions
-      @model={{@model.authMethod}}
-      @changeState={{this.authMethods.changeState}}
-      @removeAsPrimary={{this.authMethods.removeAsPrimary}}
-      @makePrimary={{this.authMethods.makePrimary}}
-      @delete={{this.authMethods.delete}}
-    />
-  </page.actions>
 
   <page.body>
     {{#if @model.managedGroups}}

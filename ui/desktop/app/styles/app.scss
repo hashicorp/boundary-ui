@@ -109,8 +109,7 @@
   .rose-header-utilities button {
     -webkit-app-region: no-drag;
   }
-  
- 
+
   &.header-cushion {
     padding-left: sizing.rems(l) * 3;
   }
@@ -258,12 +257,6 @@
     white-space: pre-wrap;
     line-height: normal;
   }
-}
-
-.session-details-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .target-details-header {

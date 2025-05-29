@@ -5,50 +5,45 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    {{#if @model.currentScope.isGlobal}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-        {{t 'resources.org.title_plural'}}
-        <DocLink @doc='org' />
-      </Hds::Text::Display>
-      {{#if @model.doScopesExist}}
-        <Hds::Text::Body @tag='p' @size='300' class='p'>
-          {{t 'resources.org.description'}}
-        </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#if (or @model.currentScope.isGlobal @model.currentScope.isOrg)}}
+        {{#let
+          (if @model.currentScope.isGlobal 'org' 'project')
+          as |scopeType|
+        }}
+          <PH.Title>
+            {{t (concat 'resources.' scopeType '.title_plural')}}
+            <DocLink @doc={{scopeType}} />
+          </PH.Title>
+          {{#if @model.doScopesExist}}
+            <PH.Description>
+              {{t (concat 'resources.' scopeType '.description')}}
+            </PH.Description>
+          {{/if}}
+        {{/let}}
       {{/if}}
-    {{else if @model.currentScope.isOrg}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-        {{t 'resources.project.title_plural'}}
-        <DocLink @doc='project' />
-      </Hds::Text::Display>
-      {{#if @model.doScopesExist}}
-        <Hds::Text::Body @tag='p' @size='300' class='p'>
-          {{t 'resources.project.description'}}
-        </Hds::Text::Body>
+      {{#if (can 'create model' @model.currentScope collection='scopes')}}
+        <PH.Actions>
+          {{#if @model.doScopesExist}}
+            <Hds::Button
+              @route='scopes.scope.scopes.new'
+              @text={{t
+                (if
+                  @model.currentScope.isGlobal
+                  'resources.org.titles.new'
+                  'resources.project.titles.new'
+                )
+              }}
+            />
+          {{/if}}
+        </PH.Actions>
       {{/if}}
-    {{/if}}
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' @model.currentScope collection='scopes')}}
-      {{#if @model.doScopesExist}}
-        <Hds::Button
-          @route='scopes.scope.scopes.new'
-          @text={{t
-            (if
-              @model.currentScope.isGlobal
-              'resources.org.titles.new'
-              'resources.project.titles.new'
-            )
-          }}
-        />
-      {{/if}}
-    {{/if}}
-  </page.actions>
 
   <page.body class='search-filtering'>
 

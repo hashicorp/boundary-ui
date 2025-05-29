@@ -19,8 +19,10 @@ module(
       this.set('model', { id: 'w_123' });
 
       await render(hbs`
-    <Workers::Worker::Header @model={{this.model}} />
-  `);
+      <Hds::PageHeader as |PH|>
+        <Workers::Worker::Header @model={{this.model}} @header={{PH}}/>
+      </Hds::PageHeader>
+      `);
 
       assert.dom(this.element).includesText('w_123');
     });

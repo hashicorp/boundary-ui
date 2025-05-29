@@ -11,24 +11,24 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Users::User::Header @model={{@model.user}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <Users::User::Header @model={{@model.user}} @header={{PH}} />
+      <PH.Actions>
+        <Users::User::Actions
+          @model={{@model.user}}
+          @delete={{this.users.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
     <Users::User::Nav @model={{@model.user}} />
   </page.navigation>
-
-  <page.actions>
-    <Users::User::Actions
-      @model={{@model.user}}
-      @delete={{this.users.delete}}
-    />
-  </page.actions>
 
   <page.body>
     {{#if @model.accounts}}

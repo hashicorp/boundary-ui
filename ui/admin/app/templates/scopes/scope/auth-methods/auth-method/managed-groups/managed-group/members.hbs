@@ -10,15 +10,22 @@
 />
 
 <Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Header
-      @model={{@model.managedGroup}}
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Header
+        @model={{@model.managedGroup}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Actions
+          @model={{@model.managedGroup}}
+          @delete={{this.managedGroups.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
@@ -26,13 +33,6 @@
       @model={{@model.managedGroup}}
     />
   </page.navigation>
-
-  <page.actions>
-    <AuthMethods::AuthMethod::ManagedGroups::ManagedGroup::Actions
-      @model={{@model.managedGroup}}
-      @delete={{this.managedGroups.delete}}
-    />
-  </page.actions>
 
   <page.body>
     {{#if @model.members}}

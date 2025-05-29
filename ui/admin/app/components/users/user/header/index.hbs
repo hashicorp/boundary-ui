@@ -3,11 +3,13 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
+<@header.Title>
   {{t 'resources.user.title'}}
   <DocLink @doc='user' />
-</Hds::Text::Display>
-<Hds::Text::Body @tag='p' @size='300' class='p'>
+</@header.Title>
+<@header.Description>
   {{t 'resources.user.description'}}
-</Hds::Text::Body>
-<Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+</@header.Description>
+<@header.Generic>
+  <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+</@header.Generic>

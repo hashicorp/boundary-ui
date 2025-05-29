@@ -10,18 +10,20 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.role.titles.new'}}
-      <DocLink @doc='role' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.role.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.titles.new'}}
+        <DocLink @doc='role' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.role.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

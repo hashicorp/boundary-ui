@@ -8,31 +8,28 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h1'
-      @size='500'
-      class='target-details-header remove-margin'
-    >
-      <Hds::IconTile @color='boundary' @icon='target' />
-      {{@model.target.displayName}}
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.IconTile @color='boundary' @icon='target' />
+      <PH.Title class='target-details-header'>
+        {{@model.target.displayName}}
+      </PH.Title>
+      {{#if (can 'connect target' @model.target)}}
+        <PH.Actions>
+          <Hds::Button
+            data-test-target-detail-connect-button
+            @text={{if
+              (gt @model.hosts.length 1)
+              (t 'resources.session.actions.quick-connect')
+              (t 'resources.session.actions.connect')
+            }}
+            @icon='entry-point'
+            @iconPosition='trailing'
+            {{on 'click' (fn this.connect @model.target)}}
+          />
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'connect target' @model.target)}}
-      <Hds::Button
-        data-test-target-detail-connect-button
-        @text={{if
-          (gt @model.hosts.length 1)
-          (t 'resources.session.actions.quick-connect')
-          (t 'resources.session.actions.connect')
-        }}
-        @icon='entry-point'
-        @iconPosition='trailing'
-        {{on 'click' (fn this.connect @model.target)}}
-      />
-    {{/if}}
-  </page.actions>
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>

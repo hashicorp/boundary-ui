@@ -22,9 +22,7 @@ test.describe('user/password authentication tests', () => {
     );
 
     // click dropdown
-    await electronPage
-      .getByRole('button', { name: 'admin' })
-      .click();
+    await electronPage.getByRole('button', { name: 'admin' }).click();
 
     await electronPage.getByRole('button', { name: 'Sign Out' }).click();
     await expect(electronPage).toHaveURL(/.*\/scopes\/global\/authenticate\//);

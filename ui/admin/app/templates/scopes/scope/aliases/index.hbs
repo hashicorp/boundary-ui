@@ -4,30 +4,31 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.alias.title_plural'}}
-      <DocLink @doc='alias' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.alias.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.alias.title_plural'}}
+        <DocLink @doc='alias' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.alias.description'}}
+      </PH.Description>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='aliases')}}
+          {{#if @model.doAliasesExist}}
+            <Hds::Button
+              @route='scopes.scope.aliases.new'
+              @text={{t 'resources.alias.titles.new'}}
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='aliases')}}
-      {{#if @model.doAliasesExist}}
-        <Hds::Button
-          @route='scopes.scope.aliases.new'
-          @text={{t 'resources.alias.titles.new'}}
-        />
-      {{/if}}
-    {{/if}}
-  </page.actions>
 
   <page.body class='search-filtering'>
     {{#if @model.doAliasesExist}}

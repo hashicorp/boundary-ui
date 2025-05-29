@@ -183,12 +183,12 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click('.rose-header-utilities .header-dropdown-button-override button');
+    await click(
+      '.rose-header-utilities .header-dropdown-button-override button',
+    );
 
     assert.strictEqual(
-      find(
-        '[data-test-sign-out]',
-      ).textContent.trim(),
+      find('[data-test-sign-out]').textContent.trim(),
       'Sign Out',
     );
 

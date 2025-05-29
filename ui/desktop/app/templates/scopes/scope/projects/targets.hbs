@@ -7,13 +7,15 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.target.title_plural'}}
-      <DocLink @doc='targets' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.target.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Title>
+        {{t 'resources.target.title_plural'}}
+        <DocLink @doc='targets' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.target.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body class='search-filtering'>

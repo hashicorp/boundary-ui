@@ -9,36 +9,32 @@
 .rose-layout-page {
   display: grid;
   grid-template-areas:
-    'breadcrumbs breadcrumbs breadcrumbs'
-    'header header actions'
+    'header header header'
     'navigation navigation navigation'
     'body body body';
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto 1fr;
 
-  .rose-layout-page-breadcrumbs {
-    grid-area: breadcrumbs;
-  }
-
   .rose-layout-page-header {
     grid-area: header;
+    margin-bottom: sizing.rems(s);
 
-    h2 {
+    h1 {
       display: flex;
-      gap: sizing.rems(xxs);
+      align-items: center;
+      gap: sizing.rems(xs);
+      margin: 0;
 
       .doc-link {
         display: flex;
         align-items: center;
       }
     }
-  }
 
-  .rose-layout-page-actions {
-    grid-area: actions;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    .hds-copy-snippet {
+      align-self: start;
+      margin-top: sizing.rems(s);
+    }
   }
 
   .rose-layout-page-navigation {
@@ -55,9 +51,7 @@
   .rose-layout-page {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'breadcrumbs'
       'header'
-      'actions'
       'navigation'
       'body';
   }

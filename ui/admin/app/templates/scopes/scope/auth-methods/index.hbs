@@ -5,42 +5,42 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.auth-method.title_plural'}}
-      <DocLink @doc='auth-method' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.auth-method.description'}}
-    </Hds::Text::Body>
-  </page.header>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
-  <page.actions>
-    {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
-      <Hds::Dropdown data-test-new-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
-        <dd.Interactive
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='password'}}
-        >{{t 'resources.auth-method.types.password'}}</dd.Interactive>
-        <dd.Interactive
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='oidc'}}
-        >{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
-        {{#if (feature-flag 'ldap-auth-methods')}}
-          <dd.Interactive
-            @route='scopes.scope.auth-methods.new'
-            @query={{hash type='ldap'}}
-          >
-            {{t 'resources.auth-method.types.ldap'}}
-          </dd.Interactive>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.auth-method.title_plural'}}
+        <DocLink @doc='auth-method' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.auth-method.description'}}
+      </PH.Description>
+      <PH.Actions>
+        {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
+          <Hds::Dropdown data-test-new-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
+            <dd.Interactive
+              @route='scopes.scope.auth-methods.new'
+              @query={{hash type='password'}}
+            >{{t 'resources.auth-method.types.password'}}</dd.Interactive>
+            <dd.Interactive
+              @route='scopes.scope.auth-methods.new'
+              @query={{hash type='oidc'}}
+            >{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
+            {{#if (feature-flag 'ldap-auth-methods')}}
+              <dd.Interactive
+                @route='scopes.scope.auth-methods.new'
+                @query={{hash type='ldap'}}
+              >
+                {{t 'resources.auth-method.types.ldap'}}
+              </dd.Interactive>
+            {{/if}}
+          </Hds::Dropdown>
         {{/if}}
-      </Hds::Dropdown>
-    {{/if}}
-  </page.actions>
+      </PH.Actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doAuthMethodsExist}}

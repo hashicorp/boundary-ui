@@ -10,14 +10,16 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::CreateAndAddHost::Header
-      @model={{@model}}
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <HostCatalogs::HostCatalog::HostSets::HostSet::CreateAndAddHost::Header
+        @header={{PH}}
+      />
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>
