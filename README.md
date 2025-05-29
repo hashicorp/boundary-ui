@@ -218,10 +218,10 @@ will not be accepted.
 
 [git]: https://git-scm.com/
 [node]: https://nodejs.org/
-[pnpm]: https://pnpmpkg.com/
+[pnpm]: https://pnpm.io
 [chrome]: https://google.com/chrome/
 [firefox]: https://firefox.com/
-[pnpm-workspaces]: https://pnpmpkg.com/features/workspaces
+[pnpm-workspaces]: https://pnpm.io/workspaces
 [homebrew]: https://brew.sh
 [warp]: https://www.warp.dev
 [vscode]: https://code.visualstudio.com/
