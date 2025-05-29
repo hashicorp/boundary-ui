@@ -7,12 +7,18 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { restartableTask, timeout } from 'ember-concurrency';
+import {
+  STATE_SESSION_RECORDING_STARTED,
+  STATE_SESSION_RECORDING_AVAILABLE,
+  STATE_SESSION_RECORDING_UNKNOWN,
+} from 'api/models/session-recording';
 
 export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   // =services
   @service store;
   @service router;
   @service can;
+  @service intl;
 
   // =attributes
 
@@ -65,6 +71,16 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  stateMap = {
+    [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
+    [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
+    [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
+  };
+  sortOnState = (recordA, recordB) =>
+    String(this.stateMap[recordA.attributes.state]).localeCompare(
+      String(this.stateMap[recordB.attributes.state]),
+    );
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -105,15 +121,20 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         filters['create_time_values.target.id'].push({ equals: target });
       });
 
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
+
+      if (sortAttribute === 'state') {
+        sort.sortFunction = this.sortOnState;
+      }
+
       if (
         this.can.can('list scope', scope, {
           collection: 'session-recordings',
         })
       ) {
-        const sort = {
-          attribute: sortAttribute,
-          direction: sortDirection,
-        };
         const queryOptions = {
           scope_id,
           recursive: true,

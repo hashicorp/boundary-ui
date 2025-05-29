@@ -59,9 +59,10 @@
               >
                 {{t 'form.name.label'}}
               </H.ThSort>
-              <H.Th>
-                {{t 'resources.role.titles.grants-applied'}}
-              </H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'grant_scope_ids'}}
+                @sortOrder={{if (eq 'grant_scope_ids' H.sortBy) H.sortOrder}}
+              >{{t 'resources.role.titles.grants-applied'}}</H.ThSort>
               <H.ThSort
                 @onClickSort={{fn H.setSortBy 'id'}}
                 @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
