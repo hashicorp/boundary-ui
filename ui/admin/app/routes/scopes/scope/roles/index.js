@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 export default class ScopesScopeRolesIndexRoute extends Route {
   // =attributes
@@ -48,6 +49,18 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  sortOnGrantsApplied = (recordA, recordB) => {
+    const a = recordA.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
+    const b = recordB.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
+    if (a === b) {
+      return 0;
+    } else if (a) {
+      return 1;
+    } else {
+      return -1;
+    }
+  };
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -70,6 +83,10 @@ export default class ScopesScopeRolesIndexRoute extends Route {
         attribute: sortAttribute,
         direction: sortDirection,
       };
+
+      if (sortAttribute === 'grant_scope_ids') {
+        sort.sortFunction = this.sortOnGrantsApplied;
+      }
 
       let roles;
       let totalItems = 0;
