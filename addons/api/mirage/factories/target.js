@@ -103,6 +103,27 @@ export default factory.extend({
     },
   }),
 
+  withManyHosts: trait({
+    afterCreate(target, server) {
+      const { scope } = target;
+      const hostCatalog = server.create('host-catalog', { scope });
+      const hosts = server.createList('host', 15, {
+        scope,
+        hostCatalog,
+        type: hostCatalog.type,
+      });
+      const hostSets = [
+        server.create('host-set', {
+          scope,
+          hostCatalog,
+          hosts,
+          type: hostCatalog.type,
+        }),
+      ];
+      target.update({ hostSets });
+    },
+  }),
+
   withTwoHosts: trait({
     afterCreate(target, server) {
       const { scope } = target;

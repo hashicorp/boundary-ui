@@ -39,7 +39,7 @@
       <bc.Body class='target-details-body'>
         {{#if (gt @model.hosts.length 1)}}
           <Hds::Table
-            @model={{@model.hosts}}
+            @model={{this.paginatedHosts}}
             @columns={{array
               (hash label=(t 'resources.target.host-source.title_plural'))
               (hash label=(t 'form.address.label'))
@@ -77,6 +77,14 @@
               </B.Tr>
             </:body>
           </Hds::Table>
+          <Hds::Pagination::Numbered
+            data-test-pagination
+            @totalItems={{this.totalItems}}
+            @currentPage={{this.page}}
+            @currentPageSize={{this.pageSize}}
+            @onPageChange={{this.handlePageChange}}
+            @onPageSizeChange={{this.handlePageSizeChange}}
+          />
         {{else}}
           <Hds::ApplicationState as |A|>
             <A.Header
