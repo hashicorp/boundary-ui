@@ -115,8 +115,23 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       const sessions = await this.store.query('session', queryOptions);
       const totalItems = sessions.meta?.totalItems;
 
-      // refresh the saved current scope context when the scope changes or if it has not been previously set
-      if (this.scopeContext?.scopeId !== scope.id) {
+      // `scopeContext` should be refreshed if:
+      // * the cached scope context does not exist
+      // * the cached scope context's scope id does not match the current scope id
+      // * the cached scope context's `allSessions` is empty
+      // * if cached scope context's `allSessions` does not include the freshly queried sessions for the current session id,
+      //   then we know the previous `allSessions` is stale
+      const scopeContextSessionIds =
+        this.scopeContext?.allSessions?.map(({ id }) => id) ?? [];
+      const scopeContextHasAllQueriedSessions = sessions.every((session) =>
+        scopeContextSessionIds.includes(session.id),
+      );
+      const shouldRefreshScopeContext =
+        !this.scopeContext ||
+        this.scopeContext.scopeId !== scope.id ||
+        this.scopeContext.allSessions.length === 0 ||
+        !scopeContextHasAllQueriedSessions;
+      if (shouldRefreshScopeContext) {
         this.scopeContext = await this.getScopeContext(scope);
       }
 

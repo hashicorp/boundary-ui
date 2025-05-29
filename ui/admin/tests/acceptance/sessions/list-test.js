@@ -311,13 +311,72 @@ module('Acceptance | sessions | list', function (hooks) {
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
-  test('sessions can be loaded after visiting a project without sessions', async function (assert) {
+  test('sessions can be loaded after visiting a different project without sessions', async function (assert) {
     await visit(`/scopes/${instances.scopes.anotherProject.id}/sessions`);
     assert.dom('[data-test-no-sessions]').includesText('No sessions available');
     await visit(`/scopes/${instances.scopes.project.id}/sessions`);
     assert
       .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
+  });
+
+  test('sessions are loaded after re-visiting same project previously without sessions when base query includes new sessions', async function (assert) {
+    // initially no sessions exist for scope
+    this.server.schema.sessions.all().destroy();
+
+    await visit(urls.sessions);
+    assert.dom('[data-test-no-sessions]').includesText('No sessions available');
+
+    // create a new session for the scope and targets filter
+    const newSession = this.server.create('session', {
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    // click on targets link for the current project
+    await click(
+      commonSelectors.HREF(`/scopes/${instances.scopes.project.id}/targets`),
+    );
+    // re-visit sessions link for the current project
+    await click(commonSelectors.HREF(urls.sessions));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(newSession.id);
+  });
+
+  test('sessions are loaded after re-visiting same project previously with different sessions when base query includes new sessions', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+    // create a new session for the scope and targets filter
+    const existingSession = this.server.create('session', {
+      created_time: CREATED_TIME_VALUES_ARRAY[0],
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    await visit(urls.sessions);
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(existingSession.id);
+
+    // create a new session for the scope and targets filter
+    const newSession = this.server.create('session', {
+      created_time: CREATED_TIME_VALUES_ARRAY[1],
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    // click on targets link for the current project
+    await click(
+      commonSelectors.HREF(`/scopes/${instances.scopes.project.id}/targets`),
+    );
+    // re-visit sessions link for the current project
+    await click(commonSelectors.HREF(urls.sessions));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(newSession.id);
+    assert.dom(commonSelectors.TABLE_ROW(2)).includesText(existingSession.id);
   });
 
   test('sessions show correct user filters when switching projects', async function (assert) {
