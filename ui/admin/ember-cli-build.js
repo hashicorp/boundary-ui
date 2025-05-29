@@ -28,6 +28,9 @@ module.exports = async function (defaults) {
     svg: {
       paths: ['../../addons/core/public'],
     },
+    api: {
+      enableSqlite: true,
+    },
   });
 
   // TODO: The deprecations object can be removed in ember-data 6.0.

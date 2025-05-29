@@ -24,9 +24,7 @@ module.exports = class BuildWorkers extends Plugin {
 
   _getWorkers(inputPath) {
     let workers = {};
-    let dir = fs
-      .readdirSync(inputPath)
-      .filter((name) => name.endsWith('worker.js'));
+    let dir = fs.readdirSync(inputPath);
 
     dir.forEach((name) => {
       workers[name] = path.join(inputPath, name);
