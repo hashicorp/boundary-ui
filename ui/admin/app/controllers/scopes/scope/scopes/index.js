@@ -10,11 +10,19 @@ import { tracked } from '@glimmer/tracking';
 export default class ScopesScopeScopesIndexController extends Controller {
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   // =methods
 
@@ -26,6 +34,13 @@ export default class ScopesScopeScopesIndexController extends Controller {
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+    this.page = 1;
+  }
+
+  @action
+  sortBy(attribute, direction) {
+    this.sortAttribute = attribute;
+    this.sortDirection = direction;
     this.page = 1;
   }
 }
