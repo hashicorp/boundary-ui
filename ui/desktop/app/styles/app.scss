@@ -109,8 +109,7 @@
   .rose-header-utilities button {
     -webkit-app-region: no-drag;
   }
-  
- 
+
   &.header-cushion {
     padding-left: sizing.rems(l) * 3;
   }
@@ -272,6 +271,12 @@
 
   > * {
     margin-right: 1rem;
+  }
+}
+
+.target-details-body {
+  .hds-segmented-group {
+    margin-bottom: 1rem;
   }
 }
 

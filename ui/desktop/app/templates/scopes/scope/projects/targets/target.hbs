@@ -38,53 +38,80 @@
     <Rose::Layout::BodyContent as |bc|>
       <bc.Body class='target-details-body'>
         {{#if (gt @model.hosts.length 1)}}
-          <Hds::Table
-            @model={{this.paginatedHosts}}
-            @columns={{array
-              (hash label=(t 'resources.target.host-source.title_plural'))
-              (hash label=(t 'form.address.label'))
-              (hash
-                label=(t 'titles.actions') isVisuallyHidden=true align='right'
-              )
-            }}
-            @valign='middle'
-          >
-            <:body as |B|>
-              <B.Tr>
-                <B.Td>
-                  <Hds::Text::Body @weight='semibold' @tag='p'>
-                    {{B.data.displayName}}
-                  </Hds::Text::Body>
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.description}}
-                  </Hds::Text::Body>
-                </B.Td>
-                <B.Td>
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.address}}
-                  </Hds::Text::Body>
-                </B.Td>
+          <Hds::SegmentedGroup as |S|>
+            <S.TextInput
+              @value={{this.search}}
+              @type='search'
+              placeholder={{t 'actions.search'}}
+              aria-label={{t 'actions.search'}}
+              {{on 'input' this.handleSearchInput}}
+            />
+          </Hds::SegmentedGroup>
+          {{#if this.hosts.length}}
+            <Hds::Table
+              @model={{this.hosts}}
+              @columns={{array
+                (hash label=(t 'resources.target.host-source.title_plural'))
+                (hash label=(t 'form.address.label'))
+                (hash
+                  label=(t 'titles.actions') isVisuallyHidden=true align='right'
+                )
+              }}
+              @valign='middle'
+            >
+              <:body as |B|>
+                <B.Tr>
+                  <B.Td>
+                    <Hds::Text::Body @weight='semibold' @tag='p'>
+                      {{B.data.displayName}}
+                    </Hds::Text::Body>
+                    <Hds::Text::Body @tag='p'>
+                      {{B.data.description}}
+                    </Hds::Text::Body>
+                  </B.Td>
+                  <B.Td>
+                    <Hds::Text::Body @tag='p'>
+                      {{B.data.address}}
+                    </Hds::Text::Body>
+                  </B.Td>
 
-                <B.Td>
-                  <Hds::Button
-                    data-test-target-connect-button={{B.data.id}}
-                    @text={{t 'resources.session.actions.connect'}}
-                    @color='secondary'
-                    {{on 'click' (fn this.connect @model.target B.data)}}
-                  />
-                </B.Td>
+                  <B.Td>
+                    <Hds::Button
+                      data-test-target-connect-button={{B.data.id}}
+                      @text={{t 'resources.session.actions.connect'}}
+                      @color='secondary'
+                      {{on 'click' (fn this.connect @model.target B.data)}}
+                    />
+                  </B.Td>
 
-              </B.Tr>
-            </:body>
-          </Hds::Table>
-          <Hds::Pagination::Numbered
-            data-test-pagination
-            @totalItems={{this.totalItems}}
-            @currentPage={{this.page}}
-            @currentPageSize={{this.pageSize}}
-            @onPageChange={{this.handlePageChange}}
-            @onPageSizeChange={{this.handlePageSizeChange}}
-          />
+                </B.Tr>
+              </:body>
+            </Hds::Table>
+            <Hds::Pagination::Numbered
+              data-test-pagination
+              @totalItems={{this.totalItems}}
+              @currentPage={{this.page}}
+              @currentPageSize={{this.pageSize}}
+              @onPageChange={{this.handlePageChange}}
+              @onPageSizeChange={{this.handlePageSizeChange}}
+            />
+          {{/if}}
+          {{#if this.noResults}}
+            <Hds::ApplicationState data-test-no-host-source-results as |A|>
+              <A.Header @title={{t 'titles.no-results-found'}} />
+              <A.Body
+                @text={{t
+                  (if
+                    this.search
+                    'descriptions.no-search-results'
+                    'descriptions.no-filter-results'
+                  )
+                  query=this.search
+                  resource=(t 'resources.target.host-source.title_plural')
+                }}
+              />
+            </Hds::ApplicationState>
+          {{/if}}
         {{else}}
           <Hds::ApplicationState as |A|>
             <A.Header
