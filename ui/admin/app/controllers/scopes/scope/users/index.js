@@ -17,10 +17,18 @@ export default class ScopesScopeUsersIndexController extends Controller {
   @service can;
   @service intl;
   @service router;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked page = 1;
@@ -125,5 +133,13 @@ export default class ScopesScopeUsersIndexController extends Controller {
   async removeAccount(user, account) {
     await user.removeAccount(account.id);
     await this.router.refresh();
+  }
+
+  @action
+  sortBy(attribute, direction) {
+    this.sortAttribute = attribute;
+    this.sortDirection = direction;
+    // Reset to the first page when changing sort
+    this.page = 1;
   }
 }
