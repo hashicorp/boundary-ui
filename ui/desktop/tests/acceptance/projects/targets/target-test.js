@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -29,6 +29,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     '.hds-modal__footer .hds-button--color-primary';
   const HDS_DIALOG_CANCEL_BUTTON =
     '.hds-modal__footer .hds-button--color-secondary';
+  const TABLE_ROWS = 'tbody tr';
 
   const instances = {
     scopes: {
@@ -43,6 +44,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    targetWithManyHosts: null,
     alias: null,
   };
 
@@ -57,6 +59,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    targetWithManyHosts: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -107,6 +110,11 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts',
     );
+    instances.targetWithManyHosts = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withManyHosts',
+    );
     instances.alias = this.server.create('alias', {
       scope: instances.scopes.global,
       destination_id: instances.targetWithOneHost.id,
@@ -128,6 +136,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetWithOneHost = `${urls.targets}/${instances.targetWithOneHost.id}`;
     urls.targetWithTwoHosts = `${urls.targets}/${instances.targetWithTwoHosts.id}`;
+    urls.targetWithManyHosts = `${urls.targets}/${instances.targetWithManyHosts.id}`;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -237,7 +246,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await visit(urls.targets);
     await click(TARGET_RESOURCE_LINK(targetId));
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
   });
 
   test('user can see host source table when visiting a target via connect button', async function (assert) {
@@ -246,7 +255,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     await visit(urls.targets);
     await click(TARGET_TABLE_CONNECT_BUTTON(targetId));
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
   });
 
   test('user can connect to a target with two hosts using host source table', async function (assert) {
@@ -265,7 +274,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await click(`[href="${urls.targetWithTwoHosts}"]`);
 
-    assert.dom('tbody tr').exists({ count: 2 });
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
 
     await click(TARGET_HOST_SOURCE_CONNECT_BUTTON(hostId));
 
@@ -293,6 +302,29 @@ module('Acceptance | projects | targets | target', function (hooks) {
       assert.dom(TARGET_CONNECT_BUTTON).hasText(input.expectedText);
     },
   );
+
+  test('user can use table pagination to see more hosts', async function (assert) {
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithManyHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 10 });
+    assert.dom('[data-test-pagination]').isVisible();
+
+    await click('button[aria-label="Next page"]');
+
+    assert.dom(TABLE_ROWS).exists({ count: 5 });
+  });
+
+  test('user can change page size', async function (assert) {
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithManyHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 10 });
+
+    await select('[data-test-pagination] select', '30');
+
+    assert.dom(TABLE_ROWS).exists({ count: 15 });
+  });
 
   test('user can visit target details screen without read permissions for host-set', async function (assert) {
     assert.expect(1);
