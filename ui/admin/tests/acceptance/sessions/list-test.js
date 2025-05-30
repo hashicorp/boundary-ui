@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  waitFor,
+  findAll,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -49,6 +56,7 @@ module('Acceptance | sessions | list', function (hooks) {
       global: null,
       org: null,
       project: null,
+      anotherProject: null,
     },
     sessions: null,
     tcpTarget: null,
@@ -80,6 +88,18 @@ module('Acceptance | sessions | list', function (hooks) {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
     });
+    instances.scopes.project.authorized_collection_actions.users = [
+      'create',
+      'list',
+    ];
+    instances.scopes.anotherProject = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: instances.scopes.org.type },
+    });
+    instances.scopes.anotherProject.authorized_collection_actions.users = [
+      'create',
+      'list',
+    ];
     this.server.createList(
       'group',
       1,
@@ -289,6 +309,204 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('status'));
 
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
+  });
+
+  test('sessions can be loaded after visiting a different project without sessions', async function (assert) {
+    await visit(`/scopes/${instances.scopes.anotherProject.id}/sessions`);
+    assert.dom('[data-test-no-sessions]').includesText('No sessions available');
+    await visit(`/scopes/${instances.scopes.project.id}/sessions`);
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: instances.sessions.length });
+  });
+
+  test('sessions are loaded after re-visiting same project previously without sessions when base query includes new sessions', async function (assert) {
+    // initially no sessions exist for scope
+    this.server.schema.sessions.all().destroy();
+
+    await visit(urls.sessions);
+    assert.dom('[data-test-no-sessions]').includesText('No sessions available');
+
+    // create a new session for the scope and targets filter
+    const newSession = this.server.create('session', {
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    // click on targets link for the current project
+    await click(
+      commonSelectors.HREF(`/scopes/${instances.scopes.project.id}/targets`),
+    );
+    // re-visit sessions link for the current project
+    await click(commonSelectors.HREF(urls.sessions));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(newSession.id);
+  });
+
+  test('sessions are loaded after re-visiting same project previously with different sessions when base query includes new sessions', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+    // create a new session for the scope and targets filter
+    const existingSession = this.server.create('session', {
+      created_time: CREATED_TIME_VALUES_ARRAY[0],
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    await visit(urls.sessions);
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(existingSession.id);
+
+    // create a new session for the scope and targets filter
+    const newSession = this.server.create('session', {
+      created_time: CREATED_TIME_VALUES_ARRAY[1],
+      scope: instances.scopes.project,
+      status: STATUS_SESSION_ACTIVE,
+      target: instances.tcpTarget,
+    });
+
+    // click on targets link for the current project
+    await click(
+      commonSelectors.HREF(`/scopes/${instances.scopes.project.id}/targets`),
+    );
+    // re-visit sessions link for the current project
+    await click(commonSelectors.HREF(urls.sessions));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+    assert.dom(commonSelectors.TABLE_ROW(1)).includesText(newSession.id);
+    assert.dom(commonSelectors.TABLE_ROW(2)).includesText(existingSession.id);
+  });
+
+  test('sessions show correct user filters when switching projects', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+
+    const anotherProjectRefs = {
+      sessionCount: 4,
+      user: instances.dev,
+      scope: instances.scopes.anotherProject,
+    };
+
+    const projectRefs = {
+      sessionCount: 2,
+      user: instances.admin,
+      scope: instances.scopes.project,
+    };
+
+    this.server.createList(
+      'session',
+      anotherProjectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: anotherProjectRefs.scope,
+        user: anotherProjectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    instances.sessions = this.server.createList(
+      'session',
+      projectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: projectRefs.scope,
+        user: projectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    await visit(`/scopes/${anotherProjectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProjectRefs.user.id))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: anotherProjectRefs.sessionCount });
+
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(anotherProjectRefs.user.name);
+    });
+
+    await visit(`/scopes/${projectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('user'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(projectRefs.user.id))
+      .isVisible();
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .exists({ count: projectRefs.sessionCount });
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(projectRefs.user.name);
+    });
+  });
+
+  test('sessions show correct target filters when switching projects', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+    this.server.schema.targets.all().destroy();
+
+    const anotherProjectRefs = {
+      sessionCount: 4,
+      user: instances.dev,
+      scope: instances.scopes.anotherProject,
+      target: this.server.create(
+        'target',
+        { scope: instances.scopes.anotherProject, type: TYPE_TARGET_TCP },
+        'withAssociations',
+      ),
+    };
+
+    const projectRefs = {
+      sessionCount: 2,
+      user: instances.admin,
+      scope: instances.scopes.project,
+      target: this.server.create(
+        'target',
+        { scope: instances.scopes.project, type: TYPE_TARGET_TCP },
+        'withAssociations',
+      ),
+    };
+
+    this.server.createList(
+      'session',
+      anotherProjectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: anotherProjectRefs.scope,
+        user: anotherProjectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    instances.sessions = this.server.createList(
+      'session',
+      projectRefs.sessionCount,
+      {
+        status: 'active',
+        scope: projectRefs.scope,
+        user: projectRefs.user,
+      },
+      'withAssociations',
+    );
+
+    await visit(`/scopes/${anotherProjectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(anotherProjectRefs.target.id))
+      .isVisible();
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(anotherProjectRefs.target.name);
+    });
+
+    await visit(`/scopes/${projectRefs.scope.id}/sessions`);
+    await click(commonSelectors.FILTER_DROPDOWN('target'));
+    assert
+      .dom(commonSelectors.FILTER_DROPDOWN_ITEM(projectRefs.target.id))
+      .isVisible();
+    findAll(commonSelectors.TABLE_ROWS).forEach((row) => {
+      assert.dom(row).includesText(projectRefs.target.name);
+    });
   });
 
   test('sessions table is sorted by `created_time` descending by default', async function (assert) {

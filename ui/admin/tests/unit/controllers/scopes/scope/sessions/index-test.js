@@ -21,9 +21,11 @@ module('Unit | Controller | scopes/scope/sessions/index', function (hooks) {
   const target = { id: 't_123', name: 'target' };
   const model = {
     sessions: [session],
-    associatedUsers: [user],
-    associatedTargets: [target],
-    allSessions: [session],
+    scopeContext: Object.freeze({
+      allSessions: [session],
+      users: [user],
+      targets: [target],
+    }),
     totalItems: 1,
   };
 
