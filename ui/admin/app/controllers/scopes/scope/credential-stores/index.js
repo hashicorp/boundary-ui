@@ -21,12 +21,21 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
 
   // =attributes
 
-  queryParams = ['search', { types: { type: 'array' } }, 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    { types: { type: 'array' } },
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked types = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   get credStoreTypeOptions() {
     return TYPES_CREDENTIAL_STORE.map((type) => ({
@@ -175,5 +184,17 @@ export default class ScopesScopeCredentialStoresIndexController extends Controll
     await this.router.replaceWith(
       'scopes.scope.credential-stores.credential-store.worker-filter',
     );
+  }
+
+  /**
+   * Set sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
