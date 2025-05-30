@@ -55,9 +55,8 @@ test.afterEach(async ({ request }) => {
   }
 });
 
-test.describe('Target with many hosts', () => {
-  // TODO: Add tests for searching host sources
-  test('should display all hosts in the target', async ({ authedPage }) => {
+test.describe('Search and Pagination', () => {
+  test('target details', async ({ authedPage }) => {
     await authedPage
       .getByRole('link', { name: targetWithManyHosts.name })
       .click();
@@ -137,6 +136,52 @@ test.describe('Target with many hosts', () => {
         .getByRole('row')
         .filter({ hasNot: authedPage.getByRole('columnheader') }),
     ).toHaveCount(10);
+
+    // Search for a specific host
+    const host = hosts[12];
+    await authedPage.getByRole('searchbox', { name: 'Search' }).fill(host.name);
+
+    await expect(
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(1);
+
+    // Clear the search box
+    await authedPage.getByRole('searchbox', { name: 'Search' }).fill('');
+
+    await expect(
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(10);
+    await expect(authedPage.getByText('1–10 of 15')).toBeVisible();
+
+    // Search with query that matches multiple hosts
+    await authedPage.getByRole('searchbox', { name: 'Search' }).fill('Host 1');
+    await expect(
+      authedPage.getByRole('cell', {
+        name: hosts[0].name,
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      authedPage.getByRole('cell', {
+        name: hosts[10].name,
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      authedPage
+        .getByRole('row')
+        .filter({ hasNot: authedPage.getByRole('columnheader') }),
+    ).toHaveCount(7);
+
+    // Search for a host that does not exist
+    await authedPage
+      .getByRole('searchbox', { name: 'Search' })
+      .fill('Nonexistent Host');
+    await expect(authedPage.getByRole('table')).toBeHidden();
   });
 });
 

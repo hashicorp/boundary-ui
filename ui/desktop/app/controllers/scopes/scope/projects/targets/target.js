@@ -7,6 +7,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { debounce } from 'core/decorators/debounce';
 
 export default class ScopesScopeProjectsTargetsTargetController extends Controller {
   @controller('scopes/scope/projects/targets/index') targets;
@@ -20,6 +21,7 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
 
   queryParams = [{ isConnecting: { type: 'boolean' } }];
 
+  @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
   @tracked totalItems = this.model.hosts.length;
@@ -29,8 +31,20 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
 
   // =methods
 
-  get paginatedHosts() {
-    return this.model.hosts.slice(
+  get hosts() {
+    let filteredHosts = this.model.hosts;
+    if (this.search) {
+      filteredHosts = this.model.hosts.filter((host) => {
+        const searchTerm = this.search?.toLowerCase() || '';
+        return (
+          host.displayName.toLowerCase().includes(searchTerm) ||
+          host.description?.toLowerCase().includes(searchTerm) ||
+          host.address.toLowerCase().includes(searchTerm)
+        );
+      });
+    }
+
+    return filteredHosts.slice(
       (this.page - 1) * this.pageSize,
       this.page * this.pageSize,
     );
@@ -58,6 +72,26 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
           this.isConnectionError = false;
         });
     }
+  }
+
+  /**
+   * Handles input on each keystroke and the search queryParam
+   * @param {object} event
+   */
+  @action
+  @debounce(250)
+  handleSearchInput(event) {
+    const { value } = event.target;
+    this.search = value;
+    this.page = 1;
+  }
+
+  /**
+   * Returns true if the search query is empty
+   * @returns {boolean}
+   */
+  get noResults() {
+    return this.model.hosts.length > 0 && this.hosts.length === 0;
   }
 
   @action
