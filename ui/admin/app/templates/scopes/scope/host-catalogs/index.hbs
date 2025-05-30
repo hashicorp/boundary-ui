@@ -46,45 +46,58 @@
 
       {{#if @model.hostCatalogs}}
         <Hds::Table
-          @model={{@model.hostCatalogs}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-          }}
           @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.Th>{{t 'form.type.label'}}</H.Th>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read host-catalog' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.host-catalogs.host-catalog'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.displayName}}
-                  </Hds::Text::Body>
-                {{/if}}
-                <Hds::Text::Body
-                  @tag='p'
-                >{{B.data.description}}</Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                <HostCatalogTypeBadge @model={{B.data}} />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @color='secondary'
-                  @textToCopy={{B.data.id}}
-                />
-              </B.Td>
-            </B.Tr>
+            {{#each @model.hostCatalogs as |data|}}
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read host-catalog' data)}}
+                    <LinkTo
+                      @route='scopes.scope.host-catalogs.host-catalog'
+                      @model={{data.id}}
+                    >
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    <Hds::Text::Body @tag='p'>
+                      {{data.displayName}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                  <Hds::Text::Body
+                    @tag='p'
+                  >{{data.description}}</Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <HostCatalogTypeBadge @model={{data}} />
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @color='secondary'
+                    @textToCopy={{data.id}}
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
+
         <Rose::Pagination
           @totalItems={{@model.totalItems}}
           @currentPage={{this.page}}
