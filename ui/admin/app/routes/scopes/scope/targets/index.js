@@ -5,11 +5,12 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_PENDING,
 } from 'api/models/session';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 
 export default class ScopesScopeTargetsIndexRoute extends Route {
   // =services
@@ -17,6 +18,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   @service can;
   @service store;
   @service session;
+  @service intl;
 
   // =attributes
 
@@ -62,6 +64,15 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
+  typeMap = {
+    [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
+    [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
+  };
+  sortOnType = (recordA, recordB) =>
+    String(this.typeMap[recordA.attributes.type]).localeCompare(
+      String(this.typeMap[recordB.attributes.type]),
+    );
+
   retrieveData = restartableTask(
     async ({
       search,
@@ -105,14 +116,19 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         this.addActiveSessionFilters(filters, availableSessions, sessions);
       }
 
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
+
+      if (sortAttribute === 'type') {
+        sort.sortFunction = this.sortOnType;
+      }
+
       let targets;
       let totalItems = 0;
       let doTargetsExist = false;
       if (this.can.can('list model', scope, { collection: 'targets' })) {
-        const sort = {
-          attribute: sortAttribute,
-          direction: sortDirection,
-        };
         targets = await this.store.query('target', {
           scope_id,
           query: { search, filters, sort },

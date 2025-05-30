@@ -26,6 +26,12 @@ function getSortableValue(schema, record, attribute) {
     return record.attributes.created_time;
   }
 
+  // When name is an optional attribute, use id to sort instead.
+  if (schema.attributes.has(attribute) && attribute === 'name') {
+    const name = record.attributes[attribute];
+    return name ? name : record.id;
+  }
+
   if (schema.attributes.has(attribute)) {
     return record.attributes[attribute];
   }
@@ -53,6 +59,17 @@ export const sortResults = (results, { querySort, schema }) => {
     )
   ) {
     throw new Error('Invalid sort direction');
+  }
+
+  // Execute custom sort function if one is provided.
+  if (querySort.sortFunction) {
+    return results.toSorted((a, b) => {
+      const sortResult = querySort.sortFunction(a, b);
+
+      return sortDirection === SORT_DIRECTION_ASCENDING
+        ? sortResult
+        : -1 * sortResult;
+    });
   }
 
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
