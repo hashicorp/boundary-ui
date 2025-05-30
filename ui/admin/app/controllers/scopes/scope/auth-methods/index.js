@@ -28,6 +28,8 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
     { primary: { type: 'array' } },
     'page',
     'pageSize',
+    'sortAttribute',
+    'sortDirection',
   ];
 
   @tracked search;
@@ -35,6 +37,8 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   @tracked primary = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   /**
    * True if the current scope has a primary auth method set.
@@ -325,5 +329,17 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
   @notifySuccess('notifications.save-success')
   async changeState(authMethod, state) {
     await authMethod.changeState(state);
+  }
+
+  /**
+   * Set sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }

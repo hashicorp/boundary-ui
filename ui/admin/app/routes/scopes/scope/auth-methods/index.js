@@ -35,6 +35,14 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -50,7 +58,16 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, types, primary, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      types,
+      primary,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -61,6 +78,11 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
         scope_id: [{ equals: scope_id }],
         type: [],
         is_primary: [],
+      };
+
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
       };
 
       types.forEach((type) => {
@@ -82,7 +104,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
           'auth-method',
           {
             scope_id,
-            query: { search, filters },
+            query: { search, filters, sort },
             page,
             pageSize,
           },
