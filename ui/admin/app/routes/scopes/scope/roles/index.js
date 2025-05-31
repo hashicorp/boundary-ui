@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 export default class ScopesScopeRolesIndexRoute extends Route {
@@ -32,6 +33,11 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     },
   };
 
+  customSortFunction = {
+    name: sortNameWithIdFallback,
+    grant_scope_ids: this.sortGrantsApplied,
+  };
+
   // =services
 
   @service can;
@@ -49,7 +55,7 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortOnGrantsApplied = (recordA, recordB) => {
+  sortGrantsApplied = (recordA, recordB) => {
     const a = recordA.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
     const b = recordB.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
     if (a === b) {
@@ -79,14 +85,11 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       const filters = {
         scope_id: [{ equals: scope_id }],
       };
-      const sort = {
-        attribute: sortAttribute,
-        direction: sortDirection,
-      };
 
-      if (sortAttribute === 'grant_scope_ids') {
-        sort.sortFunction = this.sortOnGrantsApplied;
-      }
+      const sortFunction = this.customSortFunction[sortAttribute];
+      const sort = sortFunction
+        ? { sortFunction, direction: sortDirection }
+        : { attribute: sortAttribute, direction: sortDirection };
 
       let roles;
       let totalItems = 0;

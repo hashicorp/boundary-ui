@@ -26,12 +26,6 @@ function getSortableValue(schema, record, attribute) {
     return record.attributes.created_time;
   }
 
-  // When name is an optional attribute, use id to sort instead.
-  if (schema.attributes.has(attribute) && attribute === 'name') {
-    const name = record.attributes[attribute];
-    return name ? name : record.id;
-  }
-
   if (schema.attributes.has(attribute)) {
     return record.attributes[attribute];
   }
