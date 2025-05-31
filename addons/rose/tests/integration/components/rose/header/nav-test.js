@@ -5,7 +5,7 @@
 
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, find, findAll } from '@ember/test-helpers';
+import { render, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | rose/header/nav', function (hooks) {
@@ -14,13 +14,5 @@ module('Integration | Component | rose/header/nav', function (hooks) {
   test('it renders', async function (assert) {
     await render(hbs`<Rose::Header::nav />`);
     assert.ok(find('.rose-header-nav'));
-  });
-
-  test('it renders nav dropdown elements', async function (assert) {
-    await render(hbs`<Rose::Header::nav as |nav| >
-      <nav.dropdown />
-      <nav.dropdown />
-    </Rose::Header::nav>`);
-    assert.strictEqual(findAll('.rose-dropdown').length, 2);
   });
 });

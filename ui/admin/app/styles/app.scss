@@ -47,29 +47,6 @@
   &:not(.full-width) {
     width: 66%;
   }
-
-  .rose-dropdown {
-    $icon-width: sizing.rems(m) + sizing.rems(s);
-    $indent: $icon-width + sizing.rems(xs);
-
-    .rose-form-radio-label {
-      display: flex;
-    }
-
-    .indent-label-1 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent;
-      }
-    }
-
-    .indent-label-2 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent + $icon-width;
-      }
-    }
-  }
 }
 
 .rose-header {
@@ -996,12 +973,6 @@
 
 .change-state {
   margin-right: 1rem;
-}
-
-.dropdown-radio-btn {
-  .hds-form-group__control-field {
-    padding: 0.25rem 0.75rem;
-  }
 }
 
 // worker filter generator
