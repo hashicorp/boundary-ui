@@ -30,6 +30,14 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -45,7 +53,15 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, types, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      types,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -61,6 +77,11 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
         filters.type.push({ equals: type });
       });
 
+      const sort = {
+        attribute: sortAttribute,
+        direction: sortDirection,
+      };
+
       let credentialStores;
       let totalItems = 0;
       let doCredentialStoresExist = false;
@@ -71,7 +92,7 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
       ) {
         credentialStores = await this.store.query('credential-store', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });

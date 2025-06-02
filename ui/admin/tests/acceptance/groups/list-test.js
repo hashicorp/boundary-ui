@@ -4,12 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitUntil, findAll } from '@ember/test-helpers';
+import {
+  visit,
+  click,
+  fillIn,
+  waitUntil,
+  findAll,
+  currentURL,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | groups | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -122,4 +130,97 @@ module('Acceptance | groups | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.group2)).doesNotExist();
     assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
   });
+
+  test('groups table is sorted by created_time descending by default', async function (assert) {
+    this.server.schema.groups.all().destroy();
+
+    const years = ['2026', '2025', '2024', '2023'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('group', {
+        scope: instances.scopes.org,
+        id: `g_${year}`,
+        name: `Group ${year}`,
+        created_time: `${year}-01-01T00:00:00Z`,
+      });
+    });
+
+    await visit(urls.groups);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    assert.dom(commonSelectors.TABLE_ROW(1)).containsText('Group 2026');
+    assert.dom(commonSelectors.TABLE_ROW(2)).containsText('Group 2025');
+    assert.dom(commonSelectors.TABLE_ROW(3)).containsText('Group 2024');
+    assert.dom(commonSelectors.TABLE_ROW(4)).containsText('Group 2023');
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Beta', 'Delta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['g_0001', 'g_0010', 'g_0100', 'g_1000', 'g_10000'],
+        },
+        expectedAscendingSort: [
+          'g_0001',
+          'g_0010',
+          'g_0100',
+          'g_1000',
+          'g_10000',
+        ],
+        column: 2,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.groups.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('group', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.org,
+        });
+      });
+
+      await visit(urls.groups);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
