@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | targets | manage-alias', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,7 +20,6 @@ module('Acceptance | targets | manage-alias', function (hooks) {
   const ALIASES_SIDEBAR_LIST = '.link-list-item';
   const DROPDOWN_ACTION = '[data-test-manage-target-alias] button';
   const CLEAR_BTN_SELECTOR = '.hds-dropdown-list-item--color-action button';
-  const DELETE_BTN_SELECTOR = '.hds-dropdown-list-item--color-critical button';
   const LINK_TO_NEW_ALIAS = '.target-sidebar-aliases .hds-button';
   const DEST_FIELD_SELECTOR = '[name="destination_id"]';
   const ITEM_SELECTOR = '.link-list-item a';
@@ -144,7 +144,7 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     assert.strictEqual(currentURL(), urls.tcpAlias);
     await click(DROPDOWN_ACTION);
 
-    await click(DELETE_BTN_SELECTOR);
+    await click(commonSelectors.DELETE_BTN);
 
     assert.strictEqual(getAliasCount(), aliasCount - 1);
 

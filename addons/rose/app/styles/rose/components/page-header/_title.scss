@@ -22,18 +22,4 @@
       width: sizing.rems(l);
     }
   }
-
-  .rose-header-dropdown {
-    .rose-header-dropdown-trigger-text {
-      @include typography.type(h1, bold);
-
-      margin-top: sizing.rems(xs);
-      margin-bottom: sizing.rems(xs);
-      margin-right: sizing.rems(xs);
-    }
-
-    .rose-header-dropdown-trigger {
-      background-size: sizing.rems(l);
-    }
-  }
 }

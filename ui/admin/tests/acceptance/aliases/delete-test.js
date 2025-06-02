@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | aliases | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,8 +20,6 @@ module('Acceptance | aliases | delete', function (hooks) {
 
   const DROPDOWN_BUTTON_SELECTOR =
     'tbody tr td:last-child .hds-dropdown-toggle-icon';
-  const DELETE_DROPDOWN_SELECTOR =
-    '.hds-dropdown-list-item--color-critical button';
 
   const instances = {
     scopes: {
@@ -68,7 +67,7 @@ module('Acceptance | aliases | delete', function (hooks) {
     assert.true(instances.alias.authorized_actions.includes('delete'));
     await visit(urls.aliases);
     await click(DROPDOWN_BUTTON_SELECTOR);
-    await click(DELETE_DROPDOWN_SELECTOR);
+    await click(commonSelectors.DELETE_BTN);
 
     assert.strictEqual(aliasCount(), count - 1);
   });
@@ -84,6 +83,6 @@ module('Acceptance | aliases | delete', function (hooks) {
     await click(`[href="${urls.aliases}"]`);
     await click(DROPDOWN_BUTTON_SELECTOR);
 
-    assert.dom(DELETE_DROPDOWN_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.DELETE_BTN).doesNotExist();
   });
 });
