@@ -5,33 +5,33 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.role.title_plural'}}
-      <DocLink @doc='role' />
-    </Hds::Text::Display>
-    {{#if @model.doRolesExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.role.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='roles')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.title_plural'}}
+        <DocLink @doc='role' />
+      </PH.Title>
       {{#if @model.doRolesExist}}
-        <Hds::Button
-          @route='scopes.scope.roles.new'
-          @text={{t 'resources.role.titles.new'}}
-          data-test-new-role-button
-        />
+        <PH.Description>
+          {{t 'resources.role.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='roles')}}
+          {{#if @model.doRolesExist}}
+            <Hds::Button
+              @route='scopes.scope.roles.new'
+              @text={{t 'resources.role.titles.new'}}
+              data-test-new-role-button
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doRolesExist}}
