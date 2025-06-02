@@ -11,24 +11,24 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Workers::Worker::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <Workers::Worker::Header @model={{@model}} @header={{PH}} />
+      <PH.Actions>
+        <Workers::Worker::Actions
+          @model={{@model}}
+          @delete={{this.workers.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
     <Workers::Worker::Nav />
   </page.navigation>
-
-  <page.actions>
-    <Workers::Worker::Actions
-      @model={{@model}}
-      @delete={{this.workers.delete}}
-    />
-  </page.actions>
 
   <page.body class='worker-tags'>
     {{#if @model.allTags}}

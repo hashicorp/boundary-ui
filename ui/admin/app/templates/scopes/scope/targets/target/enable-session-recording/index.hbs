@@ -4,16 +4,17 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>{{t
-        'resources.target.enable-session-recording.messages.add.title'
-      }}
-      <DocLink @doc='target.enable-session-recording' />
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.target.enable-session-recording.messages.add.title'}}
+        <DocLink @doc='target.enable-session-recording' />
+      </PH.Title>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

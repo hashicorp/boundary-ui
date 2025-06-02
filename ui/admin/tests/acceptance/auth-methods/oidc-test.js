@@ -131,7 +131,7 @@ module('Acceptance | auth-methods | oidc', function (hooks) {
     });
     const newState = 'inactive';
     await visit(urls.authMethod);
-    await click('.rose-layout-page-actions .rose-dropdown-trigger');
+    await click('.hds-page-header__actions .rose-dropdown-trigger');
     await click(`.rose-dropdown[open] input[value="${newState}"]`);
     const authMethod = this.server.db.authMethods.find(instances.authMethod.id);
     assert.notEqual(

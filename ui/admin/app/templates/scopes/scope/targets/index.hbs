@@ -4,33 +4,35 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.target.title_plural'}}
-      <DocLink @doc='target' />
-    </Hds::Text::Display>
-    {{#if @model.doTargetsExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.target.description'}}
-      </Hds::Text::Body>
-    {{/if}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.target.title_plural'}}
+        <DocLink @doc='target' />
+      </PH.Title>
+      {{#if @model.doTargetsExist}}
+        <PH.Description>
+          {{t 'resources.target.description'}}
+        </PH.Description>
+      {{/if}}
+      {{#if (can 'create model' this.scope collection='targets')}}
+        <PH.Actions>
+          {{#if @model.doTargetsExist}}
+            <Hds::Button
+              @route='scopes.scope.targets.new'
+              @text={{t 'resources.target.titles.new'}}
+              data-test-new-target-button
+            />
+          {{/if}}
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
 
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='targets')}}
-      {{#if @model.doTargetsExist}}
-        <Hds::Button
-          @route='scopes.scope.targets.new'
-          @text={{t 'resources.target.titles.new'}}
-          data-test-new-target-button
-        />
-      {{/if}}
-    {{/if}}
-  </page.actions>
   <page.body class='search-filtering'>
     {{#if @model.doTargetsExist}}
       <Hds::SegmentedGroup as |S|>
