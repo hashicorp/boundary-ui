@@ -64,14 +64,15 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  typeMap = {
-    [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
-    [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
-  };
-  sortOnType = (recordA, recordB) =>
-    String(this.typeMap[recordA.attributes.type]).localeCompare(
-      String(this.typeMap[recordB.attributes.type]),
+  sortType = (recordA, recordB) => {
+    const typeMap = {
+      [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
+      [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
+    };
+    return String(typeMap[recordA.attributes.type]).localeCompare(
+      String(typeMap[recordB.attributes.type]),
     );
+  };
 
   retrieveData = restartableTask(
     async ({
@@ -116,14 +117,10 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         this.addActiveSessionFilters(filters, availableSessions, sessions);
       }
 
-      const sort = {
-        attribute: sortAttribute,
-        direction: sortDirection,
-      };
-
-      if (sortAttribute === 'type') {
-        sort.sortFunction = this.sortOnType;
-      }
+      const sort =
+        sortAttribute === 'type'
+          ? { sortFunction: this.sortType, direction: sortDirection }
+          : { attribute: sortAttribute, direction: sortDirection };
 
       let targets;
       let totalItems = 0;
