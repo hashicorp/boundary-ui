@@ -15,7 +15,6 @@
         (if @model.isPrivate 'lock' 'check-circle')
       }}
     />
-
     {{#each @model.options.state as |state|}}
       <dd.Radio
         checked={{eq @model.state state}}
@@ -26,9 +25,7 @@
       </dd.Radio>
     {{/each}}
   </Hds::Dropdown>
-
 {{/if}}
-
 <Hds::Dropdown data-test-manage-auth-method as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if @model.isPrimary}}
@@ -58,7 +55,6 @@
       </dd.Interactive>
     {{/if}}
   {{/if}}
-
   {{#if (can 'delete auth-method' @model)}}
     <dd.Separator />
     <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
