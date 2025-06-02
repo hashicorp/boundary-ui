@@ -21,11 +21,19 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = [
+    'search',
+    'page',
+    'pageSize',
+    'sortAttribute',
+    'sortDirection',
+  ];
 
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
+  @tracked sortAttribute;
+  @tracked sortDirection;
 
   /**
    * If can list (at least): return default welcome message.
@@ -137,5 +145,17 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
   @action
   changeCredentialType(hostCatalog, credentialType) {
     hostCatalog.credentialType = credentialType;
+  }
+
+  /**
+   * Set sort values and sets page to 1
+   * @param {string} sortBy
+   * @param {string} sortOrder
+   */
+  @action
+  onSort(sortBy, sortOrder) {
+    this.sortAttribute = sortBy;
+    this.sortDirection = sortOrder;
+    this.page = 1;
   }
 }
