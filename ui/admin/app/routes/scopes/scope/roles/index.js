@@ -56,8 +56,8 @@ export default class ScopesScopeRolesIndexRoute extends Route {
   }
 
   sortGrantsApplied = (recordA, recordB) => {
-    const a = recordA.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
-    const b = recordB.attributes.grant_scope_ids?.includes(GRANT_SCOPE_THIS);
+    const a = recordA.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
+    const b = recordB.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
     if (a === b) {
       return 0;
     } else if (a) {

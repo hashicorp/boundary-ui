@@ -42,7 +42,7 @@ export const sortResults = (results, { querySort, schema }) => {
 
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
   const defaultSortDirection =
-    sortAttribute === SORT_DEFAULT_ATTRIBUTE
+    sortAttribute === SORT_DEFAULT_ATTRIBUTE && !querySort.sortFunction
       ? SORT_DIRECTION_DESCENDING
       : SORT_DIRECTION_ASCENDING;
   const sortDirection = querySort.direction || defaultSortDirection;
