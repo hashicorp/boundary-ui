@@ -4,11 +4,12 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
+import { visit, click, fillIn, waitFor, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { faker } from '@faker-js/faker';
 import {
   TYPE_CREDENTIAL_STORE_STATIC,
   TYPE_CREDENTIAL_STORE_VAULT,
@@ -182,4 +183,102 @@ module('Acceptance | credential-stores | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.staticCredentialStore)).doesNotExist();
     assert.dom(commonSelectors.HREF(urls.vaultCredentialStore)).isVisible();
   });
+
+  test('credential stores table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.credentialStores.all().destroy();
+    const years = ['2006', '2005', '2004', '2003'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('credential-store', {
+        scope: instances.scopes.project,
+        type: TYPE_CREDENTIAL_STORE_STATIC,
+        created_time: `${year}-01-01T00:00:00Z`,
+        name: `Credential-store ${year}`,
+      });
+    });
+
+    await visit(urls.credentialStores);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    years.forEach((year, index) => {
+      // nth-child index starts at 1
+      assert
+        .dom(commonSelectors.TABLE_ROW(index + 1))
+        .containsText(`Credential-store ${year}`);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Beta', 'Delta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on type': {
+        attribute: {
+          key: 'type',
+          values: ['Vault', 'Vault', 'Static', 'Vault', 'Static'],
+        },
+        expectedAscendingSort: ['Static', 'Static', 'Vault', 'Vault', 'Vault'],
+        column: 2,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['cs_1000', 'cs_0001', 'cs_0100', 'cs_0010'],
+        },
+        expectedAscendingSort: ['cs_0001', 'cs_0010', 'cs_0100', 'cs_1000'],
+        column: 3,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.credentialStores.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('credential-store', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.project,
+        });
+      });
+
+      await visit(urls.credentialStores);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
