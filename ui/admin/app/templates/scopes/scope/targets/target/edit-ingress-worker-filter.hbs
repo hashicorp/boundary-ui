@@ -11,18 +11,19 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.target.workers.edit-ingress-worker-filter.title'}}
-      <DocLink @doc='worker-filters-format' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.target.workers.edit-ingress-worker-filter.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.target.workers.edit-ingress-worker-filter.title'}}
+        <DocLink @doc='worker-filters-format' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.target.workers.edit-ingress-worker-filter.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body class='target-workers'>

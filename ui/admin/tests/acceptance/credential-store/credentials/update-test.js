@@ -143,7 +143,7 @@ module(
         );
       await visit(urls.usernamePasswordCredential);
       assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
+        .dom('.hds-page-header__actions .hds-button-secondary')
         .doesNotExist();
     });
 
@@ -154,7 +154,7 @@ module(
         );
       await visit(urls.usernameKeyPairCredential);
       assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
+        .dom('.hds-page-header__actions .hds-button-secondary')
         .doesNotExist();
     });
 
@@ -165,7 +165,7 @@ module(
         );
       await visit(urls.jsonCredential);
       assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
+        .dom('.hds-page-header__actions .hds-button-secondary')
         .doesNotExist();
     });
 

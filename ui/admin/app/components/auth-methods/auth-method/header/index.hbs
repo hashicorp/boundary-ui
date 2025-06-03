@@ -3,16 +3,16 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
+<@header.Title>
   {{t 'resources.auth-method.title'}}
   {{#if @model.isPrimary}}
-    &nbsp;
     <Hds::Badge @text={{t 'states.primary'}} @color='success' />
-    &nbsp;
   {{/if}}
   <DocLink @doc='auth-method' />
-</Hds::Text::Display>
-<Hds::Text::Body @tag='p' @size='300' class='p'>{{t
-    'resources.auth-method.description'
-  }}</Hds::Text::Body>
-<Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+</@header.Title>
+<@header.Description>
+  {{t 'resources.auth-method.description'}}
+</@header.Description>
+<@header.Generic>
+  <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+</@header.Generic>

@@ -4,19 +4,20 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>{{t
-        'resources.session-recording.title_plural'
-      }}
-      <DocLink @doc='session-recording' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.session-recording.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.session-recording.title_plural'}}
+        <DocLink @doc='session-recording' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.session-recording.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body class='search-filtering'>
