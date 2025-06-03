@@ -19,17 +19,32 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
 
   // =attributes
 
-  queryParams = [{ isConnecting: { type: 'boolean' } }];
+  queryParams = [{ isConnecting: { type: 'boolean' } }, 'page', 'pageSize'];
 
   @tracked search;
   @tracked page = 1;
   @tracked pageSize = 10;
-  @tracked totalItems = this.model.hosts.length;
 
   @tracked isConnecting = false;
   isConnectionError = false;
 
   // =methods
+
+  get paginatedHosts() {
+    return this.hosts.slice(
+      (this.page - 1) * this.pageSize,
+      this.page * this.pageSize,
+    );
+  }
+
+  get queryFunction() {
+    return (page, pageSize) => {
+      return {
+        page,
+        pageSize,
+      };
+    };
+  }
 
   get hosts() {
     let filteredHosts = this.model.hosts;
@@ -44,10 +59,15 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
       });
     }
 
-    return filteredHosts.slice(
-      (this.page - 1) * this.pageSize,
-      this.page * this.pageSize,
-    );
+    return filteredHosts;
+  }
+
+  /**
+   * Returns true if the search query is empty
+   * @returns {boolean}
+   */
+  get noResults() {
+    return this.model.hosts.length > 0 && this.hosts.length === 0;
   }
 
   /**
@@ -84,24 +104,5 @@ export default class ScopesScopeProjectsTargetsTargetController extends Controll
     const { value } = event.target;
     this.search = value;
     this.page = 1;
-  }
-
-  /**
-   * Returns true if the search query is empty
-   * @returns {boolean}
-   */
-  get noResults() {
-    return this.model.hosts.length > 0 && this.hosts.length === 0;
-  }
-
-  @action
-  async handlePageChange(page) {
-    this.page = page;
-  }
-
-  @action
-  async handlePageSizeChange(pageSize) {
-    this.page = 1;
-    this.pageSize = pageSize;
   }
 }

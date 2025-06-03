@@ -47,9 +47,9 @@
               {{on 'input' this.handleSearchInput}}
             />
           </Hds::SegmentedGroup>
-          {{#if this.hosts.length}}
+          {{#if this.paginatedHosts.length}}
             <Hds::Table
-              @model={{this.hosts}}
+              @model={{this.paginatedHosts}}
               @columns={{array
                 (hash label=(t 'resources.target.host-source.title_plural'))
                 (hash label=(t 'form.address.label'))
@@ -87,13 +87,10 @@
                 </B.Tr>
               </:body>
             </Hds::Table>
-            <Hds::Pagination::Numbered
-              data-test-pagination
-              @totalItems={{this.totalItems}}
+            <Rose::Pagination
+              @totalItems={{this.hosts.length}}
               @currentPage={{this.page}}
               @currentPageSize={{this.pageSize}}
-              @onPageChange={{this.handlePageChange}}
-              @onPageSizeChange={{this.handlePageSizeChange}}
             />
           {{/if}}
           {{#if this.noResults}}
