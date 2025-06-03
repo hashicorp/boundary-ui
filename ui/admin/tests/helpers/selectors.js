@@ -14,6 +14,8 @@ export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
 export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
+export const FIELD_PASSWORD = '[name=password]';
+
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 export const TABLE_ROWS = 'tbody tr';
 export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;

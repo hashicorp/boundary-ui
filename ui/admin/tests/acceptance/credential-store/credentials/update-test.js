@@ -16,6 +16,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
@@ -46,6 +47,28 @@ module(
       usernamePasswordCredential: null,
       usernameKeyPairCredential: null,
       jsonCredential: null,
+    };
+
+    const mockResponseMessage = 'Error in provided request.';
+    const mockResponseDescription = 'Name is required.';
+    const mockResponse = () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: mockResponseMessage,
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: mockResponseDescription,
+              },
+            ],
+          },
+        },
+      );
     };
 
     hooks.beforeEach(async function () {
@@ -92,47 +115,62 @@ module(
     });
 
     test('can save changes to existing username & password credential', async function (assert) {
-      const mockInput = 'random string';
-      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernamePasswordCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernamePasswordCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="submit"]');
+      await click(commonSelectors.EDIT_BTN);
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.SAVE_BTN);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'username_password' })
           .models[0].name,
-        mockInput,
+        commonSelectors.FIELD_NAME_VALUE,
       );
     });
 
     test('can save changes to existing username & key pair credential', async function (assert) {
-      const mockInput = 'random string';
-      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernameKeyPairCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernameKeyPairCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="submit"]');
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.SAVE_BTN);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'ssh_private_key' })
           .models[0].name,
-        mockInput,
+        commonSelectors.FIELD_NAME_VALUE,
       );
     });
 
     test('can save changes to existing JSON credential', async function (assert) {
       featuresService.enable('json-credentials');
-      const mockInput = 'random string';
-      assert.notEqual(instances.jsonCredential.name, mockInput);
+      assert.notEqual(
+        instances.jsonCredential.name,
+        commonSelectors.FIELD_NAME,
+      );
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="submit"]');
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.SAVE_BTN);
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'json' }).models[0].name,
-        mockInput,
+        commonSelectors.FIELD_NAME_VALUE,
       );
     });
 
@@ -141,10 +179,10 @@ module(
         instances.usernamePasswordCredential.authorized_actions.filter(
           (item) => item !== 'update',
         );
+
       await visit(urls.usernamePasswordCredential);
-      assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
-        .doesNotExist();
+
+      assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
     });
 
     test('cannot make changes to an existing username & key pair credential without proper authorization', async function (assert) {
@@ -153,9 +191,8 @@ module(
           (item) => item !== 'update',
         );
       await visit(urls.usernameKeyPairCredential);
-      assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
-        .doesNotExist();
+
+      assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
     });
 
     test('cannot make changes to an existing JSON credential without proper authorization', async function (assert) {
@@ -164,161 +201,128 @@ module(
           (item) => item !== 'update',
         );
       await visit(urls.jsonCredential);
-      assert
-        .dom('.rose-layout-page-actions .hds-button-secondary')
-        .doesNotExist();
+
+      assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
     });
 
     test('can cancel changes to existing username & password credential', async function (assert) {
-      const mockInput = 'random string';
       await visit(urls.usernamePasswordCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="button"]');
-      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
-      assert.strictEqual(
-        find('[name="name"]').value,
-        instances.usernamePasswordCredential.name,
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.CANCEL_BTN);
+
+      assert.notEqual(
+        instances.usernamePasswordCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      assert
+        .dom(commonSelectors.FIELD_NAME)
+        .hasValue(instances.usernamePasswordCredential.name);
     });
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
-      const mockInput = 'random string';
       await visit(urls.usernameKeyPairCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="button"]');
-      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
-      assert.strictEqual(
-        find('[name="name"]').value,
-        instances.usernameKeyPairCredential.name,
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.CANCEL_BTN);
+      assert.notEqual(
+        instances.usernameKeyPairCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      assert
+        .dom(commonSelectors.FIELD_NAME)
+        .hasValue(instances.usernameKeyPairCredential.name);
     });
 
     test('can cancel changes to existing JSON credential', async function (assert) {
-      const mockInput = 'random string';
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('.rose-form-actions [type="button"]');
-      assert.notEqual(instances.jsonCredential.name, mockInput);
-      assert.strictEqual(
-        find('[name="name"]').value,
-        instances.jsonCredential.name,
+
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.CANCEL_BTN);
+
+      assert.notEqual(
+        instances.jsonCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      assert
+        .dom(commonSelectors.FIELD_NAME)
+        .hasValue(instances.jsonCredential.name);
     });
 
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
-      const mockInput = 'random string';
-      this.server.patch('/credentials/:id', () => {
-        return new Response(
-          400,
-          {},
-          {
-            status: 400,
-            code: 'invalid_argument',
-            message: 'Error in provided request.',
-            details: {
-              request_fields: [
-                {
-                  name: 'name',
-                  description: 'Name is required.',
-                },
-              ],
-            },
-          },
-        );
-      });
+      this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('[type="submit"]');
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
-      assert.ok(
-        find('[data-test-error-message-name]').textContent.trim(),
-        'Name is required.',
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
+      assert
+        .dom(commonSelectors.FIELD_NAME_ERROR)
+        .hasText(mockResponseDescription);
     });
 
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
-      const mockInput = 'random string';
-      this.server.patch('/credentials/:id', () => {
-        return new Response(
-          400,
-          {},
-          {
-            status: 400,
-            code: 'invalid_argument',
-            message: 'Error in provided request.',
-            details: {
-              request_fields: [
-                {
-                  name: 'name',
-                  description: 'Name is required.',
-                },
-              ],
-            },
-          },
-        );
-      });
+      this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('[type="submit"]');
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
-      assert.ok(
-        find('[data-test-error-message-name]').textContent.trim(),
-        'Name is required.',
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
+      assert
+        .dom(commonSelectors.FIELD_NAME_ERROR)
+        .hasText(mockResponseDescription);
     });
 
     test('saving an existing JSON credential with invalid fields displays error message', async function (assert) {
-      const mockInput = 'random string';
-      this.server.patch('/credentials/:id', () => {
-        return new Response(
-          400,
-          {},
-          {
-            status: 400,
-            code: 'invalid_argument',
-            message: 'Error in provided request.',
-            details: {
-              request_fields: [
-                {
-                  name: 'name',
-                  description: 'Name is required.',
-                },
-              ],
-            },
-          },
-        );
-      });
+      this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
-      await click('[type="submit"]');
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('Error in provided request.');
-      assert.ok(
-        find('[data-test-error-message-name]').textContent.trim(),
-        'Name is required.',
+
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
       );
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
+      assert
+        .dom(commonSelectors.FIELD_NAME_ERROR)
+        .hasText(mockResponseDescription);
     });
 
     test('can discard unsaved username & password credential changes via dialog', async function (assert) {
       assert.expect(5);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernamePasswordCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernamePasswordCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
@@ -329,21 +333,28 @@ module(
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
-          mockInput,
+          commonSelectors.FIELD_NAME_VALUE,
         );
       }
     });
 
     test('can discard unsaved username & key pair credential changes via dialog', async function (assert) {
       assert.expect(5);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernameKeyPairCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernameKeyPairCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN);
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
+
       try {
         await visit(urls.credentials);
       } catch (e) {
@@ -353,20 +364,26 @@ module(
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
-          mockInput,
+          commonSelectors.FIELD_NAME_VALUE,
         );
       }
     });
 
     test('can discard unsaved JSON credential changes via dialog', async function (assert) {
       assert.expect(5);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.jsonCredential.name, mockInput);
+      assert.notEqual(
+        instances.jsonCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN);
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.jsonCredential);
       try {
         await visit(urls.credentials);
@@ -376,21 +393,27 @@ module(
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
-          mockInput,
+          commonSelectors.FIELD_NAME_VALUE,
         );
       }
     });
 
     test('can cancel discard unsaved username & password credential changes via dialog', async function (assert) {
       assert.expect(6);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernamePasswordCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernamePasswordCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernamePasswordCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      const credentialName = find('[name="name"]').value;
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN);
+      const credentialName = find(commonSelectors.FIELD_NAME).value;
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       try {
         await visit(urls.credentials);
@@ -398,7 +421,9 @@ module(
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-        assert.strictEqual(find('[name="name"]').value, mockInput);
+        assert
+          .dom(commonSelectors.FIELD_NAME)
+          .hasValue(commonSelectors.FIELD_NAME_VALUE);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
             .models[0].name,
@@ -409,14 +434,20 @@ module(
 
     test('can cancel discard unsaved username & key pair credential changes via dialog', async function (assert) {
       assert.expect(6);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.usernameKeyPairCredential.name, mockInput);
+      assert.notEqual(
+        instances.usernameKeyPairCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.usernameKeyPairCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      const credentialName = find('[name="name"]').value;
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN);
+      const credentialName = find(commonSelectors.FIELD_NAME).value;
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       try {
         await visit(urls.credentials);
@@ -424,7 +455,9 @@ module(
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-        assert.strictEqual(find('[name="name"]').value, mockInput);
+        assert
+          .dom(commonSelectors.FIELD_NAME)
+          .hasValue(commonSelectors.FIELD_NAME_VALUE);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
             .models[0].name,
@@ -435,14 +468,20 @@ module(
 
     test('can cancel discard unsaved JSON credential changes via dialog', async function (assert) {
       assert.expect(6);
-      const mockInput = 'random string';
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
-      assert.notEqual(instances.jsonCredential.name, mockInput);
+      assert.notEqual(
+        instances.jsonCredential.name,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
-      const credentialName = find('[name="name"]').value;
-      await fillIn('[name="name"]', mockInput);
+
+      await click(commonSelectors.EDIT_BTN);
+      const credentialName = find(commonSelectors.FIELD_NAME).value;
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
       assert.strictEqual(currentURL(), urls.jsonCredential);
       try {
         await visit(urls.credentials);
@@ -450,7 +489,9 @@ module(
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
         assert.strictEqual(currentURL(), urls.jsonCredential);
-        assert.strictEqual(find('[name="name"]').value, mockInput);
+        assert
+          .dom(commonSelectors.FIELD_NAME)
+          .hasValue(commonSelectors.FIELD_NAME_VALUE);
         assert.strictEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
           credentialName,
@@ -460,40 +501,42 @@ module(
 
     test('password field renders in edit mode only for a username & password credential', async function (assert) {
       await visit(urls.usernamePasswordCredential);
-      assert.dom('[name="password"]').doesNotExist();
-      await click('form [type="button"]', 'Activate edit mode');
+
+      assert.dom(commonSelectors.FIELD_PASSWORD).doesNotExist();
+      await click(commonSelectors.EDIT_BTN);
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert.dom('[name="password"]').isVisible();
+      assert.dom(commonSelectors.FIELD_PASSWORD).isVisible();
     });
 
     test('private_key and private_key_passphrase fields render in edit mode only for a username & key pair credential', async function (assert) {
       await visit(urls.usernameKeyPairCredential);
-      assert.dom('[name="private_key"]').doesNotExist();
-      assert.dom('[name="private_key_passphrase"]').doesNotExist();
-      await click('form [type="button"]', 'Activate edit mode');
+
+      assert.dom(selectors.FIELD_SSH_PRIVATE_KEY).doesNotExist();
+      assert.dom(selectors.FIELD_SSH_PRIVATE_KEY_PASSPHRASE).doesNotExist();
+
+      await click(commonSelectors.EDIT_BTN);
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert.dom('[name="private_key"]').isVisible();
-      assert.dom('[name="private_key_passphrase"]').isVisible();
+      assert.dom(selectors.FIELD_SSH_PRIVATE_KEY).isVisible();
+      assert.dom(selectors.FIELD_SSH_PRIVATE_KEY_PASSPHRASE).isVisible();
     });
 
     test('secret editor is in actionable state when entering edit mode of a JSON credential', async function (assert) {
       await visit(urls.jsonCredential);
-      assert.dom('.secret-editor-skeleton-message button').doesNotExist();
-      await click('form [type="button"]', 'Activate edit mode');
+
+      assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
+      await click(commonSelectors.EDIT_BTN);
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert.dom('.secret-editor-skeleton-message button').isVisible();
+      assert.dom(selectors.REPLACE_SECRET_BTN).isVisible();
     });
 
     test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
       await visit(urls.jsonCredential);
-      await click('form [type="button"]', 'Activate edit mode');
+
+      await click(commonSelectors.EDIT_BTN);
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert.dom('.secret-editor-skeleton-message button').isVisible();
-      await click(
-        '.secret-editor-skeleton-message button',
-        'Enter editing mode',
-      );
-      assert.dom('.secret-editor-skeleton-message button').doesNotExist();
+      assert.dom(selectors.REPLACE_SECRET_BTN).isVisible();
+      await click(selectors.REPLACE_SECRET_BTN);
+      assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
       await waitUntil(() => assert.dom('.CodeMirror').isVisible());
     });
   },
