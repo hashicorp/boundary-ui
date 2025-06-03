@@ -11,18 +11,19 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.auth-method.titles.new'}}
-      <DocLink @doc='auth-method' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.auth-method.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.auth-method.titles.new'}}
+        <DocLink @doc='auth-method' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.auth-method.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.body>
     <Form::AuthMethod

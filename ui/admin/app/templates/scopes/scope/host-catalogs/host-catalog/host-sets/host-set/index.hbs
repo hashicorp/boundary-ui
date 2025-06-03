@@ -4,20 +4,24 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Header @model={{@model}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <HostCatalogs::HostCatalog::HostSets::HostSet::Header
+        @model={{@model}}
+        @header={{PH}}
+      />
+      <PH.Actions>
+        <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
+          @model={{@model}}
+          @delete={{this.hostSets.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    <HostCatalogs::HostCatalog::HostSets::HostSet::Actions
-      @model={{@model}}
-      @delete={{this.hostSets.delete}}
-    />
-  </page.actions>
 
   <page.navigation>
     <HostCatalogs::HostCatalog::HostSets::HostSet::Navigation

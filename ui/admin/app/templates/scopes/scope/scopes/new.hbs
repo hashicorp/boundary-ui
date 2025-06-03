@@ -18,28 +18,37 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    {{#if @model.isOrg}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-        {{t 'resources.org.titles.new'}}
-        <DocLink @doc='org.new' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.org.description'}}
-      </Hds::Text::Body>
-    {{else if @model.isProject}}
-      <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-        {{t 'resources.project.titles.new'}}
-        <DocLink @doc='project.new' />
-      </Hds::Text::Display>
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.project.description'}}
-      </Hds::Text::Body>
-    {{/if}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      {{#if @model.isOrg}}
+        <PH.Title>
+          {{t 'resources.org.titles.new'}}
+          <DocLink @doc='org.new' />
+        </PH.Title>
+        <PH.Description>
+          {{t 'resources.org.description'}}
+        </PH.Description>
+      {{else if @model.isProject}}
+        <PH.Title>
+          {{t 'resources.project.titles.new'}}
+          <DocLink @doc='project.new' />
+        </PH.Title>
+        <PH.Description>
+          {{t 'resources.project.description'}}
+        </PH.Description>
+      {{/if}}
+      {{#if (can 'create model' @model.currentScope collection='scopes')}}
+        <PH.Actions>
+          <Hds::Button
+            @route='scopes.scope.scopes.new'
+            @text={{t 'actions.create'}}
+          />
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

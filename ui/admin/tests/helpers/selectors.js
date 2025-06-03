@@ -6,6 +6,7 @@
 export const SAVE_BTN = '[type=submit]';
 export const CANCEL_BTN = '.rose-form-actions [type=button]';
 export const EDIT_BTN = '.rose-form-actions [type=button]';
+export const DELETE_BTN = '.hds-dropdown-list-item--color-critical button';
 
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';

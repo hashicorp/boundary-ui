@@ -10,18 +10,21 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='300'>
-      {{t 'actions.edit-worker-filter'}}
-      <DocLink @doc='worker-filters-format' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300'>
-      {{t 'resources.credential-store.worker-filter.messages.edit.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'actions.edit-worker-filter'}}
+        <DocLink @doc='worker-filters-format' />
+      </PH.Title>
+      <PH.Description>
+        {{t
+          'resources.credential-store.worker-filter.messages.edit.description'
+        }}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

@@ -5,27 +5,27 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'titles.workers'}}
-      <DocLink @doc='worker' />
-    </Hds::Text::Display>
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create worker led worker' this.scope collection='workers')}}
-      {{#if @model}}
-        <Hds::Button
-          @route='scopes.scope.workers.new'
-          @text={{t 'titles.new'}}
-        />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'titles.workers'}}
+        <DocLink @doc='worker' />
+      </PH.Title>
+      {{#if (can 'create worker led worker' this.scope collection='workers')}}
+        <PH.Actions>
+          {{#if @model}}
+            <Hds::Button
+              @route='scopes.scope.workers.new'
+              @text={{t 'titles.new'}}
+            />
+          {{/if}}
+        </PH.Actions>
       {{/if}}
-    {{/if}}
-  </page.actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='workers'>
     {{#if @model}}
