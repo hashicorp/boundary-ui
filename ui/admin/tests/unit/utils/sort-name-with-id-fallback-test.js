@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import sortNameWithIdFallback from 'admin/utils/sort-name-with-id-fallback';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 import { module, test } from 'qunit';
 
 function createMockRecord(id, attributes = {}) {
