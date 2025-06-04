@@ -270,6 +270,20 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_DESCENDANTS)).isVisible();
   });
 
+  test('manage custom scopes button is not visible when "descendants" is toggled on for global level role on manage scopes page', async function (assert) {
+    await visit(urls.role);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON).isVisible();
+
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_DESCENDANTS));
+
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON).doesNotExist();
+  });
+
   test('user can save scope keywords to add on manage scopes page', async function (assert) {
     instances.role.update({ grant_scope_ids: [] });
     await visit(urls.role);
