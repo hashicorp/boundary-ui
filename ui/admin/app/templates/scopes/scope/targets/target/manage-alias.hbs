@@ -9,18 +9,56 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.alias.title'}}
-      <DocLink @doc='alias' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.alias.description'}}
-    </Hds::Text::Body>
-    <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.alias.title'}}
+        <DocLink @doc='alias' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.alias.description'}}
+      </PH.Description>
+      <PH.Generic>
+        <Hds::Copy::Snippet @color='secondary' @textToCopy={{@model.id}} />
+      </PH.Generic>
+      {{#let
+        (hash
+          canUpdate=(can 'update model' @model)
+          canDelete=(can 'delete model' @model)
+        )
+        as |perms|
+      }}
+        {{#if (or perms.canUpdate perms.canDelete)}}
+          <PH.Actions>
+            <Hds::Dropdown data-test-manage-target-alias as |dd|>
+              <dd.ToggleButton
+                data-test-manage-dropdown
+                @text={{t 'actions.manage'}}
+                @color='secondary'
+              />
+              {{#if (and perms.canUpdate @model.destination_id)}}
+                <dd.Interactive
+                  {{on 'click' (fn this.targets.clearAlias @model)}}
+                >
+                  {{t 'actions.clear'}}
+                </dd.Interactive>
+              {{/if}}
+              {{#if perms.canDelete}}
+                <dd.Interactive
+                  @color='critical'
+                  {{on 'click' (fn this.targets.deleteAlias @model)}}
+                >
+                  {{t 'actions.delete'}}
+                </dd.Interactive>
+              {{/if}}
+            </Hds::Dropdown>
+          </PH.Actions>
+        {{/if}}
+      {{/let}}
+    </Hds::PageHeader>
   </page.header>
   <page.navigation>
     <Rose::Nav::Tabs as |nav|>
@@ -29,39 +67,6 @@
       </nav.link>
     </Rose::Nav::Tabs>
   </page.navigation>
-  {{#let
-    (hash
-      canUpdate=(can 'update model' @model)
-      canDelete=(can 'delete model' @model)
-    )
-    as |perms|
-  }}
-    <page.actions>
-      {{#if (or perms.canUpdate perms.canDelete)}}
-
-        <Hds::Dropdown data-test-manage-target-alias as |dd|>
-          <dd.ToggleButton
-            data-test-manage-dropdown
-            @text={{t 'actions.manage'}}
-            @color='secondary'
-          />
-          {{#if (and perms.canUpdate @model.destination_id)}}
-            <dd.Interactive {{on 'click' (fn this.targets.clearAlias @model)}}>
-              {{t 'actions.clear'}}
-            </dd.Interactive>
-          {{/if}}
-          {{#if perms.canDelete}}
-            <dd.Interactive
-              @color='critical'
-              {{on 'click' (fn this.targets.deleteAlias @model)}}
-            >
-              {{t 'actions.delete'}}
-            </dd.Interactive>
-          {{/if}}
-        </Hds::Dropdown>
-      {{/if}}
-    </page.actions>
-  {{/let}}
 
   <page.body>
     <Form::Alias

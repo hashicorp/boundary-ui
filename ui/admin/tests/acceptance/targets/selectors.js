@@ -18,7 +18,7 @@ export const FIELD_NAME_ERROR = '[data-test-error-message-name]';
 export const FIELD_DEFAULT_PORT_ERROR =
   '[data-test-error-message-default-port]';
 
-export const NEW_TARGET_BTN = '[data-test-new-target-button';
+export const NEW_TARGET_BTN = '[data-test-new-target-button]';
 export const MANAGE_DROPDOWN = '[data-test-manage-targets-dropdown] button';
 export const MANAGE_DROPDOWN_DELETE =
   '[data-test-manage-targets-dropdown] ul li:last-child button';

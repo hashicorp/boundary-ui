@@ -5,7 +5,6 @@
 
 <Hds::Dropdown data-test-manage-dropdown-host-sets as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-
   {{#if (can 'addHosts hostSet' @model)}}
     <dd.Interactive
       @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'

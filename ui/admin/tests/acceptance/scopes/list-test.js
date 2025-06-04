@@ -4,13 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { currentURL, visit, fillIn, waitFor } from '@ember/test-helpers';
+import { currentURL, visit, fillIn, waitFor, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | scopes | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -160,4 +161,100 @@ module('Acceptance | scopes | list', function (hooks) {
       .dom(selectors.TABLE_ROW_SCOPE_LINK(instances.scopes.project2.id))
       .doesNotExist();
   });
+
+  test('scopes are sorted by created_time descending by default', async function (assert) {
+    this.server.schema.scopes.all().destroy();
+
+    const years = ['2026', '2025', '2024', '2023'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('scope', {
+        id: `o_${year}`,
+        type: 'org',
+        name: `Org ${year}`,
+        scope: { id: 'global', type: 'global' },
+        created_time: `${year}-01-01T00:00:00Z`,
+      });
+    });
+
+    await visit(urls.globalScope);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    assert.dom(commonSelectors.TABLE_ROW(1)).containsText('Org 2026');
+    assert.dom(commonSelectors.TABLE_ROW(2)).containsText('Org 2025');
+    assert.dom(commonSelectors.TABLE_ROW(3)).containsText('Org 2024');
+    assert.dom(commonSelectors.TABLE_ROW(4)).containsText('Org 2023');
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Beta', 'Delta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['o_0001', 'o_0010', 'o_0100', 'o_1000', 'o_10000'],
+        },
+        expectedAscendingSort: [
+          'o_0001',
+          'o_0010',
+          'o_0100',
+          'o_1000',
+          'o_10000',
+        ],
+        column: 2,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.scopes.all().destroy();
+
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('scope', {
+          [input.attribute.key]: value,
+          type: 'org',
+          scope: { id: 'global', type: 'global' },
+        });
+      });
+
+      await visit(urls.globalScope);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });

@@ -14,22 +14,27 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header class='channel-header'>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{reverse-indexed-display-name
-        'resources.session-recording.channel.title_index'
-        @model.channelRecording.connection_recording.channel_recordings
-        @model.channelRecording
-      }}
-    </Hds::Text::Display>
-    <Hds::Copy::Snippet
-      @textToCopy={{@model.channelRecording.id}}
-      @color='secondary'
-    />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{reverse-indexed-display-name
+          'resources.session-recording.channel.title_index'
+          @model.channelRecording.connection_recording.channel_recordings
+          @model.channelRecording
+        }}
+        <DocLink @doc='session-recording' />
+      </PH.Title>
+      <PH.Generic>
+        <Hds::Copy::Snippet
+          @textToCopy={{@model.channelRecording.id}}
+          @color='secondary'
+        />
+      </PH.Generic>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>
