@@ -229,6 +229,7 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.targets);
 
     await click('.rose-header-nav .hds-dropdown-toggle-button');
+
     await click('.rose-header-nav .hds-dropdown-list-item:nth-of-type(3) a');
 
     assert.strictEqual(currentURL(), urls.targets);

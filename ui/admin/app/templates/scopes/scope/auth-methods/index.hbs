@@ -5,42 +5,42 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <Hds::Text::Display @tag='h2' @size='400' @weight='bold'>
-      {{t 'resources.auth-method.title_plural'}}
-      <DocLink @doc='auth-method' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.auth-method.description'}}
-    </Hds::Text::Body>
-  </page.header>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
-  <page.actions>
-    {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
-      <Hds::Dropdown data-test-new-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
-        <dd.Interactive
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='password'}}
-        >{{t 'resources.auth-method.types.password'}}</dd.Interactive>
-        <dd.Interactive
-          @route='scopes.scope.auth-methods.new'
-          @query={{hash type='oidc'}}
-        >{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
-        {{#if (feature-flag 'ldap-auth-methods')}}
-          <dd.Interactive
-            @route='scopes.scope.auth-methods.new'
-            @query={{hash type='ldap'}}
-          >
-            {{t 'resources.auth-method.types.ldap'}}
-          </dd.Interactive>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.auth-method.title_plural'}}
+        <DocLink @doc='auth-method' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.auth-method.description'}}
+      </PH.Description>
+      <PH.Actions>
+        {{#if (can 'create model' this.scopeModel collection='auth-methods')}}
+          <Hds::Dropdown data-test-new-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'titles.new'}} @color='secondary' />
+            <dd.Interactive
+              @route='scopes.scope.auth-methods.new'
+              @query={{hash type='password'}}
+            >{{t 'resources.auth-method.types.password'}}</dd.Interactive>
+            <dd.Interactive
+              @route='scopes.scope.auth-methods.new'
+              @query={{hash type='oidc'}}
+            >{{t 'resources.auth-method.types.oidc'}}</dd.Interactive>
+            {{#if (feature-flag 'ldap-auth-methods')}}
+              <dd.Interactive
+                @route='scopes.scope.auth-methods.new'
+                @query={{hash type='ldap'}}
+              >
+                {{t 'resources.auth-method.types.ldap'}}
+              </dd.Interactive>
+            {{/if}}
+          </Hds::Dropdown>
         {{/if}}
-      </Hds::Dropdown>
-    {{/if}}
-  </page.actions>
+      </PH.Actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doAuthMethodsExist}}
@@ -94,80 +94,102 @@
       {{#if @model.authMethods}}
         <Hds::Table
           class='auth-methods-list-table'
-          @model={{@model.authMethods}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.type.label'))
-            (hash label=(t 'form.id.label'))
-            (hash
-              label=(t 'resources.auth-method.titles.primary')
-              isVisuallyHidden=true
-            )
-            (hash label=(t 'titles.actions'))
-          }}
           @valign='middle'
+          @onSort={{this.onSort}}
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >{{t 'form.name.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'type'}}
+                @sortOrder={{if (eq 'type' H.sortBy) H.sortOrder}}
+              >{{t 'form.type.label'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >{{t 'form.id.label'}}</H.ThSort>
+              <H.Th @isVisuallyHidden={{true}}>{{t
+                  'resources.auth-method.titles.primary'
+                }}</H.Th>
+              <H.Th>{{t 'titles.actions'}}</H.Th>
+            </H.Tr>
+          </:head>
+
           <:body as |B|>
-            <B.Tr data-test-auth-methods-table-row={{B.data.id}}>
-              <B.Td>
-                {{#if (can 'read auth-method' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.auth-methods.auth-method'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                <Hds::Badge
-                  @text={{t
-                    (concat 'resources.auth-method.types.' B.data.type)
-                  }}
-                />
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-              <B.Td>
-                {{#if B.data.isPrimary}}
-                  <Hds::Badge @text={{t 'states.primary'}} @color='success' />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                {{#if (can 'makePrimary auth-method' B.data)}}
-                  <Hds::Dropdown as |dd|>
-                    <dd.ToggleIcon
-                      @icon='more-horizontal'
-                      @text={{t 'actions.manage'}}
-                      @hasChevron={{false}}
-                    />
-                    {{#unless B.data.isPrimary}}
-                      <dd.Interactive
-                        {{on 'click' (fn this.makePrimary B.data)}}
-                      >
-                        {{t 'resources.auth-method.actions.make-primary'}}
-                      </dd.Interactive>
-                    {{/unless}}
-                    {{#if B.data.isPrimary}}
-                      <dd.Interactive
-                        {{on 'click' (fn this.removeAsPrimary B.data)}}
-                      >
-                        {{t 'resources.auth-method.actions.remove-as-primary'}}
-                      </dd.Interactive>
-                    {{/if}}
-                  </Hds::Dropdown>
-                {{/if}}
-              </B.Td>
-            </B.Tr>
+            {{#each @model.authMethods as |data|}}
+              <B.Tr data-test-auth-methods-table-row={{data.id}}>
+                {{! Name }}
+                <B.Td>
+                  {{#if (can 'read auth-method' data)}}
+                    <LinkTo
+                      @route='scopes.scope.auth-methods.auth-method'
+                      @model={{data.id}}
+                    >
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                {{! Type }}
+                <B.Td>
+                  <Hds::Badge
+                    @text={{t
+                      (concat 'resources.auth-method.types.' data.type)
+                    }}
+                  />
+                </B.Td>
+                {{! ID }}
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+                {{! isPrimary }}
+                <B.Td>
+                  {{#if data.isPrimary}}
+                    <Hds::Badge @text={{t 'states.primary'}} @color='success' />
+                  {{/if}}
+                </B.Td>
+                {{! Actions }}
+                <B.Td>
+                  {{#if (can 'makePrimary auth-method' data)}}
+                    <Hds::Dropdown as |dd|>
+                      <dd.ToggleIcon
+                        @icon='more-horizontal'
+                        @text={{t 'actions.manage'}}
+                        @hasChevron={{false}}
+                      />
+                      {{#unless data.isPrimary}}
+                        <dd.Interactive
+                          {{on 'click' (fn this.makePrimary data)}}
+                        >
+                          {{t 'resources.auth-method.actions.make-primary'}}
+                        </dd.Interactive>
+                      {{/unless}}
+                      {{#if data.isPrimary}}
+                        <dd.Interactive
+                          {{on 'click' (fn this.removeAsPrimary data)}}
+                        >
+                          {{t
+                            'resources.auth-method.actions.remove-as-primary'
+                          }}
+                        </dd.Interactive>
+                      {{/if}}
+                    </Hds::Dropdown>
+                  {{/if}}
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

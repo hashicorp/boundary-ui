@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitFor } from '@ember/test-helpers';
+import { visit, click, fillIn, waitFor, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -18,6 +18,7 @@ import {
 } from 'api/models/host-catalog';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -263,4 +264,94 @@ module('Acceptance | host-catalogs | list', function (hooks) {
     assert.dom(commonSelectors.HREF(urls.azureHostCatalog)).doesNotExist();
     assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
+
+  test('Host catalogs table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.hostCatalogs.all().destroy();
+    const years = ['2006', '2005', '2004', '2003'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('host-catalog', {
+        scope: instances.scopes.project,
+        type: TYPE_HOST_CATALOG_STATIC,
+        created_time: `${year}-01-01T00:00:00Z`,
+        name: `Host catalogs ${year}`,
+      });
+    });
+
+    await visit(urls.hostCatalogs);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    years.forEach((year, index) => {
+      // nth-child index starts at 1
+      assert
+        .dom(commonSelectors.TABLE_ROW(index + 1))
+        .containsText(`Host catalogs ${year}`);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on name': {
+        attribute: {
+          key: 'name',
+          values: ['Alpha', 'Delta', 'Beta', 'Gamma', 'Epsilon'],
+        },
+        expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
+        column: 1,
+      },
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ['hc_1000', 'hc_0001', 'hc_0100', 'hc_0010'],
+        },
+        expectedAscendingSort: ['hc_0001', 'hc_0010', 'hc_0100', 'hc_1000'],
+        column: 3,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.hostCatalogs.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('host-catalog', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.project,
+        });
+      });
+
+      await visit(urls.hostCatalogs);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });
