@@ -1036,8 +1036,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.4(@babel/core@7.27.1)(@glint/template@1.5.2)
       ember-electron:
-        specifier: ^6.0.0
-        version: 6.0.0(@babel/core@7.27.1)(ember-cli-dependency-checker@3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7)))(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(encoding@0.1.13)
+        specifier: ^7.0.0
+        version: 7.0.0(ember-cli-dependency-checker@3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7)))(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(encoding@0.1.13)
       ember-exam:
         specifier: ^8.0.0
         version: 8.0.0(@glint/template@1.5.2)(ember-qunit@8.1.1(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(qunit@2.24.1))(qunit@2.24.1)(webpack@5.99.8)
@@ -4452,8 +4452,8 @@ packages:
     resolution: {integrity: sha512-TovtNqCumzyAiW0/OisSkkVK93xnVF4NRU6+FN0ubpfwEOpRrmM2RqDwXI6YAChCgSHON1cz0DfQStpA1Gjuuw==}
     engines: {node: 10.* || >= 12}
 
-  ember-electron@6.0.0:
-    resolution: {integrity: sha512-+vS5K+EYUo3XzClvPR83IECwwqda2rKymPfzCYnYbrzgqVPXFgtL/REh2PZNPrv1VB3UKLROfKeRtF/o/h6bXw==}
+  ember-electron@7.0.0:
+    resolution: {integrity: sha512-GO8Kju74otgYERWsvlHQdVfeFrkReBWscx6TqngTB8o6XmYDkhv9oUpWJqExZ21/4q0wwg55CqOL9zPkFOzxqQ==}
     engines: {node: '>= 18'}
     peerDependencies:
       ember-cli: '>= 3.4.0'
@@ -13473,8 +13473,9 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  ember-electron@6.0.0(@babel/core@7.27.1)(ember-cli-dependency-checker@3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7)))(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(encoding@0.1.13):
+  ember-electron@7.0.0(ember-cli-dependency-checker@3.3.3(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7)))(ember-cli@5.12.0(handlebars@4.7.8)(underscore@1.13.7))(ember-source@5.12.0(@glimmer/component@1.1.2(@babel/core@7.27.1))(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(encoding@0.1.13):
     dependencies:
+      '@babel/core': 7.27.1
       '@electron-forge/core': 7.8.1(encoding@0.1.13)
       chalk: 4.1.2
       debug: 4.4.0
@@ -13490,7 +13491,6 @@ snapshots:
       silent-error: 1.1.1
       tree-kill: 1.2.2
     transitivePeerDependencies:
-      - '@babel/core'
       - bluebird
       - encoding
       - supports-color
