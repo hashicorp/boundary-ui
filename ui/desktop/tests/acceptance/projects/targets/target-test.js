@@ -374,7 +374,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(TABLE_ROWS).exists({ count: 10 });
     assert.dom('[data-test-pagination]').isVisible();
 
-    await click('button[aria-label="Next page"]');
+    await click('a[aria-label="Next page"]');
 
     assert.dom(TABLE_ROWS).exists({ count: 5 });
   });

@@ -4,12 +4,28 @@
  */
 
 import Route from '@ember/routing/route';
-import { service } from '@ember/service';
 
 export default class ScopesScopeProjectsTargetsTargetIndexRoute extends Route {
-  // =services
+  // =attributes
 
-  @service router;
+  queryParams = {
+    page: {
+      refreshModel: true,
+    },
+    pageSize: {
+      refreshModel: true,
+    },
+  };
 
-  // =methods
+  model() {
+    return this.modelFor('scopes.scope.projects.targets.target');
+  }
+
+  resetController(controller, isExiting) {
+    if (isExiting) {
+      controller.set('search', '');
+      controller.set('page', 1);
+      controller.set('pageSize', 10);
+    }
+  }
 }

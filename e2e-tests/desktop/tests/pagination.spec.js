@@ -75,7 +75,7 @@ test.describe('Search and Pagination', () => {
     // Navigate to the second page. The last host should now be visible.
     await authedPage
       .getByRole('navigation', { name: 'pagination' })
-      .getByRole('button', { name: 'page 2' })
+      .getByRole('link', { name: 'page 2' })
       .click();
     await expect(
       authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
@@ -90,7 +90,7 @@ test.describe('Search and Pagination', () => {
     // Use the "previous page" button to navigate back to the first page.
     await authedPage
       .getByRole('navigation', { name: 'pagination' })
-      .getByRole('button', { name: 'Previous page' })
+      .getByRole('link', { name: 'Previous page' })
       .click();
     await expect(
       authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
@@ -105,7 +105,7 @@ test.describe('Search and Pagination', () => {
     // Use the "next page" button to navigate to the second page again.
     await authedPage
       .getByRole('navigation', { name: 'pagination' })
-      .getByRole('button', { name: 'Next page' })
+      .getByRole('link', { name: 'Next page' })
       .click();
     await expect(
       authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),

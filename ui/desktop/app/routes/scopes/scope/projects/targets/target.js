@@ -18,12 +18,6 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
       type: 'boolean',
       refreshModel: true,
     },
-    page: {
-      refreshModel: true,
-    },
-    pageSize: {
-      refreshModel: true,
-    },
   };
 
   // =methods
