@@ -423,94 +423,66 @@ module('Unit | Utility | sortResults', function (hooks) {
   });
 
   module('custom function sorting', function () {
-    test('it sorts by ascending (default) `type` using custom sorting function', async function (assert) {
-      const result01 = createJsonApiMockRecord('id_01', 'target', {
-        type: 'ssh',
-      });
-      const result02 = createJsonApiMockRecord('id_02', 'target', {
-        type: 'tcp',
-      });
-      const result03 = createJsonApiMockRecord('id_03', 'target', {
-        type: 'ssh',
-      });
-      const result04 = createJsonApiMockRecord('id_04', 'target', {
-        type: 'tcp',
-      });
-
-      const shuffledResults = faker.helpers.shuffle([
-        result01,
-        result02,
-        result03,
-        result04,
-      ]);
-      const sortFunction = (recordA, recordB) => {
-        const typeMap = {
-          ssh: 'SSH',
-          tcp: 'Generic TCP',
-        };
-        return String(typeMap[recordA.attributes.type]).localeCompare(
-          String(typeMap[recordB.attributes.type]),
-        );
-      };
-      const querySort = { sortFunction };
-      const schema = { attributes: new Map() };
-      schema.attributes.set('name', { type: 'string' });
-      const sortedResults = sortResults(shuffledResults, { querySort, schema });
-      assert.deepEqual(
-        sortedResults.map(({ attributes: { type } }) => type),
-        ['tcp', 'tcp', 'ssh', 'ssh'],
-      );
+    const result01 = createJsonApiMockRecord('id_01', 'target', {
+      name: 'target1',
+    });
+    const result02 = createJsonApiMockRecord('id_02', 'target', {
+      name: 'target2',
+    });
+    const result03 = createJsonApiMockRecord('id_03', 'target', {
+      name: 'target3',
+    });
+    const result04 = createJsonApiMockRecord('id_04', 'target', {
+      name: 'target4',
     });
 
-    test('it sorts by ascending then descending `name` using string sorting', async function (assert) {
-      const result01 = createJsonApiMockRecord('id_01', 'target', {
-        type: 'ssh',
-      });
-      const result02 = createJsonApiMockRecord('id_02', 'target', {
-        type: 'tcp',
-      });
-      const result03 = createJsonApiMockRecord('id_03', 'target', {
-        type: 'ssh',
-      });
-      const result04 = createJsonApiMockRecord('id_04', 'target', {
-        type: 'tcp',
-      });
-
-      const shuffledResults = faker.helpers.shuffle([
-        result01,
-        result02,
-        result03,
-        result04,
-      ]);
-      const sortFunction = (recordA, recordB) => {
-        const typeMap = {
-          ssh: 'SSH',
-          tcp: 'Generic TCP',
-        };
-        return String(typeMap[recordA.attributes.type]).localeCompare(
-          String(typeMap[recordB.attributes.type]),
-        );
+    const sortFunction = (recordA, recordB) => {
+      const nameMap = {
+        target3: 'Alpha',
+        target4: 'Beta',
+        target1: 'Delta',
+        target2: 'Epsilon',
       };
-      const querySortAsc = { sortFunction, direction: 'asc' };
-      const querySortDesc = { sortFunction, direction: 'desc' };
-      const schema = { attributes: new Map() };
-      schema.attributes.set('name', { type: 'string' });
-      const sortedResultsAsc = sortResults(shuffledResults, {
-        querySort: querySortAsc,
-        schema,
-      });
-      const sortedResultsDesc = sortResults(shuffledResults, {
-        querySort: querySortDesc,
-        schema,
-      });
-      assert.deepEqual(
-        sortedResultsAsc.map(({ attributes: { type } }) => type),
-        ['tcp', 'tcp', 'ssh', 'ssh'],
+      return String(nameMap[recordA.attributes.name]).localeCompare(
+        String(nameMap[recordB.attributes.name]),
       );
-      assert.deepEqual(
-        sortedResultsDesc.map(({ attributes: { type } }) => type),
-        ['ssh', 'ssh', 'tcp', 'tcp'],
-      );
-    });
+    };
+    const schema = { attributes: new Map() };
+
+    test.each(
+      'it sorts by `name` using custom sorting function',
+      {
+        'ascending (default)': {
+          querySort: { sortFunction },
+          expectedResults: ['target3', 'target4', 'target1', 'target2'],
+        },
+        descending: {
+          querySort: { sortFunction, direction: 'desc' },
+          expectedResults: ['target2', 'target1', 'target4', 'target3'],
+        },
+        ascending: {
+          querySort: { sortFunction, direction: 'asc' },
+          expectedResults: ['target3', 'target4', 'target1', 'target2'],
+        },
+      },
+      function (assert, input) {
+        const shuffledResults = faker.helpers.shuffle([
+          result01,
+          result02,
+          result03,
+          result04,
+        ]);
+        schema.attributes.set('name', { type: 'string' });
+        const sortedResults = sortResults(shuffledResults, {
+          querySort: input.querySort,
+          schema,
+        });
+
+        assert.deepEqual(
+          sortedResults.map(({ attributes: { name } }) => name),
+          input.expectedResults,
+        );
+      },
+    );
   });
 });
