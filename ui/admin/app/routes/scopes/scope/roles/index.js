@@ -35,7 +35,17 @@ export default class ScopesScopeRolesIndexRoute extends Route {
 
   customSortFunction = {
     name: sortNameWithIdFallback,
-    grant_scope_ids: this.sortGrantsApplied,
+    grant_scope_ids: (recordA, recordB) => {
+      const a = recordA.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
+      const b = recordB.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
+      if (a === b) {
+        return 0;
+      } else if (a) {
+        return 1;
+      } else {
+        return -1;
+      }
+    },
   };
 
   // =services
@@ -54,18 +64,6 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       this.retrieveData?.lastPerformed?.args?.[0].search !== params.search;
     return this.retrieveData.perform({ ...params, useDebounce });
   }
-
-  sortGrantsApplied = (recordA, recordB) => {
-    const a = recordA.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
-    const b = recordB.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
-    if (a === b) {
-      return 0;
-    } else if (a) {
-      return 1;
-    } else {
-      return -1;
-    }
-  };
 
   retrieveData = restartableTask(
     async ({
