@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { faker } from '@faker-js/faker';
 
 module('Acceptance | aliases | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -234,4 +235,85 @@ module('Acceptance | aliases | list', function (hooks) {
       .dom(NO_RESULTS_MSG_SELECTOR)
       .includesText(intl.t('titles.no-results-found'));
   });
+
+  test('aliases are sorted by created_time descending by default', async function (assert) {
+    this.server.schema.aliases.all().destroy();
+
+    const years = ['2026', '2025', '2024', '2023'];
+    faker.helpers.shuffle(years).map((year) => {
+      return this.server.create('alias', {
+        id: `alt_${year}`,
+        value: `Alias ${year}`,
+        created_time: `${year}-01-01T00:00:00Z`,
+        scope: instances.scopes.global,
+        destination_id: instances.target.id,
+      });
+    });
+
+    await visit(urls.aliases);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: years.length });
+    assert.dom(commonSelectors.TABLE_ROW(1)).containsText('Alias 2026');
+    assert.dom(commonSelectors.TABLE_ROW(2)).containsText('Alias 2025');
+    assert.dom(commonSelectors.TABLE_ROW(3)).containsText('Alias 2024');
+    assert.dom(commonSelectors.TABLE_ROW(4)).containsText('Alias 2023');
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on value': {
+        attribute: {
+          key: 'value',
+          values: ['alpha', 'beta', 'delta', 'gamma', 'epsilon'],
+        },
+        expectedAscendingSort: ['alpha', 'beta', 'delta', 'epsilon', 'gamma'],
+        column: 1,
+      },
+    },
+    async function (assert, input) {
+      this.server.schema.aliases.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('alias', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.global,
+          destination_id: instances.target.id,
+        });
+      });
+
+      await visit(urls.aliases);
+
+      // click the sort button again to sort in ascending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });

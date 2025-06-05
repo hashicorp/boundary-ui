@@ -15,6 +15,7 @@ project {
     "**/coverage/**",
     "ui/desktop/electron-app/out/**",
     "ui/desktop/electron-app/ember-dist/**",
-    "**/.yarn/**"
+    "**/pnpm-lock.yaml",
+    "**/pnpm-workspace.yaml",
   ]
 }

@@ -27,6 +27,14 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -42,7 +50,14 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      useDebounce,
+      sortAttribute,
+      sortDirection,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -59,12 +74,18 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
           collection: 'aliases',
         })
       ) {
+        const sort = {
+          attribute: sortAttribute,
+          direction: sortDirection,
+        };
+
         aliases = await this.store.query('alias', {
           scope_id,
-          query: { search },
+          query: { search, sort },
           page,
           pageSize,
         });
+
         totalItems = aliases.meta?.totalItems;
         // since we don't receive target info from aliases list API,
         // we query the store to fetch target information based on the destination id
