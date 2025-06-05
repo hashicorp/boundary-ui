@@ -19,68 +19,153 @@
         aria-label={{t 'actions.search'}}
         {{on 'input' @handleSearchInput}}
       />
+      {{#unless @model.canSelectOrgs}}
+        <S.Generic>
+          <Dropdown
+            name='org'
+            @toggleText={{t 'resources.org.title'}}
+            @itemOptions={{@orgScopes}}
+            @checkedItems={{@orgs}}
+            @applyFilter={{fn @applyFilter 'orgs'}}
+            @isSearchable={{true}}
+          />
+        </S.Generic>
+      {{/unless}}
     </Hds::SegmentedGroup>
-    {{#if @model.orgScopes}}
-      <div class='table-selected-items-text'>
-        {{#if @model.role.grantScopeOrgIDs.length}}
-          <Hds::Text::Body @tag='p' @color='faint'>
-            {{t
-              'resources.role.scope.titles.selected'
-              items=@model.role.grantScopeOrgIDs.length
-              total=@model.totalItemsCount
-            }}
-          </Hds::Text::Body>
-        {{/if}}
-      </div>
-      <Hds::Table
-        @columns={{array
-          (hash label=(t 'resources.role.scope.title'))
-          (hash label=(t 'form.id.label'))
-          (hash label=(t 'resources.role.scope.titles.projects_selected'))
-        }}
-        @model={{@model.orgScopes}}
-        @isSelectable={{true}}
-        @onSelectionChange={{this.selectionChange}}
-        @valign='middle'
-      >
-        <:body as |B|>
-          <B.Tr
-            @selectionKey={{B.data.id}}
-            @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}}
-            @selectionAriaLabelSuffix='row {{B.data.id}}'
-            data-test-org-scopes-table-row={{B.data.id}}
-          >
-            <B.Td>
-              <Hds::Text::Body @tag='p'>
-                {{B.data.displayName}}
-              </Hds::Text::Body>
-            </B.Td>
-            <B.Td>
-              <Hds::Copy::Snippet
-                @textToCopy={{B.data.id}}
-                @color='secondary'
-              />
-            </B.Td>
-            <B.Td>
-              {{#let (get @model.projectTotals B.data.id) as |projectTotals|}}
-                {{#if projectTotals}}
-                  <Hds::Link::Standalone
-                    @icon='arrow-right'
-                    @iconPosition='trailing'
-                    @text={{t
-                      'resources.role.scope.actions.view-projects'
-                      selected=projectTotals.selected.length
-                      total=projectTotals.total
-                    }}
-                    @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
-                    @model={{B.data.id}}
-                  />
+
+    {{#if @model.scopes}}
+      {{#if @model.canSelectOrgs}}
+        <div class='table-selected-items-text'>
+          {{#if @model.role.grantScopeOrgIDs.length}}
+            <Hds::Text::Body @tag='p' @color='faint'>
+              {{t
+                'resources.role.scope.titles.selected'
+                items=@model.role.grantScopeOrgIDs.length
+                total=@model.totalItemsCount
+              }}
+            </Hds::Text::Body>
+          {{/if}}
+        </div>
+
+        <Hds::Table
+          @columns={{array
+            (hash label=(t 'resources.role.scope.title'))
+            (hash label=(t 'form.id.label'))
+            (hash label=(t 'resources.role.scope.titles.projects_selected'))
+          }}
+          @model={{@model.scopes}}
+          @isSelectable={{true}}
+          @onSelectionChange={{this.orgSelectionChange}}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr
+              @selectionKey={{B.data.id}}
+              @isSelected={{includes B.data.id @model.role.grantScopeOrgIDs}}
+              @selectionAriaLabelSuffix='row {{B.data.id}}'
+              data-test-org-scopes-table-row={{B.data.id}}
+            >
+              <B.Td>
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.displayName}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+              <B.Td>
+                {{#let (get @model.projectTotals B.data.id) as |projectTotals|}}
+                  {{#if projectTotals}}
+                    <Hds::Link::Standalone
+                      @icon='arrow-right'
+                      @iconPosition='trailing'
+                      @text={{t
+                        'resources.role.scope.actions.view-projects'
+                        selected=projectTotals.selected.length
+                        total=projectTotals.total
+                      }}
+                      @route='scopes.scope.roles.role.manage-scopes.manage-org-projects'
+                      @model={{B.data.id}}
+                    />
+                  {{/if}}
+                {{/let}}
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{else}}
+        <FilterTags @filters={{@filters}} />
+
+        <div class='table-selected-items-text'>
+          {{#if @model.role.grantScopeProjectIDs.length}}
+            <Hds::Text::Body @tag='p' @color='faint'>
+              {{t
+                'resources.role.scope.titles.selected'
+                items=@model.role.grantScopeProjectIDs.length
+                total=@model.totalItemsCount
+              }}
+            </Hds::Text::Body>
+          {{/if}}
+        </div>
+
+        <Hds::Table
+          @columns={{array
+            (hash label=(t 'resources.role.scope.title'))
+            (hash label=(t 'form.id.label'))
+            (hash
+              label=(t 'resources.org.title')
+              tooltip=(t
+                'resources.role.scope.messages.manage-custom-scopes.tooltip'
+              )
+            )
+          }}
+          @model={{@model.scopes}}
+          @isSelectable={{true}}
+          @onSelectionChange={{this.projectSelectionChange}}
+          @valign='middle'
+        >
+          <:body as |B|>
+            <B.Tr
+              @selectionKey={{B.data.id}}
+              @isSelected={{includes
+                B.data.id
+                @model.role.grantScopeProjectIDs
+              }}
+              @selectionAriaLabelSuffix='row {{B.data.id}}'
+              data-test-project-scopes-table-row={{B.data.id}}
+            >
+              <B.Td>
+                <Hds::Text::Body @tag='p'>
+                  {{B.data.displayName}}
+                </Hds::Text::Body>
+              </B.Td>
+              <B.Td>
+                <Hds::Copy::Snippet
+                  @textToCopy={{B.data.id}}
+                  @color='secondary'
+                />
+              </B.Td>
+              <B.Td>
+                {{#if (can 'read model' B.data)}}
+                  <Hds::Link::Inline
+                    @route='scopes.scope'
+                    @model={{B.data.scope.id}}
+                    @icon='org'
+                    @iconPosition='leading'
+                  >
+                    {{~or B.data.scope.name B.data.scope.id}}
+                  </Hds::Link::Inline>
+                {{else}}
+                  {{or B.data.scope.name B.data.scope.id}}
                 {{/if}}
-              {{/let}}
-            </B.Td>
-          </B.Tr>
-        </:body>
-      </Hds::Table>
+              </B.Td>
+            </B.Tr>
+          </:body>
+        </Hds::Table>
+      {{/if}}
       <Rose::Pagination
         @model={{@model.role.id}}
         @totalItems={{@model.totalItems}}

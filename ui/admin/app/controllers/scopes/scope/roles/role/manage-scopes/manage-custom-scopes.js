@@ -19,11 +19,42 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
 
   // =attributes
 
-  queryParams = ['search', 'page', 'pageSize'];
+  queryParams = ['search', { orgs: { type: 'array' } }, 'page', 'pageSize'];
 
   @tracked search;
+  @tracked orgs = [];
   @tracked page = 1;
   @tracked pageSize = 10;
+
+  /**
+   * Returns unique org scopes from projects.
+   * @returns {[object]}
+   */
+  get orgScopes() {
+    const uniqueMap = new Map();
+    this.model.allProjects.forEach(({ scope: { id, name } }) => {
+      if (!uniqueMap.has(id)) {
+        const orgName = name || id;
+        uniqueMap.set(id, { id, name: orgName });
+      }
+    });
+    return Array.from(uniqueMap.values());
+  }
+
+  /**
+   * Returns the filters object used for displaying filter tags.
+   * @type {object}
+   */
+  get filters() {
+    return {
+      allFilters: {
+        orgs: this.orgScopes,
+      },
+      selectedFilters: {
+        orgs: this.orgs,
+      },
+    };
+  }
 
   // =actions
 
@@ -35,6 +66,18 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesControlle
   handleSearchInput(event) {
     const { value } = event.target;
     this.search = value;
+    this.page = 1;
+  }
+
+  /**
+   * Sets a query param to the value of selectedItems
+   * and resets the page to 1.
+   * @param {string} paramKey
+   * @param {[string]} selectedItems
+   */
+  @action
+  applyFilter(paramKey, selectedItems) {
+    this[paramKey] = [...selectedItems];
     this.page = 1;
   }
 

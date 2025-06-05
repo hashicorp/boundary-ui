@@ -9,12 +9,17 @@ import { service } from '@ember/service';
 import { TrackedObject } from 'tracked-built-ins';
 import { TYPE_SCOPE_PROJECT } from 'api/models/scope';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { GRANT_SCOPE_CHILDREN } from 'api/models/role';
 
 export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute extends Route {
   // =attributes
 
   queryParams = {
     search: {
+      refreshModel: true,
+      replace: true,
+    },
+    orgs: {
       refreshModel: true,
       replace: true,
     },
@@ -36,7 +41,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
 
   /**
    * Loads sub scopes for the current scope.
-   * @returns {Promise<{role: RoleModel, orgScopes: [ScopeModel], projectTotals: object, totalItems: number, totalItemsCount: number}> }
+   * @returns {Promise<{role: RoleModel, orgScopes: [ScopeModel], projectTotals: object, totalItems: number, totalItemsCount: number, canSelectOrgs: boolean}> }
    */
   async model(params) {
     const useDebounce =
@@ -45,45 +50,71 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({ search, orgs, page, pageSize, useDebounce }) => {
       if (useDebounce) {
         await timeout(250);
       }
 
       const role = this.modelFor('scopes.scope.roles.role');
-      const currentScope = this.modelFor('scopes.scope');
-      const { id: scope_id } = currentScope;
-      const filters = {
-        scope_id: [{ equals: scope_id }],
-      };
+      const canSelectOrgs =
+        !role.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN);
+      const filters = canSelectOrgs
+        ? { scope_id: [{ equals: 'global' }] }
+        : { type: [{ equals: TYPE_SCOPE_PROJECT }] };
 
-      const orgScopes = await this.store.query('scope', {
-        scope_id,
+      let projectTotals;
+      let allProjects;
+      if (canSelectOrgs) {
+        projectTotals = await this.getProjectTotals(role.grantScopeProjectIDs);
+      } else {
+        filters.scope_id = [];
+        orgs.forEach((org) => {
+          filters.scope_id.push({ equals: org });
+        });
+        allProjects = await this.getAllProjects();
+      }
+
+      const scopes = await this.store.query('scope', {
+        scope_id: 'global',
         query: { search, filters },
         page,
         pageSize,
         recursive: true,
       });
-      const totalItems = orgScopes.meta?.totalItems;
+      const totalItems = scopes.meta?.totalItems;
       const totalItemsCount = await this.getTotalItemsCount(
-        scope_id,
         search,
         totalItems,
-      );
-
-      const projectTotals = await this.getProjectTotals(
-        role.grantScopeProjectIDs,
+        canSelectOrgs,
       );
 
       return {
         role,
-        orgScopes,
+        scopes,
         projectTotals,
+        allProjects,
         totalItems,
         totalItemsCount,
+        canSelectOrgs,
       };
     },
   );
+
+  /**
+   * Retrieves
+   * @returns {Promise<[ScopeModel]>}
+   */
+  async getAllProjects() {
+    const options = { pushToStore: false, peekIndexedDB: true };
+    return this.store.query(
+      'scope',
+      {
+        scope_id: 'global',
+        query: { filters: { type: [{ equals: TYPE_SCOPE_PROJECT }] } },
+      },
+      options,
+    );
+  }
 
   /**
    * Creates an object that contains the number of selected projects
@@ -92,15 +123,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
    * @returns {object}
    */
   async getProjectTotals(projectIDs) {
-    const options = { pushToStore: false, peekIndexedDB: true };
-    const projects = await this.store.query(
-      'scope',
-      {
-        scope_id: 'global',
-        query: { filters: { type: [{ equals: TYPE_SCOPE_PROJECT }] } },
-      },
-      options,
-    );
+    const projects = await this.getAllProjects();
 
     // We want this object to be tracked so that changes to this object
     // cause the "Projects selected" column to re-render with updates.
@@ -121,25 +144,23 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
   /**
    * Sets scopesExist to true if there exists any scopes and
    * sets totalItemsCount to the number of scopes that exist.
-   * @param {string} scope_id
    * @param {string} search
    * @param {number} totalItems
    * @returns {Promise<number>}
    */
-  async getTotalItemsCount(scope_id, search, totalItems) {
+  async getTotalItemsCount(search, totalItems, canSelectOrgs) {
     if (!search) {
       return totalItems;
     }
     const options = { pushToStore: false, peekIndexedDB: true };
+    const filters = canSelectOrgs
+      ? { scope_id: [{ equals: 'global' }] }
+      : { type: [{ equals: TYPE_SCOPE_PROJECT }] };
     const scopes = await this.store.query(
       'scope',
       {
-        scope_id,
-        query: {
-          filters: {
-            scope_id: [{ equals: scope_id }],
-          },
-        },
+        scope_id: 'global',
+        query: { filters },
         page: 1,
         pageSize: 1,
       },
