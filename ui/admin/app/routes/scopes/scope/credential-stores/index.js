@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeCredentialStoresIndexRoute extends Route {
   // =services
@@ -77,10 +78,10 @@ export default class ScopesScopeCredentialStoresIndexRoute extends Route {
         filters.type.push({ equals: type });
       });
 
-      const sort = {
-        attribute: sortAttribute,
-        direction: sortDirection,
-      };
+      const sort =
+        sortAttribute === 'name'
+          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
+          : { attribute: sortAttribute, direction: sortDirection };
 
       let credentialStores;
       let totalItems = 0;

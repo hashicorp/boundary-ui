@@ -6,6 +6,8 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
+import { GRANT_SCOPE_THIS } from 'api/models/role';
 
 export default class ScopesScopeRolesIndexRoute extends Route {
   // =attributes
@@ -28,6 +30,21 @@ export default class ScopesScopeRolesIndexRoute extends Route {
     sortDirection: {
       refreshModel: true,
       replace: true,
+    },
+  };
+
+  customSortFunction = {
+    name: sortNameWithIdFallback,
+    grant_scope_ids: (recordA, recordB) => {
+      const a = recordA.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
+      const b = recordB.attributes?.grant_scope_ids.includes(GRANT_SCOPE_THIS);
+      if (a === b) {
+        return 0;
+      } else if (a) {
+        return 1;
+      } else {
+        return -1;
+      }
     },
   };
 
@@ -66,10 +83,11 @@ export default class ScopesScopeRolesIndexRoute extends Route {
       const filters = {
         scope_id: [{ equals: scope_id }],
       };
-      const sort = {
-        attribute: sortAttribute,
-        direction: sortDirection,
-      };
+
+      const sortFunction = this.customSortFunction[sortAttribute];
+      const sort = sortFunction
+        ? { sortFunction, direction: sortDirection }
+        : { attribute: sortAttribute, direction: sortDirection };
 
       let roles;
       let totalItems = 0;
