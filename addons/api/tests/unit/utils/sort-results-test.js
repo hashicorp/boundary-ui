@@ -421,4 +421,68 @@ module('Unit | Utility | sortResults', function (hooks) {
       );
     });
   });
+
+  module('custom function sorting', function () {
+    const result01 = createJsonApiMockRecord('id_01', 'target', {
+      name: 'target1',
+    });
+    const result02 = createJsonApiMockRecord('id_02', 'target', {
+      name: 'target2',
+    });
+    const result03 = createJsonApiMockRecord('id_03', 'target', {
+      name: 'target3',
+    });
+    const result04 = createJsonApiMockRecord('id_04', 'target', {
+      name: 'target4',
+    });
+
+    const sortFunction = (recordA, recordB) => {
+      const nameMap = {
+        target3: 'Alpha',
+        target4: 'Beta',
+        target1: 'Delta',
+        target2: 'Epsilon',
+      };
+      return String(nameMap[recordA.attributes.name]).localeCompare(
+        String(nameMap[recordB.attributes.name]),
+      );
+    };
+    const schema = { attributes: new Map() };
+
+    test.each(
+      'it sorts by `name` using custom sorting function',
+      {
+        'ascending (default)': {
+          querySort: { sortFunction },
+          expectedResults: ['target3', 'target4', 'target1', 'target2'],
+        },
+        descending: {
+          querySort: { sortFunction, direction: 'desc' },
+          expectedResults: ['target2', 'target1', 'target4', 'target3'],
+        },
+        ascending: {
+          querySort: { sortFunction, direction: 'asc' },
+          expectedResults: ['target3', 'target4', 'target1', 'target2'],
+        },
+      },
+      function (assert, input) {
+        const shuffledResults = faker.helpers.shuffle([
+          result01,
+          result02,
+          result03,
+          result04,
+        ]);
+        schema.attributes.set('name', { type: 'string' });
+        const sortedResults = sortResults(shuffledResults, {
+          querySort: input.querySort,
+          schema,
+        });
+
+        assert.deepEqual(
+          sortedResults.map(({ attributes: { name } }) => name),
+          input.expectedResults,
+        );
+      },
+    );
+  });
 });
