@@ -1,3 +1,4 @@
+strictDepBuilds: true
 packages:
   - addons/*
   - ui/*
