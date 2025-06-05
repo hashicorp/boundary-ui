@@ -33,6 +33,20 @@ export default class FormRoleManageScopesIndexComponent extends Component {
     );
   }
 
+  /**
+   * Returns true if global role does not have "descendants" toggled on
+   * or if org role does not have "children" toggled on.
+   * @type {boolean}
+   */
+  get showManageScopesBtn() {
+    return (
+      (this.args.model.scope.isGlobal &&
+        !this.args.model.grant_scope_ids.includes(GRANT_SCOPE_DESCENDANTS)) ||
+      (this.args.model.scope.isOrg &&
+        !this.args.model.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN))
+    );
+  }
+
   // =actions
 
   /**

@@ -5,7 +5,7 @@
 
 .rose-header {
   // Temporary fix: This header component will be retired upon integrating HDS side nav for desktop.
-   .header-dropdown-button-override > button {
+  .header-dropdown-button-override > button {
     background: var(--black);
     border: none;
     color: var(--white);

@@ -10,7 +10,7 @@ Boundary UIs.
 
 - [Add Styles to an App](#add-styles-to-an-app)
 - [Installation](#installation)
-- [Yarn Commands](#yarn-commands)
+- [Pnpm Commands](#pnpm-commands)
 - [Linting](#linting)
 - [Formatting](#formatting)
 - [Building Components](#building-components)
@@ -32,9 +32,9 @@ may then import rose styles by adding `@use 'rose';` to their stylesheets.
 
 See monorepo README for installation instructions.
 
-## Yarn Commands
+## Pnpm Commands
 
-List of available project commands. `yarn run <command-name>`
+List of available project commands. `pnpm run <command-name>`
 
 | Command                  | Description                                                       |
 | ------------------------ | ----------------------------------------------------------------- |
@@ -61,39 +61,31 @@ Additional commands in the monorepo package may affect this projects.
 
 ## Linting
 
-- `yarn lint:hbs`
-- `yarn lint:js`
-- `yarn lint:js --fix`
+- `pnpm lint:hbs`
+- `pnpm lint:js`
+- `pnpm lint:js --fix`
 
 ## Formatting
 
 Before submitting your work, be sure to run auto-formatters
 (see commands above). This helps to ensure consistency among authors.
 
-- `yarn format`
+- `pnpm format`
 
 ## Building Components
 
 To build a new component, start by generating it on the command line with
 `ember g component rose/component-name`.
 
-## Using Components
-
-A few of the components have additional ember package dependencies that need to be installed before usage.
-
-| Component      | Dependency     |
-| -------------- | -------------- |
-| Rose::Dropdown | ember-modifier |
-
 ## Running tests
 
-- `yarn test` – Runs the test suite on the current Ember version
-- `yarn test --server` – Runs the test suite in "watch mode"
-- `yarn test:all` – Runs the test suite against multiple Ember versions
+- `pnpm test` – Runs the test suite on the current Ember version
+- `pnpm test --server` – Runs the test suite in "watch mode"
+- `pnpm test:all` – Runs the test suite against multiple Ember versions
 
 ## Running the dummy application
 
-- `yarn start`
+- `pnpm start`
 - Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
 ## Contributing
@@ -103,5 +95,5 @@ See monorepo README for more contribution instructions.
 ### Building ToC
 
 To autogenerate a ToC (table of contents) for this README,
-run `yarn doc:toc`. Please update the ToC whenever editing the structure
+run `pnpm doc:toc`. Please update the ToC whenever editing the structure
 of README.
