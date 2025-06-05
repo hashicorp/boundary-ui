@@ -146,9 +146,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
     await click(`[href="${urls.targetHostSources}"]`);
 
-    assert
-      .dom(`tbody tr ${commonSelectors.DELETE_BTN}`)
-      .doesNotExist();
+    assert.dom(`tbody tr ${commonSelectors.DELETE_BTN}`).doesNotExist();
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
