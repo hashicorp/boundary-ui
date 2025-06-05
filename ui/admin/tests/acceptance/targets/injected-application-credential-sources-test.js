@@ -366,9 +366,7 @@ module(
           (item) => item !== 'remove-credential-sources',
         );
       await visit(urls.injectedApplicationCredentialSources);
-      assert
-        .dom(`tbody tr ${commonSelectors.DELETE_BTN}`)
-        .doesNotExist();
+      assert.dom(`tbody tr ${commonSelectors.DELETE_BTN}`).doesNotExist();
     });
 
     test('removing a target credential library which errors displays error messages', async function (assert) {
