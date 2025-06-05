@@ -11,6 +11,7 @@ import {
   findAll,
   fillIn,
   waitUntil,
+  waitFor,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -712,6 +713,118 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert
       .dom(selectors.NO_RESULTS_GRANT_SCOPE_MSG)
       .includesText('No results found');
+  });
+
+  test('user can select projects when `children` is applied on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
+    await visit(urls.role);
+
+    await click(commonSelectors.HREF(urls.roleScopes));
+
+    assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_CHILDREN)).isVisible();
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+
+    await click(commonSelectors.HREF(urls.manageCustomScopes));
+
+    assert.strictEqual(currentURL(), urls.manageCustomScopes);
+
+    // Click three times to select, unselect, then reselect (for coverage)
+    const projectID = instances.scopes.project.id;
+    await click(selectors.SCOPE_CHECKBOX('project', projectID));
+    await click(selectors.SCOPE_CHECKBOX('project', projectID));
+    await click(selectors.SCOPE_CHECKBOX('project', projectID));
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON_ICON).isVisible();
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(currentURL(), urls.roleScopes);
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+    assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_CHILDREN)).isVisible();
+    assert.dom(selectors.GRANT_SCOPE_ROW(projectID)).isVisible();
+  });
+
+  test('user can search for a specific project scope by id on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
+    const anotherProject = this.server.create('scope', {
+      type: 'project',
+      scope: { id: instances.scopes.org.id, type: 'org' },
+    });
+    await visit(urls.manageScopes);
+
+    await click(commonSelectors.HREF(urls.manageCustomScopes));
+
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
+      .isVisible();
+
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.scopes.project.id);
+    await waitFor(selectors.SCOPE_CHECKBOX('project', anotherProject.id), {
+      count: 0,
+    });
+
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
+      .doesNotExist();
+  });
+
+  test('user can search for a specific project scope by id and get no results on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
+    await visit(urls.manageScopes);
+
+    await click(commonSelectors.HREF(urls.manageCustomScopes));
+
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', instances.scopes.project.id))
+      .isVisible();
+
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake project scope that does not exist',
+    );
+    await waitFor(selectors.NO_RESULTS_GRANT_SCOPE_MSG, { count: 1 });
+
+    assert
+      .dom(selectors.NO_RESULTS_GRANT_SCOPE_MSG)
+      .includesText('No results found');
+  });
+
+  test('user can filter a project scope by parent scope on manage custom scopes page', async function (assert) {
+    instances.role.update({ grant_scope_ids: [GRANT_SCOPE_CHILDREN] });
+    const anotherOrg = this.server.create('scope', {
+      type: 'org',
+      scope: { id: 'global', type: 'global' },
+    });
+    const anotherProject = this.server.create('scope', {
+      type: 'project',
+      scope: { id: anotherOrg.id, type: 'org' },
+    });
+    await visit(urls.manageScopes);
+
+    await click(commonSelectors.HREF(urls.manageCustomScopes));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 2 });
+
+    await click(commonSelectors.FILTER_DROPDOWN('org'));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM(anotherOrg.id));
+    await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('org'));
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
+    assert
+      .dom(selectors.SCOPE_CHECKBOX('project', anotherProject.id))
+      .isVisible();
   });
 
   test('user can save custom scopes to add on manage org projects page', async function (assert) {

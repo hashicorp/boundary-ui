@@ -58,22 +58,16 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       const role = this.modelFor('scopes.scope.roles.role');
       const canSelectOrgs =
         !role.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN);
-      const filters = canSelectOrgs
-        ? { scope_id: [{ equals: 'global' }] }
-        : { type: [{ equals: TYPE_SCOPE_PROJECT }] };
 
-      let projectTotals;
-      let allProjects;
+      let filters;
       if (canSelectOrgs) {
-        projectTotals = await this.getProjectTotals(role.grantScopeProjectIDs);
+        filters = { scope_id: [{ equals: 'global' }] };
       } else {
-        filters.scope_id = [];
+        filters = { type: [{ equals: TYPE_SCOPE_PROJECT }], scope_id: [] };
         orgs.forEach((org) => {
           filters.scope_id.push({ equals: org });
         });
-        allProjects = await this.getAllProjects();
       }
-
       const scopes = await this.store.query('scope', {
         scope_id: 'global',
         query: { search, filters },
@@ -81,6 +75,15 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         pageSize,
         recursive: true,
       });
+
+      let projectTotals;
+      let allProjects;
+      if (canSelectOrgs) {
+        projectTotals = await this.getProjectTotals(role.grantScopeProjectIDs);
+      } else {
+        allProjects = await this.getAllProjects();
+      }
+
       const totalItems = scopes.meta?.totalItems;
       const totalItemsCount = await this.getTotalItemsCount(
         search,
@@ -146,6 +149,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
    * sets totalItemsCount to the number of scopes that exist.
    * @param {string} search
    * @param {number} totalItems
+   * @param {boolean} canSelectOrgs
    * @returns {Promise<number>}
    */
   async getTotalItemsCount(search, totalItems, canSelectOrgs) {
