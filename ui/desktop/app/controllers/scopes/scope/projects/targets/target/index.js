@@ -35,7 +35,7 @@ export default class ScopesScopeProjectsTargetsTargetIndexController extends Con
     let filteredHosts = this.model.hosts;
     if (this.search) {
       filteredHosts = this.model.hosts.filter((host) => {
-        const searchTerm = this.search?.toLowerCase() || '';
+        const searchTerm = this.search?.toLowerCase() ?? '';
         return (
           host.displayName.toLowerCase().includes(searchTerm) ||
           host.description?.toLowerCase().includes(searchTerm) ||

@@ -4,7 +4,7 @@
 }}
 
 <Rose::Layout::BodyContent as |bc|>
-  <bc.Body class='target-details-body'>
+  <bc.Body class='search-filtering'>
     {{#if (gt @model.hosts.length 1)}}
       <Hds::SegmentedGroup as |S|>
         <S.TextInput
