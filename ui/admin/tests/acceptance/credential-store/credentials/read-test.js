@@ -83,32 +83,41 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('visiting username & password credential', async function (assert) {
     await visit(urls.staticCredentialStore);
-    await click(`[href="${urls.credentials}"]`);
+    await click(commonSelectors.HREF(urls.credentials));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentials);
-    await click(`[href="${urls.usernamePasswordCredential}"]`);
+
+    await click(commonSelectors.HREF(urls.usernamePasswordCredential));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
   });
 
   test('visiting username & key pair credential', async function (assert) {
     await visit(urls.staticCredentialStore);
-    await click(`[href="${urls.credentials}"]`);
+    await click(commonSelectors.HREF(urls.credentials));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentials);
-    await click(`[href="${urls.usernameKeyPairCredential}"]`);
+
+    await click(commonSelectors.HREF(urls.usernameKeyPairCredential));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
   });
 
   test('visiting JSON credential', async function (assert) {
     featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
-    await click(`[href="${urls.credentials}"]`);
+    await click(commonSelectors.HREF(urls.credentials));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.credentials);
-    await click(`[href="${urls.jsonCredential}"]`);
+
+    await click(commonSelectors.HREF(urls.jsonCredential));
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.jsonCredential);
   });
 
@@ -172,6 +181,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('visiting an unknown credential displays 404 message', async function (assert) {
     await visit(urls.unknownCredential);
     await a11yAudit();
+
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);
@@ -179,6 +189,7 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('Users can link to docs page for credential', async function (assert) {
     await visit(urls.usernamePasswordCredential);
+
     assert.ok(
       find(
         `[href="https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credentials"]`,
