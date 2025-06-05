@@ -47,29 +47,6 @@
   &:not(.full-width) {
     width: 66%;
   }
-
-  .rose-dropdown {
-    $icon-width: sizing.rems(m) + sizing.rems(s);
-    $indent: $icon-width + sizing.rems(xs);
-
-    .rose-form-radio-label {
-      display: flex;
-    }
-
-    .indent-label-1 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent;
-      }
-    }
-
-    .indent-label-2 {
-      .rose-form-radio-label,
-      .rose-form-checkbox-label {
-        padding-left: $indent + $icon-width;
-      }
-    }
-  }
 }
 
 .rose-header {
@@ -613,7 +590,6 @@
 }
 
 .auth-methods-list-table,
-.workers-list-table,
 .sessions-list-table {
   margin-top: 1rem;
 }
@@ -945,9 +921,28 @@
 
 // workers
 .workers {
-  .rose-dropdown-content {
-    max-height: 300px;
-    overflow: scroll;
+  > div {
+    margin-bottom: 1rem;
+  }
+
+  .tags-list {
+    display: flex;
+
+    .toolbar-refresher {
+      margin-left: auto;
+    }
+
+    .grouping {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.5rem 1rem;
+      text-transform: uppercase;
+    }
+
+    li:has(.indentation) {
+      padding-left: 2.25rem;
+    }
   }
 }
 
@@ -980,12 +975,6 @@
   margin-right: 1rem;
 }
 
-.dropdown-radio-btn {
-  .hds-form-group__control-field {
-    padding: 0.25rem 0.75rem;
-  }
-}
-
 // worker filter generator
 .filter-generator-selection {
   .hds-form-group__control-field {
@@ -1013,11 +1002,6 @@
   }
 }
 
-.header-spacing {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
 // scope picker
 .scope-picker {
   &__toggle-button {
@@ -1028,4 +1012,9 @@
   li.indentation {
     margin-left: 1.5rem;
   }
+}
+
+// dropdown checkbox list
+.dropdown-checkbox-list {
+  margin-bottom: 1rem;
 }

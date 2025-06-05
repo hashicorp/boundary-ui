@@ -42,7 +42,7 @@ export const sortResults = (results, { querySort, schema }) => {
 
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
   const defaultSortDirection =
-    sortAttribute === SORT_DEFAULT_ATTRIBUTE
+    sortAttribute === SORT_DEFAULT_ATTRIBUTE && !querySort.sortFunction
       ? SORT_DIRECTION_DESCENDING
       : SORT_DIRECTION_ASCENDING;
   const sortDirection = querySort.direction || defaultSortDirection;
@@ -53,6 +53,17 @@ export const sortResults = (results, { querySort, schema }) => {
     )
   ) {
     throw new Error('Invalid sort direction');
+  }
+
+  // Execute custom sort function if one is provided.
+  if (querySort.sortFunction) {
+    return results.toSorted((a, b) => {
+      const sortResult = querySort.sortFunction(a, b);
+
+      return sortDirection === SORT_DIRECTION_ASCENDING
+        ? sortResult
+        : -1 * sortResult;
+    });
   }
 
   const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;

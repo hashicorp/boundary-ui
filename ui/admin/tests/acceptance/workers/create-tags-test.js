@@ -71,7 +71,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
   test('user can save worker tags', async function (assert) {
     await visit(urls.tags);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 11 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
 
     await click(selectors.MANAGE_DROPDOWN_WORKER);
     await click(selectors.MANAGE_DROPDOWN_WORKER_CREATE_TAGS);
@@ -80,7 +80,7 @@ module('Acceptance | workers | worker | create-tags', function (hooks) {
     await click(selectors.ADD_WORKER_TAG_ACTION);
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 12 });
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 12 });
     assert.strictEqual(currentURL(), urls.tags);
   });
 

@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeUsersIndexRoute extends Route {
   // =attributes
@@ -20,6 +21,14 @@ export default class ScopesScopeUsersIndexRoute extends Route {
     },
     pageSize: {
       refreshModel: true,
+    },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
     },
   };
 
@@ -41,7 +50,14 @@ export default class ScopesScopeUsersIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -53,13 +69,18 @@ export default class ScopesScopeUsersIndexRoute extends Route {
         scope_id: [{ equals: scope_id }],
       };
 
+      const sort =
+        sortAttribute === 'name'
+          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
+          : { attribute: sortAttribute, direction: sortDirection };
+
       let users;
       let totalItems = 0;
       let doUsersExist = false;
       if (this.can.can('list model', scope, { collection: 'users' })) {
         users = await this.store.query('user', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });

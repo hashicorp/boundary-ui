@@ -4,35 +4,31 @@
 }}
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.alias.title_plural'}}
-      <DocLink @doc='alias' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.alias.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.alias.title_plural'}}
+        <DocLink @doc='alias' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.alias.description'}}
+      </PH.Description>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='aliases')}}
+          {{#if @model.doAliasesExist}}
+            <Hds::Button
+              @route='scopes.scope.aliases.new'
+              @text={{t 'resources.alias.titles.new'}}
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='aliases')}}
-      {{#if @model.doAliasesExist}}
-        <Hds::Button
-          @route='scopes.scope.aliases.new'
-          @text={{t 'resources.alias.titles.new'}}
-        />
-      {{/if}}
-    {{/if}}
-  </page.actions>
 
   <page.body class='search-filtering'>
     {{#if @model.doAliasesExist}}
@@ -48,113 +44,136 @@
 
       {{#if @model.aliases}}
         <Hds::Table
-          @model={{@model.aliases}}
-          @columns={{array
-            (hash label=(t 'resources.alias.title'))
-            (hash label=(t 'resources.alias.titles.points_to'))
-            (hash label=(t 'resources.scope.title'))
-            (hash label=(t 'resources.alias.titles.resource_id'))
-            (hash label=(t 'titles.actions') isVisuallyHidden=true)
-          }}
           @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
         >
-          <:body as |B|>
-            <B.Tr data-test-alias-row={{B.data.alias.id}}>
-              <B.Td>
-                {{#if (can 'read model' B.data.alias)}}
-                  <LinkTo
-                    @route='scopes.scope.aliases.alias'
-                    @model={{B.data.alias.id}}
-                  >
-                    {{B.data.alias.value}}
-                  </LinkTo>
-                {{else}}
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.alias.value}}
-                  </Hds::Text::Body>
-                {{/if}}
-                {{#if B.data.alias.description}}
-                  <Hds::Text::Body @tag='p'>
-                    {{B.data.alias.description}}
-                  </Hds::Text::Body>
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                {{#if B.data.target.displayName}}
-                  <div class='aliases-list-cell-item'>
-                    <span><Hds::Icon @name='target' @isInline={{true}} /></span>
-                    <span> {{B.data.target.displayName}} </span>
-                  </div>
-                {{else}}
-                  <Hds::Text::Body
-                    @tag='p'
-                    @size='100'
-                    @weight='medium'
-                    @color='faint'
-                  >
-                    {{t 'titles.not-set'}}
-                  </Hds::Text::Body>
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
-              </B.Td>
-              <B.Td>
-                {{#if B.data.alias.destination_id}}
-                  <Hds::Copy::Snippet
-                    @textToCopy={{B.data.alias.destination_id}}
-                    @color='secondary'
-                  />
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                {{#let
-                  (hash
-                    canUpdate=(can 'update model' B.data.alias)
-                    canDelete=(can 'delete model' B.data.alias)
-                  )
-                  as |perms|
-                }}
-                  {{#if (or perms.canUpdate perms.canDelete)}}
-                    <Hds::Dropdown as |dd|>
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'value'}}
+                @sortOrder={{if (eq 'value' H.sortBy) H.sortOrder}}
+              >
+                {{t 'resources.alias.title'}}
+              </H.ThSort>
+              <H.Th>
+                {{t 'resources.alias.titles.points_to'}}
+              </H.Th>
+              <H.Th>
+                {{t 'resources.scope.title'}}
+              </H.Th>
+              <H.Th>
+                {{t 'resources.alias.titles.resource_id'}}
+              </H.Th>
+              <H.Th @isVisuallyHidden={{true}}>
+                {{t 'titles.actions'}}
+              </H.Th>
+            </H.Tr>
+          </:head>
 
-                      <dd.ToggleIcon
-                        @icon='more-horizontal'
-                        @text={{t 'actions.manage'}}
-                        @hasChevron={{false}}
-                        @size='small'
-                      />
-                      {{#if perms.canUpdate}}
-                        <dd.Interactive
-                          @route='scopes.scope.aliases.alias'
-                          @model={{B.data.alias.id}}
-                        >
-                          {{t 'actions.edit'}}
-                        </dd.Interactive>
-                        {{#if B.data.alias.destination_id}}
+          <:body as |B|>
+            {{#each @model.aliases as |data|}}
+              <B.Tr data-test-alias-row={{data.alias.id}}>
+                <B.Td>
+                  {{#if (can 'read model' data.alias)}}
+                    <LinkTo
+                      @route='scopes.scope.aliases.alias'
+                      @model={{data.alias.id}}
+                    >
+                      {{data.alias.value}}
+                    </LinkTo>
+                  {{else}}
+                    <Hds::Text::Body @tag='p'>
+                      {{data.alias.value}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                  {{#if data.alias.description}}
+                    <Hds::Text::Body @tag='p'>
+                      {{data.alias.description}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if data.target.displayName}}
+                    <div class='aliases-list-cell-item'>
+                      <span><Hds::Icon
+                          @name='target'
+                          @isInline={{true}}
+                        /></span>
+                      <span> {{data.target.displayName}} </span>
+                    </div>
+                  {{else}}
+                    <Hds::Text::Body
+                      @tag='p'
+                      @size='100'
+                      @weight='medium'
+                      @color='faint'
+                    >
+                      {{t 'titles.not-set'}}
+                    </Hds::Text::Body>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Badge @text={{t 'titles.global'}} @icon='globe' />
+                </B.Td>
+                <B.Td>
+                  {{#if data.alias.destination_id}}
+                    <Hds::Copy::Snippet
+                      @textToCopy={{data.alias.destination_id}}
+                      @color='secondary'
+                    />
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#let
+                    (hash
+                      canUpdate=(can 'update model' data.alias)
+                      canDelete=(can 'delete model' data.alias)
+                    )
+                    as |perms|
+                  }}
+                    {{#if (or perms.canUpdate perms.canDelete)}}
+                      <Hds::Dropdown as |dd|>
+
+                        <dd.ToggleIcon
+                          @icon='more-horizontal'
+                          @text={{t 'actions.manage'}}
+                          @hasChevron={{false}}
+                          @size='small'
+                        />
+                        {{#if perms.canUpdate}}
                           <dd.Interactive
-                            @color='action'
-                            {{on 'click' (fn this.clearAlias B.data.alias)}}
+                            @route='scopes.scope.aliases.alias'
+                            @model={{data.alias.id}}
                           >
-                            {{t 'actions.clear'}}
+                            {{t 'actions.edit'}}
+                          </dd.Interactive>
+                          {{#if data.alias.destination_id}}
+                            <dd.Interactive
+                              @color='action'
+                              {{on 'click' (fn this.clearAlias data.alias)}}
+                            >
+                              {{t 'actions.clear'}}
+                            </dd.Interactive>
+                          {{/if}}
+                        {{/if}}
+
+                        {{#if perms.canDelete}}
+                          <dd.Interactive
+                            @color='critical'
+                            {{on 'click' (fn this.deleteAlias data.alias)}}
+                          >
+                            {{t 'actions.delete'}}
                           </dd.Interactive>
                         {{/if}}
-                      {{/if}}
+                      </Hds::Dropdown>
 
-                      {{#if perms.canDelete}}
-                        <dd.Interactive
-                          @color='critical'
-                          {{on 'click' (fn this.deleteAlias B.data.alias)}}
-                        >
-                          {{t 'actions.delete'}}
-                        </dd.Interactive>
-                      {{/if}}
-                    </Hds::Dropdown>
-
-                  {{/if}}
-                {{/let}}
-              </B.Td>
-            </B.Tr>
+                    {{/if}}
+                  {{/let}}
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

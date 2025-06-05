@@ -5,38 +5,33 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.role.title_plural'}}
-      <DocLink @doc='role' />
-    </Hds::Text::Display>
-    {{#if @model.doRolesExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.role.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='roles')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.title_plural'}}
+        <DocLink @doc='role' />
+      </PH.Title>
       {{#if @model.doRolesExist}}
-        <Hds::Button
-          @route='scopes.scope.roles.new'
-          @text={{t 'resources.role.titles.new'}}
-          data-test-new-role-button
-        />
+        <PH.Description>
+          {{t 'resources.role.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      <PH.Actions>
+        {{#if (can 'create model' this.scope collection='roles')}}
+          {{#if @model.doRolesExist}}
+            <Hds::Button
+              @route='scopes.scope.roles.new'
+              @text={{t 'resources.role.titles.new'}}
+              data-test-new-role-button
+            />
+          {{/if}}
+        {{/if}}
+      </PH.Actions>
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
     {{#if @model.doRolesExist}}
@@ -51,51 +46,69 @@
       </Hds::SegmentedGroup>
       {{#if @model.roles}}
         <Hds::Table
-          @model={{@model.roles}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'resources.role.titles.grants-applied'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @density='short'
           @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.name.label'}}
+              </H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'grant_scope_ids'}}
+                @sortOrder={{if (eq 'grant_scope_ids' H.sortBy) H.sortOrder}}
+              >{{t 'resources.role.titles.grants-applied'}}</H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.id.label'}}
+              </H.ThSort>
+            </H.Tr>
+          </:head>
           <:body as |B|>
-            <B.Tr data-test-role-row={{B.data.id}}>
-              <B.Td>
-                {{#if (can 'read role' B.data)}}
-                  <LinkTo @route='scopes.scope.roles.role' @model={{B.data.id}}>
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p' class='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                {{#if (includes this.grantScopeThis B.data.grant_scope_ids)}}
-                  <Hds::TooltipButton
-                    @text={{t 'resources.role.messages.tooltips.yes'}}
-                  >
-                    <Hds::Badge @text={{t 'actions.yes'}} @color='success' />
-                  </Hds::TooltipButton>
-                {{else}}
-                  <Hds::TooltipButton
-                    @text={{t 'resources.role.messages.tooltips.no'}}
-                  >
-                    <Hds::Badge @text={{t 'actions.no'}} />
-                  </Hds::TooltipButton>
-                {{/if}}
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
+            {{#each @model.roles as |data|}}
+              <B.Tr data-test-role-row={{data.id}}>
+                <B.Td>
+                  {{#if (can 'read role' data)}}
+                    <LinkTo @route='scopes.scope.roles.role' @model={{data.id}}>
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p' class='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{#if (includes this.grantScopeThis data.grant_scope_ids)}}
+                    <Hds::TooltipButton
+                      @text={{t 'resources.role.messages.tooltips.yes'}}
+                    >
+                      <Hds::Badge @text={{t 'actions.yes'}} @color='success' />
+                    </Hds::TooltipButton>
+                  {{else}}
+                    <Hds::TooltipButton
+                      @text={{t 'resources.role.messages.tooltips.no'}}
+                    >
+                      <Hds::Badge @text={{t 'actions.no'}} />
+                    </Hds::TooltipButton>
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

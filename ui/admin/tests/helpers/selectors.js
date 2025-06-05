@@ -6,6 +6,7 @@
 export const SAVE_BTN = '[type=submit]';
 export const CANCEL_BTN = '.rose-form-actions [type=button]';
 export const EDIT_BTN = '.rose-form-actions [type=button]';
+export const DELETE_BTN = '.hds-dropdown-list-item--color-critical button';
 
 export const FIELD_NAME = '[name=name]';
 export const FIELD_NAME_VALUE = 'Random name';
@@ -15,7 +16,8 @@ export const FIELD_DESCRIPTION = '[name=description]';
 export const FIELD_DESCRIPTION_VALUE = 'description';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
-export const TABLE_ROW = 'tbody tr';
+export const TABLE_ROWS = 'tbody tr';
+export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;
 export const TABLE_ROW_CHECKBOX = 'tbody tr input[type="checkbox"]';
 export const TABLE_FIRST_ROW_ACTION_DROPDOWN =
   'tbody tr:first-child td:last-child button';
@@ -66,3 +68,11 @@ export const FILTER_DROPDOWN_ITEM_APPLY_BTN = (filterName) =>
 export const PAGINATION = '[data-test-pagination]';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const FORM = 'main form';
+
+// Sorting selectors
+export const TABLE_SORT_BTN = (column) =>
+  `thead tr th:nth-child(${column}) button`;
+export const TABLE_SORT_BTN_ARROW_UP = (column) =>
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
+export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
+  `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;

@@ -10,23 +10,19 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.credential-store.titles.new'}}
-      <DocLink @doc='credential-store' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.credential-store.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.credential-store.titles.new'}}
+        <DocLink @doc='credential-store' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.credential-store.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

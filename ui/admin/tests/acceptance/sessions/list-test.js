@@ -4,30 +4,45 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  fillIn,
-  waitUntil,
-  findAll,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { faker } from '@faker-js/faker';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import {
+  STATUS_SESSION_ACTIVE,
+  STATUS_SESSION_CANCELING,
+  STATUS_SESSION_PENDING,
+  STATUS_SESSION_TERMINATED,
+} from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-session-results]';
-  const SESSION_ID_SELECTOR = (id) => `[data-test-session="${id}"]`;
+  const CREATED_TIME_VALUES_ARRAY = [
+    '2020-01-01T00:00:01.010Z',
+    '2020-01-01T00:00:10.100Z',
+    '2020-01-01T00:10:01.000Z',
+    '2020-01-01T01:00:10.000Z',
+    '2020-01-01T10:00:00.000Z',
+  ];
+
+  const CREATED_TIME_ISO_VALUES_ARRAY = [
+    '2020-01-01 00:00:01',
+    '2020-01-01 00:00:10',
+    '2020-01-01 00:10:01',
+    '2020-01-01 01:00:10',
+    '2020-01-01 10:00:00',
+  ];
+  const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
 
   const instances = {
     scopes: {
@@ -106,7 +121,7 @@ module('Acceptance | sessions | list', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
   });
 
@@ -152,7 +167,7 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.HREF(urls.sessions));
 
     assert
-      .dom(commonSelectors.TABLE_ROW)
+      .dom(commonSelectors.TABLE_ROWS)
       .exists({ count: instances.sessions.length });
   });
 
@@ -193,9 +208,9 @@ module('Acceptance | sessions | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessions));
     await fillIn(commonSelectors.SEARCH_INPUT, sessionId);
-    await waitUntil(() => findAll(SESSION_ID_SELECTOR(sessionId)).length === 1);
+    await waitFor(selectors.TABLE_SESSION_ID(sessionId), { count: 1 });
 
-    assert.dom(SESSION_ID_SELECTOR(sessionId)).hasText(sessionId);
+    assert.dom(selectors.TABLE_SESSION_ID(sessionId)).hasText(sessionId);
   });
 
   test('user can search for sessions and get no results', async function (assert) {
@@ -204,9 +219,9 @@ module('Acceptance | sessions | list', function (hooks) {
 
     await click(commonSelectors.HREF(urls.sessions));
     await fillIn(commonSelectors.SEARCH_INPUT, sessionId);
-    await waitUntil(() => findAll(NO_RESULTS_MSG_SELECTOR).length === 1);
+    await waitFor(selectors.NO_RESULTS_MSG, { count: 1 });
 
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
 
   test('user can filter for sessions by user', async function (assert) {
@@ -220,8 +235,8 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.dev.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('user'));
 
-    assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('users filter is hidden if no users returned or no list permissions', async function (assert) {
@@ -250,8 +265,8 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM(instances.sshTarget.id));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('target'));
 
-    assert.dom(SESSION_ID_SELECTOR(instances.sessions[2].id)).exists();
-    assert.dom(commonSelectors.TABLE_ROW).exists({ count: 1 });
+    assert.dom(selectors.TABLE_SESSION_ID(instances.sessions[2].id)).exists();
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('targets filter is hidden if no targets returned or no list permissions', async function (assert) {
@@ -273,6 +288,107 @@ module('Acceptance | sessions | list', function (hooks) {
     await click(commonSelectors.FILTER_DROPDOWN_ITEM('active'));
     await click(commonSelectors.FILTER_DROPDOWN_ITEM_APPLY_BTN('status'));
 
-    assert.dom(NO_RESULTS_MSG_SELECTOR).includesText('No results found');
+    assert.dom(selectors.NO_RESULTS_MSG).includesText('No results found');
   });
+
+  test('sessions table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.sessions.all().destroy();
+    const expectedDescendingSort = CREATED_TIME_ISO_VALUES_ARRAY.toReversed();
+    faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
+      this.server.create('session', {
+        created_time: value,
+        scope: instances.scopes.project,
+        status: STATUS_SESSION_ACTIVE,
+      });
+    });
+    await visit(urls.sessions);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
+    expectedDescendingSort.forEach((expected, index) => {
+      // nth-child index starts at 1
+      assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+    });
+  });
+
+  test.each(
+    'sorting',
+    {
+      'on id': {
+        attribute: {
+          key: 'id',
+          values: ID_VALUES_ARRAY,
+        },
+        expectedAscendingSort: ID_VALUES_ARRAY,
+        column: 1,
+      },
+      'on created_time': {
+        attribute: {
+          key: 'created_time',
+          values: CREATED_TIME_VALUES_ARRAY,
+        },
+        expectedAscendingSort: CREATED_TIME_ISO_VALUES_ARRAY,
+        column: 4,
+      },
+      'on status': {
+        attribute: {
+          key: 'status',
+          values: [
+            STATUS_SESSION_ACTIVE,
+            STATUS_SESSION_CANCELING,
+            STATUS_SESSION_PENDING,
+            STATUS_SESSION_TERMINATED,
+          ],
+        },
+        expectedAscendingSort: ['Active', 'Canceling', 'Pending', 'Terminated'],
+        column: 5,
+      },
+    },
+
+    async function (assert, input) {
+      this.server.schema.sessions.all().destroy();
+      faker.helpers.shuffle(input.attribute.values).forEach((value) => {
+        this.server.create('session', {
+          [input.attribute.key]: value,
+          scope: instances.scopes.project,
+        });
+      });
+      await visit(urls.sessions);
+
+      await click(selectors.CLEAR_FILTERS_BTN);
+      // click the sort button to sort in ascending order for provided column key
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+
+      assert.true(currentURL().includes('sortDirection=asc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_UP(input.column))
+        .isVisible();
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: input.attribute.values.length });
+      input.expectedAscendingSort.forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+
+      // click the sort button again to sort in descending order
+      await click(commonSelectors.TABLE_SORT_BTN(input.column));
+
+      assert.true(currentURL().includes('sortDirection=desc'));
+      assert.true(
+        currentURL().includes(`sortAttribute=${input.attribute.key}`),
+      );
+      assert
+        .dom(commonSelectors.TABLE_SORT_BTN_ARROW_DOWN(input.column))
+        .isVisible();
+      input.expectedAscendingSort.toReversed().forEach((expected, index) => {
+        // nth-child index starts at 1
+        assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+      });
+    },
+  );
 });

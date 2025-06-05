@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find } from '@ember/test-helpers';
+import { visit, currentURL, click, find, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -16,9 +16,12 @@ module('Acceptance | projects | targets | target', function (hooks) {
   setupMirage(hooks);
   setupStubs(hooks);
 
+  const TARGET_RESOURCE_LINK = (id) => `[data-test-visit-target="${id}"]`;
+  const TARGET_TABLE_CONNECT_BUTTON = (id) =>
+    `[data-test-targets-connect-button="${id}"]`;
   const TARGET_CONNECT_BUTTON = '[data-test-target-detail-connect-button]';
-  const TARGET_QUICK_CONNECT_BUTTON = '[data-test-host-quick-connect]';
-  const TARGET_HOST_CONNECT_BUTTON = '[data-test-host-connect]';
+  const TARGET_HOST_SOURCE_CONNECT_BUTTON = (id) =>
+    `[data-test-target-connect-button=${id}]`;
   const APP_STATE_TITLE = '.hds-application-state__title';
   const HDS_DIALOG_MODAL = '.hds-modal';
   const HDS_DIALOG_MODAL_BUTTONS = '.hds-modal__footer button';
@@ -26,6 +29,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     '.hds-modal__footer .hds-button--color-primary';
   const HDS_DIALOG_CANCEL_BUTTON =
     '.hds-modal__footer .hds-button--color-secondary';
+  const TABLE_ROWS = 'tbody tr';
 
   const instances = {
     scopes: {
@@ -40,6 +44,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    targetWithManyHosts: null,
     alias: null,
   };
 
@@ -54,6 +59,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     target: null,
     targetWithOneHost: null,
     targetWithTwoHosts: null,
+    targetWithManyHosts: null,
   };
 
   const setDefaultClusterUrl = (test) => {
@@ -104,6 +110,11 @@ module('Acceptance | projects | targets | target', function (hooks) {
       { scope: instances.scopes.project },
       'withTwoHosts',
     );
+    instances.targetWithManyHosts = this.server.create(
+      'target',
+      { scope: instances.scopes.project },
+      'withManyHosts',
+    );
     instances.alias = this.server.create('alias', {
       scope: instances.scopes.global,
       destination_id: instances.targetWithOneHost.id,
@@ -125,6 +136,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetWithOneHost = `${urls.targets}/${instances.targetWithOneHost.id}`;
     urls.targetWithTwoHosts = `${urls.targets}/${instances.targetWithTwoHosts.id}`;
+    urls.targetWithManyHosts = `${urls.targets}/${instances.targetWithManyHosts.id}`;
 
     // Mock the postMessage interface used by IPC.
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -228,8 +240,29 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
-  test('user can connect to a target with two hosts using host modal', async function (assert) {
-    assert.expect(3);
+  test('user can see host source table when visiting a target via resource link', async function (assert) {
+    const targetId = instances.targetWithTwoHosts.id;
+
+    await visit(urls.targets);
+    await click(TARGET_RESOURCE_LINK(targetId));
+
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
+  });
+
+  test('user can see host source table when visiting a target via connect button', async function (assert) {
+    const targetId = instances.targetWithTwoHosts.id;
+
+    await visit(urls.targets);
+    await click(TARGET_TABLE_CONNECT_BUTTON(targetId));
+
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
+  });
+
+  test('user can connect to a target with two hosts using host source table', async function (assert) {
+    const hostId =
+      instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0].id;
+
+    assert.expect(2);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -241,15 +274,56 @@ module('Acceptance | projects | targets | target', function (hooks) {
 
     await click(`[href="${urls.targetWithTwoHosts}"]`);
 
-    assert.dom(APP_STATE_TITLE).hasText('Connect for more info');
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
 
-    await click(TARGET_CONNECT_BUTTON);
-
-    assert.dom(TARGET_HOST_CONNECT_BUTTON).exists({ count: 2 });
-
-    await click(TARGET_QUICK_CONNECT_BUTTON);
+    await click(TARGET_HOST_SOURCE_CONNECT_BUTTON(hostId));
 
     assert.dom(APP_STATE_TITLE).hasText('Connected');
+  });
+
+  test.each(
+    'user sees correct button text for a',
+    {
+      'target with address': { target: 'target', expectedText: 'Connect' },
+      'target with one host': {
+        target: 'targetWithOneHost',
+        expectedText: 'Connect',
+      },
+      'target with two hosts': {
+        target: 'targetWithTwoHosts',
+        expectedText: 'Quick Connect',
+      },
+    },
+    async function (assert, input) {
+      await visit(urls.targets);
+
+      await click(`[href="${urls[input.target]}"]`);
+
+      assert.dom(TARGET_CONNECT_BUTTON).hasText(input.expectedText);
+    },
+  );
+
+  test('user can use table pagination to see more hosts', async function (assert) {
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithManyHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 10 });
+    assert.dom('[data-test-pagination]').isVisible();
+
+    await click('button[aria-label="Next page"]');
+
+    assert.dom(TABLE_ROWS).exists({ count: 5 });
+  });
+
+  test('user can change page size', async function (assert) {
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithManyHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 10 });
+
+    await select('[data-test-pagination] select', '30');
+
+    assert.dom(TABLE_ROWS).exists({ count: 15 });
   });
 
   test('user can visit target details screen without read permissions for host-set', async function (assert) {

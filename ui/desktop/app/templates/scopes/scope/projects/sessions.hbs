@@ -5,18 +5,15 @@
 
 <Rose::Layout::Page as |page|>
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.session.title_plural'}}
-      <DocLink @doc='sessions' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.session.description'}}
-    </Hds::Text::Body>
+    <Hds::PageHeader as |PH|>
+      <PH.Title>
+        {{t 'resources.session.title_plural'}}
+        <DocLink @doc='sessions' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.session.description'}}
+      </PH.Description>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body class='search-filtering'>

@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeGroupsIndexRoute extends Route {
   // =services
@@ -26,6 +27,14 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -41,22 +50,34 @@ export default class ScopesScopeGroupsIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
 
       const scope = this.modelFor('scopes.scope');
       const { id: scope_id } = scope;
+      const filters = { scope_id: [{ equals: scope_id }] };
+
+      const sort =
+        sortAttribute === 'name'
+          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
+          : { attribute: sortAttribute, direction: sortDirection };
+
       let groups = [];
       let totalItems = 0;
       let doGroupsExist = false;
-      const filters = { scope_id: [{ equals: scope_id }] };
-
       if (this.can.can('list model', scope, { collection: 'groups' })) {
         groups = await this.store.query('group', {
           scope_id,
-          query: { filters, search },
+          query: { filters, search, sort },
           page,
           pageSize,
         });

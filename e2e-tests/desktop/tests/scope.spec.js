@@ -52,7 +52,9 @@ test.describe('Scope tests', () => {
   }) => {
     const headerNavLocator = authedPage.getByLabel('header-nav');
     await expect(headerNavLocator).toBeVisible();
-    await expect(headerNavLocator.locator('summary')).toHaveText('Global');
+    await expect(
+      headerNavLocator.locator('.hds-dropdown-toggle-button'),
+    ).toHaveText('Global');
 
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),
@@ -67,7 +69,9 @@ test.describe('Scope tests', () => {
     });
     await orgAHeaderNavLink.click();
 
-    await expect(headerNavLocator.locator('summary')).toHaveText(orgA.name);
+    await expect(
+      headerNavLocator.locator('.hds-dropdown-toggle-button'),
+    ).toHaveText(orgA.name);
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),
     ).toBeVisible();
@@ -75,13 +79,16 @@ test.describe('Scope tests', () => {
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeHidden();
 
-    await headerNavLocator.click();
     const orgBHeaderNavLink = authedPage.getByRole('link', {
       name: orgB.name,
     });
+    await expect(orgBHeaderNavLink).toBeVisible();
+
     await orgBHeaderNavLink.click();
 
-    await expect(headerNavLocator.locator('summary')).toHaveText(orgB.name);
+    await expect(
+      headerNavLocator.locator('.hds-dropdown-toggle-button'),
+    ).toHaveText(orgB.name);
     await expect(
       authedPage.getByRole('link', { name: targetB.name }),
     ).toBeVisible();

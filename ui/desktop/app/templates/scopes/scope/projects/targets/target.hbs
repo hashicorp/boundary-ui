@@ -8,44 +8,92 @@
 <Rose::Layout::Page as |page|>
 
   <page.header>
-    <Hds::Text::Display @tag='h1' @size='500' class='target-details-header'>
-      <Hds::IconTile @color='boundary' @icon='target' />
-      {{@model.target.displayName}}
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.IconTile @color='boundary' @icon='target' />
+      <PH.Title class='target-details-header'>
+        {{@model.target.displayName}}
+      </PH.Title>
+      {{#if (can 'connect target' @model.target)}}
+        <PH.Actions>
+          <Hds::Button
+            data-test-target-detail-connect-button
+            @text={{if
+              (gt @model.hosts.length 1)
+              (t 'resources.session.actions.quick-connect')
+              (t 'resources.session.actions.connect')
+            }}
+            @icon='entry-point'
+            @iconPosition='trailing'
+            {{on 'click' (fn this.connect @model.target)}}
+          />
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'connect target' @model.target)}}
-      <Hds::Button
-        data-test-target-detail-connect-button
-        @text={{t 'resources.session.actions.connect'}}
-        @icon='entry-point'
-        @iconPosition='trailing'
-        {{on 'click' (fn this.preConnect @model)}}
-      />
-    {{/if}}
-  </page.actions>
 
   <page.body class='details-screen-body'>
     <Rose::Layout::BodyContent as |bc|>
-      <Target::HostModal
-        @showModal={{this.isConnecting}}
-        @toggleModal={{this.toggleModal}}
-        @connect={{this.hostConnect}}
-        @hosts={{@model.hosts}}
-        @target={{@model.target}}
-      />
       <bc.Body class='target-details-body'>
-        <Hds::ApplicationState as |A|>
-          <A.Header
-            @title={{t 'resources.target.messages.connect-more-info.title'}}
-          />
-          <A.Body
-            @text={{t
-              'resources.target.messages.connect-more-info.description'
+        {{#if (gt @model.hosts.length 1)}}
+          <Hds::Table
+            @model={{this.paginatedHosts}}
+            @columns={{array
+              (hash label=(t 'resources.target.host-source.title_plural'))
+              (hash label=(t 'form.address.label'))
+              (hash
+                label=(t 'titles.actions') isVisuallyHidden=true align='right'
+              )
             }}
+            @valign='middle'
+          >
+            <:body as |B|>
+              <B.Tr>
+                <B.Td>
+                  <Hds::Text::Body @weight='semibold' @tag='p'>
+                    {{B.data.displayName}}
+                  </Hds::Text::Body>
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::Text::Body @tag='p'>
+                    {{B.data.address}}
+                  </Hds::Text::Body>
+                </B.Td>
+
+                <B.Td>
+                  <Hds::Button
+                    data-test-target-connect-button={{B.data.id}}
+                    @text={{t 'resources.session.actions.connect'}}
+                    @color='secondary'
+                    {{on 'click' (fn this.connect @model.target B.data)}}
+                  />
+                </B.Td>
+
+              </B.Tr>
+            </:body>
+          </Hds::Table>
+          <Hds::Pagination::Numbered
+            data-test-pagination
+            @totalItems={{this.totalItems}}
+            @currentPage={{this.page}}
+            @currentPageSize={{this.pageSize}}
+            @onPageChange={{this.handlePageChange}}
+            @onPageSizeChange={{this.handlePageSizeChange}}
           />
-        </Hds::ApplicationState>
+        {{else}}
+          <Hds::ApplicationState as |A|>
+            <A.Header
+              @title={{t 'resources.target.messages.connect-more-info.title'}}
+            />
+            <A.Body
+              @text={{t
+                'resources.target.messages.connect-more-info.description'
+              }}
+            />
+          </Hds::ApplicationState>
+        {{/if}}
       </bc.Body>
       <bc.Sidebar>
         {{#if @model.target.aliases}}

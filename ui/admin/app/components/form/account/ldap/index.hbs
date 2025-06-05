@@ -79,7 +79,13 @@
 
       <F.Control>
         <div class='ldap-section'>
-          <Hds::Text::Display @tag='h3' @size='300' @weight='bold'>
+          <Hds::Text::Display
+            @tag='h2'
+            @size='400'
+            @weight='bold'
+            class='remove-margin'
+          >
+            {{t 'resources.account.title'}}
             {{t 'form.other_fields.label'}}
           </Hds::Text::Display>
           <Hds::Form::HelperText @controlId='helper-text-for-section'>{{t

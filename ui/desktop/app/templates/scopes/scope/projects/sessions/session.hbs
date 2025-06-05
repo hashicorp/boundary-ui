@@ -7,29 +7,31 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.header class='session-details-info'>
-    <Hds::IconTile @color='boundary' @icon='terminal' />
-    <Hds::Text::Display @tag='h1' @size='500'>
-      {{@model.displayName}}
-    </Hds::Text::Display>
-    <Hds::Badge
-      @text={{time-remaining @model.expiration_time}}
-      @icon='loading'
-    />
+  <page.header>
+    <Hds::PageHeader as |PH|>
+      <PH.IconTile @color='boundary' @icon='terminal' />
+      <PH.Title>
+        {{@model.displayName}}
+      </PH.Title>
+      <PH.Badges>
+        <Hds::Badge
+          @text={{time-remaining @model.expiration_time}}
+          @icon='loading'
+        />
+      </PH.Badges>
+      {{#if (can 'cancel session' @model)}}
+        <PH.Actions>
+          <Hds::Button
+            data-test-session-detail-cancel-button
+            @text={{t 'resources.session.actions.end'}}
+            @icon='x'
+            @color='secondary'
+            {{on 'click' (fn this.sessions.cancelSession @model)}}
+          />
+        </PH.Actions>
+      {{/if}}
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    {{#if (can 'cancel session' @model)}}
-      <Hds::Button
-        data-test-session-detail-cancel-button
-        @text={{t 'resources.session.actions.end'}}
-        @icon='x'
-        @color='secondary'
-        {{on 'click' (fn this.sessions.cancelSession @model)}}
-      />
-    {{/if}}
-
-  </page.actions>
 
   <page.body class='details-screen-body'>
     <Session::Tabs @model={{@model}} />

@@ -20,17 +20,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda #v4.1.0
+        with:
+          run_install: false
+
       - name: Set up Node
-        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4.3.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 20
-          cache: "yarn"
+          cache: "pnpm"
           cache-dependency-path: |
-            yarn.lock
-            ui/desktop/electron-app/yarn.lock
+            pnpm-lock.yaml
+            ui/desktop/electron-app/pnpm-lock.yaml
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@a1502cd9e758c50496cc9ac5308c4843bcd56d36
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
 
       - name: Set up Enos
         uses: hashicorp/action-setup-enos@b9fa53484a1e8fdcc7b02a118bcf01d65b9414c9
@@ -82,9 +87,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          yarn install --immutable
+          pnpm install --frozen-lockfile
           cd e2e-tests
-          yarn playwright install --with-deps
+          pnpm playwright install --with-deps
 
         # Runner is headless so we need to enable a display to run the client
       - name: Run Tests
@@ -93,7 +98,7 @@ jobs:
           cd e2e-tests
           export DISPLAY=:99
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-          yarn run desktop
+          pnpm run desktop
 
       - name: Upload Playwright report
         if: ${{ failure() }}

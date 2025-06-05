@@ -11,38 +11,35 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.role.title'}}
-      <DocLink @doc='role' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{#if @model.role.scope.isOrg}}
-        {{t 'resources.role.scope.description.org'}}
-      {{else if @model.role.scope.isProject}}
-        {{t 'resources.role.scope.description.project'}}
-      {{else}}
-        {{t 'resources.role.scope.description.global'}}
-      {{/if}}
-    </Hds::Text::Body>
-    <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.role.title'}}
+        <DocLink @doc='role' />
+      </PH.Title>
+      <PH.Description>
+        {{#if @model.role.scope.isOrg}}
+          {{t 'resources.role.scope.description.org'}}
+        {{else if @model.role.scope.isProject}}
+          {{t 'resources.role.scope.description.project'}}
+        {{else}}
+          {{t 'resources.role.scope.description.global'}}
+        {{/if}}
+      </PH.Description>
+      <PH.Generic>
+        <Hds::Copy::Snippet @textToCopy={{@model.role.id}} @color='secondary' />
+      </PH.Generic>
+      <PH.Actions>
+        <Roles::Role::Actions
+          @model={{@model.role}}
+          @delete={{this.roles.delete}}
+        />
+      </PH.Actions>
+    </Hds::PageHeader>
   </page.header>
-
-  <page.actions>
-    <Roles::Role::Actions
-      @model={{@model.role}}
-      @delete={{this.roles.delete}}
-    />
-  </page.actions>
 
   <page.navigation>
     <Roles::Role::Nav @model={{@model.role}} />

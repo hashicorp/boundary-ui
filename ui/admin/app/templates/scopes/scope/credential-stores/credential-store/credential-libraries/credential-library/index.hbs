@@ -4,25 +4,35 @@
 }}
 
 <Rose::Layout::Page as |page|>
-
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.credential-library.title'}}
-      <DocLink @doc='credential-library' />
-    </Hds::Text::Display>
-    <Hds::Text::Body @tag='p' @size='300' class='p'>
-      {{t 'resources.credential-library.description'}}
-    </Hds::Text::Body>
-    <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.credential-library.title'}}
+        <DocLink @doc='credential-library' />
+      </PH.Title>
+      <PH.Description>
+        {{t 'resources.credential-library.description'}}
+      </PH.Description>
+      {{#if (can 'delete model' @model)}}
+        <PH.Actions>
+          <Hds::Dropdown data-test-manage-credential-library-dropdown as |dd|>
+            <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+            <dd.Interactive
+              @color='critical'
+              {{on 'click' (fn this.credentialLibraries.delete @model)}}
+            >
+              {{t 'resources.credential-library.actions.delete'}}
+            </dd.Interactive>
+          </Hds::Dropdown>
+        </PH.Actions>
+      {{/if}}
+      <PH.Generic>
+        <Hds::Copy::Snippet @textToCopy={{@model.id}} @color='secondary' />
+      </PH.Generic>
+    </Hds::PageHeader>
   </page.header>
 
   <page.navigation>
@@ -34,19 +44,6 @@
       </nav.link>
     </Rose::Nav::Tabs>
   </page.navigation>
-
-  <page.actions>
-    {{#if (can 'delete model' @model)}}
-      <Hds::Dropdown data-test-manage-credential-library-dropdown as |dd|>
-        <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-
-        <dd.Interactive
-          @color='critical'
-          {{on 'click' (fn this.credentialLibraries.delete @model)}}
-        >{{t 'resources.credential-library.actions.delete'}}</dd.Interactive>
-      </Hds::Dropdown>
-    {{/if}}
-  </page.actions>
 
   <page.body>
     <Form::CredentialLibrary

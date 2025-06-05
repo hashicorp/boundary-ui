@@ -10,20 +10,17 @@
 />
 
 <Rose::Layout::Page as |page|>
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
 
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.storage-bucket.titles.new'}}
-      <DocLink @doc='storage-bucket.new' />
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.storage-bucket.titles.new'}}
+        <DocLink @doc='storage-bucket.new' />
+      </PH.Title>
+    </Hds::PageHeader>
   </page.header>
 
   <page.body>

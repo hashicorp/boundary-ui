@@ -5,37 +5,32 @@
 
 <Rose::Layout::Page as |page|>
 
-  <page.breadcrumbs>
-    <Breadcrumbs::Container />
-  </page.breadcrumbs>
-
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'resources.group.title_plural'}}
-      <DocLink @doc='group' />
-    </Hds::Text::Display>
-    {{#if @model.doGroupsExist}}
-      <Hds::Text::Body @tag='p' @size='300' class='p'>
-        {{t 'resources.group.description'}}
-      </Hds::Text::Body>
-    {{/if}}
-  </page.header>
-
-  <page.actions>
-    {{#if (can 'create model' this.scope collection='groups')}}
+    <Hds::PageHeader as |PH|>
+      <PH.Breadcrumb>
+        <Breadcrumbs::Container />
+      </PH.Breadcrumb>
+      <PH.Title>
+        {{t 'resources.group.title_plural'}}
+        <DocLink @doc='group' />
+      </PH.Title>
       {{#if @model.doGroupsExist}}
-        <Hds::Button
-          @route='scopes.scope.groups.new'
-          @text={{t 'resources.group.titles.new'}}
-        />
+        <PH.Description>
+          {{t 'resources.group.description'}}
+        </PH.Description>
       {{/if}}
-    {{/if}}
-  </page.actions>
+      {{#if (can 'create model' this.scope collection='groups')}}
+        {{#if @model.doGroupsExist}}
+          <PH.Actions>
+            <Hds::Button
+              @route='scopes.scope.groups.new'
+              @text={{t 'resources.group.titles.new'}}
+            />
+          </PH.Actions>
+        {{/if}}
+      {{/if}}
+    </Hds::PageHeader>
+  </page.header>
 
   <page.body class='search-filtering'>
 
@@ -52,38 +47,54 @@
       {{#if @model.groups}}
 
         <Hds::Table
-          @model={{@model.groups}}
-          @columns={{array
-            (hash label=(t 'form.name.label'))
-            (hash label=(t 'form.id.label'))
-          }}
-          @density='short'
           @valign='middle'
+          @sortBy={{this.sortAttribute}}
+          @sortOrder={{this.sortDirection}}
+          @onSort={{this.sortBy}}
         >
+          <:head as |H|>
+            <H.Tr>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'name'}}
+                @sortOrder={{if (eq 'name' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.name.label'}}
+              </H.ThSort>
+              <H.ThSort
+                @onClickSort={{fn H.setSortBy 'id'}}
+                @sortOrder={{if (eq 'id' H.sortBy) H.sortOrder}}
+              >
+                {{t 'form.id.label'}}
+              </H.ThSort>
+            </H.Tr>
+          </:head>
+
           <:body as |B|>
-            <B.Tr>
-              <B.Td>
-                {{#if (can 'read group' B.data)}}
-                  <LinkTo
-                    @route='scopes.scope.groups.group'
-                    @model={{B.data.id}}
-                  >
-                    {{B.data.displayName}}
-                  </LinkTo>
-                {{else}}
-                  {{B.data.displayName}}
-                {{/if}}
-                <Hds::Text::Body @tag='p' class='p'>
-                  {{B.data.description}}
-                </Hds::Text::Body>
-              </B.Td>
-              <B.Td>
-                <Hds::Copy::Snippet
-                  @textToCopy={{B.data.id}}
-                  @color='secondary'
-                />
-              </B.Td>
-            </B.Tr>
+            {{#each @model.groups as |data|}}
+              <B.Tr>
+                <B.Td>
+                  {{#if (can 'read group' data)}}
+                    <LinkTo
+                      @route='scopes.scope.groups.group'
+                      @model={{data.id}}
+                    >
+                      {{data.displayName}}
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
+            {{/each}}
           </:body>
         </Hds::Table>
         <Rose::Pagination

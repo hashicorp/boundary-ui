@@ -6,6 +6,7 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
+import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   // =services
@@ -26,6 +27,14 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    sortAttribute: {
+      refreshModel: true,
+      replace: true,
+    },
+    sortDirection: {
+      refreshModel: true,
+      replace: true,
+    },
   };
 
   // =methods
@@ -41,7 +50,14 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   }
 
   retrieveData = restartableTask(
-    async ({ search, page, pageSize, useDebounce }) => {
+    async ({
+      search,
+      page,
+      pageSize,
+      sortAttribute,
+      sortDirection,
+      useDebounce,
+    }) => {
       if (useDebounce) {
         await timeout(250);
       }
@@ -55,13 +71,18 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
         'plugin.name': [],
       };
 
+      const sort =
+        sortAttribute === 'name'
+          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
+          : { attribute: sortAttribute, direction: sortDirection };
+
       let hostCatalogs;
       let totalItems = 0;
       let doHostCatalogsExist = false;
       if (this.can.can('list model', scope, { collection: 'host-catalogs' })) {
         hostCatalogs = await this.store.query('host-catalog', {
           scope_id,
-          query: { search, filters },
+          query: { search, filters, sort },
           page,
           pageSize,
         });

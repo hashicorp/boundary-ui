@@ -32,6 +32,10 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     workers: null,
   };
 
+  const model = {
+    tags: [{ key: 'env', value: 'os', type: 'config' }],
+  };
+
   hooks.beforeEach(async function () {
     await authenticateSession({});
     intl = this.owner.lookup('service:intl');
@@ -85,31 +89,20 @@ module('Unit | Controller | scopes/scope/workers/index', function (hooks) {
     assert.strictEqual(getWorkerCount(), workerCount - 1);
   });
 
-  test('callFilterBy action adds expected property values to route', async function (assert) {
-    const route = this.owner.lookup('route:scopes/scope/workers/index');
-    await visit(urls.workers);
+  test('applyFilter action sets expected values correctly', async function (assert) {
+    controller.set('model', model);
     const tag = { key: 'type', value: 'dev', type: 'config' };
+    // Encode the tag to base64
+    const encodedTag = window.btoa(JSON.stringify(tag));
+    controller.applyFilter('tags', [encodedTag]);
 
-    assert.notOk(route.tags);
-
-    controller.callFilterBy('tags', [tag]);
-
-    assert.deepEqual(route.tags, [tag]);
+    assert.deepEqual(controller.tags, [encodedTag]);
   });
 
-  test('callClearAllFilters action removes all filter values from route', async function (assert) {
-    const route = this.owner.lookup('route:scopes/scope/workers/index');
-    await visit(urls.workers);
-    const tag = { key: 'type', value: 'dev', type: 'config' };
-    controller.callFilterBy('tags', [tag]);
-
-    assert.deepEqual(route.tags, [
-      { key: 'type', value: 'dev', type: 'config' },
-    ]);
-
-    controller.callClearAllFilters();
-
-    assert.deepEqual(route.tags, []);
+  test('filters returns expected entries', function (assert) {
+    controller.set('model', model.tags);
+    assert.ok(controller.filters.allFilters);
+    assert.ok(controller.filters.selectedFilters);
   });
 
   test('messageDescription returns correct translation with list authorization', async function (assert) {

@@ -5,14 +5,11 @@
 
 <Rose::Layout::Page class='settings-card' as |page|>
   <page.header>
-    <Hds::Text::Display
-      @tag='h2'
-      @size='400'
-      @weight='bold'
-      class='header-spacing'
-    >
-      {{t 'titles.settings'}}
-    </Hds::Text::Display>
+    <Hds::PageHeader as |PH|>
+      <PH.Title>
+        {{t 'titles.settings'}}
+      </PH.Title>
+    </Hds::PageHeader>
   </page.header>
   <page.body>
     {{outlet}}

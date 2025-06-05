@@ -16,8 +16,8 @@
     "build:oss": "EDITION=oss ember build --environment=production",
     "build:enterprise": "EDITION=enterprise ember build --environment=production",
     "build:hcp": "EDITION=hcp ember build --environment=production",
-    "lint": "concurrently \"yarn:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"yarn:lint:*:fix\" --names \"fix:\"",
+    "lint": "concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\"",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint .",
@@ -30,9 +30,9 @@
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_* || true",
-    "test": "yarn clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && yarn test:finalize",
+    "test": "pnpm clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && pnpm test:finalize",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
-    "test:finalize": "ember coverage-merge && yarn clean:coverage"
+    "test:finalize": "ember coverage-merge && pnpm clean:coverage"
   },
   "dependencies": {
     "@babel/runtime": "7.12.18",
@@ -57,6 +57,7 @@
     "concurrently": "^9.1.0",
     "core": "workspace:*",
     "doctoc": "^2.2.0",
+    "ember-a11y-refocus": "^4.1.4",
     "ember-a11y-testing": "^7.1.2",
     "ember-auto-import": "^2.10.0",
     "ember-cli": "~5.12.0",

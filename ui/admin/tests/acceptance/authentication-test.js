@@ -9,12 +9,12 @@ import {
   currentURL,
   fillIn,
   click,
-  findAll,
   getRootElement,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
@@ -33,6 +33,7 @@ module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let indexURL;
   let globalScope;
@@ -295,26 +296,6 @@ module('Acceptance | authentication', function (hooks) {
     assert.ok(currentSession().isAuthenticated);
   });
 
-  // This test is disabled because it is no longer relevant.  On deauth,
-  // the page is reloaded.  If the user was viewing a route requiring
-  // authentication, they will be redirected accordingly.
-  test.skip('deauthentication redirects to first global authenticate method', async function (assert) {
-    await visit(authMethodAuthenticateURL);
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
-    assert.ok(currentSession().isAuthenticated);
-    // Open header utilities dropdown
-    await click('.rose-header-utilities .rose-dropdown summary');
-    // Find and click on last element in dropdown - should be deauthenticate button
-    const menu = findAll(
-      '.rose-header-utilities .rose-dropdown .rose-dropdown-content button',
-    );
-    await click(menu[menu.length - 1]);
-    assert.notOk(currentSession().isAuthenticated);
-    assert.equal(currentURL(), authMethodGlobalAuthenticateURL);
-  });
-
   test('401 responses result in deauthentication', async function (assert) {
     await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
@@ -401,8 +382,8 @@ module('Acceptance | authentication', function (hooks) {
   test('org scopes with no auth methods are not visible in dropdown', async function (assert) {
     await visit(authMethodGlobalAuthenticateURL);
 
-    await click('.rose-dropdown-trigger');
+    await click('.hds-dropdown-toggle-button');
 
-    assert.dom('.rose-dropdown-content a').exists({ count: 3 });
+    assert.dom('.hds-dropdown-list-item a').exists({ count: 3 });
   });
 });
