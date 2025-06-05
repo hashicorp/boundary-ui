@@ -77,25 +77,27 @@
     </Hds::Alert>
   {{/if}}
 
-  <Hds::Button
-    @text={{t 'resources.role.scope.actions.manage-custom-scopes.text'}}
-    @color='secondary'
-    @icon={{if @showCheckIcon 'check-circle'}}
-    @route={{if
-      @model.scope.isGlobal
-      'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
-      'scopes.scope.roles.role.manage-scopes.manage-org-projects'
-    }}
-    @model={{if @model.scope.isOrg @model.scope.id}}
-    data-test-manage-custom-scopes-button
-  />
+  {{#if this.showManageScopesBtn}}
+    <Hds::Button
+      @text={{t 'resources.role.scope.actions.manage-custom-scopes.text'}}
+      @color='secondary'
+      @icon={{if @showCheckIcon 'check-circle'}}
+      @route={{if
+        @model.scope.isGlobal
+        'scopes.scope.roles.role.manage-scopes.manage-custom-scopes'
+        'scopes.scope.roles.role.manage-scopes.manage-org-projects'
+      }}
+      @model={{if @model.scope.isOrg @model.scope.id}}
+      data-test-manage-custom-scopes-button
+    />
 
-  <Hds::Form::HelperText
-    @controlId='for-manage-custom-scopes-button'
-    class='manage-custom-scopes-helper-text'
-  >
-    {{t 'resources.role.scope.actions.manage-custom-scopes.help'}}
-  </Hds::Form::HelperText>
+    <Hds::Form::HelperText
+      @controlId='for-manage-custom-scopes-button'
+      class='manage-custom-scopes-helper-text'
+    >
+      {{t 'resources.role.scope.actions.manage-custom-scopes.help'}}
+    </Hds::Form::HelperText>
+  {{/if}}
 
   <form.actions
     @submitText={{t 'actions.save'}}
