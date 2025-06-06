@@ -39,7 +39,11 @@
               </B.Td>
               <B.Td>
                 <Hds::Text::Body @tag='p'>
-                  {{B.data.address}}
+                  {{#if B.data.address}}
+                    {{B.data.address}}
+                  {{else}}
+                    {{t 'table.no-data-fallback'}}
+                  {{/if}}
                 </Hds::Text::Body>
               </B.Td>
 
