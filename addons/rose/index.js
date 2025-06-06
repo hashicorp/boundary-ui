@@ -12,16 +12,10 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import(
-      path.resolve(__dirname, 'node_modules/codemirror/lib/codemirror.css'),
-    );
-    app.import(
-      path.resolve(__dirname, 'node_modules/codemirror/theme/monokai.css'),
-    );
-    app.import(
-      path.resolve(__dirname, 'node_modules/codemirror/addon/lint/lint.css'),
-    );
-    app.import(require.resolve('jsonlint'));
+    this.import('node_modules/codemirror/lib/codemirror.css');
+    this.import('node_modules/codemirror/theme/monokai.css');
+    this.import('node_modules/codemirror/addon/lint/lint.css');
+    this.import('node_modules/jsonlint/lib/jsonlint.js');
 
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
