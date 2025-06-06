@@ -17,7 +17,7 @@ export default class SessionService extends BaseSessionService {
    * so we can hook in and setup the DB after a successful authentication
    */
   async handleAuthentication() {
-    await this.webWorker.setup('web-worker');
+    await this.webWorker.setup();
 
     const userId = this.data?.authenticated?.user_id;
     const hostUrl = this.window.location?.host;
