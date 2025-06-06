@@ -631,8 +631,11 @@ role:
         link: You can read more about it here
       manage-custom-scopes:
         title: Manage Custom Scopes
-        description: Select which specific orgs you want to apply to this role's grant sets.
+        description:
+          0: Select which specific orgs you want to apply to this role's grant sets.
+          1: Select specific projects from each org to apply to this role's grant sets. You cannot add specific orgs because applying "children" has already added them to this role.
         success: Custom scope selection saved
+        tooltip: The org this project is under.
       manage-org-projects:
         title: Manage Projects in {orgDisplayName}
         description: Select which projects in this org you want to apply to this role's grant sets.

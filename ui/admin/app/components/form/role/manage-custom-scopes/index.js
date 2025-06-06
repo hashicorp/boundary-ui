@@ -18,7 +18,7 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
    * @type {string}
    */
   get orgDisplayName() {
-    const org = this.args.model.orgScopes.find(
+    const org = this.args.model.scopes.find(
       ({ id }) => id === this.selectedOrg,
     );
     return org.displayName;
@@ -27,12 +27,12 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
   // =actions
 
   /**
-   * Handles the selection changes for the paginated table.
+   * Handles the org selection changes for the paginated table.
    * @param {object} selectableRowsStates
    * @param {object} selectionKey
    */
   @action
-  selectionChange({ selectableRowsStates, selectionKey }) {
+  orgSelectionChange({ selectableRowsStates, selectionKey }) {
     const { role, projectTotals } = this.args.model;
 
     const addOrRemoveValues = (add, remove, orgId) => {
@@ -108,5 +108,25 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
   @action
   toggleRemoveAllModal() {
     this.selectedOrgs = [];
+  }
+
+  /**
+   * Handles the project selection changes for the paginated table.
+   * @param {object} selectableRowsStates
+   */
+  @action
+  projectSelectionChange({ selectableRowsStates }) {
+    const { role } = this.args.model;
+    selectableRowsStates.forEach((row) => {
+      const { isSelected, selectionKey: key } = row;
+      const includesId = role.grant_scope_ids.includes(key);
+      if (isSelected && !includesId) {
+        role.grant_scope_ids = [...role.grant_scope_ids, key];
+      } else if (!isSelected && includesId) {
+        role.grant_scope_ids = role.grant_scope_ids.filter(
+          (item) => item !== key,
+        );
+      }
+    });
   }
 }
