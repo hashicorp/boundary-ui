@@ -21,7 +21,15 @@
         <DocLink @doc='role.add-grant-scopes' />
       </PH.Title>
       <PH.Description>
-        {{t 'resources.role.scope.messages.manage-custom-scopes.description'}}
+        {{#if @model.canSelectOrgs}}
+          {{t
+            'resources.role.scope.messages.manage-custom-scopes.description.0'
+          }}
+        {{else}}
+          {{t
+            'resources.role.scope.messages.manage-custom-scopes.description.1'
+          }}
+        {{/if}}
       </PH.Description>
     </Hds::PageHeader>
   </page.header>
@@ -30,9 +38,13 @@
     <Form::Role::ManageCustomScopes
       @model={{@model}}
       @search={{this.search}}
+      @filters={{this.filters}}
+      @orgs={{this.orgs}}
+      @orgScopes={{this.orgScopes}}
       @page={{this.page}}
       @pageSize={{this.pageSize}}
       @handleSearchInput={{this.handleSearchInput}}
+      @applyFilter={{this.applyFilter}}
       @submit={{fn this.setGrantScopes @model.role}}
       @cancel={{fn this.cancel @model.role}}
     />

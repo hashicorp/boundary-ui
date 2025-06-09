@@ -4,7 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, find, select } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  find,
+  select,
+  fillIn,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -30,6 +38,10 @@ module('Acceptance | projects | targets | target', function (hooks) {
   const HDS_DIALOG_CANCEL_BUTTON =
     '.hds-modal__footer .hds-button--color-secondary';
   const TABLE_ROWS = 'tbody tr';
+  const FIRST_ROW = 'tbody tr:first-child';
+  const SECOND_ROW = 'tbody tr:nth-child(2)';
+  const SEARCH_INPUT = 'input[type="search"]';
+  const NO_RESULTS_MSG = '[data-test-no-host-source-results]';
 
   const instances = {
     scopes: {
@@ -240,6 +252,58 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(APP_STATE_TITLE).hasText('Connected');
   });
 
+  test('user can search for a host source by name, description, and address', async function (assert) {
+    const host1 =
+      instances.targetWithTwoHosts.hostSets.models[0].hosts.models[0];
+    const host2 =
+      instances.targetWithTwoHosts.hostSets.models[0].hosts.models[1];
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithTwoHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
+    assert.dom(FIRST_ROW).includesText(host1.name);
+    assert.dom(SECOND_ROW).includesText(host2.name);
+
+    await fillIn(SEARCH_INPUT, host2.name);
+    await waitFor(SECOND_ROW, { count: 0 });
+
+    assert.dom(TABLE_ROWS).exists({ count: 1 });
+    assert.dom(FIRST_ROW).includesText(host2.name);
+    assert.dom(SECOND_ROW).doesNotExist();
+
+    await fillIn(SEARCH_INPUT, '');
+    await waitFor(TABLE_ROWS, { count: 2 });
+
+    await fillIn(SEARCH_INPUT, host1.description);
+    await waitFor(SECOND_ROW, { count: 0 });
+
+    assert.dom(TABLE_ROWS).exists({ count: 1 });
+    assert.dom(FIRST_ROW).includesText(host1.description);
+    assert.dom(SECOND_ROW).doesNotExist();
+
+    await fillIn(SEARCH_INPUT, '');
+    await waitFor(TABLE_ROWS, { count: 2 });
+
+    await fillIn(SEARCH_INPUT, host2.attributes.address);
+    await waitFor(SECOND_ROW, { count: 0 });
+
+    assert.dom(TABLE_ROWS).exists({ count: 1 });
+    assert.dom(FIRST_ROW).includesText(host2.attributes.address);
+    assert.dom(SECOND_ROW).doesNotExist();
+  });
+
+  test('user can search for host sources and get no results', async function (assert) {
+    await visit(urls.targets);
+    await click(`[href="${urls.targetWithTwoHosts}"]`);
+
+    assert.dom(TABLE_ROWS).exists({ count: 2 });
+
+    await fillIn(SEARCH_INPUT, 'non-existing-host');
+    await waitFor(TABLE_ROWS, { count: 0 });
+
+    assert.dom(NO_RESULTS_MSG).includesText('No results found');
+  });
+
   test('user can see host source table when visiting a target via resource link', async function (assert) {
     const targetId = instances.targetWithTwoHosts.id;
 
@@ -310,7 +374,7 @@ module('Acceptance | projects | targets | target', function (hooks) {
     assert.dom(TABLE_ROWS).exists({ count: 10 });
     assert.dom('[data-test-pagination]').isVisible();
 
-    await click('button[aria-label="Next page"]');
+    await click('a[aria-label="Next page"]');
 
     assert.dom(TABLE_ROWS).exists({ count: 5 });
   });
