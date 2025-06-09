@@ -47,8 +47,8 @@ module('Acceptance | scopes', function (hooks) {
     projectScope: null,
     newProjectScope: null,
     project2Scope: null,
-    projectScopeEdit: null,
-    project2ScopeEdit: null,
+    projectTargets: null,
+    project2Targets: null,
   };
 
   hooks.beforeEach(async function () {
@@ -82,8 +82,8 @@ module('Acceptance | scopes', function (hooks) {
     urls.newProjectScope = `${urls.orgScopes}/new`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.project2Scope = `/scopes/${instances.scopes.project2.id}`;
-    urls.projectScopeEdit = `${urls.projectScope}/edit`;
-    urls.project2ScopeEdit = `${urls.project2Scope}/edit`;
+    urls.projectTargets = `${urls.projectScope}/targets`;
+    urls.project2Targets = `${urls.project2Scope}/targets`;
     // Generate resource counter
     getScopeCount = (type) => this.server.schema.scopes.where({ type }).length;
     await authenticateSession({ isGlobal: true, username: 'admin' });
@@ -135,12 +135,12 @@ module('Acceptance | scopes', function (hooks) {
     await visit(urls.projectScope);
     await a11yAudit();
 
-    assert.strictEqual(currentURL(), urls.projectScopeEdit);
+    assert.strictEqual(currentURL(), urls.projectTargets);
 
     await click(SCOPES_DROPDOWN_BTN);
     await click(SCOPES_DROPDOWN_SELECTOR(urls.project2Scope));
 
-    assert.strictEqual(currentURL(), urls.project2ScopeEdit);
+    assert.strictEqual(currentURL(), urls.project2Targets);
   });
 
   test('can create new org scopes', async function (assert) {
