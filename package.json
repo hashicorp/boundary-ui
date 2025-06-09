@@ -48,7 +48,13 @@
       "node-gyp": "^10.0.0",
       "ansi-html": "^0.0.9",
       "fireworm>async": "^2.6.4"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
+      "tesseract.js"
+    ],
+    "onlyBuiltDependencies": []
   },
   "config": {
     "commitizen": {
