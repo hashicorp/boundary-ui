@@ -51,6 +51,8 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm lint
+      # run format across the entire repo, fail if there are unformatted files, log the files that were unformatted and specity the exit code that so that CI will fail
+      - run: pnpm format && git diff-index --quiet HEAD -- || (echo "❌ Some files have not been formatted:" && git status --short && (exit 1))
 
   test:
     name: Test
