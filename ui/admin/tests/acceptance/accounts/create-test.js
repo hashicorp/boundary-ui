@@ -81,7 +81,10 @@ module('Acceptance | accounts | create', function (hooks) {
       commonSelectors.FIELD_DESCRIPTION_VALUE,
     );
     await fillIn(selectors.FIELD_LOGIN_NAME, selectors.FIELD_LOGIN_NAME_VALUE);
-    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_PASSWORD,
+      commonSelectors.FIELD_PASSWORD_VALUE,
+    );
     await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(

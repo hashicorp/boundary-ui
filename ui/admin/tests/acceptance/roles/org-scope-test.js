@@ -102,7 +102,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.HREF(urls.roleScopes));
     await click(commonSelectors.TABLE_RESOURCE_LINK(scopeUrl));
 
-    assert.strictEqual(currentURL(), `${scopeUrl}/edit`);
+    assert.strictEqual(currentURL(), `${scopeUrl}/targets`);
   });
 
   test('user can navigate to parent scope from role grant scopes', async function (assert) {
@@ -222,6 +222,20 @@ module('Acceptance | roles | org-scope', function (hooks) {
     assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_THIS)).isVisible();
     assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_CHILDREN)).isVisible();
     assert.dom(selectors.SCOPE_TOGGLE(GRANT_SCOPE_DESCENDANTS)).doesNotExist();
+  });
+
+  test('manage custom scopes button is not visible when "children" is toggled on for org level role on manage scopes page', async function (assert) {
+    await visit(urls.role);
+
+    await click(selectors.MANAGE_DROPDOWN_ROLES);
+    await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
+
+    assert.strictEqual(currentURL(), urls.manageScopes);
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON).isVisible();
+
+    await click(selectors.SCOPE_TOGGLE(GRANT_SCOPE_CHILDREN));
+
+    assert.dom(selectors.MANAGE_CUSTOM_SCOPES_BUTTON).doesNotExist();
   });
 
   test('user can save scope keywords to add on manage scopes page', async function (assert) {

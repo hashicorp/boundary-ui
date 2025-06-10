@@ -10,10 +10,10 @@
   "scripts": {
     "build:cli": "node -e \"require('./config/cli.js').setup()\"",
     "build:config": "node -e \"require('./config/desktop.js').setup()\"",
-    "build:all": "yarn build:cli && yarn build:config",
+    "build:all": "pnpm build:cli && pnpm build:config",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "yarn build:all && electron-forge make",
+    "make": "pnpm build:all && electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
   },
@@ -43,8 +43,14 @@
     "electron": "35.1.2",
     "unzipper": "^0.11.5"
   },
-  "resolutions": {
-    "highlight.js": "^10.4.1",
-    "node-gyp": "^10.0.0"
+  "pnpm": {
+    "ignoredBuiltDependencies": [],
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-winstaller",
+      "fs-xattr",
+      "node-pty",
+      "macos-alias"
+    ]
   }
 }

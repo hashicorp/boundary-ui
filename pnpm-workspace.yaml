@@ -1,0 +1,5 @@
+strictDepBuilds: true
+packages:
+  - addons/*
+  - ui/*
+  - e2e-tests
