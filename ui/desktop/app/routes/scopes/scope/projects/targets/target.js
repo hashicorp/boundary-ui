@@ -42,22 +42,24 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
        * from the model hook for hosts
        */
       try {
-        const hostSets = await Promise.all(
-          target.host_sources.map(({ host_source_id }) =>
-            this.store.findRecord('host-set', host_source_id),
-          ),
-        );
+        const { host_sources } = target;
+        let allFilteredHosts = [];
 
-        // Extract host ids from all host sets
-        const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
+        for (const hostSource of host_sources) {
+          const query = {
+            host_catalog_id: hostSource.host_catalog_id,
+          };
+          const hostsQuery = await this.store.query('host', query);
 
-        // Load unique hosts
-        const uniqueHostIds = new Set(hostIds);
+          allFilteredHosts.push(
+            ...hostsQuery.filter((host) =>
+              host.host_set_ids?.includes(hostSource.host_source_id),
+            ),
+          );
+        }
 
-        hosts = await Promise.all(
-          [...uniqueHostIds].map((hostId) =>
-            this.store.findRecord('host', hostId),
-          ),
+        hosts = Array.from(
+          new Map(allFilteredHosts.map((host) => [host.id, host])).values(),
         );
       } catch (error) {
         // no operation
