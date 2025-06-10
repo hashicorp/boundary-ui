@@ -168,7 +168,7 @@
                     @icon='org'
                     @iconPosition='leading'
                   >
-                    {{~if B.data.scope.name B.data.scope.name B.data.scope.id}}
+                    {{~or B.data.scope.name B.data.scope.id}}
                   </Hds::Link::Inline>
                 {{/if}}
               </B.Td>
