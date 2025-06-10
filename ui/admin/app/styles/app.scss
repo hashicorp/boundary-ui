@@ -904,6 +904,10 @@
 }
 
 .role-manage-custom-scopes-form {
+  .filters-applied {
+    margin-top: 1rem;
+  }
+
   .table-selected-items-text {
     display: flex;
     justify-content: end;
