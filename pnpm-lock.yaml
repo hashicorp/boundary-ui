@@ -13,6 +13,7 @@ overrides:
   node-gyp: ^10.0.0
   ansi-html: ^0.0.9
   fireworm>async: ^2.6.4
+  '@babel/runtime': 7.27.6
 
 importers:
 
@@ -728,8 +729,8 @@ importers:
   ui/admin:
     dependencies:
       '@babel/runtime':
-        specifier: 7.12.18
-        version: 7.12.18
+        specifier: 7.27.6
+        version: 7.27.6
       ember-named-blocks-polyfill:
         specifier: ^0.2.5
         version: 0.2.5
@@ -924,8 +925,8 @@ importers:
   ui/desktop:
     dependencies:
       '@babel/runtime':
-        specifier: 7.12.18
-        version: 7.12.18
+        specifier: 7.27.6
+        version: 7.27.6
       '@xterm/addon-canvas':
         specifier: ^0.7.0
         version: 0.7.0(@xterm/xterm@5.5.0)
@@ -1688,11 +1689,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0 || ^8.0.0-0 <8.0.0
 
-  '@babel/runtime@7.12.18':
-    resolution: {integrity: sha512-BogPQ7ciE6SYAUPtlm9tWbgI9+2AgqSam6QivMgXgAT+fKbgppaj4ZX15MHeLC1PVF5sNk70huBu20XxWOs8Cg==}
-
-  '@babel/runtime@7.27.1':
-    resolution: {integrity: sha512-1x3D2xEk2fRo3PAhwQwu5UubzgiVWSXTBfWpVd2Mx2AzRqJuDJCsgaDVZ7HB5iGzDW1Hl1sWN2mFyKjmR9uAog==}
+  '@babel/runtime@7.27.6':
+    resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -9465,11 +9463,7 @@ snapshots:
       '@babel/types': 7.27.1
       esutils: 2.0.3
 
-  '@babel/runtime@7.12.18':
-    dependencies:
-      regenerator-runtime: 0.13.11
-
-  '@babel/runtime@7.27.1': {}
+  '@babel/runtime@7.27.6': {}
 
   '@babel/template@7.27.2':
     dependencies:
@@ -11315,7 +11309,7 @@ snapshots:
 
   asciinema-player@3.4.0:
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.27.6
       solid-js: 1.9.6
 
   assert-never@1.4.0: {}
@@ -12853,7 +12847,7 @@ snapshots:
       '@babel/plugin-transform-typescript': 7.27.1(@babel/core@7.27.1)
       '@babel/polyfill': 7.12.1
       '@babel/preset-env': 7.27.2(@babel/core@7.27.1)
-      '@babel/runtime': 7.12.18
+      '@babel/runtime': 7.27.6
       amd-name-resolver: 1.3.1
       babel-plugin-debug-macros: 0.3.4(@babel/core@7.27.1)
       babel-plugin-ember-data-packages-polyfill: 0.1.2
@@ -12888,7 +12882,7 @@ snapshots:
       '@babel/plugin-transform-runtime': 7.27.1(@babel/core@7.27.1)
       '@babel/plugin-transform-typescript': 7.27.1(@babel/core@7.27.1)
       '@babel/preset-env': 7.27.2(@babel/core@7.27.1)
-      '@babel/runtime': 7.12.18
+      '@babel/runtime': 7.27.6
       amd-name-resolver: 1.3.1
       babel-plugin-debug-macros: 0.3.4(@babel/core@7.27.1)
       babel-plugin-ember-data-packages-polyfill: 0.1.2
@@ -15422,7 +15416,7 @@ snapshots:
 
   is-language-code@3.1.0:
     dependencies:
-      '@babel/runtime': 7.27.1
+      '@babel/runtime': 7.27.6
 
   is-map@2.0.3: {}
 
