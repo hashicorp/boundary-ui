@@ -39,6 +39,9 @@ class SessionManager {
     return session?.stop?.();
   }
 
+  /**
+   * Stop all active and pending target sessions.
+   */
   stopAll() {
     this.#sessions.forEach((session) => session.stop());
   }
