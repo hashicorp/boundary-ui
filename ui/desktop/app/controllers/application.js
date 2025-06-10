@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 export default class ApplicationController extends Controller {
   // =services
 
@@ -17,12 +18,20 @@ export default class ApplicationController extends Controller {
 
   // =actions
 
+  @tracked closeSessionsAndSignOut = false;
+  @tracked showModal = false;
+
   /**
    * Delegates invalidation to the session service.
    */
   @action
-  invalidateSession() {
-    this.session.invalidate();
+  async invalidateSession() {
+    if (this.stopSessions) {
+      this.showModal = false;
+      await this.ipc.invoke('stopAll');
+      console.log('after await!');
+    }
+    // this.session.invalidate();
   }
 
   /**
@@ -74,5 +83,23 @@ export default class ApplicationController extends Controller {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
+  }
+
+  /**
+   * Sets.
+   */
+  @action
+  signOutAttempt() {
+    this.showModal = true;
+  }
+
+  @action
+  cancelSignOut() {
+    this.showModal = false;
+  }
+
+  @action
+  stopSessions() {
+    return (this.closeSessionsAndSignOut = true);
   }
 }
