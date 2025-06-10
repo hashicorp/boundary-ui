@@ -102,7 +102,7 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(commonSelectors.HREF(urls.roleScopes));
     await click(commonSelectors.TABLE_RESOURCE_LINK(scopeUrl));
 
-    assert.strictEqual(currentURL(), `${scopeUrl}/edit`);
+    assert.strictEqual(currentURL(), `${scopeUrl}/targets`);
   });
 
   test('user can navigate to parent scope from role grant scopes', async function (assert) {
