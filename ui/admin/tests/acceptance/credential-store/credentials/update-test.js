@@ -120,12 +120,14 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await visit(urls.usernamePasswordCredential);
+
       await click(commonSelectors.EDIT_BTN);
       await fillIn(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(commonSelectors.SAVE_BTN);
+
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'username_password' })
@@ -140,12 +142,14 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await visit(urls.usernameKeyPairCredential);
+
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(commonSelectors.SAVE_BTN);
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'ssh_private_key' })
@@ -161,12 +165,14 @@ module(
         commonSelectors.FIELD_NAME,
       );
       await visit(urls.jsonCredential);
+
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(commonSelectors.SAVE_BTN);
+
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(
         this.server.schema.credentials.where({ type: 'json' }).models[0].name,
@@ -225,12 +231,14 @@ module(
 
     test('can cancel changes to existing username & key pair credential', async function (assert) {
       await visit(urls.usernameKeyPairCredential);
+
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(commonSelectors.CANCEL_BTN);
+
       assert.notEqual(
         instances.usernameKeyPairCredential.name,
         commonSelectors.FIELD_NAME_VALUE,
@@ -262,6 +270,7 @@ module(
     test('saving an existing username & password credential with invalid fields displays error message', async function (assert) {
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
+
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
         commonSelectors.FIELD_NAME,
@@ -278,6 +287,7 @@ module(
     test('saving an existing username & key pair credential with invalid fields displays error message', async function (assert) {
       this.server.patch('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
+
       await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
       await fillIn(
         commonSelectors.FIELD_NAME,
@@ -328,7 +338,9 @@ module(
         await visit(urls.credentials);
       } catch (e) {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
+
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'username_password' })
@@ -353,13 +365,16 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
 
       try {
         await visit(urls.credentials);
       } catch (e) {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
+
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'ssh_private_key' })
@@ -385,11 +400,14 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       assert.strictEqual(currentURL(), urls.jsonCredential);
+
       try {
         await visit(urls.credentials);
       } catch (e) {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
         await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
+
         assert.strictEqual(currentURL(), urls.credentials);
         assert.notEqual(
           this.server.schema.credentials.where({ type: 'json' }).models[0].name,
@@ -414,12 +432,16 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
+
       try {
         await visit(urls.credentials);
       } catch (e) {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
+
         assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
         assert
           .dom(commonSelectors.FIELD_NAME)
@@ -448,12 +470,16 @@ module(
         commonSelectors.FIELD_NAME,
         commonSelectors.FIELD_NAME_VALUE,
       );
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
+
       try {
         await visit(urls.credentials);
       } catch (e) {
         assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
         await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
+
         assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
         assert
           .dom(commonSelectors.FIELD_NAME)
@@ -503,7 +529,9 @@ module(
       await visit(urls.usernamePasswordCredential);
 
       assert.dom(commonSelectors.FIELD_PASSWORD).doesNotExist();
+
       await click(commonSelectors.EDIT_BTN);
+
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.dom(commonSelectors.FIELD_PASSWORD).isVisible();
     });
@@ -515,6 +543,7 @@ module(
       assert.dom(selectors.FIELD_SSH_PRIVATE_KEY_PASSPHRASE).doesNotExist();
 
       await click(commonSelectors.EDIT_BTN);
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.dom(selectors.FIELD_SSH_PRIVATE_KEY).isVisible();
       assert.dom(selectors.FIELD_SSH_PRIVATE_KEY_PASSPHRASE).isVisible();
@@ -524,7 +553,9 @@ module(
       await visit(urls.jsonCredential);
 
       assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
+
       await click(commonSelectors.EDIT_BTN);
+
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.dom(selectors.REPLACE_SECRET_BTN).isVisible();
     });
@@ -533,9 +564,12 @@ module(
       await visit(urls.jsonCredential);
 
       await click(commonSelectors.EDIT_BTN);
+
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.dom(selectors.REPLACE_SECRET_BTN).isVisible();
+
       await click(selectors.REPLACE_SECRET_BTN);
+
       assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
       await waitUntil(() => assert.dom('.CodeMirror').isVisible());
     });
