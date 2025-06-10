@@ -64,7 +64,7 @@
             {{/if}}
             <dd.Interactive
               data-test-sign-out
-              {{on 'click' this.invalidateSession}}
+              {{on 'click' this.signOutAttempt}}
             >
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
@@ -156,3 +156,29 @@
     </Hds::Modal>
   {{/if}}
 </PendingConfirmations>
+
+{{#if this.showModal}}
+  <Hds::Modal @isDismissDisabled={{false}} as |M|>
+    <M.Header>
+      {{t 'resources.session.messages.stop-sessions-and-signout.title'}}
+    </M.Header>
+    <M.Body>
+      {{t 'resources.session.messages.stop-sessions-and-signout.description'}}
+    </M.Body>
+    <M.Footer>
+      <Hds::ButtonSet>
+        <Hds::Button
+          {{on 'click' this.invalidateSession}}
+          type='button'
+          @text={{t 'actions.ok'}}
+        />
+        <Hds::Button
+          {{on 'click' this.cancelSignOut}}
+          type='button'
+          @text={{t 'actions.cancel'}}
+          @color='secondary'
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
