@@ -44,6 +44,7 @@
     "unzipper": "^0.11.5"
   },
   "pnpm": {
+    "ignoredBuiltDependencies": [],
     "onlyBuiltDependencies": [
       "electron",
       "electron-winstaller",

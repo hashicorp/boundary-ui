@@ -8,6 +8,7 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupIntl } from 'ember-intl/test-support';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
@@ -18,6 +19,7 @@ module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupIntl(hooks, 'en-us');
 
   let featuresService;
   let aliasResource;
@@ -114,11 +116,10 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('cannot navigate to an ssh target form without proper authorization', async function (assert) {
     featuresService.enable('ssh-target');
-    await visit(urls.projectScope);
     instances.sshTarget.authorized_actions =
       instances.sshTarget.authorized_actions.filter((item) => item !== 'read');
 
-    await click(commonSelectors.HREF(urls.targets));
+    await visit(urls.projectScope);
 
     assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.tcpTarget)).isVisible();
     assert
@@ -128,11 +129,10 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
     featuresService.enable('ssh-target');
-    await visit(urls.projectScope);
     instances.tcpTarget.authorized_actions =
       instances.tcpTarget.authorized_actions.filter((item) => item !== 'read');
 
-    await click(commonSelectors.HREF(urls.targets));
+    await visit(urls.projectScope);
 
     assert.dom(commonSelectors.TABLE_RESOURCE_LINK(urls.sshTarget)).isVisible();
     assert
