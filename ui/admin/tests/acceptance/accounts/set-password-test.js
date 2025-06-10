@@ -10,7 +10,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | accounts | set password', function (hooks) {
@@ -95,7 +94,7 @@ module('Acceptance | accounts | set password', function (hooks) {
 
     await visit(urls.setPassword);
 
-    await fillIn(selectors.FIELD_PASSWORD, 'update password');
+    await fillIn(commonSelectors.FIELD_PASSWORD, 'update password');
     await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
   });
@@ -103,7 +102,10 @@ module('Acceptance | accounts | set password', function (hooks) {
   test('can cancel setting new password by navigating away', async function (assert) {
     await visit(urls.setPassword);
 
-    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_PASSWORD,
+      commonSelectors.FIELD_PASSWORD_VALUE,
+    );
     await click(commonSelectors.HREF(urls.account));
 
     assert.strictEqual(currentURL(), urls.account);
@@ -123,7 +125,10 @@ module('Acceptance | accounts | set password', function (hooks) {
     });
 
     await visit(urls.setPassword);
-    await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_PASSWORD,
+      commonSelectors.FIELD_PASSWORD_VALUE,
+    );
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST).isVisible();
