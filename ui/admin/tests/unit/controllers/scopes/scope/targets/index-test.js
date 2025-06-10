@@ -37,6 +37,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   };
 
   const urls = {
+    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -71,6 +72,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
       scope: instances.scopes.global,
     });
 
+    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
@@ -164,7 +166,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   });
 
   test('delete action destroys specified model', async function (assert) {
-    await visit(urls.projectScope);
+    await visit(urls.orgScope);
     const target = await store.findRecord('target', instances.target.id);
     const targetCount = getTargetCount();
 

@@ -1,0 +1,4 @@
+strictDepBuilds: true
+nodeLinker: hoisted
+packages:
+  - .
