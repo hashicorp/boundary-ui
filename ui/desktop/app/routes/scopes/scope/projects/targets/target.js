@@ -43,16 +43,18 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
        */
       try {
         const { host_sources } = target;
-        let allFilteredHosts = [];
 
-        for (const hostSource of host_sources) {
-          const query = {
-            host_catalog_id: hostSource.host_catalog_id,
-            filter: `("${hostSource.host_source_id}" in "/item/host_set_ids")`,
-          };
-          const hostsQuery = await this.store.query('host', query);
-          allFilteredHosts.push(...hostsQuery);
-        }
+        const allFilteredHosts = (
+          await Promise.all(
+            host_sources.map((hostSource) => {
+              const query = {
+                host_catalog_id: hostSource.host_catalog_id,
+                filter: `("${hostSource.host_source_id}" in "/item/host_set_ids")`,
+              };
+              return this.store.query('host', query);
+            }),
+          )
+        ).flat();
 
         // Remove duplicate hosts based on their IDs
         // This is necessary because a host can be part of multiple host sets
