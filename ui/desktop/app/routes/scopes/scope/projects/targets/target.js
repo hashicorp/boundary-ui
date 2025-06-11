@@ -48,14 +48,10 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
         for (const hostSource of host_sources) {
           const query = {
             host_catalog_id: hostSource.host_catalog_id,
+            filter: `("${hostSource.host_source_id}" in "/item/host_set_ids")`,
           };
           const hostsQuery = await this.store.query('host', query);
-
-          allFilteredHosts.push(
-            ...hostsQuery.filter((host) =>
-              host.host_set_ids?.includes(hostSource.host_source_id),
-            ),
-          );
+          allFilteredHosts.push(...hostsQuery);
         }
 
         // Remove duplicate hosts based on their IDs
