@@ -34,6 +34,8 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.minimize);
     assert.ok(controller.toggleFullScreen);
     assert.ok(controller.close);
+    assert.ok(controller.stopAll);
+    assert.ok(controller.cancelSignout);
   });
 
   test('invalidateSession action de-authenticates a user', async function (assert) {

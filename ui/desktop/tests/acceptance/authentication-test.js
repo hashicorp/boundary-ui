@@ -20,6 +20,8 @@ module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const SIGNOUT_SELECTOR = '[data-test-nav-signout-btn]';
+
   const instances = {
     scopes: {
       global: null,
@@ -187,12 +189,9 @@ module('Acceptance | authentication', function (hooks) {
       '.rose-header-utilities .header-dropdown-button-override button',
     );
 
-    assert.strictEqual(
-      find('[data-test-sign-out]').textContent.trim(),
-      'Sign Out',
-    );
+    assert.strictEqual(find(SIGNOUT_SELECTOR).textContent.trim(), 'Sign Out');
 
-    await click('[data-test-sign-out]');
+    await click(SIGNOUT_SELECTOR);
 
     assert.notOk(currentSession().isAuthenticated);
   });

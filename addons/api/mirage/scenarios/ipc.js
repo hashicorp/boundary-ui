@@ -247,6 +247,9 @@ export default function initializeMockIPC(server, config) {
     }
     pauseClientAgent() {}
     resumeClientAgent() {}
+    setSignoutInProgress(value) {
+      return value;
+    }
   }
 
   /**
