@@ -214,6 +214,7 @@ export default function initializeMockIPC(server, config) {
     closeWindow() {}
     toggleFullscreenWindow() {}
     stop() {}
+    stopAll() {}
     checkCommand() {
       return faker.system.filePath();
     }
