@@ -17,20 +17,23 @@ export default class ApplicationController extends Controller {
   @service clusterUrl;
   @service flashMessages;
 
-  // =actions
+  // =tracked properties
 
   @tracked closeSessionsAndSignOut = false;
   @tracked showModal = false;
 
+  // =actions
+
   /**
-   * Delegates invalidation to the session service.
+   * Hide signout modal, stop all active and pending target sessions
+   * De-authenticate user session
    */
   @action
   invalidateSession() {
     if (this.stopSessions) {
-      this.stopAll();
-      this.invalidateSession();
       this.showModal = false;
+      this.stopAll();
+      this.session.invalidate();
     }
   }
 
