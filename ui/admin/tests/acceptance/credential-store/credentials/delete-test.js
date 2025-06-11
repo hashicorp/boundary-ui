@@ -9,6 +9,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
+import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module(
@@ -21,10 +22,18 @@ module(
     let getUsernameKeyPairCredentialCount;
     let getJSONCredentialCount;
 
-    const MANAGE_DROPDOWN_SELECTOR =
-      '[data-test-manage-credentials-dropdown] button:first-child';
-    const DELETE_ACTION_SELECTOR =
-      '[data-test-manage-credentials-dropdown] ul li button';
+    const mockResponseMessage = 'Oops.';
+    const mockResponse = () => {
+      return new Response(
+        490,
+        {},
+        {
+          status: 490,
+          code: 'error',
+          message: mockResponseMessage,
+        },
+      );
+    };
 
     const instances = {
       scopes: {
@@ -100,8 +109,10 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -113,8 +124,10 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -125,8 +138,10 @@ module(
     test('can delete JSON credential', async function (assert) {
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
@@ -139,8 +154,9 @@ module(
           (item) => item !== 'delete',
         );
       await visit(urls.usernamePasswordCredential);
+
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
-      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+      assert.dom(selectors.MANAGE_DROPDOWN).doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernamePasswordCredentialCount,
@@ -155,8 +171,9 @@ module(
           (item) => item !== 'delete',
         );
       await visit(urls.usernameKeyPairCredential);
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
-      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+      assert.dom(selectors.MANAGE_DROPDOWN).doesNotExist();
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
         usernameKeyPairCredentialCount,
@@ -170,8 +187,9 @@ module(
           (item) => item !== 'delete',
         );
       await visit(urls.jsonCredential);
+
       assert.strictEqual(currentURL(), urls.jsonCredential);
-      assert.dom(MANAGE_DROPDOWN_SELECTOR).doesNotExist();
+      assert.dom(selectors.MANAGE_DROPDOWN).doesNotExist();
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
@@ -181,8 +199,9 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
@@ -197,9 +216,11 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -212,9 +233,11 @@ module(
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
+
       assert.strictEqual(currentURL(), urls.credentials);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount - 1);
     });
@@ -225,9 +248,11 @@ module(
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
       assert.strictEqual(
         getUsernamePasswordCredentialCount(),
@@ -241,9 +266,11 @@ module(
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
       assert.strictEqual(
         getUsernameKeyPairCredentialCount(),
@@ -256,65 +283,43 @@ module(
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
       await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
+
       assert.strictEqual(currentURL(), urls.jsonCredential);
       assert.strictEqual(getJSONCredentialCount(), jsonCredentialCount);
     });
 
     test('deleting a username & password credential which errors displays error message', async function (assert) {
-      this.server.del('/credentials/:id', () => {
-        return new Response(
-          490,
-          {},
-          {
-            status: 490,
-            code: 'error',
-            message: 'Oops.',
-          },
-        );
-      });
+      this.server.del('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
-      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
     });
 
     test('deleting a username & key pair credential which errors displays error message', async function (assert) {
-      this.server.del('/credentials/:id', () => {
-        return new Response(
-          490,
-          {},
-          {
-            status: 490,
-            code: 'error',
-            message: 'Oops.',
-          },
-        );
-      });
+      this.server.del('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
-      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
     });
 
     test('deleting a JSON credential which errors displays error message', async function (assert) {
-      this.server.del('/credentials/:id', () => {
-        return new Response(
-          490,
-          {},
-          {
-            status: 490,
-            code: 'error',
-            message: 'Oops.',
-          },
-        );
-      });
+      this.server.del('/credentials/:id', mockResponse);
       await visit(urls.jsonCredential);
-      await click(MANAGE_DROPDOWN_SELECTOR);
-      await click(DELETE_ACTION_SELECTOR);
-      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANAGE_DROPDOWN_DELETE);
+
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockResponseMessage);
     });
   },
 );
