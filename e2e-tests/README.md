@@ -176,7 +176,7 @@ cd boundary-ui/e2e-tests
 Run the command for the corresponding enos scenario to run all supported tests:
 |               | `@aws`                            | `@docker`                            |
 | ------------- | --------------------------------- | ------------------------------------ |
-| `@ce`         | command: `pnpm run admin:ce:aws`  | command: `admin:ce:docker`           |
+| `@ce`         | command: `pnpm run admin:ce:aws`  | command: `pnpm admin:ce:docker`      |
 | `@enterprise` | command: `pnpm run admin:ent:aws` | command: `pnpm run admin:ent:docker` |
 
 
