@@ -297,6 +297,13 @@ app.on('before-quit', (event) => {
     const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
     buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
   }
+
+  if (document.getElementById('signoutModal').isVisible()) {
+    // Prevent the app from quitting if the signout modal is visible
+    // This is to ensure that the user has a chance to confirm their action
+    // before the app quits.
+    event.preventDefault();
+  }
 });
 
 app.on('quit', () => {
