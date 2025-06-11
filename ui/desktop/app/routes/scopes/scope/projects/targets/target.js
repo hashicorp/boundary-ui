@@ -12,6 +12,14 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
 
   @service store;
 
+  // =attributes
+  queryParams = {
+    isConnecting: {
+      type: 'boolean',
+      refreshModel: true,
+    },
+  };
+
   // =methods
 
   /**

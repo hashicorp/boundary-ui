@@ -306,6 +306,54 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         ['Alias 001', 'Alias 002', 'Alias 003', 'Alias 004'],
       );
     });
+
+    test('it sorts by descending, then ascending `name` using custom string sorting', async function (assert) {
+      const alias1 = this.server.create('alias', { name: 'alias1' });
+      const alias2 = this.server.create('alias', { name: 'alias2' });
+      const alias3 = this.server.create('alias', { name: 'alias3' });
+      const alias4 = this.server.create('alias', { name: 'alias4' });
+
+      const sortName = (recordA, recordB) => {
+        const nameMap = {
+          alias3: 'Alpha',
+          alias4: 'Beta',
+          alias1: 'Delta',
+          alias2: 'Epsilon',
+        };
+        return String(nameMap[recordA.attributes.name]).localeCompare(
+          String(nameMap[recordB.attributes.name]),
+        );
+      };
+
+      const shuffledAliases = faker.helpers.shuffle([
+        alias1,
+        alias2,
+        alias3,
+        alias4,
+      ]);
+
+      this.server.get(
+        'aliases',
+        createPaginatedResponseHandler(shuffledAliases, {
+          pageSize: 1,
+        }),
+      );
+
+      const resultsDesc = await store.query('alias', {
+        query: { sort: { sortFunction: sortName, direction: 'desc' } },
+      });
+      const resultsAsc = await store.query('alias', {
+        query: { sort: { sortFunction: sortName, direction: 'asc' } },
+      });
+      assert.deepEqual(
+        resultsDesc.map(({ name }) => name),
+        ['alias2', 'alias1', 'alias4', 'alias3'],
+      );
+      assert.deepEqual(
+        resultsAsc.map(({ name }) => name),
+        ['alias3', 'alias4', 'alias1', 'alias2'],
+      );
+    });
   });
 
   module('option: pushToStore', function (hooks) {
