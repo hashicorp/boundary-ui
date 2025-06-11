@@ -86,9 +86,6 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
           ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
           : { attribute: sortAttribute, direction: sortDirection };
 
-      console.log('sortAttribute: ', sortAttribute);
-      console.log(sort);
-
       types.forEach((type) => {
         filters.type.push({ equals: type });
       });
