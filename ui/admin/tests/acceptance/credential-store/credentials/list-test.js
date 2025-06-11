@@ -117,8 +117,6 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
 
     await click(credentialStoreSelectors.MANAGE_DROPDOWN);
 
-    assert
-      .dom(credentialStoreSelectors.MANAGE_DROPDOWN_NEW_CREDENTIAL)
-      .isVisible();
+    assert.dom(credentialStoreSelectors.NEW_CREDENTIAL_ACTION).isVisible();
   });
 });

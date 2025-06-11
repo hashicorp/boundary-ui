@@ -6,7 +6,7 @@
 // Manage actions dropdown selectors
 export const MANAGE_DROPDOWN =
   '[data-test-manage-credential-stores-dropdown] button:first-child';
-export const MANAGE_DROPDOWN_NEW_CREDENTIAL =
+export const NEW_CREDENTIAL_ACTION =
   '[data-test-manage-credential-stores-dropdown] ul li:nth-child(1) a';
 export const EDIT_WORKER_FILTER_ACTION =
   '[data-test-manage-credential-stores-dropdown] ul li:nth-child(2) a';
