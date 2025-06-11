@@ -98,7 +98,7 @@ export default (serviceName, target, onProviderChange) => {
         console.log(
           'Provider change detected. Re-registering with the new one...',
         );
-        await onProviderChange?.(status.isServiceProvider);
+        await onProviderChange?.(await status.isServiceProvider);
         await register();
 
         if (requestsInFlight.size > 0) {
@@ -181,7 +181,7 @@ export default (serviceName, target, onProviderChange) => {
 
     commonChannel.postMessage({ type: 'providerChange', serviceName });
 
-    await onProviderChange?.(status.isServiceProvider);
+    await onProviderChange?.(await status.isServiceProvider);
 
     if (requestsInFlight.size > 0) {
       console.log(

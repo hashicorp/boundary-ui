@@ -22,7 +22,7 @@ export default class ApplicationRoute extends Route {
   @service features;
   @service featureEdition;
   @service indexedDb;
-  @service webWorker;
+  @service sqliteDb;
   @service('browser/window') window;
 
   // =attributes
@@ -71,7 +71,7 @@ export default class ApplicationRoute extends Route {
 
     // Setup the DB from a successful authentication restoration
     if (this.session.isAuthenticated) {
-      await this.webWorker.setup();
+      await this.sqliteDb.setup();
 
       const userId = this.session.data?.authenticated?.user_id;
       const hostUrl = this.window.location.host;
