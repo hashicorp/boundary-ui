@@ -58,6 +58,8 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
           );
         }
 
+        // Remove duplicate hosts based on their IDs
+        // This is necessary because a host can be part of multiple host sets
         hosts = Array.from(
           new Map(allFilteredHosts.map((host) => [host.id, host])).values(),
         );
