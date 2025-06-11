@@ -164,5 +164,3 @@ worker-filter-generator:
   operator:
     matches: matches (regex)
     contains: contains
-table:
-  no-data-fallback: —
