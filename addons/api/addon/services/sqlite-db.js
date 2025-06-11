@@ -1,6 +1,21 @@
 import Service from '@ember/service';
 import { PWBHost } from 'promise-worker-bi';
 
+// A mapping of columns to their expected model attributes for supported models
+// The order matters, it _must_ be the same as the order of the columns in the database.
+// ID is assumed to be always present and is the first column in the database.
+// The JSON data is assumed to always be last.
+export const modelMapping = {
+  target: [
+    'type',
+    'name',
+    'description',
+    'address',
+    'scope.scope_id',
+    'created_time',
+  ],
+};
+
 export default class WebWorkerService extends Service {
   // =attributes
   worker;
@@ -27,7 +42,28 @@ export default class WebWorkerService extends Service {
     });
     this.worker = new PWBHost(webWorker);
 
-    this.worker.postMessage({ method: 'initializeSQLite' });
+    await this.worker.postMessage({ method: 'initializeSQLite' });
+  }
+
+  async fetchResource(resource, args = {}) {
+    return this.worker.postMessage({
+      method: 'fetchResource',
+      payload: { resource, args },
+    });
+  }
+
+  async insertResource(resource, items) {
+    return this.worker.postMessage({
+      method: 'insertResource',
+      payload: { resource, items },
+    });
+  }
+
+  async deleteResource(resource, ids) {
+    return this.worker.postMessage({
+      method: 'deleteResource',
+      payload: { resource, ids },
+    });
   }
 
   willDestroy() {

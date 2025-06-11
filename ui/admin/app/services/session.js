@@ -9,7 +9,7 @@ import { formatDbName } from 'api/services/indexed-db';
 
 export default class SessionService extends BaseSessionService {
   @service indexedDb;
-  @service webWorker;
+  @service sqliteDb;
   @service('browser/window') window;
 
   /**
@@ -17,7 +17,7 @@ export default class SessionService extends BaseSessionService {
    * so we can hook in and setup the DB after a successful authentication
    */
   async handleAuthentication() {
-    await this.webWorker.setup();
+    await this.sqliteDb.setup();
 
     const userId = this.data?.authenticated?.user_id;
     const hostUrl = this.window.location?.host;
