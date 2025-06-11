@@ -5,7 +5,6 @@
 
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 
 export default class SettingsUserInfoComponent extends Component {
   // =services
@@ -48,15 +47,5 @@ export default class SettingsUserInfoComponent extends Component {
     } = this.session;
     const formattedAuthenticatorType = authenticator.split(':')[1];
     return this.intl.t(`resources.account.types.${formattedAuthenticatorType}`);
-  }
-
-  // =actions
-
-  /**
-   * Delegates invalidation to the session service.
-   */
-  @action
-  invalidateSession() {
-    this.session.invalidate();
   }
 }

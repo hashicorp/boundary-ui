@@ -18,4 +18,12 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
   toggleTheme({ target: { value: theme } }) {
     return this.application.toggleTheme(theme);
   }
+
+  /**
+   * Call Application controller's signOutAttempt method
+   */
+  @action
+  signOutAttempt() {
+    return this.application.signOutAttempt();
+  }
 }
