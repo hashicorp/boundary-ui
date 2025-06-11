@@ -28,6 +28,7 @@
             @text={{t 'actions.close'}}
             @icon='x'
             @isIconOnly={{true}}
+            disabled={{this.showModal}}
           />
           <Hds::Button
             {{on 'click' this.toggleFullScreen}}
@@ -158,7 +159,7 @@
 </PendingConfirmations>
 
 {{#if this.showModal}}
-  <Hds::Modal @isDismissDisabled={{false}} as |M|>
+  <Hds::Modal @onClose={{this.cancelSignOut}} as |M|>
     <M.Header>
       {{t 'resources.session.messages.stop-sessions-and-signout.title'}}
     </M.Header>
