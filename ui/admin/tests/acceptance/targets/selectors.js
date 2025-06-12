@@ -30,6 +30,13 @@ export const ALIASES_NEW_LINK_TEXT = 'Add an alias';
 export const ALIASES_VIEW_MORE_BTN = '[data-test-aliases-view-more]';
 export const ALIASES_FLYOUT = '[data-test-aliases-flyout]';
 
+// Required fields for creating a storage bucket in target tests
+export const FIELD_BUCKET_NAME = '[name="bucket_name"]';
+export const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
+export const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
+export const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+export const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
+
 export const NO_RESULTS_MSG = '[data-test-no-target-results]';
 export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
