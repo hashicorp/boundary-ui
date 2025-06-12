@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS target (
     created_time TIMESTAMP,
     data TEXT NOT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_target_scope_id ON target(scope_id);
 
 CREATE TABLE IF NOT EXISTS token (
     id TEXT NOT NULL PRIMARY KEY,
@@ -30,7 +31,7 @@ export const INSERT_STATEMENTS = {
   token: (items) =>
     `REPLACE INTO token (id, token) VALUES ${items.map(() => '(?, ?)').join(', ')};`,
   target: (items) =>
-    `INSERT INTO target (id, type, name, description, address, scope_id, created_time, data) VALUES ${items.map(() => '(?, ?, ?, ?, ?, ?, ?, ?)').join(', ')};`,
+    `REPLACE INTO target (id, type, name, description, address, scope_id, created_time, data) VALUES ${items.map(() => '(?, ?, ?, ?, ?, ?, ?, ?)').join(', ')};`,
 };
 
 export const DELETE_STATEMENT = (resource, ids) =>

@@ -6,14 +6,14 @@ import { PWBHost } from 'promise-worker-bi';
 // ID is assumed to be always present and is the first column in the database.
 // The JSON data is assumed to always be last.
 export const modelMapping = {
-  target: [
-    'type',
-    'name',
-    'description',
-    'address',
-    'scope.scope_id',
-    'created_time',
-  ],
+  target: {
+    type: 'type',
+    name: 'name',
+    description: 'description',
+    address: 'address',
+    scope_id: 'scope.scope_id',
+    created_time: 'created_time',
+  },
 };
 
 export default class WebWorkerService extends Service {
@@ -45,10 +45,10 @@ export default class WebWorkerService extends Service {
     await this.worker.postMessage({ method: 'initializeSQLite' });
   }
 
-  async fetchResource(resource, args = {}) {
+  async fetchResource({ sql, parameters }) {
     return this.worker.postMessage({
       method: 'fetchResource',
-      payload: { resource, args },
+      payload: { sql, parameters },
     });
   }
 

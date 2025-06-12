@@ -36,17 +36,15 @@ const methods = {
   clearDatabase: async () => {
     db.exec(CLEAR_DB);
   },
-  fetchResource: async ({ resource, args: { page, pageSize, select } }) => {
-    // TODO: Create parser for sql queries and use prepared statement
+  fetchResource: async ({ sql, parameters = [] }) => {
     try {
       return db.exec({
-        sql: `
-          SELECT ${select ?? '*'}
-          FROM ${resource}
-          ${pageSize && page ? `LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}` : ''}`,
+        sql,
+        bind: parameters,
         rowMode: 'object',
       });
     } catch (err) {
+      console.log('error', sql, parameters);
       console.error('Fetch resource error:', err);
       throw err;
     }
