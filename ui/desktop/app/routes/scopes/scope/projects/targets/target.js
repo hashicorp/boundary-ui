@@ -42,22 +42,24 @@ export default class ScopesScopeProjectsTargetsTargetRoute extends Route {
        * from the model hook for hosts
        */
       try {
-        const hostSets = await Promise.all(
-          target.host_sources.map(({ host_source_id }) =>
-            this.store.findRecord('host-set', host_source_id),
-          ),
-        );
+        const { host_sources } = target;
 
-        // Extract host ids from all host sets
-        const hostIds = hostSets.flatMap(({ host_ids }) => host_ids);
+        const allFilteredHosts = (
+          await Promise.all(
+            host_sources.map((hostSource) => {
+              const query = {
+                host_catalog_id: hostSource.host_catalog_id,
+                filter: `("${hostSource.host_source_id}" in "/item/host_set_ids")`,
+              };
+              return this.store.query('host', query);
+            }),
+          )
+        ).flat();
 
-        // Load unique hosts
-        const uniqueHostIds = new Set(hostIds);
-
-        hosts = await Promise.all(
-          [...uniqueHostIds].map((hostId) =>
-            this.store.findRecord('host', hostId),
-          ),
+        // Remove duplicate hosts based on their IDs
+        // This is necessary because a host can be part of multiple host sets
+        hosts = Array.from(
+          new Map(allFilteredHosts.map((host) => [host.id, host])).values(),
         );
       } catch (error) {
         // no operation
