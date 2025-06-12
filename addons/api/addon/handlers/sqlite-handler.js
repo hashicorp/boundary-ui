@@ -4,6 +4,7 @@ import { modelMapping } from 'api/services/sqlite-db';
 import { get } from '@ember/object';
 import { typeOf } from '@ember/utils';
 import { hashCode } from '../utils/hash-code';
+import { generateSQLExpressions } from '../utils/sqlite-db-query';
 
 export default class SqliteHandler {
   @service sqliteDb;
@@ -39,12 +40,16 @@ export default class SqliteHandler {
         const schema = store.modelFor(type);
         const serializer = store.serializerFor(type);
 
-        let { page, pageSize, /* query: queryObj,*/ ...remainingQuery } = query;
+        let { page, pageSize, query: queryObj, ...remainingQuery } = query;
         let payload, listToken, writeToDbPromise;
         const tokenKey = `${type}-${hashCode(remainingQuery)}`;
 
         if (storeToken) {
-          const [tokenObj] = await this.sqliteDb.fetchResource('token');
+          const [tokenObj] = await this.sqliteDb.fetchResource({
+            ...generateSQLExpressions('token', {
+              filters: { id: [{ equals: tokenKey }] },
+            }),
+          });
           listToken = tokenObj?.token;
         }
 
@@ -79,17 +84,29 @@ export default class SqliteHandler {
 
         await writeToDbPromise;
 
-        console.time('SQLite fetch');
+        console.time(`SQLite fetch ${type}`);
 
-        const rowsPromise = this.sqliteDb.fetchResource(type, {
-          select: 'data',
+        const { sql, parameters } = generateSQLExpressions(type, queryObj, {
           page,
           pageSize,
+          select: ['data'],
         });
-        const countPromise = this.sqliteDb.fetchResource('target', {
-          select: 'count(*) as total',
+
+        const rows = await this.sqliteDb.fetchResource({
+          sql,
+          parameters,
         });
-        const [rows, count] = await Promise.all([rowsPromise, countPromise]);
+        console.timeLog(`SQLite fetch ${type}`, 'rows');
+
+        const { sql: countSql, parameters: countParams } =
+          generateSQLExpressions(type, queryObj, {
+            select: ['count(*) as total'],
+          });
+        const count = await this.sqliteDb.fetchResource({
+          sql: countSql,
+          parameters: countParams,
+        });
+        console.timeLog(`SQLite fetch ${type}`, 'count');
 
         const results = rows.map((item) => JSON.parse(item.data));
 
@@ -105,7 +122,7 @@ export default class SqliteHandler {
         // This isn't conventional but is better than returning an ArrayProxy
         // or EmberArray since the ember store query method asserts it has to be an array
         // so we can't just return an object.
-        console.timeEnd('SQLite fetch');
+        console.timeEnd(`SQLite fetch ${type}`);
         records.meta = { totalItems: count[0].total };
         return records;
       }
@@ -146,7 +163,7 @@ export default class SqliteHandler {
 
     // Store the new data we just got back from the API refresh
     const items = payloadData.map((datum) => {
-      const params = modelMapping[type].map((key) => {
+      const params = Object.values(modelMapping[type]).map((key) => {
         const value = get(datum, `attributes.${key}`);
         if (typeOf(value) === 'date') {
           return value.toISOString();
