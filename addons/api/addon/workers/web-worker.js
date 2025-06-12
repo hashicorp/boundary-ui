@@ -17,6 +17,7 @@ let poolUtil;
 // See "Maximum Number Of Host Parameters In A Single SQL Statement" in
 // https://www.sqlite.org/limits.html
 const MAX_HOST_PARAMETERS = 32766;
+const SCHEMA_VERSION = 1;
 
 const methods = {
   initializeSQLite: async () => {
@@ -28,7 +29,14 @@ const methods = {
       console.log(`SQLite Version: ${sqlite3?.version.libVersion}`);
       poolUtil = await sqlite3.installOpfsSAHPoolVfs();
       db = new poolUtil.OpfsSAHPoolDb('/boundary');
-      db.exec(CREATE_TABLES);
+
+      const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
+      // Check if we're on a newer schema version and clear the database if so
+      if (SCHEMA_VERSION > row.user_version) {
+        db.exec(CLEAR_DB);
+      }
+
+      db.exec(CREATE_TABLES(SCHEMA_VERSION));
     } catch (err) {
       console.error('Initialization error:', err.name, err.message);
     }
@@ -36,17 +44,15 @@ const methods = {
   clearDatabase: async () => {
     db.exec(CLEAR_DB);
   },
-  fetchResource: async ({ resource, args: { page, pageSize, select } }) => {
-    // TODO: Create parser for sql queries and use prepared statement
+  fetchResource: async ({ sql, parameters = [] }) => {
     try {
       return db.exec({
-        sql: `
-          SELECT ${select ?? '*'}
-          FROM ${resource}
-          ${pageSize && page ? `LIMIT ${pageSize} OFFSET ${(page - 1) * pageSize}` : ''}`,
+        sql,
+        bind: parameters,
         rowMode: 'object',
       });
     } catch (err) {
+      console.log('error', sql, parameters);
       console.error('Fetch resource error:', err);
       throw err;
     }
