@@ -15,6 +15,9 @@ export const FIELD_SSH_PRIVATE_KEY_ERROR =
 export const FIELD_SSH_PRIVATE_KEY_PASSPHRASE = '[name=private_key_passphrase]';
 
 export const EDITOR = '[data-test-code-editor-field-editor]';
+export const MANAGE_DROPDOWN = '[data-test-manage-credentials-dropdown] button';
+export const MANAGE_DROPDOWN_DELETE =
+  '[data-test-manage-credentials-dropdown] ul li button';
 export const MANAGE_DROPDOWN_NEW_CREDENTIAL =
   '[data-test-manage-credential-stores-dropdown] a';
 
