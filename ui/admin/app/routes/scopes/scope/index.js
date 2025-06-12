@@ -36,9 +36,9 @@ export default class ScopesScopeIndexRoute extends Route {
       return this.router.transitionTo('onboarding');
     }
 
-    // If this a project scope, there are no further sub scopes, so show edit
+    // If this a project scope, there are no further sub scopes, so show targets
     if (model.isProject) {
-      return this.router.transitionTo('scopes.scope.edit');
+      return this.router.transitionTo('scopes.scope.targets');
     }
 
     // For all other scope types (global and org), show sub scopes
