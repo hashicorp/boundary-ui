@@ -18,6 +18,8 @@ export const FIELD_DESCRIPTION_VALUE = 'description';
 export const FIELD_PASSWORD = '[name=password]';
 export const FIELD_PASSWORD_VALUE = 'password';
 
+export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error message on the DOM.
+
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 export const TABLE_ROWS = 'tbody tr';
 export const TABLE_ROW = (row) => `tbody tr:nth-child(${row})`;
@@ -45,6 +47,10 @@ export const SIDEBAR_NAV_LINK = (url) =>
 export const SIDEBAR_NAV_CONTENT = '.hds-side-nav__content';
 export const SIDEBAR_USER_DROPDOWN =
   '[data-test-side-nav-user-dropdown] button';
+export const SIDEBAR_SCOPE_DROPDOWN =
+  '[data-test-side-nav-scope-dropdown] button';
+export const SIDEBAR_SCOPE_LINK = (url) =>
+  `[data-test-side-nav-scope-dropdown] a[href="${url}"]`;
 
 export const ALERT_TOAST = '[data-test-toast-notification]';
 export const ALERT_TOAST_BODY =
