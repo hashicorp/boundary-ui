@@ -9,6 +9,11 @@ import { nanoid } from 'nanoid';
 import { BaseResourcePage } from './base-resource.js';
 
 export class RolesPage extends BaseResourcePage {
+  goToRolesPage({ scope }) {
+    scope = scope ?? 'global';
+    this.page.goto(`/scopes/${scope}/roles`);
+  }
+
   /**
    * Creates a new role. Assumes you have selected the desired scope.
    */
