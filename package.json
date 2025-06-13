@@ -47,7 +47,8 @@
       "css-select>nth-check": "^2.0.1",
       "node-gyp": "^10.0.0",
       "ansi-html": "^0.0.9",
-      "fireworm>async": "^2.6.4"
+      "fireworm>async": "^2.6.4",
+      "ember-cli-babel>@babel/runtime": "7.27.6"
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
