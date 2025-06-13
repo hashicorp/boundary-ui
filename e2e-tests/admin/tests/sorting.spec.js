@@ -75,46 +75,64 @@ test.afterEach(async ({ request }) => {
   await boundaryHttp.deleteOrg(request, org.id);
 });
 
-test('Sorting works', { tag: ['@ce', '@aws', '@docker'] }, async ({ page }) => {
-  const rolesPage = new RolesPage(page);
-  rolesPage.goToRolesPage({ scope: org.id });
+test(
+  'Sorting works',
+  { tag: ['@ce', '@ent', '@aws', '@docker'] },
+  async ({ page }) => {
+    const rolesPage = new RolesPage(page);
+    rolesPage.goToRolesPage({ scope: org.id });
 
-  const table = page.locator('table');
-  await expect(table.locator('tbody tr')).toHaveCount(roleNamesToCreate.length);
+    const table = page.locator('table');
+    await expect(table.locator('tbody tr')).toHaveCount(
+      roleNamesToCreate.length,
+    );
 
-  // by default, resources are sorted by created time, descending
-  for (const [index, role] of Object.entries(
-    rolesSortedByCreatedTime,
-  ).toReversed()) {
-    await expect(table.locator('tbody tr').nth(index)).toContainText(role.name);
-  }
+    // by default, resources are sorted by created time, descending
+    for (const [index, role] of Object.entries(
+      rolesSortedByCreatedTime,
+    ).toReversed()) {
+      await expect(table.locator('tbody tr').nth(index)).toContainText(
+        role.name,
+      );
+    }
 
-  // click the "Name" column header to sort by name, ascending
-  await tableSortButton(table, columnHeadersOrder.name).click();
-  await tableSortButtonUpArrow(table, columnHeadersOrder.name).isVisible();
+    // click the "Name" column header to sort by name, ascending
+    await tableSortButton(table, columnHeadersOrder.name).click();
+    await tableSortButtonUpArrow(table, columnHeadersOrder.name).isVisible();
 
-  for (const [index, role] of Object.entries(rolesSortedByName)) {
-    await expect(table.locator('tbody tr').nth(index)).toContainText(role.name);
-  }
+    for (const [index, role] of Object.entries(rolesSortedByName)) {
+      await expect(table.locator('tbody tr').nth(index)).toContainText(
+        role.name,
+      );
+    }
 
-  // click the "Name" column header again, to sort by name, descending
-  await tableSortButton(table, columnHeadersOrder.name).click();
-  await tableSortButtonDownArrow(table, columnHeadersOrder.name).isVisible();
-  for (const [index, role] of Object.entries(rolesSortedByName.toReversed())) {
-    await expect(table.locator('tbody tr').nth(index)).toContainText(role.name);
-  }
+    // click the "Name" column header again, to sort by name, descending
+    await tableSortButton(table, columnHeadersOrder.name).click();
+    await tableSortButtonDownArrow(table, columnHeadersOrder.name).isVisible();
+    for (const [index, role] of Object.entries(
+      rolesSortedByName.toReversed(),
+    )) {
+      await expect(table.locator('tbody tr').nth(index)).toContainText(
+        role.name,
+      );
+    }
 
-  // click the "ID" column header to sort by ID, ascending
-  await tableSortButton(table, columnHeadersOrder.id).click();
-  await tableSortButtonUpArrow(table, columnHeadersOrder.id).isVisible();
-  for (const [index, role] of Object.entries(rolesSortedById)) {
-    await expect(table.locator('tbody tr').nth(index)).toContainText(role.name);
-  }
+    // click the "ID" column header to sort by ID, ascending
+    await tableSortButton(table, columnHeadersOrder.id).click();
+    await tableSortButtonUpArrow(table, columnHeadersOrder.id).isVisible();
+    for (const [index, role] of Object.entries(rolesSortedById)) {
+      await expect(table.locator('tbody tr').nth(index)).toContainText(
+        role.name,
+      );
+    }
 
-  // click the "ID" column header again, to sort by ID, descending
-  await tableSortButton(table, columnHeadersOrder.id).click();
-  await tableSortButtonDownArrow(table, columnHeadersOrder.id).isVisible();
-  for (const [index, role] of Object.entries(rolesSortedById.toReversed())) {
-    await expect(table.locator('tbody tr').nth(index)).toContainText(role.name);
-  }
-});
+    // click the "ID" column header again, to sort by ID, descending
+    await tableSortButton(table, columnHeadersOrder.id).click();
+    await tableSortButtonDownArrow(table, columnHeadersOrder.id).isVisible();
+    for (const [index, role] of Object.entries(rolesSortedById.toReversed())) {
+      await expect(table.locator('tbody tr').nth(index)).toContainText(
+        role.name,
+      );
+    }
+  },
+);
