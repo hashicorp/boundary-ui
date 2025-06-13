@@ -86,6 +86,9 @@ importers:
       esbuild:
         specifier: ^0.25.4
         version: 0.25.5
+      kysely:
+        specifier: ^0.28.2
+        version: 0.28.2
       miragejs:
         specifier: ^0.1.48
         version: 0.1.48
@@ -6289,6 +6292,10 @@ packages:
   ky@1.8.1:
     resolution: {integrity: sha512-7Bp3TpsE+L+TARSnnDpk3xg8Idi8RwSLdj6CMbNWoOARIrGrbuLGusV0dYwbZOm4bB3jHNxSw8Wk/ByDqJEnDw==}
     engines: {node: '>=18'}
+
+  kysely@0.28.2:
+    resolution: {integrity: sha512-4YAVLoF0Sf0UTqlhgQMFU9iQECdah7n+13ANkiuVfRvlK+uI0Etbgd7bVP36dKlG+NXWbhGua8vnGt+sdhvT7A==}
+    engines: {node: '>=18.0.0'}
 
   language-subtag-registry@0.3.23:
     resolution: {integrity: sha512-0K65Lea881pHotoGEa5gDlMxt3pctLi2RplBb7Ezh4rRdLEOtgi7n4EwK9lamnUCkKBqaeKRVebTq6BAxSkpXQ==}
@@ -16068,6 +16075,8 @@ snapshots:
   known-css-properties@0.29.0: {}
 
   ky@1.8.1: {}
+
+  kysely@0.28.2: {}
 
   language-subtag-registry@0.3.23: {}
 
