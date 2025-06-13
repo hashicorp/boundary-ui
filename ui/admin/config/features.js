@@ -14,6 +14,7 @@ const licensedFeatures = {
   'multi-hop-sessions': false,
   'ssh-target': false,
   'ssh-session-recording': false,
+  'rdp-target': false,
 };
 // Base edition declares available features, disabled by default.
 const baseEdition = {

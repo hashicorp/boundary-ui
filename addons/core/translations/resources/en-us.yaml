@@ -728,9 +728,11 @@ target:
   types:
     tcp: Generic TCP
     ssh: SSH
+    rdp: RDP
   help:
     tcp: Generic TCP supports a broad range of connection types.
     ssh: Protocol-aware SSH with support for credential injection.
+    rdp: Remote Desktop Protocol for Windows servers.
   filter:
     active-sessions:
       yes: Has active sessions

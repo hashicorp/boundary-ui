@@ -10,7 +10,11 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 
 module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   setupTest(hooks);
@@ -99,6 +103,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
     assert.deepEqual(controller.targetTypeOptions, [
       { id: TYPE_TARGET_TCP, name: 'Generic TCP' },
       { id: TYPE_TARGET_SSH, name: 'SSH' },
+      { id: TYPE_TARGET_RDP, name: 'RDP' },
     ]);
   });
 

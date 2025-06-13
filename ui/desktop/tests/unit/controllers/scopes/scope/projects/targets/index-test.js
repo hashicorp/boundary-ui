@@ -15,7 +15,11 @@ import {
   STATUS_SESSION_PENDING,
   STATUS_SESSION_CANCELING,
 } from 'api/models/session';
-import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
+import {
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 
 module(
   'Unit | Controller | scopes/scope/projects/targets/index',
@@ -167,6 +171,7 @@ module(
       assert.deepEqual(controller.targetTypeOptions, [
         { id: TYPE_TARGET_TCP, name: 'Generic TCP' },
         { id: TYPE_TARGET_SSH, name: 'SSH' },
+        { id: TYPE_TARGET_RDP, name: 'RDP' },
       ]);
     });
 

@@ -12,6 +12,7 @@ const types = [...TYPES_TARGET].reverse();
 const icons = {
   ssh: 'terminal-screen',
   tcp: 'network',
+  rdp: 'monitor',
 };
 export default class FormTargetComponent extends Component {
   // =services
