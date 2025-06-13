@@ -63,11 +63,14 @@ test.describe('Search and Pagination', () => {
 
     // Check pagination
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
+      authedPage.getByRole('cell', {
+        name: hosts[hosts.length - 1].name,
+        exact: true,
+      }),
     ).toBeVisible();
     await expect(
       authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
+        name: hosts[0].name,
         exact: true,
       }),
     ).toBeHidden();
@@ -78,11 +81,14 @@ test.describe('Search and Pagination', () => {
       .getByRole('link', { name: 'page 2' })
       .click();
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
+      authedPage.getByRole('cell', {
+        name: hosts[hosts.length - 1].name,
+        exact: true,
+      }),
     ).toBeHidden();
     await expect(
       authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
+        name: hosts[0].name,
         exact: true,
       }),
     ).toBeVisible();
@@ -93,11 +99,14 @@ test.describe('Search and Pagination', () => {
       .getByRole('link', { name: 'Previous page' })
       .click();
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
+      authedPage.getByRole('cell', {
+        name: hosts[hosts.length - 1].name,
+        exact: true,
+      }),
     ).toBeVisible();
     await expect(
       authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
+        name: hosts[0].name,
         exact: true,
       }),
     ).toBeHidden();
@@ -108,11 +117,14 @@ test.describe('Search and Pagination', () => {
       .getByRole('link', { name: 'Next page' })
       .click();
     await expect(
-      authedPage.getByRole('cell', { name: hosts[0].name, exact: true }),
+      authedPage.getByRole('cell', {
+        name: hosts[hosts.length - 1].name,
+        exact: true,
+      }),
     ).toBeHidden();
     await expect(
       authedPage.getByRole('cell', {
-        name: hosts[hosts.length - 1].name,
+        name: hosts[0].name,
         exact: true,
       }),
     ).toBeVisible();
