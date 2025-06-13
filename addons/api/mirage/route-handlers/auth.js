@@ -3,29 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-// import config from '../../config/environment';
 import { Response } from 'miragejs';
-
-// /**
-//  * Simulates a cookie-based response to authentication requests.  Any user/pass
-//  * values are allowed *except* when `username` equals `error`, in which case a
-//  * simulated error response is returned.
-//  * @param {object} schema
-//  * @param {object} request
-//  * @return {Response}
-//  */
-// export default function authenticateHandler(schema, request) {
-//   const payload = JSON.parse(request.requestBody);
-//   if (payload.attributes.login_name === 'error') {
-//     return new Response(400);
-//   } else {
-//     const cookieName = config.auth.passwordCookieName;
-//     const cookieValue = v1();
-//     const cookiePath = config.rootURL;
-//     document.cookie = `${cookieName}=${cookieValue};path=${cookiePath}`;
-//     return new Response(200);
-//   }
-// }
 
 // Quick and dirty counter system to simulate the polling behavior
 // of the API.  If the OIDC flow is pending, the route returns 100.
