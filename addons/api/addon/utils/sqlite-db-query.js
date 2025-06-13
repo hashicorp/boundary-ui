@@ -1,11 +1,4 @@
 import { modelMapping } from 'api/services/sqlite-db';
-import {
-  DummyDriver,
-  Kysely,
-  SqliteAdapter,
-  SqliteIntrospector,
-  SqliteQueryCompiler,
-} from 'kysely';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -122,45 +115,3 @@ const OPERATORS = {
 const and = (clauses) => clauses.join(' AND ');
 const or = (clauses) => clauses.join(' OR ');
 const parenthetical = (expression) => (expression ? `(${expression})` : '');
-
-export function generateSQLExpressionsKysely(
-  resource,
-  query = {},
-  { page, pageSize, select } = {},
-) {
-  let { search } = query;
-  const db = new Kysely({
-    dialect: {
-      createAdapter: () => new SqliteAdapter(),
-      createDriver: () => new DummyDriver(),
-      createIntrospector: (db) => new SqliteIntrospector(db),
-      createQueryCompiler: () => new SqliteQueryCompiler(),
-    },
-  });
-
-  let queryBuilder = db.selectFrom(resource);
-
-  if (select?.includes('count')) {
-    queryBuilder = queryBuilder.select(db.fn.countAll().as('total'));
-  } else if (select) {
-    queryBuilder = queryBuilder.select(select);
-  } else {
-    queryBuilder = queryBuilder.selectAll();
-  }
-
-  if (search) {
-    queryBuilder = queryBuilder.where((eb) =>
-      eb.or(
-        Object.keys(modelMapping[resource]).map((field) =>
-          eb(field, 'like', `%${search}%`),
-        ),
-      ),
-    );
-  }
-
-  if (page && pageSize) {
-    queryBuilder = queryBuilder.limit(pageSize).offset((page - 1) * pageSize);
-  }
-
-  return queryBuilder.compile();
-}
