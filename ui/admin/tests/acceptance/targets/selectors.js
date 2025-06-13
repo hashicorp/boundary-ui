@@ -30,6 +30,23 @@ export const ALIASES_NEW_LINK_TEXT = 'Add an alias';
 export const ALIASES_VIEW_MORE_BTN = '[data-test-aliases-view-more]';
 export const ALIASES_FLYOUT = '[data-test-aliases-flyout]';
 
+// Required fields for creating a storage bucket in target tests
+export const FIELD_BUCKET_NAME = '[name="bucket_name"]';
+export const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
+export const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
+export const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+export const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
+export const SESSION_RECORDING_SETTINGS_LINK =
+  '.target-sidebar .hds-link-standalone';
+export const SESSION_RECORDING_ENABLE_BTN = '.target-sidebar .hds-button';
+export const STORAGE_BUCKET_DROPDOWN = '[name=storage_bucket_id]';
+export const ENABLE_TOGGLE = '[name=target-enable-session-recording]';
+export const LINK_LIST = '.link-list-item > a';
+export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
+export const BADGE_TEXT = '.target-sidebar .hds-badge__text';
+export const LINK_TO_NEW_STORAGE_BUCKET =
+  '.enable-session-recording-toggle .hds-link-standalone';
+
 export const NO_RESULTS_MSG = '[data-test-no-target-results]';
 export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
