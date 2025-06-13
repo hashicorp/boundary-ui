@@ -12,9 +12,6 @@ module.exports = async function (defaults) {
 
   const app = new EmberApp(defaults, {
     hinting: false,
-    'ember-cli-babel': {
-      includeExternalHelpers: true,
-    },
     'ember-simple-auth': {
       useSessionSetupMethod: true,
     },
