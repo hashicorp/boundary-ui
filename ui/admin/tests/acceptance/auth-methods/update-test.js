@@ -483,6 +483,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
-    assert.dom(selectors.FIELD_ERROR).hasText(errorDescription);
+    assert.dom(commonSelectors.FIELD_ERROR).hasText(errorDescription);
   });
 });

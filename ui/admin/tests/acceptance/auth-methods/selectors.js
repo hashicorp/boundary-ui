@@ -94,7 +94,6 @@ export const FIELD_GROUP_FILTER = '[name=group_filter]';
 export const FIELD_GROUP_FILTER_VALUE = 'Group filter value';
 export const FIELD_ENABLE_GROUPS = '[name=enable_groups]';
 export const FIELD_USE_TOKEN_GROUPS = '[name=use_token_groups]';
-export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error message on the DOM.
 
 export const MANAGE_DROPDOWN = '[data-test-manage-auth-method] button';
 export const MANAGE_DROPDOWN_MAKE_PRIMARY =

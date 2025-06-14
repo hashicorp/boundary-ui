@@ -18,12 +18,6 @@ module('Acceptance | scopes', function (hooks) {
   setupMirage(hooks);
   setupIndexedDb(hooks);
 
-  const SCOPES_DROPDOWN_BTN = '.scope-picker button';
-  const SCOPES_DROPDOWN_SELECTOR = (url) => `.scope-picker [href="${url}"]`;
-  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
-  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-
   let getScopeCount;
 
   const instances = {
@@ -92,6 +86,7 @@ module('Acceptance | scopes', function (hooks) {
   test('visiting global scope', async function (assert) {
     await visit(urls.globalScope);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.globalScope);
   });
 
@@ -106,6 +101,7 @@ module('Acceptance | scopes', function (hooks) {
       return response;
     });
     await visit(urls.globalScope);
+
     assert.strictEqual(currentURL(), urls.globalScope);
   });
 
@@ -122,12 +118,13 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.globalScope);
 
-    await click(SCOPES_DROPDOWN_BTN);
-    await click(SCOPES_DROPDOWN_SELECTOR(urls.orgScope));
+    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
+    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.orgScope));
     assert.strictEqual(currentURL(), urls.orgScopes);
 
-    await click(SCOPES_DROPDOWN_BTN);
-    await click(SCOPES_DROPDOWN_SELECTOR(urls.org2Scope));
+    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
+    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.org2Scope));
+
     assert.strictEqual(currentURL(), urls.org2Scopes);
   });
 
@@ -137,8 +134,8 @@ module('Acceptance | scopes', function (hooks) {
 
     assert.strictEqual(currentURL(), urls.projectTargets);
 
-    await click(SCOPES_DROPDOWN_BTN);
-    await click(SCOPES_DROPDOWN_SELECTOR(urls.project2Scope));
+    await click(commonSelectors.SIDEBAR_SCOPE_DROPDOWN);
+    await click(commonSelectors.SIDEBAR_SCOPE_LINK(urls.project2Scope));
 
     assert.strictEqual(currentURL(), urls.project2Targets);
   });
@@ -147,9 +144,9 @@ module('Acceptance | scopes', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.newOrgScope}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, 'random string');
-    await click(SAVE_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.newOrgScope));
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getScopeCount('org'), orgScopeCount + 1);
   });
@@ -158,9 +155,9 @@ module('Acceptance | scopes', function (hooks) {
     const orgScopeCount = getScopeCount('project');
     await visit(urls.orgScopes);
 
-    await click(`[href="${urls.newProjectScope}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, 'random string');
-    await click(SAVE_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.newProjectScope));
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(getScopeCount('project'), orgScopeCount + 1);
   });
@@ -169,9 +166,9 @@ module('Acceptance | scopes', function (hooks) {
     const orgScopeCount = getScopeCount('org');
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.newOrgScope}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.newOrgScope));
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.globalScope);
     assert.strictEqual(getScopeCount('org'), orgScopeCount);
@@ -181,9 +178,9 @@ module('Acceptance | scopes', function (hooks) {
     const projectScopeCount = getScopeCount('project');
     await visit(urls.orgScopes);
 
-    await click(`[href="${urls.newProjectScope}"]`);
-    await fillIn(NAME_FIELD_SELECTOR, 'random string');
-    await click(CANCEL_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.newProjectScope));
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.orgScopes);
     assert.strictEqual(getScopeCount('project'), projectScopeCount);
@@ -211,12 +208,12 @@ module('Acceptance | scopes', function (hooks) {
     });
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.newOrgScope}"]`);
-    await click(SAVE_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.newOrgScope));
+    await click(commonSelectors.SAVE_BTN);
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom('.hds-form-error__message').hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_ERROR).hasText('Name is required.');
   });
 });
