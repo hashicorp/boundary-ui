@@ -16,6 +16,7 @@
       - [Desktop](#desktop)
     - [Launch Enos Scenario](#launch-enos-scenario)
       - [Admin](#admin-1)
+        - [Admin (Using a Local Branch)](#admin-using-a-local-branch)
       - [Desktop](#desktop-1)
     - [Destroy Enos Scenario](#destroy-enos-scenario)
   - [Developing Tests](#developing-tests)
@@ -176,7 +177,7 @@ cd boundary-ui/e2e-tests
 Run the command for the corresponding enos scenario to run all supported tests:
 |               | `@aws`                            | `@docker`                            |
 | ------------- | --------------------------------- | ------------------------------------ |
-| `@ce`         | command: `pnpm run admin:ce:aws`  | command: `admin:ce:docker`           |
+| `@ce`         | command: `pnpm run admin:ce:aws`  | command: `pnpm admin:ce:docker`      |
 | `@enterprise` | command: `pnpm run admin:ent:aws` | command: `pnpm run admin:ent:docker` |
 
 
@@ -248,6 +249,8 @@ After all the steps pass, you should see a `Enos operations finished!`.
 
 ### Test names and tagging
 For admin tests, it's important to tag the test with the correct tags to denote which enos scenario is supported by the test. The test tags should have at least specifying the edition (`@ce`, `@ent`) and at least one specifying the enos test infrastructure (`@aws`, or `@docker`).
+
+The `@ent` and `@ce` tags should be added to *all* and *any* test cases that are supported by the respective editions. If a test case can be ran in both editions it should have both tags.
 
 ### Selecting / Locating Elements
 It is recommended to use locators that resemble how users interact with the application. `getByRole`
