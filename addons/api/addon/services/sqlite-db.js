@@ -64,6 +64,31 @@ export default class WebWorkerService extends Service {
     });
   }
 
+  async downloadDatabase() {
+    const byteArray = await this.worker.postMessage({
+      method: 'downloadDatabase',
+    });
+
+    const blob = new Blob([byteArray.buffer], {
+      type: 'application/x-sqlite3',
+    });
+    const a = window.document.createElement('a');
+    window.document.body.appendChild(a);
+    a.href = window.URL.createObjectURL(blob);
+    a.download = 'boundary.db';
+    a.addEventListener('click', function () {
+      setTimeout(function () {
+        window.URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 500);
+    });
+    a.click();
+  }
+
+  async clearDatabase() {
+    await this.worker.postMessage({ method: 'clearDatabase' });
+  }
+
   willDestroy() {
     this.worker?.terminate();
   }

@@ -12,6 +12,8 @@ import {
 let db;
 /** @type {import('@sqlite.org/sqlite-wasm').SAHPoolUtil} */
 let poolUtil;
+/** @type {import('@sqlite.org/sqlite-wasm').Sqlite3Static} */
+let sqlite3;
 
 // Maximum number of host parameters for SQLite prepared statements.
 // See "Maximum Number Of Host Parameters In A Single SQL Statement" in
@@ -22,7 +24,7 @@ const SCHEMA_VERSION = 1;
 const methods = {
   initializeSQLite: async () => {
     try {
-      const sqlite3 = await sqlite3InitModule({
+      sqlite3 = await sqlite3InitModule({
         print: console.log,
         printErr: console.error,
       });
@@ -43,6 +45,10 @@ const methods = {
   },
   clearDatabase: async () => {
     db.exec(CLEAR_DB);
+    db.exec(CREATE_TABLES(SCHEMA_VERSION));
+  },
+  downloadDatabase: async () => {
+    return sqlite3.capi.sqlite3_js_db_export(db);
   },
   fetchResource: async ({ sql, parameters = [] }) => {
     try {
