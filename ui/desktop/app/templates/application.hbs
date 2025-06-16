@@ -64,8 +64,8 @@
               />
             {{/if}}
             <dd.Interactive
-              data-test-sign-out
-              {{on 'click' this.signOutAttempt}}
+              data-test-nav-signout-btn
+              {{on 'click' this.signoutAttempt}}
             >
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
@@ -159,7 +159,7 @@
 </PendingConfirmations>
 
 {{#if this.showSignoutModal}}
-  <Hds::Modal id='signoutModal' @onClose={{this.cancelSignOut}} as |M|>
+  <Hds::Modal @onClose={{this.cancelSignOut}} data-test-signout-modal as |M|>
     <M.Header>
       {{t 'resources.session.messages.stop-sessions-and-signout.title'}}
     </M.Header>
@@ -174,7 +174,7 @@
           @text={{t 'actions.ok'}}
         />
         <Hds::Button
-          {{on 'click' this.cancelSignOut}}
+          {{on 'click' this.cancelSignout}}
           type='button'
           @text={{t 'actions.cancel'}}
           @color='secondary'

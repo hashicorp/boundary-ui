@@ -122,6 +122,12 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
+ * Toggle when signout is in progress
+ * to prevent app from quitting when signout modal is visible
+ */
+handle('setSignoutInProgress', (value) => (app.signoutInProgress = value));
+
+/**
  * Focus the window
  */
 handle('focusWindow', () => {

@@ -34,6 +34,7 @@ export default class ApplicationController extends Controller {
       this.showSignoutModal = false;
       this.stopAll();
       this.session.invalidate();
+      this.ipc.invoke('setSignoutInProgress', false);
     }
   }
 
@@ -94,13 +95,16 @@ export default class ApplicationController extends Controller {
   }
 
   @action
-  signOutAttempt() {
+  signoutAttempt() {
     this.showSignoutModal = true;
+    // Prevents a user from quitting app while signout modal is present
+    this.ipc.invoke('setSignoutInProgress', true);
   }
 
   @action
-  cancelSignOut() {
+  cancelSignout() {
     this.showSignoutModal = false;
+    this.ipc.invoke('setSignoutInProgress', false);
   }
 
   @action
