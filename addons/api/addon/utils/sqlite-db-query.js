@@ -1,4 +1,5 @@
 import { modelMapping } from 'api/services/sqlite-db';
+import { searchTables } from 'api/services/sqlite-db';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -104,6 +105,18 @@ function addFilterConditions(filters, parameters, conditions) {
 
 function addSearchConditions(search, resource, parameters, conditions) {
   if (!search) {
+    return;
+  }
+
+  if (searchTables.has(resource)) {
+    // Use the special prefix indicator "*" for full-text search
+    parameters.push(`"${search}"*`);
+    // Use a subquery to match against the FTS table with rowids as SQLite is
+    // much more efficient with FTS queries when using rowids or MATCH (or both).
+    // We could have also used a join here but a subquery is simpler.
+    conditions.push(
+      `rowid IN (SELECT rowid FROM ${resource}_fts WHERE ${resource}_fts MATCH ?)`,
+    );
     return;
   }
 
