@@ -34,7 +34,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('Password');
@@ -52,7 +54,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('OIDC');
@@ -70,7 +74,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('LDAP');

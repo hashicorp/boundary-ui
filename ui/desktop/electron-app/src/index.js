@@ -5,7 +5,7 @@
 
 /* eslint-disable no-console */
 const path = require('path');
-const { net } = require('electron');
+const { net, webContents } = require('electron');
 const {
   default: installExtension,
   EMBER_INSPECTOR,
@@ -286,7 +286,11 @@ app.on('ready', async () => {
 /**
  * Prompt for closing spawned processes
  */
-app.on('before-quit', (event) => {
+app.on('before-quit', async (event) => {
+  if (app.signoutInProgress) {
+    event.preventDefault();
+    return;
+  }
   if (sessionManager.hasRunningSessions) {
     const dialogOpts = {
       type: 'question',
@@ -296,13 +300,6 @@ app.on('before-quit', (event) => {
 
     const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
     buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
-  }
-
-  if (document.getElementById('signoutModal').isVisible()) {
-    // Prevent the app from quitting if the signout modal is visible
-    // This is to ensure that the user has a chance to confirm their action
-    // before the app quits.
-    event.preventDefault();
   }
 });
 
