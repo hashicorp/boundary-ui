@@ -1,4 +1,5 @@
 import { modelMapping } from 'api/services/sqlite-db';
+import { searchTables } from 'api/services/sqlite-db';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -44,7 +45,8 @@ export function generateSQLExpressions(
     parameters.push(pageSize, (page - 1) * pageSize);
   }
 
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM ${resource}`;
+  const useFtsTable = search && searchTables.has(resource);
+  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM ${resource}${useFtsTable ? '_fts' : ''}`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
@@ -104,6 +106,13 @@ function addFilterConditions(filters, parameters, conditions) {
 
 function addSearchConditions(search, resource, parameters, conditions) {
   if (!search) {
+    return;
+  }
+
+  if (searchTables.has(resource)) {
+    // Use the special prefix indicator "*" for full-text search
+    parameters.push(`"${search}"*`);
+    conditions.push(`${resource}_fts MATCH ?`);
     return;
   }
 

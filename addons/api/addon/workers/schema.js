@@ -10,6 +10,11 @@ BEGIN;
 
 PRAGMA user_version = ${version};
 
+CREATE TABLE IF NOT EXISTS token (
+    id TEXT NOT NULL PRIMARY KEY,
+    token TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS target (
     id TEXT NOT NULL PRIMARY KEY,
     type TEXT NOT NULL,
@@ -22,10 +27,34 @@ CREATE TABLE IF NOT EXISTS target (
 );
 CREATE INDEX IF NOT EXISTS idx_target_scope_id ON target(scope_id);
 
-CREATE TABLE IF NOT EXISTS token (
-    id TEXT NOT NULL PRIMARY KEY,
-    token TEXT NOT NULL
+CREATE VIRTUAL TABLE IF NOT EXISTS target_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    address,
+    scope_id,
+    created_time,
+    data UNINDEXED,
+    content='target',
 );
+
+-- Create triggers to keep the FTS table in sync with the target table
+-- Note: The FTS table does not have an update trigger, as it's updated only on
+-- INSERT and DELETE as we do an INSERT OR REPLACE INTO on the table
+-- which replaces the row and doesn't execute an UPDATE trigger.
+CREATE TRIGGER IF NOT EXISTS target_ai AFTER INSERT ON target BEGIN
+    INSERT INTO target_fts(
+        id, type, name, description, address, scope_id, created_time, data
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.address, new.scope_id, new.created_time, new.data
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS target_ad AFTER DELETE ON target BEGIN
+    INSERT INTO target_fts(target_fts, rowid, id, type, name, description, address, scope_id, created_time, data)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.address, old.scope_id, old.created_time, old.data);
+END;
 
 COMMIT;`;
 

@@ -16,6 +16,9 @@ export const modelMapping = {
   },
 };
 
+// A list of tables that we support searching using FTS5 in SQLite.
+export const searchTables = new Set(['target']);
+
 export default class WebWorkerService extends Service {
   // =attributes
   worker;
