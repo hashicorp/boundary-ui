@@ -9,7 +9,7 @@ import { generateSQLExpressions } from '../utils/sqlite-db-query';
 export default class SqliteHandler {
   @service sqliteDb;
 
-  batchLimit = 10_000;
+  batchLimit = 5_000;
 
   constructor(context) {
     setOwner(this, getOwner(context));
