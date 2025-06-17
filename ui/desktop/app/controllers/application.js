@@ -19,7 +19,6 @@ export default class ApplicationController extends Controller {
 
   // =tracked properties
 
-  @tracked closeSessionsAndSignOut = false;
   @tracked showSignoutModal = false;
 
   // =actions
@@ -30,12 +29,10 @@ export default class ApplicationController extends Controller {
    */
   @action
   invalidateSession() {
-    if (this.stopSessions) {
-      this.showSignoutModal = false;
-      this.stopAll();
-      this.session.invalidate();
-      this.ipc.invoke('setSignoutInProgress', false);
-    }
+    this.showSignoutModal = false;
+    this.stopAll();
+    this.session.invalidate();
+    this.ipc.invoke('setSignoutInProgress', false);
   }
 
   /**
@@ -105,10 +102,5 @@ export default class ApplicationController extends Controller {
   cancelSignout() {
     this.showSignoutModal = false;
     this.ipc.invoke('setSignoutInProgress', false);
-  }
-
-  @action
-  stopSessions() {
-    return (this.closeSessionsAndSignOut = true);
   }
 }

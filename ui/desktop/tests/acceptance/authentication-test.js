@@ -20,7 +20,10 @@ module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const SIGNOUT_SELECTOR = '[data-test-nav-signout-btn]';
+  const SIGNOUT_BTN_SELECTOR = '[data-test-nav-signout-btn]';
+  const SIGNOUT_MODAL_SELECTOR = '[data-test-signout-modal]';
+  const SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR =
+    '.hds-modal__footer .hds-button--color-primary';
 
   const instances = {
     scopes: {
@@ -176,7 +179,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('signing out redirects to first global authenticate method', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
     await visit(urls.authenticate.methods.global);
 
     await fillIn('[name="identification"]', 'test');
@@ -189,9 +192,16 @@ module('Acceptance | authentication', function (hooks) {
       '.rose-header-utilities .header-dropdown-button-override button',
     );
 
-    assert.strictEqual(find(SIGNOUT_SELECTOR).textContent.trim(), 'Sign Out');
+    assert.strictEqual(
+      find(SIGNOUT_BTN_SELECTOR).textContent.trim(),
+      'Sign Out',
+    );
 
-    await click(SIGNOUT_SELECTOR);
+    await click(SIGNOUT_BTN_SELECTOR);
+
+    assert.dom(SIGNOUT_MODAL_SELECTOR).isVisible();
+
+    await click(SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR);
 
     assert.notOk(currentSession().isAuthenticated);
   });

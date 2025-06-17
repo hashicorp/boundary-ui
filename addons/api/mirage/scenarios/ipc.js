@@ -214,7 +214,6 @@ export default function initializeMockIPC(server, config) {
     closeWindow() {}
     toggleFullscreenWindow() {}
     stop() {}
-    stopAll() {}
     checkCommand() {
       return faker.system.filePath();
     }
@@ -247,9 +246,6 @@ export default function initializeMockIPC(server, config) {
     }
     pauseClientAgent() {}
     resumeClientAgent() {}
-    setSignoutInProgress(value) {
-      return value;
-    }
   }
 
   /**
