@@ -22,6 +22,10 @@ export const NEW_TARGET_BTN = '[data-test-new-target-button]';
 export const MANAGE_DROPDOWN = '[data-test-manage-targets-dropdown] button';
 export const MANAGE_DROPDOWN_DELETE =
   '[data-test-manage-targets-dropdown] ul li:last-child button';
+export const MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS =
+  '[data-test-manage-targets-dropdown] [data-test-add-brokered-cred-sources-action]';
+export const MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS =
+  '[data-test-manage-targets-dropdown] [data-test-add-injected-cred-sources-action]';
 
 export const ALIASES_SIDEBAR = '.target-sidebar-aliases';
 export const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
@@ -35,3 +39,5 @@ export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
 export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
+export const TABLE_CREDENTIAL_SOURCE_CHECKBOX = (type) =>
+  `tbody [data-test-credential-source="${type}"] input[type="checkbox"]`;
