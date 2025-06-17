@@ -25,6 +25,10 @@ module('Integration | Component | settings-card/user', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
+  hooks.beforeEach(function () {
+    this.set('signoutAttempt', () => {});
+  });
+
   test('it renders password correctly', async function (assert) {
     this.owner.register(
       'service:session',
