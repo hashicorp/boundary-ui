@@ -24,6 +24,8 @@ module('Acceptance | authentication', function (hooks) {
   const SIGNOUT_MODAL_SELECTOR = '[data-test-signout-modal]';
   const SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR =
     '.hds-modal__footer .hds-button--color-primary';
+  const SIGNOUT_MODAL_CANCEL_BTN_SELECTOR =
+    '.hds-modal__footer .hds-button--color-secondary';
 
   const instances = {
     scopes: {
@@ -204,6 +206,36 @@ module('Acceptance | authentication', function (hooks) {
     await click(SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR);
 
     assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('canceling signout does not de-auth user', async function (assert) {
+    assert.expect(5);
+    await visit(urls.authenticate.methods.global);
+
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(
+      '.rose-header-utilities .header-dropdown-button-override button',
+    );
+
+    assert.strictEqual(
+      find(SIGNOUT_BTN_SELECTOR).textContent.trim(),
+      'Sign Out',
+    );
+
+    await click(SIGNOUT_BTN_SELECTOR);
+
+    assert.dom(SIGNOUT_MODAL_SELECTOR).isVisible();
+
+    await click(SIGNOUT_MODAL_CANCEL_BTN_SELECTOR);
+
+    assert.dom(SIGNOUT_MODAL_SELECTOR).isNotVisible();
+
+    assert.ok(currentSession().isAuthenticated);
   });
 
   test('401 responses result in deauthentication', async function (assert) {
