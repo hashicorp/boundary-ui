@@ -338,6 +338,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
     const credentialLibraryCount = getCredentialLibraryCount();
+    const availableCredentialsCount = getCredentialCount();
     await visit(urls.brokeredCredentialSources);
 
     assert
@@ -356,7 +357,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
 
     assert
       .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialLibraryCount + 1 });
+      .isVisible({ count: availableCredentialsCount + 1 });
   });
 
   test('can remove a username & password type credential', async function (assert) {
@@ -364,6 +365,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     const credentialCount = getCredentialCount();
+    const availableCredentialsCount = getCredentialLibraryCount();
     await visit(urls.brokeredCredentialSources);
 
     assert
@@ -382,7 +384,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
 
     assert
       .dom(commonSelectors.TABLE_ROWS)
-      .isVisible({ count: credentialCount + 1 });
+      .isVisible({ count: availableCredentialsCount + 1 });
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
