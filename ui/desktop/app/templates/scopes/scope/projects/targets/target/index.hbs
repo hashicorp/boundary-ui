@@ -39,10 +39,13 @@
               </B.Td>
               <B.Td>
                 <Hds::Text::Body @tag='p'>
-                  {{B.data.address}}
+                  {{#if B.data.address}}
+                    {{B.data.address}}
+                  {{else}}
+                    —
+                  {{/if}}
                 </Hds::Text::Body>
               </B.Td>
-
               <B.Td>
                 <Hds::Button
                   data-test-target-connect-button={{B.data.id}}
@@ -54,7 +57,6 @@
                   }}
                 />
               </B.Td>
-
             </B.Tr>
           </:body>
         </Hds::Table>

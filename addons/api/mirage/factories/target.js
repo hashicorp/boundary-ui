@@ -120,6 +120,10 @@ export default factory.extend({
           type: hostCatalog.type,
         }),
       ];
+      const hostSetIds = hostSets.map((hostSet) => hostSet.id);
+      hosts.forEach((host) => {
+        host.update({ hostSetIds });
+      });
       target.update({ hostSets });
     },
   }),
@@ -141,6 +145,10 @@ export default factory.extend({
           type: hostCatalog.type,
         }),
       ];
+      const hostSetIds = hostSets.map((hostSet) => hostSet.id);
+      hosts.forEach((host) => {
+        host.update({ hostSetIds });
+      });
       target.update({ hostSets });
     },
   }),
@@ -160,6 +168,10 @@ export default factory.extend({
           type: hostCatalog.type,
         }),
       ];
+      const hostSetIds = hostSets.map((hostSet) => hostSet.id);
+      hosts.forEach((host) => {
+        host.update({ hostSetIds });
+      });
       target.update({ hostSets });
     },
   }),
