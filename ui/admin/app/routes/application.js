@@ -71,11 +71,10 @@ export default class ApplicationRoute extends Route {
 
     // Setup the DB from a successful authentication restoration
     if (this.session.isAuthenticated) {
-      await this.sqliteDb.setup();
-
       const userId = this.session.data?.authenticated?.user_id;
       const hostUrl = this.window.location.host;
       if (userId && hostUrl) {
+        await this.sqliteDb.setup(formatDbName(userId, hostUrl));
         await this.indexedDb.setup(formatDbName(userId, hostUrl));
       }
     }

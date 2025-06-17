@@ -21,7 +21,7 @@ export default class WebWorkerService extends Service {
   worker;
   webWorkerPath = '/workers/web-worker.js';
 
-  async setup() {
+  async setup(dbName) {
     if (this.worker) {
       // If the worker already exists, we don't need to do anything.
       return;
@@ -41,6 +41,11 @@ export default class WebWorkerService extends Service {
       type: 'module',
     });
     this.worker = new PWBHost(webWorker);
+    this.worker.register(async ({ method }) => {
+      if (method === 'getDatabaseName') {
+        return dbName;
+      }
+    });
   }
 
   async fetchResource({ sql, parameters }) {
