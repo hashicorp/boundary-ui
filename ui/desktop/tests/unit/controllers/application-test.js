@@ -36,6 +36,7 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.close);
     assert.ok(controller.stopAll);
     assert.ok(controller.cancelSignout);
+    assert.ok(controller.invalidateSession);
   });
 
   test('invalidateSession action de-authenticates a user', async function (assert) {
