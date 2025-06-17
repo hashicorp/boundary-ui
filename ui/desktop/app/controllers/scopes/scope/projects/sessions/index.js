@@ -150,7 +150,8 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    * Refreshes the all data for the current page.
    */
   @action
-  refresh() {
-    this.send('refreshAll');
+  async refresh() {
+    // this.send('refreshAll');
+    await this.currentRoute.refreshAll();
   }
 }
