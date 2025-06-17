@@ -23,24 +23,48 @@ const SCHEMA_VERSION = 1;
 
 const methods = {
   initializeSQLite: async () => {
-    try {
-      sqlite3 = await sqlite3InitModule({
-        print: console.log,
-        printErr: console.error,
-      });
-      console.log(`SQLite Version: ${sqlite3?.version.libVersion}`);
-      poolUtil = await sqlite3.installOpfsSAHPoolVfs();
-      db = new poolUtil.OpfsSAHPoolDb('/boundary');
+    sqlite3 = await sqlite3InitModule({
+      print: console.log,
+      printErr: console.error,
+    });
+    console.log(`SQLite Version: ${sqlite3?.version.libVersion}`);
+    const dbName = await promiseWorker.postMessage({
+      method: 'getDatabaseName',
+    });
 
-      const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
-      // Check if we're on a newer schema version and clear the database if so
-      if (SCHEMA_VERSION > row.user_version) {
-        db.exec(CLEAR_DB);
+    let done = false;
+    while (!done) {
+      try {
+        poolUtil = await sqlite3.installOpfsSAHPoolVfs();
+        db = new poolUtil.OpfsSAHPoolDb(dbName);
+
+        const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
+        // Check if we're on a newer schema version and clear the database if so
+        if (SCHEMA_VERSION > row.user_version) {
+          db.exec(CLEAR_DB);
+        }
+
+        db.exec(CREATE_TABLES(SCHEMA_VERSION));
+        done = true;
+      } catch (err) {
+        // If we get a SQLite3Error and the pool is at capacity, we'll assume the error is
+        // because we hit the cap so we add more capacity and see if that solves it.
+        if (
+          err.name === 'SQLite3Error' &&
+          poolUtil.getCapacity() === poolUtil.getFileCount()
+        ) {
+          await poolUtil.addCapacity(1);
+        } else {
+          console.error('SQLite initialization error:', err);
+          throw err;
+        }
       }
 
-      db.exec(CREATE_TABLES(SCHEMA_VERSION));
-    } catch (err) {
-      console.error('Initialization error:', err.name, err.message);
+      // If we have more than 20 files, that might indicate a problem so let's just
+      // remove the VFS and wipe all the client data across users and restart.
+      if (poolUtil.getCapacity() > 20) {
+        await poolUtil.removeVfs();
+      }
     }
   },
   clearDatabase: async () => {
@@ -58,8 +82,7 @@ const methods = {
         rowMode: 'object',
       });
     } catch (err) {
-      console.log('error', sql, parameters);
-      console.error('Fetch resource error:', err);
+      console.error('Fetch resource error:', err, sql, parameters);
       throw err;
     }
   },
