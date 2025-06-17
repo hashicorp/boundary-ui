@@ -15,6 +15,8 @@ import sinon from 'sinon';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 module('Acceptance | credential-libraries | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -22,6 +24,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   setupSqlite(hooks);
 
   let getCredentialLibraryCount;
+  let getUsernamePasswordDomainCredentialLibraryCount;
 
   const instances = {
     scopes: {
@@ -38,6 +41,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     credentialLibraries: null,
     newCredentialLibrary: null,
     unknownCredentialLibrary: null,
+    usernamePasswordDomainCredentialLibrary: null,
   };
 
   hooks.beforeEach(async function () {
@@ -58,6 +62,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
     });
+    instances.usernamePasswordDomainCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      },
+    );
     // Generate route URLs for resources
     urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
@@ -65,9 +78,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
+    urls.usernamePasswordDomainCredentialLibrary = `${urls.credentialLibraries}/${instances.usernamePasswordDomainCredentialLibrary.id}`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
+    getUsernamePasswordDomainCredentialLibraryCount = () => {
+      return this.server.schema.credentialLibraries.where({
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      }).length;
+    };
     await authenticateSession({});
   });
 
@@ -174,5 +193,19 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
+  });
+
+  test('can delete username password and domain credential library type', async function (assert) {
+    const usernamePasswordDomainCredentialLibraryCount =
+      getUsernamePasswordDomainCredentialLibraryCount();
+    await visit(urls.usernamePasswordDomainCredentialLibrary);
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
+    assert.strictEqual(
+      getUsernamePasswordDomainCredentialLibraryCount(),
+      usernamePasswordDomainCredentialLibraryCount - 1,
+    );
   });
 });

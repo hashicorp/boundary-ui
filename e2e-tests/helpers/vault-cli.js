@@ -163,3 +163,59 @@ export async function setupVaultOidc(
     authPolicyName: authPolicyName,
   };
 }
+
+/**
+ * Sets up a Vault credential store by configuring policies, enabling secrets,
+ * and creating a token with specific permissions.
+ *
+ * @async
+ * @function setupVaultCredentialStore
+ * @param {string} boundaryPolicyName - The name of the boundary policy to be created.
+ * @param {string} secretPolicyName - The name of the secret policy to be created.
+ * @param {string} secretsPath - The path where the secrets engine will be enabled.
+ * @param {string} secretName - The name of the secret to be stored in the secrets engine.
+ * @param {string} sshUser - The SSH username to be stored in the secret.
+ * @param {string} sshKeyPath - The file path to the SSH private key to be stored in the secret.
+ * @returns {Promise<string>} Vault Token
+ */
+export async function setupVaultCredentialStore(
+  boundaryPolicyName,
+  secretPolicyName,
+  secretsPath,
+  secretName,
+  sshUser,
+  sshKeyPath,
+) {
+  let clientToken;
+  try {
+    execSync(
+      `vault policy write ${boundaryPolicyName} ./admin/tests/fixtures/boundary-controller-policy.hcl`,
+    );
+    execSync(`vault secrets enable -path=${secretsPath} kv-v2`);
+    execSync(
+      `vault kv put -mount ${secretsPath} ${secretName} ` +
+        ` username=${sshUser}` +
+        ` private_key=@${sshKeyPath}`,
+    );
+    execSync(
+      `vault policy write ${secretPolicyName} ./admin/tests/fixtures/kv-policy.hcl`,
+    );
+    const vaultToken = JSON.parse(
+      execSync(
+        `vault token create \
+          -no-default-policy=true \
+          -policy=${boundaryPolicyName} \
+          -policy=${secretPolicyName} \
+          -orphan=true \
+          -period=20m \
+          -renewable=true \
+          -format=json`,
+      ),
+    );
+    clientToken = vaultToken.auth.client_token;
+  } catch (e) {
+    console.log(`${e.stderr}`);
+  }
+
+  return clientToken;
+}

@@ -115,37 +115,53 @@
     {{/if}}
   </Hds::Form::TextInput::Field>
 
-  <Hds::Form::Select::Field
-    @isOptional={{true}}
-    @width='100%'
-    name='credential_type'
-    disabled={{or form.disabled (not @model.isNew)}}
-    {{on 'input' this.selectCredentialType}}
-    as |F|
-  >
-    <F.Label>
-      {{t 'resources.credential-library.form.credential_type.label'}}
-    </F.Label>
-    <F.HelperText>
-      {{t 'resources.credential-library.form.credential_type.help'}}
-    </F.HelperText>
-    <F.Options>
-      <option value='' />
+  {{#if @model.isNew}}
+    <Hds::Form::Select::Field
+      @isOptional={{true}}
+      @width='100%'
+      name='credential_type'
+      disabled={{form.disabled}}
+      {{on 'input' this.selectCredentialType}}
+      as |F|
+    >
+      <F.Label>
+        {{t 'resources.credential-library.form.credential_type.label'}}
+      </F.Label>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.credential_type.help'}}
+      </F.HelperText>
+      <F.Options>
+        <option value='' />
 
-      {{#each this.credentialTypes as |type|}}
-        <option value={{type}} selected={{eq type @model.credential_type}}>
-          {{t (concat 'resources.credential-library.titles.' type)}}
-        </option>
-      {{/each}}
-    </F.Options>
-    {{#if @model.errors.credential_type}}
-      <F.Error as |E|>
-        {{#each @model.errors.credential_type as |error|}}
-          <E.Message>{{error.message}}</E.Message>
+        {{#each this.credentialTypes as |type|}}
+          <option value={{type}} selected={{eq type @model.credential_type}}>
+            {{t (concat 'resources.credential-library.titles.' type)}}
+          </option>
         {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Select::Field>
+      </F.Options>
+      {{#if @model.errors.credential_type}}
+        <F.Error as |E|>
+          {{#each @model.errors.credential_type as |error|}}
+            <E.Message>{{error.message}}</E.Message>
+          {{/each}}
+        </F.Error>
+      {{/if}}
+    </Hds::Form::Select::Field>
+  {{else}}
+    <InfoField
+      @value={{t
+        (concat 'resources.credential-library.titles.' @model.credential_type)
+      }}
+      as |F|
+    >
+      <F.Label>{{t
+          'resources.credential-library.form.credential_type.label'
+        }}</F.Label>
+      <F.HelperText>
+        {{t 'resources.credential-library.form.credential_type.description'}}
+      </F.HelperText>
+    </InfoField>
+  {{/if}}
 
   {{#if @model.credential_type}}
     <Form::Field::ListWrapper

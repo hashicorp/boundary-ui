@@ -225,6 +225,71 @@ export class CredentialStoresPage extends BaseResourcePage {
   }
 
   /**
+   * Creates a static username, password & Domain credential.
+   * Assumes you have selected the desired project.
+   * @param {string} username username for the credential
+   * @param {string} password password for the credential
+   * @param {string} domain domain for the credential
+   * @returns Name of the credential
+   */
+  async createStaticCredentialUsernamePasswordDomain(
+    username,
+    password,
+    domain,
+  ) {
+    const credentialsBreadcrumbIsVisible = await this.page
+      .getByRole('breadcrumbs', { name: 'Credentials' })
+      .isVisible();
+    if (credentialsBreadcrumbIsVisible) {
+      await this.page.getByRole('breadcrumbs', { name: 'Credentials' }).click();
+    } else {
+      await this.page
+        .getByRole('link', { name: 'Credentials', exact: true })
+        .click();
+    }
+
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText('Credentials'),
+    ).toBeVisible();
+
+    const newButtonIsVisible = await this.page
+      .getByRole('link', { name: 'New', exact: true })
+      .isVisible();
+    if (newButtonIsVisible) {
+      await this.page.getByRole('link', { name: 'New', exact: true }).click();
+    } else {
+      await this.page.getByText('Manage').click();
+      await this.page.getByRole('link', { name: 'New Credential' }).click();
+    }
+
+    const credentialName = 'Credential ' + nanoid();
+    await this.page.getByLabel('Name (Optional)').fill(credentialName);
+    await this.page.getByLabel('Description').fill('This is an automated test');
+    await this.page
+      .getByRole('group', { name: 'Type' })
+      .getByLabel('Username, Password & Domain')
+      .click();
+    await this.page
+      .getByLabel('Username Required', { exact: true })
+      .fill(username);
+    await this.page
+      .getByLabel('Password Required', { exact: true })
+      .fill(password);
+    await this.page.getByLabel('Domain Required', { exact: true }).fill(domain);
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.dismissSuccessAlert();
+    await expect(
+      this.page
+        .getByRole('navigation', { name: 'breadcrumbs' })
+        .getByText(credentialName),
+    ).toBeVisible();
+
+    return credentialName;
+  }
+
+  /**
    * Creates a vault-generic credential library. Assumes you have selected
    * the desired credential store.
    * @param {string} vaultPath path to secret in vault

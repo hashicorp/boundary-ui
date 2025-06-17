@@ -9,9 +9,13 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+} from 'api/models/credential-library';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 module('Acceptance | credential-libraries | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -168,5 +172,22 @@ module('Acceptance | credential-libraries | read', function (hooks) {
 
     assert.notEqual(currentURL(), incorrectUrl);
     assert.strictEqual(currentURL(), correctUrl);
+  });
+
+  test('visiting vault credential library of type username password and domain', async function (assert) {
+    const usernamePasswordDomainCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      },
+    );
+    const url = `${urls.credentialLibraries}/${usernamePasswordDomainCredentialLibrary.id}`;
+
+    await visit(url);
+
+    assert.strictEqual(currentURL(), url);
   });
 });

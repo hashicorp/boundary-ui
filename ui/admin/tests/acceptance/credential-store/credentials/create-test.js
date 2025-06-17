@@ -24,6 +24,7 @@ module(
     let getCredentialsCount;
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;
+    let getUsernamePasswordDomainCredentialCount;
     let getJsonCredentialCount;
     let featuresService;
 
@@ -80,6 +81,11 @@ module(
       getJsonCredentialCount = () => {
         return this.server.schema.credentials.where({ type: 'json' }).length;
       };
+      getUsernamePasswordDomainCredentialCount = () => {
+        return this.server.schema.credentials.where({
+          type: 'username_password_domain'
+        }).length;
+      };
       await authenticateSession({});
     });
 
@@ -111,6 +117,61 @@ module(
         usernamePasswordCredentialCount + 1,
       );
     });
+
+    test('users can create a new username, password & domain credential', async function (assert) {
+      const credentialsCount = getCredentialsCount();
+      const usernamePasswordDomainCredentialCount =
+        getUsernamePasswordDomainCredentialCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
+
+      await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_VALUE);
+      await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+      await fillIn(selectors.FIELD_DOMAIN, selectors.FIELD_DOMAIN_VALUE);
+
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(
+        getUsernamePasswordDomainCredentialCount(),
+        usernamePasswordDomainCredentialCount + 1,
+      );
+    });
+
+    test('users can create a new username & password credential with domain in username field', async function (assert) {
+      const credentialsCount = getCredentialsCount();
+      const usernamePasswordDomainCredentialCount =
+        getUsernamePasswordDomainCredentialCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
+      await fillIn(selectors.FIELD_USERNAME, selectors.FIELD_USERNAME_WITH_DOMAIN_VALUE);
+      await fillIn(selectors.FIELD_PASSWORD, selectors.FIELD_PASSWORD_VALUE);
+
+
+      // check that the domain field is filled in
+      assert.dom(selectors.FIELD_DOMAIN).hasValue(selectors.FIELD_DOMAIN_VALUE);
+
+      await click(commonSelectors.SAVE_BTN);
+
+      assert.strictEqual(getCredentialsCount(), credentialsCount + 1);
+      assert.strictEqual(
+        getUsernamePasswordDomainCredentialCount(),
+        usernamePasswordDomainCredentialCount + 1,
+      );
+    });
+
 
     test('users can create a new username & key pair credential', async function (assert) {
       setRunOptions({
@@ -248,6 +309,22 @@ module(
         commonSelectors.FIELD_NAME_VALUE,
       );
       await click(selectors.FIELD_TYPE_JSON);
+      await click(commonSelectors.CANCEL_BTN);
+
+      assert.strictEqual(currentURL(), urls.credentials);
+      assert.strictEqual(getCredentialsCount(), credentialsCount);
+    });
+
+    test('users can cancel creation of new username, password & domain credential', async function (assert) {
+      const credentialsCount = getCredentialsCount();
+      await visit(urls.credentials);
+
+      await click(commonSelectors.HREF(urls.newCredential));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
       await click(commonSelectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.credentials);
@@ -395,6 +472,42 @@ module(
       assert
         .dom(selectors.FIELD_SSH_PRIVATE_KEY_ERROR)
         .hasText(errorDescription);
+    });
+
+    test('saving a new username, password & domain credential with invalid fields displays error messages', async function (assert) {
+      const errorMessage = 'Error in provided request.';
+      const errorDescription =
+        'Field required for creating a username-password-domain credential.';
+      await visit(urls.credentials);
+
+      this.server.post('/credentials', () => {
+        return new Response(
+          400,
+          {},
+          {
+            status: 400,
+            code: 'invalid_argument',
+            message: errorMessage,
+            details: {
+              request_fields: [
+                {
+                  name: 'attributes.domain',
+                  description: errorDescription,
+                },
+              ],
+            },
+          },
+        );
+      }
+      );
+      await click(commonSelectors.HREF(urls.newCredential));
+      await click(selectors.FIELD_TYPE_USERNAME_PASSWORD_DOMAIN);
+      await click(commonSelectors.SAVE_BTN);
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+
+      assert
+        .dom(selectors.FIELD_DOMAIN_ERROR)
+        .hasText('Field required for creating a username-password-domain credential.');
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {

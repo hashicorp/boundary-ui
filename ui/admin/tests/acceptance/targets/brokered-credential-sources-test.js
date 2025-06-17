@@ -75,7 +75,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       type: 'static',
       scope: instances.scopes.project,
     });
-    instances.credentials = this.server.createList('credential', 3, {
+    instances.credentials = this.server.createList('credential', 4, {
       scope: instances.scopes.project,
       credentialStore: instances.staticCredentialStore,
     });
@@ -115,7 +115,7 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     urls.brokeredCredentialSources = `${urls.target}/brokered-credential-sources`;
     urls.credentialLibrary = `${urls.projectScope}/credential-stores/${instances.credentialLibrary.credentialStoreId}/credential-libraries/${instances.credentialLibrary.id}`;
     urls.credential = `${urls.projectScope}/credential-stores/${instances.credential.credentialStoreId}/credentials/${instances.credential.id}`;
-    urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[2].credentialStoreId}/credentials/${instances.credentials[2].id}`;
+    urls.jsonCredential = `${urls.projectScope}/credential-stores/${instances.credentials[3].credentialStoreId}/credentials/${instances.credentials[3].id}`;
     urls.addBrokeredCredentialSources = `${urls.target}/add-brokered-credential-sources`;
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
@@ -191,14 +191,14 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       },
     });
 
-    const jsonCredential = instances.credentials[2];
+    const jsonCredential = instances.credentials[3];
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
     await visit(urls.brokeredCredentialSources);
 
     assert.false(featuresService.isEnabled('json-credentials'));
-    assert.dom(commonSelectors.TABLE_ROW(3)).includesText(jsonCredential.name);
+    assert.dom(commonSelectors.TABLE_ROW(4)).includesText(jsonCredential.name);
     assert.dom(commonSelectors.HREF(urls.jsonCredential)).doesNotExist();
   });
 

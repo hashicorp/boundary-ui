@@ -904,10 +904,12 @@ credential-library:
     new: New Credential Library
     ssh_private_key: SSH Private Key
     username_password: Username & Password
+    username_password_domain: Username, Password & Domain
     username_attribute: Username
     password_attribute: Password
     private_key_passphrase_attribute: Private Key Passphrase
     private_key_attribute: Private Key
+    domain_attribute: Domain
   actions:
     create: New Credential Library
     delete: Delete Credential Library
@@ -922,6 +924,7 @@ credential-library:
     credential_type:
       label: Credential Type
       help: Specify the type of credential this library will issue. This must be set to use credential injection. After this data is saved, it cannot be changed later.
+      description: The type of credential the library uses for credential injection.
     credential_mapping_overrides:
       label: Credential mapping overrides
       help: Specify the credential fields to use instead of the defaults
@@ -974,12 +977,14 @@ credential:
   types:
     username_password: Username & Password
     ssh_private_key: Username & Key Pair
+    username_password_domain: Username, Password & Domain
     json: JSON
     unknown: Unknown
   help:
     username_password: Connect using the provided username and password.
     ssh_private_key: Connect using a username, public key, and private key.
     json: Connect using a JSON blob containing the credentials.
+    username_password_domain: Includes a domain field for Active Directory
   form:
     username:
       label: Username
@@ -987,6 +992,9 @@ credential:
     password:
       label: Password
       help: The password to use when signing in with this credential store.
+    domain:
+      label: Domain
+      help: The Active Directory domain or FQDN (e.g., contoso.local)
     private_key:
       label: SSH Private Key
       help: The private key to use when connecting with this credential store.

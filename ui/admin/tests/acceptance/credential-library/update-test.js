@@ -10,10 +10,14 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+} from 'api/models/credential-library';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -38,6 +42,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     credentialLibraries: null,
     newCredentialLibrary: null,
     unknownCredentialLibrary: null,
+    usernamePasswordDomainCredentialLibrary: null,
   };
 
   hooks.beforeEach(async function () {
@@ -58,6 +63,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
     });
+    instances.usernamePasswordDomainCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      },
+    );
     // Generate route URLs for resources
     urls.globalScope = `/scopes/global/scopes`;
     urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
@@ -68,6 +82,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     urls.credentialLibrary = `${urls.credentialLibraries}/${instances.credentialLibrary.id}`;
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
+    urls.usernamePasswordDomainCredentialLibrary = `${urls.credentialLibraries}/${instances.usernamePasswordDomainCredentialLibrary.id}`;
     await authenticateSession({});
   });
 
@@ -127,7 +142,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
     await select(
       selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
-      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_VALUE,
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_SSH_VALUE,
     );
     await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'key');
     await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
@@ -150,6 +165,45 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     );
     assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
       private_key_attribute: 'key',
+    });
+  });
+
+  test('can update a vault generic credential library of username, password and domain type and save changes', async function (assert) {
+    await visit(urls.usernamePasswordDomainCredentialLibrary);
+
+    await click(commonSelectors.EDIT_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(
+      commonSelectors.FIELD_DESCRIPTION,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
+    await select(
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
+    );
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
+
+    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await click(commonSelectors.SAVE_BTN);
+
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      credentialType: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+    });
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.description,
+      commonSelectors.FIELD_DESCRIPTION_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.path,
+      selectors.FIELD_VAULT_PATH_VALUE,
+    );
+    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
+      domain_attribute: 'domain',
     });
   });
 
@@ -288,7 +342,7 @@ module('Acceptance | credential-libraries | update', function (hooks) {
     await visit(urls.credentialLibrary);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
 
-    assert.dom(selectors.FIELD_CRED_TYPE).isDisabled();
+    assert.dom(selectors.FIELD_CRED_TYPE).doesNotExist();
   });
 
   test('can update a vault ssh cert credential library and save changes', async function (assert) {

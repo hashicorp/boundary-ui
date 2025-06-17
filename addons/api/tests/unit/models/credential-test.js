@@ -5,6 +5,13 @@
 
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import {
+  TYPE_CREDENTIAL_JSON,
+  TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+  TYPE_CREDENTIAL_USERNAME_PASSWORD
+} from 'api/models/credential';
+
 
 module('Unit | Model | credential', function (hooks) {
   setupTest(hooks);
@@ -28,12 +35,12 @@ module('Unit | Model | credential', function (hooks) {
 
   test('it has isJSON property and returns the expected values', async function (assert) {
     const store = this.owner.lookup('service:store');
-    const modelA = store.createRecord('credential', { type: 'json' });
+    const modelA = store.createRecord('credential', { type: TYPE_CREDENTIAL_JSON });
     const modelB = store.createRecord('credential', {
-      type: 'username_password',
+      type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
     });
     const modelC = store.createRecord('credential', {
-      type: 'ssh_private_key',
+      type: TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
     });
 
     assert.true(modelA.isJSON);
@@ -44,15 +51,17 @@ module('Unit | Model | credential', function (hooks) {
   test('it has isUnknown property and returns the expected values', async function (assert) {
     const store = this.owner.lookup('service:store');
     const modelA = store.createRecord('credential', {
-      type: 'username_password',
+      type: TYPE_CREDENTIAL_USERNAME_PASSWORD
     });
     const modelB = store.createRecord('credential', {
-      type: 'ssh_private_key',
+      type: TYPE_CREDENTIAL_SSH_PRIVATE_KEY
     });
     const modelC = store.createRecord('credential', { type: 'unknown' });
+    const modelD = store.createRecord('credential', { type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN });
 
     assert.false(modelA.isUnknown);
     assert.false(modelB.isUnknown);
     assert.true(modelC.isUnknown);
+    assert.false(modelD.isUnknown);
   });
 });
