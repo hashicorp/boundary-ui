@@ -260,14 +260,14 @@ module(
       },
       async function (assert, input) {
         instances.target.update({
-          brokeredCredentialSourceIds: [],
+          injectedApplicationCredentialSourceIds: [],
         });
         await visit(urls.injectedApplicationCredentialSources);
 
         assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
 
         await click(selectors.MANAGE_DROPDOWN);
-        await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+        await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
 
         assert.strictEqual(
           currentURL(),
@@ -361,7 +361,7 @@ module(
         .isVisible({ count: credentialLibraryCount - 1 });
 
       await click(selectors.MANAGE_DROPDOWN);
-      await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+      await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
 
       assert
         .dom(commonSelectors.TABLE_ROWS)
@@ -389,7 +389,7 @@ module(
         .isVisible({ count: credentialCount - 1 });
 
       await click(selectors.MANAGE_DROPDOWN);
-      await click(selectors.MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS);
+      await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
 
       assert
         .dom(commonSelectors.TABLE_ROWS)
