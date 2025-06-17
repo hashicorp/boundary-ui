@@ -17,11 +17,10 @@ export default class SessionService extends BaseSessionService {
    * so we can hook in and setup the DB after a successful authentication
    */
   async handleAuthentication() {
-    await this.sqliteDb.setup();
-
     const userId = this.data?.authenticated?.user_id;
     const hostUrl = this.window.location?.host;
     if (userId && hostUrl) {
+      await this.sqliteDb.setup(formatDbName(userId, hostUrl));
       await this.indexedDb.setup(formatDbName(userId, hostUrl));
     }
 
