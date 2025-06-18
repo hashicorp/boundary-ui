@@ -151,7 +151,6 @@ export default class ScopesScopeProjectsSessionsIndexController extends Controll
    */
   @action
   async refresh() {
-    // this.send('refreshAll');
     await this.currentRoute.refreshAll();
   }
 }
