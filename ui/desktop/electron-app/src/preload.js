@@ -61,3 +61,11 @@ process.once('loaded', () => {
     }
   });
 });
+
+contextBridge.exposeInMainWorld('electron', {
+  ipcRenderer: {
+    on(channel, callback) {
+      ipcRenderer.on(channel, callback);
+    },
+  },
+});

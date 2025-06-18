@@ -128,6 +128,15 @@ handle('closeWindow', () => app.quit());
 handle('setSignoutInProgress', (value) => (app.signoutInProgress = value));
 
 /**
+ * Toggle when attempt to close app is in progress
+ * and prevent closing app until user has engaged with modal
+ */
+handle('closeSessionsAndQuit', async () => {
+  await sessionManager.stopAll();
+  app.quit();
+});
+
+/**
  * Focus the window
  */
 handle('focusWindow', () => {
