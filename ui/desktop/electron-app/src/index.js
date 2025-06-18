@@ -5,7 +5,7 @@
 
 /* eslint-disable no-console */
 const path = require('path');
-const { net, webContents } = require('electron');
+const { net } = require('electron');
 const {
   default: installExtension,
   EMBER_INSPECTOR,
@@ -13,7 +13,6 @@ const {
 const {
   session,
   app,
-  dialog,
   protocol,
   BrowserWindow,
   Menu,
@@ -22,7 +21,6 @@ const {
 } = require('electron');
 require('./ipc/handlers.js');
 const log = require('electron-log/main');
-const fs = require('fs');
 
 const { generateCSPHeader } = require('./config/content-security-policy.js');
 const runtimeSettings = require('./services/runtime-settings.js');
@@ -40,6 +38,7 @@ const { version } = require('./cli/index.js');
 const isDev = require('electron-is-dev');
 
 // Register the custom file protocol
+// This will render as the default cluster URL: serve://boundary
 const emberAppProtocol = 'serve';
 const emberAppName = 'boundary';
 const emberAppURL = `${emberAppProtocol}://${emberAppName}`;
@@ -129,7 +128,7 @@ const createWindow = async (partition, closeWindowCB) => {
   const browserWindow = new BrowserWindow(browserWindowOptions);
 
   // If the user-specified cluster URL changes, reload the page so that
-  // the CSP can be refreshed with the this source allowed
+  // the content security policy (CSP) can be refreshed with the source allowed
   runtimeSettings.onClusterUrlChange(
     async () => await browserWindow.loadURL(emberAppURL),
   );
@@ -143,6 +142,8 @@ const createWindow = async (partition, closeWindowCB) => {
     await browserWindow.loadURL(emberAppURL);
   });
 
+  // Emitted when the renderer process unexpectedly disappears.
+  // This is normally because it was crashed or killed.
   browserWindow.webContents.on('render-process-gone', () => {
     console.log(
       'Your Ember app (or other code) in the main window has crashed.',
@@ -160,7 +161,7 @@ const createWindow = async (partition, closeWindowCB) => {
   });
 
   // Opens external links in the host default browser.
-  // We allow developer.hashicorp.com domain to open on external window
+  // We allow developer.hashicorp.com domain to open on an external window
   // and releases.hashicorp.com domain to download the desktop app or
   // link to the release page for the desktop app.
   browserWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -204,15 +205,15 @@ app.on('window-all-closed', () => {
 
 app.on('ready', async () => {
   // Setup a partition
-  // Must be prefixed with persist: in order to save things like localStorage
+  // Must be prefixed with "persist:" in order to save things like localStorage
   // data.  Without this, the session is in-memory only.
   // https://www.electronjs.org/docs/api/session#sessionfrompartitionpartition-options
   const partition = `persist:${emberAppName}`;
   const ses = session.fromPartition(partition);
 
   // Register custom protocol
-  // This file protocol is the exclusive protocol for this application.  All
-  // other protocols are disabled.
+  // This file protocol is the exclusive protocol for this application.
+  // All other protocols are disabled.
   ses.protocol.handle(emberAppProtocol, (request) => {
     /* eng-disable PROTOCOL_HANDLER_JS_CHECK */
     const isDir = request.url.endsWith('/');
@@ -270,8 +271,8 @@ app.on('ready', async () => {
 
   /**
    * Need for Mac OS behavior of closing the window but not the app.
-   * This allows to reopen the window if the user clicks Boundary icon in the dock
-   * while the app is not close.
+   * This allows a user to reopen the window when clicking the Boundary icon in the dock,
+   * only when the app has not been closed.
    * More info: https://www.electronjs.org/docs/latest/tutorial/quick-start#open-a-window-if-none-are-open-macos
    */
   app.on('activate', async () => {
@@ -284,22 +285,23 @@ app.on('ready', async () => {
 });
 
 /**
- * Prompt for closing spawned processes
+ * Prompt use to confirm action before closing spawned processes
+ * This prompt lives in the ember app using Hds::Modal
  */
 app.on('before-quit', async (event) => {
   if (app.signoutInProgress) {
     event.preventDefault();
     return;
   }
-  if (sessionManager.hasRunningSessions) {
-    const dialogOpts = {
-      type: 'question',
-      buttons: ['Close', 'Cancel'],
-      detail: 'Close sessions before quitting?',
-    };
 
-    const buttonId = dialog.showMessageBoxSync(null, dialogOpts);
-    buttonId === 0 ? sessionManager.stopAll() : event.preventDefault();
+  if (sessionManager.hasRunningSessions) {
+    try {
+      await mainWindow.webContents.send('inform-ember-of-app-closure');
+      event.preventDefault();
+      return;
+    } catch (e) {
+      console.log(`Exception: ${e}`);
+    }
   }
 });
 
@@ -316,7 +318,7 @@ app.on('quit', () => {
 // from the exception can cause additional unforeseen and unpredictable issues.
 //
 // Attempting to resume normally after an uncaught exception can be similar to pulling out
-// of the power cord when upgrading a computer -- nine out of ten times nothing happens -
+// the power cord when upgrading a computer -- nine out of ten times nothing happens -
 // but the 10th time, the system becomes corrupted.
 //
 // The correct use of 'uncaughtException' is to perform synchronous cleanup of allocated

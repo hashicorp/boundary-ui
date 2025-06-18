@@ -59,6 +59,7 @@ class MockIPC {
   setSignoutInProgress(value) {
     return value;
   }
+  closeSessionsAndQuit() {}
 }
 
 /**

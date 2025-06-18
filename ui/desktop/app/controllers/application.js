@@ -20,6 +20,18 @@ export default class ApplicationController extends Controller {
   // =tracked properties
 
   @tracked showSignoutModal = false;
+  @tracked showCloseSessionsModal = false;
+
+  constructor() {
+    super(...arguments);
+
+    // Check if Electron and ipcRenderer are available
+    if (window.electron && window.electron.ipcRenderer) {
+      window.electron.ipcRenderer.on('inform-ember-of-app-closure', () => {
+        this.showCloseSessionsModal = true;
+      });
+    }
+  }
 
   // =actions
 
@@ -102,5 +114,22 @@ export default class ApplicationController extends Controller {
   cancelSignout() {
     this.showSignoutModal = false;
     this.ipc.invoke('setSignoutInProgress', false);
+  }
+
+  @action
+  closeAppAttempt() {
+    this.showCloseSessionsModal = true;
+  }
+
+  @action
+  confirmCloseSessions() {
+    this.showCloseSessionsModal = false;
+    // Send confirmation back to Electron that user wants to close app
+    this.ipc.invoke('closeSessionsAndQuit');
+  }
+
+  @action
+  cancelCloseSessions() {
+    this.showCloseSessionsModal = false;
   }
 }

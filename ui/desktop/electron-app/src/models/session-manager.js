@@ -41,9 +41,11 @@ class SessionManager {
 
   /**
    * Stop all active and pending target sessions.
+   * Returning Promise.allSettled() ensures all sessions in the list have been
+   * settled before calling the next fn
    */
   stopAll() {
-    this.#sessions.forEach((session) => session.stop());
+    return Promise.allSettled(this.#sessions.map((session) => session.stop()));
   }
 }
 
