@@ -208,7 +208,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.notOk(currentSession().isAuthenticated);
   });
 
-  test('canceling signout does not de-auth user', async function (assert) {
+  test('canceling sign out attempt keeps current user session authenticated', async function (assert) {
     assert.expect(5);
     await visit(urls.authenticate.methods.global);
 

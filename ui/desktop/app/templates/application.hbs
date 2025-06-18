@@ -183,3 +183,33 @@
     </M.Footer>
   </Hds::Modal>
 {{/if}}
+
+{{#if this.showCloseSessionsModal}}
+  <Hds::Modal
+    @onClose={{this.cancelCloseSessions}}
+    data-test-close-sessions-modal
+    as |M|
+  >
+    <M.Header>
+      {{t 'resources.session.messages.stop-sessions-before-quit.title'}}
+    </M.Header>
+    <M.Body>
+      {{t 'resources.session.messages.stop-sessions-before-quit.description'}}
+    </M.Body>
+    <M.Footer>
+      <Hds::ButtonSet>
+        <Hds::Button
+          {{on 'click' this.confirmCloseSessions}}
+          type='button'
+          @text={{t 'actions.close'}}
+        />
+        <Hds::Button
+          {{on 'click' this.cancelCloseSessions}}
+          type='button'
+          @text={{t 'actions.cancel'}}
+          @color='secondary'
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
