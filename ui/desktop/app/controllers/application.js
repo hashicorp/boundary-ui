@@ -19,18 +19,20 @@ export default class ApplicationController extends Controller {
 
   // =tracked properties
 
-  @tracked showSignoutModal = false;
-  @tracked showCloseSessionsModal = false;
+  @tracked isLoggingOut = false;
+  @tracked isAppQuitting = false;
 
   constructor() {
     super(...arguments);
 
-    // Check if Electron and ipcRenderer are available
-    if (window.electron && window.electron.ipcRenderer) {
-      window.electron.ipcRenderer.on('inform-ember-of-app-closure', () => {
-        this.showCloseSessionsModal = true;
-      });
-    }
+    // Listen for when user attempts to quit app
+    // if (this.hasRunningSessions) {
+    //   console.log('constructor reporting running sessions: ', hasRunningSessions);
+    //   console.log('isAppQuitting: ', this.isAppQuitting);
+    // window.electron.onAppQuit();
+    // this.isAppQuitting = true;
+    // console.log('isAppQuitting: ', this.isAppQuitting);
+    // }
   }
 
   // =actions
@@ -41,7 +43,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   invalidateSession() {
-    this.showSignoutModal = false;
+    this.isLoggingOut = false;
     this.stopAll();
     this.session.invalidate();
     this.ipc.invoke('setSignoutInProgress', false);
@@ -105,31 +107,27 @@ export default class ApplicationController extends Controller {
 
   @action
   signoutAttempt() {
-    this.showSignoutModal = true;
-    // Prevents a user from quitting app while signout modal is present
-    this.ipc.invoke('setSignoutInProgress', true);
-  }
-
-  @action
-  cancelSignout() {
-    this.showSignoutModal = false;
-    this.ipc.invoke('setSignoutInProgress', false);
-  }
-
-  @action
-  closeAppAttempt() {
-    this.showCloseSessionsModal = true;
+    const hasRunningSessions = this.ipc.invoke('hasRunningSessions');
+    console.log(
+      'controller detecting if sessions are running: ',
+      hasRunningSessions,
+    );
+    // this.isLoggingOut = true;
+    // // Prevents a user from quitting app while signout modal is present
+    // this.ipc.invoke('setSignoutInProgress', true);
   }
 
   @action
   confirmCloseSessions() {
-    this.showCloseSessionsModal = false;
+    this.isAppQuitting = false;
     // Send confirmation back to Electron that user wants to close app
     this.ipc.invoke('closeSessionsAndQuit');
   }
 
   @action
-  cancelCloseSessions() {
-    this.showCloseSessionsModal = false;
+  cancel() {
+    this.isLoggingOut = false;
+    this.isAppQuitting = false;
+    this.ipc.invoke('setSignoutInProgress', false);
   }
 }
