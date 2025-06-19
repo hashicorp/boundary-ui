@@ -136,6 +136,10 @@ handle('closeSessionsAndQuit', async () => {
   app.quit();
 });
 
+handle('hasRunningSessions', async () => {
+  return sessionManager.sessionsRunning();
+});
+
 /**
  * Focus the window
  */
