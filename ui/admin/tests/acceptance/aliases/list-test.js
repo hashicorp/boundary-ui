@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
 
 module('Acceptance | aliases | list', function (hooks) {
@@ -19,15 +20,7 @@ module('Acceptance | aliases | list', function (hooks) {
 
   let intl;
 
-  const ALIAS_TITLE = 'Aliases';
-  const MESSAGE_DESCRIPTION_SELECTOR = '.hds-application-state__body';
-  const MESSAGE_LINK_SELECTOR =
-    '.hds-application-state__footer .hds-link-standalone';
-  const DROPDOWN_BUTTON_SELECTOR = (id) =>
-    `tbody [data-test-alias-row="${id}"] td:last-child .hds-dropdown-toggle-icon`;
-  const DROPDOWN_ITEM_SELECTOR = '.hds-dropdown-list-item a';
-  const SEARCH_INPUT_SELECTOR = '.search-filtering [type="search"]';
-  const NO_RESULTS_MSG_SELECTOR = '[data-test-no-alias-results]';
+  const mockTitle = 'Aliases';
 
   const instances = {
     scopes: {
@@ -90,15 +83,14 @@ module('Acceptance | aliases | list', function (hooks) {
         'create',
       ),
     );
+    assert.dom(commonSelectors.HREF(urls.aliases)).isVisible();
 
-    assert.dom(`[href="${urls.aliases}"]`).isVisible();
-
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.alias.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).isVisible();
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
@@ -119,16 +111,16 @@ module('Acceptance | aliases | list', function (hooks) {
     );
     assert
       .dom(commonSelectors.SIDEBAR_NAV_CONTENT)
-      .doesNotIncludeText(ALIAS_TITLE);
+      .doesNotIncludeText(mockTitle);
 
     await visit(urls.aliases);
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.neither-list-nor-create', {
-        resource: ALIAS_TITLE,
+        resource: mockTitle,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('user can navigate to index with only create action', async function (assert) {
@@ -150,16 +142,16 @@ module('Acceptance | aliases | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom(`[href="${urls.aliases}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.aliases)).exists();
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(MESSAGE_DESCRIPTION_SELECTOR).hasText(
+    assert.dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION).hasText(
       intl.t('descriptions.create-but-not-list', {
-        resource: ALIAS_TITLE,
+        resource: mockTitle,
       }),
     );
-    assert.dom(MESSAGE_LINK_SELECTOR).exists();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).exists();
   });
 
   test('user can navigate to index with only list action', async function (assert) {
@@ -181,58 +173,68 @@ module('Acceptance | aliases | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom(`[href="${urls.aliases}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.aliases)).exists();
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
     assert
-      .dom(MESSAGE_DESCRIPTION_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_DESCRIPTION)
       .hasText(intl.t('resources.alias.messages.none.description'));
-    assert.dom(MESSAGE_LINK_SELECTOR).doesNotExist();
+    assert.dom(commonSelectors.PAGE_MESSAGE_LINK).doesNotExist();
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.aliases}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR(instances.alias.id));
+    await click(commonSelectors.HREF(urls.aliases));
+    await click(selectors.TABLE_ROW_ID_ACTION_DROPDOWN(instances.alias.id));
 
-    assert.dom(DROPDOWN_ITEM_SELECTOR).exists();
-    assert.dom(DROPDOWN_ITEM_SELECTOR).hasText('Edit');
-    await click(DROPDOWN_ITEM_SELECTOR);
+    assert.dom(
+      selectors.TABLE_ROW_ID_ACTION_DROPDOWN_ITEM_LINK(instances.alias.id),
+    );
+    assert
+      .dom(selectors.TABLE_ROW_ID_ACTION_DROPDOWN_ITEM_LINK(instances.alias.id))
+      .hasText('Edit');
+
+    await click(
+      selectors.TABLE_ROW_ID_ACTION_DROPDOWN_ITEM_LINK(instances.alias.id),
+    );
     assert.strictEqual(currentURL(), urls.alias);
   });
 
   test('user can search for a specific alias by id', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(`[href="${urls.alias}"]`).exists();
-    assert.dom(`[href="${urls.aliasWithTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.alias)).exists();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, instances.alias.id);
-    await waitFor(`[href="${urls.aliasWithTarget}"]`, { count: 0 });
+    await fillIn(commonSelectors.SEARCH_INPUT, instances.alias.id);
+    await waitFor(commonSelectors.HREF(urls.aliasWithTarget), { count: 0 });
 
-    assert.dom(`[href="${urls.alias}"]`).exists();
-    assert.dom(`[href="${urls.aliasWithTarget}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.alias)).exists();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).doesNotExist();
   });
 
   test('user can search for aliases and get no results', async function (assert) {
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.aliases}"]`);
+    await click(commonSelectors.HREF(urls.aliases));
 
-    assert.dom(`[href="${urls.alias}"]`).exists();
-    assert.dom(`[href="${urls.aliasWithTarget}"]`).exists();
+    assert.dom(commonSelectors.HREF(urls.alias)).exists();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).exists();
 
-    await fillIn(SEARCH_INPUT_SELECTOR, 'fake alias that does not exist');
-    await waitFor(NO_RESULTS_MSG_SELECTOR, { count: 1 });
+    await fillIn(
+      commonSelectors.SEARCH_INPUT,
+      'fake alias that does not exist',
+    );
+    await waitFor(commonSelectors.PAGE_MESSAGE_HEADER, { count: 1 });
 
-    assert.dom(`[href="${urls.alias}"]`).doesNotExist();
-    assert.dom(`[href="${urls.aliasWithTarget}"]`).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.alias)).doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.aliasWithTarget)).doesNotExist();
     assert
-      .dom(NO_RESULTS_MSG_SELECTOR)
+      .dom(commonSelectors.PAGE_MESSAGE_HEADER)
       .includesText(intl.t('titles.no-results-found'));
   });
 
