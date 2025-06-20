@@ -19,6 +19,7 @@ export const FIELD_PASSWORD = '[name=password]';
 export const FIELD_PASSWORD_VALUE = 'password';
 
 export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error message on the DOM.
+export const FIELD_IDENTIFICATION = '[name=identification]';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
 export const TABLE_ROWS = 'tbody tr';
@@ -51,6 +52,12 @@ export const SIDEBAR_SCOPE_DROPDOWN =
   '[data-test-side-nav-scope-dropdown] button';
 export const SIDEBAR_SCOPE_LINK = (url) =>
   `[data-test-side-nav-scope-dropdown] a[href="${url}"]`;
+export const TOGGLE_THEME_DEFAULT =
+  '[data-test-side-nav-user-dropdown] [value=system-default-theme]';
+export const TOGGLE_THEME_LIGHT =
+  '[data-test-side-nav-user-dropdown] [value=light]';
+export const TOGGLE_THEME_DARK =
+  '[data-test-side-nav-user-dropdown] [value=dark]';
 
 export const ALERT_TOAST = '[data-test-toast-notification]';
 export const ALERT_TOAST_BODY =
@@ -65,6 +72,9 @@ export const MODAL_WARNING_CANCEL_BTN =
   'dialog .hds-modal__footer button:last-child';
 export const MODAL_WARNING_TITLE = '.hds-modal__header';
 export const MODAL_WARNING_MESSAGE = '.hds-modal__body';
+
+export const AUTH_SCOPE_DROPDOWN = '.hds-dropdown button';
+export const AUTH_SCOPE_DROPDOWN_OPTIONS = '.hds-dropdown a';
 
 // Search filtering selectors
 export const SEARCH_INPUT = '.search-filtering [type="search"]';
