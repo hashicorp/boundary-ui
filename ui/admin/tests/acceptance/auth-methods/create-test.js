@@ -544,7 +544,9 @@ module('Acceptance | auth-methods | create', function (hooks) {
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(selectors.FIELD_ERROR).hasText('At least one URL is required.');
+    assert
+      .dom(commonSelectors.FIELD_ERROR)
+      .hasText('At least one URL is required.');
   });
 
   test('users cannot directly navigate to new auth method route without proper authorization', async function (assert) {
