@@ -26,7 +26,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
   setupIntl(hooks, 'en-us');
 
   hooks.beforeEach(function () {
-    this.set('signoutAttempt', () => {});
+    this.set('checkForSessionsRunning', () => {});
   });
 
   test('it renders password correctly', async function (assert) {
@@ -39,7 +39,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+      hbs`<SettingsCard::User @checkForSessionsRunning={{this.checkForSessionsRunning}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -59,7 +59,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+      hbs`<SettingsCard::User @checkForSessionsRunning={{this.checkForSessionsRunning}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
@@ -79,7 +79,7 @@ module('Integration | Component | settings-card/user', function (hooks) {
     );
 
     await render(
-      hbs`<SettingsCard::User @signoutAttempt={{this.signoutAttempt}} />`,
+      hbs`<SettingsCard::User @checkForSessionsRunning={{this.checkForSessionsRunning}} />`,
     );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
