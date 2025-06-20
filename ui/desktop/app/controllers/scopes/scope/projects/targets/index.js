@@ -307,7 +307,7 @@ export default class ScopesScopeProjectsTargetsIndexController extends Controlle
    * Refreshes the all data for the current page.
    */
   @action
-  refresh() {
-    this.send('refreshAll');
+  async refresh() {
+    await this.currentRoute.refreshAll();
   }
 }
