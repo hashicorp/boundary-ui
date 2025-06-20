@@ -20,6 +20,8 @@ module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
+  const SIGNOUT_BTN_SELECTOR = '[data-test-nav-signout-btn]';
+
   const instances = {
     scopes: {
       global: null,
@@ -188,11 +190,11 @@ module('Acceptance | authentication', function (hooks) {
     );
 
     assert.strictEqual(
-      find('[data-test-sign-out]').textContent.trim(),
+      find(SIGNOUT_BTN_SELECTOR).textContent.trim(),
       'Sign Out',
     );
 
-    await click('[data-test-sign-out]');
+    await click(SIGNOUT_BTN_SELECTOR);
 
     assert.notOk(currentSession().isAuthenticated);
   });

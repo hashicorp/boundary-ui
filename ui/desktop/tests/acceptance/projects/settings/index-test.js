@@ -20,7 +20,7 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
-const SIGNOUT_SELECTOR = '[data-test-signout-button]';
+const SIGNOUT_BTN_SELECTOR = '[data-test-settings-signout-btn]';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -133,12 +133,15 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 
-  test('clicking sign-out button logs out the user', async function (assert) {
-    await authenticateSession({ username: 'testuser' });
+  test('clicking signout button logs out the user', async function (assert) {
     assert.expect(2);
+    await authenticateSession({ username: 'testuser' });
     await visit(urls.settings);
+
     assert.ok(currentSession().isAuthenticated);
-    await click(SIGNOUT_SELECTOR);
+
+    await click(SIGNOUT_BTN_SELECTOR);
+
     assert.notOk(currentSession().isAuthenticated);
   });
 });

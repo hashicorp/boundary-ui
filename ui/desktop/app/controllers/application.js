@@ -7,6 +7,8 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
 export default class ApplicationController extends Controller {
   // =services
 
@@ -15,14 +17,56 @@ export default class ApplicationController extends Controller {
   @service clusterUrl;
   @service flashMessages;
 
+  // =tracked properties
+
+  @tracked isLoggingOut = false;
+  @tracked isAppQuitting = false;
+
+  // =attributes
+  removeListener;
+
+  constructor() {
+    super(...arguments);
+
+    // Listen for when user attempts to quit app
+    // Setup removeListener to destroy the process after
+    this.removeListener = window.electron.onAppQuit(() => {
+      this.isAppQuitting = true;
+    });
+  }
+
   // =actions
 
   /**
-   * Delegates invalidation to the session service.
+   * Stop all active/pending target sessions
+   * Logout or close app
    */
   @action
-  invalidateSession() {
-    this.session.invalidate();
+  async confirmCloseSessions() {
+    this.stopAll();
+    if (this.isAppQuitting) {
+      // We have to set the logout modal to false to ensure it does not
+      // render if user first attempted to signout, setting isLoggingOut to true
+      this.isLoggingOut = false;
+      this.isAppQuitting = false;
+      this.close();
+    } else {
+      this.isLoggingOut = false;
+      this.session.invalidate();
+    }
+  }
+
+  /**
+   * Only render the sigout modal if sessions are running
+   */
+  @action
+  async checkForSessionsRunning() {
+    const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
+    if (hasRunningSessions) {
+      this.isLoggingOut = true;
+    } else {
+      this.session.invalidate();
+    }
   }
 
   /**
@@ -32,7 +76,7 @@ export default class ApplicationController extends Controller {
   @action
   disconnect() {
     this.clusterUrl.resetClusterUrl();
-    this.invalidateSession();
+    this.confirmCloseSessions();
   }
 
   @action
@@ -48,6 +92,11 @@ export default class ApplicationController extends Controller {
   @action
   close() {
     this.ipc.invoke('closeWindow');
+  }
+
+  @action
+  stopAll() {
+    this.ipc.invoke('stopAll');
   }
 
   /**
@@ -73,6 +122,19 @@ export default class ApplicationController extends Controller {
       default:
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
+    }
+  }
+
+  @action
+  cancel() {
+    this.isLoggingOut = false;
+    this.isAppQuitting = false;
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    if (this.removeListener) {
+      this.removeListener();
     }
   }
 }
