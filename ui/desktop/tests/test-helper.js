@@ -10,6 +10,12 @@ import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';
 import start from 'ember-exam/test-support/start';
 
+// All tests call window.electron.onAppQuit()
+// via the application controller
+window.electron = {
+  onAppQuit: () => {},
+};
+
 setApplication(Application.create(config.APP));
 
 setup(QUnit.assert);

@@ -286,27 +286,13 @@ app.on('ready', async () => {
 });
 
 /**
- * Prompt use to confirm action before closing spawned processes
- * This prompt lives in the ember app using Hds::Modal
+ * Prompt user to confirm action before closing spawned processes
+ * This interaction lives in the ember app using Hds::Modal
  */
 app.on('before-quit', async (event) => {
-  if (app.signoutInProgress) {
-    event.preventDefault();
-    return;
-  }
-
   if (sessionManager.hasRunningSessions) {
-    console.log(
-      'Inside of electron app listening for sesssions: ',
-      sessionManager.hasRunningSessions,
-    );
-    try {
-      mainWindow.webContents.send('onAppQuit');
-      event.preventDefault();
-      return;
-    } catch (e) {
-      console.log(`Exception: ${e}`);
-    }
+    mainWindow.webContents.send('onAppQuit');
+    event.preventDefault();
   }
 });
 

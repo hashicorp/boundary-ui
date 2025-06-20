@@ -21,11 +21,6 @@ import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 const SIGNOUT_BTN_SELECTOR = '[data-test-settings-signout-btn]';
-const SIGNOUT_MODAL_SELECTOR = '[data-test-signout-modal]';
-const SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR =
-  '.hds-modal__footer .hds-button--color-primary';
-const SIGNOUT_MODAL_CANCEL_BTN_SELECTOR =
-  '.hds-modal__footer .hds-button--color-secondary';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -139,36 +134,14 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('clicking signout button logs out the user', async function (assert) {
-    assert.expect(3);
+    assert.expect(2);
     await authenticateSession({ username: 'testuser' });
     await visit(urls.settings);
 
     assert.ok(currentSession().isAuthenticated);
 
     await click(SIGNOUT_BTN_SELECTOR);
-
-    assert.dom(SIGNOUT_MODAL_SELECTOR).isVisible();
-
-    await click(SIGNOUT_MODAL_CONFIRM_BTN_SELECTOR);
 
     assert.notOk(currentSession().isAuthenticated);
-  });
-
-  test('clicking cancel signout button hides modal and does not de-auth user', async function (assert) {
-    assert.expect(4);
-    await authenticateSession({ username: 'testuser' });
-    await visit(urls.settings);
-
-    assert.ok(currentSession().isAuthenticated);
-
-    await click(SIGNOUT_BTN_SELECTOR);
-
-    assert.dom(SIGNOUT_MODAL_SELECTOR).isVisible();
-
-    await click(SIGNOUT_MODAL_CANCEL_BTN_SELECTOR);
-
-    assert.dom(SIGNOUT_MODAL_SELECTOR).isNotVisible();
-
-    assert.ok(currentSession().isAuthenticated);
   });
 });
