@@ -122,22 +122,11 @@ handle('toggleFullscreenWindow', () => {
 handle('closeWindow', () => app.quit());
 
 /**
- * Toggle when signout is in progress
- * to prevent app from quitting when signout modal is visible
+ * Check if session manager has running sessions
+ * Return boolean
  */
-handle('setSignoutInProgress', (value) => (app.signoutInProgress = value));
-
-/**
- * Toggle when attempt to close app is in progress
- * and prevent closing app until user has engaged with modal
- */
-handle('closeSessionsAndQuit', async () => {
-  await sessionManager.stopAll();
-  app.quit();
-});
-
 handle('hasRunningSessions', async () => {
-  return sessionManager.sessionsRunning();
+  return sessionManager.hasRunningSessions;
 });
 
 /**

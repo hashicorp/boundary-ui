@@ -22,31 +22,51 @@ export default class ApplicationController extends Controller {
   @tracked isLoggingOut = false;
   @tracked isAppQuitting = false;
 
+  // =attributes
+  removeListener;
+
   constructor() {
     super(...arguments);
 
     // Listen for when user attempts to quit app
-    // if (this.hasRunningSessions) {
-    //   console.log('constructor reporting running sessions: ', hasRunningSessions);
-    //   console.log('isAppQuitting: ', this.isAppQuitting);
-    // window.electron.onAppQuit();
-    // this.isAppQuitting = true;
-    // console.log('isAppQuitting: ', this.isAppQuitting);
-    // }
+    // Setup removeListener to destroy the process after
+    this.removeListener = window.electron.onAppQuit(() => {
+      this.isAppQuitting = true;
+    });
   }
 
   // =actions
 
   /**
-   * Hide signout modal, stop all active and pending target sessions
-   * De-authenticate user session
+   * Stop all active/pending target sessions
+   * Logout or close app
    */
   @action
-  invalidateSession() {
-    this.isLoggingOut = false;
+  async confirmCloseSessions() {
     this.stopAll();
-    this.session.invalidate();
-    this.ipc.invoke('setSignoutInProgress', false);
+    if (this.isAppQuitting) {
+      // We have to set the logout modal to false to ensure it does not
+      // render if user first attempted to signout, setting isLoggingOut to true
+      this.isLoggingOut = false;
+      this.isAppQuitting = false;
+      this.close();
+    } else {
+      this.isLoggingOut = false;
+      this.session.invalidate();
+    }
+  }
+
+  /**
+   * Only render the sigout modal if sessions are running
+   */
+  @action
+  async checkForSessionsRunning() {
+    const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
+    if (hasRunningSessions) {
+      this.isLoggingOut = true;
+    } else {
+      this.session.invalidate();
+    }
   }
 
   /**
@@ -56,7 +76,7 @@ export default class ApplicationController extends Controller {
   @action
   disconnect() {
     this.clusterUrl.resetClusterUrl();
-    this.invalidateSession();
+    this.confirmCloseSessions();
   }
 
   @action
@@ -106,28 +126,15 @@ export default class ApplicationController extends Controller {
   }
 
   @action
-  signoutAttempt() {
-    const hasRunningSessions = this.ipc.invoke('hasRunningSessions');
-    console.log(
-      'controller detecting if sessions are running: ',
-      hasRunningSessions,
-    );
-    // this.isLoggingOut = true;
-    // // Prevents a user from quitting app while signout modal is present
-    // this.ipc.invoke('setSignoutInProgress', true);
-  }
-
-  @action
-  confirmCloseSessions() {
-    this.isAppQuitting = false;
-    // Send confirmation back to Electron that user wants to close app
-    this.ipc.invoke('closeSessionsAndQuit');
-  }
-
-  @action
   cancel() {
     this.isLoggingOut = false;
     this.isAppQuitting = false;
-    this.ipc.invoke('setSignoutInProgress', false);
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    if (this.removeListener) {
+      this.removeListener();
+    }
   }
 }
