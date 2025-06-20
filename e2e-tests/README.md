@@ -193,7 +193,7 @@ PWDEBUG=console pnpm playwright test --headed --config admin/playwright.config.j
 ```shell
 # In one terminal, run the `test_e2e_env.sh` script, and then do the following...
 cd boundary-ui/
-ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR pnpm workspace admin start
+ENABLE_MIRAGE=false API_HOST=$BOUNDARY_ADDR pnpm -F admin start
 
 # In another terminal, run the `test_e2e_env.sh` script and then do the following...
 cd boundary-ui/e2e-tests
