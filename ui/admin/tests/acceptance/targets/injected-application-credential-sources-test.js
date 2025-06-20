@@ -4,7 +4,7 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, findAll, click, currentURL } from '@ember/test-helpers';
+import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -12,6 +12,9 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
+import { TYPE_CREDENTIAL_USERNAME_PASSWORD } from 'api/models/credential';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 
 module(
   'Acceptance | targets | injected application credential sources',
@@ -123,17 +126,22 @@ module(
     test('visiting target injected application credential sources', async function (assert) {
       await visit(urls.injectedApplicationCredentialSources);
       await a11yAudit();
+
       assert.strictEqual(
         currentURL(),
         urls.injectedApplicationCredentialSources,
       );
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialSourceCount });
     });
 
     test('can navigate to a vault type credential library', async function (assert) {
       await visit(urls.injectedApplicationCredentialSources);
-      await click('main tbody tr .hds-table__td:nth-child(1) a');
+
+      await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
       await a11yAudit();
+
       assert.strictEqual(currentURL(), urls.credentialLibrary);
     });
 
@@ -144,14 +152,17 @@ module(
         ],
       });
       await visit(urls.injectedApplicationCredentialSources);
-      await click('main tbody tr .hds-table__td:nth-child(1) a');
+
+      await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credential));
       await a11yAudit();
+
       assert.strictEqual(currentURL(), urls.credential);
     });
 
     test('visiting add injected application credential sources', async function (assert) {
       await visit(urls.addInjectedApplicationCredentialSources);
       await a11yAudit();
+
       assert.strictEqual(
         currentURL(),
         urls.addInjectedApplicationCredentialSources,
@@ -163,8 +174,11 @@ module(
         injectedApplicationCredentialSourceIds: [],
       });
       await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      assert.dom('.hds-application-state__title').doesNotExist();
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialSourceCount });
+      assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
     });
 
     test('displays list of injected application credential sources with only credential libraries available', async function (assert) {
@@ -174,17 +188,18 @@ module(
         ],
       });
       await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(
-        findAll('tbody tr').length,
-        getCredentialLibraryCount(),
-      );
-      assert.dom('.hds-application-state__title').doesNotExist();
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: getCredentialLibraryCount() });
+      assert.dom(commonSelectors.PAGE_MESSAGE_HEADER).doesNotExist();
     });
 
     test('displays no injected application credential sources message when none available', async function (assert) {
       await visit(urls.addInjectedApplicationCredentialSources);
+
       assert
-        .dom('.hds-application-state__title')
+        .dom(commonSelectors.PAGE_MESSAGE_HEADER)
         .hasText('No Injected Application Credential Sources Available');
     });
 
@@ -193,65 +208,89 @@ module(
         injectedApplicationCredentialSourceIds: [],
       });
       await visit(urls.injectedApplicationCredentialSources);
+
       // Click on the rose message link
-      await click('.hds-application-state__footer .hds-link-standalone');
+      await click(commonSelectors.PAGE_MESSAGE_LINK);
+
       assert.strictEqual(
         currentURL(),
         urls.addInjectedApplicationCredentialSources,
       );
     });
 
-    test('can select and save a vault type credential library to add', async function (assert) {
-      instances.target.update({
-        injectedApplicationCredentialSourceIds: [],
-      });
-      await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, 0);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      await click('tbody tr:first-child label');
-      await click('form [type="submit"]');
-      assert.strictEqual(
-        currentURL(),
-        urls.injectedApplicationCredentialSources,
-      );
-      assert.strictEqual(findAll('tbody tr').length, 1);
-    });
+    test.each(
+      'can select credential sources',
+      {
+        'save vault generic credential-library': {
+          credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC],
+          action: commonSelectors.SAVE_BTN,
+          expectedCount: 1,
+        },
+        'save username and password credential': {
+          credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD],
+          action: commonSelectors.SAVE_BTN,
+          expectedCount: 1,
+        },
+        'save credentials and credential-libraries': {
+          credentialSources: [
+            TYPE_CREDENTIAL_USERNAME_PASSWORD,
+            TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+          ],
+          action: commonSelectors.SAVE_BTN,
+          expectedCount: 2,
+        },
+        'cancel vault generic credential-library': {
+          credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC],
+          action: commonSelectors.CANCEL_BTN,
+          expectedCount: 0,
+        },
+        'cancel username and password credential': {
+          credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD],
+          action: commonSelectors.CANCEL_BTN,
+          expectedCount: 0,
+        },
+        'cancel credentials and credential-libraries': {
+          credentialSources: [
+            TYPE_CREDENTIAL_USERNAME_PASSWORD,
+            TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+          ],
+          action: commonSelectors.CANCEL_BTN,
+          expectedCount: 0,
+        },
+      },
+      async function (assert, input) {
+        instances.target.update({
+          injectedApplicationCredentialSourceIds: [],
+        });
+        await visit(urls.injectedApplicationCredentialSources);
 
-    test('can select and save a username & password type credential to add', async function (assert) {
-      instances.target.update({
-        injectedApplicationCredentialSourceIds: [],
-      });
-      await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, 0);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      await click('tbody tr:last-child label');
-      await click('form [type="submit"]');
-      assert.strictEqual(
-        currentURL(),
-        urls.injectedApplicationCredentialSources,
-      );
-      assert.strictEqual(findAll('tbody tr').length, 1);
-    });
+        assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
 
-    test('can select and save both a credential-library and a credential to add', async function (assert) {
-      instances.target.update({
-        injectedApplicationCredentialSourceIds: [],
-      });
-      await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, 0);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      await click('tbody tr:last-child label');
-      await click('tbody tr:first-child label');
-      await click('form [type="submit"]');
-      assert.strictEqual(
-        currentURL(),
-        urls.injectedApplicationCredentialSources,
-      );
-      assert.strictEqual(findAll('tbody tr').length, 2);
-    });
+        await click(selectors.MANAGE_DROPDOWN);
+        await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
+
+        assert.strictEqual(
+          currentURL(),
+          urls.addInjectedApplicationCredentialSources,
+        );
+        assert
+          .dom(commonSelectors.TABLE_ROWS)
+          .isVisible({ count: credentialSourceCount });
+
+        for (const type of input.credentialSources) {
+          await click(selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(type));
+        }
+        await click(input.action);
+
+        assert.strictEqual(
+          currentURL(),
+          urls.injectedApplicationCredentialSources,
+        );
+        assert
+          .dom(commonSelectors.TABLE_ROWS)
+          .isVisible({ count: input.expectedCount });
+      },
+    );
 
     test('cannot add credential sources without proper authorization', async function (assert) {
       assert.expect(1);
@@ -261,42 +300,11 @@ module(
         );
       await visit(urls.injectedApplicationCredentialSources);
 
-      assert.dom('[data-test-add-injected-cred-sources-action]').doesNotExist();
-    });
+      await click(selectors.MANAGE_DROPDOWN);
 
-    test('can select and cancel credential sources to add', async function (assert) {
-      instances.target.update({
-        injectedApplicationCredentialSourceIds: [],
-      });
-      await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, 0);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      await click('tbody label');
-      await click('form [type="button"]');
-      assert.strictEqual(
-        currentURL(),
-        urls.injectedApplicationCredentialSources,
-      );
-      assert.strictEqual(findAll('tbody tr').length, 0);
-    });
-
-    test('can select multiple injected application credential sources to add and cancel', async function (assert) {
-      instances.target.update({
-        injectedApplicationCredentialSourceIds: [],
-      });
-      await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, 0);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialSourceCount);
-      await click('tbody tr:last-child label');
-      await click('tbody tr:first-child label');
-      await click('form [type="button"]');
-      assert.strictEqual(
-        currentURL(),
-        urls.injectedApplicationCredentialSources,
-      );
-      assert.strictEqual(findAll('tbody tr').length, 0);
+      assert
+        .dom(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS)
+        .doesNotExist();
     });
 
     test('adding credential sources which errors displays error message', async function (assert) {
@@ -316,9 +324,19 @@ module(
         injectedApplicationCredentialSourceIds: [],
       });
       await visit(urls.addInjectedApplicationCredentialSources);
-      await click('tbody tr:last-child label');
-      await click('tbody tr:first-child label');
-      await click('form [type="submit"]');
+
+      await click(
+        selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
+          TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        ),
+      );
+      await click(
+        selectors.TABLE_CREDENTIAL_SOURCE_CHECKBOX(
+          TYPE_CREDENTIAL_USERNAME_PASSWORD,
+        ),
+      );
+      await click(commonSelectors.SAVE_BTN);
+
       assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
 
@@ -330,18 +348,24 @@ module(
       });
       const credentialLibraryCount = getCredentialLibraryCount();
       await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialLibraryCount);
-      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-      await click('tbody tr .hds-dropdown-list-item button');
-      assert.strictEqual(
-        findAll('tbody tr').length,
-        credentialLibraryCount - 1,
-      );
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(
-        findAll('tbody tr').length,
-        credentialLibraryCount + 1,
-      );
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialLibraryCount });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialLibraryCount - 1 });
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialLibraryCount + 1 });
     });
 
     test('can remove a username & password type credential', async function (assert) {
@@ -352,12 +376,24 @@ module(
       });
       const credentialCount = getCredentialCount();
       await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialCount);
-      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-      await click('tbody tr .hds-dropdown-list-item button');
-      assert.strictEqual(findAll('tbody tr').length, credentialCount - 1);
-      await visit(urls.addInjectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, credentialCount + 1);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialCount });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialCount - 1 });
+
+      await click(selectors.MANAGE_DROPDOWN);
+      await click(selectors.MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS);
+
+      assert
+        .dom(commonSelectors.TABLE_ROWS)
+        .isVisible({ count: credentialCount + 1 });
     });
 
     test('cannot remove credential libraries without proper authorization', async function (assert) {
@@ -366,7 +402,10 @@ module(
           (item) => item !== 'remove-credential-sources',
         );
       await visit(urls.injectedApplicationCredentialSources);
-      assert.dom(`tbody tr ${commonSelectors.DELETE_BTN}`).doesNotExist();
+
+      assert
+        .dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN)
+        .doesNotExist();
     });
 
     test('removing a target credential library which errors displays error messages', async function (assert) {
@@ -389,9 +428,12 @@ module(
       });
       const count = getCredentialLibraryCount();
       await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, count);
-      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-      await click('tbody tr .hds-dropdown-list-item button');
+
+      assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
       assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
 
@@ -415,9 +457,12 @@ module(
       });
       const count = getCredentialCount();
       await visit(urls.injectedApplicationCredentialSources);
-      assert.strictEqual(findAll('tbody tr').length, count);
-      await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-      await click('tbody tr .hds-dropdown-list-item button');
+
+      assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
+
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+      await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
       assert.dom(commonSelectors.ALERT_TOAST_BODY).isVisible();
     });
   },
