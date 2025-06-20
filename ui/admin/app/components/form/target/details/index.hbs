@@ -3,6 +3,31 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
+{{#if this.showInjectedApplicationCredentialAlert}}
+  <Hds::Alert
+    data-test-injected-application-credential-alert
+    class='injected-app-credential-alert'
+    @type='inline'
+    @color='critical'
+    as |A|
+  >
+    <A.Title>{{t
+        'resources.target.injected-application-credential-source.messages.alert.title'
+      }}</A.Title>
+    <A.Description>{{t
+        'resources.target.injected-application-credential-source.messages.alert.description'
+      }}</A.Description>
+    <A.Button
+      @color='secondary'
+      @text={{t
+        'resources.target.injected-application-credential-source.messages.alert.action'
+      }}
+      @route='scopes.scope.targets.target.add-injected-application-credential-sources'
+      @model={{@model}}
+    />
+  </Hds::Alert>
+{{/if}}
+
 <Rose::Form
   class={{unless @model.isNew 'full-width'}}
   @onSubmit={{@submit}}
@@ -52,7 +77,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
+  {{#if this.showTargetTypeRadioGroup}}
     <Hds::Form::RadioCard::Group
       @name={{t 'form.type.label'}}
       @alignment='center'
@@ -144,22 +169,28 @@
   <Hds::Form::TextInput::Field
     @isOptional={{true}}
     @value={{@model.default_client_port}}
-    @isInvalid={{@model.errors.default_client_port}}
+    @isInvalid={{this.showDefaultClientPortError}}
     @type='text'
     name='default_client_port'
     disabled={{form.disabled}}
     {{on 'input' (set-from-event @model 'default_client_port')}}
+    {{on 'blur' this.handleDefaultClientPortBlur}}
     as |F|
   >
     <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
     <F.HelperText>{{t
         'resources.target.form.default_client_port.help'
       }}</F.HelperText>
-    {{#if @model.errors.default_client_port}}
+    {{#if this.showDefaultClientPortError}}
       <F.Error as |E|>
         {{#each @model.errors.default_client_port as |error|}}
           <E.Message>{{error.message}}</E.Message>
         {{/each}}
+        {{#if this.showRDPWindowsDefaultClientPortError}}
+          <E.Message data-test-error-message-default-client-port-rdp-windows>
+            {{t 'resources.target.form.default_client_port.rdp-windows-error'}}
+          </E.Message>
+        {{/if}}
       </F.Error>
     {{/if}}
   </Hds::Form::TextInput::Field>

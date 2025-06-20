@@ -750,6 +750,7 @@ target:
     default_client_port:
       label: Default Client Port
       help: The local proxy port on which to listen by default when a session is started on a client.
+      rdp-windows-error: 'Note: Windows OS prevents port 3389 from being used.'
     sidebar:
       label: Session Recording
       help: Record SSH sessions on this target and save them to a storage bucket.
@@ -812,6 +813,10 @@ target:
       add:
         title: Add Injected Application Credential Sources
         description: Select injected Application credential sources to assign to this target.
+      alert:
+        title: Cannot connect to this target without injected application credentials
+        description: Injected application credentials are used by Boundary to sign in to remote resources without showing them to the end-user.
+        action: Add injected application credentials
   workers:
     description: You can customize how your workers route traffic to this target by setting up a filter that matches specific worker tags. If your target is in a private network, we recommend setting up an egress filter to specify a worker inside the network so that Boundary can access the host. Ingress and egress filters are allowed to select the same worker.
     messages:

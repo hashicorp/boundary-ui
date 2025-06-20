@@ -24,6 +24,9 @@ export const FIELD_ENABLE_RECORDING_TOGGLE =
   '[name=target-enable-session-recording]';
 export const FIELD_ADD_NEW_STORAGE_BUCKET_LINK =
   '.enable-session-recording-toggle .hds-link-standalone';
+export const FIELD_DEFAULT_CLIENT_PORT_RDP_WINDOWS_ERROR =
+  '[data-test-error-message-default-client-port-rdp-windows';
+export const FIELD_DEFAULT_CLIENT_PORT = '[name="default_client_port"]';
 
 export const NEW_TARGET_BTN = '[data-test-new-target-button]';
 export const MANAGE_DROPDOWN = '[data-test-manage-targets-dropdown] button';
@@ -68,3 +71,7 @@ export const WORKERS_ACCORDION_DROPDOWN = (name) =>
   `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
 export const WORKERS_ACCORDION_DROPDOWN_LINK = (name) =>
   `[data-test-target-${name}-workers-accordion-item] a`;
+export const ALERT_INJECTED_APPLICATION_CREDENTIAL =
+  '[data-test-injected-application-credential-alert]';
+export const ALERT_INJECTED_APPLICATION_CREDENTIAL_ADD_BTN =
+  '[data-test-injected-application-credential-alert] .hds-alert__actions a';

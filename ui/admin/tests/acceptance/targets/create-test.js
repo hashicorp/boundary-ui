@@ -10,13 +10,18 @@ import {
   fillIn,
   getContext,
   visit,
+  blur,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
+import {
+  TYPE_TARGET_TCP,
+  TYPE_TARGET_SSH,
+  TYPE_TARGET_RDP,
+} from 'api/models/target';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -32,6 +37,7 @@ module('Acceptance | targets | create', function (hooks) {
   let getTCPTargetCount;
   let getSSHTargetCount;
   let featuresService;
+  let getRDPTargetCount;
 
   const instances = {
     scopes: {
@@ -48,6 +54,7 @@ module('Acceptance | targets | create', function (hooks) {
     newTarget: null,
     newTCPTarget: null,
     newSSHTarget: null,
+    newRDPTarget: null,
   };
 
   hooks.beforeEach(async function () {
@@ -72,12 +79,15 @@ module('Acceptance | targets | create', function (hooks) {
     urls.newTarget = `${urls.targets}/new`;
     urls.newTCPTarget = `${urls.targets}/new?type=tcp`;
     urls.newSSHTarget = `${urls.targets}/new?type=ssh`;
+    urls.newRDPTarget = `${urls.targets}/new?type=rdp`;
     // Generate resource counter
     getTargetCount = () => this.server.schema.targets.all().models.length;
     getSSHTargetCount = () =>
       this.server.schema.targets.where({ type: TYPE_TARGET_SSH }).models.length;
     getTCPTargetCount = () =>
       this.server.schema.targets.where({ type: TYPE_TARGET_TCP }).models.length;
+    getRDPTargetCount = () =>
+      this.server.schema.targets.where({ type: TYPE_TARGET_RDP }).models.length;
     await authenticateSession({});
   });
 
@@ -504,5 +514,116 @@ module('Acceptance | targets | create', function (hooks) {
       ),
     );
     assert.strictEqual(currentURL(), urls.targets);
+  });
+
+  test('defaults to type `rdp` when no query param provided and rdp feature is enabled', async function (assert) {
+    featuresService.enable('rdp-target');
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_RDP);
+  });
+
+  test('cannot navigate to new RDP targets route when rdp feature is disabled', async function (assert) {
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert.false(featuresService.isEnabled('rdp-target'));
+    assert.true(
+      instances.scopes.project.authorized_collection_actions.targets.includes(
+        'create',
+      ),
+    );
+    assert.dom(selectors.FIELD_INFO).isVisible({ count: 1 });
+    assert.dom(selectors.FIELD_INFO_LABEL).includesText('TCP');
+  });
+
+  test('default port is not marked required for RDP targets', async function (assert) {
+    featuresService.enable('rdp-target');
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+
+    assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Optional');
+  });
+
+  test('can cancel create new RDP target', async function (assert) {
+    featuresService.enable('rdp-target');
+    const targetCount = getTargetCount();
+    const rdpTargetCount = getRDPTargetCount();
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await click(selectors.FIELD_TYPE_VALUE('rdp'));
+    await click(commonSelectors.CANCEL_BTN);
+
+    assert.strictEqual(currentURL(), urls.targets);
+    assert.strictEqual(getTargetCount(), targetCount);
+    assert.strictEqual(getRDPTargetCount(), rdpTargetCount);
+  });
+
+  test('can create a type `rdp` target', async function (assert) {
+    featuresService.enable('rdp-target');
+
+    const targetCount = getTargetCount();
+    const rdpTargetCount = getRDPTargetCount();
+    await visit(urls.targets);
+
+    await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('rdp'));
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+    await fillIn(selectors.FIELD_DEFAULT_CLIENT_PORT, '3389');
+    await blur(selectors.FIELD_DEFAULT_CLIENT_PORT);
+
+    assert
+      .dom(selectors.FIELD_DEFAULT_CLIENT_PORT_RDP_WINDOWS_ERROR)
+      .hasText('Note: Windows OS prevents port 3389 from being used.');
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(getRDPTargetCount(), rdpTargetCount + 1);
+    assert.strictEqual(getTargetCount(), targetCount + 1);
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1].name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      this.server.schema.targets.all().models[getTargetCount() - 1].attributes
+        .default_client_port,
+      3389,
+    );
+  });
+
+  test('saving a new RDP target with invalid fields displays error messages', async function (assert) {
+    this.server.post('/targets', () => {
+      return new Response(
+        400,
+        {},
+        {
+          status: 400,
+          code: 'invalid_argument',
+          message: 'The request was invalid.',
+          details: {
+            request_fields: [
+              {
+                name: 'name',
+                description: 'Name is required.',
+              },
+            ],
+          },
+        },
+      );
+    });
+    await visit(urls.newRDPTarget);
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert
+      .dom(commonSelectors.ALERT_TOAST_BODY)
+      .hasText('The request was invalid.');
+    assert.dom(selectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 });
