@@ -35,14 +35,14 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.toggleFullScreen);
     assert.ok(controller.close);
     assert.ok(controller.stopAll);
-    assert.ok(controller.cancelSignout);
-    assert.ok(controller.invalidateSession);
+    assert.ok(controller.confirmCloseSessions);
+    assert.ok(controller.checkForSessionsRunning);
   });
 
   test('invalidateSession action de-authenticates a user', async function (assert) {
     assert.true(session.isAuthenticated);
 
-    await controller.invalidateSession();
+    await controller.confirmCloseSessions();
 
     assert.false(session.isAuthenticated);
   });

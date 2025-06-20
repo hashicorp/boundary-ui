@@ -16,10 +16,6 @@ class SessionManager {
     return Boolean(this.#sessions.find((session) => session.isRunning));
   }
 
-  sessionsRunning() {
-    return Boolean(this.#sessions.find((session) => session.isRunning));
-  }
-
   /**
    * Start a session and track it.
    * Returns session proxy details if successfully started.

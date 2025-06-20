@@ -20,10 +20,10 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
   }
 
   /**
-   * Call Application controller's signoutAttempt method
+   * Call Application controller's checkForSessionsRunning method
    */
   @action
-  signoutAttempt() {
-    return this.application.signoutAttempt();
+  checkForSessionsRunning() {
+    return this.application.checkForSessionsRunning();
   }
 }

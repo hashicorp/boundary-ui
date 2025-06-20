@@ -56,10 +56,7 @@ class MockIPC {
   pauseClientAgent() {}
   resumeClientAgent() {}
   stopAll() {}
-  setSignoutInProgress(value) {
-    return value;
-  }
-  cancel() {}
+  hasRunningSessions() {}
 }
 
 /**
