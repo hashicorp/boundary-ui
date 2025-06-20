@@ -11,6 +11,8 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import select from '@ember/test-helpers/dom/select';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from '../selectors';
 
 module(
   'Acceptance | targets | enable session recording | index',
@@ -21,18 +23,6 @@ module(
     let featuresService;
     let storageBucketOne;
     let storageBucketTwo;
-
-    const SETTINGS_LINK_SELECTOR = '.target-sidebar .hds-link-standalone';
-    const ENABLE_BUTTON_SELECTOR = '.target-sidebar .hds-button';
-    const DROPDOWN_SELECTOR = '[name=storage_bucket_id]';
-    const LINK_LIST_SELECTOR = '.link-list-item > a';
-    const LINK_LIST_SELECTOR_ITEM_TEXT = '.link-list-item__text';
-    const BADGE_TEXT_SELECTOR = '.target-sidebar .hds-badge__text';
-    const TOGGLE_SELECTOR = '[name=target-enable-session-recording]';
-    const LINK_TO_NEW_STORAGE_BUCKET =
-      '.enable-session-recording-toggle .hds-link-standalone';
-    const SAVE_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-    const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
 
     // Instances
     const instances = {
@@ -45,9 +35,6 @@ module(
 
     //URLs
     const urls = {
-      globalScope: null,
-      orgScope: null,
-      projectScope: null,
       targets: null,
       target: null,
       enableSessionRecording: null,
@@ -82,13 +69,10 @@ module(
       storageBucketTwo = instances.storageBucket[1];
 
       // Generate route URLs for resources
-      urls.globalScope = `/scopes/global`;
-      urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
-      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.targets = `${urls.projectScope}/targets`;
+      urls.targets = `/scopes/${instances.scopes.project.id}/targets`;
       urls.target = `${urls.targets}/${instances.target.id}`;
       urls.enableSessionRecording = `${urls.target}/enable-session-recording`;
-      urls.storageBuckets = `${urls.globalScope}/storage-buckets`;
+      urls.storageBuckets = '/scopes/global/storage-buckets';
       urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
       urls.storageBucket = `${urls.storageBuckets}/${storageBucketOne.id}`;
 
@@ -99,16 +83,21 @@ module(
 
     test('cannot enable session recording for a target without proper authorization', async function (assert) {
       assert.false(featuresService.isEnabled('ssh-session-recording'));
+
       await visit(urls.target);
       await a11yAudit();
-      assert.dom('.target-sidebar a').doesNotExist();
+
+      assert.dom(selectors.SESSION_RECORDING_ENABLE_BTN).doesNotExist();
     });
 
     test('users can click on enable-recording button in target session-recording sidebar and it takes them to enable session recording', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
-      assert.dom(SETTINGS_LINK_SELECTOR).doesNotExist();
-      await click(ENABLE_BUTTON_SELECTOR);
+
+      assert.dom(selectors.SESSION_RECORDING_SETTINGS_LINK).doesNotExist();
+
+      await click(selectors.SESSION_RECORDING_ENABLE_BTN);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
     });
 
@@ -119,7 +108,8 @@ module(
         enableSessionRecording: true,
       });
       await visit(urls.target);
-      await click(SETTINGS_LINK_SELECTOR);
+      await click(selectors.SESSION_RECORDING_SETTINGS_LINK);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
     });
 
@@ -130,37 +120,45 @@ module(
         enableSessionRecording: true,
       });
       await visit(urls.target);
-      await click(LINK_LIST_SELECTOR);
+      await click(selectors.LINK_LIST);
+
       assert.strictEqual(currentURL(), urls.storageBucket);
     });
 
     test('toggle should be disabled and storage buckets list should be shown when enable session recording button is clicked', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
-      await click(ENABLE_BUTTON_SELECTOR);
+      await click(selectors.SESSION_RECORDING_ENABLE_BTN);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
-      assert.dom(TOGGLE_SELECTOR).isVisible();
-      assert.dom(DROPDOWN_SELECTOR).isNotVisible();
+      assert.dom(selectors.ENABLE_TOGGLE).isVisible();
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).isNotVisible();
     });
 
     test('storage buckets list is hidden when toggle is disabled', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
-      await click(ENABLE_BUTTON_SELECTOR);
+      await click(selectors.SESSION_RECORDING_ENABLE_BTN);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
-      assert.dom(TOGGLE_SELECTOR).isVisible();
-      assert.dom(DROPDOWN_SELECTOR).isNotVisible();
-      await click(TOGGLE_SELECTOR);
-      assert.dom(DROPDOWN_SELECTOR).isVisible();
+      assert.dom(selectors.ENABLE_TOGGLE).isVisible();
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).isNotVisible();
+
+      await click(selectors.ENABLE_TOGGLE);
+
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).isVisible();
     });
 
     test('link to add new storage bucket should be displayed and redirect to new storage buckets form', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
-      await click(ENABLE_BUTTON_SELECTOR);
+      await click(selectors.SESSION_RECORDING_ENABLE_BTN);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
-      assert.dom(LINK_TO_NEW_STORAGE_BUCKET).isVisible();
-      await click(LINK_TO_NEW_STORAGE_BUCKET);
+      assert.dom(selectors.LINK_TO_NEW_STORAGE_BUCKET).isVisible();
+
+      await click(selectors.LINK_TO_NEW_STORAGE_BUCKET);
+
       assert.strictEqual(currentURL(), urls.newStorageBucket);
     });
 
@@ -171,45 +169,54 @@ module(
         enable_session_recording: true,
       });
       await visit(urls.target);
-      await click(SETTINGS_LINK_SELECTOR);
+      await click(selectors.SESSION_RECORDING_SETTINGS_LINK);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
 
-      const existingStorageBucketId = find(DROPDOWN_SELECTOR).value;
+      const existingStorageBucketId = find(
+        selectors.STORAGE_BUCKET_DROPDOWN,
+      ).value;
 
       //disable the toggle, dropdown should be hidden
-      await click(TOGGLE_SELECTOR);
-      assert.dom(DROPDOWN_SELECTOR).isNotVisible();
+      await click(selectors.ENABLE_TOGGLE);
+
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).isNotVisible();
 
       //enable the toggle now,
       //it should have the previously selected storage_bucket_id
-      await click(TOGGLE_SELECTOR);
-      assert.dom(DROPDOWN_SELECTOR).hasValue(existingStorageBucketId);
+      await click(selectors.ENABLE_TOGGLE);
+
+      assert
+        .dom(selectors.STORAGE_BUCKET_DROPDOWN)
+        .hasValue(existingStorageBucketId);
     });
 
     test('can assign a storage bucket for the target', async function (assert) {
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
-      await click(ENABLE_BUTTON_SELECTOR);
+      await click(selectors.SESSION_RECORDING_ENABLE_BTN);
 
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
-      await click(TOGGLE_SELECTOR);
-      assert.dom(DROPDOWN_SELECTOR).hasNoValue();
-      await select(DROPDOWN_SELECTOR, storageBucketTwo.id);
-      assert.dom(DROPDOWN_SELECTOR).hasValue();
-      await click(SAVE_BTN_SELECTOR);
+
+      await click(selectors.ENABLE_TOGGLE);
+
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).hasNoValue();
+
+      await select(selectors.STORAGE_BUCKET_DROPDOWN, storageBucketTwo.id);
+
+      assert.dom(selectors.STORAGE_BUCKET_DROPDOWN).hasValue();
+
+      await click(commonSelectors.SAVE_BTN);
 
       assert.strictEqual(currentURL(), urls.target);
-      assert.strictEqual(
-        find(BADGE_TEXT_SELECTOR).textContent.trim(),
-        intl.t(
-          `resources.storage-bucket.plugin-types.${storageBucketTwo.plugin.name}`,
-        ),
-      );
-
-      assert.strictEqual(
-        find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-        storageBucketTwo.name,
-      );
+      assert
+        .dom(selectors.BADGE_TEXT)
+        .hasText(
+          intl.t(
+            `resources.storage-bucket.plugin-types.${storageBucketTwo.plugin.name}`,
+          ),
+        );
+      assert.dom(selectors.LINK_LIST_ITEM_TEXT).hasText(storageBucketTwo.name);
     });
 
     test('can cancel changes to an existing storage bucket selection', async function (assert) {
@@ -220,25 +227,23 @@ module(
       });
 
       await visit(urls.target);
-      await click(SETTINGS_LINK_SELECTOR);
+      await click(selectors.SESSION_RECORDING_SETTINGS_LINK);
+
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
 
       //update the storage bucket selection
-      await select(DROPDOWN_SELECTOR, storageBucketTwo);
+      await select(selectors.STORAGE_BUCKET_DROPDOWN, storageBucketTwo);
+      await click(commonSelectors.CANCEL_BTN);
 
-      await click(CANCEL_BTN_SELECTOR);
       assert.strictEqual(currentURL(), urls.target);
-      assert.strictEqual(
-        find(BADGE_TEXT_SELECTOR).textContent.trim(),
-        intl.t(
-          `resources.storage-bucket.plugin-types.${storageBucketOne.plugin.name}`,
-        ),
-      );
-
-      assert.strictEqual(
-        find(LINK_LIST_SELECTOR_ITEM_TEXT).textContent.trim(),
-        storageBucketOne.name,
-      );
+      assert
+        .dom(selectors.BADGE_TEXT)
+        .hasText(
+          intl.t(
+            `resources.storage-bucket.plugin-types.${storageBucketOne.plugin.name}`,
+          ),
+        );
+      assert.dom(selectors.LINK_LIST_ITEM_TEXT).hasText(storageBucketOne.name);
     });
   },
 );
