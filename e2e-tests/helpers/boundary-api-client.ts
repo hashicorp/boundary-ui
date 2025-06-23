@@ -14,8 +14,7 @@ class BoundaryApi {
   skipCleanupResources: { id: string }[] = [];
 
   constructor(
-    private readonly controllerAddr: string,
-    private readonly fetch: BoundaryApiClient.FetchAPI,
+    private readonly controllerAddr: string
   ) {}
 
   get clients() {
@@ -61,7 +60,6 @@ class BoundaryApi {
     };
 
     const openapiConfiguration = new BoundaryApiClient.Configuration({
-      // fetchApi: this.fetch,
       basePath: controllerAddr,
       headers: { Authorization: `Bearer ${process.env.E2E_TOKEN}` },
       middleware: [
@@ -76,7 +74,12 @@ class BoundaryApi {
 
   deleteMethod(
     resourceType: string,
-  ): ((args: { id: string }, initOverrides?: RequestInit | InitOverrideFunction) => Promise<object>) | undefined {
+  ):
+    | ((
+        args: { id: string },
+        initOverrides?: RequestInit | InitOverrideFunction,
+      ) => Promise<object>)
+    | undefined {
     const { clients } = this;
 
     const deleteMethods = {
@@ -152,10 +155,7 @@ export const boundaryApiClientTest = base.extend<{
       throw new Error('`controllerAddr` must be set in the base fixture');
     }
 
-    const boundaryApi = new BoundaryApi(
-      controllerAddr,
-      request.fetch as unknown as BoundaryApiClient.FetchAPI,
-    );
+    const boundaryApi = new BoundaryApi(controllerAddr);
     await use(boundaryApi);
 
     for (const [resourceType, resources] of Object.entries(
@@ -182,20 +182,22 @@ export const boundaryApiClientTest = base.extend<{
                 ...init.headers,
                 [BoundaryE2EResourceCleanupHeader]: 'true',
               },
-            }
-          }
+            };
+          };
 
-          return resouceDeleteMethod({ id: resource.id }, initOverrides).catch((e) => {
-            // if the resource is not found it was likely already deleted and the error can be ignored
-            if (e.response?.status === 404) {
-              return;
-            }
+          return resouceDeleteMethod({ id: resource.id }, initOverrides).catch(
+            (e) => {
+              // if the resource is not found it was likely already deleted and the error can be ignored
+              if (e.response?.status === 404) {
+                return;
+              }
 
-            console.warn(
-              `Failed to clean up resource of type ${resourceType} with id ${resource.id}:`,
-              e,
-            );
-          });
+              console.warn(
+                `Failed to clean up resource of type ${resourceType} with id ${resource.id}:`,
+                e,
+              );
+            },
+          );
         }),
       );
     }
