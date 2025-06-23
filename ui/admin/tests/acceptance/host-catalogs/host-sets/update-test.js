@@ -17,25 +17,12 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  const PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR =
-    '[name="preferred_endpoints"] input';
-  const PREFERRED_ENDPOINT_BUTTON_SELECTOR =
-    '[name="preferred_endpoints"] button';
-  const PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR =
-    '[name="preferred_endpoints"] [data-test-remove-button]';
-  const FILTER_TEXT_INPUT_SELECTOR = '[name="filters"] input';
-  const FILTER_BUTTON_SELECTOR = '[name="filters"] button';
-  const FILTER_REMOVE_BUTTON_SELECTOR =
-    '[name="filters"] [data-test-remove-button]';
-  const SYNC_INTERVAL_SELECTOR = '[name="sync_interval_seconds"]';
-  const SUBMIT_BTN_SELECTOR = '.rose-form-actions [type="submit"]';
-  const AZURE_FILTER_SELECTOR = '[name="filter"]';
-  const EDIT_BUTTON_SELECTOR = 'form .rose-form-actions [type="button"]';
   const instances = {
     scopes: {
       global: null,
@@ -124,6 +111,8 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('saving a new host set with invalid fields displays error messages', async function (assert) {
+    const mockMessage = 'The request was invalid.';
+    const mockDescription = 'Name is required.';
     this.server.post('/host-sets', () => {
       return new Response(
         400,
@@ -131,12 +120,12 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
         {
           status: 400,
           code: 'invalid_argument',
-          message: 'The request was invalid.',
+          message: mockMessage,
           details: {
             request_fields: [
               {
                 name: 'name',
-                description: 'Name is required.',
+                description: mockDescription,
               },
             ],
           },
@@ -144,150 +133,144 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       );
     });
     await visit(urls.newHostSet);
-    await click(SUBMIT_BTN_SELECTOR);
-    assert
-      .dom(commonSelectors.ALERT_TOAST_BODY)
-      .hasText('The request was invalid.');
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(mockMessage);
     assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
+      find(commonSelectors.FIELD_NAME_ERROR).textContent.trim(),
+      mockDescription,
     );
   });
 
   test('can save changes to existing host-set', async function (assert) {
-    assert.notEqual(instances.hostSet.name, 'random string');
+    const mockName = 'random string';
+    assert.notEqual(instances.hostSet.name, mockName);
     await visit(urls.hostSet);
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click(SUBMIT_BTN_SELECTOR);
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, mockName);
+    await click(commonSelectors.SAVE_BTN);
+
     assert.strictEqual(currentURL(), urls.hostSet);
-    assert.strictEqual(
-      this.server.schema.hostSets.first().name,
-      'random string',
-    );
+    assert.strictEqual(this.server.schema.hostSets.first().name, mockName);
   });
 
   test('can save changes to an existing aws host-set', async function (assert) {
+    const mockName = 'aws host set';
+    const mockEndpoint = 'sample endpoint';
+    const mockFilter = 'sample filters';
     await visit(urls.awshostSet);
 
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, mockName);
 
-    const name = 'aws host set';
-    await fillIn('[name="name"]', name);
-
-    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
-
+    const endpointList = findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN);
     for (const element of endpointList) {
       await click(element);
     }
 
     assert.strictEqual(
-      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
+      findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN).length,
       0,
     );
 
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoint');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, mockEndpoint);
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
 
-    // Remove all the filters
     const filterList = await Promise.all(
-      findAll(FILTER_REMOVE_BUTTON_SELECTOR),
+      findAll(selectors.FIELD_FILTERS_REMOVE),
     );
     for (const element of filterList) {
       await click(element);
     }
 
-    assert.strictEqual(findAll(FILTER_REMOVE_BUTTON_SELECTOR).length, 0);
-    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'sample filters');
-    await click(FILTER_BUTTON_SELECTOR);
+    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE).length, 0);
 
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_FILTERS, mockFilter);
+    await click(selectors.FIELD_FILTERS_ADD_BTN);
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.awshostSet);
-    const hostSet = this.server.schema.hostSets.findBy({ name });
-    assert.strictEqual(hostSet.name, name);
-    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoint']);
-    assert.deepEqual(hostSet.attributes.filters, ['sample filters']);
+    const hostSet = this.server.schema.hostSets.findBy({ name: mockName });
+    assert.strictEqual(hostSet.name, mockName);
+    assert.deepEqual(hostSet.preferredEndpoints, [mockEndpoint]);
+    assert.deepEqual(hostSet.attributes.filters, [mockFilter]);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
   test('can save changes to an existing azure host-set', async function (assert) {
+    const mockName = 'azure host set';
+    const mockEndpoint = 'sample endpoints';
     await visit(urls.azureHostSet);
 
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, mockName);
 
-    const name = 'azure host set';
-    await fillIn('[name="name"]', name);
     // Remove all the preferred endpoints
-
-    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
-
+    const endpointList = findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN);
     for (const element of endpointList) {
       await click(element);
     }
 
     assert.strictEqual(
-      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
+      findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN).length,
       0,
     );
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoints');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
 
-    await fillIn(AZURE_FILTER_SELECTOR, 'filter');
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, mockEndpoint);
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
+    await fillIn(selectors.FIELD_AZURE_FILTER, 'filter');
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.azureHostSet);
-    const hostSet = this.server.schema.hostSets.findBy({ name });
-    assert.strictEqual(hostSet.name, name);
-    assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoints']);
+    const hostSet = this.server.schema.hostSets.findBy({ name: mockName });
+    assert.strictEqual(hostSet.name, mockName);
+    assert.deepEqual(hostSet.preferredEndpoints, [mockEndpoint]);
     assert.deepEqual(hostSet.attributes.filter, 'filter');
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
   });
 
   test('can save changes to an existing gcp host-set', async function (assert) {
+    const mockName = 'gcp host set';
     await visit(urls.awshostSet);
 
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, mockName);
 
-    const name = 'gcp host set';
-    await fillIn('[name="name"]', name);
-
-    const endpointList = findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR);
-
+    const endpointList = findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN);
     for (const element of endpointList) {
       await click(element);
     }
 
     assert.strictEqual(
-      findAll(PREFERRED_ENDPOINT_REMOVE_BUTTON_SELECTOR).length,
+      findAll(selectors.FIELD_PREFERRED_ENDPOINT_DELETE_BTN).length,
       0,
     );
 
-    await fillIn(PREFERRED_ENDPOINT_TEXT_INPUT_SELECTOR, 'sample endpoint');
-    await click(PREFERRED_ENDPOINT_BUTTON_SELECTOR);
+    await fillIn(selectors.FIELD_PREFERRED_ENDPOINT, 'sample endpoint');
+    await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
 
     // Remove all the filters
     const filterList = await Promise.all(
-      findAll(FILTER_REMOVE_BUTTON_SELECTOR),
+      findAll(selectors.FIELD_FILTERS_REMOVE),
     );
     for (const element of filterList) {
       await click(element);
     }
 
-    assert.strictEqual(findAll(FILTER_REMOVE_BUTTON_SELECTOR).length, 0);
-    await fillIn(FILTER_TEXT_INPUT_SELECTOR, 'sample filters');
-    await click(FILTER_BUTTON_SELECTOR);
+    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE).length, 0);
 
-    await fillIn(SYNC_INTERVAL_SELECTOR, 10);
-
-    await click(SUBMIT_BTN_SELECTOR);
+    await fillIn(selectors.FIELD_FILTERS, 'sample filters');
+    await click(selectors.FIELD_FILTERS_ADD_BTN);
+    await fillIn(selectors.FIELD_SYNC_INTERVAL, 10);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.awshostSet);
-    const hostSet = this.server.schema.hostSets.findBy({ name });
-    assert.strictEqual(hostSet.name, name);
+    const hostSet = this.server.schema.hostSets.findBy({ name: mockName });
+    assert.strictEqual(hostSet.name, mockName);
     assert.deepEqual(hostSet.preferredEndpoints, ['sample endpoint']);
     assert.deepEqual(hostSet.attributes.filters, ['sample filters']);
     assert.deepEqual(hostSet.syncIntervalSeconds, 10);
@@ -297,16 +280,19 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     instances.hostSet.authorized_actions =
       instances.hostSet.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.hostSet);
-    assert.notOk(find('.hds-page-header__actions .hds-button-secondary'));
+
+    assert.dom(commonSelectors.EDIT_BTN).doesNotExist();
   });
 
   test('can cancel changes to existing host-set', async function (assert) {
     await visit(urls.hostSet);
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click('.rose-form-actions [type="button"]');
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.notEqual(instances.hostSet.name, 'random string');
-    assert.strictEqual(find('[name="name"]').value, instances.hostSet.name);
+    assert.dom(commonSelectors.FIELD_NAME).hasValue(instances.hostSet.name);
   });
 
   test('saving an existing host set with invalid fields displays error messages', async function (assert) {
@@ -330,26 +316,28 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       );
     });
     await visit(urls.hostSet);
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
-    await click(SUBMIT_BTN_SELECTOR);
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, 'random string');
+    await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.ok(
-      find('[data-test-error-message-name]').textContent.trim(),
-      'Name is required.',
-    );
+    assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText('Name is required.');
   });
 
   test('can discard unsaved host set changes via dialog', async function (assert) {
+    const mockName = 'random string';
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    assert.notEqual(instances.hostSet.name, 'random string');
+    assert.notEqual(instances.hostSet.name, mockName);
     await visit(urls.hostSet);
-    await click(EDIT_BUTTON_SELECTOR, 'Activate edit mode');
-    await fillIn('[name="name"]', 'random string');
+
+    await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
+    await fillIn(commonSelectors.FIELD_NAME, mockName);
+
     assert.strictEqual(currentURL(), urls.hostSet);
     try {
       await visit(urls.hostSets);
@@ -357,10 +345,7 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
       assert.ok(find(commonSelectors.MODAL_WARNING));
       await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
       assert.strictEqual(currentURL(), urls.hostSets);
-      assert.notEqual(
-        this.server.schema.hostSets.first().name,
-        'random string',
-      );
+      assert.notEqual(this.server.schema.hostSets.first().name, mockName);
     }
   });
 });
