@@ -107,9 +107,8 @@ const patchEmptyResponsesMiddleware = {
 
 const betterErrorHandlingMiddleware = {
   async post(context: BoundaryApiClient.ResponseContext) {
-    // if the request is a clean up request it is likely that it will have a 404 if the resource has
-    // already been deleted, so we skip error handling for those requests
-    if (context.response.status === 404 && context.init.headers?.[BoundaryE2EResourceCleanupHeader] === 'true') {
+    // skip logging of cleanup requests
+    if (context.init.headers?.[BoundaryE2EResourceCleanupHeader] === 'true') {
       return;
     }
 
@@ -185,7 +184,7 @@ export const boundaryApiClientTest = base.extend<{
             }
 
             console.warn(
-              `Failed to delete resource of type ${resourceType} with id ${resource.id}:`,
+              `Failed to clean up resource of type ${resourceType} with id ${resource.id}:`,
               e,
             );
           });
