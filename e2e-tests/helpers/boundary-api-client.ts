@@ -16,10 +16,13 @@ class BoundaryApi {
   get clients() {
     const { openapiConfiguration } = this;
     const clients = {
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/roles Roles Documentation} */
       roles: new BoundaryApiClient.RoleServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/scopes Scopes Documentation} */
       scopes: new BoundaryApiClient.ScopeServiceApi(openapiConfiguration),
 
-      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/targets Target Domain Documentation} */
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/targets Targets Documentation} */
       targets: new BoundaryApiClient.TargetServiceApi(openapiConfiguration),
     };
 
