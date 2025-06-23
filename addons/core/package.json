@@ -41,7 +41,7 @@
     "ember-cli-htmlbars": "^6.3.0",
     "ember-cli-sass": "^11.0.1",
     "ember-concurrency": "^4.0.3",
-    "ember-feature-flags": "^6.0.0",
+    "ember-feature-flags": "^7.0.0",
     "ember-intl": "^7.1.8",
     "ember-loading": "^2.0.0",
     "ember-truth-helpers": "^4.0.3",
