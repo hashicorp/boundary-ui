@@ -5,27 +5,44 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-
-import * as boundaryHttp from '../../helpers/boundary-http.js';
+import { nanoid } from 'nanoid';
 
 test(
   'Search and Pagination (Targets)',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({ page, request }) => {
+  async ({ page, apiClient }) => {
     let org;
     try {
-      org = await boundaryHttp.createOrg(request);
-      const project = await boundaryHttp.createProject(request, org.id);
+      org = await apiClient.clients.scopes.scopeServiceCreateScope({
+        item: {
+          name: `Org-${nanoid()}`,
+          scopeId: 'global',
+        },
+      });
+
+      const project = await apiClient.clients.scopes.scopeServiceCreateScope({
+        item: {
+          name: `Project-${nanoid()}`,
+          scopeId: org.id,
+        },
+      });
 
       // Create targets
       let targets = [];
       const targetCount = 15;
       for (let i = 0; i < targetCount; i++) {
-        const target = await boundaryHttp.createTarget(request, {
-          scopeId: project.id,
-          type: 'tcp',
-          port: 22,
-        });
+        const target =
+          await apiClient.clients.targets.targetServiceCreateTarget({
+            item: {
+              name: `Target-${nanoid()}`,
+              scopeId: project.id,
+              type: 'tcp',
+              attributes: {
+                default_port: 22,
+              },
+            },
+          });
+
         targets.push(target);
       }
 
@@ -155,8 +172,8 @@ test(
         page.getByRole('link', { name: targets[targets.length - 1].name }),
       ).toBeVisible();
     } finally {
-      if (org.id) {
-        org = await request.delete(`/v1/scopes/${org.id}`);
+      if (org?.id) {
+        // org = await request.delete(`/v1/scopes/${org.id}`);
       }
     }
   },
