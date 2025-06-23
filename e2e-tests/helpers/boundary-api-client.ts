@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
 import { test as base } from '@playwright/test';
 import * as BoundaryApiClient from '../api-client';
 import { InitOverrideFunction } from '../api-client';
