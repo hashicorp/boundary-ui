@@ -54,7 +54,7 @@
             />
           </S.Generic>
         {{/if}}
-        {{#if (feature-flag 'ssh-target')}}
+        {{#if this.showTargetTypeOptions}}
           <S.Generic>
             <Dropdown
               name='type'
@@ -94,49 +94,47 @@
             </H.Tr>
           </:head>
           <:body as |B|>
-            {{#each @model.targets as |data|}}
-              {{#if (or (feature-flag 'ssh-target') data.isTCP)}}
-                <B.Tr data-test-targets-table-row={{data.id}}>
-                  <B.Td>
-                    {{#if (can 'read model' data)}}
-                      <LinkTo
-                        @route='scopes.scope.targets.target'
-                        @model={{data.id}}
-                      >
-                        {{data.displayName}}
-                      </LinkTo>
-                    {{else}}
+            {{#each this.targetsData as |data|}}
+              <B.Tr data-test-targets-table-row={{data.id}}>
+                <B.Td>
+                  {{#if (can 'read model' data)}}
+                    <LinkTo
+                      @route='scopes.scope.targets.target'
+                      @model={{data.id}}
+                    >
                       {{data.displayName}}
-                    {{/if}}
-                    <Hds::Text::Body @tag='p' class='p'>
-                      {{data.description}}
-                    </Hds::Text::Body>
-                  </B.Td>
-                  <B.Td>
-                    {{#if data.type}}
-                      <Hds::Badge
-                        @text={{t (concat 'resources.target.types.' data.type)}}
-                      />
-                    {{/if}}
-                  </B.Td>
-                  <B.Td>
-                    {{#if data.isActive}}
-                      <Hds::Link::Standalone
-                        @text={{t 'actions.yes'}}
-                        @route='scopes.scope.sessions.index'
-                        @query={{hash targets=(array data.id)}}
-                        @icon='info'
-                      />
-                    {{/if}}
-                  </B.Td>
-                  <B.Td>
-                    <Hds::Copy::Snippet
-                      @textToCopy={{data.id}}
-                      @color='secondary'
+                    </LinkTo>
+                  {{else}}
+                    {{data.displayName}}
+                  {{/if}}
+                  <Hds::Text::Body @tag='p' class='p'>
+                    {{data.description}}
+                  </Hds::Text::Body>
+                </B.Td>
+                <B.Td>
+                  {{#if data.type}}
+                    <Hds::Badge
+                      @text={{t (concat 'resources.target.types.' data.type)}}
                     />
-                  </B.Td>
-                </B.Tr>
-              {{/if}}
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  {{#if data.isActive}}
+                    <Hds::Link::Standalone
+                      @text={{t 'actions.yes'}}
+                      @route='scopes.scope.sessions.index'
+                      @query={{hash targets=(array data.id)}}
+                      @icon='info'
+                    />
+                  {{/if}}
+                </B.Td>
+                <B.Td>
+                  <Hds::Copy::Snippet
+                    @textToCopy={{data.id}}
+                    @color='secondary'
+                  />
+                </B.Td>
+              </B.Tr>
             {{/each}}
           </:body>
         </Hds::Table>

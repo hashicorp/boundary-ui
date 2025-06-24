@@ -27,6 +27,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   let controller;
   let getTargetCount;
   let getAliasCount;
+  let features;
 
   const instances = {
     scopes: {
@@ -53,6 +54,7 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
     intl = this.owner.lookup('service:intl');
     store = this.owner.lookup('service:store');
     controller = this.owner.lookup('controller:scopes/scope/targets/index');
+    features = this.owner.lookup('service:features');
 
     instances.scopes.global = this.server.create('scope', { id: 'global' });
     instances.scopes.org = this.server.create('scope', {
@@ -99,6 +101,8 @@ module('Unit | Controller | scopes/scope/targets/index', function (hooks) {
   });
 
   test('targetTypeOptions returns expected object', function (assert) {
+    features.enable('rdp-target');
+    features.enable('ssh-target');
     let controller = this.owner.lookup('controller:scopes/scope/targets/index');
     assert.deepEqual(controller.targetTypeOptions, [
       { id: TYPE_TARGET_TCP, name: 'Generic TCP' },
