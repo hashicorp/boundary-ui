@@ -13,7 +13,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
-
+import * as selectors from './selectors';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 
 module('Acceptance | targets | create-alias', function (hooks) {
@@ -25,15 +25,8 @@ module('Acceptance | targets | create-alias', function (hooks) {
   let getAliasCount;
   let featuresService;
 
-  const SAVE_BTN_SELECTOR = '[type="submit"]';
-  const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-  const NAME_FIELD_SELECTOR = '[name="name"]';
-  const ALIAS_FIELD_SELECTOR = '[name="value"]';
-  const DEST_FIELD_SELECTOR = '[name="destination_id"]';
-  const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
   const NAME_FIELD_TEXT = 'random string';
   const ALIAS_VALUE_TEXT = 'www.target1.com';
-  const ADD_AN_ALIAS_SELECTOR = '.target-sidebar-aliases .hds-button';
 
   const instances = {
     scopes: {
@@ -45,7 +38,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
   };
 
   const urls = {
-    globalScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -71,7 +63,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
     instances.alias = this.server.create('alias', {
       scope: instances.scopes.global,
     });
-    urls.globalScope = `/scopes/global`;
 
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
@@ -86,13 +77,11 @@ module('Acceptance | targets | create-alias', function (hooks) {
     const aliasCount = getAliasCount();
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click(ADD_AN_ALIAS_SELECTOR);
-
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
-
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.ALIASES_ADD_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, NAME_FIELD_TEXT);
+    await fillIn(selectors.FIELD_ALIAS, ALIAS_VALUE_TEXT);
+    await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,
     });
@@ -114,14 +103,11 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-
-    await click(ADD_AN_ALIAS_SELECTOR);
-
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
-
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.ALIASES_ADD_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, NAME_FIELD_TEXT);
+    await fillIn(selectors.FIELD_ALIAS, ALIAS_VALUE_TEXT);
+    await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,
     });
@@ -141,14 +127,14 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.ALIASES_ADD_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, NAME_FIELD_TEXT);
+    await fillIn(selectors.FIELD_ALIAS, ALIAS_VALUE_TEXT);
 
-    await click(ADD_AN_ALIAS_SELECTOR);
+    assert.dom(selectors.FIELD_DESTINATION_ID).hasAttribute('readOnly');
 
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await fillIn(ALIAS_FIELD_SELECTOR, ALIAS_VALUE_TEXT);
-    assert.dom(DEST_FIELD_SELECTOR).hasAttribute('readOnly');
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.SAVE_BTN);
     const alias = this.server.schema.aliases.findBy({
       name: NAME_FIELD_TEXT,
     });
@@ -165,10 +151,10 @@ module('Acceptance | targets | create-alias', function (hooks) {
       type: TYPE_TARGET_SSH,
     });
     await visit(urls.targets);
-    await click(`[href="${urls.target}"]`);
-    await click(ADD_AN_ALIAS_SELECTOR);
-    await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-    await click(CANCEL_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.ALIASES_ADD_BTN);
+    await fillIn(commonSelectors.FIELD_NAME, NAME_FIELD_TEXT);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(getAliasCount(), aliasCount);
   });
@@ -195,14 +181,14 @@ module('Acceptance | targets | create-alias', function (hooks) {
     });
     await visit(urls.targets);
 
-    await click(`[href="${urls.target}"]`);
-    await click(ADD_AN_ALIAS_SELECTOR);
-    await click(SAVE_BTN_SELECTOR);
+    await click(commonSelectors.HREF(urls.target));
+    await click(selectors.ALIASES_ADD_BTN);
+    await click(commonSelectors.SAVE_BTN);
     await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
-    assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+    assert.dom(commonSelectors.FIELD_ERROR).hasText('Name is required.');
   });
 });
