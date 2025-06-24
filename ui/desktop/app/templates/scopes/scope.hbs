@@ -20,7 +20,9 @@
       <dd.Interactive @route='scopes.scope' @model='global'>
         {{t 'titles.global'}}
       </dd.Interactive>
-      <dd.Separator />
+      {{#if this.scopes.orgs.length}}
+        <dd.Separator />
+      {{/if}}
       {{#each this.scopes.orgs as |scope|}}
         <dd.Interactive @route='scopes.scope' @model={{scope.id}}>
           {{scope.displayName}}
