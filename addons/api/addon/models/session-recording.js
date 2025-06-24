@@ -5,7 +5,6 @@
 
 import GeneratedSessionRecordingModel from '../generated/models/session-recording';
 import { hasMany } from '@ember-data/model';
-import { service } from '@ember/service';
 
 export const TYPE_SESSION_RECORDING_SSH = 'ssh';
 export const TYPES_SESSION_RECORDING = Object.freeze([
@@ -22,8 +21,6 @@ export default class SessionRecordingModel extends GeneratedSessionRecordingMode
     inverse: 'session_recording',
   })
   connection_recordings;
-
-  @service store;
 
   /**
    * True if the session recording type is `ssh`.
