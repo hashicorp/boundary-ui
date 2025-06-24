@@ -94,13 +94,10 @@ module('Acceptance | targets | create-alias', function (hooks) {
 
   test('users can create a new alias for a target of SSH type', async function (assert) {
     featuresService.enable('ssh-target');
-
     instances.target.update({
       type: TYPE_TARGET_SSH,
     });
-
     const aliasCount = getAliasCount();
-
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.target));
@@ -124,7 +121,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
       type: TYPE_TARGET_SSH,
     });
     const aliasCount = getAliasCount();
-
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.target));
@@ -151,6 +147,7 @@ module('Acceptance | targets | create-alias', function (hooks) {
       type: TYPE_TARGET_SSH,
     });
     await visit(urls.targets);
+
     await click(commonSelectors.HREF(urls.target));
     await click(selectors.ALIASES_ADD_BTN);
     await fillIn(commonSelectors.FIELD_NAME, NAME_FIELD_TEXT);
