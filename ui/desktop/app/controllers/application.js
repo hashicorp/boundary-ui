@@ -29,7 +29,7 @@ export default class ApplicationController extends Controller {
     super(...arguments);
 
     // Listen for when user attempts to quit app
-    // Setup removeListener to destroy the process after
+    // Setup removeListener to destroy the process afterwards
     this.removeListener = window.electron.onAppQuit(() => {
       this.isAppQuitting = true;
     });

@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  fillIn,
+  click,
+  find,
+  triggerEvent,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -15,12 +22,18 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupStubs(hooks);
 
   const SIGNOUT_BTN_SELECTOR = '[data-test-nav-signout-btn]';
+  const CLOSE_SESSIONS_MODAL_SELECTOR = '[data-test-close-sessions-modal]';
+  const CONFIRM_BUTTON = '.hds-modal__footer .hds-button--color-primary';
+  const CANCEL_BUTTON = '.hds-modal__footer .hds-button--color-secondary';
+  const stopAllSessions = this.ipcStub.withArgs('stopAll');
 
   const instances = {
     scopes: {
@@ -236,5 +249,106 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.dom('[data-test-no-auth-methods]').includesText('No Auth Methods');
     assert.dom('.change-origin').exists();
+  });
+
+  test('signing out with running sessions renders signout modal', async function (assert) {
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(
+      '.rose-header-utilities .header-dropdown-button-override button',
+    );
+
+    await click(SIGNOUT_BTN_SELECTOR);
+
+    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
+    assert
+      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
+      .includesText('Sign out of Boundary?');
+
+    await click(CANCEL_BUTTON);
+
+    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isNotVisible();
+    assert.ok(currentSession().isAuthenticated);
+  });
+
+  test('confirming signout via modal stops sessions and logs out user', async function (assert) {
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(
+      '.rose-header-utilities .header-dropdown-button-override button',
+    );
+
+    await click(SIGNOUT_BTN_SELECTOR);
+
+    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
+    assert
+      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
+      .includesText('Sign out of Boundary?');
+
+    await click(CONFIRM_BUTTON);
+
+    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isNotVisible();
+    assert.ok(stopAllSessions.calledOnce);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
+    const quitApp = this.ipcStub.withArgs('closeWindow');
+    // onAppQuit is the channel that handles when a user triggers the before-quit event in the electron app
+    window.electron = {
+      onAppQuit: (e) => {
+        window.addEventListener('onAppQuit', e);
+        return () => {
+          window.removeEventListener('onAppQuit', e);
+        };
+      },
+    };
+
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await fillIn('[name="identification"]', 'test');
+    await fillIn('[name="password"]', 'test');
+    await click('[type="submit"]');
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(
+      '.rose-header-utilities .header-dropdown-button-override button',
+    );
+
+    await click(SIGNOUT_BTN_SELECTOR);
+
+    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
+    assert
+      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
+      .includesText('Sign out of Boundary?');
+
+    await triggerEvent(window, 'onAppQuit');
+
+    assert
+      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
+      .includesText('Close sessions before quitting?');
+
+    await click(CONFIRM_BUTTON);
+    assert.ok(stopAllSessions.calledOnce);
+    assert.ok(quitApp.calledOnce);
   });
 });
