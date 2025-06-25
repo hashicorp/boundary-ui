@@ -74,6 +74,7 @@
           (hash label=(t 'resources.session.title_plural'))
           (hash label=(t 'resources.worker.table.release_version'))
           (hash label=(t 'resources.worker.table.ip_address'))
+          (hash label=(t 'form.worker_last_seen.label'))
           (hash label=(t 'form.id.label'))
         }}
         @valign='middle'
@@ -114,7 +115,13 @@
             </B.Td>
             <B.Td>{{B.data.active_connection_count}}</B.Td>
             <B.Td>{{B.data.release_version}}</B.Td>
-            <B.Td>{{B.data.address}} </B.Td>
+            <B.Td>{{B.data.address}}</B.Td>
+            <B.Td>
+              <Hds::Text::Body><Hds::Time
+                  @date={{B.data.last_status_time}}
+                  @display='relative'
+                /></Hds::Text::Body>
+            </B.Td>
             <B.Td>
               <Hds::Copy::Snippet
                 @textToCopy={{B.data.id}}
