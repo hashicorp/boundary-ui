@@ -179,13 +179,13 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
     await click(selectors.FIELD_PREFERRED_ENDPOINT_ADD_BTN);
 
     const filterList = await Promise.all(
-      findAll(selectors.FIELD_FILTERS_REMOVE),
+      findAll(selectors.FIELD_FILTERS_REMOVE_BTN),
     );
     for (const element of filterList) {
       await click(element);
     }
 
-    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE).length, 0);
+    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE_BTN).length, 0);
 
     await fillIn(selectors.FIELD_FILTERS, mockFilter);
     await click(selectors.FIELD_FILTERS_ADD_BTN);
@@ -255,13 +255,13 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
 
     // Remove all the filters
     const filterList = await Promise.all(
-      findAll(selectors.FIELD_FILTERS_REMOVE),
+      findAll(selectors.FIELD_FILTERS_REMOVE_BTN),
     );
     for (const element of filterList) {
       await click(element);
     }
 
-    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE).length, 0);
+    assert.strictEqual(findAll(selectors.FIELD_FILTERS_REMOVE_BTN).length, 0);
 
     await fillIn(selectors.FIELD_FILTERS, 'sample filters');
     await click(selectors.FIELD_FILTERS_ADD_BTN);

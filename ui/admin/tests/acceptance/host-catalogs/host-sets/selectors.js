@@ -12,7 +12,8 @@ export const FIELD_FILTERS = '[name=filters] input';
 export const FIELD_FILTERS_ADD_BTN = '[name=filters] button';
 export const FIELD_SYNC_INTERVAL = '[name=sync_interval_seconds]';
 export const FIELD_AZURE_FILTER = '[name=filter]';
-export const FIELD_FILTERS_REMOVE = '[name=filters] [data-test-remove-button]';
+export const FIELD_FILTERS_REMOVE_BTN =
+  '[name=filters] [data-test-remove-button]';
 
 export const MANAGE_DROPDOWN_HOST_SETS =
   '[data-test-manage-dropdown-host-sets] button:first-child';
