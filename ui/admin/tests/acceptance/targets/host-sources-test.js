@@ -300,7 +300,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
     await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
@@ -331,13 +330,12 @@ module('Acceptance | targets | host-sources', function (hooks) {
       this.server.schema.targets.find(target.id).address,
       '0.0.0.0',
     );
-
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
+
     await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
-
     await click(commonSelectors.TABLE_ROW_CHECKBOX);
     await click(commonSelectors.SAVE_BTN);
 
