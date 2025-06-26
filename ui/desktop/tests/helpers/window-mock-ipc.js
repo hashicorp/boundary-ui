@@ -55,7 +55,6 @@ class MockIPC {
   }
   pauseClientAgent() {}
   resumeClientAgent() {}
-  stopAll() {}
   hasRunningSessions() {}
 }
 
