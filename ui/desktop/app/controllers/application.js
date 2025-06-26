@@ -17,8 +17,6 @@ export default class ApplicationController extends Controller {
   @service clusterUrl;
   @service flashMessages;
 
-  // =tracked properties
-
   @tracked isLoggingOut = false;
   @tracked isAppQuitting = false;
 
@@ -29,8 +27,8 @@ export default class ApplicationController extends Controller {
     super(...arguments);
 
     // Listen for when user attempts to quit app
-    // Setup removeListener to destroy the process afterwards
-    this.removeListener = window.electron.onAppQuit(() => {
+    // Setup removeListener to destroy the listener afterwards
+    this.removeListener = window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
   }
@@ -43,7 +41,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   async confirmCloseSessions() {
-    this.stopAll();
+    await this.ipc.invoke('stopAll');
     if (this.isAppQuitting) {
       // We have to set the logout modal to false to ensure it does not
       // render if user first attempted to signout, setting isLoggingOut to true
@@ -57,7 +55,7 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Only render the sigout modal if sessions are running
+   * Only renders the sigout modal if sessions are running
    */
   @action
   async checkForSessionsRunning() {
@@ -76,7 +74,7 @@ export default class ApplicationController extends Controller {
   @action
   disconnect() {
     this.clusterUrl.resetClusterUrl();
-    this.confirmCloseSessions();
+    this.session.invalidate();
   }
 
   @action
@@ -92,11 +90,6 @@ export default class ApplicationController extends Controller {
   @action
   close() {
     this.ipc.invoke('closeWindow');
-  }
-
-  @action
-  stopAll() {
-    this.ipc.invoke('stopAll');
   }
 
   /**
@@ -131,6 +124,7 @@ export default class ApplicationController extends Controller {
     this.isAppQuitting = false;
   }
 
+  // Call ember controller willDestroy and implement teardown
   willDestroy() {
     super.willDestroy(...arguments);
     if (this.removeListener) {

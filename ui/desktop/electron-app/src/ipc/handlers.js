@@ -125,9 +125,7 @@ handle('closeWindow', () => app.quit());
  * Check if session manager has running sessions
  * Return boolean
  */
-handle('hasRunningSessions', async () => {
-  return sessionManager.hasRunningSessions;
-});
+handle('hasRunningSessions', async () => sessionManager.hasRunningSessions);
 
 /**
  * Focus the window
