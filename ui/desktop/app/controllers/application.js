@@ -41,7 +41,7 @@ export default class ApplicationController extends Controller {
    */
   @action
   async confirmCloseSessions() {
-    await this.ipc.invoke('stopAll');
+    this.stopAll();
     if (this.isAppQuitting) {
       // We have to set the logout modal to false to ensure it does not
       // render if user first attempted to signout, setting isLoggingOut to true
@@ -90,6 +90,11 @@ export default class ApplicationController extends Controller {
   @action
   close() {
     this.ipc.invoke('closeWindow');
+  }
+
+  @action
+  stopAll() {
+    this.ipc.invoke('stopAll');
   }
 
   /**
