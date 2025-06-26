@@ -4,8 +4,6 @@
  */
 
 import { test } from '../../global-setup.js';
-import * as boundaryHttp from '../../helpers/boundary-http.js';
-import * as boundaryCli from '../../helpers/boundary-cli.js';
 import { RolesPage } from '../pages/roles.js';
 import { expect } from '@playwright/test';
 
@@ -33,48 +31,33 @@ const columnHeaders = Object.freeze({
 
 let org, rolesSortedByCreatedTime, rolesSortedByName, rolesSortedById;
 
-test.beforeEach(
-  async ({
-    request,
-    controllerAddr,
-    adminAuthMethodId,
-    adminLoginName,
-    adminPassword,
-  }) => {
-    org = await boundaryHttp.createOrg(request);
+test.beforeEach(async ({ apiClient }) => {
+  org = await apiClient.clients.scopes.scopeServiceCreateScope({
+    item: {
+      scopeId: 'global',
+    },
+    skipAdminRoleCreation: true,
+    skipDefaultRoleCreation: true,
+  });
 
-    await boundaryCli.authenticateBoundary(
-      controllerAddr,
-      adminAuthMethodId,
-      adminLoginName,
-      adminPassword,
-    );
+  // create roles with specific names
+  const roles = await Promise.all(
+    roleNamesToCreate.map((roleName) => {
+      return apiClient.clients.roles.roleServiceCreateRole({
+        item: {
+          scopeId: org.id,
+          name: roleName,
+        },
+      });
+    }),
+  );
 
-    // when the org is created some roles are created automatically, but for the purposes
-    // of this sorting test it's clearer if only the roles created by the test are present
-    const existingRolesToDelete = await boundaryCli.listRoles(org.id);
-    for (const role of existingRolesToDelete) {
-      await boundaryCli.deleteRole(role.id);
-    }
-
-    // create roles with specific names
-    for (const roleName of roleNamesToCreate) {
-      boundaryCli.createRole(org.id, { name: roleName });
-    }
-
-    // collect all roles and data so that sorting can be tested based on the underlying data
-    const roles = await boundaryCli.listRoles(org.id);
-    rolesSortedByCreatedTime = roles.toSorted((a, b) => {
-      return new Date(b.created_time) - new Date(a.created_time);
-    });
-    rolesSortedByName = roles.toSorted((a, b) => a.name.localeCompare(b.name));
-    rolesSortedById = roles.toSorted((a, b) => a.id.localeCompare(b.id));
-  },
-);
-
-test.afterEach(async ({ request }) => {
-  // deletes the org and any associated roles
-  await boundaryHttp.deleteOrg(request, org.id);
+  // collect all roles and data so that sorting can be tested based on the underlying data
+  rolesSortedByCreatedTime = roles.toSorted((a, b) => {
+    return new Date(b.createdTime) - new Date(a.createdTime);
+  });
+  rolesSortedByName = roles.toSorted((a, b) => a.name.localeCompare(b.name));
+  rolesSortedById = roles.toSorted((a, b) => a.id.localeCompare(b.id));
 });
 
 test(
