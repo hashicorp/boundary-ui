@@ -33,7 +33,6 @@ module('Acceptance | authentication', function (hooks) {
   const CLOSE_SESSIONS_MODAL_SELECTOR = '[data-test-close-sessions-modal]';
   const CONFIRM_BUTTON = '.hds-modal__footer .hds-button--color-primary';
   const CANCEL_BUTTON = '.hds-modal__footer .hds-button--color-secondary';
-  const stopAllSessions = this.ipcStub.withArgs('stopAll');
 
   const instances = {
     scopes: {
@@ -280,6 +279,7 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('confirming signout via modal stops sessions and logs out user', async function (assert) {
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
     await visit(urls.authenticate.methods.global);
@@ -310,7 +310,8 @@ module('Acceptance | authentication', function (hooks) {
 
   test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
     const quitApp = this.ipcStub.withArgs('closeWindow');
-    // onAppQuit is the channel that handles when a user triggers the before-quit event in the electron app
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
+    // onAppQuit() is the channel that handles when a user triggers the before-quit event in the electron app
     window.electron = {
       onAppQuit: (e) => {
         window.addEventListener('onAppQuit', e);
