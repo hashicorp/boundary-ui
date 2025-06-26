@@ -48,10 +48,11 @@ module('Acceptance | roles | principals', function (hooks) {
       },
       'withPrincipals',
     );
+
     principalsCount =
-      this.server.db.roles[0].userIds.length +
-      this.server.db.roles[0].groupIds.length +
-      this.server.db.roles[0].managedGroupIds.length;
+      this.server.schema.roles.first().userIds.length +
+      this.server.schema.roles.first().groupIds.length +
+      this.server.schema.roles.first().managedGroupIds.length;
     urls.roles = `/scopes/${instances.scopes.org.id}/roles`;
     urls.role = `${urls.roles}/${instances.role.id}`;
     urls.rolePrincipals = `${urls.role}/principals`;
