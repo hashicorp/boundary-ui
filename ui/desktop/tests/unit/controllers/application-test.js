@@ -34,7 +34,6 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.minimize);
     assert.ok(controller.toggleFullScreen);
     assert.ok(controller.close);
-    assert.ok(controller.stopAll);
     assert.ok(controller.confirmCloseSessions);
     assert.ok(controller.checkForSessionsRunning);
   });
