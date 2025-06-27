@@ -166,7 +166,7 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(`[href="${urls.storageBucket}"]`);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
@@ -223,11 +223,11 @@ module('Acceptance | storage-buckets | update', function (hooks) {
     await click(commonSelectors.HREF(urls.storageBucketMinio));
 
     assert.dom(selectors.READONLY_WORKER_FILTER).isVisible();
-    assert.dom(selectors.EDITOR_WORKER_FILTER).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR_CONTENT).doesNotExist();
 
     await click(commonSelectors.EDIT_BTN, 'Click edit mode');
 
-    assert.dom(selectors.EDITOR_WORKER_FILTER).isVisible();
+    assert.dom(commonSelectors.CODE_EDITOR_CONTENT).isVisible();
     assert.dom(selectors.READONLY_WORKER_FILTER).doesNotExist();
   });
 });

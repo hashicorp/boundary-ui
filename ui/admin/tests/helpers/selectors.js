@@ -95,3 +95,6 @@ export const TABLE_SORT_BTN_ARROW_UP = (column) =>
   `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
 export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
   `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;
+
+export const CODE_EDITOR_CONTENT =
+  '[data-test-code-editor-field-editor] textarea';
