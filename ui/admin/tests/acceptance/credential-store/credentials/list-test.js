@@ -8,16 +8,12 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as credentialStoreSelectors from '../selectors';
 
 module('Acceptance | credential-stores | credentials | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] button:first-child';
-
-  const ADD_CREDENTIALS_SELECTOR =
-    '[data-test-manage-credential-stores-dropdown] div ul li a';
 
   const instances = {
     scopes: {
@@ -78,16 +74,19 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
 
   test('Users can navigate to credentials with proper authorization', async function (assert) {
     await visit(urls.staticCredentialStore);
+
     assert.ok(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
         'list',
       ),
     );
-    assert.dom(`[href="${urls.credentials}"]`).isVisible();
-    await click(`[href="${urls.credentials}"]`);
+    assert.dom(commonSelectors.HREF(urls.credentials)).isVisible();
+
+    await click(commonSelectors.HREF(urls.credentials));
+
     assert.strictEqual(currentURL(), urls.credentials);
     assert
-      .dom('tbody tr')
+      .dom(commonSelectors.TABLE_ROWS)
       .isVisible({ count: this.server.schema.credentials.all().models.length });
   });
 
@@ -95,6 +94,7 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       [];
     await visit(urls.staticCredentialStore);
+
     assert.notOk(
       instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
         'list',
@@ -105,15 +105,18 @@ module('Acceptance | credential-stores | credentials | list', function (hooks) {
         'create',
       ),
     );
-    assert.dom('.rose-nav-tabs a:nth-child(2)').doesNotExist();
+    assert.dom(commonSelectors.HREF(urls.credentials)).doesNotExist();
   });
 
   test('User can navigate to new credential screen with only create action', async function (assert) {
     instances.staticCredentialStore.authorized_collection_actions.credentials =
       ['create'];
     await visit(urls.staticCredentialStore);
-    assert.dom(`[href="${urls.credentials}"]`).isVisible();
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.dom(ADD_CREDENTIALS_SELECTOR).isVisible();
+
+    assert.dom(commonSelectors.HREF(urls.credentials)).isVisible();
+
+    await click(credentialStoreSelectors.MANAGE_DROPDOWN);
+
+    assert.dom(credentialStoreSelectors.NEW_CREDENTIAL_ACTION).isVisible();
   });
 });

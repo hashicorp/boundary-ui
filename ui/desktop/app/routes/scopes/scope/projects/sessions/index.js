@@ -177,6 +177,11 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     });
   }
 
+  setupController(controller, model) {
+    super.setupController(controller, model);
+    controller.currentRoute = this;
+  }
+
   resetController(controller, isExiting, transition) {
     const fromScope = transition.from.find(
       (routeInfo) => routeInfo.name === 'scopes.scope',
@@ -212,6 +217,6 @@ export default class ScopesScopeProjectsSessionsIndexRoute extends Route {
     await this.store.query('scope', {});
 
     // Refresh the proj scopes so our `modelFor` returns accurate data
-    this.router.refresh('scopes.scope.projects');
+    await this.router.refresh('scopes.scope.projects');
   }
 }
