@@ -61,3 +61,16 @@ process.once('loaded', () => {
     }
   });
 });
+
+/**
+ * Listener on electron app when user triggers before-quit event
+ */
+contextBridge.exposeInMainWorld('electron', {
+  onAppQuit: (callback) => {
+    ipcRenderer.on('onAppQuit', callback);
+
+    return () => {
+      return ipcRenderer.removeListener('onAppQuit', callback);
+    };
+  },
+});
