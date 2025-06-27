@@ -464,6 +464,9 @@ importers:
       ember-template-lint-plugin-prettier:
         specifier: ^5.0.0
         version: 5.0.0(ember-template-lint@6.1.0)(prettier@3.5.3)
+      ember-try:
+        specifier: ^3.0.0
+        version: 3.0.0(encoding@0.1.13)
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
