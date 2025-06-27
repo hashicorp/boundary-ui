@@ -205,8 +205,8 @@ module('Acceptance | projects | targets | index', function (hooks) {
   });
 
   test('visiting targets list view with no targets', async function (assert) {
-    this.server.db.targets.remove();
-    this.server.db.sessions.remove();
+    this.server.schema.targets.all().destroy();
+    this.server.schema.sessions.all().destroy();
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
 
     await visit(urls.projects);

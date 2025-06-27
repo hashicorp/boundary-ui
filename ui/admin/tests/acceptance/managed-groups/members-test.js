@@ -47,8 +47,8 @@ module('Acceptance | managed-groups | members', function (hooks) {
       },
       'withAccountsAndUsersAndManagedGroups',
     );
+    instances.managedGroup = this.server.schema.managedGroups.first();
 
-    instances.managedGroup = this.server.db.managedGroups[0];
     // Generate route URLs for resources
     urls.authMethods = `/scopes/${instances.scopes.org.id}/auth-methods`;
     urls.authMethod = `${urls.authMethods}/${instances.authMethod.id}`;

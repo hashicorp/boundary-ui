@@ -326,9 +326,9 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to account link for oidc account', async function (assert) {
-    this.server.db.authMethods.remove();
-    this.server.db.users.remove();
-    this.server.db.accounts.remove();
+    this.server.schema.authMethods.all().destroy();
+    this.server.schema.users.all().destroy();
+    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',
@@ -355,9 +355,9 @@ module('Acceptance | users | accounts', function (hooks) {
   });
 
   test('can navigate to account link for ldap account', async function (assert) {
-    this.server.db.authMethods.remove();
-    this.server.db.users.remove();
-    this.server.db.accounts.remove();
+    this.server.schema.authMethods.all().destroy();
+    this.server.schema.users.all().destroy();
+    this.server.schema.accounts.all().destroy();
 
     const authMethod = this.server.create(
       'auth-method',
