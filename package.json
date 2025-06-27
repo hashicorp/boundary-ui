@@ -49,7 +49,7 @@
       "ansi-html": "^0.0.9",
       "fireworm>async": "^2.6.4",
       "ember-cli-babel>@babel/runtime": "7.27.6",
-      "package-json>got": "^14.4.7" 
+      "ember-try-config>package-json": "^10.0.1" 
     },
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
