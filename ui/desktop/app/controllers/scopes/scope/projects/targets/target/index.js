@@ -39,7 +39,7 @@ export default class ScopesScopeProjectsTargetsTargetIndexController extends Con
         return (
           host.displayName.toLowerCase().includes(searchTerm) ||
           host.description?.toLowerCase().includes(searchTerm) ||
-          host.address.toLowerCase().includes(searchTerm)
+          host.address?.toLowerCase().includes(searchTerm)
         );
       });
     }

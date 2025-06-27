@@ -25,7 +25,6 @@ export default class ScopesScopeProjectsTargetsTargetIndexRoute extends Route {
     if (isExiting) {
       controller.set('search', '');
       controller.set('page', 1);
-      controller.set('pageSize', 10);
     }
   }
 }
