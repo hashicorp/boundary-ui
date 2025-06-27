@@ -31,6 +31,7 @@ module.exports = {
     'ember/no-computed-properties-in-native-classes': 'off',
     'ember/no-assignment-of-untracked-properties-used-in-tracking-contexts':
       'off',
+    'ember/no-unused-services': 1,
   },
   overrides: [
     // node files

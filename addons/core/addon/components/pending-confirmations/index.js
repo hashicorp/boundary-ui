@@ -14,7 +14,8 @@ import { action } from '@ember/object';
  */
 export default class PendingConfirmationsComponent extends Component {
   // =services
-
+  // confirm service use within template
+  // eslint-disable-next-line ember/no-unused-services
   @service confirm;
 
   // =actions
