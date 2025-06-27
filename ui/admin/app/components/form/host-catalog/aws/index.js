@@ -4,12 +4,17 @@
  */
 
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
 import {
   TYPES_CREDENTIALS,
   TYPE_CREDENTIAL_DYNAMIC,
 } from 'api/models/host-catalog';
 
 export default class FormHostCatalogAwsComponent extends Component {
+  // =services
+
+  @service featureEdition;
+
   // =attributes
 
   /**
@@ -26,5 +31,12 @@ export default class FormHostCatalogAwsComponent extends Component {
    */
   get showDynamicCredentials() {
     return this.args.model.credentialType === TYPE_CREDENTIAL_DYNAMIC;
+  }
+
+  /**
+   * Returns true if current edition is HCP.
+   */
+  get isWorkerFilterRequired() {
+    return this.featureEdition.edition === 'hcp';
   }
 }

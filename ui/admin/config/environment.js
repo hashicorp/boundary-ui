@@ -144,7 +144,6 @@ module.exports = function (environment) {
     },
 
     features: features,
-    featureFlags: {},
   };
 
   if (environment === 'development') {

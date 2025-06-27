@@ -26,8 +26,6 @@ const pluginTypes = [
   'foobar',
 ];
 
-let pluginTypeCounter = 1;
-
 export default factory.extend({
   id: () => generateId('hc_'),
 
@@ -64,7 +62,7 @@ export default factory.extend({
     if (this.type === TYPE_HOST_CATALOG_DYNAMIC) {
       return {
         id: `plugin-id-${i}`,
-        name: pluginTypes[pluginTypeCounter++ % pluginTypes.length],
+        name: pluginTypes[i % pluginTypes.length],
         description: faker.word.words(),
       };
     }
