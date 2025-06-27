@@ -5,7 +5,10 @@
 <Hds::Dropdown data-test-manage-targets-dropdown as |dd|>
   <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
   {{#if (can 'addHostSources target' @model)}}
-    <dd.Interactive @route='scopes.scope.targets.target.add-host-sources'>
+    <dd.Interactive
+      @route='scopes.scope.targets.target.add-host-sources'
+      data-test-add-host-sources-action
+    >
       {{t 'resources.target.actions.add-host-sources'}}
     </dd.Interactive>
   {{/if}}
