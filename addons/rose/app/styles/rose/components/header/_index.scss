@@ -17,6 +17,12 @@
   --box-shadow-dark: inset 0 -#{sizing.rems(xxxxs)} 0 var(--ui-border-subtler-1);
   --box-shadow: var(--box-shadow-light);
 
+  display: grid;
+  grid-template-areas: 'brand nav utilities';
+  grid-template-columns: 0.01fr auto 1fr;
+  background: var(--black);
+  box-shadow: var(--box-shadow);
+
   .ember-application.rose-theme-light & {
     --box-shadow: var(--box-shadow-light);
   }
@@ -28,12 +34,6 @@
   .ember-application.rose-theme-dark & {
     --box-shadow: var(--box-shadow-dark);
   }
-
-  display: grid;
-  grid-template-areas: 'brand nav utilities';
-  grid-template-columns: 0.01fr auto 1fr;
-  background: var(--black);
-  box-shadow: var(--box-shadow);
 }
 
 @media (width <= (media.width(small))) {

@@ -63,6 +63,7 @@ auth-method:
     finding: Finding
     always: Always
     primary: Primary
+    primary-method: Primary method?
   types:
     password: Password
     oidc: OIDC
@@ -240,7 +241,7 @@ host-catalog:
       label: Client/Application ID
       help: The client (application) ID of an Azure service principal that Boundary will use to authenticate and discover hosts from Azure.
     worker_filter:
-      help: Insert a worker filter in order to route requests to the correct worker.
+      help: Insert a worker filter in order to select the correct worker.
     project_id:
       label: Project ID
       help: Project ID of the instances you want to add to this GCP Host Catalog.

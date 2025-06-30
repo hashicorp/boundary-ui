@@ -7,6 +7,8 @@ export const FIELD_TYPE = '[name="Type"]';
 export const FIELD_TYPE_VALUE = (type) => `[value=${type}]`;
 
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
+export const FIELD_AWS_WORKER_FILTER_LABEL =
+  '[data-test-aws-worker-filter-label]';
 
 export const FIELD_ZONE = '[name="zone"]';
 export const FIELD_ZONE_VALUE = 'us-west-1';
