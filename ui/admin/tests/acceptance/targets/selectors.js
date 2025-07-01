@@ -58,8 +58,6 @@ export const SESSION_RECORDING_SETTINGS_LINK =
 export const SESSION_RECORDING_ENABLE_BTN = '.target-sidebar .hds-button';
 export const STORAGE_BUCKET_DROPDOWN = '[name=storage_bucket_id]';
 export const ENABLE_TOGGLE = '[name=target-enable-session-recording]';
-export const LINK_LIST = '.link-list-item > a';
-export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 export const BADGE_TEXT = '.target-sidebar .hds-badge__text';
 export const LINK_TO_NEW_STORAGE_BUCKET =
   '.enable-session-recording-toggle .hds-link-standalone';

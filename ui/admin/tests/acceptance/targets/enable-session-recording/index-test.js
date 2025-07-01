@@ -120,7 +120,7 @@ module(
         enableSessionRecording: true,
       });
       await visit(urls.target);
-      await click(selectors.LINK_LIST);
+      await click(selectors.LINK_LIST_ITEM);
 
       assert.strictEqual(currentURL(), urls.storageBucket);
     });
