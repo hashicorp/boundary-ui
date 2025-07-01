@@ -16,6 +16,7 @@ export default class ApplicationController extends Controller {
   @service session;
   @service clusterUrl;
   @service flashMessages;
+  @service('browser/window') window;
 
   @tracked isLoggingOut = false;
   @tracked isAppQuitting = false;
@@ -28,7 +29,7 @@ export default class ApplicationController extends Controller {
 
     // Listen for when user attempts to quit app
     // Setup removeListener to destroy the listener afterwards
-    this.removeListener = window.electron?.onAppQuit(() => {
+    this.removeListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
   }
