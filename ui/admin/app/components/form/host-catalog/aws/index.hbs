@@ -354,12 +354,15 @@
     <Hds::Form::Textarea::Field
       name='worker_filter'
       @value={{@model.worker_filter}}
-      @isOptional={{true}}
+      @isRequired={{this.isWorkerFilterRequired}}
+      @isOptional={{not this.isWorkerFilterRequired}}
       @isInvalid={{@model.errors.worker_filter}}
       disabled={{form.disabled}}
       as |F|
     >
-      <F.Label>{{t 'form.worker_filter.label'}}</F.Label>
+      <F.Label data-test-aws-worker-filter-label>{{t
+          'form.worker_filter.label'
+        }}</F.Label>
       <F.HelperText>
         {{t 'resources.host-catalog.form.worker_filter.help'}}
         <Hds::Link::Inline @href={{doc-url 'worker.create-tags'}}>

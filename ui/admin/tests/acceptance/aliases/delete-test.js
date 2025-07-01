@@ -18,9 +18,6 @@ module('Acceptance | aliases | delete', function (hooks) {
 
   let aliasCount;
 
-  const DROPDOWN_BUTTON_SELECTOR =
-    'tbody tr td:last-child .hds-dropdown-toggle-icon';
-
   const instances = {
     scopes: {
       global: null,
@@ -66,7 +63,8 @@ module('Acceptance | aliases | delete', function (hooks) {
 
     assert.true(instances.alias.authorized_actions.includes('delete'));
     await visit(urls.aliases);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
     await click(commonSelectors.DELETE_BTN);
 
     assert.strictEqual(aliasCount(), count - 1);
@@ -79,9 +77,8 @@ module('Acceptance | aliases | delete', function (hooks) {
     await visit(urls.globalScope);
 
     urls.alias = `${urls.aliases}/${instances.alias.id}`;
-
-    await click(`[href="${urls.aliases}"]`);
-    await click(DROPDOWN_BUTTON_SELECTOR);
+    await click(commonSelectors.HREF(urls.aliases));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
 
     assert.dom(commonSelectors.DELETE_BTN).doesNotExist();
   });
