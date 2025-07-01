@@ -64,7 +64,7 @@
             {{/if}}
             <dd.Interactive
               data-test-nav-signout-btn
-              {{on 'click' this.checkForSessionsRunning}}
+              {{on 'click' this.showModalOrLogout}}
             >
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
@@ -167,6 +167,7 @@
         {{t 'resources.session.messages.stop-sessions-before-quit.description'}}
       </M.Body>
     {{else}}
+      {{! If not rendering the isAppQuitting modal, render isLoggingOut modal }}
       <M.Header>
         {{t 'resources.session.messages.stop-sessions-and-signout.title'}}
       </M.Header>

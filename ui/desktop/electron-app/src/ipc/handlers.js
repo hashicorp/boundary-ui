@@ -83,7 +83,7 @@ handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
 /**
  * Stop all active and pending target sessions.
  */
-handle('stopAll', () => sessionManager.stopAll());
+handle('stopAll', async () => sessionManager.stopAll());
 
 /**
  * Check for OS window chrome. Enabled on MacOS only.
@@ -125,7 +125,7 @@ handle('closeWindow', () => app.quit());
  * Check if session manager has running sessions
  * Return boolean
  */
-handle('hasRunningSessions', async () => sessionManager.hasRunningSessions);
+handle('hasRunningSessions', () => sessionManager.hasRunningSessions);
 
 /**
  * Focus the window

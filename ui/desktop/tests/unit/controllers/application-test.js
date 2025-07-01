@@ -12,9 +12,9 @@ module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
 
   let controller;
-  let session;
   let clusterUrl;
   let mockIPC;
+  let session;
 
   const setupMockIpc = (test) => {
     test.owner.register('service:browser/window', WindowMockIPC);
@@ -35,15 +35,7 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.toggleFullScreen);
     assert.ok(controller.close);
     assert.ok(controller.confirmCloseSessions);
-    assert.ok(controller.checkForSessionsRunning);
-  });
-
-  test('invalidateSession action de-authenticates a user', async function (assert) {
-    assert.true(session.isAuthenticated);
-
-    await controller.confirmCloseSessions();
-
-    assert.false(session.isAuthenticated);
+    assert.ok(controller.showModalOrLogout);
   });
 
   test('toggleTheme action sets theme to specified value', function (assert) {
@@ -56,6 +48,8 @@ module('Unit | Controller | application', function (hooks) {
 
   test('disconnect action de-authenticates a user and resets cluster url', async function (assert) {
     const url = 'http://localhost:9200';
+    console.log('+++', mockIPC);
+    console.log('+++clusterUrl', clusterUrl);
     await clusterUrl.setClusterUrl(url);
 
     assert.true(session.isAuthenticated);

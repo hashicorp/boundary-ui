@@ -12,23 +12,23 @@ import { tracked } from '@glimmer/tracking';
 export default class ApplicationController extends Controller {
   // =services
 
-  @service ipc;
-  @service session;
   @service clusterUrl;
   @service flashMessages;
+  @service ipc;
+  @service session;
+  @service('browser/window') window;
 
   @tracked isLoggingOut = false;
   @tracked isAppQuitting = false;
 
   // =attributes
-  removeListener;
+  removeOnAppQuitListener;
 
   constructor() {
     super(...arguments);
-
     // Listen for when user attempts to quit app
-    // Setup removeListener to destroy the listener afterwards
-    this.removeListener = window.electron?.onAppQuit(() => {
+    // Setup removeOnAppQuitListener to destroy the listener afterwards
+    this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
       this.isAppQuitting = true;
     });
   }
@@ -55,10 +55,10 @@ export default class ApplicationController extends Controller {
   }
 
   /**
-   * Only renders the sigout modal if sessions are running
+   * Only renders the signout modal if target sessions are running
    */
   @action
-  async checkForSessionsRunning() {
+  async showModalOrLogout() {
     const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
     if (hasRunningSessions) {
       this.isLoggingOut = true;
@@ -127,8 +127,8 @@ export default class ApplicationController extends Controller {
   // Call ember controller willDestroy and implement teardown
   willDestroy() {
     super.willDestroy(...arguments);
-    if (this.removeListener) {
-      this.removeListener();
+    if (this.removeOnAppQuitListener) {
+      this.removeOnAppQuitListener();
     }
   }
 }

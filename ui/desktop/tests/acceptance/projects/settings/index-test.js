@@ -55,9 +55,9 @@ module('Acceptance | projects | settings | index', function (hooks) {
     settings: null,
   };
 
-  const SIGNOUT_BTN_SELECTOR = '[data-test-settings-signout-btn]';
-  const CLOSE_SESSIONS_MODAL_SELECTOR = '[data-test-close-sessions-modal]';
-  const CONFIRM_BUTTON = '.hds-modal__footer .hds-button--color-primary';
+  const SIGNOUT_BTN = '[data-test-settings-signout-btn]';
+  const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
+  const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
 
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
@@ -148,7 +148,7 @@ module('Acceptance | projects | settings | index', function (hooks) {
 
     await visit(urls.settings);
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
     assert.notOk(currentSession().isAuthenticated);
   });
@@ -162,16 +162,14 @@ module('Acceptance | projects | settings | index', function (hooks) {
 
     await visit(urls.settings);
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
-    assert
-      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
-      .includesText('Sign out of Boundary?');
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
 
-    await click(CONFIRM_BUTTON);
+    await click(MODAL_CONFIRM_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isNotVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
     assert.ok(stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });

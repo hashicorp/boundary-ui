@@ -36,7 +36,6 @@ const isLocalhost = require('./utils/isLocalhost');
 const config = require('../config/config.js');
 const { version } = require('./cli/index.js');
 const isDev = require('electron-is-dev');
-const SessionManager = require('./models/session-manager.js');
 
 // Register the custom file protocol
 // This will render as the default cluster URL: serve://boundary
