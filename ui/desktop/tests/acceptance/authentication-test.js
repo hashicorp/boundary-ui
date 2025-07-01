@@ -9,7 +9,6 @@ import {
   currentURL,
   fillIn,
   click,
-  find,
   triggerEvent,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
@@ -22,17 +21,13 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import Service from '@ember/service';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupStubs(hooks);
-
-  const SIGNOUT_BTN_SELECTOR = '[data-test-nav-signout-btn]';
-  const CLOSE_SESSIONS_MODAL_SELECTOR = '[data-test-close-sessions-modal]';
-  const CONFIRM_BUTTON = '.hds-modal__footer .hds-button--color-primary';
-  const CANCEL_BUTTON = '.hds-modal__footer .hds-button--color-secondary';
 
   const instances = {
     scopes: {
@@ -71,6 +66,13 @@ module('Acceptance | authentication', function (hooks) {
     targets: null,
     sessions: null,
   };
+
+  const SIGNOUT_BTN = '[data-test-nav-signout-btn]';
+  const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
+  const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
+  const MODAL_CANCEL_BTN = '.hds-modal__footer .hds-button--color-secondary';
+  const HEADER_DROPDOWN_BTN =
+    '.rose-header-utilities .header-dropdown-button-override button';
 
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
@@ -197,16 +199,11 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click(
-      '.rose-header-utilities .header-dropdown-button-override button',
-    );
+    await click(HEADER_DROPDOWN_BTN);
 
-    assert.strictEqual(
-      find(SIGNOUT_BTN_SELECTOR).textContent.trim(),
-      'Sign Out',
-    );
+    assert.dom(SIGNOUT_BTN).includesText('Sign Out');
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
     assert.notOk(currentSession().isAuthenticated);
   });
@@ -255,26 +252,20 @@ module('Acceptance | authentication', function (hooks) {
 
     await visit(urls.authenticate.methods.global);
 
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
+    await authenticateSession({ username: 'test' });
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click(
-      '.rose-header-utilities .header-dropdown-button-override button',
-    );
+    await click(HEADER_DROPDOWN_BTN);
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
-    assert
-      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
-      .includesText('Sign out of Boundary?');
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
 
-    await click(CANCEL_BUTTON);
+    await click(MODAL_CANCEL_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isNotVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
     assert.ok(currentSession().isAuthenticated);
   });
 
@@ -284,71 +275,65 @@ module('Acceptance | authentication', function (hooks) {
 
     await visit(urls.authenticate.methods.global);
 
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
+    await authenticateSession({ username: 'test' });
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click(
-      '.rose-header-utilities .header-dropdown-button-override button',
-    );
+    await click(HEADER_DROPDOWN_BTN);
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
-    assert
-      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
-      .includesText('Sign out of Boundary?');
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
 
-    await click(CONFIRM_BUTTON);
+    await click(MODAL_CONFIRM_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isNotVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
     assert.ok(stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 
   test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
-    const quitApp = this.ipcStub.withArgs('closeWindow');
-    const stopAllSessions = this.ipcStub.withArgs('stopAll');
-    // onAppQuit() is the channel that handles when a user triggers the before-quit event in the electron app
-    window.electron = {
-      onAppQuit: (e) => {
-        window.addEventListener('onAppQuit', e);
-        return () => {
-          window.removeEventListener('onAppQuit', e);
-        };
-      },
+    // We need to encapsulate the event listener inside a mocked window service to ensure
+    // the entire event is torn down (including the mocked window), since "window" exists
+    // globally across all tests, and we don't want tests impacting one another
+    const mockElectronEvent = class WindowElectronMock extends Service {
+      electron = {
+        onAppQuit: (callback) => {
+          window.addEventListener('onAppQuit', callback);
+          return () => {
+            window.removeEventListener('onAppQuit', callback);
+          };
+        },
+      };
     };
+
+    this.owner.register('service:browser/window', mockElectronEvent);
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
+    const quitApp = this.ipcStub.withArgs('closeWindow');
 
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
     await visit(urls.authenticate.methods.global);
 
-    await fillIn('[name="identification"]', 'test');
-    await fillIn('[name="password"]', 'test');
-    await click('[type="submit"]');
+    await authenticateSession({ username: 'test' });
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click(
-      '.rose-header-utilities .header-dropdown-button-override button',
-    );
+    await click(HEADER_DROPDOWN_BTN);
 
-    await click(SIGNOUT_BTN_SELECTOR);
+    await click(SIGNOUT_BTN);
 
-    assert.dom(CLOSE_SESSIONS_MODAL_SELECTOR).isVisible();
-    assert
-      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
-      .includesText('Sign out of Boundary?');
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
 
     await triggerEvent(window, 'onAppQuit');
 
     assert
-      .dom(CLOSE_SESSIONS_MODAL_SELECTOR)
+      .dom(MODAL_CLOSE_SESSIONS)
       .includesText('Close sessions before quitting?');
 
-    await click(CONFIRM_BUTTON);
+    await click(MODAL_CONFIRM_BTN);
     assert.ok(stopAllSessions.calledOnce);
     assert.ok(quitApp.calledOnce);
   });
