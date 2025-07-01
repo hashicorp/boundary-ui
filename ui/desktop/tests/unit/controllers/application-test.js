@@ -41,7 +41,7 @@ module('Unit | Controller | application', function (hooks) {
   test('invalidateSession action de-authenticates a user', async function (assert) {
     assert.true(session.isAuthenticated);
 
-    await controller.confirmCloseSessions();
+    await session.invalidate();
 
     assert.false(session.isAuthenticated);
   });

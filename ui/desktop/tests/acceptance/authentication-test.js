@@ -23,7 +23,6 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
-import Service from '@ember/service';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -310,21 +309,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
-    // We need to encapsulate the event listener inside a mocked window service to ensure
-    // the entire event is torn down (including the mocked window), since "window" exists
-    // globally across all tests, and we don't want tests impacting one another
-    const mockElectronEvent = class WindowElectronMock extends Service {
-      electron = {
-        onAppQuit: (e) => {
-          window.addEventListener('onAppQuit', e);
-          return () => {
-            window.removeEventListener('onAppQuit', e);
-          };
-        },
-      };
+    window.electron = {
+      onAppQuit: (e) => {
+        window.addEventListener('onAppQuit', e);
+        return () => {
+          window.removeEventListener('onAppQuit', e);
+        };
+      },
     };
 
-    this.owner.register('service:browser/window', mockElectronEvent);
     const stopAllSessions = this.ipcStub.withArgs('stopAll');
     const quitApp = this.ipcStub.withArgs('closeWindow');
 
@@ -358,5 +351,6 @@ module('Acceptance | authentication', function (hooks) {
     await click(CONFIRM_BUTTON);
     assert.ok(stopAllSessions.calledOnce);
     assert.ok(quitApp.calledOnce);
+    window.electron = null;
   });
 });
