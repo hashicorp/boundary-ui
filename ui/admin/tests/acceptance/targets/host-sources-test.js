@@ -11,15 +11,13 @@ import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | host-sources', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getTargetHostSetCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-targets-dropdown] button:first-child';
-  const ADD_HOSTSOURCE_SELECTOR = '[data-test-manage-targets-dropdown] ul li a';
 
   const instances = {
     scopes: {
@@ -33,7 +31,6 @@ module('Acceptance | targets | host-sources', function (hooks) {
   };
 
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -74,17 +71,15 @@ module('Acceptance | targets | host-sources', function (hooks) {
       hostSets: instances.hostCatalog.hostSets,
     });
     // Generate route URLs for resources
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
     urls.targetHostSources = `${urls.target}/host-sources`;
     urls.targetAddHostSources = `${urls.target}/add-host-sources`;
     urls.hostSet = `${urls.projectScope}/host-catalogs/${instances.hostCatalog.id}/host-sets/${instances.hostCatalog.hostSetIds[0]}`;
-    urls.unknownHostSet =
-      // Generate resource counter
-      getTargetHostSetCount = () =>
-        this.server.schema.targets.first().hostSets.models.length;
+    // Generate resource counter
+    getTargetHostSetCount = () =>
+      this.server.schema.targets.first().hostSets.models.length;
     await authenticateSession({ username: 'admin' });
   });
 
@@ -92,17 +87,19 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
+    await click(commonSelectors.HREF(urls.targetHostSources));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targetHostSources);
-    assert.dom('tbody tr').exists({ count: targetHostSetCount });
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount });
   });
 
   test('can navigate to a known host set type', async function (assert) {
     await visit(urls.targetHostSources);
 
-    await click(`[href="${urls.hostSet}"]`);
+    await click(commonSelectors.HREF(urls.hostSet));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
@@ -114,7 +111,7 @@ module('Acceptance | targets | host-sources', function (hooks) {
     });
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
+    await click(commonSelectors.HREF(urls.targetHostSources));
 
     assert
       .dom(
@@ -129,12 +126,14 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
+    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
-    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount - 1 });
   });
 
   test('cannot remove a host set without proper authorization', async function (assert) {
@@ -144,9 +143,9 @@ module('Acceptance | targets | host-sources', function (hooks) {
       );
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
+    await click(commonSelectors.HREF(urls.targetHostSources));
 
-    assert.dom(`tbody tr ${commonSelectors.DELETE_BTN}`).doesNotExist();
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
   });
 
   test('removing a target host set which errors displays error messages', async function (assert) {
@@ -165,11 +164,13 @@ module('Acceptance | targets | host-sources', function (hooks) {
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
+    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
-    assert.dom('tbody tr').exists({ count: targetHostSetCount });
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount });
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -177,23 +178,29 @@ module('Acceptance | targets | host-sources', function (hooks) {
 
   test('select and save host sets to add', async function (assert) {
     instances.target.update({ hostSetIds: [] });
-    await visit(urls.target);
     const targetHostSetCount = getTargetHostSetCount();
-    await click(`[href="${urls.targetHostSources}"]`);
-    assert.dom('tbody tr').exists({ count: 0 });
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_HOSTSOURCE_SELECTOR);
+    await visit(urls.target);
+
+    await click(commonSelectors.HREF(urls.targetHostSources));
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 0 });
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
+
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
 
     // Click three times to select, unselect, then reselect (for coverage)
-    await click('tbody label');
-    await click('tbody label');
-    await click('tbody label');
-    await click('form [type="submit"]');
-    await click(`[href="${urls.targetHostSources}"]`);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
+    await click(commonSelectors.HREF(urls.targetHostSources));
 
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount + 1);
-    assert.dom('tbody tr').exists({ count: targetHostSetCount + 1 });
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount + 1 });
   });
 
   test('cannot add host sources without proper authorization', async function (assert) {
@@ -203,32 +210,43 @@ module('Acceptance | targets | host-sources', function (hooks) {
       );
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.dom(ADD_HOSTSOURCE_SELECTOR).doesNotIncludeText('Add Host Sources');
+    await click(commonSelectors.HREF(urls.targetHostSources));
+    await click(selectors.MANAGE_DROPDOWN);
+
+    assert.dom(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES).doesNotExist();
   });
 
   test('select and cancel host sets to add', async function (assert) {
     const targetHostSetCount = getTargetHostSetCount();
     await visit(urls.target);
 
-    await click(`[href="${urls.targetHostSources}"]`);
-    assert.dom('tbody tr').exists({ count: targetHostSetCount });
+    await click(commonSelectors.HREF(urls.targetHostSources));
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount });
 
     // first, remove a target host set (otherwise none would be available to add)
-    await click('tbody tr td:last-child .hds-dropdown-toggle-icon');
-    await click('tbody tr .hds-dropdown-list-item button');
-    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_HOSTSOURCE_SELECTOR);
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount - 1 });
+
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
+
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
-    await click('tbody label');
-    await click('form [type="button"]');
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targetHostSources);
-    assert.dom('tbody tr').exists({ count: targetHostSetCount - 1 });
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount - 1);
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: targetHostSetCount - 1 });
   });
 
   test('adding a target host set which errors displays error messages', async function (assert) {
@@ -248,11 +266,13 @@ module('Acceptance | targets | host-sources', function (hooks) {
     instances.target.update({ hostSetIds: [] });
     const targetHostSetCount = getTargetHostSetCount();
 
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_HOSTSOURCE_SELECTOR);
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
+
     assert.strictEqual(targetHostSetCount, 0);
-    await click('tbody label');
-    await click('form [type="submit"]');
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.targetAddHostSources);
     assert.strictEqual(getTargetHostSetCount(), targetHostSetCount);
@@ -274,17 +294,17 @@ module('Acceptance | targets | host-sources', function (hooks) {
       this.server.schema.targets.find(target.id).address,
       '0.0.0.0',
     );
-
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
-    await click(`[href="${targetUrl}/host-sources"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_HOSTSOURCE_SELECTOR);
 
-    await click('tbody label');
-    await click('form [type="submit"]');
+    await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN);
 
     assert.strictEqual(
@@ -310,17 +330,17 @@ module('Acceptance | targets | host-sources', function (hooks) {
       this.server.schema.targets.find(target.id).address,
       '0.0.0.0',
     );
-
     const targetUrl = `${urls.targets}/${target.id}`;
     await visit(targetUrl);
-    await click(`[href="${targetUrl}/host-sources"]`);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_HOSTSOURCE_SELECTOR);
 
-    await click('tbody label');
-    await click('form [type="submit"]');
+    await click(commonSelectors.HREF(`${targetUrl}/host-sources`));
+    await click(selectors.MANAGE_DROPDOWN);
+    await click(selectors.MANAGE_DROPDOWN_ADD_HOST_SOURCES);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
+
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN);
 
     assert.strictEqual(
