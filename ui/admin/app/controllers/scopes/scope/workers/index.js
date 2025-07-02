@@ -162,7 +162,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
     if (this.can.can('read model', worker)) {
       await this.router.transitionTo('scopes.scope.workers.worker', worker);
     } else {
-      await this.router.transitionTo('scopes.scope.workers');
+      this.router.transitionTo('scopes.scope.workers');
     }
     await this.router.refresh();
   }
@@ -178,7 +178,7 @@ export default class ScopesScopeWorkersIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async delete(worker) {
     await worker.destroyRecord();
-    await this.router.replaceWith('scopes.scope.workers');
+    this.router.replaceWith('scopes.scope.workers');
     await this.router.refresh();
   }
 

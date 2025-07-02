@@ -151,7 +151,7 @@ export default class ScopesScopeTargetsIndexController extends Controller {
     if (this.can.can('read model', target)) {
       await this.router.transitionTo('scopes.scope.targets.target', target);
     } else {
-      await this.router.transitionTo('scopes.scope.targets');
+      this.router.transitionTo('scopes.scope.targets');
     }
     await this.router.refresh();
   }

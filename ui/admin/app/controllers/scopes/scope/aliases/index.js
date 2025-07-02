@@ -87,7 +87,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
     if (this.can.can('read model', alias)) {
       await this.router.transitionTo('scopes.scope.aliases.alias', alias);
     } else {
-      await this.router.transitionTo('scopes.scope.aliases');
+      this.router.transitionTo('scopes.scope.aliases');
     }
     await this.router.refresh();
   }
@@ -118,7 +118,7 @@ export default class ScopesScopeAliasesIndexController extends Controller {
   @notifySuccess('notifications.delete-success')
   async deleteAlias(alias) {
     await alias.destroyRecord();
-    await this.router.replaceWith('scopes.scope.aliases');
+    this.router.replaceWith('scopes.scope.aliases');
     await this.router.refresh();
   }
 
