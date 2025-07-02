@@ -107,7 +107,7 @@ export default class ScopesScopeHostCatalogsIndexController extends Controller {
         hostCatalog,
       );
     } else {
-      await this.router.transitionTo('scopes.scope.host-catalogs');
+      this.router.transitionTo('scopes.scope.host-catalogs');
     }
     await this.router.refresh();
   }
