@@ -58,7 +58,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await select(selectors.FIELD_SCOPE, 'global');
 
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -89,7 +89,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await select(selectors.FIELD_SCOPE, instances.scopes.org.id);
 
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -133,7 +133,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -170,7 +170,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -197,7 +197,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -234,7 +234,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
 
@@ -294,7 +294,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(`[href="${urls.newStorageBucket}"]`);
     await fillIn(
-      selectors.EDITOR_WORKER_FILTER,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);

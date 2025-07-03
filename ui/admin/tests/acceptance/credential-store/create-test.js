@@ -98,7 +98,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(selectors.TYPE_VAULT);
     await fillIn(
-      selectors.CODE_EDITOR_BODY,
+      commonSelectors.CODE_EDITOR_CONTENT,
       selectors.EDITOR_WORKER_FILTER_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
