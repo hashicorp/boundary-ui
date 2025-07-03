@@ -134,12 +134,12 @@
             </list.Item>
           {{/if}}
           {{! Target type }}
-          <list.Item class='resource-type' @icon='terminal' @color='faint'>
-            {{#if @model.target.isSSH}}
-              {{t 'resources.target.types.ssh'}}
-            {{else}}
-              {{t 'resources.target.types.tcp'}}
-            {{/if}}
+          <list.Item
+            class='resource-type'
+            @icon={{if @model.target.isRDP 'microsoft' 'terminal'}}
+            @color='faint'
+          >
+            {{t (concat 'resources.target.types.' @model.target.type)}}
           </list.Item>
           {{! Target address }}
           {{#if @model.target.address}}

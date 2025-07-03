@@ -369,6 +369,7 @@ session:
   proxy-url:
     address-port: Address & port
     ssh: SSH
+    rdp: RDP
   shell: Shell
 global:
   title: Global

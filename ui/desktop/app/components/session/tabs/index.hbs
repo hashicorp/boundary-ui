@@ -3,133 +3,37 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Tabs as |T|>
-  <T.Tab>{{t 'titles.details'}} </T.Tab>
-  <T.Tab @icon='terminal' {{on 'click' this.openTerminal}}>
-    {{t 'resources.session.shell'}}
-  </T.Tab>
-  <T.Panel>
-    {{#if (and @model.proxy_address @model.proxy_port)}}
-      <Session::ProxyUrl
-        @proxyAddress={{@model.proxy_address}}
-        @proxyPort={{@model.proxy_port}}
-        @isSSHTarget={{@model.target.isSSH}}
-      />
-    {{/if}}
-    <Rose::Layout::BodyContent as |bc|>
-      <bc.Body>
-        {{#if @model.credentials}}
-          <CredentialsPanel @credentials={{@model.credentials}} />
-        {{else}}
-          <Hds::ApplicationState data-test-no-credentials as |A|>
-            <A.Header
-              @title={{t 'resources.session.messages.connected.title'}}
-            />
-            <A.Body
-              @text={{t
-                'resources.session.messages.connected.description'
-                targetDisplayName=@model.target.displayName
-              }}
-            />
-          </Hds::ApplicationState>
-        {{/if}}
-      </bc.Body>
+{{#if @model.target.isRDP}}
+  {{! RDP: Show content directly without tabs }}
+  {{#if (and @model.proxy_address @model.proxy_port)}}
+    <Session::ProxyUrl
+      @proxyAddress={{@model.proxy_address}}
+      @proxyPort={{@model.proxy_port}}
+      @targetType={{@model.target.type}}
+    />
+  {{/if}}
 
-      {{#if (or @model.host @model.target)}}
-        <bc.Sidebar>
-          <div class='details-sidebar'>
-            {{#if @model.host}}
-              <div
-                class='title hds-typography-display-200 hds-font-weight-semibold'
-              >
-                {{t 'resources.host.details'}}
-              </div>
-              <Rose::MetadataList @orientation='vertical' as |list|>
-                {{! Host name }}
-                {{#if @model.host.name}}
-                  <list.Item @icon='monitor' @color='faint'>
-                    {{@model.host.name}}
-                  </list.Item>
-                {{/if}}
-                {{! Host description }}
-                {{#if @model.host.description}}
-                  <list.Item @icon='message-circle-fill' @color='faint'>
-                    {{@model.host.description}}
-                  </list.Item>
-                {{/if}}
-                {{! Host address }}
-                {{#if @model.host.address}}
-                  <list.Item @icon='network-alt' @color='faint'>
-                    {{@model.host.address}}
-                  </list.Item>
-                {{/if}}
-                {{! Host ID }}
-                <list.Item @icon='hash' @color='faint'>
-                  <Hds::Copy::Snippet
-                    @textToCopy={{@model.host.id}}
-                    @color='secondary'
-                  />
-                </list.Item>
-              </Rose::MetadataList>
-            {{/if}}
-            {{#if @model.target}}
-              <div
-                class='title hds-typography-display-200 hds-font-weight-semibold'
-              >
-                {{t 'resources.target.details'}}
-              </div>
-              <Rose::MetadataList @orientation='vertical' as |list|>
-                {{! Target name }}
-                <list.Item @icon='target' @color='faint'>
-                  {{@model.target.name}}
-                </list.Item>
-                {{! Project name }}
-                <list.Item @icon='grid' @color='faint'>
-                  {{@model.target.project.displayName}}
-                </list.Item>
-                {{! Target description }}
-                {{#if @model.target.description}}
-                  <list.Item @icon='message-circle-fill' @color='faint'>
-                    {{@model.target.description}}
-                  </list.Item>
-                {{/if}}
-                {{! Target type }}
-                <list.Item
-                  class='resource-type'
-                  @icon='terminal'
-                  @color='faint'
-                >
-                  {{#if @model.target.isSSH}}
-                    {{t 'resources.target.types.ssh'}}
-                  {{else}}
-                    {{t 'resources.target.types.tcp'}}
-                  {{/if}}
-                </list.Item>
-                {{! Target address }}
-                {{#if @model.target.address}}
-                  <list.Item
-                    class='resource-type'
-                    @icon='network-alt'
-                    @color='faint'
-                  >
-                    {{@model.target.address}}
-                  </list.Item>
-                {{/if}}
-                {{! Target ID }}
-                <list.Item @icon='hash' @color='faint'>
-                  <Hds::Copy::Snippet
-                    @textToCopy={{@model.target.id}}
-                    @color='secondary'
-                  />
-                </list.Item>
-              </Rose::MetadataList>
-            {{/if}}
-          </div>
-        </bc.Sidebar>
+  <Session::Details @model={{@model}} />
+{{else}}
+  {{! Non-RDP: Show tabbed interface }}
+  <Hds::Tabs as |T|>
+    <T.Tab>{{t 'titles.details'}}</T.Tab>
+    <T.Tab @icon='terminal' {{on 'click' this.openTerminal}}>
+      {{t 'resources.session.shell'}}
+    </T.Tab>
+    <T.Panel>
+      {{#if (and @model.proxy_address @model.proxy_port)}}
+        <Session::ProxyUrl
+          @proxyAddress={{@model.proxy_address}}
+          @proxyPort={{@model.proxy_port}}
+          @targetType={{@model.target.type}}
+        />
       {{/if}}
-    </Rose::Layout::BodyContent>
-  </T.Panel>
-  <T.Panel>
-    <div id='terminal-container'></div>
-  </T.Panel>
-</Hds::Tabs>
+
+      <Session::Details @model={{@model}} />
+    </T.Panel>
+    <T.Panel>
+      <div id='terminal-container'></div>
+    </T.Panel>
+  </Hds::Tabs>
+{{/if}}
