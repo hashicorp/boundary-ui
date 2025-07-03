@@ -49,6 +49,8 @@ export const RECORDING_SETTINGS_LINK = '.target-sidebar .hds-link-standalone';
 export const LINK_LIST_ITEM = '.link-list-item > a';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
 
+export const STORAGE_BUCKET_DROPDOWN = '[name=storage_bucket_id]';
+
 export const NO_RESULTS_MSG = '[data-test-no-target-results]';
 export const TABLE_ACTIVE_SESSIONS = (id) =>
   `tbody [data-test-targets-table-row="${id}"] .hds-table__td:nth-child(3) a`;
