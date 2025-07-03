@@ -63,7 +63,7 @@ const betterErrorHandlingMiddleware = {
   },
 };
 
-function extractDomainResourceFromUrl(url: string): string | undefined {
+function extractPluralizedResourceTypeFromUrl(url: string): string | undefined {
   const match = new URL(url).pathname.match(/\/v1\/([a-z]+)(|\/.*)/);
   if (!match) return undefined;
 
@@ -72,25 +72,75 @@ function extractDomainResourceFromUrl(url: string): string | undefined {
 }
 
 class BoundaryApi {
+  // `createdResources` is keyed by the pluralized resource type, e.g. "roles", "scopes", "targets"
+  // this is what is exracted from the url in `captureCreatedResourcesMiddleware`
   readonly createdResources: Record<string, { id: string }[]> = {};
   readonly skipCleanupResources: { id: string }[] = [];
 
   constructor(readonly controllerAddr: string) {}
-
   get clients() {
     const { openapiConfiguration } = this;
 
-    // these could might be able to be built dynamically, but by doing it this way the type annotations are
-    // preserved better for each client, and the "@link" jsdoc appear in the editor
+    // `clients` could be generated dynamically, but by doing it this way the type annotations are
+    // better preserved for each client, and the "@link" jsdoc appear in the editor
     const clients = {
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/accounts Accounts Documentation} */
+      Account: new BoundaryApiClient.AccountServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/aliases Aliases Method Documentation} */
+      Alias: new BoundaryApiClient.AliasServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/auth-methods Auth Method Documentation} */
+      AuthMethod: new BoundaryApiClient.AuthMethodServiceApi(openapiConfiguration),
+
+      AuthToken: new BoundaryApiClient.AuthTokenServiceApi(openapiConfiguration),
+      Billing: new BoundaryApiClient.BillingServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-libraries Credential Libraries Documentation} */
+      CredentialLibrary: new BoundaryApiClient.CredentialLibraryServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credentials Credentials Documentation} */
+      Credential: new BoundaryApiClient.CredentialServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-stores Credential Stores Documentation} */
+      CredentialStore: new BoundaryApiClient.CredentialStoreServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/groups Groups Documentation} */
+      Group: new BoundaryApiClient.GroupServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs Host Catalogs Documentation} */
+      HostCatalog: new BoundaryApiClient.HostCatalogServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-sets Host Sets Documentation} */
+      HotSet: new BoundaryApiClient.HostSetServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/managed-groups Managed Groups Documentation} */
+      ManagedGroup: new BoundaryApiClient.ManagedGroupServiceApi(openapiConfiguration),
+
+      Policy: new BoundaryApiClient.PolicyServiceApi(openapiConfiguration),
+
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/roles Roles Documentation} */
-      roles: new BoundaryApiClient.RoleServiceApi(openapiConfiguration),
+      Role: new BoundaryApiClient.RoleServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/scopes Scopes Documentation} */
-      scopes: new BoundaryApiClient.ScopeServiceApi(openapiConfiguration),
+      Scope: new BoundaryApiClient.ScopeServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/session-recordings Session Recordings Documentation} */
+      SessionRecording: new BoundaryApiClient.SessionRecordingServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/sessions Sessions Documentation} */
+      Session: new BoundaryApiClient.SessionServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/storage-buckets Storage Buckets Documentation} */
+      StorageBucket: new BoundaryApiClient.StorageBucketServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/targets Targets Documentation} */
-      targets: new BoundaryApiClient.TargetServiceApi(openapiConfiguration),
+      Target: new BoundaryApiClient.TargetServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/users Users Documentation} */
+      User: new BoundaryApiClient.UserServiceApi(openapiConfiguration),
+
+      Worker: new BoundaryApiClient.WorkerServiceApi(openapiConfiguration),
     };
 
     return clients;
@@ -116,17 +166,18 @@ class BoundaryApi {
           return context.response;
         }
 
-        const type = extractDomainResourceFromUrl(context.response.url);
+        // the url is the being used to determine the resource type, it returns the type in pluralized form
+        const pluralizedResourceType = extractPluralizedResourceTypeFromUrl(context.response.url);
         // the response `json` can only be read once, and needs to be read later by the generated api client,
         // instead we can clone the response and this allows us to read the `json` on the cloned response only
         const json = await context.response.clone().json();
 
         // it's assume that json response has an `id` in order for it to be a created resource
-        if (type && typeof json?.id === 'string') {
-          resources[type] ??= [];
+        if (pluralizedResourceType && typeof json?.id === 'string') {
+          resources[pluralizedResourceType] ??= [];
           // capture the created json payload, all that's really needed is the `id` and the `type`
           // in order to delete it later
-          resources[type].push(json);
+          resources[pluralizedResourceType].push(json);
         }
 
         // return original response
@@ -164,20 +215,42 @@ export const boundaryApiClientTest = base.extend<{
     // anything after awaiting `use` is ran after the test that uses the fixture has ran
 
     const { clients } = boundaryApi;
-    const deleteMethods = {
-      roles: clients.roles.roleServiceDeleteRole.bind(clients.roles),
-      scopes: clients.scopes.scopeServiceDeleteScope.bind(clients.scopes),
-      targets: clients.targets.targetServiceDeleteTarget.bind(clients.targets),
+
+    // These delete methods have to be keyed of the pluralized resource type because
+    // that is how the resources are stored in `createdResources` and how the type is
+    // extracted from the url
+    const cleanUpMethods = {
+      accounts: clients.Account.accountServiceDeleteAccount.bind(clients.Account),
+      aliases: clients.Alias.aliasServiceDeleteAlias.bind(clients.Alias),
+      auth_tokens: clients.AuthToken.authTokenServiceDeleteAuthToken.bind(clients.AuthToken),
+      auth_methods: clients.AuthMethod.authMethodServiceDeleteAuthMethod.bind(clients.AuthMethod),
+      credential_libraries: clients.CredentialLibrary.credentialLibraryServiceDeleteCredentialLibrary.bind(clients.CredentialLibrary),
+      credentials: clients.Credential.credentialServiceDeleteCredential.bind(clients.Credential),
+      credential_stores: clients.CredentialStore.credentialStoreServiceDeleteCredentialStore.bind(clients.CredentialStore),
+      groups: clients.Group.groupServiceDeleteGroup.bind(clients.Group),
+      host_catalogs: clients.HostCatalog.hostCatalogServiceDeleteHostCatalog.bind(clients.HostCatalog),
+      host_sets: clients.HotSet.hostSetServiceDeleteHostSet.bind(clients.HotSet),
+      managed_groups: clients.ManagedGroup.managedGroupServiceDeleteManagedGroup.bind(clients.ManagedGroup),
+      policies: clients.Policy.policyServiceDeletePolicy.bind(clients.Policy),
+      roles: clients.Role.roleServiceDeleteRole.bind(clients.Role),
+      scopes: clients.Scope.scopeServiceDeleteScope.bind(clients.Scope),
+      session_recordings: clients.SessionRecording.sessionRecordingServiceDeleteSessionRecording.bind(clients.SessionRecording),
+      // this is not a delete method on the resource, but cancelling a session is the equivalent cleanup action
+      sessions: clients.Session.sessionServiceCancelSession.bind(clients.Session),
+      storage_buckets: clients.StorageBucket.storageBucketServiceDeleteStorageBucket.bind(clients.StorageBucket),
+      targets: clients.Target.targetServiceDeleteTarget.bind(clients.Target),
+      users: clients.User.userServiceDeleteUser.bind(clients.User),
+      workers: clients.Worker.workerServiceDeleteWorker.bind(clients.Worker),
     };
 
-    for (const [resourceType, resources] of Object.entries(
+    for (const [pluralizedResourceType, resources] of Object.entries(
       boundaryApi.createdResources,
     )) {
-      const resouceDeleteMethod = deleteMethods[resourceType];
+      const cleanUpMethod = cleanUpMethods[pluralizedResourceType];
 
-      if (!resouceDeleteMethod) {
+      if (!cleanUpMethod) {
         throw new Error(
-          `No delete method found for resource type: ${resourceType}`,
+          `No delete method found for resource type: ${pluralizedResourceType}`,
         );
       }
 
@@ -201,7 +274,7 @@ export const boundaryApiClientTest = base.extend<{
             };
           };
 
-          return resouceDeleteMethod({ id: resource.id }, initOverride).catch(
+          return cleanUpMethod({ id: resource.id }, initOverride).catch(
             (error) => {
               // if the resource is not found it was likely already deleted and the error can be ignored
               if (error.response?.status === BoundaryApiStatusCodes.notFound) {
@@ -209,7 +282,7 @@ export const boundaryApiClientTest = base.extend<{
               }
 
               console.warn(
-                `Failed to clean up resource of type ${resourceType} with id ${resource.id}:`,
+                `Failed to clean up resource of type ${pluralizedResourceType} with id ${resource.id}:`,
                 error,
               );
             },
