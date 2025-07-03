@@ -18,4 +18,12 @@ export default class ScopesScopeProjectsSettingsIndexController extends Controll
   toggleTheme({ target: { value: theme } }) {
     return this.application.toggleTheme(theme);
   }
+
+  /**
+   * Call Application controller's checkForSessionsRunning method
+   */
+  @action
+  checkForSessionsRunning() {
+    return this.application.checkForSessionsRunning();
+  }
 }
