@@ -4,32 +4,20 @@
  */
 
 import { module, test } from 'qunit';
-import {
-  visit,
-  currentURL,
-  click,
-  find,
-  findAll,
-  fillIn,
-} from '@ember/test-helpers';
+import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
   let getHostSetHostCount;
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] button:first-child';
-  const CREATE_AND_ADD_HOSTS_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
-  const ADD_EXISTING_HOSTS_SELECTOR =
-    '[data-test-manage-dropdown-host-sets] div ul li:nth-child(2) a';
 
   const instances = {
     scopes: {
@@ -90,20 +78,24 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   });
 
   test('visiting host set hosts', async function (assert) {
+    const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
   });
 
   test('can remove a host', async function (assert) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, count);
 
-    await click('[data-test-host-set-hosts-dropdown-toggle]');
-    await click('[data-test-host-set-hosts-dropdown-remove-host]');
-    assert.strictEqual(findAll('tbody tr').length, count - 1);
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: count - 1 });
   });
 
   test('cannot remove a host without proper authorization', async function (assert) {
@@ -112,12 +104,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSetHosts);
-    assert.notOk(
-      find('tbody tr [data-test-host-set-hosts-dropdown-remove-host]'),
-    );
+
+    assert.dom(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN).doesNotExist();
   });
 
   test('shows error message on host remove error', async function (assert) {
+    const count = getHostSetHostCount();
     this.server.post('/host-sets/:idMethod', () => {
       return new Response(
         400,
@@ -131,9 +123,12 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
       );
     });
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, getHostSetHostCount());
-    await click('[data-test-host-set-hosts-dropdown-toggle]');
-    await click('[data-test-host-set-hosts-dropdown-remove-host]');
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -142,13 +137,16 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('visiting add hosts', async function (assert) {
     await visit(urls.addHosts);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.addHosts);
   });
 
   test('can navigate to add hosts with proper authorization', async function (assert) {
     await visit(urls.hostSet);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    assert.ok(find(`[href="${urls.addHosts}"]`));
+
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
+
+    assert.dom(commonSelectors.HREF(urls.addHosts)).isVisible();
   });
 
   test('cannot navigate to add hosts without proper authorization', async function (assert) {
@@ -157,39 +155,51 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     );
     instances.hostSet.update({ authorized_actions });
     await visit(urls.hostSet);
-    assert.notOk(find(`[href="${urls.addHosts}"]`));
+
+    assert.dom(commonSelectors.HREF(urls.addHosts)).doesNotExist();
   });
 
   test('select and save hosts to add', async function (assert) {
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, 0);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_EXISTING_HOSTS_SELECTOR);
+
+    assert.dom(commonSelectors.TABLE_ROWS).doesNotExist();
+
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_ADD_EXISTING_HOST);
+
     assert.strictEqual(currentURL(), urls.addHosts);
     // Click three times to select, unselect, then reselect (for coverage)
-    await click('tbody label');
-    await click('tbody label');
-    await click('tbody label');
-    await click('form [type="submit"]');
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, 1);
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: 1 });
   });
 
   test('select and cancel hosts to add', async function (assert) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, count);
-    await click('[data-test-host-set-hosts-dropdown-toggle]');
-    await click('[data-test-host-set-hosts-dropdown-remove-host]');
-    assert.strictEqual(findAll('tbody tr').length, count - 1);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(ADD_EXISTING_HOSTS_SELECTOR);
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count });
+
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN);
+    await click(commonSelectors.TABLE_FIRST_ROW_ACTION_DROPDOWN_ITEM_BTN);
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: count - 1 });
+
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_ADD_EXISTING_HOST);
+
     assert.strictEqual(currentURL(), urls.addHosts);
-    await click('tbody .hds-table__tr .hds-form-label');
-    await click('form [type="button"]');
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.CANCEL_BTN);
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, count - 1);
+
+    assert.dom(commonSelectors.TABLE_ROWS).isVisible({ count: count - 1 });
   });
 
   test('shows error message on host add error', async function (assert) {
@@ -207,8 +217,10 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.addHosts);
-    await click('tbody .hds-table__tr .hds-form-label');
-    await click('form [type="submit"]');
+
+    await click(commonSelectors.TABLE_ROW_CHECKBOX);
+    await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -217,26 +229,34 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('visiting host creation from a host set', async function (assert) {
     await visit(urls.createAndAddHost);
     await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.createAndAddHost);
   });
 
   test('create and add host to host set', async function (assert) {
     instances.hostSet.update({ hostIds: [] });
-    await visit(urls.hostSet);
-    assert.strictEqual(findAll('tbody tr').length, 0);
-    await click(MANAGE_DROPDOWN_SELECTOR);
-    await click(CREATE_AND_ADD_HOSTS_SELECTOR);
-    assert.strictEqual(currentURL(), urls.createAndAddHost);
-    await fillIn('[name="name"]', 'Test Name');
-    await fillIn('[name="description"]', 'description');
-    await click('form [type="submit"]:not(:disabled)');
     await visit(urls.hostSetHosts);
-    assert.strictEqual(findAll('tbody tr').length, 1);
+
+    assert.dom(commonSelectors.TABLE_ROWS).doesNotExist();
+
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS);
+    await click(selectors.MANAGE_DROPDOWN_HOST_SETS_CREATE_AND_ADD);
+
+    assert.strictEqual(currentURL(), urls.createAndAddHost);
+
+    await fillIn(commonSelectors.FIELD_NAME, 'Test Name');
+    await fillIn(commonSelectors.FIELD_DESCRIPTION, 'description');
+    await click(commonSelectors.SAVE_BTN);
+    await visit(urls.hostSetHosts);
+
+    assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 1 });
   });
 
   test('create and cancel host add to host set', async function (assert) {
     await visit(urls.createAndAddHost);
-    await click('form [type="button"]');
+
+    await click(commonSelectors.CANCEL_BTN);
+
     assert.strictEqual(currentURL(), urls.hostSetHosts);
   });
 
@@ -255,8 +275,10 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.createAndAddHost);
-    await fillIn('[name="name"]', 'New Host');
-    await click('form [type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, 'New Host');
+    await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');
@@ -277,8 +299,10 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
     });
     instances.hostSet.update({ hostIds: [] });
     await visit(urls.createAndAddHost);
-    await fillIn('[name="name"]', 'New Host');
-    await click('form [type="submit"]');
+
+    await fillIn(commonSelectors.FIELD_NAME, 'New Host');
+    await click(commonSelectors.SAVE_BTN);
+
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');

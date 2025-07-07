@@ -4,17 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, find } from '@ember/test-helpers';
+import { visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | host-catalogs | host sets | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-
-  const MANAGE_DROPDOWN_SELECTOR =
-    '[data-test-manage-host-catalogs-dropdown] button:first-child';
 
   const instances = {
     scopes: {
@@ -68,23 +66,25 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
 
   test('Users can navigate to host-sets with proper authorization', async function (assert) {
     await visit(urls.hostCatalog);
+
     assert.ok(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'list',
       ),
     );
-    assert.ok(find(`[href="${urls.hostSets}"]`));
+    assert.dom(commonSelectors.HREF(urls.hostSets)).isVisible();
   });
 
   test('Users cannot navigate to index without either list or create actions', async function (assert) {
     instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
     await visit(urls.hostCatalog);
+
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(
         'list',
       ),
     );
-    assert.notOk(find(`[href="${urls.hostSets}"]`));
+    assert.dom(commonSelectors.HREF(urls.hostSets)).doesNotExist();
   });
 
   test('Users can navigate to index with only create action', async function (assert) {
@@ -93,8 +93,6 @@ module('Acceptance | host-catalogs | host sets | list', function (hooks) {
     ];
     await visit(urls.hostCatalog);
 
-    assert.ok(find(`[href="${urls.hostSets}"]`));
-
-    assert.dom(MANAGE_DROPDOWN_SELECTOR).exists();
+    assert.dom(commonSelectors.HREF(urls.hostSets)).isVisible();
   });
 });
