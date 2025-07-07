@@ -2,6 +2,18 @@
 
 Canonical reference for changes, improvements, and bugfixes for Boundary Desktop.
 
+## V2.3.3 [CLI 0.19.3] (2025.07.08)
+
+### New & Improved
+
+- Add search and pagination support for host sources. ([PR](https://github.com/hashicorp/boundary-ui/pull/2861))
+
+### Bug Fixes
+
+- Clear stale error messages after login during Vault authentication flow. ([PR](https://github.com/hashicorp/boundary-ui/pull/2772))
+- Fix loading indicator visibility in refresh buttons for Targets and Sessions. ([PR](https://github.com/hashicorp/boundary-ui/pull/2889))
+
+
 ## V2.3.2 [CLI 0.19.2] (2025.05.08)
 
 ### Bug Fixes

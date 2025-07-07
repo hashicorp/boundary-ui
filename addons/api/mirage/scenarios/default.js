@@ -110,7 +110,18 @@ export default function (server) {
 
   // Other resources
   server.schema.scopes.where({ type: 'project' }).models.forEach((scope) => {
-    server.createList('host-catalog', 8, { scope }, 'withChildren');
+    server.createList(
+      'host-catalog',
+      2,
+      { scope, type: 'static' },
+      'withChildren',
+    );
+    server.createList(
+      'host-catalog',
+      8,
+      { scope, type: 'plugin' },
+      'withChildren',
+    );
     server.createList('credential-store', 3, { scope }, 'withAssociations');
     server.createList('target', 2, { scope }, 'withAssociations');
     server.create('target', { scope, address: '0.0.0.0' });

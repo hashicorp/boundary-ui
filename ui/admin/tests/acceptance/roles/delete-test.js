@@ -57,13 +57,16 @@ module('Acceptance | roles | delete', function (hooks) {
   });
 
   test('can delete a role', async function (assert) {
-    const rolesCount = this.server.db.roles.length;
+    const rolesCount = this.server.schema.roles.all().models.length;
     await visit(urls.role);
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_REMOVE);
 
-    assert.strictEqual(this.server.db.roles.length, rolesCount - 1);
+    assert.strictEqual(
+      this.server.schema.roles.all().models.length,
+      rolesCount - 1,
+    );
   });
 
   test('cannot delete a role without proper authorization', async function (assert) {

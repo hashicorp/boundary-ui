@@ -188,7 +188,7 @@ module('Acceptance | projects | sessions | index', function (hooks) {
   });
 
   test('visiting empty sessions', async function (assert) {
-    this.server.db.sessions.remove();
+    this.server.schema.sessions.all().destroy();
     this.stubCacheDaemonSearch('sessions', 'sessions');
     await visit(urls.projects);
 
