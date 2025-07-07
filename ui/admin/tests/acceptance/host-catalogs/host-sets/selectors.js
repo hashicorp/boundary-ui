@@ -19,3 +19,7 @@ export const MANAGE_DROPDOWN_HOST_SETS =
   '[data-test-manage-dropdown-host-sets] button:first-child';
 export const MANAGE_DROPDOWN_HOST_SETS_DELETE =
   '[data-test-manage-dropdown-host-sets] ul li button';
+export const MANAGE_DROPDOWN_HOST_SETS_CREATE_AND_ADD =
+  '[data-test-manage-dropdown-host-sets] div ul li:first-child a';
+export const MANAGE_DROPDOWN_HOST_SETS_ADD_EXISTING_HOST =
+  '[data-test-manage-dropdown-host-sets] div ul li:nth-child(2) a';
