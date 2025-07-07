@@ -35,6 +35,9 @@ export const MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS =
   '[data-test-manage-targets-dropdown] [data-test-add-injected-cred-sources-action]';
 export const MANAGE_DROPDOWN_ADD_HOST_SOURCES =
   '[data-test-manage-targets-dropdown] [data-test-add-host-sources-action]';
+export const MANAGE_ALIAS_DROPDOWN = '[data-test-manage-target-alias] button';
+export const MANAGE_ALIAS_DROPDOWN_CLEAR =
+  '[data-test-manage-target-alias] .hds-dropdown-list-item--color-action button';
 
 export const ALIASES_SIDEBAR = '.target-sidebar-aliases';
 export const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
