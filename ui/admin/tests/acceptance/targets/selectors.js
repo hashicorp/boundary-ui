@@ -63,5 +63,5 @@ export const CODE_BLOCK_CONTENT = (name) =>
   `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
 export const WORKERS_ACCORDION_DROPDOWN = (name) =>
   `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
-export const WORKERS_ACCORDION_DROPDOWN_TEXT = (name) =>
+export const WORKERS_ACCORDION_DROPDOWN_LINK = (name) =>
   `[data-test-target-${name}-workers-accordion-item] a`;

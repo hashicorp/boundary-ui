@@ -257,10 +257,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_TEXT('egress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('egress'))
       .hasText(intl.t('actions.add-worker-filter'));
     assert
-      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_TEXT('ingress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('ingress'))
       .hasText(intl.t('actions.add-worker-filter'));
   });
 
@@ -271,10 +271,10 @@ module('Acceptance | targets | workers', function (hooks) {
     await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_TEXT('egress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('egress'))
       .hasText(intl.t('actions.edit-worker-filter'));
     assert
-      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_TEXT('ingress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('ingress'))
       .hasText(intl.t('actions.edit-worker-filter'));
   });
 
