@@ -16,9 +16,7 @@ import { checkResponse } from './responseHelper.js';
  */
 export async function createPasswordAccount(
   request,
-  authMethodId,
-  username,
-  password,
+  { authMethodId, username, password },
 ) {
   const response = await request.post(`/v1/accounts`, {
     data: {

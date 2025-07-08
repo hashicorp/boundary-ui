@@ -40,12 +40,11 @@ test(
       authMethod = await boundaryHttp.createPasswordAuthMethod(request, org.id);
       const username = 'test-user';
       const password = 'password';
-      account = await boundaryHttp.createPasswordAccount(
-        request,
-        authMethod.id,
+      account = await boundaryHttp.createPasswordAccount(request, {
+        authMethodId: authMethod.id,
         username,
         password,
-      );
+      });
       await boundaryHttp.makeAuthMethodPrimary(request, {
         orgId: org.id,
         authMethodId: authMethod.id,
