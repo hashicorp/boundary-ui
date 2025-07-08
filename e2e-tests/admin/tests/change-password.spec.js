@@ -5,13 +5,10 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-import { execSync } from 'child_process';
 
 import * as boundaryCli from '../../helpers/boundary-cli';
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 import { LoginPage } from '../pages/login.js';
-import { OrgsPage } from '../pages/orgs.js';
-import { AuthMethodsPage } from '../pages/auth-methods.js';
-import { UsersPage } from '../pages/users.js';
 
 // Reset storage state for this file to avoid being authenticated
 test.use({ storageState: { cookies: [], origins: [] } });
@@ -22,18 +19,14 @@ test.beforeAll(async () => {
 
 test(
   'Verify user can change password',
-  // TODO: check test works for each tag
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({
-    page,
-    controllerAddr,
-    adminAuthMethodId,
-    adminLoginName,
-    adminPassword,
-  }) => {
+  async ({ page, request, adminLoginName, adminPassword }) => {
     await page.goto('/');
-    let orgName;
-    let authMethodName;
+
+    let org;
+    let authMethod;
+    let account;
+    let user;
     try {
       // Log in
       const loginPage = new LoginPage(page);
@@ -42,27 +35,28 @@ test(
         page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
       ).toBeVisible();
 
-      // Create a new org, password auth method, account, and user
-      const orgsPage = new OrgsPage(page);
-      orgName = await orgsPage.createOrg();
+      // Create a new org, password auth method, account, and user via http API
+      org = await boundaryHttp.createOrg(request);
 
-      const authMethodsPage = new AuthMethodsPage(page);
-      authMethodName = await authMethodsPage.createPasswordAuthMethod();
+      authMethod = await boundaryHttp.createPasswordAuthMethod(request, org.id);
       const username = 'test-user';
       const password = 'password';
-      await authMethodsPage.createPasswordAccount(username, password);
-      await authMethodsPage.makeAuthMethodPrimary();
+      account = await boundaryHttp.createPasswordAccount(
+        request,
+        authMethod.id,
+        username,
+        password,
+      );
+      await boundaryHttp.makeAuthMethodPrimary(request, org.id, authMethod.id);
 
-      const usersPage = new UsersPage(page);
-      await usersPage.createUser();
-      await usersPage.addAccountToUser(username);
+      user = await boundaryHttp.createUser(request, org.id);
+      await boundaryHttp.addAccountToUser(request, user.id, account.id);
 
       // Log in using new account
       await loginPage.logout(adminLoginName);
-      await console.log(`Logging in as ${username} with password ${password}`);
       await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
-      await page.getByRole('link', { name: authMethodName }).click();
+      await page.getByRole('link', { name: org.name }).click();
+      await page.getByRole('link', { name: authMethod.name }).click();
 
       await loginPage.login(username, password);
       await expect(
@@ -72,7 +66,6 @@ test(
       ).toBeVisible();
 
       // Change password for user
-      // TODO: move to auth-methods.js page?
       await page.getByRole('button', { name: username }).click();
       await page.getByRole('link', { name: 'Change Password' }).click();
       const newPassword = 'new-password';
@@ -86,8 +79,8 @@ test(
       // Confirm user cannot log in with old password
       await loginPage.logout(username);
       await page.getByText('Choose a different scope').click();
-      await page.getByRole('link', { name: orgName }).click();
-      await page.getByRole('link', { name: authMethodName }).click();
+      await page.getByRole('link', { name: org.name }).click();
+      await page.getByRole('link', { name: authMethod.name }).click();
       await page.getByLabel('Login Name').fill(username);
       await page.getByLabel('Password', { exact: true }).fill(password);
       await page.getByRole('button', { name: 'Sign In' }).click();
@@ -103,34 +96,11 @@ test(
           .getByText('Projects'),
       ).toBeVisible();
     } finally {
-      await boundaryCli.authenticateBoundary(
-        controllerAddr,
-        adminAuthMethodId,
-        adminLoginName,
-        adminPassword,
-      );
-
-      if (authMethodName) {
-        const authMethods = JSON.parse(
-          execSync('boundary auth-methods list --recursive -format json'),
-        );
-        const authMethod = authMethods.items.filter(
-          (obj) => obj.name == authMethodName,
-        )[0];
-        if (authMethod) {
-          try {
-            execSync('boundary auth-methods delete -id=' + authMethod.id);
-          } catch (e) {
-            console.log(`${e.stderr}`);
-          }
-        }
+      if (authMethod.id) {
+        await request.delete(`/v1/auth-methods/${authMethod.id}`);
       }
-
-      if (orgName) {
-        const orgId = await boundaryCli.getOrgIdFromName(orgName);
-        if (orgId) {
-          await boundaryCli.deleteScope(orgId);
-        }
+      if (org.id) {
+        org = await request.delete(`/v1/scopes/${org.id}`);
       }
     }
   },
