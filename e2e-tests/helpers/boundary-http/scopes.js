@@ -36,7 +36,7 @@ export async function deleteOrg(request, orgId) {
 /**
  * Creates a new project
  * @param {import('@playwright/test').APIRequestContext} request
- * @param {string} scopeId
+ * @param {string} scopeId ID of the scope where target will be created
  * @returns {Promise<Serializable>}
  */
 export async function createProject(request, scopeId) {
@@ -54,14 +54,12 @@ export async function createProject(request, scopeId) {
  * @param {import('@playwright/test').APIRequestContext} request
  * @param {string} orgId
  * @param {string} authMethodId
- * @param {number} [version=1] // The version must be incremented for subsequent updates to the same resource to prevent concurrency conflicts
+ * @param {number} [version=1] Must explicity be provided if same request is made multiple times to prevent concurrency conflicts (increment for each update)
  * @returns {Promise<Serializable>}
  */
 export async function makeAuthMethodPrimary(
   request,
-  orgId,
-  authMethodId,
-  version = 1,
+  { orgId, authMethodId, version = 1 },
 ) {
   const response = await request.patch(`v1/scopes/${orgId}`, {
     data: {

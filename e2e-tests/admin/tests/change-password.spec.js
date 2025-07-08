@@ -22,12 +22,11 @@ test(
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({ page, request, adminLoginName, adminPassword }) => {
     await page.goto('/');
-
     let org;
     let authMethod;
-    let account;
-    let user;
     try {
+      let account;
+      let user;
       // Log in
       const loginPage = new LoginPage(page);
       await loginPage.login(adminLoginName, adminPassword);
@@ -47,10 +46,16 @@ test(
         username,
         password,
       );
-      await boundaryHttp.makeAuthMethodPrimary(request, org.id, authMethod.id);
+      await boundaryHttp.makeAuthMethodPrimary(request, {
+        orgId: org.id,
+        authMethodId: authMethod.id,
+      });
 
       user = await boundaryHttp.createUser(request, org.id);
-      await boundaryHttp.addAccountToUser(request, user.id, account.id);
+      await boundaryHttp.addAccountToUser(request, {
+        userId: user.id,
+        accountId: account.id,
+      });
 
       // Log in using new account
       await loginPage.logout(adminLoginName);
@@ -97,10 +102,10 @@ test(
       ).toBeVisible();
     } finally {
       if (authMethod.id) {
-        await request.delete(`/v1/auth-methods/${authMethod.id}`);
+        await boundaryHttp.deleteAuthMethod(request, authMethod.id);
       }
       if (org.id) {
-        org = await request.delete(`/v1/scopes/${org.id}`);
+        await boundaryHttp.deleteOrg(request, org.id);
       }
     }
   },
