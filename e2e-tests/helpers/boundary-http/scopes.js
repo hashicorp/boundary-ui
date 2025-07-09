@@ -59,8 +59,6 @@ export async function createProject(request, scopeId) {
 export async function makeAuthMethodPrimary(request, { org, authMethodId }) {
   const response = await request.patch(`v1/scopes/${org.id}`, {
     data: {
-      scope_id: 'global',
-      type: 'org',
       primary_auth_method_id: authMethodId,
       version: org.version,
     },
