@@ -3,28 +3,39 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Dropdown data-test-manage-host-catalogs-dropdown as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'create model' @model collection='hosts')}}
-    <dd.Interactive
-      @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
-      @model={{@model}}
-    >
-      {{t 'resources.host.actions.create'}}
-    </dd.Interactive>
+{{#let
+  (hash
+    canCreateHosts=(can 'create model' @model collection='hosts')
+    canCreateHostSets=(can 'create model' @model collection='host-sets')
+    canDelete=(can 'delete model' @model)
+  )
+  as |perms|
+}}
+  {{#if (or perms.canCreateHosts perms.canCreateHostSets perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-host-catalogs-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canCreateHosts}}
+        <dd.Interactive
+          @route='scopes.scope.host-catalogs.host-catalog.hosts.new'
+          @model={{@model}}
+        >
+          {{t 'resources.host.actions.create'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canCreateHostSets}}
+        <dd.Interactive
+          @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
+          @model={{@model}}
+        >
+          {{t 'resources.host-set.actions.create'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        <dd.Separator />
+        <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+          {{t 'resources.host-catalog.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'create model' @model collection='host-sets')}}
-    <dd.Interactive
-      @route='scopes.scope.host-catalogs.host-catalog.host-sets.new'
-      @model={{@model}}
-    >
-      {{t 'resources.host-set.actions.create'}}
-    </dd.Interactive>
-  {{/if}}
-  {{#if (can 'delete model' @model)}}
-    <dd.Separator />
-    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
-      {{t 'resources.host-catalog.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}
