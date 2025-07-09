@@ -54,19 +54,15 @@ export async function createProject(request, scopeId) {
  * @param {import('@playwright/test').APIRequestContext} request
  * @param {string} orgId
  * @param {string} authMethodId
- * @param {number} [version=1] Must explicity be provided if same request is made multiple times to prevent concurrency conflicts (increment for each update)
  * @returns {Promise<Serializable>}
  */
-export async function makeAuthMethodPrimary(
-  request,
-  { orgId, authMethodId, version = 1 },
-) {
-  const response = await request.patch(`v1/scopes/${orgId}`, {
+export async function makeAuthMethodPrimary(request, { org, authMethodId }) {
+  const response = await request.patch(`v1/scopes/${org.id}`, {
     data: {
       scope_id: 'global',
-      version,
       type: 'org',
       primary_auth_method_id: authMethodId,
+      version: org.version,
     },
   });
 

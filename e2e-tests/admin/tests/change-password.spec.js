@@ -46,14 +46,14 @@ test(
         password,
       });
       await boundaryHttp.makeAuthMethodPrimary(request, {
-        orgId: org.id,
+        org,
         authMethodId: authMethod.id,
       });
 
       user = await boundaryHttp.createUser(request, org.id);
-      await boundaryHttp.addAccountToUser(request, {
-        userId: user.id,
-        accountId: account.id,
+      await boundaryHttp.addAccountsToUser(request, {
+        user,
+        accountIds: [account.id],
       });
 
       // Log in using new account

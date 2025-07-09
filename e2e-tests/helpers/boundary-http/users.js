@@ -28,17 +28,13 @@ export async function createUser(request, orgId) {
  * @param {import('@playwright/test').APIRequestContext} request
  * @param {string} userId
  * @param {string} accountId
- * @param {number} [version=1] Must explicity be provided if same request is made multiple times to prevent concurrency conflicts (increment for each update)
  * @returns {Promise<Serializable>}
  */
-export async function addAccountToUser(
-  request,
-  { userId, accountId, version = 1 },
-) {
-  const response = await request.post(`/v1/users/${userId}:add-accounts`, {
+export async function addAccountsToUser(request, { user, accountIds }) {
+  const response = await request.post(`/v1/users/${user.id}:add-accounts`, {
     data: {
-      account_ids: [accountId],
-      version,
+      account_ids: accountIds,
+      version: user.version,
     },
   });
   return checkResponse(response);
