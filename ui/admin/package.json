@@ -55,6 +55,7 @@
     "@hashicorp/ember-asciinema-player": "https://github.com/hashicorp/ember-asciinema-player.git#e047a096039cff70234c232efe75dcad74c6358a",
     "@warp-drive/build-config": "^0.0.2",
     "broccoli-asset-rev": "^3.0.0",
+    "broccoli-funnel": "^3.0.8",
     "concurrently": "^9.1.0",
     "core": "workspace:*",
     "doctoc": "^2.2.0",
