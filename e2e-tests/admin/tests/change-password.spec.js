@@ -20,19 +20,13 @@ test.beforeAll(async () => {
 test(
   'Verify user can change password',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({ page, request, adminLoginName, adminPassword }) => {
+  async ({ page, request }) => {
     await page.goto('/');
     let org;
     let authMethod;
     try {
       let account;
       let user;
-      // Log in
-      const loginPage = new LoginPage(page);
-      await loginPage.login(adminLoginName, adminPassword);
-      await expect(
-        page.getByRole('navigation', { name: 'breadcrumbs' }).getByText('Orgs'),
-      ).toBeVisible();
 
       // Create a new org, password auth method, account, and user via http API
       org = await boundaryHttp.createOrg(request);
@@ -57,11 +51,11 @@ test(
       });
 
       // Log in using new account
-      await loginPage.logout(adminLoginName);
+      await page.reload();
       await page.getByText('Choose a different scope').click();
       await page.getByRole('link', { name: org.name }).click();
       await page.getByRole('link', { name: authMethod.name }).click();
-
+      const loginPage = new LoginPage(page);
       await loginPage.login(username, password);
       await expect(
         page
@@ -90,7 +84,6 @@ test(
       await page.getByRole('button', { name: 'Sign In' }).click();
       await expect(page.getByRole('alert').getByText('Error')).toBeVisible();
       await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
-      await expect(page.getByText(adminLoginName)).toBeHidden();
 
       // Confirm user can log in with new password
       await loginPage.login(username, newPassword);
