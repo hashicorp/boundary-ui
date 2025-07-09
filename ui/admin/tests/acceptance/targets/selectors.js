@@ -33,6 +33,8 @@ export const MANGE_DROPDOWN_ADD_BROKERED_CREDENTIALS =
   '[data-test-manage-targets-dropdown] [data-test-add-brokered-cred-sources-action]';
 export const MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS =
   '[data-test-manage-targets-dropdown] [data-test-add-injected-cred-sources-action]';
+export const MANAGE_DROPDOWN_ADD_HOST_SOURCES =
+  '[data-test-manage-targets-dropdown] [data-test-add-host-sources-action]';
 
 export const ALIASES_SIDEBAR = '.target-sidebar-aliases';
 export const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
@@ -46,6 +48,8 @@ export const ENABLE_RECORDING_BTN = '.target-sidebar .hds-button';
 export const RECORDING_SETTINGS_LINK = '.target-sidebar .hds-link-standalone';
 export const LINK_LIST_ITEM = '.link-list-item > a';
 export const LINK_LIST_ITEM_TEXT = '.link-list-item__text';
+
+export const STORAGE_BUCKET_DROPDOWN = '[name=storage_bucket_id]';
 
 export const NO_RESULTS_MSG = '[data-test-no-target-results]';
 export const TABLE_ACTIVE_SESSIONS = (id) =>

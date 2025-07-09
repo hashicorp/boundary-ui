@@ -87,7 +87,7 @@ export default class ScopesScopeGroupsIndexController extends Controller {
     if (this.can.can('read model', group)) {
       await this.router.transitionTo('scopes.scope.groups.group', group);
     } else {
-      await this.router.transitionTo('scopes.scope.groups');
+      this.router.transitionTo('scopes.scope.groups');
     }
     await this.router.refresh();
   }
