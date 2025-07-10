@@ -203,6 +203,52 @@ module('Unit | Utility | sortResults', function (hooks) {
         ['Result 04', 'Result 03', 'Result 02', 'Result 01'],
       );
     });
+
+    test('it sorts by ascending then descending `name` using string sorting with Upper case preference', async function (assert) {
+      const result01 = createJsonApiMockRecord('id_01', 'target', {
+        name: 'orange',
+      });
+      const result02 = createJsonApiMockRecord('id_02', 'target', {
+        name: 'Orange',
+      });
+      const result03 = createJsonApiMockRecord('id_03', 'target', {
+        name: 'banana',
+      });
+      const result04 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'Banana',
+      });
+      const result05 = createJsonApiMockRecord('id_04', 'target', {
+        name: 'apple',
+      });
+      const shuffledResults = faker.helpers.shuffle([
+        result01,
+        result02,
+        result03,
+        result04,
+        result05,
+      ]);
+      const querySortAsc = { attribute: 'name', direction: 'asc' };
+      const querySortDesc = { attribute: 'name', direction: 'desc' };
+      const schema = { attributes: new Map() };
+      schema.attributes.set('name', { type: 'string' });
+
+      const sortedResultsAsc = sortResults(shuffledResults, {
+        querySort: querySortAsc,
+        schema,
+      });
+      const sortedResultsDesc = sortResults(shuffledResults, {
+        querySort: querySortDesc,
+        schema,
+      });
+      assert.deepEqual(
+        sortedResultsAsc.map(({ attributes: { name } }) => name),
+        ['apple', 'Banana', 'banana', 'Orange', 'orange'],
+      );
+      assert.deepEqual(
+        sortedResultsDesc.map(({ attributes: { name } }) => name),
+        ['orange', 'Orange', 'banana', 'Banana', 'apple'],
+      );
+    });
   });
 
   module('date sorting', function () {
