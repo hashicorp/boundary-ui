@@ -58,3 +58,10 @@ export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
 export const TABLE_CREDENTIAL_SOURCE_CHECKBOX = (type) =>
   `tbody [data-test-credential-source="${type}"] input[type="checkbox"]`;
+
+export const CODE_BLOCK_CONTENT = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
+export const WORKERS_ACCORDION_DROPDOWN = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
+export const WORKERS_ACCORDION_DROPDOWN_LINK = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] a`;
