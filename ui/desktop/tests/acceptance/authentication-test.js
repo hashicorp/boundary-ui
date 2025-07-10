@@ -22,12 +22,11 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import Service from '@ember/service';
-import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import sinon from 'sinon';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupStubs(hooks);
 
   const instances = {
     scopes: {
@@ -86,6 +85,9 @@ module('Acceptance | authentication', function (hooks) {
     });
 
     await invalidateSession();
+
+    const ipcService = this.owner.lookup('service:ipc');
+    this.ipcStub = sinon.stub(ipcService, 'invoke');
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });

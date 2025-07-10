@@ -23,10 +23,10 @@ module('Unit | Controller | application', function (hooks) {
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
+    setupMockIpc(this);
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
-    setupMockIpc(this);
   });
 
   test('it exists', function (assert) {
@@ -48,8 +48,6 @@ module('Unit | Controller | application', function (hooks) {
 
   test('disconnect action de-authenticates a user and resets cluster url', async function (assert) {
     const url = 'http://localhost:9200';
-    console.log('+++', mockIPC);
-    console.log('+++clusterUrl', clusterUrl);
     await clusterUrl.setClusterUrl(url);
 
     assert.true(session.isAuthenticated);

@@ -50,6 +50,7 @@ export default class ApplicationController extends Controller {
       this.close();
     } else {
       this.isLoggingOut = false;
+      // this.session.invalidate() comes from Ember Simple Auth BaseSessionService
       this.session.invalidate();
     }
   }
@@ -124,7 +125,6 @@ export default class ApplicationController extends Controller {
     this.isAppQuitting = false;
   }
 
-  // Call ember controller willDestroy and implement teardown
   willDestroy() {
     super.willDestroy(...arguments);
     if (this.removeOnAppQuitListener) {
