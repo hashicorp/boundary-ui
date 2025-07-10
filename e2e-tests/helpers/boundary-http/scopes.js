@@ -48,3 +48,21 @@ export async function createProject(request, scopeId) {
   });
   return checkResponse(response);
 }
+
+/**
+ * Make Auth Method Primary
+ * @param {import('@playwright/test').APIRequestContext} request
+ * @param {string} orgId
+ * @param {string} authMethodId
+ * @returns {Promise<Serializable>}
+ */
+export async function makeAuthMethodPrimary(request, { org, authMethodId }) {
+  const response = await request.patch(`v1/scopes/${org.id}`, {
+    data: {
+      primary_auth_method_id: authMethodId,
+      version: org.version,
+    },
+  });
+
+  return checkResponse(response);
+}
