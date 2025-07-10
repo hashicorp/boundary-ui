@@ -30,8 +30,6 @@ export const FIELD_SECRET_KEY_EDIT_BTN =
 export const FIELD_WORKER_FILTER = '[name=worker_filter]';
 export const FIELD_WORKER_FILTER_ERROR = '[data-test-worker-filter-error]';
 export const READONLY_WORKER_FILTER = '[data-test-worker-filter]';
-export const EDITOR_WORKER_FILTER =
-  '[data-test-code-editor-field-editor] textarea';
 export const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
 export const TOAST = '[role=alert] div';
 export const TOAST_SUCCESSFUL_VALUE = 'Saved successfully.';

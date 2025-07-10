@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import * as selectors from './selectors';
 
 module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
@@ -19,16 +20,8 @@ module('Acceptance | targets | workers', function (hooks) {
   let featuresService;
   let featureEdition;
 
-  const ACCORDION_DROPDOWN_TEXT_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] a`;
-  const ACCORDION_DROPDOWN_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
-  const CODE_BLOCK_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
-  const CODE_EDITOR_CONTENT_SELECTOR =
-    '[data-test-code-editor-field-editor] textarea';
-  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
-  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
+  const EGRESS_WORKER_FILTER_VALUE = '"egress" in "/worker/filters"';
+  const INGRESS_WORKER_FILTER_VALUE = '"ingress" in "/worker/filters"';
 
   const instances = {
     scopes: {
@@ -40,7 +33,6 @@ module('Acceptance | targets | workers', function (hooks) {
   };
 
   const urls = {
-    orgScope: null,
     projectScope: null,
     targets: null,
     target: null,
@@ -69,7 +61,6 @@ module('Acceptance | targets | workers', function (hooks) {
       ingress_worker_filter: '"ingress" in "/worker/filter"',
     });
 
-    urls.orgScope = `/scopes/${instances.scopes.org.id}/scopes`;
     urls.projectScope = `/scopes/${instances.scopes.project.id}`;
     urls.targets = `${urls.projectScope}/targets`;
     urls.target = `${urls.targets}/${instances.target.id}`;
@@ -89,7 +80,7 @@ module('Acceptance | targets | workers', function (hooks) {
     session.set('data.theme', 'light');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
     await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
@@ -99,13 +90,13 @@ module('Acceptance | targets | workers', function (hooks) {
     featureEdition.setEdition('enterprise');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
       .hasText(instances.target.ingress_worker_filter);
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -113,13 +104,13 @@ module('Acceptance | targets | workers', function (hooks) {
     featureEdition.setEdition('hcp');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
       .hasText(instances.target.ingress_worker_filter);
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -127,11 +118,11 @@ module('Acceptance | targets | workers', function (hooks) {
     featureEdition.setEdition('oss');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
-    assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
+    assert.dom(selectors.WORKERS_ACCORDION_DROPDOWN('ingress')).doesNotExist();
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -139,13 +130,13 @@ module('Acceptance | targets | workers', function (hooks) {
     featureEdition.setEdition('hcp');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
       .hasText(instances.target.ingress_worker_filter);
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -155,23 +146,23 @@ module('Acceptance | targets | workers', function (hooks) {
     instances.target.ingress_worker_filter = null;
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
-    assert.dom(CODE_BLOCK_SELECTOR('ingress')).doesNotExist();
-    assert.dom(CODE_BLOCK_SELECTOR('egress')).doesNotExist();
+    assert.dom(selectors.CODE_BLOCK_CONTENT('ingress')).doesNotExist();
+    assert.dom(selectors.CODE_BLOCK_CONTENT('egress')).doesNotExist();
   });
 
   test('user can view egress and ingress filters when `worker-filter` is enabled', async function (assert) {
     featuresService.enable('worker-filter');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
       .hasText(instances.target.ingress_worker_filter);
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -179,70 +170,80 @@ module('Acceptance | targets | workers', function (hooks) {
     featuresService.disable('worker-filter');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
-    assert.dom(ACCORDION_DROPDOWN_SELECTOR('ingress')).doesNotExist();
+    assert.dom(selectors.WORKERS_ACCORDION_DROPDOWN('ingress')).doesNotExist();
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
   test('user can save ingress worker filter to a target when `worker-filter` is enabled', async function (assert) {
     featuresService.enable('worker-filter');
     instances.target.update({ ingress_worker_filter: '' });
-    const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditIngressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
 
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
-    await click(SAVE_BUTTON_SELECTOR);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      INGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.dom(CODE_BLOCK_SELECTOR('ingress')).hasText(ingressWorkerFilter);
+    assert
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
+      .hasText(INGRESS_WORKER_FILTER_VALUE);
   });
 
   test('user can cancel changes to ingress worker filter in a target when `worker-filter` is enabled', async function (assert) {
     featuresService.enable('worker-filter');
-    const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditIngressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
 
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
-    await click(CANCEL_BUTTON_SELECTOR);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      INGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
     assert.notEqual(
       instances.target.ingress_worker_filter,
-      ingressWorkerFilter,
+      INGRESS_WORKER_FILTER_VALUE,
     );
     assert
-      .dom(CODE_BLOCK_SELECTOR('ingress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('ingress'))
       .hasText(instances.target.ingress_worker_filter);
   });
 
   test('user can save egress worker filter to a target', async function (assert) {
     instances.target.update({ egress_worker_filter: '' });
-    const egressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditEgressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
 
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
-    await click(SAVE_BUTTON_SELECTOR);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.SAVE_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.dom(CODE_BLOCK_SELECTOR('egress')).hasText(egressWorkerFilter);
+    assert
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
+      .hasText(EGRESS_WORKER_FILTER_VALUE);
   });
 
   test('user will see "Add worker filter" if no filter set', async function (assert) {
@@ -253,13 +254,13 @@ module('Acceptance | targets | workers', function (hooks) {
     });
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('egress'))
       .hasText(intl.t('actions.add-worker-filter'));
     assert
-      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('ingress'))
       .hasText(intl.t('actions.add-worker-filter'));
   });
 
@@ -267,31 +268,37 @@ module('Acceptance | targets | workers', function (hooks) {
     featuresService.enable('worker-filter');
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
 
     assert
-      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('egress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('egress'))
       .hasText(intl.t('actions.edit-worker-filter'));
     assert
-      .dom(ACCORDION_DROPDOWN_TEXT_SELECTOR('ingress'))
+      .dom(selectors.WORKERS_ACCORDION_DROPDOWN_LINK('ingress'))
       .hasText(intl.t('actions.edit-worker-filter'));
   });
 
   test('user can cancel changes to egress worker filter in a target', async function (assert) {
-    const egressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditEgressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
-    await click(CANCEL_BUTTON_SELECTOR);
+
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.CANCEL_BTN);
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
-    assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
+    assert.notEqual(
+      instances.target.egress_worker_filter,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
     assert
-      .dom(CODE_BLOCK_SELECTOR('egress'))
+      .dom(selectors.CODE_BLOCK_CONTENT('egress'))
       .hasText(instances.target.egress_worker_filter);
   });
 
@@ -299,15 +306,17 @@ module('Acceptance | targets | workers', function (hooks) {
     featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditIngressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
-    await click(`[href="${urls.target}"]`);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      INGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -316,7 +325,7 @@ module('Acceptance | targets | workers', function (hooks) {
     assert.strictEqual(currentURL(), urls.target);
     assert.notEqual(
       instances.target.ingress_worker_filter,
-      ingressWorkerFilter,
+      INGRESS_WORKER_FILTER_VALUE,
     );
   });
 
@@ -324,15 +333,17 @@ module('Acceptance | targets | workers', function (hooks) {
     featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const ingressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditIngressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditIngressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, ingressWorkerFilter);
-    await click(`[href="${urls.target}"]`);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      INGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
@@ -341,49 +352,60 @@ module('Acceptance | targets | workers', function (hooks) {
     assert.strictEqual(currentURL(), urls.targetEditIngressFilter);
     assert.notEqual(
       instances.target.ingress_worker_filter,
-      ingressWorkerFilter,
+      INGRESS_WORKER_FILTER_VALUE,
     );
   });
 
   test('can discard unsaved egress worker filter changes in a target via dialog', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const egressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditEgressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
-    await click(`[href="${urls.target}"]`);
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
     await click(commonSelectors.MODAL_WARNING_CONFIRM_BTN, 'Click Discard');
 
     assert.strictEqual(currentURL(), urls.target);
-    assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
+    assert.notEqual(
+      instances.target.egress_worker_filter,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
   });
 
   test('can click cancel on discard dialog box for unsaved egress worker filter changes', async function (assert) {
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
-    const egressWorkerFilter = '"random" in "/worker/filters"';
     await visit(urls.target);
 
-    await click(`[href="${urls.targetWorkers}"]`);
-    await click(`[href="${urls.targetEditEgressFilter}"]`);
+    await click(commonSelectors.HREF(urls.targetWorkers));
+    await click(commonSelectors.HREF(urls.targetEditEgressFilter));
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    await fillIn(CODE_EDITOR_CONTENT_SELECTOR, egressWorkerFilter);
-    await click(`[href="${urls.target}"]`);
+
+    await fillIn(
+      commonSelectors.CODE_EDITOR_CONTENT,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
+    await click(commonSelectors.HREF(urls.target));
 
     assert.dom(commonSelectors.MODAL_WARNING).isVisible();
 
     await click(commonSelectors.MODAL_WARNING_CANCEL_BTN, 'Click Cancel');
 
     assert.strictEqual(currentURL(), urls.targetEditEgressFilter);
-    assert.notEqual(instances.target.egress_worker_filter, egressWorkerFilter);
+    assert.notEqual(
+      instances.target.egress_worker_filter,
+      EGRESS_WORKER_FILTER_VALUE,
+    );
   });
 });

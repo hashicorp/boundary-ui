@@ -381,7 +381,7 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click(commonSelectors.HREF(urls.workerFilter));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.EDIT_WORKER_FILTER_ACTION);
-    await fillIn(selectors.CODE_EDITOR_BODY, '"bar" in "/tags/foo"');
+    await fillIn(commonSelectors.CODE_EDITOR_CONTENT, '"bar" in "/tags/foo"');
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(selectors.CODE_BLOCK_BODY).exists();
