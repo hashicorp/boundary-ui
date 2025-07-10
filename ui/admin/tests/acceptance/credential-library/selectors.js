@@ -51,3 +51,6 @@ export const MANAGE_DROPDOWN_CRED_LIB =
   '[data-test-manage-credential-library-dropdown] button:first-child';
 export const MANAGE_DROPDOWN_CRED_LIB_DELETE =
   '[data-test-manage-credential-library-dropdown] ul li button';
+
+export const MANAGE_DROPDOWN_CREDENTIAL_STORE =
+  '[data-test-manage-credential-stores-dropdown] button';

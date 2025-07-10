@@ -31,7 +31,9 @@
         </dd.Interactive>
       {{/if}}
       {{#if perms.canDelete}}
-        <dd.Separator />
+        {{#if (or perms.canCreateHosts perms.canCreateHostSets)}}
+          <dd.Separator />
+        {{/if}}
         <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
           {{t 'resources.host-catalog.actions.delete'}}
         </dd.Interactive>
