@@ -10,24 +10,26 @@
   )
   as |perms|
 }}
-  <Hds::Dropdown data-test-manage-group-dropdown as |dd|>
-    <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-    {{#if perms.canAddMembers}}
-      <dd.Interactive @route='scopes.scope.groups.group.add-members'>
-        {{t 'resources.group.actions.add-members'}}
-      </dd.Interactive>
-    {{/if}}
-    {{#if perms.canDelete}}
+  {{#if (or perms.canAddMembers perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-group-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
       {{#if perms.canAddMembers}}
-        <dd.Separator />
+        <dd.Interactive @route='scopes.scope.groups.group.add-members'>
+          {{t 'resources.group.actions.add-members'}}
+        </dd.Interactive>
       {{/if}}
-      <dd.Interactive
-        @color='critical'
-        @disabled={{@model.canSave}}
-        {{on 'click' @delete}}
-      >
-        {{t 'resources.group.actions.delete'}}
-      </dd.Interactive>
-    {{/if}}
-  </Hds::Dropdown>
+      {{#if perms.canDelete}}
+        {{#if perms.canAddMembers}}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive
+          @color='critical'
+          @disabled={{@model.canSave}}
+          {{on 'click' @delete}}
+        >
+          {{t 'resources.group.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
+  {{/if}}
 {{/let}}
