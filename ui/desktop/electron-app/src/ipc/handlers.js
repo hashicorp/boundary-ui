@@ -76,9 +76,14 @@ handle('connect', ({ target_id, token, host_id }) =>
 );
 
 /**
- * Cancel an established boundary session spawned process.
+ * Stop an established boundary session spawned process.
  */
 handle('stop', ({ session_id }) => sessionManager.stopById(session_id));
+
+/**
+ * Stop all active and pending target sessions.
+ */
+handle('stopAll', async () => sessionManager.stopAll());
 
 /**
  * Check for OS window chrome. Enabled on MacOS only.
@@ -115,6 +120,12 @@ handle('toggleFullscreenWindow', () => {
  * Quit app
  */
 handle('closeWindow', () => app.quit());
+
+/**
+ * Check if session manager has running sessions
+ * Return boolean
+ */
+handle('hasRunningSessions', () => sessionManager.hasRunningSessions);
 
 /**
  * Focus the window
