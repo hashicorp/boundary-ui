@@ -113,7 +113,7 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,gjs}": [
       "eslint --fix",
       "prettier --write"
     ],
