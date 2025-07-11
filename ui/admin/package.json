@@ -95,6 +95,7 @@
     "loader.js": "^4.7.0",
     "postcss": "^8.4.31",
     "prettier": "^3.6.2",
+    "prettier-plugin-ember-template-tag": "^2.0.6",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "rose": "workspace:*",

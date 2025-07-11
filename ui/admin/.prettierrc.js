@@ -8,6 +8,7 @@
 module.exports = {
   singleQuote: true,
   printWidth: 80,
+  plugins: ['prettier-plugin-ember-template-tag'],
 
   overrides: [
     {

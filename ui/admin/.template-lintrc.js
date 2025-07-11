@@ -21,7 +21,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: '**/tests/**/*.{js,gts,gjs}',
+      files: '**/*.{js,gts,gjs}',
       rules: {
         prettier: false,
       },
