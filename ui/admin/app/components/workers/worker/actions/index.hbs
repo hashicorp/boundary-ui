@@ -3,20 +3,33 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Dropdown data-test-manage-worker-dropdown as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'setWorkerTags worker' @model)}}
-    <dd.Interactive @route='scopes.scope.workers.worker.create-tags'>
-      {{t 'resources.worker.actions.create_tags'}}
-    </dd.Interactive>
+{{#let
+  (hash
+    canSetWorkerTags=(can 'setWorkerTags worker' @model)
+    canDelete=(can 'delete worker' @model)
+  )
+  as |perms|
+}}
+  {{#if (or perms.canSetWorkerTags perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-worker-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canSetWorkerTags}}
+        <dd.Interactive @route='scopes.scope.workers.worker.create-tags'>
+          {{t 'resources.worker.actions.create_tags'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        {{#if perms.canSetWorkerTags}}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive
+          @icon='trash'
+          @color='critical'
+          {{on 'click' (fn @delete @model)}}
+        >
+          {{t 'resources.worker.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'delete worker' @model)}}
-    <dd.Interactive
-      @icon='trash'
-      @color='critical'
-      {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.worker.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}

@@ -3,21 +3,33 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Dropdown data-test-manage-group-dropdown as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'addMembers group' @model)}}
-    <dd.Interactive @route='scopes.scope.groups.group.add-members'>
-      {{t 'resources.group.actions.add-members'}}
-    </dd.Interactive>
+{{#let
+  (hash
+    canAddMembers=(can 'addMembers group' @model)
+    canDelete=(can 'delete model' @model)
+  )
+  as |perms|
+}}
+  {{#if (or perms.canAddMembers perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-group-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canAddMembers}}
+        <dd.Interactive @route='scopes.scope.groups.group.add-members'>
+          {{t 'resources.group.actions.add-members'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        {{#if perms.canAddMembers}}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive
+          @color='critical'
+          @disabled={{@model.canSave}}
+          {{on 'click' @delete}}
+        >
+          {{t 'resources.group.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'delete model' @model)}}
-    <dd.Separator />
-    <dd.Interactive
-      @color='critical'
-      @disabled={{@model.canSave}}
-      {{on 'click' @delete}}
-    >
-      {{t 'resources.group.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}

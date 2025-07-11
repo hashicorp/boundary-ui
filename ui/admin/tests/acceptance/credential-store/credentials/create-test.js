@@ -344,6 +344,23 @@ module(
       assert.dom(selectors.FIELD_TYPE_JSON).doesNotExist();
     });
 
+    test('users cannot create a new credential without proper authorization', async function (assert) {
+      instances.staticCredentialStore.authorized_collection_actions.credentials =
+        instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
+          (item) => item !== 'create',
+        );
+
+      await visit(urls.credentials);
+      await click(selectors.MANAGE_DROPDOWN_CREDENTIAL_STORE);
+
+      assert.false(
+        instances.staticCredentialStore.authorized_collection_actions.credentials.includes(
+          'create',
+        ),
+      );
+      assert.dom(commonSelectors.HREF(urls.newCredential)).doesNotExist();
+    });
+
     test('users cannot directly navigate to new credential route without proper authorization', async function (assert) {
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(

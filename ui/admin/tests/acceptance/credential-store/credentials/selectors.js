@@ -21,4 +21,7 @@ export const MANAGE_DROPDOWN_DELETE =
 export const MANAGE_DROPDOWN_NEW_CREDENTIAL =
   '[data-test-manage-credential-stores-dropdown] a';
 
+export const MANAGE_DROPDOWN_CREDENTIAL_STORE =
+  '[data-test-manage-credential-stores-dropdown] button';
+
 export const REPLACE_SECRET_BTN = '.secret-editor button';
