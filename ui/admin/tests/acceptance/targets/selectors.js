@@ -35,6 +35,9 @@ export const MANGE_DROPDOWN_ADD_INJECTED_CREDENTIALS =
   '[data-test-manage-targets-dropdown] [data-test-add-injected-cred-sources-action]';
 export const MANAGE_DROPDOWN_ADD_HOST_SOURCES =
   '[data-test-manage-targets-dropdown] [data-test-add-host-sources-action]';
+export const MANAGE_ALIAS_DROPDOWN = '[data-test-manage-target-alias] button';
+export const MANAGE_ALIAS_DROPDOWN_CLEAR =
+  '[data-test-manage-target-alias] .hds-dropdown-list-item--color-action button';
 
 export const ALIASES_SIDEBAR = '.target-sidebar-aliases';
 export const ALIASES_SIDEBAR_LIST = '.target-sidebar-aliases .link-list-item';
@@ -58,3 +61,10 @@ export const TABLE_SESSIONS_ID = (id) =>
   `tbody [data-test-sessions-table-row="${id}"] .hds-table__td:first-child`;
 export const TABLE_CREDENTIAL_SOURCE_CHECKBOX = (type) =>
   `tbody [data-test-credential-source="${type}"] input[type="checkbox"]`;
+
+export const CODE_BLOCK_CONTENT = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
+export const WORKERS_ACCORDION_DROPDOWN = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
+export const WORKERS_ACCORDION_DROPDOWN_LINK = (name) =>
+  `[data-test-target-${name}-workers-accordion-item] a`;
