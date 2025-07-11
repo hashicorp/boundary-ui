@@ -64,5 +64,15 @@ module.exports = {
         'qunit/require-expect': [2, 'except-simple'],
       },
     },
+    {
+      files: ['**/*.gjs'],
+      parser: 'ember-eslint-parser',
+      plugins: ['ember'],
+      extends: [
+        'eslint:recommended',
+        'plugin:ember/recommended',
+        'plugin:ember/recommended-gjs',
+      ],
+    },
   ],
 };

@@ -8,4 +8,13 @@
 module.exports = {
   singleQuote: true,
   printWidth: 80,
+
+  overrides: [
+    {
+      files: '*.{js,ts,gjs,gts}',
+      options: {
+        singleQuote: true,
+      },
+    },
+  ],
 };
