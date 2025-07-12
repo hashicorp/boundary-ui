@@ -20,21 +20,10 @@ module('Acceptance | targets | workers', function (hooks) {
   let featuresService;
   let featureEdition;
 
-<<<<<<< HEAD
   const EGRESS_WORKER_FILTER_VALUE = '"egress" in "/worker/filters"';
   const INGRESS_WORKER_FILTER_VALUE = '"ingress" in "/worker/filters"';
-=======
-  const ACCORDION_DROPDOWN_TEXT_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] a`;
-  const ACCORDION_DROPDOWN_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] .hds-accordion-item__button`;
-  const CODE_BLOCK_SELECTOR = (name) =>
-    `[data-test-target-${name}-workers-accordion-item] .hds-code-block__body`;
   const CODE_EDITOR_CM = '.cm-editor';
   const CODE_EDITOR_CONTENT_SELECTOR = '.hds-code-editor__editor';
-  const SAVE_BUTTON_SELECTOR = '[type="submit"]';
-  const CANCEL_BUTTON_SELECTOR = '.rose-form-actions [type="button"]';
->>>>>>> ed0916f8c (updating tests for new code editor)
 
   const instances = {
     scopes: {
