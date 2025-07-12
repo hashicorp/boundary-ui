@@ -571,7 +571,7 @@ module(
       await click(selectors.REPLACE_SECRET_BTN);
 
       assert.dom(selectors.REPLACE_SECRET_BTN).doesNotExist();
-      await waitUntil(() => assert.dom('.CodeMirror').isVisible());
+      await waitUntil(() => assert.dom('.cm-editor').isVisible());
     });
   },
 );
