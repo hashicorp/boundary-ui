@@ -211,17 +211,14 @@
 
       &:first-child {
         width: 40%;
+        svg {
+          flex: none;
+        }
 
         p {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-        }
-      }
-
-      &:last-child {
-        p {
-          color: var(--success);
         }
       }
     }
