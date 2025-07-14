@@ -541,7 +541,7 @@ module('Acceptance | targets | workers', function (hooks) {
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: ingressWorkerFilter,
+        insert: INGRESS_WORKER_FILTER_VALUE,
       },
     });
 
