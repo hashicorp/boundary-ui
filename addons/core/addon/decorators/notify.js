@@ -33,7 +33,8 @@ export function notifySuccess(notification) {
       const text = intlService.t(candidateKey);
       const value = await method.apply(this, arguments);
       notifyService.success(text, {
-        notificationType: 'success',
+        color: 'success',
+        title: intlService.t('states.success'),
         dismiss: (flash) => flash.destroyMessage(),
       });
       return value;
@@ -99,7 +100,8 @@ export function notifyError(
         const sticky = options.sticky === undefined ? true : options.sticky;
 
         notifyService.danger(text, {
-          notificationType: 'error',
+          color: 'critical',
+          title: intlService.t('states.error'),
           sticky,
           dismiss: (flash) => flash.destroyMessage(),
         });

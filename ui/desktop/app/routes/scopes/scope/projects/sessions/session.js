@@ -5,7 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-
+import { TYPE_TARGET_RDP } from 'api/models/target';
 const { __electronLog } = globalThis;
 
 export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
@@ -16,6 +16,7 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
   @service clientAgentSessions;
   @service flashMessages;
   @service intl;
+  @service storage;
 
   // =methods
 
@@ -27,6 +28,30 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
    */
   async model({ session_id }) {
     const session = await this.store.findRecord('session', session_id);
+    // If it's an RDP session, we show a warning message if the user hasn't dismissed it before.
+    // This is to inform users about the potential security risks associated with RDP sessions.
+    // We store a flag in localStorage to track whether the user has dismissed this warning.
+    if (
+      session.target?.type === TYPE_TARGET_RDP &&
+      !this.storage.getItem('doNotShowRdpWarningAgain')
+    ) {
+      this.flashMessages.warning(
+        this.intl.t('errors.rdp-warning.description'),
+        {
+          color: 'neutral',
+          title: this.intl.t('errors.rdp-warning.title'),
+          sticky: true,
+          dismiss: (flash) => flash.destroyMessage(),
+          button: {
+            label: this.intl.t('errors.rdp-warning.do-not-show-again'),
+            action: (flash) => {
+              this.storage.setItem('doNotShowRdpWarningAgain', 'true');
+              flash.destroyMessage();
+            },
+          },
+        },
+      );
+    }
 
     // If we don't have any credentials, we'll try to fetch them from the client agent in case this session
     // was initiated through the client agent.
@@ -49,7 +74,8 @@ export default class ScopesScopeProjectsSessionsSessionRoute extends Route {
         this.flashMessages.danger(
           this.intl.t('errors.client-agent-failed.sessions'),
           {
-            notificationType: 'error',
+            color: 'critical',
+            title: this.intl.t('states.error'),
             sticky: true,
             dismiss: (flash) => flash.destroyMessage(),
           },

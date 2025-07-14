@@ -709,6 +709,7 @@ target:
     connect-more-info:
       title: Connect for more info
       description: Additional information for this target will be provided here after your session is established.
+      cert-warning: You may need to accept a client certificate when connecting to this target. Your RDP client should open a pop-up window if you do.
   titles:
     new: New Target
     active-sessions: Active sessions

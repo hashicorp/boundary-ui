@@ -10,6 +10,7 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
   // =services
   @service can;
   @service flashMessages;
+  @service intl;
 
   // =methods
   /**
@@ -28,7 +29,8 @@ export default class ScopesScopeSessionRecordingsSessionRecordingChannelsByConne
         // Alert user of error occurred during download.
         const error = e.errors[0];
         this.flashMessages.danger(error.detail, {
-          notificationType: 'error',
+          color: 'critical',
+          title: this.intl.t('states.error'),
           sticky: true,
           dismiss: (flash) => flash.destroyMessage(),
         });
