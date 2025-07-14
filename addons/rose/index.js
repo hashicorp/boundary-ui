@@ -12,8 +12,6 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import('node_modules/jsonlint/lib/jsonlint.js');
-
     this.includeHDSStyles(app);
     this.includeFlightIcons(app);
     this.includePublic(app);

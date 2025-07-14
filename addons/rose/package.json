@@ -42,7 +42,6 @@
     "ember-cli-sass": "^11.0.1",
     "ember-focus-trap": "^1.0.1",
     "ember-named-blocks-polyfill": "^0.2.5",
-    "jsonlint": "^1.6.3",
     "sass": "^1.69.5",
     "uuid": "^11.0.3"
   },
