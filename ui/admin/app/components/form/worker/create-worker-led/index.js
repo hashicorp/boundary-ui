@@ -184,7 +184,7 @@ unzip *.zip ;\\
 
   @action
   removeWorkerTagByIndex(index) {
-    this.workerTags.removeAt(index);
+    this.workerTags.splice(index, 1);
   }
 
   @action
