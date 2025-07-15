@@ -174,8 +174,12 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('Users cannot create a new host set without proper authorization', async function (assert) {
-    instances.hostCatalog.authorized_collection_actions['host-sets'] = [];
+    instances.hostCatalog.authorized_collection_actions['host-sets'] =
+      instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
+        (item) => item !== 'create',
+      );
     await visit(urls.hostCatalog);
+    await click(selectors.MANAGE_DROPDOWN_HOST_CATALOG);
 
     assert.notOk(
       instances.hostCatalog.authorized_collection_actions['host-sets'].includes(

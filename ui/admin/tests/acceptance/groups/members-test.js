@@ -129,6 +129,7 @@ module('Acceptance | groups | members', function (hooks) {
     instances.group.update({ authorized_actions });
 
     await visit(urls.group);
+    await click(selectors.MANAGE_DROPDOWN);
 
     assert.dom(commonSelectors.HREF(urls.addMembers)).doesNotExist();
   });
