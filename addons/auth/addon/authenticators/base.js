@@ -6,6 +6,7 @@
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
 import { waitForPromise } from '@ember/test-waiters';
+import { service } from '@ember/service';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -19,6 +20,10 @@ import { waitForPromise } from '@ember/test-waiters';
  * All other responses should resolve the session restoration successfully.
  */
 export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
+  // =services
+
+  @service store;
+
   // =unimplemented methods
 
   /**
@@ -101,7 +106,7 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @param {string} username
    * @return {object}
    */
-  normalizeData(data, username) {
+  async normalizeData(data) {
     // Pull fields up from `data.attributes` for easier access in JavaScript.
     // The `attributes` field exists on the Go side for its convenience but is
     // unnecessary here.
@@ -109,7 +114,33 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     // Add booleans indicated the scope type
     data.isGlobal = data?.scope?.type === 'global';
     data.isOrg = data?.scope?.type === 'org';
-    if (username) data.username = username;
+
+    try {
+      const adapter = this.store.adapterFor('application');
+      const findAccountRecordURL = adapter.buildURL(
+        'account',
+        data?.account_id,
+        {},
+        'findRecord',
+      );
+      const response = await waitForPromise(
+        fetch(findAccountRecordURL, {
+          method: 'get',
+          headers: { Authorization: `Bearer ${data.attributes.token}` },
+        }),
+      );
+
+      const authenticatedAccount = await response.json();
+
+      if (response.status === 200) {
+        const { email, full_name, login_name, subject } =
+          authenticatedAccount.attributes;
+        data.username = email || full_name || login_name || subject;
+      }
+    } catch (_) {
+      /* no op */
+    }
+
     return data;
   }
 
