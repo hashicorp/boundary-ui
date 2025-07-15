@@ -15,6 +15,9 @@ export const FIELD_AZURE_FILTER = '[name=filter]';
 export const FIELD_FILTERS_REMOVE_BTN =
   '[name=filters] [data-test-remove-button]';
 
+export const MANAGE_DROPDOWN_HOST_CATALOG =
+  '[data-test-manage-host-catalogs-dropdown] button';
+
 export const MANAGE_DROPDOWN_HOST_SETS =
   '[data-test-manage-dropdown-host-sets] button:first-child';
 export const MANAGE_DROPDOWN_HOST_SETS_DELETE =
