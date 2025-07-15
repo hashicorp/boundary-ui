@@ -62,7 +62,11 @@ module.exports = {
       destDir: 'workers',
     });
 
-    // If we ever have files in the public folder, merge them here
-    return merge([workers, wasmFile]);
+    const trees = [workers, wasmFile];
+    if (tree) {
+      trees.push(tree);
+    }
+
+    return merge(trees);
   },
 };

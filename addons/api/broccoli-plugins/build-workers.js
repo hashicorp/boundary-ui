@@ -12,14 +12,14 @@ const esbuild = require('esbuild');
 module.exports = class BuildWorkers extends Plugin {
   build() {
     this.inputPaths.forEach((inputPath) => {
-      this._buildWorkers(inputPath);
+      this.#buildWorkers(inputPath);
     });
   }
 
-  _buildWorkers(inputPath) {
-    const workers = this._getWorkers(inputPath);
+  #buildWorkers(inputPath) {
+    const workers = this.#getWorkers(inputPath);
 
-    const workerBuilder = this._configureWorkerBuilder({
+    const workerBuilder = this.#configureWorkerBuilder({
       isProduction: this.isProduction,
       buildDir: this.outputPath,
     });
@@ -27,7 +27,7 @@ module.exports = class BuildWorkers extends Plugin {
     Object.entries(workers).map(workerBuilder);
   }
 
-  _getWorkers(inputPath) {
+  #getWorkers(inputPath) {
     let workers = {};
     let dir = fs.readdirSync(inputPath);
 
@@ -38,7 +38,7 @@ module.exports = class BuildWorkers extends Plugin {
     return workers;
   }
 
-  _configureWorkerBuilder({ isProduction, buildDir }) {
+  #configureWorkerBuilder({ isProduction, buildDir }) {
     return ([name, entryPath]) => {
       esbuild.buildSync({
         loader: { '.js': 'js' },
