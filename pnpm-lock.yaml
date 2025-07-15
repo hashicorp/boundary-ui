@@ -798,8 +798,8 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0
       ember-a11y-refocus:
-        specifier: ^4.1.4
-        version: 4.1.4
+        specifier: ^5.0.0
+        version: 5.0.0(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))
       ember-a11y-testing:
         specifier: ^7.1.2
         version: 7.1.2(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(qunit@2.24.1)(webpack@5.99.8)
@@ -4264,6 +4264,11 @@ packages:
   ember-a11y-refocus@4.1.4:
     resolution: {integrity: sha512-51tGk30bskObL1LsGZRxzqIxgZhIE8ZvvDYcT1OWphxZlq00+Arz57aMLS4Vz4qhSE40BfeN2qFYP/gXtp9qDA==}
     engines: {node: 16.* || >= 18.*}
+
+  ember-a11y-refocus@5.0.0:
+    resolution: {integrity: sha512-0PH/iZNeTkuhZjvE5Y3CllEGnh8Ej8KYrTcatdyDWzV8pQOZO/Meo/JppKNUsISAyfuENMJafREHWdNBvS6g5w==}
+    peerDependencies:
+      ember-source: '>= 4.12.0'
 
   ember-a11y-testing@7.1.2:
     resolution: {integrity: sha512-V30dZgfj3itq+4/H78livBN1X4wvYeCJnsPTnQFqZfgrQyEfCYLL6d96W0T4UoahQao+PFzJcR2P/CpMU9j5nw==}
@@ -12791,6 +12796,17 @@ snapshots:
       ember-cli-babel: 7.26.11
       ember-cli-htmlbars: 6.3.0
     transitivePeerDependencies:
+      - supports-color
+
+  ember-a11y-refocus@5.0.0(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8)):
+    dependencies:
+      '@embroider/addon-shim': 1.10.0
+      '@glimmer/component': 2.0.0
+      '@glimmer/tracking': 1.1.2
+      decorator-transforms: 2.3.0(@babel/core@7.27.1)
+      ember-source: 5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8)
+    transitivePeerDependencies:
+      - '@babel/core'
       - supports-color
 
   ember-a11y-testing@7.1.2(@ember/test-helpers@5.2.2(@babel/core@7.27.1)(@glint/template@1.5.2))(@glint/template@1.5.2)(qunit@2.24.1)(webpack@5.99.8):
