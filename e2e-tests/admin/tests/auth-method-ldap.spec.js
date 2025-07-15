@@ -223,15 +223,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(ldapUserName);
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(ldapUserName + '@mail.com');
@@ -265,15 +265,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(ldapUserName);
       await expect(
         page
-          .getByRole('cell', { name: ldapAccountName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: ldapAccountName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(ldapUserName + '@mail.com');

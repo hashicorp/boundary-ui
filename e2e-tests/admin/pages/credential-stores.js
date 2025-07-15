@@ -97,7 +97,7 @@ export class CredentialStoresPage extends BaseResourcePage {
     await this.page.getByLabel('Address').fill(vaultAddr);
     await this.page
       .getByLabel('Worker filter')
-      .locator('textarea')
+      .getByRole('textbox')
       .fill(workerFilter);
     await this.page.getByLabel('Token').fill(clientToken);
     await this.page.getByRole('button', { name: 'Save' }).click();

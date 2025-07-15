@@ -65,7 +65,12 @@ test(
       await page
         .getByRole('link', { name: `Back to ${orgName}`, exact: true })
         .click();
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await page
+        .getByRole('link', { name: 'Back to Global', exact: true })
+        .click();
+      await page
+        .getByRole('link', { name: 'Storage Buckets', exact: true })
+        .click();
       const storageBucketsPage = new StorageBucketsPage(page);
       const storageBucketName = await storageBucketsPage.createStorageBucketAws(
         orgName,
@@ -113,7 +118,9 @@ test(
       await page
         .getByRole('link', { name: `Back to ${orgName}`, exact: true })
         .click();
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await page
+        .getByRole('link', { name: 'Back to Global', exact: true })
+        .click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
       await page.getByRole('link', { name: orgName }).click();
       await expect(
@@ -121,6 +128,9 @@ test(
           .getByRole('navigation', { name: 'breadcrumbs' })
           .getByText(orgName),
       ).toBeVisible();
+      await page
+        .getByRole('link', { name: 'Storage Policies', exact: true })
+        .click();
       const storagePoliciesPage = new StoragePoliciesPage(page);
       policyName = await storagePoliciesPage.createStoragePolicy();
       await orgsPage.attachStoragePolicy(policyName);
@@ -141,8 +151,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
       await expect(
@@ -155,7 +165,9 @@ test(
       await page
         .getByRole('link', { name: `Back to ${orgName}`, exact: true })
         .click();
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await page
+        .getByRole('link', { name: 'Back to Global', exact: true })
+        .click();
       await page
         .getByRole('navigation', { name: 'Application local navigation' })
         .getByRole('link', { name: 'Session Recordings', exact: true })
@@ -165,22 +177,14 @@ test(
         .getByRole('link', { name: 'View' })
         .click();
       await page
-        .getByRole('cell', { name: 'Channel 1' })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: 'Channel 1' }) })
         .getByRole('link', { name: 'Play' })
         .click();
       await page.locator('div.session-recording-player').hover();
       await page.locator('.ap-playback-button').click();
 
       // Edit storage policy: do not protect from deletion
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
-      await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
-      await page.getByRole('link', { name: orgName }).click();
-      await expect(
-        page
-          .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByText(orgName),
-      ).toBeVisible();
       await page
         .getByRole('link', { name: 'Storage Policies', exact: true })
         .click();
@@ -199,7 +203,9 @@ test(
       await page.getByRole('button', { name: 'Dismiss' }).click();
 
       // Re-apply storage policy to the session recording and delete
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await page
+        .getByRole('link', { name: 'Back to Global', exact: true })
+        .click();
       await page
         .getByRole('link', { name: 'Session Recordings', exact: true })
         .click();
@@ -212,7 +218,9 @@ test(
       await sessionRecordingsPage.deleteResource();
 
       // Detach storage bucket from target
-      await page.getByRole('link', { name: 'Orgs', exact: true }).click();
+      await page
+        .getByRole('link', { name: 'Back to Global', exact: true })
+        .click();
       await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
       await page.getByRole('link', { name: orgName }).click();
       await page.getByRole('link', { name: projectName }).click();
