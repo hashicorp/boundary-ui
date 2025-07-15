@@ -21,7 +21,7 @@ export default class SqliteDbService extends Service {
       return;
     }
 
-    // In production, our JS files will be fingerprinted with am MD5 hash
+    // In production, our JS files will be fingerprinted with an MD5 hash
     // so we need a way to map the worker file name to be able to find it.
     //
     // Ember is automagically replacing any URL path with the fingerprinted
