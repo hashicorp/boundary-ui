@@ -3,32 +3,45 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Dropdown data-test-manage-roles-dropdown as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'addPrincipals role' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.roles.role.add-principals'
-      data-test-manage-role-principals
-    >
-      {{t 'resources.role.principal.actions.add-principals'}}
-    </dd.Interactive>
+{{#let
+  (hash
+    canAddPrincipals=(can 'addPrincipals role' @model)
+    canSetGrantScopes=(can 'setGrantScopes role' @model)
+    canDelete=(can 'delete model' @model)
+  )
+  as |perms|
+}}
+  {{#if (or perms.canAddPrincipals perms.canSetGrantScopes perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-roles-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canAddPrincipals}}
+        <dd.Interactive
+          @route='scopes.scope.roles.role.add-principals'
+          data-test-manage-role-principals
+        >
+          {{t 'resources.role.principal.actions.add-principals'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canSetGrantScopes}}
+        <dd.Interactive
+          @route='scopes.scope.roles.role.manage-scopes'
+          data-test-manage-dropdown-scopes
+        >
+          {{t 'resources.role.scope.actions.manage-scopes'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        {{#if (or perms.canAddPrincipals perms.canSetGrantScopes)}}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive
+          @color='critical'
+          @disabled={{@model.canSave}}
+          {{on 'click' (fn @delete @model)}}
+        >
+          {{t 'resources.role.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'setGrantScopes role' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.roles.role.manage-scopes'
-      data-test-manage-dropdown-scopes
-    >
-      {{t 'resources.role.scope.actions.manage-scopes'}}
-    </dd.Interactive>
-  {{/if}}
-  {{#if (can 'delete model' @model)}}
-    <dd.Separator />
-    <dd.Interactive
-      @color='critical'
-      @disabled={{@model.canSave}}
-      {{on 'click' (fn @delete @model)}}
-    >
-      {{t 'resources.role.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}
