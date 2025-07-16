@@ -74,17 +74,17 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await select(selectors.FIELD_SCOPE, 'global');
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -100,9 +100,10 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
     assert.strictEqual(storageBucket.scopeId, 'global');
+
     assert
       .dom(selectors.READONLY_WORKER_FILTER)
-      .hasText(selectors.EDITOR_WORKER_FILTER_VALUE);
+      .hasText('"dev" in "/tags/env"');
     assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
   });
 
@@ -124,17 +125,17 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await select(selectors.FIELD_SCOPE, instances.scopes.org.id);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -175,7 +176,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     // Navigate to new storage bucket
     await visit(urls.storageBuckets);
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
 
     // Fill the form
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -191,14 +192,14 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     );
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -240,7 +241,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
     // There are 2 credential types
@@ -248,14 +249,14 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     await click(selectors.FIELD_DYNAMIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ROLE_ARN, selectors.FIELD_ROLE_ARN_VALUE);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -288,21 +289,21 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     assert.dom(selectors.GROUP_CREDENTIAL_TYPE).exists({ count: 2 });
 
     await click(selectors.FIELD_STATIC_CREDENTIAL);
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -337,7 +338,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
 
     // Navigate to new storage bucket
     await visit(urls.storageBuckets);
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
 
     // Fill the form
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -352,14 +353,14 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     );
     await fillIn(selectors.FIELD_ACCESS_KEY, selectors.FIELD_ACCESS_KEY_VALUE);
     await fillIn(selectors.FIELD_SECRET_KEY, selectors.FIELD_SECRET_KEY_VALUE);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
 
@@ -400,7 +401,7 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
 
     await click(commonSelectors.CANCEL_BTN);
@@ -445,15 +446,15 @@ module('Acceptance | storage-buckets | create', function (hooks) {
     });
     await visit(urls.storageBuckets);
 
-    await click(`[href="${urls.newStorageBucket}"]`);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await click(commonSelectors.HREF(urls.newStorageBucket));
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.EDITOR_WORKER_FILTER);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
         from: editorView.state.selection.main.from,
-        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+        insert: '"dev" in "/tags/env"',
       },
     });
     await click(commonSelectors.SAVE_BTN);

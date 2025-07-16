@@ -90,7 +90,7 @@ module('Acceptance | storage-buckets | delete', function (hooks) {
     const storageBucketCount = getStorageBucketCount();
     await visit(urls.globalScope);
 
-    await click(`[href="${urls.storageBuckets}"]`);
+    await click(commonSelectors.HREF(urls.storageBuckets));
     await click(DROPDOWN_BUTTON_SELECTOR);
     await click(DELETE_DROPDOWN_SELECTOR);
 

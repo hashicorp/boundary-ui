@@ -96,5 +96,11 @@ export const TABLE_SORT_BTN_ARROW_UP = (column) =>
 export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
   `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;
 
+// Check if we delete it
 export const CODE_EDITOR_CONTENT =
   '[data-test-code-editor-field-editor] textarea';
+// Perhaps, new?
+export const CODE_EDITOR = '[data-test-code-editor]';
+export const CODE_EDITOR_CODE =
+  '[data-test-code-editor] .hds-code-editor__editor';
+export const CODE_EDITOR_CM = '[data-test-code-editor] .cm-editor';
