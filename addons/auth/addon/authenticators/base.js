@@ -6,7 +6,6 @@
 import SimpleAuthBaseAuthenticator from 'ember-simple-auth/authenticators/base';
 import { resolve, reject } from 'rsvp';
 import { waitForPromise } from '@ember/test-waiters';
-import { service } from '@ember/service';
 
 /**
  * Encapsulates common authenticator functionality.
@@ -20,10 +19,6 @@ import { service } from '@ember/service';
  * All other responses should resolve the session restoration successfully.
  */
 export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
-  // =services
-
-  @service store;
-
   // =unimplemented methods
 
   /**
@@ -55,6 +50,14 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
    * @return {string}
    */
   buildTokenValidationEndpointURL(/* tokenID */) {}
+
+  /**
+   * Generates an account URL used to retrieve authenticated account.
+   * @override
+   * @param {string} accountID
+   * @return {string}
+   */
+  buildAccountEndpointURL(/* accountID */) {}
 
   // =methods
 
@@ -116,15 +119,12 @@ export default class BaseAuthenticator extends SimpleAuthBaseAuthenticator {
     data.isOrg = data?.scope?.type === 'org';
 
     try {
-      const adapter = this.store.adapterFor('application');
-      const findAccountRecordURL = adapter.buildURL(
-        'account',
+      const accountFindRecordURL = this.buildAccountEndpointURL(
         data?.account_id,
-        {},
-        'findRecord',
       );
+
       const response = await waitForPromise(
-        fetch(findAccountRecordURL, {
+        fetch(accountFindRecordURL, {
           method: 'get',
           headers: { Authorization: `Bearer ${data.attributes.token}` },
         }),

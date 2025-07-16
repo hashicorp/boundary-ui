@@ -60,16 +60,24 @@
 
             <Hds::Dropdown
               @enableCollisionDetection={{true}}
+              class='user-menu-dropdown'
               data-test-side-nav-user-dropdown
               as |dd|
             >
-              <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
               {{#if this.session.data.authenticated.username}}
+                <dd.ToggleButton
+                  @icon='user'
+                  @text={{this.session.data.authenticated.username}}
+                  {{hds-tooltip this.session.data.authenticated.username}}
+                  class='user-menu-dropdown__toggle-button'
+                />
                 <dd.Title @text={{t 'titles.authenticated'}} />
                 <dd.Description
                   @text={{this.session.data.authenticated.username}}
                 />
                 <dd.Separator />
+              {{else}}
+                <dd.ToggleIcon @icon='user' @text={{t 'titles.user-menu'}} />
               {{/if}}
 
               <dd.Interactive @route='account.change-password'>{{t

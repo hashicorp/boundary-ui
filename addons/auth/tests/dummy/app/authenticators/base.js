@@ -13,4 +13,8 @@ export default class ApplicationBaseAuthenticator extends BaseAuthenticator {
   buildDeauthEndpointURL() {
     return '/deauthenticate';
   }
+
+  buildAccountEndpointURL(id) {
+    return `/account/${id}`;
+  }
 }
