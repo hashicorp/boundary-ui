@@ -122,9 +122,9 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(selectors.TYPE_VAULT);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.CODE_EDITOR_BODY);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
@@ -135,7 +135,7 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(selectors.CODE_BLOCK_BODY).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR).doesNotExist();
     assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 

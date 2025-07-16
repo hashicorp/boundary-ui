@@ -17,8 +17,6 @@ export const FIELD_USERNAME_VALUE = 'username123';
 export const FIELD_PASSWORD_VALUE = 'password123';
 export const FIELD_USERNAME_WITH_DOMAIN_VALUE = 'username@g.com';
 
-export const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
-export const FIELD_EDITOR_VALUE = '{"test": "value"}';
 export const FIELD_PASSWORD_ERROR = '[data-test-error-message-password]';
 export const FIELD_SSH_PRIVATE_KEY = '[name=private_key]';
 export const FIELD_DOMAIN_ERROR = '[data-test-error-message-domain]';
@@ -26,7 +24,6 @@ export const FIELD_SSH_PRIVATE_KEY_ERROR =
   '[data-test-error-message-private-key]';
 export const FIELD_SSH_PRIVATE_KEY_PASSPHRASE = '[name=private_key_passphrase]';
 
-export const EDITOR = '[data-test-code-editor-field-editor]';
 export const MANAGE_DROPDOWN = '[data-test-manage-credentials-dropdown] button';
 export const MANAGE_DROPDOWN_DELETE =
   '[data-test-manage-credentials-dropdown] ul li button';
