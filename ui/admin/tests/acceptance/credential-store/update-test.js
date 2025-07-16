@@ -388,9 +388,9 @@ module('Acceptance | credential-stores | update', function (hooks) {
     await click(commonSelectors.HREF(urls.workerFilter));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.EDIT_WORKER_FILTER_ACTION);
-    await waitFor(selectors.CODE_EDITOR_CM_LOADED);
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-    const editorElement = find(selectors.CODE_EDITOR_BODY);
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
     const editorView = editorElement.editor;
     editorView.dispatch({
       changes: {
@@ -400,7 +400,6 @@ module('Acceptance | credential-stores | update', function (hooks) {
     });
 
     await click(commonSelectors.SAVE_BTN);
-
     assert.dom(selectors.CODE_BLOCK_BODY).exists();
     assert.dom(selectors.CODE_BLOCK_BODY).includesText('"bar" in "/tags/foo"');
   });

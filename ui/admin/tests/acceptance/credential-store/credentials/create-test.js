@@ -203,21 +203,24 @@ module(
       await click(commonSelectors.HREF(urls.newCredential));
       await click(selectors.FIELD_TYPE_JSON);
 
-      await waitFor('.cm-editor');
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
 
-      const editorElement = find('.hds-code-editor__editor');
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
       const editorView = editorElement.editor;
       editorView.dispatch({
         changes: {
           from: editorView.state.selection.main.from,
-          insert: selectors.FIELD_EDITOR_VALUE,
+          insert: '{"test": "value"}',
         },
       });
-      assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+
+      assert
+        .dom(commonSelectors.CODE_EDITOR_CODE)
+        .includesText('{"test": "value"}');
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
       await click(selectors.FIELD_TYPE_JSON);
-      assert.dom(selectors.EDITOR).includesText('{}');
+      assert.dom(commonSelectors.CODE_EDITOR_CODE).includesText('{}');
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
