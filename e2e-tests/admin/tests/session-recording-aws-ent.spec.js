@@ -119,16 +119,6 @@ test(
         .getByRole('link', { name: `Back to ${orgName}`, exact: true })
         .click();
       await page
-        .getByRole('link', { name: 'Back to Global', exact: true })
-        .click();
-      await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
-      await page.getByRole('link', { name: orgName }).click();
-      await expect(
-        page
-          .getByRole('navigation', { name: 'breadcrumbs' })
-          .getByText(orgName),
-      ).toBeVisible();
-      await page
         .getByRole('link', { name: 'Storage Policies', exact: true })
         .click();
       const storagePoliciesPage = new StoragePoliciesPage(page);
