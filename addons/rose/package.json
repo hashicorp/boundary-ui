@@ -34,7 +34,6 @@
     "@hashicorp/design-system-tokens": "^2.3.0",
     "@hashicorp/flight-icons": "^3.10.0",
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.10",
-    "codemirror": "5.65.7",
     "ember-auto-import": "^2.10.0",
     "ember-cli-babel": "^8.2.0",
     "ember-cli-clipboard": "^1.2.1",
