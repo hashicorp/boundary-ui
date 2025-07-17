@@ -147,6 +147,9 @@ class BoundaryApi {
   }
 
   skipCleanup(identifiable: { id: string }): void {
+    if (!identifiable.id) {
+      throw new Error('The `id` field is expected on the resource');
+    }
     this.skipCleanupResources.push(identifiable);
   }
 
