@@ -3,24 +3,36 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<Hds::Dropdown data-test-manage-dropdown-host-sets as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'addHosts hostSet' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'
-    >
-      {{t 'resources.host-set.actions.create-and-add-host'}}
-    </dd.Interactive>
-    <dd.Interactive
-      @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
-    >
-      {{t 'resources.host-set.actions.add-hosts'}}
-    </dd.Interactive>
-    <dd.Separator />
+{{#let
+  (hash
+    canAddHosts=(can 'addHosts hostSet' @model)
+    canDelete=(can 'delete model' @model)
+  )
+  as |perms|
+}}
+  {{#if (or perms.canAddHosts perms.canDelete)}}
+    <Hds::Dropdown data-test-manage-dropdown-host-sets as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canAddHosts}}
+        <dd.Interactive
+          @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.create-and-add-host'
+        >
+          {{t 'resources.host-set.actions.create-and-add-host'}}
+        </dd.Interactive>
+        <dd.Interactive
+          @route='scopes.scope.host-catalogs.host-catalog.host-sets.host-set.add-hosts'
+        >
+          {{t 'resources.host-set.actions.add-hosts'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        {{#if perms.canAddHosts}}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+          {{t 'resources.host-set.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'delete model' @model)}}
-    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
-      {{t 'resources.host-set.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}

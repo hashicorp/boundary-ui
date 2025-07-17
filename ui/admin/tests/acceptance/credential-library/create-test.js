@@ -215,6 +215,7 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       'credential-libraries'
     ] = [];
     await visit(urls.credentialLibraries);
+    await click(selectors.MANAGE_DROPDOWN_CREDENTIAL_STORE);
 
     assert.notOk(
       instances.credentialStore.authorized_collection_actions[
