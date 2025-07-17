@@ -54,7 +54,19 @@
                   >
                     {{feature}}
                   </dd.Checkbox>
+
                 {{/each}}
+                <dd.Separator />
+                <dd.Title @text={{t 'actions.manage-db'}} />
+                <dd.Interactive
+                  @icon='save'
+                  {{on 'click' this.downloadDatabase}}
+                >
+                  {{t 'actions.download-db'}}
+                </dd.Interactive>
+                <dd.Interactive @icon='trash' {{on 'click' this.clearDatabase}}>
+                  {{t 'actions.clear-db'}}
+                </dd.Interactive>
               </Hds::Dropdown>
             {{/if}}
 
