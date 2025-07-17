@@ -228,9 +228,19 @@ test.describe('Aliases', () => {
           targetName,
         );
 
+        await page
+          .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+          .click();
+        await page.getByRole('link', { name: 'Back to Global' }).click();
+        await page.getByRole('link', { name: 'Aliases' }).click();
+        await expect(
+          page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText('Aliases'),
+        ).toBeVisible();
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
+        await aliasesPage.createAliasForTarget(alias, targetId);
         await page.getByRole('link', { name: 'Orgs', exact: true }).click();
         await expect(page.getByRole('heading', { name: 'Orgs' })).toBeVisible();
         await page.getByRole('link', { name: orgName }).click();
