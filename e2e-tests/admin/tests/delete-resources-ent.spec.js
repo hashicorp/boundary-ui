@@ -62,9 +62,9 @@ test(
       await boundaryCli.makeAuthMethodPrimary(orgId, authMethodId);
       let passwordAccountId =
         await boundaryCli.createPasswordAccount(authMethodId);
-      let projectScopeRoleId = await boundaryCli.createRole(projectId);
-      let orgScopeRoleId = await boundaryCli.createRole(orgId);
-      let globalScopeRoleId = await boundaryCli.createRole('global');
+      let projectScopeRoleId = await boundaryCli.createRole(projectId, {});
+      let orgScopeRoleId = await boundaryCli.createRole(orgId, {});
+      let globalScopeRoleId = await boundaryCli.createRole('global', {});
       let groupId = await boundaryCli.createGroup(orgId);
       let userId = await boundaryCli.createUser(orgId);
       let staticHostCatalogId =
