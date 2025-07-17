@@ -6,6 +6,24 @@
 import Service from '@ember/service';
 import { PWBHost } from 'promise-worker-bi';
 
+// A mapping of columns to their expected model attributes for supported models
+// The order matters, it _must_ be the same as the order of the columns in the database.
+// ID is assumed to be always present and is the first column in the database.
+// The JSON data is assumed to always be last.
+export const modelMapping = {
+  target: {
+    type: 'type',
+    name: 'name',
+    description: 'description',
+    address: 'address',
+    scope_id: 'scope.scope_id',
+    created_time: 'created_time',
+  },
+};
+
+// A list of tables that we support searching using FTS5 in SQLite.
+export const searchTables = new Set(['target']);
+
 export default class SqliteDbService extends Service {
   // =attributes
 
@@ -14,8 +32,7 @@ export default class SqliteDbService extends Service {
   // This will be the worker we interact with that is wrapped by PWBHost.
   worker;
 
-  // TODO: Actually use the name that gets passed into setup later
-  setup() {
+  setup(dbName) {
     if (this.worker) {
       // If the worker already exists, we don't need to do anything.
       return;
@@ -38,6 +55,59 @@ export default class SqliteDbService extends Service {
     // We use PWBHost to simplify communication so we can just send and receive
     // messages with promises rather than having to manually set up event listeners
     this.worker = new PWBHost(this.webWorker);
+    this.worker.register(async ({ method }) => {
+      if (method === 'getDatabaseName') {
+        return dbName;
+      }
+    });
+  }
+
+  fetchResource({ sql, parameters }) {
+    return this.worker.postMessage({
+      method: 'fetchResource',
+      payload: { sql, parameters },
+    });
+  }
+
+  insertResource(resource, items) {
+    return this.worker.postMessage({
+      method: 'insertResource',
+      payload: { resource, items },
+    });
+  }
+
+  deleteResource(resource, ids) {
+    return this.worker.postMessage({
+      method: 'deleteResource',
+      payload: { resource, ids },
+    });
+  }
+
+  async downloadDatabase() {
+    const byteArray = await this.worker.postMessage({
+      method: 'downloadDatabase',
+    });
+
+    const blob = new Blob([byteArray.buffer], {
+      type: 'application/x-sqlite3',
+    });
+
+    // Create temporary elements to initialize the download
+    const a = window.document.createElement('a');
+    window.document.body.appendChild(a);
+    a.href = window.URL.createObjectURL(blob);
+    a.download = 'boundary.db';
+    a.addEventListener('click', function () {
+      setTimeout(function () {
+        window.URL.revokeObjectURL(a.href);
+        a.remove();
+      }, 500);
+    });
+    a.click();
+  }
+
+  clearDatabase() {
+    this.worker.postMessage({ method: 'clearDatabase' });
   }
 
   willDestroy() {
