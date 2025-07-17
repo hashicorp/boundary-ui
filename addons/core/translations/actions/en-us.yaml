@@ -55,6 +55,9 @@ do-this-later: Do this later
 toggle-color-theme: Toggle Color Theme
 toggle-feature-edition: Toggle Feature Edition
 toggle-licensed-features: Toggle Licensed Features
+manage-db: Manage SQLite
+download-db: Download SQLite DB
+clear-db: Clear SQLite DB
 more: ', +{remainingItems} more'
 search: Search
 yes: Yes
