@@ -32,7 +32,7 @@ const columnHeaders = Object.freeze({
 let org, rolesSortedByCreatedTime, rolesSortedByName, rolesSortedById;
 
 test.beforeEach(async ({ apiClient }) => {
-  org = await apiClient.clients.scopes.scopeServiceCreateScope({
+  org = await apiClient.clients.Scope.scopeServiceCreateScope({
     item: {
       scopeId: 'global',
     },
@@ -43,7 +43,7 @@ test.beforeEach(async ({ apiClient }) => {
   // create roles with specific names
   const roles = await Promise.all(
     roleNamesToCreate.map((roleName) => {
-      return apiClient.clients.roles.roleServiceCreateRole({
+      return apiClient.clients.Role.roleServiceCreateRole({
         item: {
           scopeId: org.id,
           name: roleName,
