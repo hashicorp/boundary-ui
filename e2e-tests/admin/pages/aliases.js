@@ -21,7 +21,7 @@ export class AliasesPage extends BaseResourcePage {
     await this.page
       .getByRole('link', { name: `Back to ${orgName}`, exact: true })
       .click();
-    await this.page.getByRole('link', { name: 'Orgs' }).click();
+    await this.page.getByRole('link', { name: 'Back to Global' }).click();
     await this.page.getByRole('link', { name: 'Aliases' }).click();
     await expect(
       this.page

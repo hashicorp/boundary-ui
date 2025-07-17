@@ -261,8 +261,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: hostSourceName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: hostSourceName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page.getByRole('button', { name: 'Add Host Sources' }).click();
@@ -274,9 +274,8 @@ export class TargetsPage extends BaseResourcePage {
 
   async removeHostSourceFromTarget(hostSourceName) {
     await this.page
-      .getByRole('link', { name: hostSourceName })
-      .locator('..')
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('link', { name: hostSourceName }) })
       .getByRole('button', { name: 'Manage' })
       .click();
     await this.page.getByRole('button', { name: 'Remove' }).click();
@@ -307,7 +306,7 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Ingress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('textarea').fill(filter);
+    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();
@@ -336,7 +335,7 @@ export class TargetsPage extends BaseResourcePage {
         .getByText('Edit Egress Worker Filter'),
     ).toBeVisible();
 
-    await this.page.locator('textarea').fill(filter);
+    await this.page.locator('.CodeMirror').getByRole('textbox').fill(filter);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.dismissSuccessAlert();
@@ -377,8 +376,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: credentialName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: credentialName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page
@@ -434,8 +433,8 @@ export class TargetsPage extends BaseResourcePage {
       .click();
 
     await this.page
-      .getByRole('cell', { name: credentialName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: credentialName }) })
       .getByRole('checkbox')
       .click({ force: true });
     await this.page

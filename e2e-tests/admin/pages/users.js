@@ -46,8 +46,8 @@ export class UsersPage extends BaseResourcePage {
       .getByRole('link', { name: 'Add Accounts', exact: true })
       .click();
     await this.page
-      .getByRole('cell', { name: loginName })
-      .locator('..')
+      .getByRole('row')
+      .filter({ has: this.page.getByRole('cell', { name: loginName }) })
       .getByRole('checkbox')
       .click({ force: true });
 

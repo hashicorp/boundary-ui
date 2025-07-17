@@ -303,9 +303,8 @@ test(
 
       // Remove the host source from the target
       await page
-        .getByRole('link', { name: credentialName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: credentialName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();

@@ -181,15 +181,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: userName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: userName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(userName);
       await expect(
         page
-          .getByRole('cell', { name: userName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: userName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(email);
@@ -223,15 +223,15 @@ test(
 
       await expect(
         page
-          .getByRole('cell', { name: userName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: userName }) })
           .getByRole('cell')
           .nth(fullNameIndex),
       ).toHaveText(userName);
       await expect(
         page
-          .getByRole('cell', { name: userName })
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('cell', { name: userName }) })
           .getByRole('cell')
           .nth(emailIndex),
       ).toHaveText(email);

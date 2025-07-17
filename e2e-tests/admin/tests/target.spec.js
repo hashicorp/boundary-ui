@@ -88,8 +88,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -155,8 +155,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -230,10 +230,16 @@ test(
       ).toBeVisible();
       await expect(page.getByText('"dev" in "/tags/type"')).toBeVisible();
 
-      await page.locator('textarea').click({ force: true });
+      await page
+        .locator('.CodeMirror')
+        .getByRole('textbox')
+        .click({ force: true });
       await page.keyboard.press('Meta+A');
       await page.keyboard.press('Backspace');
-      await page.locator('textarea').fill('"prod" in "/tags/type"');
+      await page
+        .locator('.CodeMirror')
+        .getByRole('textbox')
+        .fill('"prod" in "/tags/type"');
       await page.getByRole('button', { name: 'Save' }).click();
       const basePage = new BasePage(page);
       await basePage.dismissSuccessAlert();
