@@ -7,6 +7,10 @@ import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
 
+// These tests are are to make sure that the api-client fixture works as expected.
+// Test helpers or fixtures don't always have tests, but because this one has
+// enough complexity it's worth testing
+
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 5);
 const scopeId = 'global';
 const aliasCleanedUpDescription = 'this alias should be cleaned up';
@@ -33,6 +37,9 @@ test('resources can be created (example: alias)', async ({ apiClient }) => {
 
   apiClient.skipCleanup(skipAlias);
 
+  // These assertions ensure that by the end of this test the two aliases
+  // exist. In the next test they are checked to see if clean up and
+  // skipping clean up worked correctly
   const aliases = await apiClient.clients.Alias.aliasServiceListAliases({
     scopeId,
   });
@@ -46,8 +53,11 @@ test('resources can be created (example: alias)', async ({ apiClient }) => {
   expect(cleanUpSkippedAlias).toBeTruthy();
 });
 
-// it is an anti-pattern for this test to depend on the previously ran test.
-// this is to test that the fixture runs and the clean up is handled correctly
+// This test tests the api-client cleanup and depends on the previous test to be ran
+// It is typically an anti-pattern to have a test depend on another test but to test
+// that the resources created in the previous test are cleaned up the full test needs
+// to be ran, including all fixtures, before any assertions on the clean up can be
+// made
 test('resources not marked to be skipped from previous test are cleaned up', async ({
   apiClient,
 }) => {
@@ -57,10 +67,12 @@ test('resources not marked to be skipped from previous test are cleaned up', asy
   const cleanedUpAlias = aliases.items.find(
     ({ description }) => description === aliasCleanedUpDescription,
   );
+  // the `cleanedUpAlias` has been cleaned up so it isn't expected to be found
   expect(cleanedUpAlias).toBeFalsy();
   const cleanUpSkippedAlias = aliases.items.find(
     ({ description }) => description === aliasSkippedDescription,
   );
+  // the `cleanUpSkippedAlias` skipped cleanup so it should still exist
   expect(cleanUpSkippedAlias).toBeTruthy();
 
   // manually clean up skipped resource
