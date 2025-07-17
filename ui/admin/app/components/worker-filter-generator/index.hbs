@@ -5,20 +5,14 @@
 
 <Hds::Form::Field as |F|>
   <F.Control>
-    <Rose::CodeEditor as |c|>
-      {{#unless @hideToolbar}}
-        <c.toolbar @copyText={{get @model @name}} />
-      {{/unless}}
-      <c.fieldEditor
-        @onInput={{fn this.setWorkerFilter @model @name}}
-        @value={{or (get @model @name) ''}}
-        @options={{hash
-          mode='text/x-sh'
-          gutters=(array 'CodeMirror-lint-markers')
-          lint='true'
-        }}
-      />
-    </Rose::CodeEditor>
+    <Hds::CodeEditor
+      @ariaLabel={{t 'form.worker_filter.label'}}
+      @hasCopyButton={{not @hideToolbar}}
+      @language='shell'
+      @value={{or (get @model @name) ''}}
+      @onInput={{fn this.setWorkerFilter @model @name}}
+      data-test-code-editor
+    />
   </F.Control>
   {{#if (get @model.errors @name)}}
     <F.Error data-test-worker-filter-error as |E|>

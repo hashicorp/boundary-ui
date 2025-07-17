@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -97,13 +104,20 @@ module('Acceptance | credential-stores | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(selectors.TYPE_VAULT);
-    await fillIn(
-      commonSelectors.CODE_EDITOR_CONTENT,
-      selectors.EDITOR_WORKER_FILTER_VALUE,
-    );
+    await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+    const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+    const editorView = editorElement.editor;
+    editorView.dispatch({
+      changes: {
+        from: editorView.state.selection.main.from,
+        insert: selectors.EDITOR_WORKER_FILTER_VALUE,
+      },
+    });
+
     await click(commonSelectors.SAVE_BTN);
 
-    assert.dom(selectors.CODE_BLOCK_BODY).doesNotExist();
+    assert.dom(commonSelectors.CODE_EDITOR).doesNotExist();
     assert.strictEqual(getVaultCredentialStoresCount(), count + 1);
   });
 

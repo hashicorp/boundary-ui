@@ -279,16 +279,9 @@
   margin-bottom: sizing.rems(l);
   width: 100%;
 
-  .secret-editor-json {
-    .CodeMirror {
-      border-radius: sizing.rems(xxs);
-      height: var(--secret-editor-height);
-      display: block;
-    }
-
-    .CodeMirror-gutters {
-      background: var(--secret-editor-gutter);
-    }
+  /* stylelint-disable-next-line selector-class-pattern */
+  .hds-code-editor__editor {
+    height: var(--secret-editor-height);
   }
 
   .secret-editor-skeleton-wrapper {

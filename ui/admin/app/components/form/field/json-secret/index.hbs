@@ -20,17 +20,14 @@
       />
     </Form::Field::JsonSecret::Skeleton>
   {{else}}
-    <Rose::CodeEditor as |c|>
-      <c.fieldEditor
-        class='secret-editor-json'
-        @onInput={{@onInput}}
-        @value={{@value}}
-        @options={{hash
-          mode='application/json'
-          gutters=(array 'CodeMirror-lint-markers')
-          lint='true'
-        }}
-      />
-    </Rose::CodeEditor>
+    <Hds::CodeEditor
+      class='secret-editor-json'
+      @ariaLabel={{t 'form.secret-editor.label'}}
+      @value={{@value}}
+      @isLintingEnabled={{true}}
+      @language='json'
+      @onInput={{@onInput}}
+      data-test-code-editor
+    />
   {{/if}}
 </div>

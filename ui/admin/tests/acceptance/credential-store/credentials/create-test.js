@@ -4,7 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  click,
+  fillIn,
+  find,
+  waitFor,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -196,12 +203,24 @@ module(
       await click(commonSelectors.HREF(urls.newCredential));
       await click(selectors.FIELD_TYPE_JSON);
 
-      await fillIn(selectors.FIELD_EDITOR, selectors.FIELD_EDITOR_VALUE);
-      assert.dom(selectors.EDITOR).includesText(selectors.FIELD_EDITOR_VALUE);
+      await waitFor(commonSelectors.CODE_EDITOR_CM);
+
+      const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+      const editorView = editorElement.editor;
+      editorView.dispatch({
+        changes: {
+          from: editorView.state.selection.main.from,
+          insert: '{"test": "value"}',
+        },
+      });
+
+      assert
+        .dom(commonSelectors.CODE_EDITOR_CODE)
+        .includesText('{"test": "value"}');
       await click(selectors.FIELD_TYPE_USERNAME_PASSWORD);
 
       await click(selectors.FIELD_TYPE_JSON);
-      assert.dom(selectors.EDITOR).includesText('{}');
+      assert.dom(commonSelectors.CODE_EDITOR_CODE).includesText('{}');
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
