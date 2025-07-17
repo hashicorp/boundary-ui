@@ -26,7 +26,7 @@
     "lint:sass:fix": "stylelint 'app/styles/**/*.scss' --fix",
     "format": "concurrently \"npm:format:*\" --names \"format:\"",
     "format:hbs": "prettier --write 'app/**/*.hbs'",
-    "format:js": "prettier --write '{app,config,stories,tests}/**/*.js' *.js",
+    "format:js": "prettier --write '{app,config,stories,tests}/**/*.{gjs,js}' *.js",
     "format:sass": "prettier --write app/**/*.scss",
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_* || true",
@@ -74,6 +74,7 @@
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
     "ember-concurrency": "^4.0.3",
+    "ember-eslint-parser": "*",
     "ember-exam": "^8.0.0",
     "ember-inline-svg": "^1.0.1",
     "ember-load-initializers": "^2.1.2",
@@ -82,17 +83,19 @@
     "ember-qunit": "^8.1.0",
     "ember-resolver": "^12.0.1",
     "ember-source": "~5.12.0",
+    "ember-template-imports": "^4.3.0",
     "ember-template-lint": "^6.0.0",
     "ember-template-lint-plugin-prettier": "^5.0.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-ember": "^12.2.1",
+    "eslint-plugin-ember": "^12.5.0",
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-qunit": "^8.1.2",
     "js-bexpr": "hashicorp/js-bexpr#9b4a4b54d85eba67fdfc0990133d1518d890b1e1",
     "loader.js": "^4.7.0",
     "postcss": "^8.4.31",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
+    "prettier-plugin-ember-template-tag": "^2.0.6",
     "qunit": "^2.22.0",
     "qunit-dom": "^3.2.1",
     "rose": "workspace:*",
@@ -110,7 +113,7 @@
     "edition": "octane"
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,gjs}": [
       "eslint --fix",
       "prettier --write"
     ],
