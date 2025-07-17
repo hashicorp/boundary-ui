@@ -11,14 +11,14 @@ test(
   'Search and Pagination (Targets)',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
   async ({ page, apiClient }) => {
-    const org = await apiClient.clients.scopes.scopeServiceCreateScope({
+    const org = await apiClient.clients.Scope.scopeServiceCreateScope({
       item: {
         name: `Org-${nanoid()}`,
         scopeId: 'global',
       },
     });
 
-    const project = await apiClient.clients.scopes.scopeServiceCreateScope({
+    const project = await apiClient.clients.Scope.scopeServiceCreateScope({
       item: {
         name: `Project-${nanoid()}`,
         scopeId: org.id,
@@ -29,7 +29,7 @@ test(
     let targets = [];
     const targetCount = 15;
     for (let i = 0; i < targetCount; i++) {
-      const target = await apiClient.clients.targets.targetServiceCreateTarget({
+      const target = await apiClient.clients.Target.targetServiceCreateTarget({
         item: {
           name: `Target-${nanoid()}`,
           scopeId: project.id,
