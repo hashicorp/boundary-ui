@@ -55,6 +55,7 @@
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
       "core-js",
+      "esbuild",
       "tesseract.js"
     ],
     "onlyBuiltDependencies": []
