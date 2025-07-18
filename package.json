@@ -55,6 +55,7 @@
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
       "core-js",
+      "esbuild",
       "tesseract.js",
       "@nestjs/core",
       "@openapitools/openapi-generator-cli"

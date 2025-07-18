@@ -22,6 +22,7 @@ export default class ApplicationRoute extends Route {
   @service features;
   @service featureEdition;
   @service indexedDb;
+  @service sqliteDb;
   @service('browser/window') window;
 
   // =attributes
@@ -73,6 +74,7 @@ export default class ApplicationRoute extends Route {
       const userId = this.session.data?.authenticated?.user_id;
       const hostUrl = this.window.location.host;
       if (userId && hostUrl) {
+        await this.sqliteDb.setup(formatDbName(userId, hostUrl));
         await this.indexedDb.setup(formatDbName(userId, hostUrl));
       }
     }
