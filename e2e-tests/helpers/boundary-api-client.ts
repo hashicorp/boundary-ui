@@ -93,7 +93,10 @@ class BoundaryApi {
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/auth-methods Auth Method Documentation} */
       AuthMethod: new BoundaryApiClient.AuthMethodServiceApi(openapiConfiguration),
 
+      /** {@link https://developer.hashicorp.com/boundary/api-docs/auth-token-service Auth Token Service Api Docs} */
       AuthToken: new BoundaryApiClient.AuthTokenServiceApi(openapiConfiguration),
+
+      /** {@link https://developer.hashicorp.com/boundary/api-docs/billing-service Billing Service Api Docs} */
       Billing: new BoundaryApiClient.BillingServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/credential-libraries Credential Libraries Documentation} */
@@ -117,6 +120,7 @@ class BoundaryApi {
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/managed-groups Managed Groups Documentation} */
       ManagedGroup: new BoundaryApiClient.ManagedGroupServiceApi(openapiConfiguration),
 
+      /** {@link https://developer.hashicorp.com/boundary/api-docs/policy-service Policy Service Api Docs} */
       Policy: new BoundaryApiClient.PolicyServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/roles Roles Documentation} */
@@ -140,6 +144,7 @@ class BoundaryApi {
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/users Users Documentation} */
       User: new BoundaryApiClient.UserServiceApi(openapiConfiguration),
 
+      /** {@link https://developer.hashicorp.com/boundary/api-docs/worker-service Worker Service Api Docs} */
       Worker: new BoundaryApiClient.WorkerServiceApi(openapiConfiguration),
     };
 
