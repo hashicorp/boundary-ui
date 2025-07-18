@@ -63,8 +63,8 @@
               />
             {{/if}}
             <dd.Interactive
-              data-test-sign-out
-              {{on 'click' this.invalidateSession}}
+              data-test-nav-signout-btn
+              {{on 'click' this.showModalOrLogout}}
             >
               {{t 'actions.deauthenticate'}}
             </dd.Interactive>
@@ -156,3 +156,39 @@
     </Hds::Modal>
   {{/if}}
 </PendingConfirmations>
+
+{{#if (or this.isLoggingOut this.isAppQuitting)}}
+  <Hds::Modal @onClose={{this.cancel}} data-test-close-sessions-modal as |M|>
+    {{#if this.isAppQuitting}}
+      <M.Header>
+        {{t 'resources.session.messages.stop-sessions-before-quit.title'}}
+      </M.Header>
+      <M.Body>
+        {{t 'resources.session.messages.stop-sessions-before-quit.description'}}
+      </M.Body>
+    {{else}}
+      {{! If not rendering the isAppQuitting modal, render isLoggingOut modal }}
+      <M.Header>
+        {{t 'resources.session.messages.stop-sessions-and-signout.title'}}
+      </M.Header>
+      <M.Body>
+        {{t 'resources.session.messages.stop-sessions-and-signout.description'}}
+      </M.Body>
+    {{/if}}
+    <M.Footer>
+      <Hds::ButtonSet>
+        <Hds::Button
+          {{on 'click' this.confirmCloseSessions}}
+          type='button'
+          @text={{t 'actions.ok'}}
+        />
+        <Hds::Button
+          {{on 'click' this.cancel}}
+          type='button'
+          @text={{t 'actions.cancel'}}
+          @color='secondary'
+        />
+      </Hds::ButtonSet>
+    </M.Footer>
+  </Hds::Modal>
+{{/if}}
