@@ -5,14 +5,14 @@
 
 import { getOwner, setOwner } from '@ember/owner';
 import { service } from '@ember/service';
-import { modelMapping } from 'api/services/sqlite-db';
+import { modelMapping } from 'api/services/sqlite';
 import { get } from '@ember/object';
 import { typeOf } from '@ember/utils';
 import { hashCode } from '../utils/hash-code';
-import { generateSQLExpressions } from '../utils/sqlite-db-query';
+import { generateSQLExpressions } from '../utils/sqlite-query';
 
 export default class SqliteHandler {
-  @service sqliteDb;
+  @service sqlite;
 
   batchLimit = 5_000;
 
@@ -37,7 +37,7 @@ export default class SqliteHandler {
 
         // Go through normal flow if we don't yet support the model
         // or if we don't have a sqlite db instance
-        if (!supportedModels.includes(type) || !this.sqliteDb) {
+        if (!supportedModels.includes(type) || !this.sqlite) {
           return next(context.request);
         }
 
@@ -51,7 +51,7 @@ export default class SqliteHandler {
         if (!peekDB) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
           if (storeToken) {
-            const [tokenObj] = await this.sqliteDb.fetchResource({
+            const [tokenObj] = await this.sqlite.fetchResource({
               ...generateSQLExpressions('token', {
                 filters: { id: [{ equals: tokenKey }] },
               }),
@@ -100,7 +100,7 @@ export default class SqliteHandler {
           select: ['data'],
         });
 
-        const rows = await this.sqliteDb.fetchResource({
+        const rows = await this.sqlite.fetchResource({
           sql,
           parameters,
         });
@@ -110,7 +110,7 @@ export default class SqliteHandler {
           generateSQLExpressions(type, queryObj, {
             select: ['count(*) as total'],
           });
-        const count = await this.sqliteDb.fetchResource({
+        const count = await this.sqlite.fetchResource({
           sql: countSql,
           parameters: countParams,
         });
@@ -149,14 +149,14 @@ export default class SqliteHandler {
     type,
   ) {
     if (payload.list_token && storeToken) {
-      await this.sqliteDb.insertResource('token', [
+      await this.sqlite.insertResource('token', [
         [tokenKey, payload.list_token],
       ]);
     }
 
     // Remove any records from the DB if the API indicates they've been deleted
     if (payload.removed_ids?.length > 0) {
-      await this.sqliteDb.deleteResource(type, payload.removed_ids);
+      await this.sqlite.deleteResource(type, payload.removed_ids);
     }
 
     const normalizedPayload = serializer.normalizeResponse(
@@ -183,7 +183,7 @@ export default class SqliteHandler {
     });
 
     if (items.length > 0) console.time(`SQLite insert`);
-    await this.sqliteDb.insertResource(type, items);
+    await this.sqlite.insertResource(type, items);
     if (items.length > 0) console.timeEnd(`SQLite insert`);
   }
 }

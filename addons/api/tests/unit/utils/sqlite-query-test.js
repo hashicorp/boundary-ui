@@ -1,0 +1,268 @@
+/**
+ * Copyright (c) HashiCorp, Inc.
+ * SPDX-License-Identifier: BUSL-1.1
+ */
+
+import { generateSQLExpressions } from 'api/utils/sqlite-query';
+import { module, test } from 'qunit';
+
+module('Unit | Utility | sqlite-query', function (hooks) {
+  const date = new Date(2025, 1, 1);
+  const isoDateString = '2025-02-01T05:00:00.000Z';
+
+  hooks.beforeEach(function () {
+    String.prototype.removeExtraWhiteSpace = function () {
+      return this.replace(/^\s+/gm, '').trim();
+    };
+  });
+
+  hooks.afterEach(function () {
+    delete String.prototype.removeExtraWhiteSpace;
+  });
+
+  // TODO: Add a normal LIKE search when we add a resource that uses it
+  test('it generates search correctly with FTS5', function (assert) {
+    const query = { search: 'favorite' };
+
+    const { sql, parameters } = generateSQLExpressions('target', query);
+    assert.strictEqual(
+      sql,
+      `
+        SELECT * FROM target
+        WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, ['"favorite"*']);
+  });
+
+  test.each(
+    'it generates filters correctly',
+    {
+      equals: {
+        query: {
+          filters: {
+            type: [{ equals: 'ssh' }],
+          },
+        },
+        expectedWhereClause: 'WHERE (type = ?)',
+        expectedParams: ['ssh'],
+      },
+      notEquals: {
+        query: {
+          filters: {
+            type: [{ notEquals: 'ssh' }],
+          },
+        },
+        expectedWhereClause: 'WHERE (type != ?)',
+        expectedParams: ['ssh'],
+      },
+      contains: {
+        query: {
+          filters: {
+            type: [{ contains: 'ssh' }],
+          },
+        },
+        expectedWhereClause: 'WHERE (type LIKE ?)',
+        expectedParams: ['%ssh%'],
+      },
+      greaterThan: {
+        query: {
+          filters: {
+            created_at: [{ gt: date }],
+            numberField: [{ gt: 10 }],
+          },
+        },
+        expectedWhereClause: 'WHERE (created_at > ?) AND (numberField > ?)',
+        expectedParams: [isoDateString, 10],
+      },
+      lessThan: {
+        query: {
+          filters: {
+            created_at: [{ lt: date }],
+            numberField: [{ lt: 10 }],
+          },
+        },
+        expectedWhereClause: 'WHERE (created_at < ?) AND (numberField < ?)',
+        expectedParams: [isoDateString, 10],
+      },
+      greaterThanOrEqual: {
+        query: {
+          filters: {
+            created_at: [{ gte: date }],
+            numberField: [{ gte: 10 }],
+          },
+        },
+        expectedWhereClause: 'WHERE (created_at >= ?) AND (numberField >= ?)',
+        expectedParams: [isoDateString, 10],
+      },
+      lessThanOrEqual: {
+        query: {
+          filters: {
+            created_at: [{ lte: date }],
+            numberField: [{ lte: 10 }],
+          },
+        },
+        expectedWhereClause: 'WHERE (created_at <= ?) AND (numberField <= ?)',
+        expectedParams: [isoDateString, 10],
+      },
+      logicalOperators: {
+        query: {
+          filters: {
+            id: {
+              logicalOperator: 'and',
+              values: [{ notEquals: 'id1' }, { notEquals: 'id2' }],
+            },
+            status: {
+              logicalOperator: 'or',
+              values: [{ equals: 'active' }, { equals: 'pending' }],
+            },
+            type: [{ equals: 'ssh' }],
+          },
+        },
+        expectedWhereClause:
+          'WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND (type = ?)',
+        expectedParams: ['id1', 'id2', 'active', 'pending', 'ssh'],
+      },
+    },
+
+    function (assert, { query, expectedWhereClause, expectedParams }) {
+      const { sql, parameters } = generateSQLExpressions('target', query);
+      assert.strictEqual(
+        sql,
+        `
+        SELECT * FROM target
+        ${expectedWhereClause}`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, expectedParams);
+    },
+  );
+
+  test.each(
+    'it generates sort direction correctly',
+    [
+      ['asc', 'ASC'],
+      ['desc', 'DESC'],
+    ],
+    function (assert, [direction, expectedDirection]) {
+      const query = {
+        sort: { attribute: 'name', direction },
+      };
+
+      const { sql, parameters } = generateSQLExpressions('target', query);
+      assert.strictEqual(
+        sql,
+        `
+        SELECT * FROM target
+        ORDER BY name ${expectedDirection}`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, []);
+    },
+  );
+
+  test.each(
+    'it generates pagination clause',
+    [
+      { page: 1, pageSize: 10, expectedParams: [10, 0] },
+      { page: 3, pageSize: 10, expectedParams: [10, 20] },
+      { page: 7, pageSize: 50, expectedParams: [50, 300] },
+    ],
+    function (assert, { page, pageSize, expectedParams }) {
+      const { sql, parameters } = generateSQLExpressions(
+        'target',
+        {},
+        { page, pageSize },
+      );
+      assert.strictEqual(
+        sql,
+        `
+        SELECT * FROM target
+        LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, expectedParams);
+    },
+  );
+
+  test('it generates FTS5 search with filters', function (assert) {
+    const query = {
+      search: 'favorite',
+      filters: {
+        id: {
+          logicalOperator: 'and',
+          values: [{ notEquals: 'id1' }, { notEquals: 'id2' }],
+        },
+        status: [{ equals: 'active' }, { equals: 'pending' }],
+      },
+    };
+
+    const { sql, parameters } = generateSQLExpressions('target', query);
+    assert.strictEqual(
+      sql,
+      `
+        SELECT * FROM target
+        WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, [
+      'id1',
+      'id2',
+      'active',
+      'pending',
+      '"favorite"*',
+    ]);
+  });
+
+  test('it generates SQL with all clauses combined', function (assert) {
+    const query = {
+      search: 'favorite',
+      filters: {
+        type: [{ equals: 'ssh' }],
+        status: {
+          logicalOperator: 'or',
+          values: [{ equals: 'active' }, { equals: 'pending' }],
+        },
+        created_at: [{ gte: date }],
+      },
+      sort: { attribute: 'name', direction: 'desc' },
+    };
+
+    const { sql, parameters } = generateSQLExpressions('target', query, {
+      page: 2,
+      pageSize: 15,
+    });
+
+    assert.strictEqual(
+      sql,
+      `
+      SELECT * FROM target
+      WHERE (type = ?) AND (status = ? OR status = ?) AND (created_at >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+      ORDER BY name DESC
+      LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
+    );
+
+    assert.deepEqual(parameters, [
+      'ssh',
+      'active',
+      'pending',
+      isoDateString,
+      '"favorite"*',
+      15,
+      15,
+    ]);
+  });
+
+  test.each(
+    'it handles empty and invalid fields',
+    {
+      emptyObject: {},
+      emptySearch: { search: '' },
+      emptyFilter: { filters: {} },
+      emptyFilterAttributes: { filters: { type: [] } },
+      invalidSortAttribute: { attribute: 'test', direction: 'asc' },
+      onlyPage: { page: 10 },
+      onlyPageSize: { pageSize: 5 },
+    },
+    function (assert, query) {
+      const { sql, parameters } = generateSQLExpressions('target', query);
+      assert.strictEqual(sql, `SELECT * FROM target`);
+      assert.deepEqual(parameters, []);
+    },
+  );
+});
