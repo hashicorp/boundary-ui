@@ -33,7 +33,7 @@ export default class ApplicationController extends Controller {
   @service featureEdition;
   @service flashMessages;
   @service router;
-  @service sqliteDb;
+  @service sqlite;
 
   /**
    * Returns available themes.
@@ -116,12 +116,12 @@ export default class ApplicationController extends Controller {
 
   @action
   async downloadDatabase() {
-    await this.sqliteDb.downloadDatabase();
+    await this.sqlite.downloadDatabase();
   }
 
   @action
   async clearDatabase() {
-    await this.sqliteDb.clearDatabase();
+    await this.sqlite.clearDatabase();
     this.router.refresh();
   }
 

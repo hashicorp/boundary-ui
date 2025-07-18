@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { modelMapping } from 'api/services/sqlite-db';
-import { searchTables } from 'api/services/sqlite-db';
+import { modelMapping } from 'api/services/sqlite';
+import { searchTables } from 'api/services/sqlite';
+import { typeOf } from '@ember/utils';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -84,7 +85,12 @@ function addFilterConditions(filters, parameters, conditions) {
     const filterConditions = filterValueArray
       .filter((f) => f)
       .map((filterObjValue) => {
-        const [operation, value] = Object.entries(filterObjValue)[0];
+        let [operation, value] = Object.entries(filterObjValue)[0];
+
+        // SQLite needs to be working with ISO strings
+        if (typeOf(value) === 'date') {
+          value = value.toISOString();
+        }
 
         // Handle LIKE operator separately
         if (operation === 'contains') {
@@ -142,13 +148,13 @@ function addSearchConditions(search, resource, parameters, conditions) {
 
 // Comparison Operators
 const OPERATORS = {
-  equals: ' = ? ',
-  notEquals: ' != ? ',
-  gt: ' > ? ',
-  gte: ' >= ? ',
-  lt: ' < ? ',
-  lte: ' <= ? ',
-  contains: ' LIKE ? ',
+  equals: ' = ?',
+  notEquals: ' != ?',
+  gt: ' > ?',
+  gte: ' >= ?',
+  lt: ' < ?',
+  lte: ' <= ?',
+  contains: ' LIKE ?',
 };
 
 // Logical Operators
