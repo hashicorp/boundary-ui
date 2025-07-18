@@ -13,8 +13,8 @@ import { customAlphabet } from 'nanoid';
 
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 5);
 const scopeId = 'global';
-const aliasCleanedUpDescription = 'this alias should be cleaned up';
-const aliasSkippedDescription = 'this alias should not be cleaned up';
+const aliasCleanedUpDescription = `this alias should be cleaned up ${nanoid()}`;
+const aliasSkippedDescription = `this alias should not be cleaned up ${nanoid()}`;
 
 test('resources can be created (example: alias)', async ({ apiClient }) => {
   await apiClient.clients.Alias.aliasServiceCreateAlias({
