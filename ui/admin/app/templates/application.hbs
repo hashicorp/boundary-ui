@@ -60,6 +60,7 @@
                 <dd.Title @text={{t 'actions.manage-db'}} />
                 <dd.Interactive
                   @icon='save'
+                  @isLoading={{(is-loading)}}
                   {{on 'click' this.downloadDatabase}}
                 >
                   {{t 'actions.download-db'}}

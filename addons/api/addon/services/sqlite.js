@@ -8,10 +8,10 @@ import { PWBHost } from 'promise-worker-bi';
 
 // A mapping of columns to their expected model attributes for supported models
 // The order matters, it _must_ be the same as the order of the columns in the database.
-// ID is assumed to be always present and is the first column in the database.
 // The JSON data is assumed to always be last.
 export const modelMapping = {
   target: {
+    id: 'id',
     type: 'type',
     name: 'name',
     description: 'description',
@@ -106,8 +106,12 @@ export default class SqliteDbService extends Service {
     a.click();
   }
 
-  clearDatabase() {
-    this.worker.postMessage({ method: 'clearDatabase' });
+  async clearDatabase() {
+    await this.worker.postMessage({ method: 'clearDatabase' });
+  }
+
+  async deleteDatabase() {
+    await this.worker.postMessage({ method: 'deleteDatabase' });
   }
 
   willDestroy() {

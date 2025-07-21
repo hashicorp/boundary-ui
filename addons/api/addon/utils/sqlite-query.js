@@ -132,9 +132,6 @@ function addSearchConditions(search, resource, parameters, conditions) {
   }
 
   const fields = Object.keys(modelMapping[resource]);
-  // Include ID as it's not part of any model mapping
-  fields.push('id');
-
   const searchConditions = parenthetical(
     or(
       fields.map((field) => {
