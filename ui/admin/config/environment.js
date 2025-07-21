@@ -157,15 +157,15 @@ module.exports = function (environment) {
       ? JSON.parse(process.env.ENABLE_MIRAGE)
       : true;
 
-    ENV['ember-a11y-testing'] = {
-      componentOptions: {
-        axeOptions: {
-          checks: {
-            'color-contrast': { options: { noScroll: true } },
-          },
-        },
-      },
-    };
+    // ENV['ember-a11y-testing'] = {
+    //   componentOptions: {
+    //     axeOptions: {
+    //       checks: {
+    //         'color-contrast': { options: { noScroll: true } },
+    //       },
+    //     },
+    //   },
+    // };
 
     // Default edition in development
     ENV.features.defaultEdition = 'enterprise';
