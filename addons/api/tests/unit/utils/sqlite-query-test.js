@@ -8,7 +8,7 @@ import { module, test } from 'qunit';
 
 module('Unit | Utility | sqlite-query', function (hooks) {
   const date = new Date(2025, 1, 1);
-  const isoDateString = '2025-02-01T05:00:00.000Z';
+  const isoDateString = date.toISOString();
 
   hooks.beforeEach(function () {
     String.prototype.removeExtraWhiteSpace = function () {
@@ -67,41 +67,41 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       greaterThan: {
         query: {
           filters: {
-            created_at: [{ gt: date }],
+            created_time: [{ gt: date }],
             numberField: [{ gt: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_at > ?) AND (numberField > ?)',
+        expectedWhereClause: 'WHERE (created_time > ?) AND (numberField > ?)',
         expectedParams: [isoDateString, 10],
       },
       lessThan: {
         query: {
           filters: {
-            created_at: [{ lt: date }],
+            created_time: [{ lt: date }],
             numberField: [{ lt: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_at < ?) AND (numberField < ?)',
+        expectedWhereClause: 'WHERE (created_time < ?) AND (numberField < ?)',
         expectedParams: [isoDateString, 10],
       },
       greaterThanOrEqual: {
         query: {
           filters: {
-            created_at: [{ gte: date }],
+            created_time: [{ gte: date }],
             numberField: [{ gte: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_at >= ?) AND (numberField >= ?)',
+        expectedWhereClause: 'WHERE (created_time >= ?) AND (numberField >= ?)',
         expectedParams: [isoDateString, 10],
       },
       lessThanOrEqual: {
         query: {
           filters: {
-            created_at: [{ lte: date }],
+            created_time: [{ lte: date }],
             numberField: [{ lte: 10 }],
           },
         },
-        expectedWhereClause: 'WHERE (created_at <= ?) AND (numberField <= ?)',
+        expectedWhereClause: 'WHERE (created_time <= ?) AND (numberField <= ?)',
         expectedParams: [isoDateString, 10],
       },
       logicalOperators: {
@@ -218,7 +218,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
           logicalOperator: 'or',
           values: [{ equals: 'active' }, { equals: 'pending' }],
         },
-        created_at: [{ gte: date }],
+        created_time: [{ gte: date }],
       },
       sort: { attribute: 'name', direction: 'desc' },
     };
@@ -232,7 +232,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
       SELECT * FROM target
-      WHERE (type = ?) AND (status = ? OR status = ?) AND (created_at >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+      WHERE (type = ?) AND (status = ? OR status = ?) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
       ORDER BY name DESC
       LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
     );

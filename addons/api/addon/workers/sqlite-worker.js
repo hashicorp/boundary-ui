@@ -76,6 +76,15 @@ const methods = {
     db.exec(CLEAR_DB);
     db.exec(CREATE_TABLES(SCHEMA_VERSION));
   },
+  deleteDatabase: () => {
+    const name = db.dbFilename();
+    if (db) {
+      db.close();
+      db = null;
+    }
+
+    poolUtil.unlink(`/${name}`);
+  },
   downloadDatabase: () => {
     return sqlite3.capi.sqlite3_js_db_export(db);
   },

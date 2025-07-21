@@ -172,14 +172,21 @@ export default class SqliteHandler {
     // Store the new data we just got back from the API refresh
     const items = payloadData.map((datum) => {
       const params = Object.values(modelMapping[type]).map((key) => {
-        const value = get(datum, `attributes.${key}`);
+        let value;
+
+        if (key === 'id') {
+          value = datum.id;
+        } else {
+          value = get(datum, `attributes.${key}`);
+        }
+
         if (typeOf(value) === 'date') {
           return value.toISOString();
         }
         return value;
       });
 
-      return [datum.id, ...params, JSON.stringify(datum)];
+      return [...params, JSON.stringify(datum)];
     });
 
     if (items.length > 0) console.time(`SQLite insert`);
