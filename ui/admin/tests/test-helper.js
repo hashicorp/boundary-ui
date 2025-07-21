@@ -14,6 +14,7 @@ import {
   DEFAULT_A11Y_TEST_HELPER_NAMES,
   setRunOptions,
   setupGlobalA11yHooks,
+  setupQUnitA11yAuditToggle,
   shouldForceAudit,
   setEnableA11yAudit,
   useMiddlewareReporter,
@@ -32,11 +33,19 @@ setupGlobalA11yHooks(() => true, {
     'select',
   ],
 });
+setupQUnitA11yAuditToggle(QUnit);
 
 setRunOptions({
   runOnly: {
     type: 'tag',
-    values: ['wcag22aa', 'best-practice'],
+    values: [
+      'wcag2a',
+      'wcag2aa',
+      'wcag21a',
+      'wcag21aa',
+      'wcag22aa',
+      'best-practice',
+    ]
   },
   include: [['#ember-testing-container']],
   exclude: [['.flight-sprite-container']],

@@ -8,7 +8,6 @@ import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   authenticateSession,
@@ -60,19 +59,12 @@ module('Acceptance | accounts | change password', function (hooks) {
 
     await click(commonSelectors.SIDEBAR_USER_DROPDOWN);
     await click(commonSelectors.HREF(urls.changePassword));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.changePassword);
   });
 
   test('can change password for account', async function (assert) {
     assert.expect(2);
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     this.server.post(
       '/accounts/:idMethod',
       (_, { params: { idMethod }, requestBody }) => {
@@ -102,8 +94,6 @@ module('Acceptance | accounts | change password', function (hooks) {
       selectors.FIELD_NEW_PASSWORD_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
-
-    await a11yAudit();
   });
 
   test('can cancel password change', async function (assert) {
@@ -147,7 +137,6 @@ module('Acceptance | accounts | change password', function (hooks) {
       selectors.FIELD_NEW_PASSWORD_VALUE,
     );
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST).isVisible();
   });
