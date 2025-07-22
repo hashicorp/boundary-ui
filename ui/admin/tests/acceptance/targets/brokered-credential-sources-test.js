@@ -233,7 +233,10 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
         },
       });
 
-      featuresService.enable('json-credentials', input.enableJsonFeature);
+      // needed only if the test is for json credential
+      if (input.enableJsonFeature) {
+        featuresService.enable('json-credentials');
+      }
       await visit(urls[input.route]);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls[input.link]));
