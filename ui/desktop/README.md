@@ -107,7 +107,7 @@ These environment variables may be used to customized the build.
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in. 
+for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in.
 To build this UI for production, run the following commands from this folder:
 
 ```bash
@@ -149,8 +149,6 @@ of testing".  Use test coverage as a guide to help you identify untested
 high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
-If you write acceptance tests, please ensure at least one validation per
-route using `await a11yAudit();`.
 
 ### Running end to end Tests
 
