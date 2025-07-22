@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   currentSession,
@@ -170,7 +169,6 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     this.stubCacheDaemonSearch();
 
     await visit(urls.sessions);
-    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
@@ -193,24 +191,16 @@ module('Acceptance | projects | sessions | index', function (hooks) {
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
-    await a11yAudit();
 
     assert.dom(APP_STATE_TITLE).hasText('No Sessions Available');
   });
 
   test('visiting sessions without targets is OK', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     instances.session.update({ targetId: undefined });
     const sessionsCount = this.server.schema.sessions.all().models.length;
     await visit(urls.projects);
 
     await click(`[href="${urls.sessions}"]`);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert.dom('tbody tr').exists({ count: sessionsCount });

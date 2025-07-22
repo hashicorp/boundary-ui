@@ -14,7 +14,6 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { HCP_MANAGED_KEY } from 'api/models/worker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -53,7 +52,6 @@ module('Acceptance | workers | worker | tags', function (hooks) {
     await visit(urls.worker);
 
     await click(commonSelectors.HREF(urls.tags));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tags);
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });

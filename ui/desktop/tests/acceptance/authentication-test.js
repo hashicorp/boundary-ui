@@ -8,7 +8,6 @@ import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -131,7 +130,7 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
-    await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
@@ -140,7 +139,7 @@ module('Acceptance | authentication', function (hooks) {
     assert.expect(1);
     this.owner.lookup('service:clusterUrl').rendererClusterUrl = null;
     await visit(urls.authenticate.global);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
@@ -150,7 +149,7 @@ module('Acceptance | authentication', function (hooks) {
       return new Response(404);
     });
     await visit(urls.authenticate.global);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 

@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn, getContext } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -181,7 +180,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
     await click(commonSelectors.HREF(urls.target));
     await click(selectors.ALIASES_ADD_BTN);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)

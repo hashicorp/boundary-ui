@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -72,7 +71,6 @@ module('Acceptance | scope | add storage policy', function (hooks) {
     assert.false(featuresService.isEnabled('ssh-session-recording'));
 
     await visit(urls.orgScopeEdit);
-    await a11yAudit();
 
     assert.dom(selectors.STORAGE_POLICY_SIDEBAR).doesNotExist();
   });

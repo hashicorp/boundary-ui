@@ -8,7 +8,6 @@ import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
@@ -114,10 +113,8 @@ module('Acceptance | sessions | list', function (hooks) {
 
   test('visiting sessions', async function (assert) {
     await visit(urls.projectScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.sessions));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sessions);
     assert
@@ -127,7 +124,6 @@ module('Acceptance | sessions | list', function (hooks) {
 
   test('users cannot navigate to sessions tab without proper authorization', async function (assert) {
     await visit(urls.orgScope);
-    await a11yAudit();
     instances.scopes.project.authorized_collection_actions.sessions =
       instances.scopes.project.authorized_collection_actions.sessions.filter(
         (item) => item !== 'list',

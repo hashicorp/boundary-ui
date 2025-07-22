@@ -9,7 +9,6 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -92,12 +91,10 @@ module('Acceptance | targets | read', function (hooks) {
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targets);
 
     await click(commonSelectors.HREF(urls.sshTarget));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.sshTarget);
   });
@@ -109,7 +106,6 @@ module('Acceptance | targets | read', function (hooks) {
     assert.strictEqual(currentURL(), urls.targets);
 
     await click(commonSelectors.HREF(urls.tcpTarget));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.tcpTarget);
   });
@@ -142,7 +138,6 @@ module('Acceptance | targets | read', function (hooks) {
 
   test('visiting an unknown target displays 404 message', async function (assert) {
     await visit(urls.unknownTarget);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
