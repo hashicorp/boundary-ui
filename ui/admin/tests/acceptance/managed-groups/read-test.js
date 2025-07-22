@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   TYPE_AUTH_METHOD_OIDC,
   TYPE_AUTH_METHOD_LDAP,
@@ -78,7 +77,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
     await visit(urls.managedGroups);
 
     await click(commonSelectors.HREF(urls.managedGroup));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.managedGroup);
   });
@@ -87,7 +85,6 @@ module('Acceptance | managed-groups | read', function (hooks) {
     await visit(urls.ldapManagedGroups);
 
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);
   });

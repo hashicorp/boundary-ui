@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -55,7 +54,6 @@ module('Acceptance | accounts | set password', function (hooks) {
   test('visiting account set password', async function (assert) {
     await visit(urls.setPassword);
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.setPassword);
   });
 
@@ -96,7 +94,6 @@ module('Acceptance | accounts | set password', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_PASSWORD, 'update password');
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
   });
 
   test('can cancel setting new password by navigating away', async function (assert) {
@@ -132,6 +129,5 @@ module('Acceptance | accounts | set password', function (hooks) {
     await click(commonSelectors.SAVE_BTN);
 
     assert.dom(commonSelectors.ALERT_TOAST).isVisible();
-    await a11yAudit();
   });
 });

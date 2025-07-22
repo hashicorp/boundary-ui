@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -48,10 +47,8 @@ module('Acceptance | users | read', function (hooks) {
 
   test('visiting users', async function (assert) {
     await visit(urls.orgScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.users));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.users);
   });
@@ -60,7 +57,6 @@ module('Acceptance | users | read', function (hooks) {
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.user);
   });

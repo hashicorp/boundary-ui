@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, find, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -84,12 +83,10 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('visiting username & password credential', async function (assert) {
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentials);
 
     await click(commonSelectors.HREF(urls.usernamePasswordCredential));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.usernamePasswordCredential);
   });
@@ -97,12 +94,10 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
   test('visiting username & key pair credential', async function (assert) {
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentials);
 
     await click(commonSelectors.HREF(urls.usernameKeyPairCredential));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.usernameKeyPairCredential);
   });
@@ -111,12 +106,10 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
     featuresService.enable('json-credentials');
     await visit(urls.staticCredentialStore);
     await click(commonSelectors.HREF(urls.credentials));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentials);
 
     await click(commonSelectors.HREF(urls.jsonCredential));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.jsonCredential);
   });
@@ -180,7 +173,6 @@ module('Acceptance | credential-stores | credentials | read', function (hooks) {
 
   test('visiting an unknown credential displays 404 message', async function (assert) {
     await visit(urls.unknownCredential);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)

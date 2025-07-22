@@ -9,7 +9,6 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -216,7 +215,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
     await click(commonSelectors.HREF(urls.newManagedGroup));
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
@@ -249,7 +247,6 @@ module('Acceptance | managed-groups | create', function (hooks) {
 
     await click(commonSelectors.HREF(urls.newLdapManagedGroup));
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)

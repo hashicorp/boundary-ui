@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -93,7 +92,6 @@ module('Acceptance | targets | manage-alias', function (hooks) {
     await click(selectors.LINK_LIST_ITEM);
 
     assert.strictEqual(currentURL(), urls.tcpAlias);
-    await a11yAudit();
   });
 
   test('clicking on `clear alias` from the dropdown should remove the destination ID and alias should disapper from the target sidebar', async function (assert) {

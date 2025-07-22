@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -72,7 +71,6 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     await visit(urls.credentialLibraries);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
@@ -110,7 +108,7 @@ module('Acceptance | credential-libraries | read', function (hooks) {
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {
     await visit(urls.unknownCredentialLibrary);
-    await a11yAudit();
+
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);

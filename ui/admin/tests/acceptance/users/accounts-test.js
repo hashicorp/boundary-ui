@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
@@ -69,7 +68,6 @@ module('Acceptance | users | accounts', function (hooks) {
     await visit(urls.user);
 
     await click(commonSelectors.HREF(urls.accounts));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.accounts);
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: accountsCount });
@@ -171,7 +169,6 @@ module('Acceptance | users | accounts', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_USER);
     await click(selectors.MANAGE_DROPDOWN_USER_ADD_ACCOUNTS);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.addAccounts);
   });

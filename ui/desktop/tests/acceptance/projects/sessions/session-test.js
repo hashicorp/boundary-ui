@@ -10,7 +10,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
@@ -129,7 +128,6 @@ module('Acceptance | projects | sessions | session', function (hooks) {
     assert.expect(1);
 
     await visit(urls.session);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.session);
   });

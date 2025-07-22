@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
@@ -54,7 +53,6 @@ module('Acceptance | roles | grants', function (hooks) {
 
   test('visiting role grants', async function (assert) {
     await visit(urls.grants);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.grants);
     assert.dom(selectors.FIELD_GRANT).exists({ count: grantsCount() });

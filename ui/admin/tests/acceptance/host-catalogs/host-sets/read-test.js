@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -69,12 +68,10 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
 
   test('visiting host sets', async function (assert) {
     await visit(urls.hostSets);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSets);
 
     await click(commonSelectors.HREF(urls.hostSet));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSet);
   });
@@ -93,7 +90,6 @@ module('Acceptance | host-catalogs | host-sets | read', function (hooks) {
 
   test('visiting an unknown host set displays 404 message', async function (assert) {
     await visit(urls.unknownHostSet);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)

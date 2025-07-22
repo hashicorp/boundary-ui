@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, find, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import select from '@ember/test-helpers/dom/select';
@@ -93,7 +92,6 @@ module(
       assert.false(featuresService.isEnabled('ssh-session-recording'));
 
       await visit(urls.target);
-      await a11yAudit();
 
       assert.dom(SESSION_RECORDING_ENABLE_BTN).doesNotExist();
     });

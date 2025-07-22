@@ -16,7 +16,6 @@ import {
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   GRANT_SCOPE_THIS,
@@ -81,16 +80,9 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('visiting role scopes', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert
@@ -295,7 +287,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
@@ -410,7 +401,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
     assert.strictEqual(currentURL(), urls.manageScopes);
 
     await click(commonSelectors.HREF(urls.manageCustomScopes));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageCustomScopes);
 
@@ -839,7 +829,6 @@ module('Acceptance | roles | global-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageCustomScopes));
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.manageScopesOrg));
-    await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(

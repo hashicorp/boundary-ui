@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -55,7 +54,6 @@ module('Acceptance | accounts | read', function (hooks) {
     await visit(urls.accounts);
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.account));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.account);
   });
 

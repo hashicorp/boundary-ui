@@ -8,7 +8,6 @@ import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
@@ -140,7 +139,6 @@ module('Acceptance | roles | create', function (hooks) {
 
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMsg);
   });

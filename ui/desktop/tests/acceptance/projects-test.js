@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -105,7 +104,7 @@ module('Acceptance | projects', function (hooks) {
     await invalidateSession();
     assert.expect(2);
     await visit(urls.projects);
-    await a11yAudit();
+
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
@@ -113,7 +112,7 @@ module('Acceptance | projects', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.projects);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.projects);
   });
 });

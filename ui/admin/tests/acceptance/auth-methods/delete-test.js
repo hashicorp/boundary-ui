@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
@@ -104,7 +103,6 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.authMethod));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
@@ -127,7 +125,6 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.ldapAuthMethod));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });

@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, find, click, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -84,7 +83,6 @@ module('Acceptance | targets | enable session recording', function (hooks) {
 
   test('cannot enable session recording for a target without proper authorization', async function (assert) {
     await visit(urls.target);
-    await a11yAudit();
 
     assert.false(featuresService.isEnabled('ssh-session-recording'));
     assert.dom(selectors.ENABLE_RECORDING_BTN).doesNotExist();

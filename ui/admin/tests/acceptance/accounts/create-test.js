@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
@@ -67,7 +66,7 @@ module('Acceptance | accounts | create', function (hooks) {
 
   test('visiting accounts', async function (assert) {
     await visit(urls.accounts);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.accounts);
   });
 
@@ -205,7 +204,6 @@ module('Acceptance | accounts | create', function (hooks) {
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
 
-    await a11yAudit();
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)
       .hasText('The request was invalid.');

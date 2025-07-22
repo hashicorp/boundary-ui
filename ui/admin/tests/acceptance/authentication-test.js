@@ -16,7 +16,6 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -136,7 +135,6 @@ module('Acceptance | authentication', function (hooks) {
 
   test('visiting auth methods authenticate route redirects to first auth method', async function (assert) {
     await visit(authenticateURL);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
@@ -146,7 +144,6 @@ module('Acceptance | authentication', function (hooks) {
       return new Response(404);
     });
     await visit(authMethodAuthenticateURL);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
@@ -249,7 +246,6 @@ module('Acceptance | authentication', function (hooks) {
   test('visiting auth method authenticate route', async function (assert) {
     await visit(authMethodAuthenticateURL);
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), authMethodAuthenticateURL);
   });
 

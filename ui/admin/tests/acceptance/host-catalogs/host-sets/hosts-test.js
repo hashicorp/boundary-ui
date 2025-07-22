@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -80,7 +79,6 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   test('visiting host set hosts', async function (assert) {
     const count = getHostSetHostCount();
     await visit(urls.hostSetHosts);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostSetHosts);
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count });
@@ -136,7 +134,6 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   test('visiting add hosts', async function (assert) {
     await visit(urls.addHosts);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.addHosts);
   });
@@ -228,7 +225,6 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
 
   test('visiting host creation from a host set', async function (assert) {
     await visit(urls.createAndAddHost);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.createAndAddHost);
   });

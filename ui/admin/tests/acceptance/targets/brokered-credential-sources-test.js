@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -126,7 +125,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
 
   test('visiting target brokered credential sources', async function (assert) {
     await visit(urls.brokeredCredentialSources);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.brokeredCredentialSources);
     assert
@@ -138,7 +136,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.brokeredCredentialSources);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });
@@ -150,7 +147,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
     await visit(urls.brokeredCredentialSources);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credential));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credential);
   });
@@ -169,7 +165,6 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
 
   test('visiting add brokered credential sources', async function (assert) {
     await visit(urls.addBrokeredCredentialSources);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });

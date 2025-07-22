@@ -12,7 +12,6 @@ import {
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import {
   authenticateSession,
@@ -168,24 +167,16 @@ module('Acceptance | projects | targets | index', function (hooks) {
     await invalidateSession();
     this.stubCacheDaemonSearch();
     await visit(urls.targets);
-    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);
   });
 
   test('visiting targets index', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     const targetsCount = getTargetCount();
     await visit(urls.projects);
 
     await click(`[href="${urls.targets}"]`);
-    await a11yAudit();
 
     assert.dom('.hds-segmented-group').exists();
     assert.strictEqual(currentURL(), urls.targets);

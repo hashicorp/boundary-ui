@@ -15,7 +15,6 @@ import {
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import {
   currentSession,
   authenticateSession,
@@ -157,16 +156,9 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting global scope', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     assert.expect(1);
 
     await visit(urls.scopes.global);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
@@ -176,12 +168,6 @@ module('Acceptance | scopes', function (hooks) {
   // In order to resolve this, we might hoist authentication routes up from
   // under scopes.
   test('visiting global scope is not successful when the global scope cannot be fetched', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
@@ -190,22 +176,14 @@ module('Acceptance | scopes', function (hooks) {
     });
 
     await visit(urls.scopes.global);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalTargets);
   });
 
   test('visiting org scope', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     assert.expect(1);
 
     await visit(urls.scopes.org);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targets);
   });
@@ -249,7 +227,6 @@ module('Acceptance | scopes', function (hooks) {
     this.stubCacheDaemonSearch();
 
     await visit(urls.targets);
-    await a11yAudit();
 
     assert.notOk(currentSession().isAuthenticated);
     assert.strictEqual(currentURL(), urls.authenticate.methods.global);

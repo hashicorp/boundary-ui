@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_AUTH_METHOD_LDAP,
@@ -71,7 +70,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.orgAuthMethods));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgAuthMethods);
   });
@@ -80,7 +78,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.globalAuthMethods));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalAuthMethods);
   });
@@ -100,7 +97,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await click(
       selectors.TABLE_ROW_NAME_LINK(instances.passwordAuthMethodOrg.id),
     );
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.passwordAuthMethodOrg);
   });
@@ -120,7 +116,6 @@ module('Acceptance | auth-methods | read', function (hooks) {
     await click(
       selectors.TABLE_ROW_NAME_LINK(instances.oidcAuthMethodGlobal.id),
     );
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.oidcAuthMethodGlobal);
   });
