@@ -53,20 +53,9 @@ setRunOptions({
 
 // This will be used by developers to run the tests locally
 // Either with the `enableA11yAudit` as a query param in the URL
-// or `pnpm test:a11y` in the CLI
+// or `pnpm test-a11y` in the CLI
 // Note: if you want to filter what test is run from the start, use the --filter flag: `pnpm test-a11y --filter="alert"`
 // Docs: https://guides.emberjs.com/release/testing/#toc_how-to-filter-tests
-console.log('config a11y tests: ', config.ENABLE_A11Y_AUDIT);
-console.log('Running accessibility tests...');
-console.log(
-  'To run accessibility tests, use the `enableA11yAudit` query param in the URL or the `ENABLE_A11Y_AUDIT` environment variable.',
-);
-console.log(
-  shouldForceAudit()
-    ? 'Accessibility audits are enabled.'
-    : 'Accessibility audits are disabled.',
-);
-
 if (shouldForceAudit()) {
   setEnableA11yAudit(true);
 }
