@@ -58,7 +58,6 @@ if (shouldForceAudit()) {
 // Note, as a convenience, useMiddlewareReporter automatically forces audits, thus explicitly specifying the enableA11yAudit query param or the ENABLE_A11Y_AUDIT environment variable is unnecessary.
 if (useMiddlewareReporter()) {
   // Only runs if `enableA11yMiddlewareReporter` is set in URL
-  console.log('USING MIDDLE WARE REPORTER');
   setupMiddlewareReporter();
 }
 
