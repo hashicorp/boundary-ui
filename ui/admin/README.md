@@ -6,15 +6,16 @@ The Admin UI for Boundary.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Pnpm Commands](#pnpm-commands)
-- [Running / Development](#running--development)
-  - [Building for Production](#building-for-production)
-    - [Environment Variables](#environment-variables)
-  - [Running Tests](#running-tests)
-  - [Deploying](#deploying)
-- [Further Reading / Useful Links](#further-reading--useful-links)
+- [Admin UI](#admin-ui)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Pnpm Commands](#pnpm-commands)
+  - [Running / Development](#running--development)
+    - [Building for Production](#building-for-production)
+      - [Environment Variables](#environment-variables)
+    - [Running Tests](#running-tests)
+    - [Deploying](#deploying)
+  - [Further Reading / Useful Links](#further-reading--useful-links)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -62,7 +63,7 @@ List of available project commands.  `pnpm run <command-name>`
 
 Before executing a build, be sure to set any environment variables necessary
 for your target environment (see next section).  To build this UI for
-production, run the following commads from this folder:
+production, run the following commands from this folder:
 
 ```bash
 pnpm install
@@ -79,11 +80,13 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
+| `DARK_MODE` | | Enable (`true`) to set the test browser appearance to dark for running tests in dark mode. |
 
 ### Running Tests
 
-* `npm test` runs full tests in random order with coverage
+* `pnpm test` runs full tests in random order with coverage
 * `ember test --server`
+* `DARK_MODE=true ember test --server` runs tests in dark mode
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
