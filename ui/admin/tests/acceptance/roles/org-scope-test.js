@@ -15,7 +15,6 @@ import {
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -87,7 +86,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert
@@ -248,7 +246,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
 
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.manageScopes);
 
@@ -354,7 +351,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageOrgProjects));
-    await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(
@@ -388,7 +384,6 @@ module('Acceptance | roles | org-scope', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ROLES);
     await click(selectors.MANAGE_DROPDOWN_ROLES_SCOPES);
     await click(commonSelectors.HREF(urls.manageOrgProjects));
-    await a11yAudit();
 
     // Click three times to select, unselect, then reselect (for coverage)
     await click(

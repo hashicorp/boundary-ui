@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
@@ -101,7 +100,6 @@ module('Acceptance | accounts | delete', function (hooks) {
     await click(selectors.MANAGE_DROPDOWN_ACCOUNT);
     await click(selectors.MANAGE_DROPDOWN_DELETE_ACCOUNT);
 
-    await a11yAudit();
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 });

@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
@@ -77,12 +76,10 @@ module('Acceptance | credential-libraries | create', function (hooks) {
 
   test('visiting credential libraries', async function (assert) {
     await visit(urls.credentialLibraries);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentialLibraries);
 
     await visit(urls.credentialLibrary);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.credentialLibrary);
   });

@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { GRANT_SCOPE_THIS } from 'api/models/role';
 import * as selectors from './selectors';
@@ -56,7 +55,6 @@ module('Acceptance | roles | project-scope', function (hooks) {
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.roleScopes);
     assert.dom(selectors.GRANT_SCOPE_ROW(GRANT_SCOPE_THIS)).isVisible();

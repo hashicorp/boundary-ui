@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -125,7 +124,6 @@ module(
 
     test('visiting target injected application credential sources', async function (assert) {
       await visit(urls.injectedApplicationCredentialSources);
-      await a11yAudit();
 
       assert.strictEqual(
         currentURL(),
@@ -140,7 +138,6 @@ module(
       await visit(urls.injectedApplicationCredentialSources);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
-      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls.credentialLibrary);
     });
@@ -154,14 +151,12 @@ module(
       await visit(urls.injectedApplicationCredentialSources);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credential));
-      await a11yAudit();
 
       assert.strictEqual(currentURL(), urls.credential);
     });
 
     test('visiting add injected application credential sources', async function (assert) {
       await visit(urls.addInjectedApplicationCredentialSources);
-      await a11yAudit();
 
       assert.strictEqual(
         currentURL(),

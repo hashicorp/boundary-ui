@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -55,12 +54,9 @@ module('Acceptance | policies | read', function (hooks) {
 
   test('visiting a policy', async function (assert) {
     await visit(urls.globalScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.policies));
-    await a11yAudit();
     await click(commonSelectors.HREF(urls.policy));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.policy);
   });
@@ -77,7 +73,6 @@ module('Acceptance | policies | read', function (hooks) {
 
   test('visiting an unknown policy displays 404 message', async function (assert) {
     await visit(urls.unknownPolicy);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)

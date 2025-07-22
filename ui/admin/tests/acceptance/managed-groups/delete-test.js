@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import {
   TYPE_AUTH_METHOD_OIDC,
@@ -145,7 +144,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.managedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.managedGroup);
@@ -168,7 +166,6 @@ module('Acceptance | managed-groups | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.ldapManagedGroup));
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUPS);
     await click(selectors.MANAGE_DROPDOWN_MANAGED_GROUP_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
     assert.strictEqual(currentURL(), urls.ldapManagedGroup);

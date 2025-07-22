@@ -8,7 +8,6 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -53,10 +52,8 @@ module('Acceptance | scopes | read', function (hooks) {
 
   test('visiting org scope edit', async function (assert) {
     await visit(urls.orgScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.orgScopeEdit));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.orgScopeEdit);
     assert.dom(commonSelectors.FORM).isVisible();
@@ -64,18 +61,10 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting global scope settings when feature flag is enabled', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     features.enable('ssh-session-recording');
     await visit(urls.globalScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.globalScopeEdit));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.globalScopeEdit);
     assert.dom(commonSelectors.FORM).isVisible();

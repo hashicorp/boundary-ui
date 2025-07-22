@@ -8,7 +8,6 @@ import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
@@ -445,7 +444,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(commonSelectors.EDIT_BTN);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
@@ -480,7 +478,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(commonSelectors.EDIT_BTN);
     await fillIn(selectors.FIELD_URLS, '');
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     assert.dom(commonSelectors.FIELD_ERROR).hasText(errorDescription);

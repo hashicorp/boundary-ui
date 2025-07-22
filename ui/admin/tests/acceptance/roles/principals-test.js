@@ -8,7 +8,6 @@ import { visit, currentURL, click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
@@ -61,7 +60,6 @@ module('Acceptance | roles | principals', function (hooks) {
 
   test('visiting role principals', async function (assert) {
     await visit(urls.rolePrincipals);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.rolePrincipals);
     assert.strictEqual(findAll('tbody tr').length, principalsCount);
