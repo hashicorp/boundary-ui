@@ -8,6 +8,7 @@
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const locationType = process.env.EMBER_CLI_ELECTRON ? 'hash' : 'history';
 const ENABLE_A11Y_AUDIT = process.env.ENABLE_A11Y_AUDIT || false;
+const COLOR_THEME = process.env.COLOR_THEME ?? 'light';
 
 module.exports = function (environment) {
   const ENV = {
@@ -83,6 +84,7 @@ module.exports = function (environment) {
       : true;
 
     ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'test') {
@@ -111,6 +113,7 @@ module.exports = function (environment) {
     };
 
     ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
+    ENV.COLOR_THEME = COLOR_THEME;
   }
 
   if (environment === 'production') {
