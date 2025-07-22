@@ -7,6 +7,7 @@
 
 const APP_NAME = process.env.APP_NAME || 'Boundary';
 const locationType = process.env.EMBER_CLI_ELECTRON ? 'hash' : 'history';
+const ENABLE_A11Y_AUDIT = process.env.ENABLE_A11Y_AUDIT || false;
 
 module.exports = function (environment) {
   const ENV = {
@@ -80,6 +81,8 @@ module.exports = function (environment) {
     ENV['ember-cli-mirage'].enabled = process.env.ENABLE_MIRAGE
       ? JSON.parse(process.env.ENABLE_MIRAGE)
       : true;
+
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
   }
 
   if (environment === 'test') {
@@ -107,7 +110,7 @@ module.exports = function (environment) {
       memory: true,
     };
 
-    // Enable tests for development features
+    ENV.ENABLE_A11Y_AUDIT = ENABLE_A11Y_AUDIT;
   }
 
   if (environment === 'production') {
