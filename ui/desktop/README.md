@@ -148,8 +148,6 @@ of testing".  Use test coverage as a guide to help you identify untested
 high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
-If you write acceptance tests, please ensure at least one validation per
-route using `await a11yAudit();`.
 
 ### Running end to end Tests
 

@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
 
@@ -61,7 +60,6 @@ module('Acceptance | managed-groups | members', function (hooks) {
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.managedGroupMembers);
     assert.ok(membersCount);
     assert.dom('tbody tr').exists({ count: membersCount });

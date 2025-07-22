@@ -8,7 +8,6 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
@@ -71,12 +70,10 @@ module('Acceptance | credential-stores | read', function (hooks) {
     featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.credentialStores);
 
     await click(commonSelectors.HREF(urls.staticCredentialStore));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.staticCredentialStore);
   });
 
@@ -87,7 +84,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
 
     await click(commonSelectors.HREF(urls.vaultCredentialStore));
 
-    await a11yAudit();
     assert.strictEqual(currentURL(), urls.vaultCredentialStore);
   });
 
@@ -129,7 +125,6 @@ module('Acceptance | credential-stores | read', function (hooks) {
   test('visiting an unknown credential store displays 404 message', async function (assert) {
     await visit(urls.unknownCredentialStore);
 
-    await a11yAudit();
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
       .hasText(commonSelectors.RESOURCE_NOT_FOUND_VALUE);

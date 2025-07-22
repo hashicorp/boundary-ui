@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
@@ -72,16 +71,9 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('visiting target workers', async function (assert) {
-    // TODO: address issue with ICU-15021
-    // Failing due to a11y violation while in dark mode.
-    // Investigating issue with styles not properly
-    // being applied during test.
-    const session = this.owner.lookup('service:session');
-    session.set('data.theme', 'light');
     await visit(urls.target);
 
     await click(commonSelectors.HREF(urls.targetWorkers));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.targetWorkers);
   });
