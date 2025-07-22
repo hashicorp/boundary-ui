@@ -11,6 +11,10 @@ module.exports = {
   browser_start_timeout: 120,
   browser_args: {
     Chrome: {
+      all: [
+        process.env.DARK_MODE ? '--enable-features=WebContentsForceDark' : null,
+        process.env.DARK_MODE ? '--force-dark-mode' : null,
+      ].filter(Boolean),
       ci: [
         // --no-sandbox is needed when running Chrome inside a container
         process.env.CI ? '--no-sandbox' : null,

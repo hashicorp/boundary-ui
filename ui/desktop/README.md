@@ -103,6 +103,7 @@ These environment variables may be used to customized the build.
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
 | `ENABLE_MIRAGE` | Enable (`true`) or disable (`false`) mirage. Default value is `true`. |
+| `DARK_MODE` | Enable (`true`) to set the test browser appearance to dark for running tests in dark mode. |
 
 ### Building for Production
 
@@ -140,6 +141,7 @@ These environment variables may be used to customized the build.
 ### Running Tests
 
 - `pnpm test` runs full tests in random order with coverage
+- `DARK_MODE=true ember test --server` runs tests in dark mode
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
