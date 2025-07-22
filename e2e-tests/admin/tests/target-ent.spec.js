@@ -5,7 +5,7 @@
 
 import { test } from '../../global-setup.js';
 import { expect } from '@playwright/test';
-
+import * as boundaryHttp from '../../helpers/boundary-http.js';
 import * as boundaryCli from '../../helpers/boundary-cli';
 import { CredentialStoresPage } from '../pages/credential-stores.js';
 import { HostCatalogsPage } from '../pages/host-catalogs.js';
@@ -263,82 +263,45 @@ test(
 test(
   'Verify RDP target creation',
   { tag: ['@ent', '@aws', '@docker'] },
-  async ({
-    page,
-    controllerAddr,
-    adminAuthMethodId,
-    adminLoginName,
-    adminPassword,
-    sshUser,
-    targetAddress,
-    targetPort,
-  }) => {
+  async ({ request, page, sshUser, targetAddress, targetPort }) => {
     await page.goto('/');
-    let orgId;
+    let org;
     try {
-      const orgsPage = new OrgsPage(page);
-      const orgName = await orgsPage.createOrg();
-      const projectsPage = new ProjectsPage(page);
-      await projectsPage.createProject();
+      org = await boundaryHttp.createOrg(request);
+      const project = await boundaryHttp.createProject(request, org.id);
 
-      // Create host set
-      const hostCatalogsPage = new HostCatalogsPage(page);
-      const hostCatalogName = await hostCatalogsPage.createHostCatalog();
-      const hostSetName = await hostCatalogsPage.createHostSet();
-      await hostCatalogsPage.createHostInHostSet(targetAddress);
+      // go to the credential store page
 
-      // Create another host set
-      await page.getByRole('link', { name: hostCatalogName }).click();
-      const hostSetName2 = await hostCatalogsPage.createHostSet();
+      await page.goto(`/scopes/${project.id}/credential-stores`);
 
-      // Create target
-      const targetsPage = new TargetsPage(page);
-      const targetName = await targetsPage.createRdpTargetEnt(targetPort);
-      await targetsPage.addHostSourceToTarget(hostSetName);
-
-      // Add/Remove another host source
-      await targetsPage.addHostSourceToTarget(hostSetName2);
-      await page
-        .getByRole('link', { name: hostSetName2 })
-        .locator('..')
-        .locator('..')
-        .getByRole('button', { name: 'Manage' })
-        .click();
-      await page.getByRole('button', { name: 'Remove' }).click();
-      await page.getByRole('button', { name: 'OK', exact: true }).click();
-      await expect(
-        page.getByRole('alert').getByText('Success', { exact: true }),
-      ).toBeVisible();
-      await page.getByRole('button', { name: 'Dismiss' }).click();
-
-      // Create credentials and attach to target
-      const credentialStoresPage = new CredentialStoresPage(page);
-      await credentialStoresPage.createStaticCredentialStore();
+      // Create UPD credential
+      const credentialStore = new CredentialStoresPage(page);
+      await credentialStore.createStaticCredentialStore();
       const credentialName =
-        await credentialStoresPage.createStaticCredentialUsernamePassword(
+        await credentialStore.createStaticCredentialUsernamePasswordDomain(
           sshUser,
           'testPassword',
+          'testDomain',
         );
+
+      const targetsPage = new TargetsPage(page);
+      const rdpTarget = await targetsPage.createRDPTargetWithAddressEnt(
+        targetAddress,
+        targetPort,
+      );
+      await targetsPage.addBrokeredCredentialsToTarget(
+        rdpTarget,
+        credentialName,
+      );
       await targetsPage.addInjectedCredentialsToTarget(
-        targetName,
+        rdpTarget,
         credentialName,
       );
 
-      // Verify that an RDP target is created
-      await boundaryCli.authenticateBoundary(
-        controllerAddr,
-        adminAuthMethodId,
-        adminLoginName,
-        adminPassword,
-      );
-      orgId = await boundaryCli.getOrgIdFromName(orgName);
-
       // TODO: Connection will be tested later when we have the Proxy in place.
-      // For now, we just check if we can see the target in the UI
-      await expect(page.getByRole('link', { name: targetName })).toBeVisible();
     } finally {
-      if (orgId) {
-        await boundaryCli.deleteScope(orgId);
+      if (org) {
+        await boundaryHttp.deleteOrg(request, org.id);
       }
     }
   },

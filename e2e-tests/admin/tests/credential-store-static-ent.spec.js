@@ -46,9 +46,7 @@ test(
         targetPort,
       );
       const credentialStoresPage = new CredentialStoresPage(page);
-      const credentialStoreName =
-        await credentialStoresPage.createStaticCredentialStore();
-
+      await credentialStoresPage.createStaticCredentialStore();
       const credentialName =
         await credentialStoresPage.createStaticCredentialKeyPair(
           sshUser,
@@ -59,32 +57,6 @@ test(
           sshUser,
           'testPassword',
         );
-
-      const credentialName3 =
-        await credentialStoresPage.createStaticCredentialUsernamePasswordDomain(
-          sshUser,
-          'testPassword',
-          'testDomain',
-        );
-
-      // TODO: we can test the target association after RDP target is implemented, for now we test if the credential is visible in the UI
-      await page
-        .getByRole('navigation', { name: 'Application local navigation' })
-        .getByRole('link', { name: 'Credential Stores' })
-        .click();
-      await expect(
-        page.getByRole('link', { name: credentialStoreName }),
-      ).toBeVisible();
-
-      // Navigate to the Credential Store
-      await page.getByRole('link', { name: credentialStoreName }).click();
-
-      // click on the Credentials tab
-      await page.getByRole('link', { name: 'Credentials' }).click();
-
-      await expect(
-        page.getByRole('link').getByText(credentialName3),
-      ).toBeVisible();
 
       await targetsPage.addBrokeredCredentialsToTarget(
         targetName,

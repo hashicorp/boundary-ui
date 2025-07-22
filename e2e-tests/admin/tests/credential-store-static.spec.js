@@ -22,7 +22,6 @@ test.beforeAll(async () => {
 let orgName;
 let projectName;
 let targetName;
-let credentialStoreName;
 
 test.beforeEach(async ({ page, targetAddress, targetPort }) => {
   await page.goto('/');
@@ -37,8 +36,7 @@ test.beforeEach(async ({ page, targetAddress, targetPort }) => {
     targetPort,
   );
   const credentialStoresPage = new CredentialStoresPage(page);
-  credentialStoreName =
-    await credentialStoresPage.createStaticCredentialStore();
+  await credentialStoresPage.createStaticCredentialStore();
 });
 
 test(
@@ -282,7 +280,6 @@ test(
   }) => {
     try {
       const credentialStoresPage = new CredentialStoresPage(page);
-
       const credentialName =
         await credentialStoresPage.createStaticCredentialKeyPair(
           sshUser,
@@ -293,33 +290,6 @@ test(
           sshUser,
           'testPassword',
         );
-
-      const credentialName3 =
-        await credentialStoresPage.createStaticCredentialUsernamePasswordDomain(
-          sshUser,
-          'testPassword',
-          'testDomain',
-        );
-
-      // TODO: Handle target association later when we work on RDP targets and modify the existing target association
-      // for now we simply test if the credential is visible in the UI
-      await page
-        .getByRole('navigation', { name: 'Application local navigation' })
-        .getByRole('link', { name: 'Credential Stores' })
-        .click();
-      await expect(
-        page.getByRole('link', { name: credentialStoreName }),
-      ).toBeVisible();
-
-      // Navigate to the Credential Store
-      await page.getByRole('link', { name: credentialStoreName }).click();
-
-      // click on the Credentials tab
-      await page.getByRole('link', { name: 'Credentials' }).click();
-
-      await expect(
-        page.getByRole('link').getByText(credentialName3),
-      ).toBeVisible();
 
       const targetsPage = new TargetsPage(page);
       await targetsPage.addBrokeredCredentialsToTarget(
