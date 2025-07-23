@@ -41,7 +41,7 @@ You will need the following things properly installed on your computer.
 
 ## Installation
 
-See [boundary-ui README](https://github.com/hashicorp/boundary-ui#installation) for installation instructions.
+See [boundary-ui README](https://github.com/hashicorp/boundary-ui#installation) for installation instructions. Hello there!
 
 ## Pnpm Commands
 
