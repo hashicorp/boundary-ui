@@ -35,18 +35,23 @@ setupGlobalA11yHooks(() => true, {
 
 setupQUnitA11yAuditToggle(QUnit);
 
+const runOnly =
+  config.COLOR_THEME === 'dark'
+    ? 'color-contrast'
+    : {
+        type: 'tag',
+        values: [
+          'wcag2a',
+          'wcag2aa',
+          'wcag21a',
+          'wcag21aa',
+          'wcag22aa',
+          'best-practice',
+        ],
+      };
+
 setRunOptions({
-  runOnly: {
-    type: 'tag',
-    values: [
-      'wcag2a',
-      'wcag2aa',
-      'wcag21a',
-      'wcag21aa',
-      'wcag22aa',
-      'best-practice',
-    ],
-  },
+  runOnly,
   include: [['#ember-testing-container']],
   exclude: [['.flight-sprite-container']],
 });
