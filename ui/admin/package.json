@@ -31,8 +31,9 @@
     "start": "ember serve",
     "clean:coverage": "rm -rf coverage_* || true",
     "test": "pnpm clean:coverage && pnpm test:ember && pnpm test:finalize",
-    "test-a11y": "ENABLE_A11Y_AUDIT=true ember test",
-    "test-a11y:dark": "COLOR_THEME=dark pnpm test-a11y",
+    "test-a11y": "concurrently \"pnpm:test-a11y:*\" --names \"test-a11y:\"",
+    "test-a11y:light": "ENABLE_A11Y_AUDIT=true ember test",
+    "test-a11y:dark": "COLOR_THEME=dark pnpm test-a11y:light --test-port=7358",
     "test:ember": "COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
     "test:finalize": "ember coverage-merge && pnpm clean:coverage"
   },
