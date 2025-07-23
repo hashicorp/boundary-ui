@@ -191,7 +191,7 @@ class BoundaryApi {
           context.response.headers.get('content-type') ===
             BOUNDARY_API_CREATED_RESOURCE_HTTP_CONTENT_TYPE;
 
-        // if the respronse doesn't represent a created resource, return early
+        // if the response doesn't represent a created resource, return early
         if (!resourceWasCreated) {
           return context.response;
         }
