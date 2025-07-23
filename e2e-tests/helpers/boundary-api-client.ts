@@ -328,6 +328,9 @@ export const boundaryApiClientTest = base.extend<{
         };
       };
 
+      // this will race all deletions of all the resources marked for deletion,
+      // orders should not matter because cascade deletions should handle all
+      // dependent resources
       await Promise.all(
         resources
           .filter((resource) => {
