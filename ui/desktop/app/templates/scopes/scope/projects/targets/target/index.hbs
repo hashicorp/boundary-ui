@@ -83,11 +83,6 @@
         </Hds::ApplicationState>
       {{/if}}
     {{else}}
-      <Hds::Alert @type='compact' as |A|>
-        <A.Description>{{t
-            'resources.target.messages.connect-more-info.cert-warning'
-          }}</A.Description>
-      </Hds::Alert>
       <Hds::ApplicationState as |A|>
         <A.Header
           @title={{t 'resources.target.messages.connect-more-info.title'}}
