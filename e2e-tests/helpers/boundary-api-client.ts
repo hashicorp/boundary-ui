@@ -65,7 +65,7 @@ const betterErrorHandlingMiddleware = {
 };
 
 function extractPluralizedResourceTypeFromUrl(url: string): string | undefined {
-  const match = new URL(url).pathname.match(/\/v1\/([a-z]+)(|\/.*)/);
+  const match = new URL(url).pathname.match(/\/v1\/([a-z-]+)/);
   if (!match) return undefined;
 
   const [_, type] = match;
