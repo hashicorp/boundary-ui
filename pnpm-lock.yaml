@@ -514,14 +514,14 @@ importers:
         specifier: ^7.26.10
         version: 7.27.1
       '@hashicorp/design-system-components':
-        specifier: github:hashicorp/design-system#testing-4.21.1
-        version: '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323'
+        specifier: '@hashicorp/design-system-components@4.21.1-rc-20250724184334'
+        version: link:@hashicorp/design-system-components@4.21.1-rc-20250724184334
       '@hashicorp/design-system-tokens':
-        specifier: github:hashicorp/design-system#testing-4.21.1
-        version: '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323'
+        specifier: '@hashicorp/design-system-components@4.21.1-rc-20250724184334'
+        version: link:@hashicorp/design-system-components@4.21.1-rc-20250724184334
       '@hashicorp/flight-icons':
-        specifier: github:hashicorp/design-system#testing-4.21.1
-        version: '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323'
+        specifier: '@hashicorp/design-system-components@4.21.1-rc-20250724184334'
+        version: link:@hashicorp/design-system-components@4.21.1-rc-20250724184334
       '@nullvoxpopuli/ember-composable-helpers':
         specifier: ^5.2.10
         version: 5.2.10(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))
@@ -2188,11 +2188,6 @@ packages:
 
   '@handlebars/parser@2.0.0':
     resolution: {integrity: sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==}
-
-  '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323':
-    resolution: {tarball: https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323}
-    version: 0.0.0
-    engines: {node: '>= 22', pnpm: '>= 10.0.0'}
 
   '@hashicorp/ember-asciinema-player@https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a':
     resolution: {tarball: https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a}
@@ -10152,8 +10147,6 @@ snapshots:
     optional: true
 
   '@handlebars/parser@2.0.0': {}
-
-  '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323': {}
 
   '@hashicorp/ember-asciinema-player@https://codeload.github.com/hashicorp/ember-asciinema-player/tar.gz/e047a096039cff70234c232efe75dcad74c6358a(@glint/template@1.5.2)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))(webpack@5.99.8)':
     dependencies:
