@@ -5,7 +5,7 @@
 
 import { PWBWorker } from 'promise-worker-bi';
 import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
-import sharedServiceInit from './shared-service';
+import sharedServiceInit from './utils/shared-service';
 
 let db;
 

@@ -31,7 +31,7 @@ export default class SqliteDbService extends Service {
     // https://github.com/ember-cli/broccoli-asset-rewrite/issues/66
     // and will not work properly if it's part of a template string or interpolated.
     // Therefore, we need the URL path in a string somewhere to be replaced properly.
-    this.webWorker = new Worker('/workers/web-worker.js', {
+    this.webWorker = new Worker('/workers/sqlite-worker.js', {
       type: 'module',
     });
 

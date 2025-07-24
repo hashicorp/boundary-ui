@@ -196,14 +196,14 @@ const getClientBroadcastChannelName = (clientId, serviceName) =>
 
 // Generate a random ID for the tab to use as a lock name to hold indefinitely until the tab is closed
 const getClientId = () => {
-  const id = uuidv4();
+  const clientId = uuidv4();
 
   // Keep the lock until this context is destroyed (which means the tab was closed).
-  navigator.locks.request(id, { mode: 'exclusive' }, async () => {
+  navigator.locks.request(clientId, { mode: 'exclusive' }, async () => {
     await new Promise(() => {});
   });
 
-  return id;
+  return clientId;
 };
 
 // Sends a message to the provider to call the method on behalf of a client.
