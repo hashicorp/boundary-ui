@@ -520,8 +520,8 @@ importers:
         specifier: github:hashicorp/design-system#testing-4.21.1
         version: '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323'
       '@hashicorp/flight-icons':
-        specifier: ^3.10.0
-        version: 3.10.0
+        specifier: github:hashicorp/design-system#testing-4.21.1
+        version: '@hashicorp/design-system@https://codeload.github.com/hashicorp/design-system/tar.gz/31ee23fc3b4e317dc6a166e499f8ff66957df323'
       '@nullvoxpopuli/ember-composable-helpers':
         specifier: ^5.2.10
         version: 5.2.10(@babel/core@7.27.1)(ember-source@5.12.0(@glimmer/component@2.0.0)(@glint/template@1.5.2)(rsvp@4.8.5)(webpack@5.99.8))
@@ -2200,9 +2200,6 @@ packages:
     engines: {node: 14.* || 16.* || >= 18}
     peerDependencies:
       ember-source: ^3.28.0 || ^4.0.0
-
-  '@hashicorp/flight-icons@3.10.0':
-    resolution: {integrity: sha512-wtufYZ5Ntihmy+vbR0dM+Q7X56xPX/dtpcfVs4nCRgvYZZic5ayqE8tefs2FGtxauH6zuzzVk48s5S6psv9g+g==}
 
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
@@ -10169,8 +10166,6 @@ snapshots:
       - '@glint/template'
       - supports-color
       - webpack
-
-  '@hashicorp/flight-icons@3.10.0': {}
 
   '@humanwhocodes/config-array@0.13.0':
     dependencies:
