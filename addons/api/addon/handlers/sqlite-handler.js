@@ -29,7 +29,7 @@ export default class SqliteHandler {
           query,
           options: {
             pushToStore = true,
-            peekDB = false,
+            peekDb = false,
             storeToken = true,
           } = {},
         } = data;
@@ -48,7 +48,7 @@ export default class SqliteHandler {
         let { page, pageSize, query: queryObj, ...remainingQuery } = query;
         let payload, listToken, writeToDbPromise;
 
-        if (!peekDB) {
+        if (!peekDb) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
           if (storeToken) {
             const [tokenObj] = await this.sqlite.fetchResource({

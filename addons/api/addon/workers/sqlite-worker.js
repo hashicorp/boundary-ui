@@ -11,7 +11,7 @@ import {
   CREATE_TABLES,
   DELETE_STATEMENT,
   INSERT_STATEMENTS,
-} from './schema';
+} from './utils/schema';
 
 /** @type {import('@sqlite.org/sqlite-wasm').OpfsSAHPoolDatabase} */
 let db;
