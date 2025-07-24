@@ -16,6 +16,8 @@ The desktop client UI for Boundary.
     - [Building for Production](#building-for-production)
       - [Environment Variables (PROD)](#environment-variables-prod)
     - [Running Tests](#running-tests)
+      - [Light vs Dark Mode A11y Tests](#light-vs-dark-mode-a11y-tests)
+      - [Explicit a11yAudit usage](#explicit-a11yaudit-usage)
     - [Running end to end Tests](#running-end-to-end-tests)
     - [Troubleshooting](#troubleshooting)
       - [Blank screen and/or hang browser tab when running as web app](#blank-screen-andor-hang-browser-tab-when-running-as-web-app)
@@ -151,6 +153,44 @@ of testing".  Use test coverage as a guide to help you identify untested
 high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
+Write acceptance tests like normal. Our a11y testing strategy will automatically
+run `a11yAudit()` after specific helper actions, like visit, click, and fillIn.
+Our a11y tests have their own pnpm commands:
+
+* `pnpm test-ally` runs a11y tests for light and dark mode
+* `pnpm test-ally:light` runs a11y tests just for light mode
+* `pnpm test-ally:dark` runs a11y tests just for dark mode
+
+#### Light vs Dark Mode A11y Tests
+
+When running a11y tests in light mode, we audit against multiple WCAG standards.
+However, dark mode will only tests against the `color-contrast` rule. Unless fixing
+a specific test, please use `pnpm test-a11y` for full a11y testing coverage.
+
+#### Explicit a11yAudit usage
+
+We no longer need to call `a11yAudit()` directly but there any be times we need to.
+An example would be when an action is taken in our tests that alters the UI but
+does not trigger an audit via our default helpers. In the below example, we use
+a dispatch to insert text into a code editor. This will not trigger an audit and
+inserting an `a11yAudit()` right after would be acceptable. Wrap the audit with
+`shouldForceAudit` so the audit is only run when testing a11y.
+
+```javascript
+import { shouldForceAudit } from 'ember-a11y-testing/test-support';
+
+const editorElement = find(commonSelectors.CODE_EDITOR_CODE);
+const editorView = editorElement.editor;
+editorView.dispatch({
+  changes: {
+    from: editorView.state.selection.main.from,
+    insert: '{"test": "value"}',
+  },
+});
+if (shouldForceAudit()) {
+  await a11yAudit();
+}
+```
 
 ### Running end to end Tests
 
