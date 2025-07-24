@@ -99,7 +99,7 @@ high-value code.
 
 We rely on `ember-a11y-testing` to validate accessibility in acceptance tests.
 Write acceptance tests like normal. Our a11y testing strategy will automatically
-run `a11yAudit()` after specific helper actions, like visit, click, and fillIn.
+run `a11yAudit()` after [specific helper actions](tests/test-helper.js#L26), like visit, click, and fillIn.
 Our a11y tests have their own pnpm commands:
 
 * `pnpm test-ally` runs a11y tests for light and dark mode
