@@ -34,6 +34,34 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.deepEqual(parameters, ['"favorite"*']);
   });
 
+  test('it grabs resources not in the model mapping', function (assert) {
+    const query = {
+      filters: { id: [{ equals: 'tokenKey' }] },
+    };
+
+    const { sql, parameters } = generateSQLExpressions('token', query);
+    assert.strictEqual(
+      sql,
+      `
+        SELECT * FROM token
+        WHERE (id = ?)`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, ['tokenKey']);
+  });
+
+  test('it executes count queries correctly', function (assert) {
+    const select = {
+      select: ['count(*) as total'],
+    };
+
+    const { sql, parameters } = generateSQLExpressions('target', {}, select);
+    assert.strictEqual(
+      sql,
+      `SELECT count(*) as total FROM target`.removeExtraWhiteSpace(),
+    );
+    assert.deepEqual(parameters, []);
+  });
+
   test.each(
     'it generates filters correctly',
     {
@@ -226,12 +254,13 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', query, {
       page: 2,
       pageSize: 15,
+      select: ['data'],
     });
 
     assert.strictEqual(
       sql,
       `
-      SELECT * FROM target
+      SELECT data FROM target
       WHERE (type = ?) AND (status = ? OR status = ?) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
       ORDER BY name DESC
       LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
