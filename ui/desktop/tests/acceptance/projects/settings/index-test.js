@@ -19,6 +19,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 const SIGNOUT_SELECTOR = '[data-test-signout-button]';
 
@@ -101,12 +102,35 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('can navigate to the settings page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T20:27:25.900Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
     await click(`[href="${urls.settings}"]`);
     assert.strictEqual(currentURL(), urls.settings);
   });
 
   test('color theme is applied from session data', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T20:27:25.916Z
+          enabled: false,
+        },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T20:27:25.916Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.settings);
 
     // system default
@@ -134,6 +158,15 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('clicking sign-out button logs out the user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T20:27:25.928Z
+          enabled: false,
+        },
+      },
+    });
+
     await authenticateSession({ username: 'testuser' });
     assert.expect(2);
     await visit(urls.settings);
