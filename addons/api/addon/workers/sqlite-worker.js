@@ -7,8 +7,6 @@ import { PWBWorker } from 'promise-worker-bi';
 import sqlite3InitModule from '@sqlite.org/sqlite-wasm';
 import sharedServiceInit from './utils/shared-service';
 
-let db;
-
 const methods = {
   initializeSQLite: async () => {
     try {
@@ -18,7 +16,7 @@ const methods = {
       });
       console.log(`SQLite Version: ${sqlite3?.version.libVersion}`);
       const poolUtil = await sqlite3.installOpfsSAHPoolVfs();
-      db = new poolUtil.OpfsSAHPoolDb('/boundary');
+      new poolUtil.OpfsSAHPoolDb('/boundary');
     } catch (err) {
       console.error('Initialization error:', err.name, err.message);
     }
@@ -29,19 +27,7 @@ const promiseWorker = new PWBWorker();
 promiseWorker.register(async ({ method, payload }) => {
   await sharedService.status.ready;
 
-  switch (method) {
-    case 'initializeSQLite':
-      {
-        const isServiceProvider = await sharedService.status.isServiceProvider;
-        if (isServiceProvider && !db) {
-          await sharedService.proxy[method]();
-        }
-      }
-      break;
-    default: {
-      return sharedService.proxy[method](payload);
-    }
-  }
+  return sharedService.proxy[method](payload);
 });
 
 const initializeOnProviderChange = async (isProvider) => {
