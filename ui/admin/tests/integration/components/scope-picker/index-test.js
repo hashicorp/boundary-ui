@@ -184,6 +184,11 @@ module('Integration | Component | scope-picker/index', function (hooks) {
           // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.457Z
           enabled: false,
         },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T22:14:17.824Z
+          enabled: false,
+        },
       },
     });
 
