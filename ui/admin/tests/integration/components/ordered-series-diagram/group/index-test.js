@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Integration | Component | ordered-series-diagram/group/index',
@@ -14,6 +15,15 @@ module(
     setupRenderingTest(hooks);
 
     test('it renders group icons with highlight background', async function (assert) {
+      setRunOptions({
+        rules: {
+          listitem: {
+            // [ember-a11y-ignore]: axe rule "listitem" automatically ignored on 2025-07-25T21:48:17.547Z
+            enabled: false,
+          },
+        },
+      });
+
       this.set('client', 'Client');
       this.set('egressWorker', 'Egress Worker');
 

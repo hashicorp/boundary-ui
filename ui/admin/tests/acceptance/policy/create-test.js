@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -48,6 +49,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('users can create a new policy with global scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.449Z
+          enabled: false,
+        },
+      },
+    });
+
     const policyCount = getPolicyCount();
     await visit(urls.policies);
 

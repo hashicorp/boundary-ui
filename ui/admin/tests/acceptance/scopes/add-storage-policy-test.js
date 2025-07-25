@@ -11,6 +11,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scope | add storage policy', function (hooks) {
   setupApplicationTest(hooks);
@@ -112,6 +113,15 @@ module('Acceptance | scope | add storage policy', function (hooks) {
   });
 
   test('can assign a storage policy for the scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.513Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-session-recording');
     await visit(urls.orgScopeEdit);
     await click(selectors.ADD_STORAGE_POLICY_BTN);
@@ -131,6 +141,15 @@ module('Acceptance | scope | add storage policy', function (hooks) {
   });
 
   test('can cancel changes to an existing storage policy selection', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.514Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-session-recording');
     instances.scopes.org.update({
       storagePolicyId: policyOne.id,

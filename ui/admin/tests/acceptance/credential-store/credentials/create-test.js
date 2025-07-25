@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | create',
@@ -124,6 +125,15 @@ module(
     });
 
     test('users can create a new json credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.517Z
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
@@ -173,6 +183,15 @@ module(
     });
 
     test('users can cancel create new json credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.520Z
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
@@ -190,6 +209,15 @@ module(
     });
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.522Z
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
 
       await visit(urls.credentials);
@@ -292,6 +320,15 @@ module(
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.526Z
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);

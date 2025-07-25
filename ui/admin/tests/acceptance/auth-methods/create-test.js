@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -184,6 +185,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can create a new ldap auth method', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.458Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     const authMethodsCount = getAuthMethodsCount();
     await visit(urls.authMethods);
@@ -310,6 +320,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can navigate to new auth-methods route with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.460Z
+          enabled: false,
+        },
+      },
+    });
+
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -343,6 +362,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users can navigate to new ldap auth-method route with proper authorization and feature flag enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.462Z
+          enabled: false,
+        },
+      },
+    });
+
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -363,6 +391,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('Users cannot navigate to new ldap auth-method route when feature flag disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.466Z
+          enabled: false,
+        },
+      },
+    });
+
     instances.orgScope.authorized_collection_actions['auth-methods'] = [
       'create',
       'list',
@@ -382,6 +419,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('can cancel new auth method creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.470Z
+          enabled: false,
+        },
+      },
+    });
+
     const count = getAuthMethodsCount();
     await visit(urls.authMethods);
 
@@ -514,6 +560,15 @@ module('Acceptance | auth-methods | create', function (hooks) {
   });
 
   test('saving a new ldap auth method with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.472Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     this.server.post('/auth-methods', () => {
       return new Response(

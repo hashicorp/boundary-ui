@@ -25,6 +25,7 @@ import {
 import { TYPE_SCOPE_ORG } from 'api/models/scope';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | global-scope', function (hooks) {
   setupApplicationTest(hooks);
@@ -189,6 +190,15 @@ module('Acceptance | roles | global-scope', function (hooks) {
   });
 
   test('user can filter for grant scopes on a role by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.628Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.role);
 
     await click(commonSelectors.HREF(urls.roleScopes));

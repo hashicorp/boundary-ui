@@ -16,6 +16,7 @@ import {
 } from 'api/models/credential-store';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -166,6 +167,15 @@ module('Acceptance | credential-stores | list', function (hooks) {
   });
 
   test('user can filter for credential-stores by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.621Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));

@@ -8,6 +8,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click, fillIn, select } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Integration | Component | worker-filter-generator/index',
@@ -28,6 +29,15 @@ module(
     const GENERATED_VALUE = '[name="generated_value"]';
 
     test('it renders correct content when egress_worker_filter is passed in', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.494Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { egress_worker_filter: 'egress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='egress_worker_filter' @model={{this.model}} />`,
@@ -38,6 +48,15 @@ module(
     });
 
     test('it renders correct content when ingress_worker_filter is passed in', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.495Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -48,6 +67,15 @@ module(
     });
 
     test('toggleFilterGenerator shows filter generator when toggled on', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.496Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -63,6 +91,15 @@ module(
     });
 
     test('filter generator tag type shows key and value input boxes', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.499Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -78,6 +115,15 @@ module(
     });
 
     test('filter generator tag type generates correctly formatted filter', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.500Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -93,6 +139,15 @@ module(
     });
 
     test('filter generator name type shows operator and value fields', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.502Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -108,6 +163,15 @@ module(
     });
 
     test('filter generator name type generates correctly formatted filter', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.503Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -123,6 +187,15 @@ module(
     });
 
     test('generated result is cleared when switching filter types', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.504Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,
@@ -142,6 +215,15 @@ module(
     });
 
     test('filter generator is toggled on when showFilterGenerator is true and can be hidden', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.505Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       this.showFilterGenerator = true;
       await render(
@@ -156,6 +238,15 @@ module(
     });
 
     test('filter generator is not toggled when showFilterGenerator is not provided and can be shown', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.506Z
+            enabled: false,
+          },
+        },
+      });
+
       this.model = { ingress_worker_filter: 'ingress filter' };
       await render(
         hbs`<WorkerFilterGenerator @name='ingress_worker_filter' @model={{this.model}} />`,

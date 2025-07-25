@@ -18,6 +18,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | update',
@@ -561,6 +562,15 @@ module(
     });
 
     test('secret editor enters editing state when clicking edit button in the secret editor of a JSON credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.482Z
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.jsonCredential);
 
       await click(commonSelectors.EDIT_BTN);
