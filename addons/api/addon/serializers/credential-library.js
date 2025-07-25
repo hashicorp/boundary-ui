@@ -7,6 +7,7 @@ import ApplicationSerializer from './application';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
   options,
 } from '../models/credential-library';
 
@@ -29,6 +30,8 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         return this.serializeVaultGeneric(...arguments);
       case TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE:
         return this.serializeVaultSshCertificate(...arguments);
+      case TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP:
+        return this.serializeVaultLdap(...arguments);
       default:
         return super.serialize(...arguments);
     }
@@ -44,21 +47,7 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
       if (!serialized.attributes?.http_method?.match(/post/i)) {
         serialized.attributes.http_request_body = null;
       }
-      const { credential_type, credential_mapping_overrides } = serialized;
-
-      // API expects to send null to fields if it is undefined or deleted
-      if (credential_mapping_overrides && !isNew) {
-        serialized.credential_mapping_overrides = options.mapping_overrides[
-          credential_type
-        ].reduce((obj, key) => {
-          if (credential_mapping_overrides[key]) {
-            obj[key] = credential_mapping_overrides[key];
-          } else {
-            obj[key] = null;
-          }
-          return obj;
-        }, {});
-      }
+      this.handleCredentialMappingOverrides(serialized, isNew);
       return serialized;
     }
   }
@@ -72,6 +61,38 @@ export default class CredentialLibrarySerializer extends ApplicationSerializer {
         serialized.attributes.key_bits = null;
       }
       return serialized;
+    }
+  }
+
+  serializeVaultLdap(snapshot) {
+    const { isNew } = snapshot;
+    const serialized = super.serialize(...arguments);
+    if (serialized.attributes) {
+      this.handleCredentialMappingOverrides(serialized, isNew);
+      return serialized;
+    }
+  }
+
+  /**
+   * Handle credential mapping overrides for serialization.
+   * @param {Object} serialized - The serialized object.
+   * @param {boolean} isNew - Indicates if the record is new.
+   */
+  handleCredentialMappingOverrides(serialized, isNew) {
+    const { credential_type, credential_mapping_overrides } = serialized;
+
+    // API expects to send null to fields if it is undefined or deleted
+    if (credential_mapping_overrides && !isNew) {
+      serialized.credential_mapping_overrides = options.mapping_overrides[
+        credential_type
+      ].reduce((obj, key) => {
+        if (credential_mapping_overrides[key]) {
+          obj[key] = credential_mapping_overrides[key];
+        } else {
+          obj[key] = null;
+        }
+        return obj;
+      }, {});
     }
   }
 }

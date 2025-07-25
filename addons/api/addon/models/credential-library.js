@@ -38,6 +38,7 @@ export const options = {
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC = 'vault-generic';
 export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE =
   'vault-ssh-certificate';
+export const TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP = 'vault-ldap';
 
 /**
  * Supported Credential Library types.
@@ -45,6 +46,7 @@ export const TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE =
 export const TYPES_CREDENTIAL_LIBRARY = Object.freeze([
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 ]);
 
 export default class CredentialLibraryModel extends GeneratedCredentialLibraryModel {
@@ -65,7 +67,8 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
   get isVault() {
     return (
       this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC ||
-      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE ||
+      this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP
     );
   }
 
@@ -83,5 +86,13 @@ export default class CredentialLibraryModel extends GeneratedCredentialLibraryMo
    */
   get isVaultSSHCertificate() {
     return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE;
+  }
+
+  /**
+   * True if credential is a vault ldap type.
+   * @type {boolean}
+   */
+  get isVaultLDAP() {
+    return this.type === TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP;
   }
 }

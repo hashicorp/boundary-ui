@@ -966,6 +966,7 @@ credential-library:
   types:
     vault-generic: Generic Secrets
     vault-ssh-certificate: SSH Certificates
+    vault-ldap: LDAP
   help:
     vault-generic: Authorize sessions using credentials brokered by Vault
     vault-ssh-certificate: Authorize sessions using the SSH Secrets Engine in Vault
