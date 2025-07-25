@@ -78,9 +78,11 @@ export default function transformer(file, api) {
     if (existingEmberA11yImport.length > 0) {
       const importNode = existingEmberA11yImport.get();
 
+      const hasExistingSetRunOptionImport = importNode.value.specifiers.some(specifier => specifier.imported.name === 'setRunOptions');
+
       importNode.value.specifiers = [
         ...importNode.value.specifiers,
-        ...runOptionsEmberA11yImport.specifiers,
+        ...(hasExistingSetRunOptionImport ? [] : runOptionsEmberA11yImport.specifiers),
       ];
     } else {
       f.find(j.ImportDeclaration).at(-1).insertAfter(runOptionsEmberA11yImport);
