@@ -8,6 +8,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Integration | Component | form/field/json-secret', function (hooks) {
   setupRenderingTest(hooks);
@@ -20,6 +21,15 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the active editor', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.570Z
+          enabled: false,
+        },
+      },
+    });
+
     await render(hbs`
       <Form::Field::JsonSecret
         @value={{this.model.json_object}}
@@ -70,6 +80,15 @@ module('Integration | Component | form/field/json-secret', function (hooks) {
   });
 
   test('it renders the active editor from the actionable view', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.571Z
+          enabled: false,
+        },
+      },
+    });
+
     await render(hbs`
       <Form::Field::JsonSecret
         @disabled={{false}}

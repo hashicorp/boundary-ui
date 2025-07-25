@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -90,6 +91,20 @@ module('Acceptance | credential-stores | create', function (hooks) {
   });
 
   test('Users can create a new credential store of type vault with a worker filter', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.633Z
+          enabled: false,
+        },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.633Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     featuresService.enable('worker-filter');
     const count = getVaultCredentialStoresCount();

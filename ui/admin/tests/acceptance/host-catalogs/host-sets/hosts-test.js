@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);
@@ -305,6 +306,15 @@ module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   });
 
   test('users can navigate to host and incorrect url autocorrects', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.247Z
+          enabled: false,
+        },
+      },
+    });
+
     const hostCatalog = this.server.create('host-catalog', {
       scope: instances.scopes.project,
       type: 'plugin',

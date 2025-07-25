@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'admin/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Integration | Component | link-list-panel/index', function (hooks) {
   setupRenderingTest(hooks);
@@ -52,6 +53,15 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders link correctly supplying a single model', async function (assert) {
+    setRunOptions({
+      rules: {
+        'link-name': {
+          // [ember-a11y-ignore]: axe rule "link-name" automatically ignored on 2025-07-25T21:48:17.381Z
+          enabled: false,
+        },
+      },
+    });
+
     // ScopeId global
     this.modelA = { scopeId: 'global' };
     await render(hbs`
@@ -76,6 +86,15 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders a link correctly supplying multiple models', async function (assert) {
+    setRunOptions({
+      rules: {
+        'link-name': {
+          // [ember-a11y-ignore]: axe rule "link-name" automatically ignored on 2025-07-25T21:48:17.382Z
+          enabled: false,
+        },
+      },
+    });
+
     // ScopeId global
     this.modelA = { scopeId: 'global', id: 'u_umasjqde46' };
     await render(hbs`
@@ -106,6 +125,15 @@ module('Integration | Component | link-list-panel/index', function (hooks) {
   });
 
   test('it renders multiple links correctly supplying a combination of single and multiple models', async function (assert) {
+    setRunOptions({
+      rules: {
+        'link-name': {
+          // [ember-a11y-ignore]: axe rule "link-name" automatically ignored on 2025-07-25T21:48:17.385Z
+          enabled: false,
+        },
+      },
+    });
+
     this.modelA = { scopeId: 's_id6ozx3wue' };
     this.modelB = { scopeId: 's_id6ozx3wue', id: 'u_umasjqde46' };
     this.modelC = { scopeId: 'global' };

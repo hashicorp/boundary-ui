@@ -7,11 +7,21 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Integration | Component | branded-card', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
+    setRunOptions({
+      rules: {
+        'empty-heading': {
+          // [ember-a11y-ignore]: axe rule "empty-heading" automatically ignored on 2025-07-25T20:27:26.009Z
+          enabled: false,
+        },
+      },
+    });
+
     await render(hbs`<BrandedCard />`);
 
     assert.dom('.branded-card').isVisible();

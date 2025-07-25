@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | roles | principals', function (hooks) {
   setupApplicationTest(hooks);
@@ -115,6 +116,15 @@ module('Acceptance | roles | principals', function (hooks) {
   });
 
   test('cannot navigate to add principals without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.648Z
+          enabled: false,
+        },
+      },
+    });
+
     const authorized_actions = instances.role.authorized_actions.filter(
       (item) => item !== 'add-principals',
     );

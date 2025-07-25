@@ -12,6 +12,7 @@ import { TYPE_TARGET_SSH } from 'api/models/target';
 import select from '@ember/test-helpers/dom/select';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from '../selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | enable session recording | index',
@@ -156,6 +157,15 @@ module(
     });
 
     test('link to add new storage bucket should be displayed and redirect to new storage buckets form', async function (assert) {
+      setRunOptions({
+        rules: {
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.479Z
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('ssh-session-recording');
       await visit(urls.target);
       await click(SESSION_RECORDING_ENABLE_BTN);

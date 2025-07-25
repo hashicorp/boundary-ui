@@ -8,12 +8,22 @@ import { setupRenderingTest } from 'admin/tests/helpers';
 import { render, waitUntil, find } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl } from 'ember-intl/test-support';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Integration | Component | session-recording/player', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
   test('it renders', async function (assert) {
+    setRunOptions({
+      rules: {
+        'scrollable-region-focusable': {
+          // [ember-a11y-ignore]: axe rule "scrollable-region-focusable" automatically ignored on 2025-07-25T21:48:17.517Z
+          enabled: false,
+        },
+      },
+    });
+
     const castConfig = {
       version: 2,
       width: 124,

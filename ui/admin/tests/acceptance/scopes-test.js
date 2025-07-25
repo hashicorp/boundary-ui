@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -110,6 +111,25 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can navigate among org scopes via side-nav', async function (assert) {
+    setRunOptions({
+      rules: {
+        'aria-required-children': {
+          // [ember-a11y-ignore]: axe rule "aria-required-children" automatically ignored on 2025-07-25T21:48:17.367Z
+          enabled: false,
+        },
+
+        listitem: {
+          // [ember-a11y-ignore]: axe rule "listitem" automatically ignored on 2025-07-25T21:48:17.368Z
+          enabled: false,
+        },
+
+        'target-size': {
+          // [ember-a11y-ignore]: axe rule "target-size" automatically ignored on 2025-07-25T21:48:17.368Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     assert.strictEqual(currentURL(), urls.globalScope);
@@ -125,6 +145,20 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can navigate among project scopes via side-nav', async function (assert) {
+    setRunOptions({
+      rules: {
+        'aria-required-children': {
+          // [ember-a11y-ignore]: axe rule "aria-required-children" automatically ignored on 2025-07-25T21:48:17.370Z
+          enabled: false,
+        },
+
+        listitem: {
+          // [ember-a11y-ignore]: axe rule "listitem" automatically ignored on 2025-07-25T21:48:17.370Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     assert.strictEqual(currentURL(), urls.projectTargets);

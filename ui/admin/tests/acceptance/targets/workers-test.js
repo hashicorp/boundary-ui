@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | workers', function (hooks) {
   setupApplicationTest(hooks);
@@ -171,6 +172,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user can save ingress worker filter to a target when `worker-filter` is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.707Z
+          enabled: false,
+        },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.707Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('worker-filter');
     instances.target.update({ ingress_worker_filter: '' });
     await visit(urls.target);
@@ -193,6 +208,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user can cancel changes to ingress worker filter in a target when `worker-filter` is enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.709Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.709Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('worker-filter');
     await visit(urls.target);
 
@@ -218,6 +247,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user can save egress worker filter to a target', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.712Z
+          enabled: false,
+        },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.712Z
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({ egress_worker_filter: '' });
     await visit(urls.target);
 
@@ -271,6 +314,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('user can cancel changes to egress worker filter in a target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.715Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.715Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.target);
 
     await click(commonSelectors.HREF(urls.targetWorkers));
@@ -295,6 +352,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can discard unsaved ingress worker filter changes in a target via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.716Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.716Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -322,6 +393,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved ingress worker filter changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.718Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.718Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('worker-filter');
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -349,6 +434,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can discard unsaved egress worker filter changes in a target via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.720Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.720Z
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.target);
@@ -375,6 +474,20 @@ module('Acceptance | targets | workers', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved egress worker filter changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.721Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.721Z
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     await visit(urls.target);

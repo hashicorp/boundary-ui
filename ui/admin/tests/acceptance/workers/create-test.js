@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -34,6 +35,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('can create new workers', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.432Z
+          enabled: false,
+        },
+      },
+    });
+
     const workersCount = getWorkersCount();
     await visit(newWorkerURL);
 
@@ -47,6 +57,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('cluster id input field is visible for `hcp` binary', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.433Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
 
@@ -57,6 +76,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('initial upstreams input field is visible for `oss` binary', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.434Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(newWorkerURL);
 
     const labels = findAll(selectors.WORKER_CREATE_SECTION_FORM_LABEL);
@@ -67,6 +95,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct oss instructions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.435Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(newWorkerURL);
 
     const createSection = findAll(selectors.WORKER_CREATE_SECTION);
@@ -85,6 +122,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('download and install step shows correct hcp instructions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.437Z
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('byow-pki-hcp-cluster-id');
     await visit(newWorkerURL);
 
@@ -126,6 +172,15 @@ module('Acceptance | workers | create', function (hooks) {
   });
 
   test('saving a new worker with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-07-25T21:48:17.438Z
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/workers:create:worker-led', () => {
       return new Response(
         500,

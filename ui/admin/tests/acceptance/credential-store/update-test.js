@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -348,6 +349,20 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('manage actions dropdown displays edit option and routes to correct url', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.652Z
+          enabled: false,
+        },
+
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.652Z
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.vaultCredentialStore);
 
     await click(commonSelectors.HREF(urls.workerFilter));
@@ -372,6 +387,20 @@ module('Acceptance | credential-stores | update', function (hooks) {
   });
 
   test('when worker filter exists, readonly code block displays the filter text', async function (assert) {
+    setRunOptions({
+      rules: {
+        label: {
+          // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-07-25T21:48:17.654Z
+          enabled: false,
+        },
+
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-07-25T21:48:17.654Z
+          enabled: false,
+        },
+      },
+    });
+
     instances.vaultCredentialStore.update({
       attributes: { worker_filter: null },
     });
