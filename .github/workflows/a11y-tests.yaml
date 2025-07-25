@@ -9,7 +9,7 @@ jobs:
 
   a11y-test:
     name: Run A11y Tests
-    if: contains(github.event.pull_request.labels.*.name, 'a11y-test')
+    if: contains(github.event.pull_request.labels.*.name, 'a11y-tests')
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     timeout-minutes: 35
     steps:
