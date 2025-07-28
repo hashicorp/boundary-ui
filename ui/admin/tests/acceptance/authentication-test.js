@@ -361,6 +361,7 @@ module('Acceptance | authentication', function (hooks) {
     await authenticateSession({
       scope: { id: globalScope.id, type: globalScope.type },
     });
+    currentSession().set('data.theme', 'light');
     await visit(orgsURL);
 
     // light mode
