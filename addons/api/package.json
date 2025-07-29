@@ -42,7 +42,8 @@
     "esbuild": "^0.25.4",
     "miragejs": "^0.1.48",
     "promise-worker-bi": "^5.0.1",
-    "tracked-built-ins": "^4.0.0"
+    "tracked-built-ins": "^4.0.0",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.25.1",
