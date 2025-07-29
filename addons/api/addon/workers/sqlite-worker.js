@@ -101,14 +101,9 @@ const methods = {
       throw err;
     }
   },
-  insertResource: ({ resource, items }) => {
+  insertResource: ({ resource, items, modelMapping }) => {
     if (items.length === 0) {
       return [];
-    }
-    const insertStatementGenerator = INSERT_STATEMENTS[resource];
-
-    if (!insertStatementGenerator) {
-      throw new Error(`Insert statement for resource "${resource}" not found.`);
     }
 
     const numberOfParameters = items.reduce((acc, item) => {
@@ -127,7 +122,7 @@ const methods = {
         for (let i = 0; i < items.length; i += chunkSize) {
           const chunk = items.slice(i, i + chunkSize);
           const result = db.exec({
-            sql: insertStatementGenerator(chunk),
+            sql: INSERT_STATEMENTS(resource, chunk, modelMapping),
             bind: chunk.flat(),
             rowMode: 'object',
           });
@@ -138,7 +133,7 @@ const methods = {
     }
 
     db.exec({
-      sql: insertStatementGenerator(items),
+      sql: INSERT_STATEMENTS(resource, items, modelMapping),
       bind: items.flat(),
       rowMode: 'object',
     });

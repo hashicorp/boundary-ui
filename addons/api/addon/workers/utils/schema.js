@@ -64,11 +64,21 @@ END;
 
 COMMIT;`;
 
-export const INSERT_STATEMENTS = {
-  token: (items) =>
-    `REPLACE INTO token (id, token) VALUES ${items.map(() => '(?, ?)').join(', ')};`,
-  target: (items) =>
-    `REPLACE INTO target (id, type, name, description, address, scope_id, created_time, data) VALUES ${items.map(() => '(?, ?, ?, ?, ?, ?, ?, ?)').join(', ')};`,
+export const INSERT_STATEMENTS = (resource, items, modelMapping) => {
+  if (resource === 'token') {
+    return `REPLACE INTO token (id, token) VALUES ${items.map(() => '(?, ?)').join(', ')};`;
+  }
+
+  if (!modelMapping?.[resource]) {
+    throw new Error(`modelMapping is required for ${resource} insertions.`);
+  }
+
+  const columns = Object.keys(modelMapping[resource]);
+  // Extra column for the data column
+  const numColumns = Array(columns.length + 1);
+  const placeholders = `(${numColumns.fill('?').join(', ')})`;
+
+  return `REPLACE INTO ${resource} (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
 };
 
 export const DELETE_STATEMENT = (resource, ids) =>

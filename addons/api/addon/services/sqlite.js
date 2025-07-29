@@ -7,8 +7,7 @@ import Service from '@ember/service';
 import { PWBHost } from 'promise-worker-bi';
 
 // A mapping of columns to their expected model attributes for supported models
-// The order matters, it _must_ be the same as the order of the columns in the database.
-// The JSON data is assumed to always be last.
+// The JSON data column is not included here but is assumed to always be last.
 export const modelMapping = {
   target: {
     id: 'id',
@@ -72,7 +71,7 @@ export default class SqliteDbService extends Service {
   insertResource(resource, items) {
     return this.worker.postMessage({
       method: 'insertResource',
-      payload: { resource, items },
+      payload: { resource, items, modelMapping },
     });
   }
 
