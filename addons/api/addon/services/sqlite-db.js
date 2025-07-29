@@ -21,7 +21,7 @@ export default class SqliteDbService extends Service {
       return;
     }
 
-    // In production, our JS files will be fingerprinted with am MD5 hash
+    // In production, our JS files will be fingerprinted with an MD5 hash
     // so we need a way to map the worker file name to be able to find it.
     //
     // Ember is automagically replacing any URL path with the fingerprinted
@@ -31,7 +31,7 @@ export default class SqliteDbService extends Service {
     // https://github.com/ember-cli/broccoli-asset-rewrite/issues/66
     // and will not work properly if it's part of a template string or interpolated.
     // Therefore, we need the URL path in a string somewhere to be replaced properly.
-    this.webWorker = new Worker('/workers/web-worker.js', {
+    this.webWorker = new Worker('/workers/sqlite-worker.js', {
       type: 'module',
     });
 
