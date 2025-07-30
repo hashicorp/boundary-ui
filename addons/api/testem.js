@@ -2,13 +2,11 @@
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
  */
-/* eslint-disable n/no-extraneous-require */
 
-'use strict';
+/* eslint-disable n/no-extraneous-require, n/no-missing-require */
 const MultiReporter = require('testem-multi-reporter');
 const JUnitReporter = require('testem-gitlab-reporter');
 const fs = require('fs');
-
 const TAPReporter = require('testem/lib/reporters/tap_reporter');
 
 const multiReporterConfig = {
