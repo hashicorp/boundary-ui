@@ -8,8 +8,7 @@ const MultiReporter = require('testem-multi-reporter');
 const JUnitReporter = require('testem-gitlab-reporter');
 const fs = require('fs');
 
-// testem is provided by ember-cli and is not an explicit dependency
-// eslint-disable-next-line n/no-extraneous-require
+// eslint-disable-next-line n/no-extraneous-require, n/no-missing-require
 const TAPReporter = require('testem/lib/reporters/tap_reporter');
 
 const multiReporterConfig = {
