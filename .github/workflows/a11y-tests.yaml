@@ -11,7 +11,7 @@ jobs:
     name: Run A11y Tests
     if: contains(github.event.pull_request.labels.*.name, 'a11y-tests')
     runs-on: ${{ fromJSON(vars.RUNNER) }}
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3
         with:
