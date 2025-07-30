@@ -148,7 +148,23 @@ const methods = {
       return [];
     }
 
-    // TODO: Test with a large amount of deletions, should we chunk here as well?
+    // Check if we have too many parameters for the deletion and chunk if so
+    if (ids.length > MAX_HOST_PARAMETERS) {
+      return db.transaction(() => {
+        const results = [];
+        for (let i = 0; i < ids.length; i += MAX_HOST_PARAMETERS) {
+          const chunk = ids.slice(i, i + MAX_HOST_PARAMETERS);
+          const result = db.exec({
+            sql: DELETE_STATEMENT(resource, chunk),
+            bind: chunk,
+            rowMode: 'object',
+          });
+          results.push(result);
+        }
+        return results;
+      });
+    }
+
     return db.exec({
       sql: DELETE_STATEMENT(resource, ids),
       bind: ids,
