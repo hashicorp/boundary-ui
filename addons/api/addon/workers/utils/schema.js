@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS target (
     created_time TIMESTAMP,
     data TEXT NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_target_scope_id ON target(scope_id);
+CREATE INDEX IF NOT EXISTS idx_target_scope_id_created_time ON target(scope_id, created_time DESC);
 
 -- Create a contentless FTS table as we will only use the rowids.
 -- Note that this only creates the FTS index and cannot reference the target content

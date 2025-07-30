@@ -42,6 +42,8 @@ export function generateSQLExpressions(
     if (validAttributes.includes(attribute)) {
       orderByClause = `ORDER BY ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
     }
+  } else if (modelMapping[resource]?.created_time) {
+    orderByClause = `ORDER BY created_time DESC`;
   }
 
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';

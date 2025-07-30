@@ -29,7 +29,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
         SELECT * FROM target
-        WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)`.removeExtraWhiteSpace(),
+        WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, ['"favorite"*']);
   });
@@ -57,7 +58,9 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', {}, select);
     assert.strictEqual(
       sql,
-      `SELECT count(*) as total FROM target`.removeExtraWhiteSpace(),
+      `
+        SELECT count(*) as total FROM target
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, []);
   });
@@ -158,7 +161,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         sql,
         `
         SELECT * FROM target
-        ${expectedWhereClause}`.removeExtraWhiteSpace(),
+        ${expectedWhereClause}
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, expectedParams);
     },
@@ -203,6 +207,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         sql,
         `
         SELECT * FROM target
+        ORDER BY created_time DESC
         LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, expectedParams);
@@ -226,7 +231,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       sql,
       `
         SELECT * FROM target
-        WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)`.removeExtraWhiteSpace(),
+        WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, [
       'id1',
@@ -290,7 +296,12 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     },
     function (assert, query) {
       const { sql, parameters } = generateSQLExpressions('target', query);
-      assert.strictEqual(sql, `SELECT * FROM target`);
+      assert.strictEqual(
+        sql,
+        `
+        SELECT * FROM target
+        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+      );
       assert.deepEqual(parameters, []);
     },
   );

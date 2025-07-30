@@ -82,6 +82,10 @@ export default class SqliteDbService extends Service {
     });
   }
 
+  analyzeDatabase() {
+    return this.worker.postMessage({ method: 'analyzeDatabase' });
+  }
+
   async downloadDatabase() {
     const byteArray = await this.worker.postMessage({
       method: 'downloadDatabase',

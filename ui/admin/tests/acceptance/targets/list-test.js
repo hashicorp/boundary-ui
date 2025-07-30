@@ -33,6 +33,13 @@ module('Acceptance | targets | list', function (hooks) {
 
   const NAME_VALUES_ARRAY = ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'];
   const ID_VALUES_ARRAY = ['i_0001', 'i_0010', 'i_0100', 'i_1000', 'i_10000'];
+  const CREATED_TIME_VALUES_ARRAY = [
+    '2020-01-01T00:01:00.000Z',
+    '2020-01-01T00:00:10.000Z',
+    '2020-01-01T00:00:01.000Z',
+    '2020-01-01T00:00:00.100Z',
+    '2020-01-01T00:00:00.010Z',
+  ];
 
   const instances = {
     scopes: {
@@ -262,6 +269,30 @@ module('Acceptance | targets | list', function (hooks) {
 
     assert.strictEqual(currentRouteName(), 'scopes.scope.sessions.index');
     assert.dom(selectors.TABLE_SESSIONS_ID(instances.session.id)).isVisible();
+  });
+
+  test('targets table is sorted by `created_time` descending by default', async function (assert) {
+    this.server.schema.targets.all().destroy();
+    const createdTimeToNameMapping = {};
+    CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
+      createdTimeToNameMapping[value] = NAME_VALUES_ARRAY[index];
+    });
+    faker.helpers.shuffle(CREATED_TIME_VALUES_ARRAY).forEach((value) => {
+      this.server.create('target', {
+        name: createdTimeToNameMapping[value],
+        created_time: value,
+        scope: instances.scopes.project,
+      });
+    });
+    await visit(urls.targets);
+
+    assert
+      .dom(commonSelectors.TABLE_ROWS)
+      .isVisible({ count: CREATED_TIME_VALUES_ARRAY.length });
+    NAME_VALUES_ARRAY.forEach((expected, index) => {
+      // nth-child index starts at 1
+      assert.dom(commonSelectors.TABLE_ROW(index + 1)).containsText(expected);
+    });
   });
 
   test.each(

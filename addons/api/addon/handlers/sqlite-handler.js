@@ -46,7 +46,10 @@ export default class SqliteHandler {
         const serializer = store.serializerFor(type);
 
         let { page, pageSize, query: queryObj, ...remainingQuery } = query;
-        let payload, listToken, writeToDbPromise;
+        let payload,
+          listToken,
+          writeToDbPromise,
+          totalInsert = 0;
 
         if (!peekDb) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
@@ -66,6 +69,7 @@ export default class SqliteHandler {
                 list_token: listToken,
                 batchLimit: this.batchLimit,
               });
+              totalInsert += payload.items?.length ?? 0;
 
               // await the previous writeToDbPromise before writing to db again
               if (writeToDbPromise) {
@@ -93,6 +97,12 @@ export default class SqliteHandler {
 
         // TODO: Remove all timers once we're ready to merge back to main
         console.time(`SQLite fetch ${type}`);
+
+        if (totalInsert > 0) {
+          // If there were any inserts, let sqlite handle running analyze on the DB
+          await this.sqlite.analyzeDatabase();
+          console.timeLog(`SQLite fetch ${type}`, 'analyze');
+        }
 
         const { sql, parameters } = generateSQLExpressions(type, queryObj, {
           page,

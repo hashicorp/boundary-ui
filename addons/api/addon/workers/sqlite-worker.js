@@ -50,6 +50,8 @@ const methods = {
         }
 
         db.exec(CREATE_TABLES(SCHEMA_VERSION));
+        // Force an analyze on initial connection
+        db.exec('PRAGMA optimize=0x10002;');
         done = true;
       } catch (err) {
         // If we get a SQLite3Error and the pool is at capacity, we'll assume the error is
@@ -71,6 +73,9 @@ const methods = {
         }
       }
     }
+  },
+  analyzeDatabase: () => {
+    db.exec('PRAGMA optimize');
   },
   clearDatabase: () => {
     db.exec(CLEAR_DB);
