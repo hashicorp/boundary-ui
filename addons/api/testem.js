@@ -2,14 +2,13 @@
  * Copyright (c) HashiCorp, Inc.
  * SPDX-License-Identifier: BUSL-1.1
  */
+/* eslint-disable n/no-extraneous-require */
 
 'use strict';
 const MultiReporter = require('testem-multi-reporter');
 const JUnitReporter = require('testem-gitlab-reporter');
 const fs = require('fs');
 
-// testem is provided by ember-cli and is not an explicit dependency
-// eslint-disable-next-line n/no-extraneous-require
 const TAPReporter = require('testem/lib/reporters/tap_reporter');
 
 const multiReporterConfig = {

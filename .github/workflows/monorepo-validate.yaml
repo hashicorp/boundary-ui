@@ -54,6 +54,9 @@ jobs:
 
   test:
     name: Test
+    env:
+      # junit test report used by test-summary/action to add test summary
+      CREATE_JUNIT_TEST_REPORT: true
     needs: [lint]
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     timeout-minutes: 15
@@ -72,3 +75,8 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm test
+      - name: Test Summary
+        if: always()
+        uses: test-summary/action@v2
+        with:
+          paths: "**/test-output/junit.xml"
