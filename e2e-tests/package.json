@@ -14,6 +14,8 @@
     "lint:js:fix": "eslint . --fix",
     "format": "concurrently \"npm:format:*\" --names \"format:\"",
     "format:js": "prettier --write './**/*.{js,mjs}'",
+    "generate:api-client": "pnpm clean:api-client && openapi-generator-cli generate -g typescript-fetch -o api-client -i ${OPENAPI_SWAGGER_URL_OR_FILE-https://raw.githubusercontent.com/hashicorp/boundary/main/internal/gen/controller.swagger.json}",
+    "clean:api-client": "rm -rf api-client || true",
     "admin": "pnpm playwright test --config admin/playwright.config.js",
     "admin:ce:aws": "pnpm run admin --grep \"(?=.*@ce)(?=.*@aws)\"",
     "admin:ce:docker": "pnpm run admin --grep \"(?=.*@ce)(?=.*@docker)\"",
@@ -28,6 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/eslint-parser": "^7.21.3",
+    "@openapitools/openapi-generator-cli": "^2.20.2",
     "@playwright/test": "^1.49.0",
     "concurrently": "^9.1.0",
     "dotenv": "^16.4.5",
