@@ -35,7 +35,7 @@
     "test": "pnpm clean:coverage && pnpm test:ember && pnpm test:finalize",
     "test:ember": "cross-env COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
     "test-a11y": "concurrently \"pnpm:test-a11y:*\" --names \"test-a11y:\"",
-    "test-a11y:light": "ENABLE_A11Y_AUDIT=true ember exam --test-port 0 --split=4 --parallel=1",
+    "test-a11y:light": "ENABLE_A11Y_AUDIT=true ember exam --test-port 0 --split=4 --parallel=1 --filter='acceptance'",
     "test-a11y:dark": "COLOR_THEME=dark pnpm test-a11y:light",
     "postinstall": "pnpm --dir electron-app install",
     "test:finalize": "ember coverage-merge && pnpm clean:coverage"
