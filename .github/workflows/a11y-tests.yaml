@@ -37,9 +37,9 @@ jobs:
           jq -s 'map(.[])' ./ui/admin/ember-a11y-report/*.json > ember-a11y-reports/admin.json
           jq -s 'map(.[])' ./ui/desktop/ember-a11y-report/*.json > ember-a11y-reports/desktop.json
       # output admin test results
-      - run: cat ember-a11y-reports/admin.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"
+      - run: 'cat ember-a11y-reports/admin.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
       # output desktop test results
-      - run: cat ember-a11y-reports/desktop.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"
+      - run: 'cat ember-a11y-reports/desktop.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
       - name: Upload ember a11y reports
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -49,8 +49,8 @@ jobs:
         if: always()
         # fail CI when the combined array length of admin and desktop a11y reports is not 0
         run: |
-          EMBER_A11y_FAILURE_COUNT=$(jq -s 'map(.[]) | length' ember-a11y-reports/admin.json ember-a11y-reports/desktop.json)
-          echo "$EMBER_A11y_FAILURE_COUNT ember-a11y test failures"
-          if [ "$EMBER_A11y_FAILURE_COUNT" != '0' ] ; then
-            exit -1
+          EMBER_A11Y_FAILURE_COUNT=$(jq -s 'map(.[]) | length' ember-a11y-reports/admin.json ember-a11y-reports/desktop.json)
+          echo "$EMBER_A11Y_FAILURE_COUNT ember-a11y test failures"
+          if [ "$EMBER_A11Y_FAILURE_COUNT" != '0' ]; then
+            exit 1
           fi
