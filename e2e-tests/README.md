@@ -310,7 +310,8 @@ test.beforeEach(async ({ apiClient }) => {
 
 The generated client is found in the `api-client` folder. Manual changes should not be made to any of the files in this folder because they will be overriden the next time the client is generated.
 
-To regenerate the api-client run the `generate:api` package.json scripts command. By default this will use the latest swagger doc from the public [`boundary` repo](https://github.com/hashicorp/boundary) on the `main` branch at `main/internal/gen/controller.swagger.json`.
+To regenerate the api-client run the `generate:api` package.json scripts command. By default this will use the latest swagger doc from the public [`boundary` repo](https://github.com/hashicorp/boundary) on the `main` branch at `main/internal/gen/controller.swagger.json`. Note: The `generate:api` script calls `openapi-generator-cli` which requires java to be available on your PATH environment variable.
+
 ```shell
 pnpm generate:api-client
 ```
