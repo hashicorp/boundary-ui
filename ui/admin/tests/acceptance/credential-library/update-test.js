@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-libraries | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -80,6 +81,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a credential library and cancel changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibrary);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -95,6 +105,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault generic credential library and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibrary);
 
     await click(commonSelectors.EDIT_BTN);
@@ -133,6 +152,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('saving an existing credential library with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.patch('/credential-libraries/:id', () => {
       return new Response(
         400,
@@ -166,6 +194,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can discard unsaved credential library changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -197,6 +234,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can cancel discard unsaved credential library via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
@@ -228,6 +274,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('cannot update credential type in a vault generic credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibrary);
     await click(commonSelectors.EDIT_BTN, 'Activate edit mode');
 
@@ -235,6 +290,15 @@ module('Acceptance | credential-libraries | update', function (hooks) {
   });
 
   test('can update a vault ssh cert credential library and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,

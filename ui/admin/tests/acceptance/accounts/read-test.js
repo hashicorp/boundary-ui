@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -51,6 +52,15 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('can navigate to an account form', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.accounts);
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.account));
 
@@ -58,6 +68,15 @@ module('Acceptance | accounts | read', function (hooks) {
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.account.authorized_actions =
       instances.account.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.accounts);

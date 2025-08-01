@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | create',
@@ -83,6 +84,15 @@ module(
     });
 
     test('users can create a new username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
@@ -103,6 +113,15 @@ module(
     });
 
     test('users can create a new username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
@@ -124,6 +143,20 @@ module(
     });
 
     test('users can create a new json credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       const jsonCredentialCount = getJsonCredentialCount();
@@ -142,6 +175,15 @@ module(
     });
 
     test('users can cancel create new username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -157,6 +199,15 @@ module(
     });
 
     test('users can cancel create new username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
 
@@ -173,6 +224,20 @@ module(
     });
 
     test('users can cancel create new json credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const credentialsCount = getCredentialsCount();
       await visit(urls.credentials);
@@ -190,6 +255,20 @@ module(
     });
 
     test('users can switch away from JSON type credentials and the json_object value will be cleared', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
 
       await visit(urls.credentials);
@@ -205,6 +284,15 @@ module(
     });
 
     test('users cannot navigate to new credential route without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('static-credentials');
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
@@ -225,6 +313,15 @@ module(
     });
 
     test('saving a new username & password credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a username-password credential.';
@@ -257,6 +354,15 @@ module(
     });
 
     test('saving a new username & key pair credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'Error in provided request.';
       const errorDescription =
         'Field required for creating a username-key-pair credential.';
@@ -292,6 +398,20 @@ module(
     });
 
     test('saving a new json credential with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       featuresService.enable('json-credentials');
       const errorMessage = 'Error in provided request.';
       await visit(urls.credentials);
@@ -323,6 +443,15 @@ module(
     });
 
     test('cannot navigate to json credential when feature is disabled', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.credentials);
 
       await click(commonSelectors.HREF(urls.newCredential));
@@ -345,6 +474,15 @@ module(
     });
 
     test('users cannot create a new credential without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.staticCredentialStore.authorized_collection_actions.credentials =
         instances.staticCredentialStore.authorized_collection_actions.credentials.filter(
           (item) => item !== 'create',

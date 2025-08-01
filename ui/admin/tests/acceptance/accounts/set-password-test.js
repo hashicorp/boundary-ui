@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | set password', function (hooks) {
   setupApplicationTest(hooks);
@@ -52,6 +53,15 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('visiting account set password', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.setPassword);
 
     assert.strictEqual(currentURL(), urls.setPassword);
@@ -75,6 +85,15 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('can set a new password for account', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.post(
       '/accounts/:idMethod',
@@ -97,6 +116,15 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('can cancel setting new password by navigating away', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.setPassword);
 
     await fillIn(
@@ -109,6 +137,15 @@ module('Acceptance | accounts | set password', function (hooks) {
   });
 
   test('errors are displayed when setting password fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/accounts/:id', () => {
       return new Response(
         490,

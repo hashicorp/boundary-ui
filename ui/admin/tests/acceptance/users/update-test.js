@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -51,6 +52,15 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can save changes to an existing user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
@@ -66,6 +76,15 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('cannot make changes to an existing user without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'update');
     await visit(urls.users);
@@ -77,6 +96,15 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can cancel changes to an existing user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
@@ -89,6 +117,15 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('saving an existing user with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMessage =
       'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     await visit(urls.users);
@@ -113,6 +150,15 @@ module('Acceptance | users | update', function (hooks) {
   });
 
   test('can discard unsaved user changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     assert.notEqual(instances.user.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.user);

@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-libraries | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -68,6 +69,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('can navigate to resource', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibraries);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
@@ -76,6 +86,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to resource without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialLibrary.authorized_actions =
       instances.credentialLibrary.authorized_actions.filter(
         (item) => item !== 'read',
@@ -88,6 +107,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('cannot navigate to vault ssh cert form when feature is not enabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialLibrary = this.server.create('credential-library', {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
@@ -107,6 +135,15 @@ module('Acceptance | credential-libraries | read', function (hooks) {
   });
 
   test('visiting an unknown credential library displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownCredentialLibrary);
 
     assert

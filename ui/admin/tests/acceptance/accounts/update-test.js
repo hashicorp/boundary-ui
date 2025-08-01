@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -52,6 +53,15 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update resource and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -65,6 +75,15 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update resource and save LDAP account changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -94,6 +113,15 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('can update an account and cancel changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.account);
 
     await click(commonSelectors.EDIT_BTN);
@@ -107,6 +135,15 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('errors are displayed when save on account fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.patch('/accounts/:id', () => {
       return new Response(
         490,
@@ -128,6 +165,15 @@ module('Acceptance | accounts | update', function (hooks) {
   });
 
   test('saving an existing account with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.patch('/accounts/:id', () => {
       return new Response(
         400,

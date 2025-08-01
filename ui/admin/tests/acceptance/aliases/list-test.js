@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | aliases | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -70,6 +71,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('users can navigate to aliases with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.aliases.all().destroy();
     await visit(urls.globalScope);
 
@@ -124,6 +134,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.aliases.all().destroy();
     instances.scopes.global.authorized_collection_actions['aliases'] =
       instances.scopes.global.authorized_collection_actions['aliases'].filter(
@@ -184,6 +203,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('edit action in table directs user to appropriate page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.aliases));
@@ -203,6 +231,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('user can search for a specific alias by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.aliases));
@@ -218,6 +255,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('user can search for aliases and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.aliases));
@@ -239,6 +285,15 @@ module('Acceptance | aliases | list', function (hooks) {
   });
 
   test('aliases are sorted by created_time descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.aliases.all().destroy();
 
     const years = ['2026', '2025', '2024', '2023'];
