@@ -146,6 +146,10 @@ module('Acceptance | authentication', function (hooks) {
     setDefaultClusterUrl(this);
   });
 
+  hooks.afterEach(async function () {
+    sinon.restore();
+  });
+
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);

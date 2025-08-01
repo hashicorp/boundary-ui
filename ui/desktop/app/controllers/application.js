@@ -43,16 +43,14 @@ export default class ApplicationController extends Controller {
   async confirmCloseSessions() {
     await this.ipc.invoke('stopAll');
     if (this.isAppQuitting) {
-      // We have to set the logout modal to false to ensure it does not
-      // render if user first attempted to signout, setting isLoggingOut to true
-      this.isLoggingOut = false;
       this.isAppQuitting = false;
       this.close();
     } else {
-      this.isLoggingOut = false;
       // this.session.invalidate() comes from Ember Simple Auth BaseSessionService
       this.session.invalidate();
     }
+
+    this.isLoggingOut = false;
   }
 
   /**
@@ -127,8 +125,6 @@ export default class ApplicationController extends Controller {
 
   willDestroy() {
     super.willDestroy(...arguments);
-    if (this.removeOnAppQuitListener) {
-      this.removeOnAppQuitListener();
-    }
+    this.removeOnAppQuitListener?.();
   }
 }

@@ -22,11 +22,12 @@ contextBridge.exposeInMainWorld('terminal', {
   },
   receive: (callback, id) => {
     const incomingDataChannel = `terminalIncomingData-${id}`;
-    ipcRenderer.on(incomingDataChannel, (_event, value) => callback(value));
+    const listenerCallback = (_event, value) => callback(value);
+    ipcRenderer.on(incomingDataChannel, listenerCallback);
 
     // Return a function for the caller to handle cleaning up the listener
     return () => {
-      return ipcRenderer.removeListener(incomingDataChannel, callback);
+      return ipcRenderer.removeListener(incomingDataChannel, listenerCallback);
     };
   },
   create: (vars) => {
@@ -64,15 +65,15 @@ process.once('loaded', () => {
 
 /**
  * Listener on electron app when user triggers before-quit event
- * See docs for more info on this implementation:
- * https://www.electronjs.org/docs/latest/tutorial/security#how-17
  */
 contextBridge.exposeInMainWorld('electron', {
   onAppQuit: (callback) => {
-    ipcRenderer.on('onAppQuit', (_event, value) => callback(value));
+    // Don't pass in callback directly so users can't access passed in event for security
+    const listenerCallback = () => callback();
+    ipcRenderer.on('onAppQuit', listenerCallback);
 
     return () => {
-      return ipcRenderer.removeListener('onAppQuit', callback);
+      return ipcRenderer.removeListener('onAppQuit', listenerCallback);
     };
   },
 });
