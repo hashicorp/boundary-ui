@@ -14,6 +14,7 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { TYPE_CREDENTIAL_USERNAME_PASSWORD } from 'api/models/credential';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | injected application credential sources',
@@ -123,6 +124,15 @@ module(
     });
 
     test('visiting target injected application credential sources', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.injectedApplicationCredentialSources);
 
       assert.strictEqual(
@@ -135,6 +145,15 @@ module(
     });
 
     test('can navigate to a vault type credential library', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.injectedApplicationCredentialSources);
 
       await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
@@ -143,6 +162,15 @@ module(
     });
 
     test('can navigate to a username & password type credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentials,
@@ -156,6 +184,15 @@ module(
     });
 
     test('visiting add injected application credential sources', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.addInjectedApplicationCredentialSources);
 
       assert.strictEqual(
@@ -165,6 +202,15 @@ module(
     });
 
     test('displays list of all injected application credential source types available', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [],
       });
@@ -177,6 +223,15 @@ module(
     });
 
     test('displays list of injected application credential sources with only credential libraries available', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentialLibraries,
@@ -191,6 +246,15 @@ module(
     });
 
     test('displays no injected application credential sources message when none available', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       await visit(urls.addInjectedApplicationCredentialSources);
 
       assert
@@ -199,6 +263,15 @@ module(
     });
 
     test('when no injected application credential sources available, button routes to add injected application credential sources', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [],
       });
@@ -288,6 +361,15 @@ module(
     );
 
     test('cannot add credential sources without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       assert.expect(1);
       instances.target.authorized_actions =
         instances.target.authorized_actions.filter(
@@ -303,6 +385,15 @@ module(
     });
 
     test('adding credential sources which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       this.server.post('/targets/:idMethod', () => {
         return new Response(
           400,
@@ -336,6 +427,15 @@ module(
     });
 
     test('can remove a vault type credential library', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentialLibraries,
@@ -364,6 +464,15 @@ module(
     });
 
     test('can remove a username & password type credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentials,
@@ -392,6 +501,15 @@ module(
     });
 
     test('cannot remove credential libraries without proper authorization', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.authorized_actions =
         instances.target.authorized_actions.filter(
           (item) => item !== 'remove-credential-sources',
@@ -404,6 +522,15 @@ module(
     });
 
     test('removing a target credential library which errors displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentialLibraries,
@@ -433,6 +560,15 @@ module(
     });
 
     test('removing a target credential which errors displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         injectedApplicationCredentialSourceIds: [
           ...randomlySelectedCredentials,

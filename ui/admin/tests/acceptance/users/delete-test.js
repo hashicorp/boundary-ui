@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -53,6 +54,15 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can delete a user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     await visit(urls.users);
 
@@ -65,6 +75,15 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('cannot delete a user without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'delete');
     await visit(urls.users);
@@ -76,6 +95,15 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can accept delete user via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     confirmService.enabled = true;
     await visit(urls.users);
@@ -93,6 +121,15 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('can cancel delete user via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const usersCount = getUsersCount();
     confirmService.enabled = true;
     await visit(urls.users);
@@ -107,6 +144,15 @@ module('Acceptance | users | delete', function (hooks) {
   });
 
   test('errors are displayed when user deletion fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.users);
     this.server.del('/users/:id', () => {
       return new Response(

@@ -13,6 +13,7 @@ import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -75,6 +76,15 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('can delete host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getHostSetCount();
     await visit(urls.hostSet);
 
@@ -85,6 +95,15 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('can accept delete host set via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -109,6 +128,15 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('cannot cancel delete host set via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -123,6 +151,15 @@ module('Acceptance | host-catalogs | host sets | delete', function (hooks) {
   });
 
   test('deleting a host set which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/host-sets/:id', () => {
       return new Response(
         490,

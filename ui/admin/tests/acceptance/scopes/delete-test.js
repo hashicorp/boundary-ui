@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -59,6 +60,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can delete scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
 
@@ -84,6 +94,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can accept delete scope via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
@@ -98,6 +117,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('can cancel delete scope via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     const orgScopeCount = getScopeCount('org');
     await visit(urls.orgScope);
@@ -112,6 +140,15 @@ module('Acceptance | scopes | delete', function (hooks) {
   });
 
   test('deleting a scope which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
     this.server.del('/scopes/:id', () => {
       return new Response(

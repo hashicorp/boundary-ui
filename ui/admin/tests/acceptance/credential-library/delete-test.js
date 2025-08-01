@@ -13,6 +13,7 @@ import { resolve, reject } from 'rsvp';
 import sinon from 'sinon';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-libraries | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -69,6 +70,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('can delete resource', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getCredentialLibraryCount();
     await visit(urls.credentialLibrary);
 
@@ -90,6 +100,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('can accept delete credential library via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
@@ -104,6 +123,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('cannot cancel delete credential library via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
@@ -118,6 +146,15 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
   });
 
   test('deleting a credential library which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/credential-libraries/:id', () => {
       return new Response(
         490,

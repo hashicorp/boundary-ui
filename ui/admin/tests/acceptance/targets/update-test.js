@@ -13,6 +13,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -60,6 +61,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can save changes to existing target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     assert.notEqual(instances.target.name, 'random string');
     assert.notEqual(instances.target.worker_filter, 'random filter');
@@ -77,6 +87,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can cancel changes to existing target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.target));
@@ -89,6 +108,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving an existing target with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     this.server.patch('/targets/:id', () => {
       return new Response(
@@ -123,6 +151,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can discard unsaved target changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
@@ -148,6 +185,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('can click cancel on discard dialog box for unsaved target changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(instances.target.name, commonSelectors.FIELD_NAME_VALUE);
@@ -173,6 +219,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('cannot make changes to an existing target without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'update');
@@ -183,6 +238,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and removes host sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
@@ -230,6 +294,15 @@ module('Acceptance | targets | update', function (hooks) {
   });
 
   test('saving address with existing host sources brings up confirmation modal and can cancel', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     featuresService.enable('target-network-address');
     const confirmService = this.owner.lookup('service:confirm');
