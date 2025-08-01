@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS target (
     description TEXT,
     address TEXT,
     scope_id TEXT NOT NULL,
-    created_time TIMESTAMP,
+    created_time TEXT NOT NULL,
     data TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_target_scope_id_created_time ON target(scope_id, created_time DESC);
