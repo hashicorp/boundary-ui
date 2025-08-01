@@ -7,6 +7,15 @@ if (!reportPath) {
 }
 const reportContents = JSON.parse(readFileSync(reportPath).toString());
 
+function getKeyNameFromProperty(property) {
+  // property key can be of type `Identifier`: ({ key: "hello" }) or `StringLiteral` where the key is quoted: ({ "key": "hello" })
+  // and the path for determining the key's name is different depending on if its an `Identifier` or `StringLiteral`
+  const nameForIdentifier = property.key.name;
+  const nameForStringLiteral = property.key.value;
+
+  return nameForIdentifier ?? nameForStringLiteral;
+}
+
 export default function transformer(file, api) {
   const j = api.jscodeshift;
   const f = j(file.source);
@@ -103,21 +112,21 @@ export default function transformer(file, api) {
       setRunOptionsArgs = setRunOptions
         .get()
         .value.arguments[0].properties.filter((property) => {
-          return property.key.name !== 'rules';
+          return getKeyNameFromProperty(property) !== 'rules';
         });
 
       // get the rules from within setRunOptions
       setRunOptionsRules = setRunOptions
         .get()
         .value.arguments[0].properties.find((property) => {
-          return property.key.name === 'rules';
+          return getKeyNameFromProperty(property) === 'rules';
         });
 
       if (setRunOptionsRules) {
         setRunOptionsRules.value.properties.forEach((rule) => {
           const ruleAlreadyIgnored = rule.value.properties.some((property) => {
             return (
-              property.key.name === 'enabled' && property.value.value === false
+              getKeyNameFromProperty(property) === 'enabled' && property.value.value === false
             );
           });
 
