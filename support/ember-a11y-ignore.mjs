@@ -55,6 +55,7 @@ export default function transformer(file, api) {
     // with nested modules separated by " > "
     const moduleName = closestModules(test).join(' > ');
 
+    const violationsIdsIncluded = new Set();
     const violations = reportContents
       .filter((testEntry) => {
         // search the report for a matching module name and test name
@@ -63,7 +64,16 @@ export default function transformer(file, api) {
         );
       })
       .map((testEntry) => testEntry.violations)
-      .flat();
+      .flat()
+      .filter((violation) => {
+        if (!violationsIdsIncluded.has(violation.id)) {
+          violationsIdsIncluded.add(violation.id);
+          return true;
+        }
+
+        return false;
+      });
+
     const violationNames = new Set(
       violations
         .map((v) => {
@@ -87,11 +97,15 @@ export default function transformer(file, api) {
     if (existingEmberA11yImport.length > 0) {
       const importNode = existingEmberA11yImport.get();
 
-      const hasExistingSetRunOptionImport = importNode.value.specifiers.some(specifier => specifier.imported.name === 'setRunOptions');
+      const hasExistingSetRunOptionImport = importNode.value.specifiers.some(
+        (specifier) => specifier.imported.name === 'setRunOptions',
+      );
 
       importNode.value.specifiers = [
         ...importNode.value.specifiers,
-        ...(hasExistingSetRunOptionImport ? [] : runOptionsEmberA11yImport.specifiers),
+        ...(hasExistingSetRunOptionImport
+          ? []
+          : runOptionsEmberA11yImport.specifiers),
       ];
     } else {
       f.find(j.ImportDeclaration).at(-1).insertAfter(runOptionsEmberA11yImport);
@@ -123,24 +137,27 @@ export default function transformer(file, api) {
         });
 
       if (setRunOptionsRules) {
-        setRunOptionsRules.value.properties.forEach((rule) => {
-          const ruleAlreadyIgnored = rule.value.properties.some((property) => {
-            return (
-              getKeyNameFromProperty(property) === 'enabled' && property.value.value === false
-            );
-          });
+        setRunOptionsRules.value.properties.forEach((ruleProperty) => {
+          const ruleAlreadyIgnored = ruleProperty.value.properties.some(
+            (property) => {
+              return (
+                getKeyNameFromProperty(property) === 'enabled' &&
+                property.value.value === false
+              );
+            },
+          );
 
           // track rules that are already ignored so that they aren't updated (preserves existing comment and timestamp)
           if (ruleAlreadyIgnored) {
-            alreadyIgnoredRules.add(rule.key.value);
+            alreadyIgnoredRules.add(getKeyNameFromProperty(ruleProperty));
           }
         });
 
         // if rules currently existing within `setRunOptions` then filter out any
         // rules that currently have violations those will be handled separately
         setRunOptionsRules = setRunOptionsRules.value.properties.filter(
-          (rule) => {
-            const ruleName = rule.key.value;
+          (ruleProperty) => {
+            const ruleName = getKeyNameFromProperty(ruleProperty);
             return (
               !violationNames.has(ruleName) || alreadyIgnoredRules.has(ruleName)
             );
@@ -164,7 +181,7 @@ export default function transformer(file, api) {
 
         enabledFalseProperty.comments = [
           j.commentLine(
-            ` [ember-a11y-ignore]: axe rule "${violation.id}" automatically ignored on ${new Date().toISOString()}`,
+            ` [ember-a11y-ignore]: axe rule "${violation.id}" automatically ignored on ${new Date().toISOString().split('T')[0]}`,
             true,
             false,
           ),
@@ -211,5 +228,8 @@ export default function transformer(file, api) {
   // the codemod will insert a newline between existing import statements,
   // this regex removes the extra new line
   //
-  return code.replace(/(?<newline>\n)(import .*ember-a11y-testing\/test-support.*)/g, "$2");
+  return code.replace(
+    /(?<newline>\n)(import .*ember-a11y-testing\/test-support.*)/g,
+    '$2',
+  );
 }
