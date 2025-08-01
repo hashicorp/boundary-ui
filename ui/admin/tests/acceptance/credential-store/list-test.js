@@ -4,10 +4,11 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn, waitFor, currentURL } from '@ember/test-helpers';
+import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import {
@@ -20,6 +21,7 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 module('Acceptance | credential-stores | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
 
   const instances = {

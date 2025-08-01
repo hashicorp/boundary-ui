@@ -37,8 +37,9 @@ module.exports = {
     const env = this.parent?.app?.env ?? 'production';
     const { enableSqlite } = this.parent?.app?.options[this.name] ?? {};
 
-    // If sqlite is not enabled, we don't need to build the workers
-    if (!enableSqlite) {
+    // If sqlite is not enabled and we're not running a test directly in the addon,
+    // we don't need to build the workers
+    if (!enableSqlite && this.app?.env !== 'test') {
       return tree;
     }
 
