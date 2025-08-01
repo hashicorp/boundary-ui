@@ -4,7 +4,13 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
+import {
+  visit,
+  currentURL,
+  fillIn,
+  click,
+  triggerEvent,
+} from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
@@ -15,6 +21,8 @@ import {
   invalidateSession,
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
+import Service from '@ember/service';
+import sinon from 'sinon';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -58,6 +66,13 @@ module('Acceptance | authentication', function (hooks) {
     sessions: null,
   };
 
+  const SIGNOUT_BTN = '[data-test-nav-signout-btn]';
+  const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
+  const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
+  const MODAL_CANCEL_BTN = '.hds-modal__footer .hds-button--color-secondary';
+  const HEADER_DROPDOWN_BTN =
+    '.rose-header-utilities .header-dropdown-button-override button';
+
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
     const clusterUrl = test.owner.lookup('service:clusterUrl');
@@ -70,6 +85,9 @@ module('Acceptance | authentication', function (hooks) {
     });
 
     await invalidateSession();
+
+    const ipcService = this.owner.lookup('service:ipc');
+    this.ipcStub = sinon.stub(ipcService, 'invoke');
 
     // create scopes
     instances.scopes.global = this.server.create('scope', { id: 'global' });
@@ -128,6 +146,10 @@ module('Acceptance | authentication', function (hooks) {
     setDefaultClusterUrl(this);
   });
 
+  hooks.afterEach(async function () {
+    sinon.restore();
+  });
+
   test('visiting index while unauthenticated redirects to global authenticate method', async function (assert) {
     assert.expect(2);
     await visit(urls.index);
@@ -183,16 +205,11 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.ok(currentSession().isAuthenticated);
 
-    await click(
-      '.rose-header-utilities .header-dropdown-button-override button',
-    );
+    await click(HEADER_DROPDOWN_BTN);
 
-    assert.strictEqual(
-      find('[data-test-sign-out]').textContent.trim(),
-      'Sign Out',
-    );
+    assert.dom(SIGNOUT_BTN).includesText('Sign Out');
 
-    await click('[data-test-sign-out]');
+    await click(SIGNOUT_BTN);
 
     assert.notOk(currentSession().isAuthenticated);
   });
@@ -234,5 +251,96 @@ module('Acceptance | authentication', function (hooks) {
 
     assert.dom('[data-test-no-auth-methods]').includesText('No Auth Methods');
     assert.dom('.change-origin').exists();
+  });
+
+  test('signing out with running sessions renders signout modal', async function (assert) {
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await authenticateSession({ username: 'test' });
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(HEADER_DROPDOWN_BTN);
+
+    await click(SIGNOUT_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
+
+    await click(MODAL_CANCEL_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
+    assert.ok(currentSession().isAuthenticated);
+  });
+
+  test('confirming signout via modal stops sessions and logs out user', async function (assert) {
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await authenticateSession({ username: 'test' });
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(HEADER_DROPDOWN_BTN);
+
+    await click(SIGNOUT_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
+
+    await click(MODAL_CONFIRM_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
+    assert.ok(stopAllSessions.calledOnce);
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
+    // We need to encapsulate the event listener inside a mocked window service to ensure
+    // the entire event is torn down (including the mocked window), since "window" exists
+    // globally across all tests, and we don't want tests impacting one another
+    const mockElectronEvent = class WindowElectronMock extends Service {
+      electron = {
+        onAppQuit: (callback) => {
+          window.addEventListener('onAppQuit', callback);
+          return () => {
+            window.removeEventListener('onAppQuit', callback);
+          };
+        },
+      };
+    };
+
+    this.owner.register('service:browser/window', mockElectronEvent);
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
+    const quitApp = this.ipcStub.withArgs('closeWindow');
+
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await visit(urls.authenticate.methods.global);
+
+    await authenticateSession({ username: 'test' });
+
+    assert.ok(currentSession().isAuthenticated);
+
+    await click(HEADER_DROPDOWN_BTN);
+
+    await click(SIGNOUT_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
+
+    await triggerEvent(window, 'onAppQuit');
+
+    assert
+      .dom(MODAL_CLOSE_SESSIONS)
+      .includesText('Close sessions before quitting?');
+
+    await click(MODAL_CONFIRM_BTN);
+    assert.ok(stopAllSessions.calledOnce);
+    assert.ok(quitApp.calledOnce);
   });
 });

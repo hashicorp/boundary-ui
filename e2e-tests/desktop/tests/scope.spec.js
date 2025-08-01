@@ -54,7 +54,7 @@ test.describe('Scope tests', () => {
     await expect(headerNavLocator).toBeVisible();
     await expect(
       headerNavLocator.locator('.hds-dropdown-toggle-button'),
-    ).toHaveText('Global');
+    ).toHaveText('Global', { ignoreCase: true });
 
     await expect(
       authedPage.getByRole('link', { name: targetA.name }),

@@ -7,22 +7,63 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+
 export default class ApplicationController extends Controller {
   // =services
 
-  @service ipc;
-  @service session;
   @service clusterUrl;
   @service flashMessages;
+  @service ipc;
+  @service session;
+  @service('browser/window') window;
+
+  @tracked isLoggingOut = false;
+  @tracked isAppQuitting = false;
+
+  // =attributes
+  removeOnAppQuitListener;
+
+  constructor() {
+    super(...arguments);
+    // Listen for when user attempts to quit app
+    // Setup removeOnAppQuitListener to destroy the listener afterwards
+    this.removeOnAppQuitListener = this.window.electron?.onAppQuit(() => {
+      this.isAppQuitting = true;
+    });
+  }
 
   // =actions
 
   /**
-   * Delegates invalidation to the session service.
+   * Stop all active/pending target sessions
+   * Logout or close app
    */
   @action
-  invalidateSession() {
-    this.session.invalidate();
+  async confirmCloseSessions() {
+    await this.ipc.invoke('stopAll');
+    if (this.isAppQuitting) {
+      this.isAppQuitting = false;
+      this.close();
+    } else {
+      // this.session.invalidate() comes from Ember Simple Auth BaseSessionService
+      this.session.invalidate();
+    }
+
+    this.isLoggingOut = false;
+  }
+
+  /**
+   * Only renders the signout modal if target sessions are running
+   */
+  @action
+  async showModalOrLogout() {
+    const hasRunningSessions = await this.ipc.invoke('hasRunningSessions');
+    if (hasRunningSessions) {
+      this.isLoggingOut = true;
+    } else {
+      this.session.invalidate();
+    }
   }
 
   /**
@@ -32,7 +73,7 @@ export default class ApplicationController extends Controller {
   @action
   disconnect() {
     this.clusterUrl.resetClusterUrl();
-    this.invalidateSession();
+    this.session.invalidate();
   }
 
   @action
@@ -74,5 +115,16 @@ export default class ApplicationController extends Controller {
         rootEl.classList.remove('rose-theme-dark');
         rootEl.classList.remove('rose-theme-light');
     }
+  }
+
+  @action
+  cancel() {
+    this.isLoggingOut = false;
+    this.isAppQuitting = false;
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.removeOnAppQuitListener?.();
   }
 }

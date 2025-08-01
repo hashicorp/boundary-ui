@@ -12,9 +12,9 @@ module('Unit | Controller | application', function (hooks) {
   setupTest(hooks);
 
   let controller;
-  let session;
   let clusterUrl;
   let mockIPC;
+  let session;
 
   const setupMockIpc = (test) => {
     test.owner.register('service:browser/window', WindowMockIPC);
@@ -23,10 +23,10 @@ module('Unit | Controller | application', function (hooks) {
 
   hooks.beforeEach(async function () {
     await authenticateSession({});
+    setupMockIpc(this);
     controller = this.owner.lookup('controller:application');
     session = this.owner.lookup('service:session');
     clusterUrl = this.owner.lookup('service:cluster-url');
-    setupMockIpc(this);
   });
 
   test('it exists', function (assert) {
@@ -34,14 +34,8 @@ module('Unit | Controller | application', function (hooks) {
     assert.ok(controller.minimize);
     assert.ok(controller.toggleFullScreen);
     assert.ok(controller.close);
-  });
-
-  test('invalidateSession action de-authenticates a user', async function (assert) {
-    assert.true(session.isAuthenticated);
-
-    await controller.invalidateSession();
-
-    assert.false(session.isAuthenticated);
+    assert.ok(controller.confirmCloseSessions);
+    assert.ok(controller.showModalOrLogout);
   });
 
   test('toggleTheme action sets theme to specified value', function (assert) {

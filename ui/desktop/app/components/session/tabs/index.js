@@ -39,7 +39,7 @@ export default class SessionTerminalTabsComponent extends Component {
 
   id;
   terminal;
-  removeListener;
+  removeTerminalListener;
 
   // =actions
 
@@ -111,9 +111,7 @@ export default class SessionTerminalTabsComponent extends Component {
     }
     window.terminal?.remove(this.id);
     window.onresize = null;
-    if (this.removeListener) {
-      this.removeListener();
-    }
+    this.removeTerminalListener?.();
   }
 
   #setupTerminal(fitAddon, xterm, termContainer) {
@@ -122,7 +120,7 @@ export default class SessionTerminalTabsComponent extends Component {
     xterm.onData((data) => window.terminal.send(data, this.id));
 
     // Save the handler to cleanup the listener on the renderer process later
-    this.removeListener = window.terminal.receive((event, value) => {
+    this.removeTerminalListener = window.terminal.receive((value) => {
       xterm.write(value);
     }, this.id);
 

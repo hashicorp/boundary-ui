@@ -343,6 +343,12 @@ session:
     connected:
       title: Connected
       description: You can now access {targetDisplayName}
+    stop-sessions-and-signout:
+      title: Sign out of Boundary?
+      description: Signing out will stop all active and pending target sessions. Are you sure you want to sign out?
+    stop-sessions-before-quit:
+      title: Close sessions before quitting?
+      description: Quitting the app will stop all active and pending sessions. Are you sure you want to quit?
   actions:
     connect: Connect
     end: End session
