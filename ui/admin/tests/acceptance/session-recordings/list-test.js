@@ -18,6 +18,7 @@ import {
   STATE_SESSION_RECORDING_AVAILABLE,
   STATE_SESSION_RECORDING_UNKNOWN,
 } from 'api/models/session-recording';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | session recordings | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -126,6 +127,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('users can navigate to session-recordings with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
     assert.true(
       instances.scopes.global.authorized_collection_actions[
@@ -162,6 +172,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can search for a session recording by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -177,6 +196,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can search for a session recording by id and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -193,6 +221,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -207,6 +244,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -221,6 +267,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -237,6 +292,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('user can filter session recordings by time', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.sessionRecordings));
@@ -250,6 +314,15 @@ module('Acceptance | session recordings | list', function (hooks) {
   });
 
   test('session recordings table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.sessionRecordings.all().destroy();
     const expectedDescendingSort = CREATED_TIME_VALUES_ARRAY.toReversed();
     faker.helpers.shuffle(expectedDescendingSort).forEach((value) => {

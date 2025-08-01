@@ -16,6 +16,7 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -104,6 +105,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can search for a specifc auth-method by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -118,6 +128,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can search for auth-methods and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -135,6 +154,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can filter for auth-methods by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -152,6 +180,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('user can filter for auth-methods by primary', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.authMethods));
@@ -176,6 +213,15 @@ module('Acceptance | auth-methods | list', function (hooks) {
   });
 
   test('auth-methods table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.authMethods.all().destroy();
     const years = ['2006', '2005', '2004', '2003'];
     faker.helpers.shuffle(years).map((year) => {

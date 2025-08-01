@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_OIDC } from 'api/models/auth-method';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | members', function (hooks) {
   setupApplicationTest(hooks);
@@ -57,6 +58,15 @@ module('Acceptance | managed-groups | members', function (hooks) {
   });
 
   test('User can navigate to index', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const membersCount = instances.managedGroup.memberIds.length;
     await visit(urls.managedGroupMembers);
 

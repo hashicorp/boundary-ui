@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +75,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('can create new host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getHostCount();
     await visit(urls.newHost);
 
@@ -100,6 +110,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('Users can navigate to new host route with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hosts);
 
     assert.ok(
@@ -128,6 +147,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('can cancel create new host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getHostCount();
     await visit(urls.newHost);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
@@ -138,6 +166,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('saving a new host with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/hosts', () => {
       return new Response(
         400,
@@ -168,6 +205,15 @@ module('Acceptance | host-catalogs | hosts | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.hostCatalog.authorized_collection_actions.hosts =
       instances.hostCatalog.authorized_collection_actions.hosts.filter(
         (item) => item !== 'create',

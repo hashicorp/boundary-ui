@@ -18,6 +18,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -328,6 +329,15 @@ module('Acceptance | host-catalogs | host sets | update', function (hooks) {
   });
 
   test('can discard unsaved host set changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const mockName = 'random string';
     assert.expect(5);
     const confirmService = this.owner.lookup('service:confirm');

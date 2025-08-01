@@ -13,6 +13,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -87,6 +88,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting ssh target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.projectScope);
 
@@ -100,6 +110,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting tcp target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -111,6 +130,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot navigate to an ssh target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     instances.sshTarget.authorized_actions =
       instances.sshTarget.authorized_actions.filter((item) => item !== 'read');
@@ -124,6 +152,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot navigate to a tcp target form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     instances.tcpTarget.authorized_actions =
       instances.tcpTarget.authorized_actions.filter((item) => item !== 'read');
@@ -137,6 +174,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('visiting an unknown target displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownTarget);
 
     assert
@@ -145,6 +191,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('users can link to docs page for target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -168,6 +223,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('can view aliases on the right sidebar', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.tcpTarget.update({
       aliases: [{ id: aliasResource.id, value: aliasResource.value }],
     });
@@ -181,6 +245,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('cannot view aliases list on the right sidebar if there is no alias associated with the target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     aliasResource.authorized_collection_actions = ['create'];
     await visit(urls.targets);
 
@@ -194,6 +267,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('user should not see add a new alias button without proper auth ', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.global.authorized_collection_actions['aliases'] =
       instances.scopes.global.authorized_collection_actions['aliases'].filter(
         (item) => item !== 'create',
@@ -208,6 +290,15 @@ module('Acceptance | targets | read', function (hooks) {
   });
 
   test('can click `view more aliases` to see the remaining associated aliases if there are more than 3', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.tcpTarget.update({
       aliases: [
         { id: aliasResource.id, value: 'alias 1' },

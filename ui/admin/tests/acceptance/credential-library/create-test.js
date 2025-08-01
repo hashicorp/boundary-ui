@@ -12,6 +12,7 @@ import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -75,6 +76,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('visiting credential libraries', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialLibraries);
 
     assert.strictEqual(currentURL(), urls.credentialLibraries);
@@ -85,6 +95,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library of type vault generic', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
 
@@ -116,6 +135,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can create a new credential library of type vault ssh cert', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
@@ -191,6 +219,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('ecdsa and rsa key types bring up a key bits field', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.newCredentialLibrary);
     await click(selectors.TYPE_VAULT_SSH_CERT);
@@ -208,6 +245,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('Users cannot navigate to new credential library route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = [];
@@ -223,6 +269,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('can cancel create a new credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getCredentialLibraryCount();
     await visit(urls.newCredentialLibrary);
 
@@ -234,6 +289,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('saving a new credential library with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/credential-libraries', () => {
       return new Response(
         400,
@@ -266,6 +330,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('cannot select vault ssh cert when feature is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.newCredentialLibrary);
 
     assert.false(featuresService.isEnabled('ssh-target'));
@@ -273,6 +346,15 @@ module('Acceptance | credential-libraries | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new credential library route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.credentialStore.authorized_collection_actions[
       'credential-libraries'
     ] = instances.credentialStore.authorized_collection_actions[

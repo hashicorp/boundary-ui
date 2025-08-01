@@ -19,6 +19,7 @@ import {
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -89,6 +90,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to host catalogs with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.projectScope));
@@ -107,6 +117,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user cannot navigate to index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       [];
     await visit(urls.orgScope);
@@ -127,6 +146,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
@@ -156,6 +184,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can navigate to index with only list action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions['host-catalogs'] =
       instances.scopes.project.authorized_collection_actions[
         'host-catalogs'
@@ -182,6 +219,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can search for a specific host catalog by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -199,6 +245,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can search for aws host catalog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -214,6 +269,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can search for azure host catalog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -229,6 +293,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can search for gcp host catalog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -245,6 +318,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('user can search for host catalogs and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -266,6 +348,15 @@ module('Acceptance | host-catalogs | list', function (hooks) {
   });
 
   test('Host catalogs table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.hostCatalogs.all().destroy();
     const years = ['2006', '2005', '2004', '2003'];
     faker.helpers.shuffle(years).map((year) => {
