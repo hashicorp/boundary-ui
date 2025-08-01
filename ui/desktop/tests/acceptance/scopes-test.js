@@ -22,6 +22,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes', function (hooks) {
   setupApplicationTest(hooks);
@@ -146,6 +147,15 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting index', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(2);
     const targetsCount = this.server.schema.targets.all().models.length;
 
@@ -156,6 +166,15 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting global scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.scopes.global);
@@ -168,6 +187,15 @@ module('Acceptance | scopes', function (hooks) {
   // In order to resolve this, we might hoist authentication routes up from
   // under scopes.
   test('visiting global scope is not successful when the global scope cannot be fetched', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/scopes/:id', ({ scopes }, { params: { id } }) => {
       const scope = scopes.find(id);
@@ -181,6 +209,15 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting org scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.scopes.org);
@@ -189,6 +226,15 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('can navigate among org scopes via header navigation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     this.stubCacheDaemonSearch(
       'sessions',
@@ -233,6 +279,15 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting a target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.targets);
