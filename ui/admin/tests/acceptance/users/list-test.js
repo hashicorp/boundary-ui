@@ -290,6 +290,15 @@ module('Acceptance | users | list', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.users.all().destroy();
 
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {

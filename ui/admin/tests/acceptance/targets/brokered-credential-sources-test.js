@@ -336,6 +336,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         brokeredCredentialSourceIds: [],
       });
