@@ -10,7 +10,10 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -426,5 +429,90 @@ module('Acceptance | credential-libraries | create', function (hooks) {
       ].includes('create'),
     );
     assert.strictEqual(currentURL(), urls.credentialLibraries);
+  });
+
+  test('can create a new credential library of type vault ldap', async function (assert) {
+    await visit(urls.newCredentialLibrary);
+
+    await click(selectors.TYPE_VAULT_LDAP);
+
+    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(
+      this.server.schema.credentialLibraries.where({
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      }).length,
+      1,
+    );
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+    });
+
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.attributes.path,
+      selectors.FIELD_VAULT_PATH_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.credentialType,
+      selectors.FIELD_CRED_TYPE_UPD_VALUE,
+    );
+  });
+
+  test('can create a new credential library with username, password and domain type for vault ldap', async function (assert) {
+    const credentialLibraryCount = getCredentialLibraryCount();
+    const usernamePasswordDomainCredentialLibraryCount =
+      getUsernamePasswordDomainCredentialLibraryCount();
+    await visit(urls.newCredentialLibrary);
+
+    await click(selectors.TYPE_VAULT_LDAP);
+
+    await fillIn(selectors.FIELD_VAULT_PATH, selectors.FIELD_VAULT_PATH_VALUE);
+    await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
+
+    await select(
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT,
+      selectors.FIELD_CRED_MAP_OVERRIDES_SELECT_DOMAIN_VALUE,
+    );
+    await fillIn(selectors.FIELD_CRED_MAP_OVERRIDES_INPUT, 'domain');
+
+    await click(selectors.FIELD_CRED_MAP_OVERRIDES_BTN);
+    await click(commonSelectors.SAVE_BTN);
+
+    assert.strictEqual(getCredentialLibraryCount(), credentialLibraryCount + 1);
+    assert.strictEqual(
+      getUsernamePasswordDomainCredentialLibraryCount(),
+      usernamePasswordDomainCredentialLibraryCount + 1,
+    );
+
+    const credentialLibrary = this.server.schema.credentialLibraries.findBy({
+      type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+    });
+
+    assert.strictEqual(
+      credentialLibrary.name,
+      commonSelectors.FIELD_NAME_VALUE,
+    );
+    assert.strictEqual(
+      credentialLibrary.credentialType,
+      selectors.FIELD_CRED_TYPE_UPD_VALUE,
+    );
+    assert.deepEqual(credentialLibrary.credentialMappingOverrides, {
+      domain_attribute: 'domain',
+    });
+  });
+
+  test('default `vault-generic` credential library is selected when `ssh-target` feature is not enabled and user manually sets `type` in the query params', async function (assert) {
+    await visit(`${urls.newCredentialLibrary}?type=vault-ssh-certificate`);
+
+    assert.dom(selectors.TYPE_VAULT_SSH_CERT).isNotVisible();
+    assert.dom(selectors.TYPE_VAULT_LDAP).isNotChecked();
+    assert.dom(selectors.TYPE_VAULT_GENERIC).isChecked();
   });
 });

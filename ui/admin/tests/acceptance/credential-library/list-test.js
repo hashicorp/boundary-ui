@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP } from 'api/models/credential-library';
 
 module('Acceptance | credential-libraries | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -48,10 +49,19 @@ module('Acceptance | credential-libraries | list', function (hooks) {
       scope: instances.scopes.project,
       credentialStore: instances.credentialStore,
     });
+    instances.vaultLDAPCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      },
+    );
     // Generate route URLs for resources
     urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
     urls.credentialLibraries = `${urls.credentialStore}/credential-libraries`;
+    urls.vaultLDAPCredentialLibrary = `${urls.credentialLibraries}/${instances.vaultLDAPCredentialLibrary.id}`;
     await authenticateSession({});
   });
 
@@ -89,5 +99,13 @@ module('Acceptance | credential-libraries | list', function (hooks) {
     await visit(urls.credentialStore);
 
     assert.dom(commonSelectors.HREF(urls.credentialLibraries)).isVisible();
+  });
+
+  test('User can navigate to vault ldap credential library details', async function (assert) {
+    await visit(urls.credentialLibraries);
+
+    assert
+      .dom(commonSelectors.TABLE_RESOURCE_LINK(urls.vaultLDAPCredentialLibrary))
+      .isVisible();
   });
 });

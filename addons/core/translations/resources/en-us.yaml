@@ -970,6 +970,7 @@ credential-library:
   help:
     vault-generic: Authorize sessions using credentials brokered by Vault
     vault-ssh-certificate: Authorize sessions using the SSH Secrets Engine in Vault
+    vault-ldap: Authorize sessions using the LDAP Secrets Engine in Vault
 credential:
   title: Credential
   title_plural: Credentials

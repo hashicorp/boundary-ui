@@ -15,7 +15,10 @@ import sinon from 'sinon';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
 import { TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN } from 'api/models/credential';
 
 module('Acceptance | credential-libraries | delete', function (hooks) {
@@ -25,6 +28,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
 
   let getCredentialLibraryCount;
   let getUsernamePasswordDomainCredentialLibraryCount;
+  let getVaultLDAPCredentialLibraryCount;
 
   const instances = {
     scopes: {
@@ -42,6 +46,7 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     newCredentialLibrary: null,
     unknownCredentialLibrary: null,
     usernamePasswordDomainCredentialLibrary: null,
+    vaultLDAPCredentialLibrary: null,
   };
 
   hooks.beforeEach(async function () {
@@ -71,6 +76,14 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
         credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
       },
     );
+    instances.vaultLDAPCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      },
+    );
     // Generate route URLs for resources
     urls.credentialStores = `/scopes/${instances.scopes.project.id}/credential-stores`;
     urls.credentialStore = `${urls.credentialStores}/${instances.credentialStore.id}`;
@@ -79,12 +92,18 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     urls.newCredentialLibrary = `${urls.credentialLibraries}/new`;
     urls.unknownCredentialLibrary = `${urls.credentialLibraries}/foo`;
     urls.usernamePasswordDomainCredentialLibrary = `${urls.credentialLibraries}/${instances.usernamePasswordDomainCredentialLibrary.id}`;
+    urls.vaultLDAPCredentialLibrary = `${urls.credentialLibraries}/${instances.vaultLDAPCredentialLibrary.id}`;
     // Generate resource counter
     getCredentialLibraryCount = () =>
       this.server.schema.credentialLibraries.all().models.length;
     getUsernamePasswordDomainCredentialLibraryCount = () => {
       return this.server.schema.credentialLibraries.where({
         credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      }).length;
+    };
+    getVaultLDAPCredentialLibraryCount = () => {
+      return this.server.schema.credentialLibraries.where({
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
       }).length;
     };
     await authenticateSession({});
@@ -206,6 +225,20 @@ module('Acceptance | credential-libraries | delete', function (hooks) {
     assert.strictEqual(
       getUsernamePasswordDomainCredentialLibraryCount(),
       usernamePasswordDomainCredentialLibraryCount - 1,
+    );
+  });
+
+  test('can delete vault ldap credential library type', async function (assert) {
+    const vaultLDAPCredentialLibraryCount =
+      getVaultLDAPCredentialLibraryCount();
+    await visit(urls.vaultLDAPCredentialLibrary);
+
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB);
+    await click(selectors.MANAGE_DROPDOWN_CRED_LIB_DELETE);
+
+    assert.strictEqual(
+      getVaultLDAPCredentialLibraryCount(),
+      vaultLDAPCredentialLibraryCount - 1,
     );
   });
 });

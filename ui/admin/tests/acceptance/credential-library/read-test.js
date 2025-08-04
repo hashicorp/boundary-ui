@@ -12,6 +12,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -187,6 +188,26 @@ module('Acceptance | credential-libraries | read', function (hooks) {
     const url = `${urls.credentialLibraries}/${usernamePasswordDomainCredentialLibrary.id}`;
 
     await visit(url);
+
+    assert.strictEqual(currentURL(), url);
+  });
+
+  test('visiting vault ldap credential library', async function (assert) {
+    const vaultLDAPCredentialLibrary = this.server.create(
+      'credential-library',
+      {
+        scope: instances.scopes.project,
+        credentialStore: instances.credentialStore,
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+      },
+    );
+
+    await visit(urls.credentialLibraries);
+
+    const url = `${urls.credentialLibraries}/${vaultLDAPCredentialLibrary.id}`;
+
+    await visit(url);
+    await a11yAudit();
 
     assert.strictEqual(currentURL(), url);
   });

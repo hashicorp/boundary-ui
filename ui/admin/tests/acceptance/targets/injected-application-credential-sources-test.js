@@ -18,8 +18,11 @@ import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_JSON,
 } from 'api/models/credential';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+} from 'api/models/credential-library';
 
 module(
   'Acceptance | targets | injected application credential sources',
@@ -96,14 +99,18 @@ module(
         scope: instances.scopes.project,
         credentialStore: instances.staticCredentialStore,
       });
-      instances.credentialLibraries = this.server.createList(
-        'credential-library',
-        6,
-        {
+      instances.credentialLibraries = [
+        ...this.server.createList('credential-library', 3, {
           scope: instances.scopes.project,
           credentialStore: instances.vaultCredentialStore,
-        },
-      );
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+        }),
+        ...this.server.createList('credential-library', 3, {
+          scope: instances.scopes.project,
+          credentialStore: instances.vaultCredentialStore,
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+        }),
+      ];
       instances.credentialLibrary = instances.credentialLibraries[0];
       instances.credential = instances.credentials[0];
 

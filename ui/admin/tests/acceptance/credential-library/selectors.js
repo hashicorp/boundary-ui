@@ -37,6 +37,8 @@ export const FIELD_CRED_MAP_OVERRIDES_BTN =
   '[name="credential_mapping_overrides"] button';
 
 export const TYPE_VAULT_SSH_CERT = '[value="vault-ssh-certificate"]';
+export const TYPE_VAULT_LDAP = '[value="vault-ldap"]';
+export const TYPE_VAULT_GENERIC = '[value="vault-generic"]';
 
 export const FIELD_CRIT_OPTS_KEY =
   '[name="critical_options"] tbody td:nth-of-type(1) input';
