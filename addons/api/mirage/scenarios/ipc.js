@@ -246,6 +246,8 @@ export default function initializeMockIPC(server, config) {
     }
     pauseClientAgent() {}
     resumeClientAgent() {}
+    hasRunningSessions() {}
+    stopAll() {}
   }
 
   /**

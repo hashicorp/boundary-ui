@@ -132,7 +132,7 @@ module(
       assert.deepEqual(controller.availableSessions, selectedItems);
     });
 
-    test('cancelSession action action updates session status', async function (assert) {
+    test('cancelSession action updates session status', async function (assert) {
       await visit(urls.sessions);
 
       const session = await store.findRecord('session', instances.session.id);

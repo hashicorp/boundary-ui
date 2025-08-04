@@ -39,8 +39,13 @@ class SessionManager {
     return session?.stop?.();
   }
 
+  /**
+   * Stop all active and pending target sessions
+   * Returning Promise.all() ensures all sessions in the list have been
+   * stopped before calling the next fn
+   */
   stopAll() {
-    this.#sessions.forEach((session) => session.stop());
+    return Promise.all(this.#sessions.map((session) => session.stop()));
   }
 }
 
