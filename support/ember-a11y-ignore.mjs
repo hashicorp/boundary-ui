@@ -48,6 +48,13 @@ export default function transformer(file, api) {
     },
   });
 
+  const testsEach = f.find(j.CallExpression, {
+    callee: {
+      object: { name: 'test' },
+      property: { name: 'each' }
+    }
+  });
+
   function closestModules(test) {
     const modules = [];
     let parent = test.closest(j.CallExpression, {
@@ -69,19 +76,37 @@ export default function transformer(file, api) {
     return modules;
   }
 
-  tests.forEach((_, i) => {
-    const test = tests.at(i);
-    const testName = test.get().value.arguments[0].value;
+  const testHandler = (testAst, i) => {
+    const isTestEach = Boolean(testAst.value.callee.object?.name === 'test' && testAst.value.callee.property?.name === 'each');
+    const test = isTestEach ? testsEach.at(i) : tests.at(i);
+    let testName = test.get().value.arguments[0].value;
+
+    if (isTestEach) {
+      const testArguments = test.get().value.arguments;
+      let eachTestNames;
+      // if the second argument is an object with properties
+      if (testArguments[1]?.properties) {
+        eachTestNames = testArguments[1]?.properties?.map(property => getKeyNameFromProperty(property));
+      } else {
+        // if an array is provided and it's argument is a literal (number, boolean, string) then this is used for the test name
+        // otherwise if it's an object the index in the array is what is used for the test name
+        eachTestNames = testArguments[1].elements.map((element, i) => element.type.endsWith('Literal') ? element.value : i);
+      }
+
+      testName = eachTestNames.map(eachTestName => `${testName} [${eachTestName}]`);
+    } else {
+      testName = [testName];
+    }
+
     // the ember-a11y-testing testem middleware reporter reports the modules as a single string
     // with nested modules separated by " > "
     const moduleName = closestModules(test).join(' > ');
-
     const violationsIdsIncluded = new Set();
     const violations = reportContents
       .filter((testEntry) => {
         // search the report for a matching module name and test name
         return (
-          testEntry.moduleName === moduleName && testEntry.testName === testName
+          testEntry.moduleName === moduleName && testName.includes(testEntry.testName)
         );
       })
       .map((testEntry) => testEntry.violations)
@@ -236,13 +261,17 @@ export default function transformer(file, api) {
         return injectedSetRunOptions;
       });
     } else {
+      const testBodyArgumentIndex = isTestEach ? 2 : 1;
       test
         .get()
-        .value.arguments[1].body.body.unshift(
+        .value.arguments[testBodyArgumentIndex].body.body.unshift(
           j.expressionStatement(injectedSetRunOptions),
         );
     }
-  });
+  };
+
+  tests.forEach(testHandler);
+  testsEach.forEach(testHandler);
 
   const code = f.toSource();
 
