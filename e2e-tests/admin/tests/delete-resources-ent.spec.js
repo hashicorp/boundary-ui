@@ -155,7 +155,7 @@ test(
       await baseResourcePage.deleteResource(page);
 
       // Delete project and org
-      await page.goto(`/scopes/${projectId}`);
+      await page.goto(`/scopes/${projectId}/edit`);
       await baseResourcePage.deleteResource(page);
       await page.goto(`/scopes/${orgId}/edit`);
       await baseResourcePage.deleteResource(page);
