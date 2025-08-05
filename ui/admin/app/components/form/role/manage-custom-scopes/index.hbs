@@ -11,6 +11,20 @@
     @disabled={{@model.role.isSaving}}
     as |form|
   >
+    <Hds::Form::SuperSelect::Multiple::Field
+      @onChange={{fn (mut this.selectedOptions)}}
+      @selected={{this.selectedOptions}}
+      @options={{@model.scopes}}
+      @searchEnabled={{true}}
+      as |F|
+    >
+      <F.Label>Custom Scopes</F.Label>
+      <F.Options>{{~if
+          F.options.isProject
+          (concat (get @model.parentScopeNames F.options.scope.id) '/')
+        ~}}{{or F.options.name F.options.id}}</F.Options>
+    </Hds::Form::SuperSelect::Multiple::Field>
+
     <Hds::SegmentedGroup as |S|>
       <S.TextInput
         @value={{@search}}
