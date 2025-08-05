@@ -123,13 +123,18 @@ class BoundaryApi {
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/groups Groups Documentation} */
       Group: new BoundaryApiClient.GroupServiceApi(openapiConfiguration),
 
+      /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/hosts Hosts Documentation} */
+      Host: new BoundaryApiClient.HostServiceApi(
+        openapiConfiguration,
+      ),
+
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs Host Catalogs Documentation} */
       HostCatalog: new BoundaryApiClient.HostCatalogServiceApi(
         openapiConfiguration,
       ),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-sets Host Sets Documentation} */
-      HotSet: new BoundaryApiClient.HostSetServiceApi(openapiConfiguration),
+      HostSet: new BoundaryApiClient.HostSetServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/managed-groups Managed Groups Documentation} */
       ManagedGroup: new BoundaryApiClient.ManagedGroupServiceApi(
@@ -278,8 +283,8 @@ export const boundaryApiClientTest = base.extend<{
         clients.HostCatalog.hostCatalogServiceDeleteHostCatalog.bind(
           clients.HostCatalog,
         ),
-      host_sets: clients.HotSet.hostSetServiceDeleteHostSet.bind(
-        clients.HotSet,
+      host_sets: clients.HostSet.hostSetServiceDeleteHostSet.bind(
+        clients.HostSet,
       ),
       managed_groups:
         clients.ManagedGroup.managedGroupServiceDeleteManagedGroup.bind(
