@@ -101,7 +101,7 @@ export default class ScopesScopeScopesIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const scopes = await this.store.query(
       'scope',
       {

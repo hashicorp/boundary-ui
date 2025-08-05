@@ -132,7 +132,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const authMethod = await this.store.query(
       'auth-method',
       {
