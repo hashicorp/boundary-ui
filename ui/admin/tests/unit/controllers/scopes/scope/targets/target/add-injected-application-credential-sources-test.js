@@ -18,6 +18,7 @@ import {
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
 import { TYPE_TARGET_SSH, TYPE_TARGET_RDP } from 'api/models/target';
 
@@ -221,6 +222,13 @@ module(
           credential_type: TYPE_CREDENTIAL_SSH_PRIVATE_KEY,
           isInjectableForSSH: true,
           isInjectableForRDP: false,
+        },
+        {
+          model: 'credential-library',
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+          credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+          isInjectableForSSH: false,
+          isInjectableForRDP: true,
         },
       ],
       function (assert, input) {

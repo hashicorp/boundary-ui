@@ -19,9 +19,11 @@ import {
   TYPE_CREDENTIAL_JSON,
 } from 'api/models/credential';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
+
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
 
 module(
@@ -109,6 +111,11 @@ module(
           scope: instances.scopes.project,
           credentialStore: instances.vaultCredentialStore,
           type: TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+        }),
+        ...this.server.createList('credential-library', 3, {
+          scope: instances.scopes.project,
+          credentialStore: instances.vaultCredentialStore,
+          type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
         }),
       ];
       instances.credentialLibrary = instances.credentialLibraries[0];
@@ -470,9 +477,10 @@ module(
           credentialSources: [
             TYPE_CREDENTIAL_USERNAME_PASSWORD,
             TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+            TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
           ],
           action: commonSelectors.SAVE_BTN,
-          expectedCount: 2,
+          expectedCount: 3,
         },
 
         'cancel vault generic credential-library': {
@@ -485,6 +493,11 @@ module(
           action: commonSelectors.CANCEL_BTN,
           expectedCount: 0,
         },
+        'cancel vault ldap credential': {
+          credentialSources: [TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP],
+          action: commonSelectors.CANCEL_BTN,
+          expectedCount: 0,
+        },
         'cancel username, password & domain credential': {
           credentialSources: [TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN],
           action: commonSelectors.CANCEL_BTN,
@@ -494,6 +507,7 @@ module(
           credentialSources: [
             TYPE_CREDENTIAL_USERNAME_PASSWORD,
             TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+            TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
           ],
           action: commonSelectors.CANCEL_BTN,
           expectedCount: 0,

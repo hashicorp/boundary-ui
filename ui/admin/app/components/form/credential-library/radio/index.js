@@ -23,7 +23,7 @@ export default class FormCredentialLibraryRadioComponent extends Component {
     return this.features.isEnabled('ssh-target')
       ? types
       : types.filter(
-          (type) => type !== TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
-        );
+        (type) => type !== TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+      );
   }
 }

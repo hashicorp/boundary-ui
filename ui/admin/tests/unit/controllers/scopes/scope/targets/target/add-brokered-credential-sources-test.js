@@ -13,7 +13,10 @@ import {
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
 } from 'api/models/credential';
-import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import {
+  TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+} from 'api/models/credential-library';
 import { TYPE_TARGET_RDP } from 'api/models/target';
 
 module(
@@ -175,6 +178,11 @@ module(
         type: TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
         credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD,
       });
+      const credentialLibrary3 = store.createRecord('credential-library', {
+        id: 'lib_3',
+        type: TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
+        credential_type: TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
+      });
 
       const target = store.createRecord('target', {
         brokered_credential_source_ids: [{ value: 'cred_2' }],
@@ -183,15 +191,19 @@ module(
 
       controller.set('model', {
         target,
-        credentialLibraries: [credentialLibrary1, credentialLibrary2],
+        credentialLibraries: [
+          credentialLibrary1,
+          credentialLibrary2,
+          credentialLibrary3,
+        ],
         credentials: [credential1],
       });
 
       const filteredCredentialSources = controller.filteredCredentialSources;
-
-      assert.strictEqual(filteredCredentialSources.length, 3);
+      assert.strictEqual(filteredCredentialSources.length, 4);
       assert.true(filteredCredentialSources.includes(credentialLibrary1));
       assert.true(filteredCredentialSources.includes(credentialLibrary2));
+      assert.true(filteredCredentialSources.includes(credentialLibrary3));
       assert.true(filteredCredentialSources.includes(credential1));
       assert.false(filteredCredentialSources.includes(credential2));
     });

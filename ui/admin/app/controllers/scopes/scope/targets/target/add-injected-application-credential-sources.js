@@ -16,6 +16,7 @@ import {
 import {
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
   TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 } from 'api/models/credential-library';
 import { TYPE_TARGET_RDP, TYPE_TARGET_SSH } from 'api/models/target';
 
@@ -29,6 +30,7 @@ const ALLOWED_CREDENTIALS_FOR_RDP = [
   TYPE_CREDENTIAL_USERNAME_PASSWORD_DOMAIN,
   TYPE_CREDENTIAL_USERNAME_PASSWORD,
   TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC,
+  TYPE_CREDENTIAL_LIBRARY_VAULT_LDAP,
 ];
 
 export default class ScopesScopeTargetsTargetAddInjectedApplicationCredentialSourcesController extends Controller {
