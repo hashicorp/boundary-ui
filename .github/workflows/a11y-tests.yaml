@@ -11,7 +11,7 @@ jobs:
     name: Run A11y Tests
     if: contains(github.event.pull_request.labels.*.name, 'a11y-tests')
     runs-on: ${{ fromJSON(vars.RUNNER) }}
-    timeout-minutes: 35
+    timeout-minutes: 40
     steps:
       - uses: browser-actions/setup-chrome@c785b87e244131f27c9f19c1a33e2ead956ab7ce # v1.7.3
         with:
@@ -26,4 +26,31 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install
-      - run: pnpm test-a11y
+      - name: Run a11y tests
+        env:
+          # this will generate the test reports but causes tests to pass even when there a11y failures
+          ENABLE_A11Y_MIDDLEWARE_REPORTER: true
+        run: pnpm test-a11y
+      - name: Consolidate ember a11y reports
+        run: |
+          mkdir ember-a11y-reports
+          jq -s 'map(.[])' ./ui/admin/ember-a11y-report/*.json > ember-a11y-reports/admin.json
+          jq -s 'map(.[])' ./ui/desktop/ember-a11y-report/*.json > ember-a11y-reports/desktop.json
+      - name: Output ember a11y test report summary (admin)
+        run: 'cat ember-a11y-reports/admin.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
+      - name: Output ember a11y test report summary (desktop)
+        run: 'cat ember-a11y-reports/desktop.json | jq "map({moduleName,testName,routes,urls,violations: .violations | map({id, nodes: .nodes | map({failureSummary, targets: .[].[]?.relatedNodes?.[]?.target? })}) })"'
+      - name: Upload ember a11y reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ember-a11y-reports
+          path: ./ember-a11y-reports
+      - name: Report a11y test results status
+        if: always()
+        # fail CI when the combined array length of admin and desktop a11y reports is not 0
+        run: |
+          EMBER_A11Y_FAILURE_COUNT=$(jq -s 'map(.[]) | length' ember-a11y-reports/admin.json ember-a11y-reports/desktop.json)
+          echo "$EMBER_A11Y_FAILURE_COUNT ember-a11y test failures"
+          if [ "$EMBER_A11Y_FAILURE_COUNT" != '0' ]; then
+            exit 1
+          fi
