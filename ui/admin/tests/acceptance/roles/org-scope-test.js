@@ -5,29 +5,31 @@
 
 import { module, test } from 'qunit';
 import {
-  visit,
-  currentURL,
   click,
-  findAll,
+  currentURL,
   fillIn,
+  findAll,
+  visit,
   waitUntil,
 } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import {
-  GRANT_SCOPE_THIS,
   GRANT_SCOPE_CHILDREN,
   GRANT_SCOPE_DESCENDANTS,
+  GRANT_SCOPE_THIS,
 } from 'api/models/role';
 
 module('Acceptance | roles | org-scope', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
 
   let confirmService;
