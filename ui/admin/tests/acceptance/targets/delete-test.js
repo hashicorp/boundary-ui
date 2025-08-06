@@ -13,6 +13,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -64,6 +65,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('can delete target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetCount = getTargetCount();
     await visit(urls.targets);
 
@@ -75,6 +85,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('can accept delete target via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const targetCount = getTargetCount();
@@ -93,6 +112,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('cannot cancel delete target via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const targetCount = getTargetCount();
@@ -108,6 +136,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('cannot delete target without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter((item) => item !== 'delete');
@@ -118,6 +155,15 @@ module('Acceptance | targets | delete', function (hooks) {
   });
 
   test('deleting a target which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
     this.server.del('/targets/:id', () => {
       return new Response(

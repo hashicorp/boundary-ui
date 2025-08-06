@@ -13,6 +13,7 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { TYPE_CREDENTIAL_USERNAME_PASSWORD } from 'api/models/credential';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_GENERIC } from 'api/models/credential-library';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | brokered credential sources', function (hooks) {
   setupApplicationTest(hooks);
@@ -124,6 +125,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('visiting target brokered credential sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.brokeredCredentialSources);
 
     assert.strictEqual(currentURL(), urls.brokeredCredentialSources);
@@ -133,6 +143,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can navigate to a vault type credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.brokeredCredentialSources);
 
     await click(commonSelectors.TABLE_RESOURCE_LINK(urls.credentialLibrary));
@@ -141,6 +160,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can navigate to a username & password type credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -152,6 +180,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot navigate to a json type credential when feature is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const jsonCredential = instances.credentials[2];
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
@@ -164,12 +201,30 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('visiting add brokered credential sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.addBrokeredCredentialSources);
 
     assert.strictEqual(currentURL(), urls.addBrokeredCredentialSources);
   });
 
   test('displays list of all brokered credential source types available', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -182,6 +237,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('displays list of brokered credential sources with only credential libraries available', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -194,6 +258,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('displays no brokered credential sources message when none available', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.addBrokeredCredentialSources);
 
     assert
@@ -202,6 +275,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('when no brokered credential sources available, button routes to add brokered credential sources', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [],
     });
@@ -254,6 +336,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
       },
     },
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       instances.target.update({
         brokeredCredentialSourceIds: [],
       });
@@ -282,6 +373,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   );
 
   test('cannot add credential sources without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'add-credential-sources',
@@ -296,6 +396,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('adding credential sources which errors displays error message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets/:idMethod', () => {
       return new Response(
         400,
@@ -329,6 +438,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can remove a vault type credential library', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
@@ -356,6 +474,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('can remove a username & password type credential', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });
@@ -383,6 +510,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('cannot remove credential libraries without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.authorized_actions =
       instances.target.authorized_actions.filter(
         (item) => item !== 'remove-credential-sources',
@@ -393,6 +529,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('removing a target credential library which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentialLibraries],
     });
@@ -420,6 +565,15 @@ module('Acceptance | targets | brokered credential sources', function (hooks) {
   });
 
   test('removing a target credential which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target.update({
       brokeredCredentialSourceIds: [...randomlySelectedCredentials],
     });

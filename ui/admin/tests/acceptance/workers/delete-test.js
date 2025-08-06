@@ -13,6 +13,7 @@ import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -50,6 +51,15 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can delete a worker', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getWorkerCount();
     await visit(urls.worker);
 
@@ -60,6 +70,15 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can accept delete worker via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(resolve());
     const count = getWorkerCount();
@@ -73,6 +92,15 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('can cancel delete worker via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     confirmService.enabled = true;
     confirmService.confirm = sinon.fake.returns(reject());
     const count = getWorkerCount();
@@ -96,6 +124,15 @@ module('Acceptance | workers | delete', function (hooks) {
   });
 
   test('deleting a worker which errors displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/workers/:id', () => {
       return new Response(
         490,

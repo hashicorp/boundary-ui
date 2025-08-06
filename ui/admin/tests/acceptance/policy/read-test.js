@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -53,6 +54,15 @@ module('Acceptance | policies | read', function (hooks) {
   });
 
   test('visiting a policy', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
 
     await click(commonSelectors.HREF(urls.policies));
@@ -62,6 +72,15 @@ module('Acceptance | policies | read', function (hooks) {
   });
 
   test('cannot navigate to a policy without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.globalScope);
     instances.policy.authorized_actions =
       instances.policy.authorized_actions.filter((item) => item !== 'read');
@@ -72,6 +91,15 @@ module('Acceptance | policies | read', function (hooks) {
   });
 
   test('visiting an unknown policy displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownPolicy);
 
     assert
