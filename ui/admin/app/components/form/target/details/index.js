@@ -29,10 +29,6 @@ export default class FormTargetComponent extends Component {
     }));
   }
 
-  get showTargetTypeRadioGroup() {
-    return this.features.isEnabled('ssh-target') && this.args.model.isNew;
-  }
-
   /**
    * returns icons based on the model type
    * unlike other resources, this is needed as we use generic details component for both tcp and ssh

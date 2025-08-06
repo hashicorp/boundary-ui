@@ -52,7 +52,7 @@
     {{/if}}
   </Hds::Form::Textarea::Field>
 
-  {{#if this.showTargetTypeRadioGroup}}
+  {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
     <Hds::Form::RadioCard::Group
       @name={{t 'form.type.label'}}
       @alignment='center'

@@ -100,7 +100,7 @@
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
-    "tracked-built-ins": "^3.3.0",
+    "tracked-built-ins": "^4.0.0",
     "webpack": "^5.95.0"
   },
   "engines": {
