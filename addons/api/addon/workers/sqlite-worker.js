@@ -25,6 +25,7 @@ let sqlite3;
 // https://www.sqlite.org/limits.html
 const MAX_HOST_PARAMETERS = 32766;
 const SCHEMA_VERSION = 1;
+const isSecure = self.isSecureContext;
 
 const methods = {
   initializeSQLite: async () => {
@@ -37,21 +38,32 @@ const methods = {
       method: 'getDatabaseName',
     });
 
+    function setupDb() {
+      const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
+      // Check if we're on a newer schema version and clear the database if so
+      if (SCHEMA_VERSION > row.user_version) {
+        db.exec(CLEAR_DB);
+      }
+
+      db.exec(CREATE_TABLES(SCHEMA_VERSION));
+      // Force an analyze on initial connection
+      db.exec('PRAGMA optimize=0x10002;');
+    }
+
+    // Instantiate an in memory DB if we're not in a secure context as OPFS is unavailable otherwise
+    if (!isSecure) {
+      db = new sqlite3.oo1.DB(':memory:');
+      setupDb();
+      return;
+    }
+
     let done = false;
     while (!done) {
       try {
         poolUtil = await sqlite3.installOpfsSAHPoolVfs();
         db = new poolUtil.OpfsSAHPoolDb(dbName);
 
-        const [row] = db.exec('PRAGMA user_version;', { rowMode: 'object' });
-        // Check if we're on a newer schema version and clear the database if so
-        if (SCHEMA_VERSION > row.user_version) {
-          db.exec(CLEAR_DB);
-        }
-
-        db.exec(CREATE_TABLES(SCHEMA_VERSION));
-        // Force an analyze on initial connection
-        db.exec('PRAGMA optimize=0x10002;');
+        setupDb();
         done = true;
       } catch (err) {
         // If we get a SQLite3Error and the pool is at capacity, we'll assume the error is
@@ -175,8 +187,11 @@ const methods = {
 
 const promiseWorker = new PWBWorker();
 promiseWorker.register(async ({ method, payload }) => {
-  await sharedService.status.ready;
+  if (!sharedService) {
+    return methods[method](payload);
+  }
 
+  await sharedService.status.ready;
   return sharedService.proxy[method](payload);
 });
 
@@ -188,8 +203,14 @@ const initializeOnProviderChange = async (isProvider) => {
   await sharedService.proxy.initializeSQLite();
 };
 
-const sharedService = sharedServiceInit(
-  'sqlite',
-  methods,
-  initializeOnProviderChange,
-);
+// Only use the shared service in a secure context as weblocks aren't available otherwise
+let sharedService;
+if (isSecure) {
+  sharedService = sharedServiceInit(
+    'sqlite',
+    methods,
+    initializeOnProviderChange,
+  );
+} else {
+  await methods.initializeSQLite();
+}
