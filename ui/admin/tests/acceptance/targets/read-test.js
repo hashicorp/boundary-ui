@@ -4,13 +4,14 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click } from '@ember/test-helpers';
+import { click, currentURL, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIntl } from 'ember-intl/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { setRunOptions } from 'ember-a11y-testing/test-support';
@@ -18,6 +19,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | targets | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
   setupIntl(hooks, 'en-us');
 

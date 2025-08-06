@@ -7,6 +7,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
+import { loading } from 'ember-loading';
 import { defaultValidator } from 'ember-a11y-refocus';
 import { paramValueFinder } from 'admin/utils/param-value-finder';
 
@@ -33,6 +34,7 @@ export default class ApplicationController extends Controller {
   @service featureEdition;
   @service flashMessages;
   @service router;
+  @service sqlite;
 
   /**
    * Returns available themes.
@@ -111,6 +113,18 @@ export default class ApplicationController extends Controller {
     } else {
       this.features.enable(feature);
     }
+  }
+
+  @action
+  @loading
+  async downloadDatabase() {
+    await this.sqlite.downloadDatabase();
+  }
+
+  @action
+  async clearDatabase() {
+    await this.sqlite.clearDatabase();
+    this.router.refresh();
   }
 
   /**

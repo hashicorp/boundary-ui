@@ -4,14 +4,15 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, currentURL, click, fillIn, waitFor } from '@ember/test-helpers';
+import { click, currentURL, fillIn, visit, waitFor } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
-import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { TYPE_TARGET_SSH, TYPE_TARGET_TCP } from 'api/models/target';
 import {
   STATUS_SESSION_ACTIVE,
   STATUS_SESSION_CANCELING,
@@ -25,6 +26,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | sessions | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
 
   const CREATED_TIME_VALUES_ARRAY = [
