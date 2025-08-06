@@ -55,6 +55,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         await timeout(250);
       }
 
+      console.log({ search });
       const role = this.modelFor('scopes.scope.roles.role');
       const canSelectOrgs =
         !role.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN);

@@ -12,6 +12,12 @@ export default class FormRoleManageCustomScopesIndexComponent extends Component 
 
   @tracked selectedOrgs = [];
   @tracked selectedOrg = '';
+  @tracked modelIsOpened = false;
+
+  @action
+  toggleModal() {
+    this.modelIsOpened = !this.modelIsOpened;
+  }
 
   /**
    * Returns the display name of the selectedOrg.
