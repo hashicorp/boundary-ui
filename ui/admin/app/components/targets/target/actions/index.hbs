@@ -2,35 +2,68 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-<Hds::Dropdown data-test-manage-targets-dropdown as |dd|>
-  <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
-  {{#if (can 'addHostSources target' @model)}}
-    <dd.Interactive @route='scopes.scope.targets.target.add-host-sources'>
-      {{t 'resources.target.actions.add-host-sources'}}
-    </dd.Interactive>
+
+{{#let
+  (hash
+    canAddHostSources=(can 'addHostSources target' @model)
+    canAddBrokeredCredSources=(can 'addBrokeredCredentialSources target' @model)
+    canAddInjectedApplicationCredSources=(can
+      'addInjectedApplicationCredentialSources target' @model
+    )
+    canDelete=(can 'delete model' @model)
+  )
+  as |perms|
+}}
+  {{#if
+    (or
+      perms.canAddHostSources
+      perms.canAddBrokeredCredSources
+      perms.canAddInjectedApplicationCredSources
+      perms.canDelete
+    )
+  }}
+    <Hds::Dropdown data-test-manage-targets-dropdown as |dd|>
+      <dd.ToggleButton @text={{t 'actions.manage'}} @color='secondary' />
+      {{#if perms.canAddHostSources}}
+        <dd.Interactive
+          @route='scopes.scope.targets.target.add-host-sources'
+          data-test-add-host-sources-action
+        >
+          {{t 'resources.target.actions.add-host-sources'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canAddBrokeredCredSources}}
+        <dd.Interactive
+          @route='scopes.scope.targets.target.add-brokered-credential-sources'
+          data-test-add-brokered-cred-sources-action
+        >
+          {{t 'resources.target.actions.add-brokered-credential-sources'}}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canAddInjectedApplicationCredSources}}
+        <dd.Interactive
+          @route='scopes.scope.targets.target.add-injected-application-credential-sources'
+          data-test-add-injected-cred-sources-action
+        >
+          {{t
+            'resources.target.actions.add-injected-application-credential-sources'
+          }}
+        </dd.Interactive>
+      {{/if}}
+      {{#if perms.canDelete}}
+        {{#if
+          (or
+            perms.canAddHostSources
+            perms.canAddBrokeredCredSources
+            perms.canAddInjectedApplicationCredSources
+          )
+        }}
+          <dd.Separator />
+        {{/if}}
+        <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
+          {{t 'resources.target.actions.delete'}}
+        </dd.Interactive>
+      {{/if}}
+    </Hds::Dropdown>
   {{/if}}
-  {{#if (can 'addBrokeredCredentialSources target' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.targets.target.add-brokered-credential-sources'
-      data-test-add-brokered-cred-sources-action
-    >
-      {{t 'resources.target.actions.add-brokered-credential-sources'}}
-    </dd.Interactive>
-  {{/if}}
-  {{#if (can 'addInjectedApplicationCredentialSources target' @model)}}
-    <dd.Interactive
-      @route='scopes.scope.targets.target.add-injected-application-credential-sources'
-      data-test-add-injected-cred-sources-action
-    >
-      {{t
-        'resources.target.actions.add-injected-application-credential-sources'
-      }}
-    </dd.Interactive>
-  {{/if}}
-  {{#if (can 'delete model' @model)}}
-    <dd.Separator />
-    <dd.Interactive @color='critical' {{on 'click' (fn @delete @model)}}>
-      {{t 'resources.target.actions.delete'}}
-    </dd.Interactive>
-  {{/if}}
-</Hds::Dropdown>
+{{/let}}

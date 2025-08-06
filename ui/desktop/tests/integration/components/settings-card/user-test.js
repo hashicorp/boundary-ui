@@ -25,6 +25,10 @@ module('Integration | Component | settings-card/user', function (hooks) {
   setupRenderingTest(hooks);
   setupIntl(hooks, 'en-us');
 
+  hooks.beforeEach(function () {
+    this.set('application', { showModalOrLogout: () => {} });
+  });
+
   test('it renders password correctly', async function (assert) {
     this.owner.register(
       'service:session',
@@ -34,7 +38,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('Password');
@@ -52,7 +58,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('OIDC');
@@ -70,7 +78,9 @@ module('Integration | Component | settings-card/user', function (hooks) {
       },
     );
 
-    await render(hbs`<SettingsCard::User />`);
+    await render(
+      hbs`<SettingsCard::User @onSignout={{this.application.showModalOrLogout}} />`,
+    );
 
     assert.dom(AUTHENTICATION_BADGE).hasText('Authenticated');
     assert.dom(AUTH_METHOD_TYPE).hasText('LDAP');

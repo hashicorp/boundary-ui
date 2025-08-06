@@ -18,6 +18,7 @@ export const FIELD_DESCRIPTION_VALUE = 'description';
 export const FIELD_PASSWORD = '[name=password]';
 export const FIELD_PASSWORD_VALUE = 'password';
 
+export const FIELD_ERROR = '.hds-form-error__message'; // Selects any error message on the DOM.
 export const FIELD_IDENTIFICATION = '[name=identification]';
 
 export const TABLE_RESOURCE_LINK = (url) => `tbody [href="${url}"]`;
@@ -47,6 +48,10 @@ export const SIDEBAR_NAV_LINK = (url) =>
 export const SIDEBAR_NAV_CONTENT = '.hds-side-nav__content';
 export const SIDEBAR_USER_DROPDOWN =
   '[data-test-side-nav-user-dropdown] button';
+export const SIDEBAR_SCOPE_DROPDOWN =
+  '[data-test-side-nav-scope-dropdown] button';
+export const SIDEBAR_SCOPE_LINK = (url) =>
+  `[data-test-side-nav-scope-dropdown] a[href="${url}"]`;
 export const TOGGLE_THEME_DEFAULT =
   '[data-test-side-nav-user-dropdown] [value=system-default-theme]';
 export const TOGGLE_THEME_LIGHT =
@@ -90,3 +95,6 @@ export const TABLE_SORT_BTN_ARROW_UP = (column) =>
   `thead tr th:nth-child(${column}) button .hds-icon-arrow-up`;
 export const TABLE_SORT_BTN_ARROW_DOWN = (column) =>
   `thead tr th:nth-child(${column}) button .hds-icon-arrow-down`;
+
+export const CODE_EDITOR_CONTENT =
+  '[data-test-code-editor-field-editor] textarea';

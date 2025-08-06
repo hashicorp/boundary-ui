@@ -10,7 +10,10 @@ const SORT_DIRECTION_ASCENDING = 'asc';
 const SORT_DIRECTION_DESCENDING = 'desc';
 
 const sortFunctions = {
-  string: (a, b) => String(a).localeCompare(String(b)),
+  string: (a, b) =>
+    String(a).localeCompare(String(b), navigator.language, {
+      caseFirst: 'upper',
+    }),
   date: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
   number: (a, b) => Number(a) - Number(b),
   boolean: (a, b) => Number(a) - Number(b),

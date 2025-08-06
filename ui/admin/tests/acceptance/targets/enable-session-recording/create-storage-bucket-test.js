@@ -21,16 +21,11 @@ module(
     let features;
     let getStorageBucketCount;
 
-    const SAVE_BTN_SELECTOR = '[type="submit"]';
-    const CANCEL_BTN_SELECTOR = '.rose-form-actions [type="button"]';
-    const NAME_FIELD_SELECTOR = '[name="name"]';
-    const FIELD_ERROR_TEXT_SELECTOR = '.hds-form-error__message';
-    const NAME_FIELD_TEXT = 'random string';
-    const BUCKET_NAME_FIELD_SELECTOR = '[name="bucket_name"]';
-    const BUCKET_PREFIX_FIELD_SELECTOR = '[name="bucket_prefix"]';
-    const EDITOR_WORKER_FILTER =
-      '[data-test-code-editor-field-editor] textarea';
-    const EDITOR_WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+    const FIELD_BUCKET_NAME = '[name="bucket_name"]';
+    const FIELD_BUCKET_PREFIX = '[name="bucket_prefix"]';
+    const FIELD_EDITOR = '[data-test-code-editor-field-editor] textarea';
+    const WORKER_FILTER_VALUE = '"dev" in "/tags/env"';
+    const FIELD_SCOPE = (scope) => `[value="${scope}"]`;
 
     const instances = {
       scopes: {
@@ -40,8 +35,6 @@ module(
     };
 
     const urls = {
-      globalScope: null,
-      projectScope: null,
       targets: null,
       target: null,
       enableSessionRecording: null,
@@ -63,10 +56,8 @@ module(
         scope: instances.scopes.project,
         type: TYPE_TARGET_SSH,
       });
-      urls.globalScope = `/scopes/global`;
 
-      urls.projectScope = `/scopes/${instances.scopes.project.id}`;
-      urls.targets = `${urls.projectScope}/targets`;
+      urls.targets = `/scopes/${instances.scopes.project.id}/targets`;
       urls.target = `${urls.targets}/${instances.target.id}`;
       urls.enableSessionRecording = `${urls.target}/enable-session-recording`;
       urls.newStorageBucket = `${urls.enableSessionRecording}/create-storage-bucket`;
@@ -82,22 +73,25 @@ module(
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(`[href="${urls.newStorageBucket}"]`);
-      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-      await click('[value="global"]');
-      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
+      await click(commonSelectors.HREF(urls.newStorageBucket));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(FIELD_SCOPE('global'));
+      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
 
-      assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
-      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
-      assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
-      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+      assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
+      assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
+      assert.dom(FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
+      assert.dom(FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-      await click(SAVE_BTN_SELECTOR);
+      await click(commonSelectors.SAVE_BTN);
       const storageBucket = this.server.schema.storageBuckets.findBy({
-        name: NAME_FIELD_TEXT,
+        name: commonSelectors.FIELD_NAME_VALUE,
       });
 
-      assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+      assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
       assert.strictEqual(storageBucket.scopeId, 'global');
       assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
     });
@@ -106,22 +100,25 @@ module(
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(`[href="${urls.newStorageBucket}"]`);
-      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-      await click(`[value="${instances.scopes.org.scope.id}"]`);
-      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
+      await click(commonSelectors.HREF(urls.newStorageBucket));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(FIELD_SCOPE(instances.scopes.org.scope.id));
+      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
 
-      assert.dom(BUCKET_NAME_FIELD_SELECTOR).isNotDisabled();
-      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).isNotDisabled();
-      assert.dom(BUCKET_NAME_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
-      assert.dom(BUCKET_PREFIX_FIELD_SELECTOR).doesNotHaveAttribute('readOnly');
+      assert.dom(FIELD_BUCKET_NAME).isNotDisabled();
+      assert.dom(FIELD_BUCKET_PREFIX).isNotDisabled();
+      assert.dom(FIELD_BUCKET_NAME).doesNotHaveAttribute('readOnly');
+      assert.dom(FIELD_BUCKET_PREFIX).doesNotHaveAttribute('readOnly');
 
-      await click(SAVE_BTN_SELECTOR);
+      await click(commonSelectors.SAVE_BTN);
       const storageBucket = this.server.schema.storageBuckets.findBy({
-        name: NAME_FIELD_TEXT,
+        name: commonSelectors.FIELD_NAME_VALUE,
       });
 
-      assert.strictEqual(storageBucket.name, NAME_FIELD_TEXT);
+      assert.strictEqual(storageBucket.name, commonSelectors.FIELD_NAME_VALUE);
       assert.strictEqual(storageBucket.scopeId, instances.scopes.org.scope.id);
       assert.strictEqual(getStorageBucketCount(), storageBucketCount + 1);
     });
@@ -130,15 +127,20 @@ module(
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
-      await click(`[href="${urls.newStorageBucket}"]`);
-      await fillIn(NAME_FIELD_SELECTOR, NAME_FIELD_TEXT);
-      await click(CANCEL_BTN_SELECTOR);
+      await click(commonSelectors.HREF(urls.newStorageBucket));
+      await fillIn(
+        commonSelectors.FIELD_NAME,
+        commonSelectors.FIELD_NAME_VALUE,
+      );
+      await click(commonSelectors.CANCEL_BTN);
 
       assert.strictEqual(currentURL(), urls.enableSessionRecording);
       assert.strictEqual(getStorageBucketCount(), storageBucketCount);
     });
 
     test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
+      const errorMessage = 'The request was invalid.';
+      const errorDescription = 'Name is required.';
       this.server.post('/storage-buckets', () => {
         return new Response(
           400,
@@ -146,12 +148,12 @@ module(
           {
             status: 400,
             code: 'invalid_argument',
-            message: 'The request was invalid.',
+            message: errorMessage,
             details: {
               request_fields: [
                 {
                   name: 'name',
-                  description: 'Name is required.',
+                  description: errorDescription,
                 },
               ],
             },
@@ -160,14 +162,12 @@ module(
       });
       await visit(urls.enableSessionRecording);
 
-      await click(`[href="${urls.newStorageBucket}"]`);
-      await fillIn(EDITOR_WORKER_FILTER, EDITOR_WORKER_FILTER_VALUE);
-      await click(SAVE_BTN_SELECTOR);
+      await click(commonSelectors.HREF(urls.newStorageBucket));
+      await fillIn(FIELD_EDITOR, WORKER_FILTER_VALUE);
+      await click(commonSelectors.SAVE_BTN);
 
-      assert
-        .dom(commonSelectors.ALERT_TOAST_BODY)
-        .hasText('The request was invalid.');
-      assert.dom(FIELD_ERROR_TEXT_SELECTOR).hasText('Name is required.');
+      assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
+      assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
     });
   },
 );

@@ -172,9 +172,8 @@ test.describe('AWS', () => {
 
         // Remove the host source from the target
         await page
-          .getByRole('link', { name: newHostSetName })
-          .locator('..')
-          .locator('..')
+          .getByRole('row')
+          .filter({ has: page.getByRole('link', { name: newHostSetName }) })
           .getByRole('button', { name: 'Manage' })
           .click();
         await page.getByRole('button', { name: 'Remove' }).click();

@@ -69,8 +69,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -143,8 +143,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {
@@ -200,9 +200,8 @@ test(
       // Add/Remove another host source
       await targetsPage.addHostSourceToTarget(hostSetName2);
       await page
-        .getByRole('link', { name: hostSetName2 })
-        .locator('..')
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('link', { name: hostSetName2 }) })
         .getByRole('button', { name: 'Manage' })
         .click();
       await page.getByRole('button', { name: 'Remove' }).click();
@@ -245,8 +244,8 @@ test(
       const sessionsPage = new SessionsPage(page);
       await sessionsPage.waitForSessionToBeVisible(targetName);
       await page
-        .getByRole('cell', { name: targetName })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: targetName }) })
         .getByRole('button', { name: 'Cancel' })
         .click();
     } finally {

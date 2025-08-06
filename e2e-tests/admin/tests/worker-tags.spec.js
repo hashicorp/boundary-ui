@@ -166,9 +166,8 @@ test(
     ).toHaveText('config');
     await expect(
       page
-        .getByRole('table')
-        .getByRole('cell', { name: tagKey })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: tagKey }) })
         .getByRole('cell', { name: tagValue }),
     ).toBeVisible();
 
@@ -178,9 +177,8 @@ test(
     await workersPage.editTag(tagKey, newTagKey, newTagValue);
     await expect(
       page
-        .getByRole('table')
-        .getByRole('cell', { name: newTagKey })
-        .locator('..')
+        .getByRole('row')
+        .filter({ has: page.getByRole('cell', { name: newTagKey }) })
         .getByRole('cell', { name: newTagValue }),
     ).toBeVisible();
 

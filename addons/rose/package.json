@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.26.10",
-    "@hashicorp/design-system-components": "~4.18.2",
+    "@hashicorp/design-system-components": "^4.20.2",
     "@hashicorp/design-system-tokens": "^2.3.0",
     "@hashicorp/flight-icons": "^3.10.0",
     "@nullvoxpopuli/ember-composable-helpers": "^5.2.10",
@@ -52,7 +52,7 @@
     "@ember/optional-features": "^2.1.0",
     "@ember/test-helpers": "^5.2.1",
     "@embroider/test-setup": "^4.0.0",
-    "@glimmer/component": "^1.1.2",
+    "@glimmer/component": "^2.0.0",
     "@glimmer/tracking": "^1.1.2",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^9.1.0",

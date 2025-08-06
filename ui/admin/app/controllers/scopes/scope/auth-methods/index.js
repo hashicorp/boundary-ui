@@ -154,7 +154,7 @@ export default class ScopesScopeAuthMethodsIndexController extends Controller {
         authMethod,
       );
     } else {
-      await this.router.transitionTo('scopes.scope.auth-methods');
+      this.router.transitionTo('scopes.scope.auth-methods');
     }
     await this.router.refresh();
   }

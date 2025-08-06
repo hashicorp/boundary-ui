@@ -101,7 +101,7 @@ export default class ScopesScopeUsersIndexController extends Controller {
     if (this.can.can('read model', user)) {
       await this.router.transitionTo('scopes.scope.users.user', user);
     } else {
-      await this.router.transitionTo('scopes.scope.users');
+      this.router.transitionTo('scopes.scope.users');
     }
     await this.router.refresh();
   }

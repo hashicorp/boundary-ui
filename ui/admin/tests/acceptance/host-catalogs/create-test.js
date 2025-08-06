@@ -19,6 +19,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
   setupIndexedDb(hooks);
 
   let featuresService;
+  let featureEdition;
   let getHostCatalogCount;
 
   const instances = {
@@ -78,6 +79,7 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     urls.newAzureDynamicHostCatalog = `${urls.newHostCatalog}?type=azure`;
     urls.newGCPDynamicHostCatalog = `${urls.newHostCatalog}?type=gcp`;
     featuresService = this.owner.lookup('service:features');
+    featureEdition = this.owner.lookup('service:featureEdition');
 
     // Generate resource counter
     getHostCatalogCount = () =>
@@ -262,11 +264,26 @@ module('Acceptance | host-catalogs | create', function (hooks) {
     assert.dom(selectors.FIELD_WORKER_FILTER).doesNotExist();
   });
 
-  test('users should see worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
+  test('users should see optional worker filter field in enterprise edition when AWS host catalog is selected', async function (assert) {
     featuresService.enable('worker-filter');
+    featureEdition.setEdition('enterprise');
     await visit(urls.newAWSDynamicHostCatalog);
 
     assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
+    assert
+      .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
+      .includesText('Optional');
+  });
+
+  test('users should see required worker filter field in hcp edition when AWS host catalog is selected', async function (assert) {
+    featuresService.enable('worker-filter');
+    featureEdition.setEdition('hcp');
+    await visit(urls.newAWSDynamicHostCatalog);
+
+    assert.dom(selectors.FIELD_WORKER_FILTER).isVisible();
+    assert
+      .dom(selectors.FIELD_AWS_WORKER_FILTER_LABEL)
+      .includesText('Required');
   });
 
   test('users should see worker filter field in enterprise edition when GCP host catalog is selected', async function (assert) {

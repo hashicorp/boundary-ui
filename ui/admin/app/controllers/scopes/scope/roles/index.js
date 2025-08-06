@@ -101,7 +101,7 @@ export default class ScopesScopeRolesIndexController extends Controller {
     if (this.can.can('read model', role)) {
       await this.router.transitionTo('scopes.scope.roles.role', role);
     } else {
-      await this.router.transitionTo('scopes.scope.roles');
+      this.router.transitionTo('scopes.scope.roles');
     }
     await this.router.refresh();
   }

@@ -265,9 +265,8 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting empty targets', async function (assert) {
-    assert.expect(1);
-    this.server.db.targets.remove();
-    this.server.db.sessions.remove();
+    this.server.schema.targets.all().destroy();
+    this.server.schema.sessions.all().destroy();
     this.stubCacheDaemonSearch('sessions', 'targets', 'aliases');
 
     await visit(urls.targets);
