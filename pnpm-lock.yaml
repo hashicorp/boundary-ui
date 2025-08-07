@@ -190,6 +190,12 @@ importers:
       sinon:
         specifier: ^19.0.2
         version: 19.0.5
+      testem-gitlab-reporter:
+        specifier: ^1.0.0
+        version: 1.0.0
+      testem-multi-reporter:
+        specifier: ^1.2.0
+        version: 1.2.0
       webpack:
         specifier: ^5.95.0
         version: 5.99.8
@@ -7298,6 +7304,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qs@6.13.0:
@@ -8245,6 +8252,12 @@ packages:
     resolution: {integrity: sha512-cAGWPIyOHU6zlmg88jwm7VRyXnMN7iV68OGAbYDk/Mh/xC/pzVPlQtY6ngoIH/5/tciuhGfvESU8GrHrcxD56w==}
     engines: {node: '>=8'}
 
+  testem-gitlab-reporter@1.0.0:
+    resolution: {integrity: sha512-GUVWEDUjwAIfsK+zn39ZOW2lFeKgu8TIefIMl5hxd4GQXmQYTUCgKteTU4Hp6XYma50vmwn2ZAo4guuvqYGvgw==}
+
+  testem-multi-reporter@1.2.0:
+    resolution: {integrity: sha512-ttIds/wpU0njpRBQsDl+tcPOy8jvafad6MCEIy21+BpNEcpCBZWrYuNva8TtxaZcoLuFTW0B8FsWl6XuJfH3rQ==}
+
   testem@3.16.0:
     resolution: {integrity: sha512-TKQ3CuG/u+vDa7IUQgRQHN753wjDlgYMWE45KF5WkXyWjTNxXHPrY0qPBmHWI+kDYWc3zsJqzbS7pdzt5sc33A==}
     engines: {node: '>= 7.*'}
@@ -8726,6 +8739,10 @@ packages:
   xdg-basedir@4.0.0:
     resolution: {integrity: sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==}
     engines: {node: '>=8'}
+
+  xmlbuilder@13.0.2:
+    resolution: {integrity: sha512-Eux0i2QdDYKbdbA6AM6xE4m6ZTZr4G4xF9kahI2ukSEMCzwce2eX9WlTI5J3s+NU7hpasFsr8hWIONae7LluAQ==}
+    engines: {node: '>=6.0'}
 
   xmlbuilder@15.1.1:
     resolution: {integrity: sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==}
@@ -18033,6 +18050,12 @@ snapshots:
       glob: 7.2.3
       minimatch: 3.1.2
 
+  testem-gitlab-reporter@1.0.0:
+    dependencies:
+      xmlbuilder: 13.0.2
+
+  testem-multi-reporter@1.2.0: {}
+
   testem@3.16.0(handlebars@4.7.8)(underscore@1.13.7):
     dependencies:
       '@xmldom/xmldom': 0.8.10
@@ -18668,6 +18691,8 @@ snapshots:
   ws@8.17.1: {}
 
   xdg-basedir@4.0.0: {}
+
+  xmlbuilder@13.0.2: {}
 
   xmlbuilder@15.1.1: {}
 
