@@ -199,7 +199,7 @@ module('Acceptance | roles | list', function (hooks) {
           'r_1000',
           'r_10000',
         ],
-        column: 2,
+        column: 3,
       },
     },
     async function (assert, input) {
