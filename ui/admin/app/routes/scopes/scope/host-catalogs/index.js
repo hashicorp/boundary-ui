@@ -6,7 +6,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { sortNameWithIdFallback } from 'admin/utils/sort-name-with-id-fallback';
 
 export default class ScopesScopeHostCatalogsIndexRoute extends Route {
   // =services
@@ -73,7 +72,10 @@ export default class ScopesScopeHostCatalogsIndexRoute extends Route {
 
       const sort =
         sortAttribute === 'name'
-          ? { sortFunction: sortNameWithIdFallback, direction: sortDirection }
+          ? {
+              customSort: { attributes: [sortAttribute, 'id'] },
+              direction: sortDirection,
+            }
           : { attribute: sortAttribute, direction: sortDirection };
 
       let hostCatalogs;

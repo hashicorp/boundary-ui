@@ -18,7 +18,6 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   @service can;
   @service store;
   @service session;
-  @service intl;
 
   // =attributes
 
@@ -64,14 +63,9 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortType = (recordA, recordB) => {
-    const typeMap = {
-      [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
-      [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
-    };
-    return String(typeMap[recordA.attributes.type]).localeCompare(
-      String(typeMap[recordB.attributes.type]),
-    );
+  typeMap = {
+    [TYPE_TARGET_SSH]: 'SSH',
+    [TYPE_TARGET_TCP]: 'Generic TCP',
   };
 
   retrieveData = restartableTask(
@@ -119,7 +113,11 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
 
       const sort =
         sortAttribute === 'type'
-          ? { sortFunction: this.sortType, direction: sortDirection }
+          ? {
+              attribute: sortAttribute,
+              customSort: { attributeMap: this.typeMap },
+              direction: sortDirection,
+            }
           : { attribute: sortAttribute, direction: sortDirection };
 
       let targets;

@@ -18,7 +18,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   @service store;
   @service router;
   @service can;
-  @service intl;
 
   // =attributes
 
@@ -71,15 +70,10 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortState = (recordA, recordB) => {
-    const stateMap = {
-      [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
-      [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
-      [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
-    };
-    return String(stateMap[recordA.attributes.state]).localeCompare(
-      String(stateMap[recordB.attributes.state]),
-    );
+  stateMap = {
+    [STATE_SESSION_RECORDING_AVAILABLE]: 'Completed',
+    [STATE_SESSION_RECORDING_STARTED]: 'Recording',
+    [STATE_SESSION_RECORDING_UNKNOWN]: 'Failed',
   };
 
   retrieveData = restartableTask(
@@ -124,7 +118,11 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
 
       const sort =
         sortAttribute === 'state'
-          ? { sortFunction: this.sortState, direction: sortDirection }
+          ? {
+              attribute: sortAttribute,
+              customSort: { attributeMap: this.stateMap },
+              direction: sortDirection,
+            }
           : { attribute: sortAttribute, direction: sortDirection };
 
       if (

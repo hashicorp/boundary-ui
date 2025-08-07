@@ -187,14 +187,6 @@ module('Acceptance | roles | list', function (hooks) {
         expectedAscendingSort: ['Alpha', 'Beta', 'Delta', 'Epsilon', 'Gamma'],
         column: 1,
       },
-      'on grants applied': {
-        attribute: {
-          key: 'grant_scope_ids',
-          values: [[GRANT_SCOPE_THIS], [GRANT_SCOPE_THIS], [], [], []],
-        },
-        expectedAscendingSort: ['No', 'No', 'No', 'Yes', 'Yes'],
-        column: 2,
-      },
       'on id': {
         attribute: {
           key: 'id',
@@ -207,7 +199,7 @@ module('Acceptance | roles | list', function (hooks) {
           'r_1000',
           'r_10000',
         ],
-        column: 3,
+        column: 2,
       },
     },
     async function (assert, input) {

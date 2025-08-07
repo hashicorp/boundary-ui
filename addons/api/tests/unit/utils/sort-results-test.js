@@ -482,32 +482,39 @@ module('Unit | Utility | sortResults', function (hooks) {
       name: 'target4',
     });
 
-    const sortFunction = (recordA, recordB) => {
-      const nameMap = {
-        target3: 'Alpha',
-        target4: 'Beta',
-        target1: 'Delta',
-        target2: 'Epsilon',
-      };
-      return String(nameMap[recordA.attributes.name]).localeCompare(
-        String(nameMap[recordB.attributes.name]),
-      );
+    const nameMap = {
+      target3: 'Alpha',
+      target4: 'Beta',
+      target1: 'Delta',
+      target2: 'Epsilon',
     };
+
     const schema = { attributes: new Map() };
 
     test.each(
       'it sorts by `name` using custom sorting function',
       {
         'ascending (default)': {
-          querySort: { sortFunction },
+          querySort: {
+            attribute: 'name',
+            customSort: { attributeMap: nameMap },
+          },
           expectedResults: ['target3', 'target4', 'target1', 'target2'],
         },
         descending: {
-          querySort: { sortFunction, direction: 'desc' },
+          querySort: {
+            attribute: 'name',
+            customSort: { attributeMap: nameMap },
+            direction: 'desc',
+          },
           expectedResults: ['target2', 'target1', 'target4', 'target3'],
         },
         ascending: {
-          querySort: { sortFunction, direction: 'asc' },
+          querySort: {
+            attribute: 'name',
+            customSort: { attributeMap: nameMap },
+            direction: 'asc',
+          },
           expectedResults: ['target3', 'target4', 'target1', 'target2'],
         },
       },

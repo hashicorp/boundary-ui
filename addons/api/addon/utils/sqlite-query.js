@@ -33,16 +33,36 @@ export function generateSQLExpressions(
   addFilterConditions(filters, parameters, conditions);
   addSearchConditions(search, resource, parameters, conditions);
 
-  const { attribute, direction } = sort;
+  const { attribute, customSort, direction } = sort;
   let orderByClause = '';
-  if (attribute) {
+
+  if (customSort?.attributeMap) {
     // We have to check if the attribute is valid for the resource
     // as we can't use parameterized queries for ORDER BY
     const validAttributes = Object.keys(modelMapping[resource]);
     if (validAttributes.includes(attribute)) {
-      orderByClause = `ORDER BY ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+      let whenClauses = '';
+      Object.keys(customSort.attributeMap).forEach((key) => {
+        whenClauses += `WHEN '${key}' THEN '${customSort.attributeMap[key]}' `;
+      });
+      orderByClause = `ORDER BY CASE ${attribute} ${whenClauses}END ${direction === 'desc' ? 'DESC' : 'ASC'}`;
     }
-  } else if (modelMapping[resource]?.created_time) {
+  } else if (customSort?.attributes) {
+    const validAttributes = Object.keys(modelMapping[resource]);
+    if (validAttributes.includes(...customSort.attributes)) {
+      const commaSeparatedVals = customSort.attributes.join(', ');
+      orderByClause = `ORDER BY COALESCE(${commaSeparatedVals}) COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, COALESCE(${commaSeparatedVals}) ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+    }
+  } else if (attribute) {
+    const validAttributes = Object.keys(modelMapping[resource]);
+    if (validAttributes.includes(attribute)) {
+      orderByClause = `ORDER BY ${attribute} COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+    }
+  } else if (
+    modelMapping[resource]?.created_time &&
+    // Don't include any ordering for count statements
+    !select?.some((str) => str.includes('count(*)'))
+  ) {
     orderByClause = `ORDER BY created_time DESC`;
   }
 
@@ -53,7 +73,7 @@ export function generateSQLExpressions(
     parameters.push(pageSize, (page - 1) * pageSize);
   }
 
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM ${resource}`;
+  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${resource}"`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
