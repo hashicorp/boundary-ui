@@ -171,7 +171,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
    * @param {string} scope_id
    */
   async getAllSessionRecordings(scope_id) {
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     this.allSessionRecordings = await this.store.query(
       'session-recording',
       {
@@ -192,7 +192,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const sessionRecordings = await this.store.query(
       'session-recording',
       {
