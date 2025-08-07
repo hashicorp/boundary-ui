@@ -149,7 +149,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
     });
 
-    test('it loads from indexeddb only and does not fetch from api, when peekIndexedDB option is used', async function (assert) {
+    test('it loads from indexeddb only and does not fetch from api, when peekDb option is used', async function (assert) {
       const callCounts = {
         get writeToIndexedDb() {
           return indexedbHandlerSpy.writeToIndexedDb.callCount;
@@ -181,7 +181,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
         expectedWriteToIndexedDbCallCount,
       );
 
-      await store.query('alias', {}, { peekIndexedDB: true });
+      await store.query('alias', {}, { peekDb: true });
       assert.strictEqual(results.length, 50);
 
       // second run does not increase call counts to api or writes to indexeddb

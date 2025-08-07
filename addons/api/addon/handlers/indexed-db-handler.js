@@ -36,7 +36,7 @@ export default class IndexedDbHandler {
           query,
           options: {
             pushToStore = true,
-            peekIndexedDB = false,
+            peekDb = false,
             storeToken = true,
           } = {},
         } = data;
@@ -55,7 +55,7 @@ export default class IndexedDbHandler {
         const schema = store.modelFor(type);
         const serializer = store.serializerFor(type);
 
-        if (!peekIndexedDB) {
+        if (!peekDb) {
           const tokenKey = `${type}-${hashCode(remainingQuery)}`;
           let payload;
           let listToken;
