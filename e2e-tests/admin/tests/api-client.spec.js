@@ -3,9 +3,12 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { test } from '../../global-setup.js';
+import { test as base } from '../../global-setup.js';
 import { expect } from '@playwright/test';
 import { customAlphabet } from 'nanoid';
+
+import * as boundaryCli from '../../helpers/boundary-cli';
+import { readFile } from 'fs/promises';
 
 // These tests are to make sure that the api-client fixture works as expected.
 // Test helpers or fixtures don't always have tests, but because this one has
@@ -16,10 +19,24 @@ const scopeId = 'global';
 const aliasCleanedUpDescription = `this alias should be cleaned up ${nanoid()}`;
 const aliasSkippedDescription = `this alias should not be cleaned up ${nanoid()}`;
 
+const test = base.extend(
+  {
+    apiClientTestAfter: async ({}, use) => {
+      let apiClientTestAfter;
+      const setapiClientTestAfter = (fn) => {
+        apiClientTestAfter = fn;
+      };
+      await use(setapiClientTestAfter);
+      await apiClientTestAfter?.();
+    },
+  },
+  { scope: 'test', auto: true },
+);
+
 test(
   'resources can be created (example: alias)',
   { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({ apiClient }) => {
+  async ({ apiClient, apiClientTestAfter }) => {
     await apiClient.clients.Alias.aliasServiceCreateAlias({
       item: {
         scopeId,
@@ -54,35 +71,26 @@ test(
       ({ description }) => description === aliasSkippedDescription,
     );
     expect(cleanUpSkippedAlias).toBeTruthy();
-  },
-);
 
-// This test tests the api-client cleanup and depends on the previous test to be ran
-// It is typically an anti-pattern to have a test depend on another test but to test
-// that the resources created in the previous test are cleaned up the full test needs
-// to be ran, including all fixtures, before any assertions on the clean up can be
-// made
-test(
-  'resources not marked to be skipped from previous test are cleaned up',
-  { tag: ['@ce', '@ent', '@aws', '@docker'] },
-  async ({ apiClient }) => {
-    const aliases = await apiClient.clients.Alias.aliasServiceListAliases({
-      scopeId,
-    });
-    const cleanedUpAlias = aliases.items.find(
-      ({ description }) => description === aliasCleanedUpDescription,
-    );
-    // the `cleanedUpAlias` has been cleaned up so it isn't expected to be found
-    expect(cleanedUpAlias).toBeFalsy();
-    const cleanUpSkippedAlias = aliases.items.find(
-      ({ description }) => description === aliasSkippedDescription,
-    );
-    // the `cleanUpSkippedAlias` skipped cleanup so it should still exist
-    expect(cleanUpSkippedAlias).toBeTruthy();
+    apiClientTestAfter(async () => {
+      const aliases = await apiClient.clients.Alias.aliasServiceListAliases({
+        scopeId,
+      });
+      const cleanedUpAlias = aliases.items.find(
+        ({ description }) => description === aliasCleanedUpDescription,
+      );
+      // the `cleanedUpAlias` has been cleaned up so it isn't expected to be found
+      expect(cleanedUpAlias).toBeFalsy();
+      const cleanUpSkippedAlias = aliases.items.find(
+        ({ description }) => description === aliasSkippedDescription,
+      );
+      // the `cleanUpSkippedAlias` skipped cleanup so it should still exist
+      expect(cleanUpSkippedAlias).toBeTruthy();
 
-    // manually clean up skipped resource
-    await apiClient.clients.Alias.aliasServiceDeleteAlias({
-      id: cleanUpSkippedAlias.id,
+      // manually clean up skipped resource
+      await apiClient.clients.Alias.aliasServiceDeleteAlias({
+        id: cleanUpSkippedAlias.id,
+      });
     });
   },
 );
@@ -120,5 +128,239 @@ test(
     expect(() =>
       apiClient.skipCleanup('not an object with an id property'),
     ).toThrow('The `id` field is expected on the resource');
+  },
+);
+
+// This test serves as a more complex example and exercises many connected resources.
+// It also serves to illustrate that there are some resources, like storage buckets,
+// that may be dependent on other resources created outside the api being cleaned up first,
+// like sessions being cancelled and session recordings being deleted. Once these are
+// cleaned up then automatic clean up should work.
+test(
+  'Storage buckets can be cleaned up after a session is manually cancelled and session recordings are manually deleted',
+  { tag: ['@ent', '@docker'] },
+  async ({
+    controllerAddr,
+    adminAuthMethodId,
+    adminLoginName,
+    adminPassword,
+    bucketAccessKeyId,
+    bucketEndpointUrl,
+    bucketName,
+    bucketSecretAccessKey,
+    region,
+    sshUser,
+    sshKeyPath,
+    targetAddress,
+    targetPort,
+    workerTagEgress,
+    apiClient,
+    apiClientTestAfter,
+  }) => {
+    await boundaryCli.checkBoundaryCli();
+
+    let connect;
+    try {
+      await boundaryCli.authenticateBoundary(
+        controllerAddr,
+        adminAuthMethodId,
+        adminLoginName,
+        adminPassword,
+      );
+
+      const org = await apiClient.clients.Scope.scopeServiceCreateScope({
+        item: {
+          name: `Org-${nanoid()}`,
+          scopeId: 'global',
+        },
+      });
+
+      const project = await apiClient.clients.Scope.scopeServiceCreateScope({
+        item: {
+          name: `Project-${nanoid()}`,
+          scopeId: org.id,
+        },
+      });
+
+      const storageBucket =
+        await apiClient.clients.StorageBucket.storageBucketServiceCreateStorageBucket(
+          {
+            pluginName: 'minio',
+            item: {
+              scopeId: org.scopeId,
+              bucketName,
+              workerFilter: `"${workerTagEgress}" in "/tags/type"`,
+              attributes: {
+                region,
+                endpoint_url: bucketEndpointUrl,
+                disable_credential_rotation: true,
+              },
+              secrets: {
+                access_key_id: bucketAccessKeyId,
+                secret_access_key: bucketSecretAccessKey,
+              },
+            },
+          },
+        );
+
+      const target = await apiClient.clients.Target.targetServiceCreateTarget({
+        item: {
+          name: `ssh-target-${nanoid()}`,
+          scopeId: project.id,
+          type: 'ssh',
+          address: targetAddress,
+          ingressWorkerFilter: `"${workerTagEgress}" in "/tags/type"`,
+          egressWorkerFilter: `"${workerTagEgress}" in "/tags/type"`,
+          attributes: {
+            default_port: targetPort,
+            enable_session_recording: true,
+            storage_bucket_id: storageBucket.id,
+          },
+        },
+      });
+
+      const credentialStore =
+        await apiClient.clients.CredentialStore.credentialStoreServiceCreateCredentialStore(
+          {
+            item: {
+              scopeId: project.id,
+              type: 'static',
+            },
+          },
+        );
+
+      const keyData = await readFile(sshKeyPath, {
+        encoding: 'utf-8',
+      });
+
+      const credential =
+        await apiClient.clients.Credential.credentialServiceCreateCredential({
+          item: {
+            credentialStoreId: credentialStore.id,
+            type: 'ssh_private_key',
+            attributes: {
+              username: sshUser,
+              private_key: keyData,
+            },
+          },
+        });
+
+      await apiClient.clients.Target.targetServiceAddTargetCredentialSources({
+        id: target.id,
+        body: {
+          injectedApplicationCredentialSourceIds: [credential.id],
+          version: 1,
+        },
+      });
+
+      const storagePolicy =
+        await apiClient.clients.Policy.policyServiceCreatePolicy({
+          item: {
+            type: 'storage',
+            scopeId: 'global',
+            attributes: {
+              delete_after: { days: 1 },
+            },
+          },
+        });
+
+      apiClient.clients.Scope.scopeServiceAttachStoragePolicy({
+        id: org.id,
+        body: {
+          storagePolicyId: storagePolicy.id,
+          version: 1,
+        },
+      });
+
+      connect = await boundaryCli.connectSshToTarget(target.id);
+
+      let waitForSessionCount = 0;
+      let sshSession;
+      while (!sshSession) {
+        const sessions =
+          await apiClient.clients.Session.sessionServiceListSessions({
+            scopeId: target.scopeId,
+          });
+
+        sshSession = sessions?.items.find(
+          (session) =>
+            session.status === 'active' && session.targetId === target.id,
+        );
+
+        if (waitForSessionCount >= 20) {
+          throw new Error(
+            'Max attempts exceeded waiting for target to session to be created',
+          );
+        }
+
+        // avoid being rate limited
+        await new Promise((r) => setTimeout(r, 500));
+        waitForSessionCount++;
+      }
+
+      await apiClient.clients.Session.sessionServiceCancelSession({
+        id: sshSession.id,
+        body: {
+          version: sshSession.version,
+        },
+      });
+
+      let waitForSessionRecordingCount = 0;
+      let completedSessionRecording;
+      while (!completedSessionRecording) {
+        completedSessionRecording = (
+          await apiClient.clients.SessionRecording.sessionRecordingServiceListSessionRecordings(
+            {
+              scopeId: 'global',
+              recursive: true,
+            },
+          )
+        ).items.find(
+          (recording) =>
+            recording.sessionId === sshSession.id &&
+            recording.state === 'available',
+        );
+
+        // Session recordings have to be cleaned up manually before a storage bucket can be deleted.
+        // And session recordings can only be cleaned up once they are completed
+        if (completedSessionRecording) {
+          await apiClient.clients.SessionRecording.sessionRecordingServiceDeleteSessionRecording(
+            {
+              id: completedSessionRecording.id,
+              body: { version: completedSessionRecording.version },
+            },
+          );
+        }
+
+        if (waitForSessionRecordingCount >= 20) {
+          throw new Error(
+            'Max attempts exceeded waiting for target to session recording to be completed',
+          );
+        }
+
+        // avoid being rate limited
+        await new Promise((r) => setTimeout(r, 500));
+        waitForSessionRecordingCount++;
+      }
+    } finally {
+      // End `boundary connect` process
+      connect?.kill('SIGTERM');
+    }
+
+    apiClientTestAfter(async () => {
+      const storageBuckets =
+        (
+          await apiClient.clients.StorageBucket.storageBucketServiceListStorageBuckets(
+            {
+              scopeId: 'global',
+              recursive: true,
+            },
+          )
+        ).items ?? [];
+
+      expect(
+        storageBuckets.find((bucket) => bucket.id === storageBuckets.id),
+      ).toBeUndefined();
+    });
   },
 );

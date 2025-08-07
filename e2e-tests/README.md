@@ -302,7 +302,8 @@ test.beforeEach(async ({ apiClient }) => {
 * Generated api client uses typescript to help with the discovery of the required arguments
   * Any untyped `attributes` that have been documented by a `description` in the swagger doc will also be included as a docblock comment when inspecting `attributes` in the editor (see `ControllerApiResourcesAccountsV1Account.attributes` in `models/ControllerApiResourcesAccountsV1Account.ts` for an example)
 * Automatic resource clean up
-  * Any resources created by the api client will be automatically cleaned up after the test is finished. To skip cleanup of a resource pass in the created resource to `apiClient.skipCleanup(createdResource);` (where `createdResource` has an `id` property)
+  * Any resources created by the api client will be automatically cleaned up after the test is finished. To skip cleanup of a resource pass in the created resource to `apiClient.skipCleanup(createdResource);` (where `createdResource` has an `id` property).
+  * In some cases resources will need child resources, created outside the api, to be cleaned up first. For example, a storage bucket created by the api client cannot be automatically cleaned up until all session recordings have been deleted. Session recordings are created automatically and not tracked by the API so these need to be deleted manually. Session recordings cannot be deleted unless they are in a `available` state which depends on the session being recorded being in a `terminated` state. Sessions also are not created by the api and need to be cleaned up manually.
 * Error logging
   * When api calls fail with an http status code >= 400 the error response is logged
 

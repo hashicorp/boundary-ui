@@ -10,11 +10,10 @@ const BoundaryE2EResourceCleanupHeader = 'X-Boundary-E2E-Resource-Cleanup';
 
 // These constants represent assumptions around the boundary api
 const BoundaryApiStatusCodes = Object.freeze({
-  created: 200,
+  ok: 200,
   deleted: 204,
   notFound: 404,
 });
-const BOUNDARY_API_CREATED_RESOURCE_HTTP_CONTENT_TYPE = 'application/json';
 
 // the openapi spec generated incorrectly specifies that DELETE responses will be a 200 with a json body,
 // but they actually return a 204 "No Content" status with no body. The generated api client does not handle
@@ -64,8 +63,10 @@ const betterErrorHandlingMiddleware = {
   },
 };
 
-function extractPluralizedResourceTypeFromUrl(url: string): string | undefined {
-  const match = new URL(url).pathname.match(/\/v1\/([a-z-]+)/);
+function extractPluralizedResourceTypeFromResourceCreationUrl(
+  url: string,
+): string | undefined {
+  const match = new URL(url).pathname.match(/^\/v1\/([a-z-]+)$/);
   if (!match) return undefined;
 
   const [_, type] = match;
@@ -124,9 +125,7 @@ class BoundaryApi {
       Group: new BoundaryApiClient.GroupServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/hosts Hosts Documentation} */
-      Host: new BoundaryApiClient.HostServiceApi(
-        openapiConfiguration,
-      ),
+      Host: new BoundaryApiClient.HostServiceApi(openapiConfiguration),
 
       /** {@link https://developer.hashicorp.com/boundary/docs/concepts/domain-model/host-catalogs Host Catalogs Documentation} */
       HostCatalog: new BoundaryApiClient.HostCatalogServiceApi(
@@ -191,31 +190,37 @@ class BoundaryApi {
 
     const captureCreatedResourcesMiddleware = {
       async post(context) {
-        const resourceWasCreated =
-          context.response.status === BoundaryApiStatusCodes.created &&
-          context.response.headers.get('content-type') ===
-            BOUNDARY_API_CREATED_RESOURCE_HTTP_CONTENT_TYPE;
-
-        // if the response doesn't represent a created resource, return early
-        if (!resourceWasCreated) {
+        // only json responses are expected for created resources
+        if (
+          context.response.status !== BoundaryApiStatusCodes.ok ||
+          context.response.headers.get('content-type') !== 'application/json'
+        ) {
           return context.response;
         }
 
-        // the url is the being used to determine the resource type, it returns the type in pluralized form
-        const pluralizedResourceType = extractPluralizedResourceTypeFromUrl(
-          context.response.url,
-        );
         // the response `json` can only be read once, and needs to be read later by the generated api client,
         // instead we can clone the response and this allows us to read the `json` on the cloned response only
         const json = await context.response.clone().json();
 
-        // it's assume that json response has an `id` in order for it to be a created resource
-        if (pluralizedResourceType && typeof json?.id === 'string') {
-          resources[pluralizedResourceType] ??= [];
-          // capture the created json payload, all that's really needed is the `id` and the `type`
-          // in order to delete it later
-          resources[pluralizedResourceType].push(json);
+        // created responses should have a valid "id" field
+        if (!json.id) {
+          return context.response;
         }
+
+        // the url is the being used to determine the resource type, it returns the type in pluralized form
+        const pluralizedResourceType =
+          extractPluralizedResourceTypeFromResourceCreationUrl(
+            context.response.url,
+          );
+
+        if (!pluralizedResourceType) {
+          return context.response;
+        }
+
+        resources[pluralizedResourceType] ??= [];
+        // capture the created json payload, all that's really needed is the `id` and the `type`
+        // in order to automatically clean it up later
+        resources[pluralizedResourceType].push(json);
 
         // return original response
         return context.response;
@@ -239,8 +244,14 @@ class BoundaryApi {
 export const boundaryApiClientTest = base.extend<{
   apiClient: BoundaryApi;
   controllerAddr?: string;
+  apiClientTestAfter?: () => {};
 }>({
-  apiClient: async ({ controllerAddr }, use) => {
+  apiClient: async ({ controllerAddr, apiClientTestAfter }, use) => {
+    // by destructuring the `apiClientTestAfter` fixture it creates a dependency on that fixture which
+    // controls the setup/teardown order and allows `api-client.spec.js` to test the teardown cleanup
+    // of this fixture
+    apiClientTestAfter;
+
     if (!controllerAddr) {
       throw new Error('`controllerAddr` must be set in the base fixture');
     }
@@ -261,47 +272,40 @@ export const boundaryApiClientTest = base.extend<{
         clients.Account,
       ),
       aliases: clients.Alias.aliasServiceDeleteAlias.bind(clients.Alias),
-      auth_tokens: clients.AuthToken.authTokenServiceDeleteAuthToken.bind(
+      ['auth-tokens']: clients.AuthToken.authTokenServiceDeleteAuthToken.bind(
         clients.AuthToken,
       ),
-      auth_methods: clients.AuthMethod.authMethodServiceDeleteAuthMethod.bind(
-        clients.AuthMethod,
-      ),
-      credential_libraries:
+      ['auth-methods']:
+        clients.AuthMethod.authMethodServiceDeleteAuthMethod.bind(
+          clients.AuthMethod,
+        ),
+      ['credential-libraries']:
         clients.CredentialLibrary.credentialLibraryServiceDeleteCredentialLibrary.bind(
           clients.CredentialLibrary,
         ),
       credentials: clients.Credential.credentialServiceDeleteCredential.bind(
         clients.Credential,
       ),
-      credential_stores:
+      ['credential-stores']:
         clients.CredentialStore.credentialStoreServiceDeleteCredentialStore.bind(
           clients.CredentialStore,
         ),
       groups: clients.Group.groupServiceDeleteGroup.bind(clients.Group),
-      host_catalogs:
+      ['host-catalogs']:
         clients.HostCatalog.hostCatalogServiceDeleteHostCatalog.bind(
           clients.HostCatalog,
         ),
-      host_sets: clients.HostSet.hostSetServiceDeleteHostSet.bind(
+      ['host-sets']: clients.HostSet.hostSetServiceDeleteHostSet.bind(
         clients.HostSet,
       ),
-      managed_groups:
+      ['managed-groups']:
         clients.ManagedGroup.managedGroupServiceDeleteManagedGroup.bind(
           clients.ManagedGroup,
         ),
       policies: clients.Policy.policyServiceDeletePolicy.bind(clients.Policy),
       roles: clients.Role.roleServiceDeleteRole.bind(clients.Role),
       scopes: clients.Scope.scopeServiceDeleteScope.bind(clients.Scope),
-      session_recordings:
-        clients.SessionRecording.sessionRecordingServiceDeleteSessionRecording.bind(
-          clients.SessionRecording,
-        ),
-      // this is not a delete method on the resource, but cancelling a session is the equivalent cleanup action
-      sessions: clients.Session.sessionServiceCancelSession.bind(
-        clients.Session,
-      ),
-      storage_buckets:
+      ['storage-buckets']:
         clients.StorageBucket.storageBucketServiceDeleteStorageBucket.bind(
           clients.StorageBucket,
         ),
@@ -310,6 +314,7 @@ export const boundaryApiClientTest = base.extend<{
       workers: clients.Worker.workerServiceDeleteWorker.bind(clients.Worker),
     };
 
+    // clean up resources in batches per type
     for (const [pluralizedResourceType, resources] of Object.entries(
       boundaryApi.createdResources,
     )) {
@@ -333,33 +338,45 @@ export const boundaryApiClientTest = base.extend<{
         };
       };
 
-      // this will race all deletions of all the resources marked for deletion,
-      // orders should not matter because cascade deletions should handle all
-      // dependent resources
+      // this will race deletions for all unskipped created resources for a specific resource type
       await Promise.all(
         resources
           .filter((resource) => {
-            return boundaryApi.skipCleanupResources.some(
-              (r) => r.id !== resource.id,
+            return !boundaryApi.skipCleanupResources.some(
+              (r) => r.id === resource.id,
             );
           })
-          .map((resource) =>
-            cleanUpMethod({ id: resource.id }, cleanUpInitOverride).catch(
-              (error) => {
-                // if the resource is not found it was likely already deleted and the error can be ignored
-                if (
-                  error.response?.status === BoundaryApiStatusCodes.notFound
-                ) {
-                  return;
-                }
+          .map((resource) => {
+            return cleanUpMethod(
+              { id: resource.id },
+              cleanUpInitOverride,
+            ).catch(async (error) => {
+              // if the resource is not found it was likely already deleted and the error can be ignored
+              if (error.response?.status === BoundaryApiStatusCodes.notFound) {
+                return;
+              }
 
-                console.warn(
-                  `Failed to clean up resource of type ${pluralizedResourceType} with id ${resource.id}:`,
-                  error,
-                );
-              },
-            ),
-          ),
+              let responseDetails;
+              if (error.response) {
+                const clonedResponse = error.response.clone();
+                const { status, statusText, url } = clonedResponse;
+                responseDetails = {
+                  status,
+                  statusText,
+                  url,
+                  body: await clonedResponse.text(),
+                };
+              }
+
+              console.warn(
+                `Failed to clean up resource of type ${pluralizedResourceType} with id ${resource.id}:`,
+              );
+
+              if (responseDetails) {
+                console.warn(responseDetails);
+              }
+            });
+          }),
       );
     }
   },
