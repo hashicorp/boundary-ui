@@ -268,16 +268,27 @@ test.describe('Aliases (Enterprise)', () => {
           targetName,
         );
 
+        await page
+          .getByRole('link', { name: `Back to ${orgName}`, exact: true })
+          .click();
+        await page.getByRole('link', { name: 'Back to Global' }).click();
+        await page.getByRole('link', { name: 'Aliases' }).click();
+        await expect(
+          page
+            .getByRole('navigation', { name: 'breadcrumbs' })
+            .getByText('Aliases'),
+        ).toBeVisible();
         alias = 'example.alias.' + nanoid();
         const aliasesPage = new AliasesPage(page);
-        await aliasesPage.createAliasForTarget(alias, targetId, orgName);
-        connect = await boundaryCli.connectSshToAlias(alias);
+        await aliasesPage.createAliasForTarget(alias, targetId);
         await page
           .getByRole('navigation', { name: 'Application local navigation' })
           .getByRole('link', { name: 'Orgs' })
           .click();
         await page.getByRole('link', { name: orgName }).click();
         await page.getByRole('link', { name: projectName }).click();
+
+        connect = await boundaryCli.connectSshToAlias(alias);
         const sessionsPage = new SessionsPage(page);
         await sessionsPage.waitForSessionToBeVisible(targetName);
       } finally {
