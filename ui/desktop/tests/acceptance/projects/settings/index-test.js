@@ -20,8 +20,6 @@ import {
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
 
-const SIGNOUT_SELECTOR = '[data-test-signout-button]';
-
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -57,6 +55,10 @@ module('Acceptance | projects | settings | index', function (hooks) {
     settings: null,
   };
 
+  const SIGNOUT_BTN = '[data-test-settings-signout-btn]';
+  const MODAL_CLOSE_SESSIONS = '[data-test-close-sessions-modal]';
+  const MODAL_CONFIRM_BTN = '.hds-modal__footer .hds-button--color-primary';
+
   const setDefaultClusterUrl = (test) => {
     const windowOrigin = window.location.origin;
     const clusterUrl = test.owner.lookup('service:clusterUrl');
@@ -65,17 +67,20 @@ module('Acceptance | projects | settings | index', function (hooks) {
 
   hooks.beforeEach(async function () {
     await authenticateSession();
+
     // Generate scopes
     instances.scopes.global = this.server.create('scope', {
       id: 'global',
       name: 'Global',
     });
     const globalScope = { id: 'global', type: 'global' };
+
     instances.scopes.org = this.server.create('scope', {
       type: 'org',
       scope: globalScope,
     });
     const orgScope = { id: instances.scopes.org.id, type: 'org' };
+
     instances.scopes.project = this.server.create('scope', {
       type: 'project',
       scope: orgScope,
@@ -83,7 +88,6 @@ module('Acceptance | projects | settings | index', function (hooks) {
     urls.scopes.org = `/scopes/${instances.scopes.org.id}`;
     urls.scopes.global = `/scopes/${instances.scopes.global.id}`;
     urls.projects = `${urls.scopes.org}/projects`;
-
     urls.settings = `${urls.projects}/settings`;
 
     this.owner.register('service:browser/window', WindowMockIPC);
@@ -113,16 +117,19 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.notOk(currentSession().get('data.theme'));
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+
     // toggle light mode
     await select('[name="theme"]', 'light');
     assert.strictEqual(currentSession().get('data.theme'), 'light');
     assert.ok(getRootElement().classList.contains('rose-theme-light'));
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
+
     // toggle dark mode
     await select('[name="theme"]', 'dark');
     assert.strictEqual(currentSession().get('data.theme'), 'dark');
     assert.notOk(getRootElement().classList.contains('rose-theme-light'));
     assert.ok(getRootElement().classList.contains('rose-theme-dark'));
+
     // toggle system default
     await select('[name="theme"]', 'system-default-theme');
     assert.strictEqual(
@@ -133,12 +140,37 @@ module('Acceptance | projects | settings | index', function (hooks) {
     assert.notOk(getRootElement().classList.contains('rose-theme-dark'));
   });
 
-  test('clicking sign-out button logs out the user', async function (assert) {
-    await authenticateSession({ username: 'testuser' });
+  test('clicking signout button logs out the user', async function (assert) {
     assert.expect(2);
-    await visit(urls.settings);
+
+    await authenticateSession({ username: 'testuser' });
     assert.ok(currentSession().isAuthenticated);
-    await click(SIGNOUT_SELECTOR);
+
+    await visit(urls.settings);
+
+    await click(SIGNOUT_BTN);
+
+    assert.notOk(currentSession().isAuthenticated);
+  });
+
+  test('confirming signout with running sessions stops sessions and logs out user', async function (assert) {
+    const stopAllSessions = this.ipcStub.withArgs('stopAll');
+    this.ipcStub.withArgs('hasRunningSessions').returns(true);
+
+    await authenticateSession({ username: 'testuser' });
+    assert.ok(currentSession().isAuthenticated);
+
+    await visit(urls.settings);
+
+    await click(SIGNOUT_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isVisible();
+    assert.dom(MODAL_CLOSE_SESSIONS).includesText('Sign out of Boundary?');
+
+    await click(MODAL_CONFIRM_BTN);
+
+    assert.dom(MODAL_CLOSE_SESSIONS).isNotVisible();
+    assert.ok(stopAllSessions.calledOnce);
     assert.notOk(currentSession().isAuthenticated);
   });
 });
