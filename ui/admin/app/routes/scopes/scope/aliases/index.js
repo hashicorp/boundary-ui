@@ -118,7 +118,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
     if (totalItems > 0) {
       return true;
     }
-    const options = { pushToStore: false, peekIndexedDB: true };
+    const options = { pushToStore: false, peekDb: true };
     const aliases = await this.store.query(
       'alias',
       {
