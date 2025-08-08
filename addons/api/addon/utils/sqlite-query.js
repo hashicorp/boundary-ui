@@ -151,7 +151,7 @@ function constructOrderByClause(select, resource, sort) {
     }
   } else if (customSort?.attributes) {
     const validAttributes = Object.keys(modelMapping[resource]);
-    if (validAttributes.includes(...customSort.attributes)) {
+    if (customSort.attributes.every((attr) => validAttributes.includes(attr))) {
       const commaSeparatedVals = customSort.attributes.join(', ');
       // In places where `collate nocase` is used, it is to ensure case is ignored on the initial sort.
       // Then, a sort on the same condition is performed to ensure upper-case strings are given preference in a tie.
@@ -162,11 +162,7 @@ function constructOrderByClause(select, resource, sort) {
     if (validAttributes.includes(attribute)) {
       orderByClause = `ORDER BY ${attribute} COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
     }
-  } else if (
-    modelMapping[resource]?.created_time &&
-    // Don't include any ordering for count statements
-    !select?.some((str) => str.includes('count(*)'))
-  ) {
+  } else if (modelMapping[resource]?.created_time) {
     orderByClause = `ORDER BY created_time DESC`;
   }
 

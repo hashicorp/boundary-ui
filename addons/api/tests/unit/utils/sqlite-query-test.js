@@ -58,7 +58,9 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     const { sql, parameters } = generateSQLExpressions('target', {}, select);
     assert.strictEqual(
       sql,
-      `SELECT count(*) as total FROM "target"`.removeExtraWhiteSpace(),
+      `
+      SELECT count(*) as total FROM "target"
+      ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, []);
   });
@@ -199,6 +201,10 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         attribute: 'type',
         customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
         expectedOrderByClause: `ORDER BY CASE type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
+      },
+      'does not sort on invalid attributes': {
+        customSort: { attributes: ['name', 'doesNotExist'] },
+        expectedOrderByClause: '',
       },
     },
     function (assert, { attribute, customSort, expectedOrderByClause }) {
