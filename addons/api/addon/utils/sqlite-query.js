@@ -33,18 +33,7 @@ export function generateSQLExpressions(
   addFilterConditions(filters, parameters, conditions);
   addSearchConditions(search, resource, parameters, conditions);
 
-  const { attribute, direction } = sort;
-  let orderByClause = '';
-  if (attribute) {
-    // We have to check if the attribute is valid for the resource
-    // as we can't use parameterized queries for ORDER BY
-    const validAttributes = Object.keys(modelMapping[resource]);
-    if (validAttributes.includes(attribute)) {
-      orderByClause = `ORDER BY ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
-    }
-  } else if (modelMapping[resource]?.created_time) {
-    orderByClause = `ORDER BY created_time DESC`;
-  }
+  const orderByClause = constructOrderByClause(resource, sort);
 
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';
 
@@ -53,7 +42,7 @@ export function generateSQLExpressions(
     parameters.push(pageSize, (page - 1) * pageSize);
   }
 
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM ${resource}`;
+  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${resource}"`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
@@ -143,6 +132,43 @@ function addSearchConditions(search, resource, parameters, conditions) {
     ),
   );
   conditions.push(searchConditions);
+}
+
+function constructOrderByClause(resource, sort) {
+  let orderByClause = '';
+  const { attribute, customSort, direction } = sort;
+
+  if (modelMapping[resource]?.created_time) {
+    orderByClause = `ORDER BY created_time DESC`;
+  }
+
+  if (customSort?.attributeMap) {
+    // We have to check if the attribute is valid for the resource
+    // as we can't use parameterized queries for ORDER BY
+    const validAttributes = Object.keys(modelMapping[resource]);
+    if (validAttributes.includes(attribute)) {
+      let whenClauses = '';
+      Object.keys(customSort.attributeMap).forEach((key) => {
+        whenClauses += `WHEN '${key}' THEN '${customSort.attributeMap[key]}' `;
+      });
+      orderByClause = `ORDER BY CASE ${attribute} ${whenClauses}END ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+    }
+  } else if (customSort?.attributes) {
+    const validAttributes = Object.keys(modelMapping[resource]);
+    if (customSort.attributes.every((attr) => validAttributes.includes(attr))) {
+      const commaSeparatedVals = customSort.attributes.join(', ');
+      // In places where `collate nocase` is used, it is to ensure case is ignored on the initial sort.
+      // Then, a sort on the same condition is performed to ensure upper-case strings are given preference in a tie.
+      orderByClause = `ORDER BY COALESCE(${commaSeparatedVals}) COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, COALESCE(${commaSeparatedVals}) ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+    }
+  } else if (attribute) {
+    const validAttributes = Object.keys(modelMapping[resource]);
+    if (validAttributes.includes(attribute)) {
+      orderByClause = `ORDER BY ${attribute} COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
+    }
+  }
+
+  return orderByClause;
 }
 
 // Comparison Operators

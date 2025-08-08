@@ -28,7 +28,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.strictEqual(
       sql,
       `
-        SELECT * FROM target
+        SELECT * FROM "target"
         WHERE rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
@@ -44,7 +44,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.strictEqual(
       sql,
       `
-        SELECT * FROM token
+        SELECT * FROM "token"
         WHERE (id = ?)`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, ['tokenKey']);
@@ -59,8 +59,8 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.strictEqual(
       sql,
       `
-        SELECT count(*) as total FROM target
-        ORDER BY created_time DESC`.removeExtraWhiteSpace(),
+      SELECT count(*) as total FROM "target"
+      ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
     assert.deepEqual(parameters, []);
   });
@@ -160,7 +160,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       assert.strictEqual(
         sql,
         `
-        SELECT * FROM target
+        SELECT * FROM "target"
         ${expectedWhereClause}
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
       );
@@ -183,8 +183,37 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       assert.strictEqual(
         sql,
         `
-        SELECT * FROM target
-        ORDER BY name ${expectedDirection}`.removeExtraWhiteSpace(),
+        SELECT * FROM "target"
+        ORDER BY name COLLATE NOCASE ${expectedDirection}, name ${expectedDirection}`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(parameters, []);
+    },
+  );
+
+  test.each(
+    'it generates sort order clause correctly',
+    {
+      'sort on multiple attributes': {
+        customSort: { attributes: ['name', 'id'] },
+        expectedOrderByClause: `ORDER BY COALESCE(name, id) COLLATE NOCASE DESC, COALESCE(name, id) DESC`,
+      },
+      'sort on mapped attributes': {
+        attribute: 'type',
+        customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
+        expectedOrderByClause: `ORDER BY CASE type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
+      },
+    },
+    function (assert, { attribute, customSort, expectedOrderByClause }) {
+      const query = {
+        sort: { attribute, customSort, direction: 'desc' },
+      };
+
+      const { sql, parameters } = generateSQLExpressions('target', query);
+      assert.strictEqual(
+        sql,
+        `
+        SELECT * FROM "target"
+        ${expectedOrderByClause}`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, []);
     },
@@ -206,7 +235,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       assert.strictEqual(
         sql,
         `
-        SELECT * FROM target
+        SELECT * FROM "target"
         ORDER BY created_time DESC
         LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
       );
@@ -230,7 +259,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.strictEqual(
       sql,
       `
-        SELECT * FROM target
+        SELECT * FROM "target"
         WHERE (id != ? AND id != ?) AND (status = ? OR status = ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
     );
@@ -266,9 +295,9 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     assert.strictEqual(
       sql,
       `
-      SELECT data FROM target
+      SELECT data FROM "target"
       WHERE (type = ?) AND (status = ? OR status = ?) AND (created_time >= ?) AND rowid IN (SELECT rowid FROM target_fts WHERE target_fts MATCH ?)
-      ORDER BY name DESC
+      ORDER BY name COLLATE NOCASE DESC, name DESC
       LIMIT ? OFFSET ?`.removeExtraWhiteSpace(),
     );
 
@@ -290,7 +319,10 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       emptySearch: { search: '' },
       emptyFilter: { filters: {} },
       emptyFilterAttributes: { filters: { type: [] } },
-      invalidSortAttribute: { attribute: 'test', direction: 'asc' },
+      invalidSortAttribute: { sort: { attribute: 'test', direction: 'asc' } },
+      invalidCustomSortAttribute: {
+        sort: { customSort: { attributes: ['id', 'test'] }, direction: 'asc' },
+      },
       onlyPage: { page: 10 },
       onlyPageSize: { pageSize: 5 },
     },
@@ -299,7 +331,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       assert.strictEqual(
         sql,
         `
-        SELECT * FROM target
+        SELECT * FROM "target"
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
       );
       assert.deepEqual(parameters, []);

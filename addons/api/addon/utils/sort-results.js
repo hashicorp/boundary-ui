@@ -41,11 +41,14 @@ function getSortableValue(schema, record, attribute) {
 
 export const sortResults = (results, { querySort, schema }) => {
   querySort = querySort ?? {};
-  const sortAttribute = querySort.attribute || SORT_DEFAULT_ATTRIBUTE;
+  const sortAttribute =
+    querySort.attribute ||
+    querySort.customSort?.attributes[0] ||
+    SORT_DEFAULT_ATTRIBUTE;
 
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
   const defaultSortDirection =
-    sortAttribute === SORT_DEFAULT_ATTRIBUTE && !querySort.sortFunction
+    sortAttribute === SORT_DEFAULT_ATTRIBUTE
       ? SORT_DIRECTION_DESCENDING
       : SORT_DIRECTION_ASCENDING;
   const sortDirection = querySort.direction || defaultSortDirection;
@@ -58,21 +61,50 @@ export const sortResults = (results, { querySort, schema }) => {
     throw new Error('Invalid sort direction');
   }
 
-  // Execute custom sort function if one is provided.
-  if (querySort.sortFunction) {
+  const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
+
+  const sortFunction =
+    sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
+
+  // Execute custom sort for multiple attributes provided.
+  if (querySort.customSort?.attributes) {
+    const { attributes } = querySort.customSort;
     return results.toSorted((a, b) => {
-      const sortResult = querySort.sortFunction(a, b);
+      let sortValueA, sortValueB;
+
+      attributes.forEach((attr) => {
+        const valueA = getSortableValue(schema, a, attr);
+        const valueB = getSortableValue(schema, b, attr);
+
+        if (valueA && !sortValueA) {
+          sortValueA = valueA;
+        }
+        if (valueB && !sortValueB) {
+          sortValueB = valueB;
+        }
+      });
+      const sortResult = sortFunction(sortValueA, sortValueB);
+      return sortDirection === SORT_DIRECTION_ASCENDING
+        ? sortResult
+        : -1 * sortResult;
+    });
+  }
+  // Execute custom sort for attribute map provided.
+  if (querySort.customSort) {
+    const { attributeMap } = querySort.customSort;
+    return results.toSorted((a, b) => {
+      const sortValueA = getSortableValue(schema, a, sortAttribute);
+      const sortValueB = getSortableValue(schema, b, sortAttribute);
+      const sortResult = sortFunction(
+        attributeMap[sortValueA],
+        attributeMap[sortValueB],
+      );
 
       return sortDirection === SORT_DIRECTION_ASCENDING
         ? sortResult
         : -1 * sortResult;
     });
   }
-
-  const sortAttributeDataType = schema.attributes.get(sortAttribute)?.type;
-
-  const sortFunction =
-    sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
 
   return results.toSorted((a, b) => {
     // Extract the values to sort and sort them.
