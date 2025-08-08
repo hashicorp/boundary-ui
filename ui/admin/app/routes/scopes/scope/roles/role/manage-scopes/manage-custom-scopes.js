@@ -55,6 +55,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         await timeout(250);
       }
 
+      console.log({ search });
       const role = this.modelFor('scopes.scope.roles.role');
       const canSelectOrgs =
         !role.grant_scope_ids.includes(GRANT_SCOPE_CHILDREN);
@@ -76,13 +77,26 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
         recursive: true,
       });
 
-      let projectTotals;
-      let allProjects;
-      if (canSelectOrgs) {
-        projectTotals = await this.getProjectTotals(role.grantScopeProjectIDs);
-      } else {
-        allProjects = await this.getAllProjects();
-      }
+      let projectTotals = await this.getProjectTotals(
+        role.grantScopeProjectIDs,
+      );
+      let allProjects = await this.getAllProjects();
+      scopes.push(...allProjects);
+
+      const parentScopeNames = Object.fromEntries(
+        (
+          await Promise.all(
+            scopes.map(async (scope) => {
+              const parentScopeId = scope.scope.id;
+              const parentScope = await this.store.query('scope', {
+                query: { filters: { id: [{ equals: parentScopeId }] } },
+              });
+              if (parentScopeId === 'global') return;
+              return [parentScopeId, parentScope[0].name];
+            }),
+          )
+        ).filter(Boolean),
+      );
 
       const totalItems = scopes.meta?.totalItems;
       const totalItemsCount = await this.getTotalItemsCount(
@@ -94,6 +108,7 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
       return {
         role,
         scopes,
+        parentScopeNames,
         projectTotals,
         allProjects,
         totalItems,
@@ -108,15 +123,10 @@ export default class ScopesScopeRolesRoleManageScopesManageCustomScopesRoute ext
    * @returns {Promise<[ScopeModel]>}
    */
   async getAllProjects() {
-    const options = { pushToStore: false, peekIndexedDB: true };
-    return this.store.query(
-      'scope',
-      {
-        scope_id: 'global',
-        query: { filters: { type: [{ equals: TYPE_SCOPE_PROJECT }] } },
-      },
-      options,
-    );
+    return this.store.query('scope', {
+      scope_id: 'global',
+      query: { filters: { type: [{ equals: TYPE_SCOPE_PROJECT }] } },
+    });
   }
 
   /**
