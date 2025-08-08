@@ -88,4 +88,34 @@ module('Unit | Authenticator | base', function (hooks) {
       assert.ok(true, 'restoration failed');
     }
   });
+
+  test('it normalizes authenticated data correctly', async function (assert) {
+    assert.expect(6);
+    const account_id = 'account_123';
+    const token = 'token123';
+    const scope = { id: 'global', type: 'global' };
+    const mockData = {
+      scope,
+      id: 'auth_123',
+      attributes: { account_id, token },
+    };
+    const account = { id: account_id, attributes: { email: 'test@123.com' } };
+    const authenticator = this.owner.lookup('authenticator:base');
+
+    server.get(authenticator.buildAccountEndpointURL(account_id), () => {
+      assert.ok(true, 'account data was requested');
+      return [200, account, JSON.stringify(account)];
+    });
+
+    const normalizedData = await authenticator.normalizeData(mockData);
+
+    assert.true(normalizedData.isGlobal);
+    assert.false(normalizedData.isOrg);
+    assert.strictEqual(normalizedData.username, account.attributes.email);
+    assert.strictEqual(
+      normalizedData.account_id,
+      mockData.attributes.account_id,
+    );
+    assert.strictEqual(normalizedData.token, mockData.attributes.token);
+  });
 });
