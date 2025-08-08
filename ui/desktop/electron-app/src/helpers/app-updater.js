@@ -17,7 +17,8 @@ const boundaryCli = require('../cli/index.js');
 let currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
 const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
-if (debug && process.env.APP_UPDATER_CURRENT_VERSION) {
+
+if (!app.isPackaged && debug && process.env.APP_UPDATER_CURRENT_VERSION) {
   currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
 }
 
@@ -177,7 +178,7 @@ module.exports = {
     if (!boundaryCli.isBuiltInCli) return;
 
     let latestVersion;
-    if (debug) {
+    if (!app.isPackaged && debug) {
       latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
     } else {
       latestVersion = await findLatestVersion(releasesUrl);
@@ -197,14 +198,16 @@ module.exports = {
       return;
     }
 
-    const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
-    if (debug && location) {
-      // Support hosted url and file paths
-      displayDownloadPrompt(
-        latestVersion,
-        location.match(/^http/i) ? location : `file://${location}`,
-      );
-      return;
+    if (!app.isPackaged) {
+      const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
+      if (debug && location) {
+        // Support hosted url and file paths
+        displayDownloadPrompt(
+          latestVersion,
+          location.match(/^http/i) ? location : `file://${location}`,
+        );
+        return;
+      }
     }
 
     /**
