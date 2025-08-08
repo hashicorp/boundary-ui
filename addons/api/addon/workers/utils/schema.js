@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS token (
 CREATE TABLE IF NOT EXISTS target (
     id TEXT NOT NULL PRIMARY KEY,
     type TEXT NOT NULL,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
     description TEXT,
     address TEXT,
     scope_id TEXT NOT NULL,
@@ -64,7 +64,7 @@ END;
 
 CREATE TABLE IF NOT EXISTS "group" (
     id TEXT NOT NULL PRIMARY KEY,
-    name TEXT UNIQUE,
+    name TEXT,
     description TEXT,
     scope_id TEXT NOT NULL,
     created_time TEXT NOT NULL,

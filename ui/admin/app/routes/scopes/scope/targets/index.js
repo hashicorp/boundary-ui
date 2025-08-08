@@ -18,6 +18,7 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
   @service can;
   @service store;
   @service session;
+  @service intl;
 
   // =attributes
 
@@ -63,11 +64,6 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  typeMap = {
-    [TYPE_TARGET_SSH]: 'SSH',
-    [TYPE_TARGET_TCP]: 'Generic TCP',
-  };
-
   retrieveData = restartableTask(
     async ({
       search,
@@ -111,11 +107,16 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
         this.addActiveSessionFilters(filters, availableSessions, sessions);
       }
 
+      const typeMap = {
+        [TYPE_TARGET_SSH]: this.intl.t('resources.target.types.ssh'),
+        [TYPE_TARGET_TCP]: this.intl.t('resources.target.types.tcp'),
+      };
+
       const sort =
         sortAttribute === 'type'
           ? {
               attribute: sortAttribute,
-              customSort: { attributeMap: this.typeMap },
+              customSort: { attributeMap: typeMap },
               direction: sortDirection,
             }
           : { attribute: sortAttribute, direction: sortDirection };

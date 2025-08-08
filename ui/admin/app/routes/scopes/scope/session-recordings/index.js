@@ -18,6 +18,7 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
   @service store;
   @service router;
   @service can;
+  @service intl;
 
   // =attributes
 
@@ -70,12 +71,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  stateMap = {
-    [STATE_SESSION_RECORDING_AVAILABLE]: 'Completed',
-    [STATE_SESSION_RECORDING_STARTED]: 'Recording',
-    [STATE_SESSION_RECORDING_UNKNOWN]: 'Failed',
-  };
-
   retrieveData = restartableTask(
     async ({
       search,
@@ -116,11 +111,17 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         filters['create_time_values.target.id'].push({ equals: target });
       });
 
+      const stateMap = {
+        [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
+        [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
+        [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
+      };
+
       const sort =
         sortAttribute === 'state'
           ? {
               attribute: sortAttribute,
-              customSort: { attributeMap: this.stateMap },
+              customSort: { attributeMap: stateMap },
               direction: sortDirection,
             }
           : { attribute: sortAttribute, direction: sortDirection };
