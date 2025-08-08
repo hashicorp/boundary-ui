@@ -212,5 +212,8 @@ if (isSecure) {
     initializeOnProviderChange,
   );
 } else {
-  await methods.initializeSQLite();
+  // Production builds error out when using top level awaits so we'll just use an async IIFE
+  (async () => {
+    await methods.initializeSQLite();
+  })();
 }
