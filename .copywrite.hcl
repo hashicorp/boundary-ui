@@ -13,9 +13,10 @@ project {
     "**/node_modules/**",
     "**/dist/**",
     "**/coverage/**",
-    "ui/desktop/electron-app/out/**",
-    "ui/desktop/electron-app/ember-dist/**",
     "**/pnpm-lock.yaml",
     "**/pnpm-workspace.yaml",
+    "ui/desktop/electron-app/out/**",
+    "ui/desktop/electron-app/ember-dist/**",
+    "e2e-tests/api-client/**"
   ]
 }
