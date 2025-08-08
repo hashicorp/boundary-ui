@@ -202,10 +202,6 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
         expectedOrderByClause: `ORDER BY CASE type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
       },
-      'does not sort on invalid attributes': {
-        customSort: { attributes: ['name', 'doesNotExist'] },
-        expectedOrderByClause: '',
-      },
     },
     function (assert, { attribute, customSort, expectedOrderByClause }) {
       const query = {
@@ -323,7 +319,10 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       emptySearch: { search: '' },
       emptyFilter: { filters: {} },
       emptyFilterAttributes: { filters: { type: [] } },
-      invalidSortAttribute: { attribute: 'test', direction: 'asc' },
+      invalidSortAttribute: { sort: { attribute: 'test', direction: 'asc' } },
+      invalidCustomSortAttribute: {
+        sort: { customSort: { attributes: ['id', 'test'] }, direction: 'asc' },
+      },
       onlyPage: { page: 10 },
       onlyPageSize: { pageSize: 5 },
     },

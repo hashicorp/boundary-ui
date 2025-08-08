@@ -33,7 +33,7 @@ export function generateSQLExpressions(
   addFilterConditions(filters, parameters, conditions);
   addSearchConditions(search, resource, parameters, conditions);
 
-  let orderByClause = constructOrderByClause(select, resource, sort);
+  const orderByClause = constructOrderByClause(resource, sort);
 
   const whereClause = conditions.length ? `WHERE ${and(conditions)}` : '';
 
@@ -134,9 +134,13 @@ function addSearchConditions(search, resource, parameters, conditions) {
   conditions.push(searchConditions);
 }
 
-function constructOrderByClause(select, resource, sort) {
+function constructOrderByClause(resource, sort) {
   let orderByClause = '';
   const { attribute, customSort, direction } = sort;
+
+  if (modelMapping[resource]?.created_time) {
+    orderByClause = `ORDER BY created_time DESC`;
+  }
 
   if (customSort?.attributeMap) {
     // We have to check if the attribute is valid for the resource
@@ -162,8 +166,6 @@ function constructOrderByClause(select, resource, sort) {
     if (validAttributes.includes(attribute)) {
       orderByClause = `ORDER BY ${attribute} COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
     }
-  } else if (modelMapping[resource]?.created_time) {
-    orderByClause = `ORDER BY created_time DESC`;
   }
 
   return orderByClause;
