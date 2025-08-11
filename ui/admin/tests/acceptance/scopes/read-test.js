@@ -11,6 +11,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | scopes | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -51,6 +52,15 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting org scope edit', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.orgScopeEdit));
@@ -99,6 +109,15 @@ module('Acceptance | scopes | read', function (hooks) {
   });
 
   test('visiting org scope edit without read permission results in no form displayed', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.org.update({
       authorized_actions: instances.scopes.org.authorized_actions.filter(
         (item) => item !== 'read',

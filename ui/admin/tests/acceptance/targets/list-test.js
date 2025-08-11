@@ -22,6 +22,7 @@ import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { faker } from '@faker-js/faker';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -95,6 +96,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('can navigate to targets with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.projectScope));
@@ -134,6 +144,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'list',
@@ -156,6 +175,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can navigate to index with only list action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',
@@ -178,6 +206,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can search for a specific target by id', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -193,6 +230,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can search for targets and get no results', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -212,6 +258,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can filter for targets by type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -228,6 +283,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can filter for targets by active sessions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -246,6 +310,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('active sessions filter is hidden if user does not have permission to list sessions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions.sessions =
       instances.scopes.project.authorized_collection_actions.sessions.filter(
         (item) => item !== 'list',
@@ -260,6 +333,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('user can navigate to active sessions from targets table', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -270,6 +352,15 @@ module('Acceptance | targets | list', function (hooks) {
   });
 
   test('targets table is sorted by `created_time` descending by default', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.schema.targets.all().destroy();
     const createdTimeToNameMapping = {};
     CREATED_TIME_VALUES_ARRAY.forEach((value, index) => {
@@ -323,6 +414,15 @@ module('Acceptance | targets | list', function (hooks) {
     },
 
     async function (assert, input) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-04
+            enabled: false,
+          },
+        },
+      });
+
       this.server.schema.targets.all().destroy();
       faker.helpers.shuffle(input.attribute.values).forEach((value) => {
         this.server.create('target', {

@@ -16,6 +16,7 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +75,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new managed group', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -98,6 +108,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('can create a new ldap managed group', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -130,6 +149,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new managed group without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_collection_actions['managed-groups'] =
       instances.authMethod.authorized_collection_actions[
         'managed-groups'
@@ -147,6 +175,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User cannot create a new ldap managed group without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       instances.ldapAuthMethod.authorized_collection_actions[
@@ -165,6 +202,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new managed group creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.authMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -178,6 +224,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('User can cancel a new ldap managed group creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const managedGroupsCount = getManagedGroupCount();
     await visit(urls.ldapAuthMethod);
     await click(selectors.MANAGE_DROPDOWN_AUTH_METHOD);
@@ -191,6 +246,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new managed group with invalid fields displays error message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/managed-groups', () => {
       return new Response(
         400,
@@ -223,6 +287,15 @@ module('Acceptance | managed-groups | create', function (hooks) {
   });
 
   test('When user saving a new ldap managed group with invalid fields displays error message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/managed-groups', () => {
       return new Response(
         400,

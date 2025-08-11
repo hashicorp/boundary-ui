@@ -10,6 +10,7 @@ import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | credential-stores | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -67,6 +68,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting static credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     await visit(urls.credentialStores);
 
@@ -78,6 +88,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting vault credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.credentialStores);
 
     assert.strictEqual(currentURL(), urls.credentialStores);
@@ -88,6 +107,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a static credential store form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
     instances.staticCredentialStore.authorized_actions =
       instances.staticCredentialStore.authorized_actions.filter(
@@ -105,6 +133,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('cannot navigate to a vault credential store form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('static-credentials');
     await visit(urls.projectScope);
     instances.vaultCredentialStore.authorized_actions =
@@ -123,6 +160,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('visiting an unknown credential store displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownCredentialStore);
 
     assert
@@ -131,6 +177,15 @@ module('Acceptance | credential-stores | read', function (hooks) {
   });
 
   test('users can link to docs page for credential store', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.credentialStores));

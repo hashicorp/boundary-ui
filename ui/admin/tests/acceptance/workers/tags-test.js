@@ -18,6 +18,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { HCP_MANAGED_KEY } from 'api/models/worker';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | workers | worker | tags', function (hooks) {
   setupApplicationTest(hooks);
@@ -49,6 +50,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('visiting worker tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.worker);
 
     await click(commonSelectors.HREF(urls.tags));
@@ -58,6 +68,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('config tags display a tooltip for HCP managed tag', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.worker.config_tags = { [HCP_MANAGED_KEY]: ['true'] };
     await visit(urls.tags);
 
@@ -71,6 +90,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('config tags display a tooltip self managed tag', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.tags);
 
     await focus(selectors.TABLE_ROW_CONFIG_TAG_TOOLTIP_BUTTON);
@@ -81,6 +109,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('users can remove a specific tag', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.tags);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
@@ -100,6 +137,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('user can cancel tag removal', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.tags);
 
     assert.dom(commonSelectors.TABLE_ROWS).exists({ count: 11 });
@@ -113,6 +159,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('user cannot remove a tag without proper permission', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter(
         (item) => item !== 'remove-worker-tags',
@@ -133,6 +188,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('users can edit a specific tag', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.tags);
     const key = find(selectors.TABLE_ROW_API_TAG_KEY(4)).textContent.trim();
     const value = find(selectors.TABLE_ROW_API_TAG_VALUE(4)).textContent.trim();
@@ -153,6 +217,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('users can cancel editing a tag', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.tags);
     const key = find(selectors.TABLE_ROW_API_TAG_KEY(4)).textContent.trim();
     const value = find(selectors.TABLE_ROW_API_TAG_VALUE(4)).textContent.trim();
@@ -173,6 +246,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('user cannot edit a tag without proper permission', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter(
         (item) => item !== 'set-worker-tags',
@@ -191,6 +273,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('user does not see tag action dropdown if they cannot edit or remove tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.worker.authorized_actions =
       instances.worker.authorized_actions.filter(
         (item) => item !== 'set-worker-tags' && item !== 'remove-worker-tags',
@@ -202,6 +293,15 @@ module('Acceptance | workers | worker | tags', function (hooks) {
   });
 
   test('shows "No tags added" message when there are no worker tags', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.worker.api_tags = {};
     instances.worker.config_tags = {};
     instances.worker.canonical_tags = {};

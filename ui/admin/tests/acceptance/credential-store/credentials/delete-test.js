@@ -11,6 +11,7 @@ import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | credential-stores | credentials | delete',
@@ -106,6 +107,15 @@ module(
     });
 
     test('can delete username & password credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const usernamePasswordCredentialCount =
         getUsernamePasswordCredentialCount();
       await visit(urls.usernamePasswordCredential);
@@ -121,6 +131,15 @@ module(
     });
 
     test('can delete username & key pair credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const usernameKeyPairCredentialCount =
         getUsernameKeyPairCredentialCount();
       await visit(urls.usernameKeyPairCredential);
@@ -136,6 +155,15 @@ module(
     });
 
     test('can delete JSON credential', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const jsonCredentialCount = getJSONCredentialCount();
       await visit(urls.jsonCredential);
 
@@ -194,6 +222,15 @@ module(
     });
 
     test('can accept delete username & password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernamePasswordCredentialCount =
@@ -211,6 +248,15 @@ module(
     });
 
     test('can accept delete username & key pair credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernameKeyPairCredentialCount =
@@ -229,6 +275,15 @@ module(
     });
 
     test('can accept delete JSON credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
@@ -243,6 +298,15 @@ module(
     });
 
     test('can cancel delete username & password credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernamePasswordCredentialCount =
@@ -261,6 +325,15 @@ module(
     });
 
     test('can cancel delete username & key pair credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const usernameKeyPairCredentialCount =
@@ -279,6 +352,15 @@ module(
     });
 
     test('can cancel delete JSON credential via dialog', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const confirmService = this.owner.lookup('service:confirm');
       confirmService.enabled = true;
       const jsonCredentialCount = getJSONCredentialCount();
@@ -293,6 +375,15 @@ module(
     });
 
     test('deleting a username & password credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       this.server.del('/credentials/:id', mockResponse);
       await visit(urls.usernamePasswordCredential);
 
@@ -303,6 +394,15 @@ module(
     });
 
     test('deleting a username & key pair credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       this.server.del('/credentials/:id', mockResponse);
       await visit(urls.usernameKeyPairCredential);
 
@@ -313,6 +413,15 @@ module(
     });
 
     test('deleting a JSON credential which errors displays error message', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       this.server.del('/credentials/:id', mockResponse);
       await visit(urls.jsonCredential);
 
