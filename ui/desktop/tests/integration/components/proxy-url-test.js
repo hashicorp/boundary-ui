@@ -28,8 +28,8 @@ module('Integration | Component | session/proxy-url', function (hooks) {
       },
       {
         targetType: TYPE_TARGET_RDP,
-        expectedCommand: (address, port) => `rdp ${address} -p ${port}`,
-        expectedSnippetCount: 1,
+        expectedCommand: (address, port) => `${address}:${port}`,
+        expectedSnippetCount: 2,
       },
       {
         targetType: TYPE_TARGET_TCP,
@@ -57,7 +57,7 @@ module('Integration | Component | session/proxy-url', function (hooks) {
       assert.dom('.hds-copy-snippet').exists({ count: expectedSnippetCount });
 
       // Assert the content of the copy snippets
-      if (targetType === TYPE_TARGET_TCP) {
+      if (targetType === TYPE_TARGET_TCP || targetType === TYPE_TARGET_RDP) {
         assert
           .dom('.hds-copy-snippet:nth-of-type(1)')
           .hasText(this.proxyAddress);
@@ -80,14 +80,6 @@ module('Integration | Component | session/proxy-url', function (hooks) {
           '[data-test="address-port-option"]',
         ],
         hiddenOptions: ['[data-test="rdp-option"]'],
-      },
-      {
-        targetType: TYPE_TARGET_RDP,
-        visibleOptions: [
-          '[data-test="rdp-option"]',
-          '[data-test="address-port-option"]',
-        ],
-        hiddenOptions: ['[data-test="ssh-option"]'],
       },
       {
         targetType: TYPE_TARGET_TCP,
@@ -150,5 +142,23 @@ module('Integration | Component | session/proxy-url', function (hooks) {
       .dom('.hds-copy-snippet:nth-of-type(1)')
       .hasText(`${this.proxyAddress}`);
     assert.dom('.hds-copy-snippet:nth-of-type(2)').hasText(`${this.proxyPort}`);
+  });
+
+  test('does not show dropdown for RDP target type', async function (assert) {
+    this.set('proxyAddress', 'http://localhost');
+    this.set('proxyPort', '1234');
+    this.set('targetType', TYPE_TARGET_RDP);
+
+    await render(
+      hbs`
+      <Session::ProxyUrl
+        @proxyAddress={{this.proxyAddress}}
+        @proxyPort={{this.proxyPort}}
+        @targetType={{this.targetType}}
+      />
+    `,
+    );
+
+    assert.dom('.proxy-url-container .hds-dropdown').doesNotExist();
   });
 });

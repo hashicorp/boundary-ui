@@ -8,12 +8,13 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import {
-  TYPE_TARGET_RDP,
   TYPE_TARGET_SSH,
   TYPE_TARGET_TCP,
+  TYPE_TARGET_RDP,
 } from 'api/models/target';
 
 const ADDRESS_PORT = 'address-port';
+const DROPDOWN_OPTIONS = [ADDRESS_PORT, TYPE_TARGET_SSH];
 
 export default class SessionProxyUrlComponent extends Component {
   // =services
@@ -23,6 +24,10 @@ export default class SessionProxyUrlComponent extends Component {
   // =attributes
 
   @tracked selectedValue = null;
+
+  get isRDPTarget() {
+    return this.args.targetType === TYPE_TARGET_RDP;
+  }
 
   /**
    * Returns the current value to be displayed in the dropdown.
@@ -43,38 +48,23 @@ export default class SessionProxyUrlComponent extends Component {
    */
   get copySnippetData() {
     const { proxyAddress, proxyPort } = this.args;
-    switch (this.currentValue) {
-      case ADDRESS_PORT:
-        return {
-          address: proxyAddress,
-          port: proxyPort,
-        };
-      case TYPE_TARGET_SSH:
-        return {
-          address: `ssh ${proxyAddress} -p ${proxyPort}`,
-        };
-      case TYPE_TARGET_RDP:
-        // TODO: This is a just a placeholder. Update this based on the design and product requirements.
-        return {
-          address: `rdp ${proxyAddress} -p ${proxyPort}`,
-        };
-      default:
-        return null;
+    if (this.currentValue === TYPE_TARGET_SSH) {
+      return {
+        address: `ssh ${proxyAddress} -p ${proxyPort}`,
+      };
     }
+    // For TCP and RDP, we return the address and port
+    return {
+      address: proxyAddress,
+      port: proxyPort,
+    };
   }
 
-  /** Returns the dropdown options based on the target type.
+  /**
+   * Only show AddressPort and SSH options. We do not show RDP here
    */
   get dropdownOptions() {
-    let options = [ADDRESS_PORT];
-
-    options.push(
-      this.args.targetType === TYPE_TARGET_RDP
-        ? TYPE_TARGET_RDP
-        : TYPE_TARGET_SSH,
-    );
-
-    return options;
+    return DROPDOWN_OPTIONS;
   }
 
   // =actions

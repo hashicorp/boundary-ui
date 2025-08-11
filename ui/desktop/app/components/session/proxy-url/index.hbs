@@ -3,21 +3,26 @@
   SPDX-License-Identifier: BUSL-1.1
 }}
 
-<div class='proxy-url-container' data-test-proxy-url>
-  <Hds::Dropdown @listPosition='bottom-left' as |dd|>
-    <dd.ToggleButton
-      @color='secondary'
-      @text={{t (concat 'resources.session.proxy-url.' this.currentValue)}}
-    />
-    {{#each this.dropdownOptions as |optionId|}}
-      <dd.Interactive
-        data-test={{concat optionId '-option'}}
-        {{on 'click' (fn this.handleSelect optionId dd.close)}}
-      >
-        {{t (concat 'resources.session.proxy-url.' optionId)}}
-      </dd.Interactive>
-    {{/each}}
-  </Hds::Dropdown>
+<div
+  class='proxy-url-container{{if this.isRDPTarget " rdp-target"}}'
+  data-test-proxy-url
+>
+  {{#unless this.isRDPTarget}}
+    <Hds::Dropdown @listPosition='bottom-left' as |dd|>
+      <dd.ToggleButton
+        @color='secondary'
+        @text={{t (concat 'resources.session.proxy-url.' this.currentValue)}}
+      />
+      {{#each this.dropdownOptions as |optionId|}}
+        <dd.Interactive
+          data-test={{concat optionId '-option'}}
+          {{on 'click' (fn this.handleSelect optionId dd.close)}}
+        >
+          {{t (concat 'resources.session.proxy-url.' optionId)}}
+        </dd.Interactive>
+      {{/each}}
+    </Hds::Dropdown>
+  {{/unless}}
 
   {{#let this.copySnippetData as |snippet|}}
     {{#if snippet}}
