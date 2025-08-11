@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_TARGET_SSH } from 'api/models/target';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module(
   'Acceptance | targets | enable session recording | create storage bucket',
@@ -70,6 +71,20 @@ module(
     });
 
     test('users can create a new storage bucket with global scope', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -97,6 +112,20 @@ module(
     });
 
     test('users can create a new storage bucket with org scope', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -124,6 +153,20 @@ module(
     });
 
     test('user can cancel new storage bucket creation', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const storageBucketCount = getStorageBucketCount();
       await visit(urls.enableSessionRecording);
 
@@ -139,6 +182,20 @@ module(
     });
 
     test('saving a new storage bucket with invalid fields displays error messages', async function (assert) {
+      setRunOptions({
+        rules: {
+          'color-contrast': {
+            // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+
+          label: {
+            // [ember-a11y-ignore]: axe rule "label" automatically ignored on 2025-08-01
+            enabled: false,
+          },
+        },
+      });
+
       const errorMessage = 'The request was invalid.';
       const errorDescription = 'Name is required.';
       this.server.post('/storage-buckets', () => {

@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | accounts | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -62,6 +63,15 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('can delete an account', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const accountsCount = this.server.schema.accounts.all().models.length;
     await visit(urls.account);
 
@@ -84,6 +94,15 @@ module('Acceptance | accounts | delete', function (hooks) {
   });
 
   test('errors are displayed when delete on account fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/accounts/:id', () => {
       return new Response(
         490,

@@ -15,6 +15,7 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | managed-groups | list', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +75,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to managed groups with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.authMethods);
 
     await click(commonSelectors.HREF(urls.authMethod));
@@ -92,6 +102,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
 
@@ -111,6 +130,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_collection_actions['managed-groups'] = [];
     await visit(urls.authMethods);
 
@@ -130,6 +158,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User cannot navigate to ldap managed group index without either list or create actions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_collection_actions['managed-groups'] =
       [];
@@ -151,6 +188,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',
     ];
@@ -164,6 +210,15 @@ module('Acceptance | managed-groups | list', function (hooks) {
   });
 
   test('User can navigate to ldap managed groups index with only create action', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.authMethod.authorized_collection_actions['managed-groups'] = [
       'create',

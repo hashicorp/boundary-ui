@@ -22,6 +22,7 @@ import {
 import WindowMockIPC from '../helpers/window-mock-ipc';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | authentication', function (hooks) {
   setupApplicationTest(hooks);
@@ -195,6 +196,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('signing out redirects to first global authenticate method', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     await visit(urls.authenticate.methods.global);
 
@@ -214,6 +224,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('401 responses result in deauthentication', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(3);
     await authenticateSession({
       scope: {

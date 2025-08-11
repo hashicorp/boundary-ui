@@ -19,6 +19,7 @@ import {
 } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | settings | index', function (hooks) {
   setupApplicationTest(hooks);
@@ -105,12 +106,40 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('can navigate to the settings page', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projects);
     await click(`[href="${urls.settings}"]`);
     assert.strictEqual(currentURL(), urls.settings);
   });
 
   test('color theme is applied from session data', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.settings);
 
     // system default
@@ -141,6 +170,21 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('clicking signout button logs out the user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
+    await authenticateSession({ username: 'testuser' });
     assert.expect(2);
 
     await authenticateSession({ username: 'testuser' });

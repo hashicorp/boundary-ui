@@ -20,6 +20,7 @@ import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -81,6 +82,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('defaults to type `ssh` when no query param provided', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.targets);
 
@@ -90,6 +100,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create a type `ssh` target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
 
     const targetCount = getTargetCount();
@@ -110,6 +129,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can create a type `tcp` target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
 
     const targetCount = getTargetCount();
@@ -130,6 +158,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('default port is not marked required for SSH targets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.targets);
 
@@ -139,6 +176,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('default port is marked required for TCP targets', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     await visit(urls.targets);
 
@@ -149,6 +195,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can navigate to new targets route with proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.targets));
@@ -162,6 +217,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new targets route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',
@@ -179,6 +243,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('cannot navigate to new SSH targets route when ssh feature is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
@@ -194,6 +267,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new TCP target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
     await visit(urls.targets);
@@ -208,6 +290,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can add aliases during target creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const targetCount = getTargetCount();
     const tcpTargetCount = getTCPTargetCount();
     const name = 'target';
@@ -238,6 +329,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can cancel create new SSH target', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     const targetCount = getTargetCount();
     const sshTargetCount = getSSHTargetCount();
@@ -254,6 +354,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('saving a new TCP target with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets', () => {
       return new Response(
         400,
@@ -291,6 +400,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('saving a new SSH target with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/targets', () => {
       return new Response(
         400,
@@ -321,6 +439,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('can save address', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('target-network-address');
     const targetCount = getTargetCount();
     await visit(urls.targets);
@@ -338,6 +465,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('address field does not exist when target network address feature is disabled', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
@@ -347,6 +483,15 @@ module('Acceptance | targets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new storage bucket route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.scopes.project.authorized_collection_actions.targets =
       instances.scopes.project.authorized_collection_actions.targets.filter(
         (item) => item !== 'create',

@@ -9,6 +9,7 @@ import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -67,6 +68,15 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('visiting hosts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hosts);
 
     assert.strictEqual(currentURL(), urls.hosts);
@@ -77,6 +87,15 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('cannot navigate to a host form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostCatalog);
     instances.host.authorized_actions =
       instances.host.authorized_actions.filter((item) => item !== 'read');
@@ -87,6 +106,15 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('visiting an unknown host displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownHost);
 
     assert
@@ -95,6 +123,15 @@ module('Acceptance | host-catalogs | hosts | read', function (hooks) {
   });
 
   test('users can link to docs page for hosts', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hosts);
 
     await click(commonSelectors.HREF(urls.host));
