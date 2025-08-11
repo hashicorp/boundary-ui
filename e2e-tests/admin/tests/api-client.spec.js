@@ -23,10 +23,10 @@ const test = base.extend(
   {
     apiClientTestAfter: async ({}, use) => {
       let apiClientTestAfter;
-      const setapiClientTestAfter = (fn) => {
+      const setApiClientTestAfter = (fn) => {
         apiClientTestAfter = fn;
       };
-      await use(setapiClientTestAfter);
+      await use(setApiClientTestAfter);
       await apiClientTestAfter?.();
     },
   },
