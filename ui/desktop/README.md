@@ -96,9 +96,6 @@ These environment variables may be used to customized the build.
 | Variable | Description |
 | -------- | ----------- |
 | `DEBUG_APP_UPDATER` | Enable to debug app updater feature. Must be enabled for all `APP_UPDATER_*` variables to be used. |
-| `APP_UPDATER_CURRENT_VERSION` | Version of client. |
-| `APP_UPDATER_LATEST_VERSION_TAG` | Next version for comparison with current version. |
-| `APP_UPDATER_LATEST_VERSION_LOCATION` | Location of app release to use for updating client. Can be a filepath or url. |
 | `SETUP_CLI` | Enable download and extraction of CLI. |
 | `BYPASS_APP_UPDATER` | Disable app updater feature. For development use only. |
 | `DISABLE_WINDOW_CHROME` | Disable window chrome. For internal use only. |
@@ -107,7 +104,7 @@ These environment variables may be used to customized the build.
 ### Building for Production
 
 Before executing a build, be sure to set any environment variables necessary
-for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in. 
+for your target [environment](#environment-variables-prod) and you have full permissions in the environment you want to build in.
 To build this UI for production, run the following commands from this folder:
 
 ```bash
