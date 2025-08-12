@@ -21,13 +21,12 @@ body {
 }
 
 // This is use to set the color and background color
-// of the body and/or the ember application depending
+// of the ember application depending
 // on where the ember application is mounted
 // When running the tests, the ember application
 // is mounted on a div element with the class 'ember-application'
 // When running the app, the ember application
 // is mounted on the body element
-body,
 .ember-application {
   // these are used across the app
   color: var(--stark);
