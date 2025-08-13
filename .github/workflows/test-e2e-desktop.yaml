@@ -9,7 +9,7 @@ jobs:
   test:
     if: ${{contains(github.event.pull_request.labels.*.name, 'desktop')}}
     name: Run Desktop E2E Tests
-    runs-on: ${{ fromJSON(vars.RUNNER) }}
+    runs-on: ${{ fromJSON(vars.RUNNER_UBUNTU_22) }}
     env:
       ENOS_VAR_boundary_edition: "ent"
       ENOS_VAR_e2e_debug_no_run: true
