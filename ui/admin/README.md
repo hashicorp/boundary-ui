@@ -82,13 +82,13 @@ These environment variables may be used to customized the build.
 | -------- | ------------- | ----------- |
 | `APP_NAME` | Application Name | The user-facing name of the application, appearing in titles, etc. |
 | `API_HOST` | | The host of the API, if different than UI (e.g. https://example.net:1234). |
-| `DARK_MODE` | | Enable (`true`) to set the test browser appearance to dark for running tests in dark mode. |
+| `COLOR_THEME` | | Define (`dark`) to set the test browser appearance to dark for running tests in dark mode. |
 
 ### Running Tests
 
 * `pnpm test` runs full tests in random order with coverage
 * `ember test --server`
-* `DARK_MODE=true ember test --server` runs tests in dark mode
+* `COLOR_THEME=dark ember test --server` runs tests in dark mode
 
 Keep in mind that tests are executed in random order.  This is intentional
 and helps to prevent hard-to-debug order dependencies among tests.
@@ -102,9 +102,9 @@ Write acceptance tests like normal. Our a11y testing strategy will automatically
 run `a11yAudit()` after [specific helper actions](tests/test-helper.js#L26), like visit, click, and fillIn.
 Our a11y tests have their own pnpm commands:
 
-* `pnpm test-ally` runs a11y tests for light and dark mode
-* `pnpm test-ally:light` runs a11y tests just for light mode
-* `pnpm test-ally:dark` runs a11y tests just for dark mode
+* `pnpm test-a11y` runs a11y tests for light and dark mode
+* `pnpm test-a11y:light` runs a11y tests just for light mode
+* `pnpm test-a11y:dark` runs a11y tests just for dark mode
 
 #### Light vs Dark Mode A11y Tests
 
