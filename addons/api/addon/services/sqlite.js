@@ -18,6 +18,16 @@ export const modelMapping = {
     scope_id: 'scope.scope_id',
     created_time: 'created_time',
   },
+  alias: {
+    id: 'id',
+    type: 'type',
+    name: 'name',
+    description: 'description',
+    destination_id: 'destination_id',
+    value: 'value',
+    scope_id: 'scope.scope_id',
+    created_time: 'created_time',
+  },
   group: {
     id: 'id',
     name: 'name',
@@ -28,7 +38,7 @@ export const modelMapping = {
 };
 
 // A list of tables that we support searching using FTS5 in SQLite.
-export const searchTables = new Set(['target']);
+export const searchTables = new Set(['target', 'alias']);
 
 export default class SqliteDbService extends Service {
   // =attributes

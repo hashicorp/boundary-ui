@@ -10,17 +10,8 @@ PRAGMA writable_schema = 0;
 VACUUM;
 PRAGMA integrity_check;`;
 
-export const CREATE_TABLES = (version) => `
-BEGIN;
-
-PRAGMA user_version = ${version};
-
-CREATE TABLE IF NOT EXISTS token (
-    id TEXT NOT NULL PRIMARY KEY,
-    token TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS target (
+const createTargetTables = `
+    CREATE TABLE IF NOT EXISTS target (
     id TEXT NOT NULL PRIMARY KEY,
     type TEXT NOT NULL,
     name TEXT NOT NULL,
@@ -60,7 +51,59 @@ END;
 CREATE TRIGGER IF NOT EXISTS target_ad AFTER DELETE ON target BEGIN
     INSERT INTO target_fts(target_fts, rowid, id, type, name, description, address, scope_id, created_time)
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.address, old.scope_id, old.created_time);
+END;`;
+
+const createAliasTables = `
+CREATE TABLE IF NOT EXISTS alias (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    destination_id TEXT,
+    value TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_alias_created_time ON alias(created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS alias_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    destination_id,
+    value,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS alias_ai AFTER INSERT ON alias BEGIN
+    INSERT INTO alias_fts(
+        id, type, name, description, destination_id, value, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.destination_id, new.value, new.scope_id, new.created_time
+    );
 END;
+
+CREATE TRIGGER IF NOT EXISTS alias_ad AFTER DELETE ON alias BEGIN
+    INSERT INTO alias_fts(alias_fts, rowid, id, type, name, description, destination_id, value, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.destination_id, old.value, old.scope_id, old.created_time);
+END;`;
+
+export const CREATE_TABLES = (version) => `
+BEGIN;
+
+PRAGMA user_version = ${version};
+
+CREATE TABLE IF NOT EXISTS token (
+    id TEXT NOT NULL PRIMARY KEY,
+    token TEXT NOT NULL
+);
+
+${createTargetTables}
+${createAliasTables}
 
 CREATE TABLE IF NOT EXISTS "group" (
     id TEXT NOT NULL PRIMARY KEY,

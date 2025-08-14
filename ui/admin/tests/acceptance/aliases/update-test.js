@@ -4,16 +4,18 @@
  */
 
 import { module, test } from 'qunit';
-import { visit, click, fillIn } from '@ember/test-helpers';
+import { click, fillIn, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 
 module('Acceptance | aliases | update', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
 
   let aliasCount;
