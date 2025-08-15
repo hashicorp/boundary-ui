@@ -84,7 +84,7 @@ test(
       // Set auth method as primary
       await page.getByText('Manage', { exact: true }).click();
       await page.getByRole('button', { name: 'Make Primary' }).click();
-      await page.getByRole('button', { name: 'OK' }).click();
+      await page.getByRole('button', { name: 'OK', exact: true }).click();
       await expect(
         page.getByRole('alert').getByText('Success', { exact: true }),
       ).toBeVisible();
