@@ -70,10 +70,11 @@ export default class ScopesScopeScopesIndexRoute extends Route {
       const sort =
         sortAttribute === 'name'
           ? {
-              customSort: { attributes: [sortAttribute, 'id'] },
+              attributes: [sortAttribute, 'id'],
               direction: sortDirection,
+              isCoalesced: true,
             }
-          : { attribute: sortAttribute, direction: sortDirection };
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       const subScopes = await this.store.query('scope', {
         scope_id,

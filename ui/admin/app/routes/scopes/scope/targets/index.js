@@ -115,11 +115,11 @@ export default class ScopesScopeTargetsIndexRoute extends Route {
       const sort =
         sortAttribute === 'type'
           ? {
-              attribute: sortAttribute,
+              attributes: [sortAttribute],
               customSort: { attributeMap: typeMap },
               direction: sortDirection,
             }
-          : { attribute: sortAttribute, direction: sortDirection };
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       let targets;
       let totalItems = 0;

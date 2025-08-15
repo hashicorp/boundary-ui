@@ -120,11 +120,11 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       const sort =
         sortAttribute === 'state'
           ? {
-              attribute: sortAttribute,
+              attributes: [sortAttribute],
               customSort: { attributeMap: stateMap },
               direction: sortDirection,
             }
-          : { attribute: sortAttribute, direction: sortDirection };
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       if (
         this.can.can('list scope', scope, {

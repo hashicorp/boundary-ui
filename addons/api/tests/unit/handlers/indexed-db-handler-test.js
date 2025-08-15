@@ -262,7 +262,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
 
       const results = await store.query('target', {
-        query: { sort: { attribute: 'name' } },
+        query: { sort: { attributes: ['name'] } },
       });
 
       assert.deepEqual(
@@ -292,10 +292,10 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
 
       const resultsDesc = await store.query('alias', {
-        query: { sort: { attribute: 'name', direction: 'desc' } },
+        query: { sort: { attributes: ['name'], direction: 'desc' } },
       });
       const resultsAsc = await store.query('alias', {
-        query: { sort: { attribute: 'name', direction: 'asc' } },
+        query: { sort: { attributes: ['name'], direction: 'asc' } },
       });
       assert.deepEqual(
         resultsDesc.map(({ name }) => name),
@@ -337,7 +337,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       const resultsDesc = await store.query('alias', {
         query: {
           sort: {
-            attribute: 'name',
+            attributes: ['name'],
             customSort: { attributeMap: nameMap },
             direction: 'desc',
           },
@@ -346,7 +346,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       const resultsAsc = await store.query('alias', {
         query: {
           sort: {
-            attribute: 'name',
+            attributes: ['name'],
             customSort: { attributeMap: nameMap },
             direction: 'asc',
           },

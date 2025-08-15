@@ -83,10 +83,11 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
       const sort =
         sortAttribute === 'name'
           ? {
-              customSort: { attributes: [sortAttribute, 'id'] },
+              attributes: [sortAttribute, 'id'],
               direction: sortDirection,
+              isCoalesced: true,
             }
-          : { attribute: sortAttribute, direction: sortDirection };
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       types.forEach((type) => {
         filters.type.push({ equals: type });

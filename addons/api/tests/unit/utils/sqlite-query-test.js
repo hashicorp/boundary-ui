@@ -176,7 +176,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
     ],
     function (assert, [direction, expectedDirection]) {
       const query = {
-        sort: { attribute: 'name', direction },
+        sort: { attributes: ['name'], direction },
       };
 
       const { sql, parameters } = generateSQLExpressions('target', query);
@@ -193,19 +193,30 @@ module('Unit | Utility | sqlite-query', function (hooks) {
   test.each(
     'it generates sort order clause correctly',
     {
-      'sort on multiple attributes': {
-        customSort: { attributes: ['name', 'id'] },
+      'sort on multiple attributes and coalesced': {
+        sort: {
+          attributes: ['name', 'id'],
+          isCoalesced: true,
+        },
         expectedOrderByClause: `ORDER BY COALESCE(name, id) COLLATE NOCASE DESC, COALESCE(name, id) DESC`,
       },
+      'sort on multiple attributes': {
+        sort: {
+          attributes: ['name', 'id'],
+        },
+        expectedOrderByClause: `ORDER BY name COLLATE NOCASE DESC, id COLLATE NOCASE DESC, name DESC, id DESC`,
+      },
       'sort on mapped attributes': {
-        attribute: 'type',
-        customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
+        sort: {
+          attributes: ['type'],
+          customSort: { attributeMap: { ssh: 'SSH', tcp: 'Generic TCP' } },
+        },
         expectedOrderByClause: `ORDER BY CASE type WHEN 'ssh' THEN 'SSH' WHEN 'tcp' THEN 'Generic TCP' END DESC`,
       },
     },
-    function (assert, { attribute, customSort, expectedOrderByClause }) {
+    function (assert, { sort, expectedOrderByClause }) {
       const query = {
-        sort: { attribute, customSort, direction: 'desc' },
+        sort: { ...sort, direction: 'desc' },
       };
 
       const { sql, parameters } = generateSQLExpressions('target', query);
@@ -283,7 +294,7 @@ module('Unit | Utility | sqlite-query', function (hooks) {
         },
         created_time: [{ gte: date }],
       },
-      sort: { attribute: 'name', direction: 'desc' },
+      sort: { attributes: ['name'], direction: 'desc' },
     };
 
     const { sql, parameters } = generateSQLExpressions('target', query, {
@@ -319,22 +330,38 @@ module('Unit | Utility | sqlite-query', function (hooks) {
       emptySearch: { search: '' },
       emptyFilter: { filters: {} },
       emptyFilterAttributes: { filters: { type: [] } },
-      invalidSortAttribute: { sort: { attribute: 'test', direction: 'asc' } },
-      invalidCustomSortAttribute: {
-        sort: { customSort: { attributes: ['id', 'test'] }, direction: 'asc' },
+      invalidSortAttribute: {
+        sort: { attributes: ['test'], direction: 'asc' },
+      },
+      invalidCoalescedSortAttribute: {
+        sort: {
+          attributes: ['id', 'test'],
+          direction: 'asc',
+          isCoalesced: true,
+        },
       },
       onlyPage: { page: 10 },
       onlyPageSize: { pageSize: 5 },
     },
     function (assert, query) {
-      const { sql, parameters } = generateSQLExpressions('target', query);
+      const { sql: targetSql, parameters: targetParameters } =
+        generateSQLExpressions('target', query);
       assert.strictEqual(
-        sql,
+        targetSql,
         `
         SELECT * FROM "target"
         ORDER BY created_time DESC`.removeExtraWhiteSpace(),
       );
-      assert.deepEqual(parameters, []);
+      assert.deepEqual(targetParameters, []);
+
+      const { sql: resourceSql, parameters: resourceParameters } =
+        generateSQLExpressions('resource', query);
+      assert.strictEqual(
+        resourceSql,
+        `
+        SELECT * FROM "resource"`.removeExtraWhiteSpace(),
+      );
+      assert.deepEqual(resourceParameters, []);
     },
   );
 });

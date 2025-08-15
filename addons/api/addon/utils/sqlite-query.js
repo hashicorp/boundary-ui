@@ -135,40 +135,47 @@ function addSearchConditions(search, resource, parameters, conditions) {
 }
 
 function constructOrderByClause(resource, sort) {
-  let orderByClause = '';
-  const { attribute, customSort, direction } = sort;
+  const defaultOrderByClause = 'ORDER BY created_time DESC';
 
-  if (modelMapping[resource]?.created_time) {
-    orderByClause = `ORDER BY created_time DESC`;
+  const { attributes, customSort, direction, isCoalesced } = sort;
+  const sortDirection = direction === 'desc' ? 'DESC' : 'ASC';
+
+  // We have to check if the attributes are valid for the resource
+  // as we can't use parameterized queries for ORDER BY
+  const validAttributes = Object.keys(modelMapping[resource] ?? {});
+  if (attributes?.some((attr) => !validAttributes.includes(attr))) {
+    return modelMapping[resource]?.created_time ? defaultOrderByClause : '';
   }
 
   if (customSort?.attributeMap) {
-    // We have to check if the attribute is valid for the resource
-    // as we can't use parameterized queries for ORDER BY
-    const validAttributes = Object.keys(modelMapping[resource]);
-    if (validAttributes.includes(attribute)) {
-      let whenClauses = '';
-      Object.keys(customSort.attributeMap).forEach((key) => {
-        whenClauses += `WHEN '${key}' THEN '${customSort.attributeMap[key]}' `;
-      });
-      orderByClause = `ORDER BY CASE ${attribute} ${whenClauses}END ${direction === 'desc' ? 'DESC' : 'ASC'}`;
-    }
-  } else if (customSort?.attributes) {
-    const validAttributes = Object.keys(modelMapping[resource]);
-    if (customSort.attributes.every((attr) => validAttributes.includes(attr))) {
-      const commaSeparatedVals = customSort.attributes.join(', ');
-      // In places where `collate nocase` is used, it is to ensure case is ignored on the initial sort.
-      // Then, a sort on the same condition is performed to ensure upper-case strings are given preference in a tie.
-      orderByClause = `ORDER BY COALESCE(${commaSeparatedVals}) COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, COALESCE(${commaSeparatedVals}) ${direction === 'desc' ? 'DESC' : 'ASC'}`;
-    }
-  } else if (attribute) {
-    const validAttributes = Object.keys(modelMapping[resource]);
-    if (validAttributes.includes(attribute)) {
-      orderByClause = `ORDER BY ${attribute} COLLATE NOCASE ${direction === 'desc' ? 'DESC' : 'ASC'}, ${attribute} ${direction === 'desc' ? 'DESC' : 'ASC'}`;
-    }
-  }
+    const whenClauses = Object.keys(customSort.attributeMap).reduce(
+      (acc, key) => {
+        return acc + `WHEN '${key}' THEN '${customSort.attributeMap[key]}' `;
+      },
+      '',
+    );
+    return `ORDER BY CASE ${attributes.join(', ')} ${whenClauses}END ${sortDirection}`;
+  } else if (attributes?.length > 0) {
+    const commaSeparatedVals = attributes.join(', ');
 
-  return orderByClause;
+    // In places where `collate nocase` is used, it is to ensure case is ignored on the initial sort.
+    // Then, a sort on the same condition is performed to ensure upper-case strings are given preference in a tie.
+    if (isCoalesced) {
+      return `ORDER BY COALESCE(${attributes.join(', ')}) COLLATE NOCASE ${sortDirection}, COALESCE(${commaSeparatedVals}) ${sortDirection}`;
+    }
+
+    const attributesWithNoCollate = attributes
+      .map((attr) => `${attr} COLLATE NOCASE ${sortDirection}`)
+      .join(', ');
+    const attributesWithDirection = attributes
+      .map((attr) => `${attr} ${sortDirection}`)
+      .join(', ');
+    return `ORDER BY ${attributesWithNoCollate}, ${attributesWithDirection}`;
+  } else if (modelMapping[resource]?.created_time) {
+    return defaultOrderByClause;
+  } else {
+    return '';
+  }
 }
 
 // Comparison Operators

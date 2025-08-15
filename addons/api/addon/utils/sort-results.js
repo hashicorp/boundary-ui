@@ -41,10 +41,7 @@ function getSortableValue(schema, record, attribute) {
 
 export const sortResults = (results, { querySort, schema }) => {
   querySort = querySort ?? {};
-  const sortAttribute =
-    querySort.attribute ||
-    querySort.customSort?.attributes[0] ||
-    SORT_DEFAULT_ATTRIBUTE;
+  const sortAttribute = querySort.attributes?.[0] || SORT_DEFAULT_ATTRIBUTE;
 
   // Default sort direction is ascending unless we are sorting by `created_time` (default sort attribute)
   const defaultSortDirection =
@@ -67,8 +64,8 @@ export const sortResults = (results, { querySort, schema }) => {
     sortFunctions[sortAttributeDataType] ?? sortFunctions.string;
 
   // Execute custom sort for multiple attributes provided.
-  if (querySort.customSort?.attributes) {
-    const { attributes } = querySort.customSort;
+  if (querySort.attributes?.length > 1) {
+    const { attributes } = querySort;
     return results.toSorted((a, b) => {
       let sortValueA, sortValueB;
 
