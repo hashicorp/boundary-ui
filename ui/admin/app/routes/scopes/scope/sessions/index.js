@@ -98,7 +98,7 @@ export default class ScopesScopeSessionsIndexRoute extends Route {
       });
 
       const sort = {
-        attribute: sortAttribute,
+        attributes: [sortAttribute],
         direction: sortDirection,
       };
 

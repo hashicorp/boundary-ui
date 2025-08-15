@@ -75,7 +75,7 @@ export default class ScopesScopeAliasesIndexRoute extends Route {
         })
       ) {
         const sort = {
-          attribute: sortAttribute,
+          attributes: [sortAttribute],
           direction: sortDirection,
         };
 
