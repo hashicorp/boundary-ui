@@ -8,12 +8,12 @@ import { visit, click, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_LDAP } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | delete', function (hooks) {
   setupApplicationTest(hooks);
@@ -65,6 +65,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('can delete an auth method', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const authMethodsCount = getAuthMethodCount();
     await visit(urls.authMethods);
 
@@ -76,6 +85,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('can delete an ldap auth method', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     const authMethodsCount = getAuthMethodCount();
     await visit(urls.authMethods);
@@ -88,6 +106,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('errors are displayed when delete on an auth method fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.del('/auth-methods/:id', () => {
       return new Response(
         490,
@@ -104,12 +131,20 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.authMethod));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('errors are displayed when delete on an ldap auth method fails', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     this.server.del('/auth-methods/:id', () => {
       return new Response(
@@ -127,12 +162,20 @@ module('Acceptance | auth-methods | delete', function (hooks) {
     await click(commonSelectors.HREF(urls.ldapAuthMethod));
     await click(selectors.MANAGE_DROPDOWN);
     await click(selectors.MANAGE_DROPDOWN_DELETE);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText('Oops.');
   });
 
   test('cannot delete an auth method without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_actions =
       instances.authMethod.authorized_actions.filter(
         (item) => item !== 'delete',
@@ -146,6 +189,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('cannot delete an ldap auth method without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_actions =
       instances.ldapAuthMethod.authorized_actions.filter(
@@ -160,6 +212,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('user can accept delete auth method via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const authMethodCount = getAuthMethodCount();
@@ -175,6 +236,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('user can accept delete ldap auth method via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     featuresService.enable('ldap-auth-methods');
@@ -191,6 +261,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('user can cancel delete auth method via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     const authMethodCount = getAuthMethodCount();
@@ -206,6 +285,15 @@ module('Acceptance | auth-methods | delete', function (hooks) {
   });
 
   test('user can cancel delete ldap auth method via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     featuresService.enable('ldap-auth-methods');

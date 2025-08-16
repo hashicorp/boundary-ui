@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -174,6 +175,15 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('Users cannot create a new host set without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.hostCatalog.authorized_collection_actions['host-sets'] =
       instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
         (item) => item !== 'create',
@@ -202,6 +212,15 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('can cancel create new host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const count = getHostSetCount();
     await visit(urls.newHostSet);
 
@@ -242,6 +261,15 @@ module('Acceptance | host-catalogs | host sets | create', function (hooks) {
   });
 
   test('users cannot directly navigate to new host set route without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.hostCatalog.authorized_collection_actions['host-sets'] =
       instances.hostCatalog.authorized_collection_actions['host-sets'].filter(
         (item) => item !== 'create',

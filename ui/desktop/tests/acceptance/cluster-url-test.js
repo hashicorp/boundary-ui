@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import sinon from 'sinon';
 import { invalidateSession } from 'ember-simple-auth/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
@@ -109,7 +108,7 @@ module('Acceptance | clusterUrl', function (hooks) {
   test('visiting index', async function (assert) {
     assert.expect(1);
     await visit(urls.clusterUrl);
-    await a11yAudit();
+
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });
 
@@ -117,7 +116,7 @@ module('Acceptance | clusterUrl', function (hooks) {
     assert.expect(2);
     setupMockIpc(this);
     await visit(urls.index);
-    await a11yAudit();
+
     assert.notOk(mockIPC.clusterUrl);
     assert.strictEqual(currentURL(), urls.clusterUrl);
   });

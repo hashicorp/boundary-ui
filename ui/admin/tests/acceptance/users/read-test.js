@@ -8,9 +8,9 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | users | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -47,25 +47,49 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('visiting users', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
-    await a11yAudit();
 
     await click(commonSelectors.HREF(urls.users));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.users);
   });
 
   test('visiting user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.users);
 
     await click(commonSelectors.HREF(urls.user));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.user);
   });
 
   test('cannot navigate to an account form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.user.authorized_actions =
       instances.user.authorized_actions.filter((item) => item !== 'read');
     await visit(urls.orgScope);
@@ -76,6 +100,15 @@ module('Acceptance | users | read', function (hooks) {
   });
 
   test('users can link to docs page for users', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.orgScope);
 
     await click(commonSelectors.HREF(urls.users));

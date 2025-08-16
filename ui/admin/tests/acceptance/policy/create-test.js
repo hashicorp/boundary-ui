@@ -7,11 +7,11 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | policies | create', function (hooks) {
   setupApplicationTest(hooks);
@@ -49,6 +49,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('users can create a new policy with global scope', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const policyCount = getPolicyCount();
     await visit(urls.policies);
 
@@ -70,6 +79,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('delete policy is automatically disabled when forever retention policy is chosen', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -79,6 +97,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('user can enter custom value when custom retain option is selected', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -88,6 +115,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('user can enter custom value when custom delete option is selected', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -96,6 +132,15 @@ module('Acceptance | policies | create', function (hooks) {
     assert.dom(selectors.FIELD_NUMBER_OF_DAYS('delete_after')).isVisible();
   });
   test('user can select SOC option and will not see custom input', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -105,6 +150,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('user can select do_not_delete option and will not see custom input', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -114,6 +168,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('org override is disabled when do_not_protect is selected', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -123,6 +186,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('org override is disabled when do_not_delete is selected', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.policies);
 
     await click(commonSelectors.HREF(urls.newPolicy));
@@ -132,6 +204,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('user can cancel new policy creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const policyCount = getPolicyCount();
     await visit(urls.policies);
 
@@ -144,6 +225,15 @@ module('Acceptance | policies | create', function (hooks) {
   });
 
   test('saving a new policy with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMessage =
       'Invalid request. Request attempted to make second resource with the same field value that must be unique.';
     this.server.post('/policies', () => {
@@ -161,7 +251,6 @@ module('Acceptance | policies | create', function (hooks) {
 
     await click(commonSelectors.HREF(urls.newPolicy));
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
   });

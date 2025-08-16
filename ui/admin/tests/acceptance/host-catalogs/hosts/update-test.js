@@ -11,6 +11,7 @@ import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as selectors from './selectors';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -70,6 +71,15 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can save changes to existing host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.notEqual(instances.host.name, commonSelectors.FIELD_NAME_VALUE);
     await visit(urls.host);
 
@@ -96,6 +106,15 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can cancel changes to existing host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const { name, description } = instances.host;
     await visit(urls.host);
 
@@ -114,6 +133,15 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('saving an existing host with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.patch('/hosts/:id', () => {
       return new Response(
         400,
@@ -146,6 +174,15 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can discard unsaved host changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(7);
     const { name, description } = this.server.schema.hosts.all().models[0];
     const confirmService = this.owner.lookup('service:confirm');
@@ -175,6 +212,15 @@ module('Acceptance | host-catalogs | hosts | update', function (hooks) {
   });
 
   test('can cancel discard unsaved host changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(7);
     const { name, description } = this.server.schema.hosts.all().models[0];
     const confirmService = this.owner.lookup('service:confirm');

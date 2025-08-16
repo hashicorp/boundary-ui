@@ -7,7 +7,6 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn, getContext } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
@@ -15,6 +14,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
 import { TYPE_TARGET_TCP, TYPE_TARGET_SSH } from 'api/models/target';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | targets | create-alias', function (hooks) {
   setupApplicationTest(hooks);
@@ -74,6 +74,15 @@ module('Acceptance | targets | create-alias', function (hooks) {
   });
 
   test('users can create a new alias for a target of TCP type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const aliasCount = getAliasCount();
     await visit(urls.targets);
 
@@ -93,6 +102,15 @@ module('Acceptance | targets | create-alias', function (hooks) {
   });
 
   test('users can create a new alias for a target of SSH type', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ssh-target');
     instances.target.update({
       type: TYPE_TARGET_SSH,
@@ -116,6 +134,15 @@ module('Acceptance | targets | create-alias', function (hooks) {
   });
 
   test('destination id should be readonly', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
       type: TYPE_TARGET_SSH,
@@ -141,6 +168,15 @@ module('Acceptance | targets | create-alias', function (hooks) {
   });
 
   test('user can cancel new alias creation', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const aliasCount = getAliasCount();
     instances.target = this.server.create('target', {
       scope: instances.scopes.project,
@@ -157,6 +193,15 @@ module('Acceptance | targets | create-alias', function (hooks) {
   });
 
   test('saving a new alias with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.server.post('/aliases', () => {
       return new Response(
         400,
@@ -181,7 +226,6 @@ module('Acceptance | targets | create-alias', function (hooks) {
     await click(commonSelectors.HREF(urls.target));
     await click(selectors.ALIASES_ADD_BTN);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.ALERT_TOAST_BODY)

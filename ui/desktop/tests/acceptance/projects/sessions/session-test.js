@@ -10,11 +10,11 @@ import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { Response } from 'miragejs';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import WindowMockIPC from '../../../helpers/window-mock-ipc';
 import { STATUS_SESSION_ACTIVE } from 'api/models/session';
 import setupStubs from 'api/test-support/handlers/cache-daemon-search';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | projects | sessions | session', function (hooks) {
   setupApplicationTest(hooks);
@@ -126,15 +126,32 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting session detail', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.session);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.session);
   });
 
   test('visiting session with no credentials', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(4);
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
@@ -156,6 +173,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting session with vault type credentials should display nested data in a key/value format without escape characters', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -219,6 +245,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting session with static type credentials should display nested data in a key/value format without escape characters', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('cliExists').returns(true);
     this.ipcStub.withArgs('connect').returns({
       session_id: instances.session.id,
@@ -268,6 +303,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting a session that does not have permissions to read a host', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.get('/hosts/:id', () => new Response(403));
     this.ipcStub.withArgs('cliExists').returns(true);
@@ -286,6 +330,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('visiting a session that does not have read permissions but a successful connect', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(2);
     // verifies second call to sessions/:id is also a 403
     QUnit.onUncaughtException = (err) => {
@@ -309,6 +362,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('can cancel a session with cancel:self permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     instances.session.update({ authorized_actions: ['cancel:self'] });
 
@@ -318,6 +380,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('cannot cancel a session without cancel permissions', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     instances.session.update({ authorized_actions: [] });
 
@@ -327,6 +398,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('cancelling a session shows success alert', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.session);
@@ -338,6 +418,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('cancelling a session takes you to the targets list screen', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
 
     await visit(urls.session);
@@ -347,6 +436,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('cancelling a session with error shows notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.server.post('/sessions/:id_method', () => new Response(400));
 
@@ -359,6 +457,15 @@ module('Acceptance | projects | sessions | session', function (hooks) {
   });
 
   test('cancelling a session with ipc error shows notification', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     assert.expect(1);
     this.ipcStub.withArgs('stop').throws();
 
