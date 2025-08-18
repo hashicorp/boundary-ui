@@ -14,7 +14,7 @@ const createTargetTables = `
     CREATE TABLE IF NOT EXISTS target (
     id TEXT NOT NULL PRIMARY KEY,
     type TEXT NOT NULL,
-    name TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
     description TEXT,
     address TEXT,
     scope_id TEXT NOT NULL,
@@ -105,6 +105,16 @@ CREATE TABLE IF NOT EXISTS token (
 ${createTargetTables}
 ${createAliasTables}
 
+CREATE TABLE IF NOT EXISTS "group" (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_group_scope_id_created_time ON "group"(scope_id, created_time DESC);
+
 COMMIT;`;
 
 export const INSERT_STATEMENTS = (resource, items, modelMapping) => {
@@ -121,8 +131,8 @@ export const INSERT_STATEMENTS = (resource, items, modelMapping) => {
   const numColumns = Array(columns.length + 1);
   const placeholders = `(${numColumns.fill('?').join(', ')})`;
 
-  return `REPLACE INTO ${resource} (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
+  return `REPLACE INTO "${resource}" (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
 };
 
 export const DELETE_STATEMENT = (resource, ids) =>
-  `DELETE FROM ${resource} WHERE id IN (${ids.map(() => '?').join(',')})`;
+  `DELETE FROM "${resource}" WHERE id IN (${ids.map(() => '?').join(',')})`;

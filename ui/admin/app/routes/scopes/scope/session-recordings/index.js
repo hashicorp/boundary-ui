@@ -71,17 +71,6 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
     return this.retrieveData.perform({ ...params, useDebounce });
   }
 
-  sortState = (recordA, recordB) => {
-    const stateMap = {
-      [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
-      [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
-      [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
-    };
-    return String(stateMap[recordA.attributes.state]).localeCompare(
-      String(stateMap[recordB.attributes.state]),
-    );
-  };
-
   retrieveData = restartableTask(
     async ({
       search,
@@ -122,10 +111,20 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
         filters['create_time_values.target.id'].push({ equals: target });
       });
 
+      const stateMap = {
+        [STATE_SESSION_RECORDING_AVAILABLE]: this.intl.t('states.completed'),
+        [STATE_SESSION_RECORDING_STARTED]: this.intl.t('states.recording'),
+        [STATE_SESSION_RECORDING_UNKNOWN]: this.intl.t('states.failed'),
+      };
+
       const sort =
         sortAttribute === 'state'
-          ? { sortFunction: this.sortState, direction: sortDirection }
-          : { attribute: sortAttribute, direction: sortDirection };
+          ? {
+              attributes: [sortAttribute],
+              customSort: { attributeMap: stateMap },
+              direction: sortDirection,
+            }
+          : { attributes: [sortAttribute], direction: sortDirection };
 
       if (
         this.can.can('list scope', scope, {
