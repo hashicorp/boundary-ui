@@ -303,7 +303,7 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
       );
 
       const results = await store.query('target', {
-        query: { sort: { attribute: 'name' } },
+        query: { sort: { attributes: ['name'] } },
       });
 
       assert.deepEqual(
@@ -345,10 +345,10 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
       );
 
       const resultsDesc = await store.query('target', {
-        query: { sort: { attribute: 'name', direction: 'desc' } },
+        query: { sort: { attributes: ['name'], direction: 'desc' } },
       });
       const resultsAsc = await store.query('target', {
-        query: { sort: { attribute: 'name', direction: 'asc' } },
+        query: { sort: { attributes: ['name'], direction: 'asc' } },
       });
       assert.deepEqual(
         resultsDesc.map(({ name }) => name),

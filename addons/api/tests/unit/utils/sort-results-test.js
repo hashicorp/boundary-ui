@@ -37,7 +37,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
       ]);
 
-      const querySort = { attribute: 'name' };
+      const querySort = { attributes: ['name'] };
 
       // Note: `name` is not defined as a schema attribute but exists on the record
       const schema = { attributes: new Map() };
@@ -55,7 +55,7 @@ module('Unit | Utility | sortResults', function (hooks) {
       });
 
       const querySort = {
-        attribute: 'name',
+        attributes: ['name'],
         direction: 'invalid sort direction',
       };
       const schema = { attributes: new Map() };
@@ -119,7 +119,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySort = { attribute: 'id' };
+      const querySort = { attributes: ['id'] };
       const schema = { attributes: new Map() };
       schema.attributes.set('id', { type: 'string' });
       const sortedResults = sortResults(shuffledResults, { querySort, schema });
@@ -152,7 +152,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySort = { attribute: 'name' };
+      const querySort = { attributes: ['name'] };
       const schema = { attributes: new Map() };
       schema.attributes.set('name', { type: 'string' });
       const sortedResults = sortResults(shuffledResults, { querySort, schema });
@@ -182,8 +182,8 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySortAsc = { attribute: 'name', direction: 'asc' };
-      const querySortDesc = { attribute: 'name', direction: 'desc' };
+      const querySortAsc = { attributes: ['name'], direction: 'asc' };
+      const querySortDesc = { attributes: ['name'], direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('name', { type: 'string' });
       const sortedResultsAsc = sortResults(shuffledResults, {
@@ -227,8 +227,8 @@ module('Unit | Utility | sortResults', function (hooks) {
         result04,
         result05,
       ]);
-      const querySortAsc = { attribute: 'name', direction: 'asc' };
-      const querySortDesc = { attribute: 'name', direction: 'desc' };
+      const querySortAsc = { attributes: ['name'], direction: 'asc' };
+      const querySortDesc = { attributes: ['name'], direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('name', { type: 'string' });
 
@@ -272,7 +272,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySort = { attribute: 'date' };
+      const querySort = { attributes: ['date'] };
       const schema = { attributes: new Map() };
       schema.attributes.set('date', { type: 'date' });
 
@@ -304,8 +304,8 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySortAsc = { attribute: 'date', direction: 'asc' };
-      const querySortDesc = { attribute: 'date', direction: 'desc' };
+      const querySortAsc = { attributes: ['date'], direction: 'asc' };
+      const querySortDesc = { attributes: ['date'], direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('date', { type: 'date' });
 
@@ -350,7 +350,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySort = { attribute: 'sessions' };
+      const querySort = { attributes: ['sessions'] };
       const schema = { attributes: new Map() };
       schema.attributes.set('sessions', { type: 'number' });
 
@@ -382,8 +382,8 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySortAsc = { attribute: 'sessions', direction: 'asc' };
-      const querySortDesc = { attribute: 'sessions', direction: 'desc' };
+      const querySortAsc = { attributes: ['sessions'], direction: 'asc' };
+      const querySortDesc = { attributes: ['sessions'], direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('sessions', { type: 'number' });
 
@@ -419,7 +419,7 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySort = { attribute: 'active' };
+      const querySort = { attributes: ['active'] };
       const schema = { attributes: new Map() };
       schema.attributes.set('active', { type: 'boolean' });
 
@@ -442,8 +442,8 @@ module('Unit | Utility | sortResults', function (hooks) {
         result03,
         result04,
       ]);
-      const querySortAsc = { attribute: 'active', direction: 'asc' };
-      const querySortDesc = { attribute: 'active', direction: 'desc' };
+      const querySortAsc = { attributes: ['active'], direction: 'asc' };
+      const querySortDesc = { attributes: ['active'], direction: 'desc' };
       const schema = { attributes: new Map() };
       schema.attributes.set('active', { type: 'boolean' });
 
@@ -482,32 +482,39 @@ module('Unit | Utility | sortResults', function (hooks) {
       name: 'target4',
     });
 
-    const sortFunction = (recordA, recordB) => {
-      const nameMap = {
-        target3: 'Alpha',
-        target4: 'Beta',
-        target1: 'Delta',
-        target2: 'Epsilon',
-      };
-      return String(nameMap[recordA.attributes.name]).localeCompare(
-        String(nameMap[recordB.attributes.name]),
-      );
+    const nameMap = {
+      target3: 'Alpha',
+      target4: 'Beta',
+      target1: 'Delta',
+      target2: 'Epsilon',
     };
+
     const schema = { attributes: new Map() };
 
     test.each(
       'it sorts by `name` using custom sorting function',
       {
         'ascending (default)': {
-          querySort: { sortFunction },
+          querySort: {
+            attributes: ['name'],
+            customSort: { attributeMap: nameMap },
+          },
           expectedResults: ['target3', 'target4', 'target1', 'target2'],
         },
         descending: {
-          querySort: { sortFunction, direction: 'desc' },
+          querySort: {
+            attributes: ['name'],
+            customSort: { attributeMap: nameMap },
+            direction: 'desc',
+          },
           expectedResults: ['target2', 'target1', 'target4', 'target3'],
         },
         ascending: {
-          querySort: { sortFunction, direction: 'asc' },
+          querySort: {
+            attributes: ['name'],
+            customSort: { attributeMap: nameMap },
+            direction: 'asc',
+          },
           expectedResults: ['target3', 'target4', 'target1', 'target2'],
         },
       },

@@ -262,7 +262,7 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
 
       const results = await store.query('target', {
-        query: { sort: { attribute: 'name' } },
+        query: { sort: { attributes: ['name'] } },
       });
 
       assert.deepEqual(
@@ -292,10 +292,10 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
 
       const resultsDesc = await store.query('alias', {
-        query: { sort: { attribute: 'name', direction: 'desc' } },
+        query: { sort: { attributes: ['name'], direction: 'desc' } },
       });
       const resultsAsc = await store.query('alias', {
-        query: { sort: { attribute: 'name', direction: 'asc' } },
+        query: { sort: { attributes: ['name'], direction: 'asc' } },
       });
       assert.deepEqual(
         resultsDesc.map(({ name }) => name),
@@ -313,16 +313,11 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       const alias3 = this.server.create('alias', { name: 'alias3' });
       const alias4 = this.server.create('alias', { name: 'alias4' });
 
-      const sortName = (recordA, recordB) => {
-        const nameMap = {
-          alias3: 'Alpha',
-          alias4: 'Beta',
-          alias1: 'Delta',
-          alias2: 'Epsilon',
-        };
-        return String(nameMap[recordA.attributes.name]).localeCompare(
-          String(nameMap[recordB.attributes.name]),
-        );
+      const nameMap = {
+        alias3: 'Alpha',
+        alias4: 'Beta',
+        alias1: 'Delta',
+        alias2: 'Epsilon',
       };
 
       const shuffledAliases = faker.helpers.shuffle([
@@ -340,10 +335,22 @@ module('Unit | Handler | indexed-db-handler', function (hooks) {
       );
 
       const resultsDesc = await store.query('alias', {
-        query: { sort: { sortFunction: sortName, direction: 'desc' } },
+        query: {
+          sort: {
+            attributes: ['name'],
+            customSort: { attributeMap: nameMap },
+            direction: 'desc',
+          },
+        },
       });
       const resultsAsc = await store.query('alias', {
-        query: { sort: { sortFunction: sortName, direction: 'asc' } },
+        query: {
+          sort: {
+            attributes: ['name'],
+            customSort: { attributeMap: nameMap },
+            direction: 'asc',
+          },
+        },
       });
       assert.deepEqual(
         resultsDesc.map(({ name }) => name),
