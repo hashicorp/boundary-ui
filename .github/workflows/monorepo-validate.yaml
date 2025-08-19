@@ -82,6 +82,7 @@ jobs:
           report-path: "**/test-reports/junit.xml"
           github-report: true
           use-suite-name: true
+          suite-folded-report: true
           integrations-config: |
             {
               "junit-to-ctrf": {
