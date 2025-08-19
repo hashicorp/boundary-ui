@@ -12,6 +12,12 @@ export default defineConfig({
   outputDir: './artifacts/test-failures',
   timeout: 90000, // Each test is given 90s to complete
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
+  reporter: [
+    ['list'],
+    process.env.CREATE_JUNIT_TEST_REPORT === 'true'
+      ? ['junit', { outputFile: 'test-reports/junit.xml' }]
+      : null,
+  ].filter(Boolean),
   use: {
     baseURL: baseUrl,
     extraHTTPHeaders: {

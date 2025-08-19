@@ -9,6 +9,12 @@ export default defineConfig({
   globalSetup: '../global-setup',
   outputDir: './artifacts',
   workers: 1, // Tests need to be run in serial, otherwise there may be conflicts when using the CLI
+  reporter: [
+    ['list'],
+    process.env.CREATE_JUNIT_TEST_REPORT === 'true'
+      ? ['junit', { outputFile: 'test-reports/junit.xml' }]
+      : null,
+  ].filter(Boolean),
   use: {
     baseURL: process.env.BOUNDARY_ADDR,
     extraHTTPHeaders: {
