@@ -90,6 +90,8 @@
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^0.0.1",
     "stylelint-config-standard-scss": "^11.0.0",
+    "testem-gitlab-reporter": "^1.0.0",
+    "testem-multi-reporter": "^1.2.0",
     "webpack": "^5.95.0"
   },
   "peerDependencies": {

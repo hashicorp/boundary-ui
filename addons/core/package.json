@@ -89,6 +89,8 @@
     "qunit-dom": "^3.2.1",
     "rose": "workspace:*",
     "sinon": "^19.0.2",
+    "testem-gitlab-reporter": "^1.0.0",
+    "testem-multi-reporter": "^1.2.0",
     "webpack": "^5.95.0"
   },
   "engines": {
