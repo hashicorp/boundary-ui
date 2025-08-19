@@ -77,6 +77,22 @@ jobs:
       - run: pnpm test
       - name: Test summary
         if: always()
-        uses: test-summary/action@v2
+        uses: ctrf-io/github-test-reporter@v1
         with:
-          paths: "**/test-reports/junit.xml"
+          report-path: "**/test-reports/junit.xml"
+          github-report: true
+          integrations-config: |
+            {
+              "junit-to-ctrf": {
+                "enabled": true,
+                "action": "convert",
+                "options": {
+                  "output": "./ctrf-reports/ctrf-report.json",
+                  "toolname": "junit-to-ctrf",
+                  "useSuiteName": false,
+                  "env": {
+                    "appName": "my-app"
+                  }
+                }
+              }
+            }
