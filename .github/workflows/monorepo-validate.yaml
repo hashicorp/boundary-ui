@@ -75,13 +75,13 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm test
-      - name: Test summary
+      - name: Generate test summary
         if: always()
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: "**/test-reports/junit.xml"
+          use-suite-name: true
           github-report: true
-          suite-folded-report: true
           integrations-config: |
             {
               "junit-to-ctrf": {
