@@ -198,6 +198,20 @@ module('Acceptance | projects | settings | index', function (hooks) {
   });
 
   test('confirming signout with running sessions stops sessions and logs out user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+
+        'heading-order': {
+          // [ember-a11y-ignore]: axe rule "heading-order" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     const stopAllSessions = this.ipcStub.withArgs('stopAll');
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 

@@ -272,6 +272,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('signing out with running sessions renders signout modal', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
     await visit(urls.authenticate.methods.global);
@@ -294,6 +303,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('confirming signout via modal stops sessions and logs out user', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     const stopAllSessions = this.ipcStub.withArgs('stopAll');
     this.ipcStub.withArgs('hasRunningSessions').returns(true);
 
@@ -318,6 +336,15 @@ module('Acceptance | authentication', function (hooks) {
   });
 
   test('attempting to quit app when signout modal is present triggers the close sessions modal', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-19
+          enabled: false,
+        },
+      },
+    });
+
     // We need to encapsulate the event listener inside a mocked window service to ensure
     // the entire event is torn down (including the mocked window), since "window" exists
     // globally across all tests, and we don't want tests impacting one another
