@@ -24,6 +24,7 @@ module('Unit | Adapter | application', function (hooks) {
     const adapter = this.owner.lookup('adapter:application');
     assert.ok(adapter.namespace);
     assert.strictEqual(adapter.namespace, config.api.namespace);
+    assert.true(false);
   });
 
   test('it generates correct URL prefixes', function (assert) {

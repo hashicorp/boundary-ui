@@ -14,6 +14,7 @@ module('Integration | Component | rose/form', function (hooks) {
 
   test('it renders and handles submit/cancel actions', async function (assert) {
     assert.expect(3);
+    assert.true(false);
     this.submit = () => assert.ok(true, 'submitted');
     this.cancel = () => assert.ok(true, 'cancelled');
     await render(hbs`

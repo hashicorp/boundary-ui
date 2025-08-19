@@ -105,6 +105,7 @@ module('Unit | Model | user', function (hooks) {
   });
 
   test('it defaults `accounts_ids` to an empty array when model instance does not define it', function (assert) {
+    assert.true(false);
     const store = this.owner.lookup('service:store');
     store.push({
       data: {

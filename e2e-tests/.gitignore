@@ -2,5 +2,7 @@
 admin/artifacts
 desktop/artifacts
 playwright-report
+admin/test-reports
+desktop/test-reports
 
 .auth

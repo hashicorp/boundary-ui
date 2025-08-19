@@ -4,6 +4,35 @@
  */
 
 'use strict';
+const MultiReporter = require('testem-multi-reporter');
+const JUnitReporter = require('testem-gitlab-reporter');
+const fs = require('fs');
+
+// eslint-disable-next-line n/no-extraneous-require, n/no-missing-require
+const TAPReporter = require('testem/lib/reporters/tap_reporter');
+
+const multiReporterConfig = {
+  reporters: [
+    {
+      ReporterClass: TAPReporter,
+      args: [false, null, { get: () => false }],
+    },
+  ],
+};
+
+if (process.env.CREATE_JUNIT_TEST_REPORT === 'true') {
+  !fs.existsSync('./test-reports') && fs.mkdirSync('./test-reports');
+  multiReporterConfig.reporters.push({
+    ReporterClass: JUnitReporter,
+    args: [
+      false,
+      fs.createWriteStream('test-reports/junit.xml'),
+      { get: () => false },
+    ],
+  });
+}
+
+let reporter = new MultiReporter(multiReporterConfig);
 
 module.exports = {
   test_page: 'tests/index.html?hidepassed',
@@ -34,4 +63,5 @@ module.exports = {
     Firefox: ['-headless', '--window-size=1440,900'],
   },
   parallel: process.env.EMBER_EXAM_SPLIT_COUNT || 1,
+  reporter,
 };

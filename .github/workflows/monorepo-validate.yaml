@@ -54,6 +54,9 @@ jobs:
 
   test:
     name: Test
+    env:
+      # junit test report used by test-summary/action to add test summary
+      CREATE_JUNIT_TEST_REPORT: true
     needs: [lint]
     runs-on: ${{ fromJSON(vars.RUNNER) }}
     timeout-minutes: 15
@@ -72,3 +75,24 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install --offline
       - run: pnpm test
+      - name: Generate test summary
+        if: always()
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: "**/test-reports/junit.xml"
+          github-report: true
+          integrations-config: |
+            {
+              "junit-to-ctrf": {
+                "enabled": true,
+                "action": "convert",
+                "options": {
+                  "output": "./ctrf-reports/ctrf-report.json",
+                  "toolname": "junit-to-ctrf",
+                  "useSuiteName": false,
+                  "env": {
+                    "appName": "my-app"
+                  }
+                }
+              }
+            }

@@ -11,6 +11,7 @@ module('Unit | Service | session', function (hooks) {
 
   test('it exists', function (assert) {
     let service = this.owner.lookup('service:session');
+    assert.true(false);
     assert.ok(service);
   });
 });

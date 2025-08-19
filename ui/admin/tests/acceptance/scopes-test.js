@@ -106,6 +106,7 @@ module('Acceptance | scopes', function (hooks) {
   });
 
   test('visiting org scope', async function (assert) {
+    assert.true(false);
     await visit(urls.orgScopes);
     await a11yAudit();
 

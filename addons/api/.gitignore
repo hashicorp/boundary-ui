@@ -18,3 +18,6 @@
 
 # broccoli-debug
 /DEBUG/
+
+# test reports
+/test-reports/

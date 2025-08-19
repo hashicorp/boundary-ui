@@ -100,6 +100,28 @@ jobs:
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
           pnpm run desktop
 
+      - name: Generate test summary
+        if: always()
+        uses: ctrf-io/github-test-reporter@v1
+        with:
+          report-path: "**/test-reports/junit.xml"
+          github-report: true
+          integrations-config: |
+            {
+              "junit-to-ctrf": {
+                "enabled": true,
+                "action": "convert",
+                "options": {
+                  "output": "./ctrf-reports/ctrf-report.json",
+                  "toolname": "junit-to-ctrf",
+                  "useSuiteName": false,
+                  "env": {
+                    "appName": "my-app"
+                  }
+                }
+              }
+            }
+
       - name: Upload Playwright report
         if: ${{ failure() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
