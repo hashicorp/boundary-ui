@@ -14,13 +14,9 @@ const config = require('../../config/config.js');
 const log = require('electron-log/main');
 const boundaryCli = require('../cli/index.js');
 
-let currentVersion = config.releaseVersion;
+const currentVersion = config.releaseVersion;
 const debug = process.env.DEBUG_APP_UPDATER;
 const releasesUrl = 'https://releases.hashicorp.com/boundary-desktop/';
-
-if (!app.isPackaged && debug && process.env.APP_UPDATER_CURRENT_VERSION) {
-  currentVersion = process.env.APP_UPDATER_CURRENT_VERSION;
-}
 
 // Returns the real CPU architecture of the machine.
 const returnArchitectureToUpdate = () => {
@@ -177,12 +173,7 @@ module.exports = {
      */
     if (!boundaryCli.isBuiltInCli) return;
 
-    let latestVersion;
-    if (!app.isPackaged && debug) {
-      latestVersion = process.env.APP_UPDATER_LATEST_VERSION_TAG;
-    } else {
-      latestVersion = await findLatestVersion(releasesUrl);
-    }
+    const latestVersion = await findLatestVersion(releasesUrl);
 
     // Ensure version is in proper format
     if (!semver.valid(latestVersion)) {
@@ -196,18 +187,6 @@ module.exports = {
     if (semver.lte(latestVersion, currentVersion)) {
       if (!suppressNoUpdatePrompt) displayInfoPrompt();
       return;
-    }
-
-    if (!app.isPackaged) {
-      const location = process.env.APP_UPDATER_LATEST_VERSION_LOCATION;
-      if (debug && location) {
-        // Support hosted url and file paths
-        displayDownloadPrompt(
-          latestVersion,
-          location.match(/^http/i) ? location : `file://${location}`,
-        );
-        return;
-      }
     }
 
     /**

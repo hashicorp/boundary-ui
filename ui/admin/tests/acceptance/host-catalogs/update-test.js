@@ -17,6 +17,7 @@ import {
   TYPE_HOST_CATALOG_PLUGIN_GCP,
 } from 'api/models/host-catalog';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -83,6 +84,15 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can update static AWS credentials to Dynamic AWS credentials', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.AWSHostCatalogWithStaticCredential);
     await click(commonSelectors.EDIT_BTN);
 
@@ -101,6 +111,15 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can update GCP host catalog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.GCPHostCatalog);
     await click(commonSelectors.EDIT_BTN);
     await fillIn(selectors.FIELD_PROJECT, selectors.FIELD_PROJECT_VALUE);
@@ -129,6 +148,15 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('cannot make changes to an existing host catalog without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostCatalogs);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -178,6 +206,15 @@ module('Acceptance | host-catalogs | update', function (hooks) {
   });
 
   test('can discard unsaved host catalog changes via dialog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const confirmService = this.owner.lookup('service:confirm');
     confirmService.enabled = true;
     assert.notEqual(

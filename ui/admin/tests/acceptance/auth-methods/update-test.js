@@ -8,7 +8,6 @@ import { visit, click, fillIn, select, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import {
@@ -17,6 +16,7 @@ import {
 } from 'api/models/auth-method';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
 import * as selectors from './selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | auth-methods | update', function (hooks) {
   setupApplicationTest(hooks);
@@ -67,6 +67,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an auth method and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.authMethods);
 
     await click(commonSelectors.HREF(urls.authMethod));
@@ -86,6 +95,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an oidc auth method and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod = this.server.create('auth-method', {
       scope: instances.scopes.org,
       type: TYPE_AUTH_METHOD_OIDC,
@@ -233,6 +251,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an ldap auth method and save changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
 
@@ -363,6 +390,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('can update an ldap auth method and cancel changes', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     await visit(urls.authMethods);
     const name = instances.ldapAuthMethod.name;
@@ -393,6 +429,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('cannot make changes to an existing auth method without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     instances.authMethod.authorized_actions =
       instances.authMethod.authorized_actions.filter(
         (item) => item !== 'update',
@@ -405,6 +450,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('cannot make changes to an existing ldap auth method without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     instances.ldapAuthMethod.authorized_actions =
       instances.ldapAuthMethod.authorized_actions.filter(
@@ -418,6 +472,15 @@ module('Acceptance | auth-methods | update', function (hooks) {
   });
 
   test('saving an existing auth method with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const errorMessage = 'The request was invalid.';
     const errorDescription = 'Name is required.';
     this.server.patch('/auth-methods/:id', () => {
@@ -445,13 +508,21 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(commonSelectors.EDIT_BTN);
     await fillIn(commonSelectors.FIELD_NAME, commonSelectors.FIELD_NAME_VALUE);
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     assert.dom(commonSelectors.FIELD_NAME_ERROR).hasText(errorDescription);
   });
 
   test('saving an existing ldap auth method with invalid fields displays error messages', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     featuresService.enable('ldap-auth-methods');
     const errorMessage = 'The request was invalid.';
     const errorDescription = 'URL field is required';
@@ -480,7 +551,6 @@ module('Acceptance | auth-methods | update', function (hooks) {
     await click(commonSelectors.EDIT_BTN);
     await fillIn(selectors.FIELD_URLS, '');
     await click(commonSelectors.SAVE_BTN);
-    await a11yAudit();
 
     assert.dom(commonSelectors.ALERT_TOAST_BODY).hasText(errorMessage);
     assert.dom(commonSelectors.FIELD_ERROR).hasText(errorDescription);

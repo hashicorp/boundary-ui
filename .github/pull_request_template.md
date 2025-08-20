@@ -12,12 +12,17 @@
 ## Checklist
 <!-- strikethrough the checklist item that is not relevant to your change -->
 
+<!-- If you are merging a long lived branch, major feature, or UI altering changes,
+please add the a11y-tests label. Other cases, like a dependency change or
+translation update likely does not need an a11y audit -->
+
 - [ ] I have added before and after screenshots for UI changes
 - [ ] I have added JSON response output for API changes
 - [ ] I have added steps to reproduce and test for bug fixes in the description
 - [ ] I have commented on my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] I have added `a11y-tests` label to run a11y audit tests if needed
 
 ## PCI review checklist
 

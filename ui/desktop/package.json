@@ -32,8 +32,11 @@
     "init:desktop": "pnpm --dir electron-app build:all",
     "start:desktop": "pnpm init:desktop && ember electron",
     "clean:coverage": "rm -rf coverage_* || true",
-    "test": "pnpm clean:coverage && concurrently \"npm:test:*\" --names \"test:\" && pnpm test:finalize",
+    "test": "pnpm clean:coverage && pnpm test:ember && pnpm test:finalize",
     "test:ember": "cross-env COVERAGE=true ember exam --test-port 0 --split=4 --parallel=1 --random",
+    "test-a11y": "concurrently \"pnpm:test-a11y:*\" --names \"test-a11y:\"",
+    "test-a11y:light": "ENABLE_A11Y_AUDIT=true ember test --test-port 0 --filter='acceptance'",
+    "test-a11y:dark": "COLOR_THEME=dark pnpm test-a11y:light",
     "postinstall": "pnpm --dir electron-app install",
     "test:finalize": "ember coverage-merge && pnpm clean:coverage"
   },

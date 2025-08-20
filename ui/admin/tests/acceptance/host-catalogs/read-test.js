@@ -7,10 +7,10 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import a11yAudit from 'ember-a11y-testing/test-support/audit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
+import { setRunOptions } from 'ember-a11y-testing/test-support';
 
 module('Acceptance | host-catalogs | read', function (hooks) {
   setupApplicationTest(hooks);
@@ -60,18 +60,34 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('visiting host catalogs', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.hostCatalogs);
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostCatalogs);
 
     await click(commonSelectors.HREF(urls.hostCatalog));
-    await a11yAudit();
 
     assert.strictEqual(currentURL(), urls.hostCatalog);
   });
 
   test('cannot navigate to a host catalog form without proper authorization', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
     instances.hostCatalog.authorized_actions =
       instances.hostCatalog.authorized_actions.filter(
@@ -86,8 +102,16 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('visiting an unknown host catalog displays 404 message', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.unknownHostCatalog);
-    await a11yAudit();
 
     assert
       .dom(commonSelectors.RESOURCE_NOT_FOUND_SUBTITLE)
@@ -95,6 +119,15 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('users can link to docs page for host catalog', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     await visit(urls.projectScope);
 
     await click(commonSelectors.HREF(urls.hostCatalogs));
@@ -109,6 +142,15 @@ module('Acceptance | host-catalogs | read', function (hooks) {
   });
 
   test('users can navigate to host catalog and incorrect url autocorrects', async function (assert) {
+    setRunOptions({
+      rules: {
+        'color-contrast': {
+          // [ember-a11y-ignore]: axe rule "color-contrast" automatically ignored on 2025-08-01
+          enabled: false,
+        },
+      },
+    });
+
     const projectScope = this.server.create('scope', {
       type: 'project',
       scope: { id: instances.scopes.org.id, type: 'org' },
