@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { modelMapping, searchTables } from 'api/services/sqlite';
+import { underscore } from '@ember/string';
 
 const supportedModels = Object.keys(modelMapping);
 const supportedFtsTables = [...searchTables];
@@ -22,7 +23,7 @@ module('Unit | Service | sqlite', function (hooks) {
       const service = this.owner.lookup('service:sqlite');
 
       const tableColumns = await service.fetchResource({
-        sql: `SELECT * FROM pragma_table_info('${resource}')`,
+        sql: `SELECT * FROM pragma_table_info('${underscore(resource)}')`,
       });
 
       const columnNames = tableColumns.map((column) => column.name);
@@ -42,7 +43,7 @@ module('Unit | Service | sqlite', function (hooks) {
       const service = this.owner.lookup('service:sqlite');
 
       const tableColumns = await service.fetchResource({
-        sql: `SELECT * FROM pragma_table_info('${resource}_fts')`,
+        sql: `SELECT * FROM pragma_table_info('${underscore(resource)}_fts')`,
       });
 
       const columnNames = tableColumns.map((column) => column.name);

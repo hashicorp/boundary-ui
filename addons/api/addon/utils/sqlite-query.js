@@ -6,6 +6,7 @@
 import { modelMapping } from 'api/services/sqlite';
 import { searchTables } from 'api/services/sqlite';
 import { typeOf } from '@ember/utils';
+import { underscore } from '@ember/string';
 
 /**
  * Takes a POJO representing a filter query and builds a SQL query.
@@ -29,9 +30,10 @@ export function generateSQLExpressions(
   let { search, filters, sort = {} } = query;
   const conditions = [];
   const parameters = [];
+  const tableName = underscore(resource);
 
-  addFilterConditions(filters, parameters, conditions);
-  addSearchConditions(search, resource, parameters, conditions);
+  addFilterConditions({ filters, parameters, conditions });
+  addSearchConditions({ search, resource, tableName, parameters, conditions });
 
   const orderByClause = constructOrderByClause(resource, sort);
 
@@ -42,7 +44,7 @@ export function generateSQLExpressions(
     parameters.push(pageSize, (page - 1) * pageSize);
   }
 
-  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${resource}"`;
+  const selectClause = `SELECT ${select ? select.join(', ') : '*'} FROM "${tableName}"`;
 
   return {
     // Replace any empty newlines or leading whitespace on each line to be consistent with formatting
@@ -58,7 +60,7 @@ export function generateSQLExpressions(
   };
 }
 
-function addFilterConditions(filters, parameters, conditions) {
+function addFilterConditions({ filters, parameters, conditions }) {
   if (!filters) {
     return;
   }
@@ -105,7 +107,13 @@ function addFilterConditions(filters, parameters, conditions) {
   }
 }
 
-function addSearchConditions(search, resource, parameters, conditions) {
+function addSearchConditions({
+  search,
+  resource,
+  tableName,
+  parameters,
+  conditions,
+}) {
   if (!search) {
     return;
   }
@@ -117,7 +125,7 @@ function addSearchConditions(search, resource, parameters, conditions) {
     // much more efficient with FTS queries when using rowids or MATCH (or both).
     // We could have also used a join here but a subquery is simpler.
     conditions.push(
-      `rowid IN (SELECT rowid FROM ${resource}_fts WHERE ${resource}_fts MATCH ?)`,
+      `rowid IN (SELECT rowid FROM ${tableName}_fts WHERE ${tableName}_fts MATCH ?)`,
     );
     return;
   }
