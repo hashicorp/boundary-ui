@@ -125,6 +125,39 @@ CREATE TRIGGER IF NOT EXISTS role_ad AFTER DELETE ON role BEGIN
     VALUES('delete', old.rowid, old.id, old.name, old.description, old.scope_id, old.created_time);
 END;`;
 
+const createUserTables = `
+CREATE TABLE IF NOT EXISTS user (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_user_scope_id_created_time ON user(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS user_fts USING fts5(
+    id,
+    name,
+    description,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS user_ai AFTER INSERT ON user BEGIN
+    INSERT INTO user_fts(
+        id, name, description, scope_id, created_time
+    ) VALUES (
+        new.id, new.name, new.description, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS user_ad AFTER DELETE ON user BEGIN
+    INSERT INTO user_fts(user_fts, rowid, id, name, description, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.name, old.description, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -138,6 +171,7 @@ CREATE TABLE IF NOT EXISTS token (
 ${createTargetTables}
 ${createAliasTables}
 ${createRoleTables}
+${createUserTables}
 
 CREATE TABLE IF NOT EXISTS "group" (
     id TEXT NOT NULL PRIMARY KEY,
