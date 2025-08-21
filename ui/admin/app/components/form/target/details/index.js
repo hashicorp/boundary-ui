@@ -44,7 +44,7 @@ export default class FormTargetComponent extends Component {
   get errorFields() {
     console.log('errorFields CALLED')
     console.log('model: ', this.args.model);
-    return this.args.model?.errors?.details?.request_fields?.map((f) => f.name) || [];
+    return this.args.model.errors.map(error => error.attribute);
   }
 
   get stepObjects() {

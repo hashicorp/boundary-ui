@@ -149,24 +149,8 @@ export default class ScopesScopeTargetsIndexController extends Controller {
   async save(target) {
     try {
       await target.save();
-      if (this.can.can('read model', target)) {
-        await this.router.transitionTo('scopes.scope.targets.target', target);
-      } else {
-        this.router.transitionTo('scopes.scope.targets');
-      }
-      await this.router.refresh();
-    } catch (error) {
-      console.error('Error saving target:', error);
-      // target.errors = { ...error.errors };
-      if (error.errors) {
-        error.errors.forEach(({ source, detail }) => {
-          console.log('Adding error to target:', source, detail);
-          // source.pointer might be like "/data/attributes/name"
-          const field = source.pointer.split('/').pop();
-          console.log(`Adding error for field: ${field}`, detail);
-          target.errors.add(field, detail);
-        });
-      }
+    } catch(e) {
+      throw e;
     }
   }
 
