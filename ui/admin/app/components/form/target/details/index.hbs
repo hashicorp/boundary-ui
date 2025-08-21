@@ -2,251 +2,310 @@
   Copyright (c) HashiCorp, Inc.
   SPDX-License-Identifier: BUSL-1.1
 }}
-
-<Rose::Form
-  class={{unless @model.isNew 'full-width'}}
-  @onSubmit={{@submit}}
-  @cancel={{@cancel}}
-  @disabled={{@model.isSaving}}
-  @showEditToggle={{if @model.isNew false true}}
-  as |form|
+<Hds::Stepper::Nav
+  @ariaLabel='Basic usage'
+  @currentStep={{this.currentStep}}
+  @onStepChange={{this.onStepChange}}
+  as |S|
 >
-  <Hds::Form::TextInput::Field
-    @isRequired={{true}}
-    @isOptional={{false}}
-    @value={{@model.name}}
-    @isInvalid={{@model.errors.name}}
-    @type='text'
-    name='name'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'name')}}
-    as |F|
+  {{! <S.Step class='step'>
+    <:title>Step 1</:title>
+  </S.Step>
+  <S.Step>
+    <:title>Step 2</:title>
+  </S.Step>
+  <S.Step>
+    <:title>Step 3</:title>
+  </S.Step>
+  <S.Step>
+    <:title>Step 4</:title>
+  </S.Step> }}
+  {{#each this.stepObjects as |step|}}
+    <S.Step class={{if step.hasError 'error'}}>
+      <:title>{{step.name}}</:title>
+    </S.Step>
+  {{/each}}
+  <S.Step>
+    <:title>Step 4</:title>
+  </S.Step>
+
+  {{log 'steps: ' this.steps}}
+  {{log 'stepObjects: ' this.stepObjects}}
+  <Rose::Form
+    class={{unless @model.isNew 'full-width'}}
+    @onSubmit={{@submit}}
+    @cancel={{@cancel}}
+    @disabled={{@model.isSaving}}
+    @showEditToggle={{if @model.isNew false true}}
+    as |form|
   >
-    <F.Label>{{t 'form.name.label'}}</F.Label>
-    <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
-    {{#if @model.errors.name}}
-      <F.Error as |E|>
-        {{#each @model.errors.name as |error|}}
-          <E.Message data-test-error-message-name>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::Textarea::Field
-    @isOptional={{true}}
-    @value={{@model.description}}
-    @isInvalid={{@model.errors.description}}
-    name='description'
-    disabled={{form.disabled}}
-    as |F|
-  >
-    <F.Label>{{t 'form.description.label'}}</F.Label>
-    <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
-    {{#if @model.errors.description}}
-      <F.Error as |E|>
-        {{#each @model.errors.description as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::Textarea::Field>
-
-  {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
-    <Hds::Form::RadioCard::Group
-      @name={{t 'form.type.label'}}
-      @alignment='center'
-      as |G|
-    >
-      <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
-      <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
-      {{#each this.typeMetas as |type|}}
-        <G.RadioCard
-          @value={{type.type}}
-          @maxWidth='20rem'
-          @checked={{eq type.type @model.type}}
-          {{on 'input' (fn @changeType type.type)}}
-          as |R|
-        >
-          <R.Label>{{t (concat 'resources.target.types.' type.type)}}</R.Label>
-          <R.Description>{{t
-              (concat 'resources.target.help.' type.type)
-            }}</R.Description>
-          <R.Icon @name={{type.icon}} />
-        </G.RadioCard>
-      {{/each}}
-    </Hds::Form::RadioCard::Group>
-  {{else}}
-    <InfoField
-      @value={{t (concat 'resources.target.types.' @model.type)}}
-      @icon={{this.icon}}
-      as |F|
-    >
-      <F.Label>{{t 'form.type.label'}}</F.Label>
-      <F.HelperText>
-        {{t (concat 'resources.target.help.' @model.type)}}
-      </F.HelperText>
-    </InfoField>
-  {{/if}}
-
-  {{#if (feature-flag 'target-network-address')}}
-    <Hds::Form::TextInput::Field
-      @isOptional={{true}}
-      @value={{@model.address}}
-      @isInvalid={{@model.errors.address}}
-      @type='text'
-      name='address'
-      disabled={{form.disabled}}
-      {{on 'input' (set-from-event @model 'address')}}
-      as |F|
-    >
-      <F.Label>{{t 'resources.target.form.target-address.label'}}</F.Label>
-      <F.HelperText>{{t
-          'resources.target.form.target-address.help'
-        }}</F.HelperText>
-      {{#if @model.errors.address}}
-        <F.Error as |E|>
-          {{#each @model.errors.address as |error|}}
-            <E.Message>{{error.message}}</E.Message>
-          {{/each}}
-        </F.Error>
-      {{/if}}
-    </Hds::Form::TextInput::Field>
-  {{/if}}
-
-  <Hds::Form::TextInput::Field
-    @isRequired={{@model.isTCP}}
-    @isOptional={{not @model.isTCP}}
-    @value={{@model.default_port}}
-    @isInvalid={{@model.errors.default_port}}
-    @type='text'
-    name='default_port'
-    disabled={{form.disabled}}
-    placeholder={{@defaultPort}}
-    {{on 'input' (set-from-event @model 'default_port')}}
-    as |F|
-  >
-    <F.Label data-test-default-port-label>{{t
-        'resources.target.form.default_port.label'
-      }}</F.Label>
-    <F.HelperText>{{t 'resources.target.form.default_port.help'}}</F.HelperText>
-    {{#if @model.errors.default_port}}
-      <F.Error as |E|>
-        {{#each @model.errors.default_port as |error|}}
-          <E.Message
-            data-test-error-message-default-port
-          >{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::TextInput::Field
-    @isOptional={{true}}
-    @value={{@model.default_client_port}}
-    @isInvalid={{@model.errors.default_client_port}}
-    @type='text'
-    name='default_client_port'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'default_client_port')}}
-    as |F|
-  >
-    <F.Label>{{t 'resources.target.form.default_client_port.label'}}</F.Label>
-    <F.HelperText>{{t
-        'resources.target.form.default_client_port.help'
-      }}</F.HelperText>
-    {{#if @model.errors.default_client_port}}
-      <F.Error as |E|>
-        {{#each @model.errors.default_client_port as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::TextInput::Field
-    @isOptional={{true}}
-    @value={{@model.session_max_seconds}}
-    @isInvalid={{@model.errors.session_max_seconds}}
-    @type='text'
-    name='session_max_seconds'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'session_max_seconds')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.session_max_seconds.label'}}</F.Label>
-    <F.HelperText>{{t 'form.session_max_seconds.help'}}</F.HelperText>
-    {{#if @model.errors.session_max_seconds}}
-      <F.Error as |E|>
-        {{#each @model.errors.session_max_seconds as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  <Hds::Form::TextInput::Field
-    @isOptional={{true}}
-    @value={{@model.session_connection_limit}}
-    @isInvalid={{@model.errors.session_connection_limit}}
-    @type='text'
-    name='session_connection_limit'
-    disabled={{form.disabled}}
-    {{on 'input' (set-from-event @model 'session_connection_limit')}}
-    as |F|
-  >
-    <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
-    <F.HelperText>{{t 'form.session_connection_limit.help'}}</F.HelperText>
-    {{#if @model.errors.session_connection_limit}}
-      <F.Error as |E|>
-        {{#each @model.errors.session_connection_limit as |error|}}
-          <E.Message>{{error.message}}</E.Message>
-        {{/each}}
-      </F.Error>
-    {{/if}}
-  </Hds::Form::TextInput::Field>
-
-  {{#if
-    (and @model.isNew (can 'create model' @globalScope collection='aliases'))
-  }}
-    <Form::Field::ListWrapper
-      @layout='horizontal'
-      @isOptional={{true}}
-      @disabled={{form.disabled}}
-    >
-      <:fieldset as |F|>
-        <F.Legend>
-          {{t 'resources.alias.form.alias.label'}}
-        </F.Legend>
-        <F.HelperText>
-          {{t 'resources.alias.form.alias.help'}}
-        </F.HelperText>
-
-        {{#if @model.errors.with_aliases}}
+    {{! Step 1 }}
+    <S.Panel>
+      <Hds::Form::TextInput::Field
+        @isRequired={{true}}
+        @isOptional={{false}}
+        @value={{@model.name}}
+        @isInvalid={{@model.errors.name}}
+        @type='text'
+        name='name'
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'name')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.name.label'}}</F.Label>
+        <F.HelperText>{{t 'form.name.help'}}</F.HelperText>
+        {{#if @model.errors.name}}
           <F.Error as |E|>
-            {{#each @model.errors.with_aliases as |error|}}
+            {{#each @model.errors.name as |error|}}
+              <E.Message
+                data-test-error-message-name
+              >{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+
+      <Hds::Form::Textarea::Field
+        @isOptional={{true}}
+        @value={{@model.description}}
+        @isInvalid={{@model.errors.description}}
+        name='description'
+        disabled={{form.disabled}}
+        as |F|
+      >
+        <F.Label>{{t 'form.description.label'}}</F.Label>
+        <F.HelperText>{{t 'form.description.help'}}</F.HelperText>
+        {{#if @model.errors.description}}
+          <F.Error as |E|>
+            {{#each @model.errors.description as |error|}}
               <E.Message>{{error.message}}</E.Message>
             {{/each}}
           </F.Error>
         {{/if}}
-      </:fieldset>
+      </Hds::Form::Textarea::Field>
+      {{#if (and @model.isNew (feature-flag 'ssh-target'))}}
+        <Hds::Form::RadioCard::Group
+          @name={{t 'form.type.label'}}
+          @alignment='center'
+          as |G|
+        >
+          <G.Legend>{{t 'resources.target.form.type.label'}}</G.Legend>
+          <G.HelperText>{{t 'resources.target.form.type.help'}}</G.HelperText>
+          {{#each this.typeMetas as |type|}}
+            <G.RadioCard
+              @value={{type.type}}
+              @maxWidth='20rem'
+              @checked={{eq type.type @model.type}}
+              {{on 'input' (fn @changeType type.type)}}
+              as |R|
+            >
+              <R.Label>{{t
+                  (concat 'resources.target.types.' type.type)
+                }}</R.Label>
+              <R.Description>{{t
+                  (concat 'resources.target.help.' type.type)
+                }}</R.Description>
+              <R.Icon @name={{type.icon}} />
+            </G.RadioCard>
+          {{/each}}
+        </Hds::Form::RadioCard::Group>
+      {{else}}
+        <InfoField
+          @value={{t (concat 'resources.target.types.' @model.type)}}
+          @icon={{this.icon}}
+          as |F|
+        >
+          <F.Label>{{t 'form.type.label'}}</F.Label>
+          <F.HelperText>
+            {{t (concat 'resources.target.help.' @model.type)}}
+          </F.HelperText>
+        </InfoField>
+      {{/if}}
 
-      <:field as |F|>
-        <F.TextInput
-          @name='with_aliases'
-          @options={{@model.with_aliases}}
-          @model={{@model}}
+      <Hds::Button @text='Next' {{on 'click' this.onNextClickDemo}} />
+    </S.Panel>
+
+    {{! Step 2 }}
+    <S.Panel>
+      {{#if (feature-flag 'target-network-address')}}
+        <Hds::Form::TextInput::Field
+          @isOptional={{true}}
+          @value={{@model.address}}
+          @isInvalid={{@model.errors.address}}
+          @type='text'
+          name='address'
+          disabled={{form.disabled}}
+          {{on 'input' (set-from-event @model 'address')}}
+          as |F|
+        >
+          <F.Label>{{t 'resources.target.form.target-address.label'}}</F.Label>
+          <F.HelperText>{{t
+              'resources.target.form.target-address.help'
+            }}</F.HelperText>
+          {{#if @model.errors.address}}
+            <F.Error as |E|>
+              {{#each @model.errors.address as |error|}}
+                <E.Message>{{error.message}}</E.Message>
+              {{/each}}
+            </F.Error>
+          {{/if}}
+        </Hds::Form::TextInput::Field>
+      {{/if}}
+      <Hds::Form::TextInput::Field
+        @isRequired={{@model.isTCP}}
+        @isOptional={{not @model.isTCP}}
+        @value={{@model.default_port}}
+        @isInvalid={{@model.errors.default_port}}
+        @type='text'
+        name='default_port'
+        disabled={{form.disabled}}
+        placeholder={{@defaultPort}}
+        {{on 'input' (set-from-event @model 'default_port')}}
+        as |F|
+      >
+        <F.Label data-test-default-port-label>{{t
+            'resources.target.form.default_port.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.target.form.default_port.help'
+          }}</F.HelperText>
+        {{#if @model.errors.default_port}}
+          <F.Error as |E|>
+            {{#each @model.errors.default_port as |error|}}
+              <E.Message
+                data-test-error-message-default-port
+              >{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+
+      <Hds::Button @text='Next' {{on 'click' this.onNextClickDemo}} />
+      <Hds::Button @text='Previous' {{on 'click' this.onPrevClickDemo}} />
+    </S.Panel>
+
+    {{! Step 3 }}
+    <S.Panel>
+      <Hds::Form::TextInput::Field
+        @isOptional={{true}}
+        @value={{@model.default_client_port}}
+        @isInvalid={{@model.errors.default_client_port}}
+        @type='text'
+        name='default_client_port'
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'default_client_port')}}
+        as |F|
+      >
+        <F.Label>{{t
+            'resources.target.form.default_client_port.label'
+          }}</F.Label>
+        <F.HelperText>{{t
+            'resources.target.form.default_client_port.help'
+          }}</F.HelperText>
+        {{#if @model.errors.default_client_port}}
+          <F.Error as |E|>
+            {{#each @model.errors.default_client_port as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+      <Hds::Form::TextInput::Field
+        @isOptional={{true}}
+        @value={{@model.session_max_seconds}}
+        @isInvalid={{@model.errors.session_max_seconds}}
+        @type='text'
+        name='session_max_seconds'
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'session_max_seconds')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.session_max_seconds.label'}}</F.Label>
+        <F.HelperText>{{t 'form.session_max_seconds.help'}}</F.HelperText>
+        {{#if @model.errors.session_max_seconds}}
+          <F.Error as |E|>
+            {{#each @model.errors.session_max_seconds as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+
+      <Hds::Form::TextInput::Field
+        @isOptional={{true}}
+        @value={{@model.session_connection_limit}}
+        @isInvalid={{@model.errors.session_connection_limit}}
+        @type='text'
+        name='session_connection_limit'
+        disabled={{form.disabled}}
+        {{on 'input' (set-from-event @model 'session_connection_limit')}}
+        as |F|
+      >
+        <F.Label>{{t 'form.session_connection_limit.label'}}</F.Label>
+        <F.HelperText>{{t 'form.session_connection_limit.help'}}</F.HelperText>
+        {{#if @model.errors.session_connection_limit}}
+          <F.Error as |E|>
+            {{#each @model.errors.session_connection_limit as |error|}}
+              <E.Message>{{error.message}}</E.Message>
+            {{/each}}
+          </F.Error>
+        {{/if}}
+      </Hds::Form::TextInput::Field>
+
+      {{#if
+        (and
+          @model.isNew (can 'create model' @globalScope collection='aliases')
+        )
+      }}
+        <Form::Field::ListWrapper
+          @layout='horizontal'
+          @isOptional={{true}}
+          @disabled={{form.disabled}}
+        >
+          <:fieldset as |F|>
+            <F.Legend>
+              {{t 'resources.alias.form.alias.label'}}
+            </F.Legend>
+            <F.HelperText>
+              {{t 'resources.alias.form.alias.help'}}
+            </F.HelperText>
+
+            {{#if @model.errors.with_aliases}}
+              <F.Error as |E|>
+                {{#each @model.errors.with_aliases as |error|}}
+                  <E.Message>{{error.message}}</E.Message>
+                {{/each}}
+              </F.Error>
+            {{/if}}
+          </:fieldset>
+
+          <:field as |F|>
+            <F.TextInput
+              @name='with_aliases'
+              @options={{@model.with_aliases}}
+              @model={{@model}}
+            />
+          </:field>
+
+        </Form::Field::ListWrapper>
+      {{/if}}
+
+      <Hds::Button @text='Next' {{on 'click' this.onNextClickDemo}} />
+      <Hds::Button @text='Previous' {{on 'click' this.onPrevClickDemo}} />
+    </S.Panel>
+
+    {{! Step 4 }}
+    <S.Panel>
+      <Hds::Button @text='Previous' {{on 'click' this.onPrevClickDemo}} />
+      {{#if (can 'save model' @model)}}
+        <form.actions
+          @enableEditText={{t 'actions.edit-form'}}
+          @submitText={{t 'actions.save'}}
+          @cancelText={{t 'actions.cancel'}}
         />
-      </:field>
+      {{/if}}
 
-    </Form::Field::ListWrapper>
-  {{/if}}
-  {{#if (can 'save model' @model)}}
-    <form.actions
-      @enableEditText={{t 'actions.edit-form'}}
-      @submitText={{t 'actions.save'}}
-      @cancelText={{t 'actions.cancel'}}
-    />
-  {{/if}}
+    </S.Panel>
 
-</Rose::Form>
+  </Rose::Form>
+</Hds::Stepper::Nav>
