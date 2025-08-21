@@ -91,7 +91,7 @@ module('Acceptance | targets | create', function (hooks) {
     await authenticateSession({});
   });
 
-  test('defaults to type `ssh` when no query param provided', async function (assert) {
+  test('defaults to type `tcp` when no query param provided', async function (assert) {
     setRunOptions({
       rules: {
         'color-contrast': {
@@ -100,13 +100,12 @@ module('Acceptance | targets | create', function (hooks) {
         },
       },
     });
-
     featuresService.enable('ssh-target');
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
 
-    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_SSH);
+    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_TCP);
   });
 
   test('can create a type `ssh` target', async function (assert) {
@@ -181,6 +180,7 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('ssh'));
 
     assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Optional');
   });
@@ -199,7 +199,6 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
-    await click(selectors.FIELD_TYPE_VALUE('tcp'));
 
     assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Required');
   });
@@ -516,13 +515,13 @@ module('Acceptance | targets | create', function (hooks) {
     assert.strictEqual(currentURL(), urls.targets);
   });
 
-  test('defaults to type `rdp` when no query param provided and rdp feature is enabled', async function (assert) {
+  test('defaults to type `tcp` when no query param provided and rdp feature is enabled', async function (assert) {
     featuresService.enable('rdp-target');
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
 
-    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_RDP);
+    assert.dom(selectors.FIELD_TYPE_CHECKED).hasValue(TYPE_TARGET_TCP);
   });
 
   test('cannot navigate to new RDP targets route when rdp feature is disabled', async function (assert) {
@@ -545,6 +544,7 @@ module('Acceptance | targets | create', function (hooks) {
     await visit(urls.targets);
 
     await click(commonSelectors.HREF(urls.newTarget));
+    await click(selectors.FIELD_TYPE_VALUE('rdp'));
 
     assert.dom(selectors.FIELD_DEFAULT_PORT_LABEL).includesText('Optional');
   });

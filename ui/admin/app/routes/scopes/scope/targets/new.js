@@ -5,11 +5,7 @@
 
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
-import {
-  TYPE_TARGET_TCP,
-  TYPE_TARGET_SSH,
-  TYPE_TARGET_RDP,
-} from 'api/models/target';
+import { TYPE_TARGET_TCP } from 'api/models/target';
 
 export default class ScopesScopeTargetsNewRoute extends Route {
   // =services
@@ -47,20 +43,9 @@ export default class ScopesScopeTargetsNewRoute extends Route {
    * @return {TargetModel}
    */
 
-  model({ type }) {
+  model({ type = TYPE_TARGET_TCP }) {
     let name, description;
     const scopeModel = this.modelFor('scopes.scope');
-
-    // default type is RDP if the feature is enabled, or is SSH if feature enabled otherwise TCP
-    if (!type) {
-      if (this.features.isEnabled('rdp-target')) {
-        type = TYPE_TARGET_RDP;
-      } else if (this.features.isEnabled('ssh-target')) {
-        type = TYPE_TARGET_SSH;
-      } else {
-        type = TYPE_TARGET_TCP;
-      }
-    }
 
     if (this.currentModel?.isNew) {
       ({ name, description } = this.currentModel);
