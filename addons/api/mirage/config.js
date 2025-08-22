@@ -70,11 +70,16 @@ function routes() {
       let resultSet;
       // Default parent scope is global
       if (!scope_id) scope_id = 'global';
+      // We do not return global scope to mimic our API.
       if (recursive && scope_id === 'global') {
-        resultSet = scopes.all();
+        resultSet = scopes.where((scope) => {
+          return scope.scope ? scope.type !== 'global' : false;
+        });
       } else {
         resultSet = scopes.where((scope) => {
-          return scope.scope ? scope.scope.id === scope_id : false;
+          return scope.scope
+            ? scope.scope.id === scope_id && scope.type !== 'global'
+            : false;
         });
       }
       const filteredResultSet = resultSet.filter(makeBooleanFilter(filter));

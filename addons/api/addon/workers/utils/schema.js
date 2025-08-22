@@ -195,6 +195,41 @@ CREATE TRIGGER IF NOT EXISTS credential_store_ad AFTER DELETE ON credential_stor
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.created_time);
 END;`;
 
+const createScopeTables = `
+CREATE TABLE IF NOT EXISTS scope (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_scope_scope_id_created_time ON scope(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS scope_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS scope_ai AFTER INSERT ON scope BEGIN
+    INSERT INTO scope_fts(
+        id, type, name, description, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS scope_ad AFTER DELETE ON scope BEGIN
+    INSERT INTO scope_fts(scope_fts, rowid, id, type, name, description, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -210,6 +245,7 @@ ${createAliasTables}
 ${createRoleTables}
 ${createUserTables}
 ${createCredentialStoreTables}
+${createScopeTables}
 
 CREATE TABLE IF NOT EXISTS "group" (
     id TEXT NOT NULL PRIMARY KEY,

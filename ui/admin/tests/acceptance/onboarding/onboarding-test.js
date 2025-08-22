@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { visit, fillIn, click, currentURL } from '@ember/test-helpers';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -14,6 +15,7 @@ import * as selectors from './selectors';
 module('Acceptance | onboarding', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   const urls = {
     onboarding: '/onboarding',
