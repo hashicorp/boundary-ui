@@ -94,6 +94,10 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
     });
   });
 
+  hooks.afterEach(async function cleanUpSqliteHandler() {
+    sinon.restore();
+  });
+
   module('fetching and batch loading', function (hooks) {
     // `testBatchLimit` and `serverResultPageLimit` are intentionally difference
     // so that multiple calls to the server are required to fetch a single batch,
@@ -196,6 +200,36 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
         expectedResponseHandlerCallCount,
       );
       assert.strictEqual(callCounts.writeToDb, expectedWriteToSqliteCallCount);
+    });
+
+    test('it stores and retrieves tokens when storeToken is true (default)', async function (assert) {
+      const sqliteSpy = sinon.spy(sqliteHandler.sqlite);
+
+      await store.query('target', {});
+
+      assert.strictEqual(
+        sqliteSpy.insertResource.withArgs('token').callCount,
+        targets.length / testBatchLimit,
+      );
+      assert.strictEqual(
+        sqliteSpy.insertResource.withArgs('target').callCount,
+        targets.length / testBatchLimit,
+      );
+    });
+
+    test('it clears database and does not store tokens when storeToken is false', async function (assert) {
+      const sqliteSpy = sinon.spy(sqliteHandler.sqlite);
+
+      await store.query('target', {}, { storeToken: false });
+
+      // Targets are all deleted one time
+      assert.ok(sqliteSpy.deleteResource.calledOnceWithExactly('target'));
+
+      assert.ok(sqliteSpy.insertResource.withArgs('token').notCalled);
+      assert.strictEqual(
+        sqliteSpy.insertResource.withArgs('target').callCount,
+        targets.length / testBatchLimit,
+      );
     });
   });
 
