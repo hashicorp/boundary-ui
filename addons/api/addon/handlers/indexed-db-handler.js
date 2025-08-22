@@ -64,6 +64,11 @@ export default class IndexedDbHandler {
           if (storeToken) {
             const tokenObj = await indexedDb.token.get(tokenKey);
             listToken = tokenObj?.token;
+          } else {
+            // This is a temporary fix of clearing the DB (specifically for auth-methods)
+            // since we are not storing the token we do not get back a list of removed_ids
+            // from the API call and we do not want deleted items from showing in list view.
+            await indexedDb[type].clear();
           }
 
           do {
@@ -208,13 +213,6 @@ export default class IndexedDbHandler {
     // Remove any records from the DB if the API indicates they've been deleted
     if (payload.removed_ids?.length > 0) {
       await indexedDb[type].bulkDelete(payload.removed_ids);
-    }
-
-    // This is a temporary fix of clearing the DB (specifically for auth-methods)
-    // since we are not storing the token we do not get back a list of removed_ids
-    // from the API call and we do not want deleted items from showing in list view.
-    if (!storeToken) {
-      await indexedDb[type].clear();
     }
 
     const normalizedPayload = serializer.normalizeResponse(

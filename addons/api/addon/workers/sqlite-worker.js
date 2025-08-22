@@ -156,12 +156,8 @@ const methods = {
     });
   },
   deleteResource: ({ resource, ids }) => {
-    if (ids.length === 0) {
-      return [];
-    }
-
     // Check if we have too many parameters for the deletion and chunk if so
-    if (ids.length > MAX_HOST_PARAMETERS) {
+    if (ids?.length > MAX_HOST_PARAMETERS) {
       return db.transaction(() => {
         const results = [];
         for (let i = 0; i < ids.length; i += MAX_HOST_PARAMETERS) {
