@@ -7,11 +7,15 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { visit } from '@ember/test-helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { TYPE_AUTH_METHOD_PASSWORD } from 'api/models/auth-method';
 
 module('Unit | Controller | account/change-password', function (hooks) {
   setupTest(hooks);
+  // `setupSqlite` had to be moved before `setupMirage` or else the db object would
+  // be destroyed before route query requests had a chance to run.
+  setupSqlite(hooks);
   setupMirage(hooks);
 
   let controller;
