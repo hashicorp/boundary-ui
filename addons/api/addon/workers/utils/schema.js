@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+import { underscore } from '@ember/string';
+
 export const CLEAR_DB = `
 PRAGMA writable_schema = 1;
 DELETE FROM sqlite_master;
@@ -158,6 +160,41 @@ CREATE TRIGGER IF NOT EXISTS user_ad AFTER DELETE ON user BEGIN
     VALUES('delete', old.rowid, old.id, old.name, old.description, old.scope_id, old.created_time);
 END;`;
 
+const createCredentialStoreTables = `
+CREATE TABLE IF NOT EXISTS credential_store (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_credential_store_scope_id_created_time ON credential_store(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS credential_store_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS credential_store_ai AFTER INSERT ON credential_store BEGIN
+    INSERT INTO credential_store_fts(
+        id, type, name, description, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS credential_store_ad AFTER DELETE ON credential_store BEGIN
+    INSERT INTO credential_store_fts(credential_store_fts, rowid, id, type, name, description, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -172,6 +209,7 @@ ${createTargetTables}
 ${createAliasTables}
 ${createRoleTables}
 ${createUserTables}
+${createCredentialStoreTables}
 
 CREATE TABLE IF NOT EXISTS "group" (
     id TEXT NOT NULL PRIMARY KEY,
@@ -199,8 +237,8 @@ export const INSERT_STATEMENTS = (resource, items, modelMapping) => {
   const numColumns = Array(columns.length + 1);
   const placeholders = `(${numColumns.fill('?').join(', ')})`;
 
-  return `REPLACE INTO "${resource}" (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
+  return `REPLACE INTO "${underscore(resource)}" (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
 };
 
 export const DELETE_STATEMENT = (resource, ids) =>
-  `DELETE FROM "${resource}" WHERE id IN (${ids.map(() => '?').join(',')})`;
+  `DELETE FROM "${underscore(resource)}" WHERE id IN (${ids.map(() => '?').join(',')})`;
