@@ -37,7 +37,7 @@ export default class SqliteHandler {
 
         // Go through normal flow if we don't yet support the model
         // or if we don't have a sqlite db instance
-        if (!supportedModels.includes(type) || !this.sqlite) {
+        if (!supportedModels.includes(type) || !this.sqlite.worker) {
           return next(context.request);
         }
 
@@ -60,6 +60,11 @@ export default class SqliteHandler {
               }),
             });
             listToken = tokenObj?.token;
+          } else {
+            // This is a temporary fix of clearing the DB (specifically for auth-methods)
+            // since we are not storing the token we do not get back a list of removed_ids
+            // from the API call and we do not want deleted items from showing in list view.
+            await this.sqlite.deleteResource(type);
           }
 
           do {
