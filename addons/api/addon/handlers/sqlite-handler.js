@@ -37,7 +37,7 @@ export default class SqliteHandler {
 
         // Go through normal flow if we don't yet support the model
         // or if we don't have a sqlite db instance
-        if (!supportedModels.includes(type) || !this.sqlite) {
+        if (!supportedModels.includes(type) || !this.sqlite.worker) {
           return next(context.request);
         }
 
