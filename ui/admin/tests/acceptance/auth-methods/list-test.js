@@ -23,7 +23,6 @@ module('Acceptance | auth-methods | list', function (hooks) {
   setupMirage(hooks);
   setupSqlite(hooks);
   setupIndexedDb(hooks);
-  setupSqlite(hooks);
 
   const instances = {
     scopes: {

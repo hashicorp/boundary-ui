@@ -23,8 +23,6 @@ module('Acceptance | accounts | change password', function (hooks) {
   setupMirage(hooks);
   setupSqlite(hooks);
   setupIndexedDb(hooks);
-  setupSqlite(hooks);
-  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {

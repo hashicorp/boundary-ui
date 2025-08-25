@@ -19,7 +19,6 @@ module('Acceptance | auth-methods | create', function (hooks) {
   setupMirage(hooks);
   setupSqlite(hooks);
   setupIndexedDb(hooks);
-  setupSqlite(hooks);
 
   let getAuthMethodsCount;
   let featuresService;

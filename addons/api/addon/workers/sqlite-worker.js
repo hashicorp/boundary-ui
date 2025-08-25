@@ -94,12 +94,13 @@ const methods = {
     db.exec(CREATE_TABLES(SCHEMA_VERSION));
   },
   deleteDatabase: () => {
-    const name = db.dbFilename();
-    if (db) {
-      db.close();
-      db = null;
+    if (!db) {
+      throw new Error('No database was initialized');
     }
 
+    const name = db.dbFilename();
+    db.close();
+    db = null;
     poolUtil.unlink(`/${name}`);
   },
   downloadDatabase: () => {
