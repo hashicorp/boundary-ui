@@ -38,6 +38,9 @@ add-hosts: Add Hosts
 set-password: Set Password
 change-password: Change Password
 edit-form: Edit Form
+edit-user-details:
+  button-text: Edit User details
+  aria-label: 'edit form: users'
 change-cluster-url: Change Cluster URL
 change-state: Change State
 close: Close
