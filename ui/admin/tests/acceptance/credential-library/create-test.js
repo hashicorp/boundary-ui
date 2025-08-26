@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, click, fillIn, currentURL, select } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import { TYPE_CREDENTIAL_LIBRARY_VAULT_SSH_CERTIFICATE } from 'api/models/credential-library';
@@ -17,6 +18,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | credential-libraries | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   let featuresService;
   let getCredentialLibraryCount;

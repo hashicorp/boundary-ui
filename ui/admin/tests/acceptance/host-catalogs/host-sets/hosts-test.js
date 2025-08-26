@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { Response } from 'miragejs';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import * as commonSelectors from 'admin/tests/helpers/selectors';
@@ -16,6 +17,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | host-catalogs | host-sets | hosts', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
 
   let getHostSetHostCount;
 
