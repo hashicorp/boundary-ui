@@ -337,6 +337,57 @@ CREATE TRIGGER IF NOT EXISTS host_catalog_ad AFTER DELETE ON host_catalog BEGIN
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.plugin_name, old.scope_id, old.created_time);
 END;`;
 
+const createSessionRecordingTables = `
+CREATE TABLE IF NOT EXISTS session_recording (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    state TEXT,
+    start_time TEXT,
+    end_time TEXT,
+    duration TEXT,
+    scope_id TEXT NOT NULL,
+    user_id TEXT,
+    user_name TEXT,
+    target_id TEXT,
+    target_name TEXT,
+    target_scope_id TEXT,
+    target_scope_name TEXT,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_session_recording_created_time ON session_recording(created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS session_recording_fts USING fts5(
+    id,
+    type,
+    state,
+    start_time,
+    end_time,
+    duration,
+    scope_id,
+    user_id,
+    user_name,
+    target_id,
+    target_name,
+    target_scope_id,
+    target_scope_name,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS session_recording_ai AFTER INSERT ON session_recording BEGIN
+    INSERT INTO session_recording_fts(
+        id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time
+    ) VALUES (
+        new.id, new.type, new.state, new.start_time, new.end_time, new.duration, new.scope_id, new.user_id, new.user_name, new.target_id, new.target_name, new.target_scope_id, new.target_scope_name, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS session_recording_ad AFTER DELETE ON session_recording BEGIN
+    INSERT INTO session_recording_fts(session_recording_fts, rowid, id, type, state, start_time, end_time, duration, scope_id, user_id, user_name, target_id, target_name, target_scope_id, target_scope_name, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.state, old.start_time, old.end_time, old.duration, old.scope_id, old.user_id, old.user_name, old.target_id, old.target_name, old.target_scope_id, old.target_scope_name, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -356,6 +407,17 @@ ${createCredentialStoreTables}
 ${createScopeTables}
 ${createAuthMethodTables}
 ${createHostCatalogTables}
+${createSessionRecordingTables}
+
+CREATE TABLE IF NOT EXISTS "group" (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_group_scope_id_created_time ON "group"(scope_id, created_time DESC);
 
 COMMIT;`;
 

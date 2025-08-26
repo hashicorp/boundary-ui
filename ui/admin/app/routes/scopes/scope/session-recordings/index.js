@@ -96,19 +96,19 @@ export default class ScopesScopeSessionRecordingsIndexRoute extends Route {
       let doStorageBucketsExist = false;
       const filters = {
         created_time: [],
-        'create_time_values.user.id': [],
-        'create_time_values.target.scope.id': [],
-        'create_time_values.target.id': [],
+        user_id: [],
+        target_scope_id: [],
+        target_id: [],
       };
       if (time) filters.created_time.push({ gte: new Date(time) });
       users.forEach((user) => {
-        filters['create_time_values.user.id'].push({ equals: user });
+        filters['user_id'].push({ equals: user });
       });
       scopes.forEach((scope) => {
-        filters['create_time_values.target.scope.id'].push({ equals: scope });
+        filters['target_scope_id'].push({ equals: scope });
       });
       targets.forEach((target) => {
-        filters['create_time_values.target.id'].push({ equals: target });
+        filters['target_id'].push({ equals: target });
       });
 
       const stateMap = {
