@@ -81,8 +81,15 @@ export default class SqliteHandler {
                 await writeToDbPromise;
               }
             } catch (err) {
-              console.error('Error retrieving data:', err);
-              throw err;
+              payload = await this.retryQueryFailure({
+                err,
+                type,
+                adapter,
+                store,
+                schema,
+                remainingQuery,
+              });
+              totalInsert += payload.items?.length ?? 0;
             }
             listToken = payload.list_token;
 
@@ -151,6 +158,45 @@ export default class SqliteHandler {
       }
       default:
         return next(context.request);
+    }
+  }
+
+  async retryQueryFailure({
+    err,
+    type,
+    adapter,
+    store,
+    schema,
+    remainingQuery,
+  }) {
+    // If we get an invalid list token, we'll delete the token and
+    // clear the DB and try again without a token.
+    if (
+      err?.errors[0].status === 400 &&
+      err?.errors[0].code === 'invalid list token'
+    ) {
+      await this.sqlite.deleteResource(type);
+      // Delete all tokens of the same resource type so we don't keep clearing the DB.
+      // Even if other tokens may still be valid, we might have cleared data that they
+      // depended on so we should clear all tokens of the same type when clearing the DB.
+      const { sql, parameters } = generateSQLExpressions('token', {
+        filters: { id: [{ contains: type }] },
+      });
+      const tokenRows = await this.sqlite.fetchResource({
+        sql,
+        parameters,
+      });
+      const tokenIds = tokenRows.map((row) => row.id);
+
+      if (tokenIds.length > 0) {
+        await this.sqlite.deleteResource('token', tokenIds);
+      }
+
+      return await adapter.query(store, schema, {
+        ...remainingQuery,
+      });
+    } else {
+      throw err;
     }
   }
 

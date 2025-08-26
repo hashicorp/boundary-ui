@@ -73,17 +73,15 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
     sqliteHandler,
     store,
     applicationAdapter,
-    sqliteHandlerSpy,
-    applicationAdapterSpy;
+    sqliteHandlerSpy;
   hooks.beforeEach(async function setupSqliteHandler() {
     store = this.owner.lookup('service:store');
     manager = new RequestManager();
     sqliteHandler = new SqliteHandler(store);
     applicationAdapter = store.adapterFor('application');
 
-    // spy on all handler and application adapter methods
+    // spy on handler methods
     sqliteHandlerSpy = sinon.spy(sqliteHandler);
-    applicationAdapterSpy = sinon.spy(applicationAdapter);
 
     store.requestManager = manager;
     manager.use([sqliteHandler]);
@@ -141,6 +139,8 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
     });
 
     test('supports batching requests and writes to SQLite', async function (assert) {
+      const applicationAdapterSpy = sinon.spy(applicationAdapter);
+
       await store.query('target', {});
 
       assert.strictEqual(
@@ -468,5 +468,59 @@ module('Unit | Handler | sqlite-handler', function (hooks) {
     });
 
     assert.strictEqual(results[0].name, 'specific-target');
+  });
+
+  test('it retries query when invalid list token error occurs', async function (assert) {
+    let targets = this.server.createList('target', 5, { scope });
+
+    const sqliteSpy = sinon.spy(sqliteHandler.sqlite);
+
+    // Mock the first query to fail with invalid list token error but return data as normal otherwise
+    sinon
+      .stub(applicationAdapter, 'query')
+      .callThrough()
+      .onFirstCall()
+      .throws(() => {
+        const error = new Error('Invalid list token');
+        error.errors = [
+          {
+            status: 400,
+            code: 'invalid list token',
+          },
+        ];
+        return error;
+      });
+
+    this.server.get(
+      'targets',
+      createPaginatedResponseHandler.call(this, targets, {
+        pageSize: 5,
+      }),
+    );
+
+    // Insert tokens to simulate existing state
+    await sqliteHandler.sqlite.insertResource('token', [
+      ['target-123', 'invalid key'],
+      ['target-321', 'valid key'],
+      ['session-123', 'session key'],
+    ]);
+
+    const results = await store.query('target', {});
+
+    assert.ok(sqliteHandlerSpy.retryQueryFailure.calledOnce);
+
+    assert.ok(sqliteSpy.deleteResource.calledWithExactly('target'));
+    assert.ok(
+      sqliteSpy.deleteResource.calledWithExactly('token', [
+        'target-123',
+        'target-321',
+      ]),
+    );
+
+    // Verify the query eventually succeeded
+    assert.strictEqual(results.length, 5);
+
+    // Verify query was called twice (initial fail + retry)
+    assert.ok(applicationAdapter.query.calledTwice);
   });
 });
