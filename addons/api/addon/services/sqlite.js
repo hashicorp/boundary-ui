@@ -71,6 +71,7 @@ export const modelMapping = {
 export const searchTables = new Set([
   'target',
   'alias',
+  'group',
   'role',
   'user',
   'credential-store',
