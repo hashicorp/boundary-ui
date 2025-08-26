@@ -6,6 +6,7 @@
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, visit } from '@ember/test-helpers';
 import { Response } from 'miragejs';
@@ -17,6 +18,7 @@ module(
   function (hooks) {
     setupApplicationTest(hooks);
     setupMirage(hooks);
+    setupSqlite(hooks);
 
     let getUsernamePasswordCredentialCount;
     let getUsernameKeyPairCredentialCount;

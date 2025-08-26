@@ -8,6 +8,7 @@ import { visit, click, waitFor, fillIn, currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { faker } from '@faker-js/faker';
 import {
@@ -21,6 +22,7 @@ module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   setupIndexedDb(hooks);
+  setupSqlite(hooks);
 
   const instances = {
     scopes: {
