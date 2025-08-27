@@ -263,6 +263,43 @@ CREATE TRIGGER IF NOT EXISTS scope_ad AFTER DELETE ON scope BEGIN
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.scope_id, old.created_time);
 END;`;
 
+const createAuthMethodTables = `
+CREATE TABLE IF NOT EXISTS auth_method (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    is_primary INT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_auth_method_scope_id_created_time ON auth_method(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS auth_method_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    is_primary,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS auth_method_ai AFTER INSERT ON auth_method BEGIN
+    INSERT INTO auth_method_fts(
+        id, type, name, description, is_primary, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.is_primary, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS auth_method_ad AFTER DELETE ON auth_method BEGIN
+    INSERT INTO auth_method_fts(auth_method_fts, rowid, id, type, name, description, is_primary, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.is_primary, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -280,6 +317,7 @@ ${createRoleTables}
 ${createUserTables}
 ${createCredentialStoreTables}
 ${createScopeTables}
+${createAuthMethodTables}
 
 COMMIT;`;
 
@@ -300,5 +338,9 @@ export const INSERT_STATEMENTS = (resource, items, modelMapping) => {
   return `REPLACE INTO "${underscore(resource)}" (${columns.join(', ')}, data) VALUES ${items.map(() => placeholders).join(', ')};`;
 };
 
-export const DELETE_STATEMENT = (resource, ids) =>
-  `DELETE FROM "${underscore(resource)}" WHERE id IN (${ids.map(() => '?').join(',')})`;
+export const DELETE_STATEMENT = (resource, ids) => {
+  const baseDeleteStatement = `DELETE FROM "${underscore(resource)}"`;
+  return ids?.length > 0
+    ? `${baseDeleteStatement} WHERE id IN (${ids.map(() => '?').join(',')})`
+    : baseDeleteStatement;
+};

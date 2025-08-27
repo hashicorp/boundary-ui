@@ -21,8 +21,8 @@ import * as selectors from './selectors';
 module('Acceptance | auth-methods | list', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupSqlite(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {

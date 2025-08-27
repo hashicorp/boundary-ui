@@ -17,8 +17,8 @@ import * as selectors from './selectors';
 module('Acceptance | auth-methods | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupSqlite(hooks);
+  setupIndexedDb(hooks);
 
   let getAuthMethodsCount;
   let featuresService;
