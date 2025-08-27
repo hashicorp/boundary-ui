@@ -94,6 +94,39 @@ CREATE TRIGGER IF NOT EXISTS alias_ad AFTER DELETE ON alias BEGIN
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.destination_id, old.value, old.scope_id, old.created_time);
 END;`;
 
+const createGroupTables = `
+CREATE TABLE IF NOT EXISTS "group" (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT,
+    description TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_group_scope_id_created_time ON "group"(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS group_fts USING fts5(
+    id,
+    name,
+    description,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS group_ai AFTER INSERT ON "group" BEGIN
+    INSERT INTO group_fts(
+        id, name, description, scope_id, created_time
+    ) VALUES (
+        new.id, new.name, new.description, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS group_ad AFTER DELETE ON "group" BEGIN
+    INSERT INTO group_fts(group_fts, rowid, id, name, description, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.name, old.description, old.scope_id, old.created_time);
+END;`;
+
 const createRoleTables = `
 CREATE TABLE IF NOT EXISTS role (
     id TEXT NOT NULL PRIMARY KEY,
@@ -279,21 +312,12 @@ CREATE TABLE IF NOT EXISTS token (
 
 ${createTargetTables}
 ${createAliasTables}
+${createGroupTables}
 ${createRoleTables}
 ${createUserTables}
 ${createCredentialStoreTables}
 ${createScopeTables}
 ${createAuthMethodTables}
-
-CREATE TABLE IF NOT EXISTS "group" (
-    id TEXT NOT NULL PRIMARY KEY,
-    name TEXT,
-    description TEXT,
-    scope_id TEXT NOT NULL,
-    created_time TEXT NOT NULL,
-    data TEXT NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_group_scope_id_created_time ON "group"(scope_id, created_time DESC);
 
 COMMIT;`;
 
