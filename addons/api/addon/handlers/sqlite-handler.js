@@ -11,6 +11,10 @@ import { typeOf } from '@ember/utils';
 import { hashCode } from '../utils/hash-code';
 import { generateSQLExpressions } from '../utils/sqlite-query';
 
+const isISODateString = (str) =>
+  typeOf(str) === 'string' &&
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z?$/.test(str);
+
 export default class SqliteHandler {
   @service sqlite;
 
@@ -138,7 +142,13 @@ export default class SqliteHandler {
         });
         console.timeLog(`SQLite fetch ${type}`, 'count');
 
-        const results = rows.map((item) => JSON.parse(item.data));
+        const results = rows.map((item) =>
+          JSON.parse(item.data, (key, value) =>
+            // Reviver function to convert any ISO strings back to date objects
+            // as we had to initially convert them to strings when stored in SQLite
+            isISODateString(value) ? new Date(value) : value,
+          ),
+        );
 
         // If we are not pushing to the store, use the raw data with id property
         const records = pushToStore

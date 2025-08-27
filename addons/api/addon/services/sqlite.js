@@ -83,6 +83,22 @@ export const modelMapping = {
     scope_id: 'scope.scope_id',
     created_time: 'created_time',
   },
+  'session-recording': {
+    id: 'id',
+    type: 'type',
+    state: 'state',
+    start_time: 'start_time',
+    end_time: 'end_time',
+    duration: 'duration',
+    scope_id: 'scope.scope_id',
+    user_id: 'create_time_values.user.id',
+    user_name: 'create_time_values.user.name',
+    target_id: 'create_time_values.target.id',
+    target_name: 'create_time_values.target.name',
+    target_scope_id: 'create_time_values.target.scope.id',
+    target_scope_name: 'create_time_values.target.scope.name',
+    created_time: 'created_time',
+  },
 };
 
 // A list of tables that we support searching using FTS5 in SQLite.
@@ -96,6 +112,7 @@ export const searchTables = new Set([
   'scope',
   'auth-method',
   'host-catalog',
+  'session-recording',
 ]);
 
 export default class SqliteDbService extends Service {
