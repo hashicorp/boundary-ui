@@ -21,7 +21,6 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | accounts | change password', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupSqlite(hooks);
   setupIndexedDb(hooks);
 
