@@ -300,6 +300,43 @@ CREATE TRIGGER IF NOT EXISTS auth_method_ad AFTER DELETE ON auth_method BEGIN
     VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.is_primary, old.scope_id, old.created_time);
 END;`;
 
+const createHostCatalogTables = `
+CREATE TABLE IF NOT EXISTS host_catalog (
+    id TEXT NOT NULL PRIMARY KEY,
+    type TEXT NOT NULL,
+    name TEXT,
+    description TEXT,
+    plugin_name TEXT,
+    scope_id TEXT NOT NULL,
+    created_time TEXT NOT NULL,
+    data TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_host_catalog_scope_id_created_time ON host_catalog(scope_id, created_time DESC);
+
+CREATE VIRTUAL TABLE IF NOT EXISTS host_catalog_fts USING fts5(
+    id,
+    type,
+    name,
+    description,
+    plugin_name,
+    scope_id,
+    created_time,
+    content='',
+);
+
+CREATE TRIGGER IF NOT EXISTS host_catalog_ai AFTER INSERT ON host_catalog BEGIN
+    INSERT INTO host_catalog_fts(
+        id, type, name, description, plugin_name, scope_id, created_time
+    ) VALUES (
+        new.id, new.type, new.name, new.description, new.plugin_name, new.scope_id, new.created_time
+    );
+END;
+
+CREATE TRIGGER IF NOT EXISTS host_catalog_ad AFTER DELETE ON host_catalog BEGIN
+    INSERT INTO host_catalog_fts(host_catalog_fts, rowid, id, type, name, description, plugin_name, scope_id, created_time)
+    VALUES('delete', old.rowid, old.id, old.type, old.name, old.description, old.plugin_name, old.scope_id, old.created_time);
+END;`;
+
 export const CREATE_TABLES = (version) => `
 BEGIN;
 
@@ -318,6 +355,7 @@ ${createUserTables}
 ${createCredentialStoreTables}
 ${createScopeTables}
 ${createAuthMethodTables}
+${createHostCatalogTables}
 
 COMMIT;`;
 
