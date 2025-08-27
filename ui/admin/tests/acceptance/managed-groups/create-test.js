@@ -8,6 +8,7 @@ import { visit, currentURL, click, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'admin/tests/helpers';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 import { setupIndexedDb } from 'api/test-support/helpers/indexed-db';
+import { setupSqlite } from 'api/test-support/helpers/sqlite';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { Response } from 'miragejs';
 import {
@@ -21,6 +22,7 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | managed-groups | create', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  setupSqlite(hooks);
   setupIndexedDb(hooks);
 
   let getManagedGroupCount;

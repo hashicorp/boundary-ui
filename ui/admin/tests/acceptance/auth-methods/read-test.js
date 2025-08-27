@@ -22,8 +22,8 @@ import { setRunOptions } from 'ember-a11y-testing/test-support';
 module('Acceptance | auth-methods | read', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupSqlite(hooks);
+  setupIndexedDb(hooks);
 
   const instances = {
     scopes: {
