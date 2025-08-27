@@ -74,6 +74,15 @@ export const modelMapping = {
     scope_id: 'scope.scope_id',
     created_time: 'created_time',
   },
+  'host-catalog': {
+    id: 'id',
+    type: 'type',
+    name: 'name',
+    description: 'description',
+    plugin_name: 'plugin.name',
+    scope_id: 'scope.scope_id',
+    created_time: 'created_time',
+  },
 };
 
 // A list of tables that we support searching using FTS5 in SQLite.
@@ -86,6 +95,7 @@ export const searchTables = new Set([
   'credential-store',
   'scope',
   'auth-method',
+  'host-catalog',
 ]);
 
 export default class SqliteDbService extends Service {
