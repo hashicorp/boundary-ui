@@ -94,7 +94,7 @@ export default class ScopesScopeAuthMethodsIndexRoute extends Route {
       });
       if (primary.length === 1) {
         primary.forEach((val) => {
-          filters.is_primary.push({ equals: val });
+          filters.is_primary.push({ equals: val === 'true' });
         });
       }
 

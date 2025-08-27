@@ -94,12 +94,13 @@ const methods = {
     db.exec(CREATE_TABLES(SCHEMA_VERSION));
   },
   deleteDatabase: () => {
-    const name = db.dbFilename();
-    if (db) {
-      db.close();
-      db = null;
+    if (!db) {
+      throw new Error('No database was initialized');
     }
 
+    const name = db.dbFilename();
+    db.close();
+    db = null;
     poolUtil.unlink(`/${name}`);
   },
   downloadDatabase: () => {
@@ -156,12 +157,8 @@ const methods = {
     });
   },
   deleteResource: ({ resource, ids }) => {
-    if (ids.length === 0) {
-      return [];
-    }
-
     // Check if we have too many parameters for the deletion and chunk if so
-    if (ids.length > MAX_HOST_PARAMETERS) {
+    if (ids?.length > MAX_HOST_PARAMETERS) {
       return db.transaction(() => {
         const results = [];
         for (let i = 0; i < ids.length; i += MAX_HOST_PARAMETERS) {

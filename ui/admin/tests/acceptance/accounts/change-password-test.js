@@ -21,7 +21,6 @@ import * as commonSelectors from 'admin/tests/helpers/selectors';
 module('Acceptance | accounts | change password', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  setupIndexedDb(hooks);
   setupSqlite(hooks);
   setupIndexedDb(hooks);
 
