@@ -81,7 +81,13 @@ const methods = {
           }
         } else {
           console.error('SQLite initialization error:', err);
-          throw err;
+
+          // We might have gotten ourselves into a bad state which corrupted the DB so clear it out and retry
+          if (err?.message?.startsWith('SQLITE_CORRUPT')) {
+            poolUtil.unlink(`/${dbName}`);
+          } else {
+            throw err;
+          }
         }
       }
     }
